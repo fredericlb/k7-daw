@@ -2,8 +2,7 @@
 
 A **slot** is a frozen chain compiled once into the document the engine plays, kept by this
 machine's supervisor. At most one slot is **enabled**: the engine plays it in its `slot` session with
-no page, no file service and no network, and plays it again after every start. The design and the
-lots still to build are `docs/engine-slots-plan.md`.
+no page, no file service and no network, and plays it again after every start. The design is in this page.
 
 | choice | why |
 |---|---|

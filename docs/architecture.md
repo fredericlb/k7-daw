@@ -55,8 +55,7 @@ still as raw TypeScript (`docs/publishing.md`); every other package stays privat
 Notes for the whole repo — CI, deployment, the dev session — are in `docs/`:
 [dev.md](dev.md) (what `npm run dev` starts), [versioning.md](versioning.md) (the
 image's stamp), [images.md](images.md) (why k7's Dockerfile is staged the way it is),
-[publishing.md](publishing.md) (the four packages published for apps outside this repository), [release-scope.md](release-scope.md) (what
-the first release ships with — and what it leaves out), [release.md](release.md) (the CI that remains: GitHub's `k7.yml` and `caches.yml`; no job releases anything),
+[publishing.md](publishing.md) (the four packages published for apps outside this repository), [release.md](release.md) (the CI that remains: GitHub's `k7.yml` and `caches.yml`; no job releases anything),
 and the plan/recipe pages, [platter-plan.md](platter-plan.md) (the DJ deck's
 playback: a stretcher inside the platter, and the hybrid it deletes),
 [platter-node-plan.md](platter-node-plan.md) (its sequel — the platter is injected into the
@@ -69,8 +68,7 @@ Strudel-looking syntax that is parsed and never evaluated — and the phases tha
 [dsp-literal-plan.md](dsp-literal-plan.md) (a module's DSP graph as k7x data, `dsp.k7x`, decoded by
 the `song` crate into the graph `jsdsp.ts` builds, so no sandbox runs it; its vocabulary and migration),
 [rust-backend-plan.md](rust-backend-plan.md) (one backend in Rust on every host, by a strangler in
-front of the TypeScript one, its phases, gates and costs, [rust-phase4-plan.md](rust-phase4-plan.md)
-for the engine core) and
+front of the TypeScript one, its phases, gates and costs) and
 [rename-test-plan.md](rename-test-plan.md) — the latter is the METHOD for renaming an
 app, a service or a protocol prefix: the order of the phases, and the rule that every check
 carries its failure signature.

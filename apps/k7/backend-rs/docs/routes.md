@@ -28,7 +28,7 @@ Express's 404 and the `/api` guard's 401 for any other path. Nothing goes to the
 
 The backend keeps no copy of the app releases, the cameras, the session but `/auth/me`, the
 bearer tokens' routes: what the front sends
-it on those paths gets its 404 (`docs/rust-phase6-plan.md`, 6.0 and 6.2). Nobody signs in against an identity
+it on those paths gets its 404. Nobody signs in against an identity
 provider: `/auth/login`, `/auth/callback` and `/auth/handoff/*` are on no side, and answer what a missing route does.
 
 ## What every owned route goes through
@@ -76,7 +76,7 @@ Each reads its state from disk on every request, from files the previous release
 |---|---|
 | a request to `/api/preferences`, `/api/ai/*` or `/api/token*` with a bearer goes to the backend | the backend's `/api` guard checks a bearer against tokens the backend holds, and refuses a bad one even beside a valid cookie; behind it the backend has the preferences only, so a bearer on `/api/ai/*` hears the guard or a 404 |
 | zod's messages are written out by hand for the three bodies these routes check | the browser shows `error` as it is; the vectors hold every message |
-| shared vectors, `fixtures/leaf-vectors.json`, written by the TypeScript these routes replaced and kept as committed: the AI settings' patch and key hint | the AI patch and key hint; the file is the reference (`docs/rust-phase6-plan.md`, decision 5), and `src/vectors.rs` fails when Rust disagrees |
+| shared vectors, `fixtures/leaf-vectors.json`, written by the TypeScript these routes replaced and kept as committed: the AI settings' patch and key hint | the AI patch and key hint; the file is the reference, and `src/vectors.rs` fails when Rust disagrees |
 
 ## The session
 
