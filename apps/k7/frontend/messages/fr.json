@@ -435,7 +435,6 @@
   "libs.noticeMissing": "Aucune bibliothèque — k7 n'ouvre aucun projet sans elle.",
   "libs.noticeFailed": "L'application n'a pas de dossier pour certaines bibliothèques.",
   "home.libraries": "Bibliothèques",
-  "home.sharesEnd": "Le partage de projets par lien prend fin {date}. Une nouvelle façon de partager arrivera.",
   "libs.versions": "versions {list}",
   "libs.noVersion": "aucune version publiée",
   "libs.needsLevel": "v{version} demande le niveau {level}",
