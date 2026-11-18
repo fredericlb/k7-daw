@@ -34,9 +34,7 @@ console.log(
 
 const probe = spawnSync("cargo", ["--version"], { encoding: "utf8" });
 if (probe.error || probe.status !== 0) {
-  console.log(
-    "lint:locks: no cargo on this machine, skipped — OneDev's lint and test checks the locks",
-  );
+  console.log("lint:locks: no cargo on this machine, skipped");
   process.exit(0);
 }
 

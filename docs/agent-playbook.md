@@ -139,11 +139,11 @@ worktree tooling), [rust-builds.md](rust-builds.md) (the builds and the checks),
 | a time bound in a test is generous (30 s under musl) or replaced by a count | Linux's container and a loaded Mac run several times slower |
 | a path is spelled one way at every boundary: real paths reach `song-edit` through `winpath::to_posix`/`from_posix` at one edge (`edits/edge.rs`), roots are keyed by their resolved form (`resolve_all`), and a canonical `\\?\C:\…` is never compared with `C:/…`; what crosses to the engine machine is a plain drive path | every Windows bug found in the port was two spellings of one folder: refused reads, duplicate relay batches, empty module trees, a take filed nowhere |
 | a file is synced through a handle opened for writing, and a folder's sync is `cfg(unix)` | Windows refuses to flush a read-only handle, and has no folder sync |
-| a test spells its temporary roots with `/` and without `\\?\`, and a Windows-only test of a fixed path rule runs on every OS through the rule, not through `cfg(windows)`; Windows' own tests run on OneDev's `rust checks windows`, started by hand on a `ci/<name>` branch deleted after | the Mac never runs a `cfg(windows)` test, and two rounds of Windows fixes passed every Mac check |
+| a test spells its temporary roots with `/` and without `\\?\`, and a Windows-only test of a fixed path rule runs on every OS through the rule, not through `cfg(windows)`; Windows' own tests wait for a Windows machine | the Mac never runs a `cfg(windows)` test, and two rounds of Windows fixes passed every Mac check |
 
 ## Where a branch is checked
 
-A branch's checks and its beds run on the Mac; Windows' Rust tests (`rust checks windows`) are started by hand. One OS per
+A branch's checks and its beds run on the Mac; Windows' Rust tests wait for a Windows machine. One OS per
 milestone is enough: a platform-only failure goes to a job of its own.
 
 `bash scripts/agent/gate.sh` runs the checks below in order, cheapest first, and stops at the first failure: rustfmt on

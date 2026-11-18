@@ -163,23 +163,6 @@ away for whoever asks which image this is.
 k7 serves its own `frontend/dist` directly (`express.static` in `src/server.ts`), with no nginx
 and no location list to keep in step with the SPA's `base`.
 
-## The checkout credential
-
-Every OneDev `CheckoutStep` uses
-
-```yaml
-    cloneCredential:
-      type: HttpCredential
-      accessTokenSecret: submodule-token
-```
-
-and `engine/scripts/ciTree.mjs` sends the same token as an HTTP header: the project is private, and
-the default credential does not cover what those steps fetch.
-
-**`submodule-token` is a job secret in studio's OneDev project settings, not in this
-repo.** Secrets are per-project. If checkout fails after a fresh setup, that secret is the first
-thing to check — a missing one fails with an unresolved-secret error, a wrong one with a 401.
-
 ## The shell is asked again on every load, its assets never
 
 k7 serves its own `frontend/dist` from the backend (`src/server.ts`), with two

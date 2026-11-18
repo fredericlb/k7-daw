@@ -26,10 +26,9 @@ workspace with its own `Cargo.lock` over the same dependencies. A crate added to
 `apps/k7/backend-rs` updates that workspace's lock, which every build there writes, and leaves the
 tray's behind: the tray's next build resolves the new crate afresh, so a release ships versions no lock
 chose, and the Windows checkout is left with a `Cargo.lock` nobody committed. `cargo metadata --locked`
-resolves without compiling, so it needs neither tauri's system libraries nor a build: OneDev's
-`lint and test` runs it in its `rust:1.97.1-alpine` step on every push, and `check:changed` runs
+resolves without compiling, so it needs neither tauri's system libraries nor a build: `check:changed` runs
 `lint:locks` when a branch touches a `Cargo.toml` or `Cargo.lock` of one of these workspaces or of the browser's crates below. Where cargo is
-not on the PATH (the WSL clone) the script says so and passes, and OneDev is the check.
+not on the PATH the script says so and passes.
 
 The same script holds a deny-list (`scripts/cargoLockDeny.mjs`) over every lock: a crate pinned there fails the check
 whatever depends on it. An entry carries `enabled`, so a list can name a crate before its removal lands; the removal

@@ -4,11 +4,11 @@
 
 | Check | Command | Blocks |
 |---|---|---|
-| Biome lint and format | `npm run lint` | GitHub `k7` `lint` job, OneDev `lint and test` |
-| NUL bytes in source | `npm run lint:bytes` | GitHub `k7` `lint` job, OneDev `lint and test` |
+| Biome lint and format | `npm run lint` | GitHub `k7` `lint` job |
+| NUL bytes in source | `npm run lint:bytes` | GitHub `k7` `lint` job |
 | One version everywhere | `npm run lint:version` | GitHub `k7` `lint` job |
 | Dead file references | `npm run lint:docs` | Nothing: run it before pushing |
-| Typecheck | `npm run typecheck` | OneDev `lint and test`; GitHub runs `build` (which typechecks) instead |
+| Typecheck | `npm run typecheck` | GitHub runs `build` (which typechecks) |
 | Comment limits | `npm run lint:comments` | Nothing: a backlog report |
 | Dead code | `npm run lint:dead` | Nothing: a backlog report |
 | Panel binds | `npm run lint:panels` | Nothing: needs the external plugins installed |
@@ -114,4 +114,4 @@ These follow from the configuration and the checks above.
 | Packages are imported only through their `exports` subpaths; add a subpath rather than deep-importing | Module resolution |
 | Relative imports include the `.ts` extension | `allowImportingTsExtensions` in every package `tsconfig.json` |
 | npm scripts set environment variables through `with-env.mjs`, not `VAR=1 cmd`, so they run on Windows | Review |
-| Every edited JS or TS file passes Biome | GitHub `k7` `lint` job, OneDev `lint and test` |
+| Every edited JS or TS file passes Biome | GitHub `k7` `lint` job |

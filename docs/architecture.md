@@ -57,7 +57,7 @@ Notes for the whole repo — CI, deployment, the dev session — are in `docs/`:
 image's stamp), [images.md](images.md) (why k7's Dockerfile is staged the way it is),
 [server-engine.md](server-engine.md) (the server's own engine: its image, its null-sink device),
 [publishing.md](publishing.md) (the four packages published for apps outside this repository), [release-scope.md](release-scope.md) (what
-the first release ships with — and what it leaves out), [release.md](release.md) (the CI that remains: OneDev's check jobs and GitHub's `k7.yml` and `caches.yml`; no job releases anything),
+the first release ships with — and what it leaves out), [release.md](release.md) (the CI that remains: GitHub's `k7.yml` and `caches.yml`; no job releases anything),
 and the plan/recipe pages, [platter-plan.md](platter-plan.md) (the DJ deck's
 playback: a stretcher inside the platter, and the hybrid it deletes),
 [platter-node-plan.md](platter-node-plan.md) (its sequel — the platter is injected into the

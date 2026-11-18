@@ -2,34 +2,32 @@
 
 The two Cargo workspaces, `apps/k7/backend-rs` and the tray's `apps/k7-tray/src-tauri`, are the
 slowest builds after the engine's C++: Wasmtime, Cranelift, QuickJS and SQLite compile from source,
-and every new worktree, CI branch or target folder compiles them again. Three choices make that
-cheaper, natively and on OneDev's agents. The linker is the platform's own: it is not one of them.
+and every new worktree or target folder compiles them again. Three choices make that
+cheaper. The linker is the platform's own: it is not one of them.
 
 ## sccache in front of rustc, wherever it is found
 
 `engine/scripts/sccache.mjs` finds sccache (the `PATH`, WinGet's package folder, Homebrew's and
 cargo's bins) and returns `RUSTC_WRAPPER` with the cache's settings. Every cargo build a script of
 ours starts goes through it: the dev session's `k7-front` and tray (`dev-front.mjs`,
-`dev-tray.mjs`), Android's `buildFront`, the CI trees (`ciTree.mjs`: the engine, the APK), the native Rust checks and the macOS gate's engine testbed.
+`dev-tray.mjs`), Android's `buildFront`, the Rust checks and the macOS gate's engine testbed.
 
 | choice | why |
 |---|---|
 | never required: no sccache, one log line, an uncached build | a machine without it must still build; a `RUSTC_WRAPPER` naming a missing program fails every cargo command |
 | set by the scripts, not by a repo-wide `.cargo/config.toml` | a `rustc-wrapper` there would break every machine without sccache |
-| a `RUSTC_WRAPPER` already in the environment wins, `RUSTC_WRAPPER=` turns the cache off | a developer's own setting, or the CI tree's, is not replaced by the dev default |
-| one server per use, each on its own port: the dev session on sccache's default (4226, its default folder), the CI trees on 4227 (`k7-ci\sccache` or `~/k7-trees/sccache`), the Rust checks on 4228 (`sccache-rust` beside it) | a server keeps the folder and the size it was started with, and the Windows agent is the developer's machine: one shared server would take whichever settings started it, and a job ending could cut a dev build |
-| outside Windows each account's ports moved by `100 × (uid % 100)` (`userPort` in `engine/scripts/sccache.mjs`), a `SCCACHE_SERVER_PORT` already set kept | a server writes its outputs as the user who started it: the Mac runs a OneDev agent per account, and one account's builds through the other's server fail on `Permission denied` |
-| 10 GB for the dev cache, 15 GB for the CI trees (C++ and Rust), 5 GB for the checks: 30 GB on a machine | the disk is shared with the engine's build folders and the CI trees |
+| a `RUSTC_WRAPPER` already in the environment wins, `RUSTC_WRAPPER=` turns the cache off | a developer's own setting is not replaced by the dev default |
+| one server per use, each on its own port: the dev session on sccache's default (4226, its default folder), the lasting trees on 4227 (`~/k7-trees/sccache`), the Rust checks on 4228 (`sccache-rust` beside it) | a server keeps the folder and the size it was started with: one shared server would take whichever settings started it, and a job ending could cut a dev build |
+| outside Windows each account's ports moved by `100 × (uid % 100)` (`userPort` in `engine/scripts/sccache.mjs`), a `SCCACHE_SERVER_PORT` already set kept | a server writes its outputs as the user who started it: one account's builds through another's server fail on `Permission denied` |
+| 10 GB for the dev cache, 15 GB for the lasting trees (C++ and Rust), 5 GB for the checks: 30 GB on a machine | the disk is shared with the engine's build folders |
 | a target folder named with `--target-dir`, never `CARGO_TARGET_DIR` | sccache puts every `CARGO_*` variable in its key: a per-branch `CARGO_TARGET_DIR` would make each branch miss what the others compiled |
-| the CI trees' server left running, to its idle timeout | the engine and the APK jobs share it; a stop at the end of one would cut the other |
+| the lasting trees' server left running, to its idle timeout | the engine and the APK builds share it; a stop at the end of one would cut the other |
 
 What sccache does not cache: a workspace crate built incrementally (every workspace member in a
-debug build), a `bin`, `cdylib` or `proc-macro` crate, and a compile whose paths changed — the
-OneDev workspace folder is new each run, so the Rust checks' own crates always compile. What it
+debug build), a `bin`, `cdylib` or `proc-macro` crate, and a compile whose paths changed. What it
 saves is the dependencies, which are most of the time.
 
-Measured on the Windows agent (2026-11-04, the machine busy with CI meanwhile, so the seconds are
-rough): `cargo build -p k7-front` in a fresh target folder takes 759 s with an empty cache and 453 s
+Measured on a Windows machine (the seconds are rough): `cargo build -p k7-front` in a fresh target folder takes 759 s with an empty cache and 453 s
 with a warm one, 73 % of its rustc calls hits; the rest are the workspace's own crates and the
 build scripts.
 
@@ -38,8 +36,7 @@ build scripts.
 Both workspaces set `[profile.dev] debug = "line-tables-only"`: a panic's backtrace still names each
 frame's file and line, but a debugger sees no variables. `CARGO_PROFILE_DEV_DEBUG=2` (or `full`) in
 the environment gives full debug info back for a session at the debugger, at the cost of rebuilding
-everything once. The CI checks keep `CARGO_PROFILE_DEV_DEBUG=0`: nothing reads a backtrace there.
-A fresh `cargo build -p k7-front` on Windows leaves a 3.2 GB target folder where full debug info left
+everything once. A fresh `cargo build -p k7-front` on Windows leaves a 3.2 GB target folder where full debug info left
 7.3 GB, and links less: 708 s against 994 s on the same busy machine.
 
 ## An agent's builds
@@ -48,7 +45,7 @@ An agent runs `eval "$(node engine/scripts/sccache.mjs agent --export)"` before 
 
 | choice | why |
 |---|---|
-| `CARGO_BUILD_JOBS=4` and `NEXTEST_TEST_THREADS=8` for each agent (set through `sccache.mjs agent --export`, which `eval` needs; the CI reads the plain lines) | four agents at cargo's default each start one compiler per core: the Mac's 15 cores reached a load of 72, and every build stretched |
+| `CARGO_BUILD_JOBS=4` and `NEXTEST_TEST_THREADS=8` for each agent (set through `sccache.mjs agent --export`, which `eval` needs; a script reads the plain lines) | four agents at cargo's default each start one compiler per core: the Mac's 15 cores reached a load of 72, and every build stretched |
 | the cap fixed, never lowered while something else runs | sccache keys a compile on every `CARGO_` variable: a cap that moves makes the agents miss each other's cache |
 | `CARGO_PROFILE_DEV_DEBUG=line-tables-only` | an agent never opens a debugger; the links are shorter and a worktree's target folder, 7 to 20 GB, smaller |
 | `dev`'s cache, not a cache of its own | the agents' compiles hit each other's entries, since they all spell the same variables |
@@ -60,8 +57,8 @@ An agent runs `eval "$(node engine/scripts/sccache.mjs agent --export)"` before 
 
 ## cargo-nextest for the Rust checks
 
-`rust checks windows` and `rust checks macos` run the backend's tests with `cargo nextest run`, and
-fall back to `cargo test` with a log line on an agent without it. nextest runs every test in its own
+`mac-checks.sh` runs the backend's tests with `cargo nextest run`, and
+falls back to `cargo test` with a log line on a machine without it. nextest runs every test in its own
 process, all of them at once, where `cargo test` runs the test binaries one after another.
 
 | choice | why |
@@ -73,40 +70,33 @@ process, all of them at once, where `cargo test` runs the test binaries one afte
 | `NEXTEST_TEST_THREADS` equal to `CARGO_BUILD_JOBS` (4 on Windows, 5 on macOS) | the agents are shared with the developer and the release builds |
 | `nextest.toml` gives the known load flakes `retries = 2`, and the agent gate reruns a failed test alone once more (`scripts/agent/rerun-failed.sh`, docs/agent-playbook.md) | a timed test that passes alone is a loaded Mac, not a regression; the list of retried tests shrinks as each is fixed |
 | no `cargo test --doc` beside it | the workspace has no doctest; nextest does not run them, so a crate that adds one adds that line too |
-| no Linux nextest | the container would install it on every run; `rust checks` keeps `cargo test` |
 
-Installed by hand: on Windows the official binary in `%USERPROFILE%\.cargo\bin` (the agent runs as
-that user), on the Mac `brew install sccache cargo-nextest`. sccache on Windows is WinGet's
-`Mozilla.sccache`. The versions: sccache 0.18.0 on both, cargo-nextest 0.9.151 on Windows and
-Homebrew's 0.9.146 on the Mac.
+Installed by hand: on the Mac `brew install sccache cargo-nextest`; on Windows the official
+nextest binary in `%USERPROFILE%\.cargo\bin` and WinGet's `Mozilla.sccache`.
 
 ## Windows-only failures, caught before the push
 
-While Windows is set aside, `win-clippy.sh` is what keeps its build compiling; when its job runs, a round costs 7 to 12 minutes and shows only that run's failures, so each
-check below exists to spend fewer of them.
+Windows is set aside: `win-clippy.sh` is what keeps its build compiling, and a failure that shows only
+on a Windows run costs a long round, so each check below exists to spend fewer of them.
 
 | choice | why |
 |---|---|
 | every `cargo test` of the checks runs with `--no-fail-fast`, the browser crates' too | without it a crate stops at its first failing test binary, and the next failure costs another round |
-| `scripts/agent/win-clippy.sh` before a `ci/` push: clippy for `x86_64-pc-windows-gnu` on the Mac, about a minute | a `cfg(windows)` or `cfg(unix)` path compiles only on its platform: an import used by a Unix-only test is an error on Windows alone |
+| `scripts/agent/win-clippy.sh` before a merge: clippy for `x86_64-pc-windows-gnu` on the Mac, about a minute | a `cfg(windows)` or `cfg(unix)` path compiles only on its platform: an import used by a Unix-only test is an error on Windows alone |
 | the GNU target, not MSVC | it needs no Windows SDK; clippy checks without linking, so the ABI does not matter |
 | llvm-mingw in `~/.cache/llvm-mingw`, unpacked from its macOS release tarball, not Homebrew's `mingw-w64` | `ring` and `rquickjs-sys` compile C for the target; the tarball needs no admin rights and Homebrew on the Mac belongs to another account |
 
 What the script cannot see is a test whose answer differs on Windows (a path spelling, an error
-code): that one still needs `rust checks windows`.
+code): that one still needs a Windows machine.
 
-## What each CI run skips, when one is started
+## What the Mac checks skip
 
 | choice | why |
 |---|---|
-| an area the branch did not touch since `base/main` is skipped: `backend` (`apps/k7/backend-rs`, the lockfile) and `browser` (the three crates under `packages/*/rust`); a browser change runs both, since `k7-compile` links the song crate (`engine/scripts/ci/areas.mjs`) | a branch in one area paid for the other's clippy and tests on every round |
-| `base/main` is local `main` pushed to OneDev under that name, which no job triggers on | OneDev's `main` is not where branches are merged, so it lies far behind them |
-| a change to the checks' own scripts or the buildspec runs everything, and so does a base that cannot be fetched | a skip on a doubt would pass a branch nothing checked |
-| the Linux job runs only the backend's tests | Linux is there for processes, paths and sockets under musl; clippy, fmt and the browser crates already run on Windows and the Mac |
+| an area the branch did not touch since `main` is skipped: `backend` (`apps/k7/backend-rs`, the lockfile) and `browser` (the three crates under `packages/*/rust`); a browser change runs both, since `k7-compile` links the song crate (`engine/scripts/ci/areas.mjs`) | a branch in one area paid for the other's clippy and tests on every round |
+| a change to the checks' own scripts or the workflows run everything, and so does a base that cannot be fetched | a skip on a doubt would pass a branch nothing checked |
 | nextest for the browser crates too | it spreads the test binaries over the cores; none of the three crates holds a doctest, which nextest does not run |
-| a `ci/linux/` push runs the Linux job alone; Windows runs only for `ci/<name>` | a branch pushed under both names built the same commit twice on Windows, into two folders, at once |
 | no incremental build in the native checks (`CARGO_INCREMENTAL=0`), and no folder copied for a new branch | the incremental caches were most of a target folder's writes and sccache caches no crate built that way; sccache brings back the dependencies a copy would, writing only what a build reads |
-| a branch's folder on the Windows agent goes after two days unchecked | a day's `ci/` branches each left a full target folder behind |
 | the song crate's 131 test files are one binary, `tests/all/main.rs`, each file a module named as it was; `lanes_memory.rs` stays alone | most of a test build was linking 131 binaries (measured with sccache warm: a clean `cargo test --no-run` 50 s to 42 s, a one-file `src` change 9.2 s to 4.4 s, 146 test binaries down to 4 with the doctests; the same 1445 tests pass, 1446 with `--features ts`); a global allocator that counts live bytes would count every other test's, so that file keeps its own process; a gate is `--test all -- --ignored <module>::` |
 
 ## One test binary per backend crate
@@ -129,7 +119,7 @@ TypeScript over the golden corpus, the sweeps and the twins.
 
 | choice | why |
 |---|---|
-| on the Mac, in no CI job | the gates hold on any platform; the Linux container ran them cold, 20 of its 48 minutes |
+| on the Mac, in no CI job | the gates hold on any platform, and cost minutes a CI would pay on every push |
 | skipped when nothing they read changed since the merge-base with `main`; `--all` runs them | they read the song crate, its TypeScript, the file service and the corpus; a branch elsewhere gains nothing from their 9 minutes on the Mac |
 | the sweeps are never cut | the views and graph gates hold floors on the sweeps' counts: a gate without its sweep fails |
 | the TypeScript's outputs (the staged corpus, every dump, the smoke stage) are cached in `~/.cache/k7-stage-dumps/<key>/`, the newest 3 kept; `--fresh` ignores the cache, `--key` prints the key | most port work changes Rust only, and the TypeScript half is most of a cold run |

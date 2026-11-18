@@ -31,7 +31,6 @@ Root files worth knowing:
 | `knip.json` | Dead-code detection configuration. |
 | `vitest.config.ts` | The root Vitest config, used when Vitest is run from the root. |
 | `env.example.yaml` | Template for `env.yaml`, the per-machine service configuration (never committed). |
-| `.onedev-buildspec.yml` | The OneDev CI pipeline (see [CI](./07-ci.md)). |
 | `.gitattributes` | Forces LF line endings everywhere (`* text=auto eol=lf`) and marks audio, image and binary files as binary. |
 | `.npmrc` | `legacy-peer-deps=true`. |
 
