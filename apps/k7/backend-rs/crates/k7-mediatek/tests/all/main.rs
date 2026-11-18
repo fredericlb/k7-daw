@@ -3,7 +3,6 @@
 
 mod engine_watchdog;
 mod sidecar_atomic;
-mod stream;
 mod transcode;
 mod video_copy;
 mod video_probe;

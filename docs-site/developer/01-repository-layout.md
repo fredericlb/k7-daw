@@ -115,7 +115,7 @@ Four packages are published by version for consumers outside this repository: `w
 |---|---|
 | Song files and compile | `song-schema`, `song`, `song-edit`, `k7x`, `song-video`, `song-strudel`, `translator` |
 | Commands | `commands` |
-| Audio processing | `audio-analysis`, `audio-probe`, `audio-passes`, `take-render`, `dsp`, `stem-separation` |
+| Audio processing | `audio-analysis`, `audio-probe`, `audio-passes`, `take-render`, `dsp` |
 | Engine connection | `engine-protocol`, `engine-client`, `engine-browser`, `engine-registry`, `engine-tunnel` |
 | Disk | `user-prefs` (the file service and the hub are Rust crates under `apps/k7/backend-rs/crates/`) |
 | Media and recording | `ui-mini-player`, `recorder`, `http-client` (the media core is the Rust crate `k7-mediatek`) |

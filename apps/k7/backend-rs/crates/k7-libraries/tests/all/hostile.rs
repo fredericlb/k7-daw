@@ -1,4 +1,4 @@
-//! hostile.rs — names with `..`, an absent version, a forged or missing stamp, a seed with a link, a seed with a link.
+//! hostile.rs — a forged or missing secret, a body over the limit, a seed with a link.
 
 use std::fs;
 use std::sync::Arc;
@@ -43,59 +43,10 @@ async fn ask(
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-async fn a_name_with_dots_never_becomes_a_path() {
+async fn a_request_that_is_not_the_hubs_is_answered_nothing() {
     let root = Root::new();
     let svc = seeded(&root);
     svc.first_ensure().await;
-    for name in ["..", "../k7", "k7-core/../..", "%2e%2e", "", ".", "a/b"] {
-        let (status, body) = ask(
-            &svc,
-            "POST",
-            &format!("/account/libraries/{name}/publish"),
-            true,
-            &json!({}),
-        )
-        .await;
-        assert!(status == 400 || status == 404, "{name}: {status} {body}");
-    }
-    let (status, body) = ask(
-        &svc,
-        "PUT",
-        "/account/libraries",
-        true,
-        &json!({ "libraries": [{ "name": ".." }] }),
-    )
-    .await;
-    assert_eq!(
-        (
-            status,
-            body["error"]
-                .as_str()
-                .unwrap()
-                .contains("cannot name a library")
-        ),
-        (400, true)
-    );
-}
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-async fn a_request_that_is_not_the_hubs_or_not_an_admin_changes_nothing() {
-    let root = Root::new();
-    let svc = seeded(&root);
-    svc.first_ensure().await;
-    let list = root.0.join("data/libraries.json");
-    let before = fs::read_to_string(&list).ok();
-    let put = json!({ "libraries": [{ "name": "k7-core" }, { "name": "drums" }] });
-    // The stamp absent: every write is refused, and no folder appears.
-    for (method, path) in [
-        ("PUT", "/account/libraries"),
-        ("POST", "/account/libraries/k7-core/publish"),
-    ] {
-        let (status, body) = ask(&svc, method, path, false, &put).await;
-        assert_eq!(status, 403, "{body}");
-    }
-    assert!(!root.0.join("data/libraries/drums").exists());
-    assert_eq!(fs::read_to_string(&list).ok(), before);
     // The secret missing, empty or forged: nothing is read either.
     let body = b"{}";
     for secret in [
@@ -134,12 +85,12 @@ async fn a_request_that_is_not_the_hubs_or_not_an_admin_changes_nothing() {
         })
         .await;
     assert_eq!(r.status, 401);
-    // And a body over the limit is refused with its sentence, the list unmoved.
+    // And a body over the limit is refused with its sentence.
     let big = vec![b' '; k7_libraries::JSON_BODY_MAX + 1];
     let r = svc
         .answer(&Request {
-            method: "PUT",
-            path: "/account/libraries",
+            method: "POST",
+            path: "/libraries/sync",
             query: "",
             secret: Some(SECRET),
             admin: true,
@@ -177,20 +128,4 @@ async fn a_link_in_a_seed_or_a_version_serves_nothing_outside() {
     assert!(v1.join("mix.k7x").exists());
     assert!(!v1.join("leak.txt").exists() && !v1.join("up").exists());
     drop(svc);
-}
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-async fn a_dot_file_is_neither_published_nor_served() {
-    let root = Root::new();
-    let svc = seeded(&root);
-    let store = svc.store.clone();
-    store.ensure(None, true);
-    let draft = store.home.join("k7-core/draft");
-    fs::write(draft.join(".env"), "TOKEN=1").unwrap();
-    fs::create_dir_all(draft.join(".cache")).unwrap();
-    fs::write(draft.join(".cache/x"), "x").unwrap();
-    store.publish("k7-core", None, None).unwrap();
-    let two = store.home.join("k7-core/2");
-    assert!(two.join("modules/mix.k7x").exists());
-    assert!(!two.join(".env").exists() && !two.join(".cache").exists());
 }

@@ -56,7 +56,6 @@ export interface BandColumn {
 
 /** A band's row: the class it carries, and the class of the cell that names it. */
 export const BAND_ROW = "hover:bg-transparent";
-const BAND_LABEL = "pt-5 text-xs font-semibold uppercase tracking-wide";
 
 /** The search box at the table's head: Escape empties it, and so does its ✕. */
 export function BandSearch({
@@ -106,7 +105,7 @@ export function BandSearch({
   );
 }
 
-/** A band's cells: its label in the first column (`labelClass` styling it, BAND_LABEL for a heading), `extra` in the last, the others empty but present. */
+/** A band's cells: its label in the first column (`labelClass` styling it), `extra` in the last, the others empty but present. */
 export function bandCells(
   columns: BandColumn[],
   label: ReactNode,

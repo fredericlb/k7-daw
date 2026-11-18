@@ -126,7 +126,7 @@ async fn ask(state: &AppState, id: &str, body: Value) -> Response {
     }
 }
 
-/// A JSON answer spelt as `JSON.stringify` spells it, with Express's content type, as the médiathèque writes one.
+/// A JSON answer spelt as `JSON.stringify` spells it, with Express's content type, as the media writes one.
 fn say(status: StatusCode, body: &Value) -> Response {
     let mut r = (status, k7_mediatek::json::stringify(body)).into_response();
     r.headers_mut().insert(

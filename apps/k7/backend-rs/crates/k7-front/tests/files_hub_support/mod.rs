@@ -12,7 +12,7 @@ use tokio::net::TcpListener;
 
 use crate::http_support::{self, Reply};
 
-/// A backend that runs no hub, mints the services' médiathèque bearer, and echoes anything else.
+/// A backend that runs no hub, mints the services' media bearer, and echoes anything else.
 pub async fn backend() -> SocketAddr {
     let l = TcpListener::bind("127.0.0.1:0").await.unwrap();
     let addr = l.local_addr().unwrap();

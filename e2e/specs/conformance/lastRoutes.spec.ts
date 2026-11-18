@@ -168,49 +168,13 @@ test("a missing asset, /api and /auth are Express's 404, never the shell", async
 });
 
 test("a bearer that does not verify is refused even beside a valid session", async () => {
-  for (const path of ["/api/preferences", "/api/ai/settings", "/api/token"]) {
+  for (const path of ["/api/preferences", "/api/ai/settings"]) {
     const res = await raw(path, {
       headers: { cookie: cookie(), authorization: "Bearer conformance.forged" },
     });
     expect(res.status, path).toBe(401);
     expect(JSON.parse(res.body.toString()), path).toEqual({
       error: "invalid token",
-    });
-  }
-});
-
-test("a bearer that verifies signs nobody in: the preferences still read the session", async () => {
-  const json = { cookie: cookie(), "content-type": "application/json" };
-  const made = await raw("/api/token", {
-    method: "POST",
-    headers: json,
-    body: JSON.stringify({ label: "conformance-last-routes" }),
-  });
-  test.skip(made.status !== 200, "this instance mints no library token");
-  const minted = JSON.parse(made.body.toString());
-  try {
-    const bearer = { authorization: `Bearer ${minted.token}` };
-    for (const at of [base, upstream].filter((u): u is string => !!u)) {
-      const alone = await raw("/api/preferences", { headers: bearer, at });
-      expect(alone.status, at).toBe(401);
-      expect(JSON.parse(alone.body.toString()), at).toEqual({
-        error: "unauthenticated",
-      });
-      const beside = await raw("/api/preferences", {
-        headers: { ...bearer, cookie: cookie() },
-        at,
-      });
-      expect(beside.status, at).toBe(200);
-      const tokens = await raw("/api/token", {
-        headers: { ...bearer, cookie: cookie() },
-        at,
-      });
-      expect(tokens.status, at).toBe(404);
-    }
-  } finally {
-    await raw(`/api/token/${minted.id}`, {
-      method: "DELETE",
-      headers: { cookie: cookie() },
     });
   }
 });

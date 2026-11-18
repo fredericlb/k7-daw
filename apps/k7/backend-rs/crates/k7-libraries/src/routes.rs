@@ -1,4 +1,4 @@
-//! routes.rs — the libraries' service behind the hub's secret: `/account/libraries*`, `/libraries/sync` and `/status`,
+//! routes.rs — the libraries' service behind the hub's secret: `/account/libraries` (read only), `/libraries/sync` and `/status`,
 //! answered as `libraryCore.ts` and `librariesRoutes.ts` do.
 //! What a reader gets wrong: the caller checks who asks; `answer` believes the admin stamp it is handed, and the secret
 //! gate only keeps a request that is not the hub's out.
@@ -52,17 +52,6 @@ fn json_body(body: &[u8]) -> Value {
 
 fn error(status: u16, message: impl Into<String>) -> Reply {
     Reply::json(status, json!({ "error": message.into() }))
-}
-
-/// `String(v ?? "")` for the values a name can arrive as.
-fn text_of(v: Option<&Value>) -> String {
-    match v {
-        None | Some(Value::Null) => String::new(),
-        Some(Value::String(s)) => s.clone(),
-        Some(Value::Number(n)) => n.to_string(),
-        Some(Value::Bool(b)) => b.to_string(),
-        Some(_) => "[object Object]".into(),
-    }
 }
 
 impl Libraries {
@@ -141,7 +130,7 @@ impl Libraries {
         self.account(req).await
     }
 
-    /// `/account/libraries`: reading is everyone's, changing the list is the admins'.
+    /// `/account/libraries`: the list, which everyone reads.
     async fn account(self: &Arc<Self>, req: &Request<'_>) -> Result<Reply, String> {
         let sub = match &req.path[ACCOUNT.len()..] {
             "" => "/",
@@ -157,59 +146,6 @@ impl Libraries {
                 })
                 .await?;
             return Ok(Reply::json(200, view));
-        }
-        if method == "PUT" && sub == "/" {
-            if !admin {
-                return Ok(error(
-                    403,
-                    "only the origin's admins may change the libraries",
-                ));
-            }
-            let body = match json_body_of(req) {
-                Ok(b) => b,
-                Err(r) => return Ok(r),
-            };
-            let Some(list) = body.get("libraries").and_then(Value::as_array) else {
-                return Ok(error(400, "expected { libraries: [{ name }] }"));
-            };
-            let names: Vec<String> = list
-                .iter()
-                .map(|l| k7x::edit::js_trim(&text_of(l.get("name"))).to_string())
-                .collect();
-            return Ok(match self.blocking(move |s| s.set(&names)).await? {
-                Ok(reply) => Reply::json(200, reply),
-                Err(e) => error(400, e),
-            });
-        }
-        if method == "POST"
-            && let Some(raw) = sub
-                .strip_prefix('/')
-                .and_then(|r| r.strip_suffix("/publish"))
-            && !raw.is_empty()
-            && !raw.contains('/')
-        {
-            if !admin {
-                return Ok(error(403, "only the origin's admins may publish a library"));
-            }
-            let body = match json_body_of(req) {
-                Ok(b) => b,
-                Err(r) => return Ok(r),
-            };
-            let name = decode_component(raw);
-            let requires = body.get("requires").and_then(Value::as_f64);
-            let notes = body
-                .get("notes")
-                .and_then(Value::as_str)
-                .map(str::to_string);
-            return Ok(
-                match self
-                    .blocking(move |s| s.publish(&name, requires, notes.as_deref()))
-                    .await?
-                {
-                    Ok(_) => Reply::json(200, self.store.view(&[])),
-                    Err(e) => error(400, e),
-                },
-            );
         }
         Ok(error(404, format!("no {method} {}", req.path)))
     }
@@ -238,29 +174,4 @@ fn json_body_of(req: &Request<'_>) -> Result<Value, Reply> {
         return Err(error(413, format!("body over {JSON_BODY_MAX} bytes")));
     }
     Ok(json_body(req.body))
-}
-
-/// `decodeURIComponent` of a path segment; a malformed escape is kept as written.
-fn decode_component(s: &str) -> String {
-    let b = s.as_bytes();
-    let mut out = Vec::with_capacity(b.len());
-    let mut i = 0;
-    while i < b.len() {
-        let hex = |c: u8| (c as char).to_digit(16);
-        match (
-            b[i],
-            b.get(i + 1).and_then(|c| hex(*c)),
-            b.get(i + 2).and_then(|c| hex(*c)),
-        ) {
-            (b'%', Some(h), Some(l)) => {
-                out.push((h * 16 + l) as u8);
-                i += 3;
-            }
-            (c, _, _) => {
-                out.push(c);
-                i += 1;
-            }
-        }
-    }
-    String::from_utf8_lossy(&out).into_owned()
 }

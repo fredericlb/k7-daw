@@ -1,5 +1,5 @@
 //! The `sync` job over the bound machine's jobs path (2212): a loopback socket the hub bound, spoken to by `request_job`,
-//! the same code the médiathèque's jobs use over its tunnel link. A channel that will not open is a failed copy (2223).
+//! the same code the media's jobs use over its tunnel link. A channel that will not open is a failed copy (2223).
 
 use std::time::Duration;
 

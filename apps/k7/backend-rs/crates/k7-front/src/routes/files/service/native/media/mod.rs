@@ -1,5 +1,5 @@
 //! media — an account's waveforms, downloads and takes held natively (1l, `docs/file-media.md`): the envelopes' memo and
-//! the decodes in flight, the model downloads' registry and client, and a take filed into the médiathèque.
+//! the decodes in flight, the model downloads' registry and client, and a take filed into the media.
 //! What a reader gets wrong: no lock here is held across an await, a decode, a request or a rename (2470).
 
 pub mod direct;

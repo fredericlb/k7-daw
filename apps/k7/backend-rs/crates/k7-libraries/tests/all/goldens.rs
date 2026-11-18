@@ -54,18 +54,6 @@ fn step(root: &Root, store: &Arc<Store>, s: &Value) -> Value {
                 .collect::<Vec<_>>()
         ),
         "ensure" => notes(&store.ensure(s["target"].as_str(), s["draft"] == json!(true))),
-        "set" => match store.set(&names(&s["names"])) {
-            Ok(reply) => json!({ "ok": true, "reply": reply }),
-            Err(e) => json!({ "error": e }),
-        },
-        "publish" => match store.publish(
-            str_of(s, "name"),
-            s["requires"].as_f64(),
-            s["notes"].as_str(),
-        ) {
-            Ok(m) => json!({ "ok": true, "manifest": m.json() }),
-            Err(e) => json!({ "error": e }),
-        },
         "versions" => Value::Array(
             store
                 .versions(str_of(s, "name"))
@@ -108,14 +96,6 @@ fn step(root: &Root, store: &Arc<Store>, s: &Value) -> Value {
 fn step_alone(store: &Arc<Store>, s: &Value) -> Value {
     match str_of(s, "op") {
         "ensure" => notes(&store.ensure(s["target"].as_str(), s["draft"] == json!(true))),
-        "publish" => match store.publish(
-            str_of(s, "name"),
-            s["requires"].as_f64(),
-            s["notes"].as_str(),
-        ) {
-            Ok(m) => json!({ "ok": true, "manifest": m.json() }),
-            Err(e) => json!({ "error": e }),
-        },
         other => panic!("no parallel step {other}"),
     }
 }

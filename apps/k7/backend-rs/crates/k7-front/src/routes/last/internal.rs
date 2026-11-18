@@ -1,5 +1,5 @@
 //! internal.rs — the seam's TypeScript half (`apps/k7/backend/src/media/internalFiles.ts` behind `internalGate`):
-//! a library bearer's subject, and the backend's word that it runs no médiathèque and no recorder.
+//! a library bearer's subject, and the backend's word that it runs no media and no recorder.
 //! What a reader gets wrong: `verify-token` checks the front's own bearers too, the ones its hub mints for the file
 //! services, since no other process holds them (`packages/engine-registry/docs/internalSeam.md`).
 
@@ -22,25 +22,13 @@ pub const INTERNAL: &str = "/api/internal";
 /// The router's own body limit, `express.json({ limit: "8kb" })`.
 const BODY_LIMIT: usize = 8 * 1024;
 
-/// How long a use of a library token waits before it is written, as `fileTokenStore` flushes.
-const FLUSH_MS: f64 = 60_000.0;
-
-/// The subject a library bearer verifies as, the `/api` guard's own check: the hub's ephemeral bearers, then the listed ones.
+/// The subject a library bearer verifies as: the ephemeral bearers the hub mints for its services.
 pub fn verify_bearer(state: &AppState, token: &str) -> Option<String> {
     let secret = &state.settings.api_token_secret;
-    if let Some(sub) = state
+    state
         .files
         .as_ref()
         .and_then(|f| f.hub.verify_service_token(secret, token))
-    {
-        return Some(sub);
-    }
-    let now = crate::session::now_ms();
-    let sub = state.tokens.verify_and_touch(secret, token, now);
-    if let Err(e) = state.tokens.flush_due(now, FLUSH_MS) {
-        eprintln!("k7-front: the library tokens' last uses were not written: {e}");
-    }
-    sub
 }
 
 /// Every request under `/api/internal` the front's own families left: the gate, then the answer.

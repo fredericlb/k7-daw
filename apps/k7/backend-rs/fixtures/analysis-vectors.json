@@ -14,16 +14,6 @@
   "883cf98b901791c8f93e61b893d554c500df50f5815441105de31342747dba28",
   "448dccb9a92f62c1bf8c43fbb96e3a091e3f49ecd6b5217256052583188797c4"
  ],
- "etags": [
-  [
-   "10-1000/none",
-   "W/\"hpg81bBFATb1sMoTrxUxv5\""
-  ],
-  [
-   "4044-1730000000000.123/350000-1730000000001.5",
-   "W/\"zEiBk0I75nnpMabiMk34QO\""
-  ]
- ],
  "files": [
   {
    "name": "mono-8k-120",
@@ -92,70 +82,6 @@
    "name": "no-frames",
    "wav": "8b8fbafe8679076454429756fa72f11d5f442c87381cc6a4285451d826a9e629",
    "error": "cannot open <source>: no audio decoded"
-  },
-  {
-   "name": "tone.flac",
-   "sidecar": "324a1c00bab88015381cf2a99c294d8d1818c5fb2fb7b6bb4ca87c2b350f8fd0",
-   "bytes": 2406,
-   "envelope": "456d92bc393575dd6b2ba08aa91e2b28773a5a4f33bda1d82d8c7a8f393aab60",
-   "bpm": 0,
-   "transients": 0
-  },
-  {
-   "name": "silence.flac",
-   "sidecar": "576f9f8059f8b8a2b7a2ffce5078f15e652088e637af5100958ed1c354f1042b",
-   "bytes": 286925,
-   "envelope": "2a3c393e77fe01328de52d192ffc0755b6a3035247fdb05714cb349dc1eccff0",
-   "bpm": 0,
-   "transients": 0
-  },
-  {
-   "name": "stereo-44k.flac",
-   "sidecar": "3f6f326037f858c98636f6cee0615821de8e57d78893d83b614a7cc5b7a89392",
-   "bytes": 3291,
-   "envelope": "7911ad051a008abbf29a8b6916061745166466a5691b8db7e91487dc05700fa3",
-   "bpm": 0,
-   "transients": 5
-  },
-  {
-   "name": "mono-48k.flac",
-   "sidecar": "1bc9a47c348158862005917efbe53f7705b09e28b15b9781ab69ca280aa48907",
-   "bytes": 3492,
-   "envelope": "38a5b356f9866f8944d7850ea382a77ef838022300aff9382af8151ae966e3ae",
-   "bpm": 0,
-   "transients": 0
-  },
-  {
-   "name": "stereo-96k-24.flac",
-   "sidecar": "7f2ee7da61bae7ebac3ab0fabcf663e22b862699d3ae680ab3f8ea034a78ba5a",
-   "bytes": 2214,
-   "envelope": "001a0cf7daa3c364e1362aebb1ee03d322fc214eab5d83a3d30fe4d6a0956872",
-   "bpm": 0,
-   "transients": 2
-  },
-  {
-   "name": "mono-22k.flac",
-   "sidecar": "1584e5c46c5327a6a5e4a1577499da01a227068d6aa757b5426ea898cc45a40e",
-   "bytes": 1742,
-   "envelope": "958783cf62a8b47c75c6f5fa098f67d663762fe0f9e5802b7b349ca41df0f1a2",
-   "bpm": 0,
-   "transients": 0
-  },
-  {
-   "name": "quad-48k-24.flac",
-   "sidecar": "8077c502eb49a38286bcca4956d05c4b21d044b58d7e10b37621d17a699154bd",
-   "bytes": 1224,
-   "envelope": "9ea43ff810ec4dba76c57f932f5be874f08c45bddf7ebc4b3d2e24d45df3eccf",
-   "bpm": 0,
-   "transients": 1
-  },
-  {
-   "name": "tone.webm",
-   "sidecar": "087faf29ed60fb0fc571b1bfd58c93386ca8efed49cd250a06b151c5f9313724",
-   "bytes": 13337,
-   "envelope": "31a370eebb958d2509851a7f831c48b3502986f76afcdeee481ac5f09be17c46",
-   "bpm": 150,
-   "transients": 1
   },
   {
    "name": "song.yaml",

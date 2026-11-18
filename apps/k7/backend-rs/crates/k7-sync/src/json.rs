@@ -154,27 +154,6 @@ pub fn encode_uri_component(s: &str) -> String {
     out
 }
 
-/// `decodeURIComponent`, None where it throws a URIError.
-pub fn decode_uri_component(s: &str) -> Option<String> {
-    let b = s.as_bytes();
-    let mut out = Vec::with_capacity(b.len());
-    let mut i = 0;
-    while i < b.len() {
-        if b[i] == b'%' {
-            let hex = std::str::from_utf8(b.get(i + 1..i + 3)?).ok()?;
-            if !hex.bytes().all(|c| c.is_ascii_hexdigit()) {
-                return None;
-            }
-            out.push(u8::from_str_radix(hex, 16).ok()?);
-            i += 3;
-        } else {
-            out.push(b[i]);
-            i += 1;
-        }
-    }
-    String::from_utf8(out).ok()
-}
-
 /// A number field as JavaScript reads it: any JSON number, as a double.
 pub fn num(v: Option<&Value>) -> Option<f64> {
     v.and_then(Value::as_f64)
@@ -216,13 +195,6 @@ mod tests {
     #[test]
     fn uri_components() {
         assert_eq!(encode_uri_component("a b/é%"), "a%20b%2F%C3%A9%25");
-        assert_eq!(
-            decode_uri_component("a%20b%2F%C3%A9%25").as_deref(),
-            Some("a b/é%")
-        );
-        assert_eq!(decode_uri_component("%C3"), None);
-        assert_eq!(decode_uri_component("%zz"), None);
-        assert_eq!(decode_uri_component("%ED%A0%80"), None);
     }
 
     #[test]

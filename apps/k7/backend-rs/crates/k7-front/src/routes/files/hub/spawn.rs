@@ -1,5 +1,5 @@
 //! spawn.rs — what the hub is built from and launched with: the accounts' and the libraries' environments (the
-//! account's own values, the sync target, the render machine, the médiathèque's bearer), the libraries' runtime, a server's cut
+//! account's own values, the sync target, the render machine, the media's bearer), the libraries' runtime, a server's cut
 //! context and the caches' sweep. Choices: `docs/files.md`.
 
 use std::collections::{BTreeMap, HashMap};
@@ -264,13 +264,6 @@ pub(super) async fn launch(app: &Arc<AppState>) {
             h.settled.store(true, Ordering::Relaxed);
         }
     }));
-    // A server writes the relay rooms a device edited into their folders, beside the export and the runtime.
-    if !app.settings.local_user {
-        tasks.push(super::super::rooms_out::launch(
-            hub.data_root.clone(),
-            hub.log.clone(),
-        ));
-    }
     // One person here: their workspaces are ready before the first page asks for them.
     if hub.is_device()
         && let Some(email) = crate::session::local_user()
