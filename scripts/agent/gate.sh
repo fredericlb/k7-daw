@@ -74,7 +74,6 @@ if [ "$mode" = "--quick" ]; then
     step "win-clippy on the affected crates"
     bash scripts/agent/win-clippy.sh --narrow
   fi
-  bash scripts/agent/proof.sh put gate-quick
   echo "gate: quick checks passed"
   exit 0
 fi

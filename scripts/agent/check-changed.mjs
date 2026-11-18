@@ -129,8 +129,6 @@ if (failed.length) {
   console.error(`\ncheck:changed: FAILED in ${failed.join(", ")}`);
   process.exit(1);
 }
-// A pass on a committed tree is stamped, so merge-branch.sh need not run it again (proof.sh).
-if (!dry) spawnSync("bash", ["scripts/agent/proof.sh", "put", "check"]);
 console.log(
   `\ncheck:changed: passed (${steps.length} lints, ${runs.length} workspace runs)`,
 );
