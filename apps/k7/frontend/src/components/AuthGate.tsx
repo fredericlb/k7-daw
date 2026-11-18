@@ -55,7 +55,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
   // The service that mints the session is down.
   return (
     <SignInScreen
-      title="k7"
+      title="K7 DAW"
       description={m["auth.unreachable"]()}
       footer={<LocaleSwitcher />}
       className="text-center"

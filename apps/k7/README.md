@@ -3,7 +3,7 @@
 A **text-based DAW**. Your song is a folder of k7x files; the terminal (or a web
 editor) is your studio.
 
-k7 is a set of processes talking over a WebSocket, living inside the `studio`
+k7 is a set of processes talking over a WebSocket, living inside the `k7-daw`
 monorepo:
 
 ```
@@ -52,7 +52,7 @@ engine/k7-supervisor/           the supervisor (C++): identity, registry, engine
 engine/scripts/                  the native build: engine + supervisor, staged and packaged
 apps/k7-tray/                   the tray (Tauri; runs k7's backend, which drives k7-supervisor)
 apps/k7/                the web editor — frontend / backend
-packages/                  studio's shared tier (consumed as raw TS source):
+packages/                  k7-daw's shared tier (consumed as raw TS source):
   song/                    @studio/song            — song model + compiler + Strudel patterns
   commands/                @studio/commands        — shared command layer, file edits, timeline, mixing
   engine-client/           @studio/engine-client   — drives the engine over the WebSocket protocol

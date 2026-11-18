@@ -89,7 +89,7 @@
   "commandBar.recent": "Lancée récemment",
   "commandBar.starter": "Pour commencer",
   "engine.instrumentMissing": "Ce module a besoin de l’instrument échantillonné « {instrument} », absent de la machine du moteur. Téléchargez-le là où tourne le moteur : la section Téléchargements de la page du moteur de cette machine, ouverte depuis le tray k7, ou la section Téléchargements des Réglages sur le téléphone ; ou listez-le sous « instruments » dans le fichier de configuration du moteur en ligne de commande.",
-  "startup.loading": "Chargement de k7…",
+  "startup.loading": "Chargement de K7 DAW…",
   "startup.signingIn": "Vérification de votre connexion…",
   "startup.files": "Accès à vos fichiers…",
   "startup.opening": "Ouverture du projet…",

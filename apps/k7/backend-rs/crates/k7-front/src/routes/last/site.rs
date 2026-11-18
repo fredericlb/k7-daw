@@ -32,7 +32,7 @@ fn page() -> &'static str {
             .and_then(|v| v.get("svg").and_then(|s| s.as_str()).map(str::to_string))
             .unwrap_or_default();
         format!(
-            "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<meta name=\"color-scheme\" content=\"dark\"><meta name=\"theme-color\" content=\"#07031F\">\n<title>k7 — coming soon</title><style>\nhtml,body{{margin:0;height:100%;background:#07031F;color:#e9e9ee;font:16px/1.5 system-ui,-apple-system,\"Segoe UI\",sans-serif}}\nmain{{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding:24px;box-sizing:border-box}}\nsvg{{display:block;width:min(80vw,520px);height:auto}}\nh1{{margin:0;font-size:clamp(20px,4vw,28px);font-weight:500;letter-spacing:.08em;color:#b8b3d9}}\n</style></head><body><main>{svg}<h1>Coming soon</h1></main></body></html>"
+            "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<meta name=\"color-scheme\" content=\"dark\"><meta name=\"theme-color\" content=\"#07031F\">\n<title>K7 DAW — coming soon</title><style>\nhtml,body{{margin:0;height:100%;background:#07031F;color:#e9e9ee;font:16px/1.5 system-ui,-apple-system,\"Segoe UI\",sans-serif}}\nmain{{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding:24px;box-sizing:border-box}}\nsvg{{display:block;width:min(80vw,520px);height:auto}}\nh1{{margin:0;font-size:clamp(20px,4vw,28px);font-weight:500;letter-spacing:.08em;color:#b8b3d9}}\n</style></head><body><main>{svg}<h1>Coming soon</h1></main></body></html>"
         )
     })
 }
