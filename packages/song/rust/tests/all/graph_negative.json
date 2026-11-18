@@ -1,0 +1,2277 @@
+[
+ {
+  "name": "code-from-unknown",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "graph.k7x": "modules({ \"@in\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainFromUnknown|chain=@in|from=@in"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-mixed-lane",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"1:1\"), ref(\"r\").start(\"2:1\")])\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"m\": [\"amp\"], \"amp\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainMixedLane|chain=m|track=m|module=amp|wants=audio"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-mixed-lane-midi-wants",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"1:1\"), ref(\"r\").start(\"2:1\")])\n",
+   "nodes/syn.k7x": "plugin({ type: \"internal\", name: \"Synth\" })\ninputs([{ name: \"in\", type: \"midi\" }])\n",
+   "graph.k7x": "modules({ \"m\": [\"syn\"], \"syn\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainMixedLane|chain=m|track=m|module=syn|wants=midi"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-mixed-lane-by-port-is-quiet",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"1:1\"), ref(\"r\").start(\"2:1\")])\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"m#audio\": [\"amp\"], \"amp\": [\"OUT\"], \"m#midi\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-step-unknown",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "graph.k7x": "modules({ \"ghost\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainStepUnknown|chain=ghost|module=ghost|hint="
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-step-slash-hint",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/io/IN/module.k7x": "io(\"in\")\n",
+   "$lib/k7-core/modules/io/IN/in-2.k7x": "channel([2])\n",
+   "graph.k7x": "modules({ \"@k7-core/io/IN/in-2\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainStepUnknown|chain=@k7-core/io/IN/in-2|module=@k7-core/io/IN/in-2|hint= \u2014 did you mean '@k7-core/io/IN:in-2'? a node is named with ':', not '/'"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-extends-unknown",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/nope.k7x": "extends(\"no-such-ref\")\n",
+   "graph.k7x": "modules({ \"a\": [\"nope\"], \"nope\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainExtendsUnknown|chain=a|module=nope|base=no-such-ref"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-transition-wired",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "$lib/k7-core/modules/video_transitions/wipe/module.k7x": "type(\"video_transition\")\n",
+   "nodes/wipe.k7x": "extends(\"@k7-core/video_transitions/wipe\")\n",
+   "graph.k7x": "modules({ \"a\": [\"wipe\"], \"wipe\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainTransitionWired|chain=a|module=wipe"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-out-is-input",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/mic.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"a\": [\"mic\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainNoOut|chain=a",
+    "outIsInput|chain=a|out=mic"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-out-is-camera",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/cam.k7x": "io(\"camera\")\n",
+   "graph.k7x": "modules({ \"a\": [\"cam\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainNoOut|chain=a",
+    "outIsCamera|chain=a|out=cam"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-out-is-midi-device",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/dev.k7x": "io(\"midi\")\n",
+   "graph.k7x": "modules({ \"a\": [\"dev\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainNoOut|chain=a",
+    "outIsMidiDevice|chain=a|out=dev"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-out-is-picture-lane",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/pic.k7x": "extends(\"@meta/picture-track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"amp\"], \"amp\": [\"pic\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainNoOut|chain=a",
+    "outIsPictureLane|chain=a|out=pic"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-out-is-track",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"a\": [\"amp\"], \"amp\": [\"b\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainNoOut|chain=a",
+    "outIsTrack|chain=a|out=b"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-out-unknown",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"ZZZ\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainNoOut|chain=a",
+    "outUnknown|chain=a|out=ZZZ"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-out-bad-port",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/two.k7x": "plugin({ type: \"internal\", name: \"X\" })\noutputs([{ name: \"out\", type: \"audio\" }, { name: \"aux\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"a\": [\"amp\"], \"amp#nope\": [\"OUT\"], \"two#bad\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "outBadPort|chain=a|out=OUT|source=amp|port=nope|outputs=",
+    "outBadPort|chain=two|out=OUT|source=two|port=bad|outputs=out, aux"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-render-port",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"RENDER#bogus\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "outRenderPort|chain=a|out=RENDER#bogus"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-render-sound-not-mix",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"RENDER#audio\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "outRenderSoundNotMix|chain=a|out=RENDER#audio"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "render-audio-from-mix",
+  "category": "ports",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"MIX\"], \"MIX\": [\"RENDER#audio\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-track-clip-missing",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/e.k7x": "extends(\"@meta/track\")\nevents([ref(\"nope\").start(\"1:1\")])\n",
+   "graph.k7x": "modules({ \"e\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "trackClipMissing|track=e|ref=nope"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-asset-missing-model",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/n.k7x": "plugin({ type: \"internal\", name: \"Amp\" })\nparams({ model: \"room.nam\" })\n",
+   "graph.k7x": "modules({ \"n\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "moduleAssetMissing|module=n|param=model|ref=room.nam"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "ir-resolved-and-not",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/irs/room.wav": "x",
+   "nodes/good.k7x": "plugin({ type: \"internal\", name: \"Hall\" })\nparams({ ir: \"@k7-core/room.wav\" })\n",
+   "nodes/bad.k7x": "plugin({ type: \"internal\", name: \"Hall\" })\nparams({ ir: \"room.wav\" })\n",
+   "graph.k7x": "modules({ \"good\": [\"OUT\"], \"bad\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "moduleAssetMissing|module=bad|param=ir|ref=room.wav"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-input-no-channel",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/mic.k7x": "io(\"in\")\n",
+   "graph.k7x": "modules({ \"mic\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "inputNoChannel|input=mic"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-input-track-disabled",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/mic.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/d.k7x": "extends(\"@meta/track\")\ndisabled(true)\n",
+   "graph.k7x": "modules({ \"mic\": [\"d\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "inputTrackDisabled|input=mic|track=d"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-input-track-missing",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/mic.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/pic.k7x": "extends(\"@meta/picture-track\")\n",
+   "graph.k7x": "modules({ \"pic\": [\"mic\"], \"mic\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "inputTrackMissing|input=mic|track=pic"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-input-track-group",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/mic.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/grp.k7x": "extends(\"@meta/group-track\")\ntracks([\"a\"])\n",
+   "graph.k7x": "modules({ \"mic\": [\"grp\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "inputTrackGroup|input=mic|track=grp"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-input-track-strudel",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/mic.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/kit.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/pat.strudel\")\n",
+   "algo/pat.strudel": "s('bd')\n",
+   "graph.k7x": "modules({ \"mic\": [\"kit\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "inputTrackStrudel|input=mic|track=kit"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-track-two-inputs",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/m1.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/m2.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"m1\": [\"a\"], \"m2\": [\"a\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "trackTwoInputs|track=a|first=m1|second=m2"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-channel-not-input",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/chan.k7x": "plugin({ type: \"internal\", name: \"Amp\" })\nchannel([2])\n",
+   "graph.k7x": "modules({ \"chan\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "moduleChannelNotInput|module=chan"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-group-contains-itself-and-missing",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/g.k7x": "extends(\"@meta/group-track\")\ntracks([\"g\", \"ghost\"])\n",
+   "graph.k7x": "modules({})\n"
+  },
+  "expect": {
+   "issues": [
+    "groupContainsItself|group=g",
+    "groupTrackMissing|group=g|track=ghost"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-track-two-groups",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/g1.k7x": "extends(\"@meta/group-track\")\ntracks([\"a\"])\n",
+   "nodes/g2.k7x": "extends(\"@meta/group-track\")\ntracks([\"a\"])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "trackTwoGroups|track=a|first=g1|second=g2"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-chain-no-out",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"a\": [\"amp\"], \"amp\": [\"b\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainNoOut|chain=a",
+    "outIsTrack|chain=a|out=b"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-chain-cycle-side-input",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/x.k7x": "plugin({ type: \"jsdsp\" })\ninputs([{ name: \"a\", type: \"audio\" }, { name: \"b\", type: \"audio\", mandatory: false }])\n",
+   "nodes/y.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"x\": [\"y\"], \"y\": [\"x#b\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainCycle|chain=a",
+    "chainNoOut|chain=a"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "code-assemblies",
+  "category": "codes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/levelA.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "assemblies/box.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"ghostA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([name(\"mix\").type(\"audio\").node(\"level\")])\nparams({ Level: { node: \"level\", param: \"Gain\" } })\n",
+   "graph.k7x": "modules({ \"a\": [\"levelA\"], \"levelA\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "assemblyMemberMissing|assembly=box|member=fade|node=ghostA"
+   ],
+   "findings": [],
+   "pointers": {
+    "/assemblies/box/members": [
+     "levelA",
+     "ghostA"
+    ]
+   },
+   "absent": [
+    "/assemblies/box/missing"
+   ]
+  }
+ },
+ {
+  "name": "flag-stub-and-missing",
+  "category": "flags",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/audio/blank/module.k7x": "type(\"plugin\")\n",
+   "nodes/blank.k7x": "extends(\"@k7-core/audio/blank\")\n",
+   "graph.k7x": "modules({ \"blank\": [\"ghost\"], \"ghost\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "chainStepUnknown|chain=blank|module=ghost|hint="
+   ],
+   "findings": [],
+   "pointers": {
+    "/chains/blank/use/0/stub": true,
+    "/chains/blank/use/1/missing": true,
+    "/chains/blank/use/1/stub": false
+   },
+   "absent": [
+    "/chains/blank/use/0/pluginId"
+   ]
+  }
+ },
+ {
+  "name": "flag-not-supported-and-unknown-by-format",
+  "category": "flags",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/n.k7x": "plugin({ type: \"not_supported\", name: \"X\" })\n",
+   "nodes/t.k7x": "plugin({ type: \"mystery\", name: \"X\" })\n",
+   "graph.k7x": "modules({ \"n\": [\"OUT\"], \"t\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/n/use/0/notSupported": true,
+    "/chains/t/use/0/unknownPlugin": true
+   },
+   "absent": [
+    "/chains/n/use/0/unknownPlugin",
+    "/chains/t/use/0/pluginId"
+   ]
+  }
+ },
+ {
+  "name": "flag-unknown-formats",
+  "category": "flags",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/u1.k7x": "plugin({ type: \"mystery\", name: \"A\" })\n",
+   "nodes/u2.k7x": "plugin({ type: \"ghostformat\", name: \"B\" })\n",
+   "graph.k7x": "modules({ \"u1\": [\"OUT\"], \"u2\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/u1/use/0/unknownPlugin": true,
+    "/chains/u2/use/0/unknownPlugin": true
+   },
+   "absent": [
+    "/chains/u1/use/0/pluginId"
+   ]
+  }
+ },
+ {
+  "name": "flag-unknown-by-scan-and-native",
+  "category": "flags",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$scan": "{\"entries\":[{\"plugins\":[{\"name\":\"Real One\",\"format\":\"VST3\"}]}]}",
+   "nodes/real.k7x": "plugin({ type: \"VST3\", name: \"Real One\" })\n",
+   "nodes/ghost.k7x": "plugin({ type: \"VST3\", name: \"Nothing Here\" })\n",
+   "graph.k7x": "modules({ \"real\": [\"OUT\"], \"ghost\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/ghost/use/0/unknownPlugin": true,
+    "/chains/real/use/0/hasNativePluginUI": true,
+    "/chains/real/use/0/pluginId": "real:real"
+   },
+   "absent": [
+    "/chains/ghost/use/0/pluginId"
+   ]
+  }
+ },
+ {
+  "name": "flag-strip-offline-jsdsp-faust",
+  "category": "flags",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$meta/audio/mixer/module.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n",
+   "nodes/mix.k7x": "extends(\"@meta/audio/mixer\")\n",
+   "nodes/off.k7x": "plugin({ type: \"offline\", name: \"Denoise\" })\nparams({ strength: 0.5 })\n",
+   "nodes/js.k7x": "plugin({ type: \"jsdsp\" })\n",
+   "nodes/fa.k7x": "plugin({ type: \"faust\" })\nparams({ table: \"saw.wav\" })\n",
+   "graph.k7x": "modules({ \"mix\": [\"OUT\"], \"off\": [\"OUT\"], \"js\": [\"OUT\"], \"fa\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/mix/use/0/strip": true,
+    "/chains/js/use/0/pluginId": "js:js",
+    "/chains/fa/use/0/assets/table": "saw.wav",
+    "/chains/off/use/0/params/strength": 0.5
+   },
+   "absent": [
+    "/chains/off/use/0/pluginId",
+    "/chains/off/use/0/stage"
+   ]
+  }
+ },
+ {
+  "name": "flag-shader-shape-transition-no-plugin",
+  "category": "flags",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/shaders/blur/module.k7x": "type(\"shader\")\n",
+   "$lib/k7-core/modules/shapes/rect/module.k7x": "type(\"shape\")\nshape(\"square\")\n",
+   "nodes/sh.k7x": "extends(\"@k7-core/shaders/blur\")\nshader(\"soft\")\n",
+   "nodes/rect.k7x": "extends(\"@k7-core/shapes/rect\")\ncolor(\"#ff0000\")\n",
+   "graph.k7x": "modules({ \"sh\": [\"OUT\"], \"rect\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/sh/use/0/stub": false,
+    "/chains/sh/use/0/shader": "soft",
+    "/chains/rect/use/0/stub": false,
+    "/chains/rect/use/0/category": "shapes"
+   },
+   "absent": [
+    "/chains/sh/use/0/pluginId",
+    "/chains/rect/use/0/pluginId"
+   ]
+  }
+ },
+ {
+  "name": "ports-two-inputs-side-input-in-a-run",
+  "category": "ports",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/x.k7x": "plugin({ type: \"jsdsp\" })\ninputs([{ name: \"a\", type: \"audio\" }, { name: \"b\", type: \"audio\", mandatory: false }])\noutputs([{ name: \"out\", type: \"audio\" }, { name: \"aux\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"b\": [\"x#b\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/a/use/0/inputs/1/mandatory": false,
+    "/chains/a/use/0/outputs/1/name": "aux",
+    "/chains/a/use/0/inputs/0/name": "a"
+   },
+   "absent": [
+    "/chains/x"
+   ]
+  }
+ },
+ {
+  "name": "ports-wiring-fault-refuses",
+  "category": "refusals",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/x.k7x": "plugin({ type: \"jsdsp\" })\ninputs([{ name: \"a\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"b\": [\"x#a\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "refused": {
+    "files": [],
+    "faults": [
+     "too_many|chain:a:1|x"
+    ]
+   }
+  }
+ },
+ {
+  "name": "ports-raw-ports-fault-the-graph-does-not-make",
+  "category": "refusals",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/audio/two/module.k7x": "plugin({ type: \"jsdsp\" })\ninputs([{ name: \"a\", type: \"audio\" }, { name: \"b\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/t.k7x": "extends(\"@k7-core/audio/two\")\n",
+   "graph.k7x": "modules({ \"a\": [\"t\"], \"t\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": []
+  }
+ },
+ {
+  "name": "lanes-disabled-and-group-member-quiet",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/melody.k7x": "extends(\"@meta/track\")\n",
+   "nodes/pad.k7x": "extends(\"@meta/track\")\ndisabled(true)\n",
+   "nodes/live.k7x": "extends(\"@meta/group-track\")\ntracks([\"pad\", \"ghost\"])\n",
+   "graph.k7x": "modules({ \"melody\": [\"OUT\"], \"pad\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "groupTrackMissing|group=live|track=ghost"
+   ],
+   "findings": [],
+   "pointers": {
+    "/tracks": [
+     "live",
+     "melody"
+    ]
+   },
+   "absent": [
+    "/chains/pad"
+   ]
+  }
+ },
+ {
+  "name": "lanes-kinds-video-source-bypass",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/pic.k7x": "extends(\"@meta/picture-track\")\ncolor(\"#00ff00\")\n",
+   "nodes/snd.k7x": "extends(\"@meta/track\")\nvideo_source(\"pic\")\n",
+   "nodes/st.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/pat.strudel\")\n",
+   "algo/pat.strudel": "s('bd')\n",
+   "graph.k7x": "modules({ \"pic\": [\"RENDER\"], \"snd\": [\"OUT\"], \"st\": [\"OUT\"] })\nbypassed([\"snd\"])\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/videoTracks": [
+     "pic"
+    ],
+    "/trackSignals/snd": "audio"
+   }
+  }
+ },
+ {
+  "name": "lanes-picture-strip-by-extends",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$meta/shaders/video-mixer/module.k7x": "type(\"shader\")\n",
+   "nodes/pic.k7x": "extends(\"@meta/picture-track\")\n",
+   "nodes/vm.k7x": "extends(\"@meta/shaders/video-mixer\")\n",
+   "graph.k7x": "modules({ \"pic\": [\"vm\"], \"vm\": [\"RENDER\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackMixers": {
+     "pic": "vm"
+    }
+   }
+  }
+ },
+ {
+  "name": "lanes-meta-track-as-a-step",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "graph.k7x": "modules({ \"@meta/track\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/@meta~1track/from": "@meta/track"
+   }
+  }
+ },
+ {
+  "name": "lanes-alternatives",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\nalternatives([{ name: \"alt\", color: \"#112233\" }])\nalternative(\"alt\")\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackAlternatives/a/alternative": "alt"
+   }
+  }
+ },
+ {
+  "name": "lanes-from-port",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"1:1\"), ref(\"r\").start(\"2:1\")])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "graph.k7x": "modules({ \"a#audio\": [\"amp\"], \"a#midi\": [\"OUT\"], \"amp\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": []
+  }
+ },
+ {
+  "name": "clips-every-kind-and-ties",
+  "category": "clips",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "timelines/song.k7x": "length(\"2:0\")\nlanes([{lane: \"drums\", events: [{ref: \"k\", start: \"1:1\"}]}])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"1:1\"), ref(\"r\").start(\"1:1\"), ref(\"song\").start(\"1:1\"), ref(\"nope\").start(\"1:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "trackClipMissing|track=a|ref=nope"
+   ],
+   "findings": [],
+   "pointers": {
+    "/trackClips/a/0/kind": "audio",
+    "/trackClips/a/1/kind": "midi",
+    "/trackClips/a/2/kind": "timeline",
+    "/trackClips/a/3/kind": "missing"
+   }
+  }
+ },
+ {
+  "name": "clips-seconds-start-and-meter",
+  "category": "clips",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"t\", timeSignature: \"7/8\", tempo: 90 })\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(2), ref(\"k\").start(\"3:2\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackClips/a/0/start": 3.0
+   }
+  }
+ },
+ {
+  "name": "clips-handed-len-zero-and-missing",
+  "category": "clips",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"1:1\"), ref(\"k\").start(\"2:1\"), ref(\"k\").start(\"3:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackClips/a/0/len": 2.0,
+    "/trackClips/a/1/len": 4.0,
+    "/trackMixers/a": "mix-a",
+    "/trackColors/a": "#abcdef"
+   },
+   "absent": [
+    "/trackClips/a/2/len"
+   ]
+  },
+  "handed": {
+   "extents": {
+    "a": [
+     {
+      "start": 0,
+      "length": 2
+     },
+     {
+      "start": 4,
+      "length": 0
+     }
+    ]
+   },
+   "mixers": {
+    "a": "mix-a"
+   },
+   "colors": {
+    "a": "#abcdef"
+   },
+   "manual": [],
+   "auto": []
+  }
+ },
+ {
+  "name": "clips-signature-that-is-no-bar-still-draws",
+  "category": "clips",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"t\", timeSignature: \"0/4\" })\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"1:1\"), ref(\"k\").start(\"2:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackClips/a/1/tc": "2:1",
+    "/trackClips/a/1/start": 4.0
+   }
+  }
+ },
+ {
+  "name": "clips-start-beyond-a-spelling",
+  "category": "clips",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(1e300), ref(\"k\").start(\"2:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackClips/a/0/tc": "2:1",
+    "/trackClips/a/1/tc": ""
+   }
+  }
+ },
+ {
+  "name": "live-label-known",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/mic.k7x": "io(\"in\")\nchannel(\"synth\")\nmonitor(\"on\")\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"mic\": [\"a\"], \"a\": [\"amp\"], \"amp\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/mic/use/0/monitor": "on"
+   },
+   "absent": [
+    "/chains/mic/use/0/channel"
+   ]
+  },
+  "rig": {
+   "channels": {
+    "in": [
+     {
+      "ch": [
+       3,
+       4
+      ],
+      "label": "synth"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "name": "live-label-unknown-and-tap-by-landing",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/mic.k7x": "io(\"in\")\nchannel(\"ghost\")\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"mic\": [\"a\"], \"a\": [\"amp\"], \"amp\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/warnings/0": "input 'mic': channel 'ghost' is not an input label in preferences.yaml preferences \u2014 have: vox",
+    "/chains/mic/use/0/tap/id": "a:amp"
+   }
+  },
+  "rig": {
+   "channels": {
+    "in": [
+     {
+      "ch": [
+       1
+      ],
+      "label": "vox"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "name": "live-numeric-no-plugin-on-the-lane",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/mic.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"mic\": [\"a\"], \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/mic/use/0/channel": [
+     1
+    ]
+   },
+   "absent": [
+    "/chains/mic/use/0/tap"
+   ]
+  }
+ },
+ {
+  "name": "live-camera-midi-file",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/cam.k7x": "io(\"camera\")\n",
+   "nodes/dev.k7x": "io(\"midi\")\ndevice(\"Keys\")\n",
+   "nodes/f.k7x": "io(\"file\")\nsource(\"clips/k.wav\")\n",
+   "graph.k7x": "modules({ \"cam\": [\"RENDER\"], \"dev\": [\"OUT\"], \"f\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/cam/use/0/camera": "",
+    "/chains/dev/use/0/device": "Keys"
+   },
+   "absent": [
+    "/chains/f/use/0/camera"
+   ]
+  }
+ },
+ {
+  "name": "choices-assets-own-and-ancestor",
+  "category": "choices",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/audio/amp/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "$lib/k7-core/modules/audio/amp/assets/top.nam": "x",
+   "nodes/n.k7x": "extends(\"@k7-core/audio/amp\")\n",
+   "nodes/assets/own.json": "{}",
+   "graph.k7x": "modules({ \"n\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/n/use/0/assetChoices": [
+     "own.json",
+     "top.nam"
+    ]
+   }
+  }
+ },
+ {
+  "name": "choices-bases-fxp-and-subfolder",
+  "category": "choices",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/instruments/surge/module.k7x": "plugin({ type: \"internal\", name: \"Synth\" })\n",
+   "$lib/k7-core/modules/instruments/surge/base/warm.vstpreset": "x",
+   "$lib/k7-core/modules/instruments/surge/base/Pads/Bell Pad.fxp": "x",
+   "nodes/s.k7x": "extends(\"@k7-core/instruments/surge\")\nbase(\"Pads/Bell Pad\")\n",
+   "graph.k7x": "modules({ \"s\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/s/use/0/bases": [
+     "Pads/Bell Pad",
+     "warm"
+    ],
+    "/chains/s/use/0/base": "Pads/Bell Pad"
+   }
+  }
+ },
+ {
+  "name": "choices-shader-one-stage-not-offered",
+  "category": "choices",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/shaders/blur/module.k7x": "type(\"shader\")\n",
+   "$lib/k7-core/modules/shaders/blur/shaders/soft/vertex.glsl": "v",
+   "$lib/k7-core/modules/shaders/blur/shaders/soft/fragment.glsl": "f",
+   "$lib/k7-core/modules/shaders/blur/shaders/half/vertex.glsl": "v",
+   "nodes/sh.k7x": "extends(\"@k7-core/shaders/blur\")\n",
+   "graph.k7x": "modules({ \"sh\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/sh/use/0/shaders": [
+     "soft"
+    ]
+   }
+  }
+ },
+ {
+  "name": "choices-library-files-by-bind-library-and-project",
+  "category": "choices",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/irs/hall.wav": "x",
+   "$lib/k7-core/samples/kick.wav": "x",
+   "$lib/k7-core/wavetables/saw.wav": "x",
+   "samples/own.wav": "x",
+   "nodes/ir.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nui({ cols: 1, rows: 1, widgets: { w: { type: \"filepicker\", col: 0, row: 0, bind: \"ir\" } } })\n",
+   "nodes/rk.k7x": "type(\"rack\")\nplugin({ type: \"internal\", name: \"Sampler\" })\n",
+   "nodes/wt.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nui({ cols: 1, rows: 1, widgets: { w: { type: \"dropdown\", col: 0, row: 0, bind: \"slot\", library: \"wavetables\" } } })\n",
+   "graph.k7x": "modules({ \"ir\": [\"OUT\"], \"rk\": [\"OUT\"], \"wt\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/ir/use/0/assetChoices": [
+     "@k7-core/hall.wav"
+    ],
+    "/chains/rk/use/0/assetChoices": [
+     "@project/own.wav",
+     "@k7-core/kick.wav"
+    ],
+    "/chains/wt/use/0/assetChoices": [
+     "@k7-core/saw.wav"
+    ]
+   }
+  }
+ },
+ {
+  "name": "choices-no-root-for-the-family",
+  "category": "choices",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/ir.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nui({ cols: 1, rows: 1, widgets: { w: { type: \"filepicker\", col: 0, row: 0, bind: \"ir\" } } })\n",
+   "graph.k7x": "modules({ \"ir\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "absent": [
+    "/chains/ir/use/0/assetChoices"
+   ]
+  }
+ },
+ {
+  "name": "choices-midi-map-cc",
+  "category": "choices",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/audio/ccamp/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/modules/audio/ccamp/controller.k7x": "Gain({ ch: 1, cc: 7 })\n",
+   "nodes/n.k7x": "extends(\"@k7-core/audio/ccamp\")\n",
+   "graph.k7x": "modules({ \"n\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/n/use/0/cc/Gain/cc": 7,
+    "/chains/n/use/0/cc/Gain/ch": 1
+   }
+  }
+ },
+ {
+  "name": "racks-samples-slice-empty-kit",
+  "category": "racks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/s.k7x": "type(\"rack\")\nplugin({ type: \"internal\", name: \"Sampler\" })\nrack({ rack_type: \"samples\", symbols: { SN: { note: 38, clip: \"k\" }, BD: { note: 36, clip: \"k\", mute: true } } })\n",
+   "nodes/l.k7x": "type(\"rack\")\nplugin({ type: \"internal\", name: \"Sampler\" })\nrack({ rack_type: \"slice\", source: \"k\", symbols: { A: { note: 60, from: 0, to: 0.5 } } })\n",
+   "nodes/e.k7x": "type(\"rack\")\nplugin({ type: \"internal\", name: \"Sampler\" })\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sfz\" })\nkit({ kick: 36, snare: 38 })\nparams({ \"Mute 38\": 1 })\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "graph.k7x": "modules({ \"s\": [\"OUT\"], \"l\": [\"OUT\"], \"e\": [\"OUT\"], \"kit\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/e/use/0/rack": [],
+    "/chains/kit/use/0/rackKit": true,
+    "/chains/kit/use/0/rack/1/mute": true,
+    "/chains/s/use/0/rack/0/symbol": "BD"
+   },
+   "absent": [
+    "/chains/s/use/0/rackKit"
+   ]
+  }
+ },
+ {
+  "name": "racks-text-mute-is-not-a-mute",
+  "category": "racks",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sfz\" })\nkit({ kick: 36 })\nparams({ \"Mute 36\": \"1\" })\n",
+   "graph.k7x": "modules({ \"kit\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/kit/use/0/rackKit": true
+   },
+   "absent": [
+    "/chains/kit/use/0/rack/0/mute"
+   ]
+  }
+ },
+ {
+  "name": "models-download-with-and-without-url",
+  "category": "models",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "plugin({ type: \"offline\", name: \"D\" })\nparams({ model: \"net.onnx\" })\nmodel_url(\"https://example.com/net.onnx\")\n",
+   "nodes/b.k7x": "plugin({ type: \"offline\", name: \"D\" })\nparams({ onnx: \"net.onnx\" })\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"], \"b\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "moduleAssetMissing|module=a|param=model|ref=net.onnx",
+    "moduleAssetMissing|module=b|param=onnx|ref=net.onnx"
+   ],
+   "findings": [],
+   "pointers": {
+    "/chains/a/use/0/modelDownload/file": "net.onnx"
+   },
+   "absent": [
+    "/chains/b/use/0/modelDownload"
+   ]
+  }
+ },
+ {
+  "name": "models-nam-and-json-flavours",
+  "category": "models",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/n.k7x": "plugin({ type: \"internal\", name: \"Amp\" })\nparams({ model: \"a.NAM\" })\n",
+   "nodes/assets/a.NAM": "x",
+   "nodes/j.k7x": "plugin({ type: \"internal\", name: \"Amp\" })\nparams({ model: \"b.json\" })\n",
+   "nodes/assets/b.json": "{\"layers\":[],\"in_shape\":[1,2]}",
+   "nodes/p.k7x": "plugin({ type: \"internal\", name: \"Amp\" })\nparams({ model: \"c.json\" })\n",
+   "nodes/assets/c.json": "{\"model_data\":{\"input_size\":3},\"state_dict\":{}}",
+   "graph.k7x": "modules({ \"n\": [\"OUT\"], \"j\": [\"OUT\"], \"p\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/n/use/0/ampModel/kind": "nam",
+    "/chains/j/use/0/ampModel/knobs": 1,
+    "/chains/p/use/0/ampModel/kind": "proteus",
+    "/chains/p/use/0/ampModel/knobs": 2
+   }
+  }
+ },
+ {
+  "name": "routing-chain-project-places-stacks-levels",
+  "category": "routing",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "chains/main.k7x": "start(true)\nsteps([id(\"l1\").track(\"a\"), id(\"p\").plugin({ type: \"internal\", name: \"Chorus\" }), {sub: \"s\"}, to([chain(\"OUT\").level(0.5)])])\nsubchains([{id: \"s\", steps: [id(\"d\").plugin({ type: \"internal\", name: \"Chorus\" })]}])\n",
+   "tracks/a.k7x": "extends(\"@meta/track\")\n",
+   "layout.k7x": "positions({ a: { x: 10, y: 20 } })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/stacks": [
+     [
+      "d"
+     ]
+    ],
+    "/positions/a/x": 10.0
+   }
+  }
+ },
+ {
+  "name": "routing-hidden-chain",
+  "category": "routing",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "chains/main.k7x": "start(true)\nsteps([id(\"l1\").track(\"a\"), id(\"p\").plugin({ type: \"internal\", name: \"Chorus\" }), {sub: \"s\"}, to([chain(\"OUT\").level(0.5)])])\nsubchains([{id: \"s\", steps: [id(\"d\").plugin({ type: \"internal\", name: \"Chorus\" })]}])\n",
+   "chains/aside.k7x": "hidden(true)\nsteps([id(\"z\").plugin({ type: \"internal\", name: \"Chorus\" })])\n",
+   "tracks/a.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/stacks": [
+     [
+      "d"
+     ]
+    ]
+   },
+   "absent": [
+    "/chains/aside"
+   ]
+  }
+ },
+ {
+  "name": "routing-graph-positions-and-levels-not-played",
+  "category": "routing",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\npositions({ a: { x: 1, y: 2 } })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/positions/a/y": 2.0
+   }
+  }
+ },
+ {
+  "name": "routing-tap-feeds",
+  "category": "routing",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/rack.k7x": "type(\"rack\")\nplugin({ type: \"internal\", name: \"Sampler\" })\nrack({ rack_type: \"samples\", symbols: { BD: { note: 36, sample: \"@k7-core/kick.wav\" } } })\ntap_outs({ BD: \"run\" })\n",
+   "nodes/run.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/samples/kick.wav": "x",
+   "graph.k7x": "modules({ \"run\": [\"OUT\"] })\ntap_feeds([{ node: \"rack\", tap: \"BD\", to: \"run\" }])\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/tapFeeds/0/node": "rack"
+   }
+  }
+ },
+ {
+  "name": "curves-kinds-bound-unbound-and-missing",
+  "category": "curves",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/slow.k7x": "type(\"lfo\")\nshape(\"sine\")\nfrequency(1)\n",
+   "curves/hold.k7x": "type(\"onoff\")\npoints([{ time: \"1:1\", value: 1 }])\n",
+   "curves/env.k7x": "type(\"adsr\")\nattack(10)\ndecay(10)\nsustain(10)\nrelease(10)\nlevel(1)\n",
+   "curves/draw.k7x": "type(\"custom\")\npoints([{ time: \"1:1\", value: 0 }, { time: \"2:1\", value: 1 }])\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nautomations([{ param: \"Depth\", curve: \"@meta/curves/slow\", trigger: \"kick\" }, { param: \"Rate\", curve: \"ghost\" }])\n",
+   "graph.k7x": "modules({ \"amp\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/curves/slow/type": "lfo",
+    "/curves/hold/type": "onoff",
+    "/curves/env/type": "adsr",
+    "/curves/draw/points/1/value": 1.0,
+    "/chains/amp/use/0/automations/0/trigger": "kick"
+   },
+   "absent": [
+    "/chains/amp/use/0/automations/1"
+   ]
+  }
+ },
+ {
+  "name": "curves-broken-file-costs-one",
+  "category": "curves",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "curves/ok.k7x": "type(\"onoff\")\npoints([{ time: \"1:1\", value: 1 }])\n",
+   "curves/bad.k7x": "type(\"lfo\")\nfrequency(\n",
+   "graph.k7x": "modules({})\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [
+    "curves/bad.k7x"
+   ]
+  }
+ },
+ {
+  "name": "frozen-a-real-render",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\nfrozen(\"renders/amp.wav\")\n",
+   "renders/amp.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"amp\"], \"amp\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": []
+  }
+ },
+ {
+  "name": "frozen-on-a-lane",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\nfrozen(\"r.wav\")\n",
+   "r.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/frozen/a": "at"
+   }
+  }
+ },
+ {
+  "name": "frozen-integer-named-plans-overlap",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/1.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"r.wav\")\n",
+   "nodes/2.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"r.wav\")\n",
+   "r.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"1\"], \"1\": [\"2\"], \"2\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/frozen/1": "inside",
+    "/frozen/2": "at",
+    "/frozen/a": "inside"
+   }
+  }
+ },
+ {
+  "name": "frozen-feeds-outside",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/y.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"r.wav\")\n",
+   "r.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"x\": [\"y\", \"OUT\"], \"y\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/frozen/y": "at",
+    "/frozen/x": "inside"
+   }
+  }
+ },
+ {
+  "name": "frozen-climbing-inside-the-workspace",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"../up.wav\")\n",
+   "../up.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/frozen/x": "at"
+   }
+  }
+ },
+ {
+  "name": "frozen-climbing-out-of-the-workspace",
+  "category": "frozen",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"../../up.wav\")\n",
+   "../../up.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "absent": [
+    "/frozen"
+   ]
+  }
+ },
+ {
+  "name": "frozen-a-folder-render",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"renders\")\n",
+   "renders/a.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/frozen/x": "at"
+   }
+  }
+ },
+ {
+  "name": "frozen-on-a-disabled-lane",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\ndisabled(true)\n",
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"r.wav\")\n",
+   "r.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "absent": [
+    "/frozen"
+   ]
+  }
+ },
+ {
+  "name": "frozen-behind-a-meta-track-step",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"r.wav\")\n",
+   "r.wav": "RIFF",
+   "graph.k7x": "modules({ \"@meta/track\": [\"x\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/frozen/x": "at",
+    "/frozen/@meta~1track": "inside"
+   }
+  }
+ },
+ {
+  "name": "frozen-not-on-a-chain",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"r.wav\")\n",
+   "r.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "absent": [
+    "/frozen"
+   ]
+  }
+ },
+ {
+  "name": "frozen-render-missing",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"gone.wav\")\n",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "absent": [
+    "/frozen"
+   ]
+  }
+ },
+ {
+  "name": "frozen-manual-and-automatic",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$scan": "{\"entries\":[{\"plugins\":[{\"name\":\"Other One\",\"format\":\"VST3\"}]}]}",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\nfrozen(\"r.wav\")\n",
+   "nodes/v.k7x": "plugin({ type: \"VST3\", name: \"Ghost Synth\" })\n",
+   "r.wav": "RIFF",
+   "graph.k7x": "modules({ \"a\": [\"amp\"], \"amp\": [\"OUT\"], \"b\": [\"v\"], \"v\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/frozen/amp": "at",
+    "/autoFrozen/b": "v",
+    "/autoFrozen/v": "v"
+   }
+  },
+  "renders": "ready"
+ },
+ {
+  "name": "frozen-and-auto-from-handed",
+  "category": "frozen",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/frozen/a": "inside",
+    "/frozen/x": "at",
+    "/autoFrozen": {
+     "a": "v1"
+    },
+    "/autoFreezeWaiting": {
+     "b": "v2"
+    }
+   }
+  },
+  "handed": {
+   "extents": null,
+   "mixers": null,
+   "colors": null,
+   "manual": [
+    {
+     "at": "x",
+     "lanes": [
+      "a"
+     ],
+     "modules": [
+      "m"
+     ]
+    }
+   ],
+   "auto": [
+    {
+     "module": "v1",
+     "ready": true,
+     "hosted": false,
+     "lanes": [
+      "a"
+     ],
+     "modules": []
+    },
+    {
+     "module": "v2",
+     "ready": false,
+     "hosted": false,
+     "lanes": [],
+     "modules": [
+      "b"
+     ]
+    },
+    {
+     "module": "v3",
+     "ready": false,
+     "hosted": true,
+     "lanes": [
+      "c"
+     ],
+     "modules": []
+    }
+   ]
+  }
+ },
+ {
+  "name": "refuse-node-will-not-read",
+  "category": "refusals",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/bad.k7x": "plugin(\n",
+   "graph.k7x": "modules({})\n"
+  },
+  "expect": {
+   "refused": {
+    "files": [
+     "nodes/bad.k7x"
+    ],
+    "faults": []
+   }
+  }
+ },
+ {
+  "name": "refuse-graph-file-will-not-read",
+  "category": "refusals",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "graph.k7x": "modules(\n"
+  },
+  "expect": {
+   "refused": {
+    "files": [
+     "graph.k7x"
+    ],
+    "faults": []
+   }
+  }
+ },
+ {
+  "name": "clip-syntax-error-is-absent-not-a-refusal",
+  "category": "refusals",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "clips/bad.k7x": "source(\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"bad\").start(\"1:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "trackClipMissing|track=a|ref=bad"
+   ],
+   "findings": [
+    "clips/bad.k7x"
+   ]
+  }
+ },
+ {
+  "name": "sequence-syntax-error-is-absent",
+  "category": "refusals",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "sequences/bad.k7x": "notes(\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"bad\").start(\"1:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "trackClipMissing|track=a|ref=bad"
+   ],
+   "findings": [
+    "sequences/bad.k7x"
+   ]
+  }
+ },
+ {
+  "name": "timeline-syntax-error-is-absent",
+  "category": "refusals",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "timelines/bad.k7x": "lanes(\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"bad\").start(\"1:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "trackClipMissing|track=a|ref=bad"
+   ],
+   "findings": [
+    "timelines/bad.k7x"
+   ]
+  }
+ },
+ {
+  "name": "clip-schema-error-is-absent",
+  "category": "refusals",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "clips/bad.k7x": "source(\"clips/k.wav\")\nbogus(1)\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"bad\").start(\"1:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [
+    "trackClipMissing|track=a|ref=bad"
+   ],
+   "findings": [
+    "clips/bad.k7x"
+   ]
+  }
+ },
+ {
+  "name": "refuse-wiring-too-few",
+  "category": "refusals",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/x.k7x": "plugin({ type: \"jsdsp\" })\ninputs([{ name: \"a\", type: \"audio\" }, { name: \"b\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"x\"], \"x\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "refused": {
+    "files": [],
+    "faults": [
+     "too_few|chain:a:1|x"
+    ]
+   }
+  }
+ },
+ {
+  "name": "folder-chain-no-project-file",
+  "category": "folders",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "graph.k7x": "modules({ \"@in\": [\"amp\"], \"amp\": [\"@out\"] })\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n"
+  },
+  "expect": {
+   "issues": [
+    "chainFromUnknown|chain=@in|from=@in",
+    "chainNoOut|chain=@in",
+    "outUnknown|chain=@in|out=@out"
+   ],
+   "findings": [],
+   "pointers": {
+    "/chains/@in/from": "@in"
+   }
+  }
+ },
+ {
+  "name": "refuse-settings-file-that-will-not-read-still-draws",
+  "category": "refusals",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "settings.k7x": "nope((\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": []
+  }
+ },
+ {
+  "name": "clips-meter-numerator-past-u32",
+  "category": "clips",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"t\", timeSignature: \"99999999999/4\" })\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"2:1\"), ref(\"k\").start(\"2:3\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackClips/a/0/start": 99999999999.0,
+    "/trackClips/a/0/tc": "2:1",
+    "/trackClips/a/1/start": 100000000001.0,
+    "/trackClips/a/1/tc": "2:3"
+   }
+  }
+ },
+ {
+  "name": "clips-meter-half-zero-places-on-the-default-half",
+  "category": "clips",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"t\", timeSignature: \"3/0\" })\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"2:1\"), ref(\"k\").start(\"2:3\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackClips/a/0/start": 3.0,
+    "/trackClips/a/1/start": 5.0,
+    "/trackClips/a/0/tc": "1:4",
+    "/trackClips/a/1/tc": "2:2"
+   }
+  }
+ },
+ {
+  "name": "clips-meter-zero-denominator-5-0",
+  "category": "clips",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"t\", timeSignature: \"5/0\" })\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "sequences/r.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"k\").start(\"2:1\"), ref(\"k\").start(\"2:3\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/trackClips/a/0/start": 5.0,
+    "/trackClips/a/0/tc": "2:2",
+    "/trackClips/a/1/start": 7.0,
+    "/trackClips/a/1/tc": "2:4"
+   }
+  }
+ },
+ {
+  "name": "choices-shader-dot-folder-and-a-stage-that-is-a-folder",
+  "category": "choices",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "$lib/k7-core/modules/shaders/blur/module.k7x": "type(\"shader\")\n",
+   "$lib/k7-core/modules/shaders/blur/shaders/.dot/vertex.glsl": "v",
+   "$lib/k7-core/modules/shaders/blur/shaders/.dot/fragment.glsl": "f",
+   "$lib/k7-core/modules/shaders/blur/shaders/dirstage/vertex.glsl/x": "v",
+   "$lib/k7-core/modules/shaders/blur/shaders/dirstage/fragment.glsl": "f",
+   "$lib/k7-core/modules/shaders/blur/shaders/soft/vertex.glsl": "v",
+   "$lib/k7-core/modules/shaders/blur/shaders/soft/fragment.glsl": "f",
+   "$lib/k7-core/modules/shaders/blur/shaders/half/vertex.glsl": "v",
+   "nodes/sh.k7x": "extends(\"@k7-core/shaders/blur\")\n",
+   "graph.k7x": "modules({ \"sh\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/sh/use/0/shaders": [
+     ".dot",
+     "dirstage",
+     "soft"
+    ]
+   }
+  }
+ },
+ {
+  "name": "models-json-shapes-a-sequence-a-null-size-a-repeated-key",
+  "category": "models",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/s.k7x": "plugin({ type: \"internal\", name: \"Amp\" })\nparams({ model: \"seq.json\" })\n",
+   "nodes/assets/seq.json": "[[1],[1,2,3]]",
+   "nodes/n.k7x": "plugin({ type: \"internal\", name: \"Amp\" })\nparams({ model: \"nul.json\" })\n",
+   "nodes/assets/nul.json": "{\"model_data\":{\"input_size\":null},\"state_dict\":{}}",
+   "nodes/d.k7x": "plugin({ type: \"internal\", name: \"Amp\" })\nparams({ model: \"dup.json\" })\n",
+   "nodes/assets/dup.json": "{\"layers\":0,\"layers\":[],\"in_shape\":[1,2]}",
+   "graph.k7x": "modules({ \"s\": [\"OUT\"], \"n\": [\"OUT\"], \"d\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/n/use/0/ampModel/kind": "proteus",
+    "/chains/n/use/0/ampModel/knobs": 0,
+    "/chains/d/use/0/ampModel/kind": "aida-x",
+    "/chains/d/use/0/ampModel/knobs": 1
+   },
+   "absent": [
+    "/chains/s/use/0/ampModel"
+   ]
+  }
+ },
+ {
+  "name": "assemblies-a-node-in-two-boxes",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/levelA.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"levelA\"], \"levelA\": [\"OUT\"] })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([name(\"mix\").type(\"audio\").node(\"level\")])\nparams({ Level: { node: \"level\", param: \"Gain\" } })\n",
+   "assemblies/box.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\" })\n",
+   "assemblies/box2.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\" })\n"
+  },
+  "expect": {
+   "issues": [
+    "nodeTwoAssemblies|node=levelA|first=box|second=box2"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "assemblies-a-box-named-after-a-node",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/levelA.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"levelA\"], \"levelA\": [\"x\"], \"x\": [\"OUT\"] })\n",
+   "nodes/x.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([name(\"mix\").type(\"audio\").node(\"level\")])\nparams({ Level: { node: \"level\", param: \"Gain\" } })\n",
+   "assemblies/x.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\" })\n"
+  },
+  "expect": {
+   "issues": [
+    "assemblyNameTaken|assembly=x"
+   ],
+   "findings": []
+  }
+ },
+ {
+  "name": "assemblies-a-template-folder-of-its-own-says-nothing",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/levelA.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"levelA\"], \"levelA\": [\"OUT\"] })\n",
+   "$lib/k7-core/assemblies/deck/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([name(\"mix\").type(\"audio\").node(\"level\")])\nparams({ Level: { node: \"level\", param: \"Gain\" } })\n",
+   "$lib/k7-core/assemblies/deck/turntable/graph.k7x": "modules({ \"level\": [\"fade\"] })\n",
+   "$lib/k7-core/assemblies/deck/turntable/nodes/level.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "assemblies/box.k7x": "uses(\"@k7-core/deck/turntable\")\nmembers({ level: \"levelA\" })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/assemblies/box/members": [
+     "levelA"
+    ]
+   }
+  }
+ },
+ {
+  "name": "live-monitor-boolean-reads-as-on-off",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "nodes/i1.k7x": "io(\"in\")\nchannel([1])\nmonitor(true)\n",
+   "nodes/i2.k7x": "io(\"in\")\nchannel([2])\nmonitor(false)\n",
+   "nodes/i3.k7x": "io(\"in\")\nchannel([3])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\n",
+   "nodes/c.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"i1\": [\"a\"], \"i2\": [\"b\"], \"i3\": [\"c\"], \"a\": [\"OUT\"], \"b\": [\"OUT\"], \"c\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/chains/i1/use/0/monitor": "on",
+    "/chains/i2/use/0/monitor": "off",
+    "/chains/i3/use/0/monitor": "auto"
+   }
+  }
+ },
+ {
+  "name": "auto-freeze-ready-and-played",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "renders": "ready",
+  "files": {
+   "$scan": "{\"entries\":[{\"plugins\":[{\"name\":\"Other One\",\"format\":\"VST3\"}]}]}",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/v.k7x": "plugin({ type: \"VST3\", name: \"Ghost Synth\" })\n",
+   "graph.k7x": "modules({ \"a\": [\"v\"], \"v\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/autoFrozen/a": "v",
+    "/autoFrozen/v": "v"
+   },
+   "absent": [
+    "/autoFreezeWaiting"
+   ]
+  }
+ },
+ {
+  "name": "auto-freeze-ready-and-hosted",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "renders": "ready",
+  "files": {
+   "$scan": "{\"entries\":[{\"plugins\":[{\"name\":\"Ghost Synth\",\"format\":\"VST3\"}]}]}",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/v.k7x": "plugin({ type: \"VST3\", name: \"Ghost Synth\" })\n",
+   "graph.k7x": "modules({ \"a\": [\"v\"], \"v\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {},
+   "absent": [
+    "/autoFrozen",
+    "/autoFreezeWaiting"
+   ]
+  }
+ },
+ {
+  "name": "auto-freeze-waiting-for-its-render",
+  "category": "frozen",
+  "ts": true,
+  "mem": true,
+  "renders": "waiting",
+  "files": {
+   "$scan": "{\"entries\":[{\"plugins\":[{\"name\":\"Other One\",\"format\":\"VST3\"}]}]}",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/v.k7x": "plugin({ type: \"VST3\", name: \"Ghost Synth\" })\n",
+   "graph.k7x": "modules({ \"a\": [\"v\"], \"v\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "issues": [],
+   "findings": [],
+   "pointers": {
+    "/autoFreezeWaiting/a": "v",
+    "/autoFreezeWaiting/v": "v"
+   },
+   "absent": [
+    "/autoFrozen"
+   ]
+  }
+ }
+]

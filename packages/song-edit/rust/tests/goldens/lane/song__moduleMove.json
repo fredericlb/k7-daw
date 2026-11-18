@@ -1,0 +1,735 @@
+{
+ "module": "golden/song/moduleMove",
+ "blobs": {
+  "dfca710bc6ff": "plugin({ type: \"internal\", name: \"reverb\" })\n",
+  "3c82b6a4b19d": "extends(\"@k7-core/audio/verb\")\n",
+  "5f45162ce3ac": "plugin({})\n",
+  "11f6ad8ec52a": "x",
+  "a37ca5448b77": "modules({ \"@k7-core/audio/fx/verb\": [\"MIX\"] })\n",
+  "459ace7f09ff": "extends(\"@k7-core/audio/fx/verb\")\n",
+  "feb35774fd90": "x({ y: \"@k7-core/audio/fx/verb:warm\" })\n",
+  "b06ae46b1836": "extends(\"@k7-core/audio/delay\")\n",
+  "3f347efea9c6": "modules({ \"@k7-core/audio/verb\": [\"MIX\"] })\n",
+  "f893bc16da27": "@k7-core/audio/verb",
+  "8b3e9109f752": "x({ y: \"@k7-core/audio/verb:warm\" })\n",
+  "e50d2799d2bc": "extends(\"@k7-core/audio/verb\"\n"
+ },
+ "trees": {
+  "188bbdca382e": {
+   "home/libraries/k7-core/modules/audio/verb/module.k7x": "dfca710bc6ff",
+   "home/libraries/k7-core/modules/audio/delay/module.k7x": "3c82b6a4b19d",
+   "home/libraries/k7-core/modules/audio/fx/echo/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/audio/verb/engines/big/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/instruments/synth/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/audio/_both/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/audio/plain/readme.txt": "11f6ad8ec52a"
+  },
+  "913f80c33c4a": {
+   "home/libraries/k7-core/modules/audio/verb/module.k7x": "dfca710bc6ff",
+   "home/libraries/k7-core/modules/audio/delay/module.k7x": "3c82b6a4b19d",
+   "home/libraries/k7-core/modules/audio/fx/echo/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/audio/verb/engines/big/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/instruments/synth/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/audio/_both/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/audio/plain/readme.txt": "11f6ad8ec52a",
+   "home/libraries/k7-core/modules/audio/fx/verb/module.k7x": "5f45162ce3ac"
+  },
+  "bf21a9e8fbc5": {},
+  "c0caf366192c": {
+   "proj/nodes/a.k7x": "3c82b6a4b19d",
+   "proj/nodes/b.k7x": "b06ae46b1836",
+   "proj/graph.k7x": "3f347efea9c6",
+   "proj/_history/old.k7x": "3c82b6a4b19d",
+   "proj/node_modules/x/m.k7x": "3c82b6a4b19d",
+   "proj/readme.txt": "f893bc16da27",
+   "proj/sub/deeper/c.k7x": "8b3e9109f752",
+   "proj/broken.k7x": "e50d2799d2bc",
+   "other/d.k7x": "3c82b6a4b19d"
+  }
+ },
+ "vectors": [
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/audio/fx"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "from": "@k7-core/audio/verb",
+    "to": "@k7-core/audio/fx/verb",
+    "dest": "$DIR/home/libraries/k7-core/modules/audio/fx/verb"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/audio/fx/echo"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "a module sits in its type folder or one category below it"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/audio"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "it is already there"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/instruments"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "a module stays in its type: this one is audio/, not instruments/"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/nope"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "a module stays in its type: this one is audio/, not nope/"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "drop it on a folder, not inside another module"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/delay",
+    "$DIR/home/libraries/k7-core/modules/audio/fx"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "from": "@k7-core/audio/delay",
+    "to": "@k7-core/audio/fx/delay",
+    "dest": "$DIR/home/libraries/k7-core/modules/audio/fx/delay"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb/engines/big",
+    "$DIR/home/libraries/k7-core/modules/audio/fx"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "an engine moves with its module, not on its own"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio",
+    "$DIR/home/libraries/k7-core/modules/audio/fx"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "only a module of a library's modules/ can be moved"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/audio/fx/echo/deeper"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "a module sits in its type folder or one category below it"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/audio/verb/engines"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "a module sits in its type folder or one category below it"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/audio/plain"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "from": "@k7-core/audio/verb",
+    "to": "@k7-core/audio/plain/verb",
+    "dest": "$DIR/home/libraries/k7-core/modules/audio/plain/verb"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/fx/echo",
+    "$DIR/home/libraries/k7-core/modules/audio"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "from": "@k7-core/audio/fx/echo",
+    "to": "@k7-core/audio/echo",
+    "dest": "$DIR/home/libraries/k7-core/modules/audio/echo"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/../.."
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "drop it on a folder of k7-core's modules/"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/plain",
+    "$DIR/home/libraries/k7-core/modules/audio/fx"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "only a module of a library's modules/ can be moved"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "planModuleMove",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "$DIR/home/libraries/k7-core/modules/audio/fx"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "there is already a verb in audio/fx/"
+   },
+   "changed": {},
+   "tree": "913f80c33c4a"
+  },
+  {
+   "fn": "refAt",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "@k7-core/audio/verb",
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "refAt",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/fx/echo"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "@k7-core/audio/fx/echo",
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "refAt",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "@k7-core/audio",
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "refAt",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "refAt",
+   "args": [
+    {
+     "name": "k7-core",
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/../x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "assertNotEngine",
+   "args": [
+    {
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "$": "undefined"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "assertNotEngine",
+   "args": [
+    {
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/verb/engines/big"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "an engine is picked by its name (`engine: <name>` in every node using it), which renaming would strand — make a new engine instead"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "assertNotEngine",
+   "args": [
+    {
+     "root": "$DIR/home/libraries/k7-core"
+    },
+    "$DIR/home/libraries/k7-core/modules/audio/engines"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "an engine is picked by its name (`engine: <name>` in every node using it), which renaming would strand — make a new engine instead"
+   },
+   "changed": {},
+   "tree": "188bbdca382e"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "extends(\"@k7-core/audio/verb\")\n",
+    "@k7-core/audio/verb",
+    "@k7-core/audio/fx/verb",
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": true,
+    "text": "extends(\"@k7-core/audio/fx/verb\")\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "a({ extends: \"@k7-core/audio/verb:warm\", b: \"@k7-core/audio/verb#in\", c: \"@k7-core/audio/verbose\" })\n",
+    "@k7-core/audio/verb",
+    "@k7-core/audio/x/verb",
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": true,
+    "text": "a({ extends: \"@k7-core/audio/x/verb:warm\", b: \"@k7-core/audio/x/verb#in\", c: \"@k7-core/audio/verbose\" })\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "m({ \"@k7-core/audio/verb\": 1, other: [\"@k7-core/audio/verb\", \"@k7-core/audio/verb/deeper\"] })\n",
+    "@k7-core/audio/verb",
+    "@k7-core/audio/x/verb",
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": true,
+    "text": "m({ \"@k7-core/audio/x/verb\": 1, other: [\"@k7-core/audio/x/verb\", \"@k7-core/audio/verb/deeper\"] })\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "m({ \"@k7-core/audio/verb\": 1, other: [\"@k7-core/audio/verb\", \"@k7-core/audio/verb/deeper\"] })\n",
+    "@k7-core/audio/verb",
+    "@k7-core/audio/x/verb",
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": true,
+    "text": "m({ \"@k7-core/audio/x/verb\": 1, other: [\"@k7-core/audio/x/verb\", \"@k7-core/audio/x/verb/deeper\"] })\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "m({ \"@k7-core/audio\": 1, y: \"@k7-core/audio/a\", z: \"@k7-core/audio/b:n\" })\n",
+    "@k7-core/audio",
+    "@k7-core/fx",
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": true,
+    "text": "m({ \"@k7-core/fx\": 1, y: \"@k7-core/fx/a\", z: \"@k7-core/fx/b:n\" })\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "m({ \"@a/x\": 1, nested: { \"@a/x\": 2, \"@a/y\": 3 } })\n",
+    "@a/x",
+    "@a/y",
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": true,
+    "text": "m({ \"@a/y\": 1, nested: { \"@a/x\": 2, \"@a/y\": 3 } })\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "// header\nm(\"@a/x\")\n",
+    "@a/x",
+    "@a/z",
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": true,
+    "text": "// header\nm(\"@a/z\")\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "{\n",
+    "@a/x",
+    "@a/z",
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": false,
+    "text": "{\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "",
+    "@a/x",
+    "@a/z",
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": false,
+    "text": ""
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointDocText",
+   "args": [
+    "m({ k: \"other\" })\n",
+    "@a/x",
+    "@a/z",
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "changed": false,
+    "text": "m({ k: \"other\" })\n"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "repointRefs",
+   "args": [
+    [
+     "$DIR/proj"
+    ],
+    "@k7-core/audio/verb",
+    "@k7-core/audio/fx/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "$DIR/proj/graph.k7x",
+    "$DIR/proj/nodes/a.k7x",
+    "$DIR/proj/sub/deeper/c.k7x"
+   ],
+   "changed": {
+    "proj/graph.k7x": "a37ca5448b77",
+    "proj/nodes/a.k7x": "459ace7f09ff",
+    "proj/sub/deeper/c.k7x": "feb35774fd90"
+   },
+   "tree": "c0caf366192c"
+  },
+  {
+   "fn": "repointRefs",
+   "args": [
+    [
+     "$DIR/proj",
+     "$DIR/other",
+     "$DIR/proj"
+    ],
+    "@k7-core/audio/verb",
+    "@k7-core/audio/fx/verb",
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "$DIR/other/d.k7x",
+    "$DIR/proj/graph.k7x",
+    "$DIR/proj/nodes/a.k7x",
+    "$DIR/proj/sub/deeper/c.k7x"
+   ],
+   "changed": {
+    "other/d.k7x": "459ace7f09ff",
+    "proj/graph.k7x": "a37ca5448b77",
+    "proj/nodes/a.k7x": "459ace7f09ff",
+    "proj/sub/deeper/c.k7x": "feb35774fd90"
+   },
+   "tree": "c0caf366192c"
+  },
+  {
+   "fn": "repointRefs",
+   "args": [
+    [
+     "$DIR/nowhere"
+    ],
+    "@a/x",
+    "@a/y"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "c0caf366192c"
+  }
+ ]
+}

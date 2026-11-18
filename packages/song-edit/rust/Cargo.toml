@@ -1,0 +1,24 @@
+[package]
+name = "song-edit"
+version = "0.1.0"
+edition = "2024"
+description = "The song editor in Rust, base: the workspace's files read and written as k7x, the module folders, the confinement, the chain item and lane strip writes, after ../src/ and the write side of ../../song/src/."
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
+k7x = { path = "../../k7x/rust" }
+song = { path = "../../song/rust", default-features = false }
+sha2 = "0.10"
+song-schema = { path = "../../song-schema/rust" }
+indexmap = "2"
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+
+[dev-dependencies]
+
+# The replays edit a thousand files: unoptimized, the k7x editor is slow.
+[profile.dev.package.k7x]
+opt-level = 2

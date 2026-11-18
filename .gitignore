@@ -1,0 +1,60 @@
+# No slash: a symlinked node_modules (a worktree borrowing an install) is a file, not a folder.
+node_modules
+.turbo/
+dist/
+# One-shot codemods written during a change and kept only until it lands. Excluded from
+# biome too, for the same reason: they are not source.
+.tmp-*
+
+storybook-static/
+
+# `turbo prune` output (the Docker deps stage generates this inside the image)
+out/
+
+# vite-plugin-pwa's DEV service worker, written beside the app it serves. Generated on
+# every dev start; the built one lives in dist/ and is covered above.
+dev-dist/
+
+# Per-build-machine Docker revision counters written by build-images.sh
+.docker-revision*
+
+# macOS junk (AppleDouble resource forks + Finder metadata)
+._*
+.DS_Store
+
+# TypeScript incremental-build state (tsc -b)
+*.tsbuildinfo
+**/tsconfig.tsbuildinfo
+
+# engine daemon log (written beside a project / the CLI root at runtime)
+.studio-engine.log
+
+# `npm run dev` tees Tilt's own output here. A journal, not work — and it grows to
+# megabytes in an afternoon, which is why it is named rather than left to be skipped
+# by hand every time.
+.tilt-dev.log
+
+# Real config for every service (see env.example.yaml). Secrets — never commit.
+# The glob covers backups and swap files too: `env.yaml.bak` is the same secrets
+# under a name the bare rule missed. `env.example.yaml` is a different name and
+# stays tracked.
+env.yaml*
+
+# Claude Code's workspace: granted permissions, scratch worktrees — local to each machine.
+# Only the shared settings (hooks, read-only allowlist) are committed: docs/agents.md.
+.claude/*
+!.claude/settings.json
+
+# Per-machine Tilt overrides (e.g. CLAUDE_CONFIG_DIR) — a personal path, not shared config.
+tilt.local.yaml
+
+# design-sync tooling artifacts (bundles + captured previews). Generated, large,
+# and not imported by any app code.
+.design-sync/
+.ds-sync/
+ds-bundle/
+# The server image's bundle (apps/k7/backend/scripts/bundle.mjs --in-tree).
+server-dist/
+
+# Cargo builds outside the tree (--target-dir); one left inside is never tracked (docs/rust-builds.md).
+target/

@@ -1,0 +1,244 @@
+{
+  "project": "e2e/master-chain.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "master-chain",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [
+      {
+        "id": "MIX:glue",
+        "type": "Compressor",
+        "name": "glue",
+        "path": "",
+        "presetSave": "<ws>/e2e/master-chain.k7/nodes/glue.vstpreset",
+        "role": "",
+        "enabled": true,
+        "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+        }
+      }
+    ],
+    "recordDir": "<ws>/e2e/master-chain.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/e2e/master-chain.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "snare@1",
+            "type": "audio",
+            "name": "snare",
+            "source": "<ws>/e2e/master-chain.k7/clips/snare.wav",
+            "start": 1,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [
+          {
+            "module": "glue",
+            "uses": "@workspace/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 4,
+              "widgets": {
+                "screen": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 3
+                },
+                "threshold": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 3,
+                  "label": "Thresh",
+                  "bind": "Threshold",
+                  "min": 0.01,
+                  "max": 1,
+                  "curve": "log"
+                },
+                "ratio": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 3,
+                  "label": "Ratio",
+                  "bind": "Ratio",
+                  "min": 0,
+                  "max": 0.95
+                },
+                "attack": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 3,
+                  "label": "Attack",
+                  "bind": "Attack",
+                  "min": 0.3,
+                  "max": 200,
+                  "curve": "log"
+                },
+                "release": {
+                  "type": "knob",
+                  "col": 3,
+                  "row": 3,
+                  "label": "Release",
+                  "bind": "Release",
+                  "min": 10,
+                  "max": 300
+                },
+                "makeup": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 3,
+                  "label": "Makeup",
+                  "bind": "Output gain",
+                  "min": -10,
+                  "max": 24
+                },
+                "sidechain": {
+                  "type": "knob",
+                  "col": 5,
+                  "row": 3,
+                  "label": "SC gain",
+                  "bind": "Sidechain gain",
+                  "min": -24,
+                  "max": 24
+                }
+              },
+              "script": "// compressor — what its lcdscreen draws: the transfer curve on the left, and on the right the\n// last seconds of signal, input against output with the makeup gain taken back out, so the\n// lit band between them is exactly what the compressor removed. The curve is Tracktion's own\n// law (linear domain: above T, out = T + (in - T) * ratio, then the output gain); the band and\n// the GR readout are MEASURED off the engine's taps either side of the plugin, never simulated.\n\nconst FLOOR = -48; // dB at the bottom of every scale\nconst db = (x) => (x > 1e-6 ? 20 * Math.log10(x) : -120);\nconst lin = (d) => 10 ** (d / 20);\n\n// The compressor's static curve, output level for an input level, both linear.\nconst curve = (x, t, ratio, makeup) =>\n  (x <= t ? x : t + (x - t) * ratio) * makeup;\n\n// The loudest point of `a` between two indices — the peak a pixel column stands for.\nfunction peak(a, from, to) {\n  let m = 0;\n  for (let i = Math.max(0, from); i < Math.min(a.length, to); i++)\n    if (a[i] > m) m = a[i];\n  return m;\n}\n\nexport default {\n  screen(lcd) {\n    const { ctx, width: W, height: H, params, input, output, color } = lcd;\n    const t = params.Threshold ?? 0.501;\n    const ratio = params.Ratio ?? 0.5;\n    const makeupDb = params[\"Output gain\"] ?? 0;\n    const makeup = lin(makeupDb);\n    ctx.font = \"8px ui-monospace, monospace\";\n    ctx.textBaseline = \"top\";\n\n    // Gain reduction NOW, off the last ~50 ms of both taps, with meter ballistics kept in `state`.\n    const n = Math.min(input.length, output.length);\n    const inNow = peak(input, input.length - 8, input.length);\n    const outNow = peak(output, output.length - 8, output.length);\n    const grRaw =\n      n && inNow > 1e-4 ? Math.min(0, db(outNow) - makeupDb - db(inNow)) : 0;\n    const s = lcd.state;\n    s.gr = grRaw < (s.gr ?? 0) ? grRaw : (s.gr ?? 0) * 0.85 + grRaw * 0.15;\n\n    // Header: the settings as a person reads them, then the one live number.\n    const ratioText = ratio > 0.001 ? `${(1 / ratio).toFixed(1)}:1` : \"inf:1\";\n    ctx.fillStyle = color.dim;\n    ctx.fillText(`T ${db(t).toFixed(1)}dB  ${ratioText}`, 2, 1);\n    ctx.fillStyle = s.gr < -0.5 ? color.glow : color.ink;\n    const grText = n ? `GR ${s.gr.toFixed(1)}dB` : \"GR --\";\n    ctx.fillText(grText, W - ctx.measureText(grText).width - 2, 1);\n\n    // --- the transfer curve, a square on the left ---------------------------------------------\n    const top = 11;\n    const S = Math.max(10, H - top - 2);\n    const toX = (d) => 2 + ((d - FLOOR) / -FLOOR) * S;\n    const toY = (d) => top + (1 - (d - FLOOR) / -FLOOR) * S;\n    ctx.save();\n    ctx.beginPath();\n    ctx.rect(2, top, S, S);\n    ctx.clip();\n    ctx.strokeStyle = color.dim;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(2.5, top + 0.5, S - 1, S - 1);\n    // Unity, dashed: how far the curve bends under it is the compression.\n    ctx.setLineDash([2, 2]);\n    ctx.beginPath();\n    ctx.moveTo(toX(FLOOR), toY(FLOOR));\n    ctx.lineTo(toX(0), toY(0));\n    ctx.stroke();\n    ctx.setLineDash([]);\n    ctx.strokeStyle = color.ink;\n    ctx.lineWidth = 1.25;\n    ctx.beginPath();\n    for (let px = 0; px <= S; px++) {\n      const d = FLOOR + (px / S) * -FLOOR;\n      const y = toY(db(curve(lin(d), t, ratio, makeup)));\n      if (px === 0) ctx.moveTo(2 + px, y);\n      else ctx.lineTo(2 + px, y);\n    }\n    ctx.stroke();\n    // Where the signal sits on the curve right now.\n    if (n && inNow > lin(FLOOR)) {\n      const d = db(inNow);\n      ctx.fillStyle = color.glow;\n      ctx.beginPath();\n      ctx.arc(toX(d), toY(db(curve(inNow, t, ratio, makeup))), 2.2, 0, 7);\n      ctx.fill();\n    }\n    ctx.restore();\n\n    // --- the history, right of the square -----------------------------------------------------\n    const x0 = S + 7;\n    const w = W - x0 - 2;\n    if (w < 8) return;\n    const yOf = (d) =>\n      top + (1 - (Math.max(FLOOR, Math.min(0, d)) - FLOOR) / -FLOOR) * S;\n    const bottom = top + S;\n    ctx.strokeStyle = color.dim;\n    ctx.strokeRect(x0 + 0.5, top + 0.5, w - 1, S - 1);\n    // The threshold, where compression starts.\n    ctx.setLineDash([2, 2]);\n    ctx.beginPath();\n    ctx.moveTo(x0, yOf(db(t)) + 0.5);\n    ctx.lineTo(x0 + w, yOf(db(t)) + 0.5);\n    ctx.stroke();\n    ctx.setLineDash([]);\n    if (!n) {\n      ctx.fillStyle = color.dim;\n      ctx.fillText(\"no signal\", x0 + 4, top + S / 2 - 4);\n      return;\n    }\n    // One column per pixel, newest on the right; both taps end NOW, so they are aligned from the end.\n    const per = Math.max(1, Math.floor(n / w));\n    for (let c = 0; c < w; c++) {\n      const back = (w - c) * per;\n      const i = input.length - back;\n      const o = output.length - back;\n      if (i < 0 || o < 0) continue;\n      const inDb = db(peak(input, i, i + per));\n      const outDb = db(peak(output, o, o + per)) - makeupDb;\n      const x = x0 + c;\n      // What came in, faint…\n      ctx.fillStyle = color.dim;\n      ctx.fillRect(x, yOf(inDb), 1, bottom - yOf(inDb));\n      // …what was taken off it, lit…\n      if (inDb - outDb > 0.3) {\n        ctx.fillStyle = color.glow;\n        ctx.fillRect(x, yOf(inDb), 1, yOf(outDb) - yOf(inDb));\n      }\n      // …and what went on, as the line on top of what is left.\n      ctx.fillStyle = color.ink;\n      ctx.fillRect(x, yOf(outDb), 1, 1);\n    }\n  },\n};\n"
+            },
+            "params": {},
+            "defaults": {
+              "Threshold": 0.5011872053,
+              "Ratio": 0.5,
+              "Attack": 100,
+              "Release": 100,
+              "Output gain": 0,
+              "Sidechain gain": 0
+            },
+            "pluginId": "MIX:glue"
+          }
+        ],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "snare",
+          "start": 1,
+          "tc": "1:2",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

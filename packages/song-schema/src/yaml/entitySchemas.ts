@@ -1,0 +1,265 @@
+// entitySchemas.ts — the remaining per-entity shapes, in Zod: clips, sequences, curves,
+// timelines. Each is a FLAT file keyed by its own filename (clips/kick.k7x has no `id:` —
+// the name is the id), which also rules out one file declaring several ids.
+
+import { z } from "zod";
+import { TIMECODE } from "./placementSchema";
+import { TimelineSchema } from "./timelineSchema";
+
+export { FadeSchema } from "./placementSchema";
+
+/** A stretch map from the DAW a clip was imported from. */
+export const WarpSchema = z
+  .object({
+    algorithm: z.string().min(1),
+    // [timeline beat, source second], monotonic, at least two points.
+    markers: z.array(z.tuple([z.number(), z.number()])).min(2),
+    // Switch the map OFF while keeping it — the expensive half stays on disk (docs/entityFiles.md).
+    disable: z.boolean().optional(),
+  })
+  .strict();
+
+/** A clip is PICTURE when its source ends in one of these — the whole reason a clip file can say only `source:`. */
+export const VIDEO_SOURCE = /\.(mp4|mov|m4v|webm|mkv)$/i;
+
+/** …and a STILL when it ends in one of these: a picture with no time of its own (song-video docs/media.md). */
+export const IMAGE_SOURCE = /\.(png|jpe?g|webp|gif|avif)$/i;
+
+/** …and CAPTIONS when it is a subtitle file: timed text, drawn on a picture lane (song-video docs/titles.md). */
+export const CAPTION_SOURCE = /\.(srt|vtt)$/i;
+
+/** How text is set — the words a text shape and a captions clip share. */
+const TEXT_ALIGNS = ["left", "center", "right"] as const;
+
+/** Either kind of picture source, which is what tells a picture clip from an audio one. */
+export const isPictureSource = (s: string): boolean =>
+  VIDEO_SOURCE.test(s) || IMAGE_SOURCE.test(s);
+
+/** `from`/`to` window the SOURCE FILE, in seconds or as a timecode — see docs/entityFiles.md. */
+const WindowEdge = z.union([
+  z.number().min(0), // seconds
+  z.string().regex(TIMECODE, "expected seconds (0.25) or a timecode like 2:1"),
+]);
+
+/** CORRECTIONS to the onsets the engine detected, in source seconds — not the onsets (docs/entityFiles.md). */
+const OnsetEditsSchema = z
+  .object({
+    added: z.array(z.number().min(0)).optional(),
+    removed: z.array(z.number().min(0)).optional(),
+  })
+  .strict();
+
+export const AudioClipSchema = z
+  .object({
+    source: z.string().min(1),
+    from: WindowEdge.optional(), // default: the file's start
+    to: WindowEdge.optional(), // default: the file's end
+    warp: WarpSchema.optional(),
+    onsets: OnsetEditsSchema.optional(),
+  })
+  .strict()
+  // A backwards window compiles to a clip that plays nothing, so it is refused where the line can be named.
+  .refine(
+    (c) =>
+      typeof c.to !== "number" || typeof c.from !== "number" || c.to > c.from,
+    { message: "'to' must be greater than 'from'", path: ["to"] },
+  );
+
+export const VideoClipSchema = z
+  .object({
+    source: z
+      .string()
+      .refine(isPictureSource, "expected a video or an image file"),
+    // The file's sound, extracted once into an audio file the engine reads on every platform (packages/song/docs/videoSound.md).
+    sound: z
+      .string()
+      .refine((s) => !VIDEO_SOURCE.test(s), "a sound is an audio file")
+      .optional(),
+    // A full-resolution copy every browser DECODES, made when the source is not — preview AND export read it (song-video docs/media.md).
+    optimized: z.string().optional(),
+    // …and a small one to PREVIEW, made when the source is heavier than a lane can decode in time; export never reads it.
+    proxy: z.string().optional(),
+  })
+  .strict();
+
+/** A subtitle file placed on a picture lane, and how its cues are set — every field optional, the defaults a broadcast's. */
+const CaptionClipSchema = z
+  .object({
+    source: z.string().regex(CAPTION_SOURCE),
+    font: z.string().optional(), // a CSS family
+    font_size: z.number().positive().optional(), // px of the viewport
+    color: z.string().optional(),
+    // A box behind each cue, any CSS colour; absent, the text carries a shadow instead.
+    background: z.string().optional(),
+    align: z.enum(TEXT_ALIGNS).optional(),
+    // Where the block sits, and how far from that edge, in px.
+    position: z.enum(["bottom", "top", "middle"]).optional(),
+    margin: z.number().min(0).optional(),
+  })
+  .strict();
+
+// Audio, video or captions, told apart by the source's EXTENSION, which lets a clip file say only `source:`.
+export const ClipSchema = z.union([
+  VideoClipSchema,
+  CaptionClipSchema,
+  AudioClipSchema,
+]);
+
+/** One note — and, on a step sequencer, one PAD, which is why two effects live here (docs/padEffects.md). */
+export const NoteSchema = z
+  .object({
+    t: z.number().min(0), // onset, beats (fractional = microtiming)
+    d: z.number().positive(), // duration, beats
+    k: z.number().int().min(0).max(127), // MIDI key
+    v: z.number().min(0).max(1).optional(), // velocity, default 1
+    // Retrigger: play the note this many times inside its OWN duration; absent == once.
+    repeat: z.number().int().min(2).optional(),
+    // Fall silent on every n-th pass of the pattern; absent == every pass (docs/entityFiles.md).
+    skip: z.number().int().min(2).optional(),
+  })
+  .strict();
+
+/** A sequence's window, the MIDI counterpart of a clip's `from`/`to` — timecodes ONLY (docs/entityFiles.md). */
+const SeqEdge = z
+  .string()
+  .regex(TIMECODE, "expected a timecode like 5:1 — a position in the sequence");
+
+export const SequenceSchema = z
+  .object({
+    notes: z.array(NoteSchema),
+    from: SeqEdge.optional(), // default: the first note
+    to: SeqEdge.optional(), // default: the end of the last note
+    // A rack module whose symbols name these notes — the tracker relabels by it.
+    use_rack: z.string().min(1).optional(),
+  })
+  .strict();
+
+const Polarity = z.enum(["unipolar", "bipolar"]);
+// 0..1, scaling every curve's output — the whole range at 1, the default (packages/song/docs/curves.md).
+const Amplitude = z.number().min(0).max(1);
+// Which half of the output a curve keeps — absent is `none`, the whole of it.
+const Cut = z.enum(["none", "positive", "negative"]);
+const ConditionTime = z
+  .string()
+  .regex(TIMECODE, "expected a timecode like 5:1:1 — a position in the song");
+// WHEN a curve runs: from a moment, until one, between two, or from a node's event — packages/song/docs/curves.md.
+export const CurveConditionSchema = z.discriminatedUnion("type", [
+  z
+    .object({
+      type: z.literal("start"),
+      at: ConditionTime,
+      retrigger: z.boolean().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("end"),
+      at: ConditionTime,
+      retrigger: z.boolean().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("between"),
+      start: ConditionTime,
+      end: ConditionTime,
+      retrigger: z.boolean().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("event"),
+      event: z.string().min(1),
+      retrigger: z.boolean().optional(),
+    })
+    .strict(),
+]);
+
+export const LfoCurveSchema = z
+  .object({
+    type: z.literal("lfo"),
+    polarity: Polarity.optional(),
+    amplitude: Amplitude.optional(),
+    cut: Cut.optional(),
+    conditions: z.array(CurveConditionSchema).optional(),
+    shape: z.enum(["sine", "triangle", "saw", "square"]).optional(),
+    frequency: z.number().positive().optional(), // cycles per bar
+    phase: z.number().min(0).max(1).optional(),
+    // How long it runs, a 0-based timecode ("2:0" is two bars); "0" or absent is for ever.
+    duration: z
+      .string()
+      .regex(TIMECODE, 'expected a length like 2:0 — "0" runs for ever')
+      .optional(),
+  })
+  .strict();
+
+export const CustomCurveSchema = z
+  .object({
+    type: z.literal("custom"),
+    polarity: Polarity.optional(),
+    amplitude: Amplitude.optional(),
+    cut: Cut.optional(),
+    conditions: z.array(CurveConditionSchema).optional(),
+    points: z
+      .array(
+        z
+          .object({
+            time: z.string().regex(TIMECODE, "expected a timecode like 2:1:1"),
+            value: z.number(),
+          })
+          .strict(),
+      )
+      .min(1),
+  })
+  .strict();
+
+/** An envelope in MILLISECONDS, restarted by an event, all four stages durations — see docs/entityFiles.md. */
+export const AdsrCurveSchema = z
+  .object({
+    type: z.literal("adsr"),
+    polarity: Polarity.optional(),
+    amplitude: Amplitude.optional(),
+    cut: Cut.optional(),
+    conditions: z.array(CurveConditionSchema).optional(),
+    attack: z.number().min(0).optional(), // ms, 0 -> instant
+    decay: z.number().min(0).optional(), // ms
+    sustain: z.number().min(0).optional(), // ms — a HOLD, see above
+    release: z.number().min(0).optional(), // ms
+    level: z.number().min(0).max(1).optional(), // where decay lands (default 0.5)
+  })
+  .strict();
+
+/** A BOOLEAN param's curve: drawn points of 0 or 1, each held until the next — no ramp, no depth, no polarity. */
+export const OnOffCurveSchema = z
+  .object({
+    type: z.literal("onoff"),
+    points: z
+      .array(
+        z
+          .object({
+            time: z.string().regex(TIMECODE, "expected a timecode like 2:1:1"),
+            value: z.union([z.literal(0), z.literal(1)], {
+              message: "an on/off curve is 0 or 1",
+            }),
+          })
+          .strict(),
+      )
+      .min(1),
+    conditions: z.array(CurveConditionSchema).optional(),
+  })
+  .strict();
+
+export const CurveSchema = z.discriminatedUnion("type", [
+  LfoCurveSchema,
+  CustomCurveSchema,
+  AdsrCurveSchema,
+  OnOffCurveSchema,
+]);
+
+/** The kinds this file covers, by their folder name — what a loader looks up. */
+export const ENTITY_SCHEMAS = {
+  clips: ClipSchema,
+  sequences: SequenceSchema,
+  curves: CurveSchema,
+  timelines: TimelineSchema,
+} as const;

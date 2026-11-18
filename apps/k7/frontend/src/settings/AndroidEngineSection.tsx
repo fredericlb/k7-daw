@@ -1,0 +1,186 @@
+// AndroidEngineSection.tsx — this phone's engine, drawn only inside a phone app, Android or iOS: there the app IS the
+// engine's machine, so what the command-line engine keeps in its config file — the
+// instruments it downloads, a private CA — and quitting belong on this panel. The app shows its own tray only while no studio is open.
+// Full screen is the device's too, and Android's alone: the iOS app answers no such call.
+// See ../../docs/settings.md, engine/k7-runtime/docs/android.md and docs/ios.md.
+
+import { Switch } from "@studio/ui/switch";
+import { useEffect, useState } from "react";
+import { m } from "../paraglide/messages.js";
+import {
+  type EngineSnapshot,
+  engineCall,
+  onAndroid,
+  onIos,
+  useEngineSnapshot,
+} from "./androidEngine";
+import { InstrumentsSection } from "./InstrumentsSection";
+import { Action, Row, Section } from "./Section";
+
+export function AndroidEngineSection() {
+  const snapshot = useEngineSnapshot();
+  const [lan, setLan] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!onAndroid) return;
+    void engineCall<{ address?: string }>("lanAddress").then((r) =>
+      setLan(r.address ?? null),
+    );
+  }, []);
+
+  if (!onAndroid) return null;
+  const state = snapshot?.state;
+
+  return (
+    <>
+      <Section title={m["android.title"]()} hint={m["android.hint"]()}>
+        <Row label={engineLine(snapshot, lan)}>
+          <Action danger onClick={() => void engineCall("quit")}>
+            {m["android.quit"]()}
+          </Action>
+        </Row>
+      </Section>
+
+      {!onIos && <FullScreenSection />}
+
+      <Section title={m["engine.lanTitle"]()} hint={m["engine.lanHint"]()}>
+        <Row
+          label={m["engine.lanOpen"]()}
+          detail={
+            state?.lanOpen ? m["engine.lanOpenOn"]() : m["engine.lanOpenOff"]()
+          }
+        >
+          <Switch
+            checked={state?.lanOpen ?? false}
+            disabled={!state}
+            onCheckedChange={(on) =>
+              void engineCall("command", {
+                cmd: "lan.open",
+                arg: on ? "1" : "0",
+              })
+            }
+            aria-label={m["engine.lanOpen"]()}
+          />
+        </Row>
+      </Section>
+
+      <InstrumentsSection
+        snapshot={state ?? null}
+        send={(cmd, name) => void engineCall("command", { cmd, arg: name })}
+      />
+
+      <PrivateCaSection />
+    </>
+  );
+}
+
+function engineLine(snapshot: EngineSnapshot | null, lan: string | null) {
+  const state = snapshot?.state;
+  if (snapshot?.engineExit != null)
+    return m["android.engineStopped"]({ code: String(snapshot.engineExit) });
+  if (!state) return m["android.starting"]();
+  if (state.status === "running")
+    return m["android.engineRunning"]({
+      address: `ws://${lan ?? "127.0.0.1"}:${state.enginePort}`,
+    });
+  if (state.status === "error")
+    return m["android.engineError"]({ message: String(state.error) });
+  if (!state.status) return m["android.starting"]();
+  return m["android.engineStatus"]({ status: state.status });
+}
+
+// The app keeps the answer, not the account: a tablet left on k7 and a phone in a pocket want different ones.
+function FullScreenSection() {
+  const [on, setOn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    void engineCall<{ on: boolean }>("immersive").then((r) => setOn(r.on));
+  }, []);
+
+  const toggle = (next: boolean) => {
+    setOn(next);
+    void engineCall<{ on: boolean }>("setImmersive", { on: next ? "1" : "0" })
+      .then((r) => setOn(r.on))
+      .catch(() => setOn(!next));
+  };
+
+  return (
+    <Section
+      title={m["android.screenTitle"]()}
+      hint={m["android.screenHint"]()}
+    >
+      <Row
+        label={m["android.fullScreen"]()}
+        detail={on ? m["android.fullScreenOn"]() : m["android.fullScreenOff"]()}
+      >
+        <Switch
+          checked={on ?? false}
+          disabled={on === null}
+          onCheckedChange={toggle}
+          aria-label={m["android.fullScreen"]()}
+        />
+      </Row>
+    </Section>
+  );
+}
+
+// The supervisor reads its roots once, at start: each change restarts it, and it adopts the running engine.
+function PrivateCaSection() {
+  const [count, setCount] = useState<number | null>(null);
+  const [said, setSaid] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    void engineCall<{ count: number }>("casInfo").then((r) =>
+      setCount(r.count),
+    );
+  }, []);
+
+  const run = async (method: "importCa" | "forgetCas", doing: string) => {
+    setBusy(true);
+    setSaid(m["android.reconnecting"]({ doing }));
+    try {
+      const done = await engineCall<{ count: number; said?: string }>(method);
+      setCount(done.count);
+      setSaid(done.said || null);
+    } catch (e) {
+      setSaid(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Section
+      title={m["android.caTitle"]()}
+      hint={onIos ? m["android.caHintIos"]() : m["android.caHint"]()}
+    >
+      <Row
+        label={
+          count == null || count === 0
+            ? onIos
+              ? m["android.caSystemIos"]()
+              : m["android.caSystem"]()
+            : onIos
+              ? m["android.caYoursIos"]({ count })
+              : m["android.caYours"]({ count })
+        }
+        detail={said ?? undefined}
+      >
+        <Action
+          disabled={busy}
+          onClick={() => void run("importCa", m["android.caAdding"]())}
+        >
+          {m["android.caTrust"]()}
+        </Action>
+        <Action
+          danger
+          disabled={busy || !count}
+          onClick={() => void run("forgetCas", m["android.caForgetting"]())}
+        >
+          {m["android.caForget"]()}
+        </Action>
+      </Row>
+    </Section>
+  );
+}

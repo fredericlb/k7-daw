@@ -1,0 +1,194 @@
+{
+  "project": "k7-core/cold.stemsplit.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "cold.stemsplit",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/cold.stemsplit.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/cold.stemsplit.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/cold/stemsplit",
+            "modelDownload": {
+              "file": "htdemucs_fp16weights.onnx",
+              "url": "https://huggingface.co/StemSplitio/htdemucs-onnx/resolve/main/htdemucs_fp16weights.onnx"
+            },
+            "outputs": [
+              {
+                "name": "drums",
+                "type": "audio"
+              },
+              {
+                "name": "bass",
+                "type": "audio"
+              },
+              {
+                "name": "other",
+                "type": "audio"
+              },
+              {
+                "name": "vocals",
+                "type": "audio"
+              }
+            ],
+            "assets": {
+              "onnx": "htdemucs_fp16weights.onnx"
+            },
+            "category": "cold",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 1,
+              "widgets": {
+                "drums": {
+                  "type": "label",
+                  "col": 0,
+                  "row": 0,
+                  "label": "drums"
+                },
+                "bass": {
+                  "type": "label",
+                  "col": 1,
+                  "row": 0,
+                  "label": "bass"
+                },
+                "other": {
+                  "type": "label",
+                  "col": 2,
+                  "row": 0,
+                  "label": "other"
+                },
+                "vocals": {
+                  "type": "label",
+                  "col": 3,
+                  "row": 0,
+                  "label": "vocals"
+                }
+              }
+            },
+            "params": {
+              "onnx": "htdemucs_fp16weights.onnx"
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": [
+      "module 'fx': onnx 'htdemucs_fp16weights.onnx' is not in this module's assets/"
+    ],
+    "issues": [
+      {
+        "code": "moduleAssetMissing",
+        "params": {
+          "module": "fx",
+          "param": "onnx",
+          "ref": "htdemucs_fp16weights.onnx"
+        },
+        "text": "module 'fx': onnx 'htdemucs_fp16weights.onnx' is not in this module's assets/"
+      }
+    ]
+  },
+  "video": null
+}

@@ -1,0 +1,1466 @@
+{
+  "project": "k7-core/instruments.synth.art-analog-lab-v.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.synth.art-analog-lab-v",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.synth.art-analog-lab-v.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#9a5ad3",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/synth/art-analog-lab-v",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "PLAY",
+                  "widgets": {
+                    "macros": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "MACRO",
+                      "color": "#3d7dff26"
+                    },
+                    "m_bright": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Bright",
+                      "bind": "P1 Brightness",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "m_timbre": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "P1 Timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "m_time": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Time",
+                      "bind": "P1 Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "m_move": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Movement",
+                      "bind": "P1 Movement",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "parts": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "PARTS",
+                      "color": "#6b6b6b33"
+                    },
+                    "p1_on": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Part 1",
+                      "bind": "P1 Active",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "p2_on": {
+                      "type": "dropdown",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Part 2",
+                      "bind": "P2 Active",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "p1_vol": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Vol 1",
+                      "bind": "P1 Volume (2)",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "p2_vol": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Vol 2",
+                      "bind": "P2 Volume",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "glide": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Glide",
+                      "bind": "P1 Portamento",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq": {
+                      "type": "group",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 3,
+                      "rowSpan": 4,
+                      "label": "EQ",
+                      "color": "#ff3b301f"
+                    },
+                    "eq_bass": {
+                      "type": "fader",
+                      "col": 10,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Bass",
+                      "bind": "Master Bass",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_mid": {
+                      "type": "fader",
+                      "col": 11,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Mid",
+                      "bind": "Master Mid",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_treble": {
+                      "type": "fader",
+                      "col": 12,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Treble",
+                      "bind": "Master Treble",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "SYNTH",
+                  "widgets": {
+                    "vcf": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "VCF",
+                      "color": "#ff6a1a22"
+                    },
+                    "cutoff": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Cutoff",
+                      "bind": "P1 VCF Cutoff",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "res": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Res",
+                      "bind": "P1 VCF Resonance",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vcf_env": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Env",
+                      "bind": "P1 VCF Env",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vcf_lfo": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "LFO",
+                      "bind": "P1 VCF LFO",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vcf_screen": {
+                      "type": "lcdscreen",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "env": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "ENV",
+                      "color": "#3ec96b22"
+                    },
+                    "atk": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "P1 Attack",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dec": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "P1 Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "sus": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "P1 Sustain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "rel": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "P1 Release",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "env_screen": {
+                      "type": "lcdscreen",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "DELAY",
+                  "widgets": {
+                    "delay": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 3,
+                      "label": "DELAY",
+                      "color": "#ffffff14"
+                    },
+                    "dly_on": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Delay",
+                      "bind": "Delay Active",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "dly_div": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Div",
+                      "bind": "Delay Synced",
+                      "options": [
+                        {
+                          "label": "1/32",
+                          "value": 0
+                        },
+                        {
+                          "label": "1/16.t",
+                          "value": 0.041666666666666664
+                        },
+                        {
+                          "label": "1/32.d",
+                          "value": 0.08333333333333333
+                        },
+                        {
+                          "label": "1/16",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "1/8.t",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "1/16.d",
+                          "value": 0.20833333333333334
+                        },
+                        {
+                          "label": "1/8",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "1/4.t",
+                          "value": 0.2916666666666667
+                        },
+                        {
+                          "label": "1/8.d",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "1/4",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "1/2.t",
+                          "value": 0.4166666666666667
+                        },
+                        {
+                          "label": "1/4.d",
+                          "value": 0.4583333333333333
+                        },
+                        {
+                          "label": "1/2",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "1.t",
+                          "value": 0.5416666666666666
+                        },
+                        {
+                          "label": "1/2.d",
+                          "value": 0.5833333333333334
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "2.t",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "1.d",
+                          "value": 0.7083333333333334
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "4.t",
+                          "value": 0.7916666666666666
+                        },
+                        {
+                          "label": "2.d",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "8.t",
+                          "value": 0.9166666666666666
+                        },
+                        {
+                          "label": "4.d",
+                          "value": 0.9583333333333334
+                        },
+                        {
+                          "label": "8",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "dly_p1": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Send 1",
+                      "bind": "P1 Send Delay",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "dly_p2": {
+                      "type": "dropdown",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Send 2",
+                      "bind": "P2 Send Delay",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "dly_time": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Time",
+                      "bind": "Delay Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dly_fb": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fdbk",
+                      "bind": "Delay Feedback",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dly_width": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Width",
+                      "bind": "Delay Stereo Width",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dly_ret": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Return",
+                      "bind": "Delay Volume",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "delay_screen": {
+                      "type": "lcdscreen",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "REVERB",
+                  "widgets": {
+                    "reverb": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 3,
+                      "label": "REVERB",
+                      "color": "#ffffff14"
+                    },
+                    "rev_on": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Reverb",
+                      "bind": "Reverb Active",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "rev_p1": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Send 1",
+                      "bind": "P1 Send Reverb",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "rev_p2": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Send 2",
+                      "bind": "P2 Send Reverb",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "rev_decay": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Reverb Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "rev_size": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Size",
+                      "bind": "Reverb Size",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "rev_damp": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Damp",
+                      "bind": "Reverb Damping",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "rev_ret": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Return",
+                      "bind": "Reverb Volume",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "reverb_screen": {
+                      "type": "lcdscreen",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4
+                    }
+                  }
+                }
+              ],
+              "script": "// Analog Lab V screens: part 1's filter and envelope, the master delay's echoes and the reverb's tail. Params are normalized 0..1.\nconst BLUE = \"#3d7dff\", GREEN = \"#3ec96b\", WHITE = \"#ffffff\", ORANGE = \"#ff6a1a\", RED = \"#ff3b30\", GREY = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst clamp = (v, a, b) => Math.max(a, Math.min(b, Number.isFinite(v) ? v : a));\nconst p = (params, name, def) => clamp(params[name] ?? def, 0, 1);\nconst on = (params, name) => (params[name] ?? 1) > 0.5;\n\nfunction glass(lcd) {\n  const { ctx, width: W, height: H } = lcd;\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.font = FONT;\n  ctx.textBaseline = \"top\";\n  ctx.lineWidth = 1;\n}\n\nfunction level(arr) {\n  if (!arr || !arr.length) return 0;\n  let m = 0;\n  for (let i = Math.max(0, arr.length - 8); i < arr.length; i++) m = Math.max(m, arr[i] || 0);\n  return clamp(m, 0, 1);\n}\n\nfunction tag(ctx, W, text, color) {\n  ctx.fillStyle = color;\n  ctx.fillText(text, W - 3 - ctx.measureText(text).width, 2);\n}\n\nexport default {\n  vcf_screen(lcd) {\n    glass(lcd);\n    const { ctx, width: W, height: H, params, output } = lcd;\n    const cut = p(params, \"P1 VCF Cutoff\", 0.7);\n    const res = p(params, \"P1 VCF Resonance\", 0);\n    const env = p(params, \"P1 VCF Env\", 0);\n    const lfo = p(params, \"P1 VCF LFO\", 0);\n    ctx.fillStyle = WHITE;\n    ctx.fillText(\"VCF\", 3, 2);\n    const top = 12, bot = H - 3, h = bot - top, base = top + h * 0.45;\n    const fc = 0.05 + cut * 0.9, q = 0.5 + res * 6;\n    const curve = (shift, color) => {\n      ctx.strokeStyle = color;\n      ctx.beginPath();\n      for (let x = 0; x <= W; x++) {\n        const r = Math.pow(10, (x / Math.max(1, W) - fc - shift) * 3);\n        const g = Math.pow(1 / Math.sqrt(Math.pow(1 - r * r, 2) + Math.pow(r / q, 2)), 2);\n        const y = clamp(base - (20 * Math.log10(Math.max(1e-6, g)) / 48) * h, top, bot);\n        if (x === 0) ctx.moveTo(x, y);\n        else ctx.lineTo(x, y);\n      }\n      ctx.stroke();\n    };\n    if (env > 0.01) curve(env * 0.3, GREEN);\n    curve(0, WHITE);\n    if (lfo > 0.01) {\n      ctx.fillStyle = BLUE;\n      ctx.fillRect((fc - lfo * 0.15) * W, bot - 1, Math.max(1, lfo * 0.3 * W), 2);\n    }\n    ctx.fillStyle = ORANGE;\n    ctx.beginPath();\n    ctx.arc(fc * W, base - res * 0.4 * h, 2.5 + 2 * level(output), 0, Math.PI * 2);\n    ctx.fill();\n  },\n\n  env_screen(lcd) {\n    glass(lcd);\n    const { ctx, width: W, height: H, params, output } = lcd;\n    const a = p(params, \"P1 Attack\", 0.1), d = p(params, \"P1 Decay\", 0.3);\n    const s = p(params, \"P1 Sustain\", 0.6), r = p(params, \"P1 Release\", 0.3);\n    ctx.fillStyle = GREEN;\n    ctx.fillText(\"ENV\", 3, 2);\n    const top = 12, bot = H - 3, h = bot - top, x0 = 3, w = W - 6, seg = w / 4.2;\n    const ax = x0 + seg * (0.05 + a), dx = ax + seg * (0.05 + d), rx = x0 + w - seg * (0.05 + r);\n    ctx.strokeStyle = GREEN;\n    ctx.beginPath();\n    ctx.moveTo(x0, bot);\n    ctx.lineTo(ax, top);\n    ctx.lineTo(dx, bot - s * h);\n    ctx.lineTo(Math.max(dx, rx), bot - s * h);\n    ctx.lineTo(x0 + w, bot);\n    ctx.stroke();\n    ctx.fillStyle = WHITE;\n    ctx.fillRect(Math.max(dx, rx) - 1, bot - s * h - 1, 3, 3);\n    const lv = level(output);\n    if (lv > 0.001) {\n      ctx.fillStyle = WHITE;\n      ctx.fillRect(W - 3, bot - lv * h, 2, lv * h);\n    }\n  },\n\n  delay_screen(lcd) {\n    glass(lcd);\n    const { ctx, width: W, height: H, params, output, now } = lcd;\n    const active = on(params, \"Delay Active\");\n    const time = p(params, \"Delay Time\", 0.4), fb = p(params, \"Delay Feedback\", 0.4);\n    const width = p(params, \"Delay Stereo Width\", 0.7), ret = p(params, \"Delay Volume\", 0.5);\n    ctx.fillStyle = WHITE;\n    ctx.fillText(\"DELAY\", 3, 2);\n    tag(ctx, W, active ? \"ON\" : \"OFF\", active ? GREEN : GREY);\n    const mid = (H + 10) / 2, half = (H - 18) / 2;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(3, mid + 0.5);\n    ctx.lineTo(W - 3, mid + 0.5);\n    ctx.stroke();\n    const step = (0.06 + time * 0.3) * (W - 6);\n    const col = active ? BLUE : GREY;\n    let amp = 0.35 + ret * 0.65;\n    ctx.fillStyle = WHITE;\n    ctx.fillRect(3, mid - half, 2, half * 2);\n    for (let i = 1, x = 3 + step; x < W - 3 && i < 64; i++, x += step) {\n      const side = i % 2 ? -1 : 1;\n      const hgt = amp * half;\n      ctx.fillStyle = col;\n      ctx.fillRect(x, side * width > 0 ? mid : mid - hgt, 2, Math.max(1, hgt));\n      amp *= 0.15 + fb * 0.8;\n      if (amp < 0.02) break;\n    }\n    const lv = level(output);\n    if (active && lv > 0.001) {\n      const t = ((now / 1000) * 0.4) % 1;\n      ctx.fillStyle = ORANGE;\n      ctx.beginPath();\n      ctx.arc(3 + t * (W - 6), mid, 2 + 2 * lv, 0, Math.PI * 2);\n      ctx.fill();\n    }\n  },\n\n  reverb_screen(lcd) {\n    glass(lcd);\n    const { ctx, width: W, height: H, params, output } = lcd;\n    const active = on(params, \"Reverb Active\");\n    const decay = p(params, \"Reverb Decay\", 0.5), size = p(params, \"Reverb Size\", 0.6);\n    const damp = p(params, \"Reverb Damping\", 0.6), pre = p(params, \"Reverb Pre delay\", 0.35);\n    const ret = p(params, \"Reverb Volume\", 0.5);\n    ctx.fillStyle = WHITE;\n    ctx.fillText(\"REVERB\", 3, 2);\n    tag(ctx, W, active ? \"ON\" : \"OFF\", active ? GREEN : GREY);\n    const top = 14, bot = H - 4, h = bot - top;\n    const x0 = 3 + pre * 0.15 * (W - 6), len = (W - 6) * (0.25 + decay * 0.75);\n    const peak = 0.3 + ret * 0.7, tau = 0.2 + decay * 0.5;\n    ctx.fillStyle = WHITE;\n    ctx.fillRect(3, top, 2, h);\n    const n = Math.round(12 + size * 40);\n    for (let i = 0; i < n; i++) {\n      const f = i / n;\n      const x = x0 + f * len;\n      if (x > W - 3) break;\n      const jitter = 0.6 + 0.4 * Math.abs(Math.sin(i * 7.31));\n      const v = peak * Math.exp(-f / tau) * jitter;\n      ctx.fillStyle = active ? (f > 1 - damp * 0.6 ? GREY : BLUE) : GREY;\n      ctx.fillRect(x, bot - v * h, 1, Math.max(1, v * h));\n    }\n    ctx.strokeStyle = active ? WHITE : GREY;\n    ctx.beginPath();\n    for (let x = 0; x <= len && x0 + x <= W - 3; x++) {\n      const y = bot - peak * Math.exp(-(x / Math.max(1, len)) / tau) * h;\n      if (x === 0) ctx.moveTo(x0 + x, y);\n      else ctx.lineTo(x0 + x, y);\n    }\n    ctx.stroke();\n    const lv = level(output);\n    if (lv > 0.001) {\n      ctx.fillStyle = RED;\n      ctx.fillRect(W - 4, bot - lv * h, 2, lv * h);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 14,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "PLAY",
+                    "widgets": {
+                      "macros": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "MACRO",
+                        "color": "#3d7dff26"
+                      },
+                      "m_bright": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Bright",
+                        "bind": "P1 Brightness",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "m_timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "P1 Timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "m_time": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Time",
+                        "bind": "P1 Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "m_move": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Movement",
+                        "bind": "P1 Movement",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "parts": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "PARTS",
+                        "color": "#6b6b6b33"
+                      },
+                      "p1_on": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "Part 1",
+                        "bind": "P1 Active",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "p2_on": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "Part 2",
+                        "bind": "P2 Active",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "p1_vol": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Vol 1",
+                        "bind": "P1 Volume (2)",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "p2_vol": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Vol 2",
+                        "bind": "P2 Volume",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "glide": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Glide",
+                        "bind": "P1 Portamento",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 3,
+                        "rowSpan": 4,
+                        "label": "EQ",
+                        "color": "#ff3b301f"
+                      },
+                      "eq_bass": {
+                        "type": "fader",
+                        "col": 0,
+                        "row": 9,
+                        "rowSpan": 4,
+                        "label": "Bass",
+                        "bind": "Master Bass",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_mid": {
+                        "type": "fader",
+                        "col": 1,
+                        "row": 9,
+                        "rowSpan": 4,
+                        "label": "Mid",
+                        "bind": "Master Mid",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_treble": {
+                        "type": "fader",
+                        "col": 2,
+                        "row": 9,
+                        "rowSpan": 4,
+                        "label": "Treble",
+                        "bind": "Master Treble",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "SYNTH",
+                    "widgets": {
+                      "vcf": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "VCF",
+                        "color": "#ff6a1a22"
+                      },
+                      "cutoff": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Cutoff",
+                        "bind": "P1 VCF Cutoff",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "res": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Res",
+                        "bind": "P1 VCF Resonance",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vcf_env": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Env",
+                        "bind": "P1 VCF Env",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vcf_lfo": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "LFO",
+                        "bind": "P1 VCF LFO",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vcf_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "env": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "ENV",
+                        "color": "#3ec96b22"
+                      },
+                      "atk": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "P1 Attack",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dec": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "P1 Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "sus": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "P1 Sustain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "rel": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "P1 Release",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "env_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "DELAY",
+                    "widgets": {
+                      "delay": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "DELAY",
+                        "color": "#ffffff14"
+                      },
+                      "dly_on": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Delay",
+                        "bind": "Delay Active",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "dly_div": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Div",
+                        "bind": "Delay Synced",
+                        "options": [
+                          {
+                            "label": "1/32",
+                            "value": 0
+                          },
+                          {
+                            "label": "1/16.t",
+                            "value": 0.041666666666666664
+                          },
+                          {
+                            "label": "1/32.d",
+                            "value": 0.08333333333333333
+                          },
+                          {
+                            "label": "1/16",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "1/8.t",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "1/16.d",
+                            "value": 0.20833333333333334
+                          },
+                          {
+                            "label": "1/8",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "1/4.t",
+                            "value": 0.2916666666666667
+                          },
+                          {
+                            "label": "1/8.d",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "1/4",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "1/2.t",
+                            "value": 0.4166666666666667
+                          },
+                          {
+                            "label": "1/4.d",
+                            "value": 0.4583333333333333
+                          },
+                          {
+                            "label": "1/2",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "1.t",
+                            "value": 0.5416666666666666
+                          },
+                          {
+                            "label": "1/2.d",
+                            "value": 0.5833333333333334
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "2.t",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "1.d",
+                            "value": 0.7083333333333334
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "4.t",
+                            "value": 0.7916666666666666
+                          },
+                          {
+                            "label": "2.d",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "8.t",
+                            "value": 0.9166666666666666
+                          },
+                          {
+                            "label": "4.d",
+                            "value": 0.9583333333333334
+                          },
+                          {
+                            "label": "8",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "dly_p1": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Send 1",
+                        "bind": "P1 Send Delay",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "dly_p2": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Send 2",
+                        "bind": "P2 Send Delay",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "dly_time": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Time",
+                        "bind": "Delay Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dly_fb": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fdbk",
+                        "bind": "Delay Feedback",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dly_width": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Width",
+                        "bind": "Delay Stereo Width",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dly_ret": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Return",
+                        "bind": "Delay Volume",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "delay_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "REVERB",
+                    "widgets": {
+                      "reverb": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "REVERB",
+                        "color": "#ffffff14"
+                      },
+                      "rev_on": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Reverb",
+                        "bind": "Reverb Active",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "rev_p1": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Send 1",
+                        "bind": "P1 Send Reverb",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "rev_p2": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Send 2",
+                        "bind": "P2 Send Reverb",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "rev_decay": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Reverb Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "rev_size": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Size",
+                        "bind": "Reverb Size",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "rev_damp": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Damp",
+                        "bind": "Reverb Damping",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "rev_ret": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Return",
+                        "bind": "Reverb Volume",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "reverb_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#9a5ad3"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

@@ -1,0 +1,427 @@
+{
+ "cases": [
+  {
+   "name": "a library module's presets from every scope",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "v"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_library-pins.k7x": "k7-pub(3)\n",
+    "ws/_presets/k7-core/audio/verb/zed.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/Alpha.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/_hidden.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/notes.txt": "x\n",
+    "ws/_presets/k7-core/audio/verb/sub/inner.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/hall.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/cave 2.k7x": "params({ gain: 1 })\n",
+    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/presets/k7-core/audio/verb/pub.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/k7-core/audio/verb/mine.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n"
+   },
+   "ret": {
+    "ref": "@k7-core/audio/verb",
+    "presets": [
+     {
+      "scope": "workspace",
+      "name": "Alpha"
+     },
+     {
+      "scope": "workspace",
+      "name": "zed"
+     },
+     {
+      "scope": "account",
+      "name": "mine"
+     },
+     {
+      "scope": "k7-core",
+      "name": "cave 2"
+     },
+     {
+      "scope": "k7-core",
+      "name": "hall"
+     },
+     {
+      "scope": "k7-pub",
+      "name": "pub"
+     }
+    ],
+    "scopes": [
+     "workspace",
+     "account",
+     "k7-core",
+     "k7-pub",
+     "other"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "an engine module with only the account's",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "e"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_library-pins.k7x": "k7-pub(3)\n",
+    "ws/_presets/k7-core/audio/verb/zed.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/Alpha.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/_hidden.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/notes.txt": "x\n",
+    "ws/_presets/k7-core/audio/verb/sub/inner.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/hall.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/cave 2.k7x": "params({ gain: 1 })\n",
+    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/presets/k7-core/audio/verb/pub.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/k7-core/audio/verb/mine.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n"
+   },
+   "ret": {
+    "ref": "@engine/reverb",
+    "presets": [
+     {
+      "scope": "account",
+      "name": "own"
+     }
+    ],
+    "scopes": [
+     "workspace",
+     "account",
+     "k7-core",
+     "k7-pub",
+     "other"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "a node that extends nothing",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "bare"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_library-pins.k7x": "k7-pub(3)\n",
+    "ws/_presets/k7-core/audio/verb/zed.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/Alpha.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/_hidden.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/notes.txt": "x\n",
+    "ws/_presets/k7-core/audio/verb/sub/inner.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/hall.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/cave 2.k7x": "params({ gain: 1 })\n",
+    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/presets/k7-core/audio/verb/pub.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/k7-core/audio/verb/mine.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n"
+   },
+   "thrown": "no node named 'bare'",
+   "changed": {}
+  },
+  {
+   "name": "a node extending a name that is no ref",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "plain"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_library-pins.k7x": "k7-pub(3)\n",
+    "ws/_presets/k7-core/audio/verb/zed.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/Alpha.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/_hidden.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/notes.txt": "x\n",
+    "ws/_presets/k7-core/audio/verb/sub/inner.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/hall.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/cave 2.k7x": "params({ gain: 1 })\n",
+    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/presets/k7-core/audio/verb/pub.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/k7-core/audio/verb/mine.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n"
+   },
+   "ret": {
+    "ref": null,
+    "presets": [],
+    "scopes": [
+     "workspace",
+     "account",
+     "k7-core",
+     "k7-pub",
+     "other"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "a node the project lacks",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "ghost"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_library-pins.k7x": "k7-pub(3)\n",
+    "ws/_presets/k7-core/audio/verb/zed.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/Alpha.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/_hidden.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/notes.txt": "x\n",
+    "ws/_presets/k7-core/audio/verb/sub/inner.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/hall.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/cave 2.k7x": "params({ gain: 1 })\n",
+    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/presets/k7-core/audio/verb/pub.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/k7-core/audio/verb/mine.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n"
+   },
+   "thrown": "no node named 'ghost'",
+   "changed": {}
+  },
+  {
+   "name": "a module with no preset folder anywhere",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "v"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_library-pins.k7x": "k7-pub(3)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n"
+   },
+   "ret": {
+    "ref": "@k7-core/audio/verb",
+    "presets": [],
+    "scopes": [
+     "workspace",
+     "account",
+     "k7-core",
+     "k7-pub",
+     "other"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "no pin for the published library",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "v"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_presets/k7-core/audio/verb/zed.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/Alpha.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/_hidden.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/notes.txt": "x\n",
+    "ws/_presets/k7-core/audio/verb/sub/inner.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/hall.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/cave 2.k7x": "params({ gain: 1 })\n",
+    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/presets/k7-core/audio/verb/pub.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/k7-core/audio/verb/mine.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n"
+   },
+   "ret": {
+    "ref": "@k7-core/audio/verb",
+    "presets": [
+     {
+      "scope": "workspace",
+      "name": "Alpha"
+     },
+     {
+      "scope": "workspace",
+      "name": "zed"
+     },
+     {
+      "scope": "account",
+      "name": "mine"
+     },
+     {
+      "scope": "k7-core",
+      "name": "cave 2"
+     },
+     {
+      "scope": "k7-core",
+      "name": "hall"
+     }
+    ],
+    "scopes": [
+     "workspace",
+     "account",
+     "k7-core",
+     "k7-pub",
+     "other"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "a project with no libraries beside it",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "v"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_library-pins.k7x": "k7-pub(3)\n",
+    "ws/_presets/k7-core/audio/verb/zed.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/Alpha.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/_hidden.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/notes.txt": "x\n",
+    "ws/_presets/k7-core/audio/verb/sub/inner.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/presets/k7-core/audio/verb/pub.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/k7-core/audio/verb/mine.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n"
+   },
+   "ret": {
+    "ref": "@k7-core/audio/verb",
+    "presets": [
+     {
+      "scope": "workspace",
+      "name": "Alpha"
+     },
+     {
+      "scope": "workspace",
+      "name": "zed"
+     },
+     {
+      "scope": "account",
+      "name": "mine"
+     },
+     {
+      "scope": "k7-pub",
+      "name": "pub"
+     }
+    ],
+    "scopes": [
+     "workspace",
+     "account",
+     "k7-pub"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "a preset named with a long name",
+   "fn": "listNodePresets",
+   "args": {
+    "node": "v"
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
+    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "ws/song.k7/nodes/e.k7x": "extends(\"@engine/reverb\")\n",
+    "ws/song.k7/nodes/bare.k7x": "bypass(true)\n",
+    "ws/song.k7/nodes/plain.k7x": "extends(\"verb\")\n",
+    "ws/_library-pins.k7x": "k7-pub(3)\n",
+    "ws/_presets/k7-core/audio/verb/zed.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/Alpha.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/_hidden.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/notes.txt": "x\n",
+    "ws/_presets/k7-core/audio/verb/sub/inner.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/hall.k7x": "params({ gain: 1 })\n",
+    "libraries/k7-core/presets/k7-core/audio/verb/cave 2.k7x": "params({ gain: 1 })\n",
+    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-pub/3/presets/k7-core/audio/verb/pub.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/k7-core/audio/verb/mine.k7x": "params({ gain: 1 })\n",
+    "home/library/presets/engine/reverb/own.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.k7x": "params({ gain: 1 })\n",
+    "ws/_presets/k7-core/audio/verb/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.k7x": "params({ gain: 1 })\n"
+   },
+   "ret": {
+    "ref": "@k7-core/audio/verb",
+    "presets": [
+     {
+      "scope": "workspace",
+      "name": "Alpha"
+     },
+     {
+      "scope": "workspace",
+      "name": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+     },
+     {
+      "scope": "workspace",
+      "name": "zed"
+     },
+     {
+      "scope": "account",
+      "name": "mine"
+     },
+     {
+      "scope": "k7-core",
+      "name": "cave 2"
+     },
+     {
+      "scope": "k7-core",
+      "name": "hall"
+     },
+     {
+      "scope": "k7-pub",
+      "name": "pub"
+     }
+    ],
+    "scopes": [
+     "workspace",
+     "account",
+     "k7-core",
+     "k7-pub",
+     "other"
+    ]
+   },
+   "changed": {}
+  }
+ ]
+}

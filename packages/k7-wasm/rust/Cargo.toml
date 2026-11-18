@@ -1,0 +1,35 @@
+[package]
+name = "k7-wasm"
+version = "0.1.0"
+edition = "2024"
+description = "The browser's one WebAssembly module: a C ABI carrying JSON, the dispatch of operations, and the handles of the song-schema crate's curves."
+publish = false
+
+[lib]
+path = "src/lib.rs"
+# cdylib for WebAssembly, rlib for the tests, the bindings binary and a native host later.
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "bindings"
+path = "src/bin/bindings.rs"
+required-features = ["ts"]
+
+[features]
+ts = ["dep:ts-rs", "song-schema/ts"]
+# The compile behind song.* ops and the edits behind edit.* ops: built into the verbs' module only, so the curves' module stays small.
+song = ["dep:song", "dep:song-edit"]
+
+[dependencies]
+song-schema = { path = "../../song-schema/rust" }
+song = { path = "../../song/rust", default-features = false, optional = true }
+song-edit = { path = "../../song-edit/rust", optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["float_roundtrip"] }
+ts-rs = { version = "11", optional = true }
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

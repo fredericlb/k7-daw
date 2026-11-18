@@ -1,0 +1,40 @@
+{
+  "name": "@studio/translator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "k7's translator \u2014 parses another DAW's project (.dawproject, .als) and emits a k7 song folder (k7x). A library consumed as source; the file service is its caller.",
+  "exports": {
+    "./ableton": "./src/ableton.ts",
+    "./abletonZip": "./src/abletonZip.ts",
+    "./dawproject": "./src/dawproject.ts",
+    "./emit": "./src/emit.ts",
+    "./emitNaming": "./src/emitNaming.ts",
+    "./import": "./src/import.ts",
+    "./inflate": "./src/inflate.ts",
+    "./model": "./src/model.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "dev": "tsc --noEmit --watch --preserveWatchOutput",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@studio/k7x": "*",
+    "@studio/song": "*",
+    "@studio/song-edit": "*",
+    "@studio/song-schema": "*",
+    "@studio/web-protocol": "*",
+    "fast-xml-parser": "^4.4.1",
+    "fflate": "^0.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.16.0",
+    "typescript": "^7.0.2"
+  }
+}

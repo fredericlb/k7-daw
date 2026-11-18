@@ -1,0 +1,780 @@
+{
+  "project": "k7-core/instruments.synth.mu-elements.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.synth.mu-elements",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.synth.mu-elements.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#9a5ad3",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody:fx",
+            "type": "mu-elements",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/instruments.synth.mu-elements.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/synth/mu-elements",
+            "stage": [
+              "@output-volume"
+            ],
+            "inputs": [
+              {
+                "name": "midi",
+                "type": "midi"
+              },
+              {
+                "name": "in",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "EXCITER",
+                  "widgets": {
+                    "input": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "label": "Input",
+                      "bind": "Input",
+                      "options": [
+                        {
+                          "label": "strike",
+                          "value": 0
+                        },
+                        {
+                          "label": "blow",
+                          "value": 1
+                        },
+                        {
+                          "label": "both",
+                          "value": 2
+                        }
+                      ]
+                    },
+                    "exciter": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 6,
+                      "rowSpan": 3
+                    },
+                    "bow_group": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 4,
+                      "label": "BOW",
+                      "color": "#ff6a1a26"
+                    },
+                    "bow": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Bow",
+                      "bind": "Bow",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "bow_timbre": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Bow timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "blow_group": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "BLOW",
+                      "color": "#3d7dff26"
+                    },
+                    "blow": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Blow",
+                      "bind": "Blow",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "blow_timbre": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Blow timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "flow": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Flow",
+                      "bind": "Flow",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "strike_group": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "STRIKE",
+                      "color": "#ff3b3026"
+                    },
+                    "strike": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Strike",
+                      "bind": "Strike",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "strike_timbre": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Strike timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mallet": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Mallet",
+                      "bind": "Mallet",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "RESONATOR",
+                  "widgets": {
+                    "model": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "label": "Model",
+                      "bind": "Model",
+                      "options": [
+                        {
+                          "label": "Modal",
+                          "value": 0
+                        },
+                        {
+                          "label": "String",
+                          "value": 1
+                        },
+                        {
+                          "label": "Strings",
+                          "value": 2
+                        },
+                        {
+                          "label": "Ominous",
+                          "value": 3
+                        }
+                      ]
+                    },
+                    "resonator": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 6,
+                      "rowSpan": 3
+                    },
+                    "res_group": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "RES",
+                      "color": "#3ec96b26"
+                    },
+                    "geometry": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Geom",
+                      "bind": "Geometry",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "brightness": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Bright",
+                      "bind": "Brightness",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "damping": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Damp",
+                      "bind": "Damping",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "position": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pos",
+                      "bind": "Position",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "space": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Space",
+                      "bind": "Space",
+                      "min": 0,
+                      "max": 2
+                    },
+                    "play_group": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 4,
+                      "label": "PLAY",
+                      "color": "#6b6b6b33"
+                    },
+                    "contour": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Contour",
+                      "bind": "Contour",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "transpose": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Transp",
+                      "bind": "Transpose",
+                      "min": -24,
+                      "max": 24,
+                      "step": 1
+                    }
+                  }
+                }
+              ],
+              "script": "// mu-elements screens — the three exciters over one note's life, and the partials the resonator rings.\nconst FONT = \"8px ui-monospace, monospace\";\nconst ORANGE = \"#ff6a1a\";\nconst BLUE = \"#3d7dff\";\nconst RED = \"#ff3b30\";\nconst GREEN = \"#3ec96b\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst MODELS = [\"MODAL\", \"STRING\", \"STRINGS\", \"OMINOUS\"];\n\nfunction num(p, k, d) {\n  const v = p ? p[k] : undefined;\n  return typeof v === \"number\" && Number.isFinite(v) ? v : d;\n}\nfunction clamp(v, a, b) {\n  return Math.min(b, Math.max(a, v));\n}\nfunction noise(i) {\n  const x = Math.sin(i * 12.9898 + 78.233) * 43758.5453;\n  return (x - Math.floor(x)) * 2 - 1;\n}\n\n// The bow and blow envelope: gate held to 0.65; Contour runs from a pluck (0) to a slow swell (1).\nfunction contourEnv(t, c) {\n  const att = 0.005 + c * c * 0.4;\n  const sus = clamp(c * 1.4, 0, 1);\n  const decayed = sus + (1 - sus) * Math.exp(-Math.max(0, t - att) / 0.08);\n  const held = t < att ? t / att : decayed;\n  return t < 0.65 ? held : held * Math.exp(-(t - 0.65) / (0.03 + c * 0.12));\n}\n\nfunction lane(ctx, x0, w, mid, half, color, name, fn) {\n  ctx.strokeStyle = GREY;\n  ctx.beginPath();\n  ctx.moveTo(x0, Math.round(mid) + 0.5);\n  ctx.lineTo(x0 + w, Math.round(mid) + 0.5);\n  ctx.stroke();\n  ctx.strokeStyle = color;\n  ctx.beginPath();\n  const n = Math.max(2, Math.floor(w));\n  for (let i = 0; i < n; i++) {\n    const y = mid - clamp(fn(i / (n - 1), i), -1, 1) * half;\n    if (i === 0) ctx.moveTo(x0 + i, y);\n    else ctx.lineTo(x0 + i, y);\n  }\n  ctx.stroke();\n  ctx.fillStyle = color;\n  ctx.textAlign = \"left\";\n  ctx.fillText(name, 4, mid - half + 8);\n}\n\nexport default {\n  exciter(lcd) {\n    const { ctx, width: W, height: H, params: p } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n    const c = num(p, \"Contour\", 1);\n    const bow = num(p, \"Bow\", 0);\n    const bowT = num(p, \"Bow timbre\", 0.5);\n    const blow = num(p, \"Blow\", 0);\n    const blowT = num(p, \"Blow timbre\", 0.5);\n    const flow = num(p, \"Flow\", 0.5);\n    const strike = num(p, \"Strike\", 0.8);\n    const strikeT = num(p, \"Strike timbre\", 0.5);\n    const mallet = num(p, \"Mallet\", 0.5);\n    const x0 = 40;\n    const w = Math.max(1, W - x0 - 4);\n    const lh = H / 3;\n    const half = Math.max(1, lh / 2 - 3);\n    const bowF = 6 + bowT * 30;\n    lane(ctx, x0, w, lh * 0.5, half, ORANGE, \"BOW\", (t) => {\n      const ph = (t * bowF) % 1;\n      return bow * contourEnv(t, c) * (ph * 2 - 1);\n    });\n    let lp = 0;\n    const blowA = 0.08 + blowT * 0.9;\n    lane(ctx, x0, w, lh * 1.5, half, BLUE, \"BLOW\", (t, i) => {\n      if (i === 0) lp = 0;\n      lp += (noise(i) - lp) * blowA;\n      const gust = 1 - flow * 0.5 * (1 + Math.sin(t * 20 + Math.sin(t * 7) * 3)) * 0.5;\n      return blow * contourEnv(t, c) * gust * lp * 1.6;\n    });\n    const width = 0.004 + (1 - mallet) * 0.05;\n    const ring = 20 + strikeT * 120;\n    lane(ctx, x0, w, lh * 2.5, half, RED, \"STRIKE\", (t, i) => {\n      const e = Math.exp(-t / width);\n      const tick = mallet > 0.8 ? (mallet - 0.8) * 4 * Math.exp(-t / 0.2) * (noise(i) > 0.9 ? 1 : 0) : 0;\n      return strike * (e * Math.cos(t * ring) + tick);\n    });\n  },\n  resonator(lcd) {\n    const { ctx, width: W, height: H, params: p } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n    const geo = num(p, \"Geometry\", 0.2);\n    const bright = num(p, \"Brightness\", 0.5);\n    const damp = num(p, \"Damping\", 0.25);\n    const pos = num(p, \"Position\", 0.3);\n    const space = clamp(num(p, \"Space\", 0.5), 0, 2);\n    const model = Math.round(num(p, \"Model\", 0));\n    const x0 = 6;\n    const w = Math.max(1, W - 40);\n    const top = 16;\n    const bot = H - 6;\n    const hh = Math.max(1, bot - top);\n    const maxR = Math.log(40);\n    const strikeAt = 0.05 + pos * 0.45;\n    for (let k = 1; k <= 28; k++) {\n      const ratio = Math.pow(k, 0.6 + geo * 0.8);\n      const x = x0 + (Math.log(ratio) / maxR) * w;\n      if (x > x0 + w) continue;\n      const a = clamp(Math.abs(Math.sin(Math.PI * k * strikeAt)) * Math.pow(k, -(1 - bright) * 1.6), 0, 1);\n      const left = a * Math.exp(-(k - 1) * (0.02 + damp * 0.25));\n      const xr = Math.round(x) + 0.5;\n      ctx.strokeStyle = GREY;\n      ctx.beginPath();\n      ctx.moveTo(xr, bot);\n      ctx.lineTo(xr, bot - a * hh);\n      ctx.stroke();\n      ctx.fillStyle = GREEN;\n      ctx.fillRect(xr - 1.5, bot - left * hh, 3, left * hh);\n    }\n    const cx = W - 18;\n    const cy = top + hh / 2;\n    const r = 3 + (space / 2) * 11;\n    ctx.strokeStyle = WHITE;\n    ctx.beginPath();\n    ctx.arc(cx, cy, r, 0, Math.PI * 2);\n    ctx.stroke();\n    if (space > 1) {\n      ctx.strokeStyle = GREY;\n      ctx.beginPath();\n      ctx.arc(cx, cy, Math.max(1, r - 4 * (space - 1) - 2), 0, Math.PI * 2);\n      ctx.stroke();\n    }\n    ctx.fillStyle = GREY;\n    ctx.textAlign = \"center\";\n    ctx.fillText(\"SPACE\", cx, bot);\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = WHITE;\n    ctx.fillText(MODELS[model] ?? \"MODAL\", 6, 10);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 14,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "EXCITER",
+                    "widgets": {
+                      "input": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Input",
+                        "bind": "Input",
+                        "options": [
+                          {
+                            "label": "strike",
+                            "value": 0
+                          },
+                          {
+                            "label": "blow",
+                            "value": 1
+                          },
+                          {
+                            "label": "both",
+                            "value": 2
+                          }
+                        ]
+                      },
+                      "exciter": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "bow_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "BOW",
+                        "color": "#ff6a1a26"
+                      },
+                      "bow": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Bow",
+                        "bind": "Bow",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "bow_timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Bow timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "blow_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "BLOW",
+                        "color": "#3d7dff26"
+                      },
+                      "blow": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Blow",
+                        "bind": "Blow",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "blow_timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Blow timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "flow": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Flow",
+                        "bind": "Flow",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "strike_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "STRIKE",
+                        "color": "#ff3b3026"
+                      },
+                      "strike": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Strike",
+                        "bind": "Strike",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "strike_timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Strike timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mallet": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Mallet",
+                        "bind": "Mallet",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "RESONATOR",
+                    "widgets": {
+                      "model": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Model",
+                        "bind": "Model",
+                        "options": [
+                          {
+                            "label": "Modal",
+                            "value": 0
+                          },
+                          {
+                            "label": "String",
+                            "value": 1
+                          },
+                          {
+                            "label": "Strings",
+                            "value": 2
+                          },
+                          {
+                            "label": "Ominous",
+                            "value": 3
+                          }
+                        ]
+                      },
+                      "resonator": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "res_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "RES",
+                        "color": "#3ec96b26"
+                      },
+                      "geometry": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Geom",
+                        "bind": "Geometry",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "brightness": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Bright",
+                        "bind": "Brightness",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "damping": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Damp",
+                        "bind": "Damping",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "position": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pos",
+                        "bind": "Position",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "space": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Space",
+                        "bind": "Space",
+                        "min": 0,
+                        "max": 2
+                      },
+                      "play_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "PLAY",
+                        "color": "#6b6b6b33"
+                      },
+                      "contour": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Contour",
+                        "bind": "Contour",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "transpose": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Transp",
+                        "bind": "Transpose",
+                        "min": -24,
+                        "max": 24,
+                        "step": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "params": {},
+            "defaults": {
+              "Model": 0,
+              "Contour": 1,
+              "Bow": 0,
+              "Bow timbre": 0.5,
+              "Blow": 0,
+              "Flow": 0.5,
+              "Blow timbre": 0.5,
+              "Strike": 0.8000000119,
+              "Mallet": 0.5,
+              "Strike timbre": 0.5,
+              "Geometry": 0.200000003,
+              "Brightness": 0.5,
+              "Damping": 0.25,
+              "Position": 0.3000000119,
+              "Space": 0.5,
+              "Input": 0,
+              "Transpose": 0
+            },
+            "pluginId": "melody:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#9a5ad3"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

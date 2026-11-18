@@ -1,0 +1,25 @@
+// Parametric EQ — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({
+  "Low Freq": { min: 20, max: 1000, default: 100 },
+  "Low Gain": { min: -18, max: 18, default: 0 },
+  "Low Q": { min: 0.3, max: 2, default: 0.707 },
+  "Low Mid Freq": { min: 40, max: 4000, default: 300 },
+  "Low Mid Gain": { min: -18, max: 18, default: 0 },
+  "Low Mid Q": { min: 0.1, max: 10, default: 1 },
+  "Mid Freq": { min: 200, max: 8000, default: 1000 },
+  "Mid Gain": { min: -18, max: 18, default: 0 },
+  "Mid Q": { min: 0.1, max: 10, default: 1 },
+  "High Mid Freq": { min: 800, max: 16000, default: 3500 },
+  "High Mid Gain": { min: -18, max: 18, default: 0 },
+  "High Mid Q": { min: 0.1, max: 10, default: 1 },
+  "High Freq": { min: 1000, max: 20000, default: 8000 },
+  "High Gain": { min: -18, max: 18, default: 0 },
+  "High Q": { min: 0.3, max: 2, default: 0.707 },
+})
+graph([
+  biquad("lowshelf", glide("Low Freq"), "Low Q", glide("Low Gain")),
+  biquad("peak", glide("Low Mid Freq"), "Low Mid Q", glide("Low Mid Gain")),
+  biquad("peak", glide("Mid Freq"), "Mid Q", glide("Mid Gain")),
+  biquad("peak", glide("High Mid Freq"), "High Mid Q", glide("High Mid Gain")),
+  biquad("highshelf", glide("High Freq"), "High Q", glide("High Gain")),
+])

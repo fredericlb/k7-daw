@@ -1,0 +1,1538 @@
+{
+  "project": "k7-core/audio.zz_utility.sub-bass.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.zz_utility.sub-bass",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Dub Sub",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-bass-kit",
+        "name": "drums-bass-kit",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#ca2124",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-bass-kit:fx-bass-kit",
+            "type": "Bass Kit",
+            "name": "fx-bass-kit",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/nodes/fx-bass-kit.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-dub-center",
+        "name": "drums-dub-center",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-dub-center:fx-dub-center",
+            "type": "Dub Center",
+            "name": "fx-dub-center",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/nodes/fx-dub-center.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-dub-sub",
+        "name": "drums-dub-sub",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e15447",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-dub-sub:fx-dub-sub",
+            "type": "Dub Sub",
+            "name": "fx-dub-sub",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/nodes/fx-dub-sub.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-fathom-five",
+        "name": "drums-fathom-five",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-fathom-five:fx-fathom-five",
+            "type": "Fathom Five",
+            "name": "fx-fathom-five",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.sub-bass.k7/nodes/fx-fathom-five.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/zz_utility/sub-bass",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 12,
+              "rows": 4,
+              "widgets": {
+                "grind": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "GRIND",
+                  "color": "#ff6a1a26"
+                },
+                "grind_amt": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Grind",
+                  "bind": "TGrind",
+                  "min": 0,
+                  "max": 1
+                },
+                "grind_out": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "GrdOut",
+                  "bind": "Grd/Out",
+                  "min": 0,
+                  "max": 1
+                },
+                "xover": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "XOver",
+                  "bind": "XOver",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "BASS",
+                  "color": "#3d7dff26"
+                },
+                "bass_drive": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "BsDrive",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass_voice": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Voice",
+                  "bind": "BsVoice",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass_out": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Level",
+                  "bind": "BassOut",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub": {
+                  "type": "group",
+                  "col": 8,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "SUB",
+                  "color": "#3d7dff26"
+                },
+                "sub_drive": {
+                  "type": "knob",
+                  "col": 8,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "SbDrive",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub_voice": {
+                  "type": "knob",
+                  "col": 10,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Voice",
+                  "bind": "SbVoice",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub_out": {
+                  "type": "knob",
+                  "col": 8,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Level",
+                  "bind": "SubOut",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 12,
+                "widgets": {
+                  "grind": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "GRIND",
+                    "color": "#ff6a1a26"
+                  },
+                  "grind_amt": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Grind",
+                    "bind": "TGrind",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "grind_out": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "GrdOut",
+                    "bind": "Grd/Out",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "xover": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "XOver",
+                    "bind": "XOver",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "BASS",
+                    "color": "#3d7dff26"
+                  },
+                  "bass_drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "BsDrive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass_voice": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Voice",
+                    "bind": "BsVoice",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass_out": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Level",
+                    "bind": "BassOut",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "SUB",
+                    "color": "#3d7dff26"
+                  },
+                  "sub_drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "SbDrive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub_voice": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 8,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Voice",
+                    "bind": "SbVoice",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub_out": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 10,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Level",
+                    "bind": "SubOut",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-kit",
+              "dub-center",
+              "dub-sub",
+              "fathom-five"
+            ],
+            "engine": "dub-sub",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-bass-kit": {
+        "from": "drums-bass-kit",
+        "use": [
+          {
+            "module": "fx-bass-kit",
+            "uses": "@k7-core/audio/zz_utility/sub-bass",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 2,
+              "widgets": {
+                "gen": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "GEN",
+                  "color": "#ffffff14"
+                },
+                "drive": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "Drive",
+                  "min": 0,
+                  "max": 1
+                },
+                "voicing": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Voice",
+                  "bind": "Voicing",
+                  "min": 0,
+                  "max": 1
+                },
+                "layers": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "MIX",
+                  "color": "#3d7dff26"
+                },
+                "bass": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Bass",
+                  "bind": "BassOut",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Sub",
+                  "bind": "SubOut",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "gen": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "GEN",
+                    "color": "#ffffff14"
+                  },
+                  "drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "Drive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "voicing": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Voice",
+                    "bind": "Voicing",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "layers": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "MIX",
+                    "color": "#3d7dff26"
+                  },
+                  "bass": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Bass",
+                    "bind": "BassOut",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Sub",
+                    "bind": "SubOut",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-kit",
+              "dub-center",
+              "dub-sub",
+              "fathom-five"
+            ],
+            "engine": "bass-kit",
+            "params": {},
+            "pluginId": "drums-bass-kit:fx-bass-kit"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-dub-center": {
+        "from": "drums-dub-center",
+        "use": [
+          {
+            "module": "fx-dub-center",
+            "uses": "@k7-core/audio/zz_utility/sub-bass",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 18,
+              "rows": 2,
+              "widgets": {
+                "grind": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "GRIND",
+                  "color": "#ff6a1a26"
+                },
+                "grind_amt": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Grind",
+                  "bind": "TGrind",
+                  "min": 0,
+                  "max": 1
+                },
+                "grind_out": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "GrdOut",
+                  "bind": "Grd/Out",
+                  "min": 0,
+                  "max": 1
+                },
+                "xover": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "XOver",
+                  "bind": "XOver",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass": {
+                  "type": "group",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2,
+                  "label": "BASS",
+                  "color": "#3d7dff26"
+                },
+                "bass_drive": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "BsDrive",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass_voice": {
+                  "type": "knob",
+                  "col": 8,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Voice",
+                  "bind": "BsVoice",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass_out": {
+                  "type": "knob",
+                  "col": 10,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Level",
+                  "bind": "BassOut",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub": {
+                  "type": "group",
+                  "col": 12,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2,
+                  "label": "SUB",
+                  "color": "#3d7dff26"
+                },
+                "sub_drive": {
+                  "type": "knob",
+                  "col": 12,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "SbDrive",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub_voice": {
+                  "type": "knob",
+                  "col": 14,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Voice",
+                  "bind": "SbVoice",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub_out": {
+                  "type": "knob",
+                  "col": 16,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Level",
+                  "bind": "SubOut",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 12,
+                "widgets": {
+                  "grind": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "GRIND",
+                    "color": "#ff6a1a26"
+                  },
+                  "grind_amt": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Grind",
+                    "bind": "TGrind",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "grind_out": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "GrdOut",
+                    "bind": "Grd/Out",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "xover": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "XOver",
+                    "bind": "XOver",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "BASS",
+                    "color": "#3d7dff26"
+                  },
+                  "bass_drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "BsDrive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass_voice": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Voice",
+                    "bind": "BsVoice",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass_out": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Level",
+                    "bind": "BassOut",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "SUB",
+                    "color": "#3d7dff26"
+                  },
+                  "sub_drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "SbDrive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub_voice": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 8,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Voice",
+                    "bind": "SbVoice",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub_out": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 10,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Level",
+                    "bind": "SubOut",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-kit",
+              "dub-center",
+              "dub-sub",
+              "fathom-five"
+            ],
+            "engine": "dub-center",
+            "params": {},
+            "pluginId": "drums-dub-center:fx-dub-center"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-dub-sub": {
+        "from": "drums-dub-sub",
+        "use": [
+          {
+            "module": "fx-dub-sub",
+            "uses": "@k7-core/audio/zz_utility/sub-bass",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 12,
+              "rows": 4,
+              "widgets": {
+                "grind": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "GRIND",
+                  "color": "#ff6a1a26"
+                },
+                "grind_amt": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Grind",
+                  "bind": "TGrind",
+                  "min": 0,
+                  "max": 1
+                },
+                "grind_out": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "GrdOut",
+                  "bind": "Grd/Out",
+                  "min": 0,
+                  "max": 1
+                },
+                "xover": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "XOver",
+                  "bind": "XOver",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "BASS",
+                  "color": "#3d7dff26"
+                },
+                "bass_drive": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "BsDrive",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass_voice": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Voice",
+                  "bind": "BsVoice",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass_out": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Level",
+                  "bind": "BassOut",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub": {
+                  "type": "group",
+                  "col": 8,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "SUB",
+                  "color": "#3d7dff26"
+                },
+                "sub_drive": {
+                  "type": "knob",
+                  "col": 8,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "SbDrive",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub_voice": {
+                  "type": "knob",
+                  "col": 10,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Voice",
+                  "bind": "SbVoice",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub_out": {
+                  "type": "knob",
+                  "col": 8,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Level",
+                  "bind": "SubOut",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 12,
+                "widgets": {
+                  "grind": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "GRIND",
+                    "color": "#ff6a1a26"
+                  },
+                  "grind_amt": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Grind",
+                    "bind": "TGrind",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "grind_out": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "GrdOut",
+                    "bind": "Grd/Out",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "xover": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "XOver",
+                    "bind": "XOver",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "BASS",
+                    "color": "#3d7dff26"
+                  },
+                  "bass_drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "BsDrive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass_voice": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Voice",
+                    "bind": "BsVoice",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "bass_out": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Level",
+                    "bind": "BassOut",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "SUB",
+                    "color": "#3d7dff26"
+                  },
+                  "sub_drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "SbDrive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub_voice": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 8,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Voice",
+                    "bind": "SbVoice",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub_out": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 10,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Level",
+                    "bind": "SubOut",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-kit",
+              "dub-center",
+              "dub-sub",
+              "fathom-five"
+            ],
+            "engine": "dub-sub",
+            "params": {},
+            "pluginId": "drums-dub-sub:fx-dub-sub"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-fathom-five": {
+        "from": "drums-fathom-five",
+        "use": [
+          {
+            "module": "fx-fathom-five",
+            "uses": "@k7-core/audio/zz_utility/sub-bass",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "root_note": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Root",
+                  "bind": "Root Note",
+                  "min": 0,
+                  "max": 1
+                },
+                "sub_octave": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "SubOct",
+                  "bind": "SubOctave",
+                  "min": 0,
+                  "max": 1
+                },
+                "frequency": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Freq",
+                  "bind": "Frequency",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "root_note": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Root",
+                    "bind": "Root Note",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "sub_octave": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "SubOct",
+                    "bind": "SubOctave",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "frequency": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Freq",
+                    "bind": "Frequency",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-kit",
+              "dub-center",
+              "dub-sub",
+              "fathom-five"
+            ],
+            "engine": "fathom-five",
+            "params": {},
+            "pluginId": "drums-fathom-five:fx-fathom-five"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-bass-kit",
+      "drums-dub-center",
+      "drums-dub-sub",
+      "drums-fathom-five"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-bass-kit": "#ca2124",
+      "drums-dub-center": "#dd322c",
+      "drums-dub-sub": "#e15447",
+      "drums-fathom-five": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-bass-kit": "audio",
+      "drums-dub-center": "audio",
+      "drums-dub-sub": "audio",
+      "drums-fathom-five": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-bass-kit": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-dub-center": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-dub-sub": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-fathom-five": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

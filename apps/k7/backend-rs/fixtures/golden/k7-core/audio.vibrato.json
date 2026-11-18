@@ -1,0 +1,661 @@
+{
+  "project": "k7-core/audio.vibrato.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.vibrato",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.vibrato.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.vibrato.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Vibrato",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.vibrato.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-vibrato",
+        "name": "drums-vibrato",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.vibrato.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-vibrato:fx-vibrato",
+            "type": "Vibrato",
+            "name": "fx-vibrato",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.vibrato.k7/nodes/fx-vibrato.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-wobble",
+        "name": "drums-wobble",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.vibrato.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-wobble:fx-wobble",
+            "type": "DSP Graph",
+            "name": "fx-wobble",
+            "path": "",
+            "dspGraph": "{\n  \"params\": [\n    {\n      \"name\": \"Amount\",\n      \"min\": 0,\n      \"max\": 100,\n      \"default\": 0\n    }\n  ],\n  \"nodes\": [\n    {\n      \"type\": \"mul\",\n      \"in\": [\n        \"Amount\",\n        0.01\n      ],\n      \"out\": \"n0\"\n    },\n    {\n      \"type\": \"lerp\",\n      \"in\": [\n        0.3,\n        3.3,\n        \"n0\"\n      ],\n      \"out\": \"n1\"\n    },\n    {\n      \"type\": \"mul\",\n      \"in\": [\n        \"n0\",\n        25\n      ],\n      \"out\": \"n2\"\n    },\n    {\n      \"type\": \"ain\",\n      \"out\": \"n3\"\n    },\n    {\n      \"type\": \"mul\",\n      \"in\": [\n        \"n1\",\n        0.23\n      ],\n      \"out\": \"n4\"\n    },\n    {\n      \"type\": \"alfo\",\n      \"k\": [\n        \"n4\"\n      ],\n      \"out\": \"n5\",\n      \"shape\": \"sine\"\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n6\",\n      \"in\": [\n        \"n5\"\n      ],\n      \"k\": [\n        \"n2\"\n      ]\n    },\n    {\n      \"type\": \"mul\",\n      \"in\": [\n        \"n1\",\n        0.71\n      ],\n      \"out\": \"n7\"\n    },\n    {\n      \"type\": \"alfo\",\n      \"k\": [\n        \"n7\"\n      ],\n      \"out\": \"n8\",\n      \"shape\": \"sine\"\n    },\n    {\n      \"type\": \"mul\",\n      \"in\": [\n        \"n2\",\n        0.6\n      ],\n      \"out\": \"n9\"\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n10\",\n      \"in\": [\n        \"n8\"\n      ],\n      \"k\": [\n        \"n9\"\n      ]\n    },\n    {\n      \"type\": \"mul\",\n      \"in\": [\n        \"n1\",\n        1.37\n      ],\n      \"out\": \"n11\"\n    },\n    {\n      \"type\": \"alfo\",\n      \"k\": [\n        \"n11\"\n      ],\n      \"out\": \"n12\",\n      \"shape\": \"sine\"\n    },\n    {\n      \"type\": \"mul\",\n      \"in\": [\n        \"n2\",\n        0.35\n      ],\n      \"out\": \"n13\"\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n14\",\n      \"in\": [\n        \"n12\"\n      ],\n      \"k\": [\n        \"n13\"\n      ]\n    },\n    {\n      \"type\": \"aadd\",\n      \"out\": \"n15\",\n      \"in\": [\n        \"n6\",\n        \"n10\"\n      ]\n    },\n    {\n      \"type\": \"aadd\",\n      \"out\": \"n16\",\n      \"in\": [\n        \"n15\",\n        \"n14\"\n      ]\n    },\n    {\n      \"type\": \"aadd\",\n      \"out\": \"n17\",\n      \"in\": [\n        \"n16\"\n      ],\n      \"k\": [\n        60\n      ]\n    },\n    {\n      \"type\": \"adelay\",\n      \"in\": [\n        \"n3\",\n        \"n17\"\n      ],\n      \"out\": \"n18\",\n      \"maxMs\": 130\n    },\n    {\n      \"type\": \"aout\",\n      \"in\": [\n        \"n18\"\n      ]\n    }\n  ]\n}\n",
+            "presetSave": "<ws>/k7-core/audio.vibrato.k7/nodes/fx-wobble.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Amount": 0,
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/vibrato",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 2,
+              "widgets": {
+                "vib_section": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "VIB",
+                  "color": "#3d7dff26"
+                },
+                "speed": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Speed",
+                  "bind": "Speed",
+                  "min": 0,
+                  "max": 1
+                },
+                "depth": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Depth",
+                  "bind": "Depth",
+                  "min": 0,
+                  "max": 1
+                },
+                "fm_section": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "FM",
+                  "color": "#3d7dff26"
+                },
+                "fm_speed": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "FM Spd",
+                  "bind": "FMSpeed",
+                  "min": 0,
+                  "max": 1
+                },
+                "fm_depth": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "FM Dep",
+                  "bind": "FMDepth",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "vib_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "VIB",
+                    "color": "#3d7dff26"
+                  },
+                  "speed": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Speed",
+                    "bind": "Speed",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "depth": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Depth",
+                    "bind": "Depth",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "fm_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "FM",
+                    "color": "#3d7dff26"
+                  },
+                  "fm_speed": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "FM Spd",
+                    "bind": "FMSpeed",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "fm_depth": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "FM Dep",
+                    "bind": "FMDepth",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "vibrato",
+              "wobble"
+            ],
+            "engine": "vibrato",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-vibrato": {
+        "from": "drums-vibrato",
+        "use": [
+          {
+            "module": "fx-vibrato",
+            "uses": "@k7-core/audio/vibrato",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 2,
+              "widgets": {
+                "vib_section": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "VIB",
+                  "color": "#3d7dff26"
+                },
+                "speed": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Speed",
+                  "bind": "Speed",
+                  "min": 0,
+                  "max": 1
+                },
+                "depth": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Depth",
+                  "bind": "Depth",
+                  "min": 0,
+                  "max": 1
+                },
+                "fm_section": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "FM",
+                  "color": "#3d7dff26"
+                },
+                "fm_speed": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "FM Spd",
+                  "bind": "FMSpeed",
+                  "min": 0,
+                  "max": 1
+                },
+                "fm_depth": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "FM Dep",
+                  "bind": "FMDepth",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "vib_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "VIB",
+                    "color": "#3d7dff26"
+                  },
+                  "speed": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Speed",
+                    "bind": "Speed",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "depth": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Depth",
+                    "bind": "Depth",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "fm_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "FM",
+                    "color": "#3d7dff26"
+                  },
+                  "fm_speed": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "FM Spd",
+                    "bind": "FMSpeed",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "fm_depth": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "FM Dep",
+                    "bind": "FMDepth",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "vibrato",
+              "wobble"
+            ],
+            "engine": "vibrato",
+            "params": {},
+            "pluginId": "drums-vibrato:fx-vibrato"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-wobble": {
+        "from": "drums-wobble",
+        "use": [
+          {
+            "module": "fx-wobble",
+            "uses": "@k7-core/audio/vibrato",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 2,
+              "widgets": {
+                "amount": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Wobble",
+                  "bind": "Amount",
+                  "min": 0,
+                  "max": 100
+                },
+                "drift": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// wobble — eight seconds of the delay line's drift: three sines at 0.23, 0.71 and 1.37 Hz, scaled by Amount.\n\nconst DRIFT = \"#ff6a1a\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst WINDOW_S = 8;\n// The largest swing dsp.k7x allows: 25 · (1 + 0.6 + 0.35) ms.\nconst MAX_MS = 48.75;\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\nexport default {\n  drift(lcd) {\n    const { ctx, width: W, height: H, params, output, state, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n\n    const pad = 6;\n    const top = 13;\n    const w = Math.max(1, W - pad * 2);\n    const h = Math.max(1, H - top - pad);\n    const mid = top + h / 2;\n    const amp = h / 2 - 1;\n\n    const t = clamp01((params[\"Amount\"] ?? 0) / 100);\n    const scale = 0.3 + 3 * t;\n    const depth = 25 * t;\n\n    ctx.strokeStyle = GRID;\n    ctx.beginPath();\n    ctx.moveTo(pad, Math.round(mid) + 0.5);\n    ctx.lineTo(W - pad, Math.round(mid) + 0.5);\n    ctx.stroke();\n\n    // Scrolls while audio flows through, still otherwise.\n    const out = Array.isArray(output) && output.length ? clamp01(output[output.length - 1] ?? 0) : 0;\n    state.out = (state.out ?? 0) * 0.7 + out * 0.3;\n    const t0 = state.out > 0.02 ? now / 1000 : 0;\n    const TAU = 2 * Math.PI;\n    ctx.strokeStyle = DRIFT;\n    ctx.beginPath();\n    for (let i = 0; i <= w; i++) {\n      const s = t0 + (i / w) * WINDOW_S;\n      const ms =\n        depth *\n        (Math.sin(TAU * scale * 0.23 * s) + 0.6 * Math.sin(TAU * scale * 0.71 * s) + 0.35 * Math.sin(TAU * scale * 1.37 * s));\n      const y = mid - (ms / MAX_MS) * amp;\n      if (i === 0) ctx.moveTo(pad + i, y);\n      else ctx.lineTo(pad + i, y);\n    }\n    ctx.stroke();\n\n    ctx.fillStyle = DRIFT;\n    ctx.textAlign = \"left\";\n    ctx.fillText(`±${(depth * 1.95).toFixed(1)} MS`, pad, 9);\n    ctx.fillStyle = GRID;\n    ctx.textAlign = \"right\";\n    ctx.fillText(`${WINDOW_S} S`, W - pad, 9);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "amount": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Wobble",
+                    "bind": "Amount",
+                    "min": 0,
+                    "max": 100
+                  },
+                  "drift": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "vibrato",
+              "wobble"
+            ],
+            "engine": "wobble",
+            "params": {
+              "Amount": 0
+            },
+            "pluginId": "drums-wobble:fx-wobble"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-vibrato",
+      "drums-wobble"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-vibrato": "#dd322c",
+      "drums-wobble": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-vibrato": "audio",
+      "drums-wobble": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-vibrato": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-wobble": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

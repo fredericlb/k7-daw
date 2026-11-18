@@ -1,0 +1,141 @@
+{
+  "project": "k7-core/console.console-6.channel.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "console.console-6.channel",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/console.console-6.channel.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/console.console-6.channel.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Console 6 Channel",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/console.console-6.channel.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {}
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/console/console-6/channel",
+            "category": "console",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

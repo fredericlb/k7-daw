@@ -1,0 +1,57 @@
+{
+  "name": "@studio/k7-plugins",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "k7's builtin plugins and the two composition lists: the server half the file-service installs at boot, and the browser half the shell registers into its pane ring. A plugin is declared with @studio/k7-sdk's definePlugin — see packages/k7-sdk/docs/sdk.md. Consumed as source; the browser half's words are its own catalogue (messages/, compiled into src/paraglide).",
+  "exports": {
+    "./server": "./src/server.ts",
+    "./browser": "./src/browser.ts",
+    "./video": "./src/video/index.ts",
+    "./video/camera/opener": "./src/video/camera/opener.ts",
+    "./video/camera/remoteCamera": "./src/video/camera/remoteCamera.ts",
+    "./turntables/engine": "./src/turntables/engine.ts",
+    "./transcribe": "./src/transcription/transcribe.ts"
+  },
+  "scripts": {
+    "i18n": "paraglide-js compile --emit-ts-declarations --output-structure locale-modules --strategy localStorage baseLocale --silent",
+    "prebuild": "npm run i18n",
+    "build": "tsc --noEmit",
+    "pretypecheck": "npm run i18n",
+    "typecheck": "tsc --noEmit",
+    "pretest": "npm run i18n",
+    "test": "vitest run --passWithNoTests"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@studio/ui": "*",
+    "@studio/audio-probe": "*",
+    "@studio/commands": "*",
+    "@studio/engine-browser": "*",
+    "@studio/engine-protocol": "*",
+    "@studio/audio-analysis": "*",
+    "@studio/ffmpeg": "*",
+    "@studio/graph-model": "*",
+    "@studio/k7-sdk": "*",
+    "@studio/k7x": "*",
+    "@studio/project-shell": "*",
+    "@studio/song": "*",
+    "@studio/song-schema": "*",
+    "@studio/song-video": "*",
+    "@studio/ui-chains": "*",
+    "@studio/ui-eyes": "*",
+    "@studio/ui-timeline": "*",
+    "@studio/ui-waveform": "*",
+    "@studio/web-protocol": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.2.17",
+    "@types/ws": "^8.5.13",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10",
+    "ws": "^8.18.0"
+  }
+}

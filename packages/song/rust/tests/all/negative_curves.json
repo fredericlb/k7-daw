@@ -1,0 +1,1338 @@
+[
+ {
+  "name": "good-lfo-defaults",
+  "category": "good",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/type": "lfo",
+     "/shape": "sine",
+     "/frequency": 1,
+     "/phase": 0,
+     "/amplitude": 1,
+     "/polarity": "unipolar",
+     "/cut": null,
+     "/duration": null,
+     "/conditions": null
+    }
+   }
+  }
+ },
+ {
+  "name": "good-custom-defaults",
+  "category": "good",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"custom\")\npoints([time(\"1:1:1\").value(0), time(\"2:1:1\").value(1)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/type": "custom",
+     "/polarity": "unipolar",
+     "/amplitude": 1,
+     "/points/1/value": 1,
+     "/points/0/time": "1:1:1"
+    }
+   }
+  }
+ },
+ {
+  "name": "good-onoff-defaults",
+  "category": "good",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"onoff\")\npoints([time(\"1:1:1\").value(0), time(\"2:1:1\").value(1)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/type": "onoff",
+     "/polarity": "unipolar",
+     "/amplitude": 1,
+     "/cut": null
+    }
+   }
+  }
+ },
+ {
+  "name": "good-adsr-defaults",
+  "category": "good",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"adsr\")\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/type": "adsr",
+     "/level": 0.5,
+     "/attack": 0,
+     "/decay": 0,
+     "/sustain": 0,
+     "/release": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "good-lfo-full",
+  "category": "good",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nshape(\"triangle\")\nfrequency(2.5)\nphase(0.25)\nduration(\"1:0\")\namplitude(0.5)\npolarity(\"bipolar\")\ncut(\"negative\")\nconditions([type(\"start\").at(\"2:1:1\")])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/shape": "triangle",
+     "/frequency": 2.5,
+     "/phase": 0.25,
+     "/duration": "1:0",
+     "/amplitude": 0.5,
+     "/polarity": "bipolar",
+     "/cut": "negative",
+     "/conditions/0/type": "start"
+    }
+   }
+  }
+ },
+ {
+  "name": "good-custom-full",
+  "category": "good",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"custom\")\npolarity(\"bipolar\")\namplitude(0.25)\ncut(\"positive\")\npoints([time(\"1:1:1\").value(0), time(\"2:1:1\").value(1)])\nconditions([type(\"end\").at(\"4:1:1\")])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/polarity": "bipolar",
+     "/amplitude": 0.25,
+     "/cut": "positive",
+     "/conditions/0/at": "4:1:1"
+    }
+   }
+  }
+ },
+ {
+  "name": "good-onoff-conditions",
+  "category": "good",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"onoff\")\npoints([time(\"1:1:1\").value(1)])\nconditions([type(\"start\").at(\"3:1:1\").retrigger(true)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/retrigger": true
+    }
+   }
+  }
+ },
+ {
+  "name": "good-adsr-full",
+  "category": "good",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"adsr\")\nattack(5)\ndecay(20)\nsustain(300)\nrelease(80)\nlevel(0.8)\namplitude(0.9)\npolarity(\"bipolar\")\ncut(\"positive\")\nconditions([type(\"event\").event(\"Note On\")])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/attack": 5,
+     "/decay": 20,
+     "/sustain": 300,
+     "/release": 80,
+     "/level": 0.8,
+     "/amplitude": 0.9,
+     "/polarity": "bipolar",
+     "/cut": "positive",
+     "/conditions/0/event": "Note On"
+    }
+   }
+  }
+ },
+ {
+  "name": "value-clamped",
+  "category": "normalised",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"custom\")\npoints([time(\"1:1:1\").value(5), time(\"2:1:1\").value(-3)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/points/0/value": 1,
+     "/points/1/value": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "empty-conditions-absent",
+  "category": "normalised",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions": null
+    }
+   }
+  }
+ },
+ {
+  "name": "cut-none-absent",
+  "category": "normalised",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\ncut(\"none\")\n",
+   "curves/b.k7x": "type(\"adsr\")\ncut(\"none\")\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a",
+    "b"
+   ],
+   "values": {
+    "a": {
+     "/cut": null
+    },
+    "b": {
+     "/cut": null
+    }
+   }
+  }
+ },
+ {
+  "name": "duration-zero-absent",
+  "category": "normalised",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nduration(\"0\")\n",
+   "curves/b.k7x": "type(\"lfo\")\nduration(\"0:0\")\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a",
+    "b"
+   ],
+   "values": {
+    "a": {
+     "/duration": null
+    },
+    "b": {
+     "/duration": null
+    }
+   }
+  }
+ },
+ {
+  "name": "duration-kept",
+  "category": "normalised",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nduration(\"2:0\")\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/duration": "2:0"
+    }
+   }
+  }
+ },
+ {
+  "name": "condition-start-retrigger",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([type(\"start\").at(\"3:1:1\").retrigger(true)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/type": "start",
+     "/conditions/0/retrigger": true
+    }
+   }
+  }
+ },
+ {
+  "name": "condition-start-plain",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([type(\"start\").at(\"3:1:1\")])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/type": "start",
+     "/conditions/0/retrigger": null
+    }
+   }
+  }
+ },
+ {
+  "name": "condition-end-retrigger",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([type(\"end\").at(\"3:1:1\").retrigger(true)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/type": "end",
+     "/conditions/0/retrigger": true
+    }
+   }
+  }
+ },
+ {
+  "name": "condition-end-plain",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([type(\"end\").at(\"3:1:1\")])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/type": "end",
+     "/conditions/0/retrigger": null
+    }
+   }
+  }
+ },
+ {
+  "name": "condition-between-retrigger",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([type(\"between\").start(\"2:1:1\").end(\"3:1:1\").retrigger(true)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/type": "between",
+     "/conditions/0/retrigger": true
+    }
+   }
+  }
+ },
+ {
+  "name": "condition-between-plain",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([type(\"between\").start(\"2:1:1\").end(\"3:1:1\")])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/type": "between",
+     "/conditions/0/retrigger": null
+    }
+   }
+  }
+ },
+ {
+  "name": "condition-event-retrigger",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([type(\"event\").event(\"noteOn\").retrigger(true)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/type": "event",
+     "/conditions/0/retrigger": true
+    }
+   }
+  }
+ },
+ {
+  "name": "condition-event-plain",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"lfo\")\nconditions([type(\"event\").event(\"noteOn\")])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/0/type": "event",
+     "/conditions/0/retrigger": null
+    }
+   }
+  }
+ },
+ {
+  "name": "conditions-several",
+  "category": "condition",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/a.k7x": "type(\"adsr\")\nconditions([type(\"start\").at(\"2:1:1\"), type(\"end\").at(\"5:1:1\").retrigger(false)])\n"
+  },
+  "expect": {
+   "files": [],
+   "ids": [
+    "a"
+   ],
+   "values": {
+    "a": {
+     "/conditions/1/retrigger": false,
+     "/conditions/0/at": "2:1:1"
+    }
+   }
+  }
+ },
+ {
+  "name": "no-type",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "shape(\"saw\")\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "type-number",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(1)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "type-unknown",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"square\")\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "empty-file",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "frequency-zero",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nfrequency(0)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "frequency-negative",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nfrequency(-1)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "frequency-huge",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nfrequency(1e400)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "amplitude-high",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\namplitude(1.5)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "amplitude-negative",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\namplitude(-0.1)\npoints([time(\"1:1\").value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "phase-two",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nphase(2)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "level-two",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"adsr\")\nlevel(2)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "attack-negative",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"adsr\")\nattack(-1)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "attack-huge",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"adsr\")\nattack(1e400)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "polarity-unknown",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\npolarity(\"both\")\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "shape-unknown",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nshape(\"noise\")\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "cut-unknown",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\ncut(\"upper\")\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "extra-key-lfo",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nnonsense(1)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "extra-key-custom",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\nnonsense(1)\npoints([time(\"1:1\").value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "extra-key-onoff",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"onoff\")\nnonsense(1)\npoints([time(\"1:1\").value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "extra-key-adsr",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"adsr\")\nnonsense(1)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "onoff-polarity",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"onoff\")\npolarity(\"bipolar\")\npoints([time(\"1:1\").value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "onoff-cut",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"onoff\")\ncut(\"positive\")\npoints([time(\"1:1\").value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "onoff-amplitude",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"onoff\")\namplitude(0.5)\npoints([time(\"1:1\").value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "onoff-value-half",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"onoff\")\npoints([time(\"1:1\").value(0.5)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "custom-value-string",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(\"x\")])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "points-empty",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "points-number",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\npoints(1)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "point-no-time",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "point-extra-key",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(1).more(2)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "time-number",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(1).value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "time-bad",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"x\").value(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "duration-bad",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nduration(\"x\")\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "conditions-number",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions(1)\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "condition-not-a-map",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions([1])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "condition-no-type",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions([{ at: \"1:1\" }])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "condition-unknown-type",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions([type(\"later\")])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "condition-extra-key",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions([type(\"start\").at(\"1:1\").more(1)])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "condition-at-bad",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions([type(\"start\").at(\"x\")])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "event-empty",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions([type(\"event\").event(\"\")])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "retrigger-string",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions([type(\"start\").at(\"1:1\").retrigger(\"yes\")])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "between-no-end",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\")\nconditions([type(\"between\").start(\"1:1\")])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "nest-of-300",
+  "category": "hostile",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]])\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "syntax-error-beside-good",
+  "category": "syntax",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "curves/bad.k7x": "type(\"lfo\"\n",
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ },
+ {
+  "name": "non-utf8",
+  "category": "non-utf8",
+  "ts": false,
+  "mem": false,
+  "files": {
+   "curves/bad.k7x": {
+    "hex": "74797065282c6c666f2922ff0a"
+   },
+   "curves/ok.k7x": "type(\"lfo\")\n"
+  },
+  "expect": {
+   "files": [
+    "curves/bad.k7x"
+   ],
+   "ids": [
+    "ok"
+   ],
+   "values": {}
+  }
+ }
+]

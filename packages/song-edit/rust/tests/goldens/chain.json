@@ -1,0 +1,2410 @@
+[
+ {
+  "name": "linear: setModuleBypass",
+  "fn": "setModuleBypass",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112",
+   true
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\").bypass(true),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: setModuleBypass",
+  "fn": "setModuleBypass",
+  "args": [
+   "$DIR",
+   "11111113-1111-4111-8111-111111111113",
+   false
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: setChainNodePosition",
+  "fn": "setChainNodePosition",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112",
+   {
+    "x": 10.4,
+    "y": 20.6
+   }
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({\n  \"11111112-1111-4111-8111-111111111112\": { x: 10, y: 21 },\n})\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: setChainNodePosition",
+  "fn": "setChainNodePosition",
+  "args": [
+   "$DIR",
+   "gtr",
+   null
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: setChainNodePositions",
+  "fn": "setChainNodePositions",
+  "args": [
+   "$DIR",
+   {
+    "gtr": {
+     "x": 1,
+     "y": 2
+    },
+    "11111112-1111-4111-8111-111111111112": {
+     "x": 3,
+     "y": 4
+    }
+   }
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({\n  gtr: { x: 1, y: 2 },\n  \"11111112-1111-4111-8111-111111111112\": { x: 3, y: 4 },\n})\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: clearChainNodePositions",
+  "fn": "clearChainNodePositions",
+  "args": [
+   "$DIR"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: unlinkChainNode",
+  "fn": "unlinkChainNode",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "gtr"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus.k7x": "steps([id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\")])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "gtr"
+   ],
+   "removed": [
+    "chains/gtr.k7x: 11111112-1111-4111-8111-111111111112"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "11111113-1111-4111-8111-111111111113"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "11111112-1111-4111-8111-111111111112"
+   ],
+   "removed": [
+    "chains/gtr.k7x: 11111113-1111-4111-8111-111111111113"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "gtr"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [],
+   "removed": [
+    "chains/gtr.k7x: gtr",
+    "tracks/gtr.k7x"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nsteps([\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "linear: renameChainNode",
+  "fn": "renameChainNode",
+  "args": [
+   "$DIR",
+   "gtr",
+   "guitar"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "moved": [
+    "tracks/gtr.k7x → tracks/guitar.k7x",
+    "chains/guitar.k7x",
+    "chains/gtr.k7x"
+   ],
+   "rewired": []
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/guitar.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"guitar\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/guitar.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: renameChainNode",
+  "fn": "renameChainNode",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112",
+   "x"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "moved": [],
+   "rewired": []
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: renameChainNode",
+  "fn": "renameChainNode",
+  "args": [
+   "$DIR",
+   "gtr",
+   "bad name"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "e": "invalid track name 'bad name' — letters, digits, '.', '_' and '-' only",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: placeChainNode",
+  "fn": "placeChainNode",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: disconnectChainNodes",
+  "fn": "disconnectChainNodes",
+  "args": [
+   "$DIR",
+   "11111113-1111-4111-8111-111111111113",
+   "MIX"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: disconnectChainNodes",
+  "fn": "disconnectChainNodes",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112",
+   "11111113-1111-4111-8111-111111111113"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus.k7x": "steps([\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: connectChainNodes",
+  "fn": "connectChainNodes",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112",
+   "MIX"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus.k7x": "steps([\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"chorus\").level(1), chain(\"MIX\").level(1)]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: laneOfNode",
+  "fn": "laneOfNode",
+  "args": [
+   "$DIR",
+   "11111113-1111-4111-8111-111111111113"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "gtr",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "linear: readGraphValue",
+  "fn": "readGraphValue",
+  "args": [
+   "$DIR"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "modules": {
+    "gtr": [
+     "11111112-1111-4111-8111-111111111112"
+    ],
+    "11111112-1111-4111-8111-111111111112": [
+     "11111113-1111-4111-8111-111111111113"
+    ],
+    "11111113-1111-4111-8111-111111111113": [
+     "MIX"
+    ]
+   }
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "bus: disconnectChainNodes",
+  "fn": "disconnectChainNodes",
+  "args": [
+   "$DIR",
+   "gtr",
+   "bus"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\")])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "bus: connectChainNodes",
+  "fn": "connectChainNodes",
+  "args": [
+   "$DIR",
+   "bass",
+   "MIX"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\").level(1), chain(\"MIX\").level(1)]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"), to([chain(\"bus\")])])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "bus: connectChainNodes",
+  "fn": "connectChainNodes",
+  "args": [
+   "$DIR",
+   "gtr",
+   "11111114-1111-4111-8111-111111111114"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "e": "'gtr' already feeds '11111114-1111-4111-8111-111111111114'",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "bus: setModuleBypass",
+  "fn": "setModuleBypass",
+  "args": [
+   "$DIR",
+   "11111114-1111-4111-8111-111111111114",
+   true
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"), to([chain(\"bus\")])])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\").bypass(true),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"), to([chain(\"bus\")])])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "bus: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "11111114-1111-4111-8111-111111111114"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "bass",
+    "gtr"
+   ],
+   "removed": [
+    "chains/bus.k7x: 11111114-1111-4111-8111-111111111114"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"), to([chain(\"MIX\")])])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"), to([chain(\"MIX\")])])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "bus: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "bass"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [],
+   "removed": [
+    "chains/bass.k7x: bass",
+    "tracks/bass.k7x"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "bus: renameChainNode",
+  "fn": "renameChainNode",
+  "args": [
+   "$DIR",
+   "bass",
+   "bass2"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "moved": [
+    "tracks/bass.k7x → tracks/bass2.k7x",
+    "chains/bass2.k7x",
+    "chains/gtr.k7x",
+    "chains/bass.k7x"
+   ],
+   "rewired": []
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/bass2.k7x": "start(true)\nsteps([id(\"11111112-1111-4111-8111-111111111112\").track(\"bass2\"), to([chain(\"bus\")])])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"), to([chain(\"bus\")])])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/bass2.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "bus: unlinkChainNode",
+  "fn": "unlinkChainNode",
+  "args": [
+   "$DIR",
+   "11111114-1111-4111-8111-111111111114"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "bass",
+    "gtr"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"), to([chain(\"MIX\")])])\n",
+   "dir/chains/bus.k7x": "steps([id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\")])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"), to([chain(\"MIX\")])])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "diamond: setModuleBypass",
+  "fn": "setModuleBypass",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112",
+   true
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  [id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"), id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")],\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  [\n    id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\").bypass(true),\n    id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  ],\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "diamond: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  [id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"), id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")],\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "gtr"
+   ],
+   "removed": [
+    "chains/gtr.k7x: 11111112-1111-4111-8111-111111111112"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus-2.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/chorus.k7x": "steps([\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"chorus-2\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"chorus-2\").level(1), chain(\"chorus\").level(1)]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "diamond: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "11111114-1111-4111-8111-111111111114"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  [id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"), id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")],\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "11111112-1111-4111-8111-111111111112",
+    "11111113-1111-4111-8111-111111111113"
+   ],
+   "removed": [
+    "chains/gtr.k7x: 11111114-1111-4111-8111-111111111114"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus-2.k7x": "steps([\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/chorus.k7x": "steps([\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"chorus\").level(1), chain(\"chorus-2\").level(1)]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "diamond: disconnectChainNodes",
+  "fn": "disconnectChainNodes",
+  "args": [
+   "$DIR",
+   "gtr",
+   "11111113-1111-4111-8111-111111111113"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  [id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"), id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")],\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus-2.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/chorus.k7x": "steps([\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"chorus-2\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"chorus-2\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "diamond: unlinkChainNode",
+  "fn": "unlinkChainNode",
+  "args": [
+   "$DIR",
+   "11111114-1111-4111-8111-111111111114"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  [id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"), id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")],\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "11111112-1111-4111-8111-111111111112",
+    "11111113-1111-4111-8111-111111111113"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus-2.k7x": "steps([\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/chorus-3.k7x": "steps([id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\")])\n",
+   "dir/chains/chorus.k7x": "steps([\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"chorus\").level(1), chain(\"chorus-2\").level(1)]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "sub: setModuleBypass",
+  "fn": "setModuleBypass",
+  "args": [
+   "$DIR",
+   "11111113-1111-4111-8111-111111111113",
+   true
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\").steps([\n    id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  ]),\n])\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\")\n    .steps([\n      id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\").bypass(true),\n    ]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "sub: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "11111113-1111-4111-8111-111111111113"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\").steps([\n    id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  ]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "drums"
+   ],
+   "removed": [
+    "chains/drums.k7x: 11111113-1111-4111-8111-111111111113"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "sub: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\").steps([\n    id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  ]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "11111113-1111-4111-8111-111111111113"
+   ],
+   "removed": [
+    "chains/drums.k7x: 11111112-1111-4111-8111-111111111112"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"), sub(\"fx\"), to([chain(\"MIX\")])])\nsubchains([\n  id(\"fx\").steps([id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "sub: unlinkChainNode",
+  "fn": "unlinkChainNode",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\").steps([\n    id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  ]),\n])\n"
+  },
+  "ret": {
+   "rewired": [
+    "11111113-1111-4111-8111-111111111113"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus.k7x": "steps([id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\")])\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"), sub(\"fx\"), to([chain(\"MIX\")])])\nsubchains([\n  id(\"fx\").steps([id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "sub: renameChainNode",
+  "fn": "renameChainNode",
+  "args": [
+   "$DIR",
+   "drums",
+   "kit"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\").steps([\n    id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  ]),\n])\n"
+  },
+  "ret": {
+   "moved": [
+    "tracks/drums.k7x → tracks/kit.k7x",
+    "chains/kit.k7x",
+    "chains/drums.k7x"
+   ],
+   "rewired": []
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"kit\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\").steps([id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "loose: setModuleBypass",
+  "fn": "setModuleBypass",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112",
+   true
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\").bypass(true),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "loose: connectChainNodes",
+  "fn": "connectChainNodes",
+  "args": [
+   "$DIR",
+   "11111114-1111-4111-8111-111111111114",
+   "11111112-1111-4111-8111-111111111112"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/chorus.k7x": "steps([\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"chorus\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"chorus\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "loose: setChainNodePosition",
+  "fn": "setChainNodePosition",
+  "args": [
+   "$DIR",
+   "11111114-1111-4111-8111-111111111114",
+   {
+    "x": 5,
+    "y": 6
+   }
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 }, \"11111114-1111-4111-8111-111111111114\": { x: 5, y: 6 } })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "loose: deleteChainNode",
+  "fn": "deleteChainNode",
+  "args": [
+   "$DIR",
+   "11111112-1111-4111-8111-111111111112"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n"
+  },
+  "ret": {
+   "rewired": [
+    "gtr"
+   ],
+   "removed": [
+    "chains/gtr.k7x: 11111112-1111-4111-8111-111111111112"
+   ]
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "loose: clearChainNodePositions",
+  "fn": "clearChainNodePositions",
+  "args": [
+   "$DIR"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n"
+  },
+  "ret": "$DIR/chains",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "loose: renameChainNode",
+  "fn": "renameChainNode",
+  "args": [
+   "$DIR",
+   "gtr",
+   "guitar"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ gtr: { x: 10, y: 20 } })\n"
+  },
+  "ret": {
+   "moved": [
+    "tracks/gtr.k7x → tracks/guitar.k7x",
+    "chains/guitar.k7x",
+    "chains/gtr.k7x",
+    "layout.k7x"
+   ],
+   "rewired": []
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/guitar.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"guitar\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/spare.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/layout.k7x": "positions({ guitar: { x: 10, y: 20 } })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/guitar.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "strip: a lane with no strip",
+  "fn": "stripNewLane",
+  "args": [
+   "$DIR",
+   "gtr"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "written": [
+    "chains/gtr.k7x"
+   ],
+   "noStrip": ""
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  id(\"00000000-0000-4000-8000-000000000001\").extends(\"@meta/audio/mixer\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "strip: a bus lane",
+  "fn": "stripNewLane",
+  "args": [
+   "$DIR",
+   "bass"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "written": [],
+   "noStrip": "'bass' does not run into MIX — wire its strip by hand, this would guess"
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/bass.k7x": "start(true)\nsteps([\n  id(\"11111112-1111-4111-8111-111111111112\").track(\"bass\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/chains/bus.k7x": "steps([\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  to([chain(\"bus\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/bass.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "strip: a diamond lane",
+  "fn": "stripNewLane",
+  "args": [
+   "$DIR",
+   "gtr"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  [id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"), id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")],\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "written": [],
+   "noStrip": "'gtr' does not run into MIX — wire its strip by hand, this would guess"
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/gtr.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  [id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"), id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")],\n  id(\"11111114-1111-4111-8111-111111111114\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "strip: a lane with a subchain",
+  "fn": "stripNewLane",
+  "args": [
+   "$DIR",
+   "drums"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\").steps([\n    id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  ]),\n])\n"
+  },
+  "ret": {
+   "written": [
+    "chains/drums.k7x"
+   ],
+   "noStrip": ""
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/drums.k7x": "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"drums\"),\n  sub(\"fx\"),\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"00000000-0000-4000-8000-000000000001\").extends(\"@meta/audio/mixer\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"fx\").steps([id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/drums.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "picture lane: a new one in a chain project",
+  "fn": "createPictureLane",
+  "args": [
+   "$DIR",
+   "cam"
+  ],
+  "files": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "written": [
+    "tracks/cam.k7x",
+    "chains/cam.k7x",
+    "project.k7x"
+   ],
+   "noStrip": ""
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/cam.k7x": "start(true)\nsteps([\n  id(\"00000000-0000-4000-8000-000000000001\").track(\"cam\"),\n  id(\"00000000-0000-4000-8000-000000000002\")\n.extends(\"@meta/shaders/video-mixer\"),\n  to([chain(\"RENDER\")]),\n])\n",
+   "dir/chains/gtr.k7x": "// the guitar's chain\nstart(true)\nsteps([\n  // the lane itself\n  id(\"11111111-1111-4111-8111-111111111111\").track(\"gtr\"),\n  // the first effect\n  id(\"11111112-1111-4111-8111-111111111112\").extends(\"@workspace/audio/chorus\"),\n  id(\"11111113-1111-4111-8111-111111111113\").extends(\"@workspace/audio/chorus\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\ntrackOrder([\"gtr\", \"cam\"])\n",
+   "dir/tracks/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "dir/tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "tap chain: the first module makes the subchain",
+  "fn": "addTapChainNode",
+  "args": [
+   "$DIR",
+   "drums",
+   "Snare",
+   "@workspace/audio/chorus"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "_modules/audio/phaser/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/kick.wav": "",
+   "dir/snare.wav": "",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"lane-kit\").track(\"kit\"),\n  id(\"drums\")\n    .type(\"rack\")\n    .rack({ symbols: { Kick: { note: 36, clip: \"kick.wav\" }, Snare: { note: 38, clip: \"snare.wav\" } } }),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "ret": {
+   "subchain": "snare-fx",
+   "id": "00000000-0000-4000-8000-000000000001"
+  },
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "_modules/audio/phaser/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"lane-kit\").track(\"kit\"),\n  id(\"drums\")\n    .type(\"rack\")\n    .rack({\n      symbols: { Kick: { note: 36, clip: \"kick.wav\" }, Snare: { note: 38, clip: \"snare.wav\" } },\n    })\n    .tap_outs({ Snare: \"snare-fx\" }),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"snare-fx\")\n    .steps([\n      id(\"00000000-0000-4000-8000-000000000001\").extends(\"@workspace/audio/chorus\"),\n      to([chain(\"MIX\")]),\n    ]),\n])\n",
+   "dir/kick.wav": "",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/snare.wav": "",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "tap chain: a module the project cannot see",
+  "fn": "addTapChainNode",
+  "args": [
+   "$DIR",
+   "drums",
+   "Snare",
+   "@nowhere/fx"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "_modules/audio/phaser/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/kick.wav": "",
+   "dir/snare.wav": "",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"lane-kit\").track(\"kit\"),\n  id(\"drums\")\n    .type(\"rack\")\n    .rack({ symbols: { Kick: { note: 36, clip: \"kick.wav\" }, Snare: { note: 38, clip: \"snare.wav\" } } }),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "e": "'@nowhere/fx' is not a module this project can see",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "_modules/audio/phaser/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"lane-kit\").track(\"kit\"),\n  id(\"drums\")\n    .type(\"rack\")\n    .rack({ symbols: { Kick: { note: 36, clip: \"kick.wav\" }, Snare: { note: 38, clip: \"snare.wav\" } } }),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/kick.wav": "",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/snare.wav": "",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "tap chain: a tap the node lacks",
+  "fn": "addTapChainNode",
+  "args": [
+   "$DIR",
+   "drums",
+   "Tom",
+   "@workspace/audio/chorus"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "_modules/audio/phaser/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/kick.wav": "",
+   "dir/snare.wav": "",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"lane-kit\").track(\"kit\"),\n  id(\"drums\")\n    .type(\"rack\")\n    .rack({ symbols: { Kick: { note: 36, clip: \"kick.wav\" }, Snare: { note: 38, clip: \"snare.wav\" } } }),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "e": "'drums' has no tap 'Tom'",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "_modules/audio/phaser/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"lane-kit\").track(\"kit\"),\n  id(\"drums\")\n    .type(\"rack\")\n    .rack({ symbols: { Kick: { note: 36, clip: \"kick.wav\" }, Snare: { note: 38, clip: \"snare.wav\" } } }),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/kick.wav": "",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/snare.wav": "",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "tap chain: remove with no subchain",
+  "fn": "removeTapChainNode",
+  "args": [
+   "$DIR",
+   "drums",
+   "Snare",
+   "x"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "_modules/audio/phaser/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/kick.wav": "",
+   "dir/snare.wav": "",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"lane-kit\").track(\"kit\"),\n  id(\"drums\")\n    .type(\"rack\")\n    .rack({ symbols: { Kick: { note: 36, clip: \"kick.wav\" }, Snare: { note: 38, clip: \"snare.wav\" } } }),\n  to([chain(\"MIX\")]),\n])\n"
+  },
+  "e": "'drums': tap 'Snare' is not routed to a subchain",
+  "after": {
+   "_modules/audio/chorus/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "_modules/audio/phaser/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "dir/chains/kit.k7x": "start(true)\nsteps([\n  id(\"lane-kit\").track(\"kit\"),\n  id(\"drums\")\n    .type(\"rack\")\n    .rack({ symbols: { Kick: { note: 36, clip: \"kick.wav\" }, Snare: { note: 38, clip: \"snare.wav\" } } }),\n  to([chain(\"MIX\")]),\n])\n",
+   "dir/kick.wav": "",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/snare.wav": "",
+   "dir/tracks/kit.k7x": "extends(\"@meta/track\")\nevents([])\n"
+  }
+ },
+ {
+  "name": "preset: save",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "soft",
+   "new"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "ret": {
+   "path": "$TMP",
+   "ref": "@workspace/audio/compressor",
+   "preset": {
+    "engine": "tracktion",
+    "params": {
+     "Ratio": 4,
+     "Attack ms": 10
+    }
+   }
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/soft.k7x": "// preset for @workspace/audio/compressor\nengine(\"tracktion\")\nparams({ Ratio: 4, \"Attack ms\": 10 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: save with a space",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "big squash",
+   "new"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "ret": {
+   "path": "$TMP squash.k7x",
+   "ref": "@workspace/audio/compressor",
+   "preset": {
+    "engine": "tracktion",
+    "params": {
+     "Ratio": 4,
+     "Attack ms": 10
+    }
+   }
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/big squash.k7x": "// preset for @workspace/audio/compressor\nengine(\"tracktion\")\nparams({ Ratio: 4, \"Attack ms\": 10 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: a bad name",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "../../evil",
+   "new"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "e": "invalid preset name '../../evil' — letters, digits, space, '_' and '-' only",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: a library the account may not write",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "k7-core",
+   "b-lib",
+   "new"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "e": "a preset is kept in 'k7-core' by the origin's admins only — a library is theirs to edit",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: a library overlay",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "k7-core",
+   "b-lib",
+   "new"
+  ],
+  "overlays": [
+   "k7-core"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "ret": {
+   "path": "$TMP",
+   "ref": "@workspace/audio/compressor",
+   "preset": {
+    "engine": "tracktion",
+    "params": {
+     "Ratio": 4,
+     "Attack ms": 10
+    }
+   }
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": "",
+   "home/libraries/k7-core/presets/workspace/audio/compressor/b-lib.k7x": "// preset for @workspace/audio/compressor\nengine(\"tracktion\")\nparams({ Ratio: 4, \"Attack ms\": 10 })\n"
+  }
+ },
+ {
+  "name": "preset: a taken name",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "soft",
+   "new"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_presets/workspace/audio/compressor/soft.k7x": "params({ Ratio: 1 })\n"
+  },
+  "e": "preset 'soft' already exists in workspace — update it instead",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/soft.k7x": "params({ Ratio: 1 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: update",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "soft",
+   "update"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 2 } } })\n",
+   "_presets/workspace/audio/compressor/soft.k7x": "params({ Ratio: 1 })\n"
+  },
+  "ret": {
+   "path": "$TMP",
+   "ref": "@workspace/audio/compressor",
+   "preset": {
+    "engine": "tracktion",
+    "params": {
+     "Ratio": 2
+    }
+   }
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/soft.k7x": "// preset for @workspace/audio/compressor\nengine(\"tracktion\")\nparams({ Ratio: 2 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 2 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: update a missing one",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "soft",
+   "update"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "e": "no preset 'soft' in workspace to update",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply values",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "hard"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_presets/workspace/audio/compressor/hard.k7x": "params({ Ratio: 10 })\n"
+  },
+  "ret": {
+   "params": {
+    "Ratio": 10
+   },
+   "switched": false,
+   "rebased": false,
+   "kit": false
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/hard.k7x": "params({ Ratio: 10 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 10, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply switches the engine",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "glue"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_presets/workspace/audio/compressor/glue.k7x": "engine(\"vari-mu\")\nparams({ Drive: 0.3 })\n"
+  },
+  "ret": {
+   "params": {
+    "Drive": 0.3
+   },
+   "switched": true,
+   "rebased": false,
+   "kit": false
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/glue.k7x": "engine(\"vari-mu\")\nparams({ Drive: 0.3 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } }, vari-mu: { params: { Drive: 0.3 } } })\nengine(\"vari-mu\")\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply a missing one",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "nope"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "e": "no preset 'nope' in workspace for @workspace/audio/compressor",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply a malformed one",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "bad"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_presets/workspace/audio/compressor/bad.k7x": "params({ Ratio: \"x\" })\n"
+  },
+  "e": "preset 'bad' is malformed: Invalid input: expected number, received string",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/bad.k7x": "params({ Ratio: \"x\" })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply an unknown key",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "odd"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_presets/workspace/audio/compressor/odd.k7x": "volume(1)\n"
+  },
+  "e": "preset 'odd' is malformed: Unrecognized key: \"volume\"",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/odd.k7x": "volume(1)\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply a kit to a non-rack",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "kit"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_presets/workspace/audio/compressor/kit.k7x": "rack({ BD: { note: 36 } })\n"
+  },
+  "e": "preset 'kit' holds a kit and 'comp' is not a rack",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/kit.k7x": "rack({ BD: { note: 36 } })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: save keeps the base",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "warm squash",
+   "new"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nbase(\"Pads/warm\")\nengines({ tracktion: { params: { Ratio: 4 } } })\n",
+   "_modules/audio/compressor/base/Pads/warm.fxp": "CcnK"
+  },
+  "ret": {
+   "path": "$TMP squash.k7x",
+   "ref": "@workspace/audio/compressor",
+   "preset": {
+    "engine": "tracktion",
+    "base": "Pads/warm",
+    "params": {
+     "Ratio": 4
+    }
+   }
+  },
+  "after": {
+   "_modules/audio/compressor/base/Pads/warm.fxp": "CcnK",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/warm squash.k7x": "// preset for @workspace/audio/compressor\nengine(\"tracktion\")\nbase(\"Pads/warm\")\nparams({ Ratio: 4 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nbase(\"Pads/warm\")\nengines({ tracktion: { params: { Ratio: 4 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply switches the base",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "warm"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_modules/audio/compressor/base/Pads/warm.fxp": "CcnK",
+   "_presets/workspace/audio/compressor/warm.k7x": "base(\"Pads/warm\")\nparams({ Ratio: 6 })\n"
+  },
+  "ret": {
+   "params": {
+    "Ratio": 6
+   },
+   "switched": false,
+   "rebased": true,
+   "kit": false
+  },
+  "after": {
+   "_modules/audio/compressor/base/Pads/warm.fxp": "CcnK",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/warm.k7x": "base(\"Pads/warm\")\nparams({ Ratio: 6 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 6 } } })\nbase(\"Pads/warm\")\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply a base that is not here",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "comp",
+   "workspace",
+   "gone"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_presets/workspace/audio/compressor/gone.k7x": "base(\"Pads/gone\")\nparams({ Ratio: 3 })\n"
+  },
+  "ret": {
+   "params": {
+    "Ratio": 3
+   },
+   "switched": false,
+   "rebased": false,
+   "kit": false,
+   "missingBase": "Pads/gone"
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/gone.k7x": "base(\"Pads/gone\")\nparams({ Ratio: 3 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 3, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: list",
+  "fn": "listNodePresets",
+  "args": [
+   "$DIR",
+   "comp"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "_presets/workspace/audio/compressor/a-ws.k7x": "params({ Ratio: 1 })\n",
+   "_presets/workspace/audio/compressor/b ws.k7x": "params({ Ratio: 1 })\n",
+   "_presets/workspace/audio/compressor/-bad.k7x": ""
+  },
+  "ret": {
+   "ref": "@workspace/audio/compressor",
+   "presets": [
+    {
+     "scope": "workspace",
+     "name": "a-ws"
+    },
+    {
+     "scope": "workspace",
+     "name": "b ws"
+    }
+   ],
+   "scopes": [
+    "workspace",
+    "account",
+    "k7-core"
+   ]
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_presets/workspace/audio/compressor/-bad.k7x": "",
+   "_presets/workspace/audio/compressor/a-ws.k7x": "params({ Ratio: 1 })\n",
+   "_presets/workspace/audio/compressor/b ws.k7x": "params({ Ratio: 1 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: ref of a node",
+  "fn": "presetRefOf",
+  "args": [
+   "$DIR",
+   "comp"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "ret": "@workspace/audio/compressor",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: ref of a missing node",
+  "fn": "presetRefOf",
+  "args": [
+   "$DIR",
+   "ghost"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "e": "no node named 'ghost'",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: a file",
+  "fn": "presetFile",
+  "args": [
+   "$DIR",
+   "workspace",
+   "@workspace/audio/compressor",
+   "soft"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "ret": "$TMP",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: a file of a library",
+  "fn": "presetFile",
+  "args": [
+   "$DIR",
+   "k7-core",
+   "@workspace/audio/compressor",
+   "soft"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "ret": "$TMP",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: a file of an unknown scope",
+  "fn": "presetFile",
+  "args": [
+   "$DIR",
+   "nowhere",
+   "@workspace/audio/compressor",
+   "soft"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "e": "no library 'nowhere' to keep presets in",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: a ref with no path",
+  "fn": "presetFile",
+  "args": [
+   "$DIR",
+   "workspace",
+   "@lonely",
+   "soft"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n"
+  },
+  "e": "'@lonely' is not a module ref presets can be kept for",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/comp.k7x": "extends(\"@workspace/audio/compressor\")\nengines({ tracktion: { params: { Ratio: 4, \"Attack ms\": 10 } } })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: save a kit",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "kit",
+   "workspace",
+   "house",
+   "new"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/instruments/drums/module.k7x": "type(\"rack\")\nrack({ symbols: { BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38, sample: \"@k7-core/snares/a.wav\" } } })\nplugin({ type: \"internal\", name: \"sampler\" })\n",
+   "dir/nodes/kit.k7x": "extends(\"@workspace/instruments/drums\")\n"
+  },
+  "ret": {
+   "path": "$TMP",
+   "ref": "@workspace/instruments/drums",
+   "preset": {
+    "rack": {
+     "BD": {
+      "note": 36,
+      "sample": "@k7-core/kicks/808.wav"
+     },
+     "SN": {
+      "note": 38,
+      "sample": "@k7-core/snares/a.wav"
+     }
+    }
+   }
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/instruments/drums/module.k7x": "type(\"rack\")\nrack({ symbols: { BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38, sample: \"@k7-core/snares/a.wav\" } } })\nplugin({ type: \"internal\", name: \"sampler\" })\n",
+   "_presets/workspace/instruments/drums/house.k7x": "// preset for @workspace/instruments/drums\nrack({\n  BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" },\n  SN: { note: 38, sample: \"@k7-core/snares/a.wav\" },\n})\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/nodes/kit.k7x": "extends(\"@workspace/instruments/drums\")\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: apply a kit",
+  "fn": "applyPresetToNode",
+  "args": [
+   "$DIR",
+   "kit",
+   "workspace",
+   "house"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/instruments/drums/module.k7x": "type(\"rack\")\nrack({ symbols: { BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38, sample: \"@k7-core/snares/a.wav\" } } })\nplugin({ type: \"internal\", name: \"sampler\" })\n",
+   "dir/nodes/kit.k7x": "extends(\"@workspace/instruments/drums\")\n",
+   "_presets/workspace/instruments/drums/house.k7x": "rack({ BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38 } })\n"
+  },
+  "ret": {
+   "params": {},
+   "switched": false,
+   "rebased": false,
+   "kit": true
+  },
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/instruments/drums/module.k7x": "type(\"rack\")\nrack({ symbols: { BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38, sample: \"@k7-core/snares/a.wav\" } } })\nplugin({ type: \"internal\", name: \"sampler\" })\n",
+   "_presets/workspace/instruments/drums/house.k7x": "rack({ BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38 } })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/nodes/kit.k7x": "extends(\"@workspace/instruments/drums\")\nrack({ symbols: { BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38 } } })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ },
+ {
+  "name": "preset: a kit with a project sample",
+  "fn": "writeNodePreset",
+  "args": [
+   "$DIR",
+   "kit",
+   "workspace",
+   "local",
+   "new"
+  ],
+  "files": {
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "home/libraries/k7-core/.keep": "",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/instruments/drums/module.k7x": "type(\"rack\")\nrack({ symbols: { BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38, sample: \"@k7-core/snares/a.wav\" } } })\nplugin({ type: \"internal\", name: \"sampler\" })\n",
+   "dir/nodes/kit.k7x": "extends(\"@workspace/instruments/drums\")\nrack({ symbols: { BD: { note: 36, sample: \"@project/kick.wav\" } } })\n"
+  },
+  "e": "pad 'BD' plays @project/kick.wav, a sample only this project has — move it into a library first",
+  "after": {
+   "_modules/audio/compressor/engines/tracktion/module.k7x": "plugin({ type: \"internal\", name: \"compressor\" })\n",
+   "_modules/audio/compressor/engines/vari-mu/module.k7x": "plugin({ type: \"internal\", name: \"airwindows_varimu\" })\n",
+   "_modules/audio/compressor/module.k7x": "engine(\"tracktion\")\n",
+   "_modules/instruments/drums/module.k7x": "type(\"rack\")\nrack({ symbols: { BD: { note: 36, sample: \"@k7-core/kicks/808.wav\" }, SN: { note: 38, sample: \"@k7-core/snares/a.wav\" } } })\nplugin({ type: \"internal\", name: \"sampler\" })\n",
+   "dir/graph.k7x": "modules({ gtr: [\"comp\"], comp: [\"OUT\"] })\n",
+   "dir/nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "dir/nodes/kit.k7x": "extends(\"@workspace/instruments/drums\")\nrack({ symbols: { BD: { note: 36, sample: \"@project/kick.wav\" } } })\n",
+   "dir/project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "home/libraries/k7-core/.keep": ""
+  }
+ }
+]

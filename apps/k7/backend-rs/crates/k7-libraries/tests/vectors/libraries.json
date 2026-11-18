@@ -1,0 +1,2242 @@
+[
+ {
+  "name": "seed copied on first ask, without its .git",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "settings"
+   },
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "ensure"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "copied from $ROOT/seed/k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "here"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a library still in one folder moves into version 1",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "data/libraries/k7-core/modules/old.k7x": "x(1)\n"
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "ensure",
+    "draft": true
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "moved into version 1"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "draft copied from version 1"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/old.k7x": "x(1)\n",
+   "data/libraries/k7-core/draft/modules/old.k7x": "x(1)\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "publish freezes the draft; a level this k7 cannot run is refused",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure",
+    "draft": true
+   },
+   {
+    "op": "write",
+    "path": "data/libraries/k7-core/draft/modules/mix.k7x",
+    "content": "plugin(\"newer\")\n"
+   },
+   {
+    "op": "publish",
+    "name": "k7-core",
+    "requires": 99
+   },
+   {
+    "op": "publish",
+    "name": "k7-core",
+    "notes": "louder"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "publish",
+    "name": "drums"
+   },
+   {
+    "op": "publish",
+    "name": "k7-core",
+    "requires": 1.5
+   },
+   {
+    "op": "publish",
+    "name": "k7-core",
+    "requires": 2,
+    "notes": "  a \"q\" b\nc  "
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "draft copied from version 1"
+    }
+   ],
+   null,
+   {
+    "error": "'k7-core' cannot require level 99: this k7 runs level 2"
+   },
+   {
+    "ok": true,
+    "manifest": {
+     "name": "k7-core",
+     "version": 2,
+     "requires": 1,
+     "notes": "louder"
+    }
+   },
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 2,
+     "requires": 1,
+     "notes": "louder"
+    }
+   ],
+   {
+    "error": "'drums' has no draft to publish"
+   },
+   {
+    "error": "'k7-core' cannot require level 1.5: this k7 runs level 2"
+   },
+   {
+    "ok": true,
+    "manifest": {
+     "name": "k7-core",
+     "version": 3,
+     "requires": 2,
+     "notes": "a \"q\" b\nc"
+    }
+   },
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 2,
+     "requires": 1,
+     "notes": "louder"
+    },
+    {
+     "name": "k7-core",
+     "version": 3,
+     "requires": 2,
+     "notes": "a \"q\" b\nc"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/2/library.k7x": "name(\"k7-core\")\nversion(2)\nrequires(1)\nnotes(\"louder\")\n",
+   "data/libraries/k7-core/2/modules/mix.k7x": "plugin(\"newer\")\n",
+   "data/libraries/k7-core/3/library.k7x": "name(\"k7-core\")\nversion(3)\nrequires(2)\nnotes(`a \"q\" b\nc`)\n",
+   "data/libraries/k7-core/3/modules/mix.k7x": "plugin(\"newer\")\n",
+   "data/libraries/k7-core/draft/modules/mix.k7x": "plugin(\"newer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "two asks at once seed once and number two publishes apart",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "parallel",
+    "steps": [
+     {
+      "op": "ensure"
+     },
+     {
+      "op": "ensure"
+     }
+    ]
+   },
+   {
+    "op": "ensure",
+    "draft": true
+   },
+   {
+    "op": "parallel",
+    "steps": [
+     {
+      "op": "publish",
+      "name": "k7-core"
+     },
+     {
+      "op": "publish",
+      "name": "k7-core"
+     }
+    ]
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   }
+  ],
+  "results": [
+   [
+    [
+     {
+      "name": "k7-core",
+      "state": "seeded",
+      "note": "copied from $ROOT/seed/k7-core"
+     }
+    ],
+    [
+     {
+      "name": "k7-core",
+      "state": "current",
+      "note": "here"
+     }
+    ]
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "draft copied from version 1"
+    }
+   ],
+   [
+    {
+     "ok": true,
+     "manifest": {
+      "name": "k7-core",
+      "version": 2,
+      "requires": 1
+     }
+    },
+    {
+     "ok": true,
+     "manifest": {
+      "name": "k7-core",
+      "version": 3,
+      "requires": 1
+     }
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 2,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 3,
+     "requires": 1
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/2/library.k7x": "name(\"k7-core\")\nversion(2)\nrequires(1)\n",
+   "data/libraries/k7-core/2/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/3/library.k7x": "name(\"k7-core\")\nversion(3)\nrequires(1)\n",
+   "data/libraries/k7-core/3/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/draft/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "set makes a library the seed does not hold empty and writes the list",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "set",
+    "names": [
+     "k7-core",
+     "drums"
+    ]
+   },
+   {
+    "op": "view"
+   }
+  ],
+  "results": [
+   {
+    "ok": true,
+    "reply": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      },
+      {
+       "name": "drums",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "seeded",
+       "note": "copied from $ROOT/seed/k7-core"
+      },
+      {
+       "name": "drums",
+       "state": "created",
+       "note": "empty"
+      }
+     ]
+    }
+   },
+   {
+    "libraries": [
+     {
+      "name": "k7-core",
+      "present": true,
+      "versions": [
+       {
+        "version": 1,
+        "requires": 1
+       }
+      ],
+      "draft": false
+     },
+     {
+      "name": "drums",
+      "present": true,
+      "versions": [
+       {
+        "version": 1,
+        "requires": 1
+       }
+      ],
+      "draft": false
+     }
+    ]
+   }
+  ],
+  "after": {
+   "data/libraries/drums/1/library.k7x": "name(\"drums\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries.json": "{\n  \"libraries\": [\n    {\n      \"name\": \"k7-core\"\n    },\n    {\n      \"name\": \"drums\"\n    }\n  ]\n}\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a published seed installs under its own number and a newer one is added",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/library.k7x": "name(\"k7-core\")\nversion(3)\nrequires(1)\n"
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "write",
+    "path": "seed/k7-core/library.k7x",
+    "content": "name(\"k7-core\")\nversion(4)\nrequires(1)\n"
+   },
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "ensure"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "copied from $ROOT/seed/k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 3,
+     "requires": 1
+    }
+   ],
+   null,
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "version 4 added from $ROOT/seed/k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 3,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 4,
+     "requires": 1
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "here"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/3/library.k7x": "name(\"k7-core\")\nversion(3)\nrequires(1)\n",
+   "data/libraries/k7-core/3/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/4/library.k7x": "name(\"k7-core\")\nversion(4)\nrequires(1)\n",
+   "data/libraries/k7-core/4/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/library.k7x": "name(\"k7-core\")\nversion(4)\nrequires(1)\n",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a seed that gains a manifest is added to a machine holding version 1",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "write",
+    "path": "seed/k7-core/modules/mix.k7x",
+    "content": "plugin(\"fixed\")\n"
+   },
+   {
+    "op": "write",
+    "path": "seed/k7-core/library.k7x",
+    "content": "name(\"k7-core\")\nversion(2)\nrequires(1)\nnotes(\"fixed\")\n"
+   },
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "ensure"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "copied from $ROOT/seed/k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    }
+   ],
+   null,
+   null,
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "version 2 added from $ROOT/seed/k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 2,
+     "requires": 1,
+     "notes": "fixed"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "here"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/2/library.k7x": "name(\"k7-core\")\nversion(2)\nrequires(1)\nnotes(\"fixed\")\n",
+   "data/libraries/k7-core/2/modules/mix.k7x": "plugin(\"fixed\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/library.k7x": "name(\"k7-core\")\nversion(2)\nrequires(1)\nnotes(\"fixed\")\n",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"fixed\")\n"
+  }
+ },
+ {
+  "name": "a seed whose number an admin's publish took goes in as the next free one, once",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure",
+    "draft": true
+   },
+   {
+    "op": "write",
+    "path": "data/libraries/k7-core/draft/modules/mix.k7x",
+    "content": "plugin(\"admin\")\n"
+   },
+   {
+    "op": "publish",
+    "name": "k7-core",
+    "notes": "the admin's"
+   },
+   {
+    "op": "write",
+    "path": "seed/k7-core/modules/mix.k7x",
+    "content": "plugin(\"fixed\")\n"
+   },
+   {
+    "op": "write",
+    "path": "seed/k7-core/library.k7x",
+    "content": "name(\"k7-core\")\nversion(2)\nrequires(1)\nnotes(\"fixed\")\n"
+   },
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "publish",
+    "name": "k7-core"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "draft copied from version 1"
+    }
+   ],
+   null,
+   {
+    "ok": true,
+    "manifest": {
+     "name": "k7-core",
+     "version": 2,
+     "requires": 1,
+     "notes": "the admin's"
+    }
+   },
+   null,
+   null,
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "version 3 added from $ROOT/seed/k7-core, whose version 2 is another one here"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 2,
+     "requires": 1,
+     "notes": "the admin's"
+    },
+    {
+     "name": "k7-core",
+     "version": 3,
+     "requires": 1,
+     "notes": "fixed",
+     "seed": 2
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "here"
+    }
+   ],
+   {
+    "ok": true,
+    "manifest": {
+     "name": "k7-core",
+     "version": 4,
+     "requires": 1
+    }
+   }
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/2/library.k7x": "name(\"k7-core\")\nversion(2)\nrequires(1)\nnotes(\"the admin's\")\n",
+   "data/libraries/k7-core/2/modules/mix.k7x": "plugin(\"admin\")\n",
+   "data/libraries/k7-core/3/library.k7x": "name(\"k7-core\")\nversion(3)\nrequires(1)\nnotes(\"fixed\")\nseed(2)\n",
+   "data/libraries/k7-core/3/modules/mix.k7x": "plugin(\"fixed\")\n",
+   "data/libraries/k7-core/4/library.k7x": "name(\"k7-core\")\nversion(4)\nrequires(1)\n",
+   "data/libraries/k7-core/4/modules/mix.k7x": "plugin(\"admin\")\n",
+   "data/libraries/k7-core/draft/modules/mix.k7x": "plugin(\"admin\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/library.k7x": "name(\"k7-core\")\nversion(2)\nrequires(1)\nnotes(\"fixed\")\n",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"fixed\")\n"
+  }
+ },
+ {
+  "name": "a name that is no library publishes nothing",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "publish",
+    "name": "../k7"
+   },
+   {
+    "op": "publish",
+    "name": ""
+   },
+   {
+    "op": "publish",
+    "name": "Bad"
+   }
+  ],
+  "results": [
+   {
+    "error": "'../k7' names no library"
+   },
+   {
+    "error": "'' names no library"
+   },
+   {
+    "error": "'Bad' names no library"
+   }
+  ],
+  "after": {
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a dropped library keeps its folder",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "set",
+    "names": [
+     "k7-core",
+     "drums"
+    ]
+   },
+   {
+    "op": "set",
+    "names": [
+     "k7-core"
+    ]
+   },
+   {
+    "op": "settings"
+   }
+  ],
+  "results": [
+   {
+    "ok": true,
+    "reply": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      },
+      {
+       "name": "drums",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "seeded",
+       "note": "copied from $ROOT/seed/k7-core"
+      },
+      {
+       "name": "drums",
+       "state": "created",
+       "note": "empty"
+      }
+     ]
+    }
+   },
+   {
+    "ok": true,
+    "reply": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   },
+   [
+    {
+     "name": "k7-core"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/drums/1/library.k7x": "name(\"drums\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries.json": "{\n  \"libraries\": [\n    {\n      \"name\": \"k7-core\"\n    }\n  ]\n}\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a list written with repository URIs is read by its names",
+  "kind": "store",
+  "tree": {
+   "data/libraries.json": "{\"libraries\":[{\"name\":\"k7-core\",\"uri\":\"git@example.test:s/k7.git\"},{\"name\":\"Bad\"},{\"name\":\"k7-core\"},{\"name\":\"engine\"},7]}"
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "settings"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries.json": "{\"libraries\":[{\"name\":\"k7-core\",\"uri\":\"git@example.test:s/k7.git\"},{\"name\":\"Bad\"},{\"name\":\"k7-core\"},{\"name\":\"engine\"},7]}"
+  }
+ },
+ {
+  "name": "a seed naming its libraries",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "k7-core=$ROOT/seed/k7-core, Bad=x, drums=",
+  "steps": [
+   {
+    "op": "settings"
+   },
+   {
+    "op": "ensure"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "copied from $ROOT/seed/k7-core"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a seed given as pairs",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "k7-core=$ROOT/seed/k7-core",
+  "steps": [
+   {
+    "op": "settings"
+   },
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "copied from $ROOT/seed/k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a list is validated before anything is made",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "set",
+    "names": [
+     "engine"
+    ]
+   },
+   {
+    "op": "set",
+    "names": [
+     "Bad Name"
+    ]
+   },
+   {
+    "op": "set",
+    "names": [
+     "k7-core",
+     "k7-core"
+    ]
+   },
+   {
+    "op": "set",
+    "names": [
+     "workspace"
+    ]
+   },
+   {
+    "op": "settings"
+   }
+  ],
+  "results": [
+   {
+    "error": "'engine' cannot name a library — lowercase letters, digits and dashes, and not engine, workspace or meta"
+   },
+   {
+    "error": "'Bad Name' cannot name a library — lowercase letters, digits and dashes, and not engine, workspace or meta"
+   },
+   {
+    "error": "two libraries are called 'k7-core'"
+   },
+   {
+    "error": "'workspace' cannot name a library — lowercase letters, digits and dashes, and not engine, workspace or meta"
+   },
+   [
+    {
+     "name": "k7-core"
+    }
+   ]
+  ],
+  "after": {
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a deployment from before k7 renames st0",
+  "kind": "store",
+  "tree": {
+   "data/libraries.json": "{\"libraries\":[{\"name\":\"st0\"},{\"name\":\"drums\"}]}",
+   "data/libraries/st0/1/a.k7x": "a\n",
+   "data/libraries/drums/1/b.k7x": "b\n",
+   "data/libraries/.sync-relay/st0/state": "s",
+   "data/libraries/.sync-relay/drums/state": "s"
+  },
+  "seed": "",
+  "steps": [
+   {
+    "op": "renameLegacy"
+   },
+   {
+    "op": "settings"
+   },
+   {
+    "op": "renameLegacy"
+   }
+  ],
+  "results": [
+   true,
+   [
+    {
+     "name": "k7-core"
+    },
+    {
+     "name": "drums"
+    }
+   ],
+   false
+  ],
+  "after": {
+   "data/libraries/drums/1/b.k7x": "b\n",
+   "data/libraries/k7-core/1/a.k7x": "a\n",
+   "data/libraries.json": "{\n  \"libraries\": [\n    {\n      \"name\": \"k7-core\"\n    },\n    {\n      \"name\": \"drums\"\n    }\n  ]\n}\n"
+  }
+ },
+ {
+  "name": "a list that names k7-core already keeps st0 as it is",
+  "kind": "store",
+  "tree": {
+   "data/libraries.json": "{\"libraries\":[{\"name\":\"st0\"},{\"name\":\"k7-core\"}]}",
+   "data/libraries/st0/1/a.k7x": "a\n"
+  },
+  "seed": "",
+  "steps": [
+   {
+    "op": "renameLegacy"
+   },
+   {
+    "op": "settings"
+   }
+  ],
+  "results": [
+   false,
+   [
+    {
+     "name": "st0"
+    },
+    {
+     "name": "k7-core"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/st0/1/a.k7x": "a\n",
+   "data/libraries.json": "{\"libraries\":[{\"name\":\"st0\"},{\"name\":\"k7-core\"}]}"
+  }
+ },
+ {
+  "name": "empty version folders are husks and are removed",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/2/.keep": "",
+   "data/libraries/k7-core/3/sub/.hidden": "",
+   "data/libraries/k7-core/4/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "ensure"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "here, 3 empty version folder(s) removed (2, 3, 4)"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "here"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a legacy library.yaml in a seed is upgraded in its copy",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/library.yaml": "name: k7-core\nversion: 3\nrequires: 1\nnotes: \"from yaml\"\n"
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure"
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   },
+   {
+    "op": "ensure"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "copied from $ROOT/seed/k7-core"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "version": 3,
+     "requires": 1,
+     "notes": "from yaml"
+    }
+   ],
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "here"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/3/library.k7x": "name(\"k7-core\")\nversion(3)\nrequires(1)\nnotes(\"from yaml\")\n",
+   "data/libraries/k7-core/3/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/library.yaml": "name: k7-core\nversion: 3\nrequires: 1\nnotes: \"from yaml\"\n",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a draft leaves the newest version's manifest behind",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/library.k7x": "name(\"k7-core\")\nversion(5)\nrequires(1)\nnotes(\"five\")\n"
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure",
+    "draft": true
+   },
+   {
+    "op": "view"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "current",
+     "note": "draft copied from version 5"
+    }
+   ],
+   {
+    "libraries": [
+     {
+      "name": "k7-core",
+      "present": true,
+      "versions": [
+       {
+        "version": 5,
+        "requires": 1,
+        "notes": "five"
+       }
+      ],
+      "draft": true
+     }
+    ]
+   }
+  ],
+  "after": {
+   "data/libraries/k7-core/5/library.k7x": "name(\"k7-core\")\nversion(5)\nrequires(1)\nnotes(\"five\")\n",
+   "data/libraries/k7-core/5/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/draft/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/library.k7x": "name(\"k7-core\")\nversion(5)\nrequires(1)\nnotes(\"five\")\n",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "an ensure asked for one library leaves the others",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/drums/a.k7x": "a\n"
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure",
+    "target": "drums"
+   },
+   {
+    "op": "ensure",
+    "target": "nope"
+   },
+   {
+    "op": "settings"
+   },
+   {
+    "op": "ensure"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "drums",
+     "state": "seeded",
+     "note": "copied from $ROOT/seed/drums"
+    }
+   ],
+   [],
+   [
+    {
+     "name": "drums"
+    }
+   ],
+   [
+    {
+     "name": "drums",
+     "state": "current",
+     "note": "here"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/drums/1/a.k7x": "a\n",
+   "data/libraries/drums/1/library.k7x": "name(\"drums\")\nversion(1)\nrequires(1)\n",
+   "seed/drums/a.k7x": "a\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a library listed with no seed is made empty with version 1",
+  "kind": "store",
+  "tree": {},
+  "seed": "",
+  "steps": [
+   {
+    "op": "set",
+    "names": [
+     "drums"
+    ]
+   },
+   {
+    "op": "versions",
+    "name": "drums"
+   },
+   {
+    "op": "view"
+   }
+  ],
+  "results": [
+   {
+    "ok": true,
+    "reply": {
+     "libraries": [
+      {
+       "name": "drums",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "drums",
+       "state": "created",
+       "note": "empty"
+      }
+     ]
+    }
+   },
+   [
+    {
+     "name": "drums",
+     "version": 1,
+     "requires": 1
+    }
+   ],
+   {
+    "libraries": [
+     {
+      "name": "drums",
+      "present": true,
+      "versions": [
+       {
+        "version": 1,
+        "requires": 1
+       }
+      ],
+      "draft": false
+     }
+    ]
+   }
+  ],
+  "after": {
+   "data/libraries/drums/1/library.k7x": "name(\"drums\")\nversion(1)\nrequires(1)\n",
+   "data/libraries.json": "{\n  \"libraries\": [\n    {\n      \"name\": \"drums\"\n    }\n  ]\n}\n"
+  }
+ },
+ {
+  "name": "files named like a recycle bin are not published",
+  "kind": "store",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/_recycle_bin/gone.k7x": "x\n",
+   "seed/k7-core/keep/_recycle_bin2/ok.k7x": "y\n"
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ensure"
+   }
+  ],
+  "results": [
+   [
+    {
+     "name": "k7-core",
+     "state": "seeded",
+     "note": "copied from $ROOT/seed/k7-core"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/keep/_recycle_bin2/ok.k7x": "y\n",
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/_recycle_bin/gone.k7x": "x\n",
+   "seed/k7-core/keep/_recycle_bin2/ok.k7x": "y\n",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "the account's list and its drafts",
+  "kind": "routes",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/account/libraries",
+    "admin": false
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/account/libraries/k7-core/publish",
+    "admin": false
+   },
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/account/libraries",
+    "admin": true
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/account/libraries/k7-core/publish",
+    "admin": true
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/account/libraries/k7-core/publish",
+    "admin": true,
+    "body": {
+     "requires": 99,
+     "notes": "x"
+    }
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/account/libraries/nope/publish",
+    "admin": true
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/account/libraries/%2e%2e/publish",
+    "admin": true
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/account/libraries/k7-core%2Fx/publish",
+    "admin": true
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/account/libraries/k7-core/publish",
+    "admin": true,
+    "body": {
+     "requires": 1,
+     "notes": "seven"
+    }
+   },
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/account/libraries/",
+    "admin": false
+   },
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/account/libraries/k7-core",
+    "admin": false
+   },
+   {
+    "op": "ask",
+    "method": "DELETE",
+    "path": "/account/libraries",
+    "admin": true
+   },
+   {
+    "op": "versions",
+    "name": "k7-core"
+   }
+  ],
+  "results": [
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   },
+   {
+    "status": 403,
+    "body": {
+     "error": "only the origin's admins may publish a library"
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": true
+      }
+     ],
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "draft copied from version 1"
+      }
+     ]
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        },
+        {
+         "version": 2,
+         "requires": 1
+        }
+       ],
+       "draft": true
+      }
+     ]
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "'k7-core' cannot require level 99: this k7 runs level 2"
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "'nope' has no draft to publish"
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "'..' names no library"
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "'k7-core/x' names no library"
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        },
+        {
+         "version": 2,
+         "requires": 1
+        },
+        {
+         "version": 3,
+         "requires": 1,
+         "notes": "seven"
+        }
+       ],
+       "draft": true
+      }
+     ]
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        },
+        {
+         "version": 2,
+         "requires": 1
+        },
+        {
+         "version": 3,
+         "requires": 1,
+         "notes": "seven"
+        }
+       ],
+       "draft": true
+      }
+     ],
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   },
+   {
+    "status": 404,
+    "body": {
+     "error": "no GET /account/libraries/k7-core"
+    }
+   },
+   {
+    "status": 404,
+    "body": {
+     "error": "no DELETE /account/libraries"
+    }
+   },
+   [
+    {
+     "name": "k7-core",
+     "version": 1,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 2,
+     "requires": 1
+    },
+    {
+     "name": "k7-core",
+     "version": 3,
+     "requires": 1,
+     "notes": "seven"
+    }
+   ]
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/2/library.k7x": "name(\"k7-core\")\nversion(2)\nrequires(1)\n",
+   "data/libraries/k7-core/2/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/3/library.k7x": "name(\"k7-core\")\nversion(3)\nrequires(1)\nnotes(\"seven\")\n",
+   "data/libraries/k7-core/3/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/draft/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "changing the list",
+  "kind": "routes",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": false,
+    "body": {
+     "libraries": [
+      {
+       "name": "k7-core"
+      }
+     ]
+    }
+   },
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": true,
+    "body": {
+     "libraries": [
+      {
+       "name": "k7-core"
+      }
+     ]
+    }
+   },
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": true,
+    "body": {}
+   },
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": true,
+    "body": {
+     "libraries": "k7-core"
+    }
+   },
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": true,
+    "body": {
+     "libraries": [
+      {
+       "name": " drums "
+      },
+      {
+       "name": "k7-core"
+      }
+     ]
+    }
+   },
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": true,
+    "body": {
+     "libraries": [
+      {
+       "name": "Bad"
+      }
+     ]
+    }
+   },
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": true,
+    "body": {
+     "libraries": [
+      {
+       "name": "engine"
+      },
+      {}
+     ]
+    }
+   },
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": true,
+    "body": {
+     "libraries": [
+      {
+       "name": "a"
+      },
+      {
+       "name": "a"
+      }
+     ]
+    }
+   },
+   {
+    "op": "ask",
+    "method": "PUT",
+    "path": "/account/libraries",
+    "admin": true,
+    "body": {
+     "libraries": [
+      {
+       "name": 5
+      }
+     ]
+    }
+   },
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/account/libraries",
+    "admin": false
+   }
+  ],
+  "results": [
+   {
+    "status": 403,
+    "body": {
+     "error": "only the origin's admins may change the libraries"
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "expected { libraries: [{ name }] }"
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "expected { libraries: [{ name }] }"
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "drums",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      },
+      {
+       "name": "k7-core",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "drums",
+       "state": "created",
+       "note": "empty"
+      },
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "'Bad' cannot name a library — lowercase letters, digits and dashes, and not engine, workspace or meta"
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "'engine' cannot name a library — lowercase letters, digits and dashes, and not engine, workspace or meta"
+    }
+   },
+   {
+    "status": 400,
+    "body": {
+     "error": "two libraries are called 'a'"
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "5",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "5",
+       "state": "created",
+       "note": "empty"
+      }
+     ]
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "libraries": [
+      {
+       "name": "5",
+       "present": true,
+       "versions": [
+        {
+         "version": 1,
+         "requires": 1
+        }
+       ],
+       "draft": false
+      }
+     ],
+     "notes": [
+      {
+       "name": "5",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   }
+  ],
+  "after": {
+   "data/libraries/5/1/library.k7x": "name(\"5\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/drums/1/library.k7x": "name(\"drums\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries.json": "{\n  \"libraries\": [\n    {\n      \"name\": \"5\"\n    }\n  ]\n}\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "a file service asks to sync",
+  "kind": "routes",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/libraries/sync",
+    "body": {
+     "name": "k7-core"
+    }
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/libraries/sync",
+    "body": {
+     "name": "k7-core",
+     "draft": true
+    }
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/libraries/sync",
+    "body": {}
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/libraries/sync",
+    "body": {
+     "name": "k7-core",
+     "draft": "yes"
+    }
+   },
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/libraries/sync"
+   }
+  ],
+  "results": [
+   {
+    "status": 200,
+    "body": {
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "draft copied from version 1"
+      }
+     ]
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   },
+   {
+    "status": 200,
+    "body": {
+     "notes": [
+      {
+       "name": "k7-core",
+       "state": "current",
+       "note": "here"
+      }
+     ]
+    }
+   },
+   {
+    "status": 404,
+    "body": {
+     "error": "no GET /libraries/sync"
+    }
+   }
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "data/libraries/k7-core/draft/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ },
+ {
+  "name": "the status and the paths that are none of the service's",
+  "kind": "routes",
+  "tree": {
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": ""
+  },
+  "seed": "$ROOT/seed",
+  "steps": [
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/status"
+   },
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/nowhere"
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/account/libraries2"
+   },
+   {
+    "op": "ask",
+    "method": "GET",
+    "path": "/account"
+   },
+   {
+    "op": "ask",
+    "method": "POST",
+    "path": "/"
+   }
+  ],
+  "results": [
+   {
+    "status": 200,
+    "body": {
+     "settled": true
+    }
+   },
+   {
+    "status": 404,
+    "body": {
+     "error": "no GET /nowhere"
+    }
+   },
+   {
+    "status": 404,
+    "body": {
+     "error": "no POST /account/libraries2"
+    }
+   },
+   {
+    "status": 404,
+    "body": {
+     "error": "no GET /account"
+    }
+   },
+   {
+    "status": 404,
+    "body": {
+     "error": "no POST /"
+    }
+   }
+  ],
+  "after": {
+   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
+   "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
+   "seed/k7-core/.git/": "",
+   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
+  }
+ }
+]

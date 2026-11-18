@@ -1,0 +1,3 @@
+// A SOURCE, not a placement: this says which file, and a picture lane says where it goes.
+// One clip file can be placed any number of times, on any number of lanes.
+source("clips/sample.mp4")

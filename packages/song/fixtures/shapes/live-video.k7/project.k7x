@@ -1,0 +1,18 @@
+// A LIVE rig: something plugged in, heard through this machine — and SEEN through it.
+//
+// It declares ONE surface, the viewport, and only because a picture has nowhere else to
+// go: an arrangement left undrawn is still on disk, a frame nothing composites is not
+// shown at all. No timeline and no desk. See packages/song/docs/liveProject.md.
+//
+// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so
+// nothing warns about an arrangement that is not drawn.
+project({
+  name: "live-video",
+  // Kept although nothing is arranged: the metronome counts in it, and so does a
+  // delay whose time is written in beats.
+  tempo: 120,
+  sampleRate: 48000,
+  // The FRAME the lens draws into: [width, height, fps]. A rig has no arrangement, so
+  // this is the only size in the file.
+  viewport: [1280, 720, 30],
+})

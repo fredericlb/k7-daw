@@ -1,0 +1,30 @@
+{
+  "name": "@studio/recorder",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The browser's small shared pieces around a take: the dates and clocks worded in the app's language, a live value for what moves every frame, the metronome, and the WebM duration fix. See docs/recorder.md.",
+  "exports": {
+    "./format": "./src/format.ts",
+    "./liveValue": "./src/liveValue.ts",
+    "./metronome": "./src/useMetronome.ts",
+    "./webmDuration": "./src/webmDuration.ts"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7"
+  },
+  "dependencies": {
+    "fix-webm-duration": "^1.0.5"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@studio/tsconfig": "*",
+    "@types/react": "^19.2.17",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.4",
+    "vitest": "^4.1.10"
+  }
+}

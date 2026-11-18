@@ -1,0 +1,448 @@
+{
+  "project": "e2e/airwindows.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "airwindows",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [
+      {
+        "id": "MIX:buss",
+        "type": "Console 6 Buss",
+        "name": "buss",
+        "path": "",
+        "presetSave": "<ws>/e2e/airwindows.k7/nodes/buss.vstpreset",
+        "role": "",
+        "enabled": true,
+        "params": {}
+      }
+    ],
+    "recordDir": "<ws>/e2e/airwindows.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#8b8f98",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 1,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3,
+                "duration": 1,
+                "key": 72,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody:lead",
+            "type": "4osc",
+            "name": "lead",
+            "path": "",
+            "presetSave": "<ws>/e2e/airwindows.k7/nodes/lead.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          },
+          {
+            "id": "melody:tape",
+            "type": "To Tape 5",
+            "name": "tape",
+            "path": "",
+            "presetSave": "<ws>/e2e/airwindows.k7/nodes/tape.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          },
+          {
+            "id": "melody:chorus",
+            "type": "airwindows_chorus",
+            "name": "chorus",
+            "path": "",
+            "presetSave": "<ws>/e2e/airwindows.k7/nodes/chorus.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 0.5,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          },
+          {
+            "id": "melody:channel",
+            "type": "Console 6 Channel",
+            "name": "channel",
+            "path": "",
+            "presetSave": "<ws>/e2e/airwindows.k7/nodes/channel.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {}
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "lead",
+            "uses": "@workspace/instruments/fourosc",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "title": {
+                  "type": "label",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "text": "4OSC"
+                },
+                "cutoff": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 1,
+                  "label": "Cutoff",
+                  "bind": "Filter Freq",
+                  "min": 0,
+                  "max": 135.076232
+                },
+                "res": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "label": "Res",
+                  "bind": "Filter Resonance",
+                  "min": 0,
+                  "max": 100
+                },
+                "level": {
+                  "type": "slider",
+                  "col": 2,
+                  "row": 1,
+                  "label": "Level",
+                  "bind": "Level",
+                  "min": -100,
+                  "max": 0
+                }
+              }
+            },
+            "params": {},
+            "defaults": {
+              "Filter Freq": 69,
+              "Filter Resonance": 0.5,
+              "Level": 0
+            },
+            "pluginId": "melody:lead"
+          },
+          {
+            "module": "tape",
+            "uses": "@k7-core/audio/tape",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "sat": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "SAT",
+                  "color": "#ff6a1a26"
+                },
+                "louder": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Louder",
+                  "bind": "Louder",
+                  "min": 0,
+                  "max": 1
+                },
+                "softer": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Softer",
+                  "bind": "Softer",
+                  "min": 0,
+                  "max": 1
+                },
+                "tape": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "TAPE",
+                  "color": "#3d7dff26"
+                },
+                "fatter": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Fatter",
+                  "bind": "Fatter",
+                  "min": 0,
+                  "max": 1
+                },
+                "flutter": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Flutter",
+                  "bind": "Flutter",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "drum-slam",
+              "from-tape",
+              "iron-oxide-5",
+              "iron-oxide-classic",
+              "tape-fat",
+              "to-tape-5"
+            ],
+            "engine": "to-tape-5",
+            "params": {},
+            "pluginId": "melody:tape"
+          },
+          {
+            "module": "chorus",
+            "uses": "@k7-core/audio/chorus",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "speed": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Speed",
+                  "bind": "Speed",
+                  "min": 0,
+                  "max": 1
+                },
+                "range": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Range",
+                  "bind": "Range",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "airwindows",
+              "chorus-ensemble",
+              "classic",
+              "ensemble",
+              "melt",
+              "one-knob"
+            ],
+            "engine": "airwindows",
+            "params": {
+              "@mix": 0.5
+            },
+            "pluginId": "melody:chorus"
+          },
+          {
+            "module": "channel",
+            "uses": "@k7-core/console/console-6/channel",
+            "category": "console",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "params": {},
+            "pluginId": "melody:channel"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [
+          {
+            "module": "buss",
+            "uses": "@k7-core/console/console-6/buss",
+            "category": "console",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "params": {},
+            "pluginId": "MIX:buss"
+          }
+        ],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#8b8f98"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

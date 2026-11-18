@@ -1,0 +1,2956 @@
+[
+ {
+  "name": "shots-window",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":1,\"length\":2,\"from\":0.5}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 2,
+     "/0/length": 4,
+     "/0/sourceFrom": 0.5,
+     "/0/sourceTo": 2.5,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-silent-covers",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":10},{\"ref\":\"b\",\"start\":2,\"length\":3,\"silent\":true}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 10,
+     "/1/length": 10,
+     "/1/sourceFrom": 5,
+     "/1/sourceTo": 10,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-cut-and-return",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":10},{\"ref\":\"b\",\"start\":2,\"length\":3}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 3,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 10,
+     "/1/length": 10,
+     "/1/sourceFrom": 5,
+     "/1/sourceTo": 10,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/2/start": 4,
+     "/2/length": 6,
+     "/2/sourceFrom": null,
+     "/2/sourceTo": 3,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-crossfade",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":5},{\"ref\":\"b\",\"start\":4,\"length\":5,\"fadeIn\":{\"over\":1,\"with\":\"wipe\"}}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 10,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 5,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 2,
+     "/1/start": 8,
+     "/1/length": 10,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": 5,
+     "/1/fadeIn": 2,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-length-zero-runs-to-next",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":0},{\"ref\":\"b\",\"start\":3,\"length\":0}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 6,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 3,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 6,
+     "/1/length": 0,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": null,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-split-plays-as-one",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":1.5,\"from\":0.5},{\"ref\":\"a\",\"start\":1.5,\"length\":2.5,\"from\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 3,
+     "/0/sourceFrom": 0.5,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 3,
+     "/1/length": 5,
+     "/1/sourceFrom": 2,
+     "/1/sourceTo": 4.5,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-speed-freeze-reverse",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2,\"from\":1,\"speed\":2},{\"ref\":\"b\",\"start\":2,\"length\":2,\"speed\":0},{\"ref\":\"a\",\"start\":4,\"length\":2,\"from\":5,\"speed\":-1}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": 1,
+     "/0/sourceTo": 5,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/warp/algorithm": "varispeed",
+     "/0/warp/markers/0/1": 1,
+     "/0/warp/markers/1/0": 2,
+     "/0/warp/markers/1/1": 3
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-own-fades-mute-activation",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":4,\"fadeIn\":1,\"fadeOut\":0.5},{\"ref\":\"mute\",\"start\":4,\"length\":2},{\"start\":6,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 4,
+     "/0/fadeIn": 2,
+     "/0/fadeOut": 1
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-start-bare-string",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":\"2.5\",\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 5,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-ends-at-activation",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":0},{\"start\":3}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 6,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 3,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-ends-at-next-start",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":1},{\"ref\":\"b\",\"start\":4,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 2,
+     "/0/length": 6,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 3,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 8,
+     "/1/length": 4,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-equal-start-later",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":4},{\"ref\":\"b\",\"start\":0,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 4,
+     "/0/length": 4,
+     "/0/sourceFrom": 2,
+     "/0/sourceTo": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 0,
+     "/1/length": 4,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-equal-span",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":1,\"length\":2},{\"ref\":\"b\",\"start\":1,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 2,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-covered-reenters",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":10},{\"ref\":\"b\",\"start\":3,\"length\":1}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 3,
+     "/0/start": 0,
+     "/0/length": 6,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 3,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 8,
+     "/1/length": 12,
+     "/1/sourceFrom": 4,
+     "/1/sourceTo": 10,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/2/start": 6,
+     "/2/length": 2,
+     "/2/sourceFrom": null,
+     "/2/sourceTo": 1,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-two-reentries",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":10},{\"ref\":\"b\",\"start\":2,\"length\":1},{\"ref\":\"c\",\"start\":5,\"length\":1}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 5,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 6,
+     "/1/length": 4,
+     "/1/sourceFrom": 3,
+     "/1/sourceTo": 5,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/2/start": 12,
+     "/2/length": 8,
+     "/2/sourceFrom": 6,
+     "/2/sourceTo": 10,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/3/start": 4,
+     "/3/length": 2,
+     "/3/sourceFrom": null,
+     "/3/sourceTo": 1,
+     "/3/fadeIn": 0,
+     "/3/fadeOut": 0,
+     "/4/start": 10,
+     "/4/length": 2,
+     "/4/sourceFrom": null,
+     "/4/sourceTo": 1,
+     "/4/fadeIn": 0,
+     "/4/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-open-last",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":1}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 2,
+     "/0/length": 0,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": null,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-open-cuts-earlier",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":10},{\"ref\":\"b\",\"start\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 4,
+     "/1/length": 0,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": null,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-fade-spans-whole-shot",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":4},{\"ref\":\"b\",\"start\":2,\"length\":2,\"fadeIn\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 4,
+     "/1/start": 4,
+     "/1/length": 4,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": 2,
+     "/1/fadeIn": 4,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-fade-on-open-shot",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":10},{\"ref\":\"b\",\"start\":4,\"fadeIn\":1}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 10,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 5,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 2,
+     "/1/start": 8,
+     "/1/length": 0,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": null,
+     "/1/fadeIn": 2,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-cross-last-in-file-wins",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":6},{\"ref\":\"b\",\"start\":4,\"length\":2,\"fadeIn\":1},{\"ref\":\"c\",\"start\":3,\"length\":3,\"fadeIn\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 3,
+     "/0/start": 0,
+     "/0/length": 10,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 5,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 4,
+     "/1/start": 8,
+     "/1/length": 2,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": 1,
+     "/1/fadeIn": 2,
+     "/1/fadeOut": 4,
+     "/2/start": 6,
+     "/2/length": 6,
+     "/2/sourceFrom": null,
+     "/2/sourceTo": 3,
+     "/2/fadeIn": 4,
+     "/2/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-cross-beats-own-fadeout",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":4,\"fadeOut\":0.5},{\"ref\":\"b\",\"start\":3,\"length\":3,\"fadeIn\":1}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 2,
+     "/1/start": 6,
+     "/1/length": 6,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": 3,
+     "/1/fadeIn": 2,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-speed-half",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2,\"speed\":0.5}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/warp/algorithm": "varispeed",
+     "/0/warp/markers/1/0": 2,
+     "/0/warp/markers/1/1": 0.5
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-speed-half-keep",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2,\"speed\":0.5,\"pitch\":\"keep\"}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/warp/algorithm": "elastique",
+     "/0/warp/markers/1/0": 2,
+     "/0/warp/markers/1/1": 0.5
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-speed-double",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2,\"speed\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/warp/algorithm": "varispeed",
+     "/0/warp/markers/1/0": 2,
+     "/0/warp/markers/1/1": 2
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-speed-double-keep",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2,\"speed\":2,\"pitch\":\"keep\"}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/warp/algorithm": "elastique",
+     "/0/warp/markers/1/0": 2,
+     "/0/warp/markers/1/1": 2
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-speed-freeze-is-silent",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2,\"speed\":0},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-speed-reverse-is-silent",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2,\"speed\":-1,\"from\":3},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-speed-reverse-keep-is-silent",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2,\"speed\":-1,\"from\":3,\"pitch\":\"keep\"},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-from-with-speed-after-cut",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":4,\"from\":1,\"speed\":2},{\"ref\":\"b\",\"start\":1,\"length\":1}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 3,
+     "/0/start": 0,
+     "/0/length": 2,
+     "/0/sourceFrom": 1,
+     "/0/sourceTo": 3,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 4,
+     "/1/length": 4,
+     "/1/sourceFrom": 5,
+     "/1/sourceTo": 9,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/2/start": 2,
+     "/2/length": 2,
+     "/2/sourceFrom": null,
+     "/2/sourceTo": 1,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/warp/markers/0/1": null,
+     "/2/warp/markers/1/1": null
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-freeze-covers",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":6},{\"ref\":\"b\",\"start\":2,\"length\":2,\"speed\":0}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 8,
+     "/1/length": 4,
+     "/1/sourceFrom": 4,
+     "/1/sourceTo": 6,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "shots-reverse-covers",
+  "category": "shots",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":6},{\"ref\":\"b\",\"start\":2,\"length\":2,\"speed\":-1,\"from\":5}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 8,
+     "/1/length": 4,
+     "/1/sourceFrom": 4,
+     "/1/sourceTo": 6,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-clip-without-sound",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"mute\",\"start\":0,\"length\":2},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-audio-clip-ref",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"au\",\"start\":0,\"length\":2},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n",
+   "clips/au.k7x": "source(\"clips/au.wav\")\n",
+   "clips/au.wav": ""
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-caption-ref",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"cap\",\"start\":0,\"length\":2},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n",
+   "clips/cap.k7x": "source(\"clips/cap.srt\")\n",
+   "clips/cap.srt": ""
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-ref-absent",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"ghost\",\"start\":0,\"length\":2},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-file-absent",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"gone\",\"start\":0,\"length\":2}])\n",
+   "clips/gone.k7x": "source(\"clips/gone.mp4\")\nsound(\"clips/gone.wav\")\n",
+   "clips/gone.mp4": ""
+  },
+  "expect": {
+   "refused": [
+    "clips/gone.k7x"
+   ],
+   "warned": [],
+   "faults": [
+    "sound_missing|picture:main|gone"
+   ],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-file-absent-but-covered",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"gone\",\"start\":0,\"length\":2},{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "clips/gone.k7x": "source(\"clips/gone.mp4\")\nsound(\"clips/gone.wav\")\n",
+   "clips/gone.mp4": ""
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-one-sound-two-shots",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"a\",\"start\":2,\"length\":1}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 2,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 4,
+     "/1/length": 2,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": 1,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-two-lanes-one-absent-sound",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"gone\",\"start\":0,\"length\":2}])\n",
+   "nodes/other.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"gone\",\"start\":1,\"length\":1}])\n",
+   "clips/gone.k7x": "source(\"clips/gone.mp4\")\nsound(\"clips/gone.wav\")\n",
+   "clips/gone.mp4": ""
+  },
+  "expect": {
+   "refused": [
+    "clips/gone.k7x"
+   ],
+   "warned": [],
+   "faults": [
+    "sound_missing|picture:main|gone",
+    "sound_missing|picture:other|gone"
+   ],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    },
+    "other": {
+     "#len": 1,
+     "/0/start": 2,
+     "/0/length": 2,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "sounds-empty-word",
+  "category": "sounds",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"e\",\"start\":0,\"length\":2},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n",
+   "clips/e.k7x": "source(\"clips/e.mp4\")\nsound(\"\")\n",
+   "clips/e.mp4": ""
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-video-source",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {
+    "dialog": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "picture_sounds": {
+    "main": {
+     "#has": false
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-video-source-absent",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"nope\")\n"
+  },
+  "expect": {
+   "refused": [
+    "nodes/dialog.k7x"
+   ],
+   "warned": [],
+   "faults": [
+    "video_source_absent|lane:dialog|nope"
+   ],
+   "video_sounds": {
+    "dialog": {
+     "#has": false
+    }
+   },
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-video-source-beside-events",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\nevents([{ ref: \"a\", start: \"1:1\" }])\n",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"b\",\"start\":10,\"length\":2}])\n",
+   "nodes/voice.k7x": "extends(\"@meta/track\")\nvideo_source(\"cam\")\n"
+  },
+  "expect": {
+   "refused": [
+    "nodes/dialog.k7x"
+   ],
+   "warned": [],
+   "faults": [
+    "video_source_both|lane:dialog|main"
+   ],
+   "video_sounds": {
+    "dialog": {
+     "#has": false
+    },
+    "voice": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "picture_sounds": {
+    "main": {
+     "#has": false
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-video-source-on-disabled-lane",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\ndisabled(true)\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {
+    "dialog": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "picture_sounds": {
+    "main": {
+     "#has": false
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-two-name-one-picture-lane",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\n",
+   "nodes/dialog2.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {
+    "dialog": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    },
+    "dialog2": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "picture_sounds": {
+    "main": {
+     "#has": false
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-wired-audio-silent-shots",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"mute\",\"start\":0,\"length\":2}])\n",
+   "graph.k7x": "modules({ \"main#audio\": [\"MIX\"], \"MIX\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#has": true,
+     "#len": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-unwired-silent-shots",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"mute\",\"start\":0,\"length\":2},{\"ref\":\"b\",\"start\":10,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 20,
+     "/0/length": 4
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-wired-audio-with-sound",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "graph.k7x": "modules({ \"main#audio\": [\"MIX\"], \"MIX\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-picture-sounded-by-a-lane",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "graph.k7x": "modules({ \"main#audio\": [\"MIX\"], \"MIX\": [\"OUT\"] })\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {
+    "dialog": {
+     "#len": 1
+    }
+   },
+   "picture_sounds": {
+    "main": {
+     "#has": false
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "lanes-disabled-picture-lane-still-sounds",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\ndisabled(true)\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "placed-on-the-lane-of-its-name",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"1:1\"}])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"a\",\"start\":1.5}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "cam": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 2,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/1/start": 3,
+     "/1/length": 5,
+     "/1/sourceFrom": null,
+     "/1/sourceTo": 2.5,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0
+    }
+   },
+   "placed": {
+    "cam": {
+     "#len": 2,
+     "/0/length": 1,
+     "/0/start": 0,
+     "/0/timeline": "verse",
+     "/1/length": 2.5,
+     "/1/start": 1.5
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-on-a-lane-of-no-name",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"1:1\"}])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"ghost\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"a\",\"start\":1.5}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "ghost": {
+     "#has": false
+    },
+    "cam": {
+     "#has": false
+    }
+   },
+   "placed": {
+    "ghost": {
+     "#len": 2
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-event-disabled",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"1:1\",\"disabled\":true},{\"ref\":\"verse\",\"start\":\"3:1\"}])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"a\",\"start\":1.5}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "cam": {
+     "#len": 2
+    }
+   },
+   "placed": {
+    "cam": {
+     "#len": 2,
+     "/0/start": 4,
+     "/0/timeline": "verse"
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-timeline-lane-disabled",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"outer\",\"start\":\"1:1\"}])\n",
+   "timelines/outer.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"disabled\":true,\"events\":[{\"ref\":\"inner\",\"start\":\"1:1\"}]},{\"lane\":\"y\",\"events\":[{\"ref\":\"inner\",\"start\":\"1:1\"}]}])\npictures([])\n",
+   "timelines/inner.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"a\",\"start\":1.5}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {},
+   "placed": {
+    "cam": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/timeline": "inner"
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-picture-lane-disabled",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"1:1\"}])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"a\",\"start\":1.5}],\"disabled\":true},{\"lane\":\"cam2\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {},
+   "placed": {
+    "cam": {
+     "#has": false
+    },
+    "cam2": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 1,
+     "/0/timeline": "verse"
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-cut-at-timeline-end",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"2:1\"}])\n",
+   "timelines/verse.k7x": "length(\"1:1\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":5},{\"ref\":\"b\",\"start\":1.5,\"length\":5}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {},
+   "placed": {
+    "cam": {
+     "#len": 2,
+     "/0/start": 2,
+     "/0/length": 2.5,
+     "/1/start": 3.5,
+     "/1/length": 1
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-nested-timeline",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"outer\",\"start\":\"2:1\"}])\n",
+   "timelines/outer.k7x": "length(\"4:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"inner\",\"start\":\"2:1\"}]}])\npictures([])\n",
+   "timelines/inner.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "cam": {
+     "#len": 1,
+     "/0/start": 8,
+     "/0/length": 2,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {
+    "cam": {
+     "#len": 1,
+     "/0/start": 4,
+     "/0/length": 1,
+     "/0/timeline": "inner"
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-nest-cut-by-outer-end",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"outer\",\"start\":\"1:1\"}])\n",
+   "timelines/outer.k7x": "length(\"1:3\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"inner\",\"start\":\"1:3\"}]}])\npictures([])\n",
+   "timelines/inner.k7x": "length(\"4:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":4}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {},
+   "placed": {
+    "cam": {
+     "#len": 1,
+     "/0/start": 1,
+     "/0/length": 2.5
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-timeline-in-itself",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"loop\",\"start\":\"1:1\"}])\n",
+   "timelines/loop.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"loop\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {},
+   "placed": {
+    "cam": {
+     "#len": 1,
+     "/0/length": 1,
+     "/0/timeline": "loop"
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-no-length-takes-next-or-room",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"1:1\"}])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0},{\"ref\":\"b\",\"start\":1.25}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {},
+   "placed": {
+    "cam": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 1.25,
+     "/1/start": 1.25,
+     "/1/length": 2.75
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-before-the-lanes-own",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"b\",\"start\":0}])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"2:1\"}])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "cam": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": null,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {
+    "cam": {
+     "#len": 1,
+     "/0/start": 2
+    }
+   }
+  }
+ },
+ {
+  "name": "placed-sounds-through-audio-half",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "graph.k7x": "modules({ \"cam#audio\": [\"MIX\"], \"MIX\": [\"OUT\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"1:1\"}])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"a\",\"start\":1.5}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "cam": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 2,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "placed-sounds-through-video-source",
+  "category": "placed",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"verse\",\"start\":\"1:1\"}])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"cam\")\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"a\",\"start\":1.5}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {
+    "dialog": {
+     "#len": 2,
+     "/0/start": 0,
+     "/0/length": 2,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "picture_sounds": {
+    "cam": {
+     "#has": false
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "departs-505-colon-start-sounds-nothing",
+  "category": "departs",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":\"2:1\",\"length\":2},{\"ref\":\"b\",\"start\":0,\"length\":4}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "departs-510-not-finite-is-dropped",
+  "category": "departs",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 300 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":1e+308,\"length\":1e+308},{\"ref\":\"b\",\"start\":0,\"length\":1}])\n"
+  },
+  "expect": {
+   "refused": [
+    "clips/a.k7x"
+   ],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 5,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "departs-514-sound-outside-the-project",
+  "category": "departs",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"out\",\"start\":0,\"length\":2},{\"ref\":\"b\",\"start\":3,\"length\":1}])\n",
+   "clips/out.k7x": "source(\"clips/a.mp4\")\nsound(\"../../x.wav\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [
+    "clips/out.k7x"
+   ],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 6,
+     "/0/length": 2,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 1,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "departs-516-prototype-name-is-a-plain-name",
+  "category": "departs",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{\"ref\":\"a\",\"start\":0,\"length\":2}])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"constructor\")\n"
+  },
+  "expect": {
+   "refused": [
+    "nodes/dialog.k7x"
+   ],
+   "warned": [],
+   "faults": [
+    "video_source_absent|lane:dialog|constructor"
+   ],
+   "video_sounds": {
+    "dialog": {
+     "#has": false
+    }
+   },
+   "picture_sounds": {
+    "main": {
+     "#len": 1,
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/sourceFrom": null,
+     "/0/sourceTo": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0
+    }
+   },
+   "placed": {}
+  }
+ },
+ {
+  "name": "departs-518-a-nest-is-cut-at-the-depth",
+  "category": "departs",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/b.mp4": "",
+   "clips/b.wav": "",
+   "clips/c.k7x": "source(\"clips/c.mp4\")\nsound(\"clips/c.wav\")\n",
+   "clips/c.mp4": "",
+   "clips/c.wav": "",
+   "clips/mute.k7x": "source(\"clips/mute.mp4\")\n",
+   "clips/mute.mp4": "",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{\"ref\":\"t0\",\"start\":\"1:1\"}])\n",
+   "timelines/t0.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t1\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t1.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t2\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t2.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t3\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t3.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t4\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t4.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t5\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t5.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t6\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t6.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t7\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t7.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t8\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t8.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t9\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t9.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t10\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t10.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t11\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t11.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t12\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t12.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t13\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t13.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t14\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t14.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t15\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t15.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t16\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t16.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t17\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t17.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t18\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t18.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t19\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t19.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t20\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t20.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t21\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t21.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t22\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t22.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t23\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t23.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t24\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t24.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t25\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t25.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t26\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t26.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t27\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t27.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t28\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t28.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t29\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t29.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t30\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t30.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t31\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t31.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t32\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t32.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t33\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t33.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t34\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t34.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t35\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t35.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t36\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t36.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t37\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t37.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t38\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t38.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[{\"ref\":\"t39\",\"start\":\"1:1\"}]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n",
+   "timelines/t39.k7x": "length(\"1:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"cam\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1}]}])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "faults": [],
+   "video_sounds": {},
+   "picture_sounds": {},
+   "placed": {
+    "cam": {
+     "#len": 32,
+     "/31/timeline": "t31",
+     "/32/timeline": null
+    }
+   }
+  }
+ }
+]

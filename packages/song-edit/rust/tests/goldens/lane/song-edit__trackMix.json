@@ -1,0 +1,2943 @@
+{
+ "module": "golden/song-edit/trackMix",
+ "blobs": {
+  "2fc05f7557ef": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"k\", start: \"5:1:1\", takes: [{ ref: \"t1\", start: \"5:1\" }, { ref: \"t2\", start: \"5:2\" }], comp: [{ take: \"t1\", from: \"5:1\", to: \"5:3\" }], crossfades: [{ at: \"5:3\", length: \"0:1\" }] },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n])\n",
+  "04755b50c9f2": "project({ name: \"x\", tempo: 90, sampleRate: 48000, timeSignature: \"4/4\" })\n",
+  "583e5e8c7209": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"k\", start: \"2:1:1\", takes: [{ ref: \"t1\", start: \"2:1:1\" }, { ref: \"t2\", start: \"2:2:1\" }], comp: [{ take: \"t1\", from: \"2:1:1\", to: \"2:3:1\" }], crossfades: [{ at: \"2:3:1\", length: \"0:1\" }] },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n])\n",
+  "e64071e2e77d": "extends(\"@meta/track\")\nevents([])\n",
+  "87d17d0c8139": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:3:1\" },\n  { ref: \"k\", start: \"2:1:1\", takes: [{ ref: \"t1\", start: \"2:1:1\" }, { ref: \"t2\", start: \"2:2:1\" }], comp: [{ take: \"t1\", from: \"2:1:1\", to: \"2:3:1\" }], crossfades: [{ at: \"2:3:1\", length: \"0:1\" }] },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n])\n",
+  "28718ca55ea1": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n])\n",
+  "2fb8fbe4680d": "extends(\"@meta/track\")\nevents([\n  ref(\"k\").start(\"9:1:1\").takes([ref(\"t1\").start(\"9:1\"), ref(\"t2\").start(\"9:2\")]).comp([take(\"t1\").from(\"9:1\").to(\"9:3\")]).crossfades([at(\"9:3\").length(\"0:1\")]),\n])\n",
+  "acf4c1d9ce12": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"2:1\" },\n  { ref: \"k\", start: \"3:1\", takes: [{ ref: \"t1\", start: \"3:1\" }, { ref: \"t2\", start: \"3:2\" }], comp: [{ take: \"t1\", from: \"3:1\", to: \"3:3\" }], crossfades: [{ at: \"3:3\", length: \"0:1\" }] },\n  { ref: \"s\", start: 8.667, length: 2 },\n  { ref: \"k\", start: \"5:1\", loop: 2 },\n])\n",
+  "45248a51b171": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"k\", start: \"1:3\", takes: [{ ref: \"t1\", start: \"1:3\" }, { ref: \"t2\", start: \"1:4\" }], comp: [{ take: \"t1\", from: \"1:3\", to: \"2:1\" }], crossfades: [{ at: \"2:1\", length: \"0:1\" }] },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n])\n",
+  "43df355735e1": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"k\", start: \"2:1:1\", takes: [{ ref: \"t1\", start: \"2:1:1\" }, { ref: \"t2\", start: \"2:2:1\" }], comp: [{ take: \"t1\", from: \"2:1:1\", to: \"2:3:1\" }], crossfades: [{ at: \"2:3:1\", length: \"0:1\" }], fadeOut: \"0:1:1\" },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n])\n",
+  "81c8dcea76bf": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n  ref(\"new-tl\").start(\"2:1\"),\n])\n",
+  "cf85621c81f0": "length(\"2:0\")\nlanes([\n  lane(\"a\")\n    .events([\n      ref(\"k\")\n        .start(\"1:1\")\n        .takes([ref(\"t1\").start(\"1:1\"), ref(\"t2\").start(\"1:2\")])\n        .comp([take(\"t1\").from(\"1:1\").to(\"1:3\")])\n        .crossfades([at(\"1:3\").length(\"0:1\")]),\n      ref(\"s\").start(3.333).length(2),\n    ]),\n])\n",
+  "d922cce29d85": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"2:1:1\", takes: [{ ref: \"t1\", start: \"2:1:1\" }, { ref: \"t2\", start: \"2:2:1\" }], comp: [{ take: \"t1\", from: \"2:1:1\", to: \"2:3:1\" }], crossfades: [{ at: \"2:3:1\", length: \"0:1\" }] },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n  ref(\"new-tl\").start(\"1:1\"),\n])\n",
+  "16bf2021eafb": "length(\"1:0\")\nlanes([lane(\"a\").events([ref(\"k\").start(\"1:1\")])])\n",
+  "90f868fcb069": "extends(\"@meta/track\")\nevents([ref(\"new-tl\").start(\"1:1\")])\n",
+  "d1b2f761f688": "length(\"25:0\")\nlanes([\n  lane(\"a\")\n    .events([\n      ref(\"k\").start(\"1:1\"),\n      ref(\"k\")\n        .start(\"2:1\")\n        .takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:2\")])\n        .comp([take(\"t1\").from(\"2:1\").to(\"2:3\")])\n        .crossfades([at(\"2:3\").length(\"0:1\")]),\n      ref(\"s\").start(6).length(2),\n      ref(\"k\").start(\"4:1\").loop(2),\n    ]),\n])\n",
+  "a3204d4d0da8": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n  ref(\"new-tl\").start(\"2:1\"),\n])\n",
+  "59640e015d9f": "length(\"1:0\")\nlanes([\n  lane(\"a\")\n    .events([\n      ref(\"k\")\n        .start(\"1:1\")\n        .takes([ref(\"t1\").start(\"1:1\"), ref(\"t2\").start(\"1:2\")])\n        .comp([take(\"t1\").from(\"1:1\").to(\"1:3\")])\n        .crossfades([at(\"1:3\").length(\"0:1\")]),\n    ]),\n])\n",
+  "477587ec8254": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n  ref(\"tl\").start(\"2:1\"),\n])\n",
+  "65af590a7ede": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"k\", start: \"2:1:1\", takes: [{ ref: \"t1\", start: \"2:1:1\" }, { ref: \"t2\", start: \"2:2:1\" }], comp: [{ take: \"t1\", from: \"2:1:1\", to: \"2:3:1\" }], crossfades: [{ at: \"2:3:1\", length: \"0:1\" }] },\n  ref(\"odd name\").start(\"2:2\"),\n])\n",
+  "e5ede9d13ea7": "length(\"2:2\")\nlanes([lane(\"a\").events([ref(\"s\").start(3.333).length(2), ref(\"k\").start(\"2:3\").loop(2)])])\n",
+  "79d8b634d04f": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1:1\" }])\nalternatives([{ name: \"b\", events: [{ ref: \"k\", start: \"3:1:1\", takes: [{ ref: \"t\", start: \"3:1:1\" }] }] }])\nalternative(\"b\")\n",
+  "ac67c21ecc9e": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1:1\" }])\nalternatives([{ name: \"b\", events: [{ ref: \"k\", start: \"4:1\", takes: [{ ref: \"t\", start: \"4:1\" }] }] }])\nalternative(\"b\")\n",
+  "bb670cd8c1e4": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1:1\" }])\nalternatives([{ name: \"b\", events: [ref(\"new-tl\").start(\"2:1\")] }])\nalternative(\"b\")\n",
+  "7c240e9dacf3": "length(\"2:0\")\nlanes([lane(\"a\").events([ref(\"k\").start(\"2:1\").takes([ref(\"t\").start(\"2:1\")])])])\n",
+  "4445b0ee69ba": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1:1\" }])\nalternatives([{ name: \"b\", events: [ref(\"new-tl\").start(\"1:1\")] }])\nalternative(\"b\")\n",
+  "d3ffd6346ee1": "length(\"25:0\")\nlanes([lane(\"a\").events([ref(\"k\").start(\"3:1\").takes([ref(\"t\").start(\"3:1\")])])])\n",
+  "e89d26d8b138": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1:1\" }])\nalternatives([{ name: \"b\", events: [ref(\"tl\").start(\"2:1\")] }])\nalternative(\"b\")\n",
+  "8eea53ae0336": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1:1\" }])\nalternatives([{ name: \"b\", events: [ref(\"odd name\").start(\"2:2\")] }])\nalternative(\"b\")\n",
+  "b451e4298641": "length(\"2:2\")\nlanes([lane(\"a\").events([ref(\"k\").start(\"1:3\").takes([ref(\"t\").start(\"1:3\")])])])\n",
+  "96f0477e373a": "start(true)\nsteps([{ id: \"n1\", track: \"a\" }])\n",
+  "ab5459840dbd": "length(\"8:1\")\nlanes([{ lane: \"x\", events: [{ ref: \"k\", start: \"1:1\" }, { ref: \"k\", start: \"3:1\" }] }])\n",
+  "859b236864d2": "length(\"2:0\")\nlanes([lane(\"x\").events([ref(\"k\").start(\"2:1\")])])\n",
+  "3e60f17aafd2": "length(\"8:1\")\nlanes([{ lane: \"x\", events: [{ ref: \"k\", start: \"1:1\" }, ref(\"new-tl\").start(\"2:1\")] }])\n",
+  "4291dfd1d364": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"k\").start(\"1:1\")])])\n",
+  "e733aa69ad64": "length(\"8:1\")\nlanes([{ lane: \"x\", events: [{ ref: \"k\", start: \"3:1\" }, ref(\"new-tl\").start(\"1:1\")] }])\n",
+  "25de8eb72016": "length(\"25:0\")\nlanes([lane(\"x\").events([ref(\"k\").start(\"1:1\"), ref(\"k\").start(\"3:1\")])])\n",
+  "72b71fca4217": "length(\"8:1\")\nlanes([{ lane: \"x\", events: [ref(\"new-tl\").start(\"1:1\")] }])\n",
+  "e1c6fb02107d": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"2:1\" },\n  { ref: \"k\", start: \"3:1\", takes: [{ ref: \"t1\", start: \"3:1\" }, { ref: \"t2\", start: \"3:2\" }], comp: [{ take: \"t1\", from: \"3:1\", to: \"3:3\" }], crossfades: [{ at: \"3:3\", length: \"0:1\" }] },\n  { ref: \"s\", start: 8, length: 2 },\n  { ref: \"k\", start: \"5:1\", loop: 2 },\n])\n",
+  "5216a0e35d56": "length(\"2:0\")\nlanes([\n  lane(\"a\")\n    .events([\n      ref(\"k\")\n        .start(\"1:1\")\n        .takes([ref(\"t1\").start(\"1:1\"), ref(\"t2\").start(\"1:2\")])\n        .comp([take(\"t1\").from(\"1:1\").to(\"1:3\")])\n        .crossfades([at(\"1:3\").length(\"0:1\")]),\n    ]),\n])\n",
+  "7480f02c7e80": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"s\", start: 6, length: 2 },\n  { ref: \"k\", start: \"4:1:1\", loop: 2 },\n  ref(\"tl\").start(\"2:1\"),\n])\n",
+  "3f170b5f1560": "extends(\"@meta/track\")\nevents([\n  { ref: \"k\", start: \"1:1:1\" },\n  { ref: \"k\", start: \"2:1:1\", takes: [{ ref: \"t1\", start: \"2:1:1\" }, { ref: \"t2\", start: \"2:2:1\" }], comp: [{ take: \"t1\", from: \"2:1:1\", to: \"2:3:1\" }], crossfades: [{ at: \"2:3:1\", length: \"0:1\" }] },\n  { ref: \"s\", start: 6, length: 2 },\n  ref(\"odd name\").start(\"2:2\"),\n])\n",
+  "97b17179665a": "length(\"2:2\")\nlanes([lane(\"a\").events([ref(\"k\").start(\"2:3\").loop(2)])])\n"
+ },
+ "trees": {
+  "c818dc3f2b3d": {
+   "proj/project.k7x": "04755b50c9f2",
+   "proj/nodes/a.k7x": "583e5e8c7209",
+   "proj/nodes/b.k7x": "e64071e2e77d"
+  },
+  "18098e0630a5": {
+   "proj/project.k7x": "04755b50c9f2",
+   "proj/nodes/a.k7x": "79d8b634d04f",
+   "proj/nodes/b.k7x": "e64071e2e77d"
+  },
+  "8e4350cb76a4": {
+   "proj/project.k7x": "04755b50c9f2",
+   "proj/chains/a.k7x": "96f0477e373a",
+   "proj/tracks/a.k7x": "583e5e8c7209",
+   "proj/tracks/b.k7x": "e64071e2e77d"
+  },
+  "e31b79012e17": {
+   "proj/project.k7x": "04755b50c9f2",
+   "proj/timelines/tl.k7x": "ab5459840dbd",
+   "proj/nodes/a.k7x": "583e5e8c7209"
+  },
+  "f8f4ba1a6e9c": {
+   "proj/nodes/a.k7x": "583e5e8c7209"
+  }
+ },
+ "vectors": [
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    "5:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "2fc05f7557ef"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "1:3:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "87d17d0c8139"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    99,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "nope",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "bad timecode 'nope' — expected \"mesure:noire:croche:doublecroche\", optionally \".ticks\""
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "zzz",
+    0,
+    "1:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"zzz\" has no file in nodes/ — cannot move a clip"
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1",
+    "proj/nodes/b.k7x": "2fb8fbe4680d"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    6,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    99,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "nope",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file in nodes/ — cannot move a placement onto track \"nope\""
+   },
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    16,
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 4,
+   "changed": {
+    "proj/nodes/a.k7x": "acf4c1d9ce12"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    3.9,
+    4.1,
+    -2,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "45248a51b171"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "removeTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "setTrackPlacementFade",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4,
+    "fadeOut",
+    1.5
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "43df355735e1"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "setTrackPlacementWindow",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    4,
+    4,
+    {
+     "from": 0.00005,
+     "to": 3.33333
+    },
+    3.3333
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/nodes/a.k7x": "81c8dcea76bf",
+    "proj/timelines/new-tl.k7x": "cf85621c81f0"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "d922cce29d85",
+    "proj/timelines/new-tl.k7x": "16bf2021eafb"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 4,
+   "changed": {
+    "proj/nodes/a.k7x": "90f868fcb069",
+    "proj/timelines/new-tl.k7x": "d1b2f761f688"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "a3204d4d0da8",
+    "proj/timelines/new-tl.k7x": "59640e015d9f"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/nodes/a.k7x": "477587ec8254",
+    "proj/timelines/tl.k7x": "cf85621c81f0"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "nope",
+    4,
+    12,
+    4,
+    4,
+    "n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file"
+   },
+   "changed": {},
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    3,
+    4,
+    "odd name"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/nodes/a.k7x": "65af590a7ede",
+    "proj/timelines/odd name.k7x": "e5ede9d13ea7"
+   },
+   "tree": "c818dc3f2b3d"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    "5:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "1:3:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    99,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "nope",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "bad timecode 'nope' — expected \"mesure:noire:croche:doublecroche\", optionally \".ticks\""
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "zzz",
+    0,
+    "1:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"zzz\" has no file in nodes/ — cannot move a clip"
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    6,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    99,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "nope",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    16,
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "ac67c21ecc9e"
+   },
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    3.9,
+    4.1,
+    -2,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "removeTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "setTrackPlacementFade",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4,
+    "fadeOut",
+    1.5
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "setTrackPlacementWindow",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    4,
+    4,
+    {
+     "from": 0.00005,
+     "to": 3.33333
+    },
+    3.3333
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "bb670cd8c1e4",
+    "proj/timelines/new-tl.k7x": "7c240e9dacf3"
+   },
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "4445b0ee69ba",
+    "proj/timelines/new-tl.k7x": "d3ffd6346ee1"
+   },
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "e89d26d8b138",
+    "proj/timelines/tl.k7x": "7c240e9dacf3"
+   },
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "nope",
+    4,
+    12,
+    4,
+    4,
+    "n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file"
+   },
+   "changed": {},
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    3,
+    4,
+    "odd name"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "8eea53ae0336",
+    "proj/timelines/odd name.k7x": "b451e4298641"
+   },
+   "tree": "18098e0630a5"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    "5:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/tracks/a.k7x": "2fc05f7557ef"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "1:3:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/tracks/a.k7x": "87d17d0c8139"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    99,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "nope",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "bad timecode 'nope' — expected \"mesure:noire:croche:doublecroche\", optionally \".ticks\""
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "zzz",
+    0,
+    "1:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"zzz\" has no file in tracks/ — cannot move a clip"
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/tracks/a.k7x": "28718ca55ea1",
+    "proj/tracks/b.k7x": "2fb8fbe4680d"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    6,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    99,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "nope",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file in tracks/ — cannot move a placement onto track \"nope\""
+   },
+   "changed": {
+    "proj/tracks/a.k7x": "28718ca55ea1"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    16,
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 4,
+   "changed": {
+    "proj/tracks/a.k7x": "acf4c1d9ce12"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    3.9,
+    4.1,
+    -2,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/tracks/a.k7x": "45248a51b171"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "removeTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/tracks/a.k7x": "28718ca55ea1"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "setTrackPlacementFade",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4,
+    "fadeOut",
+    1.5
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/tracks/a.k7x": "43df355735e1"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "setTrackPlacementWindow",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    4,
+    4,
+    {
+     "from": 0.00005,
+     "to": 3.33333
+    },
+    3.3333
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/timelines/new-tl.k7x": "cf85621c81f0",
+    "proj/tracks/a.k7x": "81c8dcea76bf"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/timelines/new-tl.k7x": "16bf2021eafb",
+    "proj/tracks/a.k7x": "d922cce29d85"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 4,
+   "changed": {
+    "proj/timelines/new-tl.k7x": "d1b2f761f688",
+    "proj/tracks/a.k7x": "90f868fcb069"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/timelines/new-tl.k7x": "59640e015d9f",
+    "proj/tracks/a.k7x": "a3204d4d0da8"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/timelines/tl.k7x": "cf85621c81f0",
+    "proj/tracks/a.k7x": "477587ec8254"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "nope",
+    4,
+    12,
+    4,
+    4,
+    "n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file"
+   },
+   "changed": {},
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    3,
+    4,
+    "odd name"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/timelines/odd name.k7x": "e5ede9d13ea7",
+    "proj/tracks/a.k7x": "65af590a7ede"
+   },
+   "tree": "8e4350cb76a4"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    "5:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "2fc05f7557ef"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "1:3:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "87d17d0c8139"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    99,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "nope",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "bad timecode 'nope' — expected \"mesure:noire:croche:doublecroche\", optionally \".ticks\""
+   },
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "zzz",
+    0,
+    "1:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"zzz\" has no file in nodes/ — cannot move a clip"
+   },
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"b\" has no file in nodes/ — cannot move a placement onto track \"b\""
+   },
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    6,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    99,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "nope",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file in nodes/ — cannot move a placement onto track \"nope\""
+   },
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    16,
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 4,
+   "changed": {
+    "proj/nodes/a.k7x": "acf4c1d9ce12"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    3.9,
+    4.1,
+    -2,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "45248a51b171"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "removeTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "setTrackPlacementFade",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4,
+    "fadeOut",
+    1.5
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "43df355735e1"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "setTrackPlacementWindow",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    4,
+    4,
+    {
+     "from": 0.00005,
+     "to": 3.33333
+    },
+    3.3333
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/nodes/a.k7x": "81c8dcea76bf",
+    "proj/timelines/new-tl.k7x": "cf85621c81f0"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/timelines/new-tl.k7x": "859b236864d2",
+    "proj/timelines/tl.k7x": "3e60f17aafd2"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "d922cce29d85",
+    "proj/timelines/new-tl.k7x": "16bf2021eafb"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/timelines/new-tl.k7x": "4291dfd1d364",
+    "proj/timelines/tl.k7x": "e733aa69ad64"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 4,
+   "changed": {
+    "proj/nodes/a.k7x": "90f868fcb069",
+    "proj/timelines/new-tl.k7x": "d1b2f761f688"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/timelines/new-tl.k7x": "25de8eb72016",
+    "proj/timelines/tl.k7x": "72b71fca4217"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "a3204d4d0da8",
+    "proj/timelines/new-tl.k7x": "59640e015d9f"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "timeline 'tl' already exists"
+   },
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "nope",
+    4,
+    12,
+    4,
+    4,
+    "n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file"
+   },
+   "changed": {},
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    3,
+    4,
+    "odd name"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 2,
+   "changed": {
+    "proj/nodes/a.k7x": "65af590a7ede",
+    "proj/timelines/odd name.k7x": "e5ede9d13ea7"
+   },
+   "tree": "e31b79012e17"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    "5:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "2fc05f7557ef"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "1:3:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "87d17d0c8139"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    99,
+    "2:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    "nope",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "bad timecode 'nope' — expected \"mesure:noire:croche:doublecroche\", optionally \".ticks\""
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "moveTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "zzz",
+    0,
+    "1:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"zzz\" has no file in nodes/ — cannot move a clip"
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"b\" has no file in nodes/ — cannot move a placement onto track \"b\""
+   },
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    6,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "b",
+    99,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "movePlacementToTrack",
+   "args": [
+    "$DIR/proj",
+    "a",
+    "nope",
+    4,
+    "9:1:1",
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file in nodes/ — cannot move a placement onto track \"nope\""
+   },
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    16,
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 4,
+   "changed": {
+    "proj/nodes/a.k7x": "e1c6fb02107d"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "moveTrackPlacementsInRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    3.9,
+    4.1,
+    -2,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "45248a51b171"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "removeTrackPlacement",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "28718ca55ea1"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "setTrackPlacementFade",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    4,
+    4,
+    "fadeOut",
+    1.5
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": true,
+   "changed": {
+    "proj/nodes/a.k7x": "43df355735e1"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "setTrackPlacementWindow",
+   "args": [
+    "$DIR/proj",
+    "a",
+    6,
+    4,
+    4,
+    {
+     "from": 0.00005,
+     "to": 3.33333
+    },
+    3.3333
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": false,
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "a3204d4d0da8",
+    "proj/timelines/new-tl.k7x": "5216a0e35d56"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "d922cce29d85",
+    "proj/timelines/new-tl.k7x": "16bf2021eafb"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    4,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 4,
+   "changed": {
+    "proj/nodes/a.k7x": "90f868fcb069",
+    "proj/timelines/new-tl.k7x": "d1b2f761f688"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    0,
+    100,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    100,
+    200,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 0,
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    12,
+    12,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "a3204d4d0da8",
+    "proj/timelines/new-tl.k7x": "59640e015d9f"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "tl>x",
+    4,
+    8,
+    4,
+    4,
+    "new-tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"tl>x\" has no file"
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    4,
+    4,
+    "tl"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "7480f02c7e80",
+    "proj/timelines/tl.k7x": "5216a0e35d56"
+   },
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "nope",
+    4,
+    12,
+    4,
+    4,
+    "n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "track \"nope\" has no file"
+   },
+   "changed": {},
+   "tree": "f8f4ba1a6e9c"
+  },
+  {
+   "fn": "timelineFromRange",
+   "args": [
+    "$DIR/proj",
+    "a",
+    4,
+    12,
+    3,
+    4,
+    "odd name"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": 1,
+   "changed": {
+    "proj/nodes/a.k7x": "3f170b5f1560",
+    "proj/timelines/odd name.k7x": "97b17179665a"
+   },
+   "tree": "f8f4ba1a6e9c"
+  }
+ ]
+}

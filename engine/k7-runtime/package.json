@@ -1,0 +1,26 @@
+{
+  "name": "k7-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Headless C++ audio engine (Tracktion + IXWebSocket). Receives a compiled ProjectDoc over WebSocket, plays audio, pushes transport and meter state back. Never parses song files.",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "build:win": "node scripts/build.mjs windows-msvc",
+    "build:mac": "node scripts/build.mjs macos-clang",
+    "build:android": "node scripts/build.mjs android-arm64",
+    "build:ios": "node scripts/build.mjs ios-arm64",
+    "gen:builtin-params": "node scripts/gen-builtin-params.mjs",
+    "gen:strudel-bundle": "node scripts/gen-strudel-bundle.mjs",
+    "gen:surge-panel": "node scripts/gen-surge-panel.mjs",
+    "test": "node scripts/run-tests.mjs",
+    "test:settings-dir": "node scripts/settings-dir-proof.mjs",
+    "test:all": "node scripts/run-tests.mjs --all"
+  },
+  "devDependencies": {
+    "@studio/engine-client": "*",
+    "@studio/engine-protocol": "*",
+    "@studio/k7x": "*",
+    "@studio/song": "*",
+    "@studio/song-schema": "*"
+  }
+}

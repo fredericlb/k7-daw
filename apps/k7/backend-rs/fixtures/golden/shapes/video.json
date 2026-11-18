@@ -1,0 +1,527 @@
+{
+  "project": "shapes/video.k7",
+  "repairs": {
+    "log": [],
+    "files": [
+      "chains/main.k7x"
+    ]
+  },
+  "engine": {
+    "name": "video.k7",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/shapes/video.k7/clips",
+    "tracks": [
+      {
+        "id": "kit",
+        "name": "kit",
+        "role": "regular",
+        "contentType": "audio notes",
+        "group": "live",
+        "generated": true,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [],
+        "plugins": [
+          {
+            "id": "kit:pattern",
+            "type": "studio_pattern",
+            "name": "Pattern",
+            "path": "",
+            "presetSave": "",
+            "role": "",
+            "enabled": true,
+            "params": {},
+            "patternSource": "// A live Strudel (TidalCycles-in-JS) pattern, linked by the \"pad\" and \"kit\"\n// tracks. While the transport plays it streams onto them, locked to the beat —\n// edit + save to hear it change live.\n//\n// `.label(...)` names the lane a part plays on. A label matching a strudel\n// lane's name lands there — \"Pad\" on the \"pad\" lane, so it plays through that\n// lane's chain and mixer strip. A label no lane declares still plays, on a\n// live track named after it; so does an unlabelled part, bucketed by orbit.\n//\n// What `s(...)` means depends on WHICH lane module the lane extends: a waveform\n// on \"pad\" (a sequence lane — its chain brings the instrument), a sample name on\n// \"kit\" (an audio lane) — the bundled kit, your project `samples/` folder, or\n// $DIRT_SAMPLES.\nstack(\n  note(\"c e g c5\").s(\"sawtooth\").slow(2).label(\"Pad\"),\n  sound(\"bd hh sn hh\").label(\"Kit\"),\n)\n",
+            "patternLabel": "kit",
+            "patternCatchAll": true,
+            "patternClaimed": [
+              "kit",
+              "pad"
+            ],
+            "patternPlays": "both",
+            "patternOnly": true,
+            "patternBanks": [
+              "<ws>/shapes/video.k7/samples"
+            ]
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "pad",
+        "name": "pad",
+        "role": "regular",
+        "contentType": "audio notes",
+        "group": "live",
+        "generated": true,
+        "color": "#6c31b9",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [],
+        "plugins": [
+          {
+            "id": "pad:pattern",
+            "type": "studio_pattern",
+            "name": "Pattern",
+            "path": "",
+            "presetSave": "",
+            "role": "",
+            "enabled": true,
+            "params": {},
+            "patternSource": "// A live Strudel (TidalCycles-in-JS) pattern, linked by the \"pad\" and \"kit\"\n// tracks. While the transport plays it streams onto them, locked to the beat —\n// edit + save to hear it change live.\n//\n// `.label(...)` names the lane a part plays on. A label matching a strudel\n// lane's name lands there — \"Pad\" on the \"pad\" lane, so it plays through that\n// lane's chain and mixer strip. A label no lane declares still plays, on a\n// live track named after it; so does an unlabelled part, bucketed by orbit.\n//\n// What `s(...)` means depends on WHICH lane module the lane extends: a waveform\n// on \"pad\" (a sequence lane — its chain brings the instrument), a sample name on\n// \"kit\" (an audio lane) — the bundled kit, your project `samples/` folder, or\n// $DIRT_SAMPLES.\nstack(\n  note(\"c e g c5\").s(\"sawtooth\").slow(2).label(\"Pad\"),\n  sound(\"bd hh sn hh\").label(\"Kit\"),\n)\n",
+            "patternLabel": "pad",
+            "patternCatchAll": false,
+            "patternClaimed": [
+              "kit",
+              "pad"
+            ],
+            "patternPlays": "both",
+            "patternOnly": true,
+            "patternBanks": [
+              "<ws>/shapes/video.k7/samples"
+            ]
+          },
+          {
+            "id": "pad:00000000-0000-4000-8000-000000000007",
+            "type": "4osc",
+            "name": "00000000-0000-4000-8000-000000000007",
+            "path": "",
+            "presetSave": "<ws>/shapes/video.k7/vstpresets/00000000-0000-4000-8000-000000000007.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#c38ee1",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 8,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 62,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3,
+                "duration": 1,
+                "key": 65,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 4,
+                "duration": 1,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 5,
+                "duration": 1,
+                "key": 69,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 6,
+                "duration": 1,
+                "key": 71,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 7,
+                "duration": 1,
+                "key": 72,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody:00000000-0000-4000-8000-000000000005",
+            "type": "4osc",
+            "name": "00000000-0000-4000-8000-000000000005",
+            "path": "",
+            "presetSave": "<ws>/shapes/video.k7/vstpresets/00000000-0000-4000-8000-000000000005.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [
+      {
+        "id": "live",
+        "name": "live",
+        "color": "",
+        "mute": false,
+        "solo": false
+      }
+    ],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "main": {
+        "from": "main",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000001",
+            "uses": "@meta/shaders/video-mixer",
+            "place": "main · step 2",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "video-mixer",
+            "shaders": [
+              "video-mixer"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "red": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Red",
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "green": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Green",
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "blue": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Blue",
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "transparency": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Transparency",
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 1,
+              "P2": 1,
+              "P3": 1,
+              "P4": 0
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "RENDER",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          },
+          {
+            "to": "RENDER#audio",
+            "gain": 1
+          }
+        ]
+      },
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000005",
+            "uses": "@workspace/instruments/synth",
+            "place": "melody · step 2",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {},
+            "pluginId": "melody:00000000-0000-4000-8000-000000000005"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "pad": {
+        "from": "pad",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000007",
+            "uses": "@workspace/instruments/synth",
+            "place": "pad · step 2",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {},
+            "pluginId": "pad:00000000-0000-4000-8000-000000000007"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "RENDER": {
+        "from": "RENDER",
+        "use": [],
+        "out": [
+          {
+            "to": "VIDEO_OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "kit",
+      "live",
+      "melody",
+      "pad"
+    ],
+    "videoTracks": [
+      "main"
+    ],
+    "trackColors": {
+      "kit": "#dd322c",
+      "melody": "#c38ee1",
+      "pad": "#6c31b9"
+    },
+    "trackSignals": {
+      "kit": "audio",
+      "live": "audio",
+      "melody": "midi",
+      "pad": "audio"
+    },
+    "stacks": [],
+    "trackMixers": {
+      "main": "00000000-0000-4000-8000-000000000001"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 8,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": {
+    "doc": {
+      "name": "video.k7",
+      "viewport": [
+        1280,
+        720
+      ],
+      "fps": 30,
+      "videoTracks": [
+        {
+          "id": "main",
+          "name": "main",
+          "color": "",
+          "mute": false,
+          "solo": false,
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 720,
+          "clips": [
+            {
+              "id": "sample",
+              "name": "sample",
+              "source": "<ws>/shapes/video.k7/clips/sample.mp4",
+              "start": 0,
+              "length": 6,
+              "sourceFrom": 0
+            }
+          ],
+          "shapes": [],
+          "plugins": [
+            {
+              "id": "main:0",
+              "type": "shader",
+              "name": "00000000-0000-4000-8000-000000000001",
+              "enabled": true,
+              "params": {
+                "P1": 1,
+                "P2": 1,
+                "P3": 1,
+                "P4": 0
+              },
+              "shader": {
+                "name": "video-mixer",
+                "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+                "fragment": "#version 300 es\n// \"video-mixer\" — a lane's channels scaled and its alpha thinned: the strip a picture lane is mixed with.\n// The compositor blends straight alpha (SRC_ALPHA, ONE_MINUS_SRC_ALPHA), so transparency touches alpha alone.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;\nuniform float uP1; // red\nuniform float uP2; // green\nuniform float uP3; // blue\nuniform float uP4; // transparency\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 src = texture(uTex, vUV);\n  outColor = vec4(src.rgb * vec3(uP1, uP2, uP3), src.a * (1.0 - uP4));\n}\n"
+              }
+            }
+          ]
+        }
+      ],
+      "markers": [],
+      "framePlugins": [],
+      "sound": "mix",
+      "transitions": {},
+      "stretches": {},
+      "warnings": []
+    },
+    "errors": {
+      "errors": [],
+      "diagnostics": []
+    }
+  }
+}

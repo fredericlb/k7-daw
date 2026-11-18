@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+/* Shared design tokens (palette + radii) of the studio's apps. */
+@import "@studio/ui/theme.css";
+
+/* @studio/ui is consumed as source OUTSIDE this app tree, so Tailwind v4 must be
+   told to scan it to generate the component utility classes. Four levels up to the repo
+   root, then packages/ui/src. Tailwind ignores a @source path that doesn't exist WITHOUT
+   warning, so getting this wrong silently drops every design-system class that the app's
+   own source doesn't also happen to use — the component still renders, just unstyled. */
+@source "../../../../packages/ui/src";
+
+/* studio's OWN shared tier, for exactly the same reason: `packages/*` is consumed as source,
+   outside this app tree, so its classes exist only if scanned. It bites quietly — what a
+   package shares with the app (`flex`, `border-t`) is generated anyway, so only the classes
+   unique to the package are dropped and the component looks almost right. `h-[30%]` on the
+   module builder's bottom panes was the first to actually depend on one. */
+@source "../../../../packages/ui-user-menu/src";
+@source "../../../../packages/ui-mini-player/src";
+@source "../../../../packages/ui-module-builder/src";
+@source "../../../../packages/ui-chains-react/src";
+@source "../../../../packages/ui-editor/src";
+@source "../../../../packages/ui-eyes/src";
+@source "../../../../packages/ui-waveform/src";
+/* k7's builtin plugins, the desk and the viewport: `fill-muted` on a knob is written only there, and without it the knob draws invisible. */
+@source "../../../../packages/k7-plugins/src";
+/* The GATE and the toasts. Every screen you see before the shell — cloning a repository, a
+   workspace that will not open — is drawn from here, which is the worst place to be unstyled:
+   it is what somebody sees when something has already gone wrong. Same omission, found by
+   checking every package that renders JSX against this list rather than one at a time. */
+@source "../../../../packages/project-shell/src";
+/* The recorder's screens. */
+@source "../../../../packages/recorder/src";
+
+/* The sidebar's WIDE step: a landscape screen from 640, or any screen wider than a tablet held upright. */
+@custom-variant wide {
+  @media (min-width: 1025px), (min-width: 640px) and (orientation: landscape) {
+    @slot;
+  }
+}
+
+/* @studio/ui-waveform's own stylesheet colours its wrapper from --surface and --border, which is
+   what k7 — its first host — calls them; the shared palette prefixes everything `--sh-`, so the two
+   are bound here rather than hardcoded there. */
+:root {
+  --surface: var(--sh-card);
+  --border: var(--sh-border);
+}
+
+/* Bottom toasts sit above the project bar and the status line, never on the transport (project-shell toast.tsx). */
+:root {
+  --toast-bottom: 5.5rem;
+}
+
+/* A folded shell opens its Menu just above the bar, where bottom toasts would cover it: they go to the top (useIsMobile). */
+@media (max-width: 820px), (max-height: 520px) {
+  :root {
+    --toast-bottom: auto;
+    --toast-top: 1rem;
+  }
+}
+
+/* k7's own values over the shared palette, which phare keeps as it is (docs/shell.md):
+   - the accent as a FILL is a deep plum under white type; as TEXT it is `primary-text`, below;
+   - the ground and the card tinted toward indigo and plum, the ground near the splash's #07031F;
+   - a hover its own step above a panel, where `accent` and `muted` were the same grey. */
+:root {
+  --sh-primary: #2f132e;
+  --sh-primary-hover: #3f1a3d;
+  --sh-background: #04030f;
+  --sh-card: #22132f;
+  --sh-accent: #2c2d36;
+}
+
+/* One colour per MEANING across every view of a song, canvas included (it reads these variables):
+   the playhead, the three lane states, the meter's three zones. `static`, so each variable exists
+   even where no class names it. The series palette for takes, slices and cues is
+   @studio/song-schema's seriesColors.ts, since a canvas and an SVG draw it too. */
+@theme static {
+  --color-primary-text: #a78bfa;
+  --color-faint: #8a8a97;
+  --color-playhead: #f4f3f8;
+  --color-playhead-rec: #ff5468;
+  --color-mute: #f08a3c;
+  --color-solo: #f2c94c;
+  --color-arm: #ff5468;
+  --color-meter-ok: #3ddc97;
+  --color-meter-hot: #f2c94c;
+  --color-meter-clip: #ff5468;
+  /* What a cable carries, the graph's cables and ports reading them (packages/ui-chains-react/src/chainsCss.ts). */
+  --color-sig-midi: #5b9bd5;
+  --color-sig-audio: #d98b45;
+  --color-sig-video: #5fa871;
+  --color-sig-event: #a889b5;
+  /* The command bar waiting on its answers: an inset ring of the accent, breathing once a second. */
+  --animate-pending: pending 1s ease-in-out infinite;
+  @keyframes pending {
+    0%,
+    100% {
+      box-shadow: inset 0 0 0 2px var(--sh-primary);
+    }
+    50% {
+      box-shadow: inset 0 0 0 2px
+        color-mix(in srgb, var(--sh-primary) 30%, transparent);
+    }
+  }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    color-scheme: dark;
+    /* A pane's scroll no longer preventDefaults a two-finger slide — that slide IS the pan now
+       (usePanZoom.ts). A pane that has hit its end must not hand the rest to the page, which on
+       a Mac answers with a rubber-band bounce of the whole shell. */
+    overscroll-behavior: none;
+  }
+  body {
+    background: var(--sh-background);
+    color: var(--sh-foreground);
+  }
+  /* A keyboard user must see where focus is: one ring for every focusable thing, at zero
+     specificity so a component's own focus-visible style still wins (docs/shell.md). */
+  :where(button, [role="button"], [role="option"], a, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}

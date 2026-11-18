@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# regen-vectors.sh <slot> — regenerates the test vectors check-vectors.sh regenerates (k7x, host), then runs the Rust replays that read them.
+# Exit 0: regenerated and every replay passed (files left changed, not committed). Exit 1: a generator or replay failed, files restored, the failing step named.
+# What a reader gets wrong: the generators run with the same cwd and absolute paths as check-vectors.sh. K7_GENERATE and K7_REPLAYS override the two stages (tests).
+set -euo pipefail
+root="$(cd "$(dirname "$0")/../.." && pwd)"
+slot="${1:-0}"
+cd "$root"
+paths=(packages/k7x/rust/tests/vectors/ apps/k7/backend-rs/crates/k7-mediatek/tests/vectors/)
+restore() { git checkout HEAD -- "${paths[@]}"; git clean -fdq -- "${paths[@]}"; }
+fail() { echo "regen-vectors: $* failed; vectors restored" >&2; restore; exit 1; }
+generate() {
+  npx tsx "$PWD/packages/k7x/scripts/makeEditVectors.mts" > /dev/null || return 1
+  (cd packages/commands && npx tsx "$PWD/scripts/makeHostVectors.mts" > /dev/null) || return 1
+}
+if [ -n "${K7_GENERATE:-}" ]; then eval "$K7_GENERATE" || fail "the generators"; else generate || fail "the generators"; fi
+if [ -n "${K7_REPLAYS:-}" ]; then eval "$K7_REPLAYS" || fail "a replay"; exit 0; fi
+eval "$(node engine/scripts/sccache.mjs agent --export)"
+td="$HOME/.cache/k7-$slot"
+run() { local name="$1"; shift; echo "regen-vectors: replay $name"; bash scripts/agent/throttle.sh "$@" || fail "replay $name"; }
+run "song-edit cargo test" cargo test --manifest-path packages/song-edit/rust/Cargo.toml --target-dir "$td" --
+run "k7x edit_vectors" cargo test --manifest-path packages/k7x/rust/Cargo.toml --target-dir "$td" --test edit_vectors --
+run "k7-mediatek host vectors" cargo test --manifest-path apps/k7/backend-rs/Cargo.toml -p k7-mediatek --target-dir "$td" --test all -- vectors

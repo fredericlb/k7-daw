@@ -1,0 +1,81 @@
+// PanelClose.tsx — the bottom panel's ✕, at its top left. A view with a toolbar column of its own
+// (`ModeStrip`) or a header row (`PanelCloseButton`) CLAIMS it and draws it as its first item; with no
+// claim the frame floats it over the panel's corner. The thing a reader would get wrong: the claim is
+// counted at mount, so the panel never shows two ✕ and never none, whichever view it holds. See docs/shell.md.
+
+import { X } from "@studio/ui/icons";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
+import { m } from "../paraglide/messages.js";
+
+interface PanelCloseApi {
+  close: () => void;
+  /** A toolbar takes the ✕; the function returned gives it back. */
+  claim: () => () => void;
+}
+
+const Ctx = createContext<PanelCloseApi | null>(null);
+
+/** The ✕ for a toolbar inside a bottom panel, claimed for as long as the toolbar is mounted — null anywhere else. */
+export function usePanelClose(): (() => void) | null {
+  const api = useContext(Ctx);
+  useLayoutEffect(() => api?.claim(), [api]);
+  return api?.close ?? null;
+}
+
+/** The ✕ as a header row's first item, so it never floats over the title; nothing outside a bottom panel. */
+export function PanelCloseButton() {
+  const close = usePanelClose();
+  if (!close) return null;
+  return (
+    <button
+      type="button"
+      onClick={close}
+      title={m["panel.closeHint"]()}
+      aria-label={m["panel.close"]()}
+      className="-my-0.5 -ml-1 flex h-5 w-5 shrink-0 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground"
+    >
+      <X className="h-3.5 w-3.5" />
+    </button>
+  );
+}
+
+/** Whether this is drawn inside a bottom panel — a view that shows its toolbar only on demand shows it there, to carry the ✕. */
+export const usePanelInside = (): boolean => useContext(Ctx) !== null;
+
+export function PanelCloseFrame({
+  onClose,
+  children,
+}: {
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  const [claims, setClaims] = useState(0);
+  const claim = useCallback(() => {
+    setClaims((n) => n + 1);
+    return () => setClaims((n) => n - 1);
+  }, []);
+  const api = useMemo(() => ({ close: onClose, claim }), [onClose, claim]);
+  return (
+    <Ctx.Provider value={api}>
+      {children}
+      {claims === 0 && (
+        <button
+          type="button"
+          onClick={onClose}
+          title={m["panel.closeHint"]()}
+          aria-label={m["panel.close"]()}
+          className="absolute top-1 left-1 z-20 flex h-6 w-6 items-center justify-center rounded border border-border bg-popover/90 text-muted-foreground shadow-sm hover:text-foreground"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      )}
+    </Ctx.Provider>
+  );
+}

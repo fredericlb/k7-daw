@@ -1,0 +1,141 @@
+// WaveformWidget.tsx — a live min/max envelope on a canvas, off a tap the engine inserts on demand.
+// Painted off refs fed by a raw store subscription, never by React state, so a 30 Hz
+// frame re-renders nothing — docs/waveformWidget.md.
+
+import type { WaveformEnvelope } from "@studio/engine-browser";
+import { useEngineStoreOrNull } from "@studio/engine-browser/store";
+import type { WebWidget } from "@studio/graph-model";
+import type { GraphNode } from "@studio/ui-chains/graph";
+import { useEffect, useRef } from "react";
+import { NOOP } from "../chainsStores";
+import { startPaintLoop } from "../paintLoop";
+
+// Module-level so "no envelope" is one identity: a fresh [] per read would look like a change every frame.
+const NO_ENVELOPE: WaveformEnvelope[] = [];
+// A waveform widget: a real-time min/max envelope on a <canvas>, off the frame's waveform map for this module.
+export function WaveformWidget({
+  n,
+  w,
+  style,
+  onWatch,
+}: {
+  n: GraphNode;
+  w: WebWidget;
+  style: React.CSSProperties;
+  /** Ask the engine to tap this module (or stop). Without it nothing is ever captured. */
+  onWatch?: (pluginId: string, side: "input" | "output", on: boolean) => void;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Where to listen: this node's own plugin, or the tap it names — docs/waveformWidget.md.
+  const tap = n.tap ?? (n.pluginId ? { id: n.pluginId, side: w.source } : null);
+  // The waveform key is pluginId:side (e.g. "chain:module:output").
+  const key = tap?.id && tap.side ? `${tap.id}:${tap.side}` : null;
+
+  // The envelope reaches the canvas through a REF off a RAW subscription — docs/waveformWidget.md.
+  const store = useEngineStoreOrNull();
+  const envelopeRef = useRef<WaveformEnvelope[]>(NO_ENVELOPE);
+  const dirtyRef = useRef(true);
+  // Set by the draw effect; the subscription below pokes it to restart a stopped loop.
+  const wakeRef = useRef<() => void>(NOOP);
+
+  useEffect(() => {
+    if (!store || !key) return;
+    // Read on subscribe too, so a widget repointed between two frames drops the previous picture.
+    const read = (): void => {
+      const env = store.getSnapshot().waveform[key] ?? NO_ENVELOPE;
+      if (env === envelopeRef.current) return;
+      // A module with no tap sends nothing, and empty-after-empty is not a repaint.
+      if (env.length === 0 && envelopeRef.current.length === 0) return;
+      envelopeRef.current = env;
+      dirtyRef.current = true;
+      wakeRef.current();
+    };
+    read();
+    return store.subscribe(read);
+  }, [store, key]);
+
+  // The tap costs the ENGINE a plugin, so it lives with this widget — docs/waveformWidget.md.
+  const id = tap?.id;
+  const side = tap?.side === "input" ? "input" : "output";
+  useEffect(() => {
+    if (!id || !onWatch) return;
+    onWatch(id, side, true);
+    return () => onWatch(id, side, false);
+  }, [id, side, onWatch]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let appliedDpr = 0;
+
+    const paint = (W: number, H: number): void => {
+      const dpr = window.devicePixelRatio || 1;
+      if (
+        appliedDpr !== dpr ||
+        canvas.width !== W * dpr ||
+        canvas.height !== H * dpr
+      ) {
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        // setTransform, not scale: resizing resets the matrix, so scale() would compound.
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        appliedDpr = dpr;
+      }
+      ctx.clearRect(0, 0, W, H);
+      const env = envelopeRef.current;
+      const mid = H / 2;
+      if (env.length === 0) {
+        // No data — draw a flat center line.
+        ctx.strokeStyle = "rgba(200,160,106,0.25)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, mid);
+        ctx.lineTo(W, mid);
+        ctx.stroke();
+        return;
+      }
+      // Fill envelope: min..max → top..bottom (Y axis: 0 = top, H = bottom).
+      ctx.fillStyle = "rgba(200,160,106,0.15)";
+      ctx.beginPath();
+      const step = W / Math.max(1, env.length - 1);
+      // Top edge (max → upward from mid)
+      for (let i = 0; i < env.length; i++) {
+        const x = i * step;
+        const y = mid - env[i].max * mid;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      // Bottom edge (min → downward from mid, reversed)
+      for (let i = env.length - 1; i >= 0; i--) {
+        const x = i * step;
+        const y = mid - env[i].min * mid;
+        ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+      // Center line (zero crossing)
+      ctx.strokeStyle = "rgba(200,160,106,0.35)";
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(0, mid);
+      ctx.lineTo(W, mid);
+      ctx.stroke();
+    };
+
+    // Started by an envelope, stopped by stillness: a silent module schedules no frames at all.
+    const loop = startPaintLoop(canvas, dirtyRef, wakeRef, paint);
+    return loop.stop;
+  }, []);
+
+  return (
+    <div className="dgx-w dgx-wave" style={style}>
+      <canvas
+        ref={canvasRef}
+        style={{ width: "100%", height: "100%", display: "block" }}
+      />
+    </div>
+  );
+}

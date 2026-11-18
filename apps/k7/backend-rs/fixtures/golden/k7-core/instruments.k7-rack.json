@@ -1,0 +1,2201 @@
+{
+  "project": "k7-core/instruments.k7-rack.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.k7-rack",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.k7-rack.k7/clips",
+    "tracks": [
+      {
+        "id": "melody-big-rusty-drums",
+        "name": "melody-big-rusty-drums",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-big-rusty-drums:fx-big-rusty-drums",
+            "type": "SFZ Player",
+            "name": "fx-big-rusty-drums",
+            "path": "",
+            "sfzFile": "@instruments/big-rusty-drums/Programs/01-full.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-big-rusty-drums.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 6.4,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-naked-drums",
+        "name": "melody-naked-drums",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#d32222",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-naked-drums:fx-naked-drums",
+            "type": "SFZ Player",
+            "name": "fx-naked-drums",
+            "path": "",
+            "sfzFile": "@instruments/naked-drums/Wilkinson Audio/Naked Drums/User/Naked Drums GM.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-naked-drums.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 2.1,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-naked-drums-room",
+        "name": "melody-naked-drums-room",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#e0493e",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-naked-drums-room:fx-naked-drums-room",
+            "type": "SFZ Player",
+            "name": "fx-naked-drums-room",
+            "path": "",
+            "sfzFile": "@instruments/naked-drums/Wilkinson Audio/Naked Drums/Stereo/Naked Drums.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-naked-drums-room.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 2.1,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-retro-drumtraks",
+        "name": "melody-retro-drumtraks",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-retro-drumtraks:fx-retro-drumtraks",
+            "type": "SFZ Player",
+            "name": "fx-retro-drumtraks",
+            "path": "",
+            "sfzFile": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-retro-drumtraks.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 4.2,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#696f77",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody:fx",
+            "type": "SFZ Player",
+            "name": "fx",
+            "path": "",
+            "sfzFile": "@instruments/naked-drums/Wilkinson Audio/Naked Drums/User/Naked Drums GM.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 2.1,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-retro-casio-rz1",
+        "name": "melody-retro-casio-rz1",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#747a83",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-retro-casio-rz1:fx-retro-casio-rz1",
+            "type": "SFZ Player",
+            "name": "fx-retro-casio-rz1",
+            "path": "",
+            "sfzFile": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-retro-casio-rz1.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 3.1,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-retro-casio-sk1",
+        "name": "melody-retro-casio-sk1",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#7f848e",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-retro-casio-sk1:fx-retro-casio-sk1",
+            "type": "SFZ Player",
+            "name": "fx-retro-casio-sk1",
+            "path": "",
+            "sfzFile": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-retro-casio-sk1.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 2.4,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-retro-mfb-512",
+        "name": "melody-retro-mfb-512",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#8b8f98",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-retro-mfb-512:fx-retro-mfb-512",
+            "type": "SFZ Player",
+            "name": "fx-retro-mfb-512",
+            "path": "",
+            "sfzFile": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-retro-mfb-512.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 3.8,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-retro-roland-cr8000",
+        "name": "melody-retro-roland-cr8000",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#969aa2",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-retro-roland-cr8000:fx-retro-roland-cr8000",
+            "type": "SFZ Player",
+            "name": "fx-retro-roland-cr8000",
+            "path": "",
+            "sfzFile": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-retro-roland-cr8000.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 2.9,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-retro-yamaha-mr10",
+        "name": "melody-retro-yamaha-mr10",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#a2a5ad",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-retro-yamaha-mr10:fx-retro-yamaha-mr10",
+            "type": "SFZ Player",
+            "name": "fx-retro-yamaha-mr10",
+            "path": "",
+            "sfzFile": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+            "presetSave": "<ws>/k7-core/instruments.k7-rack.k7/nodes/fx-retro-yamaha-mr10.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 4.1,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-samples",
+        "name": "melody-samples",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#aeb0b7",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-samples:fx-samples",
+            "type": "sampler",
+            "name": "fx-samples",
+            "path": "",
+            "presetSave": "",
+            "role": "instrument",
+            "enabled": true,
+            "params": {},
+            "rack": []
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 36
+              },
+              {
+                "symbol": "SideStick",
+                "note": 37
+              },
+              {
+                "symbol": "Snare",
+                "note": 38
+              },
+              {
+                "symbol": "Snare2",
+                "note": 40
+              },
+              {
+                "symbol": "Tom5",
+                "note": 41
+              },
+              {
+                "symbol": "HatTight",
+                "note": 42
+              },
+              {
+                "symbol": "Tom4",
+                "note": 43
+              },
+              {
+                "symbol": "HatPedal",
+                "note": 44
+              },
+              {
+                "symbol": "Tom3",
+                "note": 45
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 46
+              },
+              {
+                "symbol": "Tom2",
+                "note": 47
+              },
+              {
+                "symbol": "Tom1",
+                "note": 48
+              },
+              {
+                "symbol": "Crash1",
+                "note": 49
+              },
+              {
+                "symbol": "RideBow",
+                "note": 51
+              },
+              {
+                "symbol": "China",
+                "note": 52
+              },
+              {
+                "symbol": "RideBell",
+                "note": 53
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 54
+              },
+              {
+                "symbol": "Splash",
+                "note": 55
+              },
+              {
+                "symbol": "HatHalf",
+                "note": 56
+              },
+              {
+                "symbol": "Crash2",
+                "note": 57
+              },
+              {
+                "symbol": "Crash1Bell",
+                "note": 58
+              },
+              {
+                "symbol": "Crash2Bell",
+                "note": 59
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "naked-drums",
+            "params": {
+              "sfz": "@instruments/naked-drums/Wilkinson Audio/Naked Drums/User/Naked Drums GM.sfz",
+              "Volume": 2.1
+            },
+            "pluginId": "melody:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-big-rusty-drums": {
+        "from": "melody-big-rusty-drums",
+        "use": [
+          {
+            "module": "fx-big-rusty-drums",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "KickOpen",
+                "note": 35
+              },
+              {
+                "symbol": "Kick",
+                "note": 36
+              },
+              {
+                "symbol": "SideStick",
+                "note": 37
+              },
+              {
+                "symbol": "Snare",
+                "note": 38
+              },
+              {
+                "symbol": "SnareEdge",
+                "note": 39
+              },
+              {
+                "symbol": "Rimshot",
+                "note": 40
+              },
+              {
+                "symbol": "Tom22",
+                "note": 41
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 42
+              },
+              {
+                "symbol": "Tom18",
+                "note": 43
+              },
+              {
+                "symbol": "HatPedal",
+                "note": 44
+              },
+              {
+                "symbol": "Tom15",
+                "note": 45
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 46
+              },
+              {
+                "symbol": "Tom14",
+                "note": 47
+              },
+              {
+                "symbol": "Crash",
+                "note": 49
+              },
+              {
+                "symbol": "RideBow",
+                "note": 51
+              },
+              {
+                "symbol": "RideCrash",
+                "note": 52
+              },
+              {
+                "symbol": "RideBell",
+                "note": 53
+              },
+              {
+                "symbol": "HatShank",
+                "note": 54
+              },
+              {
+                "symbol": "HatSplash",
+                "note": 56
+              },
+              {
+                "symbol": "China",
+                "note": 57
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "big-rusty-drums",
+            "params": {
+              "sfz": "@instruments/big-rusty-drums/Programs/01-full.sfz",
+              "Volume": 6.4
+            },
+            "pluginId": "melody-big-rusty-drums:fx-big-rusty-drums"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-naked-drums": {
+        "from": "melody-naked-drums",
+        "use": [
+          {
+            "module": "fx-naked-drums",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 36
+              },
+              {
+                "symbol": "SideStick",
+                "note": 37
+              },
+              {
+                "symbol": "Snare",
+                "note": 38
+              },
+              {
+                "symbol": "Snare2",
+                "note": 40
+              },
+              {
+                "symbol": "Tom5",
+                "note": 41
+              },
+              {
+                "symbol": "HatTight",
+                "note": 42
+              },
+              {
+                "symbol": "Tom4",
+                "note": 43
+              },
+              {
+                "symbol": "HatPedal",
+                "note": 44
+              },
+              {
+                "symbol": "Tom3",
+                "note": 45
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 46
+              },
+              {
+                "symbol": "Tom2",
+                "note": 47
+              },
+              {
+                "symbol": "Tom1",
+                "note": 48
+              },
+              {
+                "symbol": "Crash1",
+                "note": 49
+              },
+              {
+                "symbol": "RideBow",
+                "note": 51
+              },
+              {
+                "symbol": "China",
+                "note": 52
+              },
+              {
+                "symbol": "RideBell",
+                "note": 53
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 54
+              },
+              {
+                "symbol": "Splash",
+                "note": 55
+              },
+              {
+                "symbol": "HatHalf",
+                "note": 56
+              },
+              {
+                "symbol": "Crash2",
+                "note": 57
+              },
+              {
+                "symbol": "Crash1Bell",
+                "note": 58
+              },
+              {
+                "symbol": "Crash2Bell",
+                "note": 59
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "naked-drums",
+            "params": {
+              "sfz": "@instruments/naked-drums/Wilkinson Audio/Naked Drums/User/Naked Drums GM.sfz",
+              "Volume": 2.1
+            },
+            "pluginId": "melody-naked-drums:fx-naked-drums"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-naked-drums-room": {
+        "from": "melody-naked-drums-room",
+        "use": [
+          {
+            "module": "fx-naked-drums-room",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 36
+              },
+              {
+                "symbol": "SideStick",
+                "note": 37
+              },
+              {
+                "symbol": "Snare",
+                "note": 38
+              },
+              {
+                "symbol": "HatTight",
+                "note": 39
+              },
+              {
+                "symbol": "Snare2",
+                "note": 40
+              },
+              {
+                "symbol": "Tom5",
+                "note": 41
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 42
+              },
+              {
+                "symbol": "Tom4",
+                "note": 43
+              },
+              {
+                "symbol": "HatPedal",
+                "note": 44
+              },
+              {
+                "symbol": "Tom3",
+                "note": 45
+              },
+              {
+                "symbol": "HatHalf",
+                "note": 46
+              },
+              {
+                "symbol": "Tom2",
+                "note": 47
+              },
+              {
+                "symbol": "Tom1",
+                "note": 48
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 49
+              },
+              {
+                "symbol": "China1",
+                "note": 50
+              },
+              {
+                "symbol": "RideBow",
+                "note": 51
+              },
+              {
+                "symbol": "China2",
+                "note": 52
+              },
+              {
+                "symbol": "RideBell",
+                "note": 53
+              },
+              {
+                "symbol": "Splash1",
+                "note": 54
+              },
+              {
+                "symbol": "Crash1",
+                "note": 55
+              },
+              {
+                "symbol": "Splash2",
+                "note": 56
+              },
+              {
+                "symbol": "Crash2",
+                "note": 57
+              },
+              {
+                "symbol": "Crash1Bell",
+                "note": 58
+              },
+              {
+                "symbol": "Crash2Bell",
+                "note": 59
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "naked-drums-room",
+            "params": {
+              "sfz": "@instruments/naked-drums/Wilkinson Audio/Naked Drums/Stereo/Naked Drums.sfz",
+              "Volume": 2.1
+            },
+            "pluginId": "melody-naked-drums-room:fx-naked-drums-room"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-retro-casio-rz1": {
+        "from": "melody-retro-casio-rz1",
+        "use": [
+          {
+            "module": "fx-retro-casio-rz1",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 36
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 37
+              },
+              {
+                "symbol": "Snare",
+                "note": 38
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 39
+              },
+              {
+                "symbol": "Rimshot",
+                "note": 40
+              },
+              {
+                "symbol": "Tom3",
+                "note": 41
+              },
+              {
+                "symbol": "Ride",
+                "note": 42
+              },
+              {
+                "symbol": "Tom2",
+                "note": 43
+              },
+              {
+                "symbol": "Crash",
+                "note": 44
+              },
+              {
+                "symbol": "Tom1",
+                "note": 45
+              },
+              {
+                "symbol": "Cowbell",
+                "note": 46
+              },
+              {
+                "symbol": "Clap",
+                "note": 47
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "retro-casio-rz1",
+            "params": {
+              "sfz": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+              "Volume": 3.1
+            },
+            "pluginId": "melody-retro-casio-rz1:fx-retro-casio-rz1"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-retro-casio-sk1": {
+        "from": "melody-retro-casio-sk1",
+        "use": [
+          {
+            "module": "fx-retro-casio-sk1",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 24
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 25
+              },
+              {
+                "symbol": "Snare",
+                "note": 26
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 27
+              },
+              {
+                "symbol": "UnivoxSnare",
+                "note": 28
+              },
+              {
+                "symbol": "TomLow",
+                "note": 29
+              },
+              {
+                "symbol": "UnivoxHatOpen",
+                "note": 30
+              },
+              {
+                "symbol": "TomHigh",
+                "note": 31
+              },
+              {
+                "symbol": "ShortHat",
+                "note": 32
+              },
+              {
+                "symbol": "Kick2",
+                "note": 33
+              },
+              {
+                "symbol": "Crash",
+                "note": 34
+              },
+              {
+                "symbol": "ShortSnare",
+                "note": 35
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "retro-casio-sk1",
+            "params": {
+              "sfz": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+              "Volume": 2.4
+            },
+            "pluginId": "melody-retro-casio-sk1:fx-retro-casio-sk1"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-retro-drumtraks": {
+        "from": "melody-retro-drumtraks",
+        "use": [
+          {
+            "module": "fx-retro-drumtraks",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 48
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 49
+              },
+              {
+                "symbol": "Snare",
+                "note": 50
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 51
+              },
+              {
+                "symbol": "Rimshot",
+                "note": 52
+              },
+              {
+                "symbol": "Tom2",
+                "note": 53
+              },
+              {
+                "symbol": "Ride",
+                "note": 54
+              },
+              {
+                "symbol": "Tom1",
+                "note": 55
+              },
+              {
+                "symbol": "Crash",
+                "note": 56
+              },
+              {
+                "symbol": "Cowbell",
+                "note": 57
+              },
+              {
+                "symbol": "Tambourine",
+                "note": 58
+              },
+              {
+                "symbol": "Clap",
+                "note": 59
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "retro-drumtraks",
+            "params": {
+              "sfz": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+              "Volume": 4.2
+            },
+            "pluginId": "melody-retro-drumtraks:fx-retro-drumtraks"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-retro-mfb-512": {
+        "from": "melody-retro-mfb-512",
+        "use": [
+          {
+            "module": "fx-retro-mfb-512",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 84
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 85
+              },
+              {
+                "symbol": "Snare",
+                "note": 86
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 87
+              },
+              {
+                "symbol": "TomLow",
+                "note": 89
+              },
+              {
+                "symbol": "Cymbal",
+                "note": 90
+              },
+              {
+                "symbol": "TomMid",
+                "note": 91
+              },
+              {
+                "symbol": "TomHigh",
+                "note": 93
+              },
+              {
+                "symbol": "Clap",
+                "note": 95
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "retro-mfb-512",
+            "params": {
+              "sfz": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+              "Volume": 3.8
+            },
+            "pluginId": "melody-retro-mfb-512:fx-retro-mfb-512"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-retro-roland-cr8000": {
+        "from": "melody-retro-roland-cr8000",
+        "use": [
+          {
+            "module": "fx-retro-roland-cr8000",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 72
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 73
+              },
+              {
+                "symbol": "Snare",
+                "note": 74
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 75
+              },
+              {
+                "symbol": "Rimshot",
+                "note": 76
+              },
+              {
+                "symbol": "TomLow",
+                "note": 77
+              },
+              {
+                "symbol": "Cymbal",
+                "note": 78
+              },
+              {
+                "symbol": "TomHigh",
+                "note": 79
+              },
+              {
+                "symbol": "Claves",
+                "note": 80
+              },
+              {
+                "symbol": "CongaLow",
+                "note": 81
+              },
+              {
+                "symbol": "Cabasa",
+                "note": 82
+              },
+              {
+                "symbol": "CongaMid",
+                "note": 83
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "retro-roland-cr8000",
+            "params": {
+              "sfz": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+              "Volume": 2.9
+            },
+            "pluginId": "melody-retro-roland-cr8000:fx-retro-roland-cr8000"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-retro-yamaha-mr10": {
+        "from": "melody-retro-yamaha-mr10",
+        "use": [
+          {
+            "module": "fx-retro-yamaha-mr10",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "Kick",
+                "note": 60
+              },
+              {
+                "symbol": "HatClosed",
+                "note": 61
+              },
+              {
+                "symbol": "Snare",
+                "note": 62
+              },
+              {
+                "symbol": "HatOpen",
+                "note": 63
+              },
+              {
+                "symbol": "Brush",
+                "note": 64
+              },
+              {
+                "symbol": "TomLow",
+                "note": 65
+              },
+              {
+                "symbol": "Cymbal",
+                "note": 66
+              },
+              {
+                "symbol": "TomMid",
+                "note": 67
+              },
+              {
+                "symbol": "Shaker",
+                "note": 68
+              },
+              {
+                "symbol": "TomHigh",
+                "note": 69
+              },
+              {
+                "symbol": "Cowbell",
+                "note": 70
+              },
+              {
+                "symbol": "Clap",
+                "note": 71
+              }
+            ],
+            "rackKit": true,
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "retro-yamaha-mr10",
+            "params": {
+              "sfz": "@instruments/retro-drums/Tic Tok Men RetroDrums 1.sfz",
+              "Volume": 4.1
+            },
+            "pluginId": "melody-retro-yamaha-mr10:fx-retro-yamaha-mr10"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-samples": {
+        "from": "melody-samples",
+        "use": [
+          {
+            "module": "fx-samples",
+            "uses": "@k7-core/instruments/k7-rack",
+            "stage": [
+              "@output-volume"
+            ],
+            "assetChoices": [
+              "@k7-core/DubstepRiddim/DubstepRiddim_Crash_10.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Hihat_Open_03.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Hihat_Open_17.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Kick_19_G.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Percussion_09.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Percussion_17.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Ride_06.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Snare_14_G.wav",
+              "@k7-core/Leviathan4/Leviathan4_Clap_Snare_Layer_02.wav",
+              "@k7-core/Leviathan4/Leviathan4_Kick_C#_03.wav",
+              "@k7-core/Leviathan4/Leviathan4_Snare_Layered_B_01.wav",
+              "@k7-core/Leviathan4/Leviathan4_Snare_Tight_C#_02.wav",
+              "@k7-core/Leviathan4/PsyTrance_Hihat_Closed_05.wav",
+              "@k7-core/Leviathan4/PsyTrance_Hihat_Open_04.wav",
+              "@k7-core/acoustic_real_drum/RD_C_1.wav",
+              "@k7-core/acoustic_real_drum/RD_C_C_1.wav",
+              "@k7-core/acoustic_real_drum/RD_C_HH_1.wav",
+              "@k7-core/acoustic_real_drum/RD_C_HH_10.wav",
+              "@k7-core/acoustic_real_drum/RD_C_R_1.wav",
+              "@k7-core/acoustic_real_drum/RD_K_1.wav",
+              "@k7-core/acoustic_real_drum/RD_P_BB_1.wav",
+              "@k7-core/acoustic_real_drum/RD_P_C_1.wav",
+              "@k7-core/acoustic_real_drum/RD_P_ES_1.wav",
+              "@k7-core/acoustic_real_drum/RD_P_SH_1.wav",
+              "@k7-core/acoustic_real_drum/RD_S_1.wav",
+              "@k7-core/acoustic_real_drum/RD_T_FT_1.wav",
+              "@k7-core/acoustic_real_drum/RD_T_HT_1.wav",
+              "@k7-core/acoustic_real_drum/RD_T_MT_1.wav",
+              "@k7-core/drum_1/BD.wav",
+              "@k7-core/drum_1/HH.wav",
+              "@k7-core/drum_1/RS.wav",
+              "@k7-core/drum_1/SN.wav",
+              "@k7-core/drum_1/SN2.wav",
+              "@k7-core/drum_2/BD.wav",
+              "@k7-core/drum_2/CH.wav",
+              "@k7-core/drum_2/OH.wav",
+              "@k7-core/drum_2/SN.wav",
+              "@k7-core/naked_drums/China.wav",
+              "@k7-core/naked_drums/Crash1.wav",
+              "@k7-core/naked_drums/Crash1Bell.wav",
+              "@k7-core/naked_drums/Crash2.wav",
+              "@k7-core/naked_drums/Crash2Bell.wav",
+              "@k7-core/naked_drums/HatClosed.wav",
+              "@k7-core/naked_drums/HatHalf.wav",
+              "@k7-core/naked_drums/HatOpen.wav",
+              "@k7-core/naked_drums/HatPedal.wav",
+              "@k7-core/naked_drums/HatTight.wav",
+              "@k7-core/naked_drums/Kick.wav",
+              "@k7-core/naked_drums/RideBell.wav",
+              "@k7-core/naked_drums/RideBow.wav",
+              "@k7-core/naked_drums/SideStick.wav",
+              "@k7-core/naked_drums/Snare.wav",
+              "@k7-core/naked_drums/Snare2.wav",
+              "@k7-core/naked_drums/Splash.wav",
+              "@k7-core/naked_drums/Tom1.wav",
+              "@k7-core/naked_drums/Tom2.wav",
+              "@k7-core/naked_drums/Tom3.wav",
+              "@k7-core/naked_drums/Tom4.wav",
+              "@k7-core/naked_drums/Tom5.wav"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [],
+            "engines": [
+              "big-rusty-drums",
+              "naked-drums",
+              "naked-drums-room",
+              "retro-casio-rz1",
+              "retro-casio-sk1",
+              "retro-drumtraks",
+              "retro-mfb-512",
+              "retro-roland-cr8000",
+              "retro-yamaha-mr10",
+              "samples"
+            ],
+            "engine": "samples",
+            "params": {},
+            "pluginId": "melody-samples:fx-samples"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody",
+      "melody-big-rusty-drums",
+      "melody-naked-drums",
+      "melody-naked-drums-room",
+      "melody-retro-casio-rz1",
+      "melody-retro-casio-sk1",
+      "melody-retro-drumtraks",
+      "melody-retro-mfb-512",
+      "melody-retro-roland-cr8000",
+      "melody-retro-yamaha-mr10",
+      "melody-samples"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#696f77",
+      "melody-big-rusty-drums": "#af1d26",
+      "melody-naked-drums": "#d32222",
+      "melody-naked-drums-room": "#e0493e",
+      "melody-retro-casio-rz1": "#747a83",
+      "melody-retro-casio-sk1": "#7f848e",
+      "melody-retro-drumtraks": "#e57361",
+      "melody-retro-mfb-512": "#8b8f98",
+      "melody-retro-roland-cr8000": "#969aa2",
+      "melody-retro-yamaha-mr10": "#a2a5ad",
+      "melody-samples": "#aeb0b7"
+    },
+    "trackSignals": {
+      "melody": "midi",
+      "melody-big-rusty-drums": "midi",
+      "melody-naked-drums": "midi",
+      "melody-naked-drums-room": "midi",
+      "melody-retro-casio-rz1": "midi",
+      "melody-retro-casio-sk1": "midi",
+      "melody-retro-drumtraks": "midi",
+      "melody-retro-mfb-512": "midi",
+      "melody-retro-roland-cr8000": "midi",
+      "melody-retro-yamaha-mr10": "midi",
+      "melody-samples": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-big-rusty-drums": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-naked-drums": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-naked-drums-room": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-retro-casio-rz1": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-retro-casio-sk1": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-retro-drumtraks": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-retro-mfb-512": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-retro-roland-cr8000": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-retro-yamaha-mr10": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-samples": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

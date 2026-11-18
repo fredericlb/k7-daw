@@ -1,0 +1,6 @@
+start(true)
+steps([
+  id("00000000-0000-4000-8000-000000000006").track("pad"),
+  id("00000000-0000-4000-8000-000000000007").extends("@workspace/instruments/synth"),
+  to([chain("MIX")]),
+])

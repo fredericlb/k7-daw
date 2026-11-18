@@ -1,0 +1,346 @@
+{
+  "project": "demos/rack-demo.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "rack-demo",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/demos/rack-demo.k7/clips",
+    "tracks": [
+      {
+        "id": "beat",
+        "name": "beat",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "beat@0",
+            "type": "midi",
+            "name": "beat",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 0.25,
+                "key": 36,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 0.25,
+                "key": 36,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 0.25,
+                "key": 38,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3,
+                "duration": 0.25,
+                "key": 38,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 0,
+                "duration": 0.25,
+                "key": 42,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 0.5,
+                "duration": 0.25,
+                "key": 42,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 0.25,
+                "key": 42,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1.5,
+                "duration": 0.25,
+                "key": 42,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 0.25,
+                "key": 42,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2.5,
+                "duration": 0.25,
+                "key": 42,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3,
+                "duration": 0.25,
+                "key": 42,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3.5,
+                "duration": 0.25,
+                "key": 42,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "beat:kit",
+            "type": "sampler",
+            "name": "kit",
+            "path": "",
+            "presetSave": "",
+            "role": "instrument",
+            "enabled": true,
+            "params": {},
+            "rack": [
+              {
+                "symbol": "BD",
+                "note": 36,
+                "clip": "<ws>/demos/rack-demo.k7/samples/kick.wav",
+                "start": 0,
+                "length": 0
+              },
+              {
+                "symbol": "SN",
+                "note": 38,
+                "clip": "<ws>/demos/rack-demo.k7/samples/snare.wav",
+                "start": 0,
+                "length": 0
+              },
+              {
+                "symbol": "HH",
+                "note": 42,
+                "clip": "<ws>/demos/rack-demo.k7/samples/hat.wav",
+                "start": 0,
+                "length": 0
+              }
+            ]
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "beat": {
+        "from": "beat",
+        "use": [
+          {
+            "module": "kit",
+            "uses": "@workspace/instruments/drumrack",
+            "stage": [
+              "@output-volume"
+            ],
+            "assetChoices": [
+              "@project/hat.wav",
+              "@project/kick.wav",
+              "@project/snare.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Crash_10.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Hihat_Open_03.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Hihat_Open_17.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Kick_19_G.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Percussion_09.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Percussion_17.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Ride_06.wav",
+              "@k7-core/DubstepRiddim/DubstepRiddim_Snare_14_G.wav",
+              "@k7-core/Leviathan4/Leviathan4_Clap_Snare_Layer_02.wav",
+              "@k7-core/Leviathan4/Leviathan4_Kick_C#_03.wav",
+              "@k7-core/Leviathan4/Leviathan4_Snare_Layered_B_01.wav",
+              "@k7-core/Leviathan4/Leviathan4_Snare_Tight_C#_02.wav",
+              "@k7-core/Leviathan4/PsyTrance_Hihat_Closed_05.wav",
+              "@k7-core/Leviathan4/PsyTrance_Hihat_Open_04.wav",
+              "@k7-core/acoustic_real_drum/RD_C_1.wav",
+              "@k7-core/acoustic_real_drum/RD_C_C_1.wav",
+              "@k7-core/acoustic_real_drum/RD_C_HH_1.wav",
+              "@k7-core/acoustic_real_drum/RD_C_HH_10.wav",
+              "@k7-core/acoustic_real_drum/RD_C_R_1.wav",
+              "@k7-core/acoustic_real_drum/RD_K_1.wav",
+              "@k7-core/acoustic_real_drum/RD_P_BB_1.wav",
+              "@k7-core/acoustic_real_drum/RD_P_C_1.wav",
+              "@k7-core/acoustic_real_drum/RD_P_ES_1.wav",
+              "@k7-core/acoustic_real_drum/RD_P_SH_1.wav",
+              "@k7-core/acoustic_real_drum/RD_S_1.wav",
+              "@k7-core/acoustic_real_drum/RD_T_FT_1.wav",
+              "@k7-core/acoustic_real_drum/RD_T_HT_1.wav",
+              "@k7-core/acoustic_real_drum/RD_T_MT_1.wav",
+              "@k7-core/drum_1/BD.wav",
+              "@k7-core/drum_1/HH.wav",
+              "@k7-core/drum_1/RS.wav",
+              "@k7-core/drum_1/SN.wav",
+              "@k7-core/drum_1/SN2.wav",
+              "@k7-core/drum_2/BD.wav",
+              "@k7-core/drum_2/CH.wav",
+              "@k7-core/drum_2/OH.wav",
+              "@k7-core/drum_2/SN.wav",
+              "@k7-core/naked_drums/China.wav",
+              "@k7-core/naked_drums/Crash1.wav",
+              "@k7-core/naked_drums/Crash1Bell.wav",
+              "@k7-core/naked_drums/Crash2.wav",
+              "@k7-core/naked_drums/Crash2Bell.wav",
+              "@k7-core/naked_drums/HatClosed.wav",
+              "@k7-core/naked_drums/HatHalf.wav",
+              "@k7-core/naked_drums/HatOpen.wav",
+              "@k7-core/naked_drums/HatPedal.wav",
+              "@k7-core/naked_drums/HatTight.wav",
+              "@k7-core/naked_drums/Kick.wav",
+              "@k7-core/naked_drums/RideBell.wav",
+              "@k7-core/naked_drums/RideBow.wav",
+              "@k7-core/naked_drums/SideStick.wav",
+              "@k7-core/naked_drums/Snare.wav",
+              "@k7-core/naked_drums/Snare2.wav",
+              "@k7-core/naked_drums/Splash.wav",
+              "@k7-core/naked_drums/Tom1.wav",
+              "@k7-core/naked_drums/Tom2.wav",
+              "@k7-core/naked_drums/Tom3.wav",
+              "@k7-core/naked_drums/Tom4.wav",
+              "@k7-core/naked_drums/Tom5.wav"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "rack": [
+              {
+                "symbol": "BD",
+                "note": 36,
+                "sample": "@project/kick.wav",
+                "clip": "<ws>/demos/rack-demo.k7/samples/kick.wav"
+              },
+              {
+                "symbol": "SN",
+                "note": 38,
+                "sample": "@project/snare.wav",
+                "clip": "<ws>/demos/rack-demo.k7/samples/snare.wav"
+              },
+              {
+                "symbol": "HH",
+                "note": 42,
+                "sample": "@project/hat.wav",
+                "clip": "<ws>/demos/rack-demo.k7/samples/hat.wav"
+              }
+            ],
+            "params": {},
+            "pluginId": "beat:kit"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "beat"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "beat": "#dd322c"
+    },
+    "trackSignals": {
+      "beat": "midi"
+    },
+    "trackClips": {
+      "beat": [
+        {
+          "ref": "beat",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

@@ -1,0 +1,4 @@
+mp4parse is distributed under the Mozilla Public License, version 2.0, unmodified.
+Its source is at https://github.com/mozilla/mp4parse-rust (crate mp4parse 0.17).
+
+[The full text of MPL-2.0 is listed under the licences.]

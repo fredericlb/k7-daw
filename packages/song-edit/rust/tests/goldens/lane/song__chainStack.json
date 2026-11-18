@@ -1,0 +1,258 @@
+{
+ "module": "golden/song/chainStack",
+ "blobs": {
+  "64b5402366bf": "start(true)\nsteps([\n  id(\"lane-gtr\").track(\"gtr\"),\n  sub(\"amp\"),\n  id(\"amp-2\").extends(\"@k7-core/audio/amp\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"amp\")\n    .steps([id(\"amp-1\").extends(\"@k7-core/audio/amp\"), id(\"eq-1\").extends(\"@k7-core/audio/eq\")]),\n])\n",
+  "cd8b5c01f816": "project({ name: \"t\", tempo: 120 })\n",
+  "e64071e2e77d": "extends(\"@meta/track\")\nevents([])\n",
+  "9aa7db415fa3": "start(true)\nsteps([id(\"lane-gtr\").track(\"gtr\"), id(\"amp-1\").extends(\"@k7-core/audio/amp\"), id(\"amp-2\").extends(\"@k7-core/audio/amp\"), to([chain(\"MIX\")])])\n",
+  "5d5995951169": "steps([id(\"eq-1\").extends(\"@k7-core/audio/eq\")])\n",
+  "d91b2e1d2681": "steps([id(\"lim-1\").extends(\"@k7-core/audio/limiter\")])\n",
+  "3109101957eb": "steps([id(\"amp-3\").extends(\"@k7-core/audio/amp\")])\n",
+  "417164ccd1c9": "positions({\n  lim-1: { x: 3, y: 4 },\n})\n",
+  "2c115fcf853f": "positions({\n  eq-1: { x: 1, y: 2 },\n  lim-1: { x: 3, y: 4 },\n})\n",
+  "ef0b961ab0f3": "positions({\n  eq-1: { x: 1, y: 2 },\n})\n",
+  "a7d4f1a55511": "start(true)\nsteps([\n  id(\"lane-gtr\").track(\"gtr\"),\n  sub(\"amp\"),\n  id(\"amp-2\").extends(\"@k7-core/audio/amp\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"amp\")\n    .steps([\n      id(\"amp-1\").extends(\"@k7-core/audio/amp\"),\n      id(\"lim-1\").extends(\"@k7-core/audio/limiter\"),\n      id(\"eq-1\").extends(\"@k7-core/audio/eq\"),\n    ]),\n])\n",
+  "cee117b18b2c": "start(true)\nsteps([\n  id(\"lane-gtr\").track(\"gtr\"),\n  sub(\"amp\"),\n  id(\"amp-2\").extends(\"@k7-core/audio/amp\"),\n  to([chain(\"MIX\")]),\n])\nsubchains([\n  id(\"amp\")\n    .steps([\n      id(\"amp-1\").extends(\"@k7-core/audio/amp\"),\n      id(\"eq-1\").extends(\"@k7-core/audio/eq\"),\n      id(\"lim-1\").extends(\"@k7-core/audio/limiter\"),\n    ]),\n])\n",
+  "a6a6f4731582": "start(true)\nsteps([id(\"lane-gtr\").track(\"gtr\"), sub(\"amp\"), sub(\"amp-2\"), to([chain(\"MIX\")])])\nsubchains([\n  id(\"amp\")\n    .steps([id(\"amp-1\").extends(\"@k7-core/audio/amp\"), id(\"eq-1\").extends(\"@k7-core/audio/eq\")]),\n  id(\"amp-2\")\n    .steps([id(\"amp-2\").extends(\"@k7-core/audio/amp\"), id(\"amp-3\").extends(\"@k7-core/audio/amp\")]),\n])\n"
+ },
+ "trees": {
+  "0695f305bf15": {
+   "proj/project.k7x": "cd8b5c01f816",
+   "proj/tracks/gtr.k7x": "e64071e2e77d",
+   "proj/chains/gtr.k7x": "9aa7db415fa3",
+   "proj/chains/eq.k7x": "5d5995951169",
+   "proj/chains/lim.k7x": "d91b2e1d2681",
+   "proj/chains/amp.k7x": "3109101957eb"
+  },
+  "b9988d2d757e": {
+   "proj/project.k7x": "cd8b5c01f816",
+   "proj/tracks/gtr.k7x": "e64071e2e77d",
+   "proj/chains/gtr.k7x": "9aa7db415fa3",
+   "proj/chains/eq.k7x": "5d5995951169",
+   "proj/chains/lim.k7x": "d91b2e1d2681",
+   "proj/chains/amp.k7x": "3109101957eb",
+   "proj/layout.k7x": "2c115fcf853f"
+  },
+  "e09f467e8a1e": {
+   "proj/project.k7x": "cd8b5c01f816",
+   "proj/tracks/gtr.k7x": "e64071e2e77d",
+   "proj/chains/gtr.k7x": "9aa7db415fa3",
+   "proj/chains/eq.k7x": "5d5995951169",
+   "proj/chains/lim.k7x": "d91b2e1d2681",
+   "proj/chains/amp.k7x": "3109101957eb",
+   "proj/layout.k7x": "ef0b961ab0f3"
+  },
+  "8f33bfb7e955": {
+   "proj/chains/amp.k7x": "3109101957eb",
+   "proj/chains/gtr.k7x": "64b5402366bf",
+   "proj/chains/lim.k7x": "d91b2e1d2681",
+   "proj/project.k7x": "cd8b5c01f816",
+   "proj/tracks/gtr.k7x": "e64071e2e77d"
+  }
+ },
+ "vectors": [
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "amp-1",
+    "eq-1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "chains/gtr.k7x",
+    "chains/eq.k7x (removed)"
+   ],
+   "changed": {
+    "proj/chains/gtr.k7x": "64b5402366bf",
+    "proj/chains/eq.k7x": null
+   },
+   "tree": "0695f305bf15"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "gtr",
+    "eq-1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "'gtr' is a lane, a source: nothing stacks under it"
+   },
+   "changed": {},
+   "tree": "0695f305bf15"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "nope",
+    "eq-1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "no node 'nope' in this project"
+   },
+   "changed": {},
+   "tree": "0695f305bf15"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "amp-1",
+    "nope"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "no node 'nope' in this project"
+   },
+   "changed": {},
+   "tree": "0695f305bf15"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "amp-1",
+    "amp-2"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "'amp-2' is already wired — only a node `node new` just made can be stacked"
+   },
+   "changed": {},
+   "tree": "0695f305bf15"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "amp-1",
+    "amp-1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "'amp-1' is already wired — only a node `node new` just made can be stacked"
+   },
+   "changed": {},
+   "tree": "0695f305bf15"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "amp-1",
+    "eq-1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "chains/gtr.k7x",
+    "chains/eq.k7x (removed)",
+    "layout.k7x"
+   ],
+   "changed": {
+    "proj/chains/gtr.k7x": "64b5402366bf",
+    "proj/layout.k7x": "417164ccd1c9",
+    "proj/chains/eq.k7x": null
+   },
+   "tree": "b9988d2d757e"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "amp-1",
+    "eq-1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "chains/gtr.k7x",
+    "chains/eq.k7x (removed)",
+    "layout.k7x"
+   ],
+   "changed": {
+    "proj/chains/gtr.k7x": "64b5402366bf",
+    "proj/chains/eq.k7x": null,
+    "proj/layout.k7x": null
+   },
+   "tree": "e09f467e8a1e"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "amp-1",
+    "lim-1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "chains/gtr.k7x",
+    "chains/lim.k7x (removed)"
+   ],
+   "changed": {
+    "proj/chains/gtr.k7x": "a7d4f1a55511",
+    "proj/chains/lim.k7x": null
+   },
+   "tree": "8f33bfb7e955"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "eq-1",
+    "lim-1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "chains/gtr.k7x",
+    "chains/lim.k7x (removed)"
+   ],
+   "changed": {
+    "proj/chains/gtr.k7x": "cee117b18b2c",
+    "proj/chains/lim.k7x": null
+   },
+   "tree": "8f33bfb7e955"
+  },
+  {
+   "fn": "stackChainNode",
+   "args": [
+    "$DIR/proj",
+    "amp-2",
+    "amp-3"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "chains/gtr.k7x",
+    "chains/amp.k7x (removed)"
+   ],
+   "changed": {
+    "proj/chains/gtr.k7x": "a6a6f4731582",
+    "proj/chains/amp.k7x": null
+   },
+   "tree": "8f33bfb7e955"
+  }
+ ]
+}

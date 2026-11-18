@@ -1,0 +1,97 @@
+// camera.ts — opening a LIVE lens for a layer that names one. The matching is a pure function and
+// is the half worth testing: a project says which camera by the LABEL a person reads, because a
+// deviceId is salted per browser and per origin and one written into a committed file names
+// nothing on the next machine. See packages/song/docs/camera.md.
+
+/** The little of a `MediaDeviceInfo` this needs — declared structurally, so a test needs no DOM. */
+export interface CameraDevice {
+  deviceId: string;
+  kind: string;
+  label: string;
+}
+
+/** What matching a label answered, and WHY — a fallback that says nothing reads as a broken app. */
+export interface CameraMatch {
+  /** The device to open, or null to let the browser pick — which is also what "" asks for. */
+  deviceId: string | null;
+  /** Absent when the label was found, or when none was asked for. */
+  problem?: string;
+}
+
+/** Which camera a layer's label names, among the devices this machine has.
+ *
+ * Exact first, then case-insensitively, then a containment either way: a browser dresses a label up
+ * (`"Logitech BRIO (046d:085e)"`), and a person writing one down does not copy the ids. Nothing is
+ * REFUSED — a lens that is not here falls back to the default and says so, because a project that
+ * travels to a second machine has to draw something. */
+export function matchCamera(
+  label: string,
+  devices: readonly CameraDevice[],
+): CameraMatch {
+  const cams = devices.filter((d) => d.kind === "videoinput");
+  // "" is not "no camera": it is "whichever this machine calls default" — the ordinary state.
+  if (!label) return { deviceId: null };
+  if (!cams.length)
+    return { deviceId: null, problem: "this machine reports no camera at all" };
+  const want = label.trim().toLowerCase();
+  const hit =
+    cams.find((d) => d.label === label) ??
+    cams.find((d) => d.label.trim().toLowerCase() === want) ??
+    cams.find((d) => d.label.toLowerCase().includes(want)) ??
+    cams.find((d) => want.includes(d.label.trim().toLowerCase()) && !!d.label);
+  if (hit) return { deviceId: hit.deviceId };
+  return {
+    deviceId: null,
+    // The names it DOES have: without them the sentence cannot be acted on.
+    problem:
+      `no camera called "${label}" on this machine — using the default one ` +
+      `(it has: ${cams.map((d) => d.label || "an unnamed camera").join(", ")})`,
+  };
+}
+
+/** The constraint a match becomes. `exact` deliberately NOT used: an id that has rotated since the
+ *  page was last open would then fail outright rather than fall back to a picture. */
+export const cameraConstraint = (m: CameraMatch): MediaStreamConstraints => ({
+  video: m.deviceId ? { deviceId: m.deviceId } : true,
+  audio: false,
+});
+
+/** An opened lens, or the sentence saying why there is none — never a throw, see `openLens`. */
+export interface Lens {
+  stream: MediaStream | null;
+  problem: string | null;
+  /** Let go of what carries the picture beyond its tracks — a remote lens's peer connection and socket. */
+  close?: () => void;
+  /** How late its picture is, in ms, as last measured — a remote lens only; absent or null is "about none". */
+  latencyMs?: () => number | null;
+}
+
+/** Let a lens go: its tracks stopped, then whatever carries them closed — a lens left running keeps the camera lit. */
+export function releaseLens(lens: Pick<Lens, "stream" | "close">): void {
+  for (const track of lens.stream?.getTracks() ?? []) track.stop();
+  lens.close?.();
+}
+
+/** How a live lane gets its picture. Injected, because the browser that DRAWS a surface is not
+ *  always the one that may open a camera: over the LAN a tablet has no secure context, so its
+ *  lens arrives over a peer connection instead. See packages/song/docs/camera.md. */
+export type LensOpener = (label: string) => Promise<Lens>;
+
+/** This browser's own camera — the ordinary opener, and the only one on the machine itself. */
+export const localLens: LensOpener = async (label) => {
+  const media = globalThis.navigator?.mediaDevices;
+  if (!media?.getUserMedia)
+    return { stream: null, problem: "this browser offers no camera" };
+  try {
+    // Enumerated FIRST, so a named lens is matched before anything is opened (docs/camera.md).
+    const devices = await media.enumerateDevices();
+    const match = matchCamera(label, devices);
+    const stream = await media.getUserMedia(cameraConstraint(match));
+    return { stream, problem: match.problem ?? null };
+  } catch (e) {
+    return {
+      stream: null,
+      problem: `camera unavailable: ${(e as Error).message}`,
+    };
+  }
+};

@@ -1,0 +1,52 @@
+{
+  "name": "@studio/engine-browser",
+  "version": "0.3.4",
+  "type": "module",
+  "files": [
+    "src",
+    "!src/**/*.test.ts",
+    "!src/**/*.test.tsx",
+    "docs"
+  ],
+  "description": "The browser's WebSocket link to the C++ engine, and the React store over its ~20 Hz state push. The counterpart of @studio/engine-client (Node) — and the only browser implementation there is, deliberately.",
+  "types": "./src/engine.ts",
+  "exports": {
+    ".": "./src/engine.ts",
+    "./access": "./src/access.ts",
+    "./store": "./src/engineStore.ts",
+    "./meter": "./src/meter.ts",
+    "./params": "./src/params.ts",
+    "./probe": "./src/probe.ts",
+    "./choose": "./src/choose.ts",
+    "./compat": "./src/compat.ts",
+    "./scan-watch": "./src/scanWatch.ts",
+    "./registry": "./src/registry.ts",
+    "./lease": "./src/lease.ts",
+    "./stream": "./src/streamPlayer.ts",
+    "./stream-sink": "./src/streamSink.ts",
+    "./engine-output": "./src/engineOutput.ts",
+    "./relook": "./src/relook.ts",
+    "./pairing": "./src/pairing.ts",
+    "./playhead-clock": "./src/playheadClock.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@studio/engine-tunnel": "*",
+    "node-datachannel": "^0.33.4",
+    "vitest": "^4.1.10",
+    "ws": "^8.18.0"
+  },
+  "dependencies": {
+    "@studio/engine-protocol": "^0.3.0",
+    "@studio/web-protocol": "^0.5.0"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

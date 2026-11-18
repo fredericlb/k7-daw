@@ -1,0 +1,29 @@
+[package]
+name = "k7-mediatek"
+description = "The media core the Rust front shares: the waveform module, the analysis and its sidecar, the decodes and transcodes, the video probe and the JavaScript spellings of its answers."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# A capture's day and clock are the local wall clock's, as `getHours` reads it (src/ecma.rs).
+chrono.workspace = true
+# The envelope's validator is base64url, as Buffer spells it.
+base64.workspace = true
+# A part file's random name, as `randomUUID` draws it.
+getrandom.workspace = true
+k7-js.workspace = true
+# The compiled modules' cache files are named by the wasm's hash.
+sha2.workspace = true
+# The envelope's validator, a weak hash of its version (src/envelope_memo.rs).
+sha1.workspace = true
+serde_json.workspace = true
+# The video probe without ffprobe (src/video_read.rs): ISO family (MPL-2.0), Matroska and WebM (MIT).
+mp4parse.workspace = true
+matroska-demuxer.workspace = true
+wasmtime.workspace = true
+
+[build-dependencies]
+# The waveform module is committed as base64 in a TypeScript file (build.rs).
+base64.workspace = true
+

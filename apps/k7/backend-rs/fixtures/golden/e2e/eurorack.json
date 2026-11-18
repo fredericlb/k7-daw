@@ -1,0 +1,2786 @@
+{
+  "project": "e2e/eurorack.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "eurorack",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/e2e/eurorack.k7/clips",
+    "tracks": [
+      {
+        "id": "bass",
+        "name": "bass",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#935b34",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "bass@0",
+            "type": "midi",
+            "name": "bass",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 48,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 55,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 1,
+                "key": 60,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3,
+                "duration": 1,
+                "key": 55,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "bass:braids",
+            "type": "mu-braids",
+            "name": "braids",
+            "path": "",
+            "presetSave": "<ws>/e2e/eurorack.k7/nodes/braids.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "lead",
+        "name": "lead",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#6c31b9",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "lead@0",
+            "type": "midi",
+            "name": "lead",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 48,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 55,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 1,
+                "key": 60,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3,
+                "duration": 1,
+                "key": 55,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "lead:plaits",
+            "type": "mu-plaits",
+            "name": "plaits",
+            "path": "",
+            "presetSave": "<ws>/e2e/eurorack.k7/nodes/plaits.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          },
+          {
+            "id": "lead:grains",
+            "type": "mu-clouds",
+            "name": "grains",
+            "path": "",
+            "presetSave": "<ws>/e2e/eurorack.k7/nodes/grains.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "bells",
+        "name": "bells",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#c38ee1",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "bells@0",
+            "type": "midi",
+            "name": "bells",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 4,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 0,
+                "duration": 4,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 0,
+                "duration": 4,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "bells:rings",
+            "type": "mu-rings",
+            "name": "rings",
+            "path": "",
+            "presetSave": "<ws>/e2e/eurorack.k7/nodes/rings.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "lead": {
+        "from": "lead",
+        "use": [
+          {
+            "module": "plaits",
+            "uses": "@k7-core/instruments/synth/mu-macro-osc",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 14,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "OSC",
+                  "widgets": {
+                    "model": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "label": "Model",
+                      "bind": "Model",
+                      "options": [
+                        {
+                          "label": "VA + filter",
+                          "value": 0
+                        },
+                        {
+                          "label": "Phase distortion",
+                          "value": 1
+                        },
+                        {
+                          "label": "6-op FM 1",
+                          "value": 2
+                        },
+                        {
+                          "label": "6-op FM 2",
+                          "value": 3
+                        },
+                        {
+                          "label": "6-op FM 3",
+                          "value": 4
+                        },
+                        {
+                          "label": "Wave terrain",
+                          "value": 5
+                        },
+                        {
+                          "label": "String machine",
+                          "value": 6
+                        },
+                        {
+                          "label": "Chiptune",
+                          "value": 7
+                        },
+                        {
+                          "label": "Virtual analog",
+                          "value": 8
+                        },
+                        {
+                          "label": "Waveshaping",
+                          "value": 9
+                        },
+                        {
+                          "label": "2-op FM",
+                          "value": 10
+                        },
+                        {
+                          "label": "Granular formant",
+                          "value": 11
+                        },
+                        {
+                          "label": "Harmonic",
+                          "value": 12
+                        },
+                        {
+                          "label": "Wavetable",
+                          "value": 13
+                        },
+                        {
+                          "label": "Chords",
+                          "value": 14
+                        },
+                        {
+                          "label": "Speech",
+                          "value": 15
+                        },
+                        {
+                          "label": "Swarm",
+                          "value": 16
+                        },
+                        {
+                          "label": "Filtered noise",
+                          "value": 17
+                        },
+                        {
+                          "label": "Particle noise",
+                          "value": 18
+                        },
+                        {
+                          "label": "Inharmonic string",
+                          "value": 19
+                        },
+                        {
+                          "label": "Modal resonator",
+                          "value": 20
+                        },
+                        {
+                          "label": "Bass drum",
+                          "value": 21
+                        },
+                        {
+                          "label": "Snare drum",
+                          "value": 22
+                        },
+                        {
+                          "label": "Hi-hat",
+                          "value": 23
+                        }
+                      ]
+                    },
+                    "osc": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 6,
+                      "rowSpan": 3
+                    },
+                    "osc_group": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "OSC",
+                      "color": "#3d7dff26"
+                    },
+                    "harmonics": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Harm",
+                      "bind": "Harmonics",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "timbre": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "morph": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Morph",
+                      "bind": "Morph",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mod_group": {
+                      "type": "group",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "MOD",
+                      "color": "#ff3b3026"
+                    },
+                    "timbre_env": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "T.Env",
+                      "bind": "Timbre env",
+                      "min": -1,
+                      "max": 1
+                    },
+                    "morph_env": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "M.Env",
+                      "bind": "Morph env",
+                      "min": -1,
+                      "max": 1
+                    },
+                    "pitch_env": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "P.Env",
+                      "bind": "Pitch env",
+                      "min": -1,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "LPG",
+                  "widgets": {
+                    "lpg": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "lpg_group": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 3,
+                      "label": "LPG",
+                      "color": "#ff6a1a26"
+                    },
+                    "decay": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "colour": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Colour",
+                      "bind": "LPG colour",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "envelope": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 4,
+                      "label": "Env",
+                      "bind": "Envelope",
+                      "options": [
+                        {
+                          "label": "gate",
+                          "value": 0
+                        },
+                        {
+                          "label": "ping",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "voice_group": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "VOICE",
+                      "color": "#6b6b6b33"
+                    },
+                    "transpose": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Transp",
+                      "bind": "Transpose",
+                      "min": -24,
+                      "max": 24,
+                      "step": 1
+                    },
+                    "voices": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Voices",
+                      "bind": "Voices",
+                      "min": 1,
+                      "max": 8,
+                      "step": 1
+                    }
+                  }
+                }
+              ],
+              "script": "// mu-plaits screens — a sketch of the macro wave (not the model's exact output), and the low-pass gate's strike.\nconst FONT = \"8px ui-monospace, monospace\";\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst ORANGE = \"#ff6a1a\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst MODELS = [\"VA+FILTER\", \"PHASE DIST\", \"6-OP FM 1\", \"6-OP FM 2\", \"6-OP FM 3\", \"WAVE TERRAIN\", \"STRING MACH\", \"CHIPTUNE\", \"VIRTUAL ANA\", \"WAVESHAPING\", \"2-OP FM\", \"GRAN FORMANT\", \"HARMONIC\", \"WAVETABLE\", \"CHORDS\", \"SPEECH\", \"SWARM\", \"FILT NOISE\", \"PART NOISE\", \"INHARM STR\", \"MODAL RES\", \"BASS DRUM\", \"SNARE DRUM\", \"HI-HAT\"];\n\nfunction num(p, k, d) {\n  const v = p ? p[k] : undefined;\n  return typeof v === \"number\" && Number.isFinite(v) ? v : d;\n}\nfunction clamp(v, a, b) {\n  return Math.min(b, Math.max(a, v));\n}\n\n// Harmonics adds partials, Timbre bends the phase, Morph drives the sum toward a square.\nfunction macro(ph, harm, timbre, morph) {\n  const bent = Math.pow(ph, 1 + timbre * 3) * 2 * Math.PI;\n  const count = 1 + Math.floor(harm * 11);\n  let s = 0;\n  for (let k = 1; k <= count; k++) s += Math.sin(bent * k) / k;\n  return Math.tanh(s * (1 + morph * 6)) / Math.tanh(1 + morph * 6);\n}\n\nexport default {\n  osc(lcd) {\n    const { ctx, width: W, height: H, params: p } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n    const harm = num(p, \"Harmonics\", 0.5);\n    const timbre = num(p, \"Timbre\", 0.5);\n    const morph = num(p, \"Morph\", 0.5);\n    const model = Math.round(num(p, \"Model\", 0));\n    const x0 = 4;\n    const w = Math.max(1, W - 8);\n    const top = 16;\n    const mid = top + (H - top - 4) / 2;\n    const half = Math.max(1, (H - top - 4) / 2);\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(x0, Math.round(mid) + 0.5);\n    ctx.lineTo(x0 + w, Math.round(mid) + 0.5);\n    ctx.stroke();\n    ctx.strokeStyle = BLUE;\n    ctx.beginPath();\n    for (let i = 0; i <= w; i++) {\n      const ph = ((i / w) * 2) % 1;\n      const y = mid - clamp(macro(ph, harm, timbre, morph), -1, 1) * half;\n      if (i === 0) ctx.moveTo(x0 + i, y);\n      else ctx.lineTo(x0 + i, y);\n    }\n    ctx.stroke();\n    ctx.fillStyle = WHITE;\n    ctx.textAlign = \"left\";\n    ctx.fillText(MODELS[model] ?? \"VA+FILTER\", 6, 10);\n  },\n  lpg(lcd) {\n    const { ctx, width: W, height: H, params: p } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n    const decay = num(p, \"Decay\", 0.5);\n    const colour = num(p, \"LPG colour\", 0.5);\n    const ping = Math.round(num(p, \"Envelope\", 0)) === 1;\n    const x0 = 4;\n    const w = Math.max(1, W - 8);\n    const top = 16;\n    const bot = H - 6;\n    const hh = Math.max(1, bot - top);\n    const tau = 0.03 + decay * decay * 0.6;\n    const env = (t) => (ping ? Math.exp(-t / tau) : t < 0.45 ? 1 : Math.exp(-(t - 0.45) / tau));\n    const draw = (color, fn) => {\n      ctx.strokeStyle = color;\n      ctx.beginPath();\n      for (let i = 0; i <= w; i++) {\n        const y = bot - clamp(fn(i / w), 0, 1) * hh;\n        if (i === 0) ctx.moveTo(x0 + i, y);\n        else ctx.lineTo(x0 + i, y);\n      }\n      ctx.stroke();\n    };\n    draw(GREEN, (t) => 1 - colour + colour * env(t));\n    draw(ORANGE, (t) => Math.pow(env(t), 1 - colour * 0.6));\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = WHITE;\n    ctx.fillText(ping ? \"PING\" : \"GATE\", 6, 10);\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = ORANGE;\n    ctx.fillText(\"AMP\", W - 26, 10);\n    ctx.fillStyle = GREEN;\n    ctx.fillText(\"LPF\", W - 6, 10);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 12,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "OSC",
+                    "widgets": {
+                      "model": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Model",
+                        "bind": "Model",
+                        "options": [
+                          {
+                            "label": "VA + filter",
+                            "value": 0
+                          },
+                          {
+                            "label": "Phase distortion",
+                            "value": 1
+                          },
+                          {
+                            "label": "6-op FM 1",
+                            "value": 2
+                          },
+                          {
+                            "label": "6-op FM 2",
+                            "value": 3
+                          },
+                          {
+                            "label": "6-op FM 3",
+                            "value": 4
+                          },
+                          {
+                            "label": "Wave terrain",
+                            "value": 5
+                          },
+                          {
+                            "label": "String machine",
+                            "value": 6
+                          },
+                          {
+                            "label": "Chiptune",
+                            "value": 7
+                          },
+                          {
+                            "label": "Virtual analog",
+                            "value": 8
+                          },
+                          {
+                            "label": "Waveshaping",
+                            "value": 9
+                          },
+                          {
+                            "label": "2-op FM",
+                            "value": 10
+                          },
+                          {
+                            "label": "Granular formant",
+                            "value": 11
+                          },
+                          {
+                            "label": "Harmonic",
+                            "value": 12
+                          },
+                          {
+                            "label": "Wavetable",
+                            "value": 13
+                          },
+                          {
+                            "label": "Chords",
+                            "value": 14
+                          },
+                          {
+                            "label": "Speech",
+                            "value": 15
+                          },
+                          {
+                            "label": "Swarm",
+                            "value": 16
+                          },
+                          {
+                            "label": "Filtered noise",
+                            "value": 17
+                          },
+                          {
+                            "label": "Particle noise",
+                            "value": 18
+                          },
+                          {
+                            "label": "Inharmonic string",
+                            "value": 19
+                          },
+                          {
+                            "label": "Modal resonator",
+                            "value": 20
+                          },
+                          {
+                            "label": "Bass drum",
+                            "value": 21
+                          },
+                          {
+                            "label": "Snare drum",
+                            "value": 22
+                          },
+                          {
+                            "label": "Hi-hat",
+                            "value": 23
+                          }
+                        ]
+                      },
+                      "osc": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "osc_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "OSC",
+                        "color": "#3d7dff26"
+                      },
+                      "harmonics": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Harm",
+                        "bind": "Harmonics",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "morph": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Morph",
+                        "bind": "Morph",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mod_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "MOD",
+                        "color": "#ff3b3026"
+                      },
+                      "timbre_env": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "T.Env",
+                        "bind": "Timbre env",
+                        "min": -1,
+                        "max": 1
+                      },
+                      "morph_env": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "M.Env",
+                        "bind": "Morph env",
+                        "min": -1,
+                        "max": 1
+                      },
+                      "pitch_env": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "P.Env",
+                        "bind": "Pitch env",
+                        "min": -1,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "LPG",
+                    "widgets": {
+                      "lpg": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "lpg_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "LPG",
+                        "color": "#ff6a1a26"
+                      },
+                      "decay": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "colour": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Colour",
+                        "bind": "LPG colour",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "envelope": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 4,
+                        "label": "Env",
+                        "bind": "Envelope",
+                        "options": [
+                          {
+                            "label": "gate",
+                            "value": 0
+                          },
+                          {
+                            "label": "ping",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "voice_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "VOICE",
+                        "color": "#6b6b6b33"
+                      },
+                      "transpose": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Transp",
+                        "bind": "Transpose",
+                        "min": -24,
+                        "max": 24,
+                        "step": 1
+                      },
+                      "voices": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Voices",
+                        "bind": "Voices",
+                        "min": 1,
+                        "max": 8,
+                        "step": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "engines": [
+              "braids",
+              "plaits"
+            ],
+            "engine": "plaits",
+            "params": {},
+            "defaults": {
+              "Model": 8,
+              "Harmonics": 0.5,
+              "Timbre": 0.5,
+              "Morph": 0.5,
+              "Pitch env": 0,
+              "Timbre env": 0,
+              "Morph env": 0,
+              "Decay": 0.5,
+              "LPG colour": 0.5,
+              "Envelope": 0,
+              "Voices": 8,
+              "Transpose": 0
+            },
+            "pluginId": "lead:plaits"
+          },
+          {
+            "module": "grains",
+            "uses": "@k7-core/audio/mu-clouds",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 14,
+              "rows": 4,
+              "widgets": {
+                "mode": {
+                  "type": "dropdown",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "label": "Mode",
+                  "bind": "Mode",
+                  "options": [
+                    {
+                      "label": "Granular",
+                      "value": 0
+                    },
+                    {
+                      "label": "Stretch",
+                      "value": 1
+                    },
+                    {
+                      "label": "Looping delay",
+                      "value": 2
+                    },
+                    {
+                      "label": "Spectral",
+                      "value": 3
+                    }
+                  ]
+                },
+                "quality": {
+                  "type": "dropdown",
+                  "col": 0,
+                  "row": 1,
+                  "colSpan": 4,
+                  "label": "Quality",
+                  "bind": "Quality",
+                  "options": [
+                    {
+                      "label": "16-bit stereo",
+                      "value": 0
+                    },
+                    {
+                      "label": "16-bit mono",
+                      "value": 1
+                    },
+                    {
+                      "label": "8-bit stereo",
+                      "value": 2
+                    },
+                    {
+                      "label": "8-bit mono",
+                      "value": 3
+                    }
+                  ]
+                },
+                "freeze": {
+                  "type": "toggle",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "label": "Freeze",
+                  "bind": "Freeze"
+                },
+                "follow_notes": {
+                  "type": "toggle",
+                  "col": 0,
+                  "row": 3,
+                  "colSpan": 4,
+                  "label": "Follow",
+                  "bind": "Follow notes"
+                },
+                "grain_section": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 10,
+                  "rowSpan": 2,
+                  "label": "GRAIN",
+                  "color": "#3d7dff26"
+                },
+                "position": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Pos",
+                  "bind": "Position",
+                  "min": 0,
+                  "max": 1
+                },
+                "size": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Size",
+                  "bind": "Size",
+                  "min": 0,
+                  "max": 1
+                },
+                "pitch": {
+                  "type": "knob",
+                  "col": 8,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Pitch",
+                  "bind": "Pitch",
+                  "min": -24,
+                  "max": 24
+                },
+                "density": {
+                  "type": "knob",
+                  "col": 10,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Density",
+                  "bind": "Density",
+                  "min": 0,
+                  "max": 1
+                },
+                "texture": {
+                  "type": "knob",
+                  "col": 12,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Texture",
+                  "bind": "Texture",
+                  "min": 0,
+                  "max": 1
+                },
+                "blend_section": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 6,
+                  "rowSpan": 2,
+                  "label": "BLEND",
+                  "color": "#ff6a1a26"
+                },
+                "spread": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Spread",
+                  "bind": "Spread",
+                  "min": 0,
+                  "max": 1
+                },
+                "feedback": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Fdbk",
+                  "bind": "Feedback",
+                  "min": 0,
+                  "max": 1
+                },
+                "reverb": {
+                  "type": "knob",
+                  "col": 8,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Reverb",
+                  "bind": "Reverb",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 13,
+                "widgets": {
+                  "mode": {
+                    "type": "dropdown",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "label": "Mode",
+                    "bind": "Mode",
+                    "options": [
+                      {
+                        "label": "Granular",
+                        "value": 0
+                      },
+                      {
+                        "label": "Stretch",
+                        "value": 1
+                      },
+                      {
+                        "label": "Looping delay",
+                        "value": 2
+                      },
+                      {
+                        "label": "Spectral",
+                        "value": 3
+                      }
+                    ]
+                  },
+                  "quality": {
+                    "type": "dropdown",
+                    "col": 0,
+                    "row": 1,
+                    "colSpan": 4,
+                    "label": "Quality",
+                    "bind": "Quality",
+                    "options": [
+                      {
+                        "label": "16-bit stereo",
+                        "value": 0
+                      },
+                      {
+                        "label": "16-bit mono",
+                        "value": 1
+                      },
+                      {
+                        "label": "8-bit stereo",
+                        "value": 2
+                      },
+                      {
+                        "label": "8-bit mono",
+                        "value": 3
+                      }
+                    ]
+                  },
+                  "grain_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 6,
+                    "label": "GRAIN",
+                    "color": "#3d7dff26"
+                  },
+                  "position": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Pos",
+                    "bind": "Position",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "size": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Size",
+                    "bind": "Size",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "pitch": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Pitch",
+                    "bind": "Pitch",
+                    "min": -24,
+                    "max": 24
+                  },
+                  "density": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Density",
+                    "bind": "Density",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "texture": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Texture",
+                    "bind": "Texture",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "blend_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "BLEND",
+                    "color": "#ff6a1a26"
+                  },
+                  "spread": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Spread",
+                    "bind": "Spread",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "feedback": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 8,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Fdbk",
+                    "bind": "Feedback",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "reverb": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 10,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Reverb",
+                    "bind": "Reverb",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "freeze": {
+                    "type": "toggle",
+                    "col": 0,
+                    "row": 12,
+                    "colSpan": 2,
+                    "label": "Freeze",
+                    "bind": "Freeze"
+                  },
+                  "follow_notes": {
+                    "type": "toggle",
+                    "col": 2,
+                    "row": 12,
+                    "colSpan": 2,
+                    "label": "Follow",
+                    "bind": "Follow notes"
+                  }
+                }
+              }
+            },
+            "params": {},
+            "defaults": {
+              "Mode": 0,
+              "Quality": 0,
+              "Position": 0.5,
+              "Size": 0.5,
+              "Pitch": 0,
+              "Density": 0.5,
+              "Texture": 0.5,
+              "Spread": 0.5,
+              "Feedback": 0,
+              "Reverb": 0,
+              "Freeze": 0,
+              "Follow notes": 0
+            },
+            "pluginId": "lead:grains"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "bass": {
+        "from": "bass",
+        "use": [
+          {
+            "module": "braids",
+            "uses": "@k7-core/instruments/synth/mu-macro-osc",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 12,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "OSC",
+                  "widgets": {
+                    "osc_group": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 10,
+                      "rowSpan": 4,
+                      "label": "OSC",
+                      "color": "#3d7dff26"
+                    },
+                    "shape": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "label": "Shape",
+                      "bind": "Shape",
+                      "options": [
+                        {
+                          "label": "CSaw",
+                          "value": 0
+                        },
+                        {
+                          "label": "Morph",
+                          "value": 1
+                        },
+                        {
+                          "label": "Saw/square",
+                          "value": 2
+                        },
+                        {
+                          "label": "Fold",
+                          "value": 3
+                        },
+                        {
+                          "label": "Buzz",
+                          "value": 4
+                        },
+                        {
+                          "label": "Square sub",
+                          "value": 5
+                        },
+                        {
+                          "label": "Saw sub",
+                          "value": 6
+                        },
+                        {
+                          "label": "Square sync",
+                          "value": 7
+                        },
+                        {
+                          "label": "Saw sync",
+                          "value": 8
+                        },
+                        {
+                          "label": "Triple saw",
+                          "value": 9
+                        },
+                        {
+                          "label": "Triple square",
+                          "value": 10
+                        },
+                        {
+                          "label": "Triple triangle",
+                          "value": 11
+                        },
+                        {
+                          "label": "Triple sine",
+                          "value": 12
+                        },
+                        {
+                          "label": "Ring mod",
+                          "value": 13
+                        },
+                        {
+                          "label": "Saw swarm",
+                          "value": 14
+                        },
+                        {
+                          "label": "Saw comb",
+                          "value": 15
+                        },
+                        {
+                          "label": "Toy",
+                          "value": 16
+                        },
+                        {
+                          "label": "Digital LPF",
+                          "value": 17
+                        },
+                        {
+                          "label": "Digital peak",
+                          "value": 18
+                        },
+                        {
+                          "label": "Digital BPF",
+                          "value": 19
+                        },
+                        {
+                          "label": "Digital HPF",
+                          "value": 20
+                        },
+                        {
+                          "label": "Vosim",
+                          "value": 21
+                        },
+                        {
+                          "label": "Vowel",
+                          "value": 22
+                        },
+                        {
+                          "label": "Vowel FOF",
+                          "value": 23
+                        },
+                        {
+                          "label": "Harmonics",
+                          "value": 24
+                        },
+                        {
+                          "label": "FM",
+                          "value": 25
+                        },
+                        {
+                          "label": "Feedback FM",
+                          "value": 26
+                        },
+                        {
+                          "label": "Chaotic FM",
+                          "value": 27
+                        },
+                        {
+                          "label": "Plucked",
+                          "value": 28
+                        },
+                        {
+                          "label": "Bowed",
+                          "value": 29
+                        },
+                        {
+                          "label": "Blown",
+                          "value": 30
+                        },
+                        {
+                          "label": "Fluted",
+                          "value": 31
+                        },
+                        {
+                          "label": "Struck bell",
+                          "value": 32
+                        },
+                        {
+                          "label": "Struck drum",
+                          "value": 33
+                        },
+                        {
+                          "label": "Kick",
+                          "value": 34
+                        },
+                        {
+                          "label": "Cymbal",
+                          "value": 35
+                        },
+                        {
+                          "label": "Snare",
+                          "value": 36
+                        },
+                        {
+                          "label": "Wavetables",
+                          "value": 37
+                        },
+                        {
+                          "label": "Wave map",
+                          "value": 38
+                        },
+                        {
+                          "label": "Wave line",
+                          "value": 39
+                        },
+                        {
+                          "label": "Paraphonic",
+                          "value": 40
+                        },
+                        {
+                          "label": "Filtered noise",
+                          "value": 41
+                        },
+                        {
+                          "label": "Twin peaks noise",
+                          "value": 42
+                        },
+                        {
+                          "label": "Clocked noise",
+                          "value": 43
+                        },
+                        {
+                          "label": "Granular cloud",
+                          "value": 44
+                        },
+                        {
+                          "label": "Particle noise",
+                          "value": 45
+                        },
+                        {
+                          "label": "Digital modulation",
+                          "value": 46
+                        }
+                      ]
+                    },
+                    "wave": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 6,
+                      "rowSpan": 3
+                    },
+                    "timbre": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "color": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Color",
+                      "bind": "Color",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "timbre_env": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "T.Env",
+                      "bind": "Timbre env",
+                      "min": -1,
+                      "max": 1
+                    },
+                    "color_env": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "C.Env",
+                      "bind": "Color env",
+                      "min": -1,
+                      "max": 1
+                    },
+                    "voice_group": {
+                      "type": "group",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 4,
+                      "label": "VOICE",
+                      "color": "#6b6b6b33"
+                    },
+                    "transpose": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Transp",
+                      "bind": "Transpose",
+                      "min": -24,
+                      "max": 24,
+                      "step": 1
+                    },
+                    "voices": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Voices",
+                      "bind": "Voices",
+                      "min": 1,
+                      "max": 8,
+                      "step": 1
+                    }
+                  }
+                },
+                {
+                  "name": "ENV",
+                  "widgets": {
+                    "env_group": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4,
+                      "label": "ENV",
+                      "color": "#ff6a1a26"
+                    },
+                    "env": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "attack": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "Attack",
+                      "min": 0.001000000047,
+                      "max": 2,
+                      "curve": "log"
+                    },
+                    "decay": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Decay",
+                      "min": 0.004999999888,
+                      "max": 4,
+                      "curve": "log"
+                    },
+                    "sustain": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "Sustain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "release": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Release",
+                      "min": 0.004999999888,
+                      "max": 8,
+                      "curve": "log"
+                    },
+                    "lofi_group": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "LOFI",
+                      "color": "#ff3b3026"
+                    },
+                    "bits": {
+                      "type": "dropdown",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "label": "Bits",
+                      "bind": "Bits",
+                      "options": [
+                        {
+                          "label": "2 bits",
+                          "value": 0
+                        },
+                        {
+                          "label": "3 bits",
+                          "value": 1
+                        },
+                        {
+                          "label": "4 bits",
+                          "value": 2
+                        },
+                        {
+                          "label": "6 bits",
+                          "value": 3
+                        },
+                        {
+                          "label": "8 bits",
+                          "value": 4
+                        },
+                        {
+                          "label": "12 bits",
+                          "value": 5
+                        },
+                        {
+                          "label": "16 bits",
+                          "value": 6
+                        }
+                      ]
+                    },
+                    "rate": {
+                      "type": "dropdown",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 4,
+                      "label": "Rate",
+                      "bind": "Sample rate",
+                      "options": [
+                        {
+                          "label": "4 kHz",
+                          "value": 0
+                        },
+                        {
+                          "label": "8 kHz",
+                          "value": 1
+                        },
+                        {
+                          "label": "16 kHz",
+                          "value": 2
+                        },
+                        {
+                          "label": "24 kHz",
+                          "value": 3
+                        },
+                        {
+                          "label": "32 kHz",
+                          "value": 4
+                        },
+                        {
+                          "label": "48 kHz",
+                          "value": 5
+                        },
+                        {
+                          "label": "96 kHz",
+                          "value": 6
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "script": "// mu-braids screens — the wave crushed by Bits and Sample rate, and the voice's ADSR.\nconst FONT = \"8px ui-monospace, monospace\";\nconst BLUE = \"#3d7dff\";\nconst RED = \"#ff3b30\";\nconst ORANGE = \"#ff6a1a\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst BITS = [2, 3, 4, 6, 8, 12, 16];\nconst RATES = [4, 8, 16, 24, 32, 48, 96];\nconst STEPS = [10, 16, 28, 40, 54, 80, 0];\n\nfunction num(p, k, d) {\n  const v = p ? p[k] : undefined;\n  return typeof v === \"number\" && Number.isFinite(v) ? v : d;\n}\nfunction clamp(v, a, b) {\n  return Math.min(b, Math.max(a, v));\n}\nfunction glass(ctx, W, H) {\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.font = FONT;\n  ctx.lineWidth = 1;\n}\n\n\n\n\nfunction adsr(ctx, W, H, a, d, s, r) {\n  const wa = Math.sqrt(a / 2);\n  const wd = Math.sqrt(d / 4);\n  const wr = Math.sqrt(r / 8);\n  const hold = 0.5;\n  const total = wa + wd + hold + wr || 1;\n  const x0 = 6;\n  const w = Math.max(1, W - 12);\n  const top = 16;\n  const bot = H - 14;\n  const hh = Math.max(1, bot - top);\n  const xa = x0 + (wa / total) * w;\n  const xd = xa + (wd / total) * w;\n  const xs = xd + (hold / total) * w;\n  const xr = x0 + w;\n  const ys = bot - s * hh;\n  ctx.strokeStyle = GREY;\n  ctx.beginPath();\n  ctx.moveTo(x0, Math.round(bot) + 0.5);\n  ctx.lineTo(xr, Math.round(bot) + 0.5);\n  ctx.stroke();\n  ctx.strokeStyle = ORANGE;\n  ctx.beginPath();\n  ctx.moveTo(x0, bot);\n  const steps = 24;\n  for (let i = 1; i <= steps; i++) ctx.lineTo(x0 + ((xa - x0) * i) / steps, bot - hh * (1 - Math.pow(1 - i / steps, 2)));\n  for (let i = 1; i <= steps; i++) ctx.lineTo(xa + ((xd - xa) * i) / steps, ys - (ys - top) * Math.exp((-4 * i) / steps) + (ys - top) * Math.exp(-4) * (i / steps));\n  ctx.lineTo(xs, ys);\n  for (let i = 1; i <= steps; i++) ctx.lineTo(xs + ((xr - xs) * i) / steps, bot - (bot - ys) * (Math.exp((-4 * i) / steps) - Math.exp(-4) * (i / steps)));\n  ctx.stroke();\n  ctx.fillStyle = WHITE;\n  for (const [x, y] of [[xa, top], [xd, ys], [xs, ys]]) ctx.fillRect(x - 1.5, y - 1.5, 3, 3);\n  ctx.fillStyle = GREY;\n  ctx.textAlign = \"center\";\n  ctx.fillText(\"A\", (x0 + xa) / 2, H - 4);\n  ctx.fillText(\"D\", (xa + xd) / 2, H - 4);\n  ctx.fillText(\"S\", (xd + xs) / 2, H - 4);\n  ctx.fillText(\"R\", (xs + xr) / 2, H - 4);\n}\n\nfunction secs(t) {\n  return t < 1 ? `${Math.round(t * 1000)}MS` : `${t.toFixed(2)}S`;\n}\n\n// Timbre sharpens a sine toward a saw, Color folds it; a sketch of the macro, not the shape's exact output.\nfunction macro(ph, timbre, color) {\n  const saw = ph * 2 - 1;\n  const sine = Math.sin(ph * 2 * Math.PI);\n  const v = sine + (saw - sine) * timbre;\n  return Math.sin(v * (1 + color * 4) * 1.2) / Math.max(0.2, Math.sin(Math.min(1.5, 1.2 * (1 + color * 4))));\n}\n\nexport default {\n  wave(lcd) {\n    const { ctx, width: W, height: H, params: p } = lcd;\n    glass(ctx, W, H);\n    const timbre = num(p, \"Timbre\", 0.5);\n    const color = num(p, \"Color\", 0.5);\n    const bi = clamp(Math.round(num(p, \"Bits\", 6)), 0, 6);\n    const ri = clamp(Math.round(num(p, \"Sample rate\", 5)), 0, 6);\n    const levels = Math.pow(2, BITS[bi] ?? 16) / 2;\n    const x0 = 4;\n    const w = Math.max(1, W - 8);\n    const top = 16;\n    const mid = top + (H - top - 4) / 2;\n    const half = Math.max(1, (H - top - 4) / 2);\n    const cycles = 2;\n    const steps = STEPS[ri] ?? 0;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(x0, Math.round(mid) + 0.5);\n    ctx.lineTo(x0 + w, Math.round(mid) + 0.5);\n    ctx.stroke();\n    const sample = (u) => {\n      const held = steps > 0 ? Math.floor(u * steps * cycles) / (steps * cycles) : u;\n      const v = clamp(macro((held * cycles) % 1, timbre, color), -1, 1);\n      return Math.round(v * levels) / levels;\n    };\n    ctx.strokeStyle = BLUE;\n    ctx.beginPath();\n    let last = 0;\n    for (let i = 0; i <= w; i++) {\n      const y = mid - clamp(sample(i / w), -1, 1) * half;\n      if (i === 0) ctx.moveTo(x0, y);\n      else {\n        ctx.lineTo(x0 + i, last);\n        ctx.lineTo(x0 + i, y);\n      }\n      last = y;\n    }\n    ctx.stroke();\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = WHITE;\n    ctx.fillText(\"OSC\", 6, 10);\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = RED;\n    ctx.fillText(`${BITS[bi] ?? 16}BIT ${RATES[ri] ?? 48}K`, W - 6, 10);\n  },\n  env(lcd) {\n    const { ctx, width: W, height: H, params: p } = lcd;\n    glass(ctx, W, H);\n    const a = num(p, \"Attack\", 0.002);\n    const d = num(p, \"Decay\", 0.3);\n    const s = clamp(num(p, \"Sustain\", 0.8), 0, 1);\n    const r = num(p, \"Release\", 0.3);\n    adsr(ctx, W, H, a, d, s, r);\n    ctx.fillStyle = WHITE;\n    ctx.textAlign = \"left\";\n    ctx.fillText(\"ENV\", 6, 10);\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = ORANGE;\n    ctx.fillText(`${secs(a)} ${secs(d)} ${Math.round(s * 100)}% ${secs(r)}`, W - 6, 10);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 9,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "OSC",
+                    "widgets": {
+                      "osc_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 7,
+                        "label": "OSC",
+                        "color": "#3d7dff26"
+                      },
+                      "shape": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Shape",
+                        "bind": "Shape",
+                        "options": [
+                          {
+                            "label": "CSaw",
+                            "value": 0
+                          },
+                          {
+                            "label": "Morph",
+                            "value": 1
+                          },
+                          {
+                            "label": "Saw/square",
+                            "value": 2
+                          },
+                          {
+                            "label": "Fold",
+                            "value": 3
+                          },
+                          {
+                            "label": "Buzz",
+                            "value": 4
+                          },
+                          {
+                            "label": "Square sub",
+                            "value": 5
+                          },
+                          {
+                            "label": "Saw sub",
+                            "value": 6
+                          },
+                          {
+                            "label": "Square sync",
+                            "value": 7
+                          },
+                          {
+                            "label": "Saw sync",
+                            "value": 8
+                          },
+                          {
+                            "label": "Triple saw",
+                            "value": 9
+                          },
+                          {
+                            "label": "Triple square",
+                            "value": 10
+                          },
+                          {
+                            "label": "Triple triangle",
+                            "value": 11
+                          },
+                          {
+                            "label": "Triple sine",
+                            "value": 12
+                          },
+                          {
+                            "label": "Ring mod",
+                            "value": 13
+                          },
+                          {
+                            "label": "Saw swarm",
+                            "value": 14
+                          },
+                          {
+                            "label": "Saw comb",
+                            "value": 15
+                          },
+                          {
+                            "label": "Toy",
+                            "value": 16
+                          },
+                          {
+                            "label": "Digital LPF",
+                            "value": 17
+                          },
+                          {
+                            "label": "Digital peak",
+                            "value": 18
+                          },
+                          {
+                            "label": "Digital BPF",
+                            "value": 19
+                          },
+                          {
+                            "label": "Digital HPF",
+                            "value": 20
+                          },
+                          {
+                            "label": "Vosim",
+                            "value": 21
+                          },
+                          {
+                            "label": "Vowel",
+                            "value": 22
+                          },
+                          {
+                            "label": "Vowel FOF",
+                            "value": 23
+                          },
+                          {
+                            "label": "Harmonics",
+                            "value": 24
+                          },
+                          {
+                            "label": "FM",
+                            "value": 25
+                          },
+                          {
+                            "label": "Feedback FM",
+                            "value": 26
+                          },
+                          {
+                            "label": "Chaotic FM",
+                            "value": 27
+                          },
+                          {
+                            "label": "Plucked",
+                            "value": 28
+                          },
+                          {
+                            "label": "Bowed",
+                            "value": 29
+                          },
+                          {
+                            "label": "Blown",
+                            "value": 30
+                          },
+                          {
+                            "label": "Fluted",
+                            "value": 31
+                          },
+                          {
+                            "label": "Struck bell",
+                            "value": 32
+                          },
+                          {
+                            "label": "Struck drum",
+                            "value": 33
+                          },
+                          {
+                            "label": "Kick",
+                            "value": 34
+                          },
+                          {
+                            "label": "Cymbal",
+                            "value": 35
+                          },
+                          {
+                            "label": "Snare",
+                            "value": 36
+                          },
+                          {
+                            "label": "Wavetables",
+                            "value": 37
+                          },
+                          {
+                            "label": "Wave map",
+                            "value": 38
+                          },
+                          {
+                            "label": "Wave line",
+                            "value": 39
+                          },
+                          {
+                            "label": "Paraphonic",
+                            "value": 40
+                          },
+                          {
+                            "label": "Filtered noise",
+                            "value": 41
+                          },
+                          {
+                            "label": "Twin peaks noise",
+                            "value": 42
+                          },
+                          {
+                            "label": "Clocked noise",
+                            "value": 43
+                          },
+                          {
+                            "label": "Granular cloud",
+                            "value": 44
+                          },
+                          {
+                            "label": "Particle noise",
+                            "value": 45
+                          },
+                          {
+                            "label": "Digital modulation",
+                            "value": 46
+                          }
+                        ]
+                      },
+                      "wave": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "timbre": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "color": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Color",
+                        "bind": "Color",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "timbre_env": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "T.Env",
+                        "bind": "Timbre env",
+                        "min": -1,
+                        "max": 1
+                      },
+                      "color_env": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "C.Env",
+                        "bind": "Color env",
+                        "min": -1,
+                        "max": 1
+                      },
+                      "voice_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "VOICE",
+                        "color": "#6b6b6b33"
+                      },
+                      "transpose": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Transp",
+                        "bind": "Transpose",
+                        "min": -24,
+                        "max": 24,
+                        "step": 1
+                      },
+                      "voices": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Voices",
+                        "bind": "Voices",
+                        "min": 1,
+                        "max": 8,
+                        "step": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "ENV",
+                    "widgets": {
+                      "env_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 7,
+                        "label": "ENV",
+                        "color": "#ff6a1a26"
+                      },
+                      "env": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "attack": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "Attack",
+                        "min": 0.001000000047,
+                        "max": 2,
+                        "curve": "log"
+                      },
+                      "decay": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Decay",
+                        "min": 0.004999999888,
+                        "max": 4,
+                        "curve": "log"
+                      },
+                      "sustain": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "Sustain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "release": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Release",
+                        "min": 0.004999999888,
+                        "max": 8,
+                        "curve": "log"
+                      },
+                      "lofi_group": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "LOFI",
+                        "color": "#ff3b3026"
+                      },
+                      "bits": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "label": "Bits",
+                        "bind": "Bits",
+                        "options": [
+                          {
+                            "label": "2 bits",
+                            "value": 0
+                          },
+                          {
+                            "label": "3 bits",
+                            "value": 1
+                          },
+                          {
+                            "label": "4 bits",
+                            "value": 2
+                          },
+                          {
+                            "label": "6 bits",
+                            "value": 3
+                          },
+                          {
+                            "label": "8 bits",
+                            "value": 4
+                          },
+                          {
+                            "label": "12 bits",
+                            "value": 5
+                          },
+                          {
+                            "label": "16 bits",
+                            "value": 6
+                          }
+                        ]
+                      },
+                      "rate": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "label": "Rate",
+                        "bind": "Sample rate",
+                        "options": [
+                          {
+                            "label": "4 kHz",
+                            "value": 0
+                          },
+                          {
+                            "label": "8 kHz",
+                            "value": 1
+                          },
+                          {
+                            "label": "16 kHz",
+                            "value": 2
+                          },
+                          {
+                            "label": "24 kHz",
+                            "value": 3
+                          },
+                          {
+                            "label": "32 kHz",
+                            "value": 4
+                          },
+                          {
+                            "label": "48 kHz",
+                            "value": 5
+                          },
+                          {
+                            "label": "96 kHz",
+                            "value": 6
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "engines": [
+              "braids",
+              "plaits"
+            ],
+            "engine": "braids",
+            "params": {},
+            "defaults": {
+              "Shape": 0,
+              "Timbre": 0.5,
+              "Color": 0.5,
+              "Attack": 0.002000000095,
+              "Decay": 0.3000000119,
+              "Sustain": 0.8000000119,
+              "Release": 0.3000000119,
+              "Timbre env": 0,
+              "Color env": 0,
+              "Bits": 6,
+              "Sample rate": 6,
+              "Voices": 8,
+              "Transpose": 0
+            },
+            "pluginId": "bass:braids"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "bells": {
+        "from": "bells",
+        "use": [
+          {
+            "module": "rings",
+            "uses": "@k7-core/instruments/synth/mu-rings",
+            "stage": [
+              "@output-volume"
+            ],
+            "inputs": [
+              {
+                "name": "midi",
+                "type": "midi"
+              },
+              {
+                "name": "in",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 17,
+              "rows": 4,
+              "widgets": {
+                "model": {
+                  "type": "dropdown",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 5,
+                  "label": "Model",
+                  "bind": "Model",
+                  "options": [
+                    {
+                      "label": "Modal",
+                      "value": 0
+                    },
+                    {
+                      "label": "Sympathetic strings",
+                      "value": 1
+                    },
+                    {
+                      "label": "String",
+                      "value": 2
+                    },
+                    {
+                      "label": "FM voice",
+                      "value": 3
+                    },
+                    {
+                      "label": "Sympathetic quantized",
+                      "value": 4
+                    },
+                    {
+                      "label": "String + reverb",
+                      "value": 5
+                    },
+                    {
+                      "label": "Synth: formant",
+                      "value": 6
+                    },
+                    {
+                      "label": "Synth: chorus",
+                      "value": 7
+                    },
+                    {
+                      "label": "Synth: reverb",
+                      "value": 8
+                    },
+                    {
+                      "label": "Synth: formant 2",
+                      "value": 9
+                    },
+                    {
+                      "label": "Synth: ensemble",
+                      "value": 10
+                    },
+                    {
+                      "label": "Synth: reverb 2",
+                      "value": 11
+                    }
+                  ]
+                },
+                "polyphony": {
+                  "type": "dropdown",
+                  "col": 0,
+                  "row": 1,
+                  "colSpan": 5,
+                  "label": "Poly",
+                  "bind": "Polyphony",
+                  "options": [
+                    {
+                      "label": "1",
+                      "value": 0
+                    },
+                    {
+                      "label": "2",
+                      "value": 1
+                    },
+                    {
+                      "label": "4",
+                      "value": 2
+                    }
+                  ]
+                },
+                "exciter": {
+                  "type": "dropdown",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 5,
+                  "label": "Exciter",
+                  "bind": "Exciter",
+                  "options": [
+                    {
+                      "label": "internal",
+                      "value": 0
+                    },
+                    {
+                      "label": "input only",
+                      "value": 1
+                    }
+                  ]
+                },
+                "partials": {
+                  "type": "lcdscreen",
+                  "col": 5,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 4
+                },
+                "resonator": {
+                  "type": "group",
+                  "col": 11,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "RES",
+                  "color": "#3ec96b26"
+                },
+                "structure": {
+                  "type": "knob",
+                  "col": 11,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Struct",
+                  "bind": "Structure",
+                  "min": 0,
+                  "max": 1
+                },
+                "brightness": {
+                  "type": "knob",
+                  "col": 13,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Bright",
+                  "bind": "Brightness",
+                  "min": 0,
+                  "max": 1
+                },
+                "damping": {
+                  "type": "knob",
+                  "col": 11,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Damp",
+                  "bind": "Damping",
+                  "min": 0,
+                  "max": 1
+                },
+                "position": {
+                  "type": "knob",
+                  "col": 13,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Pos",
+                  "bind": "Position",
+                  "min": 0,
+                  "max": 1
+                },
+                "pitch": {
+                  "type": "group",
+                  "col": 15,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 4,
+                  "label": "PITCH",
+                  "color": "#6b6b6b33"
+                },
+                "transpose": {
+                  "type": "knob",
+                  "col": 15,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Transp",
+                  "bind": "Transpose",
+                  "min": -24,
+                  "max": 24,
+                  "step": 1
+                },
+                "glide": {
+                  "type": "knob",
+                  "col": 15,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Glide",
+                  "bind": "Glide",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// mu-rings screen — the resonator's partials: grey as struck, green as they still ring once damped.\nconst FONT = \"8px ui-monospace, monospace\";\nconst GREEN = \"#3ec96b\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst MODELS = [\"MODAL\", \"SYMP STR\", \"STRING\", \"FM VOICE\", \"SYMP QUANT\", \"STRING+VERB\", \"FORMANT\", \"CHORUS\", \"REVERB\", \"FORMANT 2\", \"ENSEMBLE\", \"REVERB 2\"];\nconst POLY = [\"1\", \"2\", \"4\"];\n\nfunction num(p, k, d) {\n  const v = p ? p[k] : undefined;\n  return typeof v === \"number\" && Number.isFinite(v) ? v : d;\n}\nfunction clamp(v, a, b) {\n  return Math.min(b, Math.max(a, v));\n}\n\nexport default {\n  partials(lcd) {\n    const { ctx, width: W, height: H, params: p, output, state } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.lineWidth = 1;\n    const structure = num(p, \"Structure\", 0.5);\n    const bright = num(p, \"Brightness\", 0.5);\n    const damp = num(p, \"Damping\", 0.5);\n    const pos = num(p, \"Position\", 0.5);\n    const model = Math.round(num(p, \"Model\", 0));\n    const poly = Math.round(num(p, \"Polyphony\", 0));\n    const harmonic = model === 2 || model === 5;\n    const x0 = 6;\n    const w = Math.max(1, W - 12);\n    const top = 16;\n    const bot = H - 6;\n    const hh = Math.max(1, bot - top);\n    const count = 24;\n    const maxRatio = Math.log(40);\n    const strike = 0.05 + pos * 0.45;\n    let peak = 0;\n    if (Array.isArray(output)) for (let i = Math.max(0, output.length - 8); i < output.length; i++) peak = Math.max(peak, output[i] ?? 0);\n    state.glow = Math.max(clamp(peak, 0, 1), (state.glow ?? 0) * 0.8);\n    for (let k = 1; k <= count; k++) {\n      const stretch = harmonic ? structure * 0.004 : (structure - 0.3) * 0.03;\n      const ratio = k * Math.sqrt(Math.max(0.05, 1 + stretch * k * k));\n      const x = x0 + (Math.log(Math.max(1, ratio)) / maxRatio) * w;\n      if (x > x0 + w) continue;\n      const comb = Math.abs(Math.sin(Math.PI * k * strike));\n      const tilt = Math.pow(k, -(1 - bright) * 1.6);\n      const a = clamp(comb * tilt, 0, 1);\n      const left = a * Math.exp(-(k - 1) * (0.02 + damp * 0.25));\n      const xr = Math.round(x) + 0.5;\n      ctx.strokeStyle = GREY;\n      ctx.beginPath();\n      ctx.moveTo(xr, bot);\n      ctx.lineTo(xr, bot - a * hh);\n      ctx.stroke();\n      ctx.fillStyle = GREEN;\n      const h = left * hh;\n      ctx.fillRect(xr - 1.5, bot - h, 3, h);\n    }\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = WHITE;\n    ctx.fillText(MODELS[model] ?? \"MODAL\", 6, 10);\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = GREY;\n    ctx.fillText(`POLY ${POLY[poly] ?? \"1\"}`, W - 6, 10);\n    const g = state.glow ?? 0;\n    if (g > 0.02) {\n      ctx.fillStyle = GREEN;\n      ctx.globalAlpha = clamp(g, 0, 1);\n      ctx.beginPath();\n      ctx.arc(W - 52, 7, 2.5, 0, Math.PI * 2);\n      ctx.fill();\n      ctx.globalAlpha = 1;\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 11,
+                "widgets": {
+                  "model": {
+                    "type": "dropdown",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "label": "Model",
+                    "bind": "Model",
+                    "options": [
+                      {
+                        "label": "Modal",
+                        "value": 0
+                      },
+                      {
+                        "label": "Sympathetic strings",
+                        "value": 1
+                      },
+                      {
+                        "label": "String",
+                        "value": 2
+                      },
+                      {
+                        "label": "FM voice",
+                        "value": 3
+                      },
+                      {
+                        "label": "Sympathetic quantized",
+                        "value": 4
+                      },
+                      {
+                        "label": "String + reverb",
+                        "value": 5
+                      },
+                      {
+                        "label": "Synth: formant",
+                        "value": 6
+                      },
+                      {
+                        "label": "Synth: chorus",
+                        "value": 7
+                      },
+                      {
+                        "label": "Synth: reverb",
+                        "value": 8
+                      },
+                      {
+                        "label": "Synth: formant 2",
+                        "value": 9
+                      },
+                      {
+                        "label": "Synth: ensemble",
+                        "value": 10
+                      },
+                      {
+                        "label": "Synth: reverb 2",
+                        "value": 11
+                      }
+                    ]
+                  },
+                  "polyphony": {
+                    "type": "dropdown",
+                    "col": 0,
+                    "row": 1,
+                    "colSpan": 2,
+                    "label": "Poly",
+                    "bind": "Polyphony",
+                    "options": [
+                      {
+                        "label": "1",
+                        "value": 0
+                      },
+                      {
+                        "label": "2",
+                        "value": 1
+                      },
+                      {
+                        "label": "4",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  "exciter": {
+                    "type": "dropdown",
+                    "col": 2,
+                    "row": 1,
+                    "colSpan": 2,
+                    "label": "Exciter",
+                    "bind": "Exciter",
+                    "options": [
+                      {
+                        "label": "internal",
+                        "value": 0
+                      },
+                      {
+                        "label": "input only",
+                        "value": 1
+                      }
+                    ]
+                  },
+                  "partials": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 3
+                  },
+                  "resonator": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 5,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "RES",
+                    "color": "#3ec96b26"
+                  },
+                  "structure": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 5,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Struct",
+                    "bind": "Structure",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "brightness": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 5,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Bright",
+                    "bind": "Brightness",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "damping": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 7,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Damp",
+                    "bind": "Damping",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "position": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 7,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Pos",
+                    "bind": "Position",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "pitch": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 9,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "PITCH",
+                    "color": "#6b6b6b33"
+                  },
+                  "transpose": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 9,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Transp",
+                    "bind": "Transpose",
+                    "min": -24,
+                    "max": 24,
+                    "step": 1
+                  },
+                  "glide": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 9,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Glide",
+                    "bind": "Glide",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "params": {},
+            "defaults": {
+              "Model": 0,
+              "Polyphony": 0,
+              "Structure": 0.5,
+              "Brightness": 0.5,
+              "Damping": 0.5,
+              "Position": 0.5,
+              "Exciter": 0,
+              "Transpose": 0,
+              "Glide": 0
+            },
+            "pluginId": "bells:rings"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "bass",
+      "bells",
+      "lead"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "bass": "#935b34",
+      "bells": "#c38ee1",
+      "lead": "#6c31b9"
+    },
+    "trackSignals": {
+      "bass": "midi",
+      "bells": "midi",
+      "lead": "midi"
+    },
+    "trackClips": {
+      "bass": [
+        {
+          "ref": "bass",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "bells": [
+        {
+          "ref": "bells",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "lead": [
+        {
+          "ref": "lead",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

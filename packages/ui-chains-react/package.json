@@ -1,0 +1,35 @@
+{
+  "name": "@studio/ui-chains-react",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The chains graph as React: HTML nodes plus one SVG cable layer, drawing what @studio/ui-chains laid out. The renderer only — the shell around it (fetching, the chain list, the parked camera) stays in each app.",
+  "types": "./src/DomChains.tsx",
+  "exports": {
+    ".": "./src/DomChains.tsx",
+    "./module-icons": "./src/moduleIcons.tsx",
+    "./module-preview": "./src/ModulePreview.tsx",
+    "./node-load": "./src/nodeLoad.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@studio/ui": "*",
+    "@studio/engine-browser": "*",
+    "@studio/engine-protocol": "*",
+    "@studio/graph-model": "*",
+    "@studio/k7-wasm": "*",
+    "@studio/ui-chains": "*",
+    "@studio/ui-timeline": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7"
+  }
+}

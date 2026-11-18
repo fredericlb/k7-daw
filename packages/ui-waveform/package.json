@@ -1,0 +1,28 @@
+{
+  "name": "@studio/ui-waveform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The waveform canvas — one clip's envelope, its grid, markers and playhead, rasterised once and blitted. See docs/layers.md.",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./spectrum": "./src/spectrum.ts",
+    "./spectrum-strip": "./src/spectrumStrip.ts",
+    "./styles.css": "./src/styles.css"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7"
+  },
+  "dependencies": {
+    "@studio/ui": "*",
+    "@studio/ui-timeline": "*"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.10"
+  }
+}

@@ -1,0 +1,17 @@
+# A Cargo.lock that pins the QuickJS runtime, for scripts/check-cargo-locks.test.mjs.
+version = 4
+
+[[package]]
+name = "k7-js"
+version = "0.1.0"
+dependencies = [
+ "rquickjs",
+]
+
+[[package]]
+name = "rquickjs"
+version = "0.9.0"
+
+[[package]]
+name = "rquickjs-sys"
+version = "0.9.0"

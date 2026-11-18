@@ -1,0 +1,288 @@
+{
+  "project": "shapes/live-video.k7",
+  "repairs": {
+    "log": [],
+    "files": [
+      "chains/master.k7x",
+      "project.k7x"
+    ]
+  },
+  "engine": {
+    "name": "live-video",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [
+      {
+        "id": "MIX:@record",
+        "type": "Recorder",
+        "name": "@record",
+        "path": "",
+        "presetSave": "",
+        "role": "",
+        "enabled": true,
+        "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+        }
+      }
+    ],
+    "recordDir": "<ws>/shapes/live-video.k7/clips",
+    "tracks": [
+      {
+        "id": "00000000-0000-4000-8000-000000000002",
+        "name": "IN",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#8b8f98",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "on",
+        "inputGain": 0,
+        "clips": [],
+        "plugins": [
+          {
+            "id": "00000000-0000-4000-8000-000000000002:00000000-0000-4000-8000-000000000003",
+            "type": "Mixer",
+            "name": "00000000-0000-4000-8000-000000000003",
+            "path": "",
+            "presetSave": "<ws>/shapes/live-video.k7/vstpresets/00000000-0000-4000-8000-000000000003.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": 0,
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          },
+          {
+            "to": "RENDER#audio",
+            "gain": 1
+          }
+        ]
+      },
+      "RENDER": {
+        "from": "RENDER",
+        "use": [],
+        "out": [
+          {
+            "to": "VIDEO_OUT",
+            "gain": 1
+          }
+        ]
+      },
+      "00000000-0000-4000-8000-000000000001": {
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000001",
+            "place": "CAM · step 1",
+            "category": "io",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {},
+            "camera": ""
+          }
+        ],
+        "out": [
+          {
+            "to": "RENDER",
+            "gain": 1
+          }
+        ]
+      },
+      "00000000-0000-4000-8000-000000000002": {
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000002",
+            "place": "IN · step 1",
+            "category": "io",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {},
+            "monitor": "on"
+          },
+          {
+            "module": "00000000-0000-4000-8000-000000000003",
+            "uses": "@meta/audio/mixer",
+            "place": "IN · step 2",
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "strip": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "w1": {
+                  "type": "fader",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Volume",
+                  "bind": "Volume",
+                  "min": -60,
+                  "max": 6
+                },
+                "w2": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 3,
+                  "label": "Pan",
+                  "bind": "Pan",
+                  "min": -1,
+                  "max": 1
+                },
+                "w5": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "label": "High",
+                  "bind": "High",
+                  "min": -18,
+                  "max": 18
+                },
+                "w4": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "label": "Mid",
+                  "bind": "Mid",
+                  "min": -18,
+                  "max": 18
+                },
+                "w3": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "label": "Low",
+                  "bind": "Low",
+                  "min": -18,
+                  "max": 18
+                },
+                "w6": {
+                  "type": "button",
+                  "col": 1,
+                  "row": 3,
+                  "label": "+10",
+                  "bind": "@highlight"
+                }
+              }
+            },
+            "params": {
+              "Volume": 0
+            },
+            "defaults": {
+              "Volume": 0,
+              "Pan": 0,
+              "Low": 0,
+              "Mid": 0,
+              "High": 0
+            },
+            "pluginId": "00000000-0000-4000-8000-000000000002:00000000-0000-4000-8000-000000000003"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [],
+    "videoTracks": [],
+    "trackColors": {},
+    "trackSignals": {},
+    "stacks": [],
+    "modules": {},
+    "warnings": [
+      "input '00000000-0000-4000-8000-000000000002': no channel — it feeds nothing"
+    ],
+    "issues": [
+      {
+        "code": "inputNoChannel",
+        "params": {
+          "input": "00000000-0000-4000-8000-000000000002"
+        },
+        "text": "input '00000000-0000-4000-8000-000000000002': no channel — it feeds nothing"
+      }
+    ]
+  },
+  "video": {
+    "doc": {
+      "name": "live-video",
+      "viewport": [
+        1280,
+        720
+      ],
+      "fps": 30,
+      "videoTracks": [
+        {
+          "id": "00000000-0000-4000-8000-000000000001",
+          "name": "00000000-0000-4000-8000-000000000001",
+          "color": "",
+          "mute": false,
+          "solo": false,
+          "camera": "",
+          "cameraMonitor": "on",
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 720,
+          "clips": [],
+          "shapes": []
+        }
+      ],
+      "markers": [],
+      "framePlugins": [],
+      "sound": "mix",
+      "transitions": {},
+      "stretches": {},
+      "warnings": []
+    },
+    "errors": {
+      "errors": [],
+      "diagnostics": []
+    }
+  }
+}

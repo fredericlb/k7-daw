@@ -1,0 +1,470 @@
+{
+  "project": "k7-core/audio.zz_utility.stereo-width.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.zz_utility.stereo-width",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Wider",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-stereo-fx",
+        "name": "drums-stereo-fx",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-stereo-fx:fx-stereo-fx",
+            "type": "Stereo FX",
+            "name": "fx-stereo-fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/nodes/fx-stereo-fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-wider",
+        "name": "drums-wider",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-wider:fx-wider",
+            "type": "Wider",
+            "name": "fx-wider",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-width.k7/nodes/fx-wider.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/zz_utility/stereo-width",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "width": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Width",
+                  "bind": "Width",
+                  "min": 0,
+                  "max": 1
+                },
+                "center": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Center",
+                  "bind": "Center",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "stereo-fx",
+              "wider"
+            ],
+            "engine": "wider",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-stereo-fx": {
+        "from": "drums-stereo-fx",
+        "use": [
+          {
+            "module": "fx-stereo-fx",
+            "uses": "@k7-core/audio/zz_utility/stereo-width",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "wide": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Wide",
+                  "bind": "Wide",
+                  "min": 0,
+                  "max": 1
+                },
+                "mono_bass": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Mono Bs",
+                  "bind": "MonoBs",
+                  "min": 0,
+                  "max": 1
+                },
+                "squish": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Squish",
+                  "bind": "CSquish",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "wide": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Wide",
+                    "bind": "Wide",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "mono_bass": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Mono Bs",
+                    "bind": "MonoBs",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "squish": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Squish",
+                    "bind": "CSquish",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "stereo-fx",
+              "wider"
+            ],
+            "engine": "stereo-fx",
+            "params": {},
+            "pluginId": "drums-stereo-fx:fx-stereo-fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-wider": {
+        "from": "drums-wider",
+        "use": [
+          {
+            "module": "fx-wider",
+            "uses": "@k7-core/audio/zz_utility/stereo-width",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "width": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Width",
+                  "bind": "Width",
+                  "min": 0,
+                  "max": 1
+                },
+                "center": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Center",
+                  "bind": "Center",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "stereo-fx",
+              "wider"
+            ],
+            "engine": "wider",
+            "params": {},
+            "pluginId": "drums-wider:fx-wider"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-stereo-fx",
+      "drums-wider"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-stereo-fx": "#dd322c",
+      "drums-wider": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-stereo-fx": "audio",
+      "drums-wider": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-stereo-fx": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-wider": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

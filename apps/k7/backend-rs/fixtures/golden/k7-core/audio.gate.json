@@ -1,0 +1,674 @@
+{
+  "project": "k7-core/audio.gate.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.gate",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.gate.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.gate.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Soft Gate",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.gate.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-de-hiss",
+        "name": "drums-de-hiss",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#d32222",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.gate.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-de-hiss:fx-de-hiss",
+            "type": "De Hiss",
+            "name": "fx-de-hiss",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.gate.k7/nodes/fx-de-hiss.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-gatelope",
+        "name": "drums-gatelope",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e0493e",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.gate.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-gatelope:fx-gatelope",
+            "type": "Gatelope",
+            "name": "fx-gatelope",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.gate.k7/nodes/fx-gatelope.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-soft-gate",
+        "name": "drums-soft-gate",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.gate.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-soft-gate:fx-soft-gate",
+            "type": "Soft Gate",
+            "name": "fx-soft-gate",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.gate.k7/nodes/fx-soft-gate.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/gate",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "thresh": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Thresh",
+                  "bind": "Thresh",
+                  "min": 0,
+                  "max": 1
+                },
+                "darken": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Darken",
+                  "bind": "Darken",
+                  "min": 0,
+                  "max": 1
+                },
+                "silence": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Silence",
+                  "bind": "Silence",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "thresh": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Thresh",
+                    "bind": "Thresh",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "darken": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Darken",
+                    "bind": "Darken",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "silence": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Silence",
+                    "bind": "Silence",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "de-hiss",
+              "gatelope",
+              "soft-gate"
+            ],
+            "engine": "soft-gate",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-de-hiss": {
+        "from": "drums-de-hiss",
+        "use": [
+          {
+            "module": "fx-de-hiss",
+            "uses": "@k7-core/audio/gate",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 3,
+              "widgets": {
+                "thresh": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "Thresh",
+                  "bind": "Thresh",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "de-hiss",
+              "gatelope",
+              "soft-gate"
+            ],
+            "engine": "de-hiss",
+            "params": {},
+            "pluginId": "drums-de-hiss:fx-de-hiss"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-gatelope": {
+        "from": "drums-gatelope",
+        "use": [
+          {
+            "module": "fx-gatelope",
+            "uses": "@k7-core/audio/gate",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "gate_grp": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "GATE",
+                  "color": "#3d7dff26"
+                },
+                "thresh": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Thresh",
+                  "bind": "Thresh",
+                  "min": 0,
+                  "max": 1
+                },
+                "attack": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Attack",
+                  "bind": "AttackS",
+                  "min": 0,
+                  "max": 1
+                },
+                "sus_grp": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "SUS",
+                  "color": "#3ec96b26"
+                },
+                "bass_sus": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Bass",
+                  "bind": "BassSus",
+                  "min": 0,
+                  "max": 1
+                },
+                "treb_sus": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Treble",
+                  "bind": "TrebSus",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "de-hiss",
+              "gatelope",
+              "soft-gate"
+            ],
+            "engine": "gatelope",
+            "params": {},
+            "pluginId": "drums-gatelope:fx-gatelope"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-soft-gate": {
+        "from": "drums-soft-gate",
+        "use": [
+          {
+            "module": "fx-soft-gate",
+            "uses": "@k7-core/audio/gate",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "thresh": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Thresh",
+                  "bind": "Thresh",
+                  "min": 0,
+                  "max": 1
+                },
+                "darken": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Darken",
+                  "bind": "Darken",
+                  "min": 0,
+                  "max": 1
+                },
+                "silence": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Silence",
+                  "bind": "Silence",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "thresh": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Thresh",
+                    "bind": "Thresh",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "darken": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Darken",
+                    "bind": "Darken",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "silence": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Silence",
+                    "bind": "Silence",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "de-hiss",
+              "gatelope",
+              "soft-gate"
+            ],
+            "engine": "soft-gate",
+            "params": {},
+            "pluginId": "drums-soft-gate:fx-soft-gate"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-de-hiss",
+      "drums-gatelope",
+      "drums-soft-gate"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-de-hiss": "#d32222",
+      "drums-gatelope": "#e0493e",
+      "drums-soft-gate": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-de-hiss": "audio",
+      "drums-gatelope": "audio",
+      "drums-soft-gate": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-de-hiss": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-gatelope": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-soft-gate": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

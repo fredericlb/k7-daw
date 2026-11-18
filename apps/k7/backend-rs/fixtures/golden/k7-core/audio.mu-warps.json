@@ -1,0 +1,380 @@
+{
+  "project": "k7-core/audio.mu-warps.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.mu-warps",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.mu-warps.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.mu-warps.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "mu-warps",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.mu-warps.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/mu-warps",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 3,
+              "widgets": {
+                "algo_section": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "ALGO",
+                  "color": "#3d7dff26"
+                },
+                "algorithm": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Algo",
+                  "bind": "Algorithm",
+                  "min": 0,
+                  "max": 1
+                },
+                "timbre": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Timbre",
+                  "bind": "Timbre",
+                  "min": 0,
+                  "max": 1
+                },
+                "level_section": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "LVL",
+                  "color": "#ff6a1a26"
+                },
+                "carrier_level": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Car",
+                  "bind": "Carrier level",
+                  "min": 0,
+                  "max": 1
+                },
+                "modulator_level": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Mod",
+                  "bind": "Modulator level",
+                  "min": 0,
+                  "max": 1
+                },
+                "osc_section": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 8,
+                  "label": "OSC",
+                  "color": "#3ec96b26"
+                },
+                "carrier": {
+                  "type": "dropdown",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 6,
+                  "label": "Carrier",
+                  "bind": "Carrier",
+                  "options": [
+                    {
+                      "label": "sidechain",
+                      "value": 0
+                    },
+                    {
+                      "label": "sine",
+                      "value": 1
+                    },
+                    {
+                      "label": "triangle",
+                      "value": 2
+                    },
+                    {
+                      "label": "saw",
+                      "value": 3
+                    }
+                  ]
+                },
+                "transpose": {
+                  "type": "number",
+                  "col": 6,
+                  "row": 2,
+                  "colSpan": 2,
+                  "label": "Transp",
+                  "bind": "Transpose",
+                  "min": -24,
+                  "max": 24,
+                  "step": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 6,
+                "widgets": {
+                  "algo_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "ALGO",
+                    "color": "#3d7dff26"
+                  },
+                  "algorithm": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Algo",
+                    "bind": "Algorithm",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "timbre": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Timbre",
+                    "bind": "Timbre",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "level_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "LVL",
+                    "color": "#ff6a1a26"
+                  },
+                  "carrier_level": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Car",
+                    "bind": "Carrier level",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "modulator_level": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Mod",
+                    "bind": "Modulator level",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "osc_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "OSC",
+                    "color": "#3ec96b26"
+                  },
+                  "carrier": {
+                    "type": "dropdown",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "label": "Carrier",
+                    "bind": "Carrier",
+                    "options": [
+                      {
+                        "label": "sidechain",
+                        "value": 0
+                      },
+                      {
+                        "label": "sine",
+                        "value": 1
+                      },
+                      {
+                        "label": "triangle",
+                        "value": 2
+                      },
+                      {
+                        "label": "saw",
+                        "value": 3
+                      }
+                    ]
+                  },
+                  "transpose": {
+                    "type": "number",
+                    "col": 0,
+                    "row": 5,
+                    "colSpan": 2,
+                    "label": "Transp",
+                    "bind": "Transpose",
+                    "min": -24,
+                    "max": 24,
+                    "step": 1
+                  }
+                }
+              }
+            },
+            "params": {},
+            "defaults": {
+              "Algorithm": 0,
+              "Timbre": 0.5,
+              "Carrier level": 0.5,
+              "Modulator level": 0.5,
+              "Carrier": 1,
+              "Transpose": 0
+            },
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

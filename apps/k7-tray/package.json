@@ -1,0 +1,19 @@
+{
+  "name": "k7-tray",
+  "version": "0.1.0",
+  "private": true,
+  "description": "k7's tray, on Tauri: starts k7's backend on 127.0.0.1 (which runs the machine's supervisor and engine), shows one status line, and opens k7 in the browser as an installable app. See docs/tray.md.",
+  "author": "F <fred@parapluie.org>",
+  "homepage": "https://app.k7.rocks",
+  "type": "module",
+  "scripts": {
+    "stage": "node scripts/stage.mjs",
+    "dev": "node ../../scripts/dev-tray.mjs",
+    "tray:build": "tauri build",
+    "tauri": "tauri",
+    "test": "node --test \"../../engine/scripts/*.test.mjs\" \"../k7/backend-rs/scripts/*.test.mjs\""
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

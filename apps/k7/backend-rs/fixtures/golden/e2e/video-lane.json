@@ -1,0 +1,293 @@
+{
+  "project": "e2e/video-lane.k7",
+  "repairs": {
+    "log": [],
+    "files": [
+      "graph.k7x",
+      "nodes/mix-main.k7x",
+      "project.k7x"
+    ]
+  },
+  "engine": {
+    "name": "video-lane",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/e2e/video-lane.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/e2e/video-lane.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          },
+          {
+            "to": "RENDER#audio",
+            "gain": 1
+          }
+        ]
+      },
+      "RENDER": {
+        "from": "RENDER",
+        "use": [],
+        "out": [
+          {
+            "to": "VIDEO_OUT",
+            "gain": 1
+          }
+        ]
+      },
+      "main": {
+        "from": "main",
+        "use": [
+          {
+            "module": "mix-main",
+            "uses": "@meta/shaders/video-mixer",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "video-mixer",
+            "shaders": [
+              "video-mixer"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "red": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Red",
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "green": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Green",
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "blue": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Blue",
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "transparency": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Transparency",
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 1,
+              "P2": 1,
+              "P3": 1,
+              "P4": 0
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "RENDER",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [
+      "main"
+    ],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "trackMixers": {
+      "main": "mix-main"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": {
+    "doc": {
+      "rowOrder": [
+        "drums",
+        "main"
+      ],
+      "name": "video-lane",
+      "viewport": [
+        1280,
+        720
+      ],
+      "fps": 30,
+      "videoTracks": [
+        {
+          "id": "main",
+          "name": "main",
+          "color": "",
+          "mute": false,
+          "solo": false,
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 720,
+          "clips": [
+            {
+              "id": "sample",
+              "name": "sample",
+              "source": "<ws>/e2e/video-lane.k7/clips/sample.mp4",
+              "start": 0,
+              "length": 6,
+              "sourceFrom": 0
+            }
+          ],
+          "shapes": [],
+          "plugins": [
+            {
+              "id": "main:0",
+              "type": "shader",
+              "name": "mix-main",
+              "enabled": true,
+              "params": {
+                "P1": 1,
+                "P2": 1,
+                "P3": 1,
+                "P4": 0
+              },
+              "shader": {
+                "name": "video-mixer",
+                "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+                "fragment": "#version 300 es\n// \"video-mixer\" — a lane's channels scaled and its alpha thinned: the strip a picture lane is mixed with.\n// The compositor blends straight alpha (SRC_ALPHA, ONE_MINUS_SRC_ALPHA), so transparency touches alpha alone.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;\nuniform float uP1; // red\nuniform float uP2; // green\nuniform float uP3; // blue\nuniform float uP4; // transparency\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 src = texture(uTex, vUV);\n  outColor = vec4(src.rgb * vec3(uP1, uP2, uP3), src.a * (1.0 - uP4));\n}\n"
+              }
+            }
+          ]
+        }
+      ],
+      "markers": [],
+      "framePlugins": [],
+      "sound": "mix",
+      "transitions": {},
+      "stretches": {},
+      "warnings": []
+    },
+    "errors": {
+      "errors": [],
+      "diagnostics": []
+    }
+  }
+}

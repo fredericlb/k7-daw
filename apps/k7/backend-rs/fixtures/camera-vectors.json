@@ -1,0 +1,438 @@
+{
+  "clean": [
+    {
+      "raw": "  a\nb\t c ",
+      "out": "a b c"
+    },
+    {
+      "raw": "   ",
+      "out": "camera"
+    },
+    {
+      "raw": "",
+      "out": "camera"
+    },
+    {
+      "raw": "",
+      "fallback": "phone",
+      "out": "phone"
+    },
+    {
+      "raw": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "out": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "raw": "Pixel 8 · Chrome",
+      "out": "Pixel 8 · Chrome"
+    },
+    {
+      "raw": "tab\u0001ctldel",
+      "out": "tab ctl del"
+    },
+    {
+      "raw": " nbsp　ideo﻿bom ls",
+      "out": "nbsp ideo bom ls"
+    },
+    {
+      "raw": "nelkept",
+      "out": "nelkept"
+    },
+    {
+      "raw": "Frédéric 🎛 Ünïcode",
+      "out": "Frédéric 🎛 Ünïcode"
+    },
+    {
+      "raw": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy🎥z",
+      "out": "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy🎥"
+    },
+    {
+      "raw": "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww tail",
+      "out": "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww "
+    }
+  ],
+  "unique": [
+    {
+      "want": "iPad",
+      "taken": [],
+      "out": "iPad"
+    },
+    {
+      "want": "iPad",
+      "taken": [
+        "ipad"
+      ],
+      "out": "iPad (2)"
+    },
+    {
+      "want": "iPad",
+      "taken": [
+        "iPad",
+        "iPad (2)"
+      ],
+      "out": "iPad (3)"
+    },
+    {
+      "want": "iPad",
+      "taken": [
+        "iPad",
+        "ipad (3)"
+      ],
+      "out": "iPad (2)"
+    },
+    {
+      "want": "Écran",
+      "taken": [
+        "écran"
+      ],
+      "out": "Écran (2)"
+    }
+  ],
+  "match": [
+    {
+      "label": "remote:iPad",
+      "cameras": [],
+      "out": {
+        "name": null,
+        "problem": "no remote camera is on"
+      }
+    },
+    {
+      "label": "remote:",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "iPad"
+      }
+    },
+    {
+      "label": "remote:   ",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "iPad"
+      }
+    },
+    {
+      "label": "remote:Stage left",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "Stage left"
+      }
+    },
+    {
+      "label": "remote:stage LEFT",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "Stage left"
+      }
+    },
+    {
+      "label": "remote:pixel",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "Pixel 8 · Chrome"
+      }
+    },
+    {
+      "label": "remote:my iPad pro",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "iPad"
+      }
+    },
+    {
+      "label": "remote:Drums",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "iPad",
+        "problem": "no remote camera called \"Drums\" is on — showing \"iPad\" (on: Pixel 8 · Chrome, iPad, Stage left)"
+      }
+    },
+    {
+      "label": "remote:x",
+      "cameras": [
+        {
+          "name": "first",
+          "since": 5
+        },
+        {
+          "name": "second",
+          "since": 5
+        }
+      ],
+      "out": {
+        "name": "first",
+        "problem": "no remote camera called \"x\" is on — showing \"first\" (on: first, second)"
+      }
+    },
+    {
+      "label": "",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "iPad"
+      }
+    },
+    {
+      "label": "Stage left",
+      "cameras": [
+        {
+          "name": "Pixel 8 · Chrome",
+          "since": 10
+        },
+        {
+          "name": "iPad",
+          "since": 30
+        },
+        {
+          "name": "Stage left",
+          "since": 20
+        }
+      ],
+      "out": {
+        "name": "Stage left"
+      }
+    },
+    {
+      "label": "remote:ÉCRAN",
+      "cameras": [
+        {
+          "name": "écran",
+          "since": 1
+        }
+      ],
+      "out": {
+        "name": "écran"
+      }
+    }
+  ],
+  "frame": [
+    {
+      "text": "{\"type\":\"gone\",\"from\":\"v1\"}",
+      "out": {
+        "type": "gone",
+        "from": "v1"
+      }
+    },
+    {
+      "text": "{\"type\":\"offer\",\"to\":\"v\",\"sdp\":{\"type\":\"offer\",\"sdp\":\"o\"},\"extra\":[1,2.5,null]}",
+      "out": {
+        "type": "offer",
+        "to": "v",
+        "sdp": {
+          "type": "offer",
+          "sdp": "o"
+        },
+        "extra": [
+          1,
+          2.5,
+          null
+        ]
+      }
+    },
+    {
+      "text": "  {\"type\":\"want\",\"label\":\"remote:\"}  ",
+      "out": {
+        "type": "want",
+        "label": "remote:"
+      }
+    },
+    {
+      "text": "{\"type\":3}",
+      "out": null
+    },
+    {
+      "text": "[]",
+      "out": null
+    },
+    {
+      "text": "null",
+      "out": null
+    },
+    {
+      "text": "nope",
+      "out": null
+    },
+    {
+      "text": "42",
+      "out": null
+    },
+    {
+      "text": "\"type\"",
+      "out": null
+    },
+    {
+      "text": "{\"label\":\"x\"}",
+      "out": null
+    },
+    {
+      "text": "{\"type\":\"a\",\"type\":\"b\"}",
+      "out": {
+        "type": "b"
+      }
+    }
+  ],
+  "ice": [
+    {
+      "out": []
+    },
+    {
+      "raw": "",
+      "out": []
+    },
+    {
+      "raw": "  ",
+      "out": []
+    },
+    {
+      "raw": "stun:a:3478, stun:b",
+      "out": [
+        {
+          "urls": "stun:a:3478"
+        },
+        {
+          "urls": "stun:b"
+        }
+      ]
+    },
+    {
+      "raw": " stun:a ,, ,stun:c ",
+      "out": [
+        {
+          "urls": "stun:a"
+        },
+        {
+          "urls": "stun:c"
+        }
+      ]
+    },
+    {
+      "raw": "[{\"urls\":\"turn:t\",\"username\":\"u\",\"credential\":\"c\"}]",
+      "out": [
+        {
+          "urls": "turn:t",
+          "username": "u",
+          "credential": "c"
+        }
+      ]
+    },
+    {
+      "raw": "[{\"urls\":\"\"},{\"urls\":[\"stun:x\"]},null,5,\"s\",{\"urls\":0},{\"username\":\"u\"},{\"urls\":[]}]",
+      "out": [
+        {
+          "urls": [
+            "stun:x"
+          ]
+        },
+        {
+          "urls": []
+        }
+      ]
+    },
+    {
+      "raw": "[not json",
+      "out": []
+    }
+  ]
+}

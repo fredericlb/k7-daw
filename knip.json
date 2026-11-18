@@ -1,0 +1,91 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "vitest": {
+    "config": ["vitest.config.ts"],
+    "entry": [
+      "**/*.{test,bench}.?(c|m)[jt]s?(x)",
+      "**/__tests__/**/*.?(c|m)[jt]s?(x)"
+    ]
+  },
+  "ignoreDependencies": [
+    "tsx",
+    "@vitejs/plugin-react",
+    "@tailwindcss/vite",
+    "esbuild"
+  ],
+  "ignoreBinaries": [
+    "cmake",
+    "ctest",
+    "ffmpeg",
+    "ffprobe",
+    "tilt",
+    "where.exe"
+  ],
+  "ignore": [
+    "scripts/dev-hosts.d.mts",
+    "packages/*/scripts/rustSources.d.mts"
+  ],
+  "workspaces": {
+    ".": {
+      "ignoreDependencies": ["node-pty", "@xterm/xterm", "@xterm/addon-fit"],
+      "entry": [
+        "scripts/*.mjs",
+        "scripts/**/*.mjs",
+        "demos/**/jsdsp.ts",
+        "demos/_modules/**/widgets.js",
+        "k7-core/modules/**/{jsdsp.ts,widgets.js}",
+        "engine/k7-android/scripts/termux-tools.mjs",
+        "engine/k7-android/scripts/mirror-termux-debs.mjs",
+        "engine/k7-ios/k7/backend-boot.mjs",
+        "engine/scripts/ciTree.mjs",
+        "engine/k7-android/app/src/main/assets/*.js"
+      ]
+    },
+    "engine/k7-runtime": {
+      "entry": ["scripts/*.{ts,mjs}", "engine/strudel/strudel.bundle.js"]
+    },
+    "apps/k7/frontend": {
+      "entry": ["src/docs/examples.ts", "notices/vendor.ts", "scripts/icons.mjs"]
+    },
+    "apps/k7/backend": {
+      "entry": ["scripts/bundle.mjs", "scripts/dev-front.mjs"]
+    },
+    "apps/k7-tray": {
+      "entry": ["scripts/*.mjs"]
+    },
+    "e2e": {
+      "entry": [
+        "specs/*.setup.ts",
+        "scripts/*.ts",
+        "fixtures/_modules/**/{jsdsp.ts,widgets.js}"
+      ],
+      "ignoreUnresolved": ["./gradlew"]
+    },
+    "engine/k7-android/web": {
+      "ignoreDependencies": ["@capacitor/android"]
+    },
+    "packages/song": {
+      "entry": ["src/benchProject.ts", "scripts/*.ts"]
+    },
+    "packages/audio-probe": {
+      "entry": ["scripts/*.ts"]
+    },
+    "packages/take-render": {
+      "entry": ["src/timeline.ts"]
+    },
+    "packages/k7-plugins": {
+      "entry": ["scripts/turntables/*.ts"]
+    },
+    "packages/audio-analysis": {
+      "entry": ["bench/*.ts", "scripts/*.mjs"]
+    },
+    "packages/k7x": {
+      "entry": ["bench/*.{ts,mjs}", "scripts/*.mjs"]
+    },
+    "packages/k7-wasm": {
+      "entry": ["scripts/*.mjs"],
+      "ignore": ["src/parity/*.old.ts"]
+    },
+    "packages/ui-chains-react": {}
+  }
+}

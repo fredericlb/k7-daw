@@ -1,0 +1,178 @@
+// ProjectGate.tsx — k7's wrapper over the shared gate. The resolving, cloning and opening are
+// @studio/project-shell's; what belongs here is the wording, which
+// is paraglide's, and what to render once the project is open. See @studio/project-shell docs/launch.md.
+
+import type { EngineUrl } from "@studio/engine-browser";
+import {
+  type GateEngine,
+  type GatePhase,
+  ProjectGate as Shared,
+} from "@studio/project-shell/gate";
+import { IDLE_TIMEOUT_MS } from "@studio/project-shell/idle";
+import { GateWait } from "@studio/project-shell/progress";
+import type { AccountLibrary } from "@studio/web-protocol";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { AskHostK7 } from "../AskHostK7";
+import { m } from "../paraglide/messages.js";
+import { FirstProject } from "../projects/FirstProject";
+import { LibrariesCard } from "../projects/LibrariesCard";
+import type { AccountFiles } from "../projects/workspaceOps";
+import { findAccountFiles } from "../settings/accountFiles";
+import type { RankedEngine } from "../types";
+import { ExternalSurface } from "./ExternalSurface";
+
+// The editor is the heaviest chunk there is: loaded, not imported, so the gates above it draw while it downloads.
+const loadApp = () => import("../App");
+const App = lazy(loadApp);
+
+export function ProjectGate({
+  engine,
+  gateEngine,
+  engineUrl,
+  engineSearching,
+  external,
+  onChangeEngine,
+  onIdle,
+  onResume,
+  onPhase,
+}: {
+  /** The engine playing the project, or null while there is none — the project opens either way. */
+  engine: RankedEngine | null;
+  /** Where the files are reached and with which token: the chosen engine's, else the server's file hub with none bound. */
+  gateEngine: GateEngine;
+  /** How the editor reaches the engine — asked again on every dial, so one chosen later is found. */
+  engineUrl: EngineUrl;
+  /** The first engine is still being looked for. */
+  engineSearching: boolean;
+  /** A surface's name, when this tab was opened on ONE surface — the gates above are the same either way, only the rendering differs. */
+  external?: string | null;
+  /** Passed straight through to the settings menu: the engine choice belongs to the gate ABOVE this one. */
+  onChangeEngine: () => void;
+  /** The session went to sleep — the lease belongs to the gate ABOVE, so this only forwards the news (@studio/project-shell/docs/idle.md). */
+  onIdle: () => void;
+  /** …and taking it back. */
+  onResume: () => void;
+  /** Each phase the gate enters, for the claim that waits on the address (../../docs/shell.md). */
+  onPhase: (k: GatePhase["k"]) => void;
+}) {
+  // Started at once, not when the project opens: the download runs beside the gate's own work instead of after it.
+  useEffect(() => {
+    if (!external) void loadApp();
+  }, [external]);
+  return (
+    <Shared
+      engine={gateEngine}
+      app="k7"
+      // The waits as a bar along the bottom, and the project open before the engine has it (docs/shell.md).
+      waits="bar"
+      // Twenty minutes untouched and this tab stops being a client of that engine.
+      idleTimeoutMs={IDLE_TIMEOUT_MS}
+      onIdle={onIdle}
+      onResume={onResume}
+      onPhase={onPhase}
+      // The same two the router's basename is built from, read out of the address rather than handed over, so both sides agree.
+      base={import.meta.env.BASE_URL}
+      strings={{
+        cloning: (workspace) => m["project.cloning"]({ workspace }),
+        back: m["project.backToProjects"](),
+        retry: m["common.retry"](),
+        details: m["common.details"](),
+        opening: m["startup.opening"](),
+        localUsage: m["project.localUsage"](),
+        retiredAddress: (name) => m["project.retiredAddress"]({ name }),
+        unreachableTitle: m["filesGate.title"](),
+        unreachableBody: (base) => m["filesGate.downBody"]({ base }),
+        blockedTitle: m["filesGate.blockedTitle"](),
+        blockedBody: (origin) => m["filesGate.blockedBody"]({ origin }),
+        bothBody: m["filesGate.body"](),
+        missingTitle: m["project.missingTitle"](),
+        missingBody: m["project.missingBody"](),
+        emptyWorkspace: m["project.emptyWorkspace"](),
+        librariesTitle: m["project.librariesTitle"](),
+        librariesBody: m["project.librariesBody"](),
+        benchWorkspace: m["project.benchWorkspace"](),
+        benchFetching: m["project.benchFetching"](),
+        idleTitle: m["project.idleTitle"](),
+        // The number comes from the constant rather than from the wording: two places saying 'twenty minutes' end up disagreeing.
+        idleBody: m["project.idleBody"]({
+          minutes: Math.round(IDLE_TIMEOUT_MS / 60000),
+        }),
+        resume: m["project.resume"](),
+        loading: {
+          scanningTitle: m["pluginScan.waitTitle"](),
+          scanningBody: m["pluginScan.waitBody"](),
+          scanningCount: (done, total) =>
+            m["pluginScan.progress"]({
+              done: String(done),
+              total: String(total),
+            }),
+          copyingTitle: m["engineLoad.copyingTitle"](),
+          copyingBody: m["engineLoad.copyingBody"](),
+          applyingTitle: m["engineLoad.applyingTitle"](),
+          applyingBody: m["engineLoad.applyingBody"](),
+          warmingTitle: m["engineLoad.warmingTitle"](),
+          warmingBody: m["engineLoad.warmingBody"](),
+        },
+      }}
+      /* A workspace with nothing in it asks for its first project rather than refusing to open. */
+      renderEmpty={({ workspace, onCreated }) => (
+        <FirstProject workspace={workspace} onCreated={onCreated} />
+      )}
+      /* No library: the read-only card, right here; the project opens once one is listed. */
+      renderNoLibraries={({ onAdded }) => <AddLibrary onAdded={onAdded} />}
+    >
+      {({ workspace, project, userEmail, quit }) =>
+        external ? (
+          <>
+            <ExternalSurface
+              key={`${workspace}/${project}/${external}`}
+              name={external}
+              project={project}
+              engineUrl={engineUrl}
+              userEmail={userEmail}
+            />
+            {/* The editor mounts its own; a second device's menu asks the same questions (menuConfirm.ts). */}
+            <AskHostK7 />
+          </>
+        ) : (
+          // key by workspace+project so moving between them remounts the editor cleanly; its code arriving is a wait, under the startup splash.
+          <Suspense fallback={<GateWait label={m["startup.opening"]()} />}>
+            <App
+              key={`${workspace}/${project}`}
+              // A function, not the address: the editor stays open for hours and the relayed URL carries a one-minute ticket.
+              engineUrl={engineUrl}
+              // What this link measured, passed down rather than re-probed: a second round trip would report a different number.
+              engineLatency={engine?.latency ?? null}
+              // The RAW email, not a slug: `sessionFor` does the slugging, so this half and the file service cannot drift.
+              userEmail={userEmail}
+              onQuitWorkspace={quit}
+              onChangeEngine={onChangeEngine}
+              engine={engine ?? undefined}
+              engineSearching={engineSearching}
+            />
+          </Suspense>
+        )
+      }
+    </Shared>
+  );
+}
+
+/** The libraries card on the account's file service, found the way the home page finds it. */
+function AddLibrary({ onAdded }: { onAdded: () => void }) {
+  const [fileService, setFileService] = useState<AccountFiles | null>(null);
+  useEffect(() => {
+    let live = true;
+    void findAccountFiles(false).then((f) => live && setFileService(f));
+    return () => {
+      live = false;
+    };
+  }, []);
+  // Stable, since the card reports from an effect keyed on it.
+  const onLibraries = useCallback(
+    (l: AccountLibrary[]) => {
+      if (l.length) onAdded();
+    },
+    [onAdded],
+  );
+  return <LibrariesCard fileService={fileService} onLibraries={onLibraries} />;
+}

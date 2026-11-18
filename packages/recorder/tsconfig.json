@@ -1,0 +1,11 @@
+{
+  "extends": "@studio/tsconfig/react.json",
+  "compilerOptions": {
+    "types": [
+      "vite/client"
+    ]
+  },
+  "include": [
+    "src"
+  ]
+}

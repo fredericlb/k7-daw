@@ -1,0 +1,18 @@
+[package]
+name = "k7-picture"
+description = "The picture rendered on the server (phase 5d, part 3): the image's chromium driven over the DevTools protocol, fed by a one-off loopback server (docs/service.md, \"Picture render\")."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# The DevTools protocol: chromium launched headless, a page opened, its uncaught errors heard (decision 10).
+chromiumoxide = { version = "0.7", default-features = false, features = ["tokio-runtime"] }
+futures-util.workspace = true
+# The one-off server the page fetches its job from and posts its file to.
+axum.workspace = true
+tokio = { workspace = true, features = ["rt", "net", "fs", "io-util", "sync", "time", "macros", "process"] }
+getrandom.workspace = true
+# The film comes back as base64 text: a binary body breaks the DevTools event that carries it.
+base64.workspace = true
+serde_json.workspace = true

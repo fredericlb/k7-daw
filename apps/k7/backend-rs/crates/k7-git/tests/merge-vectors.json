@@ -1,0 +1,289 @@
+[
+  {
+    "name": "k7x: different keys settle on their own",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([1, 2])\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 0.25, high: 0 })\nbands([1, 2])\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([8])\n",
+    "conflicts": [],
+    "choose": null,
+    "result": "plugin(\"eq\")\nparams({ low: 0.25, high: 0 })\nbands([8])\n"
+  },
+  {
+    "name": "k7x: both made the same change",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([1, 2])\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 0.5, high: 0 })\nbands([1, 2])\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 0.5, high: 0 })\nbands([1, 2])\n",
+    "conflicts": [],
+    "choose": null,
+    "result": "plugin(\"eq\")\nparams({ low: 0.5, high: 0 })\nbands([1, 2])\n"
+  },
+  {
+    "name": "k7x: the same key, theirs chosen",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([1, 2])\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 0.25, high: 0 })\nbands([1, 2])\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 0.75, high: 0 })\nbands([1, 2])\n",
+    "conflicts": [
+      {
+        "keyPath": "params.low",
+        "base": "0",
+        "mine": "0.25",
+        "theirs": "0.75"
+      }
+    ],
+    "choose": "theirs",
+    "result": "plugin(\"eq\")\nparams({ low: 0.75, high: 0 })\nbands([1, 2])\n"
+  },
+  {
+    "name": "k7x: the same key, mine chosen",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([1, 2])\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 0.25, high: 0 })\nbands([1, 2])\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 0.75, high: 0 })\nbands([1, 2])\n",
+    "conflicts": [
+      {
+        "keyPath": "params.low",
+        "base": "0",
+        "mine": "0.25",
+        "theirs": "0.75"
+      }
+    ],
+    "choose": "mine",
+    "result": "plugin(\"eq\")\nparams({ low: 0.25, high: 0 })\nbands([1, 2])\n"
+  },
+  {
+    "name": "text: far apart lines merge",
+    "path": "n.md",
+    "base": "a\nb\nc\nd\ne\nf\ng\n",
+    "mine": "A\nb\nc\nd\ne\nf\ng\n",
+    "theirs": "a\nb\nc\nd\ne\nf\nG\n",
+    "conflicts": [],
+    "choose": null,
+    "result": "A\nb\nc\nd\ne\nf\nG\n"
+  },
+  {
+    "name": "text: the same line, both chosen",
+    "path": "n.md",
+    "base": "one\ntwo\nthree\n",
+    "mine": "one\nMINE\nthree\n",
+    "theirs": "one\nTHEIRS\nthree\n",
+    "conflicts": [
+      {
+        "line": 2,
+        "base": "two\n",
+        "mine": "MINE\n",
+        "theirs": "THEIRS\n"
+      }
+    ],
+    "choose": "both",
+    "result": "one\nMINE\nTHEIRS\nthree\n"
+  },
+  {
+    "name": "text: the same line, theirs chosen",
+    "path": "n.md",
+    "base": "one\ntwo\nthree\n",
+    "mine": "one\nMINE\nthree\n",
+    "theirs": "one\nTHEIRS\nthree\n",
+    "conflicts": [
+      {
+        "line": 2,
+        "base": "two\n",
+        "mine": "MINE\n",
+        "theirs": "THEIRS\n"
+      }
+    ],
+    "choose": "theirs",
+    "result": "one\nTHEIRS\nthree\n"
+  },
+  {
+    "name": "text: both made the same edit",
+    "path": "n.md",
+    "base": "one\ntwo\nthree\n",
+    "mine": "one\nSAME\nthree\n",
+    "theirs": "one\nSAME\nthree\n",
+    "conflicts": [],
+    "choose": null,
+    "result": "one\nSAME\nthree\n"
+  },
+  {
+    "name": "k7x: a list changed on both sides is one conflict at its key",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([1, 2])\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([3])\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([8])\n",
+    "conflicts": [
+      {
+        "keyPath": "bands",
+        "base": "[1, 2]",
+        "mine": "[3]",
+        "theirs": "[8]"
+      }
+    ],
+    "choose": "theirs",
+    "result": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([8])\n"
+  },
+  {
+    "name": "k7x: the same list, mine chosen",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([1, 2])\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([3])\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([8])\n",
+    "conflicts": [
+      {
+        "keyPath": "bands",
+        "base": "[1, 2]",
+        "mine": "[3]",
+        "theirs": "[8]"
+      }
+    ],
+    "choose": "mine",
+    "result": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([3])\n"
+  },
+  {
+    "name": "text: both sides added at the end",
+    "path": "n.md",
+    "base": "a\nb\n",
+    "mine": "a\nb\nmine\n",
+    "theirs": "a\nb\ntheirs\n",
+    "conflicts": [
+      {
+        "line": 3,
+        "base": "",
+        "mine": "mine\n",
+        "theirs": "theirs\n"
+      }
+    ],
+    "choose": "both",
+    "result": "a\nb\nmine\ntheirs\n"
+  },
+  {
+    "name": "k7x keyed item: both sides added the same key, both chosen",
+    "path": "s/lane.k7x",
+    "base": "plugin(\"lane\")\nevents([\n  ref(\"snare\").start(\"2:1\"),\n])\n",
+    "mine": "plugin(\"lane\")\nevents([\n  ref(\"snare\").start(\"2:1\"),\n  ref(\"kick\").start(\"1:1\").gain(0),\n])\n",
+    "theirs": "plugin(\"lane\")\nevents([\n  ref(\"snare\").start(\"2:1\"),\n  ref(\"kick\").start(\"1:1\").gain(3),\n])\n",
+    "conflicts": [
+      {
+        "keyPath": "events.[ref=\"kick\",start=\"1:1\"]",
+        "base": null,
+        "mine": "ref(\"kick\").start(\"1:1\").gain(0)",
+        "theirs": "ref(\"kick\").start(\"1:1\").gain(3)",
+        "both": true
+      }
+    ],
+    "choose": "both",
+    "result": "plugin(\"lane\")\nevents([\n  ref(\"snare\").start(\"2:1\"),\n  ref(\"kick\").start(\"1:1\").gain(0),\n  ref(\"kick (Ada)\").start(\"1:1\").gain(3),\n])\n"
+  },
+  {
+    "name": "k7x keyed item: the same key, theirs chosen",
+    "path": "s/lane.k7x",
+    "base": "plugin(\"lane\")\nevents([\n  ref(\"snare\").start(\"2:1\"),\n])\n",
+    "mine": "plugin(\"lane\")\nevents([\n  ref(\"snare\").start(\"2:1\"),\n  ref(\"kick\").start(\"1:1\").gain(0),\n])\n",
+    "theirs": "plugin(\"lane\")\nevents([\n  ref(\"snare\").start(\"2:1\"),\n  ref(\"kick\").start(\"1:1\").gain(3),\n])\n",
+    "conflicts": [
+      {
+        "keyPath": "events.[ref=\"kick\",start=\"1:1\"]",
+        "base": null,
+        "mine": "ref(\"kick\").start(\"1:1\").gain(0)",
+        "theirs": "ref(\"kick\").start(\"1:1\").gain(3)",
+        "both": true
+      }
+    ],
+    "choose": "theirs",
+    "result": "plugin(\"lane\")\nevents([\n  ref(\"snare\").start(\"2:1\"),\n  ref(\"kick\").start(\"1:1\").gain(3),\n])\n"
+  },
+  {
+    "name": "k7x keyed item of a list keyed by time and note: both is not offered",
+    "path": "s/seq.k7x",
+    "base": "plugin(\"seq\")\nnotes([\n  t(1).k(60),\n])\n",
+    "mine": "plugin(\"seq\")\nnotes([\n  t(1).k(60),\n  t(2).k(62).d(1),\n])\n",
+    "theirs": "plugin(\"seq\")\nnotes([\n  t(1).k(60),\n  t(2).k(62).d(4),\n])\n",
+    "conflicts": [
+      {
+        "keyPath": "notes.[t=2,k=62]",
+        "base": null,
+        "mine": "t(2).k(62).d(1)",
+        "theirs": "t(2).k(62).d(4)",
+        "both": false
+      }
+    ],
+    "choose": "mine",
+    "result": "plugin(\"seq\")\nnotes([\n  t(1).k(60),\n  t(2).k(62).d(1),\n])\n"
+  },
+  {
+    "name": "k7x a single value: both is not offered",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 1, high: 0 })\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 2, high: 0 })\n",
+    "conflicts": [
+      {
+        "keyPath": "params.low",
+        "base": "0",
+        "mine": "1",
+        "theirs": "2",
+        "both": false
+      }
+    ],
+    "choose": "theirs",
+    "result": "plugin(\"eq\")\nparams({ low: 2, high: 0 })\n"
+  },
+  {
+    "name": "k7x keyed item keyed by a number id: theirs takes the next free id",
+    "path": "s/chain.k7x",
+    "base": "plugin(\"chain\")\nsubchains([\n  id(1).x(0),\n])\n",
+    "mine": "plugin(\"chain\")\nsubchains([\n  id(1).x(0),\n  id(2).x(1),\n])\n",
+    "theirs": "plugin(\"chain\")\nsubchains([\n  id(1).x(0),\n  id(2).x(5),\n])\n",
+    "conflicts": [
+      {
+        "keyPath": "subchains.[id=2]",
+        "base": null,
+        "mine": "id(2).x(1)",
+        "theirs": "id(2).x(5)",
+        "both": true
+      }
+    ],
+    "choose": "both",
+    "result": "plugin(\"chain\")\nsubchains([\n  id(1).x(0),\n  id(2).x(1),\n  id(3).x(5),\n])\n"
+  },
+  {
+    "name": "k7x: a key removed by one side and untouched by the other goes",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([1, 2])\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 0 })\nbands([1, 2])\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([8])\n",
+    "conflicts": [],
+    "choose": null,
+    "result": "plugin(\"eq\")\nparams({ low: 0 })\nbands([8])\n"
+  },
+  {
+    "name": "k7x: a key removed by one side and changed by the other is a conflict, theirs chosen",
+    "path": "s/eq.k7x",
+    "base": "plugin(\"eq\")\nparams({ low: 0, high: 0 })\nbands([1, 2])\n",
+    "mine": "plugin(\"eq\")\nparams({ low: 0 })\nbands([1, 2])\n",
+    "theirs": "plugin(\"eq\")\nparams({ low: 0, high: 0.5 })\nbands([1, 2])\n",
+    "conflicts": [
+      {
+        "keyPath": "params.high",
+        "base": "0",
+        "mine": null,
+        "theirs": "0.5",
+        "both": false
+      }
+    ],
+    "choose": "theirs",
+    "result": "plugin(\"eq\")\nparams({ low: 0, high: 0.5 })\nbands([1, 2])\n"
+  },
+  {
+    "name": "text: one side deletes a line the other leaves alone",
+    "path": "s/n.md",
+    "base": "one\ntwo\nthree\n",
+    "mine": "one\nthree\n",
+    "theirs": "one\ntwo\nthree\nfour\n",
+    "conflicts": [],
+    "choose": null,
+    "result": "one\nthree\nfour\n"
+  }
+]

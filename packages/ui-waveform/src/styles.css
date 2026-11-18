@@ -1,0 +1,83 @@
+/* Waveform wrapper + marker pins. Colours come from CSS variables the host app
+   defines (--surface, --border). */
+
+.waveform-wrap {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  line-height: 0;
+  background: var(--surface);
+}
+/* Interactive marker pin overlaid on the waveform (teal, matching its line). */
+.waveform-marker {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  padding: 1px 3px 2px;
+  margin: 0;
+  border: none;
+  background: rgba(45, 212, 191, 0.95);
+  border-radius: 0 0 5px 5px;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 3;
+}
+
+/* A BUBBLE near the foot of the line instead of a tab hanging from the top — `place="low"`.
+ *
+ * Opt-in, because three surfaces draw markers on a waveform and only one of them draws ONSETS:
+ * the DJ desk's cues and k7's session marks are tabs.
+ *
+ * Low down because the top of a waveform is where the loud material is, so a row of tabs along
+ * the top edge covers the transients it points at. `bottom: 5%` with `translate(-50%, 50%)`
+ * centres the bubble on the line in x and on that height in y — the mark is ON its onset both
+ * ways rather than beside it.
+ *
+ * Round and 17px because it is also the handle that DRAGS the onset (`onMarkerMove`), and a
+ * target smaller than this is a target you miss. */
+.waveform-marker--low {
+  top: auto;
+  bottom: 5%;
+  transform: translate(-50%, 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  padding: 0;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  font-size: 9px;
+}
+.waveform-marker:hover {
+  background: rgba(45, 212, 191, 1);
+}
+/* The flag inside the bubble, near-white so it reads as a mark on the teal. */
+.waveform-marker-flag {
+  display: block;
+  width: 10px;
+  height: 10px;
+  color: #fff;
+}
+
+/* A window edge's grab zone — 12px straddling a 1.5px line, which is what a hand can actually
+   catch. Transparent: the EDGE is drawn on the canvas underneath, and a second one here would be
+   two lines a pixel apart. It lights only under the cursor, so the picture stays the picture. */
+.waveform-edge {
+  position: absolute;
+  top: 0;
+  width: 12px;
+  margin-left: -6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: ew-resize;
+  touch-action: none;
+}
+.waveform-edge:hover,
+.waveform-edge:active {
+  background: rgba(226, 232, 240, 0.18);
+}

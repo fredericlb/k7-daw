@@ -1,0 +1,763 @@
+{
+ "cases": [
+  {
+   "name": "a file chain",
+   "fn": "slotOf",
+   "args": {
+    "ref": "@k7-core/solo",
+    "savedAt": "2026-11-12T09:05:03.000Z"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "id": "solo",
+    "name": "solo",
+    "chain": "@k7-core/solo",
+    "savedAt": "2026-11-12T09:05:03.000Z",
+    "protocol": 1,
+    "doc": {
+     "name": "slot solo",
+     "tempo": 120,
+     "sampleRate": 48000,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4,
+     "masterVolume": 0,
+     "masterPlugins": [
+      {
+       "id": "MIX:@record",
+       "type": "Recorder",
+       "name": "@record",
+       "path": "",
+       "presetSave": "",
+       "role": "",
+       "enabled": true,
+       "params": {
+        "@mix": 1,
+        "@input-volume": 0,
+        "@output-volume": 0
+       }
+      }
+     ],
+     "recordDir": "$DIR/home/workspace/Banc/slot-SCRATCH/clips",
+     "tracks": [
+      {
+       "id": "IN",
+       "name": "IN",
+       "role": "regular",
+       "contentType": "audio",
+       "group": "",
+       "generated": false,
+       "color": "#8b8f98",
+       "mute": false,
+       "solo": false,
+       "disabled": false,
+       "inputChannels": [],
+       "outputChannels": [],
+       "monitor": "on",
+       "inputGain": 0,
+       "clips": [],
+       "plugins": [
+        {
+         "id": "IN:verb",
+         "type": "Reverb",
+         "name": "verb",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/verb.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        },
+        {
+         "id": "IN:fader",
+         "type": "Mixer",
+         "name": "fader",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/fader.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "Volume": 0,
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        }
+       ],
+       "sends": [],
+       "automation": []
+      }
+     ],
+     "groups": [],
+     "markers": [],
+     "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+     }
+    },
+    "assets": [],
+    "chainPlugins": [
+     "IN:verb"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "a file chain with a bypassed step",
+   "fn": "slotOf",
+   "args": {
+    "ref": "@k7-core/pair",
+    "savedAt": "2026-11-12T09:05:03.000Z"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "id": "pair",
+    "name": "pair",
+    "chain": "@k7-core/pair",
+    "savedAt": "2026-11-12T09:05:03.000Z",
+    "protocol": 1,
+    "doc": {
+     "name": "slot pair",
+     "tempo": 120,
+     "sampleRate": 48000,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4,
+     "masterVolume": 0,
+     "masterPlugins": [
+      {
+       "id": "MIX:@record",
+       "type": "Recorder",
+       "name": "@record",
+       "path": "",
+       "presetSave": "",
+       "role": "",
+       "enabled": true,
+       "params": {
+        "@mix": 1,
+        "@input-volume": 0,
+        "@output-volume": 0
+       }
+      }
+     ],
+     "recordDir": "$DIR/home/workspace/Banc/slot-SCRATCH/clips",
+     "tracks": [
+      {
+       "id": "IN",
+       "name": "IN",
+       "role": "regular",
+       "contentType": "audio",
+       "group": "",
+       "generated": false,
+       "color": "#8b8f98",
+       "mute": false,
+       "solo": false,
+       "disabled": false,
+       "inputChannels": [],
+       "outputChannels": [],
+       "monitor": "on",
+       "inputGain": 0,
+       "clips": [],
+       "plugins": [
+        {
+         "id": "IN:verb",
+         "type": "Reverb",
+         "name": "verb",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/verb.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        },
+        {
+         "id": "IN:verb-2",
+         "type": "Reverb",
+         "name": "verb-2",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/verb-2.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        },
+        {
+         "id": "IN:delay",
+         "type": "Reverb",
+         "name": "delay",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/delay.vstpreset",
+         "role": "",
+         "enabled": false,
+         "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        },
+        {
+         "id": "IN:fader",
+         "type": "Mixer",
+         "name": "fader",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/fader.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "Volume": 0,
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        }
+       ],
+       "sends": [],
+       "automation": []
+      }
+     ],
+     "groups": [],
+     "markers": [],
+     "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+     }
+    },
+    "assets": [],
+    "chainPlugins": [
+     "IN:verb",
+     "IN:verb-2",
+     "IN:delay"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "a file chain with its input",
+   "fn": "slotOf",
+   "args": {
+    "ref": "@k7-core/withinput",
+    "savedAt": "2026-11-12T09:05:03.000Z"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "id": "withinput",
+    "name": "withinput",
+    "chain": "@k7-core/withinput",
+    "savedAt": "2026-11-12T09:05:03.000Z",
+    "protocol": 1,
+    "doc": {
+     "name": "slot withinput",
+     "tempo": 120,
+     "sampleRate": 48000,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4,
+     "masterVolume": 0,
+     "masterPlugins": [
+      {
+       "id": "MIX:@record",
+       "type": "Recorder",
+       "name": "@record",
+       "path": "",
+       "presetSave": "",
+       "role": "",
+       "enabled": true,
+       "params": {
+        "@mix": 1,
+        "@input-volume": 0,
+        "@output-volume": 0
+       }
+      }
+     ],
+     "recordDir": "$DIR/home/workspace/Banc/slot-SCRATCH/clips",
+     "tracks": [
+      {
+       "id": "IN",
+       "name": "IN",
+       "role": "regular",
+       "contentType": "audio",
+       "group": "",
+       "generated": false,
+       "color": "#8b8f98",
+       "mute": false,
+       "solo": false,
+       "disabled": false,
+       "inputChannels": [
+        1,
+        2
+       ],
+       "outputChannels": [],
+       "monitor": "on",
+       "inputGain": 0,
+       "clips": [],
+       "plugins": [
+        {
+         "id": "IN:verb",
+         "type": "Reverb",
+         "name": "verb",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/verb.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        },
+        {
+         "id": "IN:fader",
+         "type": "Mixer",
+         "name": "fader",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/fader.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "Volume": 0,
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        }
+       ],
+       "sends": [],
+       "automation": []
+      }
+     ],
+     "groups": [],
+     "markers": [],
+     "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+     }
+    },
+    "assets": [],
+    "chainPlugins": [
+     "IN:verb"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "a folder chain",
+   "fn": "slotOf",
+   "args": {
+    "ref": "@k7-core/old",
+    "savedAt": "2026-11-12T09:05:03.000Z"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "id": "old",
+    "name": "old",
+    "chain": "@k7-core/old",
+    "savedAt": "2026-11-12T09:05:03.000Z",
+    "protocol": 1,
+    "doc": {
+     "name": "slot old",
+     "tempo": 120,
+     "sampleRate": 48000,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4,
+     "masterVolume": 0,
+     "masterPlugins": [
+      {
+       "id": "MIX:@record",
+       "type": "Recorder",
+       "name": "@record",
+       "path": "",
+       "presetSave": "",
+       "role": "",
+       "enabled": true,
+       "params": {
+        "@mix": 1,
+        "@input-volume": 0,
+        "@output-volume": 0
+       }
+      }
+     ],
+     "recordDir": "$DIR/home/workspace/Banc/slot-SCRATCH/clips",
+     "tracks": [
+      {
+       "id": "IN",
+       "name": "IN",
+       "role": "regular",
+       "contentType": "audio",
+       "group": "",
+       "generated": false,
+       "color": "#8b8f98",
+       "mute": false,
+       "solo": false,
+       "disabled": false,
+       "inputChannels": [],
+       "outputChannels": [],
+       "monitor": "on",
+       "inputGain": 0,
+       "clips": [],
+       "plugins": [
+        {
+         "id": "IN:comp",
+         "type": "Reverb",
+         "name": "comp",
+         "path": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/comp.vstpreset",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/comp.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        },
+        {
+         "id": "IN:echo",
+         "type": "Reverb",
+         "name": "echo",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/echo.vstpreset",
+         "role": "",
+         "enabled": false,
+         "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        },
+        {
+         "id": "IN:fader",
+         "type": "Mixer",
+         "name": "fader",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/fader.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "Volume": 0,
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        }
+       ],
+       "sends": [],
+       "automation": []
+      }
+     ],
+     "groups": [],
+     "markers": [],
+     "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+     }
+    },
+    "assets": [],
+    "chainPlugins": [
+     "IN:comp",
+     "IN:echo"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "an accented name folds to its letters",
+   "fn": "slotOf",
+   "args": {
+    "ref": "@k7-core/Guitare électrique",
+    "savedAt": "2026-11-12T09:05:03.000Z"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET",
+    "libraries/k7-core/chains/Guitare électrique.k7x": "steps([\n  id(\"88888888-8888-4888-8888-888888888888\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n"
+   },
+   "ret": {
+    "id": "guitare-electrique",
+    "name": "Guitare électrique",
+    "chain": "@k7-core/Guitare électrique",
+    "savedAt": "2026-11-12T09:05:03.000Z",
+    "protocol": 1,
+    "doc": {
+     "name": "slot Guitare électrique",
+     "tempo": 120,
+     "sampleRate": 48000,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4,
+     "masterVolume": 0,
+     "masterPlugins": [
+      {
+       "id": "MIX:@record",
+       "type": "Recorder",
+       "name": "@record",
+       "path": "",
+       "presetSave": "",
+       "role": "",
+       "enabled": true,
+       "params": {
+        "@mix": 1,
+        "@input-volume": 0,
+        "@output-volume": 0
+       }
+      }
+     ],
+     "recordDir": "$DIR/home/workspace/Banc/slot-SCRATCH/clips",
+     "tracks": [
+      {
+       "id": "IN",
+       "name": "IN",
+       "role": "regular",
+       "contentType": "audio",
+       "group": "",
+       "generated": false,
+       "color": "#8b8f98",
+       "mute": false,
+       "solo": false,
+       "disabled": false,
+       "inputChannels": [],
+       "outputChannels": [],
+       "monitor": "on",
+       "inputGain": 0,
+       "clips": [],
+       "plugins": [
+        {
+         "id": "IN:verb",
+         "type": "Reverb",
+         "name": "verb",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/verb.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        },
+        {
+         "id": "IN:fader",
+         "type": "Mixer",
+         "name": "fader",
+         "path": "",
+         "presetSave": "$DIR/home/workspace/Banc/slot-SCRATCH/nodes/fader.vstpreset",
+         "role": "",
+         "enabled": true,
+         "params": {
+          "Volume": 0,
+          "@mix": 1,
+          "@input-volume": 0,
+          "@output-volume": 0
+         }
+        }
+       ],
+       "sends": [],
+       "automation": []
+      }
+     ],
+     "groups": [],
+     "markers": [],
+     "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+     }
+    },
+    "assets": [],
+    "chainPlugins": [
+     "IN:verb"
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "a cold chain refused",
+   "fn": "slotOf",
+   "args": {
+    "ref": "@k7-core/stems",
+    "savedAt": "2026-11-12T09:05:03.000Z"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "thrown": "\"@k7-core/stems\" cannot play live: \"@k7-core/cold/stemsplit\" only works on audio already on disk",
+   "changed": {}
+  },
+  {
+   "name": "a chain that is not there",
+   "fn": "slotOf",
+   "args": {
+    "ref": "@k7-core/nothing",
+    "savedAt": "2026-11-12T09:05:03.000Z"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "thrown": "no chain \"@k7-core/nothing\" in the libraries",
+   "changed": {}
+  },
+  {
+   "name": "a chain with a rig's node name",
+   "fn": "slotOf",
+   "args": {
+    "ref": "@k7-core/clash",
+    "savedAt": "2026-11-12T09:05:03.000Z"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "thrown": "\"@k7-core/clash\" cannot play live: its node \"fader\" has the name of one of the rig's own",
+   "changed": {}
+  }
+ ]
+}

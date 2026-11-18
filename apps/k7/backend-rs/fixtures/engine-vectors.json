@@ -1,0 +1,805 @@
+{
+  "heartbeats": [
+    {
+      "input": {},
+      "out": {
+        "ok": false,
+        "error": "id: Invalid input: expected string, received undefined; token: Invalid input: expected string, received undefined; addresses: Invalid input: expected object, received undefined"
+      }
+    },
+    {
+      "input": null,
+      "out": {
+        "ok": false,
+        "error": "(body): Invalid input: expected object, received null"
+      }
+    },
+    {
+      "input": [],
+      "out": {
+        "ok": false,
+        "error": "(body): Invalid input: expected object, received array"
+      }
+    },
+    {
+      "input": "x",
+      "out": {
+        "ok": false,
+        "error": "(body): Invalid input: expected object, received string"
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        }
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": []
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "hostname": "studio",
+        "machineFingerprint": "fp",
+        "performance": {
+          "score": 1200,
+          "cores": 8,
+          "singleThread": 70.5,
+          "diskWriteMBps": 900,
+          "fsyncPerSec": null,
+          "memoryGB": 32
+        },
+        "libraryLevel": 2,
+        "protocol": 1,
+        "build": "v0.1.0",
+        "safeMode": true
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "studio",
+          "machineFingerprint": "fp",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "performance": {
+            "score": 1200,
+            "cores": 8,
+            "singleThread": 70.5,
+            "diskWriteMBps": 900,
+            "fsyncPerSec": null,
+            "memoryGB": 32
+          },
+          "libraryLevel": 2,
+          "protocol": 1,
+          "build": "v0.1.0",
+          "safeMode": true,
+          "cleaned": []
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "tunnelSecret": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "tunnelSecret": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": []
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "",
+        "token": "",
+        "addresses": {}
+      },
+      "out": {
+        "ok": false,
+        "error": "id: Too small: expected string to have >=1 characters; id: an id is letters, digits, '.', '_' or '-'; token: Too small: expected string to have >=1 characters; addresses.port: Invalid input: expected number, received undefined"
+      }
+    },
+    {
+      "input": {
+        "id": "a/b",
+        "token": "t",
+        "addresses": {
+          "port": 1.5
+        }
+      },
+      "out": {
+        "ok": false,
+        "error": "id: an id is letters, digits, '.', '_' or '-'; addresses.port: Invalid input: expected int, received number"
+      }
+    },
+    {
+      "input": {
+        "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "token": "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt",
+        "tunnelSecret": "short",
+        "addresses": {
+          "port": 0
+        }
+      },
+      "out": {
+        "ok": false,
+        "error": "id: Too big: expected string to have <=128 characters; token: Too big: expected string to have <=256 characters; tunnelSecret: Too small: expected string to have >=32 characters; addresses.port: Too small: expected number to be >=1"
+      }
+    },
+    {
+      "input": {
+        "id": "e",
+        "token": "t",
+        "tunnelSecret": null,
+        "addresses": {
+          "port": "8"
+        }
+      },
+      "out": {
+        "ok": false,
+        "error": "tunnelSecret: Invalid input: expected string, received null; addresses.port: Invalid input: expected number, received string"
+      }
+    },
+    {
+      "input": {
+        "id": 5,
+        "token": true,
+        "addresses": []
+      },
+      "out": {
+        "ok": false,
+        "error": "id: Invalid input: expected string, received number; token: Invalid input: expected string, received boolean; addresses: Invalid input: expected object, received array"
+      }
+    },
+    {
+      "input": {
+        "id": "é",
+        "token": "t",
+        "addresses": {
+          "port": 70000
+        }
+      },
+      "out": {
+        "ok": false,
+        "error": "id: an id is letters, digits, '.', '_' or '-'; addresses.port: Too big: expected number to be <=65535"
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 1e+300
+        }
+      },
+      "out": {
+        "ok": false,
+        "error": "addresses.port: Too big: expected int to be <=9007199254740991; addresses.port: Too big: expected number to be <=65535"
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765,
+          "loopback": "::1",
+          "lanIps": [
+            "1.2.3.4",
+            "01.2.3.4",
+            "256.1.1.1",
+            7,
+            "10.0.0.255"
+          ]
+        }
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [
+              "1.2.3.4",
+              "10.0.0.255"
+            ],
+            "port": 8765
+          },
+          "cleaned": [
+            "addresses.loopback: \"::1\" is not IPv4, 127.0.0.1 used",
+            "addresses.lanIps: \"01.2.3.4\" is not IPv4, left out",
+            "addresses.lanIps: \"256.1.1.1\" is not IPv4, left out",
+            "addresses.lanIps: 7 is not IPv4, left out"
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765,
+          "lanIps": "no",
+          "loopback": null
+        }
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": [
+            "addresses.loopback: null is not IPv4, 127.0.0.1 used",
+            "addresses.lanIps: not a list, no LAN address kept"
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "performance": {
+          "score": 1200,
+          "cores": 0,
+          "singleThread": 70.5,
+          "diskWriteMBps": 900,
+          "fsyncPerSec": null,
+          "memoryGB": 32
+        }
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": [
+            "performance left out — cores: Too small: expected number to be >=1"
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "performance": {
+          "score": 1.5,
+          "cores": 8,
+          "singleThread": 70.5,
+          "diskWriteMBps": 900,
+          "fsyncPerSec": 50000000,
+          "memoryGB": 32
+        }
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": [
+            "performance left out — score: Invalid input: expected int, received number; fsyncPerSec: Too big: expected number to be <=10000000"
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "performance": "fast"
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": [
+            "performance left out — (body): Invalid input: expected object, received string"
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "performance": {
+          "score": 1
+        }
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": [
+            "performance left out — cores: Invalid input: expected number, received undefined; singleThread: Invalid input: expected number, received undefined; diskWriteMBps: Invalid input: expected number, received undefined; fsyncPerSec: Invalid input: expected number, received undefined; memoryGB: Invalid input: expected number, received undefined"
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "libraryLevel": 0,
+        "protocol": "2",
+        "build": "x y",
+        "safeMode": "yes",
+        "hostname": 5,
+        "machineFingerprint": null
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": [
+            "libraryLevel: 0 is no level, left out",
+            "protocol: \"2\" is no version, read as 1",
+            "build: \"x y\" is no stamp, left out",
+            "safeMode: \"yes\" is no flag, read as false",
+            "hostname: not a string, left empty",
+            "machineFingerprint: not a string, left empty"
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "libraryLevel": 2.5,
+        "protocol": 0,
+        "build": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "safeMode": null
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": [
+            "libraryLevel: 2.5 is no level, left out",
+            "protocol: 0 is no version, read as 1",
+            "build: \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\" is no stamp, left out",
+            "safeMode: null is no flag, read as false"
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "hostname": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+        "build": "0.1.0-snapshot-9f2c1ab"
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "build": "0.1.0-snapshot-9f2c1ab",
+          "cleaned": []
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "protocol": 3,
+        "libraryLevel": 1000
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "libraryLevel": 1000,
+          "protocol": 3,
+          "cleaned": []
+        }
+      }
+    },
+    {
+      "input": {
+        "id": "e1",
+        "token": "t",
+        "addresses": {
+          "port": 8765
+        },
+        "build": {
+          "a": [
+            1,
+            2,
+            "x\n"
+          ]
+        }
+      },
+      "out": {
+        "ok": true,
+        "beat": {
+          "id": "e1",
+          "token": "t",
+          "hostname": "",
+          "machineFingerprint": "",
+          "addresses": {
+            "loopback": "127.0.0.1",
+            "lanIps": [],
+            "port": 8765
+          },
+          "cleaned": [
+            "build: {\"a\":[1,2,\"x\\n\"]} is no stamp, left out"
+          ]
+        }
+      }
+    }
+  ],
+  "shares": [
+    {
+      "raw": [
+        " Bob@X ",
+        "bob@x",
+        ""
+      ],
+      "out": {
+        "ok": true,
+        "emails": [
+          "bob@x"
+        ]
+      }
+    },
+    {
+      "raw": [
+        "bob"
+      ],
+      "out": {
+        "ok": false,
+        "bad": "bob"
+      }
+    },
+    {
+      "raw": [
+        "a@b",
+        "a b@c"
+      ],
+      "out": {
+        "ok": false,
+        "bad": "a b@c"
+      }
+    },
+    {
+      "raw": [
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@b.c"
+      ],
+      "out": {
+        "ok": true,
+        "emails": [
+          "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@b.c"
+        ]
+      }
+    },
+    {
+      "raw": [
+        "x@y@z"
+      ],
+      "out": {
+        "ok": false,
+        "bad": "x@y@z"
+      }
+    },
+    {
+      "raw": [
+        " Ann@X　"
+      ],
+      "out": {
+        "ok": true,
+        "emails": [
+          "ann@x"
+        ]
+      }
+    }
+  ],
+  "roles": [
+    {
+      "o": {
+        "owner": "ann@x",
+        "shared": [
+          "bob@x"
+        ],
+        "everyone": false,
+        "since": 0
+      },
+      "holder": "ann@x",
+      "server": false,
+      "out": "owner"
+    },
+    {
+      "o": {
+        "owner": "ann@x",
+        "shared": [
+          "bob@x"
+        ],
+        "everyone": false,
+        "since": 0
+      },
+      "holder": "BOB@x",
+      "server": false,
+      "out": "shared"
+    },
+    {
+      "o": {
+        "owner": "ann@x",
+        "shared": [
+          "bob@x"
+        ],
+        "everyone": false,
+        "since": 0
+      },
+      "holder": "eve@x",
+      "server": false,
+      "out": "none"
+    },
+    {
+      "o": {
+        "owner": "ann@x",
+        "shared": [
+          "bob@x"
+        ],
+        "everyone": true,
+        "since": 0
+      },
+      "holder": "eve@x",
+      "server": false,
+      "out": "shared"
+    },
+    {
+      "o": {
+        "owner": "ann@x",
+        "shared": [
+          "bob@x"
+        ],
+        "everyone": true,
+        "since": 0
+      },
+      "holder": "",
+      "server": false,
+      "out": "none"
+    },
+    {
+      "o": {
+        "owner": "ann@x",
+        "shared": [
+          "bob@x"
+        ],
+        "everyone": false,
+        "since": 0
+      },
+      "holder": "eve@x",
+      "server": true,
+      "out": "server"
+    },
+    {
+      "o": null,
+      "holder": "eve@x",
+      "server": false,
+      "out": "unowned"
+    },
+    {
+      "o": null,
+      "holder": "",
+      "server": false,
+      "out": "unowned"
+    }
+  ],
+  "spellings": [
+    {
+      "text": "{\"type\":\"render\",\"doc\":{\"clips\":[{\"file\":\"C:\\\\srv\\\\lib\\\\x\\\\y.wav\"}]},\"out\":\"C:\\\\srv\\\\o.wav\",\"n\":1.0}",
+      "out": "{\"type\":\"render\",\"doc\":{\"clips\":[{\"file\":\"C:\\\\srv\\\\lib/x/y.wav\"}]},\"out\":\"C:\\\\srv/o.wav\",\"n\":1}"
+    },
+    {
+      "text": "{\"src\":\"D:\\\\elsewhere\\\\x\",\"b\":\"C:\\\\srv\"}",
+      "out": "{\"src\":\"D:\\\\elsewhere\\\\x\",\"b\":\"C:\\\\srv\"}"
+    },
+    {
+      "text": "{\"2\":\"C:\\\\srv\\\\a\",\"a\":1,\"1\":[0.5,1e21]}",
+      "out": "{\"1\":[0.5,1e+21],\"2\":\"C:\\\\srv/a\",\"a\":1}"
+    },
+    {
+      "text": "not json",
+      "out": "not json"
+    },
+    {
+      "text": "[1,2]",
+      "out": "[1,2]"
+    }
+  ],
+  "roots": [
+    {
+      "remote": "C:\\srv",
+      "name": "a",
+      "writable": true
+    },
+    {
+      "remote": "C:\\srv\\lib",
+      "name": "b",
+      "writable": true
+    }
+  ],
+  "droppable": [
+    {
+      "data": "{\"type\":\"state\"}",
+      "binary": false,
+      "out": true
+    },
+    {
+      "data": "{\"type\":\"io-levels\",\"l\":[1]}",
+      "binary": false,
+      "out": true
+    },
+    {
+      "data": "{\"type\":\"plugin-params-live\"}",
+      "binary": false,
+      "out": true
+    },
+    {
+      "data": "{\"type\":\"whoami\"}",
+      "binary": false,
+      "out": false
+    },
+    {
+      "data": "not json",
+      "binary": false,
+      "out": false
+    },
+    {
+      "data": "5254534c00000000",
+      "binary": true,
+      "out": true
+    },
+    {
+      "data": "4c53545200",
+      "binary": true,
+      "out": false
+    },
+    {
+      "data": "525453",
+      "binary": true,
+      "out": false
+    }
+  ]
+}

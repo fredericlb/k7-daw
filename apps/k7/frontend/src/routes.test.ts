@@ -1,0 +1,200 @@
+import { describe, expect, it } from "vitest";
+import {
+  fromLocation,
+  type RouteState,
+  sameRoute,
+  toPath,
+  viewPanes,
+} from "./routes";
+
+const st = (o: Partial<RouteState> = {}): RouteState => ({
+  full: null,
+  panel: null,
+  help: false,
+  builder: null,
+  ...o,
+});
+
+describe("toPath", () => {
+  it("maps the layout and each fullscreen pane", () => {
+    expect(toPath(st())).toBe("/");
+    expect(toPath(st({ full: "timeline" }))).toBe("/timeline");
+    expect(toPath(st({ full: "chains" }))).toBe("/chains");
+    expect(toPath(st({ help: true }))).toBe("/docs");
+  });
+
+  it("keeps a query parameter it does not own", () => {
+    // The address is rebuilt from the STATE, so anything not rebuilt is lost — and this router
+    // owns exactly one parameter. `?profile=1` turns the instruments on and used to survive about
+    // one screen change; so would any parameter in a link somebody pasted.
+    expect(toPath(st({ full: "timeline" }), "?profile=1")).toBe(
+      "/timeline?profile=1",
+    );
+    expect(toPath(st({ full: "timeline", panel: "logs" }), "?profile=1")).toBe(
+      "/timeline?profile=1&panel=logs",
+    );
+  });
+
+  it("REPLACES the panel it finds rather than adding a second one", () => {
+    // Carrying the search through naively appends, and `?panel=graph&panel=logs` reads as the first.
+    expect(toPath(st({ panel: "logs" }), "?panel=graph")).toBe("/?panel=logs");
+    // …and a panel that closed takes its parameter with it, leaving the stranger's behind.
+    expect(toPath(st(), "?panel=graph&profile=1")).toBe("/?profile=1");
+  });
+
+  it("drops the layout once a pane is fullscreened", () => {
+    // You are looking at the timeline, not at the layout behind it.
+    expect(toPath(st({ full: "timeline" }))).toBe("/timeline");
+  });
+
+  it("carries the panel as a query on any screen", () => {
+    expect(toPath(st({ panel: "graph" }))).toBe("/?panel=graph");
+    expect(toPath(st({ full: "chains", panel: "logs" }))).toBe(
+      "/chains?panel=logs",
+    );
+    // `/docs` is the HELP page and `panel=graph` is a panel — two different things, one in the path and one in the query.
+    expect(toPath(st({ help: true, panel: "graph" }))).toBe(
+      "/docs?panel=graph",
+    );
+  });
+
+  it("names the desk like any other pane", () => {
+    // A pane is named by the union rather than by a surface's FILENAME, so the desk's address is `/turntables`.
+    expect(toPath(st({ full: "turntables" }))).toBe("/turntables");
+    expect(toPath(st({ full: "turntables", panel: "logs" }))).toBe(
+      "/turntables?panel=logs",
+    );
+  });
+
+  it("stacks help over a pane", () => {
+    // The URL names the TOPMOST screen: getting this order wrong writes an address that restores something else on reload.
+    expect(toPath(st({ help: true, full: "turntables" }))).toBe("/docs");
+  });
+});
+
+describe("fromLocation", () => {
+  it("round-trips every screen", () => {
+    for (const s of [
+      st(),
+      st({ full: "editor" }),
+      st({ full: "chains", panel: "graph" }),
+      st({ help: true }),
+      st({ panel: "logs" }),
+    ]) {
+      const path = toPath(s);
+      const [pathname, search] = path.split("?");
+      expect(fromLocation(pathname, search ? `?${search}` : "")).toEqual(s);
+    }
+  });
+
+  it("round-trips the desk once the project declares it", () => {
+    // Not in the loop above: `turntables` needs the flag — the default is pessimistic for a desk.
+    const s = st({ full: "turntables" });
+    expect(fromLocation("/turntables", "", { turntables: true })).toEqual(s);
+  });
+
+  it("round-trips the master strip only once the project declares it", () => {
+    // The flag is what App.tsx must hand useViewRoute; without it `/mastering` falls back to the timeline.
+    expect(fromLocation("/mastering", "", { mastering: true })).toEqual(
+      st({ full: "mastering" }),
+    );
+    expect(fromLocation("/mastering", "")).toEqual(st());
+  });
+
+  it("falls back to the layout on a path it doesn't know", () => {
+    // The URL bar is user-editable; a typo should land somewhere usable rather than leaving the shell with no screen at all.
+    expect(fromLocation("/nonsense", "")).toEqual(st());
+    expect(fromLocation("/", "")).toEqual(st());
+  });
+
+  it("ignores a panel it doesn't know", () => {
+    expect(fromLocation("/", "?panel=wat").panel).toBeNull();
+  });
+
+  it("tolerates trailing and doubled slashes", () => {
+    expect(fromLocation("/timeline/", "").full).toBe("timeline");
+    // `/video` is an alias for the frame; without one declared it lands on the layout.
+    expect(fromLocation("//video//", "")).toEqual(st());
+  });
+
+  it("no longer reads a `/surface/<id>` address", () => {
+    // The one surface that had a screen of its own is a pane, so the segment names nothing and falls through to the layout.
+    expect(fromLocation("/surface/desk", "")).toEqual(st());
+    expect(fromLocation("/surface/", "")).toEqual(st());
+    expect(fromLocation("/surface", "")).toEqual(st());
+  });
+});
+
+describe("viewPanes", () => {
+  it("gives the layout its timeline only when the project declares one", () => {
+    // The timeline is a `split` surface, so the layout is a function of what the PROJECT says (packages/song/docs/surfaces.md).
+    expect(viewPanes({ timeline: true })).toEqual({
+      ring: ["timeline", "chains"],
+      fullscreen: ["editor", "timeline", "chains"],
+    });
+    expect(viewPanes({ timeline: false })).toEqual({
+      ring: ["chains"],
+      fullscreen: ["editor", "chains"],
+    });
+  });
+
+  it("keeps the editor when the arrangement is missing", () => {
+    // A project with no timeline surface still has files to edit, and this is the half of the pair that leaves you somewhere to work.
+    expect(viewPanes({ timeline: false }).fullscreen).toContain("editor");
+    expect(viewPanes({ timeline: false }).ring).toEqual(["chains"]);
+  });
+
+  it("refuses `/timeline` as an address when there is no timeline", () => {
+    // The same rule that already refuses it in a live project: an address must not parse into a pane nothing will mount.
+    expect(fromLocation("/timeline", "", { timeline: true }).full).toBe(
+      "timeline",
+    );
+    expect(fromLocation("/timeline", "", { timeline: false })).toEqual(st());
+  });
+
+  it("keeps the FRAME out of the ring, being a window over it", () => {
+    // The picture floats over whichever page is up, so no layout lists it — and no address parses into it.
+    expect(viewPanes({ timeline: true })).toEqual({
+      ring: ["timeline", "chains"],
+      fullscreen: ["editor", "timeline", "chains"],
+    });
+    expect(fromLocation("/viewport", "")).toEqual(st());
+    expect(fromLocation("/video", "")).toEqual(st());
+  });
+
+  it("puts the DESK directly over the graph", () => {
+    // A SET: no arrangement, a desk and the chains it is played against — the whole column, which is the point of the desk being a pane.
+    expect(viewPanes({ timeline: false, turntables: true })).toEqual({
+      ring: ["turntables", "chains"],
+      fullscreen: ["editor", "turntables", "chains"],
+    });
+    // …and under the arrangement when a project declares both, the ring being the stacking order.
+    expect(viewPanes({ timeline: true, turntables: true }).ring).toEqual([
+      "timeline",
+      "turntables",
+      "chains",
+    ]);
+  });
+
+  it("refuses `/turntables` as an address when there is no desk", () => {
+    expect(fromLocation("/turntables", "", { turntables: true }).full).toBe(
+      "turntables",
+    );
+    expect(fromLocation("/turntables", "", { turntables: false })).toEqual(
+      st(),
+    );
+    // …and NOT by the optimistic default the timeline gets: a desk is the exception, so an ordinary song must not parse this address.
+    expect(fromLocation("/turntables", "")).toEqual(st());
+  });
+});
+
+describe("sameRoute", () => {
+  it("is true only when the URL would be identical", () => {
+    expect(sameRoute(st({ full: "editor" }), st({ full: "editor" }))).toBe(
+      true,
+    );
+    expect(sameRoute(st({ panel: "graph" }), st({ panel: "logs" }))).toBe(
+      false,
+    );
+  });
+});

@@ -1,0 +1,341 @@
+// MachineJobs.cpp — see MachineJobs.h. `raw` carries what must reach the server in THIS machine's
+// spelling — a local path, a log line naming one — and the tunnel leaves it unmapped.
+
+#include "MachineJobs.h"
+
+#include "EngineProcess.h"
+#include "PathMap.h"
+#include "Paths.h"
+#include "Processes.h"
+#include "Separation.h"
+#include "ServedRender.h"
+#include "Settings.h"
+
+#include <algorithm>
+#include <cstdio>
+#include <filesystem>
+#include <fstream>
+#include <random>
+
+namespace k7 {
+
+namespace fs = std::filesystem;
+using nlohmann::json;
+using ojson = nlohmann::ordered_json;
+
+namespace {
+
+std::vector<std::string> splitLines(const std::string& s)
+{
+    std::vector<std::string> out;
+    size_t start = 0;
+    while (start < s.size()) {
+        size_t nl = s.find('\n', start);
+        if (nl == std::string::npos) nl = s.size();
+        std::string line = s.substr(start, nl - start);
+        if (!line.empty() && line.back() == '\r') line.pop_back();
+        out.push_back(line);
+        start = nl + 1;
+    }
+    return out;
+}
+
+/** `count` bytes of `p` from `from`, fewer where the file ends first. */
+std::string readRange(const fs::path& p, std::uint64_t from, std::uint64_t count)
+{
+    std::ifstream in(p, std::ios::binary);
+    if (!in) return {};
+    in.seekg(static_cast<std::streamoff>(from));
+    std::string buf(static_cast<size_t>(count), '\0');
+    in.read(buf.data(), static_cast<std::streamsize>(count));
+    buf.resize(static_cast<size_t>(std::max<std::streamsize>(0, in.gcount())));
+    return buf;
+}
+
+/** Refuse a job whose `path` would write, or stamp, a file outside a root the server takes back. */
+void requireWritable(const tunnel::JobContext& ctx, const std::string& path, const char* what)
+{
+    if (!ctx.writable || !ctx.writable(path)) throw std::runtime_error(std::string(what) + ": refused a path outside this server's writable folders");
+}
+
+/** Whether a LOCAL path is inside this machine's copies of the servers' roots, by spelling and once links are resolved. */
+bool mapped(const std::string& path)
+{
+    const fs::path root = paths::studioDir() / "remote";
+    if (!tunnel::relativeUnder(paths::utf8(root), path)) return false;
+    std::error_code ec, rootEc;
+    const fs::path real = fs::weakly_canonical(paths::fromUtf8(path), ec);
+    const fs::path realRoot = fs::weakly_canonical(root, rootEc);
+    return !ec && !rootEc && tunnel::relativeUnder(paths::utf8(realRoot), paths::utf8(real)).has_value();
+}
+
+/** Refuse a job whose input is not a copy of a server's file, before anything says whether it exists. */
+void requireMapped(const std::string& path, const char* what)
+{
+    if (!mapped(path)) throw std::runtime_error(std::string(what) + ": refused a path outside this machine's copies of the server's folders");
+}
+
+/** A folder under the temp directory that THIS call created, owner-only: never one another process prepared or linked. */
+fs::path freshScratch(const std::string& prefix, const fs::path& under = {})
+{
+    std::random_device rd;
+    std::error_code ec;
+    // `under`: a folder inside the engine's write roots, which the temp directory is not (pathRoots.md).
+    fs::path base = under;
+    if (base.empty()) base = fs::temp_directory_path(ec);
+    else fs::create_directories(base, ec);
+    if (ec) throw std::runtime_error("no temporary folder to work in: " + ec.message());
+    for (int attempt = 0; attempt < 16; ++attempt) {
+        char name[20];
+        std::snprintf(name, sizeof name, "%08x%08x", rd(), rd());
+        const fs::path dir = base / (prefix + name);
+        // False when the name is taken, by a folder, a file or a link alike: only a folder made here is used.
+        if (!fs::create_directory(dir, ec) || ec) continue;
+        fs::permissions(dir, fs::perms::owner_all, fs::perm_options::replace, ec);
+        return dir;
+    }
+    throw std::runtime_error("could not make a temporary folder to work in");
+}
+
+}  // namespace
+
+std::size_t purgeKeptHistory(const fs::path& remoteRoot, std::chrono::hours ttl)
+{
+    // Listed first, removed after: an iterator over a folder being emptied is not one to trust.
+    std::vector<fs::path> stale;
+    const auto now = fs::file_time_type::clock::now();
+    std::error_code serverEc;
+    for (fs::directory_iterator server(remoteRoot, serverEc), end; !serverEc && server != end; server.increment(serverEc)) {
+        std::error_code rootEc;
+        for (fs::directory_iterator root(server->path(), rootEc), rend; !rootEc && root != rend; root.increment(rootEc)) {
+            if (paths::utf8(root->path().filename()).rfind("history-", 0) != 0) continue;
+            std::error_code fileEc;
+            for (fs::recursive_directory_iterator f(root->path(), fileEc), fend; !fileEc && f != fend; f.increment(fileEc)) {
+                std::error_code ec;
+                if (!f->is_regular_file(ec)) continue;
+                const auto at = fs::last_write_time(f->path(), ec);
+                if (!ec && now - at >= ttl) stale.push_back(f->path());
+            }
+        }
+    }
+    std::size_t removed = 0;
+    for (const auto& p : stale) {
+        std::error_code ec;
+        if (fs::remove(p, ec)) ++removed;
+    }
+    return removed;
+}
+
+json readLog(std::optional<std::uint64_t> offset, std::optional<int> tail)
+{
+    // Merged first, then the engine-only log a run without the supervisor writes.
+    fs::path file;
+    std::error_code ec;
+    for (const auto& p : {paths::mergedLog(), paths::engineLog()})
+        if (fs::is_regular_file(p, ec)) {
+            file = p;
+            break;
+        }
+    if (file.empty()) return {{"offset", 0}, {"lines", json::array()}};
+    const std::uint64_t size = fs::file_size(file, ec);
+    if (ec) return {{"offset", 0}, {"lines", json::array()}};
+    if (offset && *offset <= size) {
+        // At most the cap per poll: a reader far behind catches up over several.
+        const std::uint64_t count = std::min(size - *offset, kLogReadCap);
+        const std::string buf = readRange(file, *offset, count);
+        const size_t lastNl = buf.rfind('\n');
+        if (lastNl == std::string::npos) {
+            // A line longer than the cap would hold the reader in place forever, so it is skipped.
+            const std::uint64_t to = count == kLogReadCap ? *offset + count : *offset;
+            return {{"offset", to}, {"lines", json::array()}};
+        }
+        return {{"offset", *offset + lastNl + 1}, {"lines", splitLines(buf.substr(0, lastNl + 1))}};
+    }
+    // Seeded from the tail, and again when a rotation left the reader's offset past the end.
+    const std::uint64_t count = std::min(size, kLogReadCap);
+    std::string buf = readRange(file, size - count, count);
+    // Started mid-file: the first line is a fragment.
+    if (count < size) buf.erase(0, std::min(buf.size(), buf.find('\n') + 1));
+    auto all = splitLines(buf);
+    const size_t n = static_cast<size_t>(std::max(1, tail.value_or(300)));
+    if (all.size() > n) all.erase(all.begin(), all.end() - static_cast<long>(n));
+    return {{"offset", size}, {"lines", all}};
+}
+
+tunnel::Jobs machineJobs(const MachineAccess& access)
+{
+    tunnel::Jobs jobs;
+
+    // The set list's records, already brought down by the channel before this runs — so this only counts.
+    jobs["prefetch"] = [](const json& req, const tunnel::Emit& emit, tunnel::JobContext&) {
+        int count = 0;
+        std::error_code ec;
+        for (const auto& f : req.value("files", json::array()))
+            if (f.is_string() && mapped(f.get<std::string>()) && fs::exists(paths::fromUtf8(f.get<std::string>()), ec)) ++count;
+        emit({{"type", "prefetched"}, {"count", count}});
+    };
+
+    // Send this machine's copy of a file BACK up: an undo's audio, which only this machine keeps (apps/k7/backend-rs/docs/files/history.md).
+    jobs["send-up"] = [](const json& req, const tunnel::Emit& emit, tunnel::JobContext& ctx) {
+        const std::string file = req.value("file", "");
+        requireWritable(ctx, file, "send-up");
+        std::error_code ec;
+        const fs::path p = paths::fromUtf8(file);
+        if (file.empty() || !fs::is_regular_file(p, ec)) throw std::runtime_error("not kept on this machine");
+        // A fresh mtime is what makes the channel upload a file it last brought DOWN, and it counts as a use.
+        fs::last_write_time(p, fs::file_time_type::clock::now(), ec);
+        emit({{"type", "sent"}, {"file", file}});
+    };
+
+    jobs["log"] = [](const json& req, const tunnel::Emit& emit, tunnel::JobContext&) {
+        std::optional<std::uint64_t> offset;
+        std::optional<int> tail;
+        if (auto it = req.find("offset"); it != req.end() && it->is_number() && it->get<double>() >= 0)
+            offset = it->get<std::uint64_t>();
+        if (auto it = req.find("tail"); it != req.end() && it->is_number()) tail = it->get<int>();
+        emit({{"type", "log"}, {"raw", readLog(offset, tail)}});
+    };
+
+    // What this machine separates on; given `set`, written first — the server's `system onnx` asks here.
+    jobs["onnx-providers"] = [access](const json& req, const tunnel::Emit& emit, tunnel::JobContext&) {
+        std::optional<std::vector<std::string>> set;
+        if (auto it = req.find("set"); it != req.end() && it->is_array()) set = normaliseProviders(*it);
+        emit({{"type", "onnx-providers"}, {"providers", access.onnxProviders(set)}});
+    };
+
+    // The chains this machine separates with; given `set`, the keys it names are written first (stemSplit.md).
+    jobs["chains"] = [access](const json& req, const tunnel::Emit& emit, tunnel::JobContext&) {
+        if (!access.chains) throw std::runtime_error("this machine keeps no chains");
+        std::optional<json> set;
+        if (auto it = req.find("set"); it != req.end() && it->is_object()) set = *it;
+        emit(access.chains(set));
+    };
+
+    // The machine's slots, listed, saved, enabled, disabled or removed by the server its owner signed in to (docs/slots.md).
+    for (const char* type : {"slots", "slot-save", "slot-enable", "slot-disable", "slot-remove", "slot-footswitch"})
+        jobs[type] = [access](const json& req, const tunnel::Emit& emit, tunnel::JobContext&) {
+            if (!access.slots) throw std::runtime_error("this machine keeps no slots");
+            const json answer = access.slots(req);
+            if (answer.contains("error")) throw std::runtime_error(answer.value("error", ""));
+            emit(answer);
+        };
+
+    // Split a mix with a model, both already on this disk; one reply per change, the last `separated`.
+    jobs["separate"] = [access](const json& req, const tunnel::Emit& emit, tunnel::JobContext& ctx) {
+        separation::Request r;
+        r.user = req.value("user", "");
+        r.source = req.value("source", "");
+        r.model = req.value("model", "");
+        r.outDir = req.value("outDir", "");
+        requireWritable(ctx, r.outDir, "separate");
+        requireMapped(r.source, "separate");
+        requireMapped(r.model, "separate");
+        for (const auto& o : req.value("outputs", json::array()))
+            if (o.is_string()) r.outputs.push_back(o.get<std::string>());
+        r.providers = access.onnxProviders(std::nullopt);
+        separation::run(r, [&](const json& job) {
+            emit({{"type", job.value("done", false) ? "separated" : "separating"}, {"job", job}});
+        });
+    };
+
+    // Bounce a ProjectDoc through THIS machine's engine binary: `out` takes the mix alone, `outDir` the whole manifest (packages/engine-tunnel/docs/jobs.md).
+    jobs["render"] = [access](const json& req, const tunnel::Emit& emit, tunnel::JobContext& ctx) {
+        const std::string out = req.value("out", "");
+        const std::string outDir = req.value("outDir", "");
+        const auto doc = req.find("doc");
+        if ((out.empty() && outDir.empty()) || doc == req.end() || !doc->is_object())
+            throw std::runtime_error("render: a doc and an out path or folder are required");
+        requireWritable(ctx, out.empty() ? outDir : out, "render");
+        const bool viaEngine = access.renderInEngine;
+        std::optional<fs::path> exe;
+        if (!viaEngine) {
+            exe = engine::findBinary();
+            if (!exe) throw std::runtime_error("no k7-runtime binary on this machine to render with");
+        }
+
+        std::error_code ec;
+        const fs::path tmp = viaEngine ? freshScratch("render-", paths::studioDir() / "render-tmp") : freshScratch("k7-render-");
+        const auto cleanup = [&] { fs::remove_all(tmp, ec); };
+        emit({{"type", "rendering"}});
+        const bool wantStems = !outDir.empty() && req.value("stems", false);
+        json manifest;
+        if (viaEngine) {
+            // A phone starts no program: the running engine bounces it, into a folder of its write roots (C2).
+            const int port = access.enginePort ? access.enginePort() : 0;
+            if (port <= 0) {
+                cleanup();
+                throw std::runtime_error("the engine is not running");
+            }
+            if (access.rendering) access.rendering(1);
+            const json cmd = {{"type", "render"}, {"id", "job-" + paths::utf8(tmp.filename())}, {"doc", *doc}, {"outDir", paths::utf8(tmp)}, {"stems", wantStems}};
+            const json answer = served_render::ask(port, cmd);
+            if (access.rendering) access.rendering(-1);
+            if (!answer.value("ok", false)) {
+                cleanup();
+                throw std::runtime_error("engine render failed: " + answer.value("error", std::string("no reason given")));
+            }
+            manifest = answer.value("manifest", json());
+            if (!manifest.is_object() || manifest.value("mix", "").empty()) {
+                cleanup();
+                throw std::runtime_error("could not read the engine's render manifest");
+            }
+        } else {
+            std::vector<std::string> args = {"--render", "-", "--out", paths::utf8(tmp)};
+            if (wantStems) args.push_back("--stems");
+            // The doc on stdin (`--render -`): no file of it to leave behind.
+            const auto r = process::run(*exe, args, doc->dump());
+            if (r.code != 0) {
+                cleanup();
+                throw std::runtime_error("engine render failed (exit " + std::to_string(r.code) + ")");
+            }
+            // The manifest is the LAST line the engine printed: {"mix": "<file>", "stems": [{"name", "file"}]}.
+            const auto lines = splitLines(r.out);
+            for (auto it = lines.rbegin(); it != lines.rend() && !manifest.is_object(); ++it) {
+                auto m = json::parse(*it, nullptr, false);
+                if (m.is_object() && !m.value("mix", "").empty()) manifest = std::move(m);
+            }
+            if (!manifest.is_object()) {
+                cleanup();
+                throw std::runtime_error("could not read the engine's render manifest");
+            }
+        }
+        const auto copyOut = [&](const std::string& file, const fs::path& dest) {
+            // The engine names the stems, so each one is held to the same folders as the job.
+            if (!ctx.writable(paths::utf8(dest))) {
+                cleanup();
+                throw std::runtime_error("render: refused a stem path outside this server's writable folders");
+            }
+            fs::create_directories(dest.parent_path(), ec);
+            fs::copy_file(tmp / paths::fromUtf8(file), dest, fs::copy_options::overwrite_existing, ec);
+            if (ec) {
+                const std::string why = ec.message();
+                cleanup();
+                throw std::runtime_error("could not write the render: " + why);
+            }
+        };
+        if (!out.empty()) {
+            copyOut(manifest.value("mix", ""), paths::fromUtf8(out));
+            cleanup();
+            // Named as a FILE, so the tunnel uploads it before the server reads this reply.
+            emit({{"type", "rendered"}, {"file", out}});
+            return;
+        }
+        const fs::path dir = paths::fromUtf8(outDir);
+        const std::string mix = manifest.value("mix", "");
+        copyOut(mix, dir / paths::fromUtf8(mix));
+        json stems = json::array();
+        for (const auto& s : manifest.value("stems", json::array())) {
+            const std::string file = s.value("file", "");
+            if (file.empty()) continue;
+            copyOut(file, dir / paths::fromUtf8(file));
+            stems.push_back({{"name", s.value("name", "")}, {"file", paths::utf8(dir / paths::fromUtf8(file))}});
+        }
+        cleanup();
+        // Every file named whole, so the tunnel uploads each before the server reads this reply.
+        emit({{"type", "rendered"}, {"mix", paths::utf8(dir / paths::fromUtf8(mix))}, {"stems", stems}});
+    };
+
+    return jobs;
+}
+
+}  // namespace k7

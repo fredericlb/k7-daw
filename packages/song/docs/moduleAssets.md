@@ -1,0 +1,200 @@
+# The assets a module carries
+
+A module holds the material it plays — an amp profile, the samples on a shelf — in an
+**`assets/` folder inside the module itself**:
+
+```
+_modules/audio/amp/    ← @workspace, beside the project; a library's modules/ the same shape
+  module.k7x         ← what the module IS
+  ui.k7x
+  assets/            ← what it LOADS
+    jcm800.nam
+    Two-Rock/Clean.nam
+```
+
+That is the only place they are looked for: there is no shared asset library (see "No shared
+asset library" below).
+
+`assets/` is one of four reserved subfolders a module may have — the others are `nodes/`
+(one file per placement), `base/` (named `.vstpreset` blobs, `docs/userPresets.md`) and `sources/`
+(a rack's audio, below). Nothing else in a module folder is a folder with a meaning: a name not on
+that list is just a name.
+
+A module INHERITS its ancestors' assets: a NODE pointing a song at a shared amp is a `nodes/<x>.k7x`
+that `extends` it, and the files stay in the shared folder — a node has no `assets/` of its own
+except one it genuinely carries (`docs/moduleAssets.md`'s "lets a node carry its own model" case).
+`moduleAssetChoices` is the one answer to "what may this param be set to" — the panel's picker, the
+graph and the CLI completion all ask it. See [filePicker.md](filePicker.md), which is also where the
+widget that offers them is described.
+
+### Why the walk is up the ANCESTRY
+
+`moduleAssetChoices` returns every asset a module can name, nearest owner first, walking what it
+`extends`. Looking at the entity's OWN folder and nowhere else is right only for a module that both
+owns the assets and stores them itself, and wrong for the two shapes that actually carry material:
+
+- the shared module itself — `@workspace/audio/guitar` (or `@k7-core/…`) has the fourteen NAM profiles;
+- a NODE that exists only to override one param of it, which is what `extends` on a `nodes/<x>.k7x`
+  produces and is the normal way a song points at a shared amp.
+
+Both would list nothing, and the panel's picker would open empty on the one module built to be
+picked from. A nearer owner's assets come first and a duplicate path is dropped, so a node's own
+file shadows an inherited one of the same name — the same precedence `resolveModuleAsset` gives
+the folders.
+
+The FOLDERS are not looked up during that walk: the loader stamps `folderAbs` on every module it
+reads, so the ref map a caller has loaded anyway answers "where does this one live" for free.
+Asking the libraries instead costs a full directory walk per ancestor per module — one graph build
+becomes a walk per node, which on a médiathèque mounted over `/mnt/c` is seconds. What is left is
+memoised per request because ancestors repeat: every module inheriting one shared amp would
+otherwise re-read that amp's `assets/` once each.
+
+## A file is a param
+
+The file a plugin loads is named in `params:`, beside the numbers:
+
+```k7x
+plugin({ type: "internal", name: "Neural Amp Modeler" })
+params({ model: "jcm800.nam", Input: -5.06, Output: 8.26 })
+```
+
+Because that is what it is. A .nam model is one of the plugin's controls — it sits in the panel
+next to Input and Output, and swapping it is the same gesture as turning a knob. A top-level field
+of its own (`model:` beside `params:`) would make it a second kind of thing: a second place to look,
+a second command to learn, a second merge rule.
+
+`params` merges **per key**, which is the real gain: a node that overrides only the model
+keeps everything else the generic set, and that is the same edit as overriding a gain.
+
+The list of file-valued params is `moduleTypes.FILE_PARAMS` — `model` (an amp: a `.nam` or an
+RTNeural `.json`) and `onnx`. A Surge XT patch is not one of them: it is a BASE (`userPresets.md`). An SFZ instrument's `sfz:` is not one of them: it names a file on the
+ENGINE's machine (`@instruments/…`, engine `docs/sfzPlugin.md`), which nothing on this side resolves. A `model` may also name a library's shared model as `@<library>/<path>`
+(`libraryFiles.md`): a bare path is this folder's, an `@` one is the library's `models/`. Every other param
+is a number, and that stays overwhelmingly the common case.
+
+### The wire carries numbers only
+
+`params` on the protocol is `Record<string, number>`, mirrored in C++ as a float map, and a
+string there is not a value the engine could set. So `nodeProject.numericParams` drops the
+file-valued ones before the doc goes out, and the model leaves as its own `namFile` field —
+which is what the engine expects. The authored shape and the protocol are free to differ, and
+here they do.
+
+## Confined to the folder
+
+`resolveModuleAsset` refuses a ref that climbs out of `assets/` rather than resolving it. Without
+it an asset ref would be a way to read any file the file service can see, on a module that
+arrives from a shared catalogue and was written by somebody else.
+
+Nesting inside `assets/` is kept, not flattened: a NAM pack arrives as a folder per amp, and
+`Two-Rock/Clean.nam` is a legitimate ref. Flattening a hundred models into one list is what makes
+a picker unusable.
+
+## …except for a file too big to travel
+
+"A module carries its material" is an argument about **cost**, and it inverts somewhere north
+of a few hundred megabytes. A shared module lives in a git repository — the workspace's own, or
+the account's library, cloned by every machine that opens it — so a 166 MB neural model bundled
+into one would be committed, pushed and cloned whole, again on every machine synced to.
+
+So a model is named exactly like an amp profile (`onnx:` in `params:`, one of `FILE_PARAMS`)
+and `resolveModuleAsset` looks in two places: the module's own `assets/` first, then the
+machine's `<state>/models`. The module stays self-describing — it still says which model it
+wants — while the bytes live where a 166 MB file belongs, which is once per machine, beside the
+engine binary and the plugin scan.
+
+**The containment check keeps its priority.** A ref that climbs out of `assets/` is refused,
+not redirected to the cache: the fallback must not become a way to launder an escaping ref. The
+cache is consulted only for a name that already passed. Pinned in `moduleAssets.test.ts`.
+
+### `model_url` — where the machine can fetch it
+
+A model that lives outside the repository has to get onto each machine somehow, and "put it in
+`~/.k7/models`" was the whole of the answer: nothing said where the 166 MB came from. A module
+may now say so, beside the name it already gives:
+
+```k7x
+params({ onnx: "htdemucs_fp16weights.onnx" })
+model_url("https://models.example.org/htdemucs_fp16weights.onnx")
+```
+
+It is a top-level key, inherited like `plugin` and `cold` (`graph.ts`'s `toModule` carries it, with
+`onnx`), so every node of the module — and every chain step extending it — knows it too.
+`missingModel` (`modelCache.ts`) is the one question asked of a resolved module: which model it
+NAMES that resolved to nothing, and where it downloads from. An authored name with no resolved path
+is exactly "not here": the loader has already tried `assets/` and the cache.
+
+Two surfaces offer the download, and neither sends a URL:
+
+- a node's right-click in the graph — **Download model**, first in its menu. The file service marks
+  the step (`modelDownload` on the graph document, `graphDoc.ts`) and `POST /models/download` takes
+  the NODE NAME, resolving it as the graph did;
+- k7's settings, *Separation chains* — a link under a chosen cold chain that cannot run for want of
+  a model (`coldChains`' `downloads`), `POST /account/cold-chains/download` taking the CHAIN REF.
+
+**The URL is only ever read off the module.** A page names what it clicked, and the server finds
+the model and its `model_url` itself — so nothing a browser sends can point this machine at an
+arbitrary address, and where the bytes land is the module's authored name, confined to the cache
+by `modelCachePath` exactly as the resolver confines a ref. `../` in a name is refused, not cleaned.
+
+The download is a **job** (`file-service`'s `modelDownloads.ts`), polled at `GET
+/account/models/:id`: written to `<file>.part`, checked against the announced size, and renamed
+only when complete, so the loader never finds half a model. Two asks for one file share one job; a
+file already present is a job that is done at once. When one lands, `moduleFoldersMoved()` is
+called and the models folder's mtime is in both the module stamp (`moduleCache.ts`) and the
+workspace revision — the cache is in no module folder, and without that a finished download would
+change nothing until something else did.
+
+## A dangling ref is reported, not silent
+
+The loader resolves each file-valued param to an absolute path and leaves it `undefined` when it
+cannot, keeping the authored name in `assets`. The two disagreeing IS the report — `validate()`
+warns rather than letting the module load nothing. An amp whose model did not load passes no
+sound at all, and silence with no explanation is the failure mode worth spending a warning on.
+
+## A rack's samples in `sources/` — the older layout
+
+A rack's taps name samples in a library's or the project's `samples/` (`racks.md`,
+`libraryFiles.md`), and nothing writes the layout below; the loader still reads it.
+
+In that layout a rack keeps its audio in **`sources/`**, its own reserved subfolder (`MODULE_SOURCES_DIR`, in
+song-schema so a browser knows the word too). It is not `assets/` because the two are chosen by
+different hands: an asset is a file a PARAM names and the asset picker offers, a source is a file a
+SYMBOL names and the rack builder writes. Keeping them apart also keeps the picker's list free of
+sixteen drum hits nobody will ever pick from it.
+
+`sources/` is the one part of a module the editor's file tree still shows: the fold that turns a
+module folder into a single row keeps this child, so the samples can be seen, renamed and dropped
+onto. The row stays openable on its name (`opensOnName`), so the chevron folds while the name still
+opens the builder.
+
+A **bare** clip name is looked for in `sources/`, then `assets/`, then the module folder itself — so
+a shelf with its `.wav` beside `module.k7x` keeps loading, and a sample dropped onto a module is found without rewriting the file. `assets/bd.wav` is still a spelling that
+stands on its own, resolved against the module folder like any other ref.
+
+## No shared asset library
+
+There is no `_library/` beside the projects with one folder per kind, and no module field naming
+a file by its path *inside* one. The reasoning is the one that governs `.vstpreset` and jsdsp
+source: **the folder is the module**. A module that carries its material is self-contained, so it
+survives being materialised (`docs/moduleFork.md` writes a fresh folder for an engine ref that
+had none), an upload to the library, and a sync onto a machine that has none of the original
+song's files — it sounds the same in all three places, because the bytes go with it. A module
+whose sound depended on a folder two levels up would not.
+
+There is no `ir:` either, in `params:` or anywhere else. It would be a whole mechanism — a plugin
+branch in `EditBuilder`, a field, a command, a completion source — for a case that never arrives:
+no song names one, and nothing holds impulse responses to name.
+
+`libraries_from` is still ACCEPTED by the project schema, because songs already written carry it
+and refusing the key would turn a working project into one that will not open.
+`deadProjectFields` is what stops "accepted" from meaning "silently ignored".
+
+## Where they come from
+
+An asset is a file of the module's own `assets/` folder, written there like any workspace file —
+an upload through the file service, or a copy into the folder.
+
+Nothing offers to *create* an asset. They arrive as bytes — a **folder** of them as readily as
+one, since the tree reads a drop through `webkitGetAsEntry` rather than `dataTransfer.files`
+(`@studio/ui/lib/droppedEntries`) and `uploadTree` PUTs each file at its own nested path.

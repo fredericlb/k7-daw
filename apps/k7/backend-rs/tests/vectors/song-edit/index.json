@@ -1,0 +1,260 @@
+{
+ "song-edit/alternativeSwitch": {
+  "vectors": 6,
+  "unreached": []
+ },
+ "song-edit/clipResize": {
+  "vectors": 9,
+  "unreached": []
+ },
+ "song-edit/crossfade": {
+  "vectors": 7,
+  "unreached": []
+ },
+ "song-edit/engineSwitch": {
+  "vectors": 5,
+  "unreached": []
+ },
+ "song-edit/eventGain": {
+  "vectors": 8,
+  "unreached": []
+ },
+ "song-edit/eventLoop": {
+  "vectors": 16,
+  "unreached": []
+ },
+ "song-edit/graphEdit": {
+  "vectors": 289,
+  "unreached": []
+ },
+ "song-edit/insertTime": {
+  "vectors": 33,
+  "unreached": []
+ },
+ "song-edit/materialCut": {
+  "vectors": 20,
+  "unreached": []
+ },
+ "song-edit/materialWindow": {
+  "vectors": 6,
+  "unreached": []
+ },
+ "song-edit/onsets": {
+  "vectors": 16,
+  "unreached": []
+ },
+ "song-edit/presets": {
+  "vectors": 30,
+  "unreached": []
+ },
+ "song-edit/projectEdit": {
+  "vectors": 472,
+  "unreached": [
+   "setChainNodePositions",
+   "setLaneBypass"
+  ]
+ },
+ "song-edit/rackTaps": {
+  "vectors": 109,
+  "unreached": []
+ },
+ "song-edit/recorderNodes": {
+  "vectors": 3,
+  "unreached": []
+ },
+ "song-edit/sequenceLoops": {
+  "vectors": 12,
+  "unreached": []
+ },
+ "song-edit/songTempo": {
+  "vectors": 10,
+  "unreached": []
+ },
+ "song-edit/takeEdit": {
+  "vectors": 14,
+  "unreached": []
+ },
+ "song-edit/tapChain": {
+  "vectors": 5,
+  "unreached": []
+ },
+ "song-edit/timelineFromRange": {
+  "vectors": 3,
+  "unreached": []
+ },
+ "song-edit/timelineRename": {
+  "vectors": 18,
+  "unreached": []
+ },
+ "song-edit/trackMix": {
+  "vectors": 258,
+  "unreached": []
+ },
+ "song/accountFork": {
+  "vectors": 0,
+  "unreached": [
+   "forkIntoAccount"
+  ]
+ },
+ "song/assemblyEdit": {
+  "vectors": 28,
+  "unreached": [
+   "memberName"
+  ]
+ },
+ "song/basePreset": {
+  "vectors": 293,
+  "unreached": [
+   "basesIn",
+   "moduleBaseChoices"
+  ]
+ },
+ "song/chainCreate": {
+  "vectors": 21,
+  "unreached": [
+   "createChainNode"
+  ]
+ },
+ "song/chainGraphEdit": {
+  "vectors": 49,
+  "unreached": [
+   "chainGraphText",
+   "deleteChainItem",
+   "editProjectGraph",
+   "projectGraphText",
+   "renameChainLane"
+  ]
+ },
+ "song/chainItemEdit": {
+  "vectors": 113,
+  "unreached": [
+   "chainFiles",
+   "chainItemOf",
+   "chainItemPath",
+   "chainItemText",
+   "editChainItem",
+   "editChainItemIn",
+   "eventItemIds",
+   "spliceChainItem"
+  ]
+ },
+ "song/chainStack": {
+  "vectors": 1,
+  "unreached": []
+ },
+ "song/confine": {
+  "vectors": 290,
+  "unreached": []
+ },
+ "song/formatStamp": {
+  "vectors": 5,
+  "unreached": [
+   "declaredLevel",
+   "holdsSecondsStarts",
+   "stampFormatForSeconds"
+  ]
+ },
+ "song/laneStrip": {
+  "vectors": 18,
+  "unreached": [
+   "addLaneStrip",
+   "applyLaneStrip",
+   "hasLaneStrip",
+   "isLaneStrip",
+   "laneStrip",
+   "laneStripsOf",
+   "ownLaneStrip",
+   "pictureLanes",
+   "planLaneStrip",
+   "soundLanes"
+  ]
+ },
+ "song/libraryForks": {
+  "vectors": 1,
+  "unreached": [
+   "libraryForks",
+   "libraryModuleDigest"
+  ]
+ },
+ "song/moduleFork": {
+  "vectors": 0,
+  "unreached": [
+   "chainsUsing",
+   "materialiseEngineModule",
+   "sharedModuleRef",
+   "sharedRoots"
+  ]
+ },
+ "song/moduleMove": {
+  "vectors": 0,
+  "unreached": [
+   "assertNotEngine",
+   "planModuleMove",
+   "refAt",
+   "repointDocRefs",
+   "repointRefs"
+  ]
+ },
+ "song/nodeFiles": {
+  "vectors": 2,
+  "unreached": [
+   "moveNodeFiles",
+   "removeNodeFiles"
+  ]
+ },
+ "song/preferences": {
+  "vectors": 5,
+  "unreached": [
+   "clearChannelLabel",
+   "defaultPreferences",
+   "formatAudioDevice",
+   "formatChannel",
+   "formatChannels",
+   "normalizePreferences",
+   "parseChannels",
+   "parsePreferences",
+   "preferencesProblem",
+   "savePreferences",
+   "setAudioDevice",
+   "setChannelLabel",
+   "setCueOutput",
+   "setEditorVim",
+   "setInputPair",
+   "setInstrumentalChain",
+   "setStemsChain",
+   "stringifyPreferences"
+  ]
+ },
+ "song/rawDoc": {
+  "vectors": 0,
+  "unreached": []
+ },
+ "song/scaffold": {
+  "vectors": 3,
+  "unreached": [
+   "projectFiles",
+   "scaffold",
+   "videoProjectFiles"
+  ]
+ },
+ "song/yaml/edit": {
+  "vectors": 73,
+  "unreached": []
+ },
+ "song/yaml/moduleIO": {
+  "vectors": 1307,
+  "unreached": []
+ },
+ "song/yaml/workspaceDoc": {
+  "vectors": 1066,
+  "unreached": []
+ },
+ "song/yaml/workspaceFile": {
+  "vectors": 437,
+  "unreached": [
+   "isK7xPath",
+   "wsList",
+   "wsRename"
+  ]
+ }
+}

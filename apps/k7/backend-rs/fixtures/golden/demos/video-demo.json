@@ -1,0 +1,1187 @@
+{
+  "project": "demos/video-demo.k7",
+  "repairs": {
+    "log": [],
+    "files": [
+      "chains/box_layer.k7x",
+      "chains/dot_layer.k7x",
+      "chains/glow.k7x",
+      "chains/master.k7x",
+      "chains/pip.k7x",
+      "chains/title_layer.k7x",
+      "project.k7x"
+    ]
+  },
+  "engine": {
+    "name": "video-demo",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/demos/video-demo.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/demos/video-demo.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "snare@8",
+            "type": "audio",
+            "name": "snare",
+            "source": "<ws>/demos/video-demo.k7/clips/snare.wav",
+            "start": 8,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "box_layer": {
+        "from": "box_layer",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000001",
+            "uses": "@meta/shaders/video-mixer",
+            "place": "box_layer · step 3",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "video-mixer",
+            "shaders": [
+              "video-mixer"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "red": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Red",
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "green": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Green",
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "blue": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Blue",
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "transparency": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Transparency",
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 1,
+              "P2": 1,
+              "P3": 1,
+              "P4": 0
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "RENDER",
+            "gain": 1
+          }
+        ]
+      },
+      "dot_layer": {
+        "from": "dot_layer",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000002",
+            "uses": "@meta/shaders/video-mixer",
+            "place": "dot_layer · step 3",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "video-mixer",
+            "shaders": [
+              "video-mixer"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "red": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Red",
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "green": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Green",
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "blue": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Blue",
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "transparency": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Transparency",
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 1,
+              "P2": 1,
+              "P3": 1,
+              "P4": 0
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "RENDER",
+            "gain": 1
+          }
+        ]
+      },
+      "drums": {
+        "from": "drums",
+        "use": [],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          },
+          {
+            "to": "078a9886-bfac-42a4-9a04-1bf1dfdb7378#audio",
+            "gain": 1
+          }
+        ]
+      },
+      "main": {
+        "from": "main",
+        "use": [
+          {
+            "module": "078a9886-bfac-42a4-9a04-1bf1dfdb7378",
+            "uses": "@workspace/shaders/glow",
+            "place": "glow · step 1",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "pulse",
+            "shaders": [
+              "pulse",
+              "ripple"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "pick": {
+                  "type": "dropdown",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "bind": "@shader"
+                },
+                "p1": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 1,
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "p2": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "p3": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 1,
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "p4": {
+                  "type": "knob",
+                  "col": 3,
+                  "row": 1,
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 0.6,
+              "P2": 0.35,
+              "P3": 0,
+              "P4": 0
+            }
+          },
+          {
+            "module": "00000000-0000-4000-8000-000000000003",
+            "uses": "@meta/shaders/video-mixer",
+            "place": "glow · step 2",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "video-mixer",
+            "shaders": [
+              "video-mixer"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "red": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Red",
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "green": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Green",
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "blue": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Blue",
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "transparency": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Transparency",
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 1,
+              "P2": 1,
+              "P3": 1,
+              "P4": 0
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "RENDER",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          },
+          {
+            "to": "RENDER#audio",
+            "gain": 1
+          }
+        ]
+      },
+      "RENDER": {
+        "from": "RENDER",
+        "use": [],
+        "out": [
+          {
+            "to": "VIDEO_OUT",
+            "gain": 1
+          }
+        ]
+      },
+      "pip": {
+        "from": "pip",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000004",
+            "uses": "@meta/shaders/video-mixer",
+            "place": "pip · step 2",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "video-mixer",
+            "shaders": [
+              "video-mixer"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "red": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Red",
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "green": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Green",
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "blue": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Blue",
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "transparency": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Transparency",
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 1,
+              "P2": 1,
+              "P3": 1,
+              "P4": 0
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "RENDER",
+            "gain": 1
+          }
+        ]
+      },
+      "title_layer": {
+        "from": "title_layer",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000005",
+            "uses": "@meta/shaders/video-mixer",
+            "place": "title_layer · step 3",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "video-mixer",
+            "shaders": [
+              "video-mixer"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "red": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Red",
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "green": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Green",
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "blue": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Blue",
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "transparency": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "rowSpan": 2,
+                  "label": "Transparency",
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 1,
+              "P2": 1,
+              "P3": 1,
+              "P4": 0
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "RENDER",
+            "gain": 1
+          }
+        ]
+      },
+      "c3abff25-19a8-49b0-9dd2-d7661d118d3e": {
+        "use": [
+          {
+            "module": "c3abff25-19a8-49b0-9dd2-d7661d118d3e",
+            "uses": "@workspace/shapes/box",
+            "place": "box_layer · step 1",
+            "category": "shapes",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {
+              "x": 448,
+              "y": 220,
+              "w": 384,
+              "h": 280
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "box_layer",
+            "gain": 1
+          }
+        ]
+      },
+      "7edb9a61-859c-4eaf-87f4-811bb8c33b7b": {
+        "use": [
+          {
+            "module": "7edb9a61-859c-4eaf-87f4-811bb8c33b7b",
+            "uses": "@workspace/shapes/dot",
+            "place": "dot_layer · step 1",
+            "category": "shapes",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {
+              "x": 240,
+              "y": 180,
+              "r": 120
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "dot_layer",
+            "gain": 1
+          }
+        ]
+      },
+      "3663c123-f41a-40d0-9a42-27b538d4faf8": {
+        "use": [
+          {
+            "module": "3663c123-f41a-40d0-9a42-27b538d4faf8",
+            "uses": "@workspace/shaders/iris",
+            "place": "main › iris · step 1",
+            "inputs": [
+              {
+                "name": "in",
+                "type": "video"
+              },
+              {
+                "name": "audio",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "shader": "iris",
+            "shaders": [
+              "iris"
+            ],
+            "category": "shaders",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "pick": {
+                  "type": "dropdown",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "bind": "@shader"
+                },
+                "p1": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 1,
+                  "bind": "P1",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "p2": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "bind": "P2",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "p3": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 1,
+                  "bind": "P3",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                },
+                "p4": {
+                  "type": "knob",
+                  "col": 3,
+                  "row": 1,
+                  "bind": "P4",
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01
+                }
+              }
+            },
+            "params": {
+              "P1": 0.15,
+              "P2": 0,
+              "P3": 0,
+              "P4": 0
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "main",
+            "gain": 1
+          }
+        ]
+      },
+      "310cef51-7f88-4f1f-80f1-fa41d0bd0fea": {
+        "use": [
+          {
+            "module": "310cef51-7f88-4f1f-80f1-fa41d0bd0fea",
+            "uses": "@workspace/shapes/title",
+            "place": "title_layer · step 1",
+            "category": "shapes",
+            "emits": "video",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {
+              "x": 40,
+              "y": 560,
+              "font_size": 72
+            }
+          }
+        ],
+        "out": [
+          {
+            "to": "title_layer",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [
+      "box_layer",
+      "dot_layer",
+      "main",
+      "pip",
+      "title_layer"
+    ],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "stacks": [],
+    "trackMixers": {
+      "box_layer": "00000000-0000-4000-8000-000000000001",
+      "dot_layer": "00000000-0000-4000-8000-000000000002",
+      "main": "00000000-0000-4000-8000-000000000003",
+      "pip": "00000000-0000-4000-8000-000000000004",
+      "title_layer": "00000000-0000-4000-8000-000000000005"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "snare",
+          "start": 8,
+          "tc": "3:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": {
+    "doc": {
+      "rowOrder": [
+        "drums",
+        "title_layer",
+        "dot_layer",
+        "box_layer",
+        "pip",
+        "main"
+      ],
+      "name": "video-demo",
+      "viewport": [
+        1280,
+        720
+      ],
+      "fps": 30,
+      "videoTracks": [
+        {
+          "id": "main",
+          "name": "main",
+          "color": "",
+          "mute": false,
+          "solo": false,
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 720,
+          "clips": [
+            {
+              "id": "counter",
+              "name": "counter",
+              "source": "<ws>/demos/video-demo.k7/clips/counter.mp4",
+              "start": 0,
+              "length": 4,
+              "sourceFrom": 0
+            },
+            {
+              "id": "bars",
+              "name": "bars",
+              "source": "<ws>/demos/video-demo.k7/clips/bars.mp4",
+              "start": 3,
+              "length": 5,
+              "sourceFrom": 1.5,
+              "fadeIn": {
+                "over": 1,
+                "with": "over",
+                "chain": "3663c123-f41a-40d0-9a42-27b538d4faf8"
+              }
+            }
+          ],
+          "shapes": [],
+          "plugins": [
+            {
+              "id": "main:0",
+              "type": "shader",
+              "name": "078a9886-bfac-42a4-9a04-1bf1dfdb7378",
+              "enabled": true,
+              "params": {
+                "P1": 0.6,
+                "P2": 0.35,
+                "P3": 0,
+                "P4": 0
+              },
+              "shader": {
+                "name": "pulse",
+                "vertex": "#version 300 es\n// The vertex stage every full-target pass wants: `aUnit` is the unit quad the compositor binds,\n// and a pass covers the whole of what it draws into — so this maps (0,0)..(1,1) onto clip space\n// and hands the fragment the same 0..1 as its texture coordinate.\n//\n// It is a separate file, and duplicated per shader on purpose: a shader is the PAIR, and the day\n// one wants to move its geometry it needs this file to itself rather than a shared one it would\n// have to fork. See packages/song-video/docs/shaders.md.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+                "fragment": "#version 300 es\n// \"pulse\" — the picture brightens with the sound, inside a vignette.\n//\n// The simplest thing that shows the audio input actually arriving: wire a lane to this node's\n// `audio` port and the frame breathes with it. With nothing wired, `uAudio` is 0 and this is a\n// vignette and nothing else, which is a legitimate way to use it.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;   // the picture coming in\nuniform float uAudio;     // 0..1, the wired lane's live level (-60..0 dB)\nuniform float uP1;        // how hard the sound lifts the picture\nuniform float uP2;        // vignette depth\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 c = texture(uTex, vUV);\n\n  // Lift, never cut: at uAudio 0 this is 1.0, so silence leaves the picture exactly as it came in.\n  // A shader that darkened at rest would make every lane look wrong the moment you added it.\n  float lift = 1.0 + uAudio * uP1 * 2.0;\n\n  // Squared distance from the centre, doubled so the corners reach ~1 on a square frame.\n  vec2 d = vUV - 0.5;\n  float vig = 1.0 - uP2 * clamp(dot(d, d) * 2.0, 0.0, 1.0);\n\n  // Alpha is passed straight through. The layer is composited OVER whatever is under it, so\n  // writing 1.0 here would make a picture-in-picture punch a hole in the lane below it.\n  outColor = vec4(c.rgb * lift * vig, c.a);\n}\n"
+              },
+              "audioFrom": "drums"
+            },
+            {
+              "id": "main:1",
+              "type": "shader",
+              "name": "00000000-0000-4000-8000-000000000003",
+              "enabled": true,
+              "params": {
+                "P1": 1,
+                "P2": 1,
+                "P3": 1,
+                "P4": 0
+              },
+              "shader": {
+                "name": "video-mixer",
+                "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+                "fragment": "#version 300 es\n// \"video-mixer\" — a lane's channels scaled and its alpha thinned: the strip a picture lane is mixed with.\n// The compositor blends straight alpha (SRC_ALPHA, ONE_MINUS_SRC_ALPHA), so transparency touches alpha alone.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;\nuniform float uP1; // red\nuniform float uP2; // green\nuniform float uP3; // blue\nuniform float uP4; // transparency\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 src = texture(uTex, vUV);\n  outColor = vec4(src.rgb * vec3(uP1, uP2, uP3), src.a * (1.0 - uP4));\n}\n"
+              }
+            }
+          ]
+        },
+        {
+          "id": "pip",
+          "name": "pip",
+          "color": "",
+          "mute": false,
+          "solo": false,
+          "x": 960,
+          "y": 540,
+          "w": 320,
+          "h": 180,
+          "clips": [
+            {
+              "id": "bars",
+              "name": "bars",
+              "source": "<ws>/demos/video-demo.k7/clips/bars.mp4",
+              "start": 0,
+              "length": 8,
+              "sourceFrom": 0
+            }
+          ],
+          "shapes": [],
+          "plugins": [
+            {
+              "id": "pip:0",
+              "type": "shader",
+              "name": "00000000-0000-4000-8000-000000000004",
+              "enabled": true,
+              "params": {
+                "P1": 1,
+                "P2": 1,
+                "P3": 1,
+                "P4": 0
+              },
+              "shader": {
+                "name": "video-mixer",
+                "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+                "fragment": "#version 300 es\n// \"video-mixer\" — a lane's channels scaled and its alpha thinned: the strip a picture lane is mixed with.\n// The compositor blends straight alpha (SRC_ALPHA, ONE_MINUS_SRC_ALPHA), so transparency touches alpha alone.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;\nuniform float uP1; // red\nuniform float uP2; // green\nuniform float uP3; // blue\nuniform float uP4; // transparency\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 src = texture(uTex, vUV);\n  outColor = vec4(src.rgb * vec3(uP1, uP2, uP3), src.a * (1.0 - uP4));\n}\n"
+              }
+            }
+          ]
+        },
+        {
+          "id": "box_layer",
+          "name": "box_layer",
+          "color": "",
+          "mute": false,
+          "solo": false,
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 720,
+          "clips": [
+            {
+              "id": "",
+              "name": "",
+              "source": "",
+              "start": 0,
+              "length": 4,
+              "sourceFrom": 0
+            }
+          ],
+          "shapes": [
+            {
+              "id": "c3abff25-19a8-49b0-9dd2-d7661d118d3e",
+              "type": "square",
+              "x": 448,
+              "y": 220,
+              "w": 384,
+              "h": 280,
+              "color": "#e2b53acc"
+            }
+          ],
+          "plugins": [
+            {
+              "id": "box_layer:0",
+              "type": "shader",
+              "name": "00000000-0000-4000-8000-000000000001",
+              "enabled": true,
+              "params": {
+                "P1": 1,
+                "P2": 1,
+                "P3": 1,
+                "P4": 0
+              },
+              "shader": {
+                "name": "video-mixer",
+                "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+                "fragment": "#version 300 es\n// \"video-mixer\" — a lane's channels scaled and its alpha thinned: the strip a picture lane is mixed with.\n// The compositor blends straight alpha (SRC_ALPHA, ONE_MINUS_SRC_ALPHA), so transparency touches alpha alone.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;\nuniform float uP1; // red\nuniform float uP2; // green\nuniform float uP3; // blue\nuniform float uP4; // transparency\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 src = texture(uTex, vUV);\n  outColor = vec4(src.rgb * vec3(uP1, uP2, uP3), src.a * (1.0 - uP4));\n}\n"
+              }
+            }
+          ]
+        },
+        {
+          "id": "dot_layer",
+          "name": "dot_layer",
+          "color": "",
+          "mute": false,
+          "solo": false,
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 720,
+          "clips": [
+            {
+              "id": "",
+              "name": "",
+              "source": "",
+              "start": 2,
+              "length": 4,
+              "sourceFrom": 0
+            }
+          ],
+          "shapes": [
+            {
+              "id": "7edb9a61-859c-4eaf-87f4-811bb8c33b7b",
+              "type": "circle",
+              "x": 240,
+              "y": 180,
+              "r": 120,
+              "color": "#e2564ecc"
+            }
+          ],
+          "plugins": [
+            {
+              "id": "dot_layer:0",
+              "type": "shader",
+              "name": "00000000-0000-4000-8000-000000000002",
+              "enabled": true,
+              "params": {
+                "P1": 1,
+                "P2": 1,
+                "P3": 1,
+                "P4": 0
+              },
+              "shader": {
+                "name": "video-mixer",
+                "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+                "fragment": "#version 300 es\n// \"video-mixer\" — a lane's channels scaled and its alpha thinned: the strip a picture lane is mixed with.\n// The compositor blends straight alpha (SRC_ALPHA, ONE_MINUS_SRC_ALPHA), so transparency touches alpha alone.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;\nuniform float uP1; // red\nuniform float uP2; // green\nuniform float uP3; // blue\nuniform float uP4; // transparency\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 src = texture(uTex, vUV);\n  outColor = vec4(src.rgb * vec3(uP1, uP2, uP3), src.a * (1.0 - uP4));\n}\n"
+              }
+            }
+          ]
+        },
+        {
+          "id": "title_layer",
+          "name": "title_layer",
+          "color": "",
+          "mute": false,
+          "solo": false,
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 720,
+          "clips": [
+            {
+              "id": "",
+              "name": "",
+              "source": "",
+              "start": 4,
+              "length": 4,
+              "sourceFrom": 0
+            }
+          ],
+          "shapes": [
+            {
+              "id": "310cef51-7f88-4f1f-80f1-fa41d0bd0fea",
+              "type": "text",
+              "content": "k7",
+              "font": "sans-serif",
+              "fontSize": 72,
+              "x": 40,
+              "y": 560,
+              "color": "#ffffff"
+            }
+          ],
+          "plugins": [
+            {
+              "id": "title_layer:0",
+              "type": "shader",
+              "name": "00000000-0000-4000-8000-000000000005",
+              "enabled": true,
+              "params": {
+                "P1": 1,
+                "P2": 1,
+                "P3": 1,
+                "P4": 0
+              },
+              "shader": {
+                "name": "video-mixer",
+                "vertex": "#version 300 es\n// The full-target vertex stage every pass uses: the unit quad onto clip space, its 0..1 as the UV.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+                "fragment": "#version 300 es\n// \"video-mixer\" — a lane's channels scaled and its alpha thinned: the strip a picture lane is mixed with.\n// The compositor blends straight alpha (SRC_ALPHA, ONE_MINUS_SRC_ALPHA), so transparency touches alpha alone.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;\nuniform float uP1; // red\nuniform float uP2; // green\nuniform float uP3; // blue\nuniform float uP4; // transparency\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 src = texture(uTex, vUV);\n  outColor = vec4(src.rgb * vec3(uP1, uP2, uP3), src.a * (1.0 - uP4));\n}\n"
+              }
+            }
+          ]
+        }
+      ],
+      "markers": [],
+      "framePlugins": [],
+      "sound": "mix",
+      "transitions": {},
+      "stretches": {
+        "3663c123-f41a-40d0-9a42-27b538d4faf8": [
+          {
+            "id": "3663c123-f41a-40d0-9a42-27b538d4faf8:0",
+            "type": "shader",
+            "name": "3663c123-f41a-40d0-9a42-27b538d4faf8",
+            "enabled": true,
+            "params": {
+              "P1": 0.15,
+              "P2": 0,
+              "P3": 0,
+              "P4": 0
+            },
+            "shader": {
+              "name": "iris",
+              "vertex": "#version 300 es\n// The vertex stage every full-target pass wants: `aUnit` is the unit quad the compositor binds,\n// and a pass covers the whole of what it draws into — so this maps (0,0)..(1,1) onto clip space\n// and hands the fragment the same 0..1 as its texture coordinate.\n//\n// It is a separate file, and duplicated per shader on purpose: a shader is the PAIR, and the day\n// one wants to move its geometry it needs this file to itself rather than a shared one it would\n// have to fork. See packages/song-video/docs/shaders.md.\nin vec2 aUnit;\nout vec2 vUV;\n\nvoid main() {\n  vUV = aUnit;\n  gl_Position = vec4(aUnit * 2.0 - 1.0, 0.0, 1.0);\n}\n",
+              "fragment": "#version 300 es\n// \"iris\" — the shot inside a circle whose radius follows `uPresence`: closed at 0, the whole\n// frame at 1. Only the ALPHA changes, which is what lets the built-in `over` mix it with the shot\n// underneath — see packages/song-video/docs/transitions.md.\nprecision mediump float;\n\nin vec2 vUV;\n\nuniform sampler2D uTex;       // the shot coming in\nuniform float uPresence;      // 0..1, how much of the shot is on screen\nuniform vec2 uResolution;     // the viewport, so the circle stays round on a wide frame\nuniform float uP1;            // edge softness\n\nout vec4 outColor;\n\nvoid main() {\n  vec4 c = texture(uTex, vUV);\n  // Distance from the centre in units of the frame's HEIGHT, so a 16:9 frame does not squash the circle.\n  vec2 d = (vUV - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);\n  float soft = max(uP1 * 0.5, 0.001);\n  // The radius reaches past the corner at presence 1, edge included, so a whole shot has no rim.\n  float far = length(vec2(uResolution.x / uResolution.y, 1.0) * 0.5) + soft;\n  float r = uPresence * far;\n  outColor = vec4(c.rgb, c.a * (1.0 - smoothstep(r - soft, r, length(d))));\n}\n"
+            }
+          }
+        ]
+      },
+      "warnings": []
+    },
+    "errors": {
+      "errors": [],
+      "diagnostics": []
+    }
+  }
+}

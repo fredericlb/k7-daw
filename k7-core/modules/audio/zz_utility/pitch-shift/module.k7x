@@ -1,0 +1,7 @@
+// Pitch Shift  [audioEffect] — pitch, in semitones. Not jsdsp: shifting pitch without moving
+// the clock needs a windowed resampler, which is a whole algorithm rather than a graph of primitives. The
+// engine already hosts one, so this module is a name and a default over Tracktion's Pitch Shifter.
+// It does NOT change the duration: the source is shifted, not resampled.
+extends("@engine/pitch-shifter")
+params({ "semitones up": 0 })
+// Transposes by whole semitones, ±12, leaving the tempo alone: detuning the source would speed the song up or down with its pitch, and this does not.

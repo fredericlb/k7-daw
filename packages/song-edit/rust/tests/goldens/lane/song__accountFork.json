@@ -1,0 +1,362 @@
+{
+ "module": "golden/song/accountFork",
+ "blobs": {
+  "3c82b6a4b19d": "extends(\"@k7-core/audio/verb\")\n",
+  "00581be874a7": "type(\"ui\")\n",
+  "d2b40ecd7ba7": "extends(\"@account/audio/verb\")\n",
+  "394d536b4f33": "extends(\"@account/audio/verb:warm\")\n",
+  "a10da7233186": "extends(\"@k7-core/audio/verb:warm\")\n",
+  "41cdfbccfcd4": "modules({})\n",
+  "c652def576d4": "plugin({ name: \"reverb\" })\n",
+  "5f45162ce3ac": "plugin({})\n",
+  "b06ae46b1836": "extends(\"@k7-core/audio/delay\")\n",
+  "52b3789c33f8": "plugin({ name: \"reverb1\" })\n",
+  "ddc689d0f256": "plugin({ name: \"reverb2\" })\n",
+  "ed65db830d1d": "k7-core(1)\n",
+  "38f72fd1b100": "plugin({ name: \"reverbdraft\" })\n",
+  "5fdd0e62f303": "k7-core(\"draft\")\n",
+  "747e0c974c2e": "extends(\"@k7-core/audio/verb\")\n// mine\n"
+ },
+ "trees": {
+  "0e37ad7d5620": {
+   "proj/nodes/a.k7x": "3c82b6a4b19d",
+   "proj/nodes/b.k7x": "a10da7233186",
+   "proj/graph.k7x": "41cdfbccfcd4",
+   "home/libraries/k7-core/modules/audio/verb/module.k7x": "c652def576d4",
+   "home/libraries/k7-core/modules/audio/verb/ui.k7x": "00581be874a7",
+   "home/libraries/k7-core/modules/audio/delay/module.k7x": "5f45162ce3ac"
+  },
+  "90375563a437": {
+   "proj/nodes/a.k7x": "3c82b6a4b19d",
+   "proj/nodes/b.k7x": "a10da7233186",
+   "proj/graph.k7x": "41cdfbccfcd4",
+   "home/libraries/k7-core/1/modules/audio/verb/module.k7x": "52b3789c33f8",
+   "home/libraries/k7-core/1/modules/audio/verb/ui.k7x": "00581be874a7",
+   "home/libraries/k7-core/1/modules/audio/delay/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/2/modules/audio/verb/module.k7x": "ddc689d0f256",
+   "home/libraries/k7-core/2/modules/audio/verb/ui.k7x": "00581be874a7",
+   "home/libraries/k7-core/2/modules/audio/delay/module.k7x": "5f45162ce3ac",
+   "_library-pins.k7x": "ed65db830d1d"
+  },
+  "05a461b879e9": {
+   "proj/nodes/a.k7x": "3c82b6a4b19d",
+   "proj/nodes/b.k7x": "a10da7233186",
+   "proj/graph.k7x": "41cdfbccfcd4",
+   "home/libraries/k7-core/1/modules/audio/verb/module.k7x": "52b3789c33f8",
+   "home/libraries/k7-core/1/modules/audio/verb/ui.k7x": "00581be874a7",
+   "home/libraries/k7-core/1/modules/audio/delay/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/2/modules/audio/verb/module.k7x": "ddc689d0f256",
+   "home/libraries/k7-core/2/modules/audio/verb/ui.k7x": "00581be874a7",
+   "home/libraries/k7-core/2/modules/audio/delay/module.k7x": "5f45162ce3ac"
+  },
+  "c4f64e0af0ae": {
+   "proj/nodes/a.k7x": "3c82b6a4b19d",
+   "proj/nodes/b.k7x": "a10da7233186",
+   "proj/graph.k7x": "41cdfbccfcd4",
+   "home/libraries/k7-core/1/modules/audio/verb/module.k7x": "52b3789c33f8",
+   "home/libraries/k7-core/1/modules/audio/verb/ui.k7x": "00581be874a7",
+   "home/libraries/k7-core/1/modules/audio/delay/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/draft/modules/audio/verb/module.k7x": "38f72fd1b100",
+   "home/libraries/k7-core/draft/modules/audio/verb/ui.k7x": "00581be874a7",
+   "home/libraries/k7-core/draft/modules/audio/delay/module.k7x": "5f45162ce3ac",
+   "_library-pins.k7x": "5fdd0e62f303"
+  },
+  "17f00cbdb42c": {
+   "proj/nodes/a.k7x": "3c82b6a4b19d",
+   "proj/nodes/b.k7x": "a10da7233186",
+   "proj/graph.k7x": "41cdfbccfcd4",
+   "home/libraries/k7-core/modules/audio/verb/module.k7x": "c652def576d4",
+   "home/libraries/k7-core/modules/audio/verb/ui.k7x": "00581be874a7",
+   "home/libraries/k7-core/modules/audio/delay/module.k7x": "5f45162ce3ac",
+   "home/library/modules/audio/verb/module.k7x": "747e0c974c2e"
+  }
+ },
+ "vectors": [
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/verb",
+    "folder": "$DIR/home/library/modules/audio/verb",
+    "created": true,
+    "repointed": [
+     "$DIR/proj/nodes/a.k7x",
+     "$DIR/proj/nodes/b.k7x"
+    ]
+   },
+   "changed": {
+    "home/library/modules/audio/verb/module.k7x": "3c82b6a4b19d",
+    "home/library/modules/audio/verb/ui.k7x": "00581be874a7",
+    "proj/nodes/a.k7x": "d2b40ecd7ba7",
+    "proj/nodes/b.k7x": "394d536b4f33"
+   },
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/verb:warm"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/verb",
+    "folder": "$DIR/home/library/modules/audio/verb",
+    "created": true,
+    "repointed": [
+     "$DIR/proj/nodes/a.k7x",
+     "$DIR/proj/nodes/b.k7x"
+    ]
+   },
+   "changed": {
+    "home/library/modules/audio/verb/module.k7x": "3c82b6a4b19d",
+    "home/library/modules/audio/verb/ui.k7x": "00581be874a7",
+    "proj/nodes/a.k7x": "d2b40ecd7ba7",
+    "proj/nodes/b.k7x": "394d536b4f33"
+   },
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/delay"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/delay",
+    "folder": "$DIR/home/library/modules/audio/delay",
+    "created": true,
+    "repointed": []
+   },
+   "changed": {
+    "home/library/modules/audio/delay/module.k7x": "b06ae46b1836"
+   },
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/nope"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "@k7-core/audio/nope: no such module in the version this workspace plays"
+   },
+   "changed": {},
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@account/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "@account/audio/verb is no module of the origin's libraries"
+   },
+   "changed": {},
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@meta/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "@meta/audio/verb is no module of the origin's libraries"
+   },
+   "changed": {},
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "no-ref"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "no-ref is no module of the origin's libraries"
+   },
+   "changed": {},
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/../verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "@k7-core/audio/../verb is no module path"
+   },
+   "changed": {},
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core//verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "@k7-core//verb is no module path"
+   },
+   "changed": {},
+   "tree": "0e37ad7d5620"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/verb",
+    "folder": "$DIR/home/library/modules/audio/verb",
+    "created": true,
+    "repointed": [
+     "$DIR/proj/nodes/a.k7x",
+     "$DIR/proj/nodes/b.k7x"
+    ]
+   },
+   "changed": {
+    "home/library/modules/audio/verb/module.k7x": "3c82b6a4b19d",
+    "home/library/modules/audio/verb/ui.k7x": "00581be874a7",
+    "proj/nodes/a.k7x": "d2b40ecd7ba7",
+    "proj/nodes/b.k7x": "394d536b4f33"
+   },
+   "tree": "90375563a437"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/verb",
+    "folder": "$DIR/home/library/modules/audio/verb",
+    "created": true,
+    "repointed": [
+     "$DIR/proj/nodes/a.k7x",
+     "$DIR/proj/nodes/b.k7x"
+    ]
+   },
+   "changed": {
+    "home/library/modules/audio/verb/module.k7x": "3c82b6a4b19d",
+    "home/library/modules/audio/verb/ui.k7x": "00581be874a7",
+    "proj/nodes/a.k7x": "d2b40ecd7ba7",
+    "proj/nodes/b.k7x": "394d536b4f33"
+   },
+   "tree": "05a461b879e9"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/verb",
+    "folder": "$DIR/home/library/modules/audio/verb",
+    "created": true,
+    "repointed": [
+     "$DIR/proj/nodes/a.k7x",
+     "$DIR/proj/nodes/b.k7x"
+    ]
+   },
+   "changed": {
+    "home/library/modules/audio/verb/module.k7x": "3c82b6a4b19d",
+    "home/library/modules/audio/verb/ui.k7x": "00581be874a7",
+    "proj/nodes/a.k7x": "d2b40ecd7ba7",
+    "proj/nodes/b.k7x": "394d536b4f33"
+   },
+   "tree": "c4f64e0af0ae"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/verb",
+    "folder": "$DIR/home/library/modules/audio/verb",
+    "created": false,
+    "repointed": [
+     "$DIR/proj/nodes/a.k7x",
+     "$DIR/proj/nodes/b.k7x"
+    ]
+   },
+   "changed": {
+    "proj/nodes/a.k7x": "d2b40ecd7ba7",
+    "proj/nodes/b.k7x": "394d536b4f33"
+   },
+   "tree": "17f00cbdb42c"
+  },
+  {
+   "fn": "forkIntoAccount",
+   "args": [
+    "$DIR/proj",
+    "@k7-core/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/verb",
+    "folder": "$DIR/home/library/modules/audio/verb",
+    "created": false,
+    "repointed": [
+     "$DIR/proj/nodes/a.k7x",
+     "$DIR/proj/nodes/b.k7x"
+    ]
+   },
+   "changed": {
+    "proj/nodes/a.k7x": "d2b40ecd7ba7",
+    "proj/nodes/b.k7x": "394d536b4f33"
+   },
+   "tree": "17f00cbdb42c"
+  }
+ ]
+}

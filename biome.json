@@ -1,0 +1,97 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.4/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!k7-core",
+      "!**/node_modules",
+      "!**/.tmp-*",
+      "!**/dist",
+      "!**/storybook-static",
+      "!**/package-lock.json",
+      "!**/*.tsbuildinfo",
+      "!**/out",
+      "!**/*.min.js",
+      "!**/*.css",
+      "!**/*.json",
+      "!**/*.jsonc",
+      "!engine/k7-runtime",
+      "!**/waveformWasm.generated.ts",
+      "!**/k7WasmSong.generated.ts",
+      "!**/hostProtocol.generated.ts"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "correctness": {
+        "noUndeclaredVariables": "error",
+        "useExhaustiveDependencies": "warn",
+        "useHookAtTopLevel": "warn"
+      },
+      "a11y": {
+        "noAriaHiddenOnFocusable": "warn",
+        "noLabelWithoutControl": "warn",
+        "noStaticElementInteractions": "warn",
+        "noSvgWithoutTitle": "warn",
+        "useAriaPropsForRole": "warn",
+        "useAriaPropsSupportedByRole": "warn",
+        "useButtonType": "warn",
+        "useFocusableInteractive": "warn",
+        "useKeyWithClickEvents": "warn",
+        "useMediaCaption": "warn",
+        "useSemanticElements": "warn"
+      },
+      "style": {
+        "noRestrictedImports": {
+          "level": "warn",
+          "options": {
+            "paths": {
+              "lucide-react": "Import icons from @studio/ui/icons, the one set every app draws with (packages/ui/docs/icons.md)."
+            }
+          }
+        }
+      },
+      "suspicious": {
+        "noArrayIndexKey": "warn",
+        "noAssignInExpressions": "warn",
+        "noControlCharactersInRegex": "warn",
+        "noImplicitAnyLet": "warn",
+        "noTsIgnore": "off",
+        "useIterableCallbackReturn": "warn"
+      }
+    }
+  },
+  "javascript": {
+    "globals": ["Terminal", "FitAddon"],
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  },
+  "css": {
+    "formatter": { "enabled": false },
+    "linter": { "enabled": false },
+    "parser": { "allowWrongLineComments": true }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}

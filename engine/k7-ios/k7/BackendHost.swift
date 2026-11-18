@@ -1,0 +1,314 @@
+// BackendHost.swift — k7's backend on the phone: the Rust front (apps/k7/backend-rs) linked into the app as
+// k7-embed, answering the studio's own port by itself, with no node behind it. Port, environment and folders are
+// the desktop's, from apps/k7/backend/standalone.json. One front per PROCESS, like the supervisor and the engine:
+// it is started once, and a start that failed is the one thing a retry redoes. See engine/k7-runtime/docs/ios.md.
+
+import Foundation
+import os
+
+final class BackendHost {
+    static let shared = BackendHost()
+
+    /// standalone.json's table, read from the bundle: its port is the desktop app's.
+    private static let table: [String: Any] = {
+        let url = Bundle.main.resourceURL!.appendingPathComponent("backend/standalone.json")
+        guard let data = try? Data(contentsOf: url),
+              let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else { return [:] }
+        return json
+    }()
+    // A test run names its own port, as Android's e2e build does, so it never meets the tray's on this loopback.
+    static let port = Int(ProcessInfo.processInfo.environment["K7_STUDIO_PORT"] ?? "") ?? table["port"] as? Int ?? 18789
+    static var origin: String { "http://127.0.0.1:\(port)" }
+    /// What every part that derives a loopback address is told — the front, the supervisor, the pages.
+    static var portsSpec: String { "k7=\(port)" }
+    /// Where a signed-out view lands: the local user, unless a session is already there.
+    static var localHome: String { "\(origin)/auth/local?return_to=%2F" }
+
+    /// What the shell page shows: `starting` with a step (`launching`), `ready`, or `failed` with why.
+    struct Status {
+        let state: String
+        var step: String?
+        var message: String?
+    }
+
+    private let log = Logger(subsystem: "se.frediver.k7.daw", category: "k7-backend")
+    private let lock = NSLock()
+    private var started = false
+    private var running = false
+    private var stopping = false
+    private var ready = false
+    // Why the front is given up on, until a view asks again; nil while it runs or starts.
+    private var failure: String?
+    private var waiting: [(then: () -> Void, failed: (String) -> Void)] = []
+    private var status = Status(state: "starting")
+    private var watchers: [UUID: (Status) -> Void] = [:]
+
+    private init() {}
+
+    func current() -> Status {
+        lock.lock()
+        defer { lock.unlock() }
+        return status
+    }
+
+    /// Every status change from now on, called on whichever thread made it; the token unwatches.
+    func watch(_ watcher: @escaping (Status) -> Void) -> UUID {
+        let token = UUID()
+        lock.lock()
+        watchers[token] = watcher
+        lock.unlock()
+        return token
+    }
+
+    func unwatch(_ token: UUID) {
+        lock.lock()
+        watchers[token] = nil
+        lock.unlock()
+    }
+
+    private func report(_ next: Status) {
+        lock.lock()
+        status = next
+        let to = Array(watchers.values)
+        lock.unlock()
+        to.forEach { $0(next) }
+    }
+
+    /// Start the front, once per process.
+    func start() {
+        lock.lock()
+        if started {
+            lock.unlock()
+            return
+        }
+        started = true
+        lock.unlock()
+        attempt()
+    }
+
+    /// `then` once the front has answered — at once if it has — or `failed` once it is given up on; either on any thread.
+    func whenReady(_ then: @escaping () -> Void, failed: @escaping (String) -> Void) {
+        lock.lock()
+        let now = ready
+        if !now { waiting.append((then, failed)) }
+        lock.unlock()
+        // A view asking after the start was given up on is the user's retry.
+        if now { then() } else { retry() }
+    }
+
+    /// The user's retry — a view asking again, or the shell page's Retry: a start given up on is made again.
+    func retry() {
+        lock.lock()
+        let again = failure != nil && started
+        if again { failure = nil }
+        lock.unlock()
+        if again { attempt() }
+    }
+
+    /// The front stopped and waited for, at most `timeout` seconds.
+    func stop(timeout: TimeInterval) {
+        lock.lock()
+        stopping = true
+        let live = running
+        lock.unlock()
+        guard live else { return }
+        let done = DispatchSemaphore(value: 0)
+        Thread {
+            _ = k7_front_stop()
+            done.signal()
+        }.start()
+        _ = done.wait(timeout: .now() + timeout)
+    }
+
+    private func attempt() {
+        Thread { [self] in
+            report(Status(state: "starting", step: "launching"))
+            let code = launch()
+            guard code > 0 else {
+                fail("k7's front did not start (code \(code))")
+                return
+            }
+            do {
+                try waitUp()
+            } catch {
+                log.error("front did not answer: \(error.localizedDescription)")
+                fail(error.localizedDescription)
+                return
+            }
+            log.info("front up on \(Self.origin, privacy: .public)")
+            report(Status(state: "ready"))
+            lock.lock()
+            ready = true
+            let run = waiting
+            waiting.removeAll()
+            lock.unlock()
+            run.forEach { $0.then() }
+        }.start()
+    }
+
+    /// Given up on: every view waiting is told why, and the next one to ask starts it again.
+    private func fail(_ why: String) {
+        lock.lock()
+        if stopping {
+            lock.unlock()
+            return
+        }
+        failure = why
+        ready = false
+        let told = waiting
+        waiting.removeAll()
+        lock.unlock()
+        report(Status(state: "failed", message: why))
+        told.forEach { $0.failed(why) }
+    }
+
+    private var root: URL {
+        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        return base.appendingPathComponent("standalone", isDirectory: true)
+    }
+
+    /// The workspaces and médiathèque, which the engine must be allowed to open (engine/k7-runtime/docs/ios.md).
+    static var engineRoots: [URL] {
+        let dirs = table["dirs"] as? [String: String] ?? [:]
+        let roots = ["STUDIO_FILES_ROOT", "STUDIO_MEDIATEK"].compactMap { dirs[$0] }.map { shared.root.appendingPathComponent($0) }
+        return roots
+    }
+
+    static let container = "iCloud.se.frediver.k7.daw"
+    private let resolved = NSLock()
+    private var resolvedOnce = false
+    private var legacy: URL?
+
+    /// The container's `Documents/` when it still holds workspaces for the front to move out, else nil; asked once, off the main thread.
+    /// The container is read for that move alone: workspaces live on the device and travel by git (apps/k7/backend-rs/docs/roam.md).
+    private func legacyDocuments() -> URL? {
+        resolved.lock()
+        defer { resolved.unlock() }
+        if resolvedOnce { return legacy }
+        resolvedOnce = true
+        // The simulator's and a signed-out device's answer is nil.
+        guard let url = FileManager.default.url(forUbiquityContainerIdentifier: Self.container) else { return nil }
+        let dir = url.appendingPathComponent("Documents", isDirectory: true)
+        let held = (try? FileManager.default.contentsOfDirectory(atPath: dir.path)) ?? []
+        guard !held.isEmpty else { return nil }
+        requestDownloads(in: dir)
+        log.info("iCloud container holds \(held.count) item(s): the front moves the workspaces out of \(dir.path, privacy: .public)")
+        legacy = dir
+        return dir
+    }
+
+    /// Asks iCloud for every file this device has evicted, so a later start finds the workspaces whole; a move never waits for it.
+    private func requestDownloads(in dir: URL) {
+        let fm = FileManager.default
+        let keys: [URLResourceKey] = [.ubiquitousItemDownloadingStatusKey]
+        guard let walk = fm.enumerator(at: dir, includingPropertiesForKeys: keys) else { return }
+        var asked = 0
+        for case let url as URL in walk {
+            var target = url
+            let name = url.lastPathComponent
+            if name.hasPrefix("."), name.hasSuffix(".icloud") {
+                target = url.deletingLastPathComponent().appendingPathComponent(String(name.dropFirst().dropLast(7)))
+            } else if let status = (try? url.resourceValues(forKeys: Set(keys)))?.ubiquitousItemDownloadingStatus, status != .current {
+                target = url
+            } else {
+                continue
+            }
+            if (try? fm.startDownloadingUbiquitousItem(at: target)) != nil { asked += 1 }
+        }
+        if asked > 0 { log.info("asked iCloud to download \(asked) evicted file(s) of the container") }
+    }
+
+    private var bundle: URL { Bundle.main.resourceURL!.appendingPathComponent("backend", isDirectory: true) }
+
+    /// Generated once and kept, so a session survives a restart.
+    private func sessionSecret() -> String {
+        let file = root.appendingPathComponent("session-secret")
+        if let kept = try? String(contentsOf: file, encoding: .utf8), !kept.isEmpty { return kept }
+        var bytes = [UInt8](repeating: 0, count: 32)
+        _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+        let secret = bytes.map { String(format: "%02x", $0) }.joined()
+        try? secret.write(to: file, atomically: true, encoding: .utf8)
+        return secret
+    }
+
+    /// The front's settings: the table's environment and folders, the session secret and every switch on `front`.
+    private func environment() -> [String: String] {
+        var env: [String: String] = [
+            "STUDIO_PORTS": Self.portsSpec,
+            "SESSION_SECRET": sessionSecret(),
+            "K7_ENGINE_CORE": "front",
+            "K7_FILES": "front",
+            "K7_LAST_ROUTES": "front",
+            "K7_FRONTEND_DIST": bundle.appendingPathComponent("dist").path,
+            "K7_CODE_ROOT": bundle.appendingPathComponent("code").path,
+            "K7_FRONT_CACHE": root.appendingPathComponent("front-cache").path,
+        ]
+        // The desktop's table: the local user on loopback.
+        for (key, value) in Self.table["env"] as? [String: String] ?? [:] { env[key] = value }
+        for (key, value) in Self.table["dirs"] as? [String: String] ?? [:] {
+            env[key] = root.appendingPathComponent(value).path
+        }
+        // What an earlier version left in the iCloud container, which the front moves into the account's own folder.
+        if let documents = legacyDocuments() { env["K7_ICLOUD_LEGACY"] = documents.path }
+        // The hub copies the library from the bundle the first time it has no folder for it.
+        if let library = Self.table["library"] as? String {
+            env["STUDIO_LIBRARY_SEED"] = "k7-core=" + bundle.appendingPathComponent(library).path
+        }
+        if FileManager.default.fileExists(atPath: TrustedCas.file.path) {
+            env["K7_EXTRA_CA_CERTS"] = TrustedCas.file.path
+        }
+        return env
+    }
+
+    /// The front's port, or the negative code it refused with.
+    private func launch() -> Int32 {
+        lock.lock()
+        running = true
+        lock.unlock()
+        try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        // iOS starts an app at 256 descriptors, which a library's first capture alone runs out of.
+        var limit = rlimit()
+        if getrlimit(RLIMIT_NOFILE, &limit) == 0 {
+            limit.rlim_cur = min(Self.openFiles, limit.rlim_max)
+            setrlimit(RLIMIT_NOFILE, &limit)
+        }
+        RoamStore.install()
+        let config: [String: Any] = ["listen": "127.0.0.1:\(Self.port)", "env": environment()]
+        guard let data = try? JSONSerialization.data(withJSONObject: config),
+              let text = String(data: data, encoding: .utf8) else { return -2 }
+        let code = text.withCString { k7_front_start($0) }
+        // One that runs already, since a start given up on may have bound before the wait failed.
+        let bound = code == -3 ? Int32(Self.port) : code
+        if bound <= 0 {
+            lock.lock()
+            running = false
+            lock.unlock()
+        }
+        return bound
+    }
+
+    /// Until the front answers its registry's hello — what the supervisor asks before it connects.
+    private func waitUp() throws {
+        let end = Date().addingTimeInterval(Self.readyTimeout)
+        let url = URL(string: "\(Self.origin)/api/registry/hello")!
+        while Date() < end {
+            var request = URLRequest(url: url)
+            request.timeoutInterval = 0.5
+            let answered = DispatchSemaphore(value: 0)
+            var ok = false
+            URLSession.shared.dataTask(with: request) { _, response, _ in
+                ok = (response as? HTTPURLResponse)?.statusCode == 200
+                answered.signal()
+            }.resume()
+            answered.wait()
+            if ok { return }
+            Thread.sleep(forTimeInterval: 0.2)
+        }
+        throw NSError(domain: "k7", code: 1, userInfo: [
+            NSLocalizedDescriptionKey: "no answer on \(Self.origin) within \(Int(Self.readyTimeout)) s",
+        ])
+    }
+
+    private static let readyTimeout: TimeInterval = 60
+    private static let openFiles: rlim_t = 10240
+}

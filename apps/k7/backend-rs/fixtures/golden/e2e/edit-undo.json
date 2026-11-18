@@ -1,0 +1,222 @@
+{
+  "project": "e2e/edit-undo.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "edit-undo",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/e2e/edit-undo.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#8b8f98",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 1,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3,
+                "duration": 1,
+                "key": 72,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody:lead",
+            "type": "4osc",
+            "name": "lead",
+            "path": "",
+            "presetSave": "<ws>/e2e/edit-undo.k7/nodes/lead.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "lead",
+            "uses": "@workspace/instruments/fourosc",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "title": {
+                  "type": "label",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "text": "4OSC"
+                },
+                "cutoff": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 1,
+                  "label": "Cutoff",
+                  "bind": "Filter Freq",
+                  "min": 0,
+                  "max": 135.076232
+                },
+                "res": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "label": "Res",
+                  "bind": "Filter Resonance",
+                  "min": 0,
+                  "max": 100
+                },
+                "level": {
+                  "type": "slider",
+                  "col": 2,
+                  "row": 1,
+                  "label": "Level",
+                  "bind": "Level",
+                  "min": -100,
+                  "max": 0
+                }
+              }
+            },
+            "params": {},
+            "defaults": {
+              "Filter Freq": 69,
+              "Filter Resonance": 0.5,
+              "Level": 0
+            },
+            "pluginId": "melody:lead"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#8b8f98"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

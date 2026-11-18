@@ -1,0 +1,190 @@
+// access.ts — one object per app for everything a browser does to reach an engine: the
+// registry's five routes, the probe, the choice and the lease. The pieces below it already
+// existed; what this adds is that `base` is given ONCE. See docs/access.md.
+
+import {
+  ENGINE_CONNECT_DEADLINE_MS,
+  FILE_HUB_HELLO,
+  type FileHubHello,
+} from "@studio/web-protocol";
+import { chooseEngine } from "./choose.ts";
+import { type HoldOptions, holdEngine } from "./lease.ts";
+import { type ProbeTarget, probeEngines, type RankedEngine } from "./probe.ts";
+import {
+  type EnginePrefs,
+  type ReadJson,
+  type RegistryClient,
+  registryClient,
+} from "./registry.ts";
+
+/** What one look at the registry produced: the measured list, and what to do with it. */
+export interface EngineLookup<E extends ProbeTarget> {
+  /** Every engine this service knows, MEASURED — the unreachable sink to the bottom. */
+  ranked: RankedEngine<E>[];
+  /** The id the account remembers, whether or not it answered. */
+  rememberedId: string | undefined;
+  /** The one to drive, or null when there is a question to ask (or nothing to ask about). */
+  chosen: RankedEngine<E> | null;
+  /** Several answered and none was remembered — the only case worth a picker. */
+  ambiguous: boolean;
+}
+
+export interface EngineAccess<
+  E extends ProbeTarget,
+  P extends EnginePrefs = EnginePrefs,
+> extends RegistryClient<E, P> {
+  /** Measure every engine in the list, through this service's relay when the direct link is refused; curried on `base`. */
+  probe(engines: E[]): Promise<RankedEngine<E>[]>;
+  /** List, read the preference, measure, apply the policy — and a silent registry reads as NO ENGINE. See docs/access.md. */
+  find(preferId?: string): Promise<EngineLookup<E>>;
+  /** Claim a measured engine for a project and keep it, returning the goodbye; `opts.project` is what makes "one engine per project" true. */
+  hold(chosen: RankedEngine<E>, opts?: HoldOptions): () => void;
+  /** Where to reach ONE engine, asked AGAIN rather than kept, since a relayed URL's ticket lives a minute — see docs/access.md. */
+  wsUrlFor(id: string): Promise<string | null>;
+  /** What to hand `new EngineClient(...)`: the address just measured, then a fresh one on every reconnect after it. */
+  linkUrl(chosen: RankedEngine<E>): () => string | Promise<string | null>;
+  /** The account's files on the server with no engine bound, or null when the server hosts none — see docs/access.md. */
+  hostedFiles(): Promise<HostedFiles | null>;
+  /** A new hub ticket, asked for now whatever the cache holds — what a 401 on the files means. */
+  freshTicket(): Promise<string | null>;
+}
+
+/** Where the server's file service answers, and the ticket its gate takes. */
+export interface HostedFiles {
+  fileBase: string;
+  fileToken: string;
+  /** The hub found the caller in the origin's admin groups — the ticket says so too. */
+  admin: boolean;
+}
+
+/** Where an app keeps its preferences, when that is not where the registry is — k7, whose registry is pl8's. */
+export interface EngineAccessOptions {
+  prefsBase?: string;
+  /** Reach the SERVER's files when it hosts them, rather than the engine machine's — see docs/access.md. */
+  hostedFiles?: boolean;
+}
+
+/** A ticket is good for twelve hours; asking again after six keeps a long session clear of the edge. */
+const HELLO_FRESH_MS = 6 * 60 * 60_000;
+
+/** One hub's hello, asked once and again when the ticket ages; `reset` is what a 401 asks for. */
+function hubHelloAt(base: string): {
+  get(): Promise<FileHubHello | null>;
+  reset(): void;
+} {
+  let hello: { at: number; p: Promise<FileHubHello | null> } | null = null;
+  return {
+    get() {
+      if (!hello || Date.now() - hello.at > HELLO_FRESH_MS) {
+        const asked = {
+          at: Date.now(),
+          p: fetch(`${base}${FILE_HUB_HELLO}`, {
+            credentials: "include",
+            signal: AbortSignal.timeout(ENGINE_CONNECT_DEADLINE_MS),
+          })
+            .then((r) => (r.ok ? (r.json() as Promise<FileHubHello>) : null))
+            .catch(() => null),
+        };
+        hello = asked;
+        // Only an answer is kept: a failure held for hours would leave every engine unpickable until a reload.
+        void asked.p.then((h) => {
+          if (!h && hello === asked) hello = null;
+        });
+      }
+      return hello.p;
+    },
+    reset() {
+      hello = null;
+    },
+  };
+}
+
+/** Everything one app's browser needs, bound to the registry's origin (and the app's own, for its preferences) ONCE — see docs/access.md. */
+export function engineAccess<
+  E extends ProbeTarget,
+  P extends EnginePrefs = EnginePrefs,
+>(
+  base: string,
+  json: ReadJson,
+  opts: EngineAccessOptions = {},
+): EngineAccess<E, P> {
+  const prefsBase = opts.prefsBase ?? base;
+  const reg = registryClient<E, P>(base, json, prefsBase);
+  const nearHub = hubHelloAt(base);
+  /** A listing measured before any claim: `claim` is what a caller DRIVING the engine passes, and it adds WebRTC. */
+  const probe = async (
+    engines: E[],
+    claim = false,
+  ): Promise<RankedEngine<E>[]> => {
+    if (!engines.length) return [];
+    const ranked = await probeEngines(engines, base, { claim });
+    const hello = opts.hostedFiles ? await nearHub.get() : null;
+    if (!hello) return ranked;
+    // Every reachable engine plays the SAME files, the hub's; which one drives them rides after the `~`.
+    return ranked.map((r) =>
+      r.wsUrl
+        ? {
+            ...r,
+            fileBase: `${base}${hello.path}`,
+            fileToken: `${hello.ticket}~${r.engine.id}`,
+            filesHosted: true,
+          }
+        : r,
+    );
+  };
+
+  return {
+    ...reg,
+    probe,
+    async freshTicket() {
+      nearHub.reset();
+      return (await nearHub.get())?.ticket ?? null;
+    },
+    async find(preferId) {
+      // Both at once: a remembered id is only a hint that still has to be probed, so serialising them would cost a round trip per load.
+      const [list, prefs] = await Promise.all([
+        reg.list().catch(() => [] as E[]),
+        reg.prefs().catch(() => ({}) as P),
+      ]);
+      const ranked = await probe(list);
+      const rememberedId = preferId ?? prefs.engineId;
+      const { engine, ambiguous } = chooseEngine(ranked, rememberedId);
+      return { ranked, rememberedId, chosen: engine, ambiguous };
+    },
+    hold: (chosen, opts) =>
+      holdEngine(
+        reg,
+        chosen.engine.id,
+        chosen.token ?? "",
+        chosen.latency?.totalMs ?? 0,
+        opts ?? { project: null },
+      ),
+    linkUrl(chosen) {
+      let measured: string | null = chosen.wsUrl;
+      return () => {
+        const first = measured;
+        measured = null; // spent: from here on, ask for a live one
+        return first ?? this.wsUrlFor(chosen.engine.id);
+      };
+    },
+    async hostedFiles() {
+      const hub = opts.hostedFiles ? await nearHub.get() : null;
+      return hub
+        ? {
+            fileBase: `${base}${hub.path}`,
+            fileToken: hub.ticket,
+            admin: hub.admin === true,
+          }
+        : null;
+    },
+    async wsUrlFor(id) {
+      // Through the registry rather than a cache: the ticket is minted by that call, so there is no fresh URL to be had without it.
+      const list = await reg.list().catch(() => [] as E[]);
+      const engine = list.find((e) => e.id === id);
+      if (!engine) return null;
+      // Asked for an engine this page DRIVES, so the claim is behind it and a data channel may answer.
+      const [ranked] = await probe([engine], true);
+      return ranked?.wsUrl ?? null;
+    },
+  };
+}

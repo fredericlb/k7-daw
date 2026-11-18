@@ -1,0 +1,65 @@
+{
+  "name": "@studio/project-shell",
+  "version": "0.3.3",
+  "type": "module",
+  "files": [
+    "src",
+    "!src/**/*.test.ts",
+    "!src/**/*.test.tsx",
+    "docs"
+  ],
+  "description": "What every app that opens a project needs before it can draw anything: the launch parameters, the file service transport, the repository -> workspace resolution (cloning when this machine has never seen it), and the gate that does all three. k7 mounts it, and apps outside this repository consume it as a published package.",
+  "types": "./src/launch.ts",
+  "exports": {
+    "./launch": "./src/launch.ts",
+    "./profiling": "./src/profiling.ts",
+    "./fileApi": "./src/fileApi.ts",
+    "./files": "./src/files.ts",
+    "./project": "./src/project.ts",
+    "./verbsHost": "./src/verbsHost.ts",
+    "./gate": "./src/ProjectGate.tsx",
+    "./progress": "./src/GateProgress.tsx",
+    "./idle": "./src/idle.ts",
+    "./toast": "./src/toast.tsx",
+    "./ask": "./src/ask.tsx",
+    "./undo": "./src/undo.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@studio/web-protocol": "^0.5.0"
+  },
+  "devDependencies": {
+    "@studio/tsconfig": "*",
+    "@studio/ui": "*",
+    "@studio/engine-protocol": "^0.3.0",
+    "@studio/graph-model": "*",
+    "@studio/song-schema": "*",
+    "@types/react": "^19.2.17",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "peerDependencies": {
+    "@studio/ui": "*",
+    "react": "^19.2.7",
+    "@studio/engine-protocol": "^0.3.0",
+    "@studio/graph-model": "*",
+    "@studio/song-schema": "*"
+  },
+  "peerDependenciesMeta": {
+    "@studio/engine-protocol": {
+      "optional": true
+    },
+    "@studio/graph-model": {
+      "optional": true
+    },
+    "@studio/song-schema": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

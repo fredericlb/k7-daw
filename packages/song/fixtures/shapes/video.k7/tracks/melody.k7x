@@ -1,0 +1,4 @@
+// The melody lane. `@meta/track` holds events written down here — each one naming a
+// sequence or a clip, and leaving by the lane's midi or audio output accordingly.
+extends("@meta/track")
+events([ref("melody").start("1:1:1")])

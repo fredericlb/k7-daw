@@ -1,0 +1,6 @@
+// Normalize — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({
+  Target: { min: -60, max: 0, default: -1 },
+  Peak: { min: -100, max: 0, default: 0 },
+})
+graph([gain(fromdb(clamp(sub("Target", "Peak"), -60, 30)))])

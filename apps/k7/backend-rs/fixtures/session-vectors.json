@@ -1,0 +1,72 @@
+[
+  {
+    "cookieName": "studio.sid",
+    "secret": "dev-secret",
+    "iat": 1700000000000,
+    "user": {
+      "sub": "e2e",
+      "name": "E2E",
+      "email": "e2e@st0.app",
+      "groups": []
+    },
+    "json": "{\"user\":{\"sub\":\"e2e\",\"name\":\"E2E\",\"email\":\"e2e@st0.app\",\"groups\":[]},\"iat\":1700000000000,\"exp\":1700604800000}",
+    "value": "eyJ1c2VyIjp7InN1YiI6ImUyZSIsIm5hbWUiOiJFMkUiLCJlbWFpbCI6ImUyZUBzdDAuYXBwIiwiZ3JvdXBzIjpbXX0sImlhdCI6MTcwMDAwMDAwMDAwMCwiZXhwIjoxNzAwNjA0ODAwMDAwfQ==",
+    "sig": "F8bN0bXfUtFQucFp33wjTkEzMiM",
+    "header": "studio.sid=eyJ1c2VyIjp7InN1YiI6ImUyZSIsIm5hbWUiOiJFMkUiLCJlbWFpbCI6ImUyZUBzdDAuYXBwIiwiZ3JvdXBzIjpbXX0sImlhdCI6MTcwMDAwMDAwMDAwMCwiZXhwIjoxNzAwNjA0ODAwMDAwfQ==; studio.sid.sig=F8bN0bXfUtFQucFp33wjTkEzMiM"
+  },
+  {
+    "cookieName": "studio.sid",
+    "secret": "s3cr3t/with+chars=",
+    "iat": 1761000000123,
+    "user": {
+      "sub": "abc|123",
+      "name": "Frédéric Ünïcode 🎛",
+      "email": null,
+      "groups": [
+        "studio",
+        "admin"
+      ]
+    },
+    "json": "{\"user\":{\"sub\":\"abc|123\",\"name\":\"Frédéric Ünïcode 🎛\",\"email\":null,\"groups\":[\"studio\",\"admin\"]},\"iat\":1761000000123,\"exp\":1761604800123}",
+    "value": "eyJ1c2VyIjp7InN1YiI6ImFiY3wxMjMiLCJuYW1lIjoiRnLDqWTDqXJpYyDDnG7Dr2NvZGUg8J+OmyIsImVtYWlsIjpudWxsLCJncm91cHMiOlsic3R1ZGlvIiwiYWRtaW4iXX0sImlhdCI6MTc2MTAwMDAwMDEyMywiZXhwIjoxNzYxNjA0ODAwMTIzfQ==",
+    "sig": "LZSXJCxPEO0hJyIK7nbOMBCTg2A",
+    "header": "studio.sid=eyJ1c2VyIjp7InN1YiI6ImFiY3wxMjMiLCJuYW1lIjoiRnLDqWTDqXJpYyDDnG7Dr2NvZGUg8J+OmyIsImVtYWlsIjpudWxsLCJncm91cHMiOlsic3R1ZGlvIiwiYWRtaW4iXX0sImlhdCI6MTc2MTAwMDAwMDEyMywiZXhwIjoxNzYxNjA0ODAwMTIzfQ==; studio.sid.sig=LZSXJCxPEO0hJyIK7nbOMBCTg2A"
+  },
+  {
+    "cookieName": "studio.sid",
+    "secret": "x",
+    "iat": 1000,
+    "user": {
+      "sub": "q",
+      "name": "quote \" back \\ slash\ttab\u0001ctl",
+      "email": "a@b.c",
+      "groups": [],
+      "extra": {
+        "nested": [
+          1,
+          2.5,
+          true,
+          null
+        ]
+      }
+    },
+    "json": "{\"user\":{\"sub\":\"q\",\"name\":\"quote \\\" back \\\\ slash\\ttab\\u0001ctl\",\"email\":\"a@b.c\",\"groups\":[],\"extra\":{\"nested\":[1,2.5,true,null]}},\"iat\":1000,\"exp\":604801000}",
+    "value": "eyJ1c2VyIjp7InN1YiI6InEiLCJuYW1lIjoicXVvdGUgXCIgYmFjayBcXCBzbGFzaFx0dGFiXHUwMDAxY3RsIiwiZW1haWwiOiJhQGIuYyIsImdyb3VwcyI6W10sImV4dHJhIjp7Im5lc3RlZCI6WzEsMi41LHRydWUsbnVsbF19fSwiaWF0IjoxMDAwLCJleHAiOjYwNDgwMTAwMH0=",
+    "sig": "1o6_xO7AaboWIDM_H2yRlc8E22A",
+    "header": "studio.sid=eyJ1c2VyIjp7InN1YiI6InEiLCJuYW1lIjoicXVvdGUgXCIgYmFjayBcXCBzbGFzaFx0dGFiXHUwMDAxY3RsIiwiZW1haWwiOiJhQGIuYyIsImdyb3VwcyI6W10sImV4dHJhIjp7Im5lc3RlZCI6WzEsMi41LHRydWUsbnVsbF19fSwiaWF0IjoxMDAwLCJleHAiOjYwNDgwMTAwMH0=; studio.sid.sig=1o6_xO7AaboWIDM_H2yRlc8E22A"
+  },
+  {
+    "cookieName": "studio.sid",
+    "secret": "longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong",
+    "iat": 1761999999999,
+    "user": {
+      "sub": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+      "name": "<script>&amp;</script>",
+      "email": "x@y.z"
+    },
+    "json": "{\"user\":{\"sub\":\"ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\",\"name\":\"<script>&amp;</script>\",\"email\":\"x@y.z\"},\"iat\":1761999999999,\"exp\":1762604799999}",
+    "value": "eyJ1c2VyIjp7InN1YiI6InNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3NzcyIsIm5hbWUiOiI8c2NyaXB0PiZhbXA7PC9zY3JpcHQ+IiwiZW1haWwiOiJ4QHkueiJ9LCJpYXQiOjE3NjE5OTk5OTk5OTksImV4cCI6MTc2MjYwNDc5OTk5OX0=",
+    "sig": "8qJOFOxGgdMob6q_EQokA-SmaME",
+    "header": "studio.sid=eyJ1c2VyIjp7InN1YiI6InNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3NzcyIsIm5hbWUiOiI8c2NyaXB0PiZhbXA7PC9zY3JpcHQ+IiwiZW1haWwiOiJ4QHkueiJ9LCJpYXQiOjE3NjE5OTk5OTk5OTksImV4cCI6MTc2MjYwNDc5OTk5OX0=; studio.sid.sig=8qJOFOxGgdMob6q_EQokA-SmaME"
+  }
+]

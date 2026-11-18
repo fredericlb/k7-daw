@@ -1,0 +1,398 @@
+{
+  "project": "k7-core/audio.power-sag.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.power-sag",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.power-sag.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.power-sag.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Power Sag 2",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.power-sag.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-power-sag",
+        "name": "drums-power-sag",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.power-sag.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-power-sag:fx-power-sag",
+            "type": "Power Sag",
+            "name": "fx-power-sag",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.power-sag.k7/nodes/fx-power-sag.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-power-sag-2",
+        "name": "drums-power-sag-2",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.power-sag.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-power-sag-2:fx-power-sag-2",
+            "type": "Power Sag 2",
+            "name": "fx-power-sag-2",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.power-sag.k7/nodes/fx-power-sag-2.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/power-sag",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 3,
+              "widgets": {
+                "range": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "Range",
+                  "bind": "Range",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "power-sag",
+              "power-sag-2"
+            ],
+            "engine": "power-sag-2",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-power-sag": {
+        "from": "drums-power-sag",
+        "use": [
+          {
+            "module": "fx-power-sag",
+            "uses": "@k7-core/audio/power-sag",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "depth": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Depth",
+                  "bind": "Depth",
+                  "min": 0,
+                  "max": 1
+                },
+                "speed": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Speed",
+                  "bind": "Speed",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "power-sag",
+              "power-sag-2"
+            ],
+            "engine": "power-sag",
+            "params": {},
+            "pluginId": "drums-power-sag:fx-power-sag"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-power-sag-2": {
+        "from": "drums-power-sag-2",
+        "use": [
+          {
+            "module": "fx-power-sag-2",
+            "uses": "@k7-core/audio/power-sag",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 3,
+              "widgets": {
+                "range": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "Range",
+                  "bind": "Range",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "power-sag",
+              "power-sag-2"
+            ],
+            "engine": "power-sag-2",
+            "params": {},
+            "pluginId": "drums-power-sag-2:fx-power-sag-2"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-power-sag",
+      "drums-power-sag-2"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-power-sag": "#dd322c",
+      "drums-power-sag-2": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-power-sag": "audio",
+      "drums-power-sag-2": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-power-sag": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-power-sag-2": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

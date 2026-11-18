@@ -1,0 +1,11 @@
+/* Tailwind v4 entry for studio's Storybook. Mirrors each app's index.css:
+   Tailwind + the shared @studio/ui design tokens. Because Tailwind v4 only auto-scans the config's own directory,
+   point the scanner at every source tree whose stories render here. */
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@studio/ui/theme.css";
+
+@source "../packages/ui/src";
+@source "../packages/ui-waveform/src";
+@source "../packages/recorder/src";
+@source "../apps/k7/frontend/src";

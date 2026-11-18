@@ -1,0 +1,36 @@
+// LibrariesNotice.tsx — what the home page says about the libraries, which it no longer edits: one
+// line when there is none or the app holds no folder for one, and nothing when all is well.
+// The list itself is a page of its own, `/libraries` (LibrariesPage.tsx), read-only.
+
+import { Button } from "@studio/ui/button";
+import { LibraryBig, TriangleAlert } from "@studio/ui/icons";
+import type { AccountLibrary } from "@studio/web-protocol";
+import { Link } from "react-router-dom";
+import { m } from "../paraglide/messages.js";
+import { LIBRARIES_ROUTE } from "./api";
+
+export function LibrariesNotice({
+  libraries,
+}: {
+  /** `undefined` while unread: no warning before the answer. */
+  libraries: AccountLibrary[] | undefined;
+}) {
+  if (!libraries) return null;
+  const said = !libraries.length
+    ? m["libs.noticeMissing"]()
+    : libraries.some((l) => !l.present)
+      ? m["libs.noticeFailed"]()
+      : null;
+  if (!said) return null;
+  return (
+    <div className="flex items-center gap-2 border-b border-b-amber-500/40 bg-amber-500/5 px-6 py-3 text-xs">
+      <TriangleAlert className="h-4 w-4 shrink-0 text-amber-500" />
+      <span className="flex-1">{said}</span>
+      <Button variant="ghost" size="sm" asChild>
+        <Link to={LIBRARIES_ROUTE}>
+          <LibraryBig className="h-3.5 w-3.5" /> {m["home.libraries"]()}
+        </Link>
+      </Button>
+    </div>
+  );
+}

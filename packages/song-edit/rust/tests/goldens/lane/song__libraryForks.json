@@ -1,0 +1,244 @@
+{
+ "module": "golden/song/libraryForks",
+ "blobs": {
+  "3c82b6a4b19d": "extends(\"@k7-core/audio/verb\")\n",
+  "dea32120fd08": "extends(\"@other/audio/verb\")\n",
+  "5f45162ce3ac": "plugin({})\n",
+  "137f554ee0f6": "{\n",
+  "3c12c0861393": "extends(5)\n",
+  "a10da7233186": "extends(\"@k7-core/audio/verb:warm\")\n",
+  "b06ae46b1836": "extends(\"@k7-core/audio/delay\")\n",
+  "e1d35a6f7182": "v1\n",
+  "ce6e989cfaa8": "ui\n",
+  "11f6ad8ec52a": "x",
+  "86f7e437faa5": "a",
+  "870efcb9bdd8": "v2\n",
+  "d207e330d76b": "flat\n"
+ },
+ "trees": {
+  "c985c7b9b1ad": {
+   "proj/_modules/audio/my-verb/module.k7x": "3c82b6a4b19d",
+   "proj/_modules/audio/other/module.k7x": "dea32120fd08",
+   "proj/_modules/audio/plain/module.k7x": "5f45162ce3ac",
+   "proj/_modules/audio/broken/module.k7x": "137f554ee0f6",
+   "proj/_modules/audio/num/module.k7x": "3c12c0861393",
+   "proj/_modules/a/b/module.k7x": "a10da7233186",
+   "proj/_modules/.dot/module.k7x": "3c82b6a4b19d",
+   "home/library/modules/mine/module.k7x": "b06ae46b1836",
+   "home/libraries/k7-core/1/modules/audio/verb/module.k7x": "e1d35a6f7182",
+   "home/libraries/k7-core/1/modules/audio/verb/ui.k7x": "ce6e989cfaa8",
+   "home/libraries/k7-core/1/modules/audio/verb/.hidden": "11f6ad8ec52a",
+   "home/libraries/k7-core/1/modules/audio/verb/sub/a.txt": "86f7e437faa5",
+   "home/libraries/k7-core/2/modules/audio/verb/module.k7x": "870efcb9bdd8",
+   "home/libraries/k7-core/2/modules/audio/verb/ui.k7x": "ce6e989cfaa8",
+   "home/libraries/k7-core/2/modules/audio/verb/.hidden": "11f6ad8ec52a",
+   "home/libraries/k7-core/2/modules/audio/verb/sub/a.txt": "86f7e437faa5"
+  },
+  "bf21a9e8fbc5": {},
+  "3c8c463b00d8": {
+   "proj/_modules/audio/my-verb/module.k7x": "3c82b6a4b19d",
+   "proj/_modules/audio/other/module.k7x": "dea32120fd08",
+   "proj/_modules/audio/plain/module.k7x": "5f45162ce3ac",
+   "proj/_modules/audio/broken/module.k7x": "137f554ee0f6",
+   "proj/_modules/audio/num/module.k7x": "3c12c0861393",
+   "proj/_modules/a/b/module.k7x": "a10da7233186",
+   "proj/_modules/.dot/module.k7x": "3c82b6a4b19d",
+   "home/library/modules/mine/module.k7x": "b06ae46b1836",
+   "home/libraries/k7-core/modules/audio/verb/module.k7x": "d207e330d76b"
+  }
+ },
+ "vectors": [
+  {
+   "fn": "libraryForks",
+   "args": [
+    "$DIR/proj",
+    "k7-core"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    {
+     "module": "@account/mine",
+     "base": "@k7-core/audio/delay"
+    },
+    {
+     "module": "_modules/a/b",
+     "base": "@k7-core/audio/verb:warm"
+    },
+    {
+     "module": "_modules/audio/my-verb",
+     "base": "@k7-core/audio/verb"
+    }
+   ],
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "libraryForks",
+   "args": [
+    "$DIR/proj",
+    "other"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    {
+     "module": "_modules/audio/other",
+     "base": "@other/audio/verb"
+    }
+   ],
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "libraryForks",
+   "args": [
+    "$DIR/proj",
+    "k7-core"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "forksWhoseBaseMoved",
+   "args": [
+    "$DIR/proj",
+    "k7-core",
+    1,
+    2
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    {
+     "module": "_modules/a/b",
+     "base": "@k7-core/audio/verb:warm"
+    },
+    {
+     "module": "_modules/audio/my-verb",
+     "base": "@k7-core/audio/verb"
+    }
+   ],
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "libraryModuleDigest",
+   "args": [
+    "k7-core",
+    1,
+    "@k7-core/audio/verb:warm"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "163da8c275954219a76018f35912d7cc0e4e31fcde44915bf4ac879f0677d55d",
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "forksWhoseBaseMoved",
+   "args": [
+    "$DIR/proj",
+    "k7-core",
+    2,
+    2
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "libraryModuleDigest",
+   "args": [
+    "k7-core",
+    2,
+    "@k7-core/audio/verb:warm"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "14214776e7f6c8898a36dab567ef2e3f10ece4345626be38e223181c04aad696",
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "forksWhoseBaseMoved",
+   "args": [
+    "$DIR/proj",
+    "k7-core",
+    1,
+    3
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    {
+     "module": "_modules/a/b",
+     "base": "@k7-core/audio/verb:warm"
+    },
+    {
+     "module": "_modules/audio/my-verb",
+     "base": "@k7-core/audio/verb"
+    }
+   ],
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "libraryModuleDigest",
+   "args": [
+    "k7-core",
+    1,
+    "@k7-core/audio/verb:warm"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "163da8c275954219a76018f35912d7cc0e4e31fcde44915bf4ac879f0677d55d",
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "libraryModuleDigest",
+   "args": [
+    "k7-core",
+    1,
+    "not-a-ref"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "c985c7b9b1ad"
+  },
+  {
+   "fn": "libraryModuleDigest",
+   "args": [
+    "k7-core",
+    1,
+    "@k7-core/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "8abcddfb21186a7451637cc5596fdd08f64d6fa332c5c9df813d01305b6fb67b",
+   "changed": {},
+   "tree": "3c8c463b00d8"
+  },
+  {
+   "fn": "libraryModuleDigest",
+   "args": [
+    "k7-core",
+    2,
+    "@k7-core/audio/verb"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "8abcddfb21186a7451637cc5596fdd08f64d6fa332c5c9df813d01305b6fb67b",
+   "changed": {},
+   "tree": "3c8c463b00d8"
+  }
+ ]
+}

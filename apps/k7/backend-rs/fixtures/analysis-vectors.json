@@ -1,0 +1,165 @@
+{
+ "batch": 100000,
+ "exp": [
+  "644a7fa4d243cf62e346f6049ec25273faf0795c28fdc4ca09de972b2658955d",
+  "c6f138b7d863a349104bf7a0ed5252ed8c23149407a025647d5df19c33aea42d",
+  "96d6a80801df0de3f983739863399561280a67ca8fdf25437dbf7bda4928c5cd",
+  "aa7c2a2012259a5c003cc0f848b318d20d6942f24c08427bd43524de61a0d0b1",
+  "9728c521fd739aa9ff9223cc7407282f17da4e5378b0ea61a2ae6faf03e9489c"
+ ],
+ "log2": [
+  "ddb5059f5bf0bec2369014a69c79d720c0dd515b8b56e3f6ae56eef0689d1ee2",
+  "57bb714b3c406f8840272565b369d6be44cf7a71a37181162f9d040fbf55cb09",
+  "59d381fd0b4a99026f5be2c183b1e932a6d9771c9bdc991a764b76f13aa0459e",
+  "883cf98b901791c8f93e61b893d554c500df50f5815441105de31342747dba28",
+  "448dccb9a92f62c1bf8c43fbb96e3a091e3f49ecd6b5217256052583188797c4"
+ ],
+ "etags": [
+  [
+   "10-1000/none",
+   "W/\"hpg81bBFATb1sMoTrxUxv5\""
+  ],
+  [
+   "4044-1730000000000.123/350000-1730000000001.5",
+   "W/\"zEiBk0I75nnpMabiMk34QO\""
+  ]
+ ],
+ "files": [
+  {
+   "name": "mono-8k-120",
+   "wav": "efe5bce3962df39a431c711a87a7989e101a4d08a0157983ecf9feed80a75f62",
+   "sidecar": "e705a5392c93373e9851a963de1cdbb436a72cce205a344ed5925d29b77ae2bc",
+   "bytes": 4640,
+   "envelope": "2170b1dce40f5aeca6b83a568e6f7993357b979bf810b50699a7a7a337809623",
+   "bpm": 118.32,
+   "transients": 7
+  },
+  {
+   "name": "stereo-44k-140",
+   "wav": "4e7f42f85912f93597a863ca52c1978e4da4cb015ef528aa80c594dbf366b50e",
+   "sidecar": "87172c4e16da0b0ccb82b1af12e6c8bc8dcbd28fe018f646f9457bfe9acca46e",
+   "bytes": 36513,
+   "envelope": "58221652c51a1004814df5303dd38d0b6cfbee4a74c43d04c9b9e1e11ac1631a",
+   "bpm": 139.81,
+   "transients": 13
+  },
+  {
+   "name": "mono-22k-87",
+   "wav": "e1fad2ac6525afa38d12f43caac361aeffc1338ae4293993b48387d1d696e76b",
+   "sidecar": "f7630f07fc93432e66c334a33aa138370d1bda2961ca56722f8449fa8efbfbc1",
+   "bytes": 24453,
+   "envelope": "2c43a405591bac9e26109900837f54cc73b3650900d12b7a666edc52b5da87aa",
+   "bpm": 87.22,
+   "transients": 11
+  },
+  {
+   "name": "quad-48k-174",
+   "wav": "faeb85f5d457e1cdb0319fe1338138639b351c908c0458542750b10389969f32",
+   "sidecar": "129603756b05d8ec13dc9e8f2b4ecee3504b57bef6f7d0bb9858cb960beafc88",
+   "bytes": 19983,
+   "envelope": "a687e3c92794a3e28d2dfab11142b5023bbf669b55d5c4d2b8e27ba2ac897fc8",
+   "bpm": 173.44,
+   "transients": 8
+  },
+  {
+   "name": "mono-11k-70",
+   "wav": "92a82a5c7f59e704a7a8a3f0b1ce959c75cdc474ee04e1327a98de30f10fd911",
+   "sidecar": "d81ed05e4713b11c846242ef7e0fcf25760b98660dd3c20f5e52e5f7e300dcf1",
+   "bytes": 15389,
+   "envelope": "ed1357ed85a61efda0f2e30aa1521c0809d57d2c974e846f0d8970d01aebd3b3",
+   "bpm": 69.84,
+   "transients": 11
+  },
+  {
+   "name": "stereo-48k-silence",
+   "wav": "7d12f526fa70b10d3f99df5ed33a43e95aaae989b4f881e5a856da204f1cf14a",
+   "sidecar": "037f82c830c96dc57d97039268afa40a0616480ec919425f3c1f7392d7a12171",
+   "bytes": 13427,
+   "envelope": "9e5b4297a584e737296a741ff181d93b7428d24aaeae3c543ed8413669c02b15",
+   "bpm": 80.36,
+   "transients": 11
+  },
+  {
+   "name": "one-frame",
+   "wav": "15885feabad1084e38e671632677c0087d84cb940bc115b834b24419fdcdd3d7",
+   "sidecar": "39ee4fe63e3dc7a9c5821854df89a45db3d5b37f627b1d12746a8232c7ea31fb",
+   "bytes": 230,
+   "envelope": "a831c08332001bebabd38874e41a531320a2efab6ede0daa37a410eed9c2ea3e",
+   "bpm": 0,
+   "transients": 0
+  },
+  {
+   "name": "no-frames",
+   "wav": "8b8fbafe8679076454429756fa72f11d5f442c87381cc6a4285451d826a9e629",
+   "error": "cannot open <source>: no audio decoded"
+  },
+  {
+   "name": "tone.flac",
+   "sidecar": "324a1c00bab88015381cf2a99c294d8d1818c5fb2fb7b6bb4ca87c2b350f8fd0",
+   "bytes": 2406,
+   "envelope": "456d92bc393575dd6b2ba08aa91e2b28773a5a4f33bda1d82d8c7a8f393aab60",
+   "bpm": 0,
+   "transients": 0
+  },
+  {
+   "name": "silence.flac",
+   "sidecar": "576f9f8059f8b8a2b7a2ffce5078f15e652088e637af5100958ed1c354f1042b",
+   "bytes": 286925,
+   "envelope": "2a3c393e77fe01328de52d192ffc0755b6a3035247fdb05714cb349dc1eccff0",
+   "bpm": 0,
+   "transients": 0
+  },
+  {
+   "name": "stereo-44k.flac",
+   "sidecar": "3f6f326037f858c98636f6cee0615821de8e57d78893d83b614a7cc5b7a89392",
+   "bytes": 3291,
+   "envelope": "7911ad051a008abbf29a8b6916061745166466a5691b8db7e91487dc05700fa3",
+   "bpm": 0,
+   "transients": 5
+  },
+  {
+   "name": "mono-48k.flac",
+   "sidecar": "1bc9a47c348158862005917efbe53f7705b09e28b15b9781ab69ca280aa48907",
+   "bytes": 3492,
+   "envelope": "38a5b356f9866f8944d7850ea382a77ef838022300aff9382af8151ae966e3ae",
+   "bpm": 0,
+   "transients": 0
+  },
+  {
+   "name": "stereo-96k-24.flac",
+   "sidecar": "7f2ee7da61bae7ebac3ab0fabcf663e22b862699d3ae680ab3f8ea034a78ba5a",
+   "bytes": 2214,
+   "envelope": "001a0cf7daa3c364e1362aebb1ee03d322fc214eab5d83a3d30fe4d6a0956872",
+   "bpm": 0,
+   "transients": 2
+  },
+  {
+   "name": "mono-22k.flac",
+   "sidecar": "1584e5c46c5327a6a5e4a1577499da01a227068d6aa757b5426ea898cc45a40e",
+   "bytes": 1742,
+   "envelope": "958783cf62a8b47c75c6f5fa098f67d663762fe0f9e5802b7b349ca41df0f1a2",
+   "bpm": 0,
+   "transients": 0
+  },
+  {
+   "name": "quad-48k-24.flac",
+   "sidecar": "8077c502eb49a38286bcca4956d05c4b21d044b58d7e10b37621d17a699154bd",
+   "bytes": 1224,
+   "envelope": "9ea43ff810ec4dba76c57f932f5be874f08c45bddf7ebc4b3d2e24d45df3eccf",
+   "bpm": 0,
+   "transients": 1
+  },
+  {
+   "name": "tone.webm",
+   "sidecar": "087faf29ed60fb0fc571b1bfd58c93386ca8efed49cd250a06b151c5f9313724",
+   "bytes": 13337,
+   "envelope": "31a370eebb958d2509851a7f831c48b3502986f76afcdeee481ac5f09be17c46",
+   "bpm": 150,
+   "transients": 1
+  },
+  {
+   "name": "song.yaml",
+   "error": "cannot open <source>: unsupported format: unsupported feature: core (probe): no suitable format reader found"
+  }
+ ]
+}

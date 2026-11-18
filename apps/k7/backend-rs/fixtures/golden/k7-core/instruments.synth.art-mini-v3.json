@@ -1,0 +1,2184 @@
+{
+  "project": "k7-core/instruments.synth.art-mini-v3.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.synth.art-mini-v3",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.synth.art-mini-v3.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#9a5ad3",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/synth/art-mini-v3",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "OSC",
+                  "widgets": {
+                    "osc_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 10,
+                      "rowSpan": 4,
+                      "label": "OSC",
+                      "color": "#3d7dff22"
+                    },
+                    "wave1": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Wave 1",
+                      "bind": "Wave Osc1",
+                      "options": [
+                        {
+                          "label": "triangular",
+                          "value": 0
+                        },
+                        {
+                          "label": "saw-triangular",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "sawtooth",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "square",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "wide rectangular",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "narrow rectangular",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "range1": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Range 1",
+                      "bind": "Range Osc1",
+                      "options": [
+                        {
+                          "label": "Low",
+                          "value": 0
+                        },
+                        {
+                          "label": "32'",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "16'",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "8'",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "4'",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "2'",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "level1": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Osc 1",
+                      "bind": "Level Osc1",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "wave2": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Wave 2",
+                      "bind": "Wave Osc2",
+                      "options": [
+                        {
+                          "label": "triangular",
+                          "value": 0
+                        },
+                        {
+                          "label": "saw-triangular",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "sawtooth",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "square",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "wide rectangular",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "narrow rectangular",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "range2": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Range 2",
+                      "bind": "Range Osc2",
+                      "options": [
+                        {
+                          "label": "Low",
+                          "value": 0
+                        },
+                        {
+                          "label": "32'",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "16'",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "8'",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "4'",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "2'",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "level2": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Osc 2",
+                      "bind": "Level Osc2",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "wave3": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Wave 3",
+                      "bind": "Wave Osc3",
+                      "options": [
+                        {
+                          "label": "triangular",
+                          "value": 0
+                        },
+                        {
+                          "label": "saw-triangular",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "sawtooth",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "square",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "wide rectangular",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "narrow rectangular",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "range3": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Range 3",
+                      "bind": "Range Osc3",
+                      "options": [
+                        {
+                          "label": "LowMono",
+                          "value": 0
+                        },
+                        {
+                          "label": "Low",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "32'",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "16'",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "8'",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "4'",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "2'",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "level3": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Osc 3",
+                      "bind": "Level Osc3",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "fine2": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fine 2",
+                      "bind": "Fine Osc2",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "fine3": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fine 3",
+                      "bind": "Fine Osc3",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "noise": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Noise",
+                      "bind": "Level Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "osc_screen": {
+                      "type": "lcdscreen",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "voice_grp": {
+                      "type": "group",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 4,
+                      "label": "VOICE",
+                      "color": "#6b6b6b33"
+                    },
+                    "glide": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Glide",
+                      "bind": "Glide",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "legato": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Legato",
+                      "bind": "Legato",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Glide",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "poly": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Voices",
+                      "bind": "Polyphony",
+                      "options": [
+                        {
+                          "label": "1",
+                          "value": 0
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.1111111111111111
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.2222222222222222
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.4444444444444444
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.5555555555555556
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.7777777777777778
+                        },
+                        {
+                          "label": "16",
+                          "value": 0.8888888888888888
+                        },
+                        {
+                          "label": "32",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "FILTER",
+                  "widgets": {
+                    "filt_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "VCF",
+                      "color": "#ff6a1a22"
+                    },
+                    "cutoff": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Cutoff",
+                      "bind": "CutOff",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "emph": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Emph",
+                      "bind": "Emphasis",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "contour": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Contour",
+                      "bind": "Amount",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "keytrk": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "KeyTrk",
+                      "bind": "Keyb. Follow1",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "filt_screen": {
+                      "type": "lcdscreen",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 2
+                    },
+                    "env_screen": {
+                      "type": "lcdscreen",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 4,
+                      "rowSpan": 2
+                    },
+                    "fenv_grp": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "F.ENV",
+                      "color": "#ff6a1a22"
+                    },
+                    "f_att": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "VCF Attack",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "f_dec": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "VCF Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "f_sus": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "VCF Sustain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "aenv_grp": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "A.ENV",
+                      "color": "#3ec96b22"
+                    },
+                    "a_att": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "VCA Attack",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "a_dec": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "VCA Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "a_sus": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "VCA Sustain",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "MOD",
+                  "widgets": {
+                    "mod_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 3,
+                      "label": "MOD",
+                      "color": "#3d7dff22"
+                    },
+                    "lfo_rate": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Lfo Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mod_mix": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "ModMix",
+                      "bind": "Mix Modulation",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "osc_mod": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Osc Mod",
+                      "bind": "Osc. Modulation",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "filt_mod": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Filt Mod",
+                      "bind": "Filter Modulation",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo_wave": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 4,
+                      "label": "LFO Wave",
+                      "bind": "Wave Lfo",
+                      "options": [
+                        {
+                          "label": "sine",
+                          "value": 0
+                        },
+                        {
+                          "label": "saw down",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "saw up",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "square",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "noise",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "randS&H",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "triangle",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "lfo_sync": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Sync",
+                      "bind": "Lfo Sync"
+                    },
+                    "osc3_kbd": {
+                      "type": "toggle",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "O3 Kbd",
+                      "bind": "Osc3 Keyb. Ctrl."
+                    },
+                    "chorus_grp": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 3,
+                      "label": "CHO",
+                      "color": "#ff3b3022"
+                    },
+                    "ch_depth": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "Chorus Depth",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "ch_speed": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Speed",
+                      "bind": "Chorus Speed",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "ch_type": {
+                      "type": "dropdown",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Type",
+                      "bind": "Chorus Type",
+                      "options": [
+                        {
+                          "label": "Chorus Type 1",
+                          "value": 0
+                        },
+                        {
+                          "label": "Chorus Type 2",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Chorus Type 3",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "ch_on": {
+                      "type": "toggle",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Chorus",
+                      "bind": "Chorus"
+                    },
+                    "unison_grp": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 4,
+                      "label": "UNI",
+                      "color": "#6b6b6b33"
+                    },
+                    "unison": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Unison",
+                      "bind": "Unison",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "detune": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Detune",
+                      "bind": "Voices/Osc detune",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "tune_grp": {
+                      "type": "group",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 3,
+                      "label": "OUT",
+                      "color": "#6b6b6b33"
+                    },
+                    "tune": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Tune",
+                      "bind": "Tune",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "clip": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Clip",
+                      "bind": "Soft Clipping",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "On",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "DLY ARP",
+                  "widgets": {
+                    "delay_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "DLY",
+                      "color": "#ff3b3022"
+                    },
+                    "dl_time_l": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Time L",
+                      "bind": "Delay Time Left",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dl_time_r": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Time R",
+                      "bind": "Delay Time Right",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dl_fb_l": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fbk L",
+                      "bind": "Delay FeedBack Left",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dl_fb_r": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fbk R",
+                      "bind": "Delay FeedBack Right",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dl_on": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Delay",
+                      "bind": "Delay"
+                    },
+                    "dl_sync": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Sync",
+                      "bind": "Delay Sync"
+                    },
+                    "arp_grp": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4,
+                      "label": "ARP",
+                      "color": "#3ec96b22"
+                    },
+                    "arp_play": {
+                      "type": "toggle",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Play",
+                      "bind": "Arpegiator Play"
+                    },
+                    "arp_sync": {
+                      "type": "toggle",
+                      "col": 6,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Sync",
+                      "bind": "Arpegiator Sync"
+                    },
+                    "arp_hold": {
+                      "type": "dropdown",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Hold",
+                      "bind": "Arpegiator Hold",
+                      "options": [
+                        {
+                          "label": "Off",
+                          "value": 0
+                        },
+                        {
+                          "label": "Mem",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Mid",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_rep": {
+                      "type": "dropdown",
+                      "col": 6,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Repeat",
+                      "bind": "Arpegiator Repeat",
+                      "options": [
+                        {
+                          "label": "1 Repeat",
+                          "value": 0
+                        },
+                        {
+                          "label": "2 Repeat",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "3 Repeat",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "4 Repeat",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "5 Repeat",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_speed": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Speed",
+                      "bind": "Arpegiator Speed",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "arp_mode": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 4,
+                      "label": "Mode",
+                      "bind": "Arpegiator Mode",
+                      "options": [
+                        {
+                          "label": "key match",
+                          "value": 0
+                        },
+                        {
+                          "label": "Random",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Backward-Forward",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Decreasing",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Increasing",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_oct": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 1,
+                      "colSpan": 4,
+                      "label": "Octaves",
+                      "bind": "Arpegiator Octave",
+                      "options": [
+                        {
+                          "label": "1 octave",
+                          "value": 0
+                        },
+                        {
+                          "label": "2 octaves",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "3 octaves",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "4 octaves",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "5 octaves",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "script": "// Mini V3 screens: the oscillator mix, the ladder filter's curve, and the two contours.\nconst BLUE = \"#3d7dff\", GREEN = \"#3ec96b\", WHITE = \"#ffffff\", ORANGE = \"#ff6a1a\", GREY = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nfunction glass(ctx, W, H) {\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.lineWidth = 1;\n  ctx.font = FONT;\n  ctx.textBaseline = \"top\";\n}\n\nfunction lastPeak(arr) {\n  return Array.isArray(arr) && arr.length ? Math.min(1, Math.max(0, arr[arr.length - 1] || 0)) : 0;\n}\n\n// One sample of a Mini waveform at phase p (0..1), from the 6-step wave switch value.\nfunction wave(sel, p) {\n  const i = Math.round((sel ?? 0.4) * 5);\n  if (i === 0) return p < 0.5 ? 4 * p - 1 : 3 - 4 * p;\n  if (i === 1) return 0.5 * (p < 0.5 ? 4 * p - 1 : 3 - 4 * p) + 0.5 * (1 - 2 * p);\n  if (i === 2) return 1 - 2 * p;\n  const duty = i === 3 ? 0.5 : i === 4 ? 0.3 : 0.12;\n  return p < duty ? 1 : -1;\n}\n\n// Cycles drawn across the screen for a footage switch: 8' draws two, each octave doubles or halves.\nfunction cycles(range, steps, eightIdx) {\n  const idx = Math.round((range ?? 0.6) * steps);\n  return Math.max(0.25, 2 * Math.pow(2, idx - eightIdx));\n}\n\nfunction envPath(ctx, x0, y0, w, h, a, d, s) {\n  const ta = 0.05 + a * 0.3, td = 0.05 + d * 0.3, hold = 0.2;\n  const total = ta + td + hold + td;\n  const sx = w / total;\n  ctx.beginPath();\n  ctx.moveTo(x0, y0 + h);\n  ctx.lineTo(x0 + ta * sx, y0);\n  let x = x0 + ta * sx;\n  for (let k = 1; k <= 12; k++) ctx.lineTo(x + (td * sx * k) / 12, y0 + h - h * (s + (1 - s) * Math.exp((-4 * k) / 12)));\n  x += td * sx;\n  ctx.lineTo(x + hold * sx, y0 + h - h * s);\n  x += hold * sx;\n  for (let k = 1; k <= 12; k++) ctx.lineTo(x + (td * sx * k) / 12, y0 + h - h * s * Math.exp((-4 * k) / 12));\n  ctx.stroke();\n}\n\nexport default {\n  osc_screen(lcd) {\n    const { ctx, width: W, height: H, params: P, output } = lcd;\n    glass(ctx, W, H);\n    const oscs = [\n      { w: P[\"Wave Osc1\"], lv: P[\"Level Osc1\"] ?? 0.5, c: cycles(P[\"Range Osc1\"], 5, 3), col: WHITE },\n      { w: P[\"Wave Osc2\"], lv: P[\"Level Osc2\"] ?? 0.5, c: cycles(P[\"Range Osc2\"], 5, 3) * (1 + ((P[\"Fine Osc2\"] ?? 0.5) - 0.5) * 0.1), col: BLUE },\n      { w: P[\"Wave Osc3\"], lv: P[\"Level Osc3\"] ?? 0.5, c: cycles(P[\"Range Osc3\"], 6, 4) * (1 + ((P[\"Fine Osc3\"] ?? 0.5) - 0.5) * 0.1), col: GREEN },\n    ];\n    const noise = P[\"Level Noise\"] ?? 0;\n    const mid = H / 2 + 4, amp = H / 2 - 8;\n    const sumLv = oscs.reduce((t, o) => t + o.lv, 0) + noise * 0.5 || 1;\n    for (const o of oscs) {\n      if (o.lv < 0.02) continue;\n      ctx.strokeStyle = o.col;\n      ctx.globalAlpha = 0.35;\n      ctx.beginPath();\n      for (let x = 0; x <= W; x += 2) {\n        const y = mid - wave(o.w, ((x / W) * o.c) % 1) * amp * o.lv;\n        x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);\n      }\n      ctx.stroke();\n    }\n    ctx.globalAlpha = 1;\n    ctx.strokeStyle = WHITE;\n    ctx.beginPath();\n    for (let x = 0; x <= W; x += 1) {\n      let v = 0;\n      for (const o of oscs) v += wave(o.w, ((x / W) * o.c) % 1) * o.lv;\n      v += noise * 0.5 * Math.sin(x * 12.9898 + 78.233 * x * x) * 0.6;\n      const y = mid - (v / sumLv) * amp;\n      x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);\n    }\n    ctx.stroke();\n    const labels = [[\"O1\", WHITE, oscs[0].lv], [\"O2\", BLUE, oscs[1].lv], [\"O3\", GREEN, oscs[2].lv], [\"N\", GREY, noise]];\n    labels.forEach(([t, c, v], i) => {\n      ctx.fillStyle = c;\n      ctx.fillText(t, 4 + i * 30, 2);\n      ctx.fillRect(16 + i * 30, 4, Math.max(1, 10 * v), 3);\n    });\n    const pk = lastPeak(output);\n    ctx.fillStyle = ORANGE;\n    ctx.fillRect(W - 4, H - pk * (H - 4), 3, pk * (H - 4));\n  },\n\n  filt_screen(lcd) {\n    const { ctx, width: W, height: H, params: P, output, state } = lcd;\n    glass(ctx, W, H);\n    const cut = P[\"CutOff\"] ?? 0.5, emph = P[\"Emphasis\"] ?? 0.5, env = P[\"Amount\"] ?? 0.5;\n    const pk = lastPeak(output);\n    state.mov = (state.mov ?? 0) * 0.7 + pk * 0.3;\n    const fc = Math.min(0.98, cut + env * state.mov * 0.25);\n    const top = 10, bot = H - 3;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(0, bot - (bot - top) * 0.6);\n    ctx.lineTo(W, bot - (bot - top) * 0.6);\n    ctx.stroke();\n    const curve = (c, col) => {\n      ctx.strokeStyle = col;\n      ctx.beginPath();\n      for (let x = 0; x <= W; x++) {\n        const r = x / W - c;\n        const peak = emph * 1.6 * Math.exp(-(r * r) / 0.0012);\n        const roll = r > 0 ? Math.min(1, r * 6) : 0;\n        const g = Math.max(0, (1 - roll) * 0.6 + peak * (1 - roll * 0.5));\n        const y = Math.max(top, bot - (bot - top) * Math.min(1, g));\n        x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);\n      }\n      ctx.stroke();\n    };\n    if (state.mov > 0.01) curve(fc, BLUE);\n    curve(cut, ORANGE);\n    ctx.fillStyle = ORANGE;\n    ctx.beginPath();\n    ctx.arc(cut * W, bot - (bot - top) * Math.min(1, 0.6 + emph * 0.4), 2.5, 0, Math.PI * 2);\n    ctx.fill();\n    ctx.fillStyle = WHITE;\n    ctx.fillText(\"VCF 24DB\", 3, 1);\n  },\n\n  env_screen(lcd) {\n    const { ctx, width: W, height: H, params: P } = lcd;\n    glass(ctx, W, H);\n    const top = 11, h = H - top - 3;\n    ctx.strokeStyle = ORANGE;\n    envPath(ctx, 2, top, W - 4, h, P[\"VCF Attack\"] ?? 0.5, P[\"VCF Decay\"] ?? 0.5, P[\"VCF Sustain\"] ?? 0.5);\n    ctx.strokeStyle = GREEN;\n    envPath(ctx, 2, top, W - 4, h, P[\"VCA Attack\"] ?? 0.5, P[\"VCA Decay\"] ?? 0.5, P[\"VCA Sustain\"] ?? 0.5);\n    ctx.fillStyle = ORANGE;\n    ctx.fillText(\"FILT\", 3, 1);\n    ctx.fillStyle = GREEN;\n    ctx.fillText(\"AMP\", 30, 1);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 16,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "OSC",
+                    "widgets": {
+                      "osc_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 9,
+                        "label": "OSC",
+                        "color": "#3d7dff22"
+                      },
+                      "wave1": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Wave 1",
+                        "bind": "Wave Osc1",
+                        "options": [
+                          {
+                            "label": "triangular",
+                            "value": 0
+                          },
+                          {
+                            "label": "saw-triangular",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "sawtooth",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "square",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "wide rectangular",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "narrow rectangular",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "range1": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Range 1",
+                        "bind": "Range Osc1",
+                        "options": [
+                          {
+                            "label": "Low",
+                            "value": 0
+                          },
+                          {
+                            "label": "32'",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "16'",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "8'",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "4'",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "2'",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "wave2": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Wave 2",
+                        "bind": "Wave Osc2",
+                        "options": [
+                          {
+                            "label": "triangular",
+                            "value": 0
+                          },
+                          {
+                            "label": "saw-triangular",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "sawtooth",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "square",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "wide rectangular",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "narrow rectangular",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "range2": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Range 2",
+                        "bind": "Range Osc2",
+                        "options": [
+                          {
+                            "label": "Low",
+                            "value": 0
+                          },
+                          {
+                            "label": "32'",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "16'",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "8'",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "4'",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "2'",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "wave3": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "label": "Wave 3",
+                        "bind": "Wave Osc3",
+                        "options": [
+                          {
+                            "label": "triangular",
+                            "value": 0
+                          },
+                          {
+                            "label": "saw-triangular",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "sawtooth",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "square",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "wide rectangular",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "narrow rectangular",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "range3": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "label": "Range 3",
+                        "bind": "Range Osc3",
+                        "options": [
+                          {
+                            "label": "LowMono",
+                            "value": 0
+                          },
+                          {
+                            "label": "Low",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "32'",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "16'",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "8'",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "4'",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "2'",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "level1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Osc 1",
+                        "bind": "Level Osc1",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "level2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Osc 2",
+                        "bind": "Level Osc2",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "level3": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Osc 3",
+                        "bind": "Level Osc3",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "noise": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Noise",
+                        "bind": "Level Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "fine2": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fine 2",
+                        "bind": "Fine Osc2",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "fine3": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fine 3",
+                        "bind": "Fine Osc3",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "osc_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "voice_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "VOICE",
+                        "color": "#6b6b6b33"
+                      },
+                      "glide": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Glide",
+                        "bind": "Glide",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "legato": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 11,
+                        "colSpan": 2,
+                        "label": "Legato",
+                        "bind": "Legato",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Glide",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "poly": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 12,
+                        "colSpan": 2,
+                        "label": "Voices",
+                        "bind": "Polyphony",
+                        "options": [
+                          {
+                            "label": "1",
+                            "value": 0
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.1111111111111111
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.2222222222222222
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.4444444444444444
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.5555555555555556
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.7777777777777778
+                          },
+                          {
+                            "label": "16",
+                            "value": 0.8888888888888888
+                          },
+                          {
+                            "label": "32",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "FILTER",
+                    "widgets": {
+                      "filt_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "VCF",
+                        "color": "#ff6a1a22"
+                      },
+                      "cutoff": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Cutoff",
+                        "bind": "CutOff",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "emph": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Emph",
+                        "bind": "Emphasis",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "contour": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Contour",
+                        "bind": "Amount",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "keytrk": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "KeyTrk",
+                        "bind": "Keyb. Follow1",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "filt_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "fenv_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "F.ENV",
+                        "color": "#ff6a1a22"
+                      },
+                      "f_att": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "VCF Attack",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "f_dec": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "VCF Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "f_sus": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "VCF Sustain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "env_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "aenv_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "A.ENV",
+                        "color": "#3ec96b22"
+                      },
+                      "a_att": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "VCA Attack",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "a_dec": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "VCA Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "a_sus": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 14,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "VCA Sustain",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "MOD",
+                    "widgets": {
+                      "mod_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "MOD",
+                        "color": "#3d7dff22"
+                      },
+                      "lfo_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Lfo Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mod_mix": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "ModMix",
+                        "bind": "Mix Modulation",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "osc_mod": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Osc Mod",
+                        "bind": "Osc. Modulation",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "filt_mod": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Filt Mod",
+                        "bind": "Filter Modulation",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo_wave": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "label": "LFO Wave",
+                        "bind": "Wave Lfo",
+                        "options": [
+                          {
+                            "label": "sine",
+                            "value": 0
+                          },
+                          {
+                            "label": "saw down",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "saw up",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "square",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "noise",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "randS&H",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "triangle",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "lfo_sync": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "label": "Sync",
+                        "bind": "Lfo Sync"
+                      },
+                      "osc3_kbd": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "label": "O3 Kbd",
+                        "bind": "Osc3 Keyb. Ctrl."
+                      },
+                      "chorus_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "CHO",
+                        "color": "#ff3b3022"
+                      },
+                      "ch_depth": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "Chorus Depth",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "ch_speed": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Speed",
+                        "bind": "Chorus Speed",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "ch_type": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "label": "Type",
+                        "bind": "Chorus Type",
+                        "options": [
+                          {
+                            "label": "Chorus Type 1",
+                            "value": 0
+                          },
+                          {
+                            "label": "Chorus Type 2",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Chorus Type 3",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "ch_on": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "label": "Chorus",
+                        "bind": "Chorus"
+                      },
+                      "unison_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "UNI",
+                        "color": "#6b6b6b33"
+                      },
+                      "unison": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Unison",
+                        "bind": "Unison",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "detune": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Detune",
+                        "bind": "Voices/Osc detune",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "tune_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "OUT",
+                        "color": "#6b6b6b33"
+                      },
+                      "tune": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Tune",
+                        "bind": "Tune",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "clip": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 11,
+                        "colSpan": 2,
+                        "label": "Clip",
+                        "bind": "Soft Clipping",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "On",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "DLY ARP",
+                    "widgets": {
+                      "delay_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "DLY",
+                        "color": "#ff3b3022"
+                      },
+                      "dl_time_l": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Time L",
+                        "bind": "Delay Time Left",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dl_time_r": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Time R",
+                        "bind": "Delay Time Right",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dl_fb_l": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fbk L",
+                        "bind": "Delay FeedBack Left",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dl_fb_r": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fbk R",
+                        "bind": "Delay FeedBack Right",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dl_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "Delay",
+                        "bind": "Delay"
+                      },
+                      "dl_sync": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "Sync",
+                        "bind": "Delay Sync"
+                      },
+                      "arp_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "ARP",
+                        "color": "#3ec96b22"
+                      },
+                      "arp_play": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "label": "Play",
+                        "bind": "Arpegiator Play"
+                      },
+                      "arp_sync": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Sync",
+                        "bind": "Arpegiator Sync"
+                      },
+                      "arp_speed": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Speed",
+                        "bind": "Arpegiator Speed",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "arp_mode": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "label": "Mode",
+                        "bind": "Arpegiator Mode",
+                        "options": [
+                          {
+                            "label": "key match",
+                            "value": 0
+                          },
+                          {
+                            "label": "Random",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Backward-Forward",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Decreasing",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Increasing",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_oct": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "label": "Octaves",
+                        "bind": "Arpegiator Octave",
+                        "options": [
+                          {
+                            "label": "1 octave",
+                            "value": 0
+                          },
+                          {
+                            "label": "2 octaves",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "3 octaves",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "4 octaves",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "5 octaves",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_hold": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Hold",
+                        "bind": "Arpegiator Hold",
+                        "options": [
+                          {
+                            "label": "Off",
+                            "value": 0
+                          },
+                          {
+                            "label": "Mem",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Mid",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_rep": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Repeat",
+                        "bind": "Arpegiator Repeat",
+                        "options": [
+                          {
+                            "label": "1 Repeat",
+                            "value": 0
+                          },
+                          {
+                            "label": "2 Repeat",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "3 Repeat",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "4 Repeat",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "5 Repeat",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#9a5ad3"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

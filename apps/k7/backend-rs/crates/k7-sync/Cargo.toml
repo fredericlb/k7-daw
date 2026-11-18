@@ -1,0 +1,21 @@
+[package]
+name = "k7-sync"
+description = "A workspace's history rooms: the ordered log on disk, the settle of each op, the history reads and restores, and the file and JSON helpers the capture writes with."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# `String(number)` and `textHash`, and the settle's error type (docs/files.md).
+k7-js.workspace = true
+# The k7x reader and document editor the settle's k7x ops are located, diffed and replayed with (docs/parity.md).
+k7x = { path = "../../../../../packages/k7x/rust" }
+getrandom.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tokio = { workspace = true, features = ["fs", "time", "rt", "sync", "macros"] }
+indexmap.workspace = true
+
+# F_BARRIERFSYNC and a plain fsync on Apple, where std's `sync_all` is F_FULLFSYNC (docs/file-capture.md, 2131b).
+[target.'cfg(target_vendor = "apple")'.dependencies]
+libc = "0.2"

@@ -1,0 +1,25 @@
+[package]
+name = "k7-engine"
+description = "Engine trust for k7's Rust backend: the registry, the relay and its gate, the tunnel hub."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[features]
+# The testbed's clock and stubs (apps/k7/backend-rs/docs/engine.md); never in a shipped build.
+test-hooks = []
+
+[dependencies]
+base64.workspace = true
+futures-util.workspace = true
+getrandom.workspace = true
+hmac.workspace = true
+# Insertion order, as a JavaScript Map keeps it: the listing's order and the state files' bytes depend on it.
+indexmap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+subtle.workspace = true
+tokio = { workspace = true, features = ["fs", "time", "rt", "net", "sync", "macros", "io-util"] }
+# The tunnel's, the relay's and the bound paths' sockets; connect: the relay dials an engine.
+tokio-tungstenite.workspace = true

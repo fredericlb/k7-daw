@@ -1,0 +1,5205 @@
+{
+ "module": "golden/song/preferences",
+ "blobs": {
+  "547466cc3b4a": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"Hub\", type: \"ASIO\" })\n",
+  "1dc8f362f6d6": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"Hub\" })\n",
+  "be88e1fc7329": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+  "9faeeb5681ec": "channels({ in: [], out: [] })\ninputPairs([1])\neditor({ vim: true })\n",
+  "f9cd1d50fa73": "channels({ in: [], out: [] })\ninputPairs([3])\neditor({ vim: true })\n",
+  "bc1295ce1c79": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\ncueOutput(\"out\")\n",
+  "3996dd5bd693": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\ncueOutput([3, 4])\n",
+  "fa7c4859e50f": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\nstemsChain(\"@k7-core/chains/split\")\n",
+  "d0f455cb0c10": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\ninstrumentalChain(\"inst\")\n",
+  "e341da74006f": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: false })\n",
+  "348e4de8c258": "channels({ in: [ch([3, 4]).label(\"synth\")], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+  "6b2a4283c72d": "channels({ in: [], out: [ch([1]).label(\"mono\")] })\ninputPairs([])\neditor({ vim: true })\n",
+  "7d4b3fc8df95": "channels({ in: [ch([1]).label(\"renamed\")], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+  "2a1258018ef7": "audioDevice({ name: \"Focusrite\", type: \"ASIO\" })\nchannels({ in: [{ ch: [1], label: \"gtr\" }, { ch: [3, 4], label: \"synth\" }], out: [{ ch: [1, 2], label: \"monitors\" }] })\ninputPairs([3])\neditor({ vim: false })\ncueOutput(\"monitors\")\n",
+  "e3fd8696ee28": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Hub\", type: \"ASIO\" })\ncueOutput(\"monitors\")\n",
+  "14d42ad6dc02": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Hub\" })\ncueOutput(\"monitors\")\n",
+  "aa8305b78609": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\ncueOutput(\"monitors\")\n",
+  "ea5e3ee79bd0": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([1, 3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput(\"monitors\")\n",
+  "854f36201584": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput(\"monitors\")\n",
+  "d6eebe1478ca": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput(\"monitors\")\n",
+  "3b51f534efda": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput(\"out\")\n",
+  "c19ace386974": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput([3, 4])\n",
+  "e624f0245c74": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\n",
+  "7bd4e6d3cd22": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/split\")\ncueOutput(\"monitors\")\n",
+  "fd038b6bebae": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ninstrumentalChain(\"inst\")\ncueOutput(\"monitors\")\n",
+  "ea936693d2b9": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: true })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput(\"monitors\")\n",
+  "8a0350876aa0": "channels({\n  in: [ch([1]).label(\"gtr\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\"), ch([1]).label(\"mono\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput(\"monitors\")\n",
+  "1986eeb68fba": "channels({\n  in: [ch([1]).label(\"renamed\"), ch([3, 4]).label(\"synth\")],\n  out: [ch([1, 2]).label(\"monitors\")],\n})\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput(\"monitors\")\n",
+  "b6fe78c8aa96": "channels({ in: [ch([1]).label(\"gtr\")], out: [ch([1, 2]).label(\"monitors\")] })\ninputPairs([3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite\", type: \"ASIO\" })\ncueOutput(\"monitors\")\n",
+  "e05e34965b8e": "channels({\n",
+  "da39a3ee5e6b": "",
+  "6d7e0100a388": "[1]\n",
+  "2c63eee19802": "editor({ vim: true })\n"
+ },
+ "trees": {
+  "bf21a9e8fbc5": {},
+  "565a9048ad4e": {
+   "home/preferences.k7x": "2a1258018ef7"
+  },
+  "15d886c008c2": {
+   "home/preferences.k7x": "e05e34965b8e"
+  },
+  "bce9edf27b8f": {
+   "home/preferences.k7x": "da39a3ee5e6b"
+  },
+  "fcd59565b86b": {
+   "home/preferences.k7x": "6d7e0100a388"
+  },
+  "4072a71daa65": {
+   "home/preferences.k7x": "2c63eee19802"
+  }
+ },
+ "vectors": [
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    null
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    null
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    5
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    5
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    "x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    "x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    []
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    []
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {}
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {}
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "audioDevice": "Scarlett"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "Scarlett"
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "audioDevice": "Scarlett"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"Scarlett\" })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "audioDevice": {
+      "name": "A"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "A"
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "audioDevice": {
+      "name": "A"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"A\" })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "audioDevice": {
+      "name": "A",
+      "type": "ASIO"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "A",
+     "type": "ASIO"
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "audioDevice": {
+      "name": "A",
+      "type": "ASIO"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"A\", type: \"ASIO\" })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "audioDevice": {
+      "name": "",
+      "type": "x"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "audioDevice": {
+      "name": "",
+      "type": "x"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "audioDevice": {
+      "type": "x"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "audioDevice": {
+      "type": "x"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": 3,
+        "label": "a"
+       },
+       {
+        "ch": [
+         "2",
+         4.5,
+         -1,
+         0,
+         null
+        ],
+        "label": 7
+       },
+       {
+        "ch": [
+         1
+        ]
+       },
+       "x",
+       null
+      ],
+      "out": "no"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        3
+       ],
+       "label": "a"
+      },
+      {
+       "ch": [
+        2
+       ],
+       "label": "7"
+      }
+     ],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": 3,
+        "label": "a"
+       },
+       {
+        "ch": [
+         "2",
+         4.5,
+         -1,
+         0,
+         null
+        ],
+        "label": 7
+       },
+       {
+        "ch": [
+         1
+        ]
+       },
+       "x",
+       null
+      ],
+      "out": "no"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [ch([3]).label(\"a\"), ch([2]).label(\"7\")], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         5,
+         6
+        ],
+        "label": "five"
+       },
+       {
+        "ch": [
+         "0x10"
+        ],
+        "label": true
+       }
+      ]
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        5,
+        6
+       ],
+       "label": "five"
+      },
+      {
+       "ch": [
+        16
+       ],
+       "label": "true"
+      }
+     ],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         5,
+         6
+        ],
+        "label": "five"
+       },
+       {
+        "ch": [
+         "0x10"
+        ],
+        "label": true
+       }
+      ]
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [ch([5, 6]).label(\"five\"), ch([16]).label(\"true\")], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "inputPairs": [
+      2,
+      1,
+      4,
+      3,
+      3,
+      "6",
+      0,
+      -2
+     ]
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [
+     1,
+     3,
+     5
+    ],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "inputPairs": [
+      2,
+      1,
+      4,
+      3,
+      3,
+      "6",
+      0,
+      -2
+     ]
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([1, 3, 5])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "editor": {
+      "vim": false
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": false
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "editor": {
+      "vim": false
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: false })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "editor": {
+      "vim": "no"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "editor": {
+      "vim": "no"
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "editor": null
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "editor": null
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "stemsChain": "  @k7-core/chains/split  ",
+     "instrumentalChain": "  ",
+     "cueOutput": [
+      3,
+      "4",
+      0
+     ]
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "stemsChain": "@k7-core/chains/split",
+    "cueOutput": [
+     3,
+     4
+    ]
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "stemsChain": "  @k7-core/chains/split  ",
+     "instrumentalChain": "  ",
+     "cueOutput": [
+      3,
+      "4",
+      0
+     ]
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\nstemsChain(\"@k7-core/chains/split\")\ncueOutput([3, 4])\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "cueOutput": "  mon "
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "cueOutput": "mon"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "cueOutput": "  mon "
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\ncueOutput(\"mon\")\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "cueOutput": []
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "cueOutput": []
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "cueOutput": 5
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "cueOutput": 5
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "cueOutput": "   "
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "cueOutput": "   "
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "normalizePreferences",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "a"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "main"
+      }
+     ]
+    },
+    "inputPairs": [
+     1
+    ],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "N",
+     "type": "T"
+    },
+    "stemsChain": "s",
+    "instrumentalChain": "i",
+    "cueOutput": "main"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "stringifyPreferences",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "channels({ in: [ch([1]).label(\"a\")], out: [ch([1, 2]).label(\"main\")] })\ninputPairs([1])\neditor({ vim: true })\naudioDevice({ name: \"N\", type: \"T\" })\nstemsChain(\"s\")\ninstrumentalChain(\"i\")\ncueOutput(\"main\")\n",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parsePreferences",
+   "args": [
+    "audioDevice({ name: \"Focusrite\", type: \"ASIO\" })\nchannels({ in: [{ ch: [1], label: \"gtr\" }, { ch: [3, 4], label: \"synth\" }], out: [{ ch: [1, 2], label: \"monitors\" }] })\ninputPairs([3])\neditor({ vim: false })\ncueOutput(\"monitors\")\n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parsePreferences",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parsePreferences",
+   "args": [
+    "// only a note\n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parsePreferences",
+   "args": [
+    "[1, 2]\n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parsePreferences",
+   "args": [
+    "{\n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parsePreferences",
+   "args": [
+    "editor({ vim: false })\n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": false
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parsePreferences",
+   "args": [
+    "audioDevice(5)\nchannels(3)\n"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "loadPreferences",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "preferencesProblem",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub",
+    "ASIO"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "Hub",
+     "type": "ASIO"
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "547466cc3b4a"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "Hub"
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "1dc8f362f6d6"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    2,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [
+     1
+    ],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "9faeeb5681ec"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "f9cd1d50fa73"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    "  out "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "cueOutput": "out"
+   },
+   "changed": {
+    "home/preferences.k7x": "bc1295ce1c79"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "cueOutput": [
+     3,
+     4
+    ]
+   },
+   "changed": {
+    "home/preferences.k7x": "3996dd5bd693"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    []
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    " @k7-core/chains/split "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "stemsChain": "@k7-core/chains/split"
+   },
+   "changed": {
+    "home/preferences.k7x": "fa7c4859e50f"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setInstrumentalChain",
+   "args": [
+    "inst"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "instrumentalChain": "inst"
+   },
+   "changed": {
+    "home/preferences.k7x": "d0f455cb0c10"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": false
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "e341da74006f"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     4,
+     3
+    ],
+    "synth"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "348e4de8c258"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "out",
+    [
+     1
+    ],
+    "mono"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "mono"
+      }
+     ]
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "6b2a4283c72d"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     1
+    ],
+    "renamed"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "renamed"
+      }
+     ],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "7d4b3fc8df95"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "in",
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "out",
+    [
+     9
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "loadPreferences",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {},
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "preferencesProblem",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub",
+    "ASIO"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Hub",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "e3fd8696ee28"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Hub"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "14d42ad6dc02"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "aa8305b78609"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    2,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     1,
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "ea5e3ee79bd0"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "854f36201584"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "d6eebe1478ca"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    "  out "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "out"
+   },
+   "changed": {
+    "home/preferences.k7x": "3b51f534efda"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": [
+     3,
+     4
+    ]
+   },
+   "changed": {
+    "home/preferences.k7x": "c19ace386974"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "e624f0245c74"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    []
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "e624f0245c74"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    " @k7-core/chains/split "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors",
+    "stemsChain": "@k7-core/chains/split"
+   },
+   "changed": {
+    "home/preferences.k7x": "7bd4e6d3cd22"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "854f36201584"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setInstrumentalChain",
+   "args": [
+    "inst"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors",
+    "instrumentalChain": "inst"
+   },
+   "changed": {
+    "home/preferences.k7x": "fd038b6bebae"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "854f36201584"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "ea936693d2b9"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     4,
+     3
+    ],
+    "synth"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "854f36201584"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "out",
+    [
+     1
+    ],
+    "mono"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      },
+      {
+       "ch": [
+        1
+       ],
+       "label": "mono"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "8a0350876aa0"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     1
+    ],
+    "renamed"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "renamed"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "1986eeb68fba"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "in",
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "b6fe78c8aa96"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "out",
+    [
+     9
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "gtr"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "monitors"
+      }
+     ]
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite",
+     "type": "ASIO"
+    },
+    "cueOutput": "monitors"
+   },
+   "changed": {
+    "home/preferences.k7x": "854f36201584"
+   },
+   "tree": "565a9048ad4e"
+  },
+  {
+   "fn": "loadPreferences",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "preferencesProblem",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved",
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub",
+    "ASIO"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    2,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    "  out "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    []
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    " @k7-core/chains/split "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setInstrumentalChain",
+   "args": [
+    "inst"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     4,
+     3
+    ],
+    "synth"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "out",
+    [
+     1
+    ],
+    "mono"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     1
+    ],
+    "renamed"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "in",
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "out",
+    [
+     9
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "15d886c008c2"
+  },
+  {
+   "fn": "loadPreferences",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "preferencesProblem",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved",
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub",
+    "ASIO"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    2,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    "  out "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    []
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    " @k7-core/chains/split "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setInstrumentalChain",
+   "args": [
+    "inst"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     4,
+     3
+    ],
+    "synth"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "out",
+    [
+     1
+    ],
+    "mono"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     1
+    ],
+    "renamed"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "in",
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "out",
+    [
+     9
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "bce9edf27b8f"
+  },
+  {
+   "fn": "loadPreferences",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "preferencesProblem",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved",
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub",
+    "ASIO"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    2,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    "  out "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    []
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    " @k7-core/chains/split "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setInstrumentalChain",
+   "args": [
+    "inst"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     4,
+     3
+    ],
+    "synth"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "out",
+    [
+     1
+    ],
+    "mono"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     1
+    ],
+    "renamed"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "in",
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "out",
+    [
+     9
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved"
+   },
+   "changed": {},
+   "tree": "fcd59565b86b"
+  },
+  {
+   "fn": "loadPreferences",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {},
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "preferencesProblem",
+   "args": [],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub",
+    "ASIO"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "Hub",
+     "type": "ASIO"
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "547466cc3b4a"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    "Hub"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "audioDevice": {
+     "name": "Hub"
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "1dc8f362f6d6"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setAudioDevice",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    2,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [
+     1
+    ],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "9faeeb5681ec"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [
+     3
+    ],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "f9cd1d50fa73"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setInputPair",
+   "args": [
+    3,
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    "  out "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "cueOutput": "out"
+   },
+   "changed": {
+    "home/preferences.k7x": "bc1295ce1c79"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "cueOutput": [
+     3,
+     4
+    ]
+   },
+   "changed": {
+    "home/preferences.k7x": "3996dd5bd693"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setCueOutput",
+   "args": [
+    []
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    " @k7-core/chains/split "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "stemsChain": "@k7-core/chains/split"
+   },
+   "changed": {
+    "home/preferences.k7x": "fa7c4859e50f"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setStemsChain",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setInstrumentalChain",
+   "args": [
+    "inst"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    },
+    "instrumentalChain": "inst"
+   },
+   "changed": {
+    "home/preferences.k7x": "d0f455cb0c10"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    false
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": false
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "e341da74006f"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setEditorVim",
+   "args": [
+    true
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     4,
+     3
+    ],
+    "synth"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "synth"
+      }
+     ],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "348e4de8c258"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "out",
+    [
+     1
+    ],
+    "mono"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "mono"
+      }
+     ]
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "6b2a4283c72d"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "setChannelLabel",
+   "args": [
+    "in",
+    [
+     1
+    ],
+    "renamed"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "renamed"
+      }
+     ],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "7d4b3fc8df95"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "in",
+    [
+     3,
+     4
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "clearChannelLabel",
+   "args": [
+    "out",
+    [
+     9
+    ]
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": true
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "be88e1fc7329"
+   },
+   "tree": "4072a71daa65"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    "3+4"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    3,
+    4
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    "1"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    1
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    " 2 + 5 "
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    2,
+    5
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    "a+3"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    3
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    "0+2"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    2
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    "3x+4y"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    3,
+    4
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    "-1+2"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    2
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    ""
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    "+"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "parseChannels",
+   "args": [
+    "1.9+2"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    1,
+    2
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "formatChannels",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "in": "1 a",
+    "out": "1+2 main"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "formatChannel",
+   "args": [
+    {
+     "ch": [
+      1
+     ],
+     "label": "a"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "1 a",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "formatAudioDevice",
+   "args": [
+    {
+     "name": "N",
+     "type": "T"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "N (T)",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "formatAudioDevice",
+   "args": [
+    {
+     "name": "Solo"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "Solo",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "formatAudioDevice",
+   "args": [
+    null
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": "(system default)",
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveInput",
+   "args": [
+    "a",
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": [
+     1
+    ]
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveInput",
+   "args": [
+    "synth",
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": [],
+    "unknownLabel": "synth"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveInput",
+   "args": [
+    "nobody",
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": [],
+    "unknownLabel": "nobody"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveInput",
+   "args": [
+    "",
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": []
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveInput",
+   "args": [
+    [
+     2,
+     3
+    ],
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": [
+     2,
+     3
+    ]
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveInput",
+   "args": [
+    [
+     0,
+     "x",
+     4
+    ],
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": [
+     4
+    ]
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveInput",
+   "args": [
+    {
+     "$": "undefined"
+    },
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": []
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveCueOutput",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "main"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": [
+     1,
+     2
+    ]
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveCueOutput",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": "elsewhere"
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": [],
+    "unknownLabel": "elsewhere"
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "resolveCueOutput",
+   "args": [
+    {
+     "channels": {
+      "in": [
+       {
+        "ch": [
+         1
+        ],
+        "label": "a"
+       }
+      ],
+      "out": [
+       {
+        "ch": [
+         1,
+         2
+        ],
+        "label": "main"
+       }
+      ]
+     },
+     "inputPairs": [
+      1
+     ],
+     "editor": {
+      "vim": true
+     },
+     "audioDevice": {
+      "name": "N",
+      "type": "T"
+     },
+     "stemsChain": "s",
+     "instrumentalChain": "i",
+     "cueOutput": [
+      5,
+      6
+     ]
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "channels": [
+     5,
+     6
+    ]
+   },
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  }
+ ]
+}

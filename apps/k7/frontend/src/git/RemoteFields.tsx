@@ -1,0 +1,111 @@
+// RemoteFields.tsx — the fields of Connect and Clone: the ssh address, the device's public key, and the host-key warnings.
+// What a reader gets wrong: a first-contact fingerprint is shown and confirmed here; no https field exists, k7 is ssh only.
+
+import { Button } from "@studio/ui/button";
+import { TriangleAlert } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
+import { useState } from "react";
+import { m } from "../paraglide/messages.js";
+import {
+  type FormEvent,
+  type FormFields,
+  isWebAddress,
+  sshHost,
+} from "./connectState";
+import { useGitTransport } from "./GitContext";
+import { GitKey } from "./GitKey";
+import { explain, git } from "./gitApi";
+
+export function RemoteFields({
+  form,
+  dispatch,
+  busy,
+  fail,
+}: {
+  form: FormFields;
+  dispatch: (e: FormEvent) => void;
+  busy: boolean;
+  fail: (message: string) => void;
+}) {
+  const t = useGitTransport();
+  const [forgetting, setForgetting] = useState(false);
+  const host = sshHost(form.url)?.host ?? form.url.trim();
+  const forget = async () => {
+    const target = sshHost(form.url);
+    if (!t || !target) return;
+    setForgetting(true);
+    try {
+      await git.forgetHost(t, target);
+      dispatch({ type: "hostForgotten" });
+    } catch (e) {
+      fail(explain(e));
+    } finally {
+      setForgetting(false);
+    }
+  };
+  return (
+    <>
+      <Input
+        autoFocus
+        placeholder={m["git.urlPlaceholder"]()}
+        aria-label={m["git.url"]()}
+        autoComplete="off"
+        value={form.url}
+        disabled={busy}
+        onChange={(e) => dispatch({ type: "edit", value: e.target.value })}
+      />
+      {isWebAddress(form.url) && (
+        <p role="alert" className="text-destructive text-xs">
+          {m["git.sshOnly"]()}
+        </p>
+      )}
+      <GitKey fail={fail} />
+      {form.trust && (
+        <div
+          role="alert"
+          className="flex flex-col gap-2 rounded border px-3 py-2 text-xs"
+        >
+          <p>{m["git.hostUnknown"]({ host })}</p>
+          <code className="break-all font-mono">{form.trust.fingerprint}</code>
+          <p className="text-muted-foreground">{m["git.hostUnknownNote"]()}</p>
+          <Button
+            size="sm"
+            variant={form.trust.confirmed ? "secondary" : "default"}
+            className="self-start"
+            disabled={busy || form.trust.confirmed}
+            onClick={() => dispatch({ type: "confirm" })}
+          >
+            {form.trust.confirmed
+              ? m["git.hostTrusted"]()
+              : m["git.hostTrust"]()}
+          </Button>
+        </div>
+      )}
+      {form.changed && (
+        <div
+          role="alert"
+          className="flex flex-col gap-1 rounded border border-destructive/40 bg-destructive/10 px-3 py-2 text-destructive text-xs"
+        >
+          <p className="font-medium">
+            <TriangleAlert className="mr-1 inline h-3 w-3" />
+            {m["git.hostChanged"]({ host })}
+          </p>
+          <p>{m["git.hostChangedTrusted"]()}</p>
+          <code className="break-all font-mono">{form.changed.expected}</code>
+          <p>{m["git.hostChangedShown"]()}</p>
+          <code className="break-all font-mono">{form.changed.got}</code>
+          <p>{m["git.hostChangedNote"]()}</p>
+          <Button
+            size="sm"
+            variant="outline"
+            className="self-start"
+            disabled={busy || forgetting || !t}
+            onClick={() => void forget()}
+          >
+            {m["git.hostForget"]()}
+          </Button>
+        </div>
+      )}
+    </>
+  );
+}

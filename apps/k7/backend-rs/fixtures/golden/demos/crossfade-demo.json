@@ -1,0 +1,299 @@
+{
+  "project": "demos/crossfade-demo.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "crossfade-demo",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/demos/crossfade-demo.k7/clips",
+    "tracks": [
+      {
+        "id": "deckA",
+        "name": "deckA",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#696f77",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/demos/crossfade-demo.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "kick@1",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/demos/crossfade-demo.k7/clips/kick.wav",
+            "start": 1,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "kick@2",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/demos/crossfade-demo.k7/clips/kick.wav",
+            "start": 2,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "kick@3",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/demos/crossfade-demo.k7/clips/kick.wav",
+            "start": 3,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "deckA:@workspace/audio/crossfade",
+            "type": "DSP Graph",
+            "name": "@workspace/audio/crossfade",
+            "path": "",
+            "dspGraph": "{\n  \"params\": [\n    {\n      \"name\": \"Mix\",\n      \"min\": 0,\n      \"max\": 1,\n      \"default\": 0.5\n    }\n  ],\n  \"nodes\": [\n    {\n      \"type\": \"ain\",\n      \"out\": \"n0\"\n    },\n    {\n      \"type\": \"sub\",\n      \"in\": [\n        1,\n        \"Mix\"\n      ],\n      \"out\": \"n1\"\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n2\",\n      \"in\": [\n        \"n0\"\n      ],\n      \"k\": [\n        \"n1\"\n      ]\n    },\n    {\n      \"type\": \"ain\",\n      \"port\": 1,\n      \"out\": \"n3\"\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n4\",\n      \"in\": [\n        \"n3\"\n      ],\n      \"k\": [\n        \"Mix\"\n      ]\n    },\n    {\n      \"type\": \"aadd\",\n      \"out\": \"n5\",\n      \"in\": [\n        \"n2\",\n        \"n4\"\n      ]\n    },\n    {\n      \"type\": \"aout\",\n      \"in\": [\n        \"n5\"\n      ]\n    }\n  ]\n}\n",
+            "sidechainFrom": "deckB",
+            "presetSave": "<ws>/demos/crossfade-demo.k7/modules/audio/crossfade/crossfade.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Mix": 0.5,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "deckB",
+        "name": "deckB",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#aeb0b7",
+        "mute": true,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "snare@1",
+            "type": "audio",
+            "name": "snare",
+            "source": "<ws>/demos/crossfade-demo.k7/clips/snare.wav",
+            "start": 1,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "snare@3",
+            "type": "audio",
+            "name": "snare",
+            "source": "<ws>/demos/crossfade-demo.k7/clips/snare.wav",
+            "start": 3,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "deckA": {
+        "from": "deckA",
+        "use": [
+          {
+            "module": "@workspace/audio/crossfade",
+            "stage": [
+              "@input-volume",
+              "@output-volume"
+            ],
+            "inputs": [
+              {
+                "name": "a",
+                "type": "audio"
+              },
+              {
+                "name": "b",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {
+              "Mix": 0.5
+            },
+            "pluginId": "deckA:@workspace/audio/crossfade"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "deckB": {
+        "from": "deckB",
+        "use": [],
+        "out": [
+          {
+            "to": "@workspace/audio/crossfade#b",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "deckA",
+      "deckB"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "deckA": "#696f77",
+      "deckB": "#aeb0b7"
+    },
+    "trackSignals": {
+      "deckA": "audio",
+      "deckB": "audio"
+    },
+    "trackClips": {
+      "deckA": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "kick",
+          "start": 1,
+          "tc": "1:2",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "kick",
+          "start": 2,
+          "tc": "1:3",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "kick",
+          "start": 3,
+          "tc": "1:4",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "deckB": [
+        {
+          "ref": "snare",
+          "start": 1,
+          "tc": "1:2",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "snare",
+          "start": 3,
+          "tc": "1:4",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

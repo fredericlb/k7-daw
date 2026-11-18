@@ -1,0 +1,745 @@
+{
+ "cases": [
+  {
+   "name": "the bare rig",
+   "fn": "ensureBench",
+   "args": {
+    "project": "live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": null,\n  \"ids\": {},\n  \"stamp\": \"d2224a467a9d1c6990d8f379b7c2c98a856d697f\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The signal graph, as SEGMENTS: each module says where its signal goes next.\n//\n// There is NO LANE here, and no `nodes/` track file: a run carrying a live input and\n// landing on no lane materialises its own track, the way a bus does. So this is the whole\n// rig — input, fader, out. See packages/song/docs/liveProject.md.\n//\n// Put a module between the two and you have an effects chain, which is what this shape is\n// for: `IN: [\"amp\"]`, `amp: [\"fader\"]`.\nmodules({\n  // The input runs into the fader…\n  IN: [\"fader\"],\n  // …and the fader into the mixer's sum, where every run in every project lands. Not\n  // straight to OUT: the engine sums a track into the master either way, so OUT would\n  // DRAW a bypass of the master run below that does not exist.\n  fader: [\"MIX\"],\n  // The master run, which every project has: what the bar's record button captures is\n  // what reaches OUT, the whole mix (packages/song/docs/outputRecording.md).\n  MIX: [\"OUT\"],\n})\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a file chain",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/solo/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/solo\",\n  \"ids\": {\n    \"verb\": \"11111111-1111-4111-8111-111111111111\"\n  },\n  \"stamp\": \"55e779f849ce298f6612ffca3d1d543b813e6ec8\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/solo\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"verb\"], verb: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a file chain with a bypassed step and a repeated module",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/pair/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/pair\",\n  \"ids\": {\n    \"verb\": \"22222222-2222-4222-8222-222222222222\",\n    \"verb-2\": \"33333333-3333-4333-8333-333333333333\",\n    \"delay\": \"44444444-4444-4444-8444-444444444444\"\n  },\n  \"stamp\": \"4fc4634505de53b72a627bca78d940c783c57f5b\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/pair\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({\n  fader: [\"MIX\"],\n  MIX: [\"OUT\"],\n  IN: [\"verb\"],\n  verb: [\"verb-2\"],\n  verb-2: [\"delay\"],\n  delay: [\"fader\"],\n})\nbypassed([\"delay\"])\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/delay.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/nodes/verb-2.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a bare address names the default library's chain",
+   "fn": "ensureBench",
+   "args": {
+    "project": "pair/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"pair\",\n  \"ids\": {\n    \"verb\": \"22222222-2222-4222-8222-222222222222\",\n    \"verb-2\": \"33333333-3333-4333-8333-333333333333\",\n    \"delay\": \"44444444-4444-4444-8444-444444444444\"\n  },\n  \"stamp\": \"ba53c5033e5e87f78ed430b9b5c4fa0a002b4486\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"pair\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({\n  fader: [\"MIX\"],\n  MIX: [\"OUT\"],\n  IN: [\"verb\"],\n  verb: [\"verb-2\"],\n  verb-2: [\"delay\"],\n  delay: [\"fader\"],\n})\nbypassed([\"delay\"])\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/delay.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/nodes/verb-2.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a file chain with its input",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/withinput/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/withinput\",\n  \"ids\": {\n    \"verb\": \"55555555-5555-4555-8555-555555555555\"\n  },\n  \"stamp\": \"a057584079219d2881c254ec979e378b40038b63\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/withinput\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"verb\"], verb: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\nchannel([1, 2])\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a chain of an input alone",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/inputonly/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/inputonly\",\n  \"ids\": {},\n  \"stamp\": \"7f1a6cf470e3680b63c473af5cdeb10ab2209526\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/inputonly\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\nchannel(\"guitar\")\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a file chain with a preset",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/withpreset/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/withpreset\",\n  \"ids\": {\n    \"verb\": \"77777777-7777-4777-8777-777777777777\"\n  },\n  \"stamp\": \"2d202206c553aa5c8c27d7d06d4a717e3ae0969d\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/withpreset\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"verb\"], verb: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/nodes/verb.vstpreset": "VSTPRESET",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a folder chain with a preset and a bypass",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/old/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/old\",\n  \"ids\": {\n    \"comp\": \"comp\",\n    \"echo\": \"echo\"\n  },\n  \"stamp\": \"a02b6d77288b051b448bec05bcbbf023884e9375\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/old\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"comp\"], comp: [\"echo\"], echo: [\"fader\"] })\nbypassed([\"echo\"])\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "home/workspace/Banc/live.k7/nodes/comp.vstpreset": "PRESET",
+    "home/workspace/Banc/live.k7/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a folder chain naming a node of the rig",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/clash/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "thrown": "the chain \"@k7-core/clash\" cannot run live: its node \"fader\" has the name of one of the rig's own",
+   "changed": {
+    "home/workspace/Banc/live.k7/graph.k7x": "// The signal graph, as SEGMENTS: each module says where its signal goes next.\n//\n// There is NO LANE here, and no `nodes/` track file: a run carrying a live input and\n// landing on no lane materialises its own track, the way a bus does. So this is the whole\n// rig — input, fader, out. See packages/song/docs/liveProject.md.\n//\n// Put a module between the two and you have an effects chain, which is what this shape is\n// for: `IN: [\"amp\"]`, `amp: [\"fader\"]`.\nmodules({\n  // The input runs into the fader…\n  IN: [\"fader\"],\n  // …and the fader into the mixer's sum, where every run in every project lands. Not\n  // straight to OUT: the engine sums a track into the master either way, so OUT would\n  // DRAW a bypass of the master run below that does not exist.\n  fader: [\"MIX\"],\n  // The master run, which every project has: what the bar's record button captures is\n  // what reaches OUT, the whole mix (packages/song/docs/outputRecording.md).\n  MIX: [\"OUT\"],\n})\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a chain that holds no step",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/empty/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "thrown": "the chain \"@k7-core/empty\" cannot run live: it holds no step",
+   "changed": {
+    "home/workspace/Banc/live.k7/graph.k7x": "// The signal graph, as SEGMENTS: each module says where its signal goes next.\n//\n// There is NO LANE here, and no `nodes/` track file: a run carrying a live input and\n// landing on no lane materialises its own track, the way a bus does. So this is the whole\n// rig — input, fader, out. See packages/song/docs/liveProject.md.\n//\n// Put a module between the two and you have an effects chain, which is what this shape is\n// for: `IN: [\"amp\"]`, `amp: [\"fader\"]`.\nmodules({\n  // The input runs into the fader…\n  IN: [\"fader\"],\n  // …and the fader into the mixer's sum, where every run in every project lands. Not\n  // straight to OUT: the engine sums a track into the master either way, so OUT would\n  // DRAW a bypass of the master run below that does not exist.\n  fader: [\"MIX\"],\n  // The master run, which every project has: what the bar's record button captures is\n  // what reaches OUT, the whole mix (packages/song/docs/outputRecording.md).\n  MIX: [\"OUT\"],\n})\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a cold chain refused",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/stems/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "thrown": "the chain \"@k7-core/stems\" cannot run live: \"@k7-core/cold/stemsplit\" only works on audio already on disk",
+   "changed": {
+    "home/workspace/Banc/live.k7/graph.k7x": "// The signal graph, as SEGMENTS: each module says where its signal goes next.\n//\n// There is NO LANE here, and no `nodes/` track file: a run carrying a live input and\n// landing on no lane materialises its own track, the way a bus does. So this is the whole\n// rig — input, fader, out. See packages/song/docs/liveProject.md.\n//\n// Put a module between the two and you have an effects chain, which is what this shape is\n// for: `IN: [\"amp\"]`, `amp: [\"fader\"]`.\nmodules({\n  // The input runs into the fader…\n  IN: [\"fader\"],\n  // …and the fader into the mixer's sum, where every run in every project lands. Not\n  // straight to OUT: the engine sums a track into the master either way, so OUT would\n  // DRAW a bypass of the master run below that does not exist.\n  fader: [\"MIX\"],\n  // The master run, which every project has: what the bar's record button captures is\n  // what reaches OUT, the whole mix (packages/song/docs/outputRecording.md).\n  MIX: [\"OUT\"],\n})\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a chain that is not there",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/nothing/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "thrown": "no chain \"@k7-core/nothing\" in the library",
+   "changed": {
+    "home/workspace/Banc/live.k7/graph.k7x": "// The signal graph, as SEGMENTS: each module says where its signal goes next.\n//\n// There is NO LANE here, and no `nodes/` track file: a run carrying a live input and\n// landing on no lane materialises its own track, the way a bus does. So this is the whole\n// rig — input, fader, out. See packages/song/docs/liveProject.md.\n//\n// Put a module between the two and you have an effects chain, which is what this shape is\n// for: `IN: [\"amp\"]`, `amp: [\"fader\"]`.\nmodules({\n  // The input runs into the fader…\n  IN: [\"fader\"],\n  // …and the fader into the mixer's sum, where every run in every project lands. Not\n  // straight to OUT: the engine sums a track into the master either way, so OUT would\n  // DRAW a bypass of the master run below that does not exist.\n  fader: [\"MIX\"],\n  // The master run, which every project has: what the bar's record button captures is\n  // what reaches OUT, the whole mix (packages/song/docs/outputRecording.md).\n  MIX: [\"OUT\"],\n})\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   }
+  },
+  {
+   "name": "a library is no chain",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
+   },
+   "thrown": "'@k7-core' is a library, not a chain — an admin edits it from any project",
+   "changed": {}
+  },
+  {
+   "name": "a leftover chains folder of the old bench is removed",
+   "fn": "ensureBench",
+   "args": {
+    "project": "live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET",
+    "home/workspace/Banc/chains/old/x.k7x": "x\n",
+    "home/workspace/Banc/live.k7/old.txt": "old\n"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": null,\n  \"ids\": {},\n  \"stamp\": \"d2224a467a9d1c6990d8f379b7c2c98a856d697f\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The signal graph, as SEGMENTS: each module says where its signal goes next.\n//\n// There is NO LANE here, and no `nodes/` track file: a run carrying a live input and\n// landing on no lane materialises its own track, the way a bus does. So this is the whole\n// rig — input, fader, out. See packages/song/docs/liveProject.md.\n//\n// Put a module between the two and you have an effects chain, which is what this shape is\n// for: `IN: [\"amp\"]`, `amp: [\"fader\"]`.\nmodules({\n  // The input runs into the fader…\n  IN: [\"fader\"],\n  // …and the fader into the mixer's sum, where every run in every project lands. Not\n  // straight to OUT: the engine sums a track into the master either way, so OUT would\n  // DRAW a bypass of the master run below that does not exist.\n  fader: [\"MIX\"],\n  // The master run, which every project has: what the bar's record button captures is\n  // what reaches OUT, the whole mix (packages/song/docs/outputRecording.md).\n  MIX: [\"OUT\"],\n})\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n",
+    "home/workspace/Banc/chains/old/x.k7x": null,
+    "home/workspace/Banc/live.k7/old.txt": null
+   }
+  },
+  {
+   "name": "an edited bench of the same chain is kept",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/solo/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET",
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/solo\",\n  \"ids\": {\n    \"verb\": \"11111111-1111-4111-8111-111111111111\"\n  },\n  \"stamp\": \"55e779f849ce298f6612ffca3d1d543b813e6ec8\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/solo\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"verb\"], verb: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n// turned\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {}
+  },
+  {
+   "name": "an untouched bench of the same chain is made fresh",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/solo/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET",
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/solo\",\n  \"ids\": {\n    \"verb\": \"11111111-1111-4111-8111-111111111111\"\n  },\n  \"stamp\": \"55e779f849ce298f6612ffca3d1d543b813e6ec8\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/solo\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"verb\"], verb: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {}
+  },
+  {
+   "name": "an edited bench of another chain is made fresh",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/pair/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET",
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/solo\",\n  \"ids\": {\n    \"verb\": \"11111111-1111-4111-8111-111111111111\"\n  },\n  \"stamp\": \"55e779f849ce298f6612ffca3d1d543b813e6ec8\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/solo\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"verb\"], verb: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n// turned\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/pair\",\n  \"ids\": {\n    \"verb\": \"22222222-2222-4222-8222-222222222222\",\n    \"verb-2\": \"33333333-3333-4333-8333-333333333333\",\n    \"delay\": \"44444444-4444-4444-8444-444444444444\"\n  },\n  \"stamp\": \"4fc4634505de53b72a627bca78d940c783c57f5b\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/pair\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({\n  fader: [\"MIX\"],\n  MIX: [\"OUT\"],\n  IN: [\"verb\"],\n  verb: [\"verb-2\"],\n  verb-2: [\"delay\"],\n  delay: [\"fader\"],\n})\nbypassed([\"delay\"])\n",
+    "home/workspace/Banc/live.k7/nodes/delay.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/nodes/verb-2.k7x": "extends(\"@k7-core/audio/verb\")\n"
+   }
+  },
+  {
+   "name": "an edited bare rig opened on a chain is made fresh",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/solo/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET",
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": null,\n  \"ids\": {\n    \"verb\": \"11111111-1111-4111-8111-111111111111\"\n  },\n  \"stamp\": \"a18c2ce147672a4752e70160606f314abef3a82a\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/solo\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"verb\"], verb: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n// turned\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/solo\",\n  \"ids\": {\n    \"verb\": \"11111111-1111-4111-8111-111111111111\"\n  },\n  \"stamp\": \"55e779f849ce298f6612ffca3d1d543b813e6ec8\"\n}",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n"
+   }
+  },
+  {
+   "name": "a source with a stale stamp counts as edited",
+   "fn": "ensureBench",
+   "args": {
+    "project": "@k7-core/solo/live.k7"
+   },
+   "tree": {
+    "home/workspace/Banc/_library-pins.k7x": "k7-core(1)\n",
+    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/audio/delay/module.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/modules/cold/stemsplit/module.k7x": "cold(true)\nplugin({ type: \"offline\", name: \"Stem Split\" })\n",
+    "libraries/k7-core/chains/solo.k7x": "steps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/pair.k7x": "steps([\n  // the first\n  id(\"22222222-2222-4222-8222-222222222222\").extends(\"@k7-core/audio/verb\"),\n  // the second\n  id(\"33333333-3333-4333-8333-333333333333\").extends(\"@k7-core/audio/verb\"),\n  id(\"44444444-4444-4444-8444-444444444444\").extends(\"@k7-core/audio/delay\").bypass(true),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/withinput.k7x": "input({ channel: [1, 2], monitor: \"on\" })\nsteps([\n  id(\"55555555-5555-4555-8555-555555555555\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/inputonly.k7x": "input({ channel: \"guitar\" })\nsteps([\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/empty.k7x": "steps([\n\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/stems.k7x": "steps([\n  id(\"66666666-6666-4666-8666-666666666666\").extends(\"@k7-core/cold/stemsplit\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/chains/old/graph.k7x": "modules({\n  \"@in\": [\"comp\"],\n  comp: [\"echo\"],\n  echo: [\"@out\"],\n})\nbypassed([\"echo\"])\n",
+    "libraries/k7-core/chains/old/nodes/comp.k7x": "// kept as written\nextends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/old/nodes/comp.vstpreset": "PRESET",
+    "libraries/k7-core/chains/old/nodes/echo.k7x": "extends(\"@k7-core/audio/delay\")\n",
+    "libraries/k7-core/chains/clash/graph.k7x": "modules({\n  \"@in\": [\"fader\"],\n  fader: [\"@out\"],\n})\n",
+    "libraries/k7-core/chains/clash/nodes/fader.k7x": "extends(\"@engine/reverb\")\n",
+    "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
+    "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET",
+    "home/workspace/Banc/bench-source.json": "{\n  \"ref\": \"@k7-core/solo\",\n  \"ids\": {\n    \"verb\": \"11111111-1111-4111-8111-111111111111\"\n  },\n  \"stamp\": \"0000000000000000000000000000000000000000\"\n}",
+    "home/workspace/Banc/live.k7/graph.k7x": "// The bench, with the library chain \"@k7-core/solo\" COPIED between the input and the fader.\n// Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend/docs/banc.md.\nmodules({ fader: [\"MIX\"], MIX: [\"OUT\"], IN: [\"verb\"], verb: [\"fader\"] })\n",
+    "home/workspace/Banc/live.k7/nodes/IN.k7x": "// The live input off the audio interface — what this project exists to hear.\n//\n// It names NO channel, and that is deliberate: which socket you are plugged into is a fact\n// about your RIG, and no scaffold can guess it. Until you choose one the project says so —\n// \"no channel — it feeds nothing\" — which is the one thing worth being told about a rig\n// that is not making a sound yet. Pick it on the node's card, or write it here:\n//\n//     channel([1])        // 1-based; a PAIR for a stereo input, e.g. [1, 2]\n//     channel(\"guitar\")   // …or a label from the machine's preferences.yaml (channels.in),\n//                         // which is the spelling that survives another machine\n//\n// `monitor(\"on\")` is what makes it audible without arming anything.\nio(\"in\")\nmonitor(\"on\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n",
+    "home/workspace/Banc/live.k7/nodes/fader.k7x": "// The rig's fader — one USE of the SHARED strip: a level in dB, a pan and three bands,\n// which is what a track's level is everywhere in this app. It comes with the face the\n// library module carries, so the card draws a fader and four knobs rather than nothing.\n//\n// A node is where a param belongs, so a second input later gets its own fader without\n// either touching the other's level.\nextends(\"@meta/audio/mixer\")\nparams({\n  // Unity, in DECIBELS: -60 is silence and +6 the top. Never 0..1, which would look like\n  // it worked and send half a dB for half a fader.\n  Volume: 0,\n})\n",
+    "home/workspace/Banc/live.k7/nodes/verb.k7x": "extends(\"@k7-core/audio/verb\")\n",
+    "home/workspace/Banc/live.k7/project.k7x": "// A LIVE rig: something plugged in, heard through this machine.\n//\n// It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole\n// of what makes it this shape rather than another. A project draws what it DECLARES, so\n// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n//\n// It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so\n// nothing warns about an arrangement that is not drawn.\nproject({\n  name: \"Banc\",\n  // Kept although nothing is arranged: the metronome counts in it, and so does a\n  // delay whose time is written in beats.\n  tempo: 120,\n  sampleRate: 48000,\n})\n",
+    "home/workspace/Banc/live.k7/settings.k7x": "// The metronome is OFF: a rig you play through is not a rig you record to a click.\nmetronome(false)\ncount_in(1)\n"
+   },
+   "ret": {
+    "workspace": "Banc",
+    "project": "live.k7"
+   },
+   "changed": {}
+  }
+ ]
+}

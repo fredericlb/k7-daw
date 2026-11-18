@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The backend and the engine live exactly as long as MainActivity; the two services only keep that process in front while it is busy (docs/android.md). -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- The engine's WebSocket server, which browsers on the LAN dial; and the studio apps, loaded from the studio — this phone's own, or another. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- The IPv4 the activity shows, so a browser knows what to dial. -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- The engine opens the device WITH its inputs (docs/engineHost.md); Oboe wants both below. Asked on first need (DeviceAccess.kt). -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- A page's camera — a picture lane's take, a live-video webcam — asked on first need (PageCapture.kt). -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Not required: CAMERA alone implies both features below, and a device without them would be refused the app. -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <!-- MediaPlaybackService and EngineService: the process kept in front while busy, screen off or app behind another. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <!-- EngineService while inputs or a page's microphone are open: Android cuts the microphone of an app behind without it. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <!-- EngineService's notification, on Android 13+; asked the first time the app is busy (MainActivity.askNotifications). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Updates.kt: the APK from k7.rocks/app_downloads handed to PackageInstaller, and, once k7 installed itself, without a prompt (Android 12+). -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="${appLabel}"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/AppTheme.Launch">
+        <!-- configChanges: a rotation must not recreate the activity, which would stop the engine. -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize|uiMode"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- k7 opened again once the old process is gone, from a process of its own that only waits (Relaunch.kt). -->
+        <activity
+            android:name=".RelaunchActivity"
+            android:process=":relaunch"
+            android:taskAffinity="${applicationId}.relaunch"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:exported="false" />
+        <!-- Holds the process in front while a page plays; MediaPlayback.kt is the session it shows. -->
+        <service
+            android:name=".MediaPlaybackService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+        <!-- Holds the process in front while the engine plays, is armed or records, or a page holds the microphone (Busy.kt). -->
+        <service
+            android:name=".EngineService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback|microphone" />
+        <!-- The media notification's own buttons, which Android 12 and older draw instead of the session's. -->
+        <receiver
+            android:name=".MediaPlayback$Buttons"
+            android:exported="false" />
+        <!-- PackageInstaller's answer to an update (Updates.kt): a confirmation to show, or how it ended. -->
+        <receiver
+            android:name=".Updates$Status"
+            android:exported="false" />
+    </application>
+</manifest>

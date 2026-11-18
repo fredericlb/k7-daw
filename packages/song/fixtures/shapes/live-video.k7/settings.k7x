@@ -1,0 +1,3 @@
+// The metronome is OFF: a rig you play through is not a rig you record to a click.
+metronome(false)
+count_in(1)

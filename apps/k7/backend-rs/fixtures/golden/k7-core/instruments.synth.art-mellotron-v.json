@@ -1,0 +1,642 @@
+{
+  "project": "k7-core/instruments.synth.art-mellotron-v.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.synth.art-mellotron-v",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.synth.art-mellotron-v.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#3a87df",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/synth/art-mellotron-v",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "TAPE",
+                  "widgets": {
+                    "tape": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 2,
+                      "label": "TAPE",
+                      "color": "#ff6a1a26"
+                    },
+                    "flutter": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Flutter",
+                      "bind": "Flutter Amount",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "saturation": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Satur",
+                      "bind": "Tape Saturation Amount",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mechanics": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Mechan",
+                      "bind": "Mechanics",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "noise": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Noise",
+                      "bind": "Noise Floor",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "play": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 8,
+                      "rowSpan": 2,
+                      "label": "PLAY",
+                      "color": "#3d7dff26"
+                    },
+                    "pitch": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pitch",
+                      "bind": "Master Pitch",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "tone": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Tone",
+                      "bind": "Master Tone",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "velocity": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Vel>Vol",
+                      "bind": "Velocity to Volume",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "at_flutter": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "AT>Flut",
+                      "bind": "AfterTouch to Flutter",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "tape_screen": {
+                      "type": "lcdscreen",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "MACRO",
+                  "widgets": {
+                    "macro": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 2,
+                      "label": "MACRO",
+                      "color": "#3ec96b26"
+                    },
+                    "brightness": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Bright",
+                      "bind": "Brightness",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "timbre": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "time": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Time",
+                      "bind": "Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "movement": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Move",
+                      "bind": "Movement",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "env": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 8,
+                      "rowSpan": 2,
+                      "label": "ENV",
+                      "color": "#ffffff1a"
+                    },
+                    "attack": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "Macro Attack",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "decay": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Macro Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "sustain": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "Macro Sustain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "release": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Macro Release",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "env_screen": {
+                      "type": "lcdscreen",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4
+                    }
+                  }
+                }
+              ],
+              "script": "// mellotron-v screens: the tape running between two reels, and the macro envelope's shape.\nconst FONT = \"8px ui-monospace, monospace\";\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst ORANGE = \"#ff6a1a\";\nconst RED = \"#ff3b30\";\nconst WHITE = \"#ffffff\";\nconst GREY = \"#6b6b6b\";\n\nfunction clamp01(v) {\n  return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0;\n}\n\nfunction last(arr) {\n  return Array.isArray(arr) && arr.length > 0 ? clamp01(arr[arr.length - 1] ?? 0) : 0;\n}\n\nfunction reel(ctx, cx, cy, r, angle, ink) {\n  ctx.strokeStyle = ink;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.arc(cx, cy, r, 0, Math.PI * 2);\n  ctx.stroke();\n  ctx.beginPath();\n  ctx.arc(cx, cy, Math.max(1, r * 0.25), 0, Math.PI * 2);\n  ctx.stroke();\n  for (let k = 0; k < 3; k++) {\n    const a = angle + (k * Math.PI * 2) / 3;\n    ctx.beginPath();\n    ctx.moveTo(cx + Math.cos(a) * r * 0.3, cy + Math.sin(a) * r * 0.3);\n    ctx.lineTo(cx + Math.cos(a) * r * 0.85, cy + Math.sin(a) * r * 0.85);\n    ctx.stroke();\n  }\n}\n\nexport default {\n  tape_screen(lcd) {\n    const { ctx, width: W, height: H, params, output, state, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    const flutter = clamp01(params[\"Flutter Amount\"] ?? 0.25);\n    const sat = clamp01(params[\"Tape Saturation Amount\"] ?? 0);\n    const mech = clamp01(params[\"Mechanics\"] ?? 0);\n    const noise = clamp01(params[\"Noise Floor\"] ?? 0);\n    const level = last(output);\n    const t = (now ?? 0) / 1000;\n    const r = Math.max(4, Math.min(H * 0.3, W * 0.14));\n    const cy = r + 6;\n    const lx = W * 0.22;\n    const rx = W * 0.78;\n    const spin = level > 0.001 ? t * 3 : (state.spin ?? 0);\n    state.spin = spin;\n    reel(ctx, lx, cy, r, spin, WHITE);\n    reel(ctx, rx, cy, r, spin * 0.8, WHITE);\n    // The tape path wobbles with flutter and thickens with saturation.\n    const y0 = cy + r + Math.max(6, H * 0.12);\n    const amp = 1 + flutter * Math.max(2, H * 0.12);\n    ctx.strokeStyle = ORANGE;\n    ctx.lineWidth = 1 + sat * 3;\n    ctx.beginPath();\n    const n = 64;\n    for (let i = 0; i <= n; i++) {\n      const x = lx + ((rx - lx) * i) / n;\n      const y = y0 + Math.sin(i * 0.45 + t * 6) * amp * Math.sin((Math.PI * i) / n);\n      if (i === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    ctx.lineWidth = 1;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(lx - r, cy);\n    ctx.lineTo(lx, y0);\n    ctx.moveTo(rx + r, cy);\n    ctx.lineTo(rx, y0);\n    ctx.stroke();\n    // The playback head, lit by the output level.\n    const hx = W / 2;\n    ctx.fillStyle = level > 0.001 ? GREEN : GREY;\n    ctx.fillRect(hx - 5, y0 + amp + 3, 10, 4 + level * 8);\n    // Hiss as scattered dots, mechanics as clicks along the frame.\n    let seed = Math.floor(t * 10) + 7;\n    const rnd = () => {\n      seed = (seed * 16807) % 2147483647;\n      return seed / 2147483647;\n    };\n    ctx.fillStyle = GREY;\n    const dots = Math.round(noise * 60);\n    for (let i = 0; i < dots; i++) ctx.fillRect(rnd() * W, y0 + rnd() * Math.max(1, H - y0 - 12), 1, 1);\n    ctx.fillStyle = BLUE;\n    const clicks = Math.round(mech * 8);\n    for (let i = 0; i < clicks; i++) ctx.fillRect(4 + (i * (W - 8)) / 8, H - 12, 2, 3);\n    ctx.fillStyle = ORANGE;\n    ctx.fillText(`FLUT ${Math.round(flutter * 100)}`, 4, H - 3);\n    ctx.fillStyle = WHITE;\n    ctx.textAlign = \"right\";\n    ctx.fillText(`SAT ${Math.round(sat * 100)}`, W - 4, H - 3);\n    ctx.textAlign = \"left\";\n  },\n\n  env_screen(lcd) {\n    const { ctx, width: W, height: H, params, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    const a = clamp01(params[\"Macro Attack\"] ?? 0.5);\n    const d = clamp01(params[\"Macro Decay\"] ?? 0.5);\n    const s = clamp01(params[\"Macro Sustain\"] ?? 0.5);\n    const r = clamp01(params[\"Macro Release\"] ?? 0.5);\n    const x0 = 4;\n    const top = 12;\n    const bottom = H - 12;\n    const h = Math.max(1, bottom - top);\n    const seg = Math.max(1, (W - 8) / 4.4);\n    const xa = x0 + a * seg;\n    const xd = xa + d * seg;\n    const xs = xd + seg * 0.8;\n    const xr = Math.min(W - 4, xs + r * seg);\n    const ys = bottom - s * h;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(x0, bottom + 0.5);\n    ctx.lineTo(W - 4, bottom + 0.5);\n    ctx.stroke();\n    ctx.fillStyle = \"#3ec96b33\";\n    ctx.beginPath();\n    ctx.moveTo(x0, bottom);\n    ctx.lineTo(xa, top);\n    ctx.lineTo(xd, ys);\n    ctx.lineTo(xs, ys);\n    ctx.lineTo(xr, bottom);\n    ctx.closePath();\n    ctx.fill();\n    ctx.strokeStyle = WHITE;\n    ctx.lineWidth = 1;\n    ctx.stroke();\n    const pts = [[xa, top, BLUE], [xd, ys, GREEN], [xs, ys, ORANGE], [xr, bottom, RED]];\n    for (const [px, py, c] of pts) {\n      ctx.fillStyle = c;\n      ctx.beginPath();\n      ctx.arc(px, py, 2.5, 0, Math.PI * 2);\n      ctx.fill();\n    }\n    const level = last(output);\n    if (level > 0.001) {\n      ctx.fillStyle = GREEN;\n      ctx.fillRect(W - 7, bottom - level * h, 3, level * h);\n    }\n    ctx.fillStyle = BLUE;\n    ctx.fillText(\"A\", 4, 9);\n    ctx.fillStyle = GREEN;\n    ctx.fillText(\"D\", 14, 9);\n    ctx.fillStyle = ORANGE;\n    ctx.fillText(\"S\", 24, 9);\n    ctx.fillStyle = RED;\n    ctx.fillText(\"R\", 34, 9);\n    ctx.fillStyle = WHITE;\n    ctx.textAlign = \"right\";\n    ctx.fillText(\"ENVELOPE\", W - 4, 9);\n    ctx.textAlign = \"left\";\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 11,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "TAPE",
+                    "widgets": {
+                      "tape": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "TAPE",
+                        "color": "#ff6a1a26"
+                      },
+                      "flutter": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Flutter",
+                        "bind": "Flutter Amount",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "saturation": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Satur",
+                        "bind": "Tape Saturation Amount",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mechanics": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Mechan",
+                        "bind": "Mechanics",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "noise": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Noise",
+                        "bind": "Noise Floor",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "play": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "PLAY",
+                        "color": "#3d7dff26"
+                      },
+                      "pitch": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pitch",
+                        "bind": "Master Pitch",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "tone": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Tone",
+                        "bind": "Master Tone",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "velocity": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Vel>Vol",
+                        "bind": "Velocity to Volume",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "at_flutter": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "AT>Flut",
+                        "bind": "AfterTouch to Flutter",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "tape_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "MACRO",
+                    "widgets": {
+                      "macro": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "MACRO",
+                        "color": "#3ec96b26"
+                      },
+                      "brightness": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Bright",
+                        "bind": "Brightness",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "time": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Time",
+                        "bind": "Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "movement": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Move",
+                        "bind": "Movement",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "env": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "ENV",
+                        "color": "#ffffff1a"
+                      },
+                      "attack": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "Macro Attack",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "decay": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Macro Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "sustain": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "Macro Sustain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "release": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Macro Release",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "env_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#3a87df"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

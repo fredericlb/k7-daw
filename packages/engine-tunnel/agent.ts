@@ -1,0 +1,462 @@
+// agent.ts — the ENGINE's end of the tunnel, run by its supervisor: one outbound socket to the
+// server that lists the engine, and for every channel the server opens, a real socket to the
+// local engine. Frames are rewritten by PathMap in order, one queue per direction, so a frame
+// waiting on a download is never overtaken by the one after it. See docs/tunnel.md.
+
+import { join } from "node:path";
+import { ENGINE_PROTOCOL } from "@studio/engine-protocol/version";
+import { jitteredBackoffMs } from "@studio/web-protocol";
+import { WebSocket } from "ws";
+import { FileRequests } from "./agentFiles.ts";
+import { CLOSE_DRAIN_MS, HIGH_WATER_BYTES } from "./drain.ts";
+import {
+  asBuffer,
+  binaryFrameType,
+  type ChannelKind,
+  decodeBinary,
+  encodeBinary,
+  type HubMessage,
+  TUNNEL_PATH,
+  TUNNEL_PROTOCOL_HEADER,
+  TUNNEL_RENDER_KEY_HEADER,
+  TUNNEL_SECRET_HEADER,
+  TUNNEL_TOKEN_HEADER,
+  type TunnelRoot,
+  textFrameType,
+} from "./frames.ts";
+import { PathMap, SyncLedger } from "./pathMap.ts";
+import { answerOffer } from "./rtc.ts";
+
+export interface TunnelAgentOptions {
+  /** The registry's base URL, http(s); the tunnel is TUNNEL_PATH under it. */
+  registryUrl: string;
+  id: string;
+  token: string;
+  /** The machine's tunnel secret, which binds `id` to it at the registry; absent, the tunnel is a legacy one. */
+  tunnelSecret?: string;
+  /** The server's render key: sent when set, so this machine renders for that server — docs/jobs.md. */
+  renderKey?: string;
+  enginePort: number;
+  /** Where this server's files are kept on this machine — one folder per server. */
+  cacheDir: string;
+  /** STUN/TURN servers for the WebRTC path; none keeps it to the local network. */
+  iceServers?: string[];
+  /** What this machine does when asked on a jobs channel, by request `type` — docs/jobs.md. */
+  jobs?: Record<string, JobHandler>;
+  /** The engine wire's version stated on the upgrade; ENGINE_PROTOCOL unless a test plays an older machine. */
+  protocol?: number;
+  log?: (msg: string) => void;
+}
+
+/** One request on a jobs channel; `id` is the caller's, echoed on every reply. */
+export interface JobRequest {
+  type: string;
+  id?: string;
+  [field: string]: unknown;
+}
+
+/** What a handler may ask of its channel beyond replying. */
+export interface JobContext {
+  /** Bring one file down by its LOCAL path, when a request names too many to fetch before it starts. */
+  fetch(local: string): Promise<boolean>;
+}
+
+/** Answer a request, as often as it has news; paths in `emit`'s replies go back through the map. */
+export type JobHandler = (
+  req: JobRequest,
+  emit: (reply: Record<string, unknown>) => void,
+  ctx: JobContext,
+) => Promise<void> | void;
+
+const SAFE_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+const MAX_BACKOFF_MS = 30_000;
+const PING_MS = 20_000;
+
+/** `https://h/x` → `wss://h/x/api/engine-tunnel?id=…`. */
+export function tunnelUrl(registryUrl: string, id: string): string {
+  const u = new URL(registryUrl);
+  u.protocol = u.protocol === "https:" ? "wss:" : "ws:";
+  u.pathname = `${u.pathname.replace(/\/$/, "")}${TUNNEL_PATH}`;
+  u.search = `?id=${encodeURIComponent(id)}`;
+  return u.toString();
+}
+
+interface AgentChannel {
+  /** The local engine's socket; null on a jobs channel, which this agent answers itself. */
+  engine: WebSocket | null;
+  map: PathMap | null;
+  /** The server copies every file before naming it (`sync`), so frames to the engine are only rewritten. */
+  synced: boolean;
+  toEngine: Promise<void>;
+  toHub: Promise<void>;
+  /** Bytes queued each way and not yet handed on: a close drains them only below HIGH_WATER_BYTES. */
+  toEngineBytes: number;
+  toHubBytes: number;
+  /** Set once a close stopped waiting: what is still queued is dropped, never sent behind the close. */
+  cut: boolean;
+}
+
+export class TunnelAgent {
+  private ws: WebSocket | null = null;
+  private stopped = false;
+  private attempt = 0;
+  private alive = true;
+  private pinger?: NodeJS.Timeout;
+  private readonly channels = new Map<number, AgentChannel>();
+  private readonly ledger = new SyncLedger();
+  private readonly files = new FileRequests(() => this.ws);
+  private readonly log: (msg: string) => void;
+  /** The frame types already said to be ignored: one line per type, never one per frame. */
+  private readonly ignored = new Set<string>();
+  /** Whether the hub accepted us last time; the supervisor shows it. */
+  connected = false;
+
+  constructor(private readonly opts: TunnelAgentOptions) {
+    this.log = opts.log ?? ((m) => console.log(`tunnel | ${m}`));
+  }
+
+  start(): void {
+    this.stopped = false;
+    this.connect();
+  }
+
+  stop(): void {
+    this.stopped = true;
+    if (this.pinger) clearInterval(this.pinger);
+    this.ws?.terminate();
+  }
+
+  private connect(): void {
+    if (this.stopped) return;
+    const ws = new WebSocket(tunnelUrl(this.opts.registryUrl, this.opts.id), {
+      headers: {
+        [TUNNEL_TOKEN_HEADER]: this.opts.token,
+        [TUNNEL_PROTOCOL_HEADER]: String(this.opts.protocol ?? ENGINE_PROTOCOL),
+        ...(this.opts.tunnelSecret
+          ? { [TUNNEL_SECRET_HEADER]: this.opts.tunnelSecret }
+          : {}),
+        ...(this.opts.renderKey
+          ? { [TUNNEL_RENDER_KEY_HEADER]: this.opts.renderKey }
+          : {}),
+      },
+    });
+    this.ws = ws;
+    ws.on("open", () => {
+      this.attempt = 0;
+      this.alive = true;
+      this.connected = true;
+      this.log(`up to ${this.opts.registryUrl}`);
+      this.pinger = setInterval(() => {
+        if (!this.alive) return void ws.terminate();
+        this.alive = false;
+        ws.ping();
+      }, PING_MS);
+    });
+    ws.on("pong", () => {
+      this.alive = true;
+    });
+    // Guarded: a throw in a socket listener ends the supervisor, so a bad frame from the hub is said and dropped.
+    ws.on("message", (data, isBinary) => {
+      try {
+        if (isBinary) this.onBinary(asBuffer(data as Buffer));
+        else this.onText(asBuffer(data as Buffer).toString("utf8"));
+      } catch (e) {
+        this.log(`bad frame from the hub: ${(e as Error).message}`);
+      }
+    });
+    ws.on("error", () => {});
+    ws.on("close", () => {
+      if (this.pinger) clearInterval(this.pinger);
+      if (this.ws === ws) this.ws = null;
+      if (this.connected) this.log(`down from ${this.opts.registryUrl}`);
+      this.connected = false;
+      this.files.failAll();
+      for (const c of this.channels.values()) c.engine?.terminate();
+      this.channels.clear();
+      setTimeout(
+        () => this.connect(),
+        jitteredBackoffMs(this.attempt++, MAX_BACKOFF_MS),
+      ).unref();
+    });
+  }
+
+  private tell(m: object): void {
+    if (this.ws?.readyState === WebSocket.OPEN) this.ws.send(JSON.stringify(m));
+  }
+
+  /** A frame this agent does not read, said once per type: a hub newer than the machine shows in the log. */
+  private ignore(kind: "text" | "binary", type: string): void {
+    const key = `${kind}:${type}`;
+    if (this.ignored.has(key)) return;
+    this.ignored.add(key);
+    this.log(
+      `ignored a ${kind} frame of type '${type}' from ${this.opts.registryUrl} — this machine does not read it`,
+    );
+  }
+
+  private onText(text: string): void {
+    let m: HubMessage;
+    try {
+      m = JSON.parse(text);
+    } catch {
+      this.ignore("text", textFrameType(text));
+      return;
+    }
+    if (typeof m !== "object" || m === null) {
+      this.ignore("text", textFrameType(text));
+      return;
+    }
+    switch (m.t) {
+      case "open":
+        this.openChannel(m.ch, m.roots, m.kind ?? "engine", m.synced ?? false);
+        break;
+      case "close": {
+        const c = this.channels.get(m.ch);
+        this.channels.delete(m.ch);
+        if (c) this.closeEngine(c);
+        break;
+      }
+      case "data":
+        this.toEngine(m.ch, m.text, false);
+        break;
+      case "stat-reply":
+        this.files.onStatReply(m.req, m.entries);
+        break;
+      case "put-reply":
+        this.files.onPutReply(m.req, m.stat, m.error);
+        break;
+      case "get-error":
+        this.files.onGetError(m.req, m.error);
+        break;
+      case "rtc-offer":
+        this.answer(m.req, m.sdp);
+        break;
+      default:
+        this.ignore("text", textFrameType(text));
+    }
+  }
+
+  private answer(req: number, offer: string): void {
+    answerOffer(offer, {
+      enginePort: this.opts.enginePort,
+      iceServers: this.opts.iceServers,
+      log: this.log,
+    }).then(
+      (sdp) => this.tell({ t: "rtc-answer", req, sdp }),
+      (e: Error) => this.tell({ t: "rtc-answer", req, error: e.message }),
+    );
+  }
+
+  private onBinary(frame: Buffer): void {
+    const d = decodeBinary(frame);
+    if (!d) {
+      this.ignore("binary", binaryFrameType(frame));
+      return;
+    }
+    if (d.header.t === "chunk")
+      this.files.onChunk(d.header.req, d.header.last, d.payload);
+    else if (d.header.t === "data") this.toEngine(d.header.ch, d.payload, true);
+    else this.ignore("binary", d.header.t);
+  }
+
+  private openChannel(
+    ch: number,
+    roots: TunnelRoot[],
+    kind: ChannelKind,
+    synced: boolean,
+  ): void {
+    if (roots.some((r) => !SAFE_NAME.test(r.name))) {
+      this.tell({ t: "close", ch, reason: "refused a root name" });
+      return;
+    }
+    const map = roots.length
+      ? new PathMap(
+          roots.map((r) => ({
+            remote: r.remote,
+            local: join(this.opts.cacheDir, r.name),
+            writable: r.writable,
+          })),
+          this.files.forChannel(ch),
+          this.ledger,
+          this.log,
+        )
+      : null;
+    if (kind === "jobs") {
+      const settled = Promise.resolve();
+      this.channels.set(ch, {
+        engine: null,
+        map,
+        synced: false,
+        toEngine: settled,
+        toHub: settled,
+        toEngineBytes: 0,
+        toHubBytes: 0,
+        cut: false,
+      });
+      this.tell({ t: "opened", ch });
+      return;
+    }
+    const engine = new WebSocket(`ws://127.0.0.1:${this.opts.enginePort}`);
+    const opened = new Promise<void>((res) => engine.once("open", () => res()));
+    const c: AgentChannel = {
+      engine,
+      map,
+      synced,
+      toEngine: opened,
+      toHub: Promise.resolve(),
+      toEngineBytes: 0,
+      toHubBytes: 0,
+      cut: false,
+    };
+    this.channels.set(ch, c);
+    engine.on("open", () => this.tell({ t: "opened", ch }));
+    engine.on("message", (data, isBinary) => {
+      try {
+        this.toHub(ch, asBuffer(data as Buffer), isBinary);
+      } catch (e) {
+        this.log(`ch${ch}: ${(e as Error).message}`);
+        engine.terminate();
+      }
+    });
+    let reason: string | undefined;
+    engine.on("error", (e) => {
+      reason = e.message;
+    });
+    engine.on("close", () => {
+      if (this.channels.get(ch) !== c) return;
+      this.channels.delete(ch);
+      this.closeHub(c, ch, reason);
+    });
+  }
+
+  /** The hub let go: the frames queued for the engine are delivered first, within the bound — docs/tunnel.md. */
+  private closeEngine(c: AgentChannel): void {
+    const engine = c.engine;
+    if (!engine) return;
+    const cut = (): void => {
+      c.cut = true;
+      engine.terminate();
+    };
+    if (c.toEngineBytes > HIGH_WATER_BYTES) {
+      cut();
+      return;
+    }
+    const timer = setTimeout(cut, CLOSE_DRAIN_MS);
+    timer.unref();
+    engine.once("close", () => clearTimeout(timer));
+    void c.toEngine.then(() => {
+      if (!c.cut) engine.close();
+    });
+  }
+
+  /** The engine let go: what it sent before is delivered to the hub first, within the bound. */
+  private closeHub(c: AgentChannel, ch: number, reason?: string): void {
+    let told = false;
+    const tell = (): void => {
+      if (told) return;
+      told = true;
+      c.cut = true;
+      this.tell({ t: "close", ch, ...(reason ? { reason } : {}) });
+    };
+    if (c.toHubBytes > HIGH_WATER_BYTES) {
+      tell();
+      return;
+    }
+    setTimeout(tell, CLOSE_DRAIN_MS).unref();
+    void c.toHub.then(tell);
+  }
+
+  private toEngine(ch: number, data: string | Buffer, binary: boolean): void {
+    const c = this.channels.get(ch);
+    if (!c) return;
+    const n = typeof data === "string" ? Buffer.byteLength(data) : data.length;
+    c.toEngineBytes += n;
+    c.toEngine = c.toEngine.then(async () => {
+      if (c.cut) return;
+      const out =
+        !binary && c.map
+          ? await c.map.outbound(data as string, !c.synced)
+          : data;
+      if (!c.engine) {
+        // A request is started once its files are here, and NOT awaited: a job takes minutes.
+        if (!binary) this.runJob(ch, out as string);
+        return;
+      }
+      if (c.engine.readyState === WebSocket.OPEN && !c.cut)
+        c.engine.send(out, { binary });
+    });
+    c.toEngine = c.toEngine
+      .catch((e) => this.log(`ch${ch} → engine: ${(e as Error).message}`))
+      .finally(() => {
+        c.toEngineBytes -= n;
+      });
+  }
+
+  /** Hand one request to its handler; every reply travels back through the channel's map. */
+  private runJob(ch: number, text: string): void {
+    let req: JobRequest;
+    try {
+      req = JSON.parse(text);
+    } catch {
+      return;
+    }
+    const emit = (reply: Record<string, unknown>): void =>
+      this.toHub(
+        ch,
+        Buffer.from(JSON.stringify({ id: req.id, ...reply })),
+        false,
+      );
+    const map = this.channels.get(ch)?.map ?? null;
+    const ctx: JobContext = {
+      fetch: (local) => (map ? map.ensureLocal(local) : Promise.resolve(false)),
+    };
+    if (req.type === "sync") {
+      const files = Array.isArray(req.files)
+        ? req.files.filter((f): f is string => typeof f === "string")
+        : [];
+      // Copied one by one, one `syncing` reply per file, then `synced` — docs/tunnel.md.
+      Promise.resolve()
+        .then(async () => {
+          const last = map
+            ? await map.sync(files, ({ failures, ...p }) =>
+                emit({ type: "syncing", ...p }),
+              )
+            : null;
+          const failures = last?.failures ?? [];
+          emit({ type: "synced", failed: failures.length, failures });
+        })
+        .catch((e: Error) => emit({ type: "error", error: e.message }));
+      return;
+    }
+    const handler = this.opts.jobs?.[req.type];
+    if (!handler) {
+      emit({ type: "error", error: `this machine does not do '${req.type}'` });
+      return;
+    }
+    Promise.resolve()
+      .then(() => handler(req, emit, ctx))
+      .catch((e: Error) => emit({ type: "error", error: e.message }));
+  }
+
+  private toHub(ch: number, data: Buffer, binary: boolean): void {
+    const c = this.channels.get(ch);
+    if (!c) return;
+    c.toHubBytes += data.length;
+    c.toHub = c.toHub.then(async () => {
+      if (c.cut) return;
+      if (binary) {
+        if (this.ws?.readyState === WebSocket.OPEN)
+          this.ws.send(encodeBinary({ t: "data", ch }, data));
+        return;
+      }
+      const text = data.toString("utf8");
+      const inbound = c.map ? await c.map.inbound(text) : text;
+      if (!c.cut) this.tell({ t: "data", ch, text: inbound });
+    });
+    c.toHub = c.toHub
+      .catch((e) => this.log(`ch${ch} → server: ${(e as Error).message}`))
+      .finally(() => {
+        c.toHubBytes -= data.length;
+      });
+  }
+}

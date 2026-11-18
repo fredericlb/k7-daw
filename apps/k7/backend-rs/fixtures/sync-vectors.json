@@ -1,0 +1,1083 @@
+{
+ "cadence": {
+  "snapshotEvery": 3,
+  "historyEvery": 5
+ },
+ "secrets": {
+  "a": "secret-a",
+  "b": "secret-b",
+  "lib": "secret-lib"
+ },
+ "accounts": {
+  "secret-a": "acct",
+  "secret-b": "acct",
+  "secret-lib": "_libraries"
+ },
+ "relay": {
+  "phase1": {
+   "steps": [
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": "w",
+      "since": 0,
+      "proto": 2
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b1",
+       "replica": "r-b1",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b1",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "a.txt",
+         "text": "x\n",
+         "was": null
+        },
+        {
+         "kind": "text",
+         "file": "dir/b.txt",
+         "text": "b\n",
+         "was": null
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "b",
+     "send": {
+      "t": "hello",
+      "workspace": "w",
+      "since": 0,
+      "proto": 2
+     }
+    },
+    {
+     "from": "b",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b2",
+       "replica": "r-b2",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b2",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "a.txt",
+         "text": "y\n",
+         "was": "1ad199ae8398a9"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b3",
+       "replica": "r-b3",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b3",
+       "ops": [
+        {
+         "kind": "remove",
+         "file": "dir/b.txt",
+         "was": "12fc361d133193"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b4",
+       "replica": "r-b4",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b4",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "a.txt",
+         "text": "z\n",
+         "was": "1ad199ae8398a9"
+        }
+       ],
+       "unknown": [
+        1,
+        "kept"
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b1",
+       "replica": "r-b1",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b1",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "a.txt",
+         "text": "x\n",
+         "was": null
+        },
+        {
+         "kind": "text",
+         "file": "dir/b.txt",
+         "text": "b\n",
+         "was": null
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "b",
+     "send": {
+      "t": "hello",
+      "workspace": "w",
+      "since": 2,
+      "proto": 2
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": "w",
+      "since": 0
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": "w",
+      "since": 0,
+      "proto": 3,
+      "build": "vectors"
+     }
+    },
+    {
+     "from": "a",
+     "send": "nope"
+    },
+    {
+     "from": "a",
+     "send": "[1]"
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "x",
+      "workspace": "w"
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": ""
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": "w",
+      "since": 0,
+      "proto": 1.5
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "y",
+       "replica": "r-y",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit y",
+       "ops": [
+        {
+         "kind": "yaml",
+         "file": "a.yaml"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "z",
+       "replica": "r-z",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit z",
+       "ops": [
+        {
+         "kind": "zip",
+         "file": "a"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "p",
+       "replica": "r-p",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit p",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "../a",
+         "text": ""
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w2",
+      "batch": {
+       "id": "u",
+       "replica": "r-u",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit u",
+       "ops": []
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": "..",
+      "since": 0,
+      "proto": 2
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": "@lib/K",
+      "since": 0,
+      "proto": 2
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": "@lib/k7-core",
+      "since": 0,
+      "proto": 2
+     }
+    },
+    {
+     "from": "lib",
+     "send": {
+      "t": "hello",
+      "workspace": "k7-core",
+      "since": 0,
+      "proto": 2
+     }
+    },
+    {
+     "from": "lib",
+     "send": {
+      "t": "batch",
+      "workspace": "k7-core",
+      "batch": {
+       "id": "l1",
+       "replica": "r-l1",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit l1",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "lib.md",
+         "text": "lib\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "@lib/k7-core",
+      "batch": {
+       "id": "l2",
+       "replica": "r-l2",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit l2",
+       "ops": []
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b5",
+       "replica": "r-b5",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b5",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "a.txt",
+         "text": "z\n",
+         "was": "12cded790ec090"
+        }
+       ],
+       "resolves": [
+        "4.0"
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b6",
+       "replica": "r-b6",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b6",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "10",
+         "text": "ten\n"
+        },
+        {
+         "kind": "text",
+         "file": "2",
+         "text": "two\n"
+        },
+        {
+         "kind": "text",
+         "file": "img.png",
+         "text": "\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\n"
+        },
+        {
+         "kind": "text",
+         "file": "é/ü.md",
+         "text": " \u0001\"\\\n"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "heard": [
+    {
+     "a": [
+      "{\"t\":\"welcome\",\"workspace\":\"w\",\"mode\":\"seed\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":1,\"batch\":{\"id\":\"b1\",\"replica\":\"r-b1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b1\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"x\\n\",\"was\":null},{\"kind\":\"text\",\"file\":\"dir/b.txt\",\"text\":\"b\\n\",\"was\":null}]},\"parked\":[]}}"
+     ]
+    },
+    {
+     "b": [
+      "{\"t\":\"welcome\",\"workspace\":\"w\",\"mode\":\"snapshot\",\"head\":1,\"files\":{\"a.txt\":\"x\\n\",\"dir/b.txt\":\"b\\n\"},\"conflicts\":[]}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":2,\"batch\":{\"id\":\"b2\",\"replica\":\"r-b2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"y\\n\",\"was\":\"1ad199ae8398a9\"}]},\"parked\":[]}}"
+     ],
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":2,\"batch\":{\"id\":\"b2\",\"replica\":\"r-b2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"y\\n\",\"was\":\"1ad199ae8398a9\"}]},\"parked\":[]}}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":3,\"batch\":{\"id\":\"b3\",\"replica\":\"r-b3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b3\",\"ops\":[{\"kind\":\"remove\",\"file\":\"dir/b.txt\",\"was\":\"12fc361d133193\"}]},\"parked\":[]}}"
+     ],
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":3,\"batch\":{\"id\":\"b3\",\"replica\":\"r-b3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b3\",\"ops\":[{\"kind\":\"remove\",\"file\":\"dir/b.txt\",\"was\":\"12fc361d133193\"}]},\"parked\":[]}}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":4,\"batch\":{\"id\":\"b4\",\"replica\":\"r-b4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b4\",\"ops\":[],\"unknown\":[1,\"kept\"]},\"parked\":[{\"id\":\"4.0\",\"seq\":4,\"replica\":\"r-b4\",\"ts\":1700000000000,\"label\":\"edit b4\",\"op\":{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"1ad199ae8398a9\"}}]}}"
+     ],
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":4,\"batch\":{\"id\":\"b4\",\"replica\":\"r-b4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b4\",\"ops\":[],\"unknown\":[1,\"kept\"]},\"parked\":[{\"id\":\"4.0\",\"seq\":4,\"replica\":\"r-b4\",\"ts\":1700000000000,\"label\":\"edit b4\",\"op\":{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"1ad199ae8398a9\"}}]}}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":1,\"batch\":{\"id\":\"b1\",\"replica\":\"r-b1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b1\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"x\\n\",\"was\":null},{\"kind\":\"text\",\"file\":\"dir/b.txt\",\"text\":\"b\\n\",\"was\":null}]},\"parked\":[]}}"
+     ]
+    },
+    {
+     "b": [
+      "{\"t\":\"welcome\",\"workspace\":\"w\",\"mode\":\"entries\",\"head\":4,\"conflicts\":[{\"id\":\"4.0\",\"seq\":4,\"replica\":\"r-b4\",\"ts\":1700000000000,\"label\":\"edit b4\",\"op\":{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"1ad199ae8398a9\"}}]}",
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":3,\"batch\":{\"id\":\"b3\",\"replica\":\"r-b3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b3\",\"ops\":[{\"kind\":\"remove\",\"file\":\"dir/b.txt\",\"was\":\"12fc361d133193\"}]},\"parked\":[]}}",
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":4,\"batch\":{\"id\":\"b4\",\"replica\":\"r-b4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b4\",\"ops\":[],\"unknown\":[1,\"kept\"]},\"parked\":[{\"id\":\"4.0\",\"seq\":4,\"replica\":\"r-b4\",\"ts\":1700000000000,\"label\":\"edit b4\",\"op\":{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"1ad199ae8398a9\"}}]}}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"refused\",\"workspace\":\"w\",\"reason\":\"update\",\"min\":2,\"server\":2}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"refused\",\"workspace\":\"w\",\"reason\":\"server-older\",\"min\":2,\"server\":2}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"error\":\"not JSON\",\"reason\":\"malformed\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"error\":\"not an object\",\"reason\":\"malformed\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"w\",\"error\":\"message \\\"x\\\" unknown here\",\"reason\":\"unknown-message\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"error\":\"no workspace named\",\"reason\":\"malformed\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"w\",\"error\":\"hello with a bad proto\",\"reason\":\"malformed\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"w\",\"error\":\"op kind \\\"yaml\\\" retired: the replica's k7 is older than this server's and must be updated\",\"reason\":\"unknown-op\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"w\",\"error\":\"op kind \\\"zip\\\" unknown here: this server's k7 is older than the replica's\",\"reason\":\"unknown-op\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"w\",\"error\":\"batch malformed\",\"reason\":\"malformed\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"w2\",\"error\":\"hello first\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"..\",\"error\":\"not a workspace name\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"@lib/K\",\"error\":\"not a library name\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"welcome\",\"workspace\":\"@lib/k7-core\",\"mode\":\"seed\"}"
+     ]
+    },
+    {
+     "lib": [
+      "{\"t\":\"welcome\",\"workspace\":\"k7-core\",\"mode\":\"seed\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"@lib/k7-core\",\"entry\":{\"seq\":1,\"batch\":{\"id\":\"l1\",\"replica\":\"r-l1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit l1\",\"ops\":[{\"kind\":\"text\",\"file\":\"lib.md\",\"text\":\"lib\\n\"}]},\"parked\":[]}}"
+     ],
+     "lib": [
+      "{\"t\":\"seq\",\"workspace\":\"k7-core\",\"entry\":{\"seq\":1,\"batch\":{\"id\":\"l1\",\"replica\":\"r-l1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit l1\",\"ops\":[{\"kind\":\"text\",\"file\":\"lib.md\",\"text\":\"lib\\n\"}]},\"parked\":[]}}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"error\",\"workspace\":\"@lib/k7-core\",\"error\":\"a library is followed, never written, through the relay\"}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":5,\"batch\":{\"id\":\"b5\",\"replica\":\"r-b5\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b5\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"12cded790ec090\"}],\"resolves\":[\"4.0\"]},\"parked\":[]}}"
+     ],
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":5,\"batch\":{\"id\":\"b5\",\"replica\":\"r-b5\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b5\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"12cded790ec090\"}],\"resolves\":[\"4.0\"]},\"parked\":[]}}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":6,\"batch\":{\"id\":\"b6\",\"replica\":\"r-b6\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b6\",\"ops\":[{\"kind\":\"text\",\"file\":\"10\",\"text\":\"ten\\n\"},{\"kind\":\"text\",\"file\":\"2\",\"text\":\"two\\n\"},{\"kind\":\"text\",\"file\":\"img.png\",\"text\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\"},{\"kind\":\"text\",\"file\":\"é/ü.md\",\"text\":\" \\u0001\\\"\\\\\\n\"}]},\"parked\":[]}}"
+     ],
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":6,\"batch\":{\"id\":\"b6\",\"replica\":\"r-b6\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b6\",\"ops\":[{\"kind\":\"text\",\"file\":\"10\",\"text\":\"ten\\n\"},{\"kind\":\"text\",\"file\":\"2\",\"text\":\"two\\n\"},{\"kind\":\"text\",\"file\":\"img.png\",\"text\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\"},{\"kind\":\"text\",\"file\":\"é/ü.md\",\"text\":\" \\u0001\\\"\\\\\\n\"}]},\"parked\":[]}}"
+     ]
+    }
+   ],
+   "dir": {
+    "_libraries/.sync-relay/k7-core/entries.jsonl": "",
+    "_libraries/.sync-relay/k7-core/log/1.jsonl": "{\"v\":1,\"seq\":1,\"batch\":{\"id\":\"l1\",\"replica\":\"r-l1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit l1\",\"ops\":[{\"kind\":\"text\",\"file\":\"lib.md\",\"text\":\"lib\\n\"}]},\"parked\":[]}\n",
+    "_libraries/.sync-relay/k7-core/log/index.json": "{\"v\":1,\"segments\":{\"1\":{\"start\":1,\"first\":1,\"last\":1,\"count\":1,\"bytes\":167}}}",
+    "_libraries/.sync-relay/k7-core/room.json": "{\"v\":1,\"head\":1,\"files\":{\"lib.md\":\"lib\\n\"},\"log\":[{\"seq\":1,\"batch\":{\"id\":\"l1\",\"replica\":\"r-l1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit l1\",\"ops\":[{\"kind\":\"text\",\"file\":\"lib.md\",\"text\":\"lib\\n\"}]},\"parked\":[]}],\"conflicts\":[],\"bases\":{\"lib.md\":[\"lib\\n\"]}}",
+    "acct/.sync-relay/w/entries.jsonl": "",
+    "acct/.sync-relay/w/log/1.jsonl": "{\"v\":1,\"seq\":1,\"batch\":{\"id\":\"b1\",\"replica\":\"r-b1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b1\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"x\\n\",\"was\":null},{\"kind\":\"text\",\"file\":\"dir/b.txt\",\"text\":\"b\\n\",\"was\":null}]},\"parked\":[]}\n{\"v\":1,\"seq\":2,\"batch\":{\"id\":\"b2\",\"replica\":\"r-b2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"y\\n\",\"was\":\"1ad199ae8398a9\"}]},\"parked\":[]}\n{\"v\":1,\"seq\":3,\"batch\":{\"id\":\"b3\",\"replica\":\"r-b3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b3\",\"ops\":[{\"kind\":\"remove\",\"file\":\"dir/b.txt\",\"was\":\"12fc361d133193\"}]},\"parked\":[]}\n",
+    "acct/.sync-relay/w/log/4.jsonl": "{\"v\":1,\"seq\":4,\"batch\":{\"id\":\"b4\",\"replica\":\"r-b4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b4\",\"ops\":[],\"unknown\":[1,\"kept\"]},\"parked\":[{\"id\":\"4.0\",\"seq\":4,\"replica\":\"r-b4\",\"ts\":1700000000000,\"label\":\"edit b4\",\"op\":{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"1ad199ae8398a9\"}}]}\n{\"v\":1,\"seq\":5,\"batch\":{\"id\":\"b5\",\"replica\":\"r-b5\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b5\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"12cded790ec090\"}],\"resolves\":[\"4.0\"]},\"parked\":[]}\n{\"v\":1,\"seq\":6,\"batch\":{\"id\":\"b6\",\"replica\":\"r-b6\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b6\",\"ops\":[{\"kind\":\"text\",\"file\":\"10\",\"text\":\"ten\\n\"},{\"kind\":\"text\",\"file\":\"2\",\"text\":\"two\\n\"},{\"kind\":\"text\",\"file\":\"img.png\",\"text\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\"},{\"kind\":\"text\",\"file\":\"é/ü.md\",\"text\":\" \\u0001\\\"\\\\\\n\"}]},\"parked\":[]}\n",
+    "acct/.sync-relay/w/log/index.json": "{\"v\":1,\"segments\":{\"1\":{\"start\":1,\"first\":1,\"last\":3,\"count\":3,\"bytes\":601},\"4\":{\"start\":4,\"first\":4,\"last\":6,\"count\":3,\"bytes\":886}}}",
+    "acct/.sync-relay/w/room.json": "{\"v\":1,\"head\":6,\"files\":{\"2\":\"two\\n\",\"10\":\"ten\\n\",\"a.txt\":\"z\\n\",\"img.png\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\",\"é/ü.md\":\" \\u0001\\\"\\\\\\n\"},\"log\":[{\"seq\":1,\"batch\":{\"id\":\"b1\",\"replica\":\"r-b1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b1\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"x\\n\",\"was\":null},{\"kind\":\"text\",\"file\":\"dir/b.txt\",\"text\":\"b\\n\",\"was\":null}]},\"parked\":[]},{\"seq\":2,\"batch\":{\"id\":\"b2\",\"replica\":\"r-b2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"y\\n\",\"was\":\"1ad199ae8398a9\"}]},\"parked\":[]},{\"seq\":3,\"batch\":{\"id\":\"b3\",\"replica\":\"r-b3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b3\",\"ops\":[{\"kind\":\"remove\",\"file\":\"dir/b.txt\",\"was\":\"12fc361d133193\"}]},\"parked\":[]},{\"seq\":4,\"batch\":{\"id\":\"b4\",\"replica\":\"r-b4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b4\",\"ops\":[],\"unknown\":[1,\"kept\"]},\"parked\":[{\"id\":\"4.0\",\"seq\":4,\"replica\":\"r-b4\",\"ts\":1700000000000,\"label\":\"edit b4\",\"op\":{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"1ad199ae8398a9\"}}]},{\"seq\":5,\"batch\":{\"id\":\"b5\",\"replica\":\"r-b5\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b5\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"12cded790ec090\"}],\"resolves\":[\"4.0\"]},\"parked\":[]},{\"seq\":6,\"batch\":{\"id\":\"b6\",\"replica\":\"r-b6\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b6\",\"ops\":[{\"kind\":\"text\",\"file\":\"10\",\"text\":\"ten\\n\"},{\"kind\":\"text\",\"file\":\"2\",\"text\":\"two\\n\"},{\"kind\":\"text\",\"file\":\"img.png\",\"text\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\"},{\"kind\":\"text\",\"file\":\"é/ü.md\",\"text\":\" \\u0001\\\"\\\\\\n\"}]},\"parked\":[]}],\"conflicts\":[],\"bases\":{\"2\":[\"two\\n\"],\"10\":[\"ten\\n\"],\"a.txt\":[\"x\\n\",\"y\\n\",\"z\\n\"],\"é/ü.md\":[\" \\u0001\\\"\\\\\\n\"]}}",
+    "acct/.sync-relay/w/snapshots/6.json": "{\"2\":\"two\\n\",\"10\":\"ten\\n\",\"a.txt\":\"z\\n\",\"img.png\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\",\"é/ü.md\":\" \\u0001\\\"\\\\\\n\"}"
+   }
+  },
+  "phase2": {
+   "steps": [
+    {
+     "from": "a",
+     "send": {
+      "t": "hello",
+      "workspace": "w",
+      "since": 6,
+      "proto": 2
+     }
+    },
+    {
+     "from": "b",
+     "send": {
+      "t": "hello",
+      "workspace": "w",
+      "since": 0,
+      "proto": 2
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b7",
+       "replica": "r-b7",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b7",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "a.txt",
+         "text": "seven\n",
+         "was": "9a34133851dd8"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b8",
+       "replica": "r-b8",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b8",
+       "ops": [
+        {
+         "kind": "remove",
+         "file": "2"
+        }
+       ],
+       "ends": true
+      }
+     }
+    },
+    {
+     "from": "a",
+     "send": {
+      "t": "batch",
+      "workspace": "w",
+      "batch": {
+       "id": "b9",
+       "replica": "r-b9",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit b9",
+       "ops": [
+        {
+         "kind": "remove",
+         "file": "10",
+         "was": "nothash"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "b",
+     "send": {
+      "t": "hello",
+      "workspace": "w 2%é",
+      "since": 0,
+      "proto": 2
+     }
+    },
+    {
+     "from": "b",
+     "send": {
+      "t": "batch",
+      "workspace": "w 2%é",
+      "batch": {
+       "id": "c1",
+       "replica": "r-c1",
+       "local": 1,
+       "ts": 1700000000000,
+       "label": "edit c1",
+       "ops": [
+        {
+         "kind": "text",
+         "file": "c.txt",
+         "text": "c\n"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "from": "lib",
+     "send": {
+      "t": "hello",
+      "workspace": "k7-core",
+      "since": 1,
+      "proto": 2
+     }
+    }
+   ],
+   "heard": [
+    {
+     "a": [
+      "{\"t\":\"welcome\",\"workspace\":\"w\",\"mode\":\"entries\",\"head\":6,\"conflicts\":[]}"
+     ]
+    },
+    {
+     "b": [
+      "{\"t\":\"welcome\",\"workspace\":\"w\",\"mode\":\"snapshot\",\"head\":6,\"files\":{\"2\":\"two\\n\",\"10\":\"ten\\n\",\"a.txt\":\"z\\n\",\"img.png\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\",\"é/ü.md\":\" \\u0001\\\"\\\\\\n\"},\"conflicts\":[]}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":7,\"batch\":{\"id\":\"b7\",\"replica\":\"r-b7\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b7\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"seven\\n\",\"was\":\"9a34133851dd8\"}]},\"parked\":[]}}"
+     ],
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":7,\"batch\":{\"id\":\"b7\",\"replica\":\"r-b7\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b7\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"seven\\n\",\"was\":\"9a34133851dd8\"}]},\"parked\":[]}}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":8,\"batch\":{\"id\":\"b8\",\"replica\":\"r-b8\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b8\",\"ops\":[{\"kind\":\"remove\",\"file\":\"2\"}],\"ends\":true},\"parked\":[]}}"
+     ],
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":8,\"batch\":{\"id\":\"b8\",\"replica\":\"r-b8\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b8\",\"ops\":[{\"kind\":\"remove\",\"file\":\"2\"}],\"ends\":true},\"parked\":[]}}"
+     ]
+    },
+    {
+     "a": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":9,\"batch\":{\"id\":\"b9\",\"replica\":\"r-b9\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b9\",\"ops\":[]},\"parked\":[{\"id\":\"9.0\",\"seq\":9,\"replica\":\"r-b9\",\"ts\":1700000000000,\"label\":\"edit b9\",\"op\":{\"kind\":\"remove\",\"file\":\"10\",\"was\":\"nothash\"}}]}}"
+     ],
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w\",\"entry\":{\"seq\":9,\"batch\":{\"id\":\"b9\",\"replica\":\"r-b9\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b9\",\"ops\":[]},\"parked\":[{\"id\":\"9.0\",\"seq\":9,\"replica\":\"r-b9\",\"ts\":1700000000000,\"label\":\"edit b9\",\"op\":{\"kind\":\"remove\",\"file\":\"10\",\"was\":\"nothash\"}}]}}"
+     ]
+    },
+    {
+     "b": [
+      "{\"t\":\"welcome\",\"workspace\":\"w 2%é\",\"mode\":\"seed\"}"
+     ]
+    },
+    {
+     "b": [
+      "{\"t\":\"seq\",\"workspace\":\"w 2%é\",\"entry\":{\"seq\":1,\"batch\":{\"id\":\"c1\",\"replica\":\"r-c1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit c1\",\"ops\":[{\"kind\":\"text\",\"file\":\"c.txt\",\"text\":\"c\\n\"}]},\"parked\":[]}}"
+     ]
+    },
+    {
+     "lib": [
+      "{\"t\":\"welcome\",\"workspace\":\"k7-core\",\"mode\":\"entries\",\"head\":1,\"conflicts\":[]}"
+     ]
+    }
+   ],
+   "dir": {
+    "_libraries/.sync-relay/k7-core/entries.jsonl": "",
+    "_libraries/.sync-relay/k7-core/log/1.jsonl": "{\"v\":1,\"seq\":1,\"batch\":{\"id\":\"l1\",\"replica\":\"r-l1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit l1\",\"ops\":[{\"kind\":\"text\",\"file\":\"lib.md\",\"text\":\"lib\\n\"}]},\"parked\":[]}\n",
+    "_libraries/.sync-relay/k7-core/log/index.json": "{\"v\":1,\"segments\":{\"1\":{\"start\":1,\"first\":1,\"last\":1,\"count\":1,\"bytes\":167}}}",
+    "_libraries/.sync-relay/k7-core/room.json": "{\"v\":1,\"head\":1,\"files\":{\"lib.md\":\"lib\\n\"},\"log\":[{\"seq\":1,\"batch\":{\"id\":\"l1\",\"replica\":\"r-l1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit l1\",\"ops\":[{\"kind\":\"text\",\"file\":\"lib.md\",\"text\":\"lib\\n\"}]},\"parked\":[]}],\"conflicts\":[],\"bases\":{\"lib.md\":[\"lib\\n\"]}}",
+    "acct/.sync-relay/w/entries.jsonl": "",
+    "acct/.sync-relay/w/log/1.jsonl": "{\"v\":1,\"seq\":1,\"batch\":{\"id\":\"b1\",\"replica\":\"r-b1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b1\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"x\\n\",\"was\":null},{\"kind\":\"text\",\"file\":\"dir/b.txt\",\"text\":\"b\\n\",\"was\":null}]},\"parked\":[]}\n{\"v\":1,\"seq\":2,\"batch\":{\"id\":\"b2\",\"replica\":\"r-b2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"y\\n\",\"was\":\"1ad199ae8398a9\"}]},\"parked\":[]}\n{\"v\":1,\"seq\":3,\"batch\":{\"id\":\"b3\",\"replica\":\"r-b3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b3\",\"ops\":[{\"kind\":\"remove\",\"file\":\"dir/b.txt\",\"was\":\"12fc361d133193\"}]},\"parked\":[]}\n",
+    "acct/.sync-relay/w/log/4.jsonl": "{\"v\":1,\"seq\":4,\"batch\":{\"id\":\"b4\",\"replica\":\"r-b4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b4\",\"ops\":[],\"unknown\":[1,\"kept\"]},\"parked\":[{\"id\":\"4.0\",\"seq\":4,\"replica\":\"r-b4\",\"ts\":1700000000000,\"label\":\"edit b4\",\"op\":{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"1ad199ae8398a9\"}}]}\n{\"v\":1,\"seq\":5,\"batch\":{\"id\":\"b5\",\"replica\":\"r-b5\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b5\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"12cded790ec090\"}],\"resolves\":[\"4.0\"]},\"parked\":[]}\n{\"v\":1,\"seq\":6,\"batch\":{\"id\":\"b6\",\"replica\":\"r-b6\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b6\",\"ops\":[{\"kind\":\"text\",\"file\":\"10\",\"text\":\"ten\\n\"},{\"kind\":\"text\",\"file\":\"2\",\"text\":\"two\\n\"},{\"kind\":\"text\",\"file\":\"img.png\",\"text\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\"},{\"kind\":\"text\",\"file\":\"é/ü.md\",\"text\":\" \\u0001\\\"\\\\\\n\"}]},\"parked\":[]}\n",
+    "acct/.sync-relay/w/log/7.jsonl": "{\"v\":1,\"seq\":7,\"batch\":{\"id\":\"b7\",\"replica\":\"r-b7\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b7\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"seven\\n\",\"was\":\"9a34133851dd8\"}]},\"parked\":[]}\n{\"v\":1,\"seq\":8,\"batch\":{\"id\":\"b8\",\"replica\":\"r-b8\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b8\",\"ops\":[{\"kind\":\"remove\",\"file\":\"2\"}],\"ends\":true},\"parked\":[]}\n{\"v\":1,\"seq\":9,\"batch\":{\"id\":\"b9\",\"replica\":\"r-b9\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b9\",\"ops\":[]},\"parked\":[{\"id\":\"9.0\",\"seq\":9,\"replica\":\"r-b9\",\"ts\":1700000000000,\"label\":\"edit b9\",\"op\":{\"kind\":\"remove\",\"file\":\"10\",\"was\":\"nothash\"}}]}\n",
+    "acct/.sync-relay/w/log/index.json": "{\"v\":1,\"segments\":{\"1\":{\"start\":1,\"first\":1,\"last\":3,\"count\":3,\"bytes\":601},\"4\":{\"start\":4,\"first\":4,\"last\":6,\"count\":3,\"bytes\":886},\"7\":{\"start\":7,\"first\":7,\"last\":9,\"count\":3,\"bytes\":597}}}",
+    "acct/.sync-relay/w/room.json": "{\"v\":1,\"head\":9,\"files\":{\"10\":\"ten\\n\",\"a.txt\":\"seven\\n\",\"img.png\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\",\"é/ü.md\":\" \\u0001\\\"\\\\\\n\"},\"log\":[{\"seq\":1,\"batch\":{\"id\":\"b1\",\"replica\":\"r-b1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b1\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"x\\n\",\"was\":null},{\"kind\":\"text\",\"file\":\"dir/b.txt\",\"text\":\"b\\n\",\"was\":null}]},\"parked\":[]},{\"seq\":2,\"batch\":{\"id\":\"b2\",\"replica\":\"r-b2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"y\\n\",\"was\":\"1ad199ae8398a9\"}]},\"parked\":[]},{\"seq\":3,\"batch\":{\"id\":\"b3\",\"replica\":\"r-b3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b3\",\"ops\":[{\"kind\":\"remove\",\"file\":\"dir/b.txt\",\"was\":\"12fc361d133193\"}]},\"parked\":[]},{\"seq\":4,\"batch\":{\"id\":\"b4\",\"replica\":\"r-b4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b4\",\"ops\":[],\"unknown\":[1,\"kept\"]},\"parked\":[{\"id\":\"4.0\",\"seq\":4,\"replica\":\"r-b4\",\"ts\":1700000000000,\"label\":\"edit b4\",\"op\":{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"1ad199ae8398a9\"}}]},{\"seq\":5,\"batch\":{\"id\":\"b5\",\"replica\":\"r-b5\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b5\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"z\\n\",\"was\":\"12cded790ec090\"}],\"resolves\":[\"4.0\"]},\"parked\":[]},{\"seq\":6,\"batch\":{\"id\":\"b6\",\"replica\":\"r-b6\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b6\",\"ops\":[{\"kind\":\"text\",\"file\":\"10\",\"text\":\"ten\\n\"},{\"kind\":\"text\",\"file\":\"2\",\"text\":\"two\\n\"},{\"kind\":\"text\",\"file\":\"img.png\",\"text\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\"},{\"kind\":\"text\",\"file\":\"é/ü.md\",\"text\":\" \\u0001\\\"\\\\\\n\"}]},\"parked\":[]},{\"seq\":7,\"batch\":{\"id\":\"b7\",\"replica\":\"r-b7\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b7\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"seven\\n\",\"was\":\"9a34133851dd8\"}]},\"parked\":[]},{\"seq\":8,\"batch\":{\"id\":\"b8\",\"replica\":\"r-b8\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b8\",\"ops\":[{\"kind\":\"remove\",\"file\":\"2\"}],\"ends\":true},\"parked\":[]},{\"seq\":9,\"batch\":{\"id\":\"b9\",\"replica\":\"r-b9\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit b9\",\"ops\":[]},\"parked\":[{\"id\":\"9.0\",\"seq\":9,\"replica\":\"r-b9\",\"ts\":1700000000000,\"label\":\"edit b9\",\"op\":{\"kind\":\"remove\",\"file\":\"10\",\"was\":\"nothash\"}}]}],\"conflicts\":[{\"id\":\"9.0\",\"seq\":9,\"replica\":\"r-b9\",\"ts\":1700000000000,\"label\":\"edit b9\",\"op\":{\"kind\":\"remove\",\"file\":\"10\",\"was\":\"nothash\"}}],\"bases\":{\"10\":[\"ten\\n\"],\"a.txt\":[\"x\\n\",\"y\\n\",\"z\\n\",\"seven\\n\"],\"é/ü.md\":[\" \\u0001\\\"\\\\\\n\"]}}",
+    "acct/.sync-relay/w/snapshots/6.json": "{\"2\":\"two\\n\",\"10\":\"ten\\n\",\"a.txt\":\"z\\n\",\"img.png\":\"\\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\\n\",\"é/ü.md\":\" \\u0001\\\"\\\\\\n\"}",
+    "acct/.sync-relay/w%202%25%C3%A9/entries.jsonl": "",
+    "acct/.sync-relay/w%202%25%C3%A9/log/1.jsonl": "{\"v\":1,\"seq\":1,\"batch\":{\"id\":\"c1\",\"replica\":\"r-c1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit c1\",\"ops\":[{\"kind\":\"text\",\"file\":\"c.txt\",\"text\":\"c\\n\"}]},\"parked\":[]}\n",
+    "acct/.sync-relay/w%202%25%C3%A9/log/index.json": "{\"v\":1,\"segments\":{\"1\":{\"start\":1,\"first\":1,\"last\":1,\"count\":1,\"bytes\":164}}}",
+    "acct/.sync-relay/w%202%25%C3%A9/room.json": "{\"v\":1,\"head\":1,\"files\":{\"c.txt\":\"c\\n\"},\"log\":[{\"seq\":1,\"batch\":{\"id\":\"c1\",\"replica\":\"r-c1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit c1\",\"ops\":[{\"kind\":\"text\",\"file\":\"c.txt\",\"text\":\"c\\n\"}]},\"parked\":[]}],\"conflicts\":[],\"bases\":{\"c.txt\":[\"c\\n\"]}}"
+   }
+  }
+ },
+ "history": {
+  "head": 9,
+  "page": [
+   {
+    "seq": 9,
+    "batch": {
+     "id": "b9",
+     "replica": "r-b9",
+     "local": 1,
+     "ts": 1700000000000,
+     "label": "edit b9",
+     "ops": []
+    },
+    "parked": [
+     {
+      "id": "9.0",
+      "seq": 9,
+      "replica": "r-b9",
+      "ts": 1700000000000,
+      "label": "edit b9",
+      "op": {
+       "kind": "remove",
+       "file": "10",
+       "was": "nothash"
+      }
+     }
+    ]
+   },
+   {
+    "seq": 8,
+    "batch": {
+     "id": "b8",
+     "replica": "r-b8",
+     "local": 1,
+     "ts": 1700000000000,
+     "label": "edit b8",
+     "ops": [
+      {
+       "kind": "remove",
+       "file": "2"
+      }
+     ],
+     "ends": true
+    },
+    "parked": []
+   },
+   {
+    "seq": 7,
+    "batch": {
+     "id": "b7",
+     "replica": "r-b7",
+     "local": 1,
+     "ts": 1700000000000,
+     "label": "edit b7",
+     "ops": [
+      {
+       "kind": "text",
+       "file": "a.txt",
+       "text": "seven\n",
+       "was": "9a34133851dd8"
+      }
+     ]
+    },
+    "parked": []
+   },
+   {
+    "seq": 6,
+    "batch": {
+     "id": "b6",
+     "replica": "r-b6",
+     "local": 1,
+     "ts": 1700000000000,
+     "label": "edit b6",
+     "ops": [
+      {
+       "kind": "text",
+       "file": "10",
+       "text": "ten\n"
+      },
+      {
+       "kind": "text",
+       "file": "2",
+       "text": "two\n"
+      },
+      {
+       "kind": "text",
+       "file": "img.png",
+       "text": "\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\n"
+      },
+      {
+       "kind": "text",
+       "file": "é/ü.md",
+       "text": " \u0001\"\\\n"
+      }
+     ]
+    },
+    "parked": []
+   }
+  ],
+  "at": {
+   "0": {},
+   "1": {
+    "a.txt": "x\n",
+    "dir/b.txt": "b\n"
+   },
+   "2": {
+    "a.txt": "y\n",
+    "dir/b.txt": "b\n"
+   },
+   "3": {
+    "a.txt": "y\n"
+   },
+   "4": {
+    "a.txt": "y\n"
+   },
+   "5": {
+    "a.txt": "z\n"
+   },
+   "6": {
+    "2": "two\n",
+    "10": "ten\n",
+    "a.txt": "z\n",
+    "img.png": "\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\n",
+    "é/ü.md": " \u0001\"\\\n"
+   },
+   "7": {
+    "2": "two\n",
+    "10": "ten\n",
+    "a.txt": "seven\n",
+    "img.png": "\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\n",
+    "é/ü.md": " \u0001\"\\\n"
+   },
+   "8": {
+    "10": "ten\n",
+    "a.txt": "seven\n",
+    "img.png": "\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\n",
+    "é/ü.md": " \u0001\"\\\n"
+   },
+   "9": {
+    "10": "ten\n",
+    "a.txt": "seven\n",
+    "img.png": "\u0000k7fs-blob abababababababababababababababababababababababababababababababab 12\n",
+    "é/ü.md": " \u0001\"\\\n"
+   }
+  }
+ },
+ "legacy": {
+  "before": {
+   "acct/.sync-relay/old/room.json": "{\"head\":2,\"files\":{\"a.txt\":\"two\\n\"},\"log\":[{\"seq\":1,\"batch\":{\"id\":\"o1\",\"replica\":\"r-o1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o1\",\"ops\":[{\"kind\":\"yaml\",\"file\":\"s.yaml\"}]},\"parked\":[]},{\"seq\":2,\"batch\":{\"id\":\"o2\",\"replica\":\"r-o2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"two\\n\"}]}}]}",
+   "acct/.sync-relay/old/entries.jsonl": "{\"v\":1,\"seq\":3,\"batch\":{\"id\":\"o3\",\"replica\":\"r-o3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o3\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"three\\n\"}]},\"parked\":[]}\n{\"v\":1,\"seq\":4,\"ba"
+  },
+  "steps": [
+   {
+    "from": "a",
+    "send": {
+     "t": "hello",
+     "workspace": "old",
+     "since": 0,
+     "proto": 2
+    }
+   },
+   {
+    "from": "a",
+    "send": {
+     "t": "batch",
+     "workspace": "old",
+     "batch": {
+      "id": "o4",
+      "replica": "r-o4",
+      "local": 1,
+      "ts": 1700000000000,
+      "label": "edit o4",
+      "ops": [
+       {
+        "kind": "text",
+        "file": "b.txt",
+        "text": "b\n"
+       }
+      ]
+     }
+    }
+   }
+  ],
+  "heard": [
+   {
+    "a": [
+     "{\"t\":\"welcome\",\"workspace\":\"old\",\"mode\":\"snapshot\",\"head\":3,\"files\":{\"a.txt\":\"three\\n\"},\"conflicts\":[]}"
+    ]
+   },
+   {
+    "a": [
+     "{\"t\":\"seq\",\"workspace\":\"old\",\"entry\":{\"seq\":4,\"batch\":{\"id\":\"o4\",\"replica\":\"r-o4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o4\",\"ops\":[{\"kind\":\"text\",\"file\":\"b.txt\",\"text\":\"b\\n\"}]},\"parked\":[]}}"
+    ]
+   }
+  ],
+  "dir": {
+   "acct/.sync-relay/old/entries.jsonl": "",
+   "acct/.sync-relay/old/log/1.jsonl": "{\"v\":1,\"seq\":1,\"batch\":{\"id\":\"o1\",\"replica\":\"r-o1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o1\",\"ops\":[]},\"parked\":[]}\n{\"v\":1,\"seq\":2,\"batch\":{\"id\":\"o2\",\"replica\":\"r-o2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"two\\n\"}]},\"parked\":[]}\n",
+   "acct/.sync-relay/old/log/3.jsonl": "{\"v\":1,\"seq\":3,\"batch\":{\"id\":\"o3\",\"replica\":\"r-o3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o3\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"three\\n\"}]},\"parked\":[]}\n{\"v\":1,\"seq\":4,\"ba\n{\"v\":1,\"seq\":4,\"batch\":{\"id\":\"o4\",\"replica\":\"r-o4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o4\",\"ops\":[{\"kind\":\"text\",\"file\":\"b.txt\",\"text\":\"b\\n\"}]},\"parked\":[]}\n",
+   "acct/.sync-relay/old/log/index.json": "{\"v\":1,\"segments\":{\"1\":{\"start\":1,\"first\":1,\"last\":2,\"count\":2,\"bytes\":287},\"3\":{\"start\":3,\"first\":3,\"last\":4,\"count\":2,\"bytes\":351}}}",
+   "acct/.sync-relay/old/room.json": "{\"v\":1,\"head\":4,\"files\":{\"a.txt\":\"three\\n\",\"b.txt\":\"b\\n\"},\"log\":[{\"seq\":1,\"batch\":{\"id\":\"o1\",\"replica\":\"r-o1\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o1\",\"ops\":[]},\"parked\":[]},{\"seq\":2,\"batch\":{\"id\":\"o2\",\"replica\":\"r-o2\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o2\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"two\\n\"}]},\"parked\":[]},{\"seq\":3,\"batch\":{\"id\":\"o3\",\"replica\":\"r-o3\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o3\",\"ops\":[{\"kind\":\"text\",\"file\":\"a.txt\",\"text\":\"three\\n\"}]},\"parked\":[]},{\"seq\":4,\"batch\":{\"id\":\"o4\",\"replica\":\"r-o4\",\"local\":1,\"ts\":1700000000000,\"label\":\"edit o4\",\"ops\":[{\"kind\":\"text\",\"file\":\"b.txt\",\"text\":\"b\\n\"}]},\"parked\":[]}],\"conflicts\":[],\"bases\":{\"a.txt\":[\"three\\n\"],\"b.txt\":[\"b\\n\"]}}",
+   "acct/.sync-relay/old/snapshots/2.json": "{\"a.txt\":\"two\\n\"}"
+  },
+  "history": {
+   "head": 4,
+   "page": [
+    {
+     "seq": 4,
+     "batch": {
+      "id": "o4",
+      "replica": "r-o4",
+      "local": 1,
+      "ts": 1700000000000,
+      "label": "edit o4",
+      "ops": [
+       {
+        "kind": "text",
+        "file": "b.txt",
+        "text": "b\n"
+       }
+      ]
+     },
+     "parked": []
+    },
+    {
+     "seq": 3,
+     "batch": {
+      "id": "o3",
+      "replica": "r-o3",
+      "local": 1,
+      "ts": 1700000000000,
+      "label": "edit o3",
+      "ops": [
+       {
+        "kind": "text",
+        "file": "a.txt",
+        "text": "three\n"
+       }
+      ]
+     },
+     "parked": []
+    },
+    {
+     "seq": 2,
+     "batch": {
+      "id": "o2",
+      "replica": "r-o2",
+      "local": 1,
+      "ts": 1700000000000,
+      "label": "edit o2",
+      "ops": [
+       {
+        "kind": "text",
+        "file": "a.txt",
+        "text": "two\n"
+       }
+      ]
+     },
+     "parked": []
+    },
+    {
+     "seq": 1,
+     "batch": {
+      "id": "o1",
+      "replica": "r-o1",
+      "local": 1,
+      "ts": 1700000000000,
+      "label": "edit o1",
+      "ops": []
+     },
+     "parked": []
+    }
+   ],
+   "at": {
+    "0": {},
+    "1": {},
+    "2": {
+     "a.txt": "two\n"
+    },
+    "3": {
+     "a.txt": "three\n"
+    },
+    "4": {
+     "a.txt": "three\n",
+     "b.txt": "b\n"
+    }
+   }
+  }
+ }
+}

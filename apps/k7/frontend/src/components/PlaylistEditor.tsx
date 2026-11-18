@@ -1,0 +1,282 @@
+// PlaylistEditor.tsx — a playlist opened: its k7x as text on the left, the morceaux it names
+// as a playable list on the right. Two panes on purpose — you edit the file while hearing what
+// it describes. See ../docs/playlists.md.
+
+import { stripDocExt } from "@studio/song-schema/docExt";
+import {
+  appendPlaylistItem,
+  movePlaylistItem,
+  type PlaylistItem,
+  parsePlaylist,
+  playlistStub,
+  removePlaylistItem,
+} from "@studio/song-schema/playlist";
+import { audioFilesOf } from "@studio/song-schema/records";
+import type { Validity } from "@studio/song-schema/yaml/validate";
+import { Button } from "@studio/ui/button";
+import { ArrowLeft, ListMusic, Loader2 } from "@studio/ui/icons";
+import { recallBuffer, useAutosave } from "@studio/ui-editor/autosave";
+import { editK7xText } from "@studio/ui-editor/k7x/bufferEdit";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { api } from "../api";
+import { m } from "../paraglide/messages.js";
+import { playlistVocabulary } from "../playlistVocabulary";
+import { saveLabel } from "../saveLabel";
+import { pollWhileVisible } from "../visiblePoll";
+import { YamlPane } from "./LazyYamlPane";
+import { PlaylistPane } from "./PlaylistPane";
+
+/** Is this text a playlist? `parsePlaylist` is what knows, and a failure is reported as a SCHEMA one, so the escape hatch applies. */
+const playlistValidity = (text: string): Validity =>
+  parsePlaylist(text) === null
+    ? {
+        ok: false,
+        issues: [{ path: "", message: m["pls.notAPlaylist"]() }],
+        depth: "schema",
+        malformed: false,
+      }
+    : { ok: true, issues: [], depth: "schema", malformed: false };
+
+/** How often the workspace's audio files are re-read while a playlist is open. */
+const FILES_POLL_MS = 10_000;
+
+export function PlaylistEditor({
+  path,
+  name,
+  vimMode,
+  panel = false,
+  onBack,
+  onSaved,
+  onRun,
+}: {
+  /** The playlist's workspace-relative path (`_playlists/ete-2026.k7x`). */
+  path: string;
+  /** What the header calls it — the title the listing parsed, else the file's stem. */
+  name: string;
+  vimMode: boolean;
+  /** Draw as the right-hand PANEL rather than as the page: no header, no text half — a mode, everything under the layout being the same (../docs/playlists.md). */
+  panel?: boolean;
+  /** Back to the listing. Unused in `panel` mode, where there is nothing to go back to. */
+  onBack?: () => void;
+  /** The file has reached disk: the listing behind this screen is one row out of date. */
+  onSaved: () => void;
+  /** Dispatch a command line, passed straight through to the records pane — optional, so neither host has to invent a shell. */
+  onRun?: (line: string) => Promise<void>;
+}) {
+  const [content, setContent] = useState<string | null>(null);
+  // What is on disk; dirty is `content !== saved`, derived rather than a flag a failed write could leave lying.
+  const [saved, setSaved] = useState("");
+  const [status, setStatus] = useState("");
+
+  /** The workspace's audio files, `stems/` included, polled beside the file: what makes 'no such record' answerable. */
+  const [files, setFiles] = useState<Set<string> | null>(null);
+  const [filesError, setFilesError] = useState("");
+  /** Ask the tree again — a callback and not a dependency, since a state bump would restart the interval as well. */
+  const refreshFiles = useCallback(
+    () =>
+      api
+        .tree()
+        .then((tree) => {
+          setFiles(new Set(audioFilesOf(tree, true)));
+          setFilesError("");
+        })
+        // Left as it was rather than emptied: an unreadable tree for one tick must not make every line missing.
+        .catch((e: Error) => setFilesError(e.message)),
+    [],
+  );
+  useEffect(() => {
+    void refreshFiles();
+    return pollWhileVisible(refreshFiles, FILES_POLL_MS);
+  }, [refreshFiles]);
+
+  // Memoised on the listing itself: the poll hands back a fresh array every time, and rebuilding the ref lists per tick is work for nothing.
+  const vocabulary = useMemo(() => playlistVocabulary(files), [files]);
+
+  // Absent is NOT an error: the editor opens on what the file WOULD say, and the gabarit is `saved` too, so opening writes nothing.
+  useEffect(() => {
+    let alive = true;
+    setContent(null);
+    setStatus("");
+    const name = path.split("/").pop();
+    const stem = name === undefined ? "playlist" : stripDocExt(name);
+    void api
+      .read(path)
+      .then((f) => {
+        if (!alive) return;
+        const disk = f.content.trim() ? f.content : playlistStub(stem);
+        // An edit that could not be written outlived this screen — give it back, not disk.
+        setContent(recallBuffer(path) ?? disk);
+        setSaved(disk);
+        if (!f.content.trim()) setStatus(m["pls.emptyFile"]());
+      })
+      .catch(() => {
+        if (!alive) return;
+        setContent(recallBuffer(path) ?? playlistStub(stem));
+        setSaved(playlistStub(stem));
+        setStatus(m["pls.noFileYet"]());
+      });
+    return () => {
+      alive = false;
+    };
+  }, [path]);
+
+  /** The lines, as the text CURRENTLY says — not as the last save did, which is the whole point of the split. */
+  const [items, setItems] = useState<PlaylistItem[]>([]);
+  useEffect(() => {
+    if (content == null) return setItems([]);
+    const parsed = parsePlaylist(content);
+    // Only ever REPLACED by something readable: half-typed text fails on nearly every keystroke, and the footer says when the pane is behind.
+    if (parsed) setItems(parsed.items);
+  }, [content]);
+  const broken = useMemo(
+    () => content != null && parsePlaylist(content) === null,
+    [content],
+  );
+
+  /** A morceau picked in the search, as a line at the end of the file: the EDIT is the TEXT, so the row appears because the buffer changed. */
+  const addItem = useCallback((item: PlaylistItem) => {
+    setContent((cur) => {
+      if (cur == null) return cur;
+      // `addRefusal` keeps the button disabled for the shapes this cannot extend, so getting here means the file changed shape under us.
+      return editK7xText(cur, (doc) => appendPlaylistItem(doc, item)) ?? cur;
+    });
+  }, []);
+
+  /** Why the search cannot write a line right now — computed HERE, being a fact about the text the pane has never seen. */
+  const addRefusal = useMemo(() => {
+    if (content == null) return m["pls.notLoaded"]();
+    return editK7xText(content, (doc) =>
+      appendPlaylistItem(doc, { song: "x" }),
+    ) === null
+      ? m["pls.addUnsupported"]()
+      : "";
+  }, [content]);
+
+  /** Drop a line, by the position the pane draws — the same edit `playlist song remove` makes. */
+  const removeItem = useCallback((index: number) => {
+    setContent((cur) =>
+      cur == null
+        ? cur
+        : (editK7xText(cur, (doc) => removePlaylistItem(doc, index)) ?? cur),
+    );
+  }, []);
+
+  /** Reorder, likewise: the buffer is what changes, and the row moves because the text did. */
+  const moveItem = useCallback((from: number, to: number) => {
+    setContent((cur) =>
+      cur == null
+        ? cur
+        : (editK7xText(cur, (doc) => movePlaylistItem(doc, from, to)) ?? cur),
+    );
+  }, []);
+
+  /** Why those two would not work — an `items` that is no list, or a text that does not read (docs/playlists.md). */
+  const editRefusal = useMemo(() => {
+    if (content == null) return m["pls.notLoaded"]();
+    return editK7xText(content, (doc) => removePlaylistItem(doc, 0)) === null &&
+      items.length
+      ? m["pls.moveUnsupported"]()
+      : "";
+  }, [content, items.length]);
+
+  // No Save button: written as soon as the buffer reads as a playlist.
+  const write = useCallback(
+    async (next: string) => {
+      await api.write(path, next);
+      setSaved(next);
+      setStatus(m["pls.saved"]({ path }));
+      onSaved();
+    },
+    [path, onSaved],
+  );
+  const autosave = useAutosave({
+    path: content == null ? null : path,
+    text: content ?? "",
+    saved,
+    write,
+    validate: (_path, text) => playlistValidity(text),
+  });
+
+  return (
+    <div className="flex h-full min-h-0 flex-col bg-background text-foreground">
+      {panel ? null : (
+        <header className="flex items-center gap-3 border-b border-border px-3 py-2">
+          <Button variant="secondary" size="sm" onClick={onBack}>
+            <ArrowLeft className="mr-1 h-4 w-4" /> Retour
+          </Button>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 truncate text-sm font-semibold">
+              <ListMusic className="h-4 w-4" /> Playlist · {name}
+            </div>
+            <div className="truncate font-mono text-xs text-muted-foreground">
+              {path}
+            </div>
+          </div>
+          {/* In place of a Save button: silent while saved, amber with the reason otherwise, in EditorTab's own two words. */}
+          <span
+            className={`ml-auto flex min-w-0 shrink-0 items-center gap-1 text-xs ${
+              autosave.status === "held" || autosave.status === "error"
+                ? "text-amber-500"
+                : "text-muted-foreground"
+            }`}
+            title={autosave.reason ?? undefined}
+          >
+            {autosave.status === "saving" && (
+              <Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+            )}
+            <span className="truncate">{saveLabel(autosave.status, null)}</span>
+          </span>
+        </header>
+      )}
+
+      {content == null ? (
+        <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> chargement…
+        </div>
+      ) : (
+        <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+          {/* Side by side when there is room, STACKED otherwise, and absent in the panel, where neither half fits — see `panel`. */}
+          {panel ? null : (
+            <div className="h-1/2 min-h-0 shrink-0 border-b border-border md:h-auto md:w-1/2 md:border-r md:border-b-0">
+              <YamlPane
+                path={path}
+                content={content}
+                // The path cannot say what this file is, so the vocabulary comes from the files polled above (../playlistVocabulary.ts).
+                vocabulary={vocabulary}
+                vimMode={vimMode}
+                onChange={setContent}
+                onSave={autosave.flush}
+              />
+            </div>
+          )}
+          <div className="min-h-0 min-w-0 flex-1">
+            <PlaylistPane
+              items={items}
+              files={files}
+              playlist={stripDocExt(path.replace(/^_playlists\//, ""))}
+              onAdd={addItem}
+              addRefusal={addRefusal}
+              onRemove={removeItem}
+              onMove={moveItem}
+              editRefusal={editRefusal}
+              onRun={onRun}
+            />
+          </div>
+        </div>
+      )}
+
+      <footer className="flex shrink-0 items-center gap-3 border-t px-3 py-1 text-xs text-muted-foreground">
+        {/* Said here and not over the list: text stops parsing on nearly every keystroke, and a pane emptying itself each time would flicker. */}
+        {broken ? (
+          <span className="text-destructive">{m["pls.brokenYaml"]()}</span>
+        ) : null}
+        {filesError ? (
+          <span className="text-destructive">
+            {m["pls.files"]()} : {filesError}
+          </span>
+        ) : null}
+        <span className="min-w-0 flex-1 truncate text-right">{status}</span>
+      </footer>
+    </div>
+  );
+}

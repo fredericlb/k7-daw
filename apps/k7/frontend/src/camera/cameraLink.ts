@@ -1,0 +1,185 @@
+// cameraLink.ts — this device AS a camera: it holds the account's camera socket on k7's backend,
+// listed under its device name, and answers each viewer that asks with a peer connection carrying
+// the one stream it shows on screen. The server only relays signalling; the picture goes peer to
+// peer. A socket that drops is dialled again with a fresh ticket. See packages/web-protocol/docs/cameras.md.
+
+import {
+  camerasSocketUrl,
+  cameraTicket,
+  sendCameraFrame,
+} from "@studio/k7-plugins/video/camera/remoteCamera";
+import {
+  type CameraFrame,
+  readCameraFrame,
+} from "@studio/web-protocol/cameras";
+import { offerStream, toPeer } from "./offer";
+
+/** Reconnect delay after the socket drops, doubling to the cap. */
+const RETRY_MS = 1000;
+const RETRY_MAX_MS = 30_000;
+/** How long each step may stay unanswered before it is retried: the ticket, then the socket's `hello`. */
+const STEP_MS = 10_000;
+
+export interface CameraModeState {
+  /** Connected and listed, or still dialling. */
+  status: "connecting" | "on" | "retrying";
+  /** The name the server listed it under — the one asked for, made unique within the account. */
+  name: string | null;
+  viewers: number;
+  error: string | null;
+}
+
+export interface CameraModeHandle {
+  /** Another lens, front to back: every viewer's track is replaced in place, no renegotiation. */
+  setStream(stream: MediaStream): void;
+  stop(): void;
+}
+
+export function startCameraMode(opts: {
+  name: string;
+  stream: MediaStream;
+  onState: (s: CameraModeState) => void;
+}): CameraModeHandle {
+  let stream = opts.stream;
+  let ws: WebSocket | null = null;
+  let stopped = false;
+  let timer = 0;
+  let wait = RETRY_MS;
+  let ice: RTCIceServer[] = [];
+  const peers = new Map<string, RTCPeerConnection>();
+  const state: CameraModeState = {
+    status: "connecting",
+    name: null,
+    viewers: 0,
+    error: null,
+  };
+  const emit = (patch: Partial<CameraModeState>) => {
+    Object.assign(state, patch);
+    opts.onState({ ...state });
+  };
+
+  const drop = (id: string) => {
+    peers.get(id)?.close();
+    peers.delete(id);
+  };
+
+  const answer = async (socket: WebSocket, id: string) => {
+    drop(id);
+    const local = await offerStream({
+      peers,
+      id,
+      config: { iceServers: ice },
+      stream,
+      tracks: stream.getVideoTracks(),
+      sendIce: (f) => sendCameraFrame(socket, f),
+      drop,
+    });
+    sendCameraFrame(socket, {
+      type: "offer",
+      to: id,
+      sdp: { type: local.type, sdp: local.sdp },
+    });
+  };
+
+  const onFrame = (socket: WebSocket, f: CameraFrame) => {
+    if (f.type === "hello")
+      return emit({ status: "on", name: f.name, error: null });
+    if (f.type === "viewers") return emit({ viewers: f.count });
+    if (f.type === "want" && f.from) {
+      const id = f.from;
+      // Carried rather than thrown: one viewer's failed negotiation must not close the socket.
+      void answer(socket, id).catch((e: Error) =>
+        sendCameraFrame(socket, { type: "problem", to: id, text: e.message }),
+      );
+      return;
+    }
+    if (f.type === "answer" || f.type === "ice" || f.type === "gone")
+      toPeer(peers, f, drop);
+  };
+
+  const retry = (error: string | null) => {
+    if (stopped) return;
+    emit({ status: "retrying", error, viewers: 0 });
+    timer = window.setTimeout(connect, wait);
+    wait = Math.min(wait * 2, RETRY_MAX_MS);
+  };
+
+  const connect = async () => {
+    if (stopped) return;
+    let ticket: string;
+    try {
+      // Bounded: a request nobody answers would otherwise hold this on "connecting" for good.
+      const t = await Promise.race([
+        cameraTicket(),
+        new Promise<never>((_, fail) =>
+          setTimeout(() => fail(new Error("no answer for a ticket")), STEP_MS),
+        ),
+      ]);
+      ticket = t.ticket;
+      ice = t.iceServers as RTCIceServer[];
+    } catch (e) {
+      return retry((e as Error).message);
+    }
+    if (stopped) return;
+    const socket = new WebSocket(
+      camerasSocketUrl({ ticket, role: "camera", name: opts.name }),
+    );
+    ws = socket;
+    // An upgrade nobody takes is never refused, only left open: no `hello` in time is a failed dial.
+    let listed = false;
+    const unanswered = window.setTimeout(() => {
+      if (listed || socket !== ws) return;
+      ws = null;
+      socket.close();
+      retry(
+        socket.readyState === WebSocket.OPEN ||
+          socket.readyState === WebSocket.CLOSING
+          ? "the server did not list this camera"
+          : "the server did not take the camera socket",
+      );
+    }, STEP_MS);
+    socket.onopen = () => {
+      wait = RETRY_MS;
+    };
+    socket.onmessage = (e) => {
+      if (socket !== ws) return;
+      const f = readCameraFrame(e.data);
+      if (f?.type === "hello") {
+        listed = true;
+        clearTimeout(unanswered);
+      }
+      if (f) onFrame(socket, f);
+    };
+    socket.onclose = (e) => {
+      clearTimeout(unanswered);
+      if (socket !== ws) return;
+      ws = null;
+      for (const id of [...peers.keys()]) drop(id);
+      // A refused upgrade closes with 1006 and no reason: say so rather than nothing.
+      retry(e.reason || (listed ? null : `the socket closed (${e.code})`));
+    };
+    // An error is followed by a close, which is where the retry lives.
+    socket.onerror = () => undefined;
+  };
+
+  void connect();
+
+  return {
+    setStream(next) {
+      stream = next;
+      const track = next.getVideoTracks()[0] ?? null;
+      for (const pc of peers.values())
+        for (const s of pc.getSenders())
+          if (s.track?.kind === "video" || s.track === null)
+            void s.replaceTrack(track).catch(() => undefined);
+    },
+    stop() {
+      stopped = true;
+      clearTimeout(timer);
+      for (const id of [...peers.keys()]) drop(id);
+      const closing = ws;
+      ws = null;
+      closing?.close();
+    },
+  };
+}

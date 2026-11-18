@@ -1,0 +1,441 @@
+{
+ "cases": [
+  {
+   "name": "a lane take",
+   "fn": "addTakeToTrack",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 2,
+     "length": 3.5
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "ret": "drums_2.1_261112T090503",
+   "changed": {
+    "p.k7/clips/drums_2.1_261112T090503.k7x": "source(\"clips/drums_2.1_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"2:4\")\n",
+    "p.k7/clips/drums_2.1_261112T090503.wav": "RIFF",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n  ref(\"drums_2.1_261112T090503\").start(\"2:1\"),\n])\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "a lane take at another tempo and metre",
+   "fn": "addTakeToTrack",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 3.25,
+     "length": 1.1
+    },
+    "doc": {
+     "tempo": 93,
+     "timeSigNumerator": 7,
+     "timeSigDenominator": 8
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "ret": "drums_2.4.36_261112T090503",
+   "changed": {
+    "p.k7/clips/drums_2.4.36_261112T090503.k7x": "source(\"clips/drums_2.4.36_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"1:4:1:2.77\")\n",
+    "p.k7/clips/drums_2.4.36_261112T090503.wav": "RIFF",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n  ref(\"drums_2.4.36_261112T090503\").start(\"2:4.36\"),\n])\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "a CRLF lane file",
+   "fn": "addTakeToTrack",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 2,
+     "length": 3.5
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\r\nevents([\r\n  ref(\"kick\").start(\"1:1:1\"),\r\n])\r\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "ret": "drums_2.1_261112T090503",
+   "changed": {
+    "p.k7/clips/drums_2.1_261112T090503.k7x": "source(\"clips/drums_2.1_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"2:4\")\n",
+    "p.k7/clips/drums_2.1_261112T090503.wav": "RIFF",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\r\nevents([\r\n  ref(\"kick\").start(\"1:1:1\"),\r\n  ref(\"drums_2.1_261112T090503\").start(\"2:1\"),\n])\r\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "a track id with spaces",
+   "fn": "addTakeToTrack",
+   "args": {
+    "take": {
+     "track": "lead synth",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 2,
+     "length": 3.5
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF",
+    "p.k7/nodes/lead synth.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n"
+   },
+   "ret": "lead-synth_2.1_261112T090503",
+   "changed": {
+    "p.k7/clips/lead-synth_2.1_261112T090503.k7x": "source(\"clips/lead-synth_2.1_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"2:4\")\n",
+    "p.k7/clips/lead-synth_2.1_261112T090503.wav": "RIFF",
+    "p.k7/nodes/lead synth.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n  ref(\"lead-synth_2.1_261112T090503\").start(\"2:1\"),\n])\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "a take whose file is gone",
+   "fn": "addTakeToTrack",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 2,
+     "length": 3.5
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF"
+   },
+   "thrown": "recorded file is missing: $DIR/p.k7/clips/tmp1.wav",
+   "changed": {}
+  },
+  {
+   "name": "a lane file that does not parse",
+   "fn": "addTakeToTrack",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 2,
+     "length": 3.5
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "events([\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "thrown": "unclosed \"[\" (1:8)",
+   "changed": {
+    "p.k7/clips/drums_2.1_261112T090503.k7x": "source(\"clips/drums_2.1_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"2:4\")\n",
+    "p.k7/clips/drums_2.1_261112T090503.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "a lane with no file",
+   "fn": "addTakeToTrack",
+   "args": {
+    "take": {
+     "track": "ghost",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 2,
+     "length": 3.5
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "thrown": "track \"ghost\" has no file in nodes/ — cannot add the recorded clip \"ghost_2.1_261112T090503\"",
+   "changed": {
+    "p.k7/clips/ghost_2.1_261112T090503.k7x": "source(\"clips/ghost_2.1_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"2:4\")\n",
+    "p.k7/clips/ghost_2.1_261112T090503.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "an armed take",
+   "fn": "addTakeToEvent",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 0,
+     "length": 4
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "target": {
+     "eventBeats": 0
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "ret": "drums_1.1_261112T090503",
+   "changed": {
+    "p.k7/clips/drums_1.1_261112T090503.k7x": "source(\"clips/drums_1.1_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"3:1\")\n",
+    "p.k7/clips/drums_1.1_261112T090503.wav": "RIFF",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\").takes([ref(\"drums_1.1_261112T090503\").start(\"1:1\")]).comp([\n    take(\"drums_1.1_261112T090503\").from(\"1:1\").to(\"3:1\"),\n  ]),\n])\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "a punch inside the take",
+   "fn": "addTakeToEvent",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 0.5,
+     "length": 6
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "target": {
+     "eventBeats": 0,
+     "punch": {
+      "from": 2,
+      "to": 4
+     }
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "ret": "drums_1.2_261112T090503",
+   "changed": {
+    "p.k7/clips/drums_1.2_261112T090503.k7x": "source(\"clips/drums_1.2_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"4:1\")\n",
+    "p.k7/clips/drums_1.2_261112T090503.wav": "RIFF",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\").takes([ref(\"drums_1.2_261112T090503\").start(\"1:2\")]).comp([\n    take(\"drums_1.2_261112T090503\").from(\"1:3\").to(\"2:1\"),\n  ]),\n])\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "a punch from its start only",
+   "fn": "addTakeToEvent",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 0.5,
+     "length": 6
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "target": {
+     "eventBeats": 0,
+     "punch": {
+      "from": 3
+     }
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "ret": "drums_1.2_261112T090503",
+   "changed": {
+    "p.k7/clips/drums_1.2_261112T090503.k7x": "source(\"clips/drums_1.2_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"4:1\")\n",
+    "p.k7/clips/drums_1.2_261112T090503.wav": "RIFF",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\").takes([ref(\"drums_1.2_261112T090503\").start(\"1:2\")]).comp([\n    take(\"drums_1.2_261112T090503\").from(\"1:4\").to(\"4:2\"),\n  ]),\n])\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "a punch outside the take",
+   "fn": "addTakeToEvent",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 0.5,
+     "length": 2
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "target": {
+     "eventBeats": 0,
+     "punch": {
+      "from": 20,
+      "to": 30
+     }
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "ret": "drums_1.2_261112T090503",
+   "changed": {
+    "p.k7/clips/drums_1.2_261112T090503.k7x": "source(\"clips/drums_1.2_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"2:1\")\n",
+    "p.k7/clips/drums_1.2_261112T090503.wav": "RIFF",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\").takes([ref(\"drums_1.2_261112T090503\").start(\"1:2\")]),\n])\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "an armed take on an event that is not there",
+   "fn": "addTakeToEvent",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 2,
+     "length": 3.5
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "target": {
+     "eventBeats": 8
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\nevents([\n  ref(\"kick\").start(\"1:1:1\"),\n])\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "thrown": "no event at 3:1 on drums",
+   "changed": {
+    "p.k7/clips/drums_2.1_261112T090503.k7x": "source(\"clips/drums_2.1_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"2:4\")\n",
+    "p.k7/clips/drums_2.1_261112T090503.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": null
+   }
+  },
+  {
+   "name": "an armed take over a CRLF lane file",
+   "fn": "addTakeToEvent",
+   "args": {
+    "take": {
+     "track": "drums",
+     "file": "$DIR/p.k7/clips/tmp1.wav",
+     "start": 0,
+     "length": 4
+    },
+    "doc": {
+     "tempo": 120,
+     "timeSigNumerator": 4,
+     "timeSigDenominator": 4
+    },
+    "target": {
+     "eventBeats": 0
+    },
+    "stamp": "261112T090503"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\r\nevents([\r\n  ref(\"kick\").start(\"1:1:1\"),\r\n])\r\n",
+    "p.k7/clips/kick.k7x": "source(\"kick.wav\")\n",
+    "p.k7/clips/kick.wav": "RIFF",
+    "p.k7/clips/tmp1.wav": "RIFF"
+   },
+   "ret": "drums_1.1_261112T090503",
+   "changed": {
+    "p.k7/clips/drums_1.1_261112T090503.k7x": "source(\"clips/drums_1.1_261112T090503.wav\")\nfrom(\"1:1\")\nto(\"3:1\")\n",
+    "p.k7/clips/drums_1.1_261112T090503.wav": "RIFF",
+    "p.k7/nodes/drums.k7x": "extends(\"@meta/track\")\r\nevents([\r\n  ref(\"kick\").start(\"1:1:1\").takes([ref(\"drums_1.1_261112T090503\").start(\"1:1\")]).comp([\n    take(\"drums_1.1_261112T090503\").from(\"1:1\").to(\"3:1\"),\n  ]),\r\n])\r\n",
+    "p.k7/clips/tmp1.wav": null
+   }
+  }
+ ]
+}

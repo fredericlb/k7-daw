@@ -1,0 +1,1176 @@
+{
+  "project": "k7-core/audio.tape.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.tape",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.tape.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.tape.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "To Tape 5",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.tape.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-drum-slam",
+        "name": "drums-drum-slam",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#c11f25",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.tape.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-drum-slam:fx-drum-slam",
+            "type": "Drum Slam",
+            "name": "fx-drum-slam",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.tape.k7/nodes/fx-drum-slam.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-from-tape",
+        "name": "drums-from-tape",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#d32222",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.tape.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-from-tape:fx-from-tape",
+            "type": "From Tape",
+            "name": "fx-from-tape",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.tape.k7/nodes/fx-from-tape.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-iron-oxide-5",
+        "name": "drums-iron-oxide-5",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.tape.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-iron-oxide-5:fx-iron-oxide-5",
+            "type": "Iron Oxide 5",
+            "name": "fx-iron-oxide-5",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.tape.k7/nodes/fx-iron-oxide-5.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-iron-oxide-classic",
+        "name": "drums-iron-oxide-classic",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e0493e",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.tape.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-iron-oxide-classic:fx-iron-oxide-classic",
+            "type": "Iron Oxide Classic",
+            "name": "fx-iron-oxide-classic",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.tape.k7/nodes/fx-iron-oxide-classic.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-tape-fat",
+        "name": "drums-tape-fat",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e25e50",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.tape.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-tape-fat:fx-tape-fat",
+            "type": "Tape Fat",
+            "name": "fx-tape-fat",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.tape.k7/nodes/fx-tape-fat.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-to-tape-5",
+        "name": "drums-to-tape-5",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.tape.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-to-tape-5:fx-to-tape-5",
+            "type": "To Tape 5",
+            "name": "fx-to-tape-5",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.tape.k7/nodes/fx-to-tape-5.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/tape",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "sat": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "SAT",
+                  "color": "#ff6a1a26"
+                },
+                "louder": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Louder",
+                  "bind": "Louder",
+                  "min": 0,
+                  "max": 1
+                },
+                "softer": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Softer",
+                  "bind": "Softer",
+                  "min": 0,
+                  "max": 1
+                },
+                "tape": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "TAPE",
+                  "color": "#3d7dff26"
+                },
+                "fatter": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Fatter",
+                  "bind": "Fatter",
+                  "min": 0,
+                  "max": 1
+                },
+                "flutter": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Flutter",
+                  "bind": "Flutter",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "drum-slam",
+              "from-tape",
+              "iron-oxide-5",
+              "iron-oxide-classic",
+              "tape-fat",
+              "to-tape-5"
+            ],
+            "engine": "to-tape-5",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-drum-slam": {
+        "from": "drums-drum-slam",
+        "use": [
+          {
+            "module": "fx-drum-slam",
+            "uses": "@k7-core/audio/tape",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "level_screen": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                },
+                "drive": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "Drive",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// The level going in (grey) against the level coming out (orange), from the module's own taps.\nconst FONT = \"8px ui-monospace, monospace\";\n\nfunction trace(ctx, arr, x0, W, H, color) {\n  const n = arr.length;\n  if (n < 2) return;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const v = Math.min(1, Math.max(0, arr[i] ?? 0));\n    const x = x0 + (i / (n - 1)) * W;\n    const y = H - 4 - v * (H - 14);\n    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n  }\n  ctx.stroke();\n}\n\nfunction last(arr) {\n  return arr && arr.length ? Math.min(1, Math.max(0, arr[arr.length - 1] ?? 0)) : 0;\n}\n\nexport default {\n  level_screen(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    const inp = Array.isArray(input) ? input : [];\n    const out = Array.isArray(output) ? output : [];\n    const barW = 10;\n    const plotW = Math.max(10, W - 2 * barW - 16);\n    ctx.strokeStyle = \"#6b6b6b\";\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(0, H - 3.5);\n    ctx.lineTo(plotW, H - 3.5);\n    ctx.stroke();\n    trace(ctx, inp, 0, plotW, H, \"#6b6b6b\");\n    trace(ctx, out, 0, plotW, H, \"#ff6a1a\");\n    const bx = plotW + 8;\n    const top = 10;\n    const span = Math.max(1, H - 14);\n    const vi = last(inp);\n    const vo = last(out);\n    ctx.fillStyle = \"#6b6b6b\";\n    ctx.fillRect(bx, top + span * (1 - vi), barW - 2, span * vi);\n    ctx.fillStyle = \"#ff6a1a\";\n    ctx.fillRect(bx + barW, top + span * (1 - vo), barW - 2, span * vo);\n    ctx.font = FONT;\n    ctx.fillStyle = \"#6b6b6b\";\n    ctx.fillText(\"IN\", 2, 8);\n    ctx.fillStyle = \"#ff6a1a\";\n    ctx.fillText(\"OUT\", 18, 8);\n    if (!inp.length && !out.length) {\n      ctx.fillStyle = \"#6b6b6b\";\n      ctx.fillText(\"NO SIGNAL\", Math.max(2, plotW / 2 - 20), H / 2);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "level_screen": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "Drive",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "drum-slam",
+              "from-tape",
+              "iron-oxide-5",
+              "iron-oxide-classic",
+              "tape-fat",
+              "to-tape-5"
+            ],
+            "engine": "drum-slam",
+            "params": {},
+            "pluginId": "drums-drum-slam:fx-drum-slam"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-from-tape": {
+        "from": "drums-from-tape",
+        "use": [
+          {
+            "module": "fx-from-tape",
+            "uses": "@k7-core/audio/tape",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "louder": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Louder",
+                  "bind": "Louder",
+                  "min": 0,
+                  "max": 1
+                },
+                "softer": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Softer",
+                  "bind": "Softer",
+                  "min": 0,
+                  "max": 1
+                },
+                "weight": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Weight",
+                  "bind": "Weight",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "louder": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Louder",
+                    "bind": "Louder",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "softer": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Softer",
+                    "bind": "Softer",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "weight": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Weight",
+                    "bind": "Weight",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "drum-slam",
+              "from-tape",
+              "iron-oxide-5",
+              "iron-oxide-classic",
+              "tape-fat",
+              "to-tape-5"
+            ],
+            "engine": "from-tape",
+            "params": {},
+            "pluginId": "drums-from-tape:fx-from-tape"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-iron-oxide-5": {
+        "from": "drums-iron-oxide-5",
+        "use": [
+          {
+            "module": "fx-iron-oxide-5",
+            "uses": "@k7-core/audio/tape",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "tone": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "TONE",
+                  "color": "#3ec96b26"
+                },
+                "tape_low": {
+                  "type": "fader",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Low",
+                  "bind": "Tape Low",
+                  "min": 0,
+                  "max": 1
+                },
+                "tape_high": {
+                  "type": "fader",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "High",
+                  "bind": "Tape High",
+                  "min": 0,
+                  "max": 1
+                },
+                "tape": {
+                  "type": "group",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "TAPE",
+                  "color": "#3d7dff26"
+                },
+                "flutter": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Flutter",
+                  "bind": "Flutter",
+                  "min": 0,
+                  "max": 1
+                },
+                "noise": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Noise",
+                  "bind": "Noise",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 5,
+                "widgets": {
+                  "tone": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 3,
+                    "label": "TONE",
+                    "color": "#3ec96b26"
+                  },
+                  "tape_low": {
+                    "type": "fader",
+                    "col": 1,
+                    "row": 0,
+                    "rowSpan": 3,
+                    "label": "Low",
+                    "bind": "Tape Low",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "tape_high": {
+                    "type": "fader",
+                    "col": 2,
+                    "row": 0,
+                    "rowSpan": 3,
+                    "label": "High",
+                    "bind": "Tape High",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "tape": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 3,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "TAPE",
+                    "color": "#3d7dff26"
+                  },
+                  "flutter": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 3,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Flutter",
+                    "bind": "Flutter",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "noise": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 3,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Noise",
+                    "bind": "Noise",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "drum-slam",
+              "from-tape",
+              "iron-oxide-5",
+              "iron-oxide-classic",
+              "tape-fat",
+              "to-tape-5"
+            ],
+            "engine": "iron-oxide-5",
+            "params": {},
+            "pluginId": "drums-iron-oxide-5:fx-iron-oxide-5"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-iron-oxide-classic": {
+        "from": "drums-iron-oxide-classic",
+        "use": [
+          {
+            "module": "fx-iron-oxide-classic",
+            "uses": "@k7-core/audio/tape",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 3,
+              "widgets": {
+                "tape_speed": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "Speed",
+                  "bind": "Tape Speed",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "drum-slam",
+              "from-tape",
+              "iron-oxide-5",
+              "iron-oxide-classic",
+              "tape-fat",
+              "to-tape-5"
+            ],
+            "engine": "iron-oxide-classic",
+            "params": {},
+            "pluginId": "drums-iron-oxide-classic:fx-iron-oxide-classic"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-tape-fat": {
+        "from": "drums-tape-fat",
+        "use": [
+          {
+            "module": "fx-tape-fat",
+            "uses": "@k7-core/audio/tape",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "lean_fat": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Lean/Ft",
+                  "bind": "Lean/Ft",
+                  "min": 0,
+                  "max": 1
+                },
+                "depth": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Depth",
+                  "bind": "Depth",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "drum-slam",
+              "from-tape",
+              "iron-oxide-5",
+              "iron-oxide-classic",
+              "tape-fat",
+              "to-tape-5"
+            ],
+            "engine": "tape-fat",
+            "params": {},
+            "pluginId": "drums-tape-fat:fx-tape-fat"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-to-tape-5": {
+        "from": "drums-to-tape-5",
+        "use": [
+          {
+            "module": "fx-to-tape-5",
+            "uses": "@k7-core/audio/tape",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "sat": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "SAT",
+                  "color": "#ff6a1a26"
+                },
+                "louder": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Louder",
+                  "bind": "Louder",
+                  "min": 0,
+                  "max": 1
+                },
+                "softer": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Softer",
+                  "bind": "Softer",
+                  "min": 0,
+                  "max": 1
+                },
+                "tape": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "TAPE",
+                  "color": "#3d7dff26"
+                },
+                "fatter": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Fatter",
+                  "bind": "Fatter",
+                  "min": 0,
+                  "max": 1
+                },
+                "flutter": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Flutter",
+                  "bind": "Flutter",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "drum-slam",
+              "from-tape",
+              "iron-oxide-5",
+              "iron-oxide-classic",
+              "tape-fat",
+              "to-tape-5"
+            ],
+            "engine": "to-tape-5",
+            "params": {},
+            "pluginId": "drums-to-tape-5:fx-to-tape-5"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-drum-slam",
+      "drums-from-tape",
+      "drums-iron-oxide-5",
+      "drums-iron-oxide-classic",
+      "drums-tape-fat",
+      "drums-to-tape-5"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-drum-slam": "#c11f25",
+      "drums-from-tape": "#d32222",
+      "drums-iron-oxide-5": "#dd322c",
+      "drums-iron-oxide-classic": "#e0493e",
+      "drums-tape-fat": "#e25e50",
+      "drums-to-tape-5": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-drum-slam": "audio",
+      "drums-from-tape": "audio",
+      "drums-iron-oxide-5": "audio",
+      "drums-iron-oxide-classic": "audio",
+      "drums-tape-fat": "audio",
+      "drums-to-tape-5": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-drum-slam": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-from-tape": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-iron-oxide-5": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-iron-oxide-classic": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-tape-fat": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-to-tape-5": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

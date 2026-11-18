@@ -1,0 +1,17 @@
+[package]
+name = "k7-libraries"
+description = "A machine's libraries in Rust: the store of folders, versions, seeds and manifests, and the routes behind the hub's secret (docs/libraries.md)."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+# Names, atomic writes, the path model and the confinement gate: the file service's own.
+k7-file-service = { path = "../k7-file-service" }
+# The manifests are k7x files.
+k7x = { path = "../../../../../packages/k7x/rust" }
+serde_json.workspace = true
+tokio = { workspace = true, features = ["sync", "rt", "time", "fs"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "time"] }

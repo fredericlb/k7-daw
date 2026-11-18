@@ -1,0 +1,8 @@
+[
+{"type":"list-plugins"},
+{"type":"project","doc":{"name":"untitled","tempo":120.0,"sampleRate":48000.0,"timeSigNumerator":4.0,"timeSigDenominator":4.0,"masterVolume":0.0,"masterPlugins":[],"recordDir":"<DIR>/home/workspace/songs/p.k7/clips","tracks":[{"id":"gtr","name":"gtr","role":"regular","contentType":"audio","group":"","generated":false,"color":"#3cb450","mute":false,"solo":false,"disabled":false,"inputChannels":[1.0],"outputChannels":[],"monitor":"auto","inputGain":0.0,"clips":[],"plugins":[],"sends":[],"automation":[]}],"groups":[],"markers":[],"settings":{"metronome":false,"metronomeLevel":0.6,"countIn":1.0}}},
+{"type":"transport","action":"stop"},
+{"type":"flush"},
+{"type":"record-enable","enabled":false},
+{"type":"drop-session"}
+]

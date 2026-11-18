@@ -1,0 +1,542 @@
+{
+ "cases": [
+  {
+   "name": "the needs, once each, nothing built from source",
+   "fn": "pluginNeeds",
+   "args": {
+    "project": "song.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}"
+   },
+   "ret": [
+    {
+     "format": "internal",
+     "name": "4osc"
+    },
+    {
+     "format": "vst3",
+     "name": "serum"
+    }
+   ],
+   "changed": {}
+  },
+  {
+   "name": "a project with no plugin",
+   "fn": "pluginNeeds",
+   "args": {
+    "project": "other.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}"
+   },
+   "ret": [],
+   "changed": {}
+  },
+  {
+   "name": "a folder that is no project",
+   "fn": "pluginNeeds",
+   "args": {
+    "project": "notes.txt"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}"
+   },
+   "thrown": "not a project: notes.txt",
+   "changed": {}
+  },
+  {
+   "name": "a project that is not there",
+   "fn": "pluginNeeds",
+   "args": {
+    "project": "ghost.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}"
+   },
+   "thrown": "not a project: ghost.k7",
+   "changed": {}
+  },
+  {
+   "name": "a path climbing out",
+   "fn": "pluginNeeds",
+   "args": {
+    "project": "../x.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}"
+   },
+   "thrown": "path escapes the workspace: ../x.k7",
+   "changed": {}
+  },
+  {
+   "name": "a module that does not read",
+   "fn": "pluginNeeds",
+   "args": {
+    "project": "song.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin(\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}"
+   },
+   "ret": [
+    {
+     "format": "internal",
+     "name": "4osc"
+    },
+    {
+     "format": "vst3",
+     "name": "Serum"
+    }
+   ],
+   "changed": {}
+  },
+  {
+   "name": "the score against the scan",
+   "fn": "pluginCompat",
+   "args": {
+    "project": "song.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}"
+   },
+   "ret": {
+    "score": 50,
+    "missing": [
+     {
+      "format": "vst3",
+      "name": "serum"
+     }
+    ]
+   },
+   "changed": {}
+  },
+  {
+   "name": "an empty scan cannot say",
+   "fn": "pluginCompat",
+   "args": {
+    "project": "song.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[]}]}"
+   },
+   "ret": null,
+   "changed": {}
+  },
+  {
+   "name": "no scan file",
+   "fn": "pluginCompat",
+   "args": {
+    "project": "song.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n"
+   },
+   "ret": null,
+   "changed": {}
+  },
+  {
+   "name": "no scan and nothing asked",
+   "fn": "pluginCompat",
+   "args": {
+    "project": "other.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n"
+   },
+   "ret": {
+    "score": 100,
+    "missing": []
+   },
+   "changed": {}
+  },
+  {
+   "name": "a full house",
+   "fn": "pluginCompat",
+   "args": {
+    "project": "song.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Serum\",\"format\":\"VST3\"}]}]}"
+   },
+   "ret": {
+    "score": 100,
+    "missing": []
+   },
+   "changed": {}
+  },
+  {
+   "name": "a scan of garbage",
+   "fn": "pluginCompat",
+   "args": {
+    "project": "song.k7"
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{ nope"
+   },
+   "ret": null,
+   "changed": {}
+  },
+  {
+   "name": "the imported clips by id",
+   "fn": "resources",
+   "args": {
+    "project": ""
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}",
+    "ws/song.k7/clips/b_voice.k7x": "source(\"voice.wav\")\n",
+    "ws/song.k7/clips/a_film.k7x": "source(\"film.mp4\")\nproxy(\"film.proxy.mp4\")\n",
+    "ws/song.k7/clips/take.k7x": "source(\"takes/t.wav\")\n",
+    "ws/song.k7/clips/drums_1.1_261112T090503.k7x": "source(\"t.wav\")\n",
+    "ws/song.k7/clips/pic.k7x": "source(\"pic.png\")\n",
+    "ws/song.k7/clips/gone.k7x": "source(\"nowhere.flac\")\n",
+    "ws/song.k7/clips/subs.k7x": "source(\"subs.srt\")\n",
+    "ws/song.k7/clips/webm.k7x": "source(\"clip.webm\")\n",
+    "ws/song.k7/voice.wav": "RIFFxxxxxxxx",
+    "ws/song.k7/film.mp4": "0123456789",
+    "ws/song.k7/film.proxy.mp4": "01234",
+    "ws/song.k7/takes/t.wav": "RIFF",
+    "ws/song.k7/t.wav": "RIFF",
+    "ws/song.k7/clip.webm": "abc"
+   },
+   "ret": [
+    {
+     "id": "a_film",
+     "kind": "video",
+     "source": "song.k7/film.mp4",
+     "preview": "song.k7/film.proxy.mp4",
+     "bytes": 10
+    },
+    {
+     "id": "b_voice",
+     "kind": "audio",
+     "source": "song.k7/voice.wav",
+     "bytes": 12
+    },
+    {
+     "id": "gone",
+     "kind": "audio",
+     "source": "song.k7/nowhere.flac",
+     "bytes": 0,
+     "missing": true
+    },
+    {
+     "id": "take",
+     "kind": "audio",
+     "source": "song.k7/takes/t.wav",
+     "bytes": 4
+    },
+    {
+     "id": "webm",
+     "kind": "video",
+     "source": "song.k7/clip.webm",
+     "bytes": 3
+    }
+   ],
+   "changed": {}
+  },
+  {
+   "name": "no clips folder",
+   "fn": "resources",
+   "args": {
+    "project": ""
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}"
+   },
+   "ret": [],
+   "changed": {}
+  },
+  {
+   "name": "no open project",
+   "fn": "resources",
+   "args": {
+    "project": ""
+   },
+   "tree": {
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}",
+    "ws/song.k7/clips/b_voice.k7x": "source(\"voice.wav\")\n",
+    "ws/song.k7/clips/a_film.k7x": "source(\"film.mp4\")\nproxy(\"film.proxy.mp4\")\n",
+    "ws/song.k7/clips/take.k7x": "source(\"takes/t.wav\")\n",
+    "ws/song.k7/clips/drums_1.1_261112T090503.k7x": "source(\"t.wav\")\n",
+    "ws/song.k7/clips/pic.k7x": "source(\"pic.png\")\n",
+    "ws/song.k7/clips/gone.k7x": "source(\"nowhere.flac\")\n",
+    "ws/song.k7/clips/subs.k7x": "source(\"subs.srt\")\n",
+    "ws/song.k7/clips/webm.k7x": "source(\"clip.webm\")\n",
+    "ws/song.k7/voice.wav": "RIFFxxxxxxxx",
+    "ws/song.k7/film.mp4": "0123456789",
+    "ws/song.k7/film.proxy.mp4": "01234",
+    "ws/song.k7/takes/t.wav": "RIFF",
+    "ws/song.k7/t.wav": "RIFF",
+    "ws/song.k7/clip.webm": "abc"
+   },
+   "ret": [],
+   "changed": {}
+  },
+  {
+   "name": "an optimized preview",
+   "fn": "resources",
+   "args": {
+    "project": ""
+   },
+   "tree": {
+    ".active-projects/ws": "song.k7",
+    "ws/song.k7/project.k7x": "project({ name: \"n\" })\n",
+    "ws/song.k7/nodes/synth.k7x": "extends(\"@workspace/instruments/synth\")\n",
+    "ws/song.k7/nodes/lead.k7x": "extends(\"@workspace/instruments/lead\")\n",
+    "ws/song.k7/nodes/verb.k7x": "extends(\"@workspace/audio/verb\")\n",
+    "ws/song.k7/nodes/dsp.k7x": "extends(\"@workspace/audio/dsp\")\n",
+    "ws/song.k7/graph.k7x": "modules({ synth: [\"OUT\"], lead: [\"OUT\"], verb: [\"OUT\"], dsp: [\"OUT\"] })\n",
+    "ws/_modules/instruments/synth/module.k7x": "plugin({ type: \"internal\", name: \"4osc\" })\n",
+    "ws/_modules/instruments/lead/module.k7x": "plugin({ type: \"VST3\", name: \"Serum\" })\n",
+    "ws/_modules/audio/verb/module.k7x": "plugin({ type: \"vst3\", name: \"serum\" })\n",
+    "ws/_modules/audio/dsp/module.k7x": "plugin({ type: \"jsdsp\", name: \"dsp\" })\n",
+    "ws/other.k7/project.k7x": "project({ name: \"o\" })\n",
+    "ws/notes.txt": "x\n",
+    "home/exts.json": "{\"entries\":[{\"plugins\":[{\"name\":\"4OSC\",\"format\":\"internal\",\"id\":\"4osc\"},{\"name\":\"Other\",\"format\":\"VST3\"}]}]}",
+    "ws/song.k7/clips/b_voice.k7x": "source(\"voice.wav\")\n",
+    "ws/song.k7/clips/a_film.k7x": "source(\"film.mp4\")\noptimized(\"film.opt.mp4\")\n",
+    "ws/song.k7/clips/take.k7x": "source(\"takes/t.wav\")\n",
+    "ws/song.k7/clips/drums_1.1_261112T090503.k7x": "source(\"t.wav\")\n",
+    "ws/song.k7/clips/pic.k7x": "source(\"pic.png\")\n",
+    "ws/song.k7/clips/gone.k7x": "source(\"nowhere.flac\")\n",
+    "ws/song.k7/clips/subs.k7x": "source(\"subs.srt\")\n",
+    "ws/song.k7/clips/webm.k7x": "source(\"clip.webm\")\n",
+    "ws/song.k7/voice.wav": "RIFFxxxxxxxx",
+    "ws/song.k7/film.mp4": "0123456789",
+    "ws/song.k7/film.proxy.mp4": "01234",
+    "ws/song.k7/takes/t.wav": "RIFF",
+    "ws/song.k7/t.wav": "RIFF",
+    "ws/song.k7/clip.webm": "abc",
+    "ws/song.k7/film.opt.mp4": "01"
+   },
+   "ret": [
+    {
+     "id": "a_film",
+     "kind": "video",
+     "source": "song.k7/film.mp4",
+     "preview": "song.k7/film.opt.mp4",
+     "bytes": 10
+    },
+    {
+     "id": "b_voice",
+     "kind": "audio",
+     "source": "song.k7/voice.wav",
+     "bytes": 12
+    },
+    {
+     "id": "gone",
+     "kind": "audio",
+     "source": "song.k7/nowhere.flac",
+     "bytes": 0,
+     "missing": true
+    },
+    {
+     "id": "take",
+     "kind": "audio",
+     "source": "song.k7/takes/t.wav",
+     "bytes": 4
+    },
+    {
+     "id": "webm",
+     "kind": "video",
+     "source": "song.k7/clip.webm",
+     "bytes": 3
+    }
+   ],
+   "changed": {}
+  }
+ ]
+}

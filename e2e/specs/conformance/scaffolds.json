@@ -1,0 +1,118 @@
+{
+  "arrangement": {
+    "files": {
+      "algo/pattern.strudel": "31543079fb03ab097bb78d5e846107b0262431f3a77dd51a1a44d2b2c38fe76b",
+      "chains/kit.k7x": "4722a3f2d4ca4e93d7355b90c701a1bab4621ad1dd02129896113030acc46584",
+      "chains/live.k7x": "6f7379c786eaa5701dd1595f8ae488b465fe463be3b6c53b6fea15e9ff92b79a",
+      "chains/master.k7x": "5cf1785d0b297bc5f567a324e311de682bc9d3ba33c3b74bfc06468ab9f6ad87",
+      "chains/melody.k7x": "99837ad5a27c8c8d22bddd0033c8b591358aae084c3a514f966bf80cff066925",
+      "chains/pad.k7x": "3693d00608bf4037362d6b9b5d52847f60109fabb1cc2f3149279696c75e8408",
+      "curves/.gitignore": "cee01ddde6c6412a2373f7e7174c1059959bcc0a78806fee4abc388f901b1968",
+      "project.k7x": "a10232d005208cdc0b115e7518ff86ca9a3709f8c7331c166fbb575cd238e3ea",
+      "sequences/melody.k7x": "9a0a923b7c28e85b56ff354691a8c804518b65bfe2e6414d8748ef884f595dba",
+      "settings.k7x": "2ea9cb0d2cee1c740b2654c18e16e0e3b8f97c015a525a195bc6ef2bcd367650",
+      "surfaces/timeline.k7x": "6748dbd5f624700ffed6a7e545baade84b8d9ab62ed8a02bc1ad55ec6e467ade",
+      "tracks/kit.k7x": "d201a8484110580cb85724dfe66007090cafdde94f35ced955261d106ba571a5",
+      "tracks/live.k7x": "555fa9b6ab4597223cdba230249c1c601c70cd1afbc52385b019f3eed369bb9e",
+      "tracks/melody.k7x": "cb4198629ef702cba60f472c9ee0c8c2b9410511c26f2b793f9549170e980624",
+      "tracks/pad.k7x": "95d28afbf8c22dbfd4c723d5e4cc5e2cc190453b7001db61825082ad927f06a6"
+    },
+    "workspace": [
+      "_modules/instruments/synth/module.k7x"
+    ]
+  },
+  "mix": {
+    "files": {
+      "assemblies/turntableA.k7x": "909e4d82d4bbffe78dcffded872bfe4792bf2f34de6714c4404d73e49e51ef55",
+      "assemblies/turntableB.k7x": "95bb92077b792bd4d4a6f09be0c62d90d108077fb3f60bf10507ce3bc7be76f3",
+      "graph.k7x": "d1ed11d325af3de86e7735bc680a6e9c243d95d794b947cb5b54a442adbfc171",
+      "mix.k7x": "d2da36f4cd328e20857457fcefe98acf581a080a06c690568ef76f39ba7e97c2",
+      "nodes/cueA.k7x": "3c68f6fd283549bb01354ee7e739e74d9060fce40022c3e7ae7b7f6a39c10555",
+      "nodes/cueB.k7x": "aff8fc1f3482702ced1cf1736684ec27c2307612ad411ad797beb03e8ec70be0",
+      "nodes/deckA.k7x": "7b585c389caf701f542257edae0cde6250a50d849d0f8f98c8579560174099e8",
+      "nodes/deckB.k7x": "f7811a3c1d4312895be543482b6996e31d3ef1fe35e94543eba0c71400a90a6c",
+      "nodes/echoA.k7x": "fb9903546297ff058aca12e4d4799dad56dc55be63b9985c0ad75a2b4a2a1e9b",
+      "nodes/echoB.k7x": "74b7e16164eacb2de99f6c6799e242be97edf2d76967bf8a13aa4f65a740ab06",
+      "nodes/eqA.k7x": "66ededd2feda2daf9b96d158092641b164a44245a7d0775db6ceaef5ad7e5ab8",
+      "nodes/eqB.k7x": "54d1f0619906b72e66f5e566240c04167cf74b0fd7184484eb82cce50aab875a",
+      "nodes/fadeA.k7x": "fb64197f1ac32bfeab057c4facbc7b122f90f192670a1a0832528eb0b02e98c0",
+      "nodes/fadeB.k7x": "5878dda590ea48e33f2dda3d0994d210eabc10c1f555c010dabc873e18a7cdf8",
+      "nodes/filterA.k7x": "b8e6c5896d3af8ae44a0595d18eb7b5450f58b556494fa3378e0438135eac4b1",
+      "nodes/filterB.k7x": "7792aaf57bc0be7b7fc024fe0f5663f4b4d7bfbcfe3e08bd1cc1364fa758e506",
+      "nodes/levelA.k7x": "317179490577aabaedb28c1cac3288f0c2a6f7f8449020543cb1e8c27fd2a431",
+      "nodes/levelB.k7x": "6b5881155f0ee5bd9ff365c52181455cf3124195df2c58ae5661037d9a35a37d",
+      "nodes/platterA.k7x": "cb93bb5ef23b231a83934053b4282f9e59fbc83171dcbdd2c8c1f5249c377349",
+      "nodes/platterB.k7x": "0c0e64a9f19e7769e6ba908dfaf1b08b249895660f7ec4c977a82f7219bdf97d",
+      "nodes/platterBassA.k7x": "3a4429b4964913b32b6465d2b4cc56371690c8b7852a0b3ca6b72209bd609369",
+      "nodes/platterBassB.k7x": "b9186cc5ad426d3642f2bfcfeb2ef5f5f1d96190969c9398c1d98eb0343cf2d9",
+      "nodes/platterDrumsA.k7x": "ef11daaf207a1cb2862b6acc3435e39bd3ce6b76f43e9aa639a7420c4a4fcc46",
+      "nodes/platterDrumsB.k7x": "ec5a04b1a19ae4130302f9dfffda2b26affe21296b92bf05d4cc5635c3ed4749",
+      "nodes/platterOtherA.k7x": "9385945dfea3ac98b769e42297a7cb411c2f27f5c7719aea9a2d221400e26102",
+      "nodes/platterOtherB.k7x": "d7b7d00aa52e5e3dfa753e07b2202c39b1b893a29340aa82c779dbe1d012e064",
+      "nodes/platterVocalsA.k7x": "451d69349c21379a8c001010f4d3d49d65192f4e6677f3e6b3ddfef877227827",
+      "nodes/platterVocalsB.k7x": "602bd3cd67594982761def08c1891cf86b125c75dea07cf989949d6610be579e",
+      "nodes/stemBassA.k7x": "a65e11fe99eb0306fb2e8690843fc14a2e5dec2d988ff23ddf9154f204489347",
+      "nodes/stemBassB.k7x": "664b5ade4eba882448808a0e0971758609452a1db8a10c97052385e4572b5671",
+      "nodes/stemDrumsA.k7x": "94a1a81c1939032063b063557150ca76b2751bddc11d607a7fce63d96699b20d",
+      "nodes/stemDrumsB.k7x": "73800d959cd1227fd634c851421d0b99c568d4db35b8d5c5bf0044426d07752b",
+      "nodes/stemOtherA.k7x": "cc8d5b5a16145d307c216548b070fa8779a762d40507c70f0e5784c0818c4d48",
+      "nodes/stemOtherB.k7x": "843769d2b5a8ae8c1cd702fea592537cc15ba862029b552150f41bed1ca09959",
+      "nodes/stemVocalsA.k7x": "78dd79b52a8f0e4c26d5646401dc999fcf76f4590baa572a7e0ad43024b6abd2",
+      "nodes/stemVocalsB.k7x": "4dd9b4425c9026f595cf6ec6352a5e0c2b69f76a5668b6e4d1bb12a1681ed6b7",
+      "nodes/tempoA.k7x": "f92b472dcd32e0a06ad67faadcd72c1a61fafda9865df4a705909e01baa96363",
+      "nodes/tempoB.k7x": "d1e500bf81cd785691009e2226578ce08e5ba2a431eb12b056161a58f50880ea",
+      "nodes/trimA.k7x": "87fa731d7aedf600408f506016c52c2190952d5ef3cd7f9c97d7208b01698f56",
+      "nodes/trimB.k7x": "54fafc59498d83d5792f0344f9a9279a2d34ef6f81136087e9147f1567921425",
+      "project.k7x": "83ec0685ca88f86a099c9016724fbba02d791f0312267f52354648150f10167a",
+      "surfaces/desk.k7x": "5ab1b0265f36eb4939d7e1edc092c27d8b6b3dce471f589586fc980c575880e7"
+    },
+    "workspace": []
+  },
+  "video": {
+    "files": {
+      "algo/pattern.strudel": "31543079fb03ab097bb78d5e846107b0262431f3a77dd51a1a44d2b2c38fe76b",
+      "chains/kit.k7x": "4722a3f2d4ca4e93d7355b90c701a1bab4621ad1dd02129896113030acc46584",
+      "chains/live.k7x": "6f7379c786eaa5701dd1595f8ae488b465fe463be3b6c53b6fea15e9ff92b79a",
+      "chains/main.k7x": "f8050088b4c1dfa348bf8f8acdf81695b2b94f6ac29cf60447fa06ce16808e9b",
+      "chains/master.k7x": "b4f850aac3628a7b2f40df089c2ec58bc15bffc2fe2f866479e8f7e0dde47e91",
+      "chains/melody.k7x": "99837ad5a27c8c8d22bddd0033c8b591358aae084c3a514f966bf80cff066925",
+      "chains/pad.k7x": "3693d00608bf4037362d6b9b5d52847f60109fabb1cc2f3149279696c75e8408",
+      "chains/picture.k7x": "c8c0c424c660ca971c04e7a3094a7377e644600d345426da5ad5430647d77eaa",
+      "clips/sample.k7x": "5407d555d817c8b56624990e0191d5927f678d94ad54399d21b9cc5ef521ec3a",
+      "clips/sample.mp4": "39d27548da02d814f2584eff8047faad0a9a165a634e86500efd355fca47fec5",
+      "curves/.gitignore": "cee01ddde6c6412a2373f7e7174c1059959bcc0a78806fee4abc388f901b1968",
+      "project.k7x": "2f99fb03d631b8b289118f68b003b5b673435b56ee19fc69b33889b6aebc6873",
+      "sequences/melody.k7x": "9a0a923b7c28e85b56ff354691a8c804518b65bfe2e6414d8748ef884f595dba",
+      "settings.k7x": "2ea9cb0d2cee1c740b2654c18e16e0e3b8f97c015a525a195bc6ef2bcd367650",
+      "surfaces/timeline.k7x": "6748dbd5f624700ffed6a7e545baade84b8d9ab62ed8a02bc1ad55ec6e467ade",
+      "surfaces/viewport.k7x": "98014f28a4cf7da7936e04c77526fd24cb215e3c7d2dca3a389f2162e4b68972",
+      "tracks/kit.k7x": "d201a8484110580cb85724dfe66007090cafdde94f35ced955261d106ba571a5",
+      "tracks/live.k7x": "555fa9b6ab4597223cdba230249c1c601c70cd1afbc52385b019f3eed369bb9e",
+      "tracks/main.k7x": "fd031604c841abd5230a0ac6c85001e06c42189dd4ac04a8409205b1c1f83acc",
+      "tracks/melody.k7x": "cb4198629ef702cba60f472c9ee0c8c2b9410511c26f2b793f9549170e980624",
+      "tracks/pad.k7x": "95d28afbf8c22dbfd4c723d5e4cc5e2cc190453b7001db61825082ad927f06a6"
+    },
+    "workspace": []
+  },
+  "live": {
+    "files": {
+      "chains/IN.k7x": "81f5e3ca429cef641c1701b01d4a11ff6bda6e478bdd348d64e8d1c18418c667",
+      "chains/master.k7x": "5cf1785d0b297bc5f567a324e311de682bc9d3ba33c3b74bfc06468ab9f6ad87",
+      "project.k7x": "81a8fdabe15861681635e54eb45618559e3628c0e8d77a8e74cfb4e7ca700938",
+      "settings.k7x": "232f0e218eb0f2cff665864a174c61f5767d9c61ae360019f5fc3a7c0efc7b5f"
+    },
+    "workspace": []
+  },
+  "live-video": {
+    "files": {
+      "chains/CAM.k7x": "2af2d322ce1a5c8577e84bea65c80c5000dd50a382b097c8637163701c6beb98",
+      "chains/IN.k7x": "81f5e3ca429cef641c1701b01d4a11ff6bda6e478bdd348d64e8d1c18418c667",
+      "chains/master.k7x": "5cf1785d0b297bc5f567a324e311de682bc9d3ba33c3b74bfc06468ab9f6ad87",
+      "chains/picture.k7x": "c8c0c424c660ca971c04e7a3094a7377e644600d345426da5ad5430647d77eaa",
+      "project.k7x": "d55e9ec5501a3d86c0503dbbe2e174d3831a62bc0f5e7dc60bb81d2d5593e8f6",
+      "settings.k7x": "232f0e218eb0f2cff665864a174c61f5767d9c61ae360019f5fc3a7c0efc7b5f",
+      "surfaces/viewport.k7x": "0a7c564fff985837380b430bc23509fc127dab654876576730ee45e7318b9666"
+    },
+    "workspace": []
+  }
+}

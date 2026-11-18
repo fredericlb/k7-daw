@@ -1,0 +1,22 @@
+# nextest's settings for the backend workspace (docs/rust-builds.md).
+# What a reader gets wrong: the hostile tests make folders of up to 20,000 files; run together they took five cores and woke
+# the Mac's file-event and security agents until the load passed 60, so they run one at a time, as their time bounds assume.
+
+# The group stays at 1 until the 2-at-a-time trial is measured over three runs (docs/rust-builds.md).
+[test-groups]
+file-churn = { max-threads = 1 }
+
+[[profile.default.overrides]]
+filter = 'test(/hostile|thousand/)'
+test-group = 'file-churn'
+
+# The tests that failed only under load and passed alone: a pass on retry shows as flaky, not as a rerun of the whole gate.
+# What a reader gets wrong: this list shrinks, as the queued `flaky-waits` job fixes each test; a new entry needs a reason.
+[[profile.default.overrides]]
+filter = 'test(/jobs_plugin/)'
+retries = 2
+
+# A deadlock check that hangs would hold a gate for ever: the ordering tests end in 30 s or are killed.
+[[profile.default.overrides]]
+filter = 'test(/tests_order::/)'
+slow-timeout = { period = "30s", terminate-after = 2 }

@@ -1,0 +1,207 @@
+// useVideoRecording.ts — a picture lane's own recording. Armed lane + record + play opens the
+// lane's INPUT (a webcam, the only one there is for now) and captures it; on stop the take lands in
+// `clips/` and is placed where the playhead was. Browser-side, top to bottom, for the reason the
+// lens itself is: the engine never hears about a camera (packages/song/docs/camera.md).
+// The MIDI capture beside it is the same shape — see useMidiRecording.ts.
+
+import type { EngineStore } from "@studio/engine-browser/store";
+import { lensOpener } from "@studio/k7-plugins/video/camera/opener";
+import { useUnsavedGuard } from "@studio/ui-editor/unsaved";
+import { type Lens, releaseLens } from "@studio/ui-eyes/camera";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { fileClip } from "../clipFiles";
+import { downloadBlob } from "../downloadBlob";
+import { m } from "../paraglide/messages.js";
+import {
+  closeTake,
+  dropSpool,
+  recordToSpool,
+  recoverSpools,
+  type Spool,
+} from "../takeSpool";
+import { extForMime, fileStamp, placeLine, takeId } from "../videoTake";
+
+export function useVideoRecording(opts: {
+  store: EngineStore;
+  /** The workspace-relative project folder, for the two writes — as `useTimelineDrop` takes it. */
+  project: string;
+  /** The picture lane armed, or null. One at a time: there is one camera and one take. */
+  armed: string | null;
+  /** The label that lane names, if it names one — `""` and absent both mean the machine's default. */
+  camera?: string;
+  recordEnabled: boolean;
+  /** The transport as `store.held()` says it, like `recordEnabled`: a short link drop must not file and reopen the take. */
+  playing: boolean;
+  runCommand: (line: string) => Promise<void>;
+  setStatus: (s: string) => void;
+  bumpReload: () => void;
+}): { recording: boolean } {
+  const {
+    store,
+    project,
+    armed,
+    camera,
+    recordEnabled,
+    playing,
+    runCommand,
+    setStatus,
+    bumpReload,
+  } = opts;
+
+  const [recording, setRecording] = useState(false);
+  // Guards the effect, which fires on every dependency change while one capture is already running.
+  const activeRef = useRef(false);
+  const recRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  // What carries a remote lens beyond its tracks — its peer connection — let go with them.
+  const closeRef = useRef<(() => void) | null>(null);
+  // Takes stopped but not yet filed: the page must not be left while one is, or it is lost with the tab.
+  const [filing, setFiling] = useState(0);
+  useUnsavedGuard(recording || filing > 0);
+  // Read inside the async start, which must not re-bind the whole effect on a status change.
+  const live = useRef({ store, project, runCommand, setStatus, bumpReload });
+  live.current = { store, project, runCommand, setStatus, bumpReload };
+
+  /** Let the lens go. A stream left running keeps the indicator lit and the device held until the tab closes. */
+  const release = useCallback(() => {
+    releaseLens({
+      stream: streamRef.current,
+      close: closeRef.current ?? undefined,
+    });
+    streamRef.current = null;
+    closeRef.current = null;
+    recRef.current = null;
+  }, []);
+
+  const finish = useCallback(
+    async (
+      bytes: Blob,
+      seconds: number,
+      take: { lane: string; at: number },
+      spool: Spool,
+    ) => {
+      const { project: dir, runCommand: run, setStatus: say } = live.current;
+      const id = takeId(take.lane, fileStamp(new Date()));
+      const upload = `${id}${extForMime(bytes.type || undefined)}`;
+      let filedId = id;
+      try {
+        filedId = (await fileClip(dir, { id, upload }, bytes)).id;
+      } catch (e) {
+        // A camera take cannot be played again: unfiled, it goes to the disk rather than nowhere (../../docs/audit.md).
+        downloadBlob(bytes, upload);
+        spool.discard();
+        say(
+          `take not filed: ${(e as Error).message} — saved to your downloads as ${upload}, drop it on the lane to file it`,
+        );
+        return;
+      }
+      spool.discard();
+      live.current.bumpReload();
+      await run(placeLine(take.lane, filedId, take.at, seconds));
+    },
+    [],
+  );
+
+  const begin = useCallback(
+    async (lane: string, label: string) => {
+      const { setStatus: say } = live.current;
+      // The label is opened as the lane's lens is: this machine's cameras, the machine's over the LAN, or the account's remote ones.
+      const lens: Lens = await lensOpener()(label);
+      const stream = lens.stream;
+      if (!stream) {
+        say(`no camera to record: ${lens.problem ?? "none opened"}`);
+        activeRef.current = false;
+        setRecording(false);
+        return;
+      }
+      if (lens.problem) say(lens.problem);
+      // Stopped while the camera was opening: a permission prompt outlives a short take.
+      if (!activeRef.current) {
+        releaseLens(lens);
+        return;
+      }
+      streamRef.current = stream;
+      closeRef.current = lens.close ?? null;
+      // Chunks go to disk as they come (../takeSpool.ts): an hour of camera is gigabytes the tab need not hold.
+      const spooled = await recordToSpool(
+        stream,
+        () => activeRef.current && streamRef.current === stream,
+      );
+      // …and stopped while the spool was opening: the lens is let go, if it is still this take's.
+      if (!spooled) {
+        if (streamRef.current === stream) release();
+        return;
+      }
+      const { recorder: rec, spool } = spooled;
+      // This take's own state, in this closure: a stop and a quick re-record must not share a buffer or a stream.
+      let take: { lane: string; at: number; from: number } | null = null;
+      recRef.current = rec;
+      rec.onstop = () => {
+        if (closeRef.current === lens.close) closeRef.current = null;
+        releaseLens(lens);
+        if (streamRef.current === stream) streamRef.current = null;
+        if (recRef.current === rec) recRef.current = null;
+        setRecording(false);
+        // Read at the stop, when it has been measured: a remote frame arrives that long after it was shot.
+        const lateSec = (lens.latencyMs?.() ?? 0) / 1000;
+        const landed = take && { ...take, at: Math.max(0, take.at - lateSec) };
+        if (!landed) return spool.discard();
+        setFiling((n) => n + 1);
+        void closeTake(spool, rec, landed.from)
+          .then((closed) => {
+            // A take with no bytes is a camera that never delivered a frame — nothing to file and nothing to place.
+            if (closed)
+              return finish(closed.blob, closed.seconds, landed, spool);
+            spool.discard();
+            live.current.setStatus(m["status.video.emptyTake"]());
+          })
+          .finally(() => setFiling((n) => n - 1));
+      };
+      rec.onstart = () => {
+        // The playhead at the moment the CAMERA started, not when the key was pressed: opening a lens takes time.
+        take = {
+          lane,
+          at: live.current.store.getSnapshot().playhead,
+          from: performance.now(),
+        };
+        setRecording(true);
+      };
+      rec.start(1000); // a chunk a second, each on disk as it comes
+    },
+    [finish, release],
+  );
+
+  const rolling = recordEnabled && playing && !!armed;
+  useEffect(() => {
+    if (rolling && !activeRef.current && armed) {
+      activeRef.current = true;
+      void begin(armed, camera ?? "");
+    } else if (!rolling && activeRef.current) {
+      activeRef.current = false;
+      const rec = recRef.current;
+      // `onstop` does the filing; with no recorder yet the lens is simply let go.
+      if (rec && rec.state !== "inactive") rec.stop();
+      else {
+        release();
+        setRecording(false);
+      }
+    }
+  }, [rolling, armed, camera, begin, release]);
+
+  // Leaving the app mid-take must not leave the lamp on.
+  useEffect(() => release, [release]);
+
+  // What a crash or a closed tab left mid-take is on disk: handed back once, as a download, then removed.
+  useEffect(() => {
+    void recoverSpools().then(async (left) => {
+      for (const { name, blob } of left) {
+        const file = name.replace(/^k7-take-/, "recovered-take-");
+        downloadBlob(blob, file);
+        await dropSpool(name);
+        live.current.setStatus(m["status.video.recovered"]({ file }));
+      }
+    });
+  }, []);
+
+  return { recording };
+}

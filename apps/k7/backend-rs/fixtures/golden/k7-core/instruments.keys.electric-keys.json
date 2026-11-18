@@ -1,0 +1,4826 @@
+{
+  "project": "k7-core/instruments.keys.electric-keys.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.keys.electric-keys",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.keys.electric-keys.k7/clips",
+    "tracks": [
+      {
+        "id": "melody-clavinet",
+        "name": "melody-clavinet",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#1e75b8",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-clavinet:fx-clavinet",
+            "type": "SFZ Player",
+            "name": "fx-clavinet",
+            "path": "",
+            "sfzFile": "@instruments/lithalean-clavinet/Clavinet/Clavinet.sfz",
+            "presetSave": "<ws>/k7-core/instruments.keys.electric-keys.k7/nodes/fx-clavinet.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-clavinet-v",
+        "name": "melody-clavinet-v",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#217ccb",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-stereo-rhodes",
+        "name": "melody-stereo-rhodes",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#2781dc",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-stereo-rhodes:fx-stereo-rhodes",
+            "type": "SFZ Player",
+            "name": "fx-stereo-rhodes",
+            "path": "",
+            "sfzFile": "@instruments/nbo-stereo-rhodes/rhodes.sfz",
+            "presetSave": "<ws>/k7-core/instruments.keys.electric-keys.k7/nodes/fx-stereo-rhodes.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-wurli-v2",
+        "name": "melody-wurli-v2",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#3a87df",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#4d8de2",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody:fx",
+            "type": "SFZ Player",
+            "name": "fx",
+            "path": "",
+            "sfzFile": "@instruments/nbo-stereo-rhodes/rhodes.sfz",
+            "presetSave": "<ws>/k7-core/instruments.keys.electric-keys.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-stage-73-v2",
+        "name": "melody-stage-73-v2",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#6095e5",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody-wurt",
+        "name": "melody-wurt",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#739ee8",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody-wurt:fx-wurt",
+            "type": "SFZ Player",
+            "name": "fx-wurt",
+            "path": "",
+            "sfzFile": "@instruments/nbo-wurt/wurly.sfz",
+            "presetSave": "<ws>/k7-core/instruments.keys.electric-keys.k7/nodes/fx-wurt.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/keys/electric-keys",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "volume": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Volume",
+                  "bind": "Volume",
+                  "min": -40,
+                  "max": 12
+                },
+                "credit": {
+                  "type": "label",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "No Budget Orchestra · bandshed.net · CC BY-SA"
+                }
+              }
+            },
+            "engines": [
+              "clavinet",
+              "clavinet-v",
+              "stage-73-v2",
+              "stereo-rhodes",
+              "wurli-v2",
+              "wurt"
+            ],
+            "engine": "stereo-rhodes",
+            "params": {
+              "sfz": "@instruments/nbo-stereo-rhodes/rhodes.sfz"
+            },
+            "defaults": {
+              "Volume": 0
+            },
+            "pluginId": "melody:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-clavinet": {
+        "from": "melody-clavinet",
+        "use": [
+          {
+            "module": "fx-clavinet",
+            "uses": "@k7-core/instruments/keys/electric-keys",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "volume": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Volume",
+                  "bind": "Volume",
+                  "min": -40,
+                  "max": 12
+                },
+                "credit": {
+                  "type": "label",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Lithalean · musical-artifacts.com"
+                }
+              }
+            },
+            "engines": [
+              "clavinet",
+              "clavinet-v",
+              "stage-73-v2",
+              "stereo-rhodes",
+              "wurli-v2",
+              "wurt"
+            ],
+            "engine": "clavinet",
+            "params": {
+              "sfz": "@instruments/lithalean-clavinet/Clavinet/Clavinet.sfz"
+            },
+            "defaults": {
+              "Volume": 0
+            },
+            "pluginId": "melody-clavinet:fx-clavinet"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-clavinet-v": {
+        "from": "melody-clavinet-v",
+        "use": [
+          {
+            "module": "fx-clavinet-v",
+            "uses": "@k7-core/instruments/keys/electric-keys",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "CLAV",
+                  "widgets": {
+                    "tone_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "TONE",
+                      "color": "#ff6a1a26"
+                    },
+                    "brilliant": {
+                      "type": "toggle",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Brill",
+                      "bind": "Tone Brillant"
+                    },
+                    "treble": {
+                      "type": "toggle",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Treble",
+                      "bind": "Tone Treble"
+                    },
+                    "medium": {
+                      "type": "toggle",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Medium",
+                      "bind": "Tone Medium"
+                    },
+                    "soft": {
+                      "type": "toggle",
+                      "col": 2,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Soft",
+                      "bind": "Tone Soft"
+                    },
+                    "pickup_ab": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 4,
+                      "label": "Pickup",
+                      "bind": "Pickup A/B Switch",
+                      "options": [
+                        {
+                          "label": "A",
+                          "value": 0
+                        },
+                        {
+                          "label": "B",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pickup_cd": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 3,
+                      "colSpan": 4,
+                      "label": "Pickup",
+                      "bind": "Pickup C/D Switch",
+                      "options": [
+                        {
+                          "label": "C",
+                          "value": 0
+                        },
+                        {
+                          "label": "D",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "tone_screen": {
+                      "type": "lcdscreen",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "key_grp": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "KEY",
+                      "color": "#3d7dff26"
+                    },
+                    "dynamics": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Dynamic",
+                      "bind": "Dynamics",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "hardness": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Hard",
+                      "bind": "Hammer Hardness",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mute": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Mute",
+                      "bind": "Mute",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "release": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Release Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "body_grp": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "BODY",
+                      "color": "#3ec96b26"
+                    },
+                    "resonance": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Reso",
+                      "bind": "Strings Resonance",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "timbre": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "tuning": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Tune",
+                      "bind": "Tuning",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "WAH",
+                  "widgets": {
+                    "noise_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "NOISE",
+                      "color": "#6b6b6b26"
+                    },
+                    "hammer_noise": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Hammer",
+                      "bind": "Hammer Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "release_noise": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "KeyOff",
+                      "bind": "Key Release Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pickup_noise": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Hum",
+                      "bind": "Pickup Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "wah_grp": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "WAH",
+                      "color": "#ff6a1a26"
+                    },
+                    "wah_mode": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Mode",
+                      "bind": "FX in slot 1",
+                      "options": [
+                        {
+                          "label": "Wah",
+                          "value": 0
+                        },
+                        {
+                          "label": "Auto-Wah",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "autowah_on": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Auto",
+                      "bind": "Auto Wah On/Off"
+                    },
+                    "wah_pedal": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pedal",
+                      "bind": "Wah Pedal",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "aw_freq": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Freq",
+                      "bind": "Auto Wah Frequency",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "aw_rate": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Auto Wah Auto Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "aw_depth": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "Auto Wah Modulation Depth",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "FX1",
+                  "widgets": {
+                    "vf_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4,
+                      "label": "VOCAL",
+                      "bind": "Vocal Filter On/Off",
+                      "color": "#3d7dff26"
+                    },
+                    "vowel_screen": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "vf_reso": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Reso",
+                      "bind": "Vocal Filter Resonance",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vf_rate": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Vocal Filter LFO rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vf_lfo": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "LFO",
+                      "bind": "Vocal Filter LFO On/Off"
+                    },
+                    "od_grp": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "DRIVE",
+                      "bind": "Overdrive On/Off",
+                      "color": "#ff3b3026"
+                    },
+                    "od_drive": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Drive",
+                      "bind": "Overdrive Drive",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "od_tone": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Tone",
+                      "bind": "Overdrive Tone",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "od_level": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Level",
+                      "bind": "Overdrive Output",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "ch_grp": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "CHORUS",
+                      "bind": "Chorus On/Off",
+                      "color": "#3d7dff26"
+                    },
+                    "ch_type": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Type",
+                      "bind": "Chorus Type",
+                      "options": [
+                        {
+                          "label": "1",
+                          "value": 0
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "3",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "ch_mix": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Mix",
+                      "bind": "Chorus Mix",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "ch_rate": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Chorus Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "ch_amount": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amount",
+                      "bind": "Chorus Amount",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "FX2",
+                  "widgets": {
+                    "ph_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "PHASER",
+                      "bind": "Phaser On/Off",
+                      "color": "#ff6a1a26"
+                    },
+                    "ph_rate": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Phaser Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "ph_depth": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "Phaser Depth",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "ph_fb": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fdbk",
+                      "bind": "Phaser Feedback",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dl_grp": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "DELAY",
+                      "bind": "Delay On/Off",
+                      "color": "#3ec96b26"
+                    },
+                    "dl_time": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Time",
+                      "bind": "Delay Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dl_fb": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fdbk",
+                      "bind": "Delay Feedback",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dl_mix": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Mix",
+                      "bind": "Delay Mix",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "comp_grp": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "COMP",
+                      "bind": "Chorus On/Off",
+                      "color": "#3ec96b26"
+                    },
+                    "comp_ratio": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Ratio",
+                      "bind": "Compressor Ratio",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "comp_thresh": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Thresh",
+                      "bind": "Compressor Thresh",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "comp_makeup": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Makeup",
+                      "bind": "Compressor Makeup",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "AMP",
+                  "widgets": {
+                    "amp_grp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 7,
+                      "rowSpan": 4,
+                      "label": "AMP",
+                      "bind": "Guitar Amp On",
+                      "color": "#ff3b3026"
+                    },
+                    "amp_volume": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Volume",
+                      "bind": "Guitar Amp Volume",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "amp_trem": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Trem",
+                      "bind": "Guitar Amp Intensity",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "amp_bright": {
+                      "type": "toggle",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Bright",
+                      "bind": "Guitar Amp Bright"
+                    },
+                    "amp_bass": {
+                      "type": "fader",
+                      "col": 4,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Bass",
+                      "bind": "Guitar Amp Bass",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "amp_mid": {
+                      "type": "fader",
+                      "col": 5,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Mid",
+                      "bind": "Guitar Amp Mid",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "amp_treble": {
+                      "type": "fader",
+                      "col": 6,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Treble",
+                      "bind": "Guitar Amp Treble",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                }
+              ],
+              "script": "// clavinet-v screens: the tone the rocker switches and the mute carve, and the vocal filter's A-E-I-O-U pad.\nconst BLUE = \"#3d7dff\", GREEN = \"#3ec96b\", WHITE = \"#ffffff\", ORANGE = \"#ff6a1a\", GREY = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst BIG = \"bold 16px ui-monospace, monospace\";\nconst VOWELS = [\"A\", \"E\", \"I\", \"O\", \"U\"];\n\nfunction text(ctx, s, x, y, c, align, font) {\n  ctx.fillStyle = c;\n  ctx.font = font || FONT;\n  ctx.textAlign = align || \"left\";\n  ctx.fillText(s, x, y);\n}\n\nconst on = (v) => (v ?? 0) >= 0.5;\nconst lp = (f, fc) => 1 / Math.sqrt(1 + Math.pow(f / fc, 2));\nconst hp = (f, fc) => 1 / Math.sqrt(1 + Math.pow(fc / f, 2));\n\nexport default {\n  tone_screen(lcd) {\n    const { ctx, width: W, height: H, params: p, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    const br = on(p[\"Tone Brillant\"]), tr = on(p[\"Tone Treble\"]), md = on(p[\"Tone Medium\"]), sf = on(p[\"Tone Soft\"]);\n    const mute = p[\"Mute\"] ?? 0;\n    const resp = (f) => {\n      let m = 1;\n      if (br) m *= hp(f, 900);\n      if (tr) m *= hp(f, 300);\n      if (md) m *= 0.4 + 0.6 * Math.exp(-Math.pow(Math.log2(f / 900), 2));\n      if (sf) m *= lp(f, 1200);\n      m *= lp(f, 12000 * Math.pow(0.03, mute));\n      return 20 * Math.log10(Math.max(m, 1e-4));\n    };\n    const top = 30, bot = H - 12;\n    const y = (d) => top + (Math.min(0, Math.max(-36, d)) / -36) * (bot - top);\n    ctx.strokeStyle = \"#1a1a1a\";\n    ctx.beginPath(); ctx.moveTo(0, y(0)); ctx.lineTo(W, y(0)); ctx.stroke();\n    ctx.strokeStyle = ORANGE;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    for (let x = 0; x <= W; x++) {\n      const f = 40 * Math.pow(400, x / W), yy = y(resp(f));\n      if (x === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy);\n    }\n    ctx.stroke();\n    ctx.fillStyle = \"#ff6a1a40\";\n    ctx.beginPath();\n    ctx.moveTo(0, bot);\n    for (let x = 0; x <= W; x += 2) ctx.lineTo(x, y(resp(40 * Math.pow(400, x / W))));\n    ctx.lineTo(W, bot);\n    ctx.closePath();\n    ctx.fill();\n    const lights = [[\"BRILL\", br], [\"TREB\", tr], [\"MED\", md], [\"SOFT\", sf]];\n    lights.forEach(([s, lit], i) => text(ctx, s, 4 + i * 34, 9, lit ? ORANGE : GREY));\n    const ab = on(p[\"Pickup A/B Switch\"]) ? \"B\" : \"A\", cd = on(p[\"Pickup C/D Switch\"]) ? \"D\" : \"C\";\n    text(ctx, ab + cd, W - 4, 22, WHITE, \"right\", BIG);\n    if (mute > 0.02) {\n      ctx.fillStyle = BLUE;\n      ctx.fillRect(4, 14, Math.max(2, mute * 60), 3);\n      text(ctx, \"MUTE\", 68, 19, BLUE);\n    }\n    let lv = 0;\n    if (output && output.length) for (let i = Math.max(0, output.length - 16); i < output.length; i++) lv = Math.max(lv, output[i] || 0);\n    if (lv > 0.001) { ctx.fillStyle = GREEN; ctx.fillRect(W - 3, bot - lv * (bot - top), 2, lv * (bot - top)); }\n    text(ctx, \"LOW\", 4, H - 2, GREY);\n    text(ctx, \"HIGH\", W - 4, H - 2, GREY, \"right\");\n  },\n\n  vowel_screen(lcd) {\n    const { ctx, width: W, height: H, params: p, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    const live = on(p[\"Vocal Filter On/Off\"]);\n    const lfo = on(p[\"Vocal Filter LFO On/Off\"]);\n    const pad = 10, pw = W - pad * 2, ph = H - pad * 2 - 4;\n    const pts = VOWELS.map((v, i) => {\n      const dx = [0.15, 0.31, 0.73, 0.87, 0.48][i], dy = [0.65, 0.25, 0.23, 0.73, 0.85][i];\n      return [pad + (p[`${v} Position X`] ?? dx) * pw, pad + 4 + (1 - (p[`${v} Position Y`] ?? dy)) * ph];\n    });\n    ctx.strokeStyle = \"#1a1a1a\";\n    ctx.strokeRect(pad + 0.5, pad + 4.5, pw, ph);\n    ctx.strokeStyle = live ? WHITE : GREY;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    pts.forEach(([x, yy], i) => (i === 0 ? ctx.moveTo(x, yy) : ctx.lineTo(x, yy)));\n    ctx.closePath();\n    ctx.stroke();\n    pts.forEach(([x, yy], i) => {\n      ctx.fillStyle = live ? BLUE : GREY;\n      ctx.beginPath(); ctx.arc(x, yy, 3, 0, 2 * Math.PI); ctx.fill();\n      text(ctx, VOWELS[i], x + 5, yy - 3, live ? WHITE : GREY);\n    });\n    if (live && lfo) {\n      const rate = 0.1 + (p[\"Vocal Filter LFO rate\"] ?? 0.6) * 2;\n      const t = ((((now || 0) / 1000) * rate) % 1 + 1) % 1;\n      const seg = t * 5, k = Math.min(4, Math.floor(seg)), f = seg - k;\n      const a = pts[k], b = pts[(k + 1) % 5];\n      ctx.fillStyle = ORANGE;\n      ctx.beginPath(); ctx.arc(a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, 4, 0, 2 * Math.PI); ctx.fill();\n    }\n    text(ctx, live ? (lfo ? \"VOCAL LFO\" : \"VOCAL\") : \"VOCAL OFF\", 4, 9, live ? WHITE : GREY);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 15,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "CLAV",
+                    "widgets": {
+                      "tone_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "TONE",
+                        "color": "#ff6a1a26"
+                      },
+                      "brilliant": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Brill",
+                        "bind": "Tone Brillant"
+                      },
+                      "treble": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Treble",
+                        "bind": "Tone Treble"
+                      },
+                      "medium": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Medium",
+                        "bind": "Tone Medium"
+                      },
+                      "soft": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Soft",
+                        "bind": "Tone Soft"
+                      },
+                      "pickup_ab": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 4,
+                        "label": "Pickup",
+                        "bind": "Pickup A/B Switch",
+                        "options": [
+                          {
+                            "label": "A",
+                            "value": 0
+                          },
+                          {
+                            "label": "B",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "pickup_cd": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 4,
+                        "label": "Pickup",
+                        "bind": "Pickup C/D Switch",
+                        "options": [
+                          {
+                            "label": "C",
+                            "value": 0
+                          },
+                          {
+                            "label": "D",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "tone_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "key_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "KEY",
+                        "color": "#3d7dff26"
+                      },
+                      "dynamics": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Dynamic",
+                        "bind": "Dynamics",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "hardness": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Hard",
+                        "bind": "Hammer Hardness",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mute": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Mute",
+                        "bind": "Mute",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "release": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Release Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "body_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "BODY",
+                        "color": "#3ec96b26"
+                      },
+                      "resonance": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Reso",
+                        "bind": "Strings Resonance",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 11,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "tuning": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 13,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Tune",
+                        "bind": "Tuning",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "WAH",
+                    "widgets": {
+                      "noise_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "NOISE",
+                        "color": "#6b6b6b26"
+                      },
+                      "hammer_noise": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Hammer",
+                        "bind": "Hammer Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "release_noise": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "KeyOff",
+                        "bind": "Key Release Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pickup_noise": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Hum",
+                        "bind": "Pickup Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "wah_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "WAH",
+                        "color": "#ff6a1a26"
+                      },
+                      "wah_mode": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "Mode",
+                        "bind": "FX in slot 1",
+                        "options": [
+                          {
+                            "label": "Wah",
+                            "value": 0
+                          },
+                          {
+                            "label": "Auto-Wah",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "autowah_on": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "Auto",
+                        "bind": "Auto Wah On/Off"
+                      },
+                      "wah_pedal": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pedal",
+                        "bind": "Wah Pedal",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "aw_freq": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Freq",
+                        "bind": "Auto Wah Frequency",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "aw_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Auto Wah Auto Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "aw_depth": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "Auto Wah Modulation Depth",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "FX1",
+                    "widgets": {
+                      "vf_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "VOCAL",
+                        "bind": "Vocal Filter On/Off",
+                        "color": "#3d7dff26"
+                      },
+                      "vowel_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "vf_reso": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Reso",
+                        "bind": "Vocal Filter Resonance",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vf_rate": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Vocal Filter LFO rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vf_lfo": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "LFO",
+                        "bind": "Vocal Filter LFO On/Off"
+                      },
+                      "od_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "DRIVE",
+                        "bind": "Overdrive On/Off",
+                        "color": "#ff3b3026"
+                      },
+                      "od_drive": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Drive",
+                        "bind": "Overdrive Drive",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "od_tone": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Tone",
+                        "bind": "Overdrive Tone",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "od_level": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Level",
+                        "bind": "Overdrive Output",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "ch_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "CHORUS",
+                        "bind": "Chorus On/Off",
+                        "color": "#3d7dff26"
+                      },
+                      "ch_type": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "label": "Type",
+                        "bind": "Chorus Type",
+                        "options": [
+                          {
+                            "label": "1",
+                            "value": 0
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "3",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "ch_mix": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 2,
+                        "label": "Mix",
+                        "bind": "Chorus Mix",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "ch_rate": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Chorus Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "ch_amount": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amount",
+                        "bind": "Chorus Amount",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "FX2",
+                    "widgets": {
+                      "ph_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "PHASER",
+                        "bind": "Phaser On/Off",
+                        "color": "#ff6a1a26"
+                      },
+                      "ph_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Phaser Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "ph_depth": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "Phaser Depth",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "ph_fb": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fdbk",
+                        "bind": "Phaser Feedback",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dl_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "DELAY",
+                        "bind": "Delay On/Off",
+                        "color": "#3ec96b26"
+                      },
+                      "dl_time": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Time",
+                        "bind": "Delay Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dl_fb": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fdbk",
+                        "bind": "Delay Feedback",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dl_mix": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Mix",
+                        "bind": "Delay Mix",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "comp_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "COMP",
+                        "bind": "Chorus On/Off",
+                        "color": "#3ec96b26"
+                      },
+                      "comp_ratio": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Ratio",
+                        "bind": "Compressor Ratio",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "comp_thresh": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Thresh",
+                        "bind": "Compressor Thresh",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "comp_makeup": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Makeup",
+                        "bind": "Compressor Makeup",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "AMP",
+                    "widgets": {
+                      "amp_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 8,
+                        "label": "AMP",
+                        "bind": "Guitar Amp On",
+                        "color": "#ff3b3026"
+                      },
+                      "amp_volume": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Volume",
+                        "bind": "Guitar Amp Volume",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_trem": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Trem",
+                        "bind": "Guitar Amp Intensity",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_bright": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 4,
+                        "label": "Bright",
+                        "bind": "Guitar Amp Bright"
+                      },
+                      "amp_bass": {
+                        "type": "fader",
+                        "col": 0,
+                        "row": 3,
+                        "rowSpan": 5,
+                        "label": "Bass",
+                        "bind": "Guitar Amp Bass",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_mid": {
+                        "type": "fader",
+                        "col": 1,
+                        "row": 3,
+                        "rowSpan": 5,
+                        "label": "Mid",
+                        "bind": "Guitar Amp Mid",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_treble": {
+                        "type": "fader",
+                        "col": 2,
+                        "row": 3,
+                        "rowSpan": 5,
+                        "label": "Treble",
+                        "bind": "Guitar Amp Treble",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "engines": [
+              "clavinet",
+              "clavinet-v",
+              "stage-73-v2",
+              "stereo-rhodes",
+              "wurli-v2",
+              "wurt"
+            ],
+            "engine": "clavinet-v",
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-stage-73-v2": {
+        "from": "melody-stage-73-v2",
+        "use": [
+          {
+            "module": "fx-stage-73-v2",
+            "uses": "@k7-core/instruments/keys/electric-keys",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "PIANO",
+                  "widgets": {
+                    "piano": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 12,
+                      "rowSpan": 4,
+                      "label": "PIANO",
+                      "color": "#ff6a1a26"
+                    },
+                    "pickup_screen": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4
+                    },
+                    "hardness": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Hammer",
+                      "bind": "Hammer Hardness",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "resonance": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Tonebar",
+                      "bind": "Tonebar Resonance",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "distance": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Distance",
+                      "bind": "Pickup Distance",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "alignment": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Align",
+                      "bind": "Pickup Alignment",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dynamics": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Dynamics",
+                      "bind": "Dynamics",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "macro": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "MACRO",
+                      "color": "#3ec96b26"
+                    },
+                    "brightness": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Bright",
+                      "bind": "Brightness",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "timbre": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "time": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Time",
+                      "bind": "Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "movement": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Move",
+                      "bind": "Movement",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "AMP",
+                  "widgets": {
+                    "vibrato": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4,
+                      "label": "VIB",
+                      "color": "#3ec96b26"
+                    },
+                    "vib_screen": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "vib_on": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Vibrato",
+                      "bind": "Preamp Vibrato On"
+                    },
+                    "vib_depth": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "Preamp Vibrato Intensity",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vib_rate": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Preamp Vibrato Speed",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "tone_grp": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "TONE",
+                      "color": "#3d7dff26"
+                    },
+                    "circuit": {
+                      "type": "dropdown",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 3,
+                      "label": "Circuit",
+                      "bind": "Tone Circuit Model",
+                      "options": [
+                        {
+                          "label": "<=73'",
+                          "value": 0
+                        },
+                        {
+                          "label": "74'=>",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "tone": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Tone",
+                      "bind": "Tone Circuit Tone",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "boost": {
+                      "type": "fader",
+                      "col": 11,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Boost",
+                      "bind": "Tone Circuit Bass Boost",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "bass": {
+                      "type": "fader",
+                      "col": 12,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Bass",
+                      "bind": "Preamp Bass",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "treble": {
+                      "type": "fader",
+                      "col": 13,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Treble",
+                      "bind": "Preamp Treble",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "NOISE",
+                  "widgets": {
+                    "noises": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "NOISE",
+                      "color": "#ffffff1a"
+                    },
+                    "hammer_noise": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Hammer",
+                      "bind": "Hammer Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "damper_noise": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Damper",
+                      "bind": "Damper Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "tine_noise": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Tine",
+                      "bind": "Tine Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pickup_noise": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pickup",
+                      "bind": "Pickup Noise",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                }
+              ],
+              "script": "// stage-73-v2 screens: the tine swinging past its pickup with the wave it makes, and the stereo vibrato.\nconst FONT = \"8px ui-monospace, monospace\";\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst ORANGE = \"#ff6a1a\";\nconst WHITE = \"#ffffff\";\nconst GREY = \"#6b6b6b\";\n\nfunction clamp01(v) {\n  return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0;\n}\n\nfunction last(arr) {\n  return Array.isArray(arr) && arr.length > 0 ? clamp01(arr[arr.length - 1] ?? 0) : 0;\n}\n\nexport default {\n  pickup_screen(lcd) {\n    const { ctx, width: W, height: H, params, output, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    const hard = clamp01(params[\"Hammer Hardness\"] ?? 0.65);\n    const dist = clamp01(params[\"Pickup Distance\"] ?? 0.42);\n    const align = clamp01(params[\"Pickup Alignment\"] ?? 0.6);\n    const level = last(output);\n    const t = (now ?? 0) / 1000;\n    // Top half: the tine, its swing, and the pickup coil set back by distance and offset by alignment.\n    const mid = H * 0.3;\n    const tipX = W * 0.55;\n    const swing = (0.25 + level * 0.75) * H * 0.12;\n    const tipY = mid + Math.sin(t * 20) * (level > 0.001 ? swing : 0);\n    ctx.strokeStyle = WHITE;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(6, mid);\n    ctx.lineTo(tipX, tipY);\n    ctx.stroke();\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(tipX, mid - swing);\n    ctx.lineTo(tipX, mid + swing);\n    ctx.stroke();\n    const coilX = tipX + 6 + dist * W * 0.3;\n    const coilY = mid + (align - 0.5) * H * 0.3;\n    const cw = Math.max(6, W * 0.08);\n    const ch = Math.max(8, H * 0.22);\n    ctx.fillStyle = BLUE;\n    ctx.fillRect(coilX, coilY - ch / 2, cw, ch);\n    ctx.strokeStyle = ORANGE;\n    ctx.beginPath();\n    ctx.arc(10, mid - 6, 2 + hard * 4, 0, Math.PI * 2);\n    ctx.stroke();\n    // Bottom half: the voltage the coil sees — asymmetric as the tine sits off-axis, softer as it moves away.\n    const wy = H * 0.72;\n    const amp = Math.max(2, H * 0.18) * (1 - dist * 0.6);\n    const off = (align - 0.5) * 2;\n    ctx.strokeStyle = GREEN;\n    ctx.beginPath();\n    const n = 96;\n    for (let i = 0; i <= n; i++) {\n      const p = (i / n) * Math.PI * 6;\n      const s = Math.sin(p);\n      const v = s + off * 0.6 * (s * s - 0.5) + hard * 0.15 * Math.sin(3 * p);\n      const x = 4 + ((W - 8) * i) / n;\n      const y = wy - Math.max(-1.4, Math.min(1.4, v)) * amp * 0.75;\n      if (i === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    ctx.fillStyle = ORANGE;\n    ctx.fillText(\"HAMMER\", 4, H - 3);\n    ctx.fillStyle = BLUE;\n    ctx.textAlign = \"right\";\n    ctx.fillText(\"PICKUP\", W - 4, H - 3);\n    ctx.textAlign = \"left\";\n  },\n\n  vib_screen(lcd) {\n    const { ctx, width: W, height: H, params, now, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    const on = (params[\"Preamp Vibrato On\"] ?? 0) >= 0.5;\n    const depth = clamp01(params[\"Preamp Vibrato Intensity\"] ?? 0);\n    const rate = clamp01(params[\"Preamp Vibrato Speed\"] ?? 0.5);\n    const cycles = 1 + rate * 5;\n    const top = 12;\n    const bottom = H - 12;\n    const mid = (top + bottom) / 2;\n    const half = Math.max(1, (bottom - top) / 2);\n    const amp = on ? depth * half : 0;\n    const phase = output && output.length > 0 && on ? ((now ?? 0) / 1000) * (1 + rate * 6) : 0;\n    const wave = (sign, color) => {\n      ctx.strokeStyle = color;\n      ctx.beginPath();\n      const n = 64;\n      for (let i = 0; i <= n; i++) {\n        const x = 4 + ((W - 8) * i) / n;\n        const y = mid - sign * Math.sin((i / n) * cycles * Math.PI * 2 + phase) * amp;\n        if (i === 0) ctx.moveTo(x, y);\n        else ctx.lineTo(x, y);\n      }\n      ctx.stroke();\n    };\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(4, Math.round(mid) + 0.5);\n    ctx.lineTo(W - 4, Math.round(mid) + 0.5);\n    ctx.stroke();\n    wave(1, on ? GREEN : GREY);\n    wave(-1, on ? WHITE : GREY);\n    ctx.fillStyle = on ? GREEN : GREY;\n    ctx.fillText(\"L\", 4, 9);\n    ctx.fillStyle = on ? WHITE : GREY;\n    ctx.fillText(\"R\", 12, 9);\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = on ? WHITE : GREY;\n    ctx.fillText(on ? \"VIBRATO\" : \"VIB OFF\", W - 4, 9);\n    ctx.textAlign = \"left\";\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 12,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "PIANO",
+                    "widgets": {
+                      "piano": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 8,
+                        "label": "PIANO",
+                        "color": "#ff6a1a26"
+                      },
+                      "pickup_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "hardness": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Hammer",
+                        "bind": "Hammer Hardness",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "resonance": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Tonebar",
+                        "bind": "Tonebar Resonance",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "distance": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Distance",
+                        "bind": "Pickup Distance",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "alignment": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Align",
+                        "bind": "Pickup Alignment",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dynamics": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Dynamics",
+                        "bind": "Dynamics",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "macro": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "MACRO",
+                        "color": "#3ec96b26"
+                      },
+                      "brightness": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Bright",
+                        "bind": "Brightness",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "time": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Time",
+                        "bind": "Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "movement": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Move",
+                        "bind": "Movement",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "AMP",
+                    "widgets": {
+                      "vibrato": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "VIB",
+                        "color": "#3ec96b26"
+                      },
+                      "vib_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "vib_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Vibrato",
+                        "bind": "Preamp Vibrato On"
+                      },
+                      "vib_depth": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "Preamp Vibrato Intensity",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vib_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Preamp Vibrato Speed",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "tone_grp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "TONE",
+                        "color": "#3d7dff26"
+                      },
+                      "circuit": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Circuit",
+                        "bind": "Tone Circuit Model",
+                        "options": [
+                          {
+                            "label": "<=73'",
+                            "value": 0
+                          },
+                          {
+                            "label": "74'=>",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "tone": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Tone",
+                        "bind": "Tone Circuit Tone",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "boost": {
+                        "type": "fader",
+                        "col": 0,
+                        "row": 8,
+                        "rowSpan": 3,
+                        "label": "Boost",
+                        "bind": "Tone Circuit Bass Boost",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "bass": {
+                        "type": "fader",
+                        "col": 1,
+                        "row": 8,
+                        "rowSpan": 3,
+                        "label": "Bass",
+                        "bind": "Preamp Bass",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "treble": {
+                        "type": "fader",
+                        "col": 2,
+                        "row": 8,
+                        "rowSpan": 3,
+                        "label": "Treble",
+                        "bind": "Preamp Treble",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "NOISE",
+                    "widgets": {
+                      "noises": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "NOISE",
+                        "color": "#ffffff1a"
+                      },
+                      "hammer_noise": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Hammer",
+                        "bind": "Hammer Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "damper_noise": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Damper",
+                        "bind": "Damper Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "tine_noise": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Tine",
+                        "bind": "Tine Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pickup_noise": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pickup",
+                        "bind": "Pickup Noise",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "engines": [
+              "clavinet",
+              "clavinet-v",
+              "stage-73-v2",
+              "stereo-rhodes",
+              "wurli-v2",
+              "wurt"
+            ],
+            "engine": "stage-73-v2",
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-stereo-rhodes": {
+        "from": "melody-stereo-rhodes",
+        "use": [
+          {
+            "module": "fx-stereo-rhodes",
+            "uses": "@k7-core/instruments/keys/electric-keys",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "volume": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Volume",
+                  "bind": "Volume",
+                  "min": -40,
+                  "max": 12
+                },
+                "credit": {
+                  "type": "label",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "No Budget Orchestra · bandshed.net · CC BY-SA"
+                }
+              }
+            },
+            "engines": [
+              "clavinet",
+              "clavinet-v",
+              "stage-73-v2",
+              "stereo-rhodes",
+              "wurli-v2",
+              "wurt"
+            ],
+            "engine": "stereo-rhodes",
+            "params": {
+              "sfz": "@instruments/nbo-stereo-rhodes/rhodes.sfz"
+            },
+            "defaults": {
+              "Volume": 0
+            },
+            "pluginId": "melody-stereo-rhodes:fx-stereo-rhodes"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-wurli-v2": {
+        "from": "melody-wurli-v2",
+        "use": [
+          {
+            "module": "fx-wurli-v2",
+            "uses": "@k7-core/instruments/keys/electric-keys",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "Keys",
+                  "widgets": {
+                    "reed": {
+                      "type": "lcdscreen",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "hammer": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 2,
+                      "label": "HAMMER",
+                      "color": "#3d7dff26"
+                    },
+                    "hardness": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Hard",
+                      "bind": "Hammer Hardness",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dynamics": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Dynamic",
+                      "bind": "Dynamics",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "damping": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Damp",
+                      "bind": "Damping Duration",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pickup": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 6,
+                      "rowSpan": 2,
+                      "label": "PICKUP",
+                      "color": "#ff6a1a26"
+                    },
+                    "distance": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Dist",
+                      "bind": "Pickup Distance",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "axis": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Axis",
+                      "bind": "Pickup Axis",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "impedance": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Imped",
+                      "bind": "Impedance",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "motion": {
+                      "type": "group",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 2,
+                      "label": "MOD",
+                      "color": "#3ec96b26"
+                    },
+                    "tremolo": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Trem",
+                      "bind": "Tremolo",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vibrato": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Vibrato",
+                      "bind": "Vibrato",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vib_rate": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Vibrato Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "noises": {
+                      "type": "group",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 6,
+                      "rowSpan": 2,
+                      "label": "NOISE",
+                      "color": "#ffffff14"
+                    },
+                    "hammer_noise": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Hammer",
+                      "bind": "Hammer Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "release_noise": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Key Release Noise",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pedal_noise": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pedal",
+                      "bind": "Sustain Pedal Noise",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "EQ",
+                  "widgets": {
+                    "eq": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 10,
+                      "rowSpan": 4,
+                      "label": "EQ",
+                      "color": "#ff6a1a26"
+                    },
+                    "eq_32": {
+                      "type": "fader",
+                      "col": 0,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "32",
+                      "bind": "32 Hz low shelf gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_63": {
+                      "type": "fader",
+                      "col": 1,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "63",
+                      "bind": "63 Hz peak gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_125": {
+                      "type": "fader",
+                      "col": 2,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "125",
+                      "bind": "125 Hz peak gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_250": {
+                      "type": "fader",
+                      "col": 3,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "250",
+                      "bind": "250 Hz peak gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_500": {
+                      "type": "fader",
+                      "col": 4,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "500",
+                      "bind": "500 Hz peak gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_1k": {
+                      "type": "fader",
+                      "col": 5,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "1k",
+                      "bind": "1 kHz peak gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_2k": {
+                      "type": "fader",
+                      "col": 6,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "2k",
+                      "bind": "2 kHz peak gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_4k": {
+                      "type": "fader",
+                      "col": 7,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "4k",
+                      "bind": "4 kHz peak gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_8k": {
+                      "type": "fader",
+                      "col": 8,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "8k",
+                      "bind": "8 kHz peak gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_16k": {
+                      "type": "fader",
+                      "col": 9,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "16k",
+                      "bind": "16 kHz high shelf gain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "eq_curve": {
+                      "type": "lcdscreen",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "Amp",
+                  "widgets": {
+                    "amp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 9,
+                      "rowSpan": 4,
+                      "label": "AMP",
+                      "color": "#ff3b3026"
+                    },
+                    "amp_drive": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Drive",
+                      "bind": "Guitar Amp Drive",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "amp_spring": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Spring",
+                      "bind": "Guitar Amp Reverb",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "amp_level": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Level",
+                      "bind": "Guitar Amp Volume",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "cabinet": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 6,
+                      "label": "Cab",
+                      "bind": "Guitar Amp Cabinet",
+                      "options": [
+                        {
+                          "label": "1x12 blackface",
+                          "value": 0
+                        },
+                        {
+                          "label": "2x12 blackface",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "4x10 tweed",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "4x12 half-stack",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "microphone": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 3,
+                      "colSpan": 6,
+                      "label": "Mic",
+                      "bind": "Guitar Amp Microphone",
+                      "options": [
+                        {
+                          "label": "SM57 off axis",
+                          "value": 0
+                        },
+                        {
+                          "label": "SM57 on axis",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "421 front",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "U87 front",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "amp_low": {
+                      "type": "fader",
+                      "col": 6,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Low",
+                      "bind": "Guitar Amp Low",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "amp_mid": {
+                      "type": "fader",
+                      "col": 7,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Mid",
+                      "bind": "Guitar Amp Mid",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "amp_hi": {
+                      "type": "fader",
+                      "col": 8,
+                      "row": 0,
+                      "rowSpan": 4,
+                      "label": "Hi",
+                      "bind": "Guitar Amp Hi",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "Leslie",
+                  "widgets": {
+                    "leslie": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 12,
+                      "rowSpan": 4,
+                      "label": "LESLIE",
+                      "color": "#3ec96b26"
+                    },
+                    "leslie_speed": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "label": "Speed",
+                      "bind": "Leslie Speed",
+                      "options": [
+                        {
+                          "label": "Stop",
+                          "value": 0
+                        },
+                        {
+                          "label": "Slow",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Fast",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "leslie_rate": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Leslie Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "leslie_depth": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "Leslie High - depth",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "leslie_width": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Width",
+                      "bind": "Leslie High - width",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "rotor": {
+                      "type": "lcdscreen",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "FX",
+                  "widgets": {
+                    "slots": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 12,
+                      "label": "FX",
+                      "color": "#ffffff14"
+                    },
+                    "slot_1": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "label": "Pedal",
+                      "bind": "FX in slot 1",
+                      "options": [
+                        {
+                          "label": "Empty",
+                          "value": 0
+                        },
+                        {
+                          "label": "Volume pedal",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "Wah-wah",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "Auto-Wah",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "slot_2": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Slot 2",
+                      "bind": "FX in slot 2",
+                      "options": [
+                        {
+                          "label": "Empty",
+                          "value": 0
+                        },
+                        {
+                          "label": "Flanger",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "Phaser",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Chorus",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Delay",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Compressor",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Overdrive",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Vocal Filter",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "PS Chorus",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "slot_3": {
+                      "type": "dropdown",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Slot 3",
+                      "bind": "FX in slot 3",
+                      "options": [
+                        {
+                          "label": "Empty",
+                          "value": 0
+                        },
+                        {
+                          "label": "Flanger",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "Phaser",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Chorus",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Delay",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Compressor",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Overdrive",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Vocal Filter",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "PS Chorus",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "slot_4": {
+                      "type": "dropdown",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Slot 4",
+                      "bind": "FX in slot 4",
+                      "options": [
+                        {
+                          "label": "Empty",
+                          "value": 0
+                        },
+                        {
+                          "label": "Flanger",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "Phaser",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Chorus",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Delay",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Compressor",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Overdrive",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Vocal Filter",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "PS Chorus",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "slot_5": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Slot 5",
+                      "bind": "FX in slot 5",
+                      "options": [
+                        {
+                          "label": "Empty",
+                          "value": 0
+                        },
+                        {
+                          "label": "Flanger",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "Phaser",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Chorus",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Delay",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Compressor",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Overdrive",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Vocal Filter",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "PS Chorus",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "phaser": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "PHASE",
+                      "color": "#3ec96b26"
+                    },
+                    "phaser_rate": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Phaser Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "phaser_depth": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "Phaser Depth",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "chorus": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "CHORUS",
+                      "color": "#3ec96b26"
+                    },
+                    "chorus_rate": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Chorus Lfo Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "chorus_depth": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "Chorus Lfo Amount",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "overdrive": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "DRIVE",
+                      "color": "#ff3b3026"
+                    },
+                    "od_drive": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Drive",
+                      "bind": "Overdrive Drive",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "od_tone": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Tone",
+                      "bind": "Overdrive Tone",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "Space",
+                  "widgets": {
+                    "delay": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 2,
+                      "label": "DELAY",
+                      "color": "#ffffff14"
+                    },
+                    "delay_time": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Time",
+                      "bind": "Delay Delay time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "delay_fb": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fdbk",
+                      "bind": "Delay Feedback",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "delay_mix": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Mix",
+                      "bind": "Delay Mix",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "reverb": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 2,
+                      "label": "REVERB",
+                      "color": "#ffffff14"
+                    },
+                    "rev_decay": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Reverb Decay time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "rev_pre": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pre",
+                      "bind": "Reverb Pre-delay time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "rev_mix": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Mix",
+                      "bind": "Reverb Mix",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                }
+              ],
+              "script": "// Screens for Wurli V2: the struck reed, the graphic EQ's curve, the Leslie's rotors.\nconst BLUE = \"#3d7dff\", GREEN = \"#3ec96b\", WHITE = \"#ffffff\", ORANGE = \"#ff6a1a\", RED = \"#ff3b30\", GREY = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nconst clamp = (v, a, b) => Math.min(b, Math.max(a, v));\nconst num = (v, d) => (typeof v === \"number\" && isFinite(v) ? v : d);\nconst last = (arr) => (Array.isArray(arr) && arr.length ? num(arr[arr.length - 1], 0) : 0);\n\nfunction glass(ctx, W, H) {\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.lineWidth = 1;\n  ctx.font = FONT;\n  ctx.textBaseline = \"top\";\n}\n\nfunction tag(ctx, text, x, y, color) {\n  ctx.fillStyle = color;\n  ctx.fillText(text, x, y);\n}\n\nexport default {\n  reed(lcd) {\n    const { ctx, width: W, height: H, params, output, state } = lcd;\n    glass(ctx, W, H);\n    const hard = clamp(num(params[\"Hammer Hardness\"], 0.5), 0, 1);\n    const damp = clamp(num(params[\"Damping Duration\"], 0.4), 0, 1);\n    const dist = clamp(num(params[\"Pickup Distance\"], 0.5), 0, 1);\n    const axis = clamp(num(params[\"Pickup Axis\"], 0.5), 0, 1);\n    const trem = clamp(num(params[\"Tremolo\"], 0), 0, 1);\n    // The reed on the left third: clamped at its root, the tip swinging with the output level.\n    const rw = Math.max(20, W * 0.3), cy = H * 0.55;\n    const lvl = clamp(last(output) * 3, 0, 1);\n    state.swing = num(state.swing, 0) * 0.6 + lvl * 0.4;\n    const tipY = cy - state.swing * H * 0.25;\n    ctx.fillStyle = GREY;\n    ctx.fillRect(4, cy - 6, 5, 12);\n    ctx.strokeStyle = WHITE;\n    ctx.beginPath();\n    ctx.moveTo(9, cy);\n    ctx.quadraticCurveTo(rw * 0.6, cy, rw, tipY);\n    ctx.stroke();\n    // The pickup comb: nearer the reed for a smaller distance, offset up or down by the axis.\n    const gap = 4 + dist * 14, off = (axis - 0.5) * 16;\n    ctx.strokeStyle = ORANGE;\n    ctx.beginPath();\n    ctx.moveTo(rw - 8, cy + gap + off);\n    ctx.lineTo(rw + 8, cy + gap + off);\n    ctx.moveTo(rw - 8, cy - gap + off);\n    ctx.lineTo(rw + 8, cy - gap + off);\n    ctx.stroke();\n    // The hammer: a blue dot whose size is its hardness.\n    ctx.fillStyle = BLUE;\n    ctx.beginPath();\n    ctx.arc(rw * 0.55, cy + 10, 2 + hard * 4, 0, Math.PI * 2);\n    ctx.fill();\n    // The note it rings: harder hammer = more harmonics, closer pickup = more asymmetric bark.\n    const x0 = rw + 16, x1 = W - 4, mid = H * 0.5, amp = H * 0.36;\n    const asym = (1 - dist) * 0.8, h3 = hard * 0.5, tau = 0.15 + damp * 0.85;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(x0, mid);\n    ctx.lineTo(x1, mid);\n    ctx.stroke();\n    ctx.strokeStyle = WHITE;\n    ctx.beginPath();\n    const n = Math.max(2, Math.floor(x1 - x0));\n    for (let i = 0; i <= n; i++) {\n      const t = i / n;\n      const env = Math.exp(-t / tau) * (1 - trem * 0.4 * (1 + Math.sin(t * 30)) * 0.5);\n      const s = Math.sin(t * 2 * Math.PI * 9);\n      const y = (s + h3 * Math.sin(t * 2 * Math.PI * 27) + asym * s * s - asym * 0.5) / (1 + h3 + asym * 0.5);\n      const px = x0 + i, py = mid - y * env * amp;\n      if (i === 0) ctx.moveTo(px, py);\n      else ctx.lineTo(px, py);\n    }\n    ctx.stroke();\n    tag(ctx, \"REED\", 4, 3, GREY);\n    tag(ctx, \"HAMMER\", 4, H - 11, BLUE);\n    tag(ctx, \"PICKUP\", Math.max(4, W - 40), H - 11, ORANGE);\n  },\n\n  eq_curve(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    glass(ctx, W, H);\n    const bands = [\n      [\"32 Hz low shelf gain\", 32, \"low\"],\n      [\"63 Hz peak gain\", 63, \"peak\"],\n      [\"125 Hz peak gain\", 125, \"peak\"],\n      [\"250 Hz peak gain\", 250, \"peak\"],\n      [\"500 Hz peak gain\", 500, \"peak\"],\n      [\"1 kHz peak gain\", 1000, \"peak\"],\n      [\"2 kHz peak gain\", 2000, \"peak\"],\n      [\"4 kHz peak gain\", 4000, \"peak\"],\n      [\"8 kHz peak gain\", 8000, \"peak\"],\n      [\"16 kHz high shelf gain\", 16000, \"high\"],\n    ].map(([name, f, kind]) => ({ f, kind, g: (clamp(num(params[name], 0.5), 0, 1) - 0.5) * 2 }));\n    const lo = Math.log2(20), hi = Math.log2(20000);\n    const xOf = (f) => ((Math.log2(f) - lo) / (hi - lo)) * (W - 8) + 4;\n    const mid = H / 2, span = H * 0.4;\n    const gainAt = (f) => {\n      let g = 0;\n      for (const b of bands) {\n        const d = Math.log2(f / b.f);\n        if (b.kind === \"low\") g += b.g / (1 + Math.exp(d * 4));\n        else if (b.kind === \"high\") g += b.g / (1 + Math.exp(-d * 4));\n        else g += b.g * Math.exp(-(d * d) / 0.5);\n      }\n      return clamp(g, -1, 1);\n    };\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(4, mid);\n    ctx.lineTo(W - 4, mid);\n    ctx.stroke();\n    ctx.strokeStyle = WHITE;\n    ctx.beginPath();\n    for (let x = 4; x <= W - 4; x++) {\n      const f = Math.pow(2, lo + ((x - 4) / Math.max(1, W - 8)) * (hi - lo));\n      const y = mid - gainAt(f) * span;\n      if (x === 4) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    for (const b of bands) {\n      const x = xOf(b.f);\n      ctx.fillStyle = b.g === 0 ? GREY : ORANGE;\n      ctx.beginPath();\n      ctx.arc(x, mid - b.g * span, 2, 0, Math.PI * 2);\n      ctx.fill();\n    }\n    tag(ctx, \"EQ\", 4, 3, GREY);\n  },\n\n  rotor(lcd) {\n    const { ctx, width: W, height: H, params, output, state, now } = lcd;\n    glass(ctx, W, H);\n    const speed = num(params[\"Leslie Speed\"], 0.5);\n    const rate = clamp(num(params[\"Leslie Rate\"], 0.5), 0, 1);\n    const depth = clamp(num(params[\"Leslie High - depth\"], 0.5), 0, 1);\n    const width = clamp(num(params[\"Leslie High - width\"], 0.5), 0, 1);\n    const mode = speed < 0.25 ? 0 : speed < 0.75 ? 1 : 2;\n    const rps = [0, 0.8, 6.5][mode] * (0.5 + rate);\n    // Turn only while sound is moving; otherwise hold the last angle.\n    const t = num(now, 0) / 1000;\n    const moving = last(output) > 0.001;\n    if (moving) state.angle = num(state.angle, 0) + rps * Math.max(0, Math.min(0.1, t - num(state.t, t))) * Math.PI * 2;\n    state.t = t;\n    const a = num(state.angle, 0.6);\n    const r = Math.max(6, Math.min(H * 0.38, W * 0.2));\n    const hx = W * 0.3, dx = W * 0.7, cy = H * 0.5;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.arc(hx, cy, r, 0, Math.PI * 2);\n    ctx.stroke();\n    ctx.beginPath();\n    ctx.arc(dx, cy, r, 0, Math.PI * 2);\n    ctx.stroke();\n    // The horn: two bells, their length the depth, the throw spread by the width.\n    const hl = r * (0.4 + depth * 0.6);\n    ctx.strokeStyle = WHITE;\n    ctx.beginPath();\n    ctx.moveTo(hx - Math.cos(a) * hl, cy - Math.sin(a) * hl);\n    ctx.lineTo(hx + Math.cos(a) * hl, cy + Math.sin(a) * hl);\n    ctx.stroke();\n    ctx.fillStyle = ORANGE;\n    ctx.beginPath();\n    ctx.arc(hx + Math.cos(a) * hl, cy + Math.sin(a) * hl, 2 + width * 3, 0, Math.PI * 2);\n    ctx.fill();\n    // The drum turns slower, the other way.\n    const b = -a * 0.8;\n    ctx.fillStyle = BLUE;\n    ctx.beginPath();\n    ctx.moveTo(dx, cy);\n    ctx.arc(dx, cy, r * 0.8, b, b + Math.PI * 0.6);\n    ctx.closePath();\n    ctx.fill();\n    tag(ctx, \"HORN\", 4, 3, GREY);\n    tag(ctx, \"DRUM\", Math.max(4, W - 28), 3, GREY);\n    tag(ctx, [\"STOP\", \"SLOW\", \"FAST\"][mode], 4, H - 11, mode === 2 ? RED : mode === 1 ? GREEN : GREY);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 18,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "Keys",
+                    "widgets": {
+                      "reed": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "hammer": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "HAMMER",
+                        "color": "#3d7dff26"
+                      },
+                      "hardness": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Hard",
+                        "bind": "Hammer Hardness",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dynamics": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Dynamic",
+                        "bind": "Dynamics",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "damping": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Damp",
+                        "bind": "Damping Duration",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pickup": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "PICKUP",
+                        "color": "#ff6a1a26"
+                      },
+                      "distance": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Dist",
+                        "bind": "Pickup Distance",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "axis": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Axis",
+                        "bind": "Pickup Axis",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "impedance": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Imped",
+                        "bind": "Impedance",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "motion": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "MOD",
+                        "color": "#3ec96b26"
+                      },
+                      "tremolo": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Trem",
+                        "bind": "Tremolo",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vibrato": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Vibrato",
+                        "bind": "Vibrato",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vib_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Vibrato Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "noises": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 14,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "NOISE",
+                        "color": "#ffffff14"
+                      },
+                      "hammer_noise": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 14,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Hammer",
+                        "bind": "Hammer Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "release_noise": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 14,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Key Release Noise",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pedal_noise": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 16,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pedal",
+                        "bind": "Sustain Pedal Noise",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "EQ",
+                    "widgets": {
+                      "eq_curve": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "eq": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 4,
+                        "rowSpan": 9,
+                        "label": "EQ",
+                        "color": "#ff6a1a26"
+                      },
+                      "eq_32": {
+                        "type": "fader",
+                        "col": 0,
+                        "row": 2,
+                        "rowSpan": 3,
+                        "label": "32",
+                        "bind": "32 Hz low shelf gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_63": {
+                        "type": "fader",
+                        "col": 1,
+                        "row": 2,
+                        "rowSpan": 3,
+                        "label": "63",
+                        "bind": "63 Hz peak gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_125": {
+                        "type": "fader",
+                        "col": 2,
+                        "row": 2,
+                        "rowSpan": 3,
+                        "label": "125",
+                        "bind": "125 Hz peak gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_250": {
+                        "type": "fader",
+                        "col": 3,
+                        "row": 2,
+                        "rowSpan": 3,
+                        "label": "250",
+                        "bind": "250 Hz peak gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_500": {
+                        "type": "fader",
+                        "col": 0,
+                        "row": 5,
+                        "rowSpan": 3,
+                        "label": "500",
+                        "bind": "500 Hz peak gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_1k": {
+                        "type": "fader",
+                        "col": 1,
+                        "row": 5,
+                        "rowSpan": 3,
+                        "label": "1k",
+                        "bind": "1 kHz peak gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_2k": {
+                        "type": "fader",
+                        "col": 2,
+                        "row": 5,
+                        "rowSpan": 3,
+                        "label": "2k",
+                        "bind": "2 kHz peak gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_4k": {
+                        "type": "fader",
+                        "col": 3,
+                        "row": 5,
+                        "rowSpan": 3,
+                        "label": "4k",
+                        "bind": "4 kHz peak gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_8k": {
+                        "type": "fader",
+                        "col": 0,
+                        "row": 8,
+                        "rowSpan": 3,
+                        "label": "8k",
+                        "bind": "8 kHz peak gain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "eq_16k": {
+                        "type": "fader",
+                        "col": 1,
+                        "row": 8,
+                        "rowSpan": 3,
+                        "label": "16k",
+                        "bind": "16 kHz high shelf gain",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "Amp",
+                    "widgets": {
+                      "amp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 9,
+                        "label": "AMP",
+                        "color": "#ff3b3026"
+                      },
+                      "cabinet": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Cab",
+                        "bind": "Guitar Amp Cabinet",
+                        "options": [
+                          {
+                            "label": "1x12 blackface",
+                            "value": 0
+                          },
+                          {
+                            "label": "2x12 blackface",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "4x10 tweed",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "4x12 half-stack",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "microphone": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 4,
+                        "label": "Mic",
+                        "bind": "Guitar Amp Microphone",
+                        "options": [
+                          {
+                            "label": "SM57 off axis",
+                            "value": 0
+                          },
+                          {
+                            "label": "SM57 on axis",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "421 front",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "U87 front",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "amp_drive": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Drive",
+                        "bind": "Guitar Amp Drive",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_spring": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Spring",
+                        "bind": "Guitar Amp Reverb",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_level": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Level",
+                        "bind": "Guitar Amp Volume",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_low": {
+                        "type": "fader",
+                        "col": 0,
+                        "row": 6,
+                        "rowSpan": 3,
+                        "label": "Low",
+                        "bind": "Guitar Amp Low",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_mid": {
+                        "type": "fader",
+                        "col": 1,
+                        "row": 6,
+                        "rowSpan": 3,
+                        "label": "Mid",
+                        "bind": "Guitar Amp Mid",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "amp_hi": {
+                        "type": "fader",
+                        "col": 2,
+                        "row": 6,
+                        "rowSpan": 3,
+                        "label": "Hi",
+                        "bind": "Guitar Amp Hi",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "Leslie",
+                    "widgets": {
+                      "leslie": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 8,
+                        "label": "LESLIE",
+                        "color": "#3ec96b26"
+                      },
+                      "leslie_speed": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Speed",
+                        "bind": "Leslie Speed",
+                        "options": [
+                          {
+                            "label": "Stop",
+                            "value": 0
+                          },
+                          {
+                            "label": "Slow",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Fast",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "leslie_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Leslie Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "leslie_depth": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 1,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "Leslie High - depth",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "leslie_width": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Width",
+                        "bind": "Leslie High - width",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "rotor": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "FX",
+                    "widgets": {
+                      "slots": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "FX",
+                        "color": "#ffffff14"
+                      },
+                      "slot_1": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Pedal",
+                        "bind": "FX in slot 1",
+                        "options": [
+                          {
+                            "label": "Empty",
+                            "value": 0
+                          },
+                          {
+                            "label": "Volume pedal",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "Wah-wah",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "Auto-Wah",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "slot_2": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Slot 2",
+                        "bind": "FX in slot 2",
+                        "options": [
+                          {
+                            "label": "Empty",
+                            "value": 0
+                          },
+                          {
+                            "label": "Flanger",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "Phaser",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Chorus",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Delay",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Compressor",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Overdrive",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Vocal Filter",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "PS Chorus",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "slot_3": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 1,
+                        "colSpan": 2,
+                        "label": "Slot 3",
+                        "bind": "FX in slot 3",
+                        "options": [
+                          {
+                            "label": "Empty",
+                            "value": 0
+                          },
+                          {
+                            "label": "Flanger",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "Phaser",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Chorus",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Delay",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Compressor",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Overdrive",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Vocal Filter",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "PS Chorus",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "slot_4": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "label": "Slot 4",
+                        "bind": "FX in slot 4",
+                        "options": [
+                          {
+                            "label": "Empty",
+                            "value": 0
+                          },
+                          {
+                            "label": "Flanger",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "Phaser",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Chorus",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Delay",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Compressor",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Overdrive",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Vocal Filter",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "PS Chorus",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "slot_5": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "label": "Slot 5",
+                        "bind": "FX in slot 5",
+                        "options": [
+                          {
+                            "label": "Empty",
+                            "value": 0
+                          },
+                          {
+                            "label": "Flanger",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "Phaser",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Chorus",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Delay",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Compressor",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Overdrive",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Vocal Filter",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "PS Chorus",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "phaser": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "PHASE",
+                        "color": "#3ec96b26"
+                      },
+                      "phaser_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Phaser Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "phaser_depth": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "Phaser Depth",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "chorus": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "CHORUS",
+                        "color": "#3ec96b26"
+                      },
+                      "chorus_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Chorus Lfo Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "chorus_depth": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "Chorus Lfo Amount",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "overdrive": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "DRIVE",
+                        "color": "#ff3b3026"
+                      },
+                      "od_drive": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Drive",
+                        "bind": "Overdrive Drive",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "od_tone": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Tone",
+                        "bind": "Overdrive Tone",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "Space",
+                    "widgets": {
+                      "delay": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "DELAY",
+                        "color": "#ffffff14"
+                      },
+                      "delay_time": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Time",
+                        "bind": "Delay Delay time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "delay_fb": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fdbk",
+                        "bind": "Delay Feedback",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "delay_mix": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Mix",
+                        "bind": "Delay Mix",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "reverb": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "REVERB",
+                        "color": "#ffffff14"
+                      },
+                      "rev_decay": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Reverb Decay time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "rev_pre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pre",
+                        "bind": "Reverb Pre-delay time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "rev_mix": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Mix",
+                        "bind": "Reverb Mix",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "engines": [
+              "clavinet",
+              "clavinet-v",
+              "stage-73-v2",
+              "stereo-rhodes",
+              "wurli-v2",
+              "wurt"
+            ],
+            "engine": "wurli-v2",
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "melody-wurt": {
+        "from": "melody-wurt",
+        "use": [
+          {
+            "module": "fx-wurt",
+            "uses": "@k7-core/instruments/keys/electric-keys",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "volume": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Volume",
+                  "bind": "Volume",
+                  "min": -40,
+                  "max": 12
+                },
+                "credit": {
+                  "type": "label",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "No Budget Orchestra · bandshed.net · CC BY-SA"
+                }
+              }
+            },
+            "engines": [
+              "clavinet",
+              "clavinet-v",
+              "stage-73-v2",
+              "stereo-rhodes",
+              "wurli-v2",
+              "wurt"
+            ],
+            "engine": "wurt",
+            "params": {
+              "sfz": "@instruments/nbo-wurt/wurly.sfz"
+            },
+            "defaults": {
+              "Volume": 0
+            },
+            "pluginId": "melody-wurt:fx-wurt"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody",
+      "melody-clavinet",
+      "melody-clavinet-v",
+      "melody-stage-73-v2",
+      "melody-stereo-rhodes",
+      "melody-wurli-v2",
+      "melody-wurt"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#4d8de2",
+      "melody-clavinet": "#1e75b8",
+      "melody-clavinet-v": "#217ccb",
+      "melody-stage-73-v2": "#6095e5",
+      "melody-stereo-rhodes": "#2781dc",
+      "melody-wurli-v2": "#3a87df",
+      "melody-wurt": "#739ee8"
+    },
+    "trackSignals": {
+      "melody": "midi",
+      "melody-clavinet": "midi",
+      "melody-clavinet-v": "midi",
+      "melody-stage-73-v2": "midi",
+      "melody-stereo-rhodes": "midi",
+      "melody-wurli-v2": "midi",
+      "melody-wurt": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-clavinet": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-clavinet-v": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-stage-73-v2": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-stereo-rhodes": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-wurli-v2": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ],
+      "melody-wurt": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

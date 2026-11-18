@@ -1,0 +1,42 @@
+{
+  "name": "@studio/ui-module-builder",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The module builder as React: a module's k7x on the left, its widget grid on the right, both editing the module.k7x / ui.k7x pair. The app supplies a ModuleStore — four calls — and owns the engine link around it.",
+  "types": "./src/EngineBuilder.tsx",
+  "exports": {
+    ".": "./src/EngineBuilder.tsx",
+    "./assembly": "./src/AssemblyBuilder.tsx",
+    "./store": "./src/store.ts",
+    "./module-ui": "./src/moduleUi.ts",
+    "./input-channels": "./src/InputChannelBar.tsx",
+    "./param-drag": "./src/paramDrag.ts",
+    "./ai-organize": "./src/aiOrganize.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@studio/ui": "*",
+    "@studio/engine-protocol": "*",
+    "@studio/graph-model": "*",
+    "@studio/k7x": "*",
+    "@studio/panel-rules": "*",
+    "@studio/project-shell": "*",
+    "@studio/song-schema": "*",
+    "@studio/ui-editor": "*",
+    "@studio/ui-timeline": "*",
+    "@studio/web-protocol": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "peerDependencies": {
+    "react": "^19.2.7"
+  }
+}

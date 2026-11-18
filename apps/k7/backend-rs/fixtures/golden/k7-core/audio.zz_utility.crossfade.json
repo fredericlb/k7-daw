@@ -1,0 +1,186 @@
+{
+  "project": "k7-core/audio.zz_utility.crossfade.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.zz_utility.crossfade",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.zz_utility.crossfade.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.crossfade.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "DSP Graph",
+            "name": "fx",
+            "path": "",
+            "dspGraph": "{\n  \"params\": [\n    {\n      \"name\": \"Mix\",\n      \"min\": 0,\n      \"max\": 1,\n      \"default\": 0.5\n    }\n  ],\n  \"nodes\": [\n    {\n      \"type\": \"ain\",\n      \"out\": \"n0\"\n    },\n    {\n      \"type\": \"sub\",\n      \"in\": [\n        1,\n        \"Mix\"\n      ],\n      \"out\": \"n1\"\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n2\",\n      \"in\": [\n        \"n0\"\n      ],\n      \"k\": [\n        \"n1\"\n      ]\n    },\n    {\n      \"type\": \"ain\",\n      \"port\": 1,\n      \"out\": \"n3\"\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n4\",\n      \"in\": [\n        \"n3\"\n      ],\n      \"k\": [\n        \"Mix\"\n      ]\n    },\n    {\n      \"type\": \"aadd\",\n      \"out\": \"n5\",\n      \"in\": [\n        \"n2\",\n        \"n4\"\n      ]\n    },\n    {\n      \"type\": \"aout\",\n      \"in\": [\n        \"n5\"\n      ]\n    }\n  ]\n}\n",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.crossfade.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Mix": 0.5,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/zz_utility/crossfade",
+            "stage": [
+              "@input-volume",
+              "@output-volume"
+            ],
+            "inputs": [
+              {
+                "name": "a",
+                "type": "audio"
+              },
+              {
+                "name": "b",
+                "type": "audio",
+                "mandatory": false
+              }
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 2,
+              "widgets": {
+                "a": {
+                  "type": "label",
+                  "col": 0,
+                  "row": 0,
+                  "label": "A"
+                },
+                "mix": {
+                  "type": "fader",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 2,
+                  "label": "Mix",
+                  "bind": "Mix",
+                  "min": 0,
+                  "max": 1
+                },
+                "b": {
+                  "type": "label",
+                  "col": 2,
+                  "row": 0,
+                  "label": "B"
+                }
+              }
+            },
+            "params": {
+              "Mix": 0.5
+            },
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

@@ -1,0 +1,242 @@
+{
+  "project": "e2e/strudel-lane.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "strudel-lane",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/e2e/strudel-lane.k7/clips",
+    "tracks": [
+      {
+        "id": "kit",
+        "name": "kit",
+        "role": "regular",
+        "contentType": "audio notes",
+        "group": "",
+        "generated": true,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [],
+        "plugins": [
+          {
+            "id": "kit:pattern",
+            "type": "studio_pattern",
+            "name": "Pattern",
+            "path": "",
+            "presetSave": "",
+            "role": "",
+            "enabled": true,
+            "params": {},
+            "patternSource": "// \"Pad\" lands on the pad lane, \"Kit\" on the kit lane; bd/hh/sn resolve to the bundled samples.\nstack(\n  note(\"c e g c5\").s(\"sawtooth\").slow(2).label(\"Pad\"),\n  sound(\"bd hh sn hh\").label(\"Kit\"),\n)\n",
+            "patternLabel": "kit",
+            "patternCatchAll": true,
+            "patternClaimed": [
+              "kit",
+              "pad"
+            ],
+            "patternPlays": "both",
+            "patternOnly": true,
+            "patternBanks": [
+              "<ws>/e2e/strudel-lane.k7/samples"
+            ]
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "pad",
+        "name": "pad",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": true,
+        "color": "#9a5ad3",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [],
+        "plugins": [
+          {
+            "id": "pad:pattern",
+            "type": "studio_pattern",
+            "name": "Pattern",
+            "path": "",
+            "presetSave": "",
+            "role": "",
+            "enabled": true,
+            "params": {},
+            "patternSource": "// \"Pad\" lands on the pad lane, \"Kit\" on the kit lane; bd/hh/sn resolve to the bundled samples.\nstack(\n  note(\"c e g c5\").s(\"sawtooth\").slow(2).label(\"Pad\"),\n  sound(\"bd hh sn hh\").label(\"Kit\"),\n)\n",
+            "patternLabel": "pad",
+            "patternCatchAll": false,
+            "patternClaimed": [
+              "kit",
+              "pad"
+            ],
+            "patternPlays": "notes",
+            "patternOnly": true,
+            "patternBanks": [
+              "<ws>/e2e/strudel-lane.k7/samples"
+            ]
+          },
+          {
+            "id": "pad:synth",
+            "type": "4osc",
+            "name": "synth",
+            "path": "",
+            "presetSave": "<ws>/e2e/strudel-lane.k7/nodes/synth.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "pad": {
+        "from": "pad",
+        "fromPort": "midi",
+        "use": [
+          {
+            "module": "synth",
+            "uses": "@workspace/instruments/fourosc",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "title": {
+                  "type": "label",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "text": "4OSC"
+                },
+                "cutoff": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 1,
+                  "label": "Cutoff",
+                  "bind": "Filter Freq",
+                  "min": 0,
+                  "max": 135.076232
+                },
+                "res": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "label": "Res",
+                  "bind": "Filter Resonance",
+                  "min": 0,
+                  "max": 100
+                },
+                "level": {
+                  "type": "slider",
+                  "col": 2,
+                  "row": 1,
+                  "label": "Level",
+                  "bind": "Level",
+                  "min": -100,
+                  "max": 0
+                }
+              }
+            },
+            "params": {},
+            "defaults": {
+              "Filter Freq": 69,
+              "Filter Resonance": 0.5,
+              "Level": 0
+            },
+            "pluginId": "pad:synth"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "kit": {
+        "from": "kit",
+        "use": [],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "kit",
+      "pad"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "kit": "#dd322c",
+      "pad": "#9a5ad3"
+    },
+    "trackSignals": {
+      "kit": "audio",
+      "pad": "audio"
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

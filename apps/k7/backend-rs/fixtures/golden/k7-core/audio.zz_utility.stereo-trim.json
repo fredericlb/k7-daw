@@ -1,0 +1,528 @@
+{
+  "project": "k7-core/audio.zz_utility.stereo-trim.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.zz_utility.stereo-trim",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.zz_utility.stereo-trim.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.stereo-trim.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Every Trim",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-trim.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-every-trim",
+        "name": "drums-every-trim",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.stereo-trim.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-every-trim:fx-every-trim",
+            "type": "Every Trim",
+            "name": "fx-every-trim",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-trim.k7/nodes/fx-every-trim.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-herme-trim",
+        "name": "drums-herme-trim",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.stereo-trim.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-herme-trim:fx-herme-trim",
+            "type": "Herme Trim",
+            "name": "fx-herme-trim",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.stereo-trim.k7/nodes/fx-herme-trim.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/zz_utility/stereo-trim",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 3,
+              "widgets": {
+                "lr": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3,
+                  "label": "L/R",
+                  "color": "#ffffff14"
+                },
+                "left": {
+                  "type": "fader",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Left",
+                  "bind": "Left",
+                  "min": 0,
+                  "max": 1
+                },
+                "right": {
+                  "type": "fader",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Right",
+                  "bind": "Right",
+                  "min": 0,
+                  "max": 1
+                },
+                "ms": {
+                  "type": "group",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3,
+                  "label": "M/S",
+                  "color": "#8a5cff22"
+                },
+                "mid": {
+                  "type": "fader",
+                  "col": 2,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Mid",
+                  "bind": "Mid",
+                  "min": 0,
+                  "max": 1
+                },
+                "side": {
+                  "type": "fader",
+                  "col": 3,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Side",
+                  "bind": "Side",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "every-trim",
+              "herme-trim"
+            ],
+            "engine": "every-trim",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-every-trim": {
+        "from": "drums-every-trim",
+        "use": [
+          {
+            "module": "fx-every-trim",
+            "uses": "@k7-core/audio/zz_utility/stereo-trim",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 3,
+              "widgets": {
+                "lr": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3,
+                  "label": "L/R",
+                  "color": "#ffffff14"
+                },
+                "left": {
+                  "type": "fader",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Left",
+                  "bind": "Left",
+                  "min": 0,
+                  "max": 1
+                },
+                "right": {
+                  "type": "fader",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Right",
+                  "bind": "Right",
+                  "min": 0,
+                  "max": 1
+                },
+                "ms": {
+                  "type": "group",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3,
+                  "label": "M/S",
+                  "color": "#8a5cff22"
+                },
+                "mid": {
+                  "type": "fader",
+                  "col": 2,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Mid",
+                  "bind": "Mid",
+                  "min": 0,
+                  "max": 1
+                },
+                "side": {
+                  "type": "fader",
+                  "col": 3,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Side",
+                  "bind": "Side",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "every-trim",
+              "herme-trim"
+            ],
+            "engine": "every-trim",
+            "params": {},
+            "pluginId": "drums-every-trim:fx-every-trim"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-herme-trim": {
+        "from": "drums-herme-trim",
+        "use": [
+          {
+            "module": "fx-herme-trim",
+            "uses": "@k7-core/audio/zz_utility/stereo-trim",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 3,
+              "widgets": {
+                "lr": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3,
+                  "label": "L/R",
+                  "color": "#ffffff14"
+                },
+                "left": {
+                  "type": "fader",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Left",
+                  "bind": "Left",
+                  "min": 0,
+                  "max": 1
+                },
+                "right": {
+                  "type": "fader",
+                  "col": 1,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Right",
+                  "bind": "Right",
+                  "min": 0,
+                  "max": 1
+                },
+                "ms": {
+                  "type": "group",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3,
+                  "label": "M/S",
+                  "color": "#8a5cff22"
+                },
+                "mid": {
+                  "type": "fader",
+                  "col": 2,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Mid",
+                  "bind": "Mid",
+                  "min": 0,
+                  "max": 1
+                },
+                "side": {
+                  "type": "fader",
+                  "col": 3,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Side",
+                  "bind": "Side",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "every-trim",
+              "herme-trim"
+            ],
+            "engine": "herme-trim",
+            "params": {},
+            "pluginId": "drums-herme-trim:fx-herme-trim"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-every-trim",
+      "drums-herme-trim"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-every-trim": "#dd322c",
+      "drums-herme-trim": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-every-trim": "audio",
+      "drums-herme-trim": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-every-trim": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-herme-trim": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

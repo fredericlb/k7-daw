@@ -1,0 +1,54 @@
+{
+  "name": "@studio/commands",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "k7's shared command layer — the SID → handler mapping and the command specs, dispatched through by the CLI and the web alike. The work a verb does now lives beside it: @studio/song-edit changes a project, @studio/take-render writes audio, @studio/audio-passes runs the offline chains. Consumed as source.",
+  "exports": {
+    "./commands": "./src/commands.ts",
+    "./commandSpec": "./src/commandSpec.ts",
+    "./nodeMedia": "./src/nodeMedia.ts",
+    "./hostTypes": "./src/hostTypes.ts",
+    "./runtime": "./src/runtime/runtime.ts",
+    "./runtime/remote": "./src/runtime/remote.ts",
+    "./runtime/protocol": "./src/runtime/protocol.ts",
+    "./runtime/worker": "./src/runtime/worker.ts",
+    "./runtime/importer": "./src/runtime/importer.ts",
+    "./node": "./src/runtime/node.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "dev": "tsc --noEmit --watch --preserveWatchOutput",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run && vitest run -c vitest.vfs.config.ts"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@studio/web-protocol": "*",
+    "@studio/audio-analysis": "*",
+    "@studio/audio-passes": "*",
+    "@studio/audio-probe": "*",
+    "@studio/engine-client": "*",
+    "@studio/engine-protocol": "*",
+    "@studio/k7-plugins": "*",
+    "@studio/k7-wasm": "*",
+    "@studio/song": "*",
+    "@studio/song-edit": "*",
+    "@studio/song-schema": "*",
+    "@studio/song-video": "*",
+    "@studio/take-render": "*",
+    "@studio/translator": "*",
+    "@studio/ui-eyes": "*",
+    "@studio/video-prep": "*",
+    "yaml": "^2.5.0"
+  },
+  "devDependencies": {
+    "@studio/k7x": "*",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.16.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

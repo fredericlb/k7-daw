@@ -1,0 +1,25 @@
+// Auto Wah — the DSP as data, read by the song crate into the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// The reasons behind each stage are jsdsp.ts's comments; this file is the same graph, node for node.
+params({
+  Low: { min: 60, max: 8000, default: 200 },
+  High: { min: 60, max: 8000, default: 2400 },
+  Sensitivity: { min: 0, max: 1, default: 0.5 },
+  Resonance: { min: 0.5, max: 20, default: 4 },
+  Attack: { min: 0.1, max: 200, default: 8 },
+  Release: { min: 1, max: 1000, default: 120 },
+  Mix: { min: 0, max: 1, default: 1 },
+  // A band-pass is far quieter than dry (-14.7 dB at the default Q): this is its make-up.
+  Output: { min: -20, max: 40, default: 15 },
+  Direction: { min: 0, max: 1, default: 0, labels: ["up", "down"] },
+})
+graph([
+  // How hard you are playing, in dB, against a floor Sensitivity moves from -60 to -15.
+  linmap(todb(envelope("Attack", "Release")), lerp(-60, -15, "Sensitivity"), 0).as("up"),
+  select("up", sub(1, "up"), "Direction").as("travel"),
+  // Geometric because pitch is, clamped under Nyquist, and glided one block so a step cannot zipper.
+  glide(clamp(geolerp("Low", "High", "travel"), 60, mul("sr", 0.45))).as("freq"),
+  biquad("bandpass", "freq", "Resonance"),
+  // Make-up gain with the resonance compensated out of it, referenced to Q=4.
+  gain(fromdb(add("Output", mul(sub(todb("Resonance"), todb(4)), 0.5)))),
+  mix("Mix"),
+])

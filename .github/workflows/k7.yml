@@ -1,0 +1,83 @@
+# k7 CI — lint, typecheck and the tests of apps/k7, the shared tier and the native supervisor.
+#
+# It runs on every push to main and every `vX.Y.Z` tag, with no path filter. Its JOBS stay narrow:
+# not the whole repo's 62 test tasks, and no C++ engine.
+#
+# The file name and the gating job `name:` fields are load-bearing: branch protection matches on them.
+
+name: k7
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+  pull_request:
+  workflow_dispatch:
+
+# A second push to a ref makes the first run pointless.
+concurrency:
+  group: k7-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  js:
+    name: tests + typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: ./.github/actions/node
+
+
+      # Only apps/k7 and packages are named, so `engine/k7-runtime`'s C++ test script never runs here.
+      - name: test
+        run: npm run test --workspace=apps/k7 --workspace=packages --if-present
+
+      # `build` is `tsc --noEmit` for every package; for web/frontend it is a real
+      # `vite build && tsc --noEmit`, which is a stronger gate and worth the minute.
+      - name: typecheck + build
+        run: npm run build --workspace=apps/k7 --workspace=packages --if-present
+
+      # the backend has only a `typecheck` script — no `build` — so neither step above
+      # covers it. Run it directly rather than adding a script to its package.json
+      # purely to satisfy CI.
+      - name: typecheck the k7 backend
+        working-directory: apps/k7/backend
+        run: npx tsc --noEmit
+
+  supervisor:
+    name: supervisor (native)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      - name: build
+        working-directory: engine/k7-supervisor
+        run: |
+          cmake --preset dev-gcc
+          cmake --build --preset dev-gcc
+
+      - name: unit tests
+        run: engine/k7-supervisor/build/dev-gcc/k7_supervisor_tests
+
+      - uses: ./.github/actions/node
+
+      # The suites find the built `tunnel_harness` and run every case against it as well as the Node agent.
+      - name: tunnel conformance
+        working-directory: packages/engine-tunnel
+        run: npx vitest run
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: ./.github/actions/node
+      # Errors fail the build; warnings are the backlog biome still reports, and do not.
+      - run: npm run lint
+      - run: npm run lint:bytes
+      # One version, the root package.json's, in every copy of it (docs/versioning.md).
+      - run: npm run lint:version

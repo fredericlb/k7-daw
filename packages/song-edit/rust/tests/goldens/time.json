@@ -1,0 +1,2326 @@
+[
+ {
+  "name": "gain on the alternative's own list",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n"
+  },
+  "fn": "setTrackPlacementGain",
+  "args": [
+   "$DIR",
+   "lane",
+   4,
+   4,
+   4,
+   2.55
+  ],
+  "ret": true,
+  "after": {
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\").gain(2.6), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "gain forks an inheriting set",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(3)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n"
+  },
+  "fn": "setTrackPlacementGain",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   -9
+  ],
+  "ret": true,
+  "after": {
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(3)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\").events([ref(\"a\").start(\"1:1:1\").gain(-6), ref(\"a\").start(\"3:1:1\").loop(4)])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "gain on a missing lane",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  },
+  "fn": "setTrackPlacementGain",
+  "args": [
+   "$DIR",
+   "ghost",
+   0,
+   4,
+   4,
+   1
+  ],
+  "e": "track \"ghost\" has no file in nodes/ — cannot set an event's gain",
+  "after": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "gain at a position no event holds",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n"
+  },
+  "fn": "setTrackPlacementGain",
+  "args": [
+   "$DIR",
+   "lane",
+   40,
+   4,
+   4,
+   1
+  ],
+  "ret": false,
+  "after": {
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "gain clamps to six",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\").gain(2)])\n"
+  },
+  "fn": "setTrackPlacementGain",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   99
+  ],
+  "ret": true,
+  "after": {
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\").gain(6)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "gain by a start in seconds",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(2)])\n"
+  },
+  "fn": "setTrackPlacementGain",
+  "args": [
+   "$DIR",
+   "lane",
+   4,
+   4,
+   4,
+   1.25
+  ],
+  "ret": true,
+  "after": {
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(2).gain(1.3)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "gain over a list in call form",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents(ref(\"a\").start(\"1:1:1\"), ref(\"b\").start(\"2:1:1\"))\nalternative(2)\nalternatives([name(\"two\")])\n"
+  },
+  "fn": "setTrackPlacementGain",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   3
+  ],
+  "ret": true,
+  "after": {
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents(ref(\"a\").start(\"1:1:1\"), ref(\"b\").start(\"2:1:1\"))\nalternative(2)\nalternatives([name(\"two\").events([ref(\"a\").start(\"1:1:1\").gain(3), ref(\"b\").start(\"2:1:1\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "audio split keeps the end and the fade",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\").to(4).fadeIn(0.5).fadeOut(0.25)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n"
+  },
+  "fn": "splitAudioPlacement",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   2,
+   4,
+   4,
+   1.23456
+  ],
+  "ret": {
+   "cut": 1.2346
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\").to(1.2346).fadeIn(0.5), ref(\"a\").start(\"1:3\").to(4).fadeOut(0.25).from(1.2346)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "audio split in seconds",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(2)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n"
+  },
+  "fn": "splitAudioPlacement",
+  "args": [
+   "$DIR",
+   "drums",
+   4,
+   8,
+   4,
+   4,
+   2
+  ],
+  "ret": {
+   "cut": 2
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(2).to(2), ref(\"a\").start(4).from(2)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "audio split on an alternative",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(3)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n"
+  },
+  "fn": "splitAudioPlacement",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   2,
+   4,
+   4,
+   1
+  ],
+  "ret": {
+   "cut": 1
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(3)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\").events([ref(\"a\").start(\"1:1:1\").to(1), ref(\"a\").start(\"3:1:1\").loop(4), ref(\"a\").start(\"1:3\").from(1)])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "sequence split by a placement window",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\").from(\"1:2:1\").to(\"1:4:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n"
+  },
+  "fn": "splitSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   1,
+   4,
+   4
+  ],
+  "ret": {
+   "head": {
+    "ref": "kick-1",
+    "file": "sequences/kick-1.k7x",
+    "notes": 1
+   },
+   "tail": {
+    "ref": "kick-2",
+    "file": "sequences/kick-2.k7x",
+    "notes": 1
+   },
+   "from": "kick"
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick-1\").start(\"1:1:1\"), ref(\"kick-2\").start(\"1:2\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/kick-1.k7x": "// Written by `event split`.\nto(\"1:2\")\nnotes([t(0).d(1).k(62)])\n",
+   "sequences/kick-2.k7x": "// Written by `event split`.\nto(\"1:2\")\nnotes([t(0).d(1).k(64)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "sequence split cut at the window end",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\").to(\"1:3:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n"
+  },
+  "fn": "splitSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   2,
+   4,
+   4
+  ],
+  "e": "the cut has to be before the event ends",
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\").to(\"1:3:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "sequence split with a tie in toFixed",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"s\").start(\"1:1:1\")])\n",
+   "sequences/s.k7x": "notes([t(0.0078125).d(1).k(60).v(0.5), t(1.0000005).d(0.1234565).k(61)])\n"
+  },
+  "fn": "splitSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   1,
+   4,
+   4
+  ],
+  "ret": {
+   "head": {
+    "ref": "s-1",
+    "file": "sequences/s-1.k7x",
+    "notes": 1
+   },
+   "tail": {
+    "ref": "s-2",
+    "file": "sequences/s-2.k7x",
+    "notes": 2
+   },
+   "from": "s"
+  },
+  "after": {
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"s-1\").start(\"1:1:1\"), ref(\"s-2\").start(\"1:2\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/s-1.k7x": "// Written by `event split`.\nto(\"1:2\")\nnotes([t(0.007813).d(0.992188).k(60).v(0.5)])\n",
+   "sequences/s-2.k7x": "// Written by `event split`.\nto(\"1:1.119\")\nnotes([t(0).d(0.007813).k(60).v(0.5), t(0.000001).d(0.123457).k(61)])\n",
+   "sequences/s.k7x": "notes([t(0.0078125).d(1).k(60).v(0.5), t(1.0000005).d(0.1234565).k(61)])\n"
+  }
+ },
+ {
+  "name": "sequence split in a start in seconds",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(1)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "splitSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   2,
+   4,
+   4,
+   4
+  ],
+  "ret": {
+   "head": {
+    "ref": "kick-1",
+    "file": "sequences/kick-1.k7x",
+    "notes": 2
+   },
+   "tail": {
+    "ref": "kick-2",
+    "file": "sequences/kick-2.k7x",
+    "notes": 2
+   },
+   "from": "kick"
+  },
+  "after": {
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick-1\").start(1), ref(\"kick-2\").start(2)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/kick-1.k7x": "// Written by `event split`.\nto(\"1:3\")\nnotes([t(0).d(1).k(60), t(1).d(1).k(62)])\n",
+   "sequences/kick-2.k7x": "// Written by `event split`.\nto(\"1:3\")\nnotes([t(0).d(1).k(64), t(1).d(1).k(65)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "sequence split names skip taken numbers",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/kick-1.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "sequences/kick-3.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "splitSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   1,
+   4,
+   4
+  ],
+  "ret": {
+   "head": {
+    "ref": "kick-2",
+    "file": "sequences/kick-2.k7x",
+    "notes": 1
+   },
+   "tail": {
+    "ref": "kick-4",
+    "file": "sequences/kick-4.k7x",
+    "notes": 3
+   },
+   "from": "kick"
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick-2\").start(\"1:1:1\"), ref(\"kick-4\").start(\"1:2\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/kick-1.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "sequences/kick-2.k7x": "// Written by `event split`.\nto(\"1:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "sequences/kick-3.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "sequences/kick-4.k7x": "// Written by `event split`.\nto(\"1:4\")\nnotes([t(0).d(1).k(62), t(1).d(1).k(64), t(2).d(1).k(65)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "sequence split of a missing lane",
+  "files": {},
+  "fn": "splitSequenceMaterial",
+  "args": [
+   "$DIR",
+   "ghost",
+   0,
+   1,
+   4,
+   4
+  ],
+  "e": "track \"ghost\" has no file in nodes/",
+  "after": {}
+ },
+ {
+  "name": "sequence split with a material window",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"m\").start(\"1:1:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/m.k7x": "from(\"1:2:1\")\nto(\"2:1:1\")\nnotes([t(0).d(1).k(60), t(1).d(2).k(62), t(3).d(1).k(64)])\n"
+  },
+  "fn": "splitSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   1,
+   4,
+   4
+  ],
+  "ret": {
+   "head": {
+    "ref": "m-1",
+    "file": "sequences/m-1.k7x",
+    "notes": 1
+   },
+   "tail": {
+    "ref": "m-2",
+    "file": "sequences/m-2.k7x",
+    "notes": 2
+   },
+   "from": "m"
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"m-1\").start(\"1:1:1\"), ref(\"m-2\").start(\"1:2\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "sequences/m-1.k7x": "// Written by `event split`.\nto(\"1:2\")\nnotes([t(0).d(1).k(62)])\n",
+   "sequences/m-2.k7x": "// Written by `event split`.\nto(\"1:3\")\nnotes([t(0).d(1).k(62), t(1).d(1).k(64)])\n",
+   "sequences/m.k7x": "from(\"1:2:1\")\nto(\"2:1:1\")\nnotes([t(0).d(1).k(60), t(1).d(2).k(62), t(3).d(1).k(64)])\n"
+  }
+ },
+ {
+  "name": "sequence split with both edges declared",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"m\").start(\"1:1:1\").to(\"2:1:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/m.k7x": "from(\"1:1\")\nto(\"3:1\")\nnotes([t(0).d(1).k(60), t(1).d(2).k(62), t(5).d(1).k(64)])\n"
+  },
+  "fn": "splitSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   1,
+   4,
+   4
+  ],
+  "ret": {
+   "head": {
+    "ref": "m-1",
+    "file": "sequences/m-1.k7x",
+    "notes": 1
+   },
+   "tail": {
+    "ref": "m-2",
+    "file": "sequences/m-2.k7x",
+    "notes": 1
+   },
+   "from": "m"
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"m-1\").start(\"1:1:1\"), ref(\"m-2\").start(\"1:2\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "sequences/m-1.k7x": "// Written by `event split`.\nto(\"1:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "sequences/m-2.k7x": "// Written by `event split`.\nto(\"1:4\")\nnotes([t(0).d(2).k(62)])\n",
+   "sequences/m.k7x": "from(\"1:1\")\nto(\"3:1\")\nnotes([t(0).d(1).k(60), t(1).d(2).k(62), t(5).d(1).k(64)])\n"
+  }
+ },
+ {
+  "name": "consolidate with both edges declared",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"m\").start(\"1:1:1\").to(\"2:1:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/m.k7x": "from(\"1:1\")\nto(\"3:1\")\nnotes([t(0).d(1).k(60), t(5).d(1).k(64)])\n"
+  },
+  "fn": "consolidateSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   8,
+   4,
+   4
+  ],
+  "ret": {
+   "written": {
+    "ref": "drums-1",
+    "file": "sequences/drums-1.k7x",
+    "notes": 1
+   },
+   "replaced": 1,
+   "from": [
+    "m"
+   ]
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"drums-1\").start(\"1:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/drums-1.k7x": "// Written by `selection consolidate`.\nfrom(\"1:1\")\nto(\"3:1\")\nnotes([t(0).d(1).k(60)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "sequences/m.k7x": "from(\"1:1\")\nto(\"3:1\")\nnotes([t(0).d(1).k(60), t(5).d(1).k(64)])\n"
+  }
+ },
+ {
+  "name": "consolidate with a loop and a gap",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\").loop(2), ref(\"kick\").start(\"4:1:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n"
+  },
+  "fn": "consolidateSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   16,
+   4,
+   4
+  ],
+  "ret": {
+   "written": {
+    "ref": "drums-1",
+    "file": "sequences/drums-1.k7x",
+    "notes": 12
+   },
+   "replaced": 2,
+   "from": [
+    "kick",
+    "kick"
+   ]
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"drums-1\").start(\"1:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/drums-1.k7x": "// Written by `selection consolidate`.\nfrom(\"1:1\")\nto(\"5:1\")\nnotes([\n  t(0).d(1).k(60),\n  t(1).d(1).k(62),\n  t(2).d(1).k(64),\n  t(3).d(1).k(65),\n  t(4).d(1).k(60),\n  t(5).d(1).k(62),\n  t(6).d(1).k(64),\n  t(7).d(1).k(65),\n  t(12).d(1).k(60),\n  t(13).d(1).k(62),\n  t(14).d(1).k(64),\n  t(15).d(1).k(65),\n])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "consolidate a window and a short range",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\").from(\"1:2:1\").to(\"1:4:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n"
+  },
+  "fn": "consolidateSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   1,
+   4,
+   4
+  ],
+  "ret": {
+   "written": {
+    "ref": "drums-1",
+    "file": "sequences/drums-1.k7x",
+    "notes": 2
+   },
+   "replaced": 1,
+   "from": [
+    "kick"
+   ]
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"drums-1\").start(\"1:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/drums-1.k7x": "// Written by `selection consolidate`.\nfrom(\"1:1\")\nto(\"1:3\")\nnotes([t(0).d(1).k(62), t(1).d(1).k(64)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "consolidate notes past the range",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n"
+  },
+  "fn": "consolidateSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   2,
+   4,
+   4
+  ],
+  "ret": {
+   "written": {
+    "ref": "drums-1",
+    "file": "sequences/drums-1.k7x",
+    "notes": 4
+   },
+   "replaced": 1,
+   "from": [
+    "kick"
+   ]
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"drums-1\").start(\"1:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/drums-1.k7x": "// Written by `selection consolidate`.\nfrom(\"1:1\")\nto(\"2:1\")\nnotes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "consolidate on an alternative",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\"), ref(\"kick\").start(\"3:1:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"kick\").start(\"2:1:1\"), ref(\"kick\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "consolidateSequenceMaterial",
+  "args": [
+   "$DIR",
+   "drums",
+   0,
+   8,
+   4,
+   4
+  ],
+  "ret": {
+   "written": {
+    "ref": "drums-1",
+    "file": "sequences/drums-1.k7x",
+    "notes": 4
+   },
+   "replaced": 1,
+   "from": [
+    "kick"
+   ]
+  },
+  "after": {
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\"), ref(\"kick\").start(\"3:1:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"kick\").start(\"4:1:1\").loop(2), ref(\"drums-1\").start(\"1:1\")]), name(\"three\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/drums-1.k7x": "// Written by `selection consolidate`.\nfrom(\"1:1\")\nto(\"3:1\")\nnotes([t(4).d(1).k(60), t(5).d(1).k(62), t(6).d(1).k(64), t(7).d(1).k(65)])\n",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "crossfade replaces and sorts",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\").crossfades([at(\"3:3\").length(\"0:0:2\"), at(\"3:1\").length(\"0:0:1\")])]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventCrossfade",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   "3:1",
+   "0:0:3",
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\").crossfades([at(\"3:3\").length(\"0:0:2\"), at(\"3:1\").length(\"0:0:1\")])]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")]).crossfades([\n  at(\"3:1\").length(\"0:0:3\"),\n])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "crossfade removed by a null length",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\").crossfades([at(\"3:3\").length(\"0:0:2\")])]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventCrossfade",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   "3:3",
+   null,
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\").crossfades([at(\"3:3\").length(\"0:0:2\")])]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "crossfade of the last one drops the key",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\").crossfades([at(\"3:3\").length(\"0:0:2\")])]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventCrossfade",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   "3:3.0",
+   null,
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\").crossfades([at(\"3:3\").length(\"0:0:2\")])]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "crossfade with a bad seam",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventCrossfade",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   "x",
+   "1",
+   4,
+   4
+  ],
+  "e": "bad timecode 'x' — expected \"mesure:noire:croche:doublecroche\", optionally \".ticks\"",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "comp span trims its neighbours",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventComp",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   {
+    "take": "t2",
+    "from": "2:3",
+    "to": "3:2"
+   },
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"2:3\"), take(\"t2\")\n  .from(\"2:3\")\n  .to(\"3:2\"), take(\"t2\").from(\"3:2\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "comp span of the base clears",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventComp",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   {
+    "take": "riff",
+    "from": "2:1",
+    "to": "3:3"
+   },
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "comp span before the start",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventComp",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   {
+    "take": "t1",
+    "from": "1:1",
+    "to": "2:2"
+   },
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\")\n  .from(\"2:1\")\n  .to(\"2:2\"), take(\"t1\").from(\"2:2\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "comp span backwards",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventComp",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   {
+    "take": "t1",
+    "from": "3:1",
+    "to": "2:1"
+   },
+   4,
+   4
+  ],
+  "e": "a comp span must end after it starts",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "comp span on a bad timecode",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "setEventComp",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   {
+    "take": "t1",
+    "from": "a",
+    "to": "2:1"
+   },
+   4,
+   4
+  ],
+  "e": "bad timecode 'a' — expected \"mesure:noire:croche:doublecroche\", optionally \".ticks\"",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "take removal drops its spans",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "removeEventTake",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   "t1",
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t2\").start(\"2:3\")]).comp([take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "take removal of the last drops both keys",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "removeEventTake",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   "t1",
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "take removal of an unknown take",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "removeEventTake",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   "zz",
+   4,
+   4
+  ],
+  "e": "no take \"zz\" on this event",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "take added unheard",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\")])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "addEventTake",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   {
+    "ref": "t9",
+    "start": "2:2"
+   },
+   null,
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t9\").start(\"2:2\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "take added and comped",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "addEventTake",
+  "args": [
+   "$DIR",
+   "keys",
+   4,
+   {
+    "ref": "t9",
+    "start": "2:2"
+   },
+   {
+    "from": "2:2",
+    "to": "2:4"
+   },
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\"), ref(\"t9\").start(\"2:2\")]).comp([take(\"t1\")\n  .from(\"2:1\")\n  .to(\"2:2\"), take(\"t9\").from(\"2:2\").to(\"2:4\"), take(\"t1\").from(\"2:4\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "take added on an alternative",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(3)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n"
+  },
+  "fn": "addEventTake",
+  "args": [
+   "$DIR",
+   "keys",
+   0,
+   {
+    "ref": "t9",
+    "start": "1:1"
+   },
+   null,
+   4,
+   4
+  ],
+  "ret": "$DIR/nodes/keys.k7x",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:1:1\").loop(4)])\nalternative(3)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\").events([ref(\"a\").start(\"1:1:1\").takes([\n  ref(\"t9\").start(\"1:1\"),\n]), ref(\"a\").start(\"3:1:1\").loop(4)])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "take on a missing event",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "addEventTake",
+  "args": [
+   "$DIR",
+   "keys",
+   99,
+   {
+    "ref": "t9",
+    "start": "1:1"
+   },
+   null,
+   4,
+   4
+  ],
+  "e": "no event at 25:4 on keys",
+  "after": {
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").takes([ref(\"t1\").start(\"2:1\"), ref(\"t2\").start(\"2:3\")]).comp([take(\"t1\").from(\"2:1\").to(\"3:1\"), take(\"t2\").from(\"3:1\").to(\"3:3\")])])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "take sequence refused when it exists",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/x.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  },
+  "fn": "writeTakeSequence",
+  "args": [
+   "$DIR",
+   "x",
+   [],
+   4,
+   4,
+   4
+  ],
+  "e": "sequence 'x' already exists (sequences/x.k7x)",
+  "after": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/x.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])\n"
+  }
+ },
+ {
+  "name": "take sequence in a fresh folder",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  },
+  "fn": "writeTakeSequence",
+  "args": [
+   "$DIR",
+   "x",
+   [
+    {
+     "t": 0.5,
+     "d": 0.25,
+     "k": 64,
+     "v": 0.8
+    },
+    {
+     "t": 1,
+     "d": 1,
+     "k": 60
+    }
+   ],
+   3.5,
+   4,
+   4
+  ],
+  "ret": "sequences/x.k7x",
+  "after": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/x.k7x": "from(\"1:1\")\nto(\"1:4:2\")\nnotes([t(0.5).d(0.25).k(64).v(0.8), t(1).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "take sequence of a negative length",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  },
+  "fn": "writeTakeSequence",
+  "args": [
+   "$DIR",
+   "y",
+   [],
+   -2,
+   3,
+   8
+  ],
+  "ret": "sequences/y.k7x",
+  "after": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/y.k7x": "from(\"1:1\")\nto(\"1:1\")\nnotes([])\n"
+  }
+ },
+ {
+  "name": "loop on a sequence with no window",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoop",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   true
+  ],
+  "ret": {
+   "loops": 2,
+   "changed": true
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\").loop(2)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop on an audio window without an end",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoop",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   true,
+   7.99999
+  ],
+  "ret": {
+   "loops": 2,
+   "changed": true
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1\").loop(2).to(7.9999)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop on an audio window with a file end",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"w\").start(\"1:1\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoop",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   true
+  ],
+  "ret": {
+   "loops": 2,
+   "changed": true
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"w\").start(\"1:1\").loop(2)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop off",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\").loop(3)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoop",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   false
+  ],
+  "ret": {
+   "loops": 1,
+   "changed": true
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop off when not looped",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoop",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   false
+  ],
+  "ret": {
+   "loops": 1,
+   "changed": false
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop of an unknown material",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"zz\").start(\"1:1\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoop",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   true
+  ],
+  "e": "'zz' is neither a clip nor a sequence in this project",
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"zz\").start(\"1:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop of a missing lane",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoop",
+  "args": [
+   "$DIR",
+   "ghost",
+   0,
+   4,
+   4,
+   120,
+   true
+  ],
+  "e": "track \"ghost\" has no lane file",
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop points inside a material window",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"win\").start(\"1:1\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoopPoints",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   0,
+   3
+  ],
+  "ret": {
+   "kind": "sequence",
+   "from": 1,
+   "to": 3,
+   "loops": 1
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"win\").start(\"1:1\").to(\"1:4\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop points past the material end",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"win\").start(\"1:1\").loop(2)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoopPoints",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   1,
+   99
+  ],
+  "ret": {
+   "kind": "sequence",
+   "from": 1,
+   "to": 5,
+   "loops": 2
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"win\").start(\"1:1\").loop(2)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop points of a looped audio window",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"w\").start(\"1:1\").loop(3)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoopPoints",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   1.5,
+   2.25
+  ],
+  "ret": {
+   "kind": "audio",
+   "from": 1.5,
+   "to": 2.25,
+   "loops": 8
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"w\").start(\"1:1\").loop(8).from(1.5).to(2.25)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop points with the event's own edges",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\").from(\"1:2\").to(\"2:1\").loop(2)])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoopPoints",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   4,
+   4,
+   120,
+   1,
+   2
+  ],
+  "ret": {
+   "kind": "sequence",
+   "from": 1,
+   "to": 2,
+   "loops": 6
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\").from(\"1:2\").to(\"1:3\").loop(6)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "loop points of a three-eighths bar",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\")])\n",
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n"
+  },
+  "fn": "setTrackPlacementLoopPoints",
+  "args": [
+   "$DIR",
+   "lane",
+   0,
+   3,
+   8,
+   90,
+   0.5,
+   1.5
+  ],
+  "ret": {
+   "kind": "sequence",
+   "from": 0.5,
+   "to": 1.5,
+   "loops": 1
+  },
+  "after": {
+   "clips/a.k7x": "source(\"a.wav\")\n",
+   "clips/w.k7x": "source(\"w.wav\")\nfrom(1)\nto(3)\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1\").from(\"1:2\").to(\"2:1\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(1).k(60), t(5.5).d(1).k(60)])\n",
+   "sequences/win.k7x": "from(\"1:2\")\nto(\"2:2\")\nnotes([t(0).d(1).k(60)])\n"
+  }
+ },
+ {
+  "name": "halving over a chain project",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "chains/gtr.k7x": "start(true)\nsteps([\n  id(\"lane-gtr\").track(\"gtr\"),\n  id(\"w1\").extends(\"@k7-core/audio/wah\").events([ref(\"riff\").start(\"1:1:1\").loop(4), ref(\"riff\").start(\"5:1:1\").loop(3), ref(\"riff\").start(\"9:1:1\").loop(2).from(1)]),\n  to([chain(\"MIX\")]),\n])\n",
+   "tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\").loop(6), ref(\"other\").start(\"2:1:1\").loop(4)])\n"
+  },
+  "fn": "halveLoopsOf",
+  "args": [
+   "$DIR",
+   "riff",
+   "$snap"
+  ],
+  "ret": {
+   "files": [
+    "tracks/gtr.k7x",
+    "chains/gtr.k7x"
+   ],
+   "halved": 2,
+   "kept": [
+    {
+     "start": "5:1:1",
+     "loop": 3,
+     "why": "odd",
+     "lane": "gtr"
+    },
+    {
+     "start": "9:1:1",
+     "loop": 2,
+     "why": "windowed",
+     "lane": "gtr"
+    }
+   ]
+  },
+  "snap": [
+   "tracks/gtr.k7x",
+   "chains/gtr.k7x"
+  ],
+  "after": {
+   "chains/gtr.k7x": "start(true)\nsteps([\n  id(\"lane-gtr\").track(\"gtr\"),\n  id(\"w1\").extends(\"@k7-core/audio/wah\").events([ref(\"riff\").start(\"1:1:1\").loop(2), ref(\"riff\").start(\"5:1:1\").loop(3), ref(\"riff\").start(\"9:1:1\").loop(2).from(1)]),\n  to([chain(\"MIX\")]),\n])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\").loop(3), ref(\"other\").start(\"2:1:1\").loop(4)])\n"
+  }
+ },
+ {
+  "name": "halving over alternatives",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\"), ref(\"riff\").start(\"3:1:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"riff\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\").loop(2)])\n"
+  },
+  "fn": "halveLoopsOf",
+  "args": [
+   "$DIR",
+   "riff",
+   "$snap"
+  ],
+  "ret": {
+   "files": [
+    "nodes/b.k7x",
+    "nodes/lane.k7x"
+   ],
+   "halved": 3,
+   "kept": []
+  },
+  "snap": [
+   "nodes/b.k7x",
+   "nodes/lane.k7x"
+  ],
+  "after": {
+   "nodes/b.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\")])\n",
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\"), ref(\"riff\").start(\"3:1:1\").loop(2)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"riff\").start(\"4:1:1\")]), name(\"three\")])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "halving of a project with no lanes",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  },
+  "fn": "halveLoopsOf",
+  "args": [
+   "$DIR",
+   "riff",
+   "$snap"
+  ],
+  "ret": {
+   "files": [],
+   "halved": 0,
+   "kept": []
+  },
+  "snap": [],
+  "after": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\n"
+  }
+ },
+ {
+  "name": "insert across lanes, curves and markers",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:1\": \"verse\", \"5:2:1\": \"late\", \"9:1\": \"end\" })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:2:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(30)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:1\").value(0.5)])\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:1\").value(0)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   4,
+   2,
+   "insert"
+  ],
+  "ret": {
+   "files": [
+    "nodes/a.k7x",
+    "nodes/sec.k7x",
+    "curves/c.k7x",
+    "curves/o.k7x",
+    "project.k7x"
+   ],
+   "moved": 9,
+   "removed": 0
+  },
+  "after": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:3\").value(0.5)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:3\").value(0)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"4:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:3\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(31.2)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:3\": \"verse\", \"6:1\": \"late\", \"9:3\": \"end\" })\n"
+  }
+ },
+ {
+  "name": "delete across lanes, curves and markers",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:1\": \"verse\", \"5:2:1\": \"late\", \"9:1\": \"end\" })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:2:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(30)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:1\").value(0.5)])\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:1\").value(0)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   4,
+   4,
+   "delete"
+  ],
+  "ret": {
+   "files": [
+    "nodes/a.k7x",
+    "nodes/sec.k7x",
+    "curves/c.k7x",
+    "curves/o.k7x",
+    "project.k7x"
+   ],
+   "moved": 6,
+   "removed": 3
+  },
+  "after": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"2:3\").value(0.5)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\")])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"2:3\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(27.6)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"4:1\": \"late\", \"7:3\": \"end\" })\n"
+  }
+ },
+ {
+  "name": "delete whose markers all go",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:1\": \"verse\", \"5:2:1\": \"late\", \"9:1\": \"end\" })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:2:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(30)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:1\").value(0.5)])\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:1\").value(0)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   100,
+   "delete"
+  ],
+  "ret": {
+   "files": [
+    "nodes/a.k7x",
+    "nodes/sec.k7x",
+    "curves/bad.k7x",
+    "curves/c.k7x",
+    "curves/o.k7x",
+    "project.k7x"
+   ],
+   "moved": 0,
+   "removed": 17
+  },
+  "after": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([])\nalternative(2)\nalternatives([name(\"two\").events([]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({})\n"
+  }
+ },
+ {
+  "name": "a zero length",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:1\": \"verse\", \"5:2:1\": \"late\", \"9:1\": \"end\" })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:2:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(30)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:1\").value(0.5)])\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:1\").value(0)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   4,
+   0,
+   "insert"
+  ],
+  "ret": {
+   "files": [],
+   "moved": 0,
+   "removed": 0
+  },
+  "after": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:1\").value(0.5)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:1\").value(0)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:2:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(30)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:1\": \"verse\", \"5:2:1\": \"late\", \"9:1\": \"end\" })\n"
+  }
+ },
+ {
+  "name": "insert at the top",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:1\": \"verse\", \"5:2:1\": \"late\", \"9:1\": \"end\" })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:2:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(30)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:1\").value(0.5)])\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:1\").value(0)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   3,
+   "insert"
+  ],
+  "ret": {
+   "files": [
+    "nodes/a.k7x",
+    "nodes/sec.k7x",
+    "curves/bad.k7x",
+    "curves/c.k7x",
+    "curves/o.k7x",
+    "project.k7x"
+   ],
+   "moved": 17,
+   "removed": 0
+  },
+  "after": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"3:1\").value(1)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"2:1\").value(0), time(\"3:1\").value(1), time(\"5:1\").value(0.5)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"3:1\").value(1), time(\"4:1\").value(0)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"2:1\"), ref(\"a\").start(\"4:2\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"3:1\"), ref(\"a\").start(\"5:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(3), ref(\"a\").start(1.8), ref(\"b\").start(31.8)])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"2:1\": \"start\", \"4:1\": \"verse\", \"6:2\": \"late\", \"10:1\": \"end\" })\n"
+  }
+ },
+ {
+  "name": "a chain project's items are spliced",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\nmarkers({ \"2:1\": \"x\" })\n",
+   "chains/gtr.k7x": "start(true)\nsteps([\n  id(\"lane-gtr\").track(\"gtr\"),\n  id(\"w1\").extends(\"@k7-core/audio/wah\").events([ref(\"riff\").start(\"1:1:1\").loop(4), ref(\"riff\").start(\"5:1:1\").loop(3), ref(\"riff\").start(\"9:1:1\").loop(2).from(1)]),\n  to([chain(\"MIX\")]),\n])\n",
+   "tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\").loop(6), ref(\"other\").start(\"2:1:1\").loop(4)])\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "ret": {
+   "files": [
+    "tracks/gtr.k7x",
+    "chains/gtr.k7x",
+    "project.k7x"
+   ],
+   "moved": 6,
+   "removed": 0
+  },
+  "after": {
+   "chains/gtr.k7x": "start(true)\nsteps([\n  id(\"lane-gtr\").track(\"gtr\"),\n  id(\"w1\").extends(\"@k7-core/audio/wah\").events([ref(\"riff\").start(\"2:1\").loop(4), ref(\"riff\").start(\"6:1\").loop(3), ref(\"riff\").start(\"10:1\").loop(2).from(1)]),\n  to([chain(\"MIX\")]),\n])\n",
+   "project.k7x": "project({ name: \"t\", tempo: 120 })\nmarkers({ \"3:1\": \"x\" })\n",
+   "tracks/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"2:1\").loop(6), ref(\"other\").start(\"3:1\").loop(4)])\n"
+  }
+ },
+ {
+  "name": "markers in a project with no root",
+  "files": {
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\")])\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "ret": {
+   "files": [
+    "nodes/lane.k7x"
+   ],
+   "moved": 1,
+   "removed": 0
+  },
+  "after": {
+   "nodes/lane.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"2:1\")])\n"
+  }
+ },
+ {
+  "name": "a lane that does not parse refuses the whole",
+  "files": {
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:1\": \"verse\", \"5:2:1\": \"late\", \"9:1\": \"end\" })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:2:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(30)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:1\").value(0.5)])\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:1\").value(0)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n",
+   "nodes/z.k7x": "events([ref(\"a\")"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "$DIR/nodes/z.k7x: expected \",\" or \"]\" (1:17)",
+  "after": {
+   "curves/bad.k7x": "type(\"custom\")\npoints([time(\"zz\").value(0), time(\"2:1\").value(1)])\n",
+   "curves/c.k7x": "type(\"custom\")\npoints([time(\"1:1\").value(0), time(\"2:1\").value(1), time(\"4:1\").value(0.5)])\n",
+   "curves/l.k7x": "type(\"lfo\")\nfrequency(1)\n",
+   "curves/o.k7x": "type(\"onoff\")\npoints([time(\"2:1\").value(1), time(\"3:1\").value(0)])\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1:1\"), ref(\"a\").start(\"3:2:1\").loop(4)])\nalternative(2)\nalternatives([name(\"two\").events([ref(\"b\").start(\"2:1:1\"), ref(\"a\").start(\"4:1:1\").loop(2)]), name(\"three\")])\n",
+   "nodes/sec.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(1.2), ref(\"a\").start(0), ref(\"b\").start(30)])\n",
+   "nodes/z.k7x": "events([ref(\"a\")",
+   "project.k7x": "project({ name: \"t\", tempo: 100, timeSignature: \"3/4\" })\nmarkers({ \"1:1\": \"start\", \"3:1\": \"verse\", \"5:2:1\": \"late\", \"9:1\": \"end\" })\n"
+  }
+ },
+ {
+  "name": "a bad time signature",
+  "files": {
+   "project.k7x": "project({ timeSignature: \"x/4\" })\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: project.timeSignature: expected a time signature like 4/4",
+  "after": {
+   "project.k7x": "project({ timeSignature: \"x/4\" })\n"
+  }
+ },
+ {
+  "name": "invalid: an unknown project key",
+  "files": {
+   "project.k7x": "project({ tempo: 90, nme: 1 })\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: project: Unrecognized key: \"nme\"",
+  "after": {
+   "project.k7x": "project({ tempo: 90, nme: 1 })\n"
+  }
+ },
+ {
+  "name": "invalid: a tempo of zero",
+  "files": {
+   "project.k7x": "project({ tempo: 0 })\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: project.tempo: Too small: expected number to be >0",
+  "after": {
+   "project.k7x": "project({ tempo: 0 })\n"
+  }
+ },
+ {
+  "name": "invalid: a tempo as text",
+  "files": {
+   "project.k7x": "project({ tempo: \"x\" })\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: project.tempo: Invalid input: expected number, received string",
+  "after": {
+   "project.k7x": "project({ tempo: \"x\" })\n"
+  }
+ },
+ {
+  "name": "invalid: a name as a number",
+  "files": {
+   "project.k7x": "project({ name: 5 })\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: project.name: Invalid input: expected string, received number",
+  "after": {
+   "project.k7x": "project({ name: 5 })\n"
+  }
+ },
+ {
+  "name": "invalid: an unknown root key",
+  "files": {
+   "project.k7x": "project({ tempo: 90 })\nmystery(1)\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: (root): Unrecognized key: \"mystery\"",
+  "after": {
+   "project.k7x": "project({ tempo: 90 })\nmystery(1)\n"
+  }
+ },
+ {
+  "name": "invalid: a marker key",
+  "files": {
+   "project.k7x": "markers({ \"x\": \"a\" })\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: markers.x: Invalid key in record",
+  "after": {
+   "project.k7x": "markers({ \"x\": \"a\" })\n"
+  }
+ },
+ {
+  "name": "invalid: a marker label",
+  "files": {
+   "project.k7x": "markers({ \"1:1\": 4 })\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: markers.1:1: Invalid input: expected string, received number",
+  "after": {
+   "project.k7x": "markers({ \"1:1\": 4 })\n"
+  }
+ },
+ {
+  "name": "invalid: a track order",
+  "files": {
+   "project.k7x": "trackOrder(5)\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: trackOrder: Invalid input: expected array, received number",
+  "after": {
+   "project.k7x": "trackOrder(5)\n"
+  }
+ },
+ {
+  "name": "invalid: a format of zero",
+  "files": {
+   "project.k7x": "format(0)\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "invalid project:\n  /project.k7x: format: Too small: expected number to be >=1",
+  "after": {
+   "project.k7x": "format(0)\n"
+  }
+ },
+ {
+  "name": "a newer format",
+  "files": {
+   "project.k7x": "format(9)\nproject({ name: \"t\" })\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "project.k7x: this project was written by a newer k7 (format 9); this k7 reads format 5 — update k7 to open it",
+  "after": {
+   "project.k7x": "format(9)\nproject({ name: \"t\" })\n"
+  }
+ },
+ {
+  "name": "a newer format in data",
+  "files": {
+   "project.k7x": "project({ name: \"t\" })\nformat(7)\n"
+  },
+  "fn": "spliceProjectTime",
+  "args": [
+   "$DIR",
+   0,
+   4,
+   "insert"
+  ],
+  "e": "project.k7x: this project was written by a newer k7 (format 7); this k7 reads format 5 — update k7 to open it",
+  "after": {
+   "project.k7x": "project({ name: \"t\" })\nformat(7)\n"
+  }
+ },
+ {
+  "name": "tempo absent",
+  "files": {
+   "project.k7x": "project({ name: \"t\" })\n"
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "ret": 120,
+  "after": {
+   "project.k7x": "project({ name: \"t\" })\n"
+  }
+ },
+ {
+  "name": "tempo a decimal",
+  "files": {
+   "project.k7x": "project({ tempo: 90.5 })\n"
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "ret": 90.5,
+  "after": {
+   "project.k7x": "project({ tempo: 90.5 })\n"
+  }
+ },
+ {
+  "name": "tempo negative falls to 120",
+  "files": {
+   "project.k7x": "project({ tempo: -3 })\n"
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "ret": 120,
+  "after": {
+   "project.k7x": "project({ tempo: -3 })\n"
+  }
+ },
+ {
+  "name": "tempo a string falls to 120",
+  "files": {
+   "project.k7x": "project({ tempo: \"fast\" })\n"
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "ret": 120,
+  "after": {
+   "project.k7x": "project({ tempo: \"fast\" })\n"
+  }
+ },
+ {
+  "name": "tempo with an unknown key falls to 120",
+  "files": {
+   "project.k7x": "project({ tempo: 77, nme: 1 })\n"
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "ret": 120,
+  "after": {
+   "project.k7x": "project({ tempo: 77, nme: 1 })\n"
+  }
+ },
+ {
+  "name": "tempo with a dead key",
+  "files": {
+   "project.k7x": "type(\"x\")\nproject_type(\"y\")\nproject({ tempo: 77 })\n"
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "ret": 77,
+  "after": {
+   "project.k7x": "type(\"x\")\nproject_type(\"y\")\nproject({ tempo: 77 })\n"
+  }
+ },
+ {
+  "name": "tempo with a v1 marker key",
+  "files": {
+   "project.k7x": "project({ tempo: 66 })\nmarkers({ \"1:30.5\": \"wall\" })\n"
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "ret": 66,
+  "after": {
+   "project.k7x": "project({ tempo: 66 })\nmarkers({ \"1:30.5\": \"wall\" })\n"
+  }
+ },
+ {
+  "name": "no project file",
+  "files": {},
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "ret": 120,
+  "after": {}
+ },
+ {
+  "name": "a newer format refuses",
+  "files": {
+   "project.k7x": "format(6)\nproject({ tempo: 60 })\n"
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "e": "project.k7x: this project was written by a newer k7 (format 6); this k7 reads format 5 — update k7 to open it",
+  "after": {
+   "project.k7x": "format(6)\nproject({ tempo: 60 })\n"
+  }
+ },
+ {
+  "name": "a syntax error refuses",
+  "files": {
+   "project.k7x": "project({ tempo: "
+  },
+  "fn": "songTempo",
+  "args": [
+   "$DIR"
+  ],
+  "e": "expected a value (1:18)",
+  "after": {
+   "project.k7x": "project({ tempo: "
+  }
+ },
+ {
+  "name": "gain value ties",
+  "files": {},
+  "fn": "eventGainValue",
+  "args": [
+   0.25
+  ],
+  "ret": 0.3,
+  "after": {}
+ },
+ {
+  "name": "gain value clamp",
+  "files": {},
+  "fn": "eventGainValue",
+  "args": [
+   -99
+  ],
+  "ret": -6,
+  "after": {}
+ },
+ {
+  "name": "gain value tenth",
+  "files": {},
+  "fn": "eventGainValue",
+  "args": [
+   0.05
+  ],
+  "ret": 0.1,
+  "after": {}
+ },
+ {
+  "name": "gain value half tenth",
+  "files": {},
+  "fn": "eventGainValue",
+  "args": [
+   -0.25
+  ],
+  "ret": -0.2,
+  "after": {}
+ }
+]

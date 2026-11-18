@@ -1,0 +1,3894 @@
+[
+ {
+  "name": "lane-single",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\"), ref(\"riff\").start(\"2:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "a": {
+     "/type": "single",
+     "/events/0": "kick",
+     "/events/1": "riff",
+     "/tracks/#len": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-group",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/g.k7x": "extends(\"@meta/group-track\")\ntracks([\"a\"])\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "g": {
+     "/type": "group",
+     "/events/0": null,
+     "/tracks/0": "a"
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-strudel",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/k.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\n",
+   "algo/beat.strudel": "s(\"bd sn\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "k": {
+     "/type": "strudel",
+     "/strudel": "algo/beat.strudel",
+     "/events/0": null
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-picture",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/p.k7x": "extends(\"@meta/picture-track\")\nframe([0, 0, 640, 360])\ncolor(\"#336699\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "pictures": {
+    "p": {
+     "/type": "picture",
+     "/frame/2": 640,
+     "/color": "#336699"
+    }
+   },
+   "video_tracks": {
+    "p": {
+     "/x": 0,
+     "/w": 640,
+     "/color": "#336699"
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-color-empty-and-set",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\ncolor(\"#ff0000\")\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\ncolor(\"\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "a": {
+     "/color": "#ff0000"
+    },
+    "b": {
+     "/color": null
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-video-source",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nvideo_source(\"cam\")\n",
+   "nodes/g.k7x": "extends(\"@meta/group-track\")\nvideo_source(\"cam\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "a": {
+     "/videoSource": "cam"
+    },
+    "g": {
+     "/videoSource": null
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-frame-sound-and-disabled",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/s.k7x": "extends(\"@meta/track\")\nframe([0, 0, 1, 1])\ndisabled(true)\n",
+   "nodes/p.k7x": "extends(\"@meta/picture-track\")\ndisabled(true)\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "s": {
+     "/frame": null,
+     "/disabled": true
+    }
+   },
+   "pictures": {
+    "p": {
+     "/disabled": true
+    }
+   },
+   "video_tracks": {
+    "p": {
+     "/mute": true
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-strudel-no-pattern",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/k.k7x": "extends(\"@meta/strudel-track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "k": {
+     "/type": "strudel",
+     "/strudel": null
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-meta-track-step-is-no-lane",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"@meta/track\"], \"@meta/track\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "a": {
+     "/type": "single"
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-through-a-library-module",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@k7-core/tracks/mytrack\")\n",
+   "$lib/k7-core/modules/tracks/mytrack/module.k7x": "extends(\"@meta/track\")\ncolor(\"#00ff00\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "lanes": {
+    "a": {
+     "/type": "single",
+     "/color": "#00ff00"
+    }
+   }
+  }
+ },
+ {
+  "name": "lane-picture-mute-from-bypass",
+  "category": "lanes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/p.k7x": "extends(\"@meta/picture-track\")\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "graph.k7x": "modules({ \"p\": [\"fx\"], \"fx\": [\"VIDEO_OUT\"] })\nbypassed([\"p\"])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "video_tracks": {
+    "p": {
+     "/mute": true
+    }
+   }
+  }
+ },
+ {
+  "name": "own-lane-chain",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"MIX\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "owners": {
+    "gtr": "gtr"
+   },
+   "bus": [],
+   "input": [],
+   "tap": [],
+   "side": {
+    "gtr": "gtr",
+    "amp": "gtr",
+    "drums": "drums",
+    "~absent~": ""
+   }
+  }
+ },
+ {
+  "name": "own-master-with-a-step",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"MIX\"], \"MIX\": [\"fx\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "owners": {
+    "MIX": "@master",
+    "gtr": "gtr"
+   },
+   "bus": [],
+   "side": {
+    "MIX": "@master",
+    "fx": "@master"
+   }
+  }
+ },
+ {
+  "name": "own-master-with-none",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"MIX\"], \"MIX\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "owners": {
+    "MIX": "@master"
+   },
+   "bus": []
+  }
+ },
+ {
+  "name": "own-bus-fed-by-two-lanes",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"verb\"], \"drums\": [\"verb\"], \"verb\": [\"MIX\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "owners": {
+    "verb": "verb",
+    "gtr": "gtr",
+    "drums": "drums"
+   },
+   "bus": [
+    "verb"
+   ],
+   "side": {
+    "verb": "verb"
+   }
+  }
+ },
+ {
+  "name": "own-bus-to-cue-without-a-pair",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"verb\"], \"drums\": [\"verb\"], \"verb\": [\"CUE\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "owners": {
+    "verb": "verb"
+   },
+   "bus": [
+    "verb"
+   ],
+   "cued": [
+    "verb"
+   ],
+   "cue_pair": []
+  }
+ },
+ {
+  "name": "own-bus-to-cue-with-a-pair",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"verb\"], \"drums\": [\"verb\"], \"verb\": [\"CUE\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "owners": {
+    "verb": "verb"
+   },
+   "bus": [
+    "verb"
+   ],
+   "cued": [
+    "verb"
+   ],
+   "cue_pair": [
+    5,
+    6
+   ]
+  },
+  "rig": {
+   "channels": {
+    "out": [
+     {
+      "ch": [
+       5,
+       6
+      ],
+      "label": "phones"
+     }
+    ]
+   },
+   "cueOutput": "phones"
+  }
+ },
+ {
+  "name": "own-cue-pair-by-numbers",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"verb\"], \"drums\": [\"verb\"], \"verb\": [\"CUE\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "cue_pair": [
+    3,
+    4
+   ]
+  },
+  "rig": {
+   "cueOutput": [
+    3,
+    4
+   ]
+  }
+ },
+ {
+  "name": "own-chain-to-a-picture-lane",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/cam.k7x": "extends(\"@meta/picture-track\")\n",
+   "graph.k7x": "modules({ \"gtr\": [\"fx\"], \"fx\": [\"cam\"], \"cam\": [\"VIDEO_OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "bus": []
+  }
+ },
+ {
+  "name": "own-builtin-with-a-port",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"RENDER#audio\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "bus": []
+  }
+ },
+ {
+  "name": "own-chain-with-a-port",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"verb#side\"], \"verb\": [\"MIX\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "bus": []
+  }
+ },
+ {
+  "name": "own-run-to-a-live-lane",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"rec\": [\"gtr\"], \"gtr\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "input": [],
+   "owners": {
+    "gtr": "gtr"
+   },
+   "live": {
+    "gtr": {
+     "/channels/0": 1,
+     "/monitor": "auto",
+     "/gain": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "own-input-with-no-lane",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "input": [
+    "rec"
+   ],
+   "owners": {
+    "rec": "rec"
+   },
+   "live": {
+    "rec": {
+     "/channels/0": 1
+    }
+   }
+  }
+ },
+ {
+  "name": "own-input-on-a-bus",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"verb\"], \"drums\": [\"verb\"], \"verb\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "input": [],
+   "bus": [
+    "verb"
+   ],
+   "live": {
+    "verb": {
+     "/channels/0": 1
+    }
+   }
+  }
+ },
+ {
+  "name": "own-input-in-the-master",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"MIX\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "input": [],
+   "owners": {
+    "MIX": "@master"
+   },
+   "live": {
+    "@master": {
+     "/channels/0": 1
+    }
+   }
+  }
+ },
+ {
+  "name": "own-tap-with-a-run",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\ntap_outs({ Snare: \"snare-fx\", Clap: \"clap-fx\" })\n",
+   "nodes/snare-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/clap-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"snare-fx\": [\"OUT\"], \"clap-fx\": [\"OUT\"] })\ntap_feeds([{ node: \"kit\", tap: \"Snare\", to: \"snare-fx\" }, { node: \"kit\", tap: \"Clap\", to: \"clap-fx\" }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "tap": [
+    [
+     "clap-fx",
+     {
+      "node": "kit",
+      "pair": 1
+     }
+    ],
+    [
+     "snare-fx",
+     {
+      "node": "kit",
+      "pair": 2
+     }
+    ]
+   ],
+   "owners": {
+    "snare-fx": "snare-fx"
+   }
+  }
+ },
+ {
+  "name": "own-tap-with-none",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\ntap_outs({ Snare: \"snare-fx\", Clap: \"clap-fx\" })\n",
+   "nodes/snare-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/clap-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"snare-fx\": [\"OUT\"], \"clap-fx\": [\"OUT\"] })\ntap_feeds([{ node: \"kit\", tap: \"Snare\", to: \"snare-fx\" }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "tap_unrouted|node:kit|Clap"
+   ],
+   "tap": [
+    [
+     "snare-fx",
+     {
+      "node": "kit",
+      "pair": 1
+     }
+    ]
+   ]
+  }
+ },
+ {
+  "name": "own-two-taps-on-one-run",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\ntap_outs({ a: \"r1\", b: \"r2\", c: \"r1\" })\n",
+   "nodes/r1.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/r2.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"r1\": [\"OUT\"], \"r2\": [\"OUT\"] })\ntap_feeds([{ node: \"kit\", tap: \"a\", to: \"r1\" }, { node: \"kit\", tap: \"b\", to: \"r2\" }, { node: \"kit\", tap: \"c\", to: \"r1\" }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "tap": [
+    [
+     "r1",
+     {
+      "node": "kit",
+      "pair": 3
+     }
+    ],
+    [
+     "r2",
+     {
+      "node": "kit",
+      "pair": 2
+     }
+    ]
+   ]
+  }
+ },
+ {
+  "name": "own-two-taps-with-none",
+  "category": "ownership",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\ntap_outs({ Snare: \"snare-fx\", Clap: \"clap-fx\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "tap_unrouted|node:kit|Clap",
+    "tap_unrouted|node:kit|Snare"
+   ]
+  }
+ },
+ {
+  "name": "own-side-input-of-a-step-in-a-run",
+  "category": "ownership",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"fx\"], \"fx\": [\"MIX\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "side": {
+    "fx": "gtr",
+    "amp": "gtr",
+    "gtr": "gtr",
+    "drums": "drums",
+    "~absent~": ""
+   }
+  }
+ },
+ {
+  "name": "own-integer-like-chain-names",
+  "category": "ownership",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/10.k7x": "io(\"in\")\nchannel([1])\n",
+   "nodes/2.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"10\": [\"OUT\"], \"2\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "input": [
+    "10",
+    "2"
+   ]
+  }
+ },
+ {
+  "name": "live-label-resolved",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel(\"synth\")\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/channels/0": 3,
+     "/channels/1": 4
+    }
+   }
+  },
+  "rig": {
+   "channels": {
+    "in": [
+     {
+      "ch": [
+       3,
+       4
+      ],
+      "label": "synth"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "name": "live-label-absent",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel(\"ghost\")\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/channels/#len": 0
+    }
+   }
+  },
+  "rig": {
+   "channels": {
+    "in": [
+     {
+      "ch": [
+       3,
+       4
+      ],
+      "label": "synth"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "name": "live-numbers",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([5])\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/channels/0": 5,
+     "/channels/#len": 1
+    }
+   }
+  }
+ },
+ {
+  "name": "live-stereo-pair-of-numbers",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([5, 6])\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/channels/1": 6
+    }
+   }
+  }
+ },
+ {
+  "name": "live-no-channel",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/channels/#len": 0,
+     "/monitor": "auto"
+    }
+   }
+  }
+ },
+ {
+  "name": "live-monitor-on-true",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\nmonitor(true)\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/monitor": "on"
+    }
+   }
+  }
+ },
+ {
+  "name": "live-monitor-off-false",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\nmonitor(false)\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/monitor": "off"
+    }
+   }
+  }
+ },
+ {
+  "name": "live-monitor-on-on",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\nmonitor(\"on\")\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/monitor": "on"
+    }
+   }
+  }
+ },
+ {
+  "name": "live-monitor-off-off",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\nmonitor(\"off\")\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/monitor": "off"
+    }
+   }
+  }
+ },
+ {
+  "name": "live-monitor-auto-auto",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\nmonitor(\"auto\")\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/monitor": "auto"
+    }
+   }
+  }
+ },
+ {
+  "name": "live-gain-set",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\ngain(-6)\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/gain": -6
+    }
+   }
+  }
+ },
+ {
+  "name": "live-two-inputs-on-one-lane",
+  "category": "live",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+   "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"], \"rec2\": [\"mic\"] })\n",
+   "nodes/rec2.k7x": "io(\"in\")\nchannel([2])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "live": {
+    "mic": {
+     "/channels/0": 1
+    }
+   }
+  }
+ },
+ {
+  "name": "ref-clean",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\"), ref(\"riff\").start(\"2:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "ref-missing",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"nope\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "ref_missing|track:a|nope"
+   ]
+  }
+ },
+ {
+  "name": "ref-clip-broken-placed",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nfrom(\"nonsense\")\n",
+   "clips/kick.wav": "RIFF"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "clip_broken|track:a|kick"
+   ]
+  }
+ },
+ {
+  "name": "ref-clip-syntax-error-placed",
+  "category": "references",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "clip_broken|track:a|kick"
+   ]
+  }
+ },
+ {
+  "name": "ref-sequence-broken-placed",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1)])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "sequence_broken|track:a|riff"
+   ]
+  }
+ },
+ {
+  "name": "ref-sequence-syntax-error-placed",
+  "category": "references",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "sequences/riff.k7x": "notes(\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "sequence_broken|track:a|riff"
+   ]
+  }
+ },
+ {
+  "name": "ref-broken-clip-unplaced",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nfrom(\"nonsense\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "ref-syntax-error-clip-unplaced",
+  "category": "references",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "clips/kick.k7x": "source(\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "ref-two-lanes-one-broken-clip",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nfrom(\"nonsense\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "clip_broken|track:a|kick",
+    "clip_broken|track:b|kick"
+   ]
+  }
+ },
+ {
+  "name": "ref-clip-and-sequence-of-one-name",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60)])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "ref-clip-and-sequence-clip-file-missing",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/gone.wav\")\n",
+   "clips/other.wav": "RIFF",
+   "sequences/kick.k7x": "notes([t(0).d(1).k(60)])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "audio_missing|track:a|kick"
+   ]
+  }
+ },
+ {
+  "name": "ref-audio-outside",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"/etc/passwd\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "audio_outside|track:a|kick"
+   ]
+  }
+ },
+ {
+  "name": "ref-audio-missing",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/gone.wav\")\n",
+   "clips/other.wav": "RIFF"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "audio_missing|track:a|kick"
+   ]
+  }
+ },
+ {
+  "name": "ref-sequence-with-a-gain",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\").gain(3)])\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "sequence_gain|track:a|riff"
+   ]
+  }
+ },
+ {
+  "name": "ref-loop-without-an-end",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").loop(2)])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "loop_no_to|track:a|kick"
+   ]
+  }
+ },
+ {
+  "name": "ref-loop-with-an-end-on-the-event",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").loop(2).to(2)])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "ref-loop-with-an-end-on-the-clip",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").loop(2)])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nto(2)\n",
+   "clips/kick.wav": "RIFF"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "ref-strudel-missing",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/k.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\n",
+   "algo/other.strudel": "s(\"bd\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "strudel_missing|track:k|algo/beat.strudel"
+   ]
+  }
+ },
+ {
+  "name": "ref-extends-unknown",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "extends(\"@k7-core/audio/ghost\")\n",
+   "graph.k7x": "modules({ \"a\": [\"amp\"], \"amp\": [\"OUT\"] })\n",
+   "$lib/k7-core/modules/audio/other/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "extends_unknown|module:amp|@k7-core/audio/ghost"
+   ]
+  }
+ },
+ {
+  "name": "ref-extends-broken",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "extends(\"@k7-core/audio/bad\")\n",
+   "graph.k7x": "modules({ \"a\": [\"amp\"], \"amp\": [\"OUT\"] })\n",
+   "$lib/k7-core/modules/audio/bad/module.k7x": "plugin(\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [
+    "@k7-core/audio/bad/module.k7x"
+   ],
+   "faults": [
+    "extends_broken|module:amp|@k7-core/audio/bad"
+   ]
+  }
+ },
+ {
+  "name": "ref-missing-module-is-silent",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"ghost\"], \"ghost\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "ref-timeline-self-loop",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/x.k7x": "length(\"2:0\")\nlanes([lane(\"a\").events([ref(\"x\").start(\"1:1\")])])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "timeline_cycle|timeline:x:a|x"
+   ]
+  }
+ },
+ {
+  "name": "ref-timeline-two-cycle",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/x.k7x": "length(\"2:0\")\nlanes([lane(\"a\").events([ref(\"y\").start(\"1:1\")])])\n",
+   "timelines/y.k7x": "length(\"2:0\")\nlanes([lane(\"b\").events([ref(\"x\").start(\"1:1\")])])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "timeline_cycle|timeline:x:a|y",
+    "timeline_cycle|timeline:y:b|x"
+   ]
+  }
+ },
+ {
+  "name": "ref-timeline-three-cycle-with-a-chain-in",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/a.k7x": "length(\"2:0\")\nlanes([lane(\"l\").events([ref(\"b\").start(\"1:1\")])])\n",
+   "timelines/b.k7x": "length(\"2:0\")\nlanes([lane(\"l\").events([ref(\"c\").start(\"1:1\")])])\n",
+   "timelines/c.k7x": "length(\"2:0\")\nlanes([lane(\"l\").events([ref(\"a\").start(\"1:1\")])])\n",
+   "timelines/w.k7x": "length(\"2:0\")\nlanes([lane(\"l\").events([ref(\"a\").start(\"1:1\")])])\n",
+   "nodes/d.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "timeline_cycle|timeline:a:l|b",
+    "timeline_cycle|timeline:b:l|c",
+    "timeline_cycle|timeline:c:l|a"
+   ]
+  }
+ },
+ {
+  "name": "ref-timeline-fixed",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([lane(\"a\").events([])])\n",
+   "nodes/d.k7x": "extends(\"@meta/track\")\nevents([ref(\"verse\").start(\"1:1\").loop(2)])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "timeline_fixed|track:d|verse"
+   ]
+  }
+ },
+ {
+  "name": "ref-timeline-fixed-on-a-cycle-edge",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/x.k7x": "length(\"2:0\")\nlanes([lane(\"a\").events([ref(\"y\").start(\"1:1\").fadeIn(1)])])\n",
+   "timelines/y.k7x": "length(\"2:0\")\nlanes([lane(\"b\").events([ref(\"x\").start(\"1:1\")])])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "timeline_cycle|timeline:x:a|y",
+    "timeline_cycle|timeline:y:b|x",
+    "timeline_fixed|timeline:x:a|y"
+   ]
+  }
+ },
+ {
+  "name": "ref-timeline-missing-ref",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([lane(\"x\").events([ref(\"nope\").start(\"1:1\")])])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "ref_missing|timeline:verse:x|nope"
+   ]
+  }
+ },
+ {
+  "name": "ref-timeline-broken",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/bad.k7x": "length(\"2:0\")\nlanes([lane(\"a\").events([ref(\"x\").start(\"zz\")])])\n"
+  },
+  "expect": {
+   "stopped": [
+    "timelines/bad.k7x"
+   ],
+   "warned": [],
+   "faults": [
+    "timeline_broken|file:timelines/bad.k7x|"
+   ]
+  }
+ },
+ {
+  "name": "ref-timeline-syntax-error",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/bad.k7x": "lanes(\n"
+  },
+  "expect": {
+   "stopped": [
+    "timelines/bad.k7x"
+   ],
+   "warned": [],
+   "faults": [
+    "timeline_broken|file:timelines/bad.k7x|"
+   ]
+  }
+ },
+ {
+  "name": "ref-timeline-pictures-unchecked",
+  "category": "references",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([])\npictures([lane(\"v\").events([ref(\"nope\").start(\"1:1\")])])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-audio-lane-into-audio-port",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"a\": [\"fx\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-midi-lane-into-audio-port",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"m\": [\"fx\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "port_type|chain:m:1|in"
+   ]
+  }
+ },
+ {
+  "name": "wire-audio-lane-by-port",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/mix.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\"), ref(\"riff\").start(\"2:1\")])\n",
+   "graph.k7x": "modules({ \"a\": [\"fx\"], \"fx\": [\"OUT\"] })\n",
+   "nodes/fx2.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-mixed-lane-by-midi-port-into-audio",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/mix.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\"), ref(\"riff\").start(\"2:1\")])\n",
+   "graph.k7x": "modules({ \"mix#midi\": [\"fx\"], \"mix#audio\": [\"OUT\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "port_type|chain:mix#midi:1|in"
+   ]
+  }
+ },
+ {
+  "name": "wire-mixed-lane-unknown-signal",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/mix.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\"), ref(\"riff\").start(\"2:1\")])\n",
+   "graph.k7x": "modules({ \"mix\": [\"fx\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-empty-and-lost-lanes-say-nothing",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/empty.k7x": "extends(\"@meta/track\")\n",
+   "nodes/lost.k7x": "extends(\"@meta/track\")\nevents([ref(\"nope\").start(\"1:1\")])\n",
+   "nodes/fx2.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"midi\" }])\n",
+   "graph.k7x": "modules({ \"empty\": [\"fx\"], \"lost\": [\"fx2\"], \"fx\": [\"OUT\"], \"fx2\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "ref_missing|track:lost|nope"
+   ]
+  }
+ },
+ {
+  "name": "wire-too-few",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }, { name: \"b\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "too_few|chain:fx:1|fx"
+   ]
+  }
+ },
+ {
+  "name": "wire-too-many",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/m2.k7x": "extends(\"@meta/track\")\n",
+   "graph.k7x": "modules({ \"a\": [\"fx#in\", \"fx#side\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "too_many|chain:fx:1|fx"
+   ]
+  }
+ },
+ {
+  "name": "wire-group-as-from",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/g.k7x": "extends(\"@meta/group-track\")\ntracks([\"a\"])\n",
+   "graph.k7x": "modules({ \"g\": [\"fx\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "group_source|chain:g|g"
+   ]
+  }
+ },
+ {
+  "name": "wire-picture-lane-audio",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/p.k7x": "extends(\"@meta/picture-track\")\n",
+   "graph.k7x": "modules({ \"p#audio\": [\"fx\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-picture-lane-into-audio-port",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/p.k7x": "extends(\"@meta/picture-track\")\n",
+   "graph.k7x": "modules({ \"p\": [\"fx\"], \"fx\": [\"VIDEO_OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "port_type|chain:p:1|in"
+   ]
+  }
+ },
+ {
+  "name": "wire-bypassed-step",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"midi\" }])\n",
+   "graph.k7x": "modules({ \"a\": [\"fx\"], \"fx\": [\"OUT\"] })\nbypassed([\"fx\"])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-parked-chain",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }, { name: \"b\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"fx\": [] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-no-ports",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "graph.k7x": "modules({ \"a\": [\"fx\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-tap-fed-head",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/snare-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\ntap_outs({ Snare: \"snare-fx\", Clap: \"snare-fx\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"snare-fx\": [\"OUT\"] })\ntap_feeds([{ node: \"kit\", tap: \"Snare\", to: \"snare-fx\" }, { node: \"kit\", tap: \"Clap\", to: \"snare-fx\" }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-fade-shot-head",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/s.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"video\" }])\n",
+   "nodes/pic.k7x": "extends(\"@meta/picture-track\")\n",
+   "graph.k7x": "modules({ \"s\": [\"pic\"], \"pic\": [\"VIDEO_OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-reference-and-wiring-faults-both",
+  "category": "wiring",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/bad.k7x": "extends(\"@meta/track\")\nevents([ref(\"nope\").start(\"1:1\")])\n",
+   "graph.k7x": "modules({ \"m\": [\"fx\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "port_type|chain:m:1|in",
+    "ref_missing|track:bad|nope"
+   ]
+  }
+ },
+ {
+  "name": "wire-clip-source",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"kick\": [\"fx#in\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-sequence-source-into-audio-port",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"riff\": [\"fx#in\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "port_type|chain:fx:1|in"
+   ]
+  }
+ },
+ {
+  "name": "wire-video-clip-into-audio-port",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "clips/take.k7x": "source(\"clips/take.mp4\")\n",
+   "clips/take.mp4": "x",
+   "graph.k7x": "modules({ \"take\": [\"fx#in\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "port_type|chain:fx:1|in"
+   ]
+  }
+ },
+ {
+  "name": "wire-caption-clip-is-video",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "clips/subs.k7x": "source(\"clips/subs.srt\")\n",
+   "clips/subs.srt": "x",
+   "graph.k7x": "modules({ \"subs\": [\"fx#in\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "port_type|chain:fx:1|in"
+   ]
+  }
+ },
+ {
+  "name": "wire-lanes-as-side-sources",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }, { name: \"side\", type: \"audio\", mandatory: false }])\n",
+   "graph.k7x": "modules({ \"a\": [\"fx#in\"], \"m\": [\"fx#side\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "port_type|chain:fx:1|side"
+   ]
+  }
+ },
+ {
+  "name": "wire-detyped-lane-with-each-material",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }, { name: \"side\", type: \"audio\", mandatory: false }])\n",
+   "nodes/mix.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\"), ref(\"riff\").start(\"2:1\")])\n",
+   "nodes/empty.k7x": "extends(\"@meta/track\")\n",
+   "nodes/fx2.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"a\": [\"fx#in\"], \"mix\": [\"fx#side\"], \"empty\": [\"fx2#in\"], \"fx\": [\"OUT\"], \"fx2\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-picture-sources",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"video\" }, { name: \"side\", type: \"audio\", mandatory: false }])\n",
+   "nodes/p.k7x": "extends(\"@meta/picture-track\")\n",
+   "graph.k7x": "modules({ \"p\": [\"fx#in\"], \"p#audio\": [\"fx#side\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-unknown-source",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "graph.k7x": "modules({ \"ghost\": [\"fx#in\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": []
+  }
+ },
+ {
+  "name": "wire-group-source-by-port",
+  "category": "wiring",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\")])\n",
+   "nodes/m.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\")])\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "clips/kick.wav": "RIFF",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }])\n",
+   "nodes/g.k7x": "extends(\"@meta/group-track\")\ntracks([\"a\"])\n",
+   "graph.k7x": "modules({ \"g\": [\"fx#in\"], \"fx\": [\"OUT\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "group_source|chain:g|g"
+   ]
+  }
+ },
+ {
+  "name": "asm-good-one",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/turntableA.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([\n  name(\"mix\").type(\"audio\").node(\"fade\"),\n  name(\"cue\").type(\"audio\").node(\"cue\"),\n])\nparams({\n  Level: { node: \"level\", param: \"Gain\" },\n  Fade: { node: \"fade\", param: \"Level\" },\n})\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "turntableA": {
+     "/label": "Turntable",
+     "/outputs/0/node": "fadeA",
+     "/outputs/1/node": "cueA",
+     "/params/Level/node": "levelA",
+     "/outputs/0/mandatory": true,
+     "/missing": null
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-member-unmapped",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/turntableA.k7x": "uses(\"@k7-core/turntable\")\nmembers({ fade: \"fadeA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([\n  name(\"mix\").type(\"audio\").node(\"fade\"),\n  name(\"cue\").type(\"audio\").node(\"cue\"),\n])\nparams({\n  Level: { node: \"level\", param: \"Gain\" },\n  Fade: { node: \"fade\", param: \"Level\" },\n})\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "turntableA": {
+     "/outputs/#len": 1,
+     "/params/Fade/node": "fadeA",
+     "/params/Level": null
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-absent-template",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/turntableA.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [
+    "assemblies/turntableA.k7x"
+   ],
+   "faults": [],
+   "assemblies": {
+    "turntableA": {
+     "/missing": true,
+     "/label": "turntableA",
+     "/outputs/#len": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-no-library-at-all",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/turntableA.k7x": "uses(\"@nowhere/x\")\nmembers({ a: \"b\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [
+    "assemblies/turntableA.k7x"
+   ],
+   "faults": [],
+   "assemblies": {
+    "turntableA": {
+     "/missing": true
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-template-schema-fault",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/turntableA.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "plugs([])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "turntableA": {
+     "/label": "turntableA",
+     "/outputs/#len": 0
+    }
+   },
+   "assembly_issues": [
+    "assemblies/turntableA.k7x|error"
+   ]
+  }
+ },
+ {
+  "name": "asm-empty-template",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/turntableA.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": ""
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "turntableA": {
+     "/outputs/#len": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-empty-instance",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/blank.k7x": "",
+   "assemblies/turntableA.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([\n  name(\"mix\").type(\"audio\").node(\"fade\"),\n  name(\"cue\").type(\"audio\").node(\"cue\"),\n])\nparams({\n  Level: { node: \"level\", param: \"Gain\" },\n  Fade: { node: \"fade\", param: \"Level\" },\n})\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "turntableA": {
+     "/label": "Turntable"
+    },
+    "blank": null
+   }
+  }
+ },
+ {
+  "name": "asm-two-plugs-of-one-name",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/turntableA.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "outputs([name(\"m\").type(\"audio\").node(\"fade\"), name(\"m\").type(\"audio\").node(\"cue\")])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "turntableA": {
+     "/outputs/#len": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-template-with-a-label",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/t.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Deck\")\noutputs([name(\"o\").type(\"midi\").node(\"fade\").port(\"p\").mandatory(false)])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "t": {
+     "/label": "Deck",
+     "/outputs/0/type": "midi",
+     "/outputs/0/port": "p",
+     "/outputs/0/mandatory": false
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-no-template-label-is-the-id",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/t.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "outputs([name(\"o\").type(\"audio\").node(\"fade\")])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "t": {
+     "/label": "t"
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-two-instances-of-one-template",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/a.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "assemblies/b.k7x": "uses(\"@k7-core/turntable\")\nmembers({ fade: \"fadeB\", cue: \"cueB\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([\n  name(\"mix\").type(\"audio\").node(\"fade\"),\n  name(\"cue\").type(\"audio\").node(\"cue\"),\n])\nparams({\n  Level: { node: \"level\", param: \"Gain\" },\n  Fade: { node: \"fade\", param: \"Level\" },\n})\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "assemblies": {
+    "a": {
+     "/outputs/0/node": "fadeA"
+    },
+    "b": {
+     "/outputs/0/node": "fadeB"
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-hostile-refs-are-missing",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/a.k7x": "uses(\"@k7-core/../../x\")\nmembers({ a: \"b\" })\n",
+   "assemblies/b.k7x": "uses(\"@project/x\")\nmembers({ a: \"b\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([\n  name(\"mix\").type(\"audio\").node(\"fade\"),\n  name(\"cue\").type(\"audio\").node(\"cue\"),\n])\nparams({\n  Level: { node: \"level\", param: \"Gain\" },\n  Fade: { node: \"fade\", param: \"Level\" },\n})\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [
+    "assemblies/a.k7x",
+    "assemblies/b.k7x"
+   ],
+   "faults": [],
+   "assemblies": {
+    "a": {
+     "/missing": true
+    },
+    "b": {
+     "/missing": true
+    }
+   }
+  }
+ },
+ {
+  "name": "asm-a-box-changes-no-chain",
+  "category": "assemblies",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "assemblies/turntableA.k7x": "uses(\"@k7-core/turntable\")\nmembers({ level: \"levelA\", fade: \"fadeA\", cue: \"cueA\" })\n",
+   "$lib/k7-core/assemblies/turntable/assembly.k7x": "label(\"Turntable\")\noutputs([\n  name(\"mix\").type(\"audio\").node(\"fade\"),\n  name(\"cue\").type(\"audio\").node(\"cue\"),\n])\nparams({\n  Level: { node: \"level\", param: \"Gain\" },\n  Fade: { node: \"fade\", param: \"Level\" },\n})\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/levelA.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"levelA\"], \"levelA\": [\"MIX\"] })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "owners": {
+    "gtr": "gtr"
+   },
+   "bus": []
+  }
+ },
+ {
+  "name": "console-a-system",
+  "category": "console",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120, console: \"@k7-core/console/console-6\" })\n",
+   "$lib/k7-core/modules/console/console-6/channel/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Channel\" })\nparams({ Drive: 0.5, Mode: \"warm\", Trim: -3 })\n",
+   "$lib/k7-core/modules/console/console-6/buss/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Buss\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "console": {
+    "channel": {
+     "/type": "Console 6 Channel",
+     "/params/Drive": 0.5,
+     "/params/Trim": -3,
+     "/params/Mode": null,
+     "/id": "@console:x",
+     "/path": "",
+     "/enabled": true
+    },
+    "buss": {
+     "/type": "Console 6 Buss",
+     "/id": "@console:master"
+    }
+   }
+  }
+ },
+ {
+  "name": "console-half-a-system",
+  "category": "console",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120, console: \"@k7-core/console/broken\" })\n",
+   "$lib/k7-core/modules/console/console-6/channel/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Channel\" })\nparams({ Drive: 0.5, Mode: \"warm\", Trim: -3 })\n",
+   "$lib/k7-core/modules/console/console-6/buss/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Buss\" })\n",
+   "$lib/k7-core/modules/console/broken/channel/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "console_absent|console|buss"
+   ]
+  }
+ },
+ {
+  "name": "console-none",
+  "category": "console",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "$lib/k7-core/modules/console/console-6/channel/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Channel\" })\nparams({ Drive: 0.5, Mode: \"warm\", Trim: -3 })\n",
+   "$lib/k7-core/modules/console/console-6/buss/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Buss\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "console": {
+    "channel": {
+     "": null
+    },
+    "buss": {
+     "": null
+    }
+   }
+  }
+ },
+ {
+  "name": "console-system-absent",
+  "category": "console",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120, console: \"@k7-core/console/ghost\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "console_absent|console|channel"
+   ]
+  }
+ },
+ {
+  "name": "console-jsdsp-half",
+  "category": "console",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120, console: \"@k7-core/console/dsp\" })\n",
+   "$lib/k7-core/modules/console/dsp/channel/module.k7x": "plugin({ type: \"jsdsp\" })\n",
+   "$lib/k7-core/modules/console/dsp/buss/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Buss\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "console": {
+    "channel": {
+     "/type": "DSP Graph",
+     "/name": "@console:x"
+    }
+   }
+  }
+ },
+ {
+  "name": "console-systems-sorted",
+  "category": "console",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "$lib/k7-core/modules/console/console-6/channel/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Channel\" })\nparams({ Drive: 0.5, Mode: \"warm\", Trim: -3 })\n",
+   "$lib/k7-core/modules/console/console-6/buss/module.k7x": "plugin({ type: \"internal\", name: \"Console 6 Buss\" })\n",
+   "$lib/k7-core/modules/console/alpha/channel/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/modules/console/alpha/buss/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [],
+   "console": {
+    "systems": {
+     "/0/label": "alpha",
+     "/1/label": "console-6"
+    }
+   }
+  }
+ },
+ {
+  "name": "departs-a-hundred-tap-faults-capped",
+  "category": "departs",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\ntap_outs({ T0000: \"r0\", T0001: \"r1\", T0002: \"r2\", T0003: \"r3\", T0004: \"r4\", T0005: \"r5\", T0006: \"r6\", T0007: \"r7\", T0008: \"r8\", T0009: \"r9\", T0010: \"r10\", T0011: \"r11\", T0012: \"r12\", T0013: \"r13\", T0014: \"r14\", T0015: \"r15\", T0016: \"r16\", T0017: \"r17\", T0018: \"r18\", T0019: \"r19\", T0020: \"r20\", T0021: \"r21\", T0022: \"r22\", T0023: \"r23\", T0024: \"r24\", T0025: \"r25\", T0026: \"r26\", T0027: \"r27\", T0028: \"r28\", T0029: \"r29\", T0030: \"r30\", T0031: \"r31\", T0032: \"r32\", T0033: \"r33\", T0034: \"r34\", T0035: \"r35\", T0036: \"r36\", T0037: \"r37\", T0038: \"r38\", T0039: \"r39\", T0040: \"r40\", T0041: \"r41\", T0042: \"r42\", T0043: \"r43\", T0044: \"r44\", T0045: \"r45\", T0046: \"r46\", T0047: \"r47\", T0048: \"r48\", T0049: \"r49\", T0050: \"r50\", T0051: \"r51\", T0052: \"r52\", T0053: \"r53\", T0054: \"r54\", T0055: \"r55\", T0056: \"r56\", T0057: \"r57\", T0058: \"r58\", T0059: \"r59\", T0060: \"r60\", T0061: \"r61\", T0062: \"r62\", T0063: \"r63\", T0064: \"r64\", T0065: \"r65\", T0066: \"r66\", T0067: \"r67\", T0068: \"r68\", T0069: \"r69\", T0070: \"r70\", T0071: \"r71\", T0072: \"r72\", T0073: \"r73\", T0074: \"r74\", T0075: \"r75\", T0076: \"r76\", T0077: \"r77\", T0078: \"r78\", T0079: \"r79\", T0080: \"r80\", T0081: \"r81\", T0082: \"r82\", T0083: \"r83\", T0084: \"r84\", T0085: \"r85\", T0086: \"r86\", T0087: \"r87\", T0088: \"r88\", T0089: \"r89\", T0090: \"r90\", T0091: \"r91\", T0092: \"r92\", T0093: \"r93\", T0094: \"r94\", T0095: \"r95\", T0096: \"r96\", T0097: \"r97\", T0098: \"r98\", T0099: \"r99\", T0100: \"r100\", T0101: \"r101\", T0102: \"r102\", T0103: \"r103\", T0104: \"r104\", T0105: \"r105\", T0106: \"r106\", T0107: \"r107\", T0108: \"r108\", T0109: \"r109\", T0110: \"r110\", T0111: \"r111\", T0112: \"r112\", T0113: \"r113\", T0114: \"r114\", T0115: \"r115\", T0116: \"r116\", T0117: \"r117\", T0118: \"r118\", T0119: \"r119\", T0120: \"r120\", T0121: \"r121\", T0122: \"r122\", T0123: \"r123\", T0124: \"r124\", T0125: \"r125\", T0126: \"r126\", T0127: \"r127\", T0128: \"r128\", T0129: \"r129\", T0130: \"r130\", T0131: \"r131\", T0132: \"r132\", T0133: \"r133\", T0134: \"r134\", T0135: \"r135\", T0136: \"r136\", T0137: \"r137\", T0138: \"r138\", T0139: \"r139\", T0140: \"r140\", T0141: \"r141\", T0142: \"r142\", T0143: \"r143\", T0144: \"r144\", T0145: \"r145\", T0146: \"r146\", T0147: \"r147\", T0148: \"r148\", T0149: \"r149\", T0150: \"r150\", T0151: \"r151\", T0152: \"r152\", T0153: \"r153\", T0154: \"r154\", T0155: \"r155\", T0156: \"r156\", T0157: \"r157\", T0158: \"r158\", T0159: \"r159\", T0160: \"r160\", T0161: \"r161\", T0162: \"r162\", T0163: \"r163\", T0164: \"r164\", T0165: \"r165\", T0166: \"r166\", T0167: \"r167\", T0168: \"r168\", T0169: \"r169\", T0170: \"r170\", T0171: \"r171\", T0172: \"r172\", T0173: \"r173\", T0174: \"r174\", T0175: \"r175\", T0176: \"r176\", T0177: \"r177\", T0178: \"r178\", T0179: \"r179\", T0180: \"r180\", T0181: \"r181\", T0182: \"r182\", T0183: \"r183\", T0184: \"r184\", T0185: \"r185\", T0186: \"r186\", T0187: \"r187\", T0188: \"r188\", T0189: \"r189\", T0190: \"r190\", T0191: \"r191\", T0192: \"r192\", T0193: \"r193\", T0194: \"r194\", T0195: \"r195\", T0196: \"r196\", T0197: \"r197\", T0198: \"r198\", T0199: \"r199\", T0200: \"r200\", T0201: \"r201\", T0202: \"r202\", T0203: \"r203\", T0204: \"r204\", T0205: \"r205\", T0206: \"r206\", T0207: \"r207\", T0208: \"r208\", T0209: \"r209\", T0210: \"r210\", T0211: \"r211\", T0212: \"r212\", T0213: \"r213\", T0214: \"r214\", T0215: \"r215\", T0216: \"r216\", T0217: \"r217\", T0218: \"r218\", T0219: \"r219\", T0220: \"r220\", T0221: \"r221\", T0222: \"r222\", T0223: \"r223\", T0224: \"r224\", T0225: \"r225\", T0226: \"r226\", T0227: \"r227\", T0228: \"r228\", T0229: \"r229\", T0230: \"r230\", T0231: \"r231\", T0232: \"r232\", T0233: \"r233\", T0234: \"r234\", T0235: \"r235\", T0236: \"r236\", T0237: \"r237\", T0238: \"r238\", T0239: \"r239\", T0240: \"r240\", T0241: \"r241\", T0242: \"r242\", T0243: \"r243\", T0244: \"r244\", T0245: \"r245\", T0246: \"r246\", T0247: \"r247\", T0248: \"r248\", T0249: \"r249\", T0250: \"r250\", T0251: \"r251\", T0252: \"r252\", T0253: \"r253\", T0254: \"r254\", T0255: \"r255\", T0256: \"r256\", T0257: \"r257\", T0258: \"r258\", T0259: \"r259\", T0260: \"r260\", T0261: \"r261\", T0262: \"r262\", T0263: \"r263\", T0264: \"r264\", T0265: \"r265\", T0266: \"r266\", T0267: \"r267\", T0268: \"r268\", T0269: \"r269\", T0270: \"r270\", T0271: \"r271\", T0272: \"r272\", T0273: \"r273\", T0274: \"r274\", T0275: \"r275\", T0276: \"r276\", T0277: \"r277\", T0278: \"r278\", T0279: \"r279\", T0280: \"r280\", T0281: \"r281\", T0282: \"r282\", T0283: \"r283\", T0284: \"r284\", T0285: \"r285\", T0286: \"r286\", T0287: \"r287\", T0288: \"r288\", T0289: \"r289\", T0290: \"r290\", T0291: \"r291\", T0292: \"r292\", T0293: \"r293\", T0294: \"r294\", T0295: \"r295\", T0296: \"r296\", T0297: \"r297\", T0298: \"r298\", T0299: \"r299\", T0300: \"r300\", T0301: \"r301\", T0302: \"r302\", T0303: \"r303\", T0304: \"r304\", T0305: \"r305\", T0306: \"r306\", T0307: \"r307\", T0308: \"r308\", T0309: \"r309\", T0310: \"r310\", T0311: \"r311\", T0312: \"r312\", T0313: \"r313\", T0314: \"r314\", T0315: \"r315\", T0316: \"r316\", T0317: \"r317\", T0318: \"r318\", T0319: \"r319\", T0320: \"r320\", T0321: \"r321\", T0322: \"r322\", T0323: \"r323\", T0324: \"r324\", T0325: \"r325\", T0326: \"r326\", T0327: \"r327\", T0328: \"r328\", T0329: \"r329\", T0330: \"r330\", T0331: \"r331\", T0332: \"r332\", T0333: \"r333\", T0334: \"r334\", T0335: \"r335\", T0336: \"r336\", T0337: \"r337\", T0338: \"r338\", T0339: \"r339\", T0340: \"r340\", T0341: \"r341\", T0342: \"r342\", T0343: \"r343\", T0344: \"r344\", T0345: \"r345\", T0346: \"r346\", T0347: \"r347\", T0348: \"r348\", T0349: \"r349\", T0350: \"r350\", T0351: \"r351\", T0352: \"r352\", T0353: \"r353\", T0354: \"r354\", T0355: \"r355\", T0356: \"r356\", T0357: \"r357\", T0358: \"r358\", T0359: \"r359\", T0360: \"r360\", T0361: \"r361\", T0362: \"r362\", T0363: \"r363\", T0364: \"r364\", T0365: \"r365\", T0366: \"r366\", T0367: \"r367\", T0368: \"r368\", T0369: \"r369\", T0370: \"r370\", T0371: \"r371\", T0372: \"r372\", T0373: \"r373\", T0374: \"r374\", T0375: \"r375\", T0376: \"r376\", T0377: \"r377\", T0378: \"r378\", T0379: \"r379\", T0380: \"r380\", T0381: \"r381\", T0382: \"r382\", T0383: \"r383\", T0384: \"r384\", T0385: \"r385\", T0386: \"r386\", T0387: \"r387\", T0388: \"r388\", T0389: \"r389\", T0390: \"r390\", T0391: \"r391\", T0392: \"r392\", T0393: \"r393\", T0394: \"r394\", T0395: \"r395\", T0396: \"r396\", T0397: \"r397\", T0398: \"r398\", T0399: \"r399\", T0400: \"r400\", T0401: \"r401\", T0402: \"r402\", T0403: \"r403\", T0404: \"r404\", T0405: \"r405\", T0406: \"r406\", T0407: \"r407\", T0408: \"r408\", T0409: \"r409\", T0410: \"r410\", T0411: \"r411\", T0412: \"r412\", T0413: \"r413\", T0414: \"r414\", T0415: \"r415\", T0416: \"r416\", T0417: \"r417\", T0418: \"r418\", T0419: \"r419\", T0420: \"r420\", T0421: \"r421\", T0422: \"r422\", T0423: \"r423\", T0424: \"r424\", T0425: \"r425\", T0426: \"r426\", T0427: \"r427\", T0428: \"r428\", T0429: \"r429\", T0430: \"r430\", T0431: \"r431\", T0432: \"r432\", T0433: \"r433\", T0434: \"r434\", T0435: \"r435\", T0436: \"r436\", T0437: \"r437\", T0438: \"r438\", T0439: \"r439\", T0440: \"r440\", T0441: \"r441\", T0442: \"r442\", T0443: \"r443\", T0444: \"r444\", T0445: \"r445\", T0446: \"r446\", T0447: \"r447\", T0448: \"r448\", T0449: \"r449\", T0450: \"r450\", T0451: \"r451\", T0452: \"r452\", T0453: \"r453\", T0454: \"r454\", T0455: \"r455\", T0456: \"r456\", T0457: \"r457\", T0458: \"r458\", T0459: \"r459\", T0460: \"r460\", T0461: \"r461\", T0462: \"r462\", T0463: \"r463\", T0464: \"r464\", T0465: \"r465\", T0466: \"r466\", T0467: \"r467\", T0468: \"r468\", T0469: \"r469\", T0470: \"r470\", T0471: \"r471\", T0472: \"r472\", T0473: \"r473\", T0474: \"r474\", T0475: \"r475\", T0476: \"r476\", T0477: \"r477\", T0478: \"r478\", T0479: \"r479\", T0480: \"r480\", T0481: \"r481\", T0482: \"r482\", T0483: \"r483\", T0484: \"r484\", T0485: \"r485\", T0486: \"r486\", T0487: \"r487\", T0488: \"r488\", T0489: \"r489\", T0490: \"r490\", T0491: \"r491\", T0492: \"r492\", T0493: \"r493\", T0494: \"r494\", T0495: \"r495\", T0496: \"r496\", T0497: \"r497\", T0498: \"r498\", T0499: \"r499\", T0500: \"r500\", T0501: \"r501\", T0502: \"r502\", T0503: \"r503\", T0504: \"r504\", T0505: \"r505\", T0506: \"r506\", T0507: \"r507\", T0508: \"r508\", T0509: \"r509\", T0510: \"r510\", T0511: \"r511\", T0512: \"r512\", T0513: \"r513\", T0514: \"r514\", T0515: \"r515\", T0516: \"r516\", T0517: \"r517\", T0518: \"r518\", T0519: \"r519\", T0520: \"r520\", T0521: \"r521\", T0522: \"r522\", T0523: \"r523\", T0524: \"r524\", T0525: \"r525\", T0526: \"r526\", T0527: \"r527\", T0528: \"r528\", T0529: \"r529\", T0530: \"r530\", T0531: \"r531\", T0532: \"r532\", T0533: \"r533\", T0534: \"r534\", T0535: \"r535\", T0536: \"r536\", T0537: \"r537\", T0538: \"r538\", T0539: \"r539\", T0540: \"r540\", T0541: \"r541\", T0542: \"r542\", T0543: \"r543\", T0544: \"r544\", T0545: \"r545\", T0546: \"r546\", T0547: \"r547\", T0548: \"r548\", T0549: \"r549\", T0550: \"r550\", T0551: \"r551\", T0552: \"r552\", T0553: \"r553\", T0554: \"r554\", T0555: \"r555\", T0556: \"r556\", T0557: \"r557\", T0558: \"r558\", T0559: \"r559\", T0560: \"r560\", T0561: \"r561\", T0562: \"r562\", T0563: \"r563\", T0564: \"r564\", T0565: \"r565\", T0566: \"r566\", T0567: \"r567\", T0568: \"r568\", T0569: \"r569\", T0570: \"r570\", T0571: \"r571\", T0572: \"r572\", T0573: \"r573\", T0574: \"r574\", T0575: \"r575\", T0576: \"r576\", T0577: \"r577\", T0578: \"r578\", T0579: \"r579\", T0580: \"r580\", T0581: \"r581\", T0582: \"r582\", T0583: \"r583\", T0584: \"r584\", T0585: \"r585\", T0586: \"r586\", T0587: \"r587\", T0588: \"r588\", T0589: \"r589\", T0590: \"r590\", T0591: \"r591\", T0592: \"r592\", T0593: \"r593\", T0594: \"r594\", T0595: \"r595\", T0596: \"r596\", T0597: \"r597\", T0598: \"r598\", T0599: \"r599\", T0600: \"r600\", T0601: \"r601\", T0602: \"r602\", T0603: \"r603\", T0604: \"r604\", T0605: \"r605\", T0606: \"r606\", T0607: \"r607\", T0608: \"r608\", T0609: \"r609\", T0610: \"r610\", T0611: \"r611\", T0612: \"r612\", T0613: \"r613\", T0614: \"r614\", T0615: \"r615\", T0616: \"r616\", T0617: \"r617\", T0618: \"r618\", T0619: \"r619\", T0620: \"r620\", T0621: \"r621\", T0622: \"r622\", T0623: \"r623\", T0624: \"r624\", T0625: \"r625\", T0626: \"r626\", T0627: \"r627\", T0628: \"r628\", T0629: \"r629\", T0630: \"r630\", T0631: \"r631\", T0632: \"r632\", T0633: \"r633\", T0634: \"r634\", T0635: \"r635\", T0636: \"r636\", T0637: \"r637\", T0638: \"r638\", T0639: \"r639\", T0640: \"r640\", T0641: \"r641\", T0642: \"r642\", T0643: \"r643\", T0644: \"r644\", T0645: \"r645\", T0646: \"r646\", T0647: \"r647\", T0648: \"r648\", T0649: \"r649\", T0650: \"r650\", T0651: \"r651\", T0652: \"r652\", T0653: \"r653\", T0654: \"r654\", T0655: \"r655\", T0656: \"r656\", T0657: \"r657\", T0658: \"r658\", T0659: \"r659\", T0660: \"r660\", T0661: \"r661\", T0662: \"r662\", T0663: \"r663\", T0664: \"r664\", T0665: \"r665\", T0666: \"r666\", T0667: \"r667\", T0668: \"r668\", T0669: \"r669\", T0670: \"r670\", T0671: \"r671\", T0672: \"r672\", T0673: \"r673\", T0674: \"r674\", T0675: \"r675\", T0676: \"r676\", T0677: \"r677\", T0678: \"r678\", T0679: \"r679\", T0680: \"r680\", T0681: \"r681\", T0682: \"r682\", T0683: \"r683\", T0684: \"r684\", T0685: \"r685\", T0686: \"r686\", T0687: \"r687\", T0688: \"r688\", T0689: \"r689\", T0690: \"r690\", T0691: \"r691\", T0692: \"r692\", T0693: \"r693\", T0694: \"r694\", T0695: \"r695\", T0696: \"r696\", T0697: \"r697\", T0698: \"r698\", T0699: \"r699\", T0700: \"r700\", T0701: \"r701\", T0702: \"r702\", T0703: \"r703\", T0704: \"r704\", T0705: \"r705\", T0706: \"r706\", T0707: \"r707\", T0708: \"r708\", T0709: \"r709\", T0710: \"r710\", T0711: \"r711\", T0712: \"r712\", T0713: \"r713\", T0714: \"r714\", T0715: \"r715\", T0716: \"r716\", T0717: \"r717\", T0718: \"r718\", T0719: \"r719\", T0720: \"r720\", T0721: \"r721\", T0722: \"r722\", T0723: \"r723\", T0724: \"r724\", T0725: \"r725\", T0726: \"r726\", T0727: \"r727\", T0728: \"r728\", T0729: \"r729\", T0730: \"r730\", T0731: \"r731\", T0732: \"r732\", T0733: \"r733\", T0734: \"r734\", T0735: \"r735\", T0736: \"r736\", T0737: \"r737\", T0738: \"r738\", T0739: \"r739\", T0740: \"r740\", T0741: \"r741\", T0742: \"r742\", T0743: \"r743\", T0744: \"r744\", T0745: \"r745\", T0746: \"r746\", T0747: \"r747\", T0748: \"r748\", T0749: \"r749\", T0750: \"r750\", T0751: \"r751\", T0752: \"r752\", T0753: \"r753\", T0754: \"r754\", T0755: \"r755\", T0756: \"r756\", T0757: \"r757\", T0758: \"r758\", T0759: \"r759\", T0760: \"r760\", T0761: \"r761\", T0762: \"r762\", T0763: \"r763\", T0764: \"r764\", T0765: \"r765\", T0766: \"r766\", T0767: \"r767\", T0768: \"r768\", T0769: \"r769\", T0770: \"r770\", T0771: \"r771\", T0772: \"r772\", T0773: \"r773\", T0774: \"r774\", T0775: \"r775\", T0776: \"r776\", T0777: \"r777\", T0778: \"r778\", T0779: \"r779\", T0780: \"r780\", T0781: \"r781\", T0782: \"r782\", T0783: \"r783\", T0784: \"r784\", T0785: \"r785\", T0786: \"r786\", T0787: \"r787\", T0788: \"r788\", T0789: \"r789\", T0790: \"r790\", T0791: \"r791\", T0792: \"r792\", T0793: \"r793\", T0794: \"r794\", T0795: \"r795\", T0796: \"r796\", T0797: \"r797\", T0798: \"r798\", T0799: \"r799\", T0800: \"r800\", T0801: \"r801\", T0802: \"r802\", T0803: \"r803\", T0804: \"r804\", T0805: \"r805\", T0806: \"r806\", T0807: \"r807\", T0808: \"r808\", T0809: \"r809\", T0810: \"r810\", T0811: \"r811\", T0812: \"r812\", T0813: \"r813\", T0814: \"r814\", T0815: \"r815\", T0816: \"r816\", T0817: \"r817\", T0818: \"r818\", T0819: \"r819\", T0820: \"r820\", T0821: \"r821\", T0822: \"r822\", T0823: \"r823\", T0824: \"r824\", T0825: \"r825\", T0826: \"r826\", T0827: \"r827\", T0828: \"r828\", T0829: \"r829\", T0830: \"r830\", T0831: \"r831\", T0832: \"r832\", T0833: \"r833\", T0834: \"r834\", T0835: \"r835\", T0836: \"r836\", T0837: \"r837\", T0838: \"r838\", T0839: \"r839\", T0840: \"r840\", T0841: \"r841\", T0842: \"r842\", T0843: \"r843\", T0844: \"r844\", T0845: \"r845\", T0846: \"r846\", T0847: \"r847\", T0848: \"r848\", T0849: \"r849\", T0850: \"r850\", T0851: \"r851\", T0852: \"r852\", T0853: \"r853\", T0854: \"r854\", T0855: \"r855\", T0856: \"r856\", T0857: \"r857\", T0858: \"r858\", T0859: \"r859\", T0860: \"r860\", T0861: \"r861\", T0862: \"r862\", T0863: \"r863\", T0864: \"r864\", T0865: \"r865\", T0866: \"r866\", T0867: \"r867\", T0868: \"r868\", T0869: \"r869\", T0870: \"r870\", T0871: \"r871\", T0872: \"r872\", T0873: \"r873\", T0874: \"r874\", T0875: \"r875\", T0876: \"r876\", T0877: \"r877\", T0878: \"r878\", T0879: \"r879\", T0880: \"r880\", T0881: \"r881\", T0882: \"r882\", T0883: \"r883\", T0884: \"r884\", T0885: \"r885\", T0886: \"r886\", T0887: \"r887\", T0888: \"r888\", T0889: \"r889\", T0890: \"r890\", T0891: \"r891\", T0892: \"r892\", T0893: \"r893\", T0894: \"r894\", T0895: \"r895\", T0896: \"r896\", T0897: \"r897\", T0898: \"r898\", T0899: \"r899\", T0900: \"r900\", T0901: \"r901\", T0902: \"r902\", T0903: \"r903\", T0904: \"r904\", T0905: \"r905\", T0906: \"r906\", T0907: \"r907\", T0908: \"r908\", T0909: \"r909\", T0910: \"r910\", T0911: \"r911\", T0912: \"r912\", T0913: \"r913\", T0914: \"r914\", T0915: \"r915\", T0916: \"r916\", T0917: \"r917\", T0918: \"r918\", T0919: \"r919\", T0920: \"r920\", T0921: \"r921\", T0922: \"r922\", T0923: \"r923\", T0924: \"r924\", T0925: \"r925\", T0926: \"r926\", T0927: \"r927\", T0928: \"r928\", T0929: \"r929\", T0930: \"r930\", T0931: \"r931\", T0932: \"r932\", T0933: \"r933\", T0934: \"r934\", T0935: \"r935\", T0936: \"r936\", T0937: \"r937\", T0938: \"r938\", T0939: \"r939\", T0940: \"r940\", T0941: \"r941\", T0942: \"r942\", T0943: \"r943\", T0944: \"r944\", T0945: \"r945\", T0946: \"r946\", T0947: \"r947\", T0948: \"r948\", T0949: \"r949\", T0950: \"r950\", T0951: \"r951\", T0952: \"r952\", T0953: \"r953\", T0954: \"r954\", T0955: \"r955\", T0956: \"r956\", T0957: \"r957\", T0958: \"r958\", T0959: \"r959\", T0960: \"r960\", T0961: \"r961\", T0962: \"r962\", T0963: \"r963\", T0964: \"r964\", T0965: \"r965\", T0966: \"r966\", T0967: \"r967\", T0968: \"r968\", T0969: \"r969\", T0970: \"r970\", T0971: \"r971\", T0972: \"r972\", T0973: \"r973\", T0974: \"r974\", T0975: \"r975\", T0976: \"r976\", T0977: \"r977\", T0978: \"r978\", T0979: \"r979\", T0980: \"r980\", T0981: \"r981\", T0982: \"r982\", T0983: \"r983\", T0984: \"r984\", T0985: \"r985\", T0986: \"r986\", T0987: \"r987\", T0988: \"r988\", T0989: \"r989\", T0990: \"r990\", T0991: \"r991\", T0992: \"r992\", T0993: \"r993\", T0994: \"r994\", T0995: \"r995\", T0996: \"r996\", T0997: \"r997\", T0998: \"r998\", T0999: \"r999\", T1000: \"r1000\", T1001: \"r1001\", T1002: \"r1002\", T1003: \"r1003\", T1004: \"r1004\", T1005: \"r1005\", T1006: \"r1006\", T1007: \"r1007\", T1008: \"r1008\", T1009: \"r1009\", T1010: \"r1010\", T1011: \"r1011\", T1012: \"r1012\", T1013: \"r1013\", T1014: \"r1014\", T1015: \"r1015\", T1016: \"r1016\", T1017: \"r1017\", T1018: \"r1018\", T1019: \"r1019\", T1020: \"r1020\", T1021: \"r1021\", T1022: \"r1022\", T1023: \"r1023\", T1024: \"r1024\", T1025: \"r1025\", T1026: \"r1026\", T1027: \"r1027\", T1028: \"r1028\", T1029: \"r1029\", T1030: \"r1030\", T1031: \"r1031\", T1032: \"r1032\", T1033: \"r1033\", T1034: \"r1034\", T1035: \"r1035\", T1036: \"r1036\", T1037: \"r1037\", T1038: \"r1038\", T1039: \"r1039\", T1040: \"r1040\", T1041: \"r1041\", T1042: \"r1042\", T1043: \"r1043\", T1044: \"r1044\", T1045: \"r1045\", T1046: \"r1046\", T1047: \"r1047\", T1048: \"r1048\", T1049: \"r1049\", T1050: \"r1050\", T1051: \"r1051\", T1052: \"r1052\", T1053: \"r1053\", T1054: \"r1054\", T1055: \"r1055\", T1056: \"r1056\", T1057: \"r1057\", T1058: \"r1058\", T1059: \"r1059\", T1060: \"r1060\", T1061: \"r1061\", T1062: \"r1062\", T1063: \"r1063\", T1064: \"r1064\", T1065: \"r1065\", T1066: \"r1066\", T1067: \"r1067\", T1068: \"r1068\", T1069: \"r1069\", T1070: \"r1070\", T1071: \"r1071\", T1072: \"r1072\", T1073: \"r1073\", T1074: \"r1074\", T1075: \"r1075\", T1076: \"r1076\", T1077: \"r1077\", T1078: \"r1078\", T1079: \"r1079\", T1080: \"r1080\", T1081: \"r1081\", T1082: \"r1082\", T1083: \"r1083\", T1084: \"r1084\", T1085: \"r1085\", T1086: \"r1086\", T1087: \"r1087\", T1088: \"r1088\", T1089: \"r1089\", T1090: \"r1090\", T1091: \"r1091\", T1092: \"r1092\", T1093: \"r1093\", T1094: \"r1094\", T1095: \"r1095\", T1096: \"r1096\", T1097: \"r1097\", T1098: \"r1098\", T1099: \"r1099\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "faults": [
+    "tap_unrouted|node:kit|T0000",
+    "tap_unrouted|node:kit|T0001",
+    "tap_unrouted|node:kit|T0002",
+    "tap_unrouted|node:kit|T0003",
+    "tap_unrouted|node:kit|T0004",
+    "tap_unrouted|node:kit|T0005",
+    "tap_unrouted|node:kit|T0006",
+    "tap_unrouted|node:kit|T0007",
+    "tap_unrouted|node:kit|T0008",
+    "tap_unrouted|node:kit|T0009",
+    "tap_unrouted|node:kit|T0010",
+    "tap_unrouted|node:kit|T0011",
+    "tap_unrouted|node:kit|T0012",
+    "tap_unrouted|node:kit|T0013",
+    "tap_unrouted|node:kit|T0014",
+    "tap_unrouted|node:kit|T0015",
+    "tap_unrouted|node:kit|T0016",
+    "tap_unrouted|node:kit|T0017",
+    "tap_unrouted|node:kit|T0018",
+    "tap_unrouted|node:kit|T0019",
+    "tap_unrouted|node:kit|T0020",
+    "tap_unrouted|node:kit|T0021",
+    "tap_unrouted|node:kit|T0022",
+    "tap_unrouted|node:kit|T0023",
+    "tap_unrouted|node:kit|T0024",
+    "tap_unrouted|node:kit|T0025",
+    "tap_unrouted|node:kit|T0026",
+    "tap_unrouted|node:kit|T0027",
+    "tap_unrouted|node:kit|T0028",
+    "tap_unrouted|node:kit|T0029",
+    "tap_unrouted|node:kit|T0030",
+    "tap_unrouted|node:kit|T0031",
+    "tap_unrouted|node:kit|T0032",
+    "tap_unrouted|node:kit|T0033",
+    "tap_unrouted|node:kit|T0034",
+    "tap_unrouted|node:kit|T0035",
+    "tap_unrouted|node:kit|T0036",
+    "tap_unrouted|node:kit|T0037",
+    "tap_unrouted|node:kit|T0038",
+    "tap_unrouted|node:kit|T0039",
+    "tap_unrouted|node:kit|T0040",
+    "tap_unrouted|node:kit|T0041",
+    "tap_unrouted|node:kit|T0042",
+    "tap_unrouted|node:kit|T0043",
+    "tap_unrouted|node:kit|T0044",
+    "tap_unrouted|node:kit|T0045",
+    "tap_unrouted|node:kit|T0046",
+    "tap_unrouted|node:kit|T0047",
+    "tap_unrouted|node:kit|T0048",
+    "tap_unrouted|node:kit|T0049",
+    "tap_unrouted|node:kit|T0050",
+    "tap_unrouted|node:kit|T0051",
+    "tap_unrouted|node:kit|T0052",
+    "tap_unrouted|node:kit|T0053",
+    "tap_unrouted|node:kit|T0054",
+    "tap_unrouted|node:kit|T0055",
+    "tap_unrouted|node:kit|T0056",
+    "tap_unrouted|node:kit|T0057",
+    "tap_unrouted|node:kit|T0058",
+    "tap_unrouted|node:kit|T0059",
+    "tap_unrouted|node:kit|T0060",
+    "tap_unrouted|node:kit|T0061",
+    "tap_unrouted|node:kit|T0062",
+    "tap_unrouted|node:kit|T0063",
+    "tap_unrouted|node:kit|T0064",
+    "tap_unrouted|node:kit|T0065",
+    "tap_unrouted|node:kit|T0066",
+    "tap_unrouted|node:kit|T0067",
+    "tap_unrouted|node:kit|T0068",
+    "tap_unrouted|node:kit|T0069",
+    "tap_unrouted|node:kit|T0070",
+    "tap_unrouted|node:kit|T0071",
+    "tap_unrouted|node:kit|T0072",
+    "tap_unrouted|node:kit|T0073",
+    "tap_unrouted|node:kit|T0074",
+    "tap_unrouted|node:kit|T0075",
+    "tap_unrouted|node:kit|T0076",
+    "tap_unrouted|node:kit|T0077",
+    "tap_unrouted|node:kit|T0078",
+    "tap_unrouted|node:kit|T0079",
+    "tap_unrouted|node:kit|T0080",
+    "tap_unrouted|node:kit|T0081",
+    "tap_unrouted|node:kit|T0082",
+    "tap_unrouted|node:kit|T0083",
+    "tap_unrouted|node:kit|T0084",
+    "tap_unrouted|node:kit|T0085",
+    "tap_unrouted|node:kit|T0086",
+    "tap_unrouted|node:kit|T0087",
+    "tap_unrouted|node:kit|T0088",
+    "tap_unrouted|node:kit|T0089",
+    "tap_unrouted|node:kit|T0090",
+    "tap_unrouted|node:kit|T0091",
+    "tap_unrouted|node:kit|T0092",
+    "tap_unrouted|node:kit|T0093",
+    "tap_unrouted|node:kit|T0094",
+    "tap_unrouted|node:kit|T0095",
+    "tap_unrouted|node:kit|T0096",
+    "tap_unrouted|node:kit|T0097",
+    "tap_unrouted|node:kit|T0098",
+    "tap_unrouted|node:kit|T0099",
+    "tap_unrouted|node:kit|T0100",
+    "tap_unrouted|node:kit|T0101",
+    "tap_unrouted|node:kit|T0102",
+    "tap_unrouted|node:kit|T0103",
+    "tap_unrouted|node:kit|T0104",
+    "tap_unrouted|node:kit|T0105",
+    "tap_unrouted|node:kit|T0106",
+    "tap_unrouted|node:kit|T0107",
+    "tap_unrouted|node:kit|T0108",
+    "tap_unrouted|node:kit|T0109",
+    "tap_unrouted|node:kit|T0110",
+    "tap_unrouted|node:kit|T0111",
+    "tap_unrouted|node:kit|T0112",
+    "tap_unrouted|node:kit|T0113",
+    "tap_unrouted|node:kit|T0114",
+    "tap_unrouted|node:kit|T0115",
+    "tap_unrouted|node:kit|T0116",
+    "tap_unrouted|node:kit|T0117",
+    "tap_unrouted|node:kit|T0118",
+    "tap_unrouted|node:kit|T0119",
+    "tap_unrouted|node:kit|T0120",
+    "tap_unrouted|node:kit|T0121",
+    "tap_unrouted|node:kit|T0122",
+    "tap_unrouted|node:kit|T0123",
+    "tap_unrouted|node:kit|T0124",
+    "tap_unrouted|node:kit|T0125",
+    "tap_unrouted|node:kit|T0126",
+    "tap_unrouted|node:kit|T0127",
+    "tap_unrouted|node:kit|T0128",
+    "tap_unrouted|node:kit|T0129",
+    "tap_unrouted|node:kit|T0130",
+    "tap_unrouted|node:kit|T0131",
+    "tap_unrouted|node:kit|T0132",
+    "tap_unrouted|node:kit|T0133",
+    "tap_unrouted|node:kit|T0134",
+    "tap_unrouted|node:kit|T0135",
+    "tap_unrouted|node:kit|T0136",
+    "tap_unrouted|node:kit|T0137",
+    "tap_unrouted|node:kit|T0138",
+    "tap_unrouted|node:kit|T0139",
+    "tap_unrouted|node:kit|T0140",
+    "tap_unrouted|node:kit|T0141",
+    "tap_unrouted|node:kit|T0142",
+    "tap_unrouted|node:kit|T0143",
+    "tap_unrouted|node:kit|T0144",
+    "tap_unrouted|node:kit|T0145",
+    "tap_unrouted|node:kit|T0146",
+    "tap_unrouted|node:kit|T0147",
+    "tap_unrouted|node:kit|T0148",
+    "tap_unrouted|node:kit|T0149",
+    "tap_unrouted|node:kit|T0150",
+    "tap_unrouted|node:kit|T0151",
+    "tap_unrouted|node:kit|T0152",
+    "tap_unrouted|node:kit|T0153",
+    "tap_unrouted|node:kit|T0154",
+    "tap_unrouted|node:kit|T0155",
+    "tap_unrouted|node:kit|T0156",
+    "tap_unrouted|node:kit|T0157",
+    "tap_unrouted|node:kit|T0158",
+    "tap_unrouted|node:kit|T0159",
+    "tap_unrouted|node:kit|T0160",
+    "tap_unrouted|node:kit|T0161",
+    "tap_unrouted|node:kit|T0162",
+    "tap_unrouted|node:kit|T0163",
+    "tap_unrouted|node:kit|T0164",
+    "tap_unrouted|node:kit|T0165",
+    "tap_unrouted|node:kit|T0166",
+    "tap_unrouted|node:kit|T0167",
+    "tap_unrouted|node:kit|T0168",
+    "tap_unrouted|node:kit|T0169",
+    "tap_unrouted|node:kit|T0170",
+    "tap_unrouted|node:kit|T0171",
+    "tap_unrouted|node:kit|T0172",
+    "tap_unrouted|node:kit|T0173",
+    "tap_unrouted|node:kit|T0174",
+    "tap_unrouted|node:kit|T0175",
+    "tap_unrouted|node:kit|T0176",
+    "tap_unrouted|node:kit|T0177",
+    "tap_unrouted|node:kit|T0178",
+    "tap_unrouted|node:kit|T0179",
+    "tap_unrouted|node:kit|T0180",
+    "tap_unrouted|node:kit|T0181",
+    "tap_unrouted|node:kit|T0182",
+    "tap_unrouted|node:kit|T0183",
+    "tap_unrouted|node:kit|T0184",
+    "tap_unrouted|node:kit|T0185",
+    "tap_unrouted|node:kit|T0186",
+    "tap_unrouted|node:kit|T0187",
+    "tap_unrouted|node:kit|T0188",
+    "tap_unrouted|node:kit|T0189",
+    "tap_unrouted|node:kit|T0190",
+    "tap_unrouted|node:kit|T0191",
+    "tap_unrouted|node:kit|T0192",
+    "tap_unrouted|node:kit|T0193",
+    "tap_unrouted|node:kit|T0194",
+    "tap_unrouted|node:kit|T0195",
+    "tap_unrouted|node:kit|T0196",
+    "tap_unrouted|node:kit|T0197",
+    "tap_unrouted|node:kit|T0198",
+    "tap_unrouted|node:kit|T0199",
+    "tap_unrouted|node:kit|T0200",
+    "tap_unrouted|node:kit|T0201",
+    "tap_unrouted|node:kit|T0202",
+    "tap_unrouted|node:kit|T0203",
+    "tap_unrouted|node:kit|T0204",
+    "tap_unrouted|node:kit|T0205",
+    "tap_unrouted|node:kit|T0206",
+    "tap_unrouted|node:kit|T0207",
+    "tap_unrouted|node:kit|T0208",
+    "tap_unrouted|node:kit|T0209",
+    "tap_unrouted|node:kit|T0210",
+    "tap_unrouted|node:kit|T0211",
+    "tap_unrouted|node:kit|T0212",
+    "tap_unrouted|node:kit|T0213",
+    "tap_unrouted|node:kit|T0214",
+    "tap_unrouted|node:kit|T0215",
+    "tap_unrouted|node:kit|T0216",
+    "tap_unrouted|node:kit|T0217",
+    "tap_unrouted|node:kit|T0218",
+    "tap_unrouted|node:kit|T0219",
+    "tap_unrouted|node:kit|T0220",
+    "tap_unrouted|node:kit|T0221",
+    "tap_unrouted|node:kit|T0222",
+    "tap_unrouted|node:kit|T0223",
+    "tap_unrouted|node:kit|T0224",
+    "tap_unrouted|node:kit|T0225",
+    "tap_unrouted|node:kit|T0226",
+    "tap_unrouted|node:kit|T0227",
+    "tap_unrouted|node:kit|T0228",
+    "tap_unrouted|node:kit|T0229",
+    "tap_unrouted|node:kit|T0230",
+    "tap_unrouted|node:kit|T0231",
+    "tap_unrouted|node:kit|T0232",
+    "tap_unrouted|node:kit|T0233",
+    "tap_unrouted|node:kit|T0234",
+    "tap_unrouted|node:kit|T0235",
+    "tap_unrouted|node:kit|T0236",
+    "tap_unrouted|node:kit|T0237",
+    "tap_unrouted|node:kit|T0238",
+    "tap_unrouted|node:kit|T0239",
+    "tap_unrouted|node:kit|T0240",
+    "tap_unrouted|node:kit|T0241",
+    "tap_unrouted|node:kit|T0242",
+    "tap_unrouted|node:kit|T0243",
+    "tap_unrouted|node:kit|T0244",
+    "tap_unrouted|node:kit|T0245",
+    "tap_unrouted|node:kit|T0246",
+    "tap_unrouted|node:kit|T0247",
+    "tap_unrouted|node:kit|T0248",
+    "tap_unrouted|node:kit|T0249",
+    "tap_unrouted|node:kit|T0250",
+    "tap_unrouted|node:kit|T0251",
+    "tap_unrouted|node:kit|T0252",
+    "tap_unrouted|node:kit|T0253",
+    "tap_unrouted|node:kit|T0254",
+    "tap_unrouted|node:kit|T0255",
+    "tap_unrouted|node:kit|T0256",
+    "tap_unrouted|node:kit|T0257",
+    "tap_unrouted|node:kit|T0258",
+    "tap_unrouted|node:kit|T0259",
+    "tap_unrouted|node:kit|T0260",
+    "tap_unrouted|node:kit|T0261",
+    "tap_unrouted|node:kit|T0262",
+    "tap_unrouted|node:kit|T0263",
+    "tap_unrouted|node:kit|T0264",
+    "tap_unrouted|node:kit|T0265",
+    "tap_unrouted|node:kit|T0266",
+    "tap_unrouted|node:kit|T0267",
+    "tap_unrouted|node:kit|T0268",
+    "tap_unrouted|node:kit|T0269",
+    "tap_unrouted|node:kit|T0270",
+    "tap_unrouted|node:kit|T0271",
+    "tap_unrouted|node:kit|T0272",
+    "tap_unrouted|node:kit|T0273",
+    "tap_unrouted|node:kit|T0274",
+    "tap_unrouted|node:kit|T0275",
+    "tap_unrouted|node:kit|T0276",
+    "tap_unrouted|node:kit|T0277",
+    "tap_unrouted|node:kit|T0278",
+    "tap_unrouted|node:kit|T0279",
+    "tap_unrouted|node:kit|T0280",
+    "tap_unrouted|node:kit|T0281",
+    "tap_unrouted|node:kit|T0282",
+    "tap_unrouted|node:kit|T0283",
+    "tap_unrouted|node:kit|T0284",
+    "tap_unrouted|node:kit|T0285",
+    "tap_unrouted|node:kit|T0286",
+    "tap_unrouted|node:kit|T0287",
+    "tap_unrouted|node:kit|T0288",
+    "tap_unrouted|node:kit|T0289",
+    "tap_unrouted|node:kit|T0290",
+    "tap_unrouted|node:kit|T0291",
+    "tap_unrouted|node:kit|T0292",
+    "tap_unrouted|node:kit|T0293",
+    "tap_unrouted|node:kit|T0294",
+    "tap_unrouted|node:kit|T0295",
+    "tap_unrouted|node:kit|T0296",
+    "tap_unrouted|node:kit|T0297",
+    "tap_unrouted|node:kit|T0298",
+    "tap_unrouted|node:kit|T0299",
+    "tap_unrouted|node:kit|T0300",
+    "tap_unrouted|node:kit|T0301",
+    "tap_unrouted|node:kit|T0302",
+    "tap_unrouted|node:kit|T0303",
+    "tap_unrouted|node:kit|T0304",
+    "tap_unrouted|node:kit|T0305",
+    "tap_unrouted|node:kit|T0306",
+    "tap_unrouted|node:kit|T0307",
+    "tap_unrouted|node:kit|T0308",
+    "tap_unrouted|node:kit|T0309",
+    "tap_unrouted|node:kit|T0310",
+    "tap_unrouted|node:kit|T0311",
+    "tap_unrouted|node:kit|T0312",
+    "tap_unrouted|node:kit|T0313",
+    "tap_unrouted|node:kit|T0314",
+    "tap_unrouted|node:kit|T0315",
+    "tap_unrouted|node:kit|T0316",
+    "tap_unrouted|node:kit|T0317",
+    "tap_unrouted|node:kit|T0318",
+    "tap_unrouted|node:kit|T0319",
+    "tap_unrouted|node:kit|T0320",
+    "tap_unrouted|node:kit|T0321",
+    "tap_unrouted|node:kit|T0322",
+    "tap_unrouted|node:kit|T0323",
+    "tap_unrouted|node:kit|T0324",
+    "tap_unrouted|node:kit|T0325",
+    "tap_unrouted|node:kit|T0326",
+    "tap_unrouted|node:kit|T0327",
+    "tap_unrouted|node:kit|T0328",
+    "tap_unrouted|node:kit|T0329",
+    "tap_unrouted|node:kit|T0330",
+    "tap_unrouted|node:kit|T0331",
+    "tap_unrouted|node:kit|T0332",
+    "tap_unrouted|node:kit|T0333",
+    "tap_unrouted|node:kit|T0334",
+    "tap_unrouted|node:kit|T0335",
+    "tap_unrouted|node:kit|T0336",
+    "tap_unrouted|node:kit|T0337",
+    "tap_unrouted|node:kit|T0338",
+    "tap_unrouted|node:kit|T0339",
+    "tap_unrouted|node:kit|T0340",
+    "tap_unrouted|node:kit|T0341",
+    "tap_unrouted|node:kit|T0342",
+    "tap_unrouted|node:kit|T0343",
+    "tap_unrouted|node:kit|T0344",
+    "tap_unrouted|node:kit|T0345",
+    "tap_unrouted|node:kit|T0346",
+    "tap_unrouted|node:kit|T0347",
+    "tap_unrouted|node:kit|T0348",
+    "tap_unrouted|node:kit|T0349",
+    "tap_unrouted|node:kit|T0350",
+    "tap_unrouted|node:kit|T0351",
+    "tap_unrouted|node:kit|T0352",
+    "tap_unrouted|node:kit|T0353",
+    "tap_unrouted|node:kit|T0354",
+    "tap_unrouted|node:kit|T0355",
+    "tap_unrouted|node:kit|T0356",
+    "tap_unrouted|node:kit|T0357",
+    "tap_unrouted|node:kit|T0358",
+    "tap_unrouted|node:kit|T0359",
+    "tap_unrouted|node:kit|T0360",
+    "tap_unrouted|node:kit|T0361",
+    "tap_unrouted|node:kit|T0362",
+    "tap_unrouted|node:kit|T0363",
+    "tap_unrouted|node:kit|T0364",
+    "tap_unrouted|node:kit|T0365",
+    "tap_unrouted|node:kit|T0366",
+    "tap_unrouted|node:kit|T0367",
+    "tap_unrouted|node:kit|T0368",
+    "tap_unrouted|node:kit|T0369",
+    "tap_unrouted|node:kit|T0370",
+    "tap_unrouted|node:kit|T0371",
+    "tap_unrouted|node:kit|T0372",
+    "tap_unrouted|node:kit|T0373",
+    "tap_unrouted|node:kit|T0374",
+    "tap_unrouted|node:kit|T0375",
+    "tap_unrouted|node:kit|T0376",
+    "tap_unrouted|node:kit|T0377",
+    "tap_unrouted|node:kit|T0378",
+    "tap_unrouted|node:kit|T0379",
+    "tap_unrouted|node:kit|T0380",
+    "tap_unrouted|node:kit|T0381",
+    "tap_unrouted|node:kit|T0382",
+    "tap_unrouted|node:kit|T0383",
+    "tap_unrouted|node:kit|T0384",
+    "tap_unrouted|node:kit|T0385",
+    "tap_unrouted|node:kit|T0386",
+    "tap_unrouted|node:kit|T0387",
+    "tap_unrouted|node:kit|T0388",
+    "tap_unrouted|node:kit|T0389",
+    "tap_unrouted|node:kit|T0390",
+    "tap_unrouted|node:kit|T0391",
+    "tap_unrouted|node:kit|T0392",
+    "tap_unrouted|node:kit|T0393",
+    "tap_unrouted|node:kit|T0394",
+    "tap_unrouted|node:kit|T0395",
+    "tap_unrouted|node:kit|T0396",
+    "tap_unrouted|node:kit|T0397",
+    "tap_unrouted|node:kit|T0398",
+    "tap_unrouted|node:kit|T0399",
+    "tap_unrouted|node:kit|T0400",
+    "tap_unrouted|node:kit|T0401",
+    "tap_unrouted|node:kit|T0402",
+    "tap_unrouted|node:kit|T0403",
+    "tap_unrouted|node:kit|T0404",
+    "tap_unrouted|node:kit|T0405",
+    "tap_unrouted|node:kit|T0406",
+    "tap_unrouted|node:kit|T0407",
+    "tap_unrouted|node:kit|T0408",
+    "tap_unrouted|node:kit|T0409",
+    "tap_unrouted|node:kit|T0410",
+    "tap_unrouted|node:kit|T0411",
+    "tap_unrouted|node:kit|T0412",
+    "tap_unrouted|node:kit|T0413",
+    "tap_unrouted|node:kit|T0414",
+    "tap_unrouted|node:kit|T0415",
+    "tap_unrouted|node:kit|T0416",
+    "tap_unrouted|node:kit|T0417",
+    "tap_unrouted|node:kit|T0418",
+    "tap_unrouted|node:kit|T0419",
+    "tap_unrouted|node:kit|T0420",
+    "tap_unrouted|node:kit|T0421",
+    "tap_unrouted|node:kit|T0422",
+    "tap_unrouted|node:kit|T0423",
+    "tap_unrouted|node:kit|T0424",
+    "tap_unrouted|node:kit|T0425",
+    "tap_unrouted|node:kit|T0426",
+    "tap_unrouted|node:kit|T0427",
+    "tap_unrouted|node:kit|T0428",
+    "tap_unrouted|node:kit|T0429",
+    "tap_unrouted|node:kit|T0430",
+    "tap_unrouted|node:kit|T0431",
+    "tap_unrouted|node:kit|T0432",
+    "tap_unrouted|node:kit|T0433",
+    "tap_unrouted|node:kit|T0434",
+    "tap_unrouted|node:kit|T0435",
+    "tap_unrouted|node:kit|T0436",
+    "tap_unrouted|node:kit|T0437",
+    "tap_unrouted|node:kit|T0438",
+    "tap_unrouted|node:kit|T0439",
+    "tap_unrouted|node:kit|T0440",
+    "tap_unrouted|node:kit|T0441",
+    "tap_unrouted|node:kit|T0442",
+    "tap_unrouted|node:kit|T0443",
+    "tap_unrouted|node:kit|T0444",
+    "tap_unrouted|node:kit|T0445",
+    "tap_unrouted|node:kit|T0446",
+    "tap_unrouted|node:kit|T0447",
+    "tap_unrouted|node:kit|T0448",
+    "tap_unrouted|node:kit|T0449",
+    "tap_unrouted|node:kit|T0450",
+    "tap_unrouted|node:kit|T0451",
+    "tap_unrouted|node:kit|T0452",
+    "tap_unrouted|node:kit|T0453",
+    "tap_unrouted|node:kit|T0454",
+    "tap_unrouted|node:kit|T0455",
+    "tap_unrouted|node:kit|T0456",
+    "tap_unrouted|node:kit|T0457",
+    "tap_unrouted|node:kit|T0458",
+    "tap_unrouted|node:kit|T0459",
+    "tap_unrouted|node:kit|T0460",
+    "tap_unrouted|node:kit|T0461",
+    "tap_unrouted|node:kit|T0462",
+    "tap_unrouted|node:kit|T0463",
+    "tap_unrouted|node:kit|T0464",
+    "tap_unrouted|node:kit|T0465",
+    "tap_unrouted|node:kit|T0466",
+    "tap_unrouted|node:kit|T0467",
+    "tap_unrouted|node:kit|T0468",
+    "tap_unrouted|node:kit|T0469",
+    "tap_unrouted|node:kit|T0470",
+    "tap_unrouted|node:kit|T0471",
+    "tap_unrouted|node:kit|T0472",
+    "tap_unrouted|node:kit|T0473",
+    "tap_unrouted|node:kit|T0474",
+    "tap_unrouted|node:kit|T0475",
+    "tap_unrouted|node:kit|T0476",
+    "tap_unrouted|node:kit|T0477",
+    "tap_unrouted|node:kit|T0478",
+    "tap_unrouted|node:kit|T0479",
+    "tap_unrouted|node:kit|T0480",
+    "tap_unrouted|node:kit|T0481",
+    "tap_unrouted|node:kit|T0482",
+    "tap_unrouted|node:kit|T0483",
+    "tap_unrouted|node:kit|T0484",
+    "tap_unrouted|node:kit|T0485",
+    "tap_unrouted|node:kit|T0486",
+    "tap_unrouted|node:kit|T0487",
+    "tap_unrouted|node:kit|T0488",
+    "tap_unrouted|node:kit|T0489",
+    "tap_unrouted|node:kit|T0490",
+    "tap_unrouted|node:kit|T0491",
+    "tap_unrouted|node:kit|T0492",
+    "tap_unrouted|node:kit|T0493",
+    "tap_unrouted|node:kit|T0494",
+    "tap_unrouted|node:kit|T0495",
+    "tap_unrouted|node:kit|T0496",
+    "tap_unrouted|node:kit|T0497",
+    "tap_unrouted|node:kit|T0498",
+    "tap_unrouted|node:kit|T0499",
+    "tap_unrouted|node:kit|T0500",
+    "tap_unrouted|node:kit|T0501",
+    "tap_unrouted|node:kit|T0502",
+    "tap_unrouted|node:kit|T0503",
+    "tap_unrouted|node:kit|T0504",
+    "tap_unrouted|node:kit|T0505",
+    "tap_unrouted|node:kit|T0506",
+    "tap_unrouted|node:kit|T0507",
+    "tap_unrouted|node:kit|T0508",
+    "tap_unrouted|node:kit|T0509",
+    "tap_unrouted|node:kit|T0510",
+    "tap_unrouted|node:kit|T0511",
+    "tap_unrouted|node:kit|T0512",
+    "tap_unrouted|node:kit|T0513",
+    "tap_unrouted|node:kit|T0514",
+    "tap_unrouted|node:kit|T0515",
+    "tap_unrouted|node:kit|T0516",
+    "tap_unrouted|node:kit|T0517",
+    "tap_unrouted|node:kit|T0518",
+    "tap_unrouted|node:kit|T0519",
+    "tap_unrouted|node:kit|T0520",
+    "tap_unrouted|node:kit|T0521",
+    "tap_unrouted|node:kit|T0522",
+    "tap_unrouted|node:kit|T0523",
+    "tap_unrouted|node:kit|T0524",
+    "tap_unrouted|node:kit|T0525",
+    "tap_unrouted|node:kit|T0526",
+    "tap_unrouted|node:kit|T0527",
+    "tap_unrouted|node:kit|T0528",
+    "tap_unrouted|node:kit|T0529",
+    "tap_unrouted|node:kit|T0530",
+    "tap_unrouted|node:kit|T0531",
+    "tap_unrouted|node:kit|T0532",
+    "tap_unrouted|node:kit|T0533",
+    "tap_unrouted|node:kit|T0534",
+    "tap_unrouted|node:kit|T0535",
+    "tap_unrouted|node:kit|T0536",
+    "tap_unrouted|node:kit|T0537",
+    "tap_unrouted|node:kit|T0538",
+    "tap_unrouted|node:kit|T0539",
+    "tap_unrouted|node:kit|T0540",
+    "tap_unrouted|node:kit|T0541",
+    "tap_unrouted|node:kit|T0542",
+    "tap_unrouted|node:kit|T0543",
+    "tap_unrouted|node:kit|T0544",
+    "tap_unrouted|node:kit|T0545",
+    "tap_unrouted|node:kit|T0546",
+    "tap_unrouted|node:kit|T0547",
+    "tap_unrouted|node:kit|T0548",
+    "tap_unrouted|node:kit|T0549",
+    "tap_unrouted|node:kit|T0550",
+    "tap_unrouted|node:kit|T0551",
+    "tap_unrouted|node:kit|T0552",
+    "tap_unrouted|node:kit|T0553",
+    "tap_unrouted|node:kit|T0554",
+    "tap_unrouted|node:kit|T0555",
+    "tap_unrouted|node:kit|T0556",
+    "tap_unrouted|node:kit|T0557",
+    "tap_unrouted|node:kit|T0558",
+    "tap_unrouted|node:kit|T0559",
+    "tap_unrouted|node:kit|T0560",
+    "tap_unrouted|node:kit|T0561",
+    "tap_unrouted|node:kit|T0562",
+    "tap_unrouted|node:kit|T0563",
+    "tap_unrouted|node:kit|T0564",
+    "tap_unrouted|node:kit|T0565",
+    "tap_unrouted|node:kit|T0566",
+    "tap_unrouted|node:kit|T0567",
+    "tap_unrouted|node:kit|T0568",
+    "tap_unrouted|node:kit|T0569",
+    "tap_unrouted|node:kit|T0570",
+    "tap_unrouted|node:kit|T0571",
+    "tap_unrouted|node:kit|T0572",
+    "tap_unrouted|node:kit|T0573",
+    "tap_unrouted|node:kit|T0574",
+    "tap_unrouted|node:kit|T0575",
+    "tap_unrouted|node:kit|T0576",
+    "tap_unrouted|node:kit|T0577",
+    "tap_unrouted|node:kit|T0578",
+    "tap_unrouted|node:kit|T0579",
+    "tap_unrouted|node:kit|T0580",
+    "tap_unrouted|node:kit|T0581",
+    "tap_unrouted|node:kit|T0582",
+    "tap_unrouted|node:kit|T0583",
+    "tap_unrouted|node:kit|T0584",
+    "tap_unrouted|node:kit|T0585",
+    "tap_unrouted|node:kit|T0586",
+    "tap_unrouted|node:kit|T0587",
+    "tap_unrouted|node:kit|T0588",
+    "tap_unrouted|node:kit|T0589",
+    "tap_unrouted|node:kit|T0590",
+    "tap_unrouted|node:kit|T0591",
+    "tap_unrouted|node:kit|T0592",
+    "tap_unrouted|node:kit|T0593",
+    "tap_unrouted|node:kit|T0594",
+    "tap_unrouted|node:kit|T0595",
+    "tap_unrouted|node:kit|T0596",
+    "tap_unrouted|node:kit|T0597",
+    "tap_unrouted|node:kit|T0598",
+    "tap_unrouted|node:kit|T0599",
+    "tap_unrouted|node:kit|T0600",
+    "tap_unrouted|node:kit|T0601",
+    "tap_unrouted|node:kit|T0602",
+    "tap_unrouted|node:kit|T0603",
+    "tap_unrouted|node:kit|T0604",
+    "tap_unrouted|node:kit|T0605",
+    "tap_unrouted|node:kit|T0606",
+    "tap_unrouted|node:kit|T0607",
+    "tap_unrouted|node:kit|T0608",
+    "tap_unrouted|node:kit|T0609",
+    "tap_unrouted|node:kit|T0610",
+    "tap_unrouted|node:kit|T0611",
+    "tap_unrouted|node:kit|T0612",
+    "tap_unrouted|node:kit|T0613",
+    "tap_unrouted|node:kit|T0614",
+    "tap_unrouted|node:kit|T0615",
+    "tap_unrouted|node:kit|T0616",
+    "tap_unrouted|node:kit|T0617",
+    "tap_unrouted|node:kit|T0618",
+    "tap_unrouted|node:kit|T0619",
+    "tap_unrouted|node:kit|T0620",
+    "tap_unrouted|node:kit|T0621",
+    "tap_unrouted|node:kit|T0622",
+    "tap_unrouted|node:kit|T0623",
+    "tap_unrouted|node:kit|T0624",
+    "tap_unrouted|node:kit|T0625",
+    "tap_unrouted|node:kit|T0626",
+    "tap_unrouted|node:kit|T0627",
+    "tap_unrouted|node:kit|T0628",
+    "tap_unrouted|node:kit|T0629",
+    "tap_unrouted|node:kit|T0630",
+    "tap_unrouted|node:kit|T0631",
+    "tap_unrouted|node:kit|T0632",
+    "tap_unrouted|node:kit|T0633",
+    "tap_unrouted|node:kit|T0634",
+    "tap_unrouted|node:kit|T0635",
+    "tap_unrouted|node:kit|T0636",
+    "tap_unrouted|node:kit|T0637",
+    "tap_unrouted|node:kit|T0638",
+    "tap_unrouted|node:kit|T0639",
+    "tap_unrouted|node:kit|T0640",
+    "tap_unrouted|node:kit|T0641",
+    "tap_unrouted|node:kit|T0642",
+    "tap_unrouted|node:kit|T0643",
+    "tap_unrouted|node:kit|T0644",
+    "tap_unrouted|node:kit|T0645",
+    "tap_unrouted|node:kit|T0646",
+    "tap_unrouted|node:kit|T0647",
+    "tap_unrouted|node:kit|T0648",
+    "tap_unrouted|node:kit|T0649",
+    "tap_unrouted|node:kit|T0650",
+    "tap_unrouted|node:kit|T0651",
+    "tap_unrouted|node:kit|T0652",
+    "tap_unrouted|node:kit|T0653",
+    "tap_unrouted|node:kit|T0654",
+    "tap_unrouted|node:kit|T0655",
+    "tap_unrouted|node:kit|T0656",
+    "tap_unrouted|node:kit|T0657",
+    "tap_unrouted|node:kit|T0658",
+    "tap_unrouted|node:kit|T0659",
+    "tap_unrouted|node:kit|T0660",
+    "tap_unrouted|node:kit|T0661",
+    "tap_unrouted|node:kit|T0662",
+    "tap_unrouted|node:kit|T0663",
+    "tap_unrouted|node:kit|T0664",
+    "tap_unrouted|node:kit|T0665",
+    "tap_unrouted|node:kit|T0666",
+    "tap_unrouted|node:kit|T0667",
+    "tap_unrouted|node:kit|T0668",
+    "tap_unrouted|node:kit|T0669",
+    "tap_unrouted|node:kit|T0670",
+    "tap_unrouted|node:kit|T0671",
+    "tap_unrouted|node:kit|T0672",
+    "tap_unrouted|node:kit|T0673",
+    "tap_unrouted|node:kit|T0674",
+    "tap_unrouted|node:kit|T0675",
+    "tap_unrouted|node:kit|T0676",
+    "tap_unrouted|node:kit|T0677",
+    "tap_unrouted|node:kit|T0678",
+    "tap_unrouted|node:kit|T0679",
+    "tap_unrouted|node:kit|T0680",
+    "tap_unrouted|node:kit|T0681",
+    "tap_unrouted|node:kit|T0682",
+    "tap_unrouted|node:kit|T0683",
+    "tap_unrouted|node:kit|T0684",
+    "tap_unrouted|node:kit|T0685",
+    "tap_unrouted|node:kit|T0686",
+    "tap_unrouted|node:kit|T0687",
+    "tap_unrouted|node:kit|T0688",
+    "tap_unrouted|node:kit|T0689",
+    "tap_unrouted|node:kit|T0690",
+    "tap_unrouted|node:kit|T0691",
+    "tap_unrouted|node:kit|T0692",
+    "tap_unrouted|node:kit|T0693",
+    "tap_unrouted|node:kit|T0694",
+    "tap_unrouted|node:kit|T0695",
+    "tap_unrouted|node:kit|T0696",
+    "tap_unrouted|node:kit|T0697",
+    "tap_unrouted|node:kit|T0698",
+    "tap_unrouted|node:kit|T0699",
+    "tap_unrouted|node:kit|T0700",
+    "tap_unrouted|node:kit|T0701",
+    "tap_unrouted|node:kit|T0702",
+    "tap_unrouted|node:kit|T0703",
+    "tap_unrouted|node:kit|T0704",
+    "tap_unrouted|node:kit|T0705",
+    "tap_unrouted|node:kit|T0706",
+    "tap_unrouted|node:kit|T0707",
+    "tap_unrouted|node:kit|T0708",
+    "tap_unrouted|node:kit|T0709",
+    "tap_unrouted|node:kit|T0710",
+    "tap_unrouted|node:kit|T0711",
+    "tap_unrouted|node:kit|T0712",
+    "tap_unrouted|node:kit|T0713",
+    "tap_unrouted|node:kit|T0714",
+    "tap_unrouted|node:kit|T0715",
+    "tap_unrouted|node:kit|T0716",
+    "tap_unrouted|node:kit|T0717",
+    "tap_unrouted|node:kit|T0718",
+    "tap_unrouted|node:kit|T0719",
+    "tap_unrouted|node:kit|T0720",
+    "tap_unrouted|node:kit|T0721",
+    "tap_unrouted|node:kit|T0722",
+    "tap_unrouted|node:kit|T0723",
+    "tap_unrouted|node:kit|T0724",
+    "tap_unrouted|node:kit|T0725",
+    "tap_unrouted|node:kit|T0726",
+    "tap_unrouted|node:kit|T0727",
+    "tap_unrouted|node:kit|T0728",
+    "tap_unrouted|node:kit|T0729",
+    "tap_unrouted|node:kit|T0730",
+    "tap_unrouted|node:kit|T0731",
+    "tap_unrouted|node:kit|T0732",
+    "tap_unrouted|node:kit|T0733",
+    "tap_unrouted|node:kit|T0734",
+    "tap_unrouted|node:kit|T0735",
+    "tap_unrouted|node:kit|T0736",
+    "tap_unrouted|node:kit|T0737",
+    "tap_unrouted|node:kit|T0738",
+    "tap_unrouted|node:kit|T0739",
+    "tap_unrouted|node:kit|T0740",
+    "tap_unrouted|node:kit|T0741",
+    "tap_unrouted|node:kit|T0742",
+    "tap_unrouted|node:kit|T0743",
+    "tap_unrouted|node:kit|T0744",
+    "tap_unrouted|node:kit|T0745",
+    "tap_unrouted|node:kit|T0746",
+    "tap_unrouted|node:kit|T0747",
+    "tap_unrouted|node:kit|T0748",
+    "tap_unrouted|node:kit|T0749",
+    "tap_unrouted|node:kit|T0750",
+    "tap_unrouted|node:kit|T0751",
+    "tap_unrouted|node:kit|T0752",
+    "tap_unrouted|node:kit|T0753",
+    "tap_unrouted|node:kit|T0754",
+    "tap_unrouted|node:kit|T0755",
+    "tap_unrouted|node:kit|T0756",
+    "tap_unrouted|node:kit|T0757",
+    "tap_unrouted|node:kit|T0758",
+    "tap_unrouted|node:kit|T0759",
+    "tap_unrouted|node:kit|T0760",
+    "tap_unrouted|node:kit|T0761",
+    "tap_unrouted|node:kit|T0762",
+    "tap_unrouted|node:kit|T0763",
+    "tap_unrouted|node:kit|T0764",
+    "tap_unrouted|node:kit|T0765",
+    "tap_unrouted|node:kit|T0766",
+    "tap_unrouted|node:kit|T0767",
+    "tap_unrouted|node:kit|T0768",
+    "tap_unrouted|node:kit|T0769",
+    "tap_unrouted|node:kit|T0770",
+    "tap_unrouted|node:kit|T0771",
+    "tap_unrouted|node:kit|T0772",
+    "tap_unrouted|node:kit|T0773",
+    "tap_unrouted|node:kit|T0774",
+    "tap_unrouted|node:kit|T0775",
+    "tap_unrouted|node:kit|T0776",
+    "tap_unrouted|node:kit|T0777",
+    "tap_unrouted|node:kit|T0778",
+    "tap_unrouted|node:kit|T0779",
+    "tap_unrouted|node:kit|T0780",
+    "tap_unrouted|node:kit|T0781",
+    "tap_unrouted|node:kit|T0782",
+    "tap_unrouted|node:kit|T0783",
+    "tap_unrouted|node:kit|T0784",
+    "tap_unrouted|node:kit|T0785",
+    "tap_unrouted|node:kit|T0786",
+    "tap_unrouted|node:kit|T0787",
+    "tap_unrouted|node:kit|T0788",
+    "tap_unrouted|node:kit|T0789",
+    "tap_unrouted|node:kit|T0790",
+    "tap_unrouted|node:kit|T0791",
+    "tap_unrouted|node:kit|T0792",
+    "tap_unrouted|node:kit|T0793",
+    "tap_unrouted|node:kit|T0794",
+    "tap_unrouted|node:kit|T0795",
+    "tap_unrouted|node:kit|T0796",
+    "tap_unrouted|node:kit|T0797",
+    "tap_unrouted|node:kit|T0798",
+    "tap_unrouted|node:kit|T0799",
+    "tap_unrouted|node:kit|T0800",
+    "tap_unrouted|node:kit|T0801",
+    "tap_unrouted|node:kit|T0802",
+    "tap_unrouted|node:kit|T0803",
+    "tap_unrouted|node:kit|T0804",
+    "tap_unrouted|node:kit|T0805",
+    "tap_unrouted|node:kit|T0806",
+    "tap_unrouted|node:kit|T0807",
+    "tap_unrouted|node:kit|T0808",
+    "tap_unrouted|node:kit|T0809",
+    "tap_unrouted|node:kit|T0810",
+    "tap_unrouted|node:kit|T0811",
+    "tap_unrouted|node:kit|T0812",
+    "tap_unrouted|node:kit|T0813",
+    "tap_unrouted|node:kit|T0814",
+    "tap_unrouted|node:kit|T0815",
+    "tap_unrouted|node:kit|T0816",
+    "tap_unrouted|node:kit|T0817",
+    "tap_unrouted|node:kit|T0818",
+    "tap_unrouted|node:kit|T0819",
+    "tap_unrouted|node:kit|T0820",
+    "tap_unrouted|node:kit|T0821",
+    "tap_unrouted|node:kit|T0822",
+    "tap_unrouted|node:kit|T0823",
+    "tap_unrouted|node:kit|T0824",
+    "tap_unrouted|node:kit|T0825",
+    "tap_unrouted|node:kit|T0826",
+    "tap_unrouted|node:kit|T0827",
+    "tap_unrouted|node:kit|T0828",
+    "tap_unrouted|node:kit|T0829",
+    "tap_unrouted|node:kit|T0830",
+    "tap_unrouted|node:kit|T0831",
+    "tap_unrouted|node:kit|T0832",
+    "tap_unrouted|node:kit|T0833",
+    "tap_unrouted|node:kit|T0834",
+    "tap_unrouted|node:kit|T0835",
+    "tap_unrouted|node:kit|T0836",
+    "tap_unrouted|node:kit|T0837",
+    "tap_unrouted|node:kit|T0838",
+    "tap_unrouted|node:kit|T0839",
+    "tap_unrouted|node:kit|T0840",
+    "tap_unrouted|node:kit|T0841",
+    "tap_unrouted|node:kit|T0842",
+    "tap_unrouted|node:kit|T0843",
+    "tap_unrouted|node:kit|T0844",
+    "tap_unrouted|node:kit|T0845",
+    "tap_unrouted|node:kit|T0846",
+    "tap_unrouted|node:kit|T0847",
+    "tap_unrouted|node:kit|T0848",
+    "tap_unrouted|node:kit|T0849",
+    "tap_unrouted|node:kit|T0850",
+    "tap_unrouted|node:kit|T0851",
+    "tap_unrouted|node:kit|T0852",
+    "tap_unrouted|node:kit|T0853",
+    "tap_unrouted|node:kit|T0854",
+    "tap_unrouted|node:kit|T0855",
+    "tap_unrouted|node:kit|T0856",
+    "tap_unrouted|node:kit|T0857",
+    "tap_unrouted|node:kit|T0858",
+    "tap_unrouted|node:kit|T0859",
+    "tap_unrouted|node:kit|T0860",
+    "tap_unrouted|node:kit|T0861",
+    "tap_unrouted|node:kit|T0862",
+    "tap_unrouted|node:kit|T0863",
+    "tap_unrouted|node:kit|T0864",
+    "tap_unrouted|node:kit|T0865",
+    "tap_unrouted|node:kit|T0866",
+    "tap_unrouted|node:kit|T0867",
+    "tap_unrouted|node:kit|T0868",
+    "tap_unrouted|node:kit|T0869",
+    "tap_unrouted|node:kit|T0870",
+    "tap_unrouted|node:kit|T0871",
+    "tap_unrouted|node:kit|T0872",
+    "tap_unrouted|node:kit|T0873",
+    "tap_unrouted|node:kit|T0874",
+    "tap_unrouted|node:kit|T0875",
+    "tap_unrouted|node:kit|T0876",
+    "tap_unrouted|node:kit|T0877",
+    "tap_unrouted|node:kit|T0878",
+    "tap_unrouted|node:kit|T0879",
+    "tap_unrouted|node:kit|T0880",
+    "tap_unrouted|node:kit|T0881",
+    "tap_unrouted|node:kit|T0882",
+    "tap_unrouted|node:kit|T0883",
+    "tap_unrouted|node:kit|T0884",
+    "tap_unrouted|node:kit|T0885",
+    "tap_unrouted|node:kit|T0886",
+    "tap_unrouted|node:kit|T0887",
+    "tap_unrouted|node:kit|T0888",
+    "tap_unrouted|node:kit|T0889",
+    "tap_unrouted|node:kit|T0890",
+    "tap_unrouted|node:kit|T0891",
+    "tap_unrouted|node:kit|T0892",
+    "tap_unrouted|node:kit|T0893",
+    "tap_unrouted|node:kit|T0894",
+    "tap_unrouted|node:kit|T0895",
+    "tap_unrouted|node:kit|T0896",
+    "tap_unrouted|node:kit|T0897",
+    "tap_unrouted|node:kit|T0898",
+    "tap_unrouted|node:kit|T0899",
+    "tap_unrouted|node:kit|T0900",
+    "tap_unrouted|node:kit|T0901",
+    "tap_unrouted|node:kit|T0902",
+    "tap_unrouted|node:kit|T0903",
+    "tap_unrouted|node:kit|T0904",
+    "tap_unrouted|node:kit|T0905",
+    "tap_unrouted|node:kit|T0906",
+    "tap_unrouted|node:kit|T0907",
+    "tap_unrouted|node:kit|T0908",
+    "tap_unrouted|node:kit|T0909",
+    "tap_unrouted|node:kit|T0910",
+    "tap_unrouted|node:kit|T0911",
+    "tap_unrouted|node:kit|T0912",
+    "tap_unrouted|node:kit|T0913",
+    "tap_unrouted|node:kit|T0914",
+    "tap_unrouted|node:kit|T0915",
+    "tap_unrouted|node:kit|T0916",
+    "tap_unrouted|node:kit|T0917",
+    "tap_unrouted|node:kit|T0918",
+    "tap_unrouted|node:kit|T0919",
+    "tap_unrouted|node:kit|T0920",
+    "tap_unrouted|node:kit|T0921",
+    "tap_unrouted|node:kit|T0922",
+    "tap_unrouted|node:kit|T0923",
+    "tap_unrouted|node:kit|T0924",
+    "tap_unrouted|node:kit|T0925",
+    "tap_unrouted|node:kit|T0926",
+    "tap_unrouted|node:kit|T0927",
+    "tap_unrouted|node:kit|T0928",
+    "tap_unrouted|node:kit|T0929",
+    "tap_unrouted|node:kit|T0930",
+    "tap_unrouted|node:kit|T0931",
+    "tap_unrouted|node:kit|T0932",
+    "tap_unrouted|node:kit|T0933",
+    "tap_unrouted|node:kit|T0934",
+    "tap_unrouted|node:kit|T0935",
+    "tap_unrouted|node:kit|T0936",
+    "tap_unrouted|node:kit|T0937",
+    "tap_unrouted|node:kit|T0938",
+    "tap_unrouted|node:kit|T0939",
+    "tap_unrouted|node:kit|T0940",
+    "tap_unrouted|node:kit|T0941",
+    "tap_unrouted|node:kit|T0942",
+    "tap_unrouted|node:kit|T0943",
+    "tap_unrouted|node:kit|T0944",
+    "tap_unrouted|node:kit|T0945",
+    "tap_unrouted|node:kit|T0946",
+    "tap_unrouted|node:kit|T0947",
+    "tap_unrouted|node:kit|T0948",
+    "tap_unrouted|node:kit|T0949",
+    "tap_unrouted|node:kit|T0950",
+    "tap_unrouted|node:kit|T0951",
+    "tap_unrouted|node:kit|T0952",
+    "tap_unrouted|node:kit|T0953",
+    "tap_unrouted|node:kit|T0954",
+    "tap_unrouted|node:kit|T0955",
+    "tap_unrouted|node:kit|T0956",
+    "tap_unrouted|node:kit|T0957",
+    "tap_unrouted|node:kit|T0958",
+    "tap_unrouted|node:kit|T0959",
+    "tap_unrouted|node:kit|T0960",
+    "tap_unrouted|node:kit|T0961",
+    "tap_unrouted|node:kit|T0962",
+    "tap_unrouted|node:kit|T0963",
+    "tap_unrouted|node:kit|T0964",
+    "tap_unrouted|node:kit|T0965",
+    "tap_unrouted|node:kit|T0966",
+    "tap_unrouted|node:kit|T0967",
+    "tap_unrouted|node:kit|T0968",
+    "tap_unrouted|node:kit|T0969",
+    "tap_unrouted|node:kit|T0970",
+    "tap_unrouted|node:kit|T0971",
+    "tap_unrouted|node:kit|T0972",
+    "tap_unrouted|node:kit|T0973",
+    "tap_unrouted|node:kit|T0974",
+    "tap_unrouted|node:kit|T0975",
+    "tap_unrouted|node:kit|T0976",
+    "tap_unrouted|node:kit|T0977",
+    "tap_unrouted|node:kit|T0978",
+    "tap_unrouted|node:kit|T0979",
+    "tap_unrouted|node:kit|T0980",
+    "tap_unrouted|node:kit|T0981",
+    "tap_unrouted|node:kit|T0982",
+    "tap_unrouted|node:kit|T0983",
+    "tap_unrouted|node:kit|T0984",
+    "tap_unrouted|node:kit|T0985",
+    "tap_unrouted|node:kit|T0986",
+    "tap_unrouted|node:kit|T0987",
+    "tap_unrouted|node:kit|T0988",
+    "tap_unrouted|node:kit|T0989",
+    "tap_unrouted|node:kit|T0990",
+    "tap_unrouted|node:kit|T0991",
+    "tap_unrouted|node:kit|T0992",
+    "tap_unrouted|node:kit|T0993",
+    "tap_unrouted|node:kit|T0994",
+    "tap_unrouted|node:kit|T0995",
+    "tap_unrouted|node:kit|T0996",
+    "tap_unrouted|node:kit|T0997",
+    "tap_unrouted|node:kit|T0998",
+    "tap_unrouted|node:kit|T0999",
+    "more|file:|"
+   ]
+  }
+ },
+  {
+    "name": "live-rig-string-channels",
+    "category": "live",
+    "ts": true,
+    "mem": true,
+    "files": {
+      "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+      "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+      "nodes/rec.k7x": "io(\"in\")\nchannel(\"synth\")\n",
+      "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+    },
+    "expect": {
+      "stopped": [],
+      "warned": [],
+      "faults": [],
+      "live": {
+        "mic": {
+          "/channels/0": 3,
+          "/channels/1": 4,
+          "/channels/2": 16,
+          "/channels/3": 1
+        }
+      }
+    },
+    "rig": {
+      "channels": {
+        "in": [
+          {
+            "ch": [
+              "3",
+              " 4 ",
+              "0x10",
+              true
+            ],
+            "label": "synth"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "live-rig-numeric-label",
+    "category": "live",
+    "ts": true,
+    "mem": true,
+    "files": {
+      "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+      "nodes/mic.k7x": "extends(\"@meta/track\")\n",
+      "nodes/rec.k7x": "io(\"in\")\nchannel(\"5\")\n",
+      "graph.k7x": "modules({ \"mic\": [\"rec\"], \"rec\": [\"OUT\"] })\n"
+    },
+    "expect": {
+      "stopped": [],
+      "warned": [],
+      "faults": [],
+      "live": {
+        "mic": {
+          "/channels/0": 7
+        }
+      }
+    },
+    "rig": {
+      "channels": {
+        "in": [
+          {
+            "ch": [
+              7
+            ],
+            "label": 5
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "own-cue-pair-from-strings",
+    "category": "ownership",
+    "ts": true,
+    "mem": true,
+    "files": {
+      "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+      "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+      "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+      "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+      "nodes/fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+      "nodes/verb.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+      "nodes/rec.k7x": "io(\"in\")\nchannel([1])\n",
+      "graph.k7x": "modules({ \"gtr\": [\"verb\"], \"drums\": [\"verb\"], \"verb\": [\"CUE\"] })\n"
+    },
+    "expect": {
+      "stopped": [],
+      "warned": [],
+      "faults": [],
+      "cue_pair": [
+        3,
+        4
+      ]
+    },
+    "rig": {
+      "cueOutput": [
+        "3",
+        4
+      ]
+    }
+  }
+]

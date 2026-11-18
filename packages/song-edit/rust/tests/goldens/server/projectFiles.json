@@ -1,0 +1,1034 @@
+{
+ "cases": [
+  {
+   "name": "a node of a workspace module",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "reverb",
+    "node": "verb",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "ret": "nodes/verb.k7x",
+   "changed": {
+    "p.k7/nodes/verb.k7x": "// verb: one use of module \"audio/reverb\".\n// It inherits everything that module says — state only what THIS use changes, e.g.\n//   params({ \"Filter Freq\": 69 })\nextends(\"@workspace/audio/reverb\")\n"
+   }
+  },
+  {
+   "name": "a node of a module that is not there",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "ghost",
+    "node": "verb",
+    "scan": null
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "thrown": "module 'audio/ghost' is neither in the workspace nor one the engine offers — create it first, or name one of the engine's",
+   "changed": {}
+  },
+  {
+   "name": "an unnamed node",
+   "fn": "freeNodeName",
+   "args": {
+    "module": "reverb",
+    "lane": null
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "ret": "reverb_1",
+   "changed": {}
+  },
+  {
+   "name": "an unnamed node under a lane",
+   "fn": "freeNodeName",
+   "args": {
+    "module": "reverb",
+    "lane": "drums"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "ret": "drums_reverb_1",
+   "changed": {}
+  },
+  {
+   "name": "an unnamed node whose first name is a file",
+   "fn": "freeNodeName",
+   "args": {
+    "module": "x",
+    "lane": null
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/x_1.k7x": "io(\"in\")\n"
+   },
+   "ret": "x_2",
+   "changed": {}
+  },
+  {
+   "name": "an unnamed node whose first two names are taken",
+   "fn": "freeNodeName",
+   "args": {
+    "module": "x",
+    "lane": null
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/x_1.k7x": "io(\"in\")\n",
+    "p.k7/nodes/x_2.k7x": "io(\"in\")\n"
+   },
+   "ret": "x_3",
+   "changed": {}
+  },
+  {
+   "name": "an unnamed node whose first name is a chain",
+   "fn": "freeNodeName",
+   "args": {
+    "module": "x",
+    "lane": null
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/chains/x_1.k7x": "steps([])\n"
+   },
+   "ret": "x_2",
+   "changed": {}
+  },
+  {
+   "name": "a node in a chain project",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "reverb",
+    "node": "verb",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n",
+    "p.k7/chains/x_1.k7x": "steps([])\n"
+   },
+   "ret": "00000000-0000-4000-8000-000000000001",
+   "changed": {
+    "p.k7/chains/verb.k7x": "// verb: one use of module \"audio/reverb\".\n// It inherits everything that module says — state only what THIS use changes, e.g.\n//   params({ \"Filter Freq\": 69 })\nsteps([id(\"00000000-0000-4000-8000-000000000001\").extends(\"@workspace/audio/reverb\")])\n"
+   }
+  },
+  {
+   "name": "an engine node from a scan",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "neural-amp",
+    "node": "amp",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "ret": "nodes/amp.k7x",
+   "changed": {
+    "p.k7/nodes/amp.k7x": "// amp: one use of \"neural-amp\", a module the engine provides.\n// The plugin is named here so the project says what it uses, whatever this machine\n// has scanned. Add params to set it.\nplugin({ type: \"vst3\", name: \"Neural Amp\" })\n"
+   }
+  },
+  {
+   "name": "an instrument from a scan",
+   "fn": "createNode",
+   "args": {
+    "category": "instruments",
+    "module": "serum",
+    "node": "lead",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "ret": "nodes/lead.k7x",
+   "changed": {
+    "p.k7/nodes/lead.k7x": "// lead: one use of \"serum\", a module the engine provides.\n// The plugin is named here so the project says what it uses, whatever this machine\n// has scanned. Add params to set it.\nplugin({ type: \"vst3\", name: \"Serum\" })\n"
+   }
+  },
+  {
+   "name": "an engine node from the built-ins",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "4osc",
+    "node": "built",
+    "scan": null
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "ret": "nodes/built.k7x",
+   "changed": {
+    "p.k7/nodes/built.k7x": "// built: one use of \"4osc\", a module the engine provides.\n// The plugin is named here so the project says what it uses, whatever this machine\n// has scanned. Add params to set it.\nplugin({ type: \"internal\", name: \"4OSC\" })\n"
+   }
+  },
+  {
+   "name": "an engine node a scan does not offer",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "4osc",
+    "node": "built",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "thrown": "module 'audio/4osc' is neither in the workspace nor one the engine offers — create it first, or name one of the engine's",
+   "changed": {}
+  },
+  {
+   "name": "an engine node in a chain project",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "neural-amp",
+    "node": "amp",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/chains/x_1.k7x": "steps([])\n"
+   },
+   "ret": "00000000-0000-4000-8000-000000000001",
+   "changed": {
+    "p.k7/chains/amp.k7x": "// amp: one use of \"neural-amp\", a module the engine provides.\n// The plugin is named here so the project says what it uses, whatever this machine\n// has scanned. Add params to set it.\nsteps([id(\"00000000-0000-4000-8000-000000000001\").plugin({ type: \"vst3\", name: \"Neural Amp\" })])\n"
+   }
+  },
+  {
+   "name": "the io role IN",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "IN",
+    "node": "IN2",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "ret": "nodes/IN2.k7x",
+   "changed": {
+    "p.k7/nodes/IN2.k7x": "// IN2: this machine's audio input, the live rig's IN.\n//\n// `monitor(\"auto\")` is audible once its track is armed; \"on\" always, \"off\" never.\nio(\"in\")\nmonitor(\"auto\")\n// …and a trim in dB, applied at the interface ahead of everything: 0 is unity.\ngain(0)\n"
+   }
+  },
+  {
+   "name": "the io role FILE",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "FILE",
+    "node": "SRC",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "ret": "nodes/SRC.k7x",
+   "changed": {
+    "p.k7/nodes/SRC.k7x": "// SRC: audio off disk rather than off an interface (docs/fileInput.md).\n//\n// `source` is optional and absent is the useful case — pick the file on the node's\n// card, or name it here, project-relative:\n//\n//     source(\"clips/original.wav\")\nio(\"file\")\n"
+   }
+  },
+  {
+   "name": "the io role CAM",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "CAM",
+    "node": "CAM2",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "ret": "nodes/CAM2.k7x",
+   "changed": {
+    "p.k7/nodes/CAM2.k7x": "// CAM2: a live picture — the one io source whose signal is video, not audio (docs/camera.md).\n//\n// It names NO lens: which camera you are on is a fact about your rig. Empty means whichever\n// one this machine calls default, so it draws a picture before you have chosen anything.\n// Pick it on the node's card, or write the LABEL here — never a deviceId, which is salted\n// per browser and rotates:\n//\n//     camera(\"Logitech BRIO\")\nio(\"camera\")\n"
+   }
+  },
+  {
+   "name": "the io role MIDI",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "MIDI",
+    "node": "KEYS",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "ret": "nodes/KEYS.k7x",
+   "changed": {
+    "p.k7/nodes/KEYS.k7x": "// KEYS: a MIDI device — the notes a lane records, when this node is wired to it (docs/midiIn.md).\n//\n// Pick the device on the node's card, or write its LABEL here — never an id, which is per\n// browser. Empty records from any device:\n//\n//     device(\"Arturia KeyStep 37\")\nio(\"midi\")\n"
+   }
+  },
+  {
+   "name": "an io role in a chain project",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "IN",
+    "node": "IN2",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/chains/x_1.k7x": "steps([])\n"
+   },
+   "ret": "00000000-0000-4000-8000-000000000001",
+   "changed": {
+    "p.k7/chains/IN2.k7x": "// IN2: this machine's audio input, the live rig's IN.\n//\n// `monitor(\"auto\")` is audible once its track is armed; \"on\" always, \"off\" never.\nsteps([id(\"00000000-0000-4000-8000-000000000001\").io(\"in\").monitor(\"auto\").gain(0)])\n"
+   }
+  },
+  {
+   "name": "an io output is refused",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "OUT",
+    "node": "OUT2",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "thrown": "'OUT' is an OUTPUT — MIX, OUT, CUE, RENDER and VIDEO_OUT are built into every graph and take no node",
+   "changed": {}
+  },
+  {
+   "name": "an io cue is refused",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "CUE",
+    "node": "CUE2",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "thrown": "'CUE' is an OUTPUT — MIX, OUT, CUE, RENDER and VIDEO_OUT are built into every graph and take no node",
+   "changed": {}
+  },
+  {
+   "name": "an unknown io role",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "NOPE",
+    "node": "N",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "thrown": "unknown io module 'NOPE' — the app provides: IN, OUT, CAM, CUE, FILE, MIDI",
+   "changed": {}
+  },
+  {
+   "name": "an io name that a node holds",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "IN",
+    "node": "IN2",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "p.k7/nodes/IN2.k7x": "io(\"in\")\n"
+   },
+   "thrown": "the name 'IN2' is already a module or node in this project",
+   "changed": {}
+  },
+  {
+   "name": "an io name with a slash",
+   "fn": "createNode",
+   "args": {
+    "category": "io",
+    "module": "IN",
+    "node": "a/b",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n"
+   },
+   "thrown": "invalid node name 'a/b' — letters, digits, '_' and '-' only",
+   "changed": {}
+  },
+  {
+   "name": "a node of a template's module",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "reverb",
+    "node": "verb",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "t.k7/modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "ret": "nodes/verb.k7x",
+   "changed": {
+    "t.k7/nodes/verb.k7x": "// verb: one use of module \"audio/reverb\".\n// It inherits everything that module says — state only what THIS use changes, e.g.\n//   params({ \"Filter Freq\": 69 })\nextends(\"@project/audio/reverb\")\n"
+   }
+  },
+  {
+   "name": "an engine node in a template",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "neural-amp",
+    "node": "amp",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "t.k7/nodes/a.k7x": "io(\"in\")\n"
+   },
+   "ret": "nodes/amp.k7x",
+   "changed": {
+    "t.k7/nodes/amp.k7x": "// amp: one use of \"neural-amp\", a module the engine provides.\n// The plugin is named here so the project says what it uses, whatever this machine\n// has scanned. Add params to set it.\nplugin({ type: \"vst3\", name: \"Neural Amp\" })\n"
+   }
+  },
+  {
+   "name": "an unknown category",
+   "fn": "createNode",
+   "args": {
+    "category": "gizmos",
+    "module": "reverb",
+    "node": "verb",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "thrown": "unknown module category 'gizmos' — use one of: io, docs, instruments, audio, transformers, video_effects, video_transitions, shaders, shapes, midi, cold, console, tracks",
+   "changed": {}
+  },
+  {
+   "name": "a node name with dots",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "reverb",
+    "node": "../x",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "thrown": "invalid node name '../x' — letters, digits, '_' and '-' only",
+   "changed": {}
+  },
+  {
+   "name": "a node name with a slash",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "reverb",
+    "node": "a/b",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "thrown": "invalid node name 'a/b' — letters, digits, '_' and '-' only",
+   "changed": {}
+  },
+  {
+   "name": "a node that is taken",
+   "fn": "createNode",
+   "args": {
+    "category": "audio",
+    "module": "reverb",
+    "node": "verb",
+    "scan": [
+     {
+      "name": "Neural Amp",
+      "format": "VST3",
+      "role": "audioEffect"
+     },
+     {
+      "name": "Serum",
+      "format": "VST3",
+      "role": "instrument",
+      "instrument": true
+     }
+    ]
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n",
+    "p.k7/nodes/verb.k7x": "io(\"in\")\n"
+   },
+   "thrown": "nodes/verb.k7x already exists — refusing to overwrite",
+   "changed": {}
+  },
+  {
+   "name": "a plain clone",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "reverb",
+    "newName": "plate"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "ret": "../_modules/audio/plate/module.k7x",
+   "changed": {
+    "_modules/audio/plate/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   }
+  },
+  {
+   "name": "a clone of a module that states its name",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "warm",
+    "newName": "hot"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/warm/module.k7x": "name(\"warm\")\n// warm\nextends(\"@engine/serum\")\n",
+    "_modules/audio/warm/ui.k7x": "// panel\n",
+    "_modules/audio/warm/base/warm.vstpreset": "PRESET",
+    "_modules/audio/warm/base/deep/x.bin": "BIN"
+   },
+   "ret": "../_modules/audio/hot/module.k7x",
+   "changed": {
+    "_modules/audio/hot/base/deep/x.bin": "BIN",
+    "_modules/audio/hot/base/warm.vstpreset": "PRESET",
+    "_modules/audio/hot/module.k7x": "name(\"hot\")\n// warm\nextends(\"@engine/serum\")\n",
+    "_modules/audio/hot/ui.k7x": "// panel\n"
+   }
+  },
+  {
+   "name": "a clone with a preset and a sub folder",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "warm",
+    "newName": "hot"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/warm/module.k7x": "// warm\nextends(\"@engine/serum\")\n",
+    "_modules/audio/warm/ui.k7x": "// panel\n",
+    "_modules/audio/warm/base/warm.vstpreset": "PRESET",
+    "_modules/audio/warm/base/deep/x.bin": "BIN"
+   },
+   "ret": "../_modules/audio/hot/module.k7x",
+   "changed": {
+    "_modules/audio/hot/base/deep/x.bin": "BIN",
+    "_modules/audio/hot/base/warm.vstpreset": "PRESET",
+    "_modules/audio/hot/module.k7x": "// warm\nextends(\"@engine/serum\")\n",
+    "_modules/audio/hot/ui.k7x": "// panel\n"
+   }
+  },
+  {
+   "name": "a clone whose destination is taken",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "reverb",
+    "newName": "plate"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n",
+    "_modules/audio/plate/module.k7x": "// plate\nextends(\"@engine/serum\")\n"
+   },
+   "thrown": "folder ../_modules/audio/plate/ already exists",
+   "changed": {}
+  },
+  {
+   "name": "a clone to the same name",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "reverb",
+    "newName": "reverb"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "thrown": "source and destination names are the same",
+   "changed": {}
+  },
+  {
+   "name": "a clone of a missing module",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "ghost",
+    "newName": "plate"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "thrown": "module 'audio/ghost' not found",
+   "changed": {}
+  },
+  {
+   "name": "a clone to a name with a separator",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "reverb",
+    "newName": "a/b"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "thrown": "invalid new name 'a/b' — letters, digits, '_' and '-' only",
+   "changed": {}
+  },
+  {
+   "name": "a clone of a module with no module file",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "reverb",
+    "newName": "plate"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/ui.k7x": "// x\n"
+   },
+   "thrown": "module 'audio/reverb' not found",
+   "changed": {}
+  },
+  {
+   "name": "a clone of a module whose file does not parse",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "reverb",
+    "newName": "plate"
+   },
+   "tree": {
+    "p.k7/project.k7x": "project({ name: \"p\", tempo: 120 })\n",
+    "_modules/audio/reverb/module.k7x": "name(\n"
+   },
+   "ret": "../_modules/audio/plate/module.k7x",
+   "changed": {
+    "_modules/audio/plate/module.k7x": "name(\n"
+   }
+  },
+  {
+   "name": "a clone in a template",
+   "fn": "cloneModuleFile",
+   "args": {
+    "category": "audio",
+    "name": "reverb",
+    "newName": "plate"
+   },
+   "tree": {
+    "t.k7/modules/audio/reverb/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   },
+   "ret": "modules/audio/plate/module.k7x",
+   "changed": {
+    "t.k7/modules/audio/plate/module.k7x": "// reverb\nextends(\"@engine/serum\")\n"
+   }
+  },
+  {
+   "name": "namePart of \"Neural Amp\"",
+   "fn": "namePart",
+   "args": {
+    "text": "Neural Amp"
+   },
+   "tree": {},
+   "ret": "Neural_Amp",
+   "changed": {}
+  },
+  {
+   "name": "namePart of \"__x__\"",
+   "fn": "namePart",
+   "args": {
+    "text": "__x__"
+   },
+   "tree": {},
+   "ret": "x",
+   "changed": {}
+  },
+  {
+   "name": "namePart of \"é\"",
+   "fn": "namePart",
+   "args": {
+    "text": "é"
+   },
+   "tree": {},
+   "ret": "x",
+   "changed": {}
+  },
+  {
+   "name": "namePart of \"\"",
+   "fn": "namePart",
+   "args": {
+    "text": ""
+   },
+   "tree": {},
+   "ret": "x",
+   "changed": {}
+  },
+  {
+   "name": "namePart of \"a  b\"",
+   "fn": "namePart",
+   "args": {
+    "text": "a  b"
+   },
+   "tree": {},
+   "ret": "a_b",
+   "changed": {}
+  },
+  {
+   "name": "namePart of \"-a-\"",
+   "fn": "namePart",
+   "args": {
+    "text": "-a-"
+   },
+   "tree": {},
+   "ret": "-a-",
+   "changed": {}
+  },
+  {
+   "name": "namePart of \"x_y\"",
+   "fn": "namePart",
+   "args": {
+    "text": "x_y"
+   },
+   "tree": {},
+   "ret": "x_y",
+   "changed": {}
+  },
+  {
+   "name": "instanceName of reverb for null",
+   "fn": "instanceName",
+   "args": {
+    "what": "reverb",
+    "owner": null,
+    "taken": []
+   },
+   "tree": {},
+   "ret": "reverb_1",
+   "changed": {}
+  },
+  {
+   "name": "instanceName of reverb for drums",
+   "fn": "instanceName",
+   "args": {
+    "what": "reverb",
+    "owner": "drums",
+    "taken": [
+     "drums_reverb_1"
+    ]
+   },
+   "tree": {},
+   "ret": "drums_reverb_2",
+   "changed": {}
+  },
+  {
+   "name": "instanceName of Neural Amp for my lane",
+   "fn": "instanceName",
+   "args": {
+    "what": "Neural Amp",
+    "owner": "my lane",
+    "taken": [
+     "my_lane_Neural_Amp_1",
+     "my_lane_Neural_Amp_2"
+    ]
+   },
+   "tree": {},
+   "ret": "my_lane_Neural_Amp_3",
+   "changed": {}
+  },
+  {
+   "name": "instanceName of x for ",
+   "fn": "instanceName",
+   "args": {
+    "what": "x",
+    "owner": "",
+    "taken": [
+     "x_1"
+    ]
+   },
+   "tree": {},
+   "ret": "x_2",
+   "changed": {}
+  }
+ ]
+}

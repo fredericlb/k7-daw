@@ -1,0 +1,10 @@
+// Chorus (one knob) — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({ Amount: { min: 0, max: 100, default: 0 } })
+graph([
+  mul("Amount", 0.01).as("t"),
+  lerp(0.2, 5, "t").as("rate"),
+  mul("t", 20).as("depth"),
+  input().as("dry"),
+  delay("dry", aadd(amul(lfo("sine", "rate"), "depth"), 30), 60).as("wet"),
+  output(aadd(amul("dry", 0.7), amul("wet", 0.3))),
+])

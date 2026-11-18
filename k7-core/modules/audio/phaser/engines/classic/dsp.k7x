@@ -1,0 +1,18 @@
+// Phaser — the DSP as data, read by the song crate into the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Tracktion's phaser, stage for stage: its knobs are plain plugin state, so a curve could never move them.
+params({
+  Depth: { min: 0, max: 10, default: 5 },
+  Rate: { min: 0, max: 10, default: 0.4 },
+  Feedback: { min: 0, max: 1, default: 0.7 },
+})
+// Read before the last stage writes it, so it is that stage's PREVIOUS sample: the plugin's feedback tap.
+wires("fb")
+graph([
+  input().as("dry"),
+  // A triangle, 0..1, times Depth: the plugin sweeps evenly in PITCH, so it is octaves that move linearly.
+  amul(aadd(amul(lfo("triangle", "Rate"), 0.5), 0.5), "Depth").as("octaves"),
+  aadd("dry", amul("fb", "Feedback")).as("x"),
+  allpass("x", 100, "octaves").as("x").repeat(3),
+  allpass("x", 100, "octaves").into("fb"),
+  output(aadd("dry", "fb")),
+])

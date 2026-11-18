@@ -1,0 +1,580 @@
+// ClipView.tsx — a clip's CONTENT: the AudioClipPanel for audio, the piano roll for MIDI, and for
+// a live sequence FILE the roll of the notes parsed out of its text. Each draws its own header and
+// close button. Two hosts mount it — the Editor bottom panel, and the graph slot when a clip is
+// clicked in the timeline (see docs/shell.md). There is ONE audio clip panel, and clicking a clip
+// reaches it: `WaveformView` draws the same picture and can act on none of it.
+
+import { DEFAULT_METRONOME_LEVEL } from "@studio/engine-protocol/build";
+import { seqWindowFromText, windowSpan } from "@studio/song-schema/seqWindow";
+import { beatsToPosition } from "@studio/song-schema/timecode";
+import { Grid3x3 } from "@studio/ui/icons";
+import { readSequence } from "@studio/ui-editor/tracker/notes";
+import {
+  type ComponentProps,
+  type RefObject,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { api } from "../api";
+import type { MenuCtx } from "../contextMenu";
+import type { ClipGridHandle, OnGridSelection } from "../gridCaret";
+import { m } from "../paraglide/messages.js";
+import { fileStem } from "../projectPaths";
+import { usePaneGraph } from "../queries/graph";
+import { usePaneProjectDoc } from "../queries/projectDoc";
+import { rackFor, rackKeyNames } from "../rackFor";
+import type { RollMode } from "../rollMode";
+import { trackPlacing } from "../rows";
+import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
+import { eventIdOf, takesEventOf } from "../takes";
+import type { Hints, WebClip, WebNote, WebProject } from "../types";
+import type { WaveMode } from "../waveMode";
+import { type AudioClipHandle, AudioClipPanel } from "./AudioClipPanel";
+import { type ClipViewMode, ClipViewModes } from "./ClipViewModes";
+import { GraphSlotPane } from "./GraphSlotPane";
+import { PanelCloseButton } from "./PanelClose";
+import { PianoRoll, type RollHandle } from "./PianoRoll";
+import { SeqGridFile } from "./SeqGridFile";
+import { SequencerPanel } from "./SequencerPanel";
+import type { PanelTakes, TakesHost } from "./TakesView";
+
+// What to show: a concrete clip (timeline caret or click), or the live sequence file open in the editor, parsed here.
+export type EditTarget =
+  // `track` when the opener knows the lane: a duplicated lane holds clips with the SAME ids as its original.
+  | { kind: "clip"; project: WebProject; clip: WebClip; track?: string }
+  | { kind: "seq"; path: string; content: string };
+
+// Enough of a project for the roll (tempo + time signature) until the real doc loads, so a sequence still previews.
+const FALLBACK_PROJECT: WebProject = {
+  name: "",
+  tempo: 120,
+  timeSigNumerator: 4,
+  timeSigDenominator: 4,
+  masterVolume: 0, // unity — a stand-in draws no fader, and a roll asks nothing of it
+  tracks: [],
+  groups: [],
+  metronome: false,
+  metronomeLevel: DEFAULT_METRONOME_LEVEL,
+  countIn: 0,
+  markers: [],
+};
+
+// The live sequence file's notes as a roll, re-parsed as the text changes — parsing is local and cheap.
+function SeqRoll({
+  path,
+  content,
+  onCreateNote,
+  onSetVelocity,
+  onSetNoteRange,
+  onMoveNote,
+  onMoveNotes,
+  onContextMenu,
+  onRemoveNote,
+  roll,
+}: {
+  path: string;
+  content: string;
+  onCreateNote?: (
+    seqId: string,
+    key: number,
+    t0: number,
+    t1: number,
+  ) => void | Promise<void>;
+  onSetVelocity?: (
+    seqId: string,
+    key: number,
+    startBeat: number,
+    vel: number,
+  ) => void | Promise<void>;
+  /** Move or stretch a note (`sequence note timerange`): where it starts NOW, then where it should start and end. */
+  onSetNoteRange?: (
+    seqId: string,
+    key: number,
+    startBeat: number,
+    newStart: number,
+    newEnd: number,
+  ) => void | Promise<void>;
+  /** Move a note to another PITCH (`sequence note move`), which keeps its duration. */
+  onMoveNote?: (
+    seqId: string,
+    key: number,
+    startBeat: number,
+    newKey: number,
+    newStart: number,
+  ) => void | Promise<void>;
+  /** Move SEVERAL notes in one write (`sequence notes move`): each [key, start, newKey, newStart] — the roll's dragged selection. */
+  onMoveNotes?: (
+    seqId: string,
+    moves: [number, number, number, number][],
+  ) => void | Promise<void>;
+  onContextMenu?: (ctx: MenuCtx, x: number, y: number) => void;
+  /** Remove one note (`sequence note remove`) — the roll's `remove` mode and its context menu. */
+  onRemoveNote?: (
+    seqId: string,
+    key: number,
+    startBeat: number,
+  ) => void | Promise<void>;
+  /** The caret and the mode, wired as the clip's roll wires them — what `x`, `ui roll <mode>` and the mode strip reach. */
+  roll?: Pick<
+    ComponentProps<typeof PianoRoll>,
+    | "caretRef"
+    | "active"
+    | "setStatus"
+    | "onSelection"
+    | "onCommand"
+    | "modeRef"
+    | "onModeChange"
+  >;
+}) {
+  // The shared document, for the tempo and the signature the roll is drawn in (queries/projectDoc.ts).
+  const { doc: project } = usePaneProjectDoc(useReloadKey());
+
+  const notes = useMemo<WebNote[]>(() => {
+    return (readSequence(content)?.notes ?? []).map((n) => ({
+      time: n.t,
+      duration: n.d,
+      key: n.k,
+      // Only what the file states, as the compiled path does: absent IS the default 1.
+      ...(n.v === undefined ? {} : { vel: n.v }),
+    }));
+  }, [content]);
+
+  const name = fileStem(path) || "sequence";
+  /** The file's own `from`/`to` as the roll's loop pair — for MIDI that IS the window (clipLoop.ts); the default `to` rounds UP TO THE BAR. */
+  const loop = useMemo(() => {
+    const num = project?.timeSigNumerator ?? 4;
+    const den = project?.timeSigDenominator ?? 4;
+    const win = seqWindowFromText(content, num, den);
+    if (!win) return null;
+    const bar = (num * 4) / den;
+    const extent =
+      Math.ceil(
+        notes.reduce((m, n) => Math.max(m, n.time + n.duration), 0) / bar,
+      ) * bar;
+    return windowSpan(win, extent);
+  }, [content, notes, project]);
+  const clip: WebClip = {
+    id: path,
+    type: "midi",
+    name,
+    start: 0,
+    length: 0,
+    ...(loop ? { loopStart: loop.from, loopEnd: loop.to } : {}),
+    notes,
+  };
+
+  return (
+    <div className="h-full min-h-0">
+      <PianoRoll
+        project={project ?? FALLBACK_PROJECT}
+        clip={clip}
+        onCreateNote={
+          onCreateNote
+            ? (k, t0, t1) => onCreateNote(name, k, t0, t1)
+            : undefined
+        }
+        onSetVelocity={
+          onSetVelocity ? (k, t, v) => onSetVelocity(name, k, t, v) : undefined
+        }
+        onSetNoteRange={
+          onSetNoteRange
+            ? (k, t, ns, ne) => onSetNoteRange(name, k, t, ns, ne)
+            : undefined
+        }
+        onMoveNote={
+          onMoveNote
+            ? (k, t, nk, ns) => onMoveNote(name, k, t, nk, ns)
+            : undefined
+        }
+        onMoveNotes={
+          onMoveNotes ? (moves) => onMoveNotes(name, moves) : undefined
+        }
+        onContextMenu={onContextMenu}
+        onRemoveNote={
+          onRemoveNote ? (k, t) => onRemoveNote(name, k, t) : undefined
+        }
+        {...roll}
+      />
+    </div>
+  );
+}
+
+/** The roll's note edits as command lines over one runner, each returning its promise. */
+function noteVerbs(run: (line: string) => Promise<void>) {
+  return {
+    onCreateNote: (seqId: string, key: number, t0: number, t1: number) =>
+      run(`sequence note new ${seqId} ${key} ${t0} ${t1}`),
+    // The velocity drag, committed like the timeline's clip drag: one command on release.
+    onSetVelocity: (seqId: string, key: number, start: number, vel: number) =>
+      run(`sequence note velocity ${seqId} ${key} ${start} ${vel}`),
+    // Move and stretch are one verb, being one gesture with two grips.
+    onSetNoteRange: (
+      seqId: string,
+      key: number,
+      start: number,
+      ns: number,
+      ne: number,
+    ) => run(`sequence note timerange ${seqId} ${key} ${start} ${ns} ${ne}`),
+    // A drag that changed the PITCH keeps the duration and refuses an occupied slot.
+    onMoveNote: (
+      seqId: string,
+      key: number,
+      start: number,
+      nk: number,
+      ns: number,
+    ) => run(`sequence note move ${seqId} ${key} ${start} ${nk} ${ns}`),
+    // A dragged SELECTION: every note in one write and one Ctrl+Z.
+    onMoveNotes: (seqId: string, moves: [number, number, number, number][]) =>
+      run(`sequence notes move ${seqId} ${JSON.stringify(moves)}`),
+    // The roll's `remove` mode, which is the caret's `x` reached by the pointer instead.
+    onRemoveNote: (seqId: string, key: number, start: number) =>
+      run(`sequence note remove ${seqId} ${key} ${start}`),
+  };
+}
+
+export function ClipView({
+  target,
+  onClose,
+  caretRef,
+  onSelection,
+  onPreviewNote,
+  waveRef,
+  onWaveView,
+  rollRef,
+  onRollMode,
+  takesHost,
+}: {
+  target: EditTarget;
+  onClose: () => void;
+  /** Where the shell reaches this pane's CARET — forwarded to whichever grid is drawn; the tracker gets none, being CodeMirror. */
+  caretRef?: RefObject<ClipGridHandle | null>;
+  /** Whether the drawn grid has a rectangle — what makes ⇧L conditional (see OnGridSelection). */
+  onSelection?: OnGridSelection;
+  /** Hear one note through a TRACK's chain — over the engine's socket, not through a command; the track is found here. */
+  onPreviewNote?: (track: string, key: number, vel: number) => void;
+  /** The AUDIO leaf's mode, the counterpart of `caretRef` for the three grids — `ui wave <mode>` arrives through it. */
+  waveRef?: RefObject<AudioClipHandle | null>;
+  onWaveView?: (v: WaveMode | null) => void;
+  /** …and the ROLL's, the third of the three — `ui roll <mode>`. */
+  rollRef?: RefObject<RollHandle | null>;
+  onRollMode?: (m: RollMode | null) => void;
+  /** The takes mode's shell half — absent, neither panel offers the mode a record button (song docs/takes.md). */
+  takesHost?: TakesHost;
+}) {
+  // Bumped by the shell after every command's reload — what keeps the open clip FRESH below.
+  const reloadKey = useReloadKey();
+  const {
+    seek: onSeek,
+    runCommand: command,
+    openContextMenu: onContextMenu,
+    setStatus,
+    setLoop: onSetLoop,
+  } = useVerbs();
+  // The TRACKER writes its file directly rather than through a command, so its reload is asked for here.
+  const onChanged = useShell((s) => s.bumpReload);
+  // The roll's gestures, one `sequence note` line each, ANSWERING the promise: the ghost is held until the reload lands (rollPending.ts).
+  const notes = useMemo(() => noteVerbs(command), [command]);
+  const {
+    onCreateNote,
+    onSetVelocity,
+    onSetNoteRange,
+    onMoveNote,
+    onMoveNotes,
+    onRemoveNote,
+  } = notes;
+  /** The open clip, kept FRESH: `target` is a snapshot from the click, and the placement is found again by (id, start). */
+  const { doc: sharedProject } = usePaneProjectDoc(reloadKey);
+  const freshProject = target.kind === "seq" ? null : sharedProject;
+  const clip = useMemo(() => {
+    if (target.kind === "seq") return null;
+    const base = target.clip;
+    for (const t of freshProject?.tracks ?? [])
+      for (const c of [...(t.clips ?? []), ...(t.frozenMaterial ?? [])])
+        if (c.id === base.id && Math.abs(c.start - base.start) < 1e-6) return c;
+    return base;
+  }, [target, freshProject]);
+  const project =
+    target.kind === "seq" ? null : (freshProject ?? target.project);
+  // The EVENT the open clip belongs to, by its own id: a re-comp can replace the very piece that was clicked.
+  const takes = useMemo((): PanelTakes | undefined => {
+    if (target.kind === "seq" || !project || !takesHost) return undefined;
+    const track = target.track || trackPlacing(target.project, target.clip.id);
+    const ev = track
+      ? takesEventOf(project, track, eventIdOf(target.clip))
+      : null;
+    return ev
+      ? {
+          host: takesHost,
+          ev,
+          num: project.timeSigNumerator,
+          den: project.timeSigDenominator,
+        }
+      : undefined;
+  }, [target, project, takesHost]);
+  const seqId = clip ? clip.name || clip.id : "";
+  /** A MIDI clip whose track feeds a RACK opens as a STEP SEQUENCER; a graph that will not BUILD is kept apart from one naming no rack. */
+  const midiTrack =
+    target.kind !== "seq" && target.clip.type === "midi"
+      ? target.track || trackPlacing(target.project, target.clip.id)
+      : "";
+  /** The event as the `event …` verbs address it — lane and start — or null for a roll that shows no placement. */
+  const eventAddr =
+    clip && midiTrack && clip.length > 0 && target.kind !== "seq"
+      ? `${midiTrack} ${beatsToPosition(
+          clip.start,
+          (project ?? target.project).timeSigNumerator,
+          (project ?? target.project).timeSigDenominator,
+        )}`
+      : null;
+  // The shared graph, asked only for a MIDI lane: undefined while the first read is in flight, null with none to read.
+  const graphRead = usePaneGraph(reloadKey, !!midiTrack);
+  const graph = !midiTrack
+    ? null
+    : (graphRead.graph ?? (graphRead.loading ? undefined : null));
+  const graphError = midiTrack ? graphRead.error : null;
+  /** WHICH view of these notes, reset per clip: every clip opens on the roll, and the header's dropdown moves it from there. */
+  const [mode, setMode] = useState<ClipViewMode>("roll");
+  // biome-ignore lint/correctness/useExhaustiveDependencies: another clip IS the signal to go back to the roll.
+  useEffect(() => setMode("roll"), [midiTrack, clip?.id]);
+  const rack = midiTrack ? rackFor(graph ?? null, midiTrack) : null;
+  // The roll names a rack's keys after their samples; a lane with no rack keeps note names alone.
+  const keyNames = useMemo(
+    () => (rack ? rackKeyNames(rack) : undefined),
+    [rack],
+  );
+  // The sequencer needs a rack: with none there is no grid to draw, so a pick of it falls to the roll.
+  const view: ClipViewMode = mode === "sequencer" && !rack ? "roll" : mode;
+
+  /** The TRACKER edits the sequence FILE, so it needs `/hints` — asked only once a tracker is, and on `reloadKey` too. */
+  const [hints, setHints] = useState<Pick<Hints, "paths" | "racks"> | null>(
+    null,
+  );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reloadKey is a TRIGGER, not a value this body reads — dropping it is exactly the "a sequence made since the pane opened has no path" bug.
+  useEffect(() => {
+    if (view !== "tracker") return;
+    let cancelled = false;
+    void api
+      .hints()
+      .then((h) => !cancelled && setHints(h))
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [view, reloadKey]);
+  const seqPath = hints?.paths[`sequence:${seqId}`] ?? null;
+
+  const modes = (
+    <ClipViewModes value={view} onChange={setMode} sequencer={!!rack} />
+  );
+  // No title bar: each of the three leaves draws its own header, and the frame contributes the shell and one floating ✕.
+  return (
+    <GraphSlotPane>
+      {target.kind === "seq" ? (
+        <SeqRoll
+          path={target.path}
+          content={target.content}
+          onCreateNote={onCreateNote}
+          onSetVelocity={onSetVelocity}
+          onSetNoteRange={onSetNoteRange}
+          onMoveNote={onMoveNote}
+          onMoveNotes={onMoveNotes}
+          onContextMenu={onContextMenu}
+          onRemoveNote={onRemoveNote}
+          // No placement, so no seek and no event loop: the rest is the clip roll's wiring below.
+          roll={{
+            caretRef,
+            active: true,
+            setStatus,
+            onSelection,
+            onCommand: command,
+            modeRef: rollRef,
+            onModeChange: onRollMode,
+          }}
+        />
+      ) : clip?.type === "midi" ? (
+        graph === undefined ? (
+          <div className="p-3 text-sm text-muted-foreground">
+            {m["clipv.readingGraph"]()}
+          </div>
+        ) : rack && view === "sequencer" ? (
+          <SequencerPanel
+            project={project ?? target.project}
+            clip={clip}
+            rack={rack}
+            modes={modes}
+            command={command}
+            // The caret is the DRAWN grid's, so the ref and `active` go to whichever of the two is on screen.
+            caretRef={caretRef}
+            active
+            setStatus={setStatus}
+            onSelection={onSelection}
+            onSeek={onSeek}
+            onSetLoop={onSetLoop}
+            // …and the same right-click every other entity has, here for a pad's effects.
+            onContextMenu={onContextMenu}
+            onPreviewNote={
+              onPreviewNote && midiTrack
+                ? (k, v) => onPreviewNote(midiTrack, k, v)
+                : undefined
+            }
+          />
+        ) : view === "tracker" ? (
+          // The tracker over the sequence FILE, headed the way the other two are; it writes straight to the file (SeqGridFile.tsx).
+          <div className="flex h-full min-h-0 flex-col border-t-2 border-border">
+            <div className="flex items-center gap-2 border-border border-b px-3 py-1 text-xs">
+              <PanelCloseButton />
+              <span className="font-semibold text-primary-text">
+                <Grid3x3 className="h-3.5 w-3.5" /> {seqId}
+              </span>
+              <span className="truncate text-muted-foreground">
+                {seqPath ?? "…"}
+              </span>
+              <span className="ml-auto">{modes}</span>
+            </div>
+            <div className="min-h-0 flex-1 overflow-auto">
+              {hints && !seqPath ? (
+                // The clip names no sequence file of this project — said, rather than shown as an empty grid.
+                <div className="p-3 text-muted-foreground text-sm">
+                  {m["clipv.noSeqFile"]({ seq: seqId })}
+                </div>
+              ) : seqPath ? (
+                <SeqGridFile
+                  path={seqPath}
+                  view="tracker"
+                  racks={hints?.racks ?? {}}
+                  onChanged={onChanged ?? (() => {})}
+                  setStatus={setStatus ?? (() => {})}
+                  reloadKey={reloadKey}
+                />
+              ) : (
+                <div className="p-3 text-muted-foreground text-sm">
+                  {m["clipv.readingProject"]()}
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          // The roll, and above it the reason the sequencer is not here: the failure is reported beside the work, not in place of it.
+          <div className="flex h-full min-h-0 flex-col">
+            {graphError && (
+              <div
+                className="shrink-0 whitespace-pre-wrap border-amber-500/40 border-b bg-amber-500/10 px-3 py-1 text-amber-300 text-xs"
+                title={m["clipv.needsGraph"]()}
+              >
+                pas de séquenceur : le graphe ne se construit pas — {graphError}
+              </div>
+            )}
+            {/* The roll's root is `h-full`, so it gets a box to be the whole of and the notice takes its height off the top. */}
+            <div className="min-h-0 min-w-0 flex-1">
+              <PianoRoll
+                project={project ?? target.project}
+                clip={clip}
+                keyNames={keyNames}
+                modes={modes}
+                caretRef={caretRef}
+                active
+                setStatus={setStatus}
+                onSelection={onSelection}
+                onSetLoop={onSetLoop}
+                // The EVENT's own loop, which only a placement has: the switch, and its two points in the notes' beats.
+                onLoop={
+                  eventAddr
+                    ? (on) =>
+                        void command(
+                          `event loop ${eventAddr} ${on ? "on" : "off"}`,
+                        )
+                    : undefined
+                }
+                onLoopPoints={
+                  eventAddr
+                    ? (f, t) =>
+                        void command(
+                          `event loop points ${eventAddr} ${f.toFixed(4)} ${t.toFixed(4)}`,
+                        )
+                    : undefined
+                }
+                onSeek={onSeek}
+                onCreateNote={
+                  onCreateNote
+                    ? (k, t0, t1) => onCreateNote(seqId, k, t0, t1)
+                    : undefined
+                }
+                onSetVelocity={
+                  onSetVelocity
+                    ? (k, t, v) => onSetVelocity(seqId, k, t, v)
+                    : undefined
+                }
+                onSetNoteRange={
+                  onSetNoteRange
+                    ? (k, t, ns, ne) => onSetNoteRange(seqId, k, t, ns, ne)
+                    : undefined
+                }
+                onMoveNote={
+                  onMoveNote
+                    ? (k, t, nk, ns) => onMoveNote(seqId, k, t, nk, ns)
+                    : undefined
+                }
+                onMoveNotes={
+                  onMoveNotes ? (moves) => onMoveNotes(seqId, moves) : undefined
+                }
+                onContextMenu={onContextMenu}
+                // A sequence FILE has no placement, so no chain to hear it through: the roll is then silent, and honestly so.
+                onPreviewNote={
+                  onPreviewNote && midiTrack
+                    ? (k, v) => onPreviewNote(midiTrack, k, v)
+                    : undefined
+                }
+                onRemoveNote={
+                  onRemoveNote ? (k, t) => onRemoveNote(seqId, k, t) : undefined
+                }
+                // The roll's mode: down from the shell so a key reaches it, up so a condition and the badge can read it.
+                onCommand={command}
+                modeRef={rollRef}
+                onModeChange={onRollMode}
+                takes={takes}
+                reloadKey={reloadKey}
+              />
+            </div>
+          </div>
+        )
+      ) : (
+        // An audio event opens the CLIP PANEL — the same one a take lands in, with its onsets, its trim and its normalise.
+        clip && (
+          <AudioClipPanel
+            clip={clip.id}
+            track={
+              (target.kind === "clip" && target.clip.id === clip.id
+                ? target.track
+                : undefined) || trackPlacing(project ?? target.project, clip.id)
+            }
+            // The project's own, so the twelve-bar window is twelve of THIS song's bars.
+            tempo={(project ?? target.project).tempo}
+            beatsPerBar={(project ?? target.project).timeSigNumerator}
+            // …and its lanes, which name a take in the panel's header.
+            lanes={(project ?? target.project).tracks}
+            // The clicked EVENT's beat — what puts the song's ruler over the wave.
+            placedAt={clip.start}
+            // …and the same beat as a TIMECODE, spelled HERE because it needs the project's time signature, denominator included.
+            eventAt={beatsToPosition(
+              clip.start,
+              (project ?? target.project).timeSigNumerator,
+              (project ?? target.project).timeSigDenominator,
+            )}
+            // …and the slice of the file it plays, already the intersection the compiler made (nodeProject.ts).
+            eventWindow={{ from: clip.sourceFrom, to: clip.sourceTo }}
+            // …and how many times it plays it: more than one is a loop, which the panel's switch and ruler edit.
+            loops={clip.event?.loop ?? 1}
+            // …and its own trim, which only an audio event has.
+            gainDb={clip.event?.gain ?? 0}
+            onClose={onClose}
+            // The waveform's mode: down from the shell so a key reaches it, up so a condition and the badge can read it.
+            viewRef={waveRef}
+            onViewChange={onWaveView}
+            takes={takes}
+          />
+        )
+      )}
+    </GraphSlotPane>
+  );
+}

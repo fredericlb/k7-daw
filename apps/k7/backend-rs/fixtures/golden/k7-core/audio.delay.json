@@ -1,0 +1,1427 @@
+{
+  "project": "k7-core/audio.delay.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.delay",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.delay.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.delay.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Delay",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.delay.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-adt",
+        "name": "drums-adt",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#c11f25",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.delay.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-adt:fx-adt",
+            "type": "ADT",
+            "name": "fx-adt",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.delay.k7/nodes/fx-adt.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-echo",
+        "name": "drums-echo",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#d32222",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.delay.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-echo:fx-echo",
+            "type": "DSP Graph",
+            "name": "fx-echo",
+            "path": "",
+            "dspGraph": "{\n  \"params\": [\n    {\n      \"name\": \"Time\",\n      \"min\": 1,\n      \"max\": 900,\n      \"default\": 250\n    },\n    {\n      \"name\": \"Feedback\",\n      \"min\": 0,\n      \"max\": 0.95,\n      \"default\": 0.6\n    },\n    {\n      \"name\": \"Mix\",\n      \"min\": 0,\n      \"max\": 1,\n      \"default\": 0.5\n    }\n  ],\n  \"nodes\": [\n    {\n      \"type\": \"ain\",\n      \"out\": \"n0\"\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n1\",\n      \"in\": [\n        \"fb\"\n      ],\n      \"k\": [\n        \"Feedback\"\n      ]\n    },\n    {\n      \"type\": \"aadd\",\n      \"out\": \"n2\",\n      \"in\": [\n        \"n0\",\n        \"n1\"\n      ]\n    },\n    {\n      \"type\": \"adelay\",\n      \"in\": [\n        \"n2\"\n      ],\n      \"k\": [\n        \"Time\"\n      ],\n      \"out\": \"fb\",\n      \"maxMs\": 1000\n    },\n    {\n      \"type\": \"aadd\",\n      \"out\": \"n3\",\n      \"in\": [\n        \"n0\",\n        \"fb\"\n      ]\n    },\n    {\n      \"type\": \"aout\",\n      \"in\": [\n        \"n3\"\n      ]\n    },\n    {\n      \"type\": \"mix\",\n      \"in\": [\n        \"Mix\"\n      ]\n    }\n  ]\n}\n",
+            "presetSave": "<ws>/k7-core/audio.delay.k7/nodes/fx-echo.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-hombre",
+        "name": "drums-hombre",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.delay.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-hombre:fx-hombre",
+            "type": "Hombre",
+            "name": "fx-hombre",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.delay.k7/nodes/fx-hombre.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-purest-echo",
+        "name": "drums-purest-echo",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e0493e",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.delay.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-purest-echo:fx-purest-echo",
+            "type": "Purest Echo",
+            "name": "fx-purest-echo",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.delay.k7/nodes/fx-purest-echo.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-tape-delay",
+        "name": "drums-tape-delay",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e25e50",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.delay.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-tape-delay:fx-tape-delay",
+            "type": "Tape Delay",
+            "name": "fx-tape-delay",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.delay.k7/nodes/fx-tape-delay.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-tracktion",
+        "name": "drums-tracktion",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.delay.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-tracktion:fx-tracktion",
+            "type": "Delay",
+            "name": "fx-tracktion",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.delay.k7/nodes/fx-tracktion.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/delay",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 3,
+              "widgets": {
+                "taps": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "feedback": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Fdbk",
+                  "bind": "Feedback",
+                  "min": -30,
+                  "max": 0
+                }
+              },
+              "script": "// delay — the repeats one hit leaves: each tap Feedback dB under the last, until they fall below -60 dB.\n// The delay TIME is the plugin's own setting and no param, so the taps are evenly spaced.\n\nconst FB = \"#3d7dff\";\nconst DRY = \"#ffffff\";\nconst GRID = \"#6b6b6b\";\nconst FLOOR = -60;\nconst MAX_TAPS = 24;\n\nexport default {\n  taps(lcd) {\n    const { ctx, width: W, height: H, params, output, state, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n\n    const fb = Math.min(0, Math.max(-30, params[\"Feedback\"] ?? -6));\n    // Repeats until -60 dB; at 0 dB it never dies, which the screen caps and says.\n    const endless = fb > -0.05;\n    const count = endless ? MAX_TAPS : Math.min(MAX_TAPS, Math.ceil(FLOOR / fb));\n\n    const pad = 6;\n    const top = 14;\n    const base = H - pad;\n    const span = Math.max(1, base - top);\n    const step = (W - pad * 2 - 40) / (MAX_TAPS + 1);\n\n    ctx.strokeStyle = GRID;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(pad, Math.round(base) + 0.5);\n    ctx.lineTo(W - pad - 40, Math.round(base) + 0.5);\n    ctx.stroke();\n\n    // A tap's height is its level in dB mapped onto 0..-60, so a long tail reads as a slope.\n    const heightOf = (db) => ((Math.max(FLOOR, db) - FLOOR) / -FLOOR) * span;\n    // While audio leaves the module, a dot walks the repeats so the tail is seen moving.\n    const out = Array.isArray(output) && output.length ? (output[output.length - 1] ?? 0) : 0;\n    state.out = (state.out ?? 0) * 0.7 + out * 0.3;\n    const lit = state.out > 0.02 ? Math.floor(now / 180) % (count + 1) : -1;\n\n    for (let k = 0; k <= count; k++) {\n      const x = Math.round(pad + step * k) + 0.5;\n      const h = heightOf(fb * k);\n      ctx.fillStyle = k === 0 ? DRY : FB;\n      ctx.globalAlpha = k === lit ? 1 : k === 0 ? 0.9 : 0.75;\n      ctx.fillRect(x - 1, base - h, 3, h);\n    }\n    ctx.globalAlpha = 1;\n\n    // The one number that matters: how many repeats are heard.\n    ctx.textAlign = \"right\";\n    ctx.textBaseline = \"top\";\n    ctx.fillStyle = FB;\n    ctx.font = \"8px ui-monospace, monospace\";\n    ctx.fillText(\"REPEATS\", W - pad, 4);\n    ctx.font = \"16px ui-monospace, monospace\";\n    ctx.fillText(endless ? \"INF\" : String(count), W - pad, 16);\n    ctx.font = \"8px ui-monospace, monospace\";\n    ctx.fillStyle = GRID;\n    ctx.fillText(`${fb.toFixed(1)} DB`, W - pad, 38);\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = DRY;\n    ctx.fillText(\"HIT\", pad, 4);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "taps": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "feedback": {
+                    "type": "knob",
+                    "col": 1,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Fdbk",
+                    "bind": "Feedback",
+                    "min": -30,
+                    "max": 0
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "adt",
+              "echo",
+              "hombre",
+              "purest-echo",
+              "tape-delay"
+            ],
+            "engine": "tracktion",
+            "params": {},
+            "defaults": {
+              "Feedback": -6
+            },
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-adt": {
+        "from": "drums-adt",
+        "use": [
+          {
+            "module": "fx-adt",
+            "uses": "@k7-core/audio/delay",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 10,
+              "rows": 4,
+              "widgets": {
+                "headrm": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Headrm",
+                  "bind": "Headrm",
+                  "min": 0,
+                  "max": 1
+                },
+                "a_section": {
+                  "type": "group",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "TAP A",
+                  "color": "#3d7dff26"
+                },
+                "a_delay": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Delay",
+                  "bind": "A Delay",
+                  "min": 0,
+                  "max": 1
+                },
+                "a_level": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Level",
+                  "bind": "A Level",
+                  "min": 0,
+                  "max": 1
+                },
+                "b_section": {
+                  "type": "group",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "TAP B",
+                  "color": "#3d7dff26"
+                },
+                "b_delay": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Delay",
+                  "bind": "B Delay",
+                  "min": 0,
+                  "max": 1
+                },
+                "b_level": {
+                  "type": "knob",
+                  "col": 8,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Level",
+                  "bind": "B Level",
+                  "min": 0,
+                  "max": 1
+                },
+                "taps_screen": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 10,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// adt — the two taps against the dry signal: where each sits in time, and how loud it plays.\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\nexport default {\n  taps_screen(lcd) {\n    const { ctx, width: W, height: H, params, output, state } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n\n    const pad = 10;\n    const base = H - 14;\n    const top = 12;\n    const span = Math.max(1, W - pad * 2);\n    const tall = Math.max(1, base - top);\n\n    // The blend is the engine's @mix, on the equal-power curve it applies: all wet when unset.\n    const mix = clamp01(params[\"@mix\"] ?? 1);\n    const wet = Math.sin((mix * Math.PI) / 2);\n    const dry = Math.cos((mix * Math.PI) / 2);\n\n    // The time axis, with a faint tick every tenth.\n    ctx.strokeStyle = \"#6b6b6b\";\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(pad, base + 0.5);\n    ctx.lineTo(W - pad, base + 0.5);\n    for (let i = 1; i < 10; i++) {\n      const x = Math.round(pad + (span * i) / 10) + 0.5;\n      ctx.moveTo(x, base);\n      ctx.lineTo(x, base + 3);\n    }\n    ctx.stroke();\n\n    // The dry signal: a white bar at time zero.\n    const bar = (x, level, color, name) => {\n      const h = Math.max(1, tall * clamp01(level));\n      ctx.fillStyle = color;\n      ctx.fillRect(Math.round(x) - 3, base - h, 6, h);\n      ctx.fillStyle = color;\n      ctx.font = \"8px ui-monospace, monospace\";\n      ctx.textAlign = \"center\";\n      ctx.fillText(name, Math.round(x), base + 11);\n    };\n    bar(pad + 3, dry, \"#ffffff\", \"DRY\");\n\n    // Each tap at its delay, as loud as its level times the wet side of the blend.\n    const aTime = clamp01(params[\"A Delay\"] ?? 0.3);\n    const bTime = clamp01(params[\"B Delay\"] ?? 0.6);\n    const aLevel = clamp01(params[\"A Level\"] ?? 0.7) * wet;\n    const bLevel = clamp01(params[\"B Level\"] ?? 0.7) * wet;\n    bar(pad + 3 + (span - 6) * aTime, aLevel, \"#3d7dff\", \"A\");\n    bar(pad + 3 + (span - 6) * bTime, bLevel, \"#3ec96b\", \"B\");\n\n    // The output, smoothed: a thin orange line across the top that swells with what leaves.\n    const out = output.length ? clamp01(output[output.length - 1]) : 0;\n    state.out = (state.out ?? 0) * 0.7 + out * 0.3;\n    if (state.out > 0.01) {\n      ctx.fillStyle = \"#ff6a1a\";\n      ctx.fillRect(pad, 4, span * state.out, 2);\n    }\n\n    ctx.fillStyle = \"#6b6b6b\";\n    ctx.font = \"8px ui-monospace, monospace\";\n    ctx.textAlign = \"right\";\n    ctx.fillText(\"TAPS\", W - pad, 10);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 8,
+                "widgets": {
+                  "headrm": {
+                    "type": "knob",
+                    "col": 1,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Headrm",
+                    "bind": "Headrm",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "a_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "TAP A",
+                    "color": "#3d7dff26"
+                  },
+                  "a_delay": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Delay",
+                    "bind": "A Delay",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "a_level": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Level",
+                    "bind": "A Level",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "b_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "TAP B",
+                    "color": "#3d7dff26"
+                  },
+                  "b_delay": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Delay",
+                    "bind": "B Delay",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "b_level": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Level",
+                    "bind": "B Level",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "taps_screen": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "adt",
+              "echo",
+              "hombre",
+              "purest-echo",
+              "tape-delay"
+            ],
+            "engine": "adt",
+            "params": {},
+            "pluginId": "drums-adt:fx-adt"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-echo": {
+        "from": "drums-echo",
+        "use": [
+          {
+            "module": "fx-echo",
+            "uses": "@k7-core/audio/delay",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "time": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Time",
+                  "bind": "Time",
+                  "min": 1,
+                  "max": 900
+                },
+                "feedback": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Fdbk",
+                  "bind": "Feedback",
+                  "min": 0,
+                  "max": 0.95
+                },
+                "repeats": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// echo — the repeats the delay makes: where each one lands in time, and how loud it plays.\n\nconst DRY = \"#ffffff\";\nconst WET = \"#3d7dff\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\n// The window drawn, in ms: two seconds holds a dub delay's tail at any Time the knob allows.\nconst WINDOW_MS = 2000;\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\nexport default {\n  repeats(lcd) {\n    const { ctx, width: W, height: H, params, output, state, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const pad = 8;\n    const base = H - 12;\n    const top = 14;\n    const span = Math.max(1, W - pad * 2);\n    const tall = Math.max(1, base - top);\n\n    const time = Math.max(1, params[\"Time\"] ?? 250);\n    const feedback = clamp01(params[\"Feedback\"] ?? 0.6);\n    // The engine's blend around the delay: the dry hit shrinks as the repeats grow.\n    const mix = clamp01(params[\"@mix\"] ?? 1);\n    const wet = Math.sin((mix * Math.PI) / 2);\n    const dry = Math.cos((mix * Math.PI) / 2);\n\n    // The time axis, a tick every 250 ms.\n    ctx.strokeStyle = GRID;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(pad, base + 0.5);\n    ctx.lineTo(W - pad, base + 0.5);\n    for (let ms = 250; ms < WINDOW_MS; ms += 250) {\n      const x = Math.round(pad + (span * ms) / WINDOW_MS) + 0.5;\n      ctx.moveTo(x, base);\n      ctx.lineTo(x, base + 3);\n    }\n    ctx.stroke();\n\n    const bar = (ms, level, color) => {\n      const x = Math.round(pad + (span * ms) / WINDOW_MS);\n      const h = Math.max(1, tall * clamp01(level));\n      ctx.fillStyle = color;\n      ctx.fillRect(x - 1, base - h, 3, h);\n    };\n\n    // The dry hit at zero, then each repeat one Time later, a Feedback quieter than the last.\n    bar(0, dry, DRY);\n    let level = wet;\n    for (let n = 1; n <= 64; n++) {\n      const ms = n * time;\n      if (ms >= WINDOW_MS || level < 0.01) break;\n      bar(ms, level, WET);\n      level *= feedback;\n    }\n\n    // A dot riding the repeats while audio leaves the module, so a running delay reads as one.\n    const out = Array.isArray(output) && output.length ? clamp01(output[output.length - 1] ?? 0) : 0;\n    state.out = (state.out ?? 0) * 0.7 + out * 0.3;\n    if (state.out > 0.02) {\n      const phase = (now % WINDOW_MS) / WINDOW_MS;\n      ctx.fillStyle = WET;\n      ctx.beginPath();\n      ctx.arc(pad + span * phase, top - 6, 2, 0, Math.PI * 2);\n      ctx.fill();\n    }\n\n    // The one value that matters, big; the rest small.\n    ctx.fillStyle = DRY;\n    ctx.textAlign = \"right\";\n    ctx.font = \"bold 11px ui-monospace, monospace\";\n    ctx.fillText(`${Math.round(time)} MS`, W - pad, 11);\n    ctx.font = FONT;\n    ctx.fillStyle = GRID;\n    ctx.textAlign = \"left\";\n    ctx.fillText(`FB ${Math.round(feedback * 100)}%`, pad, 10);\n  },\n};\n"
+            },
+            "engines": [
+              "tracktion",
+              "adt",
+              "echo",
+              "hombre",
+              "purest-echo",
+              "tape-delay"
+            ],
+            "engine": "echo",
+            "params": {},
+            "pluginId": "drums-echo:fx-echo"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-hombre": {
+        "from": "drums-hombre",
+        "use": [
+          {
+            "module": "fx-hombre",
+            "uses": "@k7-core/audio/delay",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 4,
+              "widgets": {
+                "voicing": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Voicing",
+                  "bind": "Voicing",
+                  "min": 0,
+                  "max": 1
+                },
+                "intensity": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Intens",
+                  "bind": "Intensity",
+                  "min": 0,
+                  "max": 1
+                },
+                "levels": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// hombre — the level going IN against the level coming OUT, so what the texture adds or takes is seen.\n\nconst IN = \"#3d7dff\";\nconst OUT = \"#ff6a1a\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\n/** One envelope, mirrored about `mid`, oldest on the left and NOW at the right edge. */\nfunction envelope(ctx, data, len, x0, w, mid, half, color, fill) {\n  if (!data.length || len < 2) return;\n  const step = w / (len - 1);\n  const offset = len - data.length;\n  ctx.beginPath();\n  for (let i = 0; i < data.length; i++) {\n    const x = x0 + (offset + i) * step;\n    const y = mid - clamp01(data[i] ?? 0) * half;\n    if (i === 0) ctx.moveTo(x, y);\n    else ctx.lineTo(x, y);\n  }\n  for (let i = data.length - 1; i >= 0; i--)\n    ctx.lineTo(x0 + (offset + i) * step, mid + clamp01(data[i] ?? 0) * half);\n  ctx.closePath();\n  if (fill) {\n    ctx.fillStyle = color;\n    ctx.globalAlpha = 0.35;\n    ctx.fill();\n    ctx.globalAlpha = 1;\n  }\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.stroke();\n}\n\nexport default {\n  levels(lcd) {\n    const { ctx, width: W, height: H, params, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const x0 = 6;\n    const w = Math.max(1, W - 12);\n    const top = 14;\n    const bottom = H - 6;\n    const mid = (top + bottom) / 2;\n    const half = Math.max(1, (bottom - top) / 2);\n\n    ctx.strokeStyle = GRID;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(x0, Math.round(mid) + 0.5);\n    ctx.lineTo(x0 + w, Math.round(mid) + 0.5);\n    ctx.stroke();\n\n    const inp = Array.isArray(input) ? input : [];\n    const out = Array.isArray(output) ? output : [];\n    const len = Math.max(inp.length, out.length);\n    if (len > 1) {\n      // What goes in underneath, filled; what comes out on top, as a line.\n      envelope(ctx, inp, len, x0, w, mid, half, IN, true);\n      envelope(ctx, out, len, x0, w, mid, half, OUT, false);\n    } else {\n      // No audio yet: the two settings as bars, so the screen still says where the texture sits.\n      const voicing = clamp01(params[\"Voicing\"] ?? 0.5);\n      const intensity = clamp01(params[\"Intensity\"] ?? 0.5);\n      const barW = Math.max(1, w / 2 - 6);\n      ctx.fillStyle = IN;\n      ctx.fillRect(x0, bottom - (bottom - top) * voicing, barW, (bottom - top) * voicing);\n      ctx.fillStyle = OUT;\n      ctx.fillRect(x0 + w / 2 + 6, bottom - (bottom - top) * intensity, barW, (bottom - top) * intensity);\n    }\n\n    ctx.fillStyle = IN;\n    ctx.textAlign = \"left\";\n    ctx.fillText(\"IN\", x0, 10);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", x0 + 18, 10);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "voicing": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Voicing",
+                    "bind": "Voicing",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "intensity": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Intens",
+                    "bind": "Intensity",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "levels": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "adt",
+              "echo",
+              "hombre",
+              "purest-echo",
+              "tape-delay"
+            ],
+            "engine": "hombre",
+            "params": {},
+            "pluginId": "drums-hombre:fx-hombre"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-purest-echo": {
+        "from": "drums-purest-echo",
+        "use": [
+          {
+            "module": "fx-purest-echo",
+            "uses": "@k7-core/audio/delay",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 4,
+              "widgets": {
+                "time": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Time",
+                  "bind": "Time",
+                  "min": 0,
+                  "max": 1
+                },
+                "taps": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 8,
+                  "rowSpan": 2,
+                  "label": "TAPS",
+                  "color": "#3d7dff26"
+                },
+                "tap1": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Tap 1",
+                  "bind": "Tap 1",
+                  "min": 0,
+                  "max": 1
+                },
+                "tap2": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Tap 2",
+                  "bind": "Tap 2",
+                  "min": 0,
+                  "max": 1
+                },
+                "tap3": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Tap 3",
+                  "bind": "Tap 3",
+                  "min": 0,
+                  "max": 1
+                },
+                "tap4": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Tap 4",
+                  "bind": "Tap 4",
+                  "min": 0,
+                  "max": 1
+                },
+                "taps_screen": {
+                  "type": "lcdscreen",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// purest-echo — one screen: the dry hit and the four taps, spaced evenly across Time, each as tall as its level.\n\nconst TIME = \"#ff6a1a\";\nconst TAP = \"#3d7dff\";\nconst GRID = \"#6b6b6b\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\nexport default {\n  taps_screen(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const pad = 6;\n    const top = 13;\n    const h = Math.max(1, H - top - pad - 1);\n    const w = Math.max(1, W - pad * 2);\n    const base = top + h;\n    const time = clamp01(params[\"Time\"] ?? 0.5);\n    const span = 0.08 + time * 0.92;\n\n    ctx.strokeStyle = GRID;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(pad, base + 0.5);\n    ctx.lineTo(pad + w, base + 0.5);\n    ctx.stroke();\n\n    // The dry hit at zero, full height, for the taps to be read against.\n    ctx.fillStyle = INK;\n    ctx.fillRect(pad, top, 2, h);\n\n    ctx.strokeStyle = TIME;\n    ctx.beginPath();\n    const tx = Math.round(pad + span * (w - 2)) + 0.5;\n    ctx.moveTo(tx, base + 3);\n    ctx.lineTo(tx, top - 2);\n    ctx.stroke();\n\n    ctx.fillStyle = TAP;\n    for (let k = 1; k <= 4; k++) {\n      const lvl = clamp01(params[`Tap ${k}`] ?? (k === 1 ? 1 : 0));\n      const x = pad + (k / 4) * span * (w - 2);\n      const bh = Math.max(1, lvl * h);\n      ctx.fillRect(Math.round(x) - 1, base - bh, 3, bh);\n      ctx.beginPath();\n      ctx.arc(Math.round(x) + 0.5, base - bh, 2, 0, Math.PI * 2);\n      ctx.fill();\n    }\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = TIME;\n    ctx.fillText(`TIME ${Math.round(time * 100)}`, pad, 9);\n    ctx.textAlign = \"right\";\n    ctx.fillStyle = TAP;\n    ctx.fillText(\"TAPS\", W - pad, 9);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 8,
+                "widgets": {
+                  "time": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Time",
+                    "bind": "Time",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "taps_screen": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "taps": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "TAPS",
+                    "color": "#3d7dff26"
+                  },
+                  "tap1": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Tap 1",
+                    "bind": "Tap 1",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "tap2": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Tap 2",
+                    "bind": "Tap 2",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "tap3": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Tap 3",
+                    "bind": "Tap 3",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "tap4": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Tap 4",
+                    "bind": "Tap 4",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "adt",
+              "echo",
+              "hombre",
+              "purest-echo",
+              "tape-delay"
+            ],
+            "engine": "purest-echo",
+            "params": {},
+            "pluginId": "drums-purest-echo:fx-purest-echo"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-tape-delay": {
+        "from": "drums-tape-delay",
+        "use": [
+          {
+            "module": "fx-tape-delay",
+            "uses": "@k7-core/audio/delay",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 4,
+              "widgets": {
+                "taps_screen": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 8,
+                  "rowSpan": 2
+                },
+                "delay_grp": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "DELAY",
+                  "color": "#3d7dff26"
+                },
+                "delay": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Time",
+                  "bind": "Delay",
+                  "min": 0,
+                  "max": 1
+                },
+                "feedback": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Fdbk",
+                  "bind": "Feedbak",
+                  "min": 0,
+                  "max": 1
+                },
+                "tone": {
+                  "type": "group",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "TONE",
+                  "color": "#3ec96b26"
+                },
+                "lean_fat": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Lean/Ft",
+                  "bind": "Lean/Ft",
+                  "min": 0,
+                  "max": 1
+                },
+                "depth": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Depth",
+                  "bind": "Depth",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// The echoes: the dry hit, then repeats spaced by Delay and shrinking by Feedbak (time is relative, not ms).\nconst FONT = \"8px ui-monospace, monospace\";\n\nfunction clamp(v, lo, hi) {\n  return Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : lo));\n}\n\nexport default {\n  taps_screen(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    const time = clamp(params[\"Delay\"] ?? 0.5, 0, 1);\n    const fb = clamp(params[\"Feedbak\"] ?? 0.5, 0, 0.98);\n    const base = H - 4;\n    const top = 12;\n    const span = Math.max(1, base - top);\n    const x0 = 6;\n    const step = Math.max(4, (0.08 + 0.42 * time) * Math.max(1, W - x0 - 4));\n    ctx.strokeStyle = \"#6b6b6b\";\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(0, base + 0.5);\n    ctx.lineTo(W, base + 0.5);\n    ctx.stroke();\n    ctx.fillStyle = \"#ffffff\";\n    ctx.fillRect(x0, top, 2, span);\n    let amp = 1;\n    for (let i = 1; i < 64; i++) {\n      amp *= fb;\n      const x = x0 + i * step;\n      if (x > W - 2 || amp < 0.02) break;\n      const h = span * amp;\n      ctx.fillStyle = \"#3d7dff\";\n      ctx.fillRect(x, base - h, 2, h);\n    }\n    ctx.font = FONT;\n    ctx.fillStyle = \"#3d7dff\";\n    ctx.fillText(\"TIME \" + Math.round(time * 100), 2, 8);\n    ctx.fillText(\"FDBK \" + Math.round(fb * 100), Math.max(2, W - 48), 8);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 6,
+                "widgets": {
+                  "taps_screen": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "delay_grp": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "DELAY",
+                    "color": "#3d7dff26"
+                  },
+                  "delay": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Time",
+                    "bind": "Delay",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "feedback": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Fdbk",
+                    "bind": "Feedbak",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "tone": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "TONE",
+                    "color": "#3ec96b26"
+                  },
+                  "lean_fat": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Lean/Ft",
+                    "bind": "Lean/Ft",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "depth": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Depth",
+                    "bind": "Depth",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "adt",
+              "echo",
+              "hombre",
+              "purest-echo",
+              "tape-delay"
+            ],
+            "engine": "tape-delay",
+            "params": {},
+            "pluginId": "drums-tape-delay:fx-tape-delay"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-tracktion": {
+        "from": "drums-tracktion",
+        "use": [
+          {
+            "module": "fx-tracktion",
+            "uses": "@k7-core/audio/delay",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 3,
+              "widgets": {
+                "taps": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "feedback": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Fdbk",
+                  "bind": "Feedback",
+                  "min": -30,
+                  "max": 0
+                }
+              },
+              "script": "// delay — the repeats one hit leaves: each tap Feedback dB under the last, until they fall below -60 dB.\n// The delay TIME is the plugin's own setting and no param, so the taps are evenly spaced.\n\nconst FB = \"#3d7dff\";\nconst DRY = \"#ffffff\";\nconst GRID = \"#6b6b6b\";\nconst FLOOR = -60;\nconst MAX_TAPS = 24;\n\nexport default {\n  taps(lcd) {\n    const { ctx, width: W, height: H, params, output, state, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n\n    const fb = Math.min(0, Math.max(-30, params[\"Feedback\"] ?? -6));\n    // Repeats until -60 dB; at 0 dB it never dies, which the screen caps and says.\n    const endless = fb > -0.05;\n    const count = endless ? MAX_TAPS : Math.min(MAX_TAPS, Math.ceil(FLOOR / fb));\n\n    const pad = 6;\n    const top = 14;\n    const base = H - pad;\n    const span = Math.max(1, base - top);\n    const step = (W - pad * 2 - 40) / (MAX_TAPS + 1);\n\n    ctx.strokeStyle = GRID;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(pad, Math.round(base) + 0.5);\n    ctx.lineTo(W - pad - 40, Math.round(base) + 0.5);\n    ctx.stroke();\n\n    // A tap's height is its level in dB mapped onto 0..-60, so a long tail reads as a slope.\n    const heightOf = (db) => ((Math.max(FLOOR, db) - FLOOR) / -FLOOR) * span;\n    // While audio leaves the module, a dot walks the repeats so the tail is seen moving.\n    const out = Array.isArray(output) && output.length ? (output[output.length - 1] ?? 0) : 0;\n    state.out = (state.out ?? 0) * 0.7 + out * 0.3;\n    const lit = state.out > 0.02 ? Math.floor(now / 180) % (count + 1) : -1;\n\n    for (let k = 0; k <= count; k++) {\n      const x = Math.round(pad + step * k) + 0.5;\n      const h = heightOf(fb * k);\n      ctx.fillStyle = k === 0 ? DRY : FB;\n      ctx.globalAlpha = k === lit ? 1 : k === 0 ? 0.9 : 0.75;\n      ctx.fillRect(x - 1, base - h, 3, h);\n    }\n    ctx.globalAlpha = 1;\n\n    // The one number that matters: how many repeats are heard.\n    ctx.textAlign = \"right\";\n    ctx.textBaseline = \"top\";\n    ctx.fillStyle = FB;\n    ctx.font = \"8px ui-monospace, monospace\";\n    ctx.fillText(\"REPEATS\", W - pad, 4);\n    ctx.font = \"16px ui-monospace, monospace\";\n    ctx.fillText(endless ? \"INF\" : String(count), W - pad, 16);\n    ctx.font = \"8px ui-monospace, monospace\";\n    ctx.fillStyle = GRID;\n    ctx.fillText(`${fb.toFixed(1)} DB`, W - pad, 38);\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = DRY;\n    ctx.fillText(\"HIT\", pad, 4);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "taps": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "feedback": {
+                    "type": "knob",
+                    "col": 1,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Fdbk",
+                    "bind": "Feedback",
+                    "min": -30,
+                    "max": 0
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "adt",
+              "echo",
+              "hombre",
+              "purest-echo",
+              "tape-delay"
+            ],
+            "engine": "tracktion",
+            "params": {},
+            "defaults": {
+              "Feedback": -6
+            },
+            "pluginId": "drums-tracktion:fx-tracktion"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-adt",
+      "drums-echo",
+      "drums-hombre",
+      "drums-purest-echo",
+      "drums-tape-delay",
+      "drums-tracktion"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-adt": "#c11f25",
+      "drums-echo": "#d32222",
+      "drums-hombre": "#dd322c",
+      "drums-purest-echo": "#e0493e",
+      "drums-tape-delay": "#e25e50",
+      "drums-tracktion": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-adt": "audio",
+      "drums-echo": "audio",
+      "drums-hombre": "audio",
+      "drums-purest-echo": "audio",
+      "drums-tape-delay": "audio",
+      "drums-tracktion": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-adt": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-echo": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-hombre": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-purest-echo": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-tape-delay": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-tracktion": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

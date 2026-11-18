@@ -1,0 +1,91 @@
+[workspace]
+resolver = "3"
+members = ["crates/k7-auth", "crates/k7-front", "crates/k7-embed", "crates/k7-local", "crates/k7-engine", "crates/k7-js", "crates/k7-mediatek", "crates/k7-hub", "crates/k7-sync", "crates/k7-picture", "crates/k7-file-service", "crates/k7-replica", "crates/k7-capture", "crates/k7-libraries", "crates/k7-git", "crates/k7-roam"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace.dependencies]
+k7-auth = { path = "crates/k7-auth" }
+k7-front = { path = "crates/k7-front" }
+k7-local = { path = "crates/k7-local" }
+k7-engine = { path = "crates/k7-engine" }
+k7-js = { path = "crates/k7-js" }
+k7-mediatek = { path = "crates/k7-mediatek" }
+k7-hub = { path = "crates/k7-hub" }
+k7-sync = { path = "crates/k7-sync" }
+saphyr-parser = "0.3"
+k7-picture = { path = "crates/k7-picture" }
+k7-file-service = { path = "crates/k7-file-service" }
+k7-replica = { path = "crates/k7-replica" }
+k7-capture = { path = "crates/k7-capture" }
+k7-libraries = { path = "crates/k7-libraries" }
+k7-git = { path = "crates/k7-git" }
+k7-roam = { path = "crates/k7-roam" }
+# libgit2 with no https and no ssh feature: those bring OpenSSL and libssh2, k7 has its own transports (docs/git.md).
+git2 = { version = "0.21", default-features = false }
+# The device's keychain, for a git token or key: Keychain, Credential Manager and the Secret Service over zbus, no C build (docs/git.md).
+keyring = { version = "4", default-features = false }
+# The iOS keychain: the protected-data store is the one iOS has.
+apple-native-keyring-store = { version = "1", default-features = false, features = ["protected"] }
+keyring-core = "1"
+aes-gcm = "0.10"
+axum = { version = "0.8", default-features = false, features = ["http1", "http2", "json", "tokio"] }
+base64 = "0.22"
+# Local wall-clock time: the merged log's `HH:MM:SS` and macOS's process start times (docs/local.md).
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+futures-util = { version = "0.3", default-features = false, features = ["sink"] }
+getrandom = "0.3"
+hmac = "0.12"
+# The video probe where there is no ffprobe, the phone: ISO and Matroska headers read in Rust (docs/mediatek.md).
+mp4parse = "0.17"
+matroska-demuxer = "0.8"
+httpdate = "1"
+http-body-util = "0.1"
+hyper = { version = "1", features = ["client", "http1"] }
+# Already serde_json's (preserve_order); named for the registry's insertion order (docs/engine.md).
+indexmap = "2"
+hyper-util = { version = "0.1", features = ["client-legacy", "http1", "tokio", "server-auto", "server-graceful"] }
+# The front's outgoing HTTPS: rustls with ring, never aws-lc's C build (docs/routes.md).
+hyper-rustls = { version = "0.27", default-features = false, features = ["http1", "tls12", "ring"] }
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+# The git transports over SSH: ring, never aws-lc's C build (docs/git.md).
+russh = { version = "0.65", default-features = false, features = ["ring", "rsa"] }
+scrypt = { version = "0.11", default-features = false }
+serde = { version = "1", features = ["derive"] }
+# preserve_order: a minted session must serialize its keys in the order JSON.stringify does; float_roundtrip:
+# a number parsed as JSON.parse parses it, which a sidecar read back and answered again needs (docs/mediatek.md).
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+sha1 = "0.10"
+sha2 = "0.10"
+unicode-normalization = "0.1"
+# YAML 1.2 events with spans, parse only: a sidecar and a playlist read, and the editor's map of them (docs/mediatek/text.md).
+subtle = "2.6"
+url = "2"
+# The tracks export: a track's notes as a .mid, and the archive of the lot, pure-Rust deflate only (docs/tracks-export.md).
+midly = { version = "0.5", default-features = false, features = ["std"] }
+zip = { version = "4", default-features = false, features = ["deflate-flate2-zlib-rs"] }
+# The waveform module's Wasmtime, with Pulley bytecode where a host may not make memory executable (iOS).
+wasmtime = { version = "50", default-features = false, features = ["cranelift", "pulley", "runtime", "std", "gc", "gc-drc"] }
+webpki-roots = "1"
+tokio-tungstenite = "0.29"
+# The dev session's watch of the file service's source, which the hub stops the services on (docs/files.md).
+notify = "8"
+# axum's own, named for `oneshot`: a door hands a rewritten request to the shares' routes (crates/k7-front/src/routes/shares).
+tower = { version = "0.5", default-features = false, features = ["util"] }
+tokio = { version = "1", features = ["rt-multi-thread", "net", "macros", "signal", "sync", "io-util"] }
+
+# File and line in a backtrace, no variables: less than half the target folder; CARGO_PROFILE_DEV_DEBUG=2 for a debugger (docs/rust-builds.md).
+[profile.dev]
+debug = "line-tables-only"
+
+# Dependencies optimized in debug builds too: Wasmtime crawls at opt-level 0 (docs/front.md).
+[profile.dev.package."*"]
+opt-level = 2
+
+# Thin LTO over 16 units: a cold build at fat LTO and one unit takes more than twice as long (docs/images.md).
+[profile.release]
+lto = "thin"
+strip = true

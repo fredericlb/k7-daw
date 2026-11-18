@@ -1,0 +1,34 @@
+[package]
+name = "song"
+version = "0.1.0"
+edition = "2024"
+description = "The song compiler in Rust: the Source it reads through, its cache, the file readers, the compile to the engine's ProjectDoc, the views, the session a host calls, after ../src/ and song-schema's yaml readers."
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
+song-schema = { path = "../../song-schema/rust" }
+k7x = { path = "../../k7x/rust" }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+indexmap = { version = "2", features = ["serde"] }
+sha2 = "0.10"
+ts-rs = { version = "11", optional = true }
+
+[dev-dependencies]
+insta = { version = "1", features = ["json"] }
+
+[features]
+default = ["disk"]
+disk = []
+ts = ["dep:ts-rs", "song-schema/ts"]
+
+# The hostile tests hold a five-second bound, which unoptimized code misses on a loaded CI container.
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package.sha2]
+opt-level = 3

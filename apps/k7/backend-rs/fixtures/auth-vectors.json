@@ -1,0 +1,61 @@
+{
+  "tokens": [
+    {
+      "secret": "dev-secret:pl8",
+      "sub": "e2e",
+      "token": "eyJ2IjoyLCJqdGkiOiJlS3JBbGthSDQ4ZVphVEpUT2ZzSEFRIiwic3ViIjoiZTJlIiwiaWF0IjoxNzkzNjI4NzE2ODc1LCJleHAiOjQ5NDcyMjg3MTY4NzV9.e1liXjDUfSbk4u007xZDfjfrPeeuLsJ4UASLf2b8B6U",
+      "payload": {
+        "v": 2,
+        "jti": "eKrAlkaH48eZaTJTOfsHAQ",
+        "sub": "e2e",
+        "iat": 1793628716875,
+        "exp": 4947228716875
+      },
+      "record": {
+        "id": "eKrAlkaH48eZaTJTOfsHAQ",
+        "sub": "e2e",
+        "label": "vector",
+        "created": 1793628716875,
+        "expires": 4947228716875
+      }
+    },
+    {
+      "secret": "s3cr3t/with+chars=:pl8",
+      "sub": "abc|123 Frédéric 🎛",
+      "token": "eyJ2IjoyLCJqdGkiOiJ6eTAxVW5xS0pTZE9iUklkbDlfc1lnIiwic3ViIjoiYWJjfDEyMyBGcsOpZMOpcmljIPCfjpsiLCJpYXQiOjE3OTM2Mjg3MTY4NzYsImV4cCI6NDk0NzIyODcxNjg3Nn0.zMYYgPf-7kbeK2kp8IzZmZOycLIrAxwg7atkh3rZ1yQ",
+      "payload": {
+        "v": 2,
+        "jti": "zy01UnqKJSdObRIdl9_sYg",
+        "sub": "abc|123 Frédéric 🎛",
+        "iat": 1793628716876,
+        "exp": 4947228716876
+      },
+      "record": {
+        "id": "zy01UnqKJSdObRIdl9_sYg",
+        "sub": "abc|123 Frédéric 🎛",
+        "label": "vector",
+        "created": 1793628716876,
+        "expires": 4947228716876
+      }
+    },
+    {
+      "secret": ":pl8",
+      "sub": "quote \" back \\ slash",
+      "token": "eyJ2IjoyLCJqdGkiOiJvakJtdzRKVzFjYWJqalZhY0hDcEZRIiwic3ViIjoicXVvdGUgXCIgYmFjayBcXCBzbGFzaCIsImlhdCI6MTc5MzYyODcxNjg3NiwiZXhwIjo0OTQ3MjI4NzE2ODc2fQ.ExxIdosKeMUEWXvkjVlF66QnX_L120dTSlijqUvRJ6Q",
+      "payload": {
+        "v": 2,
+        "jti": "ojBmw4JW1cabjjVacHCpFQ",
+        "sub": "quote \" back \\ slash",
+        "iat": 1793628716876,
+        "exp": 4947228716876
+      },
+      "record": {
+        "id": "ojBmw4JW1cabjjVacHCpFQ",
+        "sub": "quote \" back \\ slash",
+        "label": "vector",
+        "created": 1793628716876,
+        "expires": 4947228716876
+      }
+    }
+  ]
+}

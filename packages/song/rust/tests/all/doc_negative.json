@@ -1,0 +1,2541 @@
+[
+ {
+  "name": "plugin-internal",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/id": "gtr:amp",
+    "/tracks/0/plugins/0/type": "Chorus",
+    "/tracks/0/plugins/0/role": ""
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-vst3-files",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"v\"], \"v\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/v.k7x": "extends(\"@k7-core/audio/eq\")\nbase(\"x\")\n",
+   "$lib/k7-core/modules/audio/eq/module.k7x": "plugin({ type: \"vst3\", name: \"Pro-Q 3\" })\nmix(0.5)\nparams({ gain: 3, sfz: \"a.sfz\" })\n",
+   "$lib/k7-core/modules/audio/eq/base/x.vstpreset": "b",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/type": "vst3",
+    "/tracks/0/plugins/0/name": "Pro-Q 3",
+    "/tracks/0/plugins/0/sfzFile": "a.sfz",
+    "/tracks/0/plugins/0/params/@mix": 0.5,
+    "/tracks/0/plugins/0/params/gain": 3
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-fxp-patch",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"s\"], \"s\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/s.k7x": "extends(\"@k7-core/instruments/syn\")\nbase(\"s\")\n",
+   "$lib/k7-core/modules/instruments/syn/module.k7x": "plugin({ type: \"vst3\", name: \"Surge\" })\n",
+   "$lib/k7-core/modules/instruments/syn/base/s.fxp": "b",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/path": "",
+    "/tracks/0/plugins/0/params/@output-volume": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-sfz-empty",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"s\"], \"s\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/s.k7x": "plugin({ type: \"vst3\", name: \"X\" })\nparams({ sfz: \"\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/id": "gtr:s",
+    "/tracks/0/plugins/0/sfzFile": null
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-offline-skipped",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"a\"], \"a\": [\"b\"], \"b\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/a.k7x": "plugin({ type: \"offline\", name: \"R\" })\n",
+   "nodes/b.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins#len": 1,
+    "/tracks/0/plugins/0/id": "gtr:b"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-unknown-type-skipped",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"a\"], \"a\": [\"b\"], \"b\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/a.k7x": "plugin({ type: \"mystery\", name: \"R\" })\n",
+   "nodes/b.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins#len": 1,
+    "/tracks/0/plugins/0/id": "gtr:b"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-io-module",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"a\"], \"a\": [\"b\"], \"b\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/a.k7x": "io(\"out\")\n",
+   "nodes/b.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-held-param-effect",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"e\"], \"e\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/e.k7x": "extends(\"@k7-core/audio/fx\")\nparams({ Wet: 1 })\n",
+   "$lib/k7-core/modules/audio/fx/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [
+    "nodes/e.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-held-param-allowed-on-two-inputs",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"e\"], \"e\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/e.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }, { name: \"side\", type: \"audio\", mandatory: false }])\nparams({ Wet: 1 })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/Wet": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-mix-defaulted",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"e\"], \"e\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/e.k7x": "extends(\"@k7-core/audio/fx\")\n",
+   "$lib/k7-core/modules/audio/fx/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/@mix": 1,
+    "/tracks/0/plugins/0/params/@input-volume": 0,
+    "/tracks/0/plugins/0/params/@output-volume": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-levels-stated",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"e\"], \"e\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/e.k7x": "extends(\"@k7-core/audio/fx\")\nmix(0.25)\ninput_volume(-3)\noutput_volume(2)\n",
+   "$lib/k7-core/modules/audio/fx/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/@mix": 0.25,
+    "/tracks/0/plugins/0/params/@input-volume": -3,
+    "/tracks/0/plugins/0/params/@output-volume": 2
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-instrument-only-output-stage",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"s\"], \"s\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/s.k7x": "extends(\"@k7-core/instruments/syn\")\n",
+   "$lib/k7-core/modules/instruments/syn/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/@output-volume": 0,
+    "/tracks/0/plugins/0/params/@mix": null
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-bypassed-step",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"a\"], \"a\": [\"b\"], \"b\": [\"MIX\"] })\nbypassed([\"a\"])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/a.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/b.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/enabled": false,
+    "/tracks/0/plugins/1/enabled": true
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-missing-module",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"ghost\"], \"ghost\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins#len": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-sidechain-from-lane",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"c\"], \"c\": [\"MIX\"], \"drums\": [\"c#side\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/c.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }, { name: \"side\", type: \"audio\" }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/1/plugins/0/sidechainFrom": "drums"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-faust-with-files",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"w.wav\", gain: 1 })\n",
+   "nodes/dsp.dsp": "process = _;\n",
+   "w.wav": "x"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/faustDsp": "process = _;\n",
+    "/tracks/0/plugins/0/faustFiles#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-faust-file-missing",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"gone.wav\" })\n",
+   "nodes/dsp.dsp": "process = _;\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/faustFiles/Table": "gone.wav"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-faust-file-escapes",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"../../x.wav\" })\n",
+   "nodes/dsp.dsp": "process = _;\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/faustDsp": "process = _;\n",
+    "/tracks/0/plugins/0/faustFiles": null
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "plugin-faust-source-missing",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/faustDsp": null
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "rack-samples",
+  "category": "racks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"r\"], \"r\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/r.k7x": "type(\"rack\")\nrack({ rack_type: \"samples\", symbols: { k: { note: 36, clip: \"k.wav\" }, m: { note: 37, clip: \"k.wav\", mute: true } } })\n",
+   "k.wav": "x"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/type": "sampler",
+    "/tracks/0/plugins/0/role": "instrument",
+    "/tracks/0/plugins/0/rack#len": 1,
+    "/tracks/0/plugins/0/rack/0/note": 36
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "rack-slice",
+  "category": "racks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"r\"], \"r\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/r.k7x": "type(\"rack\")\nrack({ rack_type: \"slice\", source: \"k.wav\", symbols: { a: { note: 36, from: 1, to: 3 } } })\n",
+   "k.wav": "x"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/rack/0/start": 1,
+    "/tracks/0/plugins/0/rack/0/length": 2
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "rack-slice-bad-window",
+  "category": "racks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"r\"], \"r\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/r.k7x": "type(\"rack\")\nrack({ rack_type: \"slice\", source: \"k.wav\", symbols: { a: { note: 36, from: 3, to: 1 } } })\n",
+   "k.wav": "x"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/rack/0/start": 3,
+    "/tracks/0/plugins/0/rack/0/length": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "tap-kit-routed",
+  "category": "taps",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"kit\"], \"kit\": [\"MIX\"], \"snare-fx\": [\"OUT\"], \"clap-fx\": [\"OUT\"] })\ntap_feeds([{ node: \"kit\", tap: \"Snare\", to: \"snare-fx\" }, { node: \"kit\", tap: \"Clap\", to: \"clap-fx\" }])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\nkit({ Snare: 38, Clap: 39 })\ntap_outs({ Snare: \"snare-fx\", Clap: \"clap-fx\" })\n",
+   "nodes/snare-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/clap-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/tapOuts#len": 2
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "tap-chain-has-input-from",
+  "category": "taps",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"kit\"], \"kit\": [\"MIX\"], \"snare-fx\": [\"OUT\"], \"clap-fx\": [\"OUT\"] })\ntap_feeds([{ node: \"kit\", tap: \"Snare\", to: \"snare-fx\" }, { node: \"kit\", tap: \"Clap\", to: \"clap-fx\" }])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\nkit({ Snare: 38, Clap: 39 })\ntap_outs({ Snare: \"snare-fx\", Clap: \"clap-fx\" })\n",
+   "nodes/snare-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/clap-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 3,
+    "/tracks/1/inputFrom/plugin": "gtr:kit",
+    "/tracks/1/inputFrom/pair": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "tap-rack-routed",
+  "category": "taps",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"kit\"], \"kit\": [\"MIX\"], \"snare-fx\": [\"OUT\"], \"clap-fx\": [\"OUT\"] })\ntap_feeds([{ node: \"kit\", tap: \"Snare\", to: \"snare-fx\" }, { node: \"kit\", tap: \"Clap\", to: \"clap-fx\" }])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/kit.k7x": "type(\"rack\")\nrack({ rack_type: \"samples\", symbols: { Snare: { note: 38, clip: \"k.wav\" }, Clap: { note: 39, clip: \"k.wav\" } } })\ntap_outs({ Snare: \"snare-fx\", Clap: \"clap-fx\" })\n",
+   "nodes/snare-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/clap-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "k.wav": "x"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/tapOuts#len": 2
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "tap-with-no-note",
+  "category": "taps",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"kit\"], \"kit\": [\"MIX\"], \"snare-fx\": [\"OUT\"], \"clap-fx\": [\"OUT\"] })\ntap_feeds([{ node: \"kit\", tap: \"Snare\", to: \"snare-fx\" }, { node: \"kit\", tap: \"Clap\", to: \"clap-fx\" }])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\nkit({ Snare: 38 })\ntap_outs({ Snare: \"snare-fx\", Clap: \"clap-fx\" })\n",
+   "nodes/snare-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/clap-fx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [
+    "nodes/kit.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "lane-single-half",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"s\", start: \"1:1\" }, { ref: \"k\", start: \"2:1\" }])\n",
+   "sequences/s.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(64)])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/contentType": "audio notes",
+    "/tracks/0/clips#len": 2
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "lane-two-halves",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr#midi\": [\"MIX\"], \"gtr#audio\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"s\", start: \"1:1\" }, { ref: \"k\", start: \"2:1\" }])\n",
+   "sequences/s.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(64)])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 2,
+    "/tracks/0/contentType": "notes",
+    "/tracks/1/contentType": "audio",
+    "/tracks/0/clips#len": 1,
+    "/tracks/1/clips#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "lane-audio-only",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\n",
+   "sequences/s.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(64)])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/contentType": "audio"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "lane-notes-only",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"s\", start: \"1:1\" }])\n",
+   "sequences/s.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(64)])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/contentType": "notes"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "lane-event-with-no-half",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr#audio\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"s\", start: \"1:1\" }, { ref: \"k\", start: \"2:1\" }])\n",
+   "sequences/s.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(64)])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w"
+  },
+  "expect": {
+   "stopped": [
+    "nodes/gtr.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "lane-unrouted",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ other: [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/other.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 2
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "lane-disabled",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\ndisabled(true)\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "lane-strudel",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/a.strudel\")\n",
+   "algo/a.strudel": "s('bd')"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/generated": true,
+    "/tracks/0/contentType": "audio notes",
+    "/tracks/0/plugins/0/type": "studio_pattern"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "group-members",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"drums\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/band.k7x": "extends(\"@meta/group-track\")\ntracks([\"gtr\"])\ncolor(\"#112233\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/groups#len": 1,
+    "/groups/0/color": "#112233",
+    "/tracks/1/group": "band"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "group-disabled",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/band.k7x": "extends(\"@meta/group-track\")\ntracks([\"gtr\"])\ncolor(\"#112233\")\ndisabled(true)\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/groups#len": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "group-muted-and-soloed",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "soloed([\"band\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\nbypassed([\"band\"])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/band.k7x": "extends(\"@meta/group-track\")\ntracks([\"gtr\"])\ncolor(\"#112233\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/groups/0/solo": true,
+    "/groups/0/mute": true,
+    "/tracks/0/solo": true,
+    "/tracks/0/mute": true
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "highlight-mixer",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "highlighted([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"m\"], \"m\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/m.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/highlight": true,
+    "/tracks/0/plugins/0/params/@output-volume": 10
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "highlight-no-mixer",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "highlighted([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"a\"], \"a\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/a.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/highlight": true,
+    "/tracks/0/plugins/0/params/@output-volume": null
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "highlight-ceiling",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "highlighted([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"m\"], \"m\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/m.k7x": "extends(\"@k7-core/audio/mx\")\noutput_volume(6)\n",
+   "$lib/k7-core/modules/audio/mx/module.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/@output-volume": 12
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "input-chain-track",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"rec\": [\"amp\"], \"amp\": [\"MIX\"] })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel(\"mic\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/role": "regular",
+    "/tracks/0/clips#len": 0
+   },
+   "freezes": {}
+  },
+  "rig": {
+   "channels": {
+    "in": [
+     {
+      "ch": [
+       1,
+       2
+      ],
+      "label": "mic"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "name": "live-input-on-lane",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"rec\": [\"gtr\"], \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel(\"mic\")\ngain(-6)\nmonitor(true)\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/inputChannels#len": 2,
+    "/tracks/0/monitor": "on",
+    "/tracks/0/inputGain": -6
+   },
+   "freezes": {}
+  },
+  "rig": {
+   "channels": {
+    "in": [
+     {
+      "ch": [
+       1,
+       2
+      ],
+      "label": "mic"
+     }
+    ]
+   }
+  }
+ },
+ {
+  "name": "bus-track",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"drums\": [\"amp\"], \"amp\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/2/role": "effect",
+    "/tracks/2/id": "amp",
+    "/tracks/0/sends/0/to": "amp"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "bus-only",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"drums\": [\"amp\"], \"amp\": [\"MIX\"] })\nbus_only([\"amp\"])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/2/mute": true
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "bus-cued-with-pair",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"drums\": [\"amp\"], \"amp\": [\"CUE\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/2/outputChannels#len": 2,
+    "/tracks/2/mute": false
+   },
+   "freezes": {}
+  },
+  "rig": {
+   "channels": {
+    "out": [
+     {
+      "ch": [
+       3,
+       4
+      ],
+      "label": "cue"
+     }
+    ]
+   },
+   "cueOutput": "cue"
+  }
+ },
+ {
+  "name": "bus-cued-without-pair",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"drums\": [\"amp\"], \"amp\": [\"CUE\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/2/outputChannels#len": 0,
+    "/tracks/2/mute": true
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "track-order-full",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "trackOrder([\"vocals\", \"gtr\", \"drums\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"drums\": [\"MIX\"], \"vocals\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/vocals.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "vocals",
+    "/tracks/1/id": "gtr",
+    "/tracks/2/id": "drums"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "track-order-partial",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "trackOrder([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"drums\": [\"MIX\"], \"vocals\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/vocals.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "gtr",
+    "/tracks/1/id": "vocals",
+    "/tracks/2/id": "drums"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "track-order-names-nothing",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "trackOrder([\"nobody\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"drums\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "drums",
+    "/tracks/1/id": "gtr"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "track-pinned-name",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"2.gtr\": [\"MIX\"], \"drums\": [\"MIX\"], \"vocals\": [\"MIX\"] })\n",
+   "nodes/2.gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n",
+   "nodes/vocals.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/1/id": "2.gtr"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "track-colour-stated",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\ncolor(\"#abcdef\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/color": "#abcdef"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "track-colour-by-name",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"drums\": [\"MIX\"] })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/color": "#dd322c"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "track-colour-by-hint",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"lane1\": [\"s\"], \"s\": [\"MIX\"] })\n",
+   "nodes/lane1.k7x": "extends(\"@meta/track\")\n",
+   "nodes/s.k7x": "extends(\"@k7-core/instruments/piano\")\n",
+   "$lib/k7-core/modules/instruments/piano/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/color": "#3a87df"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "freeze-inside-run",
+  "category": "freezes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"cab\"], \"cab\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w",
+   "nodes/amp.k7x": "plugin({ type: \"vst3\", name: \"X\" })\nfrozen(\"fr/r.wav\")\n",
+   "nodes/cab.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "fr/r.wav": "r"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/clips/0/id": "gtr__frozen",
+    "/tracks/0/plugins#len": 1,
+    "/tracks/0/frozenMaterial#len": 1
+   },
+   "freezes": {}
+  },
+  "vsts_none": true
+ },
+ {
+  "name": "freeze-render-absent",
+  "category": "freezes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"cab\"], \"cab\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w",
+   "nodes/amp.k7x": "plugin({ type: \"vst3\", name: \"X\" })\nfrozen(\"fr/gone.wav\")\n",
+   "nodes/cab.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "fr/r.wav": "r"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/clips/0/id": "k@0",
+    "/tracks/0/plugins#len": 2
+   },
+   "freezes": {}
+  },
+  "vsts_none": true
+ },
+ {
+  "name": "freeze-render-outside",
+  "category": "freezes",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"cab\"], \"cab\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w",
+   "nodes/amp.k7x": "plugin({ type: \"vst3\", name: \"X\" })\nfrozen(\"/etc/passwd\")\n",
+   "nodes/cab.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "fr/r.wav": "r"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [
+    "nodes/amp.k7x"
+   ],
+   "doc": {
+    "/tracks/0/plugins#len": 2
+   },
+   "freezes": {}
+  },
+  "vsts_none": true
+ },
+ {
+  "name": "freeze-render-folder",
+  "category": "freezes",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"cab\"], \"cab\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w",
+   "nodes/amp.k7x": "plugin({ type: \"vst3\", name: \"X\" })\nfrozen(\"fr/d\")\n",
+   "nodes/cab.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "fr/r.wav": "r",
+   "fr/d/x.wav": "r"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/clips/0/id": "gtr__frozen"
+   },
+   "freezes": {
+    "#len": 1
+   }
+  },
+  "vsts_none": true
+ },
+ {
+  "name": "freeze-on-lane-name",
+  "category": "freezes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"cab\"], \"cab\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\nfrozen(\"fr/r.wav\")\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w",
+   "nodes/amp.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "nodes/cab.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "fr/r.wav": "r"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1
+   },
+   "freezes": {}
+  },
+  "vsts_none": true
+ },
+ {
+  "name": "auto-freeze-not-ready",
+  "category": "freezes",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"cab\"], \"cab\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w",
+   "nodes/amp.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "nodes/cab.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "fr/r.wav": "r"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins#len": 2
+   },
+   "freezes": {
+    "#len": 1,
+    "/0/module": "cab",
+    "/0/ready": false,
+    "/0/hosted": false
+   }
+  },
+  "vsts_none": true
+ },
+ {
+  "name": "auto-freeze-ready",
+  "category": "freezes",
+  "ts": true,
+  "mem": false,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"cab\"], \"cab\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w",
+   "nodes/amp.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "nodes/cab.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "fr/r.wav": "r"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/clips/0/id": "gtr__frozen"
+   },
+   "freezes": {
+    "/0/ready": true
+   }
+  },
+  "vsts_none": true,
+  "renders": [
+   "cab"
+  ]
+ },
+ {
+  "name": "auto-freeze-hosted-by-scan",
+  "category": "freezes",
+  "ts": true,
+  "mem": false,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"amp\"], \"amp\": [\"cab\"], \"cab\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"k\", start: \"1:1\" }])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w",
+   "nodes/amp.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "nodes/cab.k7x": "plugin({ type: \"vst3\", name: \"X\" })\n",
+   "fr/r.wav": "r",
+   "$scan": "{\"entries\": [{\"plugins\": [{\"name\": \"X\", \"format\": \"VST3\", \"role\": \"audioEffect\"}]}]}"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {},
+   "freezes": {
+    "/0/hosted": true
+   }
+  },
+  "renders": [
+   "cab"
+  ]
+ },
+ {
+  "name": "whole-head",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ uuid: \"abc\", name: \"song\", tempo: 90, sampleRate: 44100, timeSignature: \"3/4\", masterVolume: -3 })\nmarkers({ \"2:1:1\": \"verse\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/uuid": "abc",
+    "/name": "song",
+    "/tempo": 90,
+    "/sampleRate": 44100,
+    "/timeSigNumerator": 3,
+    "/masterVolume": -3,
+    "/markers#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-master-chain-and-recorder",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"MIX\": [\"lim\"], \"lim\": [\"OUT\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/lim.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/masterPlugins#len": 2,
+    "/masterPlugins/0/id": "MIX:lim",
+    "/masterPlugins/1/id": "MIX:@record"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-timeline-surface-no-recorder",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"], \"MIX\": [\"OUT\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "surfaces/t.k7x": "type(\"timeline\")\nlayout(\"split\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/masterPlugins#len": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-no-run-to-out-no-recorder",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/masterPlugins#len": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-timelines",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "timelines/t.k7x": "lanes([lane(\"a\").events([ref(\"k\").start(\"1:1\")])])\n",
+   "sequences/s.k7x": "notes([t(0).d(1).k(60), t(1).d(1).k(64)])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/timelines#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-not-a-project",
+  "category": "whole",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"x\" })\n"
+  },
+  "expect": {
+   "stopped": [
+    "project.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-two-reasons-to-fail",
+  "category": "whole",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"e\"], \"e\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/e.k7x": "extends(\"@k7-core/audio/fx\")\nparams({ Wet: 1 })\n",
+   "nodes/bad.k7x": "plugin({ type: \"vst3\" })\n",
+   "$lib/k7-core/modules/audio/fx/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [
+    "nodes/bad.k7x",
+    "nodes/e.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-newer-format",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "format(999)\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [
+    "project.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-console",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ console: \"@k7-core/console/desk\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"m\"], \"m\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/m.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n",
+   "$lib/k7-core/modules/console/desk/channel/module.k7x": "plugin({ type: \"internal\", name: \"DeskChannel\" })\n",
+   "$lib/k7-core/modules/console/desk/buss/module.k7x": "plugin({ type: \"internal\", name: \"DeskBuss\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/1/id": "@console:gtr",
+    "/masterPlugins/0/id": "@console:master"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-console-without-a-half",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ console: \"@k7-core/console/desk\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "$lib/k7-core/modules/console/desk/channel/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [
+    "project.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "order-chain-project-lanes",
+  "category": "order",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "chains/a.k7x": "start(true)\nsteps([\n  id(\"zeta\").track(\"zeta\"),\n  to([chain(\"OUT\")]),\n])\n",
+   "chains/b.k7x": "start(true)\nsteps([\n  id(\"alpha\").track(\"alpha\"),\n  to([chain(\"OUT\")]),\n])\n",
+   "tracks/zeta.k7x": "extends(\"@meta/track\")\n",
+   "tracks/alpha.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "zeta",
+    "/tracks/1/id": "alpha"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "order-integer-nodes",
+  "category": "order",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"9\": [\"MIX\"], \"10\": [\"MIX\"] })\n",
+   "nodes/9.k7x": "extends(\"@meta/track\")\n",
+   "nodes/10.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "9",
+    "/tracks/1/id": "10"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "order-timelines-dash",
+  "category": "order",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "timelines/a.k7x": "lanes([lane(\"l\").events([ref(\"k\").start(\"1:1\")])])\n",
+   "timelines/a-b.k7x": "lanes([lane(\"l\").events([ref(\"k\").start(\"1:1\")])])\n",
+   "clips/k.k7x": "source(\"clips/k.wav\")\n",
+   "clips/k.wav": "w"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/timelines/0/id": "a",
+    "/timelines/1/id": "a-b"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "order-rack-symbols-integer",
+  "category": "order",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"r\"], \"r\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/r.k7x": "type(\"rack\")\nrack({ rack_type: \"samples\", symbols: { \"36\": { note: 36, clip: \"k.wav\" }, \"4\": { note: 4, clip: \"k.wav\" } } })\n",
+   "k.wav": "x"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/rack/0/symbol": "4",
+    "/tracks/0/plugins/0/rack/1/symbol": "36"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "order-integer-chains",
+  "category": "order",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "chains/a.k7x": "start(true)\nsteps([\n  id(\"x\").track(\"10\"),\n  to([chain(\"OUT\")]),\n])\n",
+   "chains/b.k7x": "start(true)\nsteps([\n  id(\"y\").track(\"9\"),\n  to([chain(\"OUT\")]),\n])\n",
+   "tracks/10.k7x": "extends(\"@meta/track\")\n",
+   "tracks/9.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "9",
+    "/tracks/1/id": "10"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "faust-file-in-the-workspace-modules",
+  "category": "plugins",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"../_modules/t.wav\" })\n",
+   "nodes/dsp.dsp": "process = _;\n",
+   "../_modules/t.wav": "w"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/faustFiles#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "tap-fed-input-chain",
+  "category": "taps",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"kit\"], \"kit\": [\"MIX\"], \"rec\": [\"amp\"], \"amp\": [\"MIX\"] })\ntap_feeds([{ node: \"kit\", tap: \"Snare\", to: \"rec\" }])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/kit.k7x": "plugin({ type: \"internal\", name: \"Sampler\" })\nkit({ Snare: 38 })\ntap_outs({ Snare: \"rec\" })\n",
+   "nodes/rec.k7x": "io(\"in\")\nchannel(\"mic\")\n",
+   "nodes/amp.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 3,
+    "/tracks/1/id": "rec",
+    "/tracks/2/id": "rec",
+    "/tracks/1/plugins#len": 1,
+    "/tracks/2/plugins#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "order-integer-buses",
+  "category": "order",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"a\": [\"10\"], \"b\": [\"10\"], \"c\": [\"9\"], \"d\": [\"9\"], \"10\": [\"MIX\"], \"9\": [\"MIX\"] })\n",
+   "nodes/a.k7x": "extends(\"@meta/track\")\n",
+   "nodes/b.k7x": "extends(\"@meta/track\")\n",
+   "nodes/c.k7x": "extends(\"@meta/track\")\n",
+   "nodes/d.k7x": "extends(\"@meta/track\")\n",
+   "nodes/10.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/9.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "order-integer-lanes-buses",
+  "category": "order",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "graph.k7x": "modules({ \"10\": [\"bx\"], \"12\": [\"bx\"], \"9\": [\"by\"], \"11\": [\"by\"], \"bx\": [\"MIX\"], \"by\": [\"MIX\"] })\n",
+   "nodes/9.k7x": "extends(\"@meta/track\")\n",
+   "nodes/10.k7x": "extends(\"@meta/track\")\n",
+   "nodes/11.k7x": "extends(\"@meta/track\")\n",
+   "nodes/12.k7x": "extends(\"@meta/track\")\n",
+   "nodes/bx.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "nodes/by.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "9",
+    "/tracks/4/id": "by",
+    "/tracks/5/id": "bx"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "chain-links-and-sidechain",
+  "category": "chains",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\" })\n",
+   "tracks/gtr.k7x": "extends(\"@meta/track\")\n",
+   "tracks/drums.k7x": "extends(\"@meta/track\")\n",
+   "chains/gtr.k7x": "start(true)\nsteps([\n  id(\"l1\").track(\"gtr\"),\n  id(\"a1\").extends(\"@k7-core/audio/fx\"),\n  to([chain(\"comp\").level(0.5), chain(\"MIX\").level(0.8)]),\n])\n",
+   "chains/drums.k7x": "start(true)\nsteps([\n  id(\"l2\").track(\"drums\"),\n  to([chain(\"comp\").port(\"side\").level(0.7)]),\n])\n",
+   "chains/comp.k7x": "steps([\n  id(\"c1\").extends(\"@k7-core/audio/two\"),\n  to([chain(\"MIX\")]),\n])\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n",
+   "$lib/k7-core/modules/audio/fx/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n",
+   "$lib/k7-core/modules/audio/two/module.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\ninputs([{ name: \"in\", type: \"audio\" }, { name: \"side\", type: \"audio\", mandatory: false }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/1/sends/0/to": "c1",
+    "/tracks/1/sends/0/level": 0.5,
+    "/tracks/2/id": "c1",
+    "/tracks/2/name": "comp",
+    "/tracks/2/plugins/0/sidechainFrom": "drums"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "whole-console-at-the-end-of-a-lane",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ console: \"@k7-core/console/desk\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"a\"], \"a\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "$lib/k7-core/modules/console/desk/channel/module.k7x": "plugin({ type: \"internal\", name: \"DeskChannel\" })\n",
+   "$lib/k7-core/modules/console/desk/buss/module.k7x": "plugin({ type: \"internal\", name: \"DeskBuss\" })\n",
+   "nodes/a.k7x": "plugin({ type: \"internal\", name: \"Chorus\" })\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/id": "gtr:a",
+    "/tracks/0/plugins/1/id": "@console:gtr"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "project-invalid",
+  "category": "whole",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ tempo: \"fast\" })\n",
+   "graph.k7x": "modules({ \"gtr\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n"
+  },
+  "expect": {
+   "stopped": [
+    "project.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "highlight-ceiling-at-two",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "highlighted([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"m\"], \"m\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/m.k7x": "extends(\"@k7-core/audio/mx\")\noutput_volume(2)\n",
+   "$lib/k7-core/modules/audio/mx/module.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/@output-volume": 12
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "highlight-ceiling-at-twelve",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "highlighted([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"m\"], \"m\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/m.k7x": "extends(\"@k7-core/audio/mx\")\noutput_volume(12)\n",
+   "$lib/k7-core/modules/audio/mx/module.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/@output-volume": 12
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "highlight-ceiling-last-of-two-mixers",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "highlighted([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"m\"], \"m\": [\"m2\"], \"m2\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/m.k7x": "extends(\"@k7-core/audio/mx\")\noutput_volume(5)\n",
+   "$lib/k7-core/modules/audio/mx/module.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n",
+   "nodes/m2.k7x": "extends(\"@k7-core/audio/mx\")\noutput_volume(5)\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/1/params/@output-volume": 12,
+    "/tracks/0/plugins/0/params/@output-volume": 5
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "highlight-just-under-the-ceiling",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "highlighted([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"m\"], \"m\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/m.k7x": "extends(\"@k7-core/audio/mx\")\noutput_volume(1)\n",
+   "$lib/k7-core/modules/audio/mx/module.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/@output-volume": 11
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "highlight-ceiling-at-three",
+  "category": "tracks",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "highlighted([\"gtr\"])\n",
+   "graph.k7x": "modules({ \"gtr\": [\"m\"], \"m\": [\"MIX\"] })\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
+   "nodes/m.k7x": "extends(\"@k7-core/audio/mx\")\noutput_volume(3)\n",
+   "$lib/k7-core/modules/audio/mx/module.k7x": "plugin({ type: \"internal\", name: \"Mixer\" })\n",
+   "$lib/k7-core/library.k7x": "name(\"k7-core\")\nversion(\"1.0.0\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/plugins/0/params/@output-volume": 12
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-lane-sounds-the-shots-with-a-dissolve",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 5 }, { ref: \"b\", start: 4, length: 5, fadeIn: 1 }])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/id": "dialog",
+    "/tracks/0/clips#len": 2,
+    "/tracks/0/clips/0/crossfade/out": true,
+    "/tracks/0/clips/1/crossfade/in": true
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-video-source-names-no-picture-lane",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 5 }, { ref: \"b\", start: 4, length: 5, fadeIn: 1 }])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"nope\")\n"
+  },
+  "expect": {
+   "stopped": [
+    "nodes/dialog.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-video-source-with-events",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 5 }, { ref: \"b\", start: 4, length: 5, fadeIn: 1 }])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\nevents([{ ref: \"a\", start: \"1:1\" }])\n"
+  },
+  "expect": {
+   "stopped": [
+    "nodes/dialog.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-sound-file-gone",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 5 }, { ref: \"b\", start: 4, length: 5, fadeIn: 1 }])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\n"
+  },
+  "expect": {
+   "stopped": [
+    "clips/b.k7x"
+   ],
+   "warned": [],
+   "doc": {},
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-own-sound-unwired",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 1, length: 2 }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/id": "main#audio",
+    "/tracks/0/contentType": "audio",
+    "/tracks/0/clips#len": 1,
+    "/tracks/0/clips/0/start": 2,
+    "/tracks/0/clips/0/length": 4
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-own-sound-on-the-wired-chain",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ main: [\"RENDER\"], \"main#audio\": [\"MIX\"], MIX: [\"OUT\"], RENDER: [\"VIDEO_OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 2 }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/id": "main#audio",
+    "/tracks/0/clips#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-wired-lane-with-no-shots",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ \"main#audio\": [\"MIX\"], MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/id": "main#audio",
+    "/tracks/0/clips#len": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-silent-shot-beside-a-sounding-one",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"still\", start: 0, length: 2 }, { ref: \"a\", start: 2, length: 2 }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/clips#len": 1,
+    "/tracks/0/clips/0/start": 4
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-lane-of-silent-shots",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"still\", start: 0, length: 2 }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 0
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-hiding-the-picture-keeps-its-sound",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\nbypassed([\"main\"])\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 2 }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "main#audio",
+    "/tracks/0/mute": false
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-muting-the-sound-apart",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\nbypassed([\"main#audio\"])\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 2 }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/id": "main#audio",
+    "/tracks/0/mute": true
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-speed-like-tape-or-keeping-the-pitch",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 2, speed: 0.5 }, { ref: \"a\", start: 2, length: 2, speed: 0.5, pitch: \"keep\" }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks/0/clips#len": 2,
+    "/tracks/0/clips/0/warp/algorithm": "varispeed",
+    "/tracks/0/clips/1/warp/algorithm": "elastique"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-naming-the-lane-leaves-the-picture-silent",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 2 }])\n",
+   "nodes/dialog.k7x": "extends(\"@meta/track\")\nvideo_source(\"main\")\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/id": "dialog",
+    "/tracks/0/clips#len": 1
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-disabled-lane-still-sounds",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 2 }])\ndisabled(true)\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/id": "main#audio"
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-shot-cut-by-later-shots",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 0, length: 6 }, { ref: \"b\", start: 2, length: 2, fadeIn: 1 }, { ref: \"b\", start: 3, length: 2, fadeIn: 1, speed: 2 }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 1,
+    "/tracks/0/id": "main#audio",
+    "/tracks/0/clips#len": 4,
+    "/tracks/0/clips/0/start": 0,
+    "/tracks/0/clips/0/length": 6,
+    "/tracks/0/clips/0/fadeOut": 2,
+    "/tracks/0/clips/0/crossfade/out": true,
+    "/tracks/0/clips/1/start": 10,
+    "/tracks/0/clips/1/length": 2,
+    "/tracks/0/clips/1/fadeIn": 0,
+    "/tracks/0/clips/2/start": 4,
+    "/tracks/0/clips/2/length": 4,
+    "/tracks/0/clips/2/fadeIn": 2,
+    "/tracks/0/clips/3/start": 6,
+    "/tracks/0/clips/3/length": 4
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-timeline-draws-on-the-lane",
+  "category": "pictures",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"clips/a.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([])\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([{ ref: \"verse\", start: \"1:1\" }])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([{\"lane\":\"x\",\"events\":[]}])\npictures([{\"lane\":\"main\",\"events\":[{\"ref\":\"a\",\"start\":0,\"length\":1},{\"ref\":\"b\",\"start\":1.5}]}])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [],
+   "doc": {
+    "/tracks#len": 2,
+    "/tracks/0/id": "gtr",
+    "/tracks/0/clips#len": 0,
+    "/tracks/1/id": "main#audio",
+    "/tracks/1/clips#len": 2,
+    "/tracks/1/clips/0/start": 0,
+    "/tracks/1/clips/0/length": 2,
+    "/tracks/1/clips/1/start": 3,
+    "/tracks/1/clips/1/length": 5
+   },
+   "freezes": {}
+  }
+ },
+ {
+  "name": "pictures-sound-outside-the-mounts",
+  "category": "pictures",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"n\", tempo: 120 })\n",
+   "graph.k7x": "modules({ MIX: [\"OUT\"] })\n",
+   "clips/a.k7x": "source(\"clips/a.mp4\")\nsound(\"../../../x.wav\")\n",
+   "clips/b.k7x": "source(\"clips/b.mp4\")\nsound(\"clips/b.wav\")\n",
+   "clips/still.k7x": "source(\"clips/still.mp4\")\n",
+   "clips/a.mp4": "",
+   "clips/a.wav": "",
+   "clips/b.mp4": "",
+   "clips/still.mp4": "",
+   "clips/b.wav": "",
+   "nodes/main.k7x": "extends(\"@meta/picture-track\")\nevents([{ ref: \"a\", start: 1, length: 2 }])\n"
+  },
+  "expect": {
+   "stopped": [],
+   "warned": [
+    "clips/a.k7x"
+   ],
+   "doc": {
+    "/tracks#len": 0
+   },
+   "freezes": {}
+  }
+ }
+]

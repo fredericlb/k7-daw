@@ -1,0 +1,4 @@
+// "synth": Tracktion's built-in 4OSC. plugin.type is the FORMAT — "internal" for a
+// built-in, its xmlTypeName in `name` (an external plugin uses type "vst3" etc. and
+// its real name as `name`). Add params to tweak it.
+plugin({ type: "internal", name: "4osc" })

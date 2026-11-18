@@ -1,0 +1,32 @@
+# Force LF in the working tree on every platform, not just in the index.
+#
+# Biome's formatter emits LF, so a Windows checkout with core.autocrlf=true
+# would rewrite every file to CRLF and `npm run lint` would report the whole
+# repo as a format error on a fresh clone. eol=lf overrides autocrlf.
+* text=auto eol=lf
+
+# Binaries git must never touch.
+*.png binary
+*.jpg binary
+*.ico binary
+*.wav binary
+*.fxp binary
+*.vstpreset binary
+*.flac binary
+*.ogg binary
+*.mp3 binary
+*.mp4 binary
+*.exe binary
+*.dll binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+
+# cmd misreads a label or a long parenthesised block in an LF script.
+engine/scripts/ci/*.cmd text eol=crlf
+
+# Built from sources, never merged by hand: a conflict keeps one side, then `npm run rebuild:generated` (docs/agents.md).
+packages/k7-wasm/src/k7Wasm.generated.ts merge=rebuilt
+packages/k7-wasm/src/k7WasmSong.generated.ts merge=rebuilt
+packages/audio-analysis/src/waveformWasm.generated.ts merge=rebuilt
+packages/song/rust/src/modules/types_generated.rs merge=rebuilt

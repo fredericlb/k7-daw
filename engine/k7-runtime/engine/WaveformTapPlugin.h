@@ -1,0 +1,91 @@
+// WaveformTapPlugin.h — a minimal Tracktion plugin that captures audio samples
+// into a WaveformTap for real-time waveform display. Sits in a track's plugin
+// chain (post-fader, like the LevelMeterPlugin) and is transparent to the audio
+// — it passes samples through unchanged while also pushing min/max envelope data
+// into a lock-free ring buffer.
+
+#pragma once
+
+#include <atomic>
+
+#include "WaveformTap.h"
+// The module header, not a path into a build tree: FetchContent puts the checkout under build/<preset>/_deps, so a relative path pins the file to one preset.
+#include <tracktion_engine/tracktion_engine.h>
+
+namespace studio {
+
+class WaveformTapPlugin : public tracktion::engine::Plugin {
+public:
+    WaveformTapPlugin(tracktion::engine::PluginCreationInfo info)
+        : Plugin(std::move(info))
+    {
+        // Enable bypass-safe processing so the tap works even when bypassed
+        setProcessingEnabled(true);
+    }
+
+    ~WaveformTapPlugin() override
+    {
+        notifyListenersOfDeletion();
+    }
+
+    static const char* getPluginName()               { return "Waveform Tap"; }
+    static const char* xmlTypeName;
+    static juce::ValueTree create();
+
+    // --- Plugin interface ---------------------------------------------------
+
+    juce::String getName() const override                 { return "Waveform Tap"; }
+    juce::String getPluginType() override                  { return xmlTypeName; }
+    juce::String getShortName(int) override                { return "WfTap"; }
+    juce::String getSelectableDescription() override       { return "Waveform Tap Plugin"; }
+    bool canBeDisabled() override                          { return false; }
+    bool shouldMeasureCpuUsage() const noexcept override   { return false; }
+    bool noTail() override                                 { return true; }
+    bool takesAudioInput() override                        { return true; }
+    bool producesAudioWhenNoAudioInput() override          { return false; }
+
+    int getNumOutputChannelsGivenInputs(int numInputChannels) override
+    {
+        return juce::jmin(numInputChannels, 2);
+    }
+
+    void initialise(const tracktion::engine::PluginInitialisationInfo&) override {}
+    void deinitialise() override {}
+    // Only the writer's half, and only as a flag: reset() runs on the message thread beside the audio one, which owns the bucket (docs/panic.md).
+    void reset() override { resetPending_ = true; }
+
+    void applyToBuffer(const tracktion::engine::PluginRenderContext& ctx) override
+    {
+        if (resetPending_.exchange(false)) tap_.resetBucket();
+        if (!enabled_.load(std::memory_order_relaxed)) return;
+        if (!ctx.destBuffer) return;
+
+        const int numSamples = ctx.bufferNumSamples;
+        const int startSample = ctx.bufferStartSample;
+        const int numChans = ctx.destBuffer->getNumChannels();
+        if (numChans <= 0 || numSamples <= 0) return;
+
+        // One point per FRAME, both sides in one bucket: left-block-then-right-block drew every block twice — docs/engineHost.md.
+        const float* l = ctx.destBuffer->getReadPointer(0, startSample);
+        const float* r = numChans > 1 ? ctx.destBuffer->getReadPointer(1, startSample) : l;
+        for (int i = 0; i < numSamples; ++i)
+            tap_.pushFrame(l[i], r[i]);
+    }
+
+    void restorePluginStateFromValueTree(const juce::ValueTree&) override {}
+
+    // --- WaveformTap access -------------------------------------------------
+
+    WaveformTap& tap() { return tap_; }
+    void setEnabled(bool on) { enabled_.store(on, std::memory_order_relaxed); }
+    bool isEnabled() const { return enabled_.load(std::memory_order_relaxed); }
+
+private:
+    std::atomic<bool> resetPending_{false};
+    WaveformTap tap_{256};  // 256-sample buckets → ~86 points/sec at 44.1 kHz
+    std::atomic<bool> enabled_{true};
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveformTapPlugin)
+};
+
+}  // namespace studio

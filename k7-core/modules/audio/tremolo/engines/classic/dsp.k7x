@@ -1,0 +1,11 @@
+// Tremolo — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({
+  Rate: { min: 0.1, max: 20, default: 5 },
+  Depth: { min: 0, max: 1, default: 0.5 },
+})
+graph([
+  input().as("dry"),
+  amul(aadd(lfo("sine", "Rate"), 1), 0.5).as("unipolar"),
+  aadd(amul("unipolar", "Depth"), sub(1, "Depth")).as("amount"),
+  output(amul("dry", "amount")),
+])

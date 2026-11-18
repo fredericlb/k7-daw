@@ -1,0 +1,917 @@
+{
+  "project": "k7-core/audio.zz_utility.monitoring.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.zz_utility.monitoring",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Monitoring",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-lefto-mono",
+        "name": "drums-lefto-mono",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#be1f25",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-lefto-mono:fx-lefto-mono",
+            "type": "Lefto Mono",
+            "name": "fx-lefto-mono",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-lefto-mono.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-mo-noam",
+        "name": "drums-mo-noam",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#ce2123",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-mo-noam:fx-mo-noam",
+            "type": "Mo Noam",
+            "name": "fx-mo-noam",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-mo-noam.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-monitoring",
+        "name": "drums-monitoring",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dc2825",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-monitoring:fx-monitoring",
+            "type": "Monitoring",
+            "name": "fx-monitoring",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-monitoring.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-peaks-only",
+        "name": "drums-peaks-only",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#de3c34",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-peaks-only:fx-peaks-only",
+            "type": "Peaks Only",
+            "name": "fx-peaks-only",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-peaks-only.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-righto-mono",
+        "name": "drums-righto-mono",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e04f43",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-righto-mono:fx-righto-mono",
+            "type": "Righto Mono",
+            "name": "fx-righto-mono",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-righto-mono.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-slew-only",
+        "name": "drums-slew-only",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e36152",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-slew-only:fx-slew-only",
+            "type": "Slew Only",
+            "name": "fx-slew-only",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-slew-only.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-subs-only",
+        "name": "drums-subs-only",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.monitoring.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-subs-only:fx-subs-only",
+            "type": "Subs Only",
+            "name": "fx-subs-only",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.monitoring.k7/nodes/fx-subs-only.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/zz_utility/monitoring",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 3,
+              "widgets": {
+                "mode": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "Mode",
+                  "bind": "Monitor",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "lefto-mono",
+              "mo-noam",
+              "monitoring",
+              "peaks-only",
+              "righto-mono",
+              "slew-only",
+              "subs-only"
+            ],
+            "engine": "monitoring",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-lefto-mono": {
+        "from": "drums-lefto-mono",
+        "use": [
+          {
+            "module": "fx-lefto-mono",
+            "uses": "@k7-core/audio/zz_utility/monitoring",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "lefto-mono",
+              "mo-noam",
+              "monitoring",
+              "peaks-only",
+              "righto-mono",
+              "slew-only",
+              "subs-only"
+            ],
+            "engine": "lefto-mono",
+            "params": {},
+            "pluginId": "drums-lefto-mono:fx-lefto-mono"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-mo-noam": {
+        "from": "drums-mo-noam",
+        "use": [
+          {
+            "module": "fx-mo-noam",
+            "uses": "@k7-core/audio/zz_utility/monitoring",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 3,
+              "widgets": {
+                "mode": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "Mode",
+                  "bind": "Monotor",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "lefto-mono",
+              "mo-noam",
+              "monitoring",
+              "peaks-only",
+              "righto-mono",
+              "slew-only",
+              "subs-only"
+            ],
+            "engine": "mo-noam",
+            "params": {},
+            "pluginId": "drums-mo-noam:fx-mo-noam"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-monitoring": {
+        "from": "drums-monitoring",
+        "use": [
+          {
+            "module": "fx-monitoring",
+            "uses": "@k7-core/audio/zz_utility/monitoring",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 3,
+              "widgets": {
+                "mode": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "Mode",
+                  "bind": "Monitor",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "lefto-mono",
+              "mo-noam",
+              "monitoring",
+              "peaks-only",
+              "righto-mono",
+              "slew-only",
+              "subs-only"
+            ],
+            "engine": "monitoring",
+            "params": {},
+            "pluginId": "drums-monitoring:fx-monitoring"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-peaks-only": {
+        "from": "drums-peaks-only",
+        "use": [
+          {
+            "module": "fx-peaks-only",
+            "uses": "@k7-core/audio/zz_utility/monitoring",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "lefto-mono",
+              "mo-noam",
+              "monitoring",
+              "peaks-only",
+              "righto-mono",
+              "slew-only",
+              "subs-only"
+            ],
+            "engine": "peaks-only",
+            "params": {},
+            "pluginId": "drums-peaks-only:fx-peaks-only"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-righto-mono": {
+        "from": "drums-righto-mono",
+        "use": [
+          {
+            "module": "fx-righto-mono",
+            "uses": "@k7-core/audio/zz_utility/monitoring",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "lefto-mono",
+              "mo-noam",
+              "monitoring",
+              "peaks-only",
+              "righto-mono",
+              "slew-only",
+              "subs-only"
+            ],
+            "engine": "righto-mono",
+            "params": {},
+            "pluginId": "drums-righto-mono:fx-righto-mono"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-slew-only": {
+        "from": "drums-slew-only",
+        "use": [
+          {
+            "module": "fx-slew-only",
+            "uses": "@k7-core/audio/zz_utility/monitoring",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "lefto-mono",
+              "mo-noam",
+              "monitoring",
+              "peaks-only",
+              "righto-mono",
+              "slew-only",
+              "subs-only"
+            ],
+            "engine": "slew-only",
+            "params": {},
+            "pluginId": "drums-slew-only:fx-slew-only"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-subs-only": {
+        "from": "drums-subs-only",
+        "use": [
+          {
+            "module": "fx-subs-only",
+            "uses": "@k7-core/audio/zz_utility/monitoring",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "lefto-mono",
+              "mo-noam",
+              "monitoring",
+              "peaks-only",
+              "righto-mono",
+              "slew-only",
+              "subs-only"
+            ],
+            "engine": "subs-only",
+            "params": {},
+            "pluginId": "drums-subs-only:fx-subs-only"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-lefto-mono",
+      "drums-mo-noam",
+      "drums-monitoring",
+      "drums-peaks-only",
+      "drums-righto-mono",
+      "drums-slew-only",
+      "drums-subs-only"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-lefto-mono": "#be1f25",
+      "drums-mo-noam": "#ce2123",
+      "drums-monitoring": "#dc2825",
+      "drums-peaks-only": "#de3c34",
+      "drums-righto-mono": "#e04f43",
+      "drums-slew-only": "#e36152",
+      "drums-subs-only": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-lefto-mono": "audio",
+      "drums-mo-noam": "audio",
+      "drums-monitoring": "audio",
+      "drums-peaks-only": "audio",
+      "drums-righto-mono": "audio",
+      "drums-slew-only": "audio",
+      "drums-subs-only": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-lefto-mono": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-mo-noam": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-monitoring": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-peaks-only": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-righto-mono": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-slew-only": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-subs-only": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

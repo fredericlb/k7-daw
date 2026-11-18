@@ -1,0 +1,3714 @@
+{
+  "project": "k7-core/instruments.synth.art-cz-v.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.synth.art-cz-v",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.synth.art-cz-v.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#9a5ad3",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/synth/art-cz-v",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "L1 OSC",
+                  "widgets": {
+                    "l1_osc": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "OSC",
+                      "color": "#3d7dff26"
+                    },
+                    "l1_shape_a": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 3,
+                      "label": "Shape A",
+                      "bind": "Line 1 Shape A",
+                      "options": [
+                        {
+                          "label": "Saw",
+                          "value": 0
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "Pulse",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "DblSine",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "SawPulse",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Reso1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Reso2",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Reso3",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Custom",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l1_shape_b": {
+                      "type": "dropdown",
+                      "col": 3,
+                      "row": 0,
+                      "colSpan": 3,
+                      "label": "Shape B",
+                      "bind": "Line 1 Shape B",
+                      "options": [
+                        {
+                          "label": "Saw",
+                          "value": 0
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "Pulse",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "DblSine",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "SawPulse",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Reso1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Reso2",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Reso3",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Custom",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l1_lines": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 6,
+                      "label": "Lines",
+                      "bind": "Line Select",
+                      "options": [
+                        {
+                          "label": "Line1Only",
+                          "value": 0
+                        },
+                        {
+                          "label": "Line2Only",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "Line1+2",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "Line1+1'",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l1_dcw": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "DCW",
+                      "bind": "Line 1 DCW",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_dcw_amt": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "DCW Env",
+                      "bind": "Line 1 DCW Envelope Depth",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_penv": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "PitchEnv",
+                      "bind": "Line 1 Pitch Envelope Depth",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "wave1": {
+                      "type": "lcdscreen",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "l1_out": {
+                      "type": "group",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 4,
+                      "label": "OUT",
+                      "color": "#6b6b6b33"
+                    },
+                    "l1_level": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Level",
+                      "bind": "Line 1 Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_pan": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pan",
+                      "bind": "Line 1 Pan",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "L1 ENV",
+                  "widgets": {
+                    "l1_dcw_env": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "DCW",
+                      "color": "#ff6a1a22"
+                    },
+                    "l1_dcw_a": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "Line 1 DCW ADSR Attack",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_dcw_d": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Line 1 DCW ADSR Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_dcw_s": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "Line 1 DCW ADSR Sustain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_dcw_r": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Line 1 DCW ADSR Release",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_dcw_vel": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Vel",
+                      "bind": "Line 1 DCW Envelope Velocity",
+                      "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.06666666666666667
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.13333333333333333
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.26666666666666666
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.4666666666666667
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.5333333333333333
+                        },
+                        {
+                          "label": "9",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "10",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "11",
+                          "value": 0.7333333333333333
+                        },
+                        {
+                          "label": "12",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "13",
+                          "value": 0.8666666666666667
+                        },
+                        {
+                          "label": "14",
+                          "value": 0.9333333333333333
+                        },
+                        {
+                          "label": "15",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l1_dcw_kf": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "KeyF",
+                      "bind": "Line 1 DCW Envelope Keyboard Follow",
+                      "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.1111111111111111
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.2222222222222222
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.4444444444444444
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.5555555555555556
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.7777777777777778
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.8888888888888888
+                        },
+                        {
+                          "label": "9",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l1_amp_env": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "DCA",
+                      "color": "#3ec96b22"
+                    },
+                    "l1_amp_a": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "Line 1 Amp ADSR Attack",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_amp_d": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Line 1 Amp ADSR Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_amp_s": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "Line 1 Amp ADSR Sustain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_amp_r": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Line 1 Amp ADSR Release",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l1_amp_vel": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Vel",
+                      "bind": "Line 1 Amplitude Envelope Velocity",
+                      "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.06666666666666667
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.13333333333333333
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.26666666666666666
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.4666666666666667
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.5333333333333333
+                        },
+                        {
+                          "label": "9",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "10",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "11",
+                          "value": 0.7333333333333333
+                        },
+                        {
+                          "label": "12",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "13",
+                          "value": 0.8666666666666667
+                        },
+                        {
+                          "label": "14",
+                          "value": 0.9333333333333333
+                        },
+                        {
+                          "label": "15",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l1_amp_kf": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "KeyF",
+                      "bind": "Line 1 Amplitude Envelope Keyboard Follow",
+                      "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.1111111111111111
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.2222222222222222
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.4444444444444444
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.5555555555555556
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.7777777777777778
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.8888888888888888
+                        },
+                        {
+                          "label": "9",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "env1": {
+                      "type": "lcdscreen",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "L2 OSC",
+                  "widgets": {
+                    "l2_osc": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "OSC",
+                      "color": "#3d7dff26"
+                    },
+                    "l2_shape_a": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 3,
+                      "label": "Shape A",
+                      "bind": "Line 2 Shape A",
+                      "options": [
+                        {
+                          "label": "Saw",
+                          "value": 0
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "Pulse",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "DblSine",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "SawPulse",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Reso1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Reso2",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Reso3",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Custom",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l2_shape_b": {
+                      "type": "dropdown",
+                      "col": 3,
+                      "row": 0,
+                      "colSpan": 3,
+                      "label": "Shape B",
+                      "bind": "Line 2 Shape B",
+                      "options": [
+                        {
+                          "label": "Saw",
+                          "value": 0
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "Pulse",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "DblSine",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "SawPulse",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Reso1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Reso2",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Reso3",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Custom",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l2_oct": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 6,
+                      "label": "Oct",
+                      "bind": "Line 2 Detune Octave (relatively to Line 1)",
+                      "options": [
+                        {
+                          "label": "-3",
+                          "value": 0
+                        },
+                        {
+                          "label": "-2",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "-1",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "0",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "3",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l2_dcw": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "DCW",
+                      "bind": "Line 2 DCW",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_dcw_amt": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "DCW Env",
+                      "bind": "Line 2 DCW Envelope Depth",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_fine": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fine",
+                      "bind": "Line 2 Detune Fine (relatively to Line 1)",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "wave2": {
+                      "type": "lcdscreen",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    },
+                    "l2_out": {
+                      "type": "group",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 4,
+                      "label": "OUT",
+                      "color": "#6b6b6b33"
+                    },
+                    "l2_level": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Level",
+                      "bind": "Line 2 Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_pan": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pan",
+                      "bind": "Line 2 Pan",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "L2 ENV",
+                  "widgets": {
+                    "l2_dcw_env": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "DCW",
+                      "color": "#ff6a1a22"
+                    },
+                    "l2_dcw_a": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "Line 2 DCW ADSR Attack",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_dcw_d": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Line 2 DCW ADSR Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_dcw_s": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "Line 2 DCW ADSR Sustain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_dcw_r": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Line 2 DCW ADSR Release",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_dcw_vel": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Vel",
+                      "bind": "Line 2 DCW Envelope Velocity",
+                      "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.06666666666666667
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.13333333333333333
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.26666666666666666
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.4666666666666667
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.5333333333333333
+                        },
+                        {
+                          "label": "9",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "10",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "11",
+                          "value": 0.7333333333333333
+                        },
+                        {
+                          "label": "12",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "13",
+                          "value": 0.8666666666666667
+                        },
+                        {
+                          "label": "14",
+                          "value": 0.9333333333333333
+                        },
+                        {
+                          "label": "15",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l2_dcw_kf": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "KeyF",
+                      "bind": "Line 2 DCW Envelope Keyboard Follow",
+                      "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.1111111111111111
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.2222222222222222
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.4444444444444444
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.5555555555555556
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.7777777777777778
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.8888888888888888
+                        },
+                        {
+                          "label": "9",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l2_amp_env": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "DCA",
+                      "color": "#3ec96b22"
+                    },
+                    "l2_amp_a": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "Line 2 Amp ADSR Attack",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_amp_d": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Line 2 Amp ADSR Decay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_amp_s": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "Line 2 Amp ADSR Sustain",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_amp_r": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Line 2 Amp ADSR Release",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2_amp_vel": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Vel",
+                      "bind": "Line 2 Amplitude Envelope Velocity",
+                      "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.06666666666666667
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.13333333333333333
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.26666666666666666
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.4666666666666667
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.5333333333333333
+                        },
+                        {
+                          "label": "9",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "10",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "11",
+                          "value": 0.7333333333333333
+                        },
+                        {
+                          "label": "12",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "13",
+                          "value": 0.8666666666666667
+                        },
+                        {
+                          "label": "14",
+                          "value": 0.9333333333333333
+                        },
+                        {
+                          "label": "15",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "l2_amp_kf": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "KeyF",
+                      "bind": "Line 2 Amplitude Envelope Keyboard Follow",
+                      "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.1111111111111111
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.2222222222222222
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.4444444444444444
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.5555555555555556
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.7777777777777778
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.8888888888888888
+                        },
+                        {
+                          "label": "9",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "env2": {
+                      "type": "lcdscreen",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "MOD",
+                  "widgets": {
+                    "vib": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 3,
+                      "label": "VIB",
+                      "color": "#ffffff14"
+                    },
+                    "vib_depth": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "Vibrato Depth",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vib_rate": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Vibrato Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vib_delay": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Delay",
+                      "bind": "Vibrato Delay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vib_wave": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 3,
+                      "label": "Wave",
+                      "bind": "Vibrato Waveform",
+                      "options": [
+                        {
+                          "label": "Sine",
+                          "value": 0
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "Triangle",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "Saw Down",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Saw Up",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "S&H",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "Noise",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "vib_sync": {
+                      "type": "dropdown",
+                      "col": 3,
+                      "row": 2,
+                      "colSpan": 3,
+                      "label": "Sync",
+                      "bind": "Vibrato Sync",
+                      "options": [
+                        {
+                          "label": "Free",
+                          "value": 0
+                        },
+                        {
+                          "label": "Sync",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "lfo1": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 3,
+                      "label": "LFO1",
+                      "color": "#ffffff14"
+                    },
+                    "lfo1_rate": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "LFO1 Unsync Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo1_delay": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Delay",
+                      "bind": "LFO1 Delay Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo1_wave": {
+                      "type": "dropdown",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Wave",
+                      "bind": "LFO1 Waveform",
+                      "options": [
+                        {
+                          "label": "Sine",
+                          "value": 0
+                        },
+                        {
+                          "label": "Triangle",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "Saw Down",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "Saw Up",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "S&H",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "lfo1_sync": {
+                      "type": "dropdown",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Sync",
+                      "bind": "LFO1 Sync Rate",
+                      "options": [
+                        {
+                          "label": "8/1",
+                          "value": 0
+                        },
+                        {
+                          "label": "4/1",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "2/1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "1/1",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "1/2",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "1/4",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "1/8",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "1/16",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "1/32",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "lfo2": {
+                      "type": "group",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 3,
+                      "label": "LFO2",
+                      "color": "#ffffff14"
+                    },
+                    "lfo2_rate": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "LFO2 Unsync Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo2_delay": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Delay",
+                      "bind": "LFO2 Delay Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo2_wave": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Wave",
+                      "bind": "LFO2 Waveform",
+                      "options": [
+                        {
+                          "label": "Sine",
+                          "value": 0
+                        },
+                        {
+                          "label": "Triangle",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "Saw Down",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "Saw Up",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "S&H",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "lfo2_sync": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Sync",
+                      "bind": "LFO2 Sync Rate",
+                      "options": [
+                        {
+                          "label": "8/1",
+                          "value": 0
+                        },
+                        {
+                          "label": "4/1",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "2/1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "1/1",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "1/2",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "1/4",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "1/8",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "1/16",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "1/32",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "VOICE",
+                  "widgets": {
+                    "voice": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4,
+                      "label": "VOICE",
+                      "color": "#6b6b6b33"
+                    },
+                    "glide": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Glide",
+                      "bind": "Portamento Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "unison": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Detune",
+                      "bind": "Unison Detune",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "noise": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Noise",
+                      "bind": "Noise Source Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "ring": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "ModAmt",
+                      "bind": "Lines Modulation Amount",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mod_mode": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 4,
+                      "label": "Mod",
+                      "bind": "Modulation Mode",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "Ring",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Noise",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "poly": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 4,
+                      "label": "Poly",
+                      "bind": "Polyphony",
+                      "options": [
+                        {
+                          "label": "Poly",
+                          "value": 0
+                        },
+                        {
+                          "label": "Legato",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "octave": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 3,
+                      "colSpan": 4,
+                      "label": "Octave",
+                      "bind": "Octave",
+                      "options": [
+                        {
+                          "label": "-2",
+                          "value": 0
+                        },
+                        {
+                          "label": "-1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "0",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "+1",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "+2",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "noise_color": {
+                      "type": "number",
+                      "col": 4,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Color",
+                      "bind": "Noise Source Color",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "tune": {
+                      "type": "number",
+                      "col": 6,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Tune",
+                      "bind": "Master Tune",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "arp": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "ARP",
+                      "color": "#ff3b301f"
+                    },
+                    "arp_on": {
+                      "type": "toggle",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Arp",
+                      "bind": "Arp on/off"
+                    },
+                    "arp_pattern": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 4,
+                      "label": "Pattern",
+                      "bind": "Arp Pattern",
+                      "options": [
+                        {
+                          "label": "As played",
+                          "value": 0
+                        },
+                        {
+                          "label": "Up",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "Down",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "Up/Down 1",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "Up/Down 2",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "Random",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_hold": {
+                      "type": "toggle",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Hold",
+                      "bind": "Arp Hold"
+                    },
+                    "arp_oct": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 1,
+                      "colSpan": 4,
+                      "label": "Oct",
+                      "bind": "Arp Octave Range",
+                      "options": [
+                        {
+                          "label": "1",
+                          "value": 0
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "4",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_gate": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Gate",
+                      "bind": "Arp Gate Length",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "arp_rate": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "Arp Unsync Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "arp_sync_rate": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Sync",
+                      "bind": "Arp Sync Rate",
+                      "options": [
+                        {
+                          "label": "1/2",
+                          "value": 0
+                        },
+                        {
+                          "label": "1/4",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "1/8",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "1/16",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "1/32",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "1/64",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_sync": {
+                      "type": "toggle",
+                      "col": 12,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Sync",
+                      "bind": "Arp Sync"
+                    }
+                  }
+                }
+              ],
+              "script": "// cz-v screens: each line's phase-distortion cycle pair, and its DCW and DCA envelopes.\nconst BLUE = \"#3d7dff\", GREEN = \"#3ec96b\", WHITE = \"#ffffff\", ORANGE = \"#ff6a1a\", GREY = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst SHAPES = [\"SAW\", \"SQR\", \"PULSE\", \"DSIN\", \"SAWP\", \"RES1\", \"RES2\", \"RES3\", \"CUST\"];\n\nconst clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));\nconst num = (v, d) => (typeof v === \"number\" && Number.isFinite(v) ? v : d);\nconst shapeIndex = (v) => clamp(Math.round(num(v, 0) * 8), 0, 8);\n\n// One sample of a CZ waveform at phase x (0..1) with DCW d (0..1): d = 0 is always a sine.\nfunction cz(shape, x, d) {\n  const k = 0.5 - 0.49 * d;\n  const warp = (p) => (p < k ? (p / k) * 0.5 : 0.5 + ((p - k) / (1 - k)) * 0.5);\n  const sq = (p, duty) => {\n    const s = Math.sin(2 * Math.PI * (p < duty ? (p / duty) * 0.5 : 0.5 + ((p - duty) / (1 - duty)) * 0.5));\n    const g = 1 + 24 * d;\n    return Math.tanh(s * g) / Math.tanh(g);\n  };\n  switch (shape) {\n    case 0: return Math.cos(2 * Math.PI * warp(x));\n    case 1: return sq(x, 0.5);\n    case 2: return sq(x, 0.5 - 0.4 * d);\n    case 3: return Math.cos(4 * Math.PI * warp(x));\n    case 4: return x < 0.5 ? Math.cos(2 * Math.PI * warp(x * 2)) : sq(x * 2 - 1, 0.5 - 0.4 * d);\n    case 5: case 6: case 7: {\n      const win = shape === 5 ? 1 - x : shape === 6 ? 1 - Math.abs(2 * x - 1) : Math.min(1, 4 * (1 - x));\n      const r = Math.cos(2 * Math.PI * x * (1 + 14 * d));\n      return (1 - d) * Math.cos(2 * Math.PI * x) + d * win * r;\n    }\n    default: return Math.cos(2 * Math.PI * x);\n  }\n}\n\nfunction waveScreen(lcd, n) {\n  const { ctx, width: W, height: H, params } = lcd;\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  const L = `Line ${n} `;\n  const a = shapeIndex(params[`${L}Shape A`]);\n  const b = shapeIndex(params[`${L}Shape B`]);\n  const d = clamp(num(params[`${L}DCW`], 0), 0, 1);\n  const top = 14, bot = H - 6, mid = (top + bot) / 2, amp = Math.max(1, (bot - top) / 2 - 2);\n  ctx.strokeStyle = GREY;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.moveTo(4, mid); ctx.lineTo(W - 4, mid);\n  ctx.moveTo(W / 2, top); ctx.lineTo(W / 2, bot);\n  ctx.stroke();\n  const half = Math.max(1, (W - 8) / 2);\n  for (const [i, shape, col] of [[0, a, BLUE], [1, b, WHITE]]) {\n    ctx.strokeStyle = col;\n    ctx.beginPath();\n    for (let px = 0; px <= half; px++) {\n      const y = clamp(cz(shape, px / half, d), -1, 1);\n      const X = 4 + i * half + px, Y = mid - y * amp;\n      if (px === 0) ctx.moveTo(X, Y); else ctx.lineTo(X, Y);\n    }\n    ctx.stroke();\n  }\n  ctx.font = FONT;\n  ctx.textBaseline = \"top\";\n  ctx.fillStyle = BLUE;\n  ctx.fillText(`A ${SHAPES[a]}`, 4, 3);\n  ctx.fillStyle = WHITE;\n  ctx.fillText(`B ${SHAPES[b]}`, W / 2 + 3, 3);\n  ctx.fillStyle = ORANGE;\n  const t = `DCW ${Math.round(d * 99)}`;\n  ctx.fillText(t, W - 4 - ctx.measureText(t).width, 3);\n  ctx.fillRect(4, H - 3, (W - 8) * d, 2);\n}\n\n// The envelope's breakpoints, x in 0..1 of the drawing width, y in 0..1.\nfunction adsr(params, base) {\n  const g = (k, d) => clamp(num(params[`${base} ${k}`], d), 0, 1);\n  const dl = g(\"Delay\", 0), a = g(\"Attack\", 0), dc = g(\"Decay\", 0), pk = g(\"Peak\", 1), s = g(\"Sustain\", 1), r = g(\"Release\", 0);\n  const seg = [dl * 0.6, 0.02 + a, 0.02 + dc, 0.35, 0.02 + r];\n  const tot = seg.reduce((x, y) => x + y, 0) || 1;\n  let x = 0;\n  const pts = [[0, 0]];\n  const ys = [0, pk, pk * s, pk * s, 0];\n  for (let i = 0; i < seg.length; i++) { x += seg[i] / tot; pts.push([x, ys[i]]); }\n  return pts;\n}\n\nfunction envScreen(lcd, n) {\n  const { ctx, width: W, height: H, params, output, state, now } = lcd;\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  const L = `Line ${n} `;\n  const left = 4, right = W - 10, top = 14, bot = H - 6;\n  const w = Math.max(1, right - left), h = Math.max(1, bot - top);\n  ctx.strokeStyle = GREY;\n  ctx.lineWidth = 1;\n  ctx.beginPath(); ctx.moveTo(left, bot); ctx.lineTo(right, bot); ctx.stroke();\n  const draw = (base, col) => {\n    const pts = adsr(params, base);\n    ctx.strokeStyle = col;\n    ctx.beginPath();\n    pts.forEach(([x, y], i) => { const X = left + x * w, Y = bot - y * h; if (i) ctx.lineTo(X, Y); else ctx.moveTo(X, Y); });\n    ctx.stroke();\n    ctx.fillStyle = col;\n    for (const [x, y] of pts.slice(1, -1)) ctx.fillRect(left + x * w - 1, bot - y * h - 1, 3, 3);\n  };\n  draw(`${L}DCW ADSR`, ORANGE);\n  draw(`${L}Amp ADSR`, GREEN);\n  ctx.font = FONT;\n  ctx.textBaseline = \"top\";\n  ctx.fillStyle = ORANGE; ctx.fillText(\"DCW\", left, 3);\n  ctx.fillStyle = GREEN; ctx.fillText(\"DCA\", left + 24, 3);\n  const last = Array.isArray(output) && output.length ? num(output[output.length - 1], 0) : 0;\n  state.lvl = Math.max(clamp(last, 0, 1), num(state.lvl, 0) * 0.85);\n  ctx.fillStyle = state.lvl > 0.9 ? \"#ff3b30\" : WHITE;\n  const bh = h * state.lvl;\n  ctx.fillRect(W - 6, bot - bh, 3, bh);\n  if (state.lvl > 0.01) {\n    const pts = adsr(params, `${L}Amp ADSR`);\n    const p = pts[2] ?? [0.5, 1];\n    const pulse = 1.5 + Math.sin(num(now, 0) / 180);\n    ctx.fillStyle = WHITE;\n    ctx.beginPath();\n    ctx.arc(left + p[0] * w, bot - p[1] * h, pulse + 1, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\nexport default {\n  wave1(lcd) { waveScreen(lcd, 1); },\n  wave2(lcd) { waveScreen(lcd, 2); },\n  env1(lcd) { envScreen(lcd, 1); },\n  env2(lcd) { envScreen(lcd, 2); },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 14,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "L1 OSC",
+                    "widgets": {
+                      "l1_osc": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 7,
+                        "label": "OSC",
+                        "color": "#3d7dff26"
+                      },
+                      "l1_shape_a": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Shape A",
+                        "bind": "Line 1 Shape A",
+                        "options": [
+                          {
+                            "label": "Saw",
+                            "value": 0
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "Pulse",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "DblSine",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "SawPulse",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Reso1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Reso2",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Reso3",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Custom",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l1_shape_b": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 4,
+                        "label": "Shape B",
+                        "bind": "Line 1 Shape B",
+                        "options": [
+                          {
+                            "label": "Saw",
+                            "value": 0
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "Pulse",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "DblSine",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "SawPulse",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Reso1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Reso2",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Reso3",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Custom",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l1_lines": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 4,
+                        "label": "Lines",
+                        "bind": "Line Select",
+                        "options": [
+                          {
+                            "label": "Line1Only",
+                            "value": 0
+                          },
+                          {
+                            "label": "Line2Only",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "Line1+2",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "Line1+1'",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l1_dcw": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "DCW",
+                        "bind": "Line 1 DCW",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_dcw_amt": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "DCW Env",
+                        "bind": "Line 1 DCW Envelope Depth",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_penv": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "PitchEnv",
+                        "bind": "Line 1 Pitch Envelope Depth",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "wave1": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "l1_out": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "OUT",
+                        "color": "#6b6b6b33"
+                      },
+                      "l1_level": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Level",
+                        "bind": "Line 1 Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_pan": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pan",
+                        "bind": "Line 1 Pan",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "L1 ENV",
+                    "widgets": {
+                      "l1_dcw_env": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "DCW",
+                        "color": "#ff6a1a22"
+                      },
+                      "l1_dcw_a": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "Line 1 DCW ADSR Attack",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_dcw_d": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Line 1 DCW ADSR Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_dcw_s": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "Line 1 DCW ADSR Sustain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_dcw_r": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Line 1 DCW ADSR Release",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_dcw_vel": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "Vel",
+                        "bind": "Line 1 DCW Envelope Velocity",
+                        "options": [
+                          {
+                            "label": "0",
+                            "value": 0
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.06666666666666667
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.13333333333333333
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.26666666666666666
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.4666666666666667
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.5333333333333333
+                          },
+                          {
+                            "label": "9",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "10",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "11",
+                            "value": 0.7333333333333333
+                          },
+                          {
+                            "label": "12",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "13",
+                            "value": 0.8666666666666667
+                          },
+                          {
+                            "label": "14",
+                            "value": 0.9333333333333333
+                          },
+                          {
+                            "label": "15",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l1_dcw_kf": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "KeyF",
+                        "bind": "Line 1 DCW Envelope Keyboard Follow",
+                        "options": [
+                          {
+                            "label": "0",
+                            "value": 0
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.1111111111111111
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.2222222222222222
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.4444444444444444
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.5555555555555556
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.7777777777777778
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.8888888888888888
+                          },
+                          {
+                            "label": "9",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l1_amp_env": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "DCA",
+                        "color": "#3ec96b22"
+                      },
+                      "l1_amp_a": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "Line 1 Amp ADSR Attack",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_amp_d": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Line 1 Amp ADSR Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_amp_s": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "Line 1 Amp ADSR Sustain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_amp_r": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Line 1 Amp ADSR Release",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l1_amp_vel": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Vel",
+                        "bind": "Line 1 Amplitude Envelope Velocity",
+                        "options": [
+                          {
+                            "label": "0",
+                            "value": 0
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.06666666666666667
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.13333333333333333
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.26666666666666666
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.4666666666666667
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.5333333333333333
+                          },
+                          {
+                            "label": "9",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "10",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "11",
+                            "value": 0.7333333333333333
+                          },
+                          {
+                            "label": "12",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "13",
+                            "value": 0.8666666666666667
+                          },
+                          {
+                            "label": "14",
+                            "value": 0.9333333333333333
+                          },
+                          {
+                            "label": "15",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l1_amp_kf": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "KeyF",
+                        "bind": "Line 1 Amplitude Envelope Keyboard Follow",
+                        "options": [
+                          {
+                            "label": "0",
+                            "value": 0
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.1111111111111111
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.2222222222222222
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.4444444444444444
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.5555555555555556
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.7777777777777778
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.8888888888888888
+                          },
+                          {
+                            "label": "9",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "env1": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "L2 OSC",
+                    "widgets": {
+                      "l2_osc": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 7,
+                        "label": "OSC",
+                        "color": "#3d7dff26"
+                      },
+                      "l2_shape_a": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "label": "Shape A",
+                        "bind": "Line 2 Shape A",
+                        "options": [
+                          {
+                            "label": "Saw",
+                            "value": 0
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "Pulse",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "DblSine",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "SawPulse",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Reso1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Reso2",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Reso3",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Custom",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l2_shape_b": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 4,
+                        "label": "Shape B",
+                        "bind": "Line 2 Shape B",
+                        "options": [
+                          {
+                            "label": "Saw",
+                            "value": 0
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "Pulse",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "DblSine",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "SawPulse",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Reso1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Reso2",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Reso3",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Custom",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l2_oct": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 4,
+                        "label": "Oct",
+                        "bind": "Line 2 Detune Octave (relatively to Line 1)",
+                        "options": [
+                          {
+                            "label": "-3",
+                            "value": 0
+                          },
+                          {
+                            "label": "-2",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "-1",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "0",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "3",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l2_dcw": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "DCW",
+                        "bind": "Line 2 DCW",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_dcw_amt": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "DCW Env",
+                        "bind": "Line 2 DCW Envelope Depth",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_fine": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fine",
+                        "bind": "Line 2 Detune Fine (relatively to Line 1)",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "wave2": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      },
+                      "l2_out": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "OUT",
+                        "color": "#6b6b6b33"
+                      },
+                      "l2_level": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Level",
+                        "bind": "Line 2 Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_pan": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pan",
+                        "bind": "Line 2 Pan",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "L2 ENV",
+                    "widgets": {
+                      "l2_dcw_env": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "DCW",
+                        "color": "#ff6a1a22"
+                      },
+                      "l2_dcw_a": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "Line 2 DCW ADSR Attack",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_dcw_d": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Line 2 DCW ADSR Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_dcw_s": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "Line 2 DCW ADSR Sustain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_dcw_r": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Line 2 DCW ADSR Release",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_dcw_vel": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "Vel",
+                        "bind": "Line 2 DCW Envelope Velocity",
+                        "options": [
+                          {
+                            "label": "0",
+                            "value": 0
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.06666666666666667
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.13333333333333333
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.26666666666666666
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.4666666666666667
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.5333333333333333
+                          },
+                          {
+                            "label": "9",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "10",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "11",
+                            "value": 0.7333333333333333
+                          },
+                          {
+                            "label": "12",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "13",
+                            "value": 0.8666666666666667
+                          },
+                          {
+                            "label": "14",
+                            "value": 0.9333333333333333
+                          },
+                          {
+                            "label": "15",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l2_dcw_kf": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "label": "KeyF",
+                        "bind": "Line 2 DCW Envelope Keyboard Follow",
+                        "options": [
+                          {
+                            "label": "0",
+                            "value": 0
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.1111111111111111
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.2222222222222222
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.4444444444444444
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.5555555555555556
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.7777777777777778
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.8888888888888888
+                          },
+                          {
+                            "label": "9",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l2_amp_env": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "DCA",
+                        "color": "#3ec96b22"
+                      },
+                      "l2_amp_a": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "Line 2 Amp ADSR Attack",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_amp_d": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Line 2 Amp ADSR Decay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_amp_s": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "Line 2 Amp ADSR Sustain",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_amp_r": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Line 2 Amp ADSR Release",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2_amp_vel": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Vel",
+                        "bind": "Line 2 Amplitude Envelope Velocity",
+                        "options": [
+                          {
+                            "label": "0",
+                            "value": 0
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.06666666666666667
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.13333333333333333
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.26666666666666666
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.4666666666666667
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.5333333333333333
+                          },
+                          {
+                            "label": "9",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "10",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "11",
+                            "value": 0.7333333333333333
+                          },
+                          {
+                            "label": "12",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "13",
+                            "value": 0.8666666666666667
+                          },
+                          {
+                            "label": "14",
+                            "value": 0.9333333333333333
+                          },
+                          {
+                            "label": "15",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "l2_amp_kf": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "KeyF",
+                        "bind": "Line 2 Amplitude Envelope Keyboard Follow",
+                        "options": [
+                          {
+                            "label": "0",
+                            "value": 0
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.1111111111111111
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.2222222222222222
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.4444444444444444
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.5555555555555556
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.7777777777777778
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.8888888888888888
+                          },
+                          {
+                            "label": "9",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "env2": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "MOD",
+                    "widgets": {
+                      "vib": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "VIB",
+                        "color": "#ffffff14"
+                      },
+                      "vib_depth": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "Vibrato Depth",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vib_rate": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Vibrato Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vib_delay": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Delay",
+                        "bind": "Vibrato Delay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vib_wave": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "label": "Wave",
+                        "bind": "Vibrato Waveform",
+                        "options": [
+                          {
+                            "label": "Sine",
+                            "value": 0
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "Triangle",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "Saw Down",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Saw Up",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "S&H",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "Noise",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "vib_sync": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "label": "Sync",
+                        "bind": "Vibrato Sync",
+                        "options": [
+                          {
+                            "label": "Free",
+                            "value": 0
+                          },
+                          {
+                            "label": "Sync",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "lfo1": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "LFO1",
+                        "color": "#ffffff14"
+                      },
+                      "lfo1_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "LFO1 Unsync Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo1_delay": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Delay",
+                        "bind": "LFO1 Delay Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo1_wave": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Wave",
+                        "bind": "LFO1 Waveform",
+                        "options": [
+                          {
+                            "label": "Sine",
+                            "value": 0
+                          },
+                          {
+                            "label": "Triangle",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "Saw Down",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "Saw Up",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "S&H",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "lfo1_sync": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Sync",
+                        "bind": "LFO1 Sync Rate",
+                        "options": [
+                          {
+                            "label": "8/1",
+                            "value": 0
+                          },
+                          {
+                            "label": "4/1",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "2/1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "1/1",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "1/2",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "1/4",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "1/8",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "1/16",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "1/32",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "lfo2": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "LFO2",
+                        "color": "#ffffff14"
+                      },
+                      "lfo2_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "LFO2 Unsync Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo2_delay": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Delay",
+                        "bind": "LFO2 Delay Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo2_wave": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Wave",
+                        "bind": "LFO2 Waveform",
+                        "options": [
+                          {
+                            "label": "Sine",
+                            "value": 0
+                          },
+                          {
+                            "label": "Triangle",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "Saw Down",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "Saw Up",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "S&H",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "lfo2_sync": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Sync",
+                        "bind": "LFO2 Sync Rate",
+                        "options": [
+                          {
+                            "label": "8/1",
+                            "value": 0
+                          },
+                          {
+                            "label": "4/1",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "2/1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "1/1",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "1/2",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "1/4",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "1/8",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "1/16",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "1/32",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "VOICE",
+                    "widgets": {
+                      "voice": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 8,
+                        "label": "VOICE",
+                        "color": "#6b6b6b33"
+                      },
+                      "glide": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Glide",
+                        "bind": "Portamento Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "unison": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Detune",
+                        "bind": "Unison Detune",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "noise": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Noise",
+                        "bind": "Noise Source Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "ring": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "ModAmt",
+                        "bind": "Lines Modulation Amount",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mod_mode": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "label": "Mod",
+                        "bind": "Modulation Mode",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "Ring",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Noise",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "poly": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 4,
+                        "label": "Poly",
+                        "bind": "Polyphony",
+                        "options": [
+                          {
+                            "label": "Poly",
+                            "value": 0
+                          },
+                          {
+                            "label": "Legato",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "octave": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "label": "Octave",
+                        "bind": "Octave",
+                        "options": [
+                          {
+                            "label": "-2",
+                            "value": 0
+                          },
+                          {
+                            "label": "-1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "0",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "+1",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "+2",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "noise_color": {
+                        "type": "number",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "label": "Color",
+                        "bind": "Noise Source Color",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "tune": {
+                        "type": "number",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "label": "Tune",
+                        "bind": "Master Tune",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "arp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "ARP",
+                        "color": "#ff3b301f"
+                      },
+                      "arp_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "label": "Arp",
+                        "bind": "Arp on/off"
+                      },
+                      "arp_hold": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "label": "Hold",
+                        "bind": "Arp Hold"
+                      },
+                      "arp_pattern": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 4,
+                        "label": "Pattern",
+                        "bind": "Arp Pattern",
+                        "options": [
+                          {
+                            "label": "As played",
+                            "value": 0
+                          },
+                          {
+                            "label": "Up",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "Down",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "Up/Down 1",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "Up/Down 2",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "Random",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_oct": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "label": "Oct",
+                        "bind": "Arp Octave Range",
+                        "options": [
+                          {
+                            "label": "1",
+                            "value": 0
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "4",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_gate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Gate",
+                        "bind": "Arp Gate Length",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "arp_rate": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 11,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "Arp Unsync Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "arp_sync_rate": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 13,
+                        "colSpan": 2,
+                        "label": "Sync",
+                        "bind": "Arp Sync Rate",
+                        "options": [
+                          {
+                            "label": "1/2",
+                            "value": 0
+                          },
+                          {
+                            "label": "1/4",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "1/8",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "1/16",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "1/32",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "1/64",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_sync": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 13,
+                        "colSpan": 2,
+                        "label": "Sync",
+                        "bind": "Arp Sync"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#9a5ad3"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

@@ -1,0 +1,223 @@
+{
+  "project": "e2e/group-lane.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "group-lane",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/e2e/group-lane.k7/clips",
+    "tracks": [
+      {
+        "id": "kicks",
+        "name": "kicks",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "drums",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/e2e/group-lane.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "kick@2",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/e2e/group-lane.k7/clips/kick.wav",
+            "start": 2,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "snares",
+        "name": "snares",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "drums",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "snare@1",
+            "type": "audio",
+            "name": "snare",
+            "source": "<ws>/e2e/group-lane.k7/clips/snare.wav",
+            "start": 1,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "snare@3",
+            "type": "audio",
+            "name": "snare",
+            "source": "<ws>/e2e/group-lane.k7/clips/snare.wav",
+            "start": 3,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "color": "",
+        "mute": false,
+        "solo": false
+      }
+    ],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "kicks": {
+        "from": "kicks",
+        "use": [],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "snares": {
+        "from": "snares",
+        "use": [],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "kicks",
+      "snares"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "kicks": "#af1d26",
+      "snares": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "kicks": "audio",
+      "snares": "audio"
+    },
+    "trackClips": {
+      "kicks": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "kick",
+          "start": 2,
+          "tc": "1:3",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "snares": [
+        {
+          "ref": "snare",
+          "start": 1,
+          "tc": "1:2",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "snare",
+          "start": 3,
+          "tc": "1:4",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

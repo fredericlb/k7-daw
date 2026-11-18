@@ -1,0 +1,36 @@
+{
+  "name": "@studio/engine-client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "k7's engine client \u2014 drives the C++ audio engine over the WebSocket protocol. Consumed as source.",
+  "exports": {
+    "./engineClient": "./src/engineClient.ts",
+    "./engineControl": "./src/engineControl.ts",
+    "./engineBinary": "./src/engineBinary.ts",
+    "./pluginCache": "./src/pluginCache.ts",
+    "./paths": "./src/paths.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "dev": "tsc --noEmit --watch --preserveWatchOutput",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@studio/engine-protocol": "*",
+    "@studio/song": "*",
+    "@studio/web-protocol": "*",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/ws": "^8.5.10",
+    "tsx": "^4.16.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

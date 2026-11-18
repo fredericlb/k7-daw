@@ -1,0 +1,2975 @@
+{
+  "project": "k7-core/audio.compressor.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.compressor",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.compressor.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Compressor",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-block-party",
+        "name": "drums-block-party",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#b61e26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-block-party:fx-block-party",
+            "type": "Block Party",
+            "name": "fx-block-party",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-block-party.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-butter-comp",
+        "name": "drums-butter-comp",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#bc1f25",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-butter-comp:fx-butter-comp",
+            "type": "Butter Comp",
+            "name": "fx-butter-comp",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-butter-comp.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-butter-comp-2",
+        "name": "drums-butter-comp-2",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#c22025",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-butter-comp-2:fx-butter-comp-2",
+            "type": "Butter Comp 2",
+            "name": "fx-butter-comp-2",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-butter-comp-2.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-compresaturator",
+        "name": "drums-compresaturator",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#c82124",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-compresaturator:fx-compresaturator",
+            "type": "Compresaturator",
+            "name": "fx-compresaturator",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-compresaturator.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-logical-4",
+        "name": "drums-logical-4",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#ce2223",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-logical-4:fx-logical-4",
+            "type": "Logical 4",
+            "name": "fx-logical-4",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-logical-4.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-podcast",
+        "name": "drums-podcast",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#d52323",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-podcast:fx-podcast",
+            "type": "Podcast",
+            "name": "fx-podcast",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-podcast.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-podcast-deluxe",
+        "name": "drums-podcast-deluxe",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#db2624",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-podcast-deluxe:fx-podcast-deluxe",
+            "type": "Podcast Deluxe",
+            "name": "fx-podcast-deluxe",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-podcast-deluxe.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-pop",
+        "name": "drums-pop",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dc2e29",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-pop:fx-pop",
+            "type": "Pop",
+            "name": "fx-pop",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-pop.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-pressure-4",
+        "name": "drums-pressure-4",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd3630",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-pressure-4:fx-pressure-4",
+            "type": "Pressure 4",
+            "name": "fx-pressure-4",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-pressure-4.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-purest-squish",
+        "name": "drums-purest-squish",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#de3e36",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-purest-squish:fx-purest-squish",
+            "type": "Purest Squish",
+            "name": "fx-purest-squish",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-purest-squish.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-pyewacket",
+        "name": "drums-pyewacket",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#df463c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-pyewacket:fx-pyewacket",
+            "type": "Pyewacket",
+            "name": "fx-pyewacket",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-pyewacket.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-recurve",
+        "name": "drums-recurve",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e04e42",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-recurve:fx-recurve",
+            "type": "Recurve",
+            "name": "fx-recurve",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-recurve.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-surge",
+        "name": "drums-surge",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e15648",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-surge:fx-surge",
+            "type": "Surge",
+            "name": "fx-surge",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-surge.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-surge-tide",
+        "name": "drums-surge-tide",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e25d4f",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-surge-tide:fx-surge-tide",
+            "type": "Surge Tide",
+            "name": "fx-surge-tide",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-surge-tide.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-thunder",
+        "name": "drums-thunder",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e36455",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-thunder:fx-thunder",
+            "type": "Thunder",
+            "name": "fx-thunder",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-thunder.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-tracktion",
+        "name": "drums-tracktion",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e46c5b",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-tracktion:fx-tracktion",
+            "type": "Compressor",
+            "name": "fx-tracktion",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-tracktion.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-vari-mu",
+        "name": "drums-vari-mu",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.compressor.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-vari-mu:fx-vari-mu",
+            "type": "Vari Mu",
+            "name": "fx-vari-mu",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.compressor.k7/nodes/fx-vari-mu.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 7,
+              "rows": 4,
+              "widgets": {
+                "curve": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "comp_grp": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "COMP",
+                  "color": "#3d7dff26"
+                },
+                "threshold": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Thresh",
+                  "bind": "Threshold",
+                  "min": 0.01,
+                  "max": 1,
+                  "curve": "log"
+                },
+                "ratio": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Ratio",
+                  "bind": "Ratio",
+                  "min": 0,
+                  "max": 0.95
+                },
+                "attack": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "label": "Attack",
+                  "bind": "Attack",
+                  "min": 0.3,
+                  "max": 200,
+                  "curve": "log"
+                },
+                "release": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 1,
+                  "label": "Release",
+                  "bind": "Release",
+                  "min": 10,
+                  "max": 300,
+                  "curve": "log"
+                },
+                "sidechain": {
+                  "type": "knob",
+                  "col": 5,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "SC Gain",
+                  "bind": "Sidechain gain",
+                  "min": -24,
+                  "max": 24
+                }
+              },
+              "script": "// compressor — the transfer curve from Threshold and Ratio (Ratio is the output slope above threshold, 0 = limit), and the live level on it.\nconst FLOOR = -48;\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -120);\nconst lin = (d) => Math.pow(10, d / 20);\nconst last = (arr) => (Array.isArray(arr) && arr.length && typeof arr[arr.length - 1] === \"number\" ? arr[arr.length - 1] : null);\nexport default {\n  curve(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    const thr = Math.max(0.01, Math.min(1, params[\"Threshold\"] ?? 0.5011872053));\n    const r = Math.max(0, Math.min(0.95, params[\"Ratio\"] ?? 0.5));\n    const S = Math.max(10, Math.min(W, H) - 4), ox = 2, oy = 2;\n    const px = (d) => ox + ((Math.max(FLOOR, Math.min(0, d)) - FLOOR) / -FLOOR) * S;\n    const py = (d) => oy + S - ((Math.max(FLOOR, Math.min(0, d)) - FLOOR) / -FLOOR) * S;\n    const shape = (a) => (a <= thr ? a : thr + (a - thr) * r);\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.strokeStyle = \"#6b6b6b\"; ctx.lineWidth = 1;\n    ctx.strokeRect(ox + 0.5, oy + 0.5, S, S);\n    ctx.setLineDash([1, 3]); ctx.beginPath(); ctx.moveTo(px(FLOOR), py(FLOOR)); ctx.lineTo(px(0), py(0)); ctx.stroke();\n    const tx = px(db(thr));\n    ctx.strokeStyle = \"#ff6a1a\"; ctx.beginPath(); ctx.moveTo(tx + 0.5, oy); ctx.lineTo(tx + 0.5, oy + S); ctx.stroke();\n    ctx.setLineDash([]);\n    ctx.strokeStyle = \"#3d7dff\"; ctx.beginPath();\n    for (let i = 0; i <= 64; i++) { const d = FLOOR + (i / 64) * -FLOOR; const x = px(d), y = py(db(shape(lin(d)))); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }\n    ctx.stroke();\n    const a = last(lcd.input), b = last(lcd.output);\n    if (a !== null && b !== null && db(a) > FLOOR) { ctx.fillStyle = \"#3ec96b\"; ctx.beginPath(); ctx.arc(px(db(a)), py(db(b)), 3, 0, Math.PI * 2); ctx.fill(); }\n    const tx0 = ox + S + 8;\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#ff6a1a\"; ctx.fillText(\"THR\", tx0, 4);\n    ctx.font = \"14px ui-monospace, monospace\"; ctx.fillText(`${db(thr).toFixed(1)}`, tx0, 14);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.fillStyle = \"#3d7dff\"; ctx.fillText(\"RATIO\", tx0, 36);\n    ctx.font = \"14px ui-monospace, monospace\"; ctx.fillText(r > 0.001 ? `${(1 / r).toFixed(1)}:1` : \"INF:1\", tx0, 46);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 8,
+                "widgets": {
+                  "curve": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "comp_grp": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "COMP",
+                    "color": "#3d7dff26"
+                  },
+                  "ratio": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Ratio",
+                    "bind": "Ratio",
+                    "min": 0,
+                    "max": 0.95
+                  },
+                  "threshold": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Thresh",
+                    "bind": "Threshold",
+                    "min": 0.01,
+                    "max": 1,
+                    "curve": "log"
+                  },
+                  "attack": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Attack",
+                    "bind": "Attack",
+                    "min": 0.3,
+                    "max": 200,
+                    "curve": "log"
+                  },
+                  "release": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Release",
+                    "bind": "Release",
+                    "min": 10,
+                    "max": 300,
+                    "curve": "log"
+                  },
+                  "sidechain": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "SC Gain",
+                    "bind": "Sidechain gain",
+                    "min": -24,
+                    "max": 24
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "tracktion",
+            "params": {},
+            "defaults": {
+              "Threshold": 0.5011872053,
+              "Ratio": 0.5,
+              "Attack": 100,
+              "Release": 100,
+              "Sidechain gain": 0
+            },
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-block-party": {
+        "from": "drums-block-party",
+        "use": [
+          {
+            "module": "fx-block-party",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "pound": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Pound",
+                  "bind": "Pound",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "block-party",
+            "params": {},
+            "pluginId": "drums-block-party:fx-block-party"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-butter-comp": {
+        "from": "drums-butter-comp",
+        "use": [
+          {
+            "module": "fx-butter-comp",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "levels": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                },
+                "compress": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Comp",
+                  "bind": "Compress",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// levels — the peak level going in (grey) against coming out (green), and their difference in dB.\nconst FLOOR = -48;\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -120);\nconst yOf = (a, H) => { const d = Math.max(FLOOR, Math.min(0, db(a))); return H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); };\nfunction trace(ctx, arr, n, W, H, color) {\n  const len = arr.length;\n  if (len < 2 || n < 2) return;\n  ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const v = arr[len - n + i];\n    const x = (i / (n - 1)) * W, y = yOf(typeof v === \"number\" ? v : 0, H);\n    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n  }\n  ctx.stroke();\n}\nfunction meanDb(arr, k) {\n  const n = Math.min(k, arr.length);\n  if (n < 1) return null;\n  let s = 0;\n  for (let i = arr.length - n; i < arr.length; i++) s += db(typeof arr[i] === \"number\" ? arr[i] : 0);\n  return s / n;\n}\nexport default {\n  levels(lcd) {\n    const { ctx, width: W, height: H, state } = lcd;\n    const input = Array.isArray(lcd.input) ? lcd.input : [], output = Array.isArray(lcd.output) ? lcd.output : [];\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.strokeStyle = \"#6b6b6b\"; ctx.lineWidth = 1;\n    for (const d of [-12, -24, -36]) { const y = H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); ctx.beginPath(); ctx.setLineDash([1, 3]); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }\n    ctx.setLineDash([]);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#6b6b6b\"; ctx.fillText(\"IN\", 2, 2);\n    ctx.fillStyle = \"#3ec96b\"; ctx.fillText(\"OUT\", 18, 2);\n    const n = Math.min(256, input.length, output.length);\n    const inDb = meanDb(input, 24), outDb = meanDb(output, 24);\n    if (n < 2 || inDb === null || outDb === null || inDb < FLOOR) {\n      ctx.strokeStyle = \"#6b6b6b\"; ctx.beginPath(); ctx.moveTo(0, H - 3); ctx.lineTo(W, H - 3); ctx.stroke();\n      ctx.fillStyle = \"#6b6b6b\"; ctx.textAlign = \"right\"; ctx.fillText(\"NO SIGNAL\", W - 2, 2); ctx.textAlign = \"left\";\n      return;\n    }\n    trace(ctx, input, n, W, H, \"#6b6b6b\");\n    trace(ctx, output, n, W, H, \"#3ec96b\");\n    const d = outDb - inDb;\n    state.delta = typeof state.delta === \"number\" ? state.delta * 0.7 + d * 0.3 : d;\n    const v = state.delta;\n    ctx.fillStyle = v < -0.5 ? \"#3d7dff\" : \"#ffffff\"; ctx.textAlign = \"right\";\n    ctx.font = \"14px ui-monospace, monospace\";\n    ctx.fillText(`${v >= 0 ? \"+\" : \"\"}${v.toFixed(1)}`, W - 14, 1);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.fillText(\"DB\", W - 2, 5);\n    ctx.textAlign = \"left\";\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "levels": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "compress": {
+                    "type": "knob",
+                    "col": 1,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Comp",
+                    "bind": "Compress",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "butter-comp",
+            "params": {},
+            "pluginId": "drums-butter-comp:fx-butter-comp"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-butter-comp-2": {
+        "from": "drums-butter-comp-2",
+        "use": [
+          {
+            "module": "fx-butter-comp-2",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "levels": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                },
+                "compress": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Comp",
+                  "bind": "Compress",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// levels — the peak level going in (grey) against coming out (green), and their difference in dB.\nconst FLOOR = -48;\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -120);\nconst yOf = (a, H) => { const d = Math.max(FLOOR, Math.min(0, db(a))); return H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); };\nfunction trace(ctx, arr, n, W, H, color) {\n  const len = arr.length;\n  if (len < 2 || n < 2) return;\n  ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const v = arr[len - n + i];\n    const x = (i / (n - 1)) * W, y = yOf(typeof v === \"number\" ? v : 0, H);\n    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n  }\n  ctx.stroke();\n}\nfunction meanDb(arr, k) {\n  const n = Math.min(k, arr.length);\n  if (n < 1) return null;\n  let s = 0;\n  for (let i = arr.length - n; i < arr.length; i++) s += db(typeof arr[i] === \"number\" ? arr[i] : 0);\n  return s / n;\n}\nexport default {\n  levels(lcd) {\n    const { ctx, width: W, height: H, state } = lcd;\n    const input = Array.isArray(lcd.input) ? lcd.input : [], output = Array.isArray(lcd.output) ? lcd.output : [];\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.strokeStyle = \"#6b6b6b\"; ctx.lineWidth = 1;\n    for (const d of [-12, -24, -36]) { const y = H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); ctx.beginPath(); ctx.setLineDash([1, 3]); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }\n    ctx.setLineDash([]);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#6b6b6b\"; ctx.fillText(\"IN\", 2, 2);\n    ctx.fillStyle = \"#3ec96b\"; ctx.fillText(\"OUT\", 18, 2);\n    const n = Math.min(256, input.length, output.length);\n    const inDb = meanDb(input, 24), outDb = meanDb(output, 24);\n    if (n < 2 || inDb === null || outDb === null || inDb < FLOOR) {\n      ctx.strokeStyle = \"#6b6b6b\"; ctx.beginPath(); ctx.moveTo(0, H - 3); ctx.lineTo(W, H - 3); ctx.stroke();\n      ctx.fillStyle = \"#6b6b6b\"; ctx.textAlign = \"right\"; ctx.fillText(\"NO SIGNAL\", W - 2, 2); ctx.textAlign = \"left\";\n      return;\n    }\n    trace(ctx, input, n, W, H, \"#6b6b6b\");\n    trace(ctx, output, n, W, H, \"#3ec96b\");\n    const d = outDb - inDb;\n    state.delta = typeof state.delta === \"number\" ? state.delta * 0.7 + d * 0.3 : d;\n    const v = state.delta;\n    ctx.fillStyle = v < -0.5 ? \"#3d7dff\" : \"#ffffff\"; ctx.textAlign = \"right\";\n    ctx.font = \"14px ui-monospace, monospace\";\n    ctx.fillText(`${v >= 0 ? \"+\" : \"\"}${v.toFixed(1)}`, W - 14, 1);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.fillText(\"DB\", W - 2, 5);\n    ctx.textAlign = \"left\";\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "levels": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "compress": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Comp",
+                    "bind": "Compress",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "butter-comp-2",
+            "params": {},
+            "pluginId": "drums-butter-comp-2:fx-butter-comp-2"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-compresaturator": {
+        "from": "drums-compresaturator",
+        "use": [
+          {
+            "module": "fx-compresaturator",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "drive": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "Drive",
+                  "min": 0,
+                  "max": 1
+                },
+                "clamp": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Clamp",
+                  "bind": "Clamp",
+                  "min": 0,
+                  "max": 1
+                },
+                "expand": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Expand",
+                  "bind": "Expand",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "Drive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "clamp": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Clamp",
+                    "bind": "Clamp",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "expand": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Expand",
+                    "bind": "Expand",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "compresaturator",
+            "params": {},
+            "pluginId": "drums-compresaturator:fx-compresaturator"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-logical-4": {
+        "from": "drums-logical-4",
+        "use": [
+          {
+            "module": "fx-logical-4",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 4,
+              "widgets": {
+                "levels": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "comp_grp": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 6,
+                  "rowSpan": 2,
+                  "label": "COMP",
+                  "color": "#3d7dff26"
+                },
+                "threshold": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Thresh",
+                  "bind": "Threshold",
+                  "min": 0,
+                  "max": 1
+                },
+                "ratio": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Ratio",
+                  "bind": "Ratio",
+                  "min": 0,
+                  "max": 1
+                },
+                "speed": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Speed",
+                  "bind": "Speed",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// levels — the peak level going in (grey) against coming out (green), and their difference in dB.\nconst FLOOR = -48;\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -120);\nconst yOf = (a, H) => { const d = Math.max(FLOOR, Math.min(0, db(a))); return H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); };\nfunction trace(ctx, arr, n, W, H, color) {\n  const len = arr.length;\n  if (len < 2 || n < 2) return;\n  ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const v = arr[len - n + i];\n    const x = (i / (n - 1)) * W, y = yOf(typeof v === \"number\" ? v : 0, H);\n    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n  }\n  ctx.stroke();\n}\nfunction meanDb(arr, k) {\n  const n = Math.min(k, arr.length);\n  if (n < 1) return null;\n  let s = 0;\n  for (let i = arr.length - n; i < arr.length; i++) s += db(typeof arr[i] === \"number\" ? arr[i] : 0);\n  return s / n;\n}\nexport default {\n  levels(lcd) {\n    const { ctx, width: W, height: H, state } = lcd;\n    const input = Array.isArray(lcd.input) ? lcd.input : [], output = Array.isArray(lcd.output) ? lcd.output : [];\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.strokeStyle = \"#6b6b6b\"; ctx.lineWidth = 1;\n    for (const d of [-12, -24, -36]) { const y = H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); ctx.beginPath(); ctx.setLineDash([1, 3]); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }\n    ctx.setLineDash([]);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#6b6b6b\"; ctx.fillText(\"IN\", 2, 2);\n    ctx.fillStyle = \"#3ec96b\"; ctx.fillText(\"OUT\", 18, 2);\n    const n = Math.min(256, input.length, output.length);\n    const inDb = meanDb(input, 24), outDb = meanDb(output, 24);\n    if (n < 2 || inDb === null || outDb === null || inDb < FLOOR) {\n      ctx.strokeStyle = \"#6b6b6b\"; ctx.beginPath(); ctx.moveTo(0, H - 3); ctx.lineTo(W, H - 3); ctx.stroke();\n      ctx.fillStyle = \"#6b6b6b\"; ctx.textAlign = \"right\"; ctx.fillText(\"NO SIGNAL\", W - 2, 2); ctx.textAlign = \"left\";\n      return;\n    }\n    trace(ctx, input, n, W, H, \"#6b6b6b\");\n    trace(ctx, output, n, W, H, \"#3ec96b\");\n    const d = outDb - inDb;\n    state.delta = typeof state.delta === \"number\" ? state.delta * 0.7 + d * 0.3 : d;\n    const v = state.delta;\n    ctx.fillStyle = v < -0.5 ? \"#3d7dff\" : \"#ffffff\"; ctx.textAlign = \"right\";\n    ctx.font = \"14px ui-monospace, monospace\";\n    ctx.fillText(`${v >= 0 ? \"+\" : \"\"}${v.toFixed(1)}`, W - 14, 1);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.fillText(\"DB\", W - 2, 5);\n    ctx.textAlign = \"left\";\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 7,
+                "widgets": {
+                  "levels": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 3
+                  },
+                  "comp_grp": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 3,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "COMP",
+                    "color": "#3d7dff26"
+                  },
+                  "threshold": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 3,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Thresh",
+                    "bind": "Threshold",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "ratio": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 3,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Ratio",
+                    "bind": "Ratio",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "speed": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 5,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Speed",
+                    "bind": "Speed",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "logical-4",
+            "params": {},
+            "pluginId": "drums-logical-4:fx-logical-4"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-podcast": {
+        "from": "drums-podcast",
+        "use": [
+          {
+            "module": "fx-podcast",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "boost": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Boost",
+                  "bind": "Boost",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "podcast",
+            "params": {},
+            "pluginId": "drums-podcast:fx-podcast"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-podcast-deluxe": {
+        "from": "drums-podcast-deluxe",
+        "use": [
+          {
+            "module": "fx-podcast-deluxe",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "boost": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Boost",
+                  "bind": "Boost",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "podcast-deluxe",
+            "params": {},
+            "pluginId": "drums-podcast-deluxe:fx-podcast-deluxe"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-pop": {
+        "from": "drums-pop",
+        "use": [
+          {
+            "module": "fx-pop",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "intensity": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Intens",
+                  "bind": "Intenst",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "pop",
+            "params": {},
+            "pluginId": "drums-pop:fx-pop"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-pressure-4": {
+        "from": "drums-pressure-4",
+        "use": [
+          {
+            "module": "fx-pressure-4",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 4,
+              "widgets": {
+                "levels": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "comp_grp": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 6,
+                  "rowSpan": 2,
+                  "label": "COMP",
+                  "color": "#3d7dff26"
+                },
+                "pressure": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Pressure",
+                  "bind": "Pressure",
+                  "min": 0,
+                  "max": 1
+                },
+                "speed": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Speed",
+                  "bind": "Speed",
+                  "min": 0,
+                  "max": 1
+                },
+                "mewiness": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Mewi",
+                  "bind": "Mewiness",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// levels — the peak level going in (grey) against coming out (green), and their difference in dB.\nconst FLOOR = -48;\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -120);\nconst yOf = (a, H) => { const d = Math.max(FLOOR, Math.min(0, db(a))); return H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); };\nfunction trace(ctx, arr, n, W, H, color) {\n  const len = arr.length;\n  if (len < 2 || n < 2) return;\n  ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const v = arr[len - n + i];\n    const x = (i / (n - 1)) * W, y = yOf(typeof v === \"number\" ? v : 0, H);\n    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n  }\n  ctx.stroke();\n}\nfunction meanDb(arr, k) {\n  const n = Math.min(k, arr.length);\n  if (n < 1) return null;\n  let s = 0;\n  for (let i = arr.length - n; i < arr.length; i++) s += db(typeof arr[i] === \"number\" ? arr[i] : 0);\n  return s / n;\n}\nexport default {\n  levels(lcd) {\n    const { ctx, width: W, height: H, state } = lcd;\n    const input = Array.isArray(lcd.input) ? lcd.input : [], output = Array.isArray(lcd.output) ? lcd.output : [];\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.strokeStyle = \"#6b6b6b\"; ctx.lineWidth = 1;\n    for (const d of [-12, -24, -36]) { const y = H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); ctx.beginPath(); ctx.setLineDash([1, 3]); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }\n    ctx.setLineDash([]);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#6b6b6b\"; ctx.fillText(\"IN\", 2, 2);\n    ctx.fillStyle = \"#3ec96b\"; ctx.fillText(\"OUT\", 18, 2);\n    const n = Math.min(256, input.length, output.length);\n    const inDb = meanDb(input, 24), outDb = meanDb(output, 24);\n    if (n < 2 || inDb === null || outDb === null || inDb < FLOOR) {\n      ctx.strokeStyle = \"#6b6b6b\"; ctx.beginPath(); ctx.moveTo(0, H - 3); ctx.lineTo(W, H - 3); ctx.stroke();\n      ctx.fillStyle = \"#6b6b6b\"; ctx.textAlign = \"right\"; ctx.fillText(\"NO SIGNAL\", W - 2, 2); ctx.textAlign = \"left\";\n      return;\n    }\n    trace(ctx, input, n, W, H, \"#6b6b6b\");\n    trace(ctx, output, n, W, H, \"#3ec96b\");\n    const d = outDb - inDb;\n    state.delta = typeof state.delta === \"number\" ? state.delta * 0.7 + d * 0.3 : d;\n    const v = state.delta;\n    ctx.fillStyle = v < -0.5 ? \"#3d7dff\" : \"#ffffff\"; ctx.textAlign = \"right\";\n    ctx.font = \"14px ui-monospace, monospace\";\n    ctx.fillText(`${v >= 0 ? \"+\" : \"\"}${v.toFixed(1)}`, W - 14, 1);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.fillText(\"DB\", W - 2, 5);\n    ctx.textAlign = \"left\";\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 6,
+                "widgets": {
+                  "levels": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "comp_grp": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "COMP",
+                    "color": "#3d7dff26"
+                  },
+                  "pressure": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Pressure",
+                    "bind": "Pressure",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "speed": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Speed",
+                    "bind": "Speed",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "mewiness": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Mewi",
+                    "bind": "Mewiness",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "pressure-4",
+            "params": {},
+            "pluginId": "drums-pressure-4:fx-pressure-4"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-purest-squish": {
+        "from": "drums-purest-squish",
+        "use": [
+          {
+            "module": "fx-purest-squish",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "squish": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Squish",
+                  "bind": "Squish",
+                  "min": 0,
+                  "max": 1
+                },
+                "bass_bloom": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Bloom",
+                  "bind": "BassBlm",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "purest-squish",
+            "params": {},
+            "pluginId": "drums-purest-squish:fx-purest-squish"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-pyewacket": {
+        "from": "drums-pyewacket",
+        "use": [
+          {
+            "module": "fx-pyewacket",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 2,
+              "widgets": {
+                "levels": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                },
+                "release": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Release",
+                  "bind": "Release",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// levels — the peak level going in (grey) against coming out (green), and their difference in dB.\nconst FLOOR = -48;\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -120);\nconst yOf = (a, H) => { const d = Math.max(FLOOR, Math.min(0, db(a))); return H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); };\nfunction trace(ctx, arr, n, W, H, color) {\n  const len = arr.length;\n  if (len < 2 || n < 2) return;\n  ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const v = arr[len - n + i];\n    const x = (i / (n - 1)) * W, y = yOf(typeof v === \"number\" ? v : 0, H);\n    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n  }\n  ctx.stroke();\n}\nfunction meanDb(arr, k) {\n  const n = Math.min(k, arr.length);\n  if (n < 1) return null;\n  let s = 0;\n  for (let i = arr.length - n; i < arr.length; i++) s += db(typeof arr[i] === \"number\" ? arr[i] : 0);\n  return s / n;\n}\nexport default {\n  levels(lcd) {\n    const { ctx, width: W, height: H, state } = lcd;\n    const input = Array.isArray(lcd.input) ? lcd.input : [], output = Array.isArray(lcd.output) ? lcd.output : [];\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.strokeStyle = \"#6b6b6b\"; ctx.lineWidth = 1;\n    for (const d of [-12, -24, -36]) { const y = H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); ctx.beginPath(); ctx.setLineDash([1, 3]); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }\n    ctx.setLineDash([]);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#6b6b6b\"; ctx.fillText(\"IN\", 2, 2);\n    ctx.fillStyle = \"#3ec96b\"; ctx.fillText(\"OUT\", 18, 2);\n    const n = Math.min(256, input.length, output.length);\n    const inDb = meanDb(input, 24), outDb = meanDb(output, 24);\n    if (n < 2 || inDb === null || outDb === null || inDb < FLOOR) {\n      ctx.strokeStyle = \"#6b6b6b\"; ctx.beginPath(); ctx.moveTo(0, H - 3); ctx.lineTo(W, H - 3); ctx.stroke();\n      ctx.fillStyle = \"#6b6b6b\"; ctx.textAlign = \"right\"; ctx.fillText(\"NO SIGNAL\", W - 2, 2); ctx.textAlign = \"left\";\n      return;\n    }\n    trace(ctx, input, n, W, H, \"#6b6b6b\");\n    trace(ctx, output, n, W, H, \"#3ec96b\");\n    const d = outDb - inDb;\n    state.delta = typeof state.delta === \"number\" ? state.delta * 0.7 + d * 0.3 : d;\n    const v = state.delta;\n    ctx.fillStyle = v < -0.5 ? \"#3d7dff\" : \"#ffffff\"; ctx.textAlign = \"right\";\n    ctx.font = \"14px ui-monospace, monospace\";\n    ctx.fillText(`${v >= 0 ? \"+\" : \"\"}${v.toFixed(1)}`, W - 14, 1);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.fillText(\"DB\", W - 2, 5);\n    ctx.textAlign = \"left\";\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "levels": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "release": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Release",
+                    "bind": "Release",
+                    "min": 0,
+                    "max": 1
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "pyewacket",
+            "params": {},
+            "pluginId": "drums-pyewacket:fx-pyewacket"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-recurve": {
+        "from": "drums-recurve",
+        "use": [
+          {
+            "module": "fx-recurve",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "recurve",
+            "params": {},
+            "pluginId": "drums-recurve:fx-recurve"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-surge": {
+        "from": "drums-surge",
+        "use": [
+          {
+            "module": "fx-surge",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "surge": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "Surge",
+                  "bind": "Surge",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "surge",
+            "params": {},
+            "pluginId": "drums-surge:fx-surge"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-surge-tide": {
+        "from": "drums-surge-tide",
+        "use": [
+          {
+            "module": "fx-surge-tide",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 2,
+              "widgets": {
+                "node": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Node",
+                  "bind": "SurgeNode",
+                  "min": 0,
+                  "max": 1
+                },
+                "rate": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Rate",
+                  "bind": "SurgeRate",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "surge-tide",
+            "params": {},
+            "pluginId": "drums-surge-tide:fx-surge-tide"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-thunder": {
+        "from": "drums-thunder",
+        "use": [
+          {
+            "module": "fx-thunder",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "thunder": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 4,
+                  "label": "Thunder",
+                  "bind": "Thunder",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "thunder",
+            "params": {},
+            "pluginId": "drums-thunder:fx-thunder"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-tracktion": {
+        "from": "drums-tracktion",
+        "use": [
+          {
+            "module": "fx-tracktion",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 7,
+              "rows": 4,
+              "widgets": {
+                "curve": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2
+                },
+                "comp_grp": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2,
+                  "label": "COMP",
+                  "color": "#3d7dff26"
+                },
+                "threshold": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Thresh",
+                  "bind": "Threshold",
+                  "min": 0.01,
+                  "max": 1,
+                  "curve": "log"
+                },
+                "ratio": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Ratio",
+                  "bind": "Ratio",
+                  "min": 0,
+                  "max": 0.95
+                },
+                "attack": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 0,
+                  "label": "Attack",
+                  "bind": "Attack",
+                  "min": 0.3,
+                  "max": 200,
+                  "curve": "log"
+                },
+                "release": {
+                  "type": "knob",
+                  "col": 6,
+                  "row": 1,
+                  "label": "Release",
+                  "bind": "Release",
+                  "min": 10,
+                  "max": 300,
+                  "curve": "log"
+                },
+                "sidechain": {
+                  "type": "knob",
+                  "col": 5,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "SC Gain",
+                  "bind": "Sidechain gain",
+                  "min": -24,
+                  "max": 24
+                }
+              },
+              "script": "// compressor — the transfer curve from Threshold and Ratio (Ratio is the output slope above threshold, 0 = limit), and the live level on it.\nconst FLOOR = -48;\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -120);\nconst lin = (d) => Math.pow(10, d / 20);\nconst last = (arr) => (Array.isArray(arr) && arr.length && typeof arr[arr.length - 1] === \"number\" ? arr[arr.length - 1] : null);\nexport default {\n  curve(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    const thr = Math.max(0.01, Math.min(1, params[\"Threshold\"] ?? 0.5011872053));\n    const r = Math.max(0, Math.min(0.95, params[\"Ratio\"] ?? 0.5));\n    const S = Math.max(10, Math.min(W, H) - 4), ox = 2, oy = 2;\n    const px = (d) => ox + ((Math.max(FLOOR, Math.min(0, d)) - FLOOR) / -FLOOR) * S;\n    const py = (d) => oy + S - ((Math.max(FLOOR, Math.min(0, d)) - FLOOR) / -FLOOR) * S;\n    const shape = (a) => (a <= thr ? a : thr + (a - thr) * r);\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.strokeStyle = \"#6b6b6b\"; ctx.lineWidth = 1;\n    ctx.strokeRect(ox + 0.5, oy + 0.5, S, S);\n    ctx.setLineDash([1, 3]); ctx.beginPath(); ctx.moveTo(px(FLOOR), py(FLOOR)); ctx.lineTo(px(0), py(0)); ctx.stroke();\n    const tx = px(db(thr));\n    ctx.strokeStyle = \"#ff6a1a\"; ctx.beginPath(); ctx.moveTo(tx + 0.5, oy); ctx.lineTo(tx + 0.5, oy + S); ctx.stroke();\n    ctx.setLineDash([]);\n    ctx.strokeStyle = \"#3d7dff\"; ctx.beginPath();\n    for (let i = 0; i <= 64; i++) { const d = FLOOR + (i / 64) * -FLOOR; const x = px(d), y = py(db(shape(lin(d)))); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }\n    ctx.stroke();\n    const a = last(lcd.input), b = last(lcd.output);\n    if (a !== null && b !== null && db(a) > FLOOR) { ctx.fillStyle = \"#3ec96b\"; ctx.beginPath(); ctx.arc(px(db(a)), py(db(b)), 3, 0, Math.PI * 2); ctx.fill(); }\n    const tx0 = ox + S + 8;\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#ff6a1a\"; ctx.fillText(\"THR\", tx0, 4);\n    ctx.font = \"14px ui-monospace, monospace\"; ctx.fillText(`${db(thr).toFixed(1)}`, tx0, 14);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.fillStyle = \"#3d7dff\"; ctx.fillText(\"RATIO\", tx0, 36);\n    ctx.font = \"14px ui-monospace, monospace\"; ctx.fillText(r > 0.001 ? `${(1 / r).toFixed(1)}:1` : \"INF:1\", tx0, 46);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 8,
+                "widgets": {
+                  "curve": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "comp_grp": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "COMP",
+                    "color": "#3d7dff26"
+                  },
+                  "ratio": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Ratio",
+                    "bind": "Ratio",
+                    "min": 0,
+                    "max": 0.95
+                  },
+                  "threshold": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Thresh",
+                    "bind": "Threshold",
+                    "min": 0.01,
+                    "max": 1,
+                    "curve": "log"
+                  },
+                  "attack": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Attack",
+                    "bind": "Attack",
+                    "min": 0.3,
+                    "max": 200,
+                    "curve": "log"
+                  },
+                  "release": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 4,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Release",
+                    "bind": "Release",
+                    "min": 10,
+                    "max": 300,
+                    "curve": "log"
+                  },
+                  "sidechain": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "SC Gain",
+                    "bind": "Sidechain gain",
+                    "min": -24,
+                    "max": 24
+                  }
+                }
+              }
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "tracktion",
+            "params": {},
+            "defaults": {
+              "Threshold": 0.5011872053,
+              "Ratio": 0.5,
+              "Attack": 100,
+              "Release": 100,
+              "Sidechain gain": 0
+            },
+            "pluginId": "drums-tracktion:fx-tracktion"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-vari-mu": {
+        "from": "drums-vari-mu",
+        "use": [
+          {
+            "module": "fx-vari-mu",
+            "uses": "@k7-core/audio/compressor",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "levels": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                },
+                "intensity": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Intens",
+                  "bind": "Intensty",
+                  "min": 0,
+                  "max": 1
+                },
+                "speed": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Speed",
+                  "bind": "Speed",
+                  "min": 0,
+                  "max": 1
+                }
+              },
+              "script": "// levels — the peak level going in (grey) against coming out (green), and their difference in dB.\nconst FLOOR = -48;\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -120);\nconst yOf = (a, H) => { const d = Math.max(FLOOR, Math.min(0, db(a))); return H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); };\nfunction trace(ctx, arr, n, W, H, color) {\n  const len = arr.length;\n  if (len < 2 || n < 2) return;\n  ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const v = arr[len - n + i];\n    const x = (i / (n - 1)) * W, y = yOf(typeof v === \"number\" ? v : 0, H);\n    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);\n  }\n  ctx.stroke();\n}\nfunction meanDb(arr, k) {\n  const n = Math.min(k, arr.length);\n  if (n < 1) return null;\n  let s = 0;\n  for (let i = arr.length - n; i < arr.length; i++) s += db(typeof arr[i] === \"number\" ? arr[i] : 0);\n  return s / n;\n}\nexport default {\n  levels(lcd) {\n    const { ctx, width: W, height: H, state } = lcd;\n    const input = Array.isArray(lcd.input) ? lcd.input : [], output = Array.isArray(lcd.output) ? lcd.output : [];\n    ctx.fillStyle = \"#000\"; ctx.fillRect(0, 0, W, H);\n    ctx.strokeStyle = \"#6b6b6b\"; ctx.lineWidth = 1;\n    for (const d of [-12, -24, -36]) { const y = H - 3 - ((d - FLOOR) / -FLOOR) * (H - 16); ctx.beginPath(); ctx.setLineDash([1, 3]); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }\n    ctx.setLineDash([]);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.textBaseline = \"top\";\n    ctx.fillStyle = \"#6b6b6b\"; ctx.fillText(\"IN\", 2, 2);\n    ctx.fillStyle = \"#3ec96b\"; ctx.fillText(\"OUT\", 18, 2);\n    const n = Math.min(256, input.length, output.length);\n    const inDb = meanDb(input, 24), outDb = meanDb(output, 24);\n    if (n < 2 || inDb === null || outDb === null || inDb < FLOOR) {\n      ctx.strokeStyle = \"#6b6b6b\"; ctx.beginPath(); ctx.moveTo(0, H - 3); ctx.lineTo(W, H - 3); ctx.stroke();\n      ctx.fillStyle = \"#6b6b6b\"; ctx.textAlign = \"right\"; ctx.fillText(\"NO SIGNAL\", W - 2, 2); ctx.textAlign = \"left\";\n      return;\n    }\n    trace(ctx, input, n, W, H, \"#6b6b6b\");\n    trace(ctx, output, n, W, H, \"#3ec96b\");\n    const d = outDb - inDb;\n    state.delta = typeof state.delta === \"number\" ? state.delta * 0.7 + d * 0.3 : d;\n    const v = state.delta;\n    ctx.fillStyle = v < -0.5 ? \"#3d7dff\" : \"#ffffff\"; ctx.textAlign = \"right\";\n    ctx.font = \"14px ui-monospace, monospace\";\n    ctx.fillText(`${v >= 0 ? \"+\" : \"\"}${v.toFixed(1)}`, W - 14, 1);\n    ctx.font = \"8px ui-monospace, monospace\"; ctx.fillText(\"DB\", W - 2, 5);\n    ctx.textAlign = \"left\";\n  },\n};\n"
+            },
+            "engines": [
+              "tracktion",
+              "block-party",
+              "butter-comp",
+              "butter-comp-2",
+              "compresaturator",
+              "logical-4",
+              "podcast",
+              "podcast-deluxe",
+              "pop",
+              "pressure-4",
+              "purest-squish",
+              "pyewacket",
+              "recurve",
+              "surge",
+              "surge-tide",
+              "thunder",
+              "vari-mu"
+            ],
+            "engine": "vari-mu",
+            "params": {},
+            "pluginId": "drums-vari-mu:fx-vari-mu"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-block-party",
+      "drums-butter-comp",
+      "drums-butter-comp-2",
+      "drums-compresaturator",
+      "drums-logical-4",
+      "drums-podcast",
+      "drums-podcast-deluxe",
+      "drums-pop",
+      "drums-pressure-4",
+      "drums-purest-squish",
+      "drums-pyewacket",
+      "drums-recurve",
+      "drums-surge",
+      "drums-surge-tide",
+      "drums-thunder",
+      "drums-tracktion",
+      "drums-vari-mu"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-block-party": "#b61e26",
+      "drums-butter-comp": "#bc1f25",
+      "drums-butter-comp-2": "#c22025",
+      "drums-compresaturator": "#c82124",
+      "drums-logical-4": "#ce2223",
+      "drums-podcast": "#d52323",
+      "drums-podcast-deluxe": "#db2624",
+      "drums-pop": "#dc2e29",
+      "drums-pressure-4": "#dd3630",
+      "drums-purest-squish": "#de3e36",
+      "drums-pyewacket": "#df463c",
+      "drums-recurve": "#e04e42",
+      "drums-surge": "#e15648",
+      "drums-surge-tide": "#e25d4f",
+      "drums-thunder": "#e36455",
+      "drums-tracktion": "#e46c5b",
+      "drums-vari-mu": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-block-party": "audio",
+      "drums-butter-comp": "audio",
+      "drums-butter-comp-2": "audio",
+      "drums-compresaturator": "audio",
+      "drums-logical-4": "audio",
+      "drums-podcast": "audio",
+      "drums-podcast-deluxe": "audio",
+      "drums-pop": "audio",
+      "drums-pressure-4": "audio",
+      "drums-purest-squish": "audio",
+      "drums-pyewacket": "audio",
+      "drums-recurve": "audio",
+      "drums-surge": "audio",
+      "drums-surge-tide": "audio",
+      "drums-thunder": "audio",
+      "drums-tracktion": "audio",
+      "drums-vari-mu": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-block-party": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-butter-comp": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-butter-comp-2": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-compresaturator": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-logical-4": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-podcast": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-podcast-deluxe": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-pop": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-pressure-4": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-purest-squish": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-pyewacket": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-recurve": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-surge": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-surge-tide": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-thunder": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-tracktion": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-vari-mu": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

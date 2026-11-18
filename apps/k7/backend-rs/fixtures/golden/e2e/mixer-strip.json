@@ -1,0 +1,234 @@
+{
+  "project": "e2e/mixer-strip.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "mixer-strip",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/e2e/mixer-strip.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/e2e/mixer-strip.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          },
+          {
+            "id": "snare@1",
+            "type": "audio",
+            "name": "snare",
+            "source": "<ws>/e2e/mixer-strip.k7/clips/snare.wav",
+            "start": 1,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fader",
+            "type": "Mixer",
+            "name": "fader",
+            "path": "",
+            "presetSave": "<ws>/e2e/mixer-strip.k7/nodes/fader.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Volume": -6,
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fader",
+            "uses": "@meta/audio/mixer",
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "strip": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 2,
+              "rows": 4,
+              "widgets": {
+                "w1": {
+                  "type": "fader",
+                  "col": 0,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Volume",
+                  "bind": "Volume",
+                  "min": -60,
+                  "max": 6
+                },
+                "w2": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 3,
+                  "label": "Pan",
+                  "bind": "Pan",
+                  "min": -1,
+                  "max": 1
+                },
+                "w5": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 0,
+                  "label": "High",
+                  "bind": "High",
+                  "min": -18,
+                  "max": 18
+                },
+                "w4": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "label": "Mid",
+                  "bind": "Mid",
+                  "min": -18,
+                  "max": 18
+                },
+                "w3": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 2,
+                  "label": "Low",
+                  "bind": "Low",
+                  "min": -18,
+                  "max": 18
+                },
+                "w6": {
+                  "type": "button",
+                  "col": 1,
+                  "row": 3,
+                  "label": "+10",
+                  "bind": "@highlight"
+                }
+              }
+            },
+            "params": {
+              "Volume": -6
+            },
+            "defaults": {
+              "Volume": 0,
+              "Pan": 0,
+              "Low": 0,
+              "Mid": 0,
+              "High": 0
+            },
+            "pluginId": "drums:fader"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "trackMixers": {
+      "drums": "fader"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        },
+        {
+          "ref": "snare",
+          "start": 1,
+          "tc": "1:2",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

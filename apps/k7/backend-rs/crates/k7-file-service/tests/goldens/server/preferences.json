@@ -1,0 +1,830 @@
+{
+ "cases": [
+  {
+   "name": "a k7x alone",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\neditor({ vim: false })\nstemsChain(\"@k7-core/chains/stems\")\n"
+   },
+   "ret": {
+    "audioDevice": "Focusrite USB (ASIO)",
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": false,
+    "stemsChain": "@k7-core/chains/stems",
+    "instrumentalChain": null
+   },
+   "changed": {}
+  },
+  {
+   "name": "no file at all",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {},
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {}
+  },
+  {
+   "name": "a legacy yaml alone",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n"
+   },
+   "ret": {
+    "audioDevice": "Focusrite USB (ASIO)",
+    "channels": {
+     "in": "1 Voice · 3+4 Keys",
+     "out": "1+2 Mains"
+    },
+    "vim": false,
+    "stemsChain": "@k7-core/chains/stems",
+    "instrumentalChain": "@k7-core/chains/inst"
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({\n  in: [ch([1]).label(\"Voice\"), ch([3, 4]).label(\"Keys\")],\n  out: [ch([1, 2]).label(\"Mains\")],\n})\ninputPairs([1, 3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\ninstrumentalChain(\"@k7-core/chains/inst\")\ncueOutput(\"Mains\")\n",
+    "home/preferences.yaml.pre-k7x": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a legacy yaml beside an older backup",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml.pre-k7x": "old\n",
+    "home/preferences.yaml.pre-k7x.1": "older\n"
+   },
+   "ret": {
+    "audioDevice": "Focusrite USB (ASIO)",
+    "channels": {
+     "in": "1 Voice · 3+4 Keys",
+     "out": "1+2 Mains"
+    },
+    "vim": false,
+    "stemsChain": "@k7-core/chains/stems",
+    "instrumentalChain": "@k7-core/chains/inst"
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({\n  in: [ch([1]).label(\"Voice\"), ch([3, 4]).label(\"Keys\")],\n  out: [ch([1, 2]).label(\"Mains\")],\n})\ninputPairs([1, 3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\ninstrumentalChain(\"@k7-core/chains/inst\")\ncueOutput(\"Mains\")\n",
+    "home/preferences.yaml.pre-k7x.2": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml that does not read",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "a: [1\n"
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {}
+  },
+  {
+   "name": "an empty yaml",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": ""
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+    "home/preferences.yaml.pre-k7x": "",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a k7x that does not read",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice(\n"
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {}
+  },
+  {
+   "name": "an empty k7x alone",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.k7x": ""
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {}
+  },
+  {
+   "name": "an empty k7x beside a yaml",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.k7x": "",
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n"
+   },
+   "ret": {
+    "audioDevice": "Focusrite USB (ASIO)",
+    "channels": {
+     "in": "1 Voice · 3+4 Keys",
+     "out": "1+2 Mains"
+    },
+    "vim": false,
+    "stemsChain": "@k7-core/chains/stems",
+    "instrumentalChain": "@k7-core/chains/inst"
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({\n  in: [ch([1]).label(\"Voice\"), ch([3, 4]).label(\"Keys\")],\n  out: [ch([1, 2]).label(\"Mains\")],\n})\ninputPairs([1, 3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\ninstrumentalChain(\"@k7-core/chains/inst\")\ncueOutput(\"Mains\")\n",
+    "home/preferences.yaml.pre-k7x": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "both files, the k7x wins",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\neditor({ vim: false })\nstemsChain(\"@k7-core/chains/stems\")\n",
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n"
+   },
+   "ret": {
+    "audioDevice": "Focusrite USB (ASIO)",
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": false,
+    "stemsChain": "@k7-core/chains/stems",
+    "instrumentalChain": null
+   },
+   "changed": {}
+  },
+  {
+   "name": "a yaml of the old string form",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice: Focusrite\nchannels:\n  in: [{ ch: 2, label: A }]\ncueOutput: [3, 4]\n"
+   },
+   "ret": {
+    "audioDevice": "Focusrite",
+    "channels": {
+     "in": "2 A",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [ch([2]).label(\"A\")], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"Focusrite\" })\ncueOutput([3, 4])\n",
+    "home/preferences.yaml.pre-k7x": "audioDevice: Focusrite\nchannels:\n  in: [{ ch: 2, label: A }]\ncueOutput: [3, 4]\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml with a byte order mark and CRLF",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "﻿editor:\r\n  vim: false\r\n"
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": false,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: false })\n",
+    "home/preferences.yaml.pre-k7x": "﻿editor:\r\n  vim: false\r\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml with an alias",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "base: &b { name: X }\naudioDevice: *b\n"
+   },
+   "ret": {
+    "audioDevice": "X",
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"X\" })\n",
+    "home/preferences.yaml.pre-k7x": "base: &b { name: X }\naudioDevice: *b\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml with a repeated key",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "editor: {vim: true}\neditor: {vim: false}\n"
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {}
+  },
+  {
+   "name": "a yaml of two documents",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "editor: {vim: false}\n---\nx: 1\n"
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {}
+  },
+  {
+   "name": "a yaml whose vim is not a boolean",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "editor: {vim: yes}\n"
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+    "home/preferences.yaml.pre-k7x": "editor: {vim: yes}\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml that is a list",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "- 1\n- 2\n"
+   },
+   "ret": {
+    "audioDevice": null,
+    "channels": {
+     "in": "",
+     "out": ""
+    },
+    "vim": true,
+    "stemsChain": null,
+    "instrumentalChain": null
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+    "home/preferences.yaml.pre-k7x": "- 1\n- 2\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "another process holds the upgrade",
+   "fn": "view",
+   "args": {
+    "arg": null
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.k7x.lock": "1\telsewhere\t0\tx\n"
+   },
+   "ret": {
+    "audioDevice": "Focusrite USB (ASIO)",
+    "channels": {
+     "in": "1 Voice · 3+4 Keys",
+     "out": "1+2 Mains"
+    },
+    "vim": false,
+    "stemsChain": "@k7-core/chains/stems",
+    "instrumentalChain": "@k7-core/chains/inst"
+   },
+   "changed": {}
+  },
+  {
+   "name": "a k7x alone",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\neditor({ vim: false })\nstemsChain(\"@k7-core/chains/stems\")\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\n"
+   }
+  },
+  {
+   "name": "no file at all",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {},
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n"
+   }
+  },
+  {
+   "name": "a legacy yaml alone",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({\n  in: [ch([1]).label(\"Voice\"), ch([3, 4]).label(\"Keys\")],\n  out: [ch([1, 2]).label(\"Mains\")],\n})\ninputPairs([1, 3])\neditor({ vim: true })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\ninstrumentalChain(\"@k7-core/chains/inst\")\ncueOutput(\"Mains\")\n",
+    "home/preferences.yaml.pre-k7x": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a legacy yaml beside an older backup",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml.pre-k7x": "old\n",
+    "home/preferences.yaml.pre-k7x.1": "older\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({\n  in: [ch([1]).label(\"Voice\"), ch([3, 4]).label(\"Keys\")],\n  out: [ch([1, 2]).label(\"Mains\")],\n})\ninputPairs([1, 3])\neditor({ vim: true })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\ninstrumentalChain(\"@k7-core/chains/inst\")\ncueOutput(\"Mains\")\n",
+    "home/preferences.yaml.pre-k7x.2": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml that does not read",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "a: [1\n"
+   },
+   "thrown": "$DIR/home/preferences.yaml does not read; fix it by hand or move it away, nothing was saved",
+   "changed": {}
+  },
+  {
+   "name": "an empty yaml",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": ""
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+    "home/preferences.yaml.pre-k7x": "",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a k7x that does not read",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice(\n"
+   },
+   "thrown": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved",
+   "changed": {}
+  },
+  {
+   "name": "an empty k7x alone",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.k7x": ""
+   },
+   "thrown": "$DIR/home/preferences.k7x is empty; fix it by hand or move it away, nothing was saved",
+   "changed": {}
+  },
+  {
+   "name": "an empty k7x beside a yaml",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.k7x": "",
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({\n  in: [ch([1]).label(\"Voice\"), ch([3, 4]).label(\"Keys\")],\n  out: [ch([1, 2]).label(\"Mains\")],\n})\ninputPairs([1, 3])\neditor({ vim: true })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\ninstrumentalChain(\"@k7-core/chains/inst\")\ncueOutput(\"Mains\")\n",
+    "home/preferences.yaml.pre-k7x": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "both files, the k7x wins",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\neditor({ vim: false })\nstemsChain(\"@k7-core/chains/stems\")\n",
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\n"
+   }
+  },
+  {
+   "name": "a yaml of the old string form",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice: Focusrite\nchannels:\n  in: [{ ch: 2, label: A }]\ncueOutput: [3, 4]\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [ch([2]).label(\"A\")], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"Focusrite\" })\ncueOutput([3, 4])\n",
+    "home/preferences.yaml.pre-k7x": "audioDevice: Focusrite\nchannels:\n  in: [{ ch: 2, label: A }]\ncueOutput: [3, 4]\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml with a byte order mark and CRLF",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "﻿editor:\r\n  vim: false\r\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+    "home/preferences.yaml.pre-k7x": "﻿editor:\r\n  vim: false\r\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml with an alias",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "base: &b { name: X }\naudioDevice: *b\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\naudioDevice({ name: \"X\" })\n",
+    "home/preferences.yaml.pre-k7x": "base: &b { name: X }\naudioDevice: *b\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml with a repeated key",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "editor: {vim: true}\neditor: {vim: false}\n"
+   },
+   "thrown": "$DIR/home/preferences.yaml does not read; fix it by hand or move it away, nothing was saved",
+   "changed": {}
+  },
+  {
+   "name": "a yaml of two documents",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "editor: {vim: false}\n---\nx: 1\n"
+   },
+   "thrown": "$DIR/home/preferences.yaml does not read; fix it by hand or move it away, nothing was saved",
+   "changed": {}
+  },
+  {
+   "name": "a yaml whose vim is not a boolean",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "editor: {vim: yes}\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+    "home/preferences.yaml.pre-k7x": "editor: {vim: yes}\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "a yaml that is a list",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "- 1\n- 2\n"
+   },
+   "ret": {
+    "vim": true
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: true })\n",
+    "home/preferences.yaml.pre-k7x": "- 1\n- 2\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "another process holds the upgrade",
+   "fn": "setVim",
+   "args": {
+    "arg": true
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.k7x.lock": "1\telsewhere\t0\tx\n"
+   },
+   "thrown": "$DIR/home/preferences.k7x is being upgraded by another process; nothing was saved, try again",
+   "changed": {}
+  },
+  {
+   "name": "stems chain set, trimmed",
+   "fn": "setStems",
+   "args": {
+    "arg": "  @k7-core/chains/stems "
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\neditor({ vim: false })\nstemsChain(\"@k7-core/chains/stems\")\n"
+   },
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite USB",
+     "type": "ASIO"
+    },
+    "stemsChain": "@k7-core/chains/stems"
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\n"
+   }
+  },
+  {
+   "name": "stems chain cleared",
+   "fn": "setStems",
+   "args": {
+    "arg": ""
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\neditor({ vim: false })\nstemsChain(\"@k7-core/chains/stems\")\n"
+   },
+   "ret": {
+    "channels": {
+     "in": [],
+     "out": []
+    },
+    "inputPairs": [],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite USB",
+     "type": "ASIO"
+    }
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({ in: [], out: [] })\ninputPairs([])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\n"
+   }
+  },
+  {
+   "name": "instrumental chain set over a yaml",
+   "fn": "setInstr",
+   "args": {
+    "arg": "@k7-core/chains/inst"
+   },
+   "tree": {
+    "home/preferences.yaml": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n"
+   },
+   "ret": {
+    "channels": {
+     "in": [
+      {
+       "ch": [
+        1
+       ],
+       "label": "Voice"
+      },
+      {
+       "ch": [
+        3,
+        4
+       ],
+       "label": "Keys"
+      }
+     ],
+     "out": [
+      {
+       "ch": [
+        1,
+        2
+       ],
+       "label": "Mains"
+      }
+     ]
+    },
+    "inputPairs": [
+     1,
+     3
+    ],
+    "editor": {
+     "vim": false
+    },
+    "audioDevice": {
+     "name": "Focusrite USB",
+     "type": "ASIO"
+    },
+    "stemsChain": "@k7-core/chains/stems",
+    "instrumentalChain": "@k7-core/chains/inst",
+    "cueOutput": "Mains"
+   },
+   "changed": {
+    "home/preferences.k7x": "channels({\n  in: [ch([1]).label(\"Voice\"), ch([3, 4]).label(\"Keys\")],\n  out: [ch([1, 2]).label(\"Mains\")],\n})\ninputPairs([1, 3])\neditor({ vim: false })\naudioDevice({ name: \"Focusrite USB\", type: \"ASIO\" })\nstemsChain(\"@k7-core/chains/stems\")\ninstrumentalChain(\"@k7-core/chains/inst\")\ncueOutput(\"Mains\")\n",
+    "home/preferences.yaml.pre-k7x": "audioDevice:\n  name: Focusrite USB\n  type: ASIO\nchannels:\n  in:\n    - { ch: 1, label: Voice }\n    - { ch: [3, 4], label: Keys }\n  out:\n    - { ch: [1, 2], label: Mains }\ninputPairs: [2, 3, 3]\neditor:\n  vim: false\nstemsChain: \"@k7-core/chains/stems\"\ninstrumentalChain: \"  @k7-core/chains/inst \"\ncueOutput: Mains\n",
+    "home/preferences.yaml": null
+   }
+  },
+  {
+   "name": "stems chain on a k7x that does not read",
+   "fn": "setStems",
+   "args": {
+    "arg": "x"
+   },
+   "tree": {
+    "home/preferences.k7x": "audioDevice(\n"
+   },
+   "thrown": "$DIR/home/preferences.k7x does not read; fix it by hand or move it away, nothing was saved",
+   "changed": {}
+  }
+ ]
+}

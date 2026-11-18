@@ -1,0 +1,1352 @@
+{
+  "project": "k7-core/instruments.synth.art-buchla-easel-v.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.synth.art-buchla-easel-v",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.synth.art-buchla-easel-v.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#9a5ad3",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/synth/art-buchla-easel-v",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "OSC",
+                  "widgets": {
+                    "modosc": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "MOD",
+                      "color": "#3d7dff26"
+                    },
+                    "mod_freq": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Freq",
+                      "bind": "Mod Osc Freq",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mod_index": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Index",
+                      "bind": "Modulation",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mod_wave": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "bind": "Mod Osc Waveshape",
+                      "options": [
+                        {
+                          "label": "Triangle",
+                          "value": 0
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Sawtooth",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "mod_mode": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "bind": "Modulation Mode",
+                      "options": [
+                        {
+                          "label": "F.M. Osc",
+                          "value": 0
+                        },
+                        {
+                          "label": "A.M. Osc",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Bal Ext.",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "mod_fine": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Fine",
+                      "bind": "Mod Osc Fine",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mod_cv": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Freq CV",
+                      "bind": "Mod Osc Freq CV",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "mod_range": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "bind": "Mod Osc Range",
+                      "options": [
+                        {
+                          "label": "Low",
+                          "value": 0
+                        },
+                        {
+                          "label": "High",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "mod_kbd": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Keys",
+                      "bind": "Mod Osc Keyboard"
+                    },
+                    "comp": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "OSC",
+                      "color": "#ff6a1a26"
+                    },
+                    "pitch": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Pitch",
+                      "bind": "Comp Osc Pitch",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "timbre": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Timbre",
+                      "bind": "Comp Osc Timbre",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "shape": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Shape",
+                      "bind": "Comp Osc Wave Mix",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "osc_screen": {
+                      "type": "lcdscreen",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 4,
+                      "rowSpan": 2
+                    },
+                    "comp_wave": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "bind": "Comp Osc Waveshape",
+                      "options": [
+                        {
+                          "label": "Triangle",
+                          "value": 0
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Impulse",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "comp_fine": {
+                      "type": "number",
+                      "col": 10,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Fine",
+                      "bind": "Comp Osc Fine",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "gates": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "LPG",
+                      "color": "#ffffff14"
+                    },
+                    "gate1": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Gate 1",
+                      "bind": "Gate 1 Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "gate2": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Gate 2",
+                      "bind": "Gate 2 Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "gate1_mode": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "bind": "Gate 1 Mode",
+                      "options": [
+                        {
+                          "label": "VCA",
+                          "value": 0
+                        },
+                        {
+                          "label": "Combination",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "LoPassFilter",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "gate2_mode": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 2,
+                      "colSpan": 2,
+                      "bind": "Gate 2 Mode",
+                      "options": [
+                        {
+                          "label": "VCA",
+                          "value": 0
+                        },
+                        {
+                          "label": "Combination",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "LoPassFilter",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "gate1_vac": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 3,
+                      "colSpan": 2,
+                      "bind": "Gate 1 Vactrol Time",
+                      "options": [
+                        {
+                          "label": "Fast",
+                          "value": 0
+                        },
+                        {
+                          "label": "Medium",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Slow",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "gate2_vac": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 3,
+                      "colSpan": 2,
+                      "bind": "Gate 2 Vactrol Time",
+                      "options": [
+                        {
+                          "label": "Fast",
+                          "value": 0
+                        },
+                        {
+                          "label": "Medium",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Slow",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "SEQ",
+                  "widgets": {
+                    "seq": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4,
+                      "label": "SEQ",
+                      "color": "#3ec96b26"
+                    },
+                    "step1": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Step 1",
+                      "bind": "Seq Voltage 1",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "step2": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Step 2",
+                      "bind": "Seq Voltage 2",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "step3": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Step 3",
+                      "bind": "Seq Voltage 3",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "step4": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Step 4",
+                      "bind": "Seq Voltage 4",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "step5": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Step 5",
+                      "bind": "Seq Voltage 5",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "seq_stages": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "bind": "Seq Stages",
+                      "options": [
+                        {
+                          "label": "5",
+                          "value": 0
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "3",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "seq_trig": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 3,
+                      "colSpan": 2,
+                      "bind": "Seq Trig Select",
+                      "options": [
+                        {
+                          "label": "Clock",
+                          "value": 0
+                        },
+                        {
+                          "label": "Pulser",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Keyboard",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "seq_screen": {
+                      "type": "lcdscreen",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 4,
+                      "rowSpan": 2
+                    },
+                    "env": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "ENV",
+                      "color": "#6b6b6b33"
+                    },
+                    "attack": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Attack",
+                      "bind": "Env Attack Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "sustain": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "Env Sustain Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "decay": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Decay",
+                      "bind": "Env Decay Rate",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "env_screen": {
+                      "type": "lcdscreen",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 4,
+                      "rowSpan": 2
+                    },
+                    "env_mode": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "bind": "Env Mode Select",
+                      "options": [
+                        {
+                          "label": "Self",
+                          "value": 0
+                        },
+                        {
+                          "label": "Transient",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Sustained",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "env_trig": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 3,
+                      "colSpan": 2,
+                      "bind": "Env Trig Select",
+                      "options": [
+                        {
+                          "label": "Sequencer",
+                          "value": 0
+                        },
+                        {
+                          "label": "Pulser",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Keyboard",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pulser": {
+                      "type": "group",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 4,
+                      "label": "PULSE",
+                      "color": "#ff3b3026"
+                    },
+                    "period": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Period",
+                      "bind": "Pulser Period",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pulse_mode": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 2,
+                      "colSpan": 2,
+                      "bind": "Pulser Mode",
+                      "options": [
+                        {
+                          "label": "Clock",
+                          "value": 0
+                        },
+                        {
+                          "label": "Free",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Sync",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pulse_trig": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 3,
+                      "colSpan": 2,
+                      "bind": "Pulser Trig Select",
+                      "options": [
+                        {
+                          "label": "Sequencer",
+                          "value": 0
+                        },
+                        {
+                          "label": "Pulser",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Keyboard",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "script": "// Buchla Easel V screens: the complex oscillator's wave, the five sequencer steps, the envelope's shape.\nconst BLUE = \"#3d7dff\", GREEN = \"#3ec96b\", WHITE = \"#ffffff\", ORANGE = \"#ff6a1a\", GREY = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst num = (v, d) => (typeof v === \"number\" && Number.isFinite(v) ? v : d);\nconst clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));\n\nfunction glass(ctx, W, H) {\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n}\n\nfunction tag(ctx, text, x, y, color, align) {\n  ctx.font = FONT;\n  ctx.fillStyle = color;\n  ctx.textAlign = align || \"left\";\n  ctx.textBaseline = \"top\";\n  ctx.fillText(text, x, y);\n}\n\n// One cycle of the selected waveshape at phase p in [0, 1).\nfunction shapeAt(p, sel) {\n  if (sel < 0.25) return 1 - 4 * Math.abs(p - 0.5);\n  if (sel < 0.75) return p < 0.5 ? 1 : -1;\n  return p < 0.06 ? 1 : -0.15;\n}\n\n// The timbre wavefolder: more drive folds the sine back on itself.\nfunction fold(x, t) {\n  return Math.sin(x * (1 + t * 4) * Math.PI / 2);\n}\n\nconst WAVE_NAMES = [\"TRI\", \"SQR\", \"IMP\"];\n\nexport default {\n  osc_screen(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    glass(ctx, W, H);\n    if (W < 10 || H < 20) return;\n    const timbre = clamp(num(params[\"Comp Osc Timbre\"], 1), 0, 1);\n    const mix = clamp(num(params[\"Comp Osc Wave Mix\"], 1), 0, 1);\n    const sel = num(params[\"Comp Osc Waveshape\"], 0);\n    const index = clamp(num(params[\"Modulation\"], 0.5), 0, 1);\n    const modeFM = num(params[\"Modulation Mode\"], 0) < 0.25;\n    const modeAM = !modeFM && num(params[\"Modulation Mode\"], 0) < 0.75;\n    const mid = (H + 10) / 2, amp = (H - 14) / 2;\n    ctx.lineWidth = 1;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(0, mid + 0.5);\n    ctx.lineTo(W, mid + 0.5);\n    ctx.stroke();\n    ctx.strokeStyle = ORANGE;\n    ctx.beginPath();\n    const cycles = 2;\n    for (let i = 0; i <= W; i++) {\n      const t = (i / W) * cycles;\n      const mod = Math.sin(t * Math.PI * 2 * 0.5);\n      const ph = modeFM ? t + index * 0.25 * mod : t;\n      const p = ((ph % 1) + 1) % 1;\n      const sine = fold(Math.sin(p * Math.PI * 2), timbre);\n      let v = sine * (1 - mix) + shapeAt(p, sel) * mix;\n      if (modeAM) v *= 1 - index * 0.5 * (1 - mod);\n      const y = mid - clamp(v, -1, 1) * amp;\n      if (i === 0) ctx.moveTo(i, y);\n      else ctx.lineTo(i, y);\n    }\n    ctx.stroke();\n    const idx = clamp(Math.round(clamp(sel, 0, 1) * 2), 0, 2);\n    tag(ctx, \"SINE+\" + WAVE_NAMES[idx], 2, 2, WHITE);\n    tag(ctx, modeFM ? \"FM\" : modeAM ? \"AM\" : \"EXT\", W - 2, 2, BLUE, \"right\");\n  },\n\n  seq_screen(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    glass(ctx, W, H);\n    if (W < 20 || H < 20) return;\n    const st = num(params[\"Seq Stages\"], 0);\n    const stages = st < 0.25 ? 5 : st < 0.75 ? 4 : 3;\n    const top = 12, bot = H - 3, h = bot - top;\n    const slot = W / 5, bw = Math.max(2, slot - 6);\n    for (let i = 0; i < 5; i++) {\n      const v = clamp(num(params[`Seq Voltage ${i + 1}`], 0), 0, 1);\n      const x = i * slot + 3;\n      const on = i < stages;\n      ctx.strokeStyle = GREY;\n      ctx.strokeRect(x + 0.5, top + 0.5, bw - 1, h - 1);\n      ctx.fillStyle = on ? GREEN : GREY;\n      const bh = Math.max(1, v * (h - 2));\n      ctx.fillRect(x + 1, bot - 1 - bh, bw - 2, bh);\n    }\n    tag(ctx, stages + \" STAGES\", 2, 2, WHITE);\n  },\n\n  env_screen(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    glass(ctx, W, H);\n    if (W < 10 || H < 20) return;\n    const a = clamp(num(params[\"Env Attack Rate\"], 1), 0, 1);\n    const s = clamp(num(params[\"Env Sustain Rate\"], 1), 0, 1);\n    const d = clamp(num(params[\"Env Decay Rate\"], 0.5), 0, 1);\n    const m = num(params[\"Env Mode Select\"], 0);\n    const sustained = m >= 0.75;\n    const self = m < 0.25;\n    const hold = sustained ? 0.6 : s;\n    const total = Math.max(0.2, a + hold + d);\n    const top = 12, bot = H - 3;\n    const sx = (W - 4) / total;\n    ctx.lineWidth = 1;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(0, bot + 0.5);\n    ctx.lineTo(W, bot + 0.5);\n    ctx.stroke();\n    ctx.strokeStyle = GREEN;\n    ctx.beginPath();\n    ctx.moveTo(2, bot);\n    ctx.lineTo(2 + a * sx, top);\n    ctx.lineTo(2 + (a + hold) * sx, top);\n    ctx.lineTo(2 + (a + hold + d) * sx, bot);\n    ctx.stroke();\n    if (self) {\n      ctx.strokeStyle = GREY;\n      ctx.beginPath();\n      ctx.moveTo(2 + (a + hold + d) * sx, bot - 3);\n      ctx.lineTo(W - 2, bot - 3);\n      ctx.stroke();\n    }\n    tag(ctx, self ? \"SELF\" : sustained ? \"SUSTAINED\" : \"TRANSIENT\", 2, 2, WHITE);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 16,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "OSC",
+                    "widgets": {
+                      "modosc": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "MOD",
+                        "color": "#3d7dff26"
+                      },
+                      "mod_freq": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Freq",
+                        "bind": "Mod Osc Freq",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mod_index": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Index",
+                        "bind": "Modulation",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mod_fine": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Fine",
+                        "bind": "Mod Osc Fine",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mod_cv": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Freq CV",
+                        "bind": "Mod Osc Freq CV",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "mod_wave": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "bind": "Mod Osc Waveshape",
+                        "options": [
+                          {
+                            "label": "Triangle",
+                            "value": 0
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Sawtooth",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "mod_mode": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "bind": "Modulation Mode",
+                        "options": [
+                          {
+                            "label": "F.M. Osc",
+                            "value": 0
+                          },
+                          {
+                            "label": "A.M. Osc",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Bal Ext.",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "mod_range": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "bind": "Mod Osc Range",
+                        "options": [
+                          {
+                            "label": "Low",
+                            "value": 0
+                          },
+                          {
+                            "label": "High",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "mod_kbd": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "label": "Keys",
+                        "bind": "Mod Osc Keyboard"
+                      },
+                      "comp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "OSC",
+                        "color": "#ff6a1a26"
+                      },
+                      "pitch": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Pitch",
+                        "bind": "Comp Osc Pitch",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "timbre": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Timbre",
+                        "bind": "Comp Osc Timbre",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "shape": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Shape",
+                        "bind": "Comp Osc Wave Mix",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "comp_wave": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "bind": "Comp Osc Waveshape",
+                        "options": [
+                          {
+                            "label": "Triangle",
+                            "value": 0
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Impulse",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "comp_fine": {
+                        "type": "number",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Fine",
+                        "bind": "Comp Osc Fine",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "osc_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "gates": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "LPG",
+                        "color": "#ffffff14"
+                      },
+                      "gate1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Gate 1",
+                        "bind": "Gate 1 Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "gate2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Gate 2",
+                        "bind": "Gate 2 Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "gate1_mode": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 14,
+                        "colSpan": 2,
+                        "bind": "Gate 1 Mode",
+                        "options": [
+                          {
+                            "label": "VCA",
+                            "value": 0
+                          },
+                          {
+                            "label": "Combination",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "LoPassFilter",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "gate2_mode": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 14,
+                        "colSpan": 2,
+                        "bind": "Gate 2 Mode",
+                        "options": [
+                          {
+                            "label": "VCA",
+                            "value": 0
+                          },
+                          {
+                            "label": "Combination",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "LoPassFilter",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "gate1_vac": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 15,
+                        "colSpan": 2,
+                        "bind": "Gate 1 Vactrol Time",
+                        "options": [
+                          {
+                            "label": "Fast",
+                            "value": 0
+                          },
+                          {
+                            "label": "Medium",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Slow",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "gate2_vac": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 15,
+                        "colSpan": 2,
+                        "bind": "Gate 2 Vactrol Time",
+                        "options": [
+                          {
+                            "label": "Fast",
+                            "value": 0
+                          },
+                          {
+                            "label": "Medium",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Slow",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "SEQ",
+                    "widgets": {
+                      "seq": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 8,
+                        "label": "SEQ",
+                        "color": "#3ec96b26"
+                      },
+                      "step1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Step 1",
+                        "bind": "Seq Voltage 1",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "step2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Step 2",
+                        "bind": "Seq Voltage 2",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "step3": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Step 3",
+                        "bind": "Seq Voltage 3",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "step4": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Step 4",
+                        "bind": "Seq Voltage 4",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "step5": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Step 5",
+                        "bind": "Seq Voltage 5",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "seq_stages": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "bind": "Seq Stages",
+                        "options": [
+                          {
+                            "label": "5",
+                            "value": 0
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "3",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "seq_trig": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "bind": "Seq Trig Select",
+                        "options": [
+                          {
+                            "label": "Clock",
+                            "value": 0
+                          },
+                          {
+                            "label": "Pulser",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Keyboard",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "seq_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "env": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 6,
+                        "label": "ENV",
+                        "color": "#6b6b6b33"
+                      },
+                      "attack": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Attack",
+                        "bind": "Env Attack Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "sustain": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "Env Sustain Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "decay": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Decay",
+                        "bind": "Env Decay Rate",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "env_mode": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "bind": "Env Mode Select",
+                        "options": [
+                          {
+                            "label": "Self",
+                            "value": 0
+                          },
+                          {
+                            "label": "Transient",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Sustained",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "env_trig": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 11,
+                        "colSpan": 2,
+                        "bind": "Env Trig Select",
+                        "options": [
+                          {
+                            "label": "Sequencer",
+                            "value": 0
+                          },
+                          {
+                            "label": "Pulser",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Keyboard",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "env_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 4,
+                        "rowSpan": 2
+                      },
+                      "pulser": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 14,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "PULSE",
+                        "color": "#ff3b3026"
+                      },
+                      "period": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 14,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Period",
+                        "bind": "Pulser Period",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pulse_mode": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 14,
+                        "colSpan": 2,
+                        "bind": "Pulser Mode",
+                        "options": [
+                          {
+                            "label": "Clock",
+                            "value": 0
+                          },
+                          {
+                            "label": "Free",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Sync",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "pulse_trig": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 15,
+                        "colSpan": 2,
+                        "bind": "Pulser Trig Select",
+                        "options": [
+                          {
+                            "label": "Sequencer",
+                            "value": 0
+                          },
+                          {
+                            "label": "Pulser",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Keyboard",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#9a5ad3"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

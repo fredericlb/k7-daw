@@ -1,0 +1,43 @@
+// watch.ts — what counts as a page going wrong while a spec drives it: an uncaught error, or a 5xx.
+// A 4xx and a console.error are noted on the report rather than failed on, since some are the app asking a question.
+import { expect, type Page, test } from "@playwright/test";
+
+/** `expected5xx`: paths a target answers 5xx by design, noted rather than failed on. */
+export function watchPage(page: Page, expected5xx: RegExp[] = []) {
+  const problems: string[] = [];
+  const notes = new Set<string>();
+  const onError = (err: Error) => {
+    // A dev server's HMR socket dials the TLS proxy's port and fails there (docs/e2e.md): noted when Vite's client threw it.
+    if (/\/@vite\/client/.test(err.stack ?? ""))
+      notes.add(`vite: ${err.message}`);
+    else problems.push(`pageerror: ${err.message}`);
+  };
+  const onResponse = (res: { status(): number; url(): string }) => {
+    const path = new URL(res.url()).pathname;
+    const expected = expected5xx.some((re) => re.test(path));
+    if (res.status() >= 500 && !expected)
+      problems.push(`${res.status()} ${res.url()}`);
+    else if (res.status() >= 400) notes.add(`${res.status()} ${path}`);
+  };
+  const onConsole = (msg: { type(): string; text(): string }) => {
+    if (
+      msg.type() === "error" &&
+      !msg.text().startsWith("Failed to load resource")
+    )
+      notes.add(msg.text().slice(0, 300));
+  };
+  page.on("pageerror", onError);
+  page.on("response", onResponse);
+  page.on("console", onConsole);
+  return {
+    problems,
+    assertClean() {
+      page.off("pageerror", onError);
+      page.off("response", onResponse);
+      page.off("console", onConsole);
+      for (const note of notes)
+        test.info().annotations.push({ type: "noted", description: note });
+      expect(problems).toEqual([]);
+    },
+  };
+}

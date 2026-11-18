@@ -1,0 +1,2511 @@
+[
+ {
+  "name": "start-seconds",
+  "category": "start",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(4.5), ref(\"kick\").start(\"2:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "kick@9",
+     "/0/start": 9,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/1/id": "kick@4",
+     "/1/start": 4,
+     "/1/length": 0,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "start-none",
+  "category": "start",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "start-fractional",
+  "category": "start",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(2.25), ref(\"kick\").start(\"1:1:1.480\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "kick@4.5",
+     "/0/start": 4.5,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/1/id": "kick@0.5",
+     "/1/start": 0.5,
+     "/1/length": 0,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "start-tie-even",
+  "category": "start",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"440670152396381:2.240\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@1762680609585521.2",
+     "/0/start": 1762680609585521.2
+    }
+   }
+  }
+ },
+ {
+  "name": "start-negative",
+  "category": "start",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"0:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@-4",
+     "/0/start": -4,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "start-1e21",
+  "category": "start",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"250000000000000000001:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@1e+21",
+     "/0/start": 1e+21,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "clip-window-seconds",
+  "category": "clip-window",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nfrom(0.25)\nto(1.5)\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 2.5,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0.25,
+     "/0/sourceTo": 1.5,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "clip-window-timecode",
+  "category": "clip-window",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nfrom(\"2:1\")\nto(\"3:1\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 2,
+     "/0/sourceTo": 4,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "clip-window-one-edge",
+  "category": "clip-window",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nfrom(0.1)\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0.1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "clip-window-first-beat",
+  "category": "clip-window",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/zero.k7x": "source(\"clips/zero.wav\")\nfrom(0)\nto(1)\n",
+   "clips/first.k7x": "source(\"clips/first.wav\")\nfrom(\"1:1\")\nto(\"2:1\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"zero\").start(\"1:1:1\"), ref(\"first\").start(\"2:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "zero@0",
+     "/0/start": 0,
+     "/0/length": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceTo": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/1/id": "first@4",
+     "/1/start": 4,
+     "/1/length": 4,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceTo": 2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "event-window",
+  "category": "event-window",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nfrom(0.5)\nto(1.25)\n",
+   "clips/open.k7x": "source(\"clips/open.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").from(0.75).to(1), ref(\"kick\").start(\"2:1\").from(0.25).to(1.5), ref(\"kick\").start(\"3:1\").to(1), ref(\"open\").start(\"4:1\").from(0.25).to(1.5)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 4,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 0.5,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0.75,
+     "/0/sourceTo": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/1/id": "kick@4",
+     "/1/start": 4,
+     "/1/length": 1.5,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 0.5,
+     "/1/sourceTo": 1.25,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/2/id": "kick@8",
+     "/2/start": 8,
+     "/2/length": 1,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/sourceFrom": 0.5,
+     "/2/sourceTo": 1,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/3/id": "open@12",
+     "/3/start": 12,
+     "/3/length": 2.5,
+     "/3/fadeIn": 0,
+     "/3/fadeOut": 0,
+     "/3/sourceFrom": 0.25,
+     "/3/sourceTo": 1.5,
+     "/3/loopStart": 0,
+     "/3/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "event-window-timecode",
+  "category": "event-window",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/open.k7x": "source(\"clips/open.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"open\").start(\"1:1\").from(\"2:1\"), ref(\"open\").start(\"2:1\").from(0)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "open@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 2,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/1/id": "open@4",
+     "/1/start": 4,
+     "/1/length": 0,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "event-window-sequence",
+  "category": "event-window",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60), t(4.5).d(1).k(62)])\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\"), ref(\"riff\").start(\"2:1\").from(\"1:3\"), ref(\"riff\").start(\"3:1\").from(\"1:3\").to(\"1:4\"), ref(\"riff\").start(\"4:1\").to(\"1:2\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "keys": {
+     "#len": 4,
+     "/0/id": "riff@0",
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/type": "midi",
+     "/1/id": "riff@4",
+     "/1/start": 4,
+     "/1/length": 6,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 2,
+     "/1/loopEnd": 8,
+     "/1/type": "midi",
+     "/2/id": "riff@8",
+     "/2/start": 8,
+     "/2/length": 1,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/loopStart": 2,
+     "/2/loopEnd": 3,
+     "/2/type": "midi",
+     "/3/id": "riff@12",
+     "/3/start": 12,
+     "/3/length": 1,
+     "/3/fadeIn": 0,
+     "/3/fadeOut": 0,
+     "/3/loopStart": 0,
+     "/3/loopEnd": 1,
+     "/3/type": "midi"
+    }
+   }
+  }
+ },
+ {
+  "name": "sequence-windows",
+  "category": "sequence",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "sequences/plain.k7x": "notes([t(0).d(1).k(60), t(4.5).d(1).k(62).v(0.5)])\n",
+   "sequences/backwards.k7x": "notes([t(0).d(1).k(60)])\nfrom(\"2:1\")\nto(\"1:1\")\n",
+   "sequences/tail.k7x": "notes([t(0).d(1).k(60)])\nto(\"1:3\")\n",
+   "sequences/mid.k7x": "notes([t(0).d(1).k(60)])\nfrom(\"1:2\")\nto(\"1:4\")\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"plain\").start(\"1:1:1\"), ref(\"backwards\").start(\"2:1\"), ref(\"tail\").start(\"3:1\"), ref(\"mid\").start(\"4:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "keys": {
+     "#len": 4,
+     "/0/id": "plain@0",
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/type": "midi",
+     "/1/id": "backwards@4",
+     "/1/start": 4,
+     "/1/length": 0,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/type": "midi",
+     "/2/id": "tail@8",
+     "/2/start": 8,
+     "/2/length": 2,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 2,
+     "/2/type": "midi",
+     "/3/id": "mid@12",
+     "/3/start": 12,
+     "/3/length": 2,
+     "/3/fadeIn": 0,
+     "/3/fadeOut": 0,
+     "/3/loopStart": 1,
+     "/3/loopEnd": 3,
+     "/3/type": "midi"
+    }
+   }
+  }
+ },
+ {
+  "name": "sequence-pad-effects",
+  "category": "sequence",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "sequences/pat.k7x": "notes([t(0).d(0.25).k(36).repeat(4).skip(2), t(1).d(0.25).k(38)])\n",
+   "nodes/keys.k7x": "extends(\"@meta/track\")\nevents([ref(\"pat\").start(\"1:1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "keys": {
+     "#len": 1,
+     "/0/id": "pat@0",
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/type": "midi",
+     "/0/notes/0/repeat": 4
+    }
+   }
+  }
+ },
+ {
+  "name": "loop-with-window",
+  "category": "loop",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\nfrom(0.5)\nto(1.5)\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").loop(3)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 6,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0.5,
+     "/0/sourceTo": 1.5,
+     "/0/loopStart": 1,
+     "/0/loopEnd": 3
+    }
+   }
+  }
+ },
+ {
+  "name": "loop-no-window",
+  "category": "loop",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").loop(3), ref(\"riff\").start(\"2:1\").loop(2)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/1/id": "riff@4",
+     "/1/start": 4,
+     "/1/length": 8,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 4,
+     "/1/type": "midi"
+    }
+   }
+  }
+ },
+ {
+  "name": "fades",
+  "category": "fade",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").fadeIn(\"0:2\").fadeOut(\"0:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 2,
+     "/0/fadeOut": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "gain",
+  "category": "gain",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").gain(3), ref(\"kick\").start(\"2:1\").gain(-6), ref(\"kick\").start(\"3:1\").gain(0), ref(\"riff\").start(\"4:1\").gain(2)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 4,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/gainDb": 3,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/1/id": "kick@4",
+     "/1/start": 4,
+     "/1/length": 0,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/gainDb": -6,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/2/id": "kick@8",
+     "/2/start": 8,
+     "/2/length": 0,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/3/id": "riff@12",
+     "/3/start": 12,
+     "/3/length": 4,
+     "/3/fadeIn": 0,
+     "/3/fadeOut": 0,
+     "/3/loopStart": 0,
+     "/3/loopEnd": 0,
+     "/3/type": "midi"
+    }
+   }
+  }
+ },
+ {
+  "name": "disabled",
+  "category": "disabled",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").disabled(true), ref(\"kick\").start(\"2:1\").disabled(false)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/disabled": true,
+     "/1/id": "kick@4",
+     "/1/start": 4,
+     "/1/length": 0,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "warp-map",
+  "category": "warp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/riff.k7x": "source(\"clips/riff.wav\")\nto(\"2:1\")\nwarp({ algorithm: \"slice\", markers: [[0, 0], [4, 2]] })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\"), ref(\"riff\").start(\"3:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "riff@0",
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceTo": 2,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/warp/algorithm": "slice",
+     "/1/id": "riff@8",
+     "/1/start": 8,
+     "/1/length": 4,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceTo": 2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/warp/algorithm": "slice"
+    }
+   }
+  }
+ },
+ {
+  "name": "warp-disable",
+  "category": "warp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/riff.k7x": "source(\"clips/riff.wav\")\nto(\"2:1\")\nwarp({ algorithm: \"slice\", markers: [[0, 0], [4, 2]], disable: true })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1:1\"), ref(\"riff\").start(\"3:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "riff@0",
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceTo": 2,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/warpOff": true,
+     "/1/id": "riff@8",
+     "/1/start": 8,
+     "/1/length": 4,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceTo": 2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/warpOff": true
+    }
+   }
+  }
+ },
+ {
+  "name": "warp-event-false",
+  "category": "warp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/riff.k7x": "source(\"clips/riff.wav\")\nto(\"2:1\")\nwarp({ algorithm: \"slice\", markers: [[0, 0], [4, 2]] })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"1:1\").warp(false), ref(\"kick\").start(\"2:1\").warp(false)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 2,
+     "/0/id": "riff@0",
+     "/0/start": 0,
+     "/0/length": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceTo": 2,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/warpOff": true,
+     "/1/id": "kick@4",
+     "/1/start": 4,
+     "/1/length": 0,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "video-clip-on-lane",
+  "category": "material",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/shot.k7x": "source(\"clips/shot.mp4\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"shot\").start(\"1:1\").warp(false)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "shot@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "dangling-ref",
+  "category": "material",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"ghost\").start(\"2:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/id": "ghost@4",
+     "/0/start": 4,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "source-places",
+  "category": "material",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/inside.k7x": "source(\"clips/inside.wav\")\n",
+   "clips/workspace.k7x": "source(\"../other.wav\")\n",
+   "clips/outside.k7x": "source(\"../../x.wav\")\n",
+   "clips/absolute.k7x": "source(\"/etc/hosts\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"inside\").start(\"1:1:1\"), ref(\"workspace\").start(\"2:1\"), ref(\"outside\").start(\"3:1\"), ref(\"absolute\").start(\"4:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 4,
+     "/0/id": "inside@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/1/id": "workspace@4",
+     "/1/start": 4,
+     "/1/length": 0,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/2/id": "outside@8",
+     "/2/start": 8,
+     "/2/length": 0,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/3/id": "absolute@12",
+     "/3/start": 12,
+     "/3/length": 0,
+     "/3/fadeIn": 0,
+     "/3/fadeOut": 0,
+     "/3/loopStart": 0,
+     "/3/loopEnd": 0,
+     "/0/source": "{project}/clips/inside.wav",
+     "/1/source": "{workspace}/other.wav",
+     "/2/source": "",
+     "/3/source": ""
+    }
+   }
+  }
+ },
+ {
+  "name": "refused-shot-key",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").length(2), ref(\"kick\").start(\"4:1\")])\n"
+  },
+  "expect": {
+   "refused": [
+    "nodes/drums.k7x"
+   ],
+   "warned": []
+  }
+ },
+ {
+  "name": "refused-number-fade",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").fadeIn(0.5), ref(\"kick\").start(\"4:1\")])\n"
+  },
+  "expect": {
+   "refused": [
+    "nodes/drums.k7x"
+   ],
+   "warned": []
+  }
+ },
+ {
+  "name": "refused-transition-map",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1\").fadeOut(over(1).with(\"wipe\")), ref(\"kick\").start(\"4:1\")])\n"
+  },
+  "expect": {
+   "refused": [
+    "nodes/drums.k7x"
+   ],
+   "warned": []
+  }
+ },
+ {
+  "name": "refused-no-ref",
+  "category": "refused",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([start(\"1:1\"), ref(\"kick\").start(\"4:1\")])\n"
+  },
+  "expect": {
+   "refused": [
+    "nodes/drums.k7x"
+   ],
+   "warned": []
+  }
+ },
+ {
+  "name": "comp-middle",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr_t2\", start: \"5:1\" }]).comp([{ take: \"gtr_t2\", from: \"5:3\", to: \"6:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 3,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "gtr_t2@18",
+     "/1/start": 18,
+     "/1/length": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 1,
+     "/1/sourceTo": 2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "gtr_t2",
+     "/2/id": "gtr@20",
+     "/2/start": 20,
+     "/2/length": 4,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/sourceFrom": 2,
+     "/2/sourceTo": 4,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/2/comp/of": "gtr@16",
+     "/2/comp/take": "gtr"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-past-end",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr_t2\", start: \"6:3\" }]).comp([{ take: \"gtr_t2\", from: \"6:3\", to: \"8:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 2,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 6,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 3,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "gtr_t2@22",
+     "/1/start": 22,
+     "/1/length": 6,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 0,
+     "/1/sourceTo": 3,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "gtr_t2"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-before-take",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr_t2\", start: \"5:3\" }]).comp([{ take: \"gtr_t2\", from: \"5:1\", to: \"6:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 3,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "gtr_t2@18",
+     "/1/start": 18,
+     "/1/length": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 0,
+     "/1/sourceTo": 1,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "gtr_t2",
+     "/2/id": "gtr@20",
+     "/2/start": 20,
+     "/2/length": 4,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/sourceFrom": 2,
+     "/2/sourceTo": 4,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/2/comp/of": "gtr@16",
+     "/2/comp/take": "gtr"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-unknown-take",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").comp([{ take: \"nope\", from: \"5:3\", to: \"6:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 2,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "gtr@20",
+     "/1/start": 20,
+     "/1/length": 4,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 2,
+     "/1/sourceTo": 4,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "gtr"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-all-silent",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").comp([{ take: \"nope\", from: \"1:1\", to: \"99:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-own-ref",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr\", start: \"5:1\" }]).comp([{ take: \"gtr\", from: \"5:3\", to: \"6:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 3,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "gtr@18",
+     "/1/start": 18,
+     "/1/length": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 1,
+     "/1/sourceTo": 2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "gtr",
+     "/2/id": "gtr@20",
+     "/2/start": 20,
+     "/2/length": 4,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/sourceFrom": 2,
+     "/2/sourceTo": 4,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/2/comp/of": "gtr@16",
+     "/2/comp/take": "gtr"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-looped-ignored",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr_t2\", start: \"5:1\" }]).loop(2).comp([{ take: \"gtr_t2\", from: \"5:3\", to: \"6:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 1,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 16,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceTo": 4,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 8
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-fades",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr_t2\", start: \"5:1\" }]).fadeIn(\"0:1\").fadeOut(\"0:2\").comp([{ take: \"gtr_t2\", from: \"5:3\", to: \"6:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 3,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 2,
+     "/0/fadeIn": 1,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "gtr_t2@18",
+     "/1/start": 18,
+     "/1/length": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 1,
+     "/1/sourceTo": 2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "gtr_t2",
+     "/2/id": "gtr@20",
+     "/2/start": 20,
+     "/2/length": 4,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 2,
+     "/2/sourceFrom": 2,
+     "/2/sourceTo": 4,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/2/comp/of": "gtr@16",
+     "/2/comp/take": "gtr"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-on-sequence",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\nto(\"2:1\")\n",
+   "sequences/riff2.k7x": "notes([t(0).d(1).k(62)])\nto(\"2:1\")\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"5:1\").takes([{ ref: \"riff2\", start: \"5:1\" }]).comp([{ take: \"riff2\", from: \"5:3\", to: \"6:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 2,
+     "/0/id": "riff@16",
+     "/0/start": 16,
+     "/0/length": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 2,
+     "/0/comp/of": "riff@16",
+     "/0/comp/take": "riff",
+     "/0/type": "midi",
+     "/1/id": "riff2@18",
+     "/1/start": 18,
+     "/1/length": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 2,
+     "/1/loopEnd": 4,
+     "/1/comp/of": "riff@16",
+     "/1/comp/take": "riff2",
+     "/1/type": "midi"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-seam-crossfade",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr_t2\", start: \"5:1\" }]).comp([{ take: \"gtr_t2\", from: \"5:3\", to: \"6:1\" }]).crossfades([{ at: \"5:3\", length: \"0:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 3,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 2.5,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 1,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 1.25,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/crossfade/out": true,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "gtr_t2@17.5",
+     "/1/start": 17.5,
+     "/1/length": 2.5,
+     "/1/fadeIn": 1,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 0.75,
+     "/1/sourceTo": 2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/crossfade/in": true,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "gtr_t2",
+     "/2/id": "gtr@20",
+     "/2/start": 20,
+     "/2/length": 4,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/sourceFrom": 2,
+     "/2/sourceTo": 4,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/2/comp/of": "gtr@16",
+     "/2/comp/take": "gtr"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-crossfade-no-seam",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr_t2\", start: \"5:1\" }]).comp([{ take: \"gtr_t2\", from: \"5:3\", to: \"6:1\" }]).crossfades([{ at: \"5:2\", length: \"0:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 3,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 1,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "gtr_t2@18",
+     "/1/start": 18,
+     "/1/length": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 1,
+     "/1/sourceTo": 2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "gtr_t2",
+     "/2/id": "gtr@20",
+     "/2/start": 20,
+     "/2/length": 4,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/sourceFrom": 2,
+     "/2/sourceTo": 4,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/2/comp/of": "gtr@16",
+     "/2/comp/take": "gtr"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-crossfade-midi",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "sequences/riff.k7x": "notes([t(0).d(1).k(60)])\nto(\"2:1\")\n",
+   "sequences/riff2.k7x": "notes([t(0).d(1).k(62)])\nto(\"2:1\")\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"riff\").start(\"5:1\").takes([{ ref: \"riff2\", start: \"5:1\" }]).comp([{ take: \"riff2\", from: \"5:3\", to: \"6:1\" }]).crossfades([{ at: \"5:3\", length: \"0:1\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 2,
+     "/0/id": "riff@16",
+     "/0/start": 16,
+     "/0/length": 2,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 2,
+     "/0/comp/of": "riff@16",
+     "/0/comp/take": "riff",
+     "/0/type": "midi",
+     "/1/id": "riff2@18",
+     "/1/start": 18,
+     "/1/length": 2,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 2,
+     "/1/loopEnd": 4,
+     "/1/comp/of": "riff@16",
+     "/1/comp/take": "riff2",
+     "/1/type": "midi"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-crossfade-clamped",
+  "category": "comp",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/short.k7x": "source(\"clips/short.wav\")\nto(1.2)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"short\", start: \"5:1\" }]).comp([{ take: \"short\", from: \"5:3\", to: \"6:1\" }]).crossfades([{ at: \"5:3\", length: \"1:0\" }])])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 3,
+     "/0/id": "gtr@16",
+     "/0/start": 16,
+     "/0/length": 3,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 2,
+     "/0/sourceFrom": 0,
+     "/0/sourceTo": 1.5,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/crossfade/out": true,
+     "/0/comp/of": "gtr@16",
+     "/0/comp/take": "gtr",
+     "/1/id": "short@17",
+     "/1/start": 17,
+     "/1/length": 3,
+     "/1/fadeIn": 2,
+     "/1/fadeOut": 0,
+     "/1/sourceFrom": 0.5,
+     "/1/sourceTo": 1.2,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/crossfade/in": true,
+     "/1/comp/of": "gtr@16",
+     "/1/comp/take": "short",
+     "/2/id": "gtr@20",
+     "/2/start": 20,
+     "/2/length": 4,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/sourceFrom": 2,
+     "/2/sourceTo": 4,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0,
+     "/2/comp/of": "gtr@16",
+     "/2/comp/take": "gtr"
+    }
+   }
+  }
+ },
+ {
+  "name": "comp-muted",
+  "category": "comp",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/gtr.k7x": "source(\"clips/gtr.wav\")\nto(4)\n",
+   "clips/gtr_t2.k7x": "source(\"clips/gtr_t2.wav\")\nto(6)\n",
+   "nodes/gtr.k7x": "extends(\"@meta/track\")\nevents([ref(\"gtr\").start(\"5:1\").takes([{ ref: \"gtr_t2\", start: \"5:1\" }]).comp([{ take: \"gtr_t2\", from: \"5:3\", to: \"6:1\" }]).disabled(true)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "gtr": {
+     "#len": 3,
+     "/0/disabled": true,
+     "/1/disabled": true,
+     "/2/disabled": true
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-placed",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/bassline.k7x": "notes([t(0).d(12).k(40)])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([lane(\"drums\").events([ref(\"kick\").start(\"1:1\")]), lane(\"bass\").events([ref(\"bassline\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"verse\").start(\"3:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 2,
+     "/0/id": "verse@8>kick@0",
+     "/0/start": 8,
+     "/0/length": 8,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "verse@8",
+     "/0/nest/ref": "verse",
+     "/1/id": "verse@8>bassline@0",
+     "/1/start": 8,
+     "/1/length": 8,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/nest/of": "verse@8",
+     "/1/nest/ref": "verse",
+     "/1/type": "midi"
+    }
+   },
+   "lengths": {
+    "verse": {
+     "": 8
+    }
+   },
+   "timelines": {
+    "verse": {
+     "/length": 8
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-no-length",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/bassline.k7x": "notes([t(0).d(12).k(40)])\n",
+   "timelines/verse.k7x": "lanes([lane(\"drums\").events([ref(\"kick\").start(\"1:1\")]), lane(\"bass\").events([ref(\"bassline\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"verse\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 2,
+     "/0/id": "verse@0>kick@0",
+     "/0/start": 0,
+     "/0/length": 12,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "verse@0",
+     "/0/nest/ref": "verse",
+     "/1/id": "verse@0>bassline@0",
+     "/1/start": 0,
+     "/1/length": 12,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/nest/of": "verse@0",
+     "/1/nest/ref": "verse",
+     "/1/type": "midi"
+    }
+   },
+   "lengths": {
+    "verse": {
+     "": 12
+    }
+   },
+   "timelines": {
+    "verse": {
+     "/length": 12
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-one-bar-minimum",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "timelines/empty.k7x": "lanes([lane(\"a\")])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"empty\").start(\"2:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 0
+    }
+   },
+   "lengths": {
+    "empty": {
+     "": 4
+    }
+   },
+   "timelines": {
+    "empty": {
+     "/length": 4
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-clip-no-to",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/loose.k7x": "source(\"clips/loose.wav\")\n",
+   "timelines/t.k7x": "length(\"1:0\")\nlanes([lane(\"a\").events([ref(\"loose\").start(\"1:2\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"t\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 1,
+     "/0/id": "t@0>loose@1",
+     "/0/start": 1,
+     "/0/length": 3,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "t@0",
+     "/0/nest/ref": "t"
+    }
+   },
+   "lengths": {
+    "t": {
+     "": 4
+    }
+   },
+   "timelines": {
+    "t": {
+     "/length": 4
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-pictures-extend",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "timelines/t.k7x": "lanes([lane(\"a\").events([ref(\"kick\").start(\"1:1\")])])\npictures([lane(\"p\").events([ref(\"shot\").start(\"3:1\").length(5)])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"t\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 1,
+     "/0/id": "t@0>kick@0",
+     "/0/start": 0,
+     "/0/length": 20,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "t@0",
+     "/0/nest/ref": "t"
+    }
+   },
+   "lengths": {
+    "t": {
+     "": 20
+    }
+   },
+   "timelines": {
+    "t": {
+     "/length": 20
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-gain-disabled",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/bassline.k7x": "notes([t(0).d(12).k(40)])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([lane(\"drums\").events([ref(\"kick\").start(\"1:1\")]), lane(\"bass\").events([ref(\"bassline\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"verse\").start(\"1:1\").gain(-3).disabled(true)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 2,
+     "/0/id": "verse@0>kick@0",
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/gainDb": -3,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "verse@0",
+     "/0/nest/ref": "verse",
+     "/0/disabled": true,
+     "/1/id": "verse@0>bassline@0",
+     "/1/start": 0,
+     "/1/length": 8,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/nest/of": "verse@0",
+     "/1/nest/ref": "verse",
+     "/1/disabled": true,
+     "/1/type": "midi"
+    }
+   },
+   "lengths": {
+    "verse": {
+     "": 8
+    }
+   },
+   "timelines": {
+    "verse": {
+     "/length": 8
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-lane-disabled",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/bassline.k7x": "notes([t(0).d(12).k(40)])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([lane(\"drums\").disabled(true).events([ref(\"kick\").start(\"1:1\")]), lane(\"bass\").events([ref(\"bassline\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"verse\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 2,
+     "/0/id": "verse@0>kick@0",
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "verse@0",
+     "/0/nest/ref": "verse",
+     "/0/disabled": true,
+     "/1/id": "verse@0>bassline@0",
+     "/1/start": 0,
+     "/1/length": 8,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/nest/of": "verse@0",
+     "/1/nest/ref": "verse",
+     "/1/type": "midi"
+    }
+   },
+   "lengths": {
+    "verse": {
+     "": 8
+    }
+   },
+   "timelines": {
+    "verse": {
+     "/length": 8
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-gain-sum",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "timelines/inner.k7x": "length(\"2:0\")\nlanes([lane(\"a\").events([ref(\"kick\").start(\"1:1\").gain(5)])])\n",
+   "timelines/outer.k7x": "length(\"2:0\")\nlanes([lane(\"a\").events([ref(\"inner\").start(\"1:1\").gain(4)])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"outer\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 1,
+     "/0/id": "outer@0>inner@0>kick@0",
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/gainDb": 6,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "outer@0",
+     "/0/nest/ref": "outer"
+    }
+   },
+   "lengths": {
+    "inner": {
+     "": 8
+    },
+    "outer": {
+     "": 8
+    }
+   },
+   "timelines": {
+    "inner": {
+     "/length": 8
+    },
+    "outer": {
+     "/length": 8
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-three-levels",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "timelines/a.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"kick\").start(\"1:1\")])])\n",
+   "timelines/b.k7x": "length(\"3:0\")\nlanes([lane(\"x\").events([ref(\"a\").start(\"2:1\")])])\n",
+   "timelines/c.k7x": "length(\"5:0\")\nlanes([lane(\"x\").events([ref(\"b\").start(\"2:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"c\").start(\"2:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 1,
+     "/0/id": "c@4>b@4>a@4>kick@0",
+     "/0/start": 12,
+     "/0/length": 4,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "c@4",
+     "/0/nest/ref": "c"
+    }
+   },
+   "lengths": {
+    "a": {
+     "": 4
+    },
+    "b": {
+     "": 12
+    },
+    "c": {
+     "": 20
+    }
+   },
+   "timelines": {
+    "a": {
+     "/length": 4
+    },
+    "b": {
+     "/length": 12
+    },
+    "c": {
+     "/length": 20
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-mixed",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/bassline.k7x": "notes([t(0).d(12).k(40)])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([lane(\"drums\").events([ref(\"kick\").start(\"1:1\")]), lane(\"bass\").events([ref(\"bassline\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"verse\").start(\"1:1\"), ref(\"kick\").start(\"5:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 3,
+     "/0/id": "verse@0>kick@0",
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "verse@0",
+     "/0/nest/ref": "verse",
+     "/1/id": "verse@0>bassline@0",
+     "/1/start": 0,
+     "/1/length": 8,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/nest/of": "verse@0",
+     "/1/nest/ref": "verse",
+     "/1/type": "midi",
+     "/2/id": "kick@16",
+     "/2/start": 16,
+     "/2/length": 0,
+     "/2/fadeIn": 0,
+     "/2/fadeOut": 0,
+     "/2/loopStart": 0,
+     "/2/loopEnd": 0
+    }
+   },
+   "lengths": {
+    "verse": {
+     "": 8
+    }
+   },
+   "timelines": {
+    "verse": {
+     "/length": 8
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-placed-nowhere",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/bassline.k7x": "notes([t(0).d(12).k(40)])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([lane(\"drums\").events([ref(\"kick\").start(\"1:1\")]), lane(\"bass\").events([ref(\"bassline\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"1:1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 1,
+     "/0/id": "kick@0",
+     "/0/start": 0,
+     "/0/length": 0,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0
+    }
+   },
+   "lengths": {
+    "verse": {
+     "": 8
+    }
+   },
+   "timelines": {
+    "verse": {
+     "/length": 8
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-fixed-field",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "sequences/bassline.k7x": "notes([t(0).d(12).k(40)])\n",
+   "timelines/verse.k7x": "length(\"2:0\")\nlanes([lane(\"drums\").events([ref(\"kick\").start(\"1:1\")]), lane(\"bass\").events([ref(\"bassline\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"verse\").start(\"1:1\").loop(2)])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 2,
+     "/0/id": "verse@0>kick@0",
+     "/0/start": 0,
+     "/0/length": 8,
+     "/0/fadeIn": 0,
+     "/0/fadeOut": 0,
+     "/0/loopStart": 0,
+     "/0/loopEnd": 0,
+     "/0/nest/of": "verse@0",
+     "/0/nest/ref": "verse",
+     "/1/id": "verse@0>bassline@0",
+     "/1/start": 0,
+     "/1/length": 8,
+     "/1/fadeIn": 0,
+     "/1/fadeOut": 0,
+     "/1/loopStart": 0,
+     "/1/loopEnd": 0,
+     "/1/nest/of": "verse@0",
+     "/1/nest/ref": "verse",
+     "/1/type": "midi"
+    }
+   },
+   "lengths": {
+    "verse": {
+     "": 8
+    }
+   },
+   "timelines": {
+    "verse": {
+     "/length": 8
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-length-zero",
+  "category": "timeline",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "timelines/zero.k7x": "length(\"0:0\")\nlanes([lane(\"a\").events([ref(\"kick\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"zero\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 0
+    }
+   },
+   "lengths": {
+    "zero": {
+     "": 0
+    }
+   },
+   "timelines": {
+    "zero": {
+     "/length": 0
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-cycle",
+  "category": "timeline",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "timelines/a.k7x": "lanes([lane(\"x\").events([ref(\"b\").start(\"1:1\"), ref(\"kick\").start(\"1:1\")])])\n",
+   "timelines/b.k7x": "lanes([lane(\"x\").events([ref(\"a\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"a\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "song": {
+     "#len": 1
+    }
+   }
+  }
+ },
+ {
+  "name": "tl-nest-40",
+  "category": "timeline",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "timelines/t0.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t1\").start(\"1:1\")])])\n",
+   "timelines/t1.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t2\").start(\"1:1\")])])\n",
+   "timelines/t2.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t3\").start(\"1:1\")])])\n",
+   "timelines/t3.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t4\").start(\"1:1\")])])\n",
+   "timelines/t4.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t5\").start(\"1:1\")])])\n",
+   "timelines/t5.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t6\").start(\"1:1\")])])\n",
+   "timelines/t6.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t7\").start(\"1:1\")])])\n",
+   "timelines/t7.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t8\").start(\"1:1\")])])\n",
+   "timelines/t8.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t9\").start(\"1:1\")])])\n",
+   "timelines/t9.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t10\").start(\"1:1\")])])\n",
+   "timelines/t10.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t11\").start(\"1:1\")])])\n",
+   "timelines/t11.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t12\").start(\"1:1\")])])\n",
+   "timelines/t12.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t13\").start(\"1:1\")])])\n",
+   "timelines/t13.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t14\").start(\"1:1\")])])\n",
+   "timelines/t14.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t15\").start(\"1:1\")])])\n",
+   "timelines/t15.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t16\").start(\"1:1\")])])\n",
+   "timelines/t16.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t17\").start(\"1:1\")])])\n",
+   "timelines/t17.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t18\").start(\"1:1\")])])\n",
+   "timelines/t18.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t19\").start(\"1:1\")])])\n",
+   "timelines/t19.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t20\").start(\"1:1\")])])\n",
+   "timelines/t20.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t21\").start(\"1:1\")])])\n",
+   "timelines/t21.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t22\").start(\"1:1\")])])\n",
+   "timelines/t22.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t23\").start(\"1:1\")])])\n",
+   "timelines/t23.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t24\").start(\"1:1\")])])\n",
+   "timelines/t24.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t25\").start(\"1:1\")])])\n",
+   "timelines/t25.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t26\").start(\"1:1\")])])\n",
+   "timelines/t26.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t27\").start(\"1:1\")])])\n",
+   "timelines/t27.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t28\").start(\"1:1\")])])\n",
+   "timelines/t28.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t29\").start(\"1:1\")])])\n",
+   "timelines/t29.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t30\").start(\"1:1\")])])\n",
+   "timelines/t30.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t31\").start(\"1:1\")])])\n",
+   "timelines/t31.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t32\").start(\"1:1\")])])\n",
+   "timelines/t32.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t33\").start(\"1:1\")])])\n",
+   "timelines/t33.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t34\").start(\"1:1\")])])\n",
+   "timelines/t34.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t35\").start(\"1:1\")])])\n",
+   "timelines/t35.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t36\").start(\"1:1\")])])\n",
+   "timelines/t36.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t37\").start(\"1:1\")])])\n",
+   "timelines/t37.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t38\").start(\"1:1\")])])\n",
+   "timelines/t38.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"t39\").start(\"1:1\")])])\n",
+   "timelines/t39.k7x": "length(\"1:0\")\nlanes([lane(\"x\").events([ref(\"kick\").start(\"1:1\")])])\n",
+   "nodes/song.k7x": "extends(\"@meta/track\")\nevents([ref(\"t0\").start(\"1:1\")])\n"
+  },
+  "expect": {
+   "refused": [
+    "timelines/t32.k7x",
+    "timelines/t33.k7x",
+    "timelines/t34.k7x",
+    "timelines/t35.k7x",
+    "timelines/t36.k7x",
+    "timelines/t37.k7x",
+    "timelines/t38.k7x",
+    "timelines/t39.k7x"
+   ],
+   "warned": []
+  }
+ },
+ {
+  "name": "nonfinite-start",
+  "category": "nonfinite",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "clips/kick.k7x": "source(\"clips/kick.wav\")\n",
+   "nodes/drums.k7x": "extends(\"@meta/track\")\nevents([ref(\"kick\").start(\"9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999:1\"), ref(\"kick\").start(\"2:1\")])\n"
+  },
+  "expect": {
+   "refused": [
+    "nodes/drums.k7x"
+   ],
+   "warned": [],
+   "lanes": {
+    "drums": {
+     "#len": 1,
+     "/0/start": 4
+    }
+   }
+  }
+ },
+ {
+  "name": "pattern-one",
+  "category": "pattern",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "algo/beat.strudel": "s(\"bd sn\").label(\"kit\")\n",
+   "nodes/kit.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "kit": {
+     "#len": 0
+    }
+   },
+   "shares": {
+    "kit": {
+     "/catchAll": true,
+     "/claimed": [
+      "kit"
+     ]
+    }
+   },
+   "patterns": {
+    "kit": {
+     "/single/kit/patternPlays": "both"
+    }
+   }
+  }
+ },
+ {
+  "name": "pattern-two-sharing",
+  "category": "pattern",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "algo/beat.strudel": "s(\"bd sn\").label(\"kit\")\n",
+   "nodes/kit.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\n",
+   "nodes/pad.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "kit": {
+     "#len": 0
+    },
+    "pad": {
+     "#len": 0
+    }
+   },
+   "shares": {
+    "kit": {
+     "/catchAll": true,
+     "/claimed": [
+      "kit",
+      "pad"
+     ]
+    },
+    "pad": {
+     "/catchAll": false,
+     "/claimed": [
+      "kit",
+      "pad"
+     ]
+    }
+   },
+   "patterns": {
+    "kit": {
+     "/single/kit/patternPlays": "both"
+    },
+    "pad": {
+     "/single/pad/patternPlays": "both"
+    }
+   }
+  }
+ },
+ {
+  "name": "pattern-disabled",
+  "category": "pattern",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "algo/beat.strudel": "s(\"bd sn\").label(\"kit\")\n",
+   "nodes/kit.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\n",
+   "nodes/pad.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\ndisabled(true)\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "kit": {
+     "#len": 0
+    }
+   },
+   "shares": {
+    "kit": {
+     "/catchAll": true,
+     "/claimed": [
+      "kit"
+     ]
+    }
+   },
+   "patterns": {
+    "kit": {
+     "/single/kit/patternPlays": "both"
+    }
+   }
+  }
+ },
+ {
+  "name": "pattern-missing-file",
+  "category": "pattern",
+  "ts": true,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/kit.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [],
+   "lanes": {
+    "kit": {
+     "#len": 0
+    }
+   },
+   "shares": {
+    "kit": {
+     "/catchAll": true,
+     "/claimed": [
+      "kit"
+     ]
+    }
+   },
+   "patterns": {
+    "kit": {
+     "/single/kit/patternPlays": "both"
+    }
+   }
+  }
+ },
+ {
+  "name": "pattern-not-utf8",
+  "category": "pattern",
+  "ts": false,
+  "mem": false,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "algo/beat.strudel": {
+    "hex": "fffe0041"
+   },
+   "nodes/kit.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/beat.strudel\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [
+    "algo/beat.strudel"
+   ],
+   "patterns": {
+    "kit": {
+     "/single/kit/patternSource": ""
+    }
+   }
+  }
+ },
+ {
+  "name": "pattern-escape",
+  "category": "pattern",
+  "ts": false,
+  "mem": true,
+  "files": {
+   "project.k7x": "project({ name: \"c\", tempo: 120 })\n",
+   "nodes/kit.k7x": "extends(\"@meta/strudel-track\")\nstrudel(\"algo/../../../x.strudel\")\n"
+  },
+  "expect": {
+   "refused": [],
+   "warned": [
+    "algo/../../../x.strudel"
+   ]
+  }
+ }
+]

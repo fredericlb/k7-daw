@@ -1,0 +1,20 @@
+[package]
+name = "song-schema"
+version = "0.1.0"
+edition = "2024"
+description = "A song's value vocabulary in Rust: the timecode, and a curve resolved against a time signature, after ../src/timecode.ts and ../src/curveMath.ts."
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+ts-rs = { version = "11", optional = true }
+
+[features]
+ts = ["dep:ts-rs"]
+
+[dev-dependencies]
+serde_json = "1"

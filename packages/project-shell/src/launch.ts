@@ -1,0 +1,46 @@
+// launch.ts — which project this editor is open on. The address says so, and nothing
+// else does: `/<repo>/<project>` (k7 answers the origin root). The parsing itself lives in
+// @studio/web-protocol/projects, beside the suffix rule it depends on, because k7's home page
+// WRITES these addresses and both editors READ them — a wire contract, not an app's habit.
+// This module is what the two apps import. See docs/launch.md.
+
+import { serviceUrl } from "@studio/web-protocol/services";
+
+export type { Launch } from "@studio/web-protocol/projects";
+export {
+  EXTERNAL_INDEX,
+  EXTERNAL_SEGMENT,
+  externalIndexUrl,
+  externalOf,
+  externalUrl,
+  isExternalIndex,
+  launchUrl,
+  parseExternal,
+  parseLaunch,
+  projectApp,
+  projectBasename,
+  projectClaimKey,
+} from "@studio/web-protocol/projects";
+
+/** Where projects are chosen: k7's home page, ONE address for every app — see docs/launch.md. */
+export function projectsUrl(origin: string): string {
+  return `${serviceUrl(origin, "k7")}/`;
+}
+
+/** How the gate leaves for another address: a page load unless the host draws it in place (docs/launch.md). */
+export type AddressNavigator = (url: string, replace: boolean) => void;
+
+let navigateTo: AddressNavigator = (url, replace) => {
+  if (replace) window.location.replace(url);
+  else window.location.assign(url);
+};
+
+/** Let a host that switches projects without a page load take the gate's departures. */
+export function setAddressNavigator(fn: AddressNavigator): void {
+  navigateTo = fn;
+}
+
+/** Go to `url` the host's way — the gate's Quit, and its way out of an address naming no project. */
+export function goToAddress(url: string, replace = false): void {
+  navigateTo(url, replace);
+}

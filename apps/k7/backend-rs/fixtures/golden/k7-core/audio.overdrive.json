@@ -1,0 +1,3018 @@
+{
+  "project": "k7-core/audio.overdrive.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.overdrive",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.overdrive.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Drive",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-bass-drive",
+        "name": "drums-bass-drive",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#b61e26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-bass-drive:fx-bass-drive",
+            "type": "Bass Drive",
+            "name": "fx-bass-drive",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-bass-drive.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-coils",
+        "name": "drums-coils",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#bc1f25",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-coils:fx-coils",
+            "type": "Coils",
+            "name": "fx-coils",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-coils.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-cojones",
+        "name": "drums-cojones",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#c22025",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-cojones:fx-cojones",
+            "type": "Cojones",
+            "name": "fx-cojones",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-cojones.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-density",
+        "name": "drums-density",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#c82124",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-density:fx-density",
+            "type": "Density",
+            "name": "fx-density",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-density.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-drive",
+        "name": "drums-drive",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#ce2223",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-drive:fx-drive",
+            "type": "Drive",
+            "name": "fx-drive",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-drive.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-dyno",
+        "name": "drums-dyno",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#d52323",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-dyno:fx-dyno",
+            "type": "Dyno",
+            "name": "fx-dyno",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-dyno.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-facet",
+        "name": "drums-facet",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#db2624",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-facet:fx-facet",
+            "type": "Facet",
+            "name": "fx-facet",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-facet.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-focus",
+        "name": "drums-focus",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dc2e29",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-focus:fx-focus",
+            "type": "Focus",
+            "name": "fx-focus",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-focus.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-high-impact",
+        "name": "drums-high-impact",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd3630",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-high-impact:fx-high-impact",
+            "type": "High Impact",
+            "name": "fx-high-impact",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-high-impact.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-loud",
+        "name": "drums-loud",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#de3e36",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-loud:fx-loud",
+            "type": "Loud",
+            "name": "fx-loud",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-loud.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-mojo",
+        "name": "drums-mojo",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#df463c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-mojo:fx-mojo",
+            "type": "Mojo",
+            "name": "fx-mojo",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-mojo.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-nc-17",
+        "name": "drums-nc-17",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e04e42",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-nc-17:fx-nc-17",
+            "type": "NC-17",
+            "name": "fx-nc-17",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-nc-17.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-one-knob",
+        "name": "drums-one-knob",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e15648",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-one-knob:fx-one-knob",
+            "type": "DSP Graph",
+            "name": "fx-one-knob",
+            "path": "",
+            "dspGraph": "{\n  \"params\": [\n    {\n      \"name\": \"Amount\",\n      \"min\": 0,\n      \"max\": 100,\n      \"default\": 0\n    }\n  ],\n  \"nodes\": [\n    {\n      \"type\": \"mul\",\n      \"in\": [\n        \"Amount\",\n        0.01\n      ],\n      \"out\": \"n0\"\n    },\n    {\n      \"type\": \"lerp\",\n      \"in\": [\n        1,\n        50,\n        \"n0\"\n      ],\n      \"out\": \"n1\"\n    },\n    {\n      \"type\": \"linmap\",\n      \"in\": [\n        \"n1\",\n        1,\n        4\n      ],\n      \"out\": \"n2\"\n    },\n    {\n      \"type\": \"lerp\",\n      \"in\": [\n        1.313,\n        1,\n        \"n2\"\n      ],\n      \"out\": \"n3\"\n    },\n    {\n      \"type\": \"ain\",\n      \"out\": \"n4\"\n    },\n    {\n      \"type\": \"atanh\",\n      \"out\": \"n5\",\n      \"in\": [\n        \"n4\"\n      ],\n      \"k\": [\n        \"n1\"\n      ]\n    },\n    {\n      \"type\": \"amul\",\n      \"out\": \"n6\",\n      \"in\": [\n        \"n5\"\n      ],\n      \"k\": [\n        \"n3\"\n      ]\n    },\n    {\n      \"type\": \"aout\",\n      \"in\": [\n        \"n6\"\n      ]\n    }\n  ]\n}\n",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-one-knob.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Amount": 0,
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-purest-drive",
+        "name": "drums-purest-drive",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e25d4f",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-purest-drive:fx-purest-drive",
+            "type": "Purest Drive",
+            "name": "fx-purest-drive",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-purest-drive.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-spiral",
+        "name": "drums-spiral",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e36455",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-spiral:fx-spiral",
+            "type": "Spiral",
+            "name": "fx-spiral",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-spiral.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-spiral-2",
+        "name": "drums-spiral-2",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e46c5b",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-spiral-2:fx-spiral-2",
+            "type": "Spiral 2",
+            "name": "fx-spiral-2",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-spiral-2.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-un-box",
+        "name": "drums-un-box",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.overdrive.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-un-box:fx-un-box",
+            "type": "Un Box",
+            "name": "fx-un-box",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.overdrive.k7/nodes/fx-un-box.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 3,
+              "widgets": {
+                "drive": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "Drive",
+                  "min": 0,
+                  "max": 1
+                },
+                "highpass": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Highpass",
+                  "bind": "Highpass",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// drive — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "Drive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "highpass": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Highpass",
+                    "bind": "Highpass",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "drive",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-bass-drive": {
+        "from": "drums-bass-drive",
+        "use": [
+          {
+            "module": "fx-bass-drive",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 10,
+              "rows": 3,
+              "widgets": {
+                "drive": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 3,
+                  "label": "Drive",
+                  "bind": "Drive",
+                  "min": 0,
+                  "max": 1
+                },
+                "eq_section": {
+                  "type": "group",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 3,
+                  "label": "EQ",
+                  "color": "#3ec96b26"
+                },
+                "low": {
+                  "type": "fader",
+                  "col": 2,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Low",
+                  "bind": "Low",
+                  "min": 0,
+                  "max": 1
+                },
+                "mid": {
+                  "type": "fader",
+                  "col": 3,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Mid",
+                  "bind": "Mid",
+                  "min": 0,
+                  "max": 1
+                },
+                "high": {
+                  "type": "fader",
+                  "col": 4,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "High",
+                  "bind": "High",
+                  "min": 0,
+                  "max": 1
+                },
+                "presence": {
+                  "type": "fader",
+                  "col": 5,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Pres",
+                  "bind": "Presnce",
+                  "min": 0,
+                  "max": 1
+                },
+                "shape": {
+                  "type": "lcdscreen",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 3
+                }
+              },
+              "script": "// bass-drive — two pictures side by side: how hard the drive bends the signal, and where the four bands sit.\n\nconst DRIVE = \"#ff6a1a\";\nconst TONE = \"#3ec96b\";\nconst GRID = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\n/** The drive's transfer curve: a soft clip that bends harder as Drive rises — its shape, not Bass Drive's exact law. */\nfunction transfer(ctx, x0, y0, w, h, drive) {\n  const k = 1 + drive * 9;\n  const norm = Math.tanh(k) || 1;\n  ctx.strokeStyle = GRID;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  // The straight line a clean signal would follow, for the bend to be read against.\n  ctx.moveTo(x0, y0 + h);\n  ctx.lineTo(x0 + w, y0);\n  ctx.stroke();\n  ctx.strokeStyle = DRIVE;\n  ctx.beginPath();\n  for (let i = 0; i <= 48; i++) {\n    const x = -1 + (2 * i) / 48;\n    const y = Math.tanh(k * x) / norm;\n    const px = x0 + ((x + 1) / 2) * w;\n    const py = y0 + h - ((y + 1) / 2) * h;\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\n/** The four bands as a smooth tone shape across low to presence — where each knob pushes, not a measured response. */\nfunction tone(ctx, x0, y0, w, h, bands) {\n  const mid = y0 + h / 2;\n  ctx.strokeStyle = GRID;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  ctx.moveTo(x0, Math.round(mid) + 0.5);\n  ctx.lineTo(x0 + w, Math.round(mid) + 0.5);\n  ctx.stroke();\n  const at = (i) => mid - (clamp01(bands[i]) - 0.5) * h * 0.9;\n  const xs = bands.map((_, i) => x0 + ((i + 0.5) / bands.length) * w);\n  ctx.strokeStyle = TONE;\n  ctx.beginPath();\n  ctx.moveTo(x0, at(0));\n  for (let i = 0; i < bands.length; i++) {\n    const prevX = i === 0 ? x0 : xs[i - 1];\n    const prevY = i === 0 ? at(0) : at(i - 1);\n    const cx = (prevX + xs[i]) / 2;\n    ctx.bezierCurveTo(cx, prevY, cx, at(i), xs[i], at(i));\n  }\n  ctx.lineTo(x0 + w, at(bands.length - 1));\n  ctx.stroke();\n  ctx.fillStyle = TONE;\n  for (let i = 0; i < bands.length; i++) {\n    ctx.beginPath();\n    ctx.arc(xs[i], at(i), 2, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\nexport default {\n  shape(lcd) {\n    const { ctx, width: W, height: H, params } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const pad = 6;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const left = Math.max(1, Math.min(h * 1.4, W * 0.35));\n    const drive = clamp01(params[\"Drive\"] ?? 0.5);\n    const bands = [\"Low\", \"Mid\", \"High\", \"Presnce\"].map((n) => params[n] ?? 0.5);\n\n    transfer(ctx, pad, top, left, h, drive);\n    tone(ctx, pad * 3 + left, top, Math.max(1, W - left - pad * 4), h, bands);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = DRIVE;\n    ctx.fillText(`DRIVE ${Math.round(drive * 100)}`, pad, 9);\n    ctx.fillStyle = TONE;\n    ctx.fillText(\"LOW  MID  HIGH  PRES\", pad * 3 + left, 9);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 7,
+                "widgets": {
+                  "drive": {
+                    "type": "knob",
+                    "col": 1,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "Drive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "eq_section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 3,
+                    "label": "EQ",
+                    "color": "#3ec96b26"
+                  },
+                  "low": {
+                    "type": "fader",
+                    "col": 0,
+                    "row": 2,
+                    "rowSpan": 3,
+                    "label": "Low",
+                    "bind": "Low",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "mid": {
+                    "type": "fader",
+                    "col": 1,
+                    "row": 2,
+                    "rowSpan": 3,
+                    "label": "Mid",
+                    "bind": "Mid",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "high": {
+                    "type": "fader",
+                    "col": 2,
+                    "row": 2,
+                    "rowSpan": 3,
+                    "label": "High",
+                    "bind": "High",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "presence": {
+                    "type": "fader",
+                    "col": 3,
+                    "row": 2,
+                    "rowSpan": 3,
+                    "label": "Pres",
+                    "bind": "Presnce",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "shape": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 5,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "bass-drive",
+            "params": {},
+            "pluginId": "drums-bass-drive:fx-bass-drive"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-coils": {
+        "from": "drums-coils",
+        "use": [
+          {
+            "module": "fx-coils",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "saturat": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Sat",
+                  "bind": "Saturat",
+                  "min": 0,
+                  "max": 1
+                },
+                "core_dc": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Core DC",
+                  "bind": "Core DC",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 0,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// coils — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n"
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "coils",
+            "params": {},
+            "pluginId": "drums-coils:fx-coils"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-cojones": {
+        "from": "drums-cojones",
+        "use": [
+          {
+            "module": "fx-cojones",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 10,
+              "rows": 3,
+              "widgets": {
+                "section": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 2,
+                  "label": "VOICE",
+                  "color": "#ff6a1a26"
+                },
+                "breathy": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Breathy",
+                  "bind": "Breathy",
+                  "min": 0,
+                  "max": 1
+                },
+                "cojones": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Cojones",
+                  "bind": "Cojones",
+                  "min": 0,
+                  "max": 1
+                },
+                "body": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Body",
+                  "bind": "Body",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// cojones — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 6,
+                "widgets": {
+                  "section": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 4,
+                    "rowSpan": 4,
+                    "label": "VOICE",
+                    "color": "#ff6a1a26"
+                  },
+                  "breathy": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Breathy",
+                    "bind": "Breathy",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "cojones": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Cojones",
+                    "bind": "Cojones",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "body": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Body",
+                    "bind": "Body",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "cojones",
+            "params": {},
+            "pluginId": "drums-cojones:fx-cojones"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-density": {
+        "from": "drums-density",
+        "use": [
+          {
+            "module": "fx-density",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 3,
+              "widgets": {
+                "density": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Density",
+                  "bind": "Density",
+                  "min": 0,
+                  "max": 1
+                },
+                "highpass": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Highpass",
+                  "bind": "Highpass",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// density — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "density": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Density",
+                    "bind": "Density",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "highpass": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Highpass",
+                    "bind": "Highpass",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "density",
+            "params": {},
+            "pluginId": "drums-density:fx-density"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-drive": {
+        "from": "drums-drive",
+        "use": [
+          {
+            "module": "fx-drive",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 8,
+              "rows": 3,
+              "widgets": {
+                "drive": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "Drive",
+                  "min": 0,
+                  "max": 1
+                },
+                "highpass": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Highpass",
+                  "bind": "Highpass",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// drive — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "Drive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "highpass": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Highpass",
+                    "bind": "Highpass",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "drive",
+            "params": {},
+            "pluginId": "drums-drive:fx-drive"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-dyno": {
+        "from": "drums-dyno",
+        "use": [
+          {
+            "module": "fx-dyno",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "dyno",
+            "params": {},
+            "pluginId": "drums-dyno:fx-dyno"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-facet": {
+        "from": "drums-facet",
+        "use": [
+          {
+            "module": "fx-facet",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 4,
+              "rows": 4,
+              "widgets": {
+                "facet": {
+                  "type": "knob",
+                  "col": 1,
+                  "row": 1,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Facet",
+                  "bind": "Facet",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "facet",
+            "params": {},
+            "pluginId": "drums-facet:fx-facet"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-focus": {
+        "from": "drums-focus",
+        "use": [
+          {
+            "module": "fx-focus",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 10,
+              "rows": 3,
+              "widgets": {
+                "boost": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Boost",
+                  "bind": "Boost",
+                  "min": 0,
+                  "max": 1
+                },
+                "focus": {
+                  "type": "knob",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Focus",
+                  "bind": "Focus",
+                  "min": 0,
+                  "max": 1
+                },
+                "mode": {
+                  "type": "knob",
+                  "col": 4,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Mode",
+                  "bind": "Mode",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 6,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// focus — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 6,
+                "widgets": {
+                  "boost": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Boost",
+                    "bind": "Boost",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "focus": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Focus",
+                    "bind": "Focus",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "mode": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Mode",
+                    "bind": "Mode",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 4,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "focus",
+            "params": {},
+            "pluginId": "drums-focus:fx-focus"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-high-impact": {
+        "from": "drums-high-impact",
+        "use": [
+          {
+            "module": "fx-high-impact",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "impact": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Impact",
+                  "bind": "Impact",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// high-impact — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "impact": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Impact",
+                    "bind": "Impact",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "high-impact",
+            "params": {},
+            "pluginId": "drums-high-impact:fx-high-impact"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-loud": {
+        "from": "drums-loud",
+        "use": [
+          {
+            "module": "fx-loud",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "boost": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Boost",
+                  "bind": "Boost",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// loud — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "boost": {
+                    "type": "knob",
+                    "col": 1,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Boost",
+                    "bind": "Boost",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "loud",
+            "params": {},
+            "pluginId": "drums-loud:fx-loud"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-mojo": {
+        "from": "drums-mojo",
+        "use": [
+          {
+            "module": "fx-mojo",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "mojo",
+            "params": {},
+            "pluginId": "drums-mojo:fx-mojo"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-nc-17": {
+        "from": "drums-nc-17",
+        "use": [
+          {
+            "module": "fx-nc-17",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "louder": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Louder",
+                  "bind": "LOUDER",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// nc-17 — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "louder": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Louder",
+                    "bind": "LOUDER",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "nc-17",
+            "params": {},
+            "pluginId": "drums-nc-17:fx-nc-17"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-one-knob": {
+        "from": "drums-one-knob",
+        "use": [
+          {
+            "module": "fx-one-knob",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "amount": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Amount",
+                  "bind": "Amount",
+                  "min": 0,
+                  "max": 100
+                },
+                "curve": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// overdrive — one screen: the exact transfer curve dsp.k7x runs, tanh(drive·x) with its makeup gain.\n\nconst DRIVE = \"#ff6a1a\";\nconst GRID = \"#6b6b6b\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nconst clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);\n\n/** The curve for Amount 0..100, the same law and makeup ramp as dsp.k7x. */\nfunction shaper(amount) {\n  const drive = 1 + 49 * clamp01(amount / 100);\n  const makeup = 1.313 + (1 - 1.313) * clamp01((drive - 1) / 3);\n  return { drive, fn: (x) => Math.tanh(drive * x) * makeup };\n}\n\nexport default {\n  curve(lcd) {\n    const { ctx, width: W, height: H, params, input } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const w = Math.max(1, Math.min(W - pad * 2, h * 2.2));\n    const x0 = (W - w) / 2;\n    const { drive, fn } = shaper(Number(params[\"Amount\"] ?? 0));\n    const px = (x) => x0 + ((x + 1) / 2) * w;\n    const py = (y) => top + h - ((Math.max(-1.2, Math.min(1.2, y)) + 1) / 2) * h;\n\n    ctx.strokeStyle = GRID;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(px(-1), py(-1));\n    ctx.lineTo(px(1), py(1));\n    ctx.moveTo(x0, Math.round(py(0)) + 0.5);\n    ctx.lineTo(x0 + w, Math.round(py(0)) + 0.5);\n    ctx.stroke();\n\n    ctx.strokeStyle = DRIVE;\n    ctx.beginPath();\n    for (let i = 0; i <= 64; i++) {\n      const x = -1 + (2 * i) / 64;\n      if (i === 0) ctx.moveTo(px(x), py(fn(x)));\n      else ctx.lineTo(px(x), py(fn(x)));\n    }\n    ctx.stroke();\n\n    // Where the loudest recent input sits on the curve, when there is any.\n    const n = Array.isArray(input) ? input.length : 0;\n    if (n > 0) {\n      const a = Math.max(0, Math.min(1, Number(input[n - 1]) || 0));\n      if (a > 1e-4) {\n        ctx.fillStyle = INK;\n        ctx.beginPath();\n        ctx.arc(px(a), py(fn(a)), 2.5, 0, Math.PI * 2);\n        ctx.fill();\n      }\n    }\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = DRIVE;\n    ctx.fillText(`DRIVE x${drive.toFixed(drive < 10 ? 1 : 0)}`, pad, 9);\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 5,
+                "widgets": {
+                  "amount": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Amount",
+                    "bind": "Amount",
+                    "min": 0,
+                    "max": 100
+                  },
+                  "curve": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "one-knob",
+            "params": {
+              "Amount": 0
+            },
+            "pluginId": "drums-one-knob:fx-one-knob"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-purest-drive": {
+        "from": "drums-purest-drive",
+        "use": [
+          {
+            "module": "fx-purest-drive",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "drive": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "Drive",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// purest-drive — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "drive": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "Drive",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "purest-drive",
+            "params": {},
+            "pluginId": "drums-purest-drive:fx-purest-drive"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-spiral": {
+        "from": "drums-spiral",
+        "use": [
+          {
+            "module": "fx-spiral",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 1,
+              "rows": 1,
+              "widgets": {}
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "spiral",
+            "params": {},
+            "pluginId": "drums-spiral:fx-spiral"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-spiral-2": {
+        "from": "drums-spiral-2",
+        "use": [
+          {
+            "module": "fx-spiral-2",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 7,
+              "rows": 4,
+              "widgets": {
+                "tone": {
+                  "type": "group",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "TONE",
+                  "color": "#3ec96b26"
+                },
+                "highpass": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Highpass",
+                  "bind": "Highpass",
+                  "min": 0,
+                  "max": 1
+                },
+                "presence": {
+                  "type": "fader",
+                  "col": 2,
+                  "row": 0,
+                  "rowSpan": 3,
+                  "label": "Pres",
+                  "bind": "Presence",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 3,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// spiral-2 — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 5,
+                "widgets": {
+                  "tone": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 3,
+                    "rowSpan": 3,
+                    "label": "TONE",
+                    "color": "#3ec96b26"
+                  },
+                  "highpass": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Highpass",
+                    "bind": "Highpass",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "presence": {
+                    "type": "fader",
+                    "col": 2,
+                    "row": 0,
+                    "rowSpan": 3,
+                    "label": "Pres",
+                    "bind": "Presence",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 3,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "spiral-2",
+            "params": {},
+            "pluginId": "drums-spiral-2:fx-spiral-2"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-un-box": {
+        "from": "drums-un-box",
+        "use": [
+          {
+            "module": "fx-un-box",
+            "uses": "@k7-core/audio/overdrive",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "unbox": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "UnBox",
+                  "bind": "UnBox",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// un-box — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "unbox": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "UnBox",
+                    "bind": "UnBox",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "bass-drive",
+              "coils",
+              "cojones",
+              "density",
+              "drive",
+              "dyno",
+              "facet",
+              "focus",
+              "high-impact",
+              "loud",
+              "mojo",
+              "nc-17",
+              "one-knob",
+              "purest-drive",
+              "spiral",
+              "spiral-2",
+              "un-box"
+            ],
+            "engine": "un-box",
+            "params": {},
+            "pluginId": "drums-un-box:fx-un-box"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-bass-drive",
+      "drums-coils",
+      "drums-cojones",
+      "drums-density",
+      "drums-drive",
+      "drums-dyno",
+      "drums-facet",
+      "drums-focus",
+      "drums-high-impact",
+      "drums-loud",
+      "drums-mojo",
+      "drums-nc-17",
+      "drums-one-knob",
+      "drums-purest-drive",
+      "drums-spiral",
+      "drums-spiral-2",
+      "drums-un-box"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-bass-drive": "#b61e26",
+      "drums-coils": "#bc1f25",
+      "drums-cojones": "#c22025",
+      "drums-density": "#c82124",
+      "drums-drive": "#ce2223",
+      "drums-dyno": "#d52323",
+      "drums-facet": "#db2624",
+      "drums-focus": "#dc2e29",
+      "drums-high-impact": "#dd3630",
+      "drums-loud": "#de3e36",
+      "drums-mojo": "#df463c",
+      "drums-nc-17": "#e04e42",
+      "drums-one-knob": "#e15648",
+      "drums-purest-drive": "#e25d4f",
+      "drums-spiral": "#e36455",
+      "drums-spiral-2": "#e46c5b",
+      "drums-un-box": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-bass-drive": "audio",
+      "drums-coils": "audio",
+      "drums-cojones": "audio",
+      "drums-density": "audio",
+      "drums-drive": "audio",
+      "drums-dyno": "audio",
+      "drums-facet": "audio",
+      "drums-focus": "audio",
+      "drums-high-impact": "audio",
+      "drums-loud": "audio",
+      "drums-mojo": "audio",
+      "drums-nc-17": "audio",
+      "drums-one-knob": "audio",
+      "drums-purest-drive": "audio",
+      "drums-spiral": "audio",
+      "drums-spiral-2": "audio",
+      "drums-un-box": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-bass-drive": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-coils": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-cojones": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-density": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-drive": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-dyno": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-facet": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-focus": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-high-impact": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-loud": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-mojo": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-nc-17": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-one-knob": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-purest-drive": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-spiral": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-spiral-2": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-un-box": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

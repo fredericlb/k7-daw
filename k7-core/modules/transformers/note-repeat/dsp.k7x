@@ -1,0 +1,24 @@
+// Note repeat — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({
+  Count: { min: 1, max: 8, default: 1 },
+  Division: { min: 0.125, max: 4, default: 0.5 },
+  Gate: { min: 0.05, max: 1, default: 0.5 },
+  Decay: { min: 0, max: 1, default: 0 },
+  Chance: { min: 0, max: 1, default: 1 },
+  Pattern: { min: 0, max: 2, default: 0 },
+  Length: { min: 1, max: 32, default: 16 },
+  Density: { min: 0, max: 1, default: 0.5 },
+  Rotate: { min: 0, max: 1, default: 0 },
+  Accents: { min: 0, max: 1, default: 1 },
+  Low: { min: 0, max: 1, default: 0.5 },
+  Opposite: { min: 0, max: 1, default: 0 },
+  Keep: { min: 0, max: 1, default: 0 },
+})
+graph([
+  hold(),
+  pattern("Pattern", "Length", "Density", "Rotate"),
+  accent("Accents", "Low", "Opposite", "Keep"),
+  chance("Chance"),
+  decay("Decay"),
+  strike(mul("Count", "Division"), "Gate"),
+])

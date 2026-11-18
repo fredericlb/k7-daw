@@ -1,0 +1,353 @@
+{
+  "project": "shapes/arrangement.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "arrangement.k7",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/shapes/arrangement.k7/clips",
+    "tracks": [
+      {
+        "id": "kit",
+        "name": "kit",
+        "role": "regular",
+        "contentType": "audio notes",
+        "group": "live",
+        "generated": true,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [],
+        "plugins": [
+          {
+            "id": "kit:pattern",
+            "type": "studio_pattern",
+            "name": "Pattern",
+            "path": "",
+            "presetSave": "",
+            "role": "",
+            "enabled": true,
+            "params": {},
+            "patternSource": "// A live Strudel (TidalCycles-in-JS) pattern, linked by the \"pad\" and \"kit\"\n// tracks. While the transport plays it streams onto them, locked to the beat —\n// edit + save to hear it change live.\n//\n// `.label(...)` names the lane a part plays on. A label matching a strudel\n// lane's name lands there — \"Pad\" on the \"pad\" lane, so it plays through that\n// lane's chain and mixer strip. A label no lane declares still plays, on a\n// live track named after it; so does an unlabelled part, bucketed by orbit.\n//\n// What `s(...)` means depends on WHICH lane module the lane extends: a waveform\n// on \"pad\" (a sequence lane — its chain brings the instrument), a sample name on\n// \"kit\" (an audio lane) — the bundled kit, your project `samples/` folder, or\n// $DIRT_SAMPLES.\nstack(\n  note(\"c e g c5\").s(\"sawtooth\").slow(2).label(\"Pad\"),\n  sound(\"bd hh sn hh\").label(\"Kit\"),\n)\n",
+            "patternLabel": "kit",
+            "patternCatchAll": true,
+            "patternClaimed": [
+              "kit",
+              "pad"
+            ],
+            "patternPlays": "both",
+            "patternOnly": true,
+            "patternBanks": [
+              "<ws>/shapes/arrangement.k7/samples"
+            ]
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "pad",
+        "name": "pad",
+        "role": "regular",
+        "contentType": "audio notes",
+        "group": "live",
+        "generated": true,
+        "color": "#6c31b9",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [],
+        "plugins": [
+          {
+            "id": "pad:pattern",
+            "type": "studio_pattern",
+            "name": "Pattern",
+            "path": "",
+            "presetSave": "",
+            "role": "",
+            "enabled": true,
+            "params": {},
+            "patternSource": "// A live Strudel (TidalCycles-in-JS) pattern, linked by the \"pad\" and \"kit\"\n// tracks. While the transport plays it streams onto them, locked to the beat —\n// edit + save to hear it change live.\n//\n// `.label(...)` names the lane a part plays on. A label matching a strudel\n// lane's name lands there — \"Pad\" on the \"pad\" lane, so it plays through that\n// lane's chain and mixer strip. A label no lane declares still plays, on a\n// live track named after it; so does an unlabelled part, bucketed by orbit.\n//\n// What `s(...)` means depends on WHICH lane module the lane extends: a waveform\n// on \"pad\" (a sequence lane — its chain brings the instrument), a sample name on\n// \"kit\" (an audio lane) — the bundled kit, your project `samples/` folder, or\n// $DIRT_SAMPLES.\nstack(\n  note(\"c e g c5\").s(\"sawtooth\").slow(2).label(\"Pad\"),\n  sound(\"bd hh sn hh\").label(\"Kit\"),\n)\n",
+            "patternLabel": "pad",
+            "patternCatchAll": false,
+            "patternClaimed": [
+              "kit",
+              "pad"
+            ],
+            "patternPlays": "both",
+            "patternOnly": true,
+            "patternBanks": [
+              "<ws>/shapes/arrangement.k7/samples"
+            ]
+          },
+          {
+            "id": "pad:00000000-0000-4000-8000-000000000006",
+            "type": "4osc",
+            "name": "00000000-0000-4000-8000-000000000006",
+            "path": "",
+            "presetSave": "<ws>/shapes/arrangement.k7/vstpresets/00000000-0000-4000-8000-000000000006.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#c38ee1",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 8,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 62,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 3,
+                "duration": 1,
+                "key": 65,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 4,
+                "duration": 1,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 5,
+                "duration": 1,
+                "key": 69,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 6,
+                "duration": 1,
+                "key": 71,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 7,
+                "duration": 1,
+                "key": 72,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [
+          {
+            "id": "melody:00000000-0000-4000-8000-000000000004",
+            "type": "4osc",
+            "name": "00000000-0000-4000-8000-000000000004",
+            "path": "",
+            "presetSave": "<ws>/shapes/arrangement.k7/vstpresets/00000000-0000-4000-8000-000000000004.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [
+      {
+        "id": "live",
+        "name": "live",
+        "color": "",
+        "mute": false,
+        "solo": false
+      }
+    ],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      },
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000004",
+            "uses": "@workspace/instruments/synth",
+            "place": "melody · step 2",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {},
+            "pluginId": "melody:00000000-0000-4000-8000-000000000004"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "pad": {
+        "from": "pad",
+        "use": [
+          {
+            "module": "00000000-0000-4000-8000-000000000006",
+            "uses": "@workspace/instruments/synth",
+            "place": "pad · step 2",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "params": {},
+            "pluginId": "pad:00000000-0000-4000-8000-000000000006"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "kit",
+      "live",
+      "melody",
+      "pad"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "kit": "#dd322c",
+      "melody": "#c38ee1",
+      "pad": "#6c31b9"
+    },
+    "trackSignals": {
+      "kit": "audio",
+      "live": "audio",
+      "melody": "midi",
+      "pad": "audio"
+    },
+    "stacks": [],
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 8,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

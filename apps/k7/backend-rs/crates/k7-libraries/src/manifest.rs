@@ -1,0 +1,145 @@
+//! manifest.rs — a version's `library.k7x`: read from k7x (or a flat legacy `library.yaml`), written as k7x.
+//! `libraryVersions.ts`' `parseLibraryManifest` and `stringifyLibraryManifest`, byte for byte on what it writes.
+//! What a reader gets wrong: a legacy manifest is read as flat `key: value` lines only (docs/libraries.md, "Departures").
+
+use k7x::edit::{StringifyOptions, Value, js_trim, parse, stringify};
+use serde_json::{Map, Value as Json, json};
+
+/// What a published version says about itself.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Manifest {
+    pub name: String,
+    pub version: u64,
+    pub requires: u64,
+    pub notes: Option<String>,
+    pub seed: Option<u64>,
+}
+
+impl Manifest {
+    /// A manifest with nothing but the three fields every version has.
+    pub fn plain(name: &str, version: u64, requires: u64) -> Manifest {
+        Manifest {
+            name: name.into(),
+            version,
+            requires,
+            notes: None,
+            seed: None,
+        }
+    }
+
+    /// The listing's spelling: `name, version, requires`, then `notes` and `seed` when set.
+    pub fn json(&self) -> Json {
+        let mut m = Map::new();
+        m.insert("name".into(), json!(self.name));
+        m.insert("version".into(), json!(self.version));
+        m.insert("requires".into(), json!(self.requires));
+        if let Some(n) = &self.notes {
+            m.insert("notes".into(), json!(n));
+        }
+        if let Some(s) = self.seed {
+            m.insert("seed".into(), json!(s));
+        }
+        Json::Object(m)
+    }
+
+    /// A manifest from a JSON object the way `libraryManifestData` reads data; None when it is not one.
+    pub fn from_json(v: &Json) -> Option<Manifest> {
+        let d = v.as_object()?;
+        let int = |k: &str| d.get(k).and_then(int_of);
+        let version = int("version")?;
+        let requires = int("requires").unwrap_or(1);
+        let name = d.get("name")?.as_str()?.to_string();
+        let notes = d
+            .get("notes")
+            .and_then(Json::as_str)
+            .map(|n| js_trim(n).to_string())
+            .filter(|n| !n.is_empty());
+        Some(Manifest {
+            name,
+            version,
+            requires,
+            notes,
+            seed: int("seed"),
+        })
+    }
+}
+
+/// An integer of at least 1, as the manifest's `int` takes it.
+fn int_of(v: &Json) -> Option<u64> {
+    let n = v.as_f64()?;
+    (n.fract() == 0.0 && (1.0..=9_007_199_254_740_991.0).contains(&n)).then_some(n as u64)
+}
+
+fn from_value(v: &Value) -> Option<Manifest> {
+    let Value::Map(entries) = v else { return None };
+    let mut o = Map::new();
+    for (k, v) in entries {
+        o.insert(
+            k.clone(),
+            match v {
+                Value::Num(n) => json!(n),
+                Value::Str(s) => json!(s),
+                _ => Json::Null,
+            },
+        );
+    }
+    Manifest::from_json(&Json::Object(o))
+}
+
+/// A `library.k7x`'s data, or None when the text is not one.
+pub fn parse_manifest(text: &str) -> Option<Manifest> {
+    from_value(&parse(text).ok()?)
+}
+
+/// A `library.yaml` of flat scalars (what the hub's own installs wrote); anything nested, folded or anchored reads as none.
+pub fn parse_legacy_manifest(text: &str) -> Option<Manifest> {
+    let mut o = Map::new();
+    for line in text.lines() {
+        let t = line.trim_end();
+        if t.trim().is_empty() || t.trim_start().starts_with('#') || t == "---" {
+            continue;
+        }
+        if t.starts_with(char::is_whitespace) {
+            return None;
+        }
+        let (k, v) = t.split_once(':')?;
+        let v = v.trim();
+        if matches!(
+            v.chars().next(),
+            Some('|' | '>' | '&' | '*' | '[' | '{' | '!')
+        ) {
+            return None;
+        }
+        let value = scalar(v)?;
+        o.insert(k.trim().to_string(), value);
+    }
+    Manifest::from_json(&Json::Object(o))
+}
+
+/// One flat scalar: a quoted string without escapes, a whole number, else the bare text.
+fn scalar(v: &str) -> Option<Json> {
+    if let Some(q @ ('"' | '\'')) = v.chars().next() {
+        let inner = v.strip_prefix(q)?.strip_suffix(q)?;
+        return (!inner.contains([q, '\\'])).then(|| json!(inner));
+    }
+    if !v.is_empty() && v.bytes().all(|b| b.is_ascii_digit()) {
+        return v.parse::<f64>().ok().map(|n| json!(n));
+    }
+    Some(json!(v))
+}
+
+/// The text of a `library.k7x`.
+pub fn stringify_manifest(m: &Manifest) -> String {
+    let mut e = vec![
+        ("name".to_string(), Value::Str(m.name.clone())),
+        ("version".into(), Value::Num(m.version as f64)),
+        ("requires".into(), Value::Num(m.requires as f64)),
+    ];
+    if let Some(n) = &m.notes {
+        e.push(("notes".into(), Value::Str(n.clone())));
+    }
+    if let Some(s) = m.seed {
+        e.push(("seed".into(), Value::Num(s as f64)));
+    }
+    stringify(&Value::object(e), &StringifyOptions::default()).unwrap_or_default()
+}

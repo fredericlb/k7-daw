@@ -1,0 +1,12 @@
+// A lane of picture. Every time here is DECIMAL SECONDS — picture is cut against the
+// wall clock, where the lanes above are placed in bars against the tempo. Both are drawn
+// on the one timeline, whose ruler reads either (the clock button in its header).
+//
+// Re-typing `tempo` therefore slides the GRID under this shot rather than moving it:
+// the file says seconds, and seconds is what it keeps saying.
+//
+// `length(0)` runs to the end of the source; `from` trims the head. Muting it
+// HIDES it — there is no sound on a picture lane.
+extends("@meta/picture-track")
+frame([0, 0, 1280, 720])
+events([ref("sample").start(0).length(6).from(0)])

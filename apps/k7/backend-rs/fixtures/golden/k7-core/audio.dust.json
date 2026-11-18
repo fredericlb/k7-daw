@@ -1,0 +1,597 @@
+{
+  "project": "k7-core/audio.dust.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.dust",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.dust.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#af1d26",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.dust.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Tape Dust",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.dust.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-deckwrecka",
+        "name": "drums-deckwrecka",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#d32222",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.dust.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-deckwrecka:fx-deckwrecka",
+            "type": "Deckwrecka",
+            "name": "fx-deckwrecka",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.dust.k7/nodes/fx-deckwrecka.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-dust-bunny",
+        "name": "drums-dust-bunny",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e0493e",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.dust.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-dust-bunny:fx-dust-bunny",
+            "type": "Dust Bunny",
+            "name": "fx-dust-bunny",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.dust.k7/nodes/fx-dust-bunny.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      },
+      {
+        "id": "drums-tape-dust",
+        "name": "drums-tape-dust",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#e57361",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.dust.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums-tape-dust:fx-tape-dust",
+            "type": "Tape Dust",
+            "name": "fx-tape-dust",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.dust.k7/nodes/fx-tape-dust.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/dust",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "dust": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Dust",
+                  "bind": "Dust",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// tape-dust — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 5,
+                "widgets": {
+                  "dust": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Dust",
+                    "bind": "Dust",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "deckwrecka",
+              "dust-bunny",
+              "tape-dust"
+            ],
+            "engine": "tape-dust",
+            "params": {},
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-deckwrecka": {
+        "from": "drums-deckwrecka",
+        "use": [
+          {
+            "module": "fx-deckwrecka",
+            "uses": "@k7-core/audio/dust",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 3,
+              "rows": 3,
+              "widgets": {
+                "wreck": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 3,
+                  "rowSpan": 3,
+                  "label": "Wreck",
+                  "bind": "Wreck",
+                  "min": 0,
+                  "max": 1
+                }
+              }
+            },
+            "engines": [
+              "deckwrecka",
+              "dust-bunny",
+              "tape-dust"
+            ],
+            "engine": "deckwrecka",
+            "params": {},
+            "pluginId": "drums-deckwrecka:fx-deckwrecka"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-dust-bunny": {
+        "from": "drums-dust-bunny",
+        "use": [
+          {
+            "module": "fx-dust-bunny",
+            "uses": "@k7-core/audio/dust",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "bunny": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Bunny",
+                  "bind": "Bunny",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// dust-bunny — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 4,
+                "widgets": {
+                  "bunny": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Bunny",
+                    "bind": "Bunny",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "deckwrecka",
+              "dust-bunny",
+              "tape-dust"
+            ],
+            "engine": "dust-bunny",
+            "params": {},
+            "pluginId": "drums-dust-bunny:fx-dust-bunny"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "drums-tape-dust": {
+        "from": "drums-tape-dust",
+        "use": [
+          {
+            "module": "fx-tape-dust",
+            "uses": "@k7-core/audio/dust",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 6,
+              "rows": 3,
+              "widgets": {
+                "dust": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Dust",
+                  "bind": "Dust",
+                  "min": 0,
+                  "max": 1
+                },
+                "io": {
+                  "type": "lcdscreen",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                }
+              },
+              "script": "// tape-dust — one screen: the level going in against the level coming out, read off the taps, not guessed.\n\nconst IN = \"#6b6b6b\";\nconst OUT = \"#ff6a1a\";\nconst INK = \"#ffffff\";\nconst FONT = \"8px ui-monospace, monospace\";\nconst FLOOR = -48;\n\nconst db = (a) => (a > 1e-5 ? 20 * Math.log10(a) : -100);\nconst level = (a) => Math.max(0, Math.min(1, (db(a) - FLOOR) / -FLOOR));\nconst last = (arr) => (Array.isArray(arr) && arr.length > 0 ? Number(arr[arr.length - 1]) || 0 : 0);\n\n/** One tap's recent history as a line, newest at the right edge. */\nfunction trace(ctx, arr, x0, top, w, h, color) {\n  const n = Array.isArray(arr) ? Math.min(arr.length, 160) : 0;\n  if (n < 2) return;\n  const start = arr.length - n;\n  ctx.strokeStyle = color;\n  ctx.lineWidth = 1;\n  ctx.beginPath();\n  for (let i = 0; i < n; i++) {\n    const px = x0 + (i / (n - 1)) * w;\n    const py = top + h * (1 - level(Number(arr[start + i]) || 0));\n    if (i === 0) ctx.moveTo(px, py);\n    else ctx.lineTo(px, py);\n  }\n  ctx.stroke();\n}\n\nexport default {\n  io(lcd) {\n    const { ctx, width: W, height: H, input, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    ctx.font = FONT;\n    ctx.textBaseline = \"alphabetic\";\n\n    const pad = 5;\n    const top = 13;\n    const h = Math.max(1, H - top - pad);\n    const barW = 5;\n    const bars = barW * 2 + 4;\n    const w = Math.max(1, W - pad * 3 - bars);\n    const hasIn = Array.isArray(input) && input.length > 0;\n    const hasOut = Array.isArray(output) && output.length > 0;\n\n    ctx.strokeStyle = IN;\n    ctx.lineWidth = 1;\n    ctx.strokeRect(pad + 0.5, top + 0.5, w - 1, h - 1);\n\n    if (!hasIn && !hasOut) {\n      ctx.fillStyle = IN;\n      ctx.textAlign = \"center\";\n      ctx.fillText(\"NO SIGNAL\", pad + w / 2, top + h / 2 + 3);\n    } else {\n      trace(ctx, input, pad, top, w, h, IN);\n      trace(ctx, output, pad, top, w, h, OUT);\n    }\n\n    const inNow = last(input);\n    const outNow = last(output);\n    const bx = pad * 2 + w;\n    ctx.fillStyle = IN;\n    const hi = h * level(inNow);\n    ctx.fillRect(bx, top + h - hi, barW, hi);\n    ctx.fillStyle = OUT;\n    const ho = h * level(outNow);\n    ctx.fillRect(bx + barW + 4, top + h - ho, barW, ho);\n\n    ctx.textAlign = \"left\";\n    ctx.fillStyle = IN;\n    ctx.fillText(\"IN\", pad, 9);\n    ctx.fillStyle = OUT;\n    ctx.fillText(\"OUT\", pad + 16, 9);\n    if (inNow > 1e-4 && outNow > 1e-4) {\n      const diff = db(outNow) - db(inNow);\n      ctx.textAlign = \"right\";\n      ctx.fillStyle = INK;\n      ctx.fillText(`${diff >= 0 ? \"+\" : \"\"}${diff.toFixed(1)} DB`, W - pad, 9);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 5,
+                "widgets": {
+                  "dust": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Dust",
+                    "bind": "Dust",
+                    "min": 0,
+                    "max": 1
+                  },
+                  "io": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  }
+                }
+              }
+            },
+            "engines": [
+              "deckwrecka",
+              "dust-bunny",
+              "tape-dust"
+            ],
+            "engine": "tape-dust",
+            "params": {},
+            "pluginId": "drums-tape-dust:fx-tape-dust"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums",
+      "drums-deckwrecka",
+      "drums-dust-bunny",
+      "drums-tape-dust"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#af1d26",
+      "drums-deckwrecka": "#d32222",
+      "drums-dust-bunny": "#e0493e",
+      "drums-tape-dust": "#e57361"
+    },
+    "trackSignals": {
+      "drums": "audio",
+      "drums-deckwrecka": "audio",
+      "drums-dust-bunny": "audio",
+      "drums-tape-dust": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-deckwrecka": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-dust-bunny": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ],
+      "drums-tape-dust": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

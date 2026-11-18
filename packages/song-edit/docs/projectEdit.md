@@ -1,0 +1,205 @@
+# `projectEdit.ts` — changing a project in its own vocabulary
+
+`projectEdit.ts` is the layer that turns "set `Filter Freq` on module `synth`" into a write:
+it finds the file a NAME lives in and hands the change to the k7x writer for that kind of
+file. It is not `yaml/edit.ts`, the file primitive — this one knows modules, nodes, clips and
+chains, and nothing about the format beyond handing a writer the document. Every writer takes a
+`K7Scope` — the file's root, or a chain item's — and sets values in it, so every write changes
+the value and nothing else: comments, key order and layout all survive.
+
+This page holds the reasoning behind the functions.
+
+## Where a module's file is
+
+Two cases, and `moduleFileOf` picks between them:
+
+- a **node** carries its own `home` folder and has no category to rebuild a path from — the
+  only shape `loadModules` returns, a project keeping no modules of its own;
+  reached FIRST, since a node needs no lookup elsewhere to answer for itself;
+- a **shared** one, `"@engine/io/IN:in-2"`, whose file lives in the workspace's `_modules` (or
+  one of the account's libraries) and not in this project at all.
+
+That second case is `sharedModuleFileOf`, and it returns null for anything that is not a
+namespaced ref. Writing there changes the module for every project beside it, which is right
+for what lives on ONE desk rather than in one song — an input's `channel:` describes the rig,
+and so does whether that input is audible. `@k7-core` is the one exception the file service still
+gates behind an explicit Edit confirmation before it takes a write at all
+(`apps/k7/frontend/docs/sharedModules.md`); `@workspace` takes this write directly, the same
+as any other file.
+
+## Attribute sets (alternatives)
+
+`moduleAlternatives` reads the FILE rather than the compiled doc, and that is not an
+optimisation. An alternative may change any field, so the doc carries the chosen one already
+merged in and has nothing left to say about the others. It sits here beside the writers so
+`moduleFileOf` can stay private — one place knows where a module's file is.
+
+`newModuleAlternative` resolves the module before deciding what an empty set means. A LANE's
+empty one is empty of PLACEMENTS: a new take that opens holding the previous take's clips is
+not a new take. It has to read the module RESOLVED, not as loaded — `loadModules` hands back a
+node with its `extends` still a string, and `kind: "track"` lives on the built-in it extends.
+Both reads are memoised on the module folders' stamp, so this costs a directory walk and not a
+re-read, and a name that resolves to nothing simply is not a lane. Deciding it here rather than
+in the document editor is deliberate: the question is what this module extends, and the
+vocabulary to answer it lives on this side.
+
+See `packages/song/docs/alternatives.md` for the format.
+
+## Fields that are not params
+
+Several module settings are FIELDS rather than entries in `params:`, and the difference decides
+how each takes effect. A param is sent to a running plugin; a field is learnt by REBUILDING
+something, which is why the caller reloads instead of patching.
+
+| field | what it says | why not a param |
+|---|---|---|
+| `monitor` | `off` \| `auto` \| `on`, whether a live input is audible | an io module has no plugin to send it to; the engine rebuilds the track's input |
+| `channel` | which interface channels an input listens on, 1-based | same, and it may land in a shared file: which socket an input is on describes the desk |
+| `gain` | the interface trim in dB, 0 being unity | same three-field family as the two above |
+| `base` | which named `.vstpreset` the module starts from | a preset is loaded when the plugin is CREATED, so the engine relearns it by rebuilding |
+| `shader` | which shader folder this node runs | the four knobs steer a program already running; this decides which program is compiled |
+| `frozen` | the render this module plays instead of its inputs | see `packages/song/docs/freeze.md` |
+
+`channel` is one number for mono, two for a stereo pair, and the two-element form only ever
+means a pair the interface actually groups: `findWaveInput` matches a device on its exact
+channel list, so a set the rig does not offer resolves to nothing and plays as silence (see
+`engine/k7-runtime/docs/audioDevice.md`). Whether such a pair exists is the ENGINE's business and
+not checkable from here — the writer writes what it is told, and the surface offering the
+choice is the one that only offers real ones. `gain` is unclamped for the same reason:
+Tracktion does not clamp it either, and what is USEFUL (±24 dB, the range the builder's binds
+declare) is a judgement for the surface, not for a writer taking a number someone typed.
+
+`base` is PER INSTANCE, because the write lands in the module's own file and a node has one:
+two nodes of the same module can sit on two different bases, which is the point of choosing at
+all. And it cannot disturb what the module already said — the engine loads the base and then
+applies `params:` over it, so every authored value still wins and a base only decides what text
+could not have said (`packages/song/docs/userPresets.md`).
+
+`shader` is deliberately NOT checked against the folder, the same posture `base` takes. Which
+shaders exist is a fact about a disk this may not be on; the dropdown offers only what
+`moduleShaderChoices` listed, and a name whose folder is missing is already handled where it
+matters — `readShader` returns null and the pass falls through. Refusing here would mean a name
+could not be typed before the folder it names is synced.
+
+Both `shader` and `base` REMOVE their key when handed an empty string rather than writing
+`: ""`. The schema's `min(1)` would refuse that anyway, and a node running no shader is one
+with no line about it, not one holding an empty name.
+
+`frozen` is refused outright on a shared module. It is a fact about THIS song's signal path —
+the render was bounced from these lanes — and a catalogue module sits beside every project at
+once, so writing it there would freeze a reverb in songs that have never been rendered.
+`monitor` goes the other way deliberately; this one does not.
+
+## A clip name is half a placement id
+
+`clipFileOf` strips the `@<beat>` before building a path. A clip on a lane is `bass_2_0@16`
+(`placementId.ts`): the material, and where it plays. Everything in the clip section is a
+property of the MATERIAL — the stretch map, the onset corrections, the file itself — and is
+shared by every placement of it.
+
+Every surface that draws a clip holds the placement id, because that is what the compiler put on
+it and what `/waveform` is asked with. So `clip warp` and `clip onset …` are handed one, and
+without the strip they are reachable only by typing a material name by hand.
+
+Stripped HERE and not in the callers, for the reason the file service strips it at its own
+boundary (`waveformOps.ts`, `workspace.ts`, both carrying the same note): there is one rule, and
+the place that turns a name into a path is where it belongs. `materialRefOf` returns a bare
+material name unchanged, so a hand-typed one is untouched.
+
+`missingClip` names BOTH the id and the file it looked for. For a placement the id is the one
+string that is NOT the file's name — `sy.chrpan2_…@106` against `clips/sy.chrpan2_….k7x` — and
+naming both is what turns "this is broken" into "that file is gone".
+
+Two more rules in that section. Onset corrections that cancel out take the `onsets:` key away
+rather than writing `onsets: {}` — a clip nobody has corrected must read exactly as it did
+before anyone opened it, or every take in a session grows an empty block that says nothing and
+shows up in every diff. And `clipWarpMarkers` does no resolution and no defaulting: a clip with
+no `warp:` has no map, which is a different thing from an identity one. The `algorithm` on
+`setClipWarp` is only used when the block is being created — the engine ignores it entirely,
+realising a warp through Tracktion's auto-tempo, so the name is documentation of where the map
+came from and is written only because the schema requires it.
+
+## One graph file, project or chain
+
+`graphFileOf` is what every chain verb goes through, and it is what lets the graph editor act
+on a library CHAIN template without a single verb knowing it might be one. That costs nothing
+to arrange because a chain is not a lookalike: it is a folder holding a `graph.k7x` and a
+`nodes/`, the same two things a project holds, differing only in having no `project.k7x` and
+in naming its ends `@in`/`@out`.
+
+Bypassing needs no chain name: the file names each module once, so there is one thing to toggle
+however many chains the module sits in.
+
+## Repointing, unlinking, renaming, deleting
+
+`setModuleExtends` rewrites ONE line of ONE file and that is the whole of it. The file stays
+where it is under the name it has, so its position on the graph, its panel and its alternatives
+survive; only what it IS changes. Three keys are dropped on the way — `plugin`, `params`,
+`rack` — because they describe the module it extended before the rewrite and, left behind, would
+either outrank the new ref (`plugin` wins over an inherited one) or address knobs and sounds it
+has not got.
+The ref is checked against the project's real vocabulary rather than a guessed path: an
+inherited `@ns/…` has no local file to stat, and a typo must be refused before anything is
+written. Repointing something at itself is refused for the reason the resolver guards its walk —
+an `extends` cycle resolves to nothing at all.
+
+The `node replace` VERB may then RENAME the node, when its name was one the convention made and
+is therefore about to start lying about the module under it (`renameChainNode`, and
+`renamedInstance` for the judgement). That is a second act on purpose: this one cannot fail
+halfway, and a rename touches a file, a preset and every chain step that spells the name.
+
+### A graph node need not have a file
+
+Two shapes answer to a name on the graph: a NODE — `nodes/<name>.k7x`, one use of a module — and a
+MODULE used directly, whose `module.k7x` is the only file there is. The second is not an import's
+oddity: k7 writes it itself for every lane's strip (`mix-<lane>`,
+`packages/song/docs/trackMixer.md`), and the importer writes it for a plugin used once. So the
+verbs have to know it, rather than answering "no node 'x'" about something plainly on the graph.
+
+- **delete** takes it off the graph and leaves the MODULE where it is. The module is a definition
+  and another chain may name it; what the person asked to delete is the node.
+- **rename** refuses, and says which of the two it is looking at. The name on the graph IS the
+  module's, so renaming it here would leave the graph naming a folder that no longer exists —
+  rename the module, or give it a node first.
+- **replace** repoints the MODULE, which is the paragraph above and stays right: that shape means
+  the module is used once — collapsing an insert is what produces it — so repointing it is
+  repointing the node, and its position, panel and alternatives survive. A module two chains DO
+  name is one plugin shared on purpose (`apps/k7/docs/24-syntax-chains.md`), and changing it
+  changes the thing they share.
+
+`unlinkChainNode` takes a node out of the SIGNAL PATH, joining what fed it to what it fed, and
+leaves it in the graph wired to nothing. Its files are untouched and so is its place on the
+canvas: unlinking is "take it out of the run", not "get rid of it". Putting it back is `node
+insert`; removing it altogether is `node delete`. A node may be named as a step or only ever as
+somebody's destination — the last module in a run has no entry of its own, and it is still in
+the chain and still unlinkable. A LANE is not refused: it is a module like any other
+(`packages/song/docs/trackModules.md`), so the splice is well defined there too.
+
+`renameChainNode` and `deleteChainNode` share a footprint — a node is `nodes/<name>.k7x` plus,
+when it has one, `nodes/<name>.vstpreset` — and an ORDER that is load-bearing. The FILES go
+first and the chains second, because the state to avoid at all costs is a `graph.k7x` naming a
+node with no file: that is what stops the project loading, and it is the half a person cannot
+see. Interrupted the other way round you get an orphan file, which loads fine and is merely
+untidy. Renaming has no safe order at all — whichever half lands first, the other is dangling
+until it does — so the check that the destination is free happens BEFORE anything moves, and
+that is what keeps it from being a real risk.
+
+Neither touches the MODULE. A node is one use of one, its name is the key a chain writes, and
+deleting the last use is not a statement about the thing being used — other projects read the
+same module.
+
+`laneOfNode` answers which lane's chain plays a node, which is what an instance name is built
+from (`instanceName.ts`) — the same question `moduleFork.md`'s `chainsUsing` answers when it
+reports which chains now play a freshly materialised module. It takes the FIRST when several
+chains reach it, the same arbitrary-but-stable choice either makes.
+
+`replugChainNodes` moves ONE end of an existing arrow in one read and one write, so however the
+two halves are spelt the file changes atomically: a crash between "pulled" and "plugged" cannot
+leave the cable half-gone.
+
+## What this layer does not do
+
+It removes no MODULE. Deleting a module's file or folder is the file tree's business, and taking
+its name out of the runs is `unlinkChainNode` and `deleteChainNode` above — two acts, because a
+chain step naming a module that is gone is a dangling reference the compiler refuses to load,
+and the two halves have owners of their own.

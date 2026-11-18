@@ -1,0 +1,883 @@
+{
+ "module": "golden/song/moduleFork",
+ "blobs": {
+  "2969e49923d1": "// tape-delay: @engine/audio/delay/tape-delay, given a folder so it can carry a panel and presets.\nplugin({ type: \"vst3\", name: \"Tape Delay\" })\n",
+  "83a6d4f24f3d": "modules({\n  gtr: [\"@workspace/audio/tape-delay\"],\n  \"@workspace/audio/tape-delay\": [\"MIX\"],\n  MIX: [\"OUT\"],\n})\n",
+  "3c3d0a3ece32": "modules({\n  gtr: [\"@engine/audio/delay/tape-delay\"],\n  \"@engine/audio/delay/tape-delay\": [\"MIX\"],\n  MIX: [\"OUT\"],\n})\n",
+  "17ed2a3e0b5b": "// tape-delay_3: @engine/audio/delay/tape-delay, given a folder so it can carry a panel and presets.\nplugin({ type: \"vst3\", name: \"Tape Delay\" })\n",
+  "b7394d969e36": "modules({\n  gtr: [\"@workspace/audio/tape-delay_3\"],\n  \"@workspace/audio/tape-delay_3\": [\"MIX\"],\n  MIX: [\"OUT\"],\n})\n",
+  "5f45162ce3ac": "plugin({})\n",
+  "49e119ce06a6": "// Synth_Lead: @engine/instruments/synth, given a folder so it can carry a panel and presets.\nplugin({ type: \"internal\", name: \"4osc\" })\n",
+  "b628dafac7de": "// OUT: OUT, given a folder so it can carry a panel and presets.\nio(\"out\")\n",
+  "14c94fedb688": "modules({\n  gtr: [\"@engine/audio/delay/tape-delay\"],\n  \"@engine/audio/delay/tape-delay\": [\"MIX\"],\n  MIX: [\"@workspace/OUT\"],\n})\n",
+  "da8efdb3c574": "// x: @engine/audio/___, given a folder so it can carry a panel and presets.\nplugin({ type: \"vst3\", name: \"\" })\n",
+  "dcb6708588db": "start(true)\nsteps([{ id: \"n1\", extends: \"@workspace/audio/tape-delay\" }, { id: \"n2\", extends: \"@workspace/audio/tape-delay\" }])\n",
+  "c6ac48736676": "start(true)\nsteps([{ id: \"n1\", extends: \"@engine/audio/delay/tape-delay\" }, { id: \"n2\", extends: \"@engine/audio/delay/tape-delay\" }])\n",
+  "64c264437a7b": "extends(\"@meta/track\")\n",
+  "b378c7616c46": "modules({ gtr: [\"MIX\"], MIX: [] })\n"
+ },
+ "trees": {
+  "3c5084053a17": {
+   "ws/proj/graph.k7x": "3c3d0a3ece32"
+  },
+  "8ecccf66631e": {
+   "ws/proj/graph.k7x": "3c3d0a3ece32",
+   "ws/_modules/audio/tape-delay/module.k7x": "5f45162ce3ac",
+   "ws/_modules/audio/tape-delay_2/module.k7x": "5f45162ce3ac"
+  },
+  "bf21a9e8fbc5": {},
+  "a311bbcc6704": {
+   "ws/proj/chains/a.k7x": "c6ac48736676",
+   "ws/proj/tracks/gtr.k7x": "64c264437a7b"
+  },
+  "500f117fbbad": {
+   "ws/proj/graph.k7x": "b378c7616c46"
+  },
+  "bf8259647bb4": {
+   "ws/_modules/audio/verb/module.k7x": "5f45162ce3ac",
+   "ws/_modules/audio/fx/echo/module.k7x": "5f45162ce3ac",
+   "ws/_modules/audio/verb/engines/big/module.k7x": "5f45162ce3ac",
+   "home/libraries/k7-core/modules/audio/verb/module.k7x": "5f45162ce3ac",
+   "home/library/modules/audio/mine/module.k7x": "5f45162ce3ac"
+  }
+ },
+ "vectors": [
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/audio/delay/tape-delay",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@engine/audio/delay/tape-delay",
+    "module": "tape-delay",
+    "path": "../_modules/audio/tape-delay/module.k7x",
+    "chains": [
+     "gtr"
+    ]
+   },
+   "changed": {
+    "ws/_modules/audio/tape-delay/module.k7x": "2969e49923d1",
+    "ws/proj/graph.k7x": "83a6d4f24f3d"
+   },
+   "tree": "3c5084053a17"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/audio/delay/tape-delay",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@engine/audio/delay/tape-delay",
+    "module": "tape-delay_3",
+    "path": "../_modules/audio/tape-delay_3/module.k7x",
+    "chains": [
+     "gtr"
+    ]
+   },
+   "changed": {
+    "ws/_modules/audio/tape-delay_3/module.k7x": "17ed2a3e0b5b",
+    "ws/proj/graph.k7x": "b7394d969e36"
+   },
+   "tree": "8ecccf66631e"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/instruments/synth",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@engine/instruments/synth",
+    "module": "Synth_Lead",
+    "path": "../_modules/instruments/Synth_Lead/module.k7x",
+    "chains": []
+   },
+   "changed": {
+    "ws/_modules/instruments/Synth_Lead/module.k7x": "49e119ce06a6"
+   },
+   "tree": "3c5084053a17"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/audio/nope",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "@engine/audio/nope is not a module this machine's engine offers — nothing to give a folder to"
+   },
+   "changed": {},
+   "tree": "3c5084053a17"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/misc/odd",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "thrown": {
+    "$": "error",
+    "name": "Error",
+    "message": "@engine/misc/odd: unknown module category 'nonsense'"
+   },
+   "changed": {},
+   "tree": "3c5084053a17"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "OUT",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "OUT",
+    "module": "OUT",
+    "path": "../_modules/io/OUT/module.k7x",
+    "chains": [
+     "MIX"
+    ]
+   },
+   "changed": {
+    "ws/_modules/io/OUT/module.k7x": "b628dafac7de",
+    "ws/proj/graph.k7x": "14c94fedb688"
+   },
+   "tree": "3c5084053a17"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/audio/___",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@engine/audio/___",
+    "module": "x",
+    "path": "../_modules/audio/x/module.k7x",
+    "chains": []
+   },
+   "changed": {
+    "ws/_modules/audio/x/module.k7x": "da8efdb3c574"
+   },
+   "tree": "3c5084053a17"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/audio/delay/tape-delay",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@engine/audio/delay/tape-delay",
+    "module": "tape-delay",
+    "path": "../_modules/audio/tape-delay/module.k7x",
+    "chains": []
+   },
+   "changed": {
+    "ws/_modules/audio/tape-delay/module.k7x": "2969e49923d1"
+   },
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/audio/delay/tape-delay",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@engine/audio/delay/tape-delay",
+    "module": "tape-delay",
+    "path": "../_modules/audio/tape-delay/module.k7x",
+    "chains": [
+     "a"
+    ]
+   },
+   "changed": {
+    "ws/_modules/audio/tape-delay/module.k7x": "2969e49923d1",
+    "ws/proj/chains/a.k7x": "dcb6708588db"
+   },
+   "tree": "a311bbcc6704"
+  },
+  {
+   "fn": "materialiseEngineModule",
+   "args": [
+    "$DIR/ws/proj",
+    "@engine/audio/delay/tape-delay",
+    {
+     "@engine/audio/delay/tape-delay": {
+      "category": "audio",
+      "file": "tape-delay",
+      "plugin": {
+       "type": "vst3",
+       "name": "Tape Delay"
+      }
+     },
+     "@engine/instruments/synth": {
+      "category": "instruments",
+      "file": "Synth Lead!",
+      "plugin": {
+       "type": "internal",
+       "name": "4osc"
+      }
+     },
+     "@engine/misc/odd": {
+      "category": "nonsense",
+      "file": "odd",
+      "plugin": {
+       "type": "x",
+       "name": "y"
+      }
+     },
+     "OUT": {
+      "category": "io",
+      "file": "OUT",
+      "io": "out"
+     },
+     "@engine/audio/___": {
+      "category": "audio",
+      "file": "___",
+      "plugin": {
+       "type": "vst3"
+      }
+     }
+    }
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@engine/audio/delay/tape-delay",
+    "module": "tape-delay",
+    "path": "../_modules/audio/tape-delay/module.k7x",
+    "chains": []
+   },
+   "changed": {
+    "ws/_modules/audio/tape-delay/module.k7x": "2969e49923d1"
+   },
+   "tree": "500f117fbbad"
+  },
+  {
+   "fn": "sharedRoots",
+   "args": [
+    "$DIR/ws/proj"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    {
+     "root": "$DIR/ws/_modules",
+     "ns": "workspace"
+    },
+    {
+     "root": "$DIR/home/library/modules",
+     "ns": "account"
+    },
+    {
+     "root": "$DIR/home/libraries/k7-core/modules",
+     "ns": "k7-core"
+    }
+   ],
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedRoots",
+   "args": [
+    "$DIR/ws/proj"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/ws/_modules/audio/verb/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@workspace/audio/verb",
+    "folder": "$DIR/ws/_modules/audio/verb",
+    "leaf": "verb",
+    "type": "audio"
+   },
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/ws/_modules/audio/fx/echo/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@workspace/audio/fx/echo",
+    "folder": "$DIR/ws/_modules/audio/fx/echo",
+    "leaf": "echo",
+    "type": "audio"
+   },
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/ws/_modules/audio/verb/engines/big/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@workspace/audio/verb/engines/big",
+    "folder": "$DIR/ws/_modules/audio/verb/engines/big",
+    "leaf": "big",
+    "type": "audio"
+   },
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/home/libraries/k7-core/modules/audio/verb/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@k7-core/audio/verb",
+    "folder": "$DIR/home/libraries/k7-core/modules/audio/verb",
+    "leaf": "verb",
+    "type": "audio"
+   },
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/home/library/modules/audio/mine/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": {
+    "ref": "@account/audio/mine",
+    "folder": "$DIR/home/library/modules/audio/mine",
+    "leaf": "mine",
+    "type": "audio"
+   },
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/ws/_modules/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/ws/_modules/nonsense/a/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/ws/_modules/audio/a/b/c/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "sharedModuleRef",
+   "args": [
+    "$DIR/ws/proj",
+    "$DIR/elsewhere/module.k7x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": null,
+   "changed": {},
+   "tree": "bf8259647bb4"
+  },
+  {
+   "fn": "chainsUsing",
+   "args": [
+    "modules({ a: [\"x\"], x: [\"fx\"], fx: [\"MIX\"], MIX: [] })\n",
+    "fx"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "a"
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "chainsUsing",
+   "args": [
+    "modules({ a: [\"x\"], x: [\"fx\"], fx: [\"MIX\"], MIX: [] })\n",
+    "x"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "a"
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "chainsUsing",
+   "args": [
+    "modules({ a: [\"x\"], x: [\"fx\"], fx: [\"MIX\"], MIX: [] })\n",
+    "nope"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "chainsUsing",
+   "args": [
+    "modules({ a: [\"b\"], b: [\"MIX\"] })\nbypassed([\"b\"])\n",
+    "b"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "a"
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "chainsUsing",
+   "args": [
+    "{\n",
+    "b"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "chainsUsing",
+   "args": [
+    "",
+    "b"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  },
+  {
+   "fn": "chainsUsing",
+   "args": [
+    "modules({ a: [\"b\", \"c\"], b: [\"MIX\"], c: [\"MIX\"] })\n",
+    "MIX"
+   ],
+   "replay": true,
+   "from": "makeLaneGoldens.mts",
+   "ret": [
+    "b",
+    "c"
+   ],
+   "changed": {},
+   "tree": "bf21a9e8fbc5"
+  }
+ ]
+}

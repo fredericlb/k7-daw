@@ -1,0 +1,608 @@
+{
+  "project": "k7-core/audio.zz_utility.quick-master.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "audio.zz_utility.quick-master",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/audio.zz_utility.quick-master.k7/clips",
+    "tracks": [
+      {
+        "id": "drums",
+        "name": "drums",
+        "role": "regular",
+        "contentType": "audio",
+        "group": "",
+        "generated": false,
+        "color": "#dd322c",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "kick@0",
+            "type": "audio",
+            "name": "kick",
+            "source": "<ws>/k7-core/audio.zz_utility.quick-master.k7/clips/kick.wav",
+            "start": 0,
+            "length": 0,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": []
+          }
+        ],
+        "plugins": [
+          {
+            "id": "drums:fx",
+            "type": "Quick Master",
+            "name": "fx",
+            "path": "",
+            "presetSave": "<ws>/k7-core/audio.zz_utility.quick-master.k7/nodes/fx.vstpreset",
+            "role": "",
+            "enabled": true,
+            "params": {
+              "Low Freq": 180,
+              "High Freq": 3000,
+              "Low Amount": 25,
+              "Mid Amount": 20,
+              "High Amount": 15,
+              "Width": 110,
+              "Bass Mono": 120,
+              "Drive": 0,
+              "Ceiling": -0.3,
+              "Release": 120,
+              "@mix": 1,
+              "@input-volume": 0,
+              "@output-volume": 0
+            }
+          }
+        ],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "drums": {
+        "from": "drums",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/audio/zz_utility/quick-master",
+            "stage": [
+              "@input-volume",
+              "@mix",
+              "@output-volume"
+            ],
+            "category": "audio",
+            "emits": "audio",
+            "stub": false,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 23,
+              "rows": 4,
+              "widgets": {
+                "low_cut": {
+                  "type": "knob",
+                  "col": 0,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Low Cut",
+                  "bind": "Low Cut",
+                  "min": 0,
+                  "max": 300,
+                  "step": 1
+                },
+                "comp": {
+                  "type": "group",
+                  "col": 2,
+                  "row": 0,
+                  "colSpan": 5,
+                  "rowSpan": 4,
+                  "label": "COMP",
+                  "color": "#3ec96b26"
+                },
+                "low_amount": {
+                  "type": "fader",
+                  "col": 2,
+                  "row": 0,
+                  "rowSpan": 4,
+                  "label": "Low",
+                  "bind": "Low Amount",
+                  "min": 0,
+                  "max": 100,
+                  "step": 1
+                },
+                "mid_amount": {
+                  "type": "fader",
+                  "col": 3,
+                  "row": 0,
+                  "rowSpan": 4,
+                  "label": "Mid",
+                  "bind": "Mid Amount",
+                  "min": 0,
+                  "max": 100,
+                  "step": 1
+                },
+                "high_amount": {
+                  "type": "fader",
+                  "col": 4,
+                  "row": 0,
+                  "rowSpan": 4,
+                  "label": "High",
+                  "bind": "High Amount",
+                  "min": 0,
+                  "max": 100,
+                  "step": 1
+                },
+                "low_freq": {
+                  "type": "knob",
+                  "col": 5,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Lo X",
+                  "bind": "Low Freq",
+                  "min": 40,
+                  "max": 500,
+                  "step": 1,
+                  "curve": "log"
+                },
+                "high_freq": {
+                  "type": "knob",
+                  "col": 5,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Hi X",
+                  "bind": "High Freq",
+                  "min": 800,
+                  "max": 8000,
+                  "step": 10,
+                  "curve": "log"
+                },
+                "bands": {
+                  "type": "lcdscreen",
+                  "col": 7,
+                  "row": 0,
+                  "colSpan": 6,
+                  "rowSpan": 4
+                },
+                "stereo": {
+                  "type": "group",
+                  "col": 13,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 4,
+                  "label": "WIDE",
+                  "color": "#3d7dff26"
+                },
+                "width": {
+                  "type": "knob",
+                  "col": 13,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Width",
+                  "bind": "Width",
+                  "min": 0,
+                  "max": 200,
+                  "step": 1
+                },
+                "bass_mono": {
+                  "type": "knob",
+                  "col": 13,
+                  "row": 2,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Mono <",
+                  "bind": "Bass Mono",
+                  "min": 0,
+                  "max": 300,
+                  "step": 1
+                },
+                "limit": {
+                  "type": "group",
+                  "col": 15,
+                  "row": 0,
+                  "colSpan": 8,
+                  "rowSpan": 4,
+                  "label": "LIMIT",
+                  "color": "#ff6a1a26"
+                },
+                "hf_limit": {
+                  "type": "knob",
+                  "col": 15,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "HF Limit",
+                  "bind": "HF Limit",
+                  "min": 0,
+                  "max": 100,
+                  "step": 1
+                },
+                "drive": {
+                  "type": "knob",
+                  "col": 17,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Drive",
+                  "bind": "Drive",
+                  "min": 0,
+                  "max": 12,
+                  "step": 0.1
+                },
+                "ceiling": {
+                  "type": "knob",
+                  "col": 19,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Ceiling",
+                  "bind": "Ceiling",
+                  "min": -12,
+                  "max": 0,
+                  "step": 0.1
+                },
+                "release": {
+                  "type": "knob",
+                  "col": 21,
+                  "row": 0,
+                  "colSpan": 2,
+                  "rowSpan": 2,
+                  "label": "Release",
+                  "bind": "Release",
+                  "min": 10,
+                  "max": 500,
+                  "step": 1,
+                  "curve": "log"
+                },
+                "level": {
+                  "type": "lcdscreen",
+                  "col": 15,
+                  "row": 2,
+                  "colSpan": 4,
+                  "rowSpan": 2
+                },
+                "output": {
+                  "type": "dropdown",
+                  "col": 19,
+                  "row": 2,
+                  "colSpan": 4,
+                  "label": "Output",
+                  "bind": "Output",
+                  "options": [
+                    {
+                      "label": "Float",
+                      "value": 0
+                    },
+                    {
+                      "label": "24-bit",
+                      "value": 1
+                    },
+                    {
+                      "label": "16-bit",
+                      "value": 2
+                    }
+                  ]
+                }
+              },
+              "script": "// quick-master — the three bands across the spectrum with their stereo treatment, and the level against the ceiling.\n\nconst FONT = \"8px ui-monospace, monospace\";\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst ORANGE = \"#ff6a1a\";\nconst RED = \"#ff3b30\";\nconst GREY = \"#6b6b6b\";\nconst WHITE = \"#ffffff\";\nconst F_LO = 20;\nconst F_HI = 20000;\n\nconst num = (v, d) => (typeof v === \"number\" && Number.isFinite(v) ? v : d);\nconst clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);\nconst hz = (f) => (f >= 1000 ? `${(f / 1000).toFixed(f >= 10000 ? 0 : 1)}K` : `${Math.round(f)}`);\nconst db = (p) => 20 * Math.log10(Math.max(1e-6, p));\n\nfunction glass(ctx, W, H) {\n  ctx.fillStyle = \"#000\";\n  ctx.fillRect(0, 0, W, H);\n  ctx.font = FONT;\n  ctx.lineWidth = 1;\n}\n\nfunction text(ctx, s, x, y, color, align) {\n  ctx.fillStyle = color;\n  ctx.textAlign = align;\n  ctx.fillText(s, x, y);\n}\n\nconst xOf = (b, f) => b.x + (Math.log(clamp(f, F_LO, F_HI) / F_LO) / Math.log(F_HI / F_LO)) * b.w;\n\n// The recent peak of a tap, smoothed in `state` so the picture breathes rather than flickers.\nfunction recent(points, n) {\n  let p = 0;\n  for (let i = Math.max(0, points.length - n); i < points.length; i++) p = Math.max(p, num(points[i], 0));\n  return p;\n}\n\nexport default {\n  // Three bands split at the crossovers, each as tall as its compression amount; the mono bass and the width on top.\n  bands(lcd) {\n    const { ctx, width: W, height: H, params, output, state } = lcd;\n    glass(ctx, W, H);\n    const b = { x: 4, y: 24, w: Math.max(1, W - 8), h: Math.max(1, H - 36) };\n    const lowX = clamp(num(params[\"Low Freq\"], 180), 40, 500);\n    const highX = Math.max(lowX * 1.5, clamp(num(params[\"High Freq\"], 3000), 800, 8000));\n    const amounts = [\n      [num(params[\"Low Amount\"], 25), F_LO, lowX, ORANGE, \"LOW\"],\n      [num(params[\"Mid Amount\"], 20), lowX, highX, GREEN, \"MID\"],\n      [num(params[\"High Amount\"], 15), highX, F_HI, BLUE, \"HIGH\"],\n    ];\n    // The music's level lifts the bars slightly, so a playing master visibly works.\n    const target = recent(output, 8);\n    state.lvl = num(state.lvl, 0) * 0.7 + target * 0.3;\n    const pulse = 0.85 + 0.15 * clamp(state.lvl, 0, 1);\n\n    for (const [amt, f0, f1, color, name] of amounts) {\n      const x0 = xOf(b, f0);\n      const x1 = xOf(b, f1);\n      const h = (clamp(amt, 0, 100) / 100) * b.h * pulse;\n      ctx.fillStyle = color;\n      ctx.fillRect(x0 + 1, b.y + b.h - h, Math.max(0, x1 - x0 - 2), h);\n      text(ctx, name, (x0 + x1) / 2, b.y + b.h + 9, color, \"center\");\n    }\n    // Baseline and the two crossovers.\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(b.x, b.y + b.h + 0.5);\n    ctx.lineTo(b.x + b.w, b.y + b.h + 0.5);\n    for (const f of [lowX, highX]) {\n      const x = Math.round(xOf(b, f)) + 0.5;\n      ctx.moveTo(x, b.y);\n      ctx.lineTo(x, b.y + b.h);\n    }\n    ctx.stroke();\n    text(ctx, hz(lowX), xOf(b, lowX) + 2, b.y + 8, WHITE, \"left\");\n    text(ctx, hz(highX), xOf(b, highX) + 2, b.y + 8, WHITE, \"left\");\n\n    // Bass mono: the low end folded to the centre, a white bracket from 20 Hz to its corner (off below 20).\n    const mono = clamp(num(params[\"Bass Mono\"], 120), 0, 300);\n    if (mono >= 20) {\n      const x = xOf(b, mono);\n      ctx.strokeStyle = WHITE;\n      ctx.beginPath();\n      ctx.moveTo(b.x + 0.5, 14);\n      ctx.lineTo(b.x + 0.5, 18.5);\n      ctx.lineTo(x + 0.5, 18.5);\n      ctx.lineTo(x + 0.5, 14);\n      ctx.stroke();\n      text(ctx, \"MONO\", b.x, 10, WHITE, \"left\");\n    }\n\n    // Width: a centred bar, the 100 % mark in grey, red past where mono starts to lose things.\n    const width = clamp(num(params[\"Width\"], 110), 0, 200);\n    const cx = b.x + b.w * 0.72;\n    const half = b.w * 0.12;\n    ctx.strokeStyle = GREY;\n    ctx.beginPath();\n    ctx.moveTo(Math.round(cx - half) + 0.5, 12);\n    ctx.lineTo(Math.round(cx - half) + 0.5, 20);\n    ctx.moveTo(Math.round(cx + half) + 0.5, 12);\n    ctx.lineTo(Math.round(cx + half) + 0.5, 20);\n    ctx.stroke();\n    const wHalf = (width / 100) * half;\n    ctx.fillStyle = width > 130 ? RED : BLUE;\n    ctx.fillRect(cx - wHalf, 14, Math.max(1, wHalf * 2), 4);\n    text(ctx, `WIDTH ${Math.round(width)}%`, W - 4, 10, width > 130 ? RED : BLUE, \"right\");\n  },\n\n  // The level going in (pushed by Drive, grey) against what leaves (white), under the ceiling (orange).\n  level(lcd) {\n    const { ctx, width: W, height: H, params, input, output } = lcd;\n    glass(ctx, W, H);\n    const b = { x: 4, y: 12, w: Math.max(1, W - 8), h: Math.max(1, H - 16) };\n    const LO = -36;\n    const drive = clamp(num(params[\"Drive\"], 0), 0, 12);\n    const ceiling = clamp(num(params[\"Ceiling\"], -0.3), -12, 0);\n    const yOf = (d) => b.y + (1 - (clamp(d, LO, 0) - LO) / -LO) * b.h;\n\n    const trace = (points, shift, color) => {\n      const n = Math.min(points.length, Math.floor(b.w));\n      if (n < 2) return;\n      ctx.strokeStyle = color;\n      ctx.beginPath();\n      const x0 = b.x + b.w - n;\n      for (let i = 0; i < n; i++) {\n        const y = yOf(db(num(points[points.length - n + i], 0)) + shift);\n        if (i === 0) ctx.moveTo(x0 + i, y);\n        else ctx.lineTo(x0 + i, y);\n      }\n      ctx.stroke();\n    };\n    trace(input, drive, GREY);\n    trace(output, 0, WHITE);\n\n    const yc = Math.round(yOf(ceiling)) + 0.5;\n    ctx.strokeStyle = ORANGE;\n    ctx.beginPath();\n    ctx.moveTo(b.x, yc);\n    ctx.lineTo(b.x + b.w, yc);\n    ctx.stroke();\n    text(ctx, `CEIL ${ceiling.toFixed(1)}`, b.x, 9, ORANGE, \"left\");\n    text(ctx, `DRIVE +${drive.toFixed(1)}`, W - 4, 9, GREY, \"right\");\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 20,
+                "widgets": {
+                  "low_cut": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 0,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Low Cut",
+                    "bind": "Low Cut",
+                    "min": 0,
+                    "max": 300,
+                    "step": 1
+                  },
+                  "comp": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 2,
+                    "colSpan": 4,
+                    "rowSpan": 6,
+                    "label": "COMP",
+                    "color": "#3ec96b26"
+                  },
+                  "low_amount": {
+                    "type": "fader",
+                    "col": 0,
+                    "row": 2,
+                    "rowSpan": 4,
+                    "label": "Low",
+                    "bind": "Low Amount",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1
+                  },
+                  "mid_amount": {
+                    "type": "fader",
+                    "col": 1,
+                    "row": 2,
+                    "rowSpan": 4,
+                    "label": "Mid",
+                    "bind": "Mid Amount",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1
+                  },
+                  "high_amount": {
+                    "type": "fader",
+                    "col": 2,
+                    "row": 2,
+                    "rowSpan": 4,
+                    "label": "High",
+                    "bind": "High Amount",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1
+                  },
+                  "low_freq": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Lo X",
+                    "bind": "Low Freq",
+                    "min": 40,
+                    "max": 500,
+                    "step": 1,
+                    "curve": "log"
+                  },
+                  "high_freq": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 6,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Hi X",
+                    "bind": "High Freq",
+                    "min": 800,
+                    "max": 8000,
+                    "step": 10,
+                    "curve": "log"
+                  },
+                  "bands": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 8,
+                    "colSpan": 4,
+                    "rowSpan": 3
+                  },
+                  "stereo": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 11,
+                    "colSpan": 4,
+                    "rowSpan": 2,
+                    "label": "WIDE",
+                    "color": "#3d7dff26"
+                  },
+                  "width": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 11,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Width",
+                    "bind": "Width",
+                    "min": 0,
+                    "max": 200,
+                    "step": 1
+                  },
+                  "bass_mono": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 11,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Mono <",
+                    "bind": "Bass Mono",
+                    "min": 0,
+                    "max": 300,
+                    "step": 1
+                  },
+                  "limit": {
+                    "type": "group",
+                    "col": 0,
+                    "row": 13,
+                    "colSpan": 4,
+                    "rowSpan": 7,
+                    "label": "LIMIT",
+                    "color": "#ff6a1a26"
+                  },
+                  "hf_limit": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 13,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "HF Limit",
+                    "bind": "HF Limit",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1
+                  },
+                  "drive": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 13,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Drive",
+                    "bind": "Drive",
+                    "min": 0,
+                    "max": 12,
+                    "step": 0.1
+                  },
+                  "ceiling": {
+                    "type": "knob",
+                    "col": 0,
+                    "row": 15,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Ceiling",
+                    "bind": "Ceiling",
+                    "min": -12,
+                    "max": 0,
+                    "step": 0.1
+                  },
+                  "release": {
+                    "type": "knob",
+                    "col": 2,
+                    "row": 15,
+                    "colSpan": 2,
+                    "rowSpan": 2,
+                    "label": "Release",
+                    "bind": "Release",
+                    "min": 10,
+                    "max": 500,
+                    "step": 1,
+                    "curve": "log"
+                  },
+                  "level": {
+                    "type": "lcdscreen",
+                    "col": 0,
+                    "row": 17,
+                    "colSpan": 4,
+                    "rowSpan": 2
+                  },
+                  "output": {
+                    "type": "dropdown",
+                    "col": 0,
+                    "row": 19,
+                    "colSpan": 4,
+                    "label": "Output",
+                    "bind": "Output",
+                    "options": [
+                      {
+                        "label": "Float",
+                        "value": 0
+                      },
+                      {
+                        "label": "24-bit",
+                        "value": 1
+                      },
+                      {
+                        "label": "16-bit",
+                        "value": 2
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "params": {
+              "Low Freq": 180,
+              "High Freq": 3000,
+              "Low Amount": 25,
+              "Mid Amount": 20,
+              "High Amount": 15,
+              "Width": 110,
+              "Bass Mono": 120,
+              "Drive": 0,
+              "Ceiling": -0.3,
+              "Release": 120
+            },
+            "defaults": {
+              "Low Cut": 0,
+              "Low Freq": 180,
+              "High Freq": 3000,
+              "Low Amount": 0,
+              "Mid Amount": 0,
+              "High Amount": 0,
+              "Width": 100,
+              "Bass Mono": 0,
+              "HF Limit": 0,
+              "Drive": 0,
+              "Ceiling": 0,
+              "Release": 120,
+              "Output": 0
+            },
+            "pluginId": "drums:fx"
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "drums"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "drums": "#dd322c"
+    },
+    "trackSignals": {
+      "drums": "audio"
+    },
+    "trackClips": {
+      "drums": [
+        {
+          "ref": "kick",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "audio"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

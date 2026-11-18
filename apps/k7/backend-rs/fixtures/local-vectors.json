@@ -1,0 +1,527 @@
+{
+  "snapshots": [
+    {
+      "name": "state-full",
+      "line": "{\"t\":\"state\",\"owns\":{\"engine\":true,\"engineQueries\":true},\"status\":\"error\",\"error\":\"engine binary not found (build it)\",\"safeMode\":{\"crashes\":3,\"suspect\":\"Diva\"},\"ownsEngine\":true,\"userStopped\":false,\"engineId\":\"e1\",\"enginePort\":8766,\"registryUrl\":\"https://app.k7.rocks\",\"lastHeartbeatOk\":true,\"pluginCount\":1,\"plugins\":[{\"name\":\"Diva\",\"format\":\"VST3\",\"manufacturer\":\"u-he\",\"role\":\"instrument\"}],\"pluginsSig\":\"p1\",\"audioDevices\":[{\"name\":\"Focusrite USB ASIO\",\"deviceType\":\"ASIO\",\"current\":false,\"currentInput\":false,\"inputs\":0,\"outputs\":0},{\"name\":\"Speakers (Focusrite USB Audio)\",\"deviceType\":\"Windows Audio\",\"current\":true,\"currentInput\":true,\"inputs\":2,\"outputs\":2}],\"audioPriority\":[\"Focusrite USB ASIO\",\"Speakers (Focusrite USB Audio)\"],\"audioMenuSig\":\"a1\",\"lanOpen\":true,\"editPlugins\":[{\"session\":\"s1\",\"id\":\"n4\",\"name\":\"Diva\",\"hasNativePluginUI\":true}],\"editPluginsSig\":\"x1\",\"sessions\":[{\"id\":\"s1\",\"project\":\"@local/w/song\",\"loaded\":true,\"playing\":true,\"tracks\":4,\"listeners\":2}],\"sessionsSig\":\"s1\",\"instances\":[{\"url\":\"https://app.k7.rocks\",\"removable\":true}],\"instanceCheck\":{\"url\":\"https://play.st0.app\",\"state\":\"refused\",\"message\":\"certificate not trusted\"},\"paths\":{\"root\":\"/home/u/.k7\",\"mergedLog\":\"/home/u/.k7/logs/merged.log\"},\"downloads\":[{\"name\":\"nbo-wurt\",\"label\":\"Wurlitzer\",\"received\":1024,\"total\":7947927,\"phase\":\"failed\",\"error\":\"disk full\"}],\"instruments\":[{\"name\":\"nbo-wurt\",\"label\":\"Wurlitzer\",\"bytes\":7947927,\"wanted\":true,\"installed\":false}],\"pairRequests\":[{\"requestId\":\"r1\",\"name\":\"iPhone · Safari\",\"ip\":\"192.168.1.20\",\"code\":\"482913\",\"since\":1760000000000}],\"pairedDevices\":[{\"deviceId\":\"d1\",\"name\":\"iPad\",\"created\":1760000000000,\"lastSeen\":1760000600000}],\"slots\":[{\"id\":\"warm\",\"name\":\"Warm\",\"chain\":\"@account/warm\",\"savedAt\":\"2026-11-01T18:00:00Z\",\"protocol\":7,\"footswitch\":64}],\"enabledSlot\":\"warm\"}",
+      "snapshot": "{\"status\":\"error\",\"ownsEngine\":true,\"userStopped\":false,\"engineId\":\"e1\",\"enginePort\":8766,\"registryUrl\":\"https://app.k7.rocks\",\"lastHeartbeatOk\":true,\"plugins\":[{\"name\":\"Diva\",\"format\":\"VST3\",\"manufacturer\":\"u-he\",\"role\":\"instrument\"}],\"pluginsSig\":\"p1\",\"audioDevices\":[{\"name\":\"Focusrite USB ASIO\",\"deviceType\":\"ASIO\",\"current\":false,\"currentInput\":false,\"inputs\":0,\"outputs\":0},{\"name\":\"Speakers (Focusrite USB Audio)\",\"deviceType\":\"Windows Audio\",\"current\":true,\"currentInput\":true,\"inputs\":2,\"outputs\":2}],\"audioPriority\":[\"Focusrite USB ASIO\",\"Speakers (Focusrite USB Audio)\"],\"audioMenuSig\":\"a1\",\"editPlugins\":[{\"session\":\"s1\",\"id\":\"n4\",\"name\":\"Diva\",\"hasNativePluginUI\":true}],\"editPluginsSig\":\"x1\",\"sessions\":[{\"id\":\"s1\",\"project\":\"@local/w/song\",\"loaded\":true,\"playing\":true,\"tracks\":4,\"listeners\":2}],\"sessionsSig\":\"s1\",\"instances\":[{\"url\":\"https://app.k7.rocks\",\"removable\":true}],\"paths\":{\"root\":\"/home/u/.k7\",\"mergedLog\":\"/home/u/.k7/logs/merged.log\"},\"downloads\":[{\"name\":\"nbo-wurt\",\"label\":\"Wurlitzer\",\"received\":1024,\"total\":7947927,\"phase\":\"failed\",\"error\":\"disk full\"}],\"instruments\":[{\"name\":\"nbo-wurt\",\"label\":\"Wurlitzer\",\"bytes\":7947927,\"wanted\":true,\"installed\":false}],\"pairRequests\":[{\"requestId\":\"r1\",\"name\":\"iPhone · Safari\",\"ip\":\"192.168.1.20\",\"code\":\"482913\",\"since\":1760000000000}],\"pairedDevices\":[{\"deviceId\":\"d1\",\"name\":\"iPad\",\"created\":1760000000000,\"lastSeen\":1760000600000}],\"slots\":[{\"id\":\"warm\",\"name\":\"Warm\",\"chain\":\"@account/warm\",\"savedAt\":\"2026-11-01T18:00:00Z\",\"protocol\":7,\"footswitch\":64}],\"error\":\"engine binary not found (build it)\",\"safeMode\":{\"crashes\":3,\"suspect\":\"Diva\"},\"lanOpen\":true,\"enabledSlot\":\"warm\",\"pluginCount\":1,\"instanceCheck\":{\"url\":\"https://play.st0.app\",\"state\":\"refused\",\"message\":\"certificate not trusted\"}}"
+    },
+    {
+      "name": "state-empty",
+      "line": "{\"t\":\"state\",\"owns\":{\"engine\":true,\"engineQueries\":true},\"status\":\"stopped\",\"ownsEngine\":false,\"userStopped\":false,\"engineId\":\"\",\"enginePort\":8765,\"registryUrl\":\"\",\"lastHeartbeatOk\":false,\"pluginCount\":null,\"plugins\":[],\"pluginsSig\":\"\",\"audioDevices\":[],\"audioPriority\":[],\"audioMenuSig\":\"\",\"lanOpen\":true,\"editPlugins\":[],\"editPluginsSig\":\"\",\"sessions\":[],\"sessionsSig\":\"\",\"instances\":[],\"instanceCheck\":null,\"paths\":{\"root\":\"\",\"mergedLog\":\"\"},\"instruments\":[],\"pairRequests\":[],\"pairedDevices\":[],\"slots\":[],\"enabledSlot\":null}",
+      "snapshot": "{\"status\":\"stopped\",\"ownsEngine\":false,\"userStopped\":false,\"engineId\":\"\",\"enginePort\":8765,\"registryUrl\":\"\",\"lastHeartbeatOk\":false,\"plugins\":[],\"pluginsSig\":\"\",\"audioDevices\":[],\"audioPriority\":[],\"audioMenuSig\":\"\",\"editPlugins\":[],\"editPluginsSig\":\"\",\"sessions\":[],\"sessionsSig\":\"\",\"instances\":[],\"paths\":{\"root\":\"\",\"mergedLog\":\"\"},\"downloads\":[],\"instruments\":[],\"pairRequests\":[],\"pairedDevices\":[],\"slots\":[],\"lanOpen\":true,\"enabledSlot\":null}"
+    }
+  ],
+  "commands": [
+    {
+      "id": 4,
+      "cmd": "audio.priority",
+      "arg": "A\u001fB",
+      "line": "{\"t\":\"cmd\",\"id\":4,\"cmd\":\"audio.priority\",\"arg\":\"A\\u001fB\"}\n"
+    },
+    {
+      "id": 1,
+      "cmd": "shutdown",
+      "line": "{\"t\":\"cmd\",\"id\":1,\"cmd\":\"shutdown\"}\n"
+    },
+    {
+      "id": 2,
+      "cmd": "weburi.pair",
+      "arg": "https://app.k7.rocks\u001ftok\"en",
+      "line": "{\"t\":\"cmd\",\"id\":2,\"cmd\":\"weburi.pair\",\"arg\":\"https://app.k7.rocks\\u001ftok\\\"en\"}\n"
+    }
+  ],
+  "tray": [
+    {
+      "snapshot": null,
+      "down": "supervisor restarting…",
+      "out": {
+        "icon": "error",
+        "line": "⚠ supervisor restarting…",
+        "downloads": null
+      }
+    },
+    {
+      "snapshot": null,
+      "down": null,
+      "out": {
+        "icon": "loading",
+        "line": "Starting the engine…",
+        "downloads": null
+      }
+    },
+    {
+      "snapshot": {
+        "status": "running",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": []
+      },
+      "down": null,
+      "out": {
+        "icon": "loading",
+        "line": "● Engine running · :8765",
+        "downloads": null
+      }
+    },
+    {
+      "snapshot": {
+        "status": "running",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": [],
+        "pluginCount": 12
+      },
+      "down": null,
+      "out": {
+        "icon": "running",
+        "line": "● Engine running · :8765",
+        "downloads": null
+      }
+    },
+    {
+      "snapshot": {
+        "status": "stopped",
+        "ownsEngine": false,
+        "userStopped": true,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": []
+      },
+      "down": null,
+      "out": {
+        "icon": "stopped",
+        "line": "○ Engine stopped",
+        "downloads": null
+      }
+    },
+    {
+      "snapshot": {
+        "status": "stopped",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": []
+      },
+      "down": null,
+      "out": {
+        "icon": "stopped",
+        "line": "○ Engine starting…",
+        "downloads": null
+      }
+    },
+    {
+      "snapshot": {
+        "status": "error",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": []
+      },
+      "down": null,
+      "out": {
+        "icon": "error",
+        "line": "⚠ engine error",
+        "downloads": null
+      }
+    },
+    {
+      "snapshot": {
+        "status": "error",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": [],
+        "error": "no device"
+      },
+      "down": null,
+      "out": {
+        "icon": "error",
+        "line": "⚠ no device",
+        "downloads": null
+      }
+    },
+    {
+      "snapshot": {
+        "status": "running",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [
+          {
+            "name": "piano",
+            "label": "Piano",
+            "received": 50,
+            "total": 200,
+            "phase": "downloading"
+          },
+          {
+            "name": "drums",
+            "label": "Drums",
+            "received": 0,
+            "total": 0,
+            "phase": "queued"
+          }
+        ],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": [],
+        "pluginCount": 3
+      },
+      "down": null,
+      "out": {
+        "icon": "loading",
+        "line": "● Engine running · :8765",
+        "downloads": "↓ Downloading Piano… 25% (+1 more)"
+      }
+    },
+    {
+      "snapshot": {
+        "status": "running",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [
+          {
+            "name": "piano",
+            "label": "Piano",
+            "received": 0,
+            "total": 0,
+            "phase": "unpacking"
+          }
+        ],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": [],
+        "pluginCount": 3
+      },
+      "down": null,
+      "out": {
+        "icon": "loading",
+        "line": "● Engine running · :8765",
+        "downloads": "↓ Unpacking Piano…"
+      }
+    },
+    {
+      "snapshot": {
+        "status": "running",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [
+          {
+            "name": "piano",
+            "label": "Piano",
+            "received": 0,
+            "total": 0,
+            "phase": "failed"
+          }
+        ],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": [],
+        "pluginCount": 3
+      },
+      "down": null,
+      "out": {
+        "icon": "loading",
+        "line": "● Engine running · :8765",
+        "downloads": "⚠ Piano: download failed"
+      }
+    },
+    {
+      "snapshot": {
+        "status": "running",
+        "ownsEngine": false,
+        "userStopped": false,
+        "engineId": "",
+        "enginePort": 8765,
+        "registryUrl": "",
+        "lastHeartbeatOk": false,
+        "plugins": [],
+        "pluginsSig": "",
+        "audioDevices": [],
+        "audioPriority": [],
+        "audioMenuSig": "",
+        "editPlugins": [],
+        "editPluginsSig": "",
+        "sessions": [],
+        "sessionsSig": "",
+        "instances": [],
+        "paths": {
+          "root": "",
+          "mergedLog": ""
+        },
+        "downloads": [
+          {
+            "name": "piano",
+            "label": "Piano",
+            "received": 999,
+            "total": 10,
+            "phase": "downloading"
+          }
+        ],
+        "instruments": [],
+        "pairRequests": [],
+        "pairedDevices": [],
+        "slots": [],
+        "pluginCount": 3
+      },
+      "down": null,
+      "out": {
+        "icon": "loading",
+        "line": "● Engine running · :8765",
+        "downloads": "↓ Downloading Piano… 100%"
+      }
+    }
+  ],
+  "pins": [
+    {
+      "settings": {},
+      "local": "http://127.0.0.1:18789",
+      "out": "{\"registryUrls\":[\"http://127.0.0.1:18789\"]}"
+    },
+    {
+      "settings": {
+        "port": 8765,
+        "registryUrls": [
+          "https://app.k7.rocks"
+        ]
+      },
+      "local": "http://127.0.0.1:18789",
+      "out": "{\"port\":8765,\"registryUrls\":[\"http://127.0.0.1:18789\",\"https://app.k7.rocks\"]}"
+    },
+    {
+      "settings": {
+        "registryUrls": [
+          "https://app.k7.rocks",
+          "http://127.0.0.1:18789/"
+        ]
+      },
+      "local": "http://127.0.0.1:18789",
+      "out": "{\"registryUrls\":[\"http://127.0.0.1:18789\",\"https://app.k7.rocks\"]}"
+    },
+    {
+      "settings": {
+        "registryUrls": [
+          "http://127.0.0.1:18789",
+          "http://localhost:18789",
+          "http://[::1]:8789",
+          "http://127.1:8789",
+          "https://app.priv.k7.rocks"
+        ]
+      },
+      "local": "http://127.0.0.1:18789",
+      "out": "{\"registryUrls\":[\"http://127.0.0.1:18789\",\"https://app.priv.k7.rocks\"]}"
+    },
+    {
+      "settings": {
+        "registryUrls": [
+          "http://127.0.0.1:18789",
+          "https://app.k7.rocks"
+        ]
+      },
+      "local": "http://127.0.0.1:18789",
+      "out": null
+    },
+    {
+      "settings": {
+        "registryUrls": "not a list",
+        "lanOpen": true
+      },
+      "local": "http://127.0.0.1:18789",
+      "out": "{\"registryUrls\":[\"http://127.0.0.1:18789\"],\"lanOpen\":true}"
+    },
+    {
+      "settings": {
+        "registryUrls": [
+          "http://127.0.0.1:18789",
+          3,
+          "not a url"
+        ]
+      },
+      "local": "http://127.0.0.1:18789",
+      "out": "{\"registryUrls\":[\"http://127.0.0.1:18789\",\"not a url\"]}"
+    }
+  ]
+}

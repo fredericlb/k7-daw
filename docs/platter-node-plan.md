@@ -1,0 +1,151 @@
+# The platter is a node
+
+Sequel to [platter-plan.md](platter-plan.md), which put the stretch INSIDE the platter. This page
+holds the decisions behind declaring the platter in the project rather than injecting it.
+
+A deck's source is a `studio_turntable` node written in the scaffold, compiled like any other, and
+the desk's `withDecks` invents no plugin. What that buys:
+
+- **the chains view draws the source.** Without it the signal appears from nowhere: the first
+  visible thing is the tempo, and nothing draws what makes the sound;
+- **the censor can become a binding.** It is `Rate = −1` on a plugin — exactly the shape of a
+  binding — and you cannot bind a parameter of a plugin the project does not declare
+  ([fx.md](../packages/k7-plugins/docs/turntables/fx.md));
+- **`deckDoc` loses a reason to exist.** It is a second set of tracks built in code, with no trim,
+  no level, no echo, no cue and no stems.
+
+## The engine asked for nothing
+
+| | where | what it gives |
+|---|---|---|
+| `PluginDoc.deckFile` | `packages/engine-protocol/project.ts` | already a first-class field, commented "TURNTABLE modules only — the record the platter OWNS" |
+| loading the record | `engine/k7-runtime/engine/EditBuilder.cpp` | `dynamic_cast<studio::TurntablePlugin*>` on whatever the plugin is — generic, like `namFile` and `irFile` just above |
+| naming a built-in | `packages/song/src/nodeProject.ts` | `plugin: { type: internal, name: … }` is already how the EQ's `tracktion` engine names Tracktion's equaliser |
+
+The engine does not ask where the plugin came from. It builds one from `p.type`, and if it happens
+to be a platter, it puts its record on. A platter compiled from a module takes exactly the same
+path as an injected one.
+
+## Three things measured, and what they settled
+
+`engine/k7-runtime/scripts/platter-node-probe.ts` replays the last two against a running engine; the
+first is read in the source.
+
+**`role: ""` has no consequence.** `deck.ts` sets `role: "instrument"`; `nodeProject.ts`'s generic
+branch sets `role: ""`. A `PluginDoc`'s `role` is **parsed and never read**: across the whole
+engine, the only read outside the plugin SCAN (`PluginScan.cpp`, another struct) is
+`ParamDump.cpp:87`, which re-emits it as JSON for a diagnostic. `EditBuilder` never branches on it,
+and it is not in `ProjectDiff`'s identity key.
+
+**A platter with no record is harmless.** `TurntablePlugin::applyToBuffer` clears the buffer
+**first**, then returns immediately if `frames_ <= 0`. So it is silence, not a noise to discover on
+stage. Measured on the running engine: the document applies, no warning, no error. A declared empty
+platter is an ordinary state.
+
+**The record is not a parameter**, and a `set-plugin-file` message is refused. A parameter is a
+number, `deckFile` is a path, and it changes when a record is dropped — so `withDecks` sets
+`deckFile` on a plugin the compiler emitted, rather than the engine growing a message for it. What
+that message would have bought, measured on this engine with `applied` as the acknowledgement:
+
+| | median of 7 |
+|---|---|
+| IDENTICAL resend, 1 track (nothing changes) | 1.9 ms |
+| identical resend, **16 tracks** | 1.1 ms |
+| putting on ANOTHER record, 1 track | 2.1 ms |
+| another record, **16 tracks** | 1.9 ms |
+
+The cost does not rise with document size — a real set is 16 tracks (`mymix` is exactly 16) and it
+does not show. The diff is cheap. So there is about 1 ms to gain, against the 85 ms the gesture
+really costs (`platter-plan.md`, a plain record), dominated by decoding — which
+`set-plugin-file` would not remove either, the record being loaded at insertion. A protocol message
+and C++ for 1 % of the gesture: no.
+
+## What it does not solve
+
+**Five platters per deck.** A separated record plays through its four parts, which share a
+position, a `Rate` and a `Key` ([stems.md](../packages/k7-plugins/docs/turntables/stems.md)). That is **ten
+nodes** for a two-deck set, and a desk control drives **at most one** parameter, so "deck A's five
+platters" is not expressible as a binding. `plattersOf()` — the code deriving the five identifiers
+— stays.
+
+The metronome stays too: a whole track built in code, and another subject.
+
+## The nodes
+
+The `@meta/audio/turntable` module, shipped with k7 (`packages/song/docs/metaModules.md`) — `module.k7x` and `ui.k7x`, no jsdsp: the engine
+already hosts the platter, and `type: internal` names it the way the EQ's `tracktion` engine names the equaliser. The
+ranges come from `TurntablePlugin.cpp`:
+
+| parameter | range | rest | |
+|---|---|---|---|
+| `Rate` | −4…4 | **0** | speed, SIGNED. 0 is stopped, not a neutral: a platter has no neutral position |
+| `Seek` | 0…1 | 0 | where to drop the needle — a JUMP, applied when the value CHANGES |
+| `Gain` | 0…2 | 1 | |
+| `Key` | 0…1 | 0 | hold the pitch; off, because a platter is a varispeed |
+
+The scaffold writes ten platters — one per lane that plays a file, generated by `platterNodeFiles`
+as `stemNodeFiles` already generates the lanes and the cuts. A deck's graph therefore starts at its
+source:
+
+```k7x
+deckA(["platterA"])
+platterA(["tempoA"])
+stemBassA(["platterBassA"])
+platterBassA(["cutBassA"])
+```
+
+`onPlatter` sets three things on the plugin the COMPILER emitted: the record, and `Rate`/`Key`.
+Those two are there rather than in the node file because they are LIVE state — a deck that is
+turning must still be turning after the next document, and the file says `Rate: 0`. `Seek` is
+absent for the inverse reason: a jump is a message, and resending a document must not put the
+needle back.
+
+Verified end to end — a set that DECLARES its platter, compiled, then sent to the running engine:
+
+```
+graph warnings: []
+deckA chain steps: [ 'platterA', 'tempoA' ]
+deckA:platterA  type=studio_turntable  role=""  params={"Rate":0,"Seek":0,"Gain":1,"Key":0}
+=== sent to the engine ===  applied: yes   warnings: none   errors: none
+```
+
+`PLATTER_TYPE` survives for one use — `deckDoc`, the stand-in, which declares no node and so
+remains the last place in that file that fabricates a plugin.
+
+## Two things worth knowing
+
+**The platter is CATALOGUED.** `builtInPlugins()` lists it as `Turntable`, so a project's needs
+find it and its engine is not reported as missing it (`engine/k7-runtime/docs/turntable.md`).
+`enginePlugin` passes an `internal`'s name **as is** without consulting the catalogue either way.
+`BUILTIN_PLUGINS` holds its parameters once `gen:builtin-params` is re-run against a built engine.
+
+**A parameter CAN be a file**, and the mechanism exists: `bind: model` + `filepicker`, and
+`nodeProject.ts` turns a module's `model:` into `namFile`. An analogous line would make `deck:` →
+`deckFile`. That is not the right route for a deck: its record is chosen live and deliberately must
+not be committed into the project (`deckTrack` says so). Worth noting because the question comes
+back, and the answer is not "impossible" but "it would write the record into the project".
+
+## The identifiers
+
+`plattersOf` addresses `deckA:platterA` and `stemBassA:platterBassA`; a set without those
+platters has nothing to patch — it plays silence.
+
+The platter nodes name `@meta/audio/turntable`, which ships with k7, so no library has to be
+prepared first.
+
+## What is left
+
+**The censor becomes a binding.** It needs one addition to the vocabulary: `MixControl.kind` is
+`"fader" | "button"` and a **momentary** button has no word. With `"momentary"`,
+`deckA.censor: { module: platterA, param: Rate }` becomes a line of `surfaces/desk.k7x`.
+
+## Replaying the measurements
+
+A running engine, then:
+
+```bash
+npx tsx engine/k7-runtime/scripts/platter-node-probe.ts   # [ws://127.0.0.1:8765]
+```
+
+Its own session, `Rate: 0` everywhere: it makes no noise and does not touch the loaded project.
+Measured 25 August 2026, on this machine's engine.

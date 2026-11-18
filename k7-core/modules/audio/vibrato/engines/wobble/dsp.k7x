@@ -1,0 +1,12 @@
+// Vibrato (wobble) — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({ Amount: { min: 0, max: 100, default: 0 } })
+graph([
+  mul("Amount", 0.01).as("t"),
+  lerp(0.3, 3.3, "t").as("rateScale"),
+  mul("t", 25).as("depth"),
+  input().as("dry"),
+  amul(lfo("sine", mul("rateScale", 0.23)), "depth").as("w1"),
+  amul(lfo("sine", mul("rateScale", 0.71)), mul("depth", 0.6)).as("w2"),
+  amul(lfo("sine", mul("rateScale", 1.37)), mul("depth", 0.35)).as("w3"),
+  output(delay("dry", aadd(aadd(aadd("w1", "w2"), "w3"), 60), 130)),
+])

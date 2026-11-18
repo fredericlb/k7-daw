@@ -1,0 +1,86 @@
+[package]
+name = "k7-front"
+description = "The Rust front of k7's backend: owns the routes ported to Rust and proxies every other one to the TypeScript backend."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+# `cargo run -p k7-front` is the front; the testbed is a second binary, built only with its feature.
+default-run = "k7-front"
+
+[dependencies]
+# aes-gcm and scrypt: the hunt's secrets, sealed as the previous release seals them (src/routes/hunt_settings/seal.rs).
+aes-gcm.workspace = true
+# ws: the remote cameras' signalling socket.
+axum = { workspace = true, features = ["ws"] }
+base64.workspace = true
+# The take's file stamp is the machine's local time, as the TypeScript's `fileStamp` reads it (docs/file-changes.md).
+chrono.workspace = true
+getrandom.workspace = true
+hmac.workspace = true
+http-body-util.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+# The outgoing HTTPS client, over rustls with Mozilla's roots (src/https.rs).
+hyper-rustls.workspace = true
+rustls.workspace = true
+webpki-roots.workspace = true
+scrypt.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+subtle.workspace = true
+httpdate.workspace = true
+k7-auth.workspace = true
+# The machine's supervisor, hosted over stdio when a device's host gives the local engine to the front (docs/local.md).
+k7-local.workspace = true
+# The registry, the relay and the tunnel hub (docs/engine.md).
+k7-engine.workspace = true
+k7-js.workspace = true
+sha1.workspace = true
+# The media core: the waveform module, the analysis, the decodes and the transcodes (docs/file-media.md).
+k7-mediatek.workspace = true
+# The file hub, the relay and the pairing under `K7_FILES=front` (docs/files.md).
+k7-hub.workspace = true
+k7-sync.workspace = true
+k7-libraries.workspace = true
+# The native capture each account starts, and the one k7x half the relay shares (1i).
+k7-capture.workspace = true
+k7-git.workspace = true
+k7-roam.workspace = true
+# Chromium over the DevTools protocol: the picture render of `native/shares/picture.rs` (docs/service.md, "Picture render").
+k7-picture.workspace = true
+# The file service's native pieces (docs/file-native.md).
+k7-file-service.workspace = true
+# The compile's `Ask`, `View` and `Roots`, which the docs routes build and read (decision 1113).
+song = { path = "../../../../../packages/song/rust" }
+# The relay's and the hub's sockets, served over the upgrades the front accepts itself.
+tokio-tungstenite.workspace = true
+tower.workspace = true
+futures-util.workspace = true
+# fs: the apps' uploads and downloads stream to and from disk (src/routes/app_releases.rs); time: the camera sockets' ping; rt: SQLite off the async threads.
+tokio = { workspace = true, features = ["fs", "time", "rt", "process"] }
+url.workspace = true
+# The tracks export: a .mid per track and the zip that holds them (docs/tracks-export.md).
+midly.workspace = true
+zip.workspace = true
+
+[dev-dependencies]
+git2.workspace = true
+k7-auth.workspace = true
+sha2.workspace = true
+# `tokio::time::pause` and `advance`, for the freezer's 3 s timer test.
+tokio = { workspace = true, features = ["test-util"] }
+
+[features]
+# The engine testbed's clock and stubs, for the TypeScript suites run against Rust (docs/engine.md).
+test-hooks = ["k7-engine/test-hooks"]
+
+[[bin]]
+name = "k7-front"
+path = "src/main.rs"
+
+# The front with the engine testbed's hooks, which the TypeScript suites spawn (docs/engine.md).
+[[bin]]
+name = "k7-engine-testbed"
+path = "src/testbed.rs"
+required-features = ["test-hooks"]

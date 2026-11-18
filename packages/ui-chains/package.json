@@ -1,0 +1,50 @@
+{
+  "name": "@studio/ui-chains",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "k7's routing-graph engine — compiles a project graph to a dagre layout the web app draws as HTML nodes + SVG cables. Framework-agnostic; consumed as source.",
+  "exports": {
+    "./anchorRight": "./src/anchorRight.ts",
+    "./assembly": "./src/assembly.ts",
+    "./bindings": "./src/bindings.ts",
+    "./cableCanvas": "./src/cableCanvas.ts",
+    "./cables": "./src/cables.ts",
+    "./automationDepth": "./src/automationDepth.ts",
+    "./curvePlacement": "./src/curvePlacement.ts",
+    "./flow": "./src/flow.ts",
+    "./graph": "./src/graph.ts",
+    "./gridFit": "./src/gridFit.ts",
+    "./groupEdge": "./src/groupEdge.ts",
+    "./hang": "./src/hang.ts",
+    "./lcdScreen": "./src/lcdScreen.ts",
+    "./widgetSandbox": "./src/widgetSandbox.ts",
+    "./modulePreview": "./src/modulePreview.ts",
+    "./multiSelect": "./src/multiSelect.ts",
+    "./stackLayout": "./src/stackLayout.ts",
+    "./noteLoad": "./src/noteLoad.ts",
+    "./patchGesture": "./src/patchGesture.ts",
+    "./rowSeams": "./src/rowSeams.ts",
+    "./shownName": "./src/shownName.ts",
+    "./zoomGesture": "./src/zoomGesture.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "bench": "vitest bench --run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@dagrejs/dagre": "^1.1.8",
+    "@studio/graph-model": "*",
+    "@studio/song-schema": "*",
+    "@studio/web-protocol": "*"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

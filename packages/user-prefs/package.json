@@ -1,0 +1,28 @@
+{
+  "name": "@studio/user-prefs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "What a hosted service remembers about a person: one small JSON per user on a volume, keyed by the OIDC subject, plus the two routes over it. No database — see docs/store.md.",
+  "types": "./store.ts",
+  "exports": {
+    ".": "./store.ts",
+    "./router": "./router.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@studio/http": "*",
+    "@studio/song": "*",
+    "express": "^4.19.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.0",
+    "vitest": "^4.1.10",
+    "typescript": "^7.0.2"
+  }
+}

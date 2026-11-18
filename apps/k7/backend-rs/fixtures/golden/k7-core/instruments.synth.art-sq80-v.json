@@ -1,0 +1,4515 @@
+{
+  "project": "k7-core/instruments.synth.art-sq80-v.k7",
+  "repairs": {
+    "log": [],
+    "files": []
+  },
+  "engine": {
+    "name": "instruments.synth.art-sq80-v",
+    "tempo": 120,
+    "sampleRate": 48000,
+    "timeSigNumerator": 4,
+    "timeSigDenominator": 4,
+    "masterVolume": 0,
+    "masterPlugins": [],
+    "recordDir": "<ws>/k7-core/instruments.synth.art-sq80-v.k7/clips",
+    "tracks": [
+      {
+        "id": "melody",
+        "name": "melody",
+        "role": "regular",
+        "contentType": "notes",
+        "group": "",
+        "generated": false,
+        "color": "#9a5ad3",
+        "mute": false,
+        "solo": false,
+        "disabled": false,
+        "inputChannels": [],
+        "outputChannels": [],
+        "monitor": "auto",
+        "inputGain": 0,
+        "clips": [
+          {
+            "id": "melody@0",
+            "type": "midi",
+            "name": "melody",
+            "source": "",
+            "start": 0,
+            "length": 4,
+            "offset": 0,
+            "fadeIn": 0,
+            "fadeOut": 0,
+            "loopStart": 0,
+            "loopEnd": 0,
+            "notes": [
+              {
+                "time": 0,
+                "duration": 1,
+                "key": 60,
+                "vel": 0.8,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 1,
+                "duration": 1,
+                "key": 64,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              },
+              {
+                "time": 2,
+                "duration": 2,
+                "key": 67,
+                "vel": 1,
+                "channel": 0,
+                "rel": 1
+              }
+            ]
+          }
+        ],
+        "plugins": [],
+        "sends": [],
+        "automation": []
+      }
+    ],
+    "groups": [],
+    "markers": [],
+    "settings": {
+      "metronome": false,
+      "metronomeLevel": 0.6,
+      "countIn": 1
+    }
+  },
+  "errors": {
+    "errors": [],
+    "diagnostics": []
+  },
+  "freezes": [],
+  "graph": {
+    "chains": {
+      "melody": {
+        "from": "melody",
+        "use": [
+          {
+            "module": "fx",
+            "uses": "@k7-core/instruments/synth/art-sq80-v",
+            "stage": [
+              "@output-volume"
+            ],
+            "events": [
+              "note-on"
+            ],
+            "category": "instruments",
+            "emits": "audio",
+            "stub": true,
+            "hasNativePluginUI": false,
+            "ui": {
+              "cols": 16,
+              "rows": 4,
+              "widgets": {},
+              "tabs": [
+                {
+                  "name": "OSC",
+                  "widgets": {
+                    "dco1": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "DCO1",
+                      "color": "#3d7dff26"
+                    },
+                    "wave1": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Wave",
+                      "bind": "DCO1 Wave",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lvl1": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Level",
+                      "bind": "DCA1 Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "oct1": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Oct",
+                      "bind": "DCO1 Octave",
+                      "options": [
+                        {
+                          "label": "-2",
+                          "value": 0
+                        },
+                        {
+                          "label": "-1",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "0",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "4",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "semi1": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Semi",
+                      "bind": "DCO1 Semi",
+                      "options": [
+                        {
+                          "label": "-12",
+                          "value": 0
+                        },
+                        {
+                          "label": "-11",
+                          "value": 0.041666666666666664
+                        },
+                        {
+                          "label": "-10",
+                          "value": 0.08333333333333333
+                        },
+                        {
+                          "label": "-9",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "-8",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "-7",
+                          "value": 0.20833333333333334
+                        },
+                        {
+                          "label": "-6",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "-5",
+                          "value": 0.2916666666666667
+                        },
+                        {
+                          "label": "-4",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "-3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "-2",
+                          "value": 0.4166666666666667
+                        },
+                        {
+                          "label": "-1",
+                          "value": 0.4583333333333333
+                        },
+                        {
+                          "label": "0",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.5416666666666666
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.5833333333333334
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.7083333333333334
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.7916666666666666
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "9",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "10",
+                          "value": 0.9166666666666666
+                        },
+                        {
+                          "label": "11",
+                          "value": 0.9583333333333334
+                        },
+                        {
+                          "label": "12",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "on1": {
+                      "type": "toggle",
+                      "col": 0,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "On",
+                      "bind": "DCA1 ON/OFF"
+                    },
+                    "fine1": {
+                      "type": "number",
+                      "col": 2,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Fine",
+                      "bind": "DCO1 Fine",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dco2": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "DCO2",
+                      "color": "#3d7dff26"
+                    },
+                    "wave2": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Wave",
+                      "bind": "DCO2 Wave",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lvl2": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Level",
+                      "bind": "DCA2 Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "oct2": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Oct",
+                      "bind": "DCO2 Octave",
+                      "options": [
+                        {
+                          "label": "-2",
+                          "value": 0
+                        },
+                        {
+                          "label": "-1",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "0",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "4",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "semi2": {
+                      "type": "dropdown",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Semi",
+                      "bind": "DCO2 Semi",
+                      "options": [
+                        {
+                          "label": "-12",
+                          "value": 0
+                        },
+                        {
+                          "label": "-11",
+                          "value": 0.041666666666666664
+                        },
+                        {
+                          "label": "-10",
+                          "value": 0.08333333333333333
+                        },
+                        {
+                          "label": "-9",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "-8",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "-7",
+                          "value": 0.20833333333333334
+                        },
+                        {
+                          "label": "-6",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "-5",
+                          "value": 0.2916666666666667
+                        },
+                        {
+                          "label": "-4",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "-3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "-2",
+                          "value": 0.4166666666666667
+                        },
+                        {
+                          "label": "-1",
+                          "value": 0.4583333333333333
+                        },
+                        {
+                          "label": "0",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.5416666666666666
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.5833333333333334
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.7083333333333334
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.7916666666666666
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "9",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "10",
+                          "value": 0.9166666666666666
+                        },
+                        {
+                          "label": "11",
+                          "value": 0.9583333333333334
+                        },
+                        {
+                          "label": "12",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "on2": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "On",
+                      "bind": "DCA2 ON/OFF"
+                    },
+                    "fine2": {
+                      "type": "number",
+                      "col": 6,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Fine",
+                      "bind": "DCO2 Fine",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "dco3": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "DCO3",
+                      "color": "#3d7dff26"
+                    },
+                    "wave3": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Wave",
+                      "bind": "DCO3 Wave",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lvl3": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Level",
+                      "bind": "DCA3 Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "oct3": {
+                      "type": "dropdown",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Oct",
+                      "bind": "DCO3 Octave",
+                      "options": [
+                        {
+                          "label": "-2",
+                          "value": 0
+                        },
+                        {
+                          "label": "-1",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "0",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "4",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "semi3": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Semi",
+                      "bind": "DCO3 Semi",
+                      "options": [
+                        {
+                          "label": "-12",
+                          "value": 0
+                        },
+                        {
+                          "label": "-11",
+                          "value": 0.041666666666666664
+                        },
+                        {
+                          "label": "-10",
+                          "value": 0.08333333333333333
+                        },
+                        {
+                          "label": "-9",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "-8",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "-7",
+                          "value": 0.20833333333333334
+                        },
+                        {
+                          "label": "-6",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "-5",
+                          "value": 0.2916666666666667
+                        },
+                        {
+                          "label": "-4",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "-3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "-2",
+                          "value": 0.4166666666666667
+                        },
+                        {
+                          "label": "-1",
+                          "value": 0.4583333333333333
+                        },
+                        {
+                          "label": "0",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "1",
+                          "value": 0.5416666666666666
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.5833333333333334
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "4",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "5",
+                          "value": 0.7083333333333334
+                        },
+                        {
+                          "label": "6",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "7",
+                          "value": 0.7916666666666666
+                        },
+                        {
+                          "label": "8",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "9",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "10",
+                          "value": 0.9166666666666666
+                        },
+                        {
+                          "label": "11",
+                          "value": 0.9583333333333334
+                        },
+                        {
+                          "label": "12",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "on3": {
+                      "type": "toggle",
+                      "col": 8,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "On",
+                      "bind": "DCA3 ON/OFF"
+                    },
+                    "fine3": {
+                      "type": "number",
+                      "col": 10,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Fine",
+                      "bind": "DCO3 Fine",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "voice": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4,
+                      "label": "VOICE",
+                      "color": "#6b6b6b33"
+                    },
+                    "glide": {
+                      "type": "knob",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Glide",
+                      "bind": "Glide Time",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "detune": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Detune",
+                      "bind": "Unison Detune",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "unison": {
+                      "type": "toggle",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Unison",
+                      "bind": "Unison_On"
+                    },
+                    "mono": {
+                      "type": "toggle",
+                      "col": 14,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Mono",
+                      "bind": "Mono"
+                    },
+                    "sync2": {
+                      "type": "toggle",
+                      "col": 12,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Sync 2",
+                      "bind": "DCO 2 Sync"
+                    },
+                    "am2": {
+                      "type": "number",
+                      "col": 14,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "AM 2",
+                      "bind": "DCO 2 AM",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                },
+                {
+                  "name": "VCF",
+                  "widgets": {
+                    "vcf": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 10,
+                      "rowSpan": 4,
+                      "label": "VCF",
+                      "color": "#ff6a1a26"
+                    },
+                    "cutoff": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Cutoff",
+                      "bind": "Filter Cutoff Frequency",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "res": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Res",
+                      "bind": "Filter Resonance",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "keytrk": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "KeyTrk",
+                      "bind": "Filter Keyboard Tracking",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "drift": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Drift",
+                      "bind": "Filter Cutoff Dispersion",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "res_drift": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "ResDrft",
+                      "bind": "Filter Resonance Dispersion",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vcf_src1": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "label": "Src 1",
+                      "bind": "VCF Cutoff Mod Source 1",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "LFO 1",
+                          "value": 0.0625
+                        },
+                        {
+                          "label": "LFO 2",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "LFO 3",
+                          "value": 0.1875
+                        },
+                        {
+                          "label": "Env 1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Env 2",
+                          "value": 0.3125
+                        },
+                        {
+                          "label": "Env 3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Env 4 (DCA 4)",
+                          "value": 0.4375
+                        },
+                        {
+                          "label": "Velocity",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Velocity-Exp",
+                          "value": 0.5625
+                        },
+                        {
+                          "label": "Keyboard 1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Keyboard 2",
+                          "value": 0.6875
+                        },
+                        {
+                          "label": "ModWheel",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Expression",
+                          "value": 0.8125
+                        },
+                        {
+                          "label": "Breath",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Aftertouch",
+                          "value": 0.9375
+                        },
+                        {
+                          "label": "ModMixer",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "vcf_src2": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 3,
+                      "colSpan": 2,
+                      "label": "Src 2",
+                      "bind": "VCF Cutoff Mod Source 2",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "LFO 1",
+                          "value": 0.0625
+                        },
+                        {
+                          "label": "LFO 2",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "LFO 3",
+                          "value": 0.1875
+                        },
+                        {
+                          "label": "Env 1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Env 2",
+                          "value": 0.3125
+                        },
+                        {
+                          "label": "Env 3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Env 4 (DCA 4)",
+                          "value": 0.4375
+                        },
+                        {
+                          "label": "Velocity",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Velocity-Exp",
+                          "value": 0.5625
+                        },
+                        {
+                          "label": "Keyboard 1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Keyboard 2",
+                          "value": 0.6875
+                        },
+                        {
+                          "label": "ModWheel",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Expression",
+                          "value": 0.8125
+                        },
+                        {
+                          "label": "Breath",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Aftertouch",
+                          "value": 0.9375
+                        },
+                        {
+                          "label": "ModMixer",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "vcf_amt1": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amt 1",
+                      "bind": "VCF Cutoff Mod Amount 1",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vcf_amt2": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amt 2",
+                      "bind": "VCF Cutoff Mod Amount 2",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "filter_screen": {
+                      "type": "lcdscreen",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "ENV",
+                  "widgets": {
+                    "amp": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4,
+                      "label": "AMP ENV",
+                      "color": "#3ec96b26"
+                    },
+                    "t1": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "T1",
+                      "bind": "Envelope4 SQ80 Time 1",
+                      "min": 0,
+                      "max": 1,
+                      "step": 0.015873015873015872
+                    },
+                    "t2": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "T2",
+                      "bind": "Envelope4 SQ80 Time 2",
+                      "min": 0,
+                      "max": 1,
+                      "step": 0.015873015873015872
+                    },
+                    "t3": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "T3",
+                      "bind": "Envelope4 SQ80 Time 3",
+                      "min": 0,
+                      "max": 1,
+                      "step": 0.015873015873015872
+                    },
+                    "t4": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Release",
+                      "bind": "Envelope4 SQ80 Release Time",
+                      "min": 0,
+                      "max": 1,
+                      "step": 0.015873015873015872
+                    },
+                    "l1": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "L1",
+                      "bind": "Envelope4 SQ80 Level 1",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l2": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "L2",
+                      "bind": "Envelope4 SQ80 Level 2",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "l3": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Sustain",
+                      "bind": "Envelope4 SQ80 Level 3",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "vel": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Vel",
+                      "bind": "Envelope4 SQ80 Velocity Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "env_screen": {
+                      "type": "lcdscreen",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 8,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "LFO 1-2",
+                  "widgets": {
+                    "lfo1": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "LFO1",
+                      "color": "#ffffff14"
+                    },
+                    "lfo1_rate": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "LFO1 Rate Unsync",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo1_amt": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "LFO1 Amplitude",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo1_delay": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Delay",
+                      "bind": "LFO1 Delay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo1_init": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Init",
+                      "bind": "LFO1 Initial Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo1_wave": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Wave",
+                      "bind": "LFO1 Waveform",
+                      "options": [
+                        {
+                          "label": "Triangle",
+                          "value": 0
+                        },
+                        {
+                          "label": "Ramp",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "Noise",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "Sine",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "Saw",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "lfo2": {
+                      "type": "group",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "LFO2",
+                      "color": "#ffffff14"
+                    },
+                    "lfo2_rate": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "LFO2 Rate Unsync",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo2_amt": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "LFO2 Amplitude",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo2_delay": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Delay",
+                      "bind": "LFO2 Delay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo2_init": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Init",
+                      "bind": "LFO2 Initial Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo2_wave": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Wave",
+                      "bind": "LFO2 Waveform",
+                      "options": [
+                        {
+                          "label": "Triangle",
+                          "value": 0
+                        },
+                        {
+                          "label": "Ramp",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "Noise",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "Sine",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "Saw",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "lfo_screen": {
+                      "type": "lcdscreen",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 4
+                    }
+                  }
+                },
+                {
+                  "name": "LFO 3",
+                  "widgets": {
+                    "lfo3": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 6,
+                      "rowSpan": 4,
+                      "label": "LFO3",
+                      "color": "#ffffff14"
+                    },
+                    "lfo3_rate": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Rate",
+                      "bind": "LFO3 Rate Unsync",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo3_amt": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Depth",
+                      "bind": "LFO3 Amplitude",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo3_delay": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Delay",
+                      "bind": "LFO3 Delay",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo3_init": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 2,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Init",
+                      "bind": "LFO3 Initial Level",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "lfo3_wave": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Wave",
+                      "bind": "LFO3 Waveform",
+                      "options": [
+                        {
+                          "label": "Triangle",
+                          "value": 0
+                        },
+                        {
+                          "label": "Ramp",
+                          "value": 0.2
+                        },
+                        {
+                          "label": "Square",
+                          "value": 0.4
+                        },
+                        {
+                          "label": "Noise",
+                          "value": 0.6
+                        },
+                        {
+                          "label": "Sine",
+                          "value": 0.8
+                        },
+                        {
+                          "label": "Saw",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "MOD",
+                  "widgets": {
+                    "pm1": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 3,
+                      "label": "PITCH1",
+                      "color": "#3d7dff1a"
+                    },
+                    "pm1_src1": {
+                      "type": "dropdown",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Src 1",
+                      "bind": "DCO1 Pitch Mod Source 1",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "LFO 1",
+                          "value": 0.0625
+                        },
+                        {
+                          "label": "LFO 2",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "LFO 3",
+                          "value": 0.1875
+                        },
+                        {
+                          "label": "Env 1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Env 2",
+                          "value": 0.3125
+                        },
+                        {
+                          "label": "Env 3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Env 4 (DCA 4)",
+                          "value": 0.4375
+                        },
+                        {
+                          "label": "Velocity",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Velocity-Exp",
+                          "value": 0.5625
+                        },
+                        {
+                          "label": "Keyboard 1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Keyboard 2",
+                          "value": 0.6875
+                        },
+                        {
+                          "label": "ModWheel",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Expression",
+                          "value": 0.8125
+                        },
+                        {
+                          "label": "Breath",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Aftertouch",
+                          "value": 0.9375
+                        },
+                        {
+                          "label": "ModMixer",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pm1_src2": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Src 2",
+                      "bind": "DCO1 Pitch Mod Source 2",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "LFO 1",
+                          "value": 0.0625
+                        },
+                        {
+                          "label": "LFO 2",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "LFO 3",
+                          "value": 0.1875
+                        },
+                        {
+                          "label": "Env 1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Env 2",
+                          "value": 0.3125
+                        },
+                        {
+                          "label": "Env 3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Env 4 (DCA 4)",
+                          "value": 0.4375
+                        },
+                        {
+                          "label": "Velocity",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Velocity-Exp",
+                          "value": 0.5625
+                        },
+                        {
+                          "label": "Keyboard 1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Keyboard 2",
+                          "value": 0.6875
+                        },
+                        {
+                          "label": "ModWheel",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Expression",
+                          "value": 0.8125
+                        },
+                        {
+                          "label": "Breath",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Aftertouch",
+                          "value": 0.9375
+                        },
+                        {
+                          "label": "ModMixer",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pm1_amt1": {
+                      "type": "knob",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amt 1",
+                      "bind": "DCO1 Pitch Mod Amount 1",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pm1_amt2": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amt 2",
+                      "bind": "DCO1 Pitch Mod Amount 2",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pm2": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 3,
+                      "label": "PITCH2",
+                      "color": "#3d7dff1a"
+                    },
+                    "pm2_src1": {
+                      "type": "dropdown",
+                      "col": 4,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Src 1",
+                      "bind": "DCO2 Pitch Mod Source 1",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "LFO 1",
+                          "value": 0.0625
+                        },
+                        {
+                          "label": "LFO 2",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "LFO 3",
+                          "value": 0.1875
+                        },
+                        {
+                          "label": "Env 1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Env 2",
+                          "value": 0.3125
+                        },
+                        {
+                          "label": "Env 3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Env 4 (DCA 4)",
+                          "value": 0.4375
+                        },
+                        {
+                          "label": "Velocity",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Velocity-Exp",
+                          "value": 0.5625
+                        },
+                        {
+                          "label": "Keyboard 1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Keyboard 2",
+                          "value": 0.6875
+                        },
+                        {
+                          "label": "ModWheel",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Expression",
+                          "value": 0.8125
+                        },
+                        {
+                          "label": "Breath",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Aftertouch",
+                          "value": 0.9375
+                        },
+                        {
+                          "label": "ModMixer",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pm2_src2": {
+                      "type": "dropdown",
+                      "col": 6,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Src 2",
+                      "bind": "DCO2 Pitch Mod Source 2",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "LFO 1",
+                          "value": 0.0625
+                        },
+                        {
+                          "label": "LFO 2",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "LFO 3",
+                          "value": 0.1875
+                        },
+                        {
+                          "label": "Env 1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Env 2",
+                          "value": 0.3125
+                        },
+                        {
+                          "label": "Env 3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Env 4 (DCA 4)",
+                          "value": 0.4375
+                        },
+                        {
+                          "label": "Velocity",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Velocity-Exp",
+                          "value": 0.5625
+                        },
+                        {
+                          "label": "Keyboard 1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Keyboard 2",
+                          "value": 0.6875
+                        },
+                        {
+                          "label": "ModWheel",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Expression",
+                          "value": 0.8125
+                        },
+                        {
+                          "label": "Breath",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Aftertouch",
+                          "value": 0.9375
+                        },
+                        {
+                          "label": "ModMixer",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pm2_amt1": {
+                      "type": "knob",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amt 1",
+                      "bind": "DCO2 Pitch Mod Amount 1",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pm2_amt2": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amt 2",
+                      "bind": "DCO2 Pitch Mod Amount 2",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pm3": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 3,
+                      "label": "PITCH3",
+                      "color": "#3d7dff1a"
+                    },
+                    "pm3_src1": {
+                      "type": "dropdown",
+                      "col": 8,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Src 1",
+                      "bind": "DCO3 Pitch Mod Source 1",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "LFO 1",
+                          "value": 0.0625
+                        },
+                        {
+                          "label": "LFO 2",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "LFO 3",
+                          "value": 0.1875
+                        },
+                        {
+                          "label": "Env 1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Env 2",
+                          "value": 0.3125
+                        },
+                        {
+                          "label": "Env 3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Env 4 (DCA 4)",
+                          "value": 0.4375
+                        },
+                        {
+                          "label": "Velocity",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Velocity-Exp",
+                          "value": 0.5625
+                        },
+                        {
+                          "label": "Keyboard 1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Keyboard 2",
+                          "value": 0.6875
+                        },
+                        {
+                          "label": "ModWheel",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Expression",
+                          "value": 0.8125
+                        },
+                        {
+                          "label": "Breath",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Aftertouch",
+                          "value": 0.9375
+                        },
+                        {
+                          "label": "ModMixer",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pm3_src2": {
+                      "type": "dropdown",
+                      "col": 10,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Src 2",
+                      "bind": "DCO3 Pitch Mod Source 2",
+                      "options": [
+                        {
+                          "label": "None",
+                          "value": 0
+                        },
+                        {
+                          "label": "LFO 1",
+                          "value": 0.0625
+                        },
+                        {
+                          "label": "LFO 2",
+                          "value": 0.125
+                        },
+                        {
+                          "label": "LFO 3",
+                          "value": 0.1875
+                        },
+                        {
+                          "label": "Env 1",
+                          "value": 0.25
+                        },
+                        {
+                          "label": "Env 2",
+                          "value": 0.3125
+                        },
+                        {
+                          "label": "Env 3",
+                          "value": 0.375
+                        },
+                        {
+                          "label": "Env 4 (DCA 4)",
+                          "value": 0.4375
+                        },
+                        {
+                          "label": "Velocity",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Velocity-Exp",
+                          "value": 0.5625
+                        },
+                        {
+                          "label": "Keyboard 1",
+                          "value": 0.625
+                        },
+                        {
+                          "label": "Keyboard 2",
+                          "value": 0.6875
+                        },
+                        {
+                          "label": "ModWheel",
+                          "value": 0.75
+                        },
+                        {
+                          "label": "Expression",
+                          "value": 0.8125
+                        },
+                        {
+                          "label": "Breath",
+                          "value": 0.875
+                        },
+                        {
+                          "label": "Aftertouch",
+                          "value": 0.9375
+                        },
+                        {
+                          "label": "ModMixer",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "pm3_amt1": {
+                      "type": "knob",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amt 1",
+                      "bind": "DCO3 Pitch Mod Amount 1",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "pm3_amt2": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amt 2",
+                      "bind": "DCO3 Pitch Mod Amount 2",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "arp": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 4,
+                      "rowSpan": 3,
+                      "label": "ARP",
+                      "color": "#6b6b6b33"
+                    },
+                    "arp_on": {
+                      "type": "toggle",
+                      "col": 12,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Arp",
+                      "bind": "Arpeggiator ON/OFF"
+                    },
+                    "arp_mode": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "Mode",
+                      "bind": "Arpeggiator Mode",
+                      "options": [
+                        {
+                          "label": "Up",
+                          "value": 0
+                        },
+                        {
+                          "label": "Down",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "Ordered",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "Reversed",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "Inc",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "Exc",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "Random",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_oct": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Oct",
+                      "bind": "Arpeggiator Octave Range",
+                      "options": [
+                        {
+                          "label": "1",
+                          "value": 0
+                        },
+                        {
+                          "label": "2",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "3",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "4",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_rate": {
+                      "type": "dropdown",
+                      "col": 14,
+                      "row": 1,
+                      "colSpan": 2,
+                      "label": "Rate",
+                      "bind": "Arpeggiator Rate (Synced)",
+                      "options": [
+                        {
+                          "label": "1",
+                          "value": 0
+                        },
+                        {
+                          "label": "1/2",
+                          "value": 0.16666666666666666
+                        },
+                        {
+                          "label": "1/4",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "1/8",
+                          "value": 0.5
+                        },
+                        {
+                          "label": "1/16",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "1/32",
+                          "value": 0.8333333333333334
+                        },
+                        {
+                          "label": "1/64",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "arp_type": {
+                      "type": "dropdown",
+                      "col": 12,
+                      "row": 2,
+                      "colSpan": 4,
+                      "label": "Sync",
+                      "bind": "Arpeggiator Rate Type",
+                      "options": [
+                        {
+                          "label": "Hertz",
+                          "value": 0
+                        },
+                        {
+                          "label": "Sync",
+                          "value": 0.3333333333333333
+                        },
+                        {
+                          "label": "Sync Triplets",
+                          "value": 0.6666666666666666
+                        },
+                        {
+                          "label": "Sync Dotted",
+                          "value": 1
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "FX",
+                  "widgets": {
+                    "fx": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 16,
+                      "label": "FX",
+                      "color": "#ff3b3026"
+                    },
+                    "fx_on": {
+                      "type": "toggle",
+                      "col": 0,
+                      "row": 0,
+                      "colSpan": 2,
+                      "label": "FX On",
+                      "bind": "Effect Section On/Off"
+                    },
+                    "fx_route": {
+                      "type": "dropdown",
+                      "col": 2,
+                      "row": 0,
+                      "colSpan": 3,
+                      "label": "Route",
+                      "bind": "Effect Routing",
+                      "options": [
+                        {
+                          "label": "Serial",
+                          "value": 0
+                        },
+                        {
+                          "label": "Parallel",
+                          "value": 1
+                        }
+                      ]
+                    },
+                    "slot1": {
+                      "type": "group",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "FX1",
+                      "color": "#ff3b3026"
+                    },
+                    "fx1_on": {
+                      "type": "toggle",
+                      "col": 0,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "On",
+                      "bind": "FX1 On/Off"
+                    },
+                    "fx1_mix": {
+                      "type": "knob",
+                      "col": 2,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amount",
+                      "bind": "FX1 Dry/Wet",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "slot2": {
+                      "type": "group",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "FX2",
+                      "color": "#ff3b3026"
+                    },
+                    "fx2_on": {
+                      "type": "toggle",
+                      "col": 4,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "On",
+                      "bind": "FX2 On/Off"
+                    },
+                    "fx2_mix": {
+                      "type": "knob",
+                      "col": 6,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amount",
+                      "bind": "FX2 Dry/Wet",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "slot3": {
+                      "type": "group",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "FX3",
+                      "color": "#ff3b3026"
+                    },
+                    "fx3_on": {
+                      "type": "toggle",
+                      "col": 8,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "On",
+                      "bind": "FX3 On/Off"
+                    },
+                    "fx3_mix": {
+                      "type": "knob",
+                      "col": 10,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amount",
+                      "bind": "FX3 Dry/Wet",
+                      "min": 0,
+                      "max": 1
+                    },
+                    "slot4": {
+                      "type": "group",
+                      "col": 12,
+                      "row": 1,
+                      "colSpan": 4,
+                      "rowSpan": 2,
+                      "label": "FX4",
+                      "color": "#ff3b3026"
+                    },
+                    "fx4_on": {
+                      "type": "toggle",
+                      "col": 12,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "On",
+                      "bind": "FX4 On/Off"
+                    },
+                    "fx4_mix": {
+                      "type": "knob",
+                      "col": 14,
+                      "row": 1,
+                      "colSpan": 2,
+                      "rowSpan": 2,
+                      "label": "Amount",
+                      "bind": "FX4 Dry/Wet",
+                      "min": 0,
+                      "max": 1
+                    }
+                  }
+                }
+              ],
+              "script": "// Screens for SQ80 V: the VCF's response, the amp envelope's shape, the three LFOs.\nconst BLUE = \"#3d7dff\";\nconst GREEN = \"#3ec96b\";\nconst ORANGE = \"#ff6a1a\";\nconst WHITE = \"#ffffff\";\nconst GREY = \"#6b6b6b\";\nconst FONT = \"8px ui-monospace, monospace\";\n\nfunction clamp(v, lo, hi) {\n  return Math.max(lo, Math.min(hi, Number.isFinite(v) ? v : lo));\n}\n\nfunction last(arr) {\n  return arr && arr.length ? clamp(arr[arr.length - 1], 0, 1) : 0;\n}\n\nfunction text(ctx, s, x, y, color, align) {\n  ctx.font = FONT;\n  ctx.fillStyle = color;\n  ctx.textAlign = align || \"left\";\n  ctx.textBaseline = \"top\";\n  ctx.fillText(s, x, y);\n}\n\n// One cycle of an LFO shape at phase p in 0..1, value in -1..1.\nfunction lfoShape(kind, p, seed) {\n  const f = p - Math.floor(p);\n  if (kind === 0) return f < 0.5 ? 4 * f - 1 : 3 - 4 * f;\n  if (kind === 1) return 1 - 2 * f;\n  if (kind === 2) return f < 0.5 ? 1 : -1;\n  if (kind === 3) {\n    const n = Math.sin((Math.floor(p * 4) + seed) * 12.9898) * 43758.5453;\n    return 2 * (n - Math.floor(n)) - 1;\n  }\n  if (kind === 4) return Math.sin(f * Math.PI * 2);\n  return 2 * f - 1;\n}\n\nexport default {\n  filter_screen(lcd) {\n    const { ctx, width: W, height: H, params, output } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    if (W < 20 || H < 20) return;\n    const cut = clamp(params[\"Filter Cutoff Frequency\"] ?? 1, 0, 1);\n    const res = clamp(params[\"Filter Resonance\"] ?? 0, 0, 1);\n    const kt = clamp(params[\"Filter Keyboard Tracking\"] ?? 0, 0, 1);\n    const top = 6;\n    const bot = H - 12;\n    ctx.strokeStyle = GREY;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(0, bot + 0.5);\n    ctx.lineTo(W, bot + 0.5);\n    ctx.stroke();\n    // Four-pole lowpass magnitude on a log-frequency axis, x in 0..1.\n    const fc = 0.02 + cut * 0.96;\n    const q = 0.5 + res * 6;\n    const yOf = (x) => {\n      const r = Math.pow(10, (x - fc) * 3);\n      const one = 1 / Math.sqrt((1 - r * r) ** 2 + (r / q) ** 2);\n      const db = 20 * Math.log10(Math.max(1e-6, one * one));\n      const t = clamp((db + 48) / 66, 0, 1);\n      return bot - t * (bot - top);\n    };\n    ctx.strokeStyle = ORANGE;\n    ctx.beginPath();\n    for (let px = 0; px <= W; px += 2) {\n      const y = yOf(px / W);\n      if (px === 0) ctx.moveTo(px, y);\n      else ctx.lineTo(px, y);\n    }\n    ctx.stroke();\n    const cx = fc * W;\n    const lvl = last(output);\n    ctx.fillStyle = ORANGE;\n    ctx.beginPath();\n    ctx.arc(cx, yOf(fc), 2.5 + lvl * 3, 0, Math.PI * 2);\n    ctx.fill();\n    // Key tracking: a short white tick sliding right of the cutoff by its amount.\n    if (kt > 0.01) {\n      ctx.strokeStyle = WHITE;\n      ctx.beginPath();\n      ctx.moveTo(cx, bot + 3.5);\n      ctx.lineTo(Math.min(W - 1, cx + kt * W * 0.25), bot + 3.5);\n      ctx.stroke();\n    }\n    text(ctx, \"VCF\", 3, 2, GREY);\n    text(ctx, `RES ${Math.round(res * 100)}`, W - 3, 2, GREY, \"right\");\n  },\n\n  env_screen(lcd) {\n    const { ctx, width: W, height: H, params, output, state } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    if (W < 20 || H < 20) return;\n    const g = (k, d) => clamp(params[k] ?? d, 0, 1);\n    const t = [g(\"Envelope4 SQ80 Time 1\", 0), g(\"Envelope4 SQ80 Time 2\", 0), g(\"Envelope4 SQ80 Time 3\", 0), g(\"Envelope4 SQ80 Release Time\", 0)];\n    const l = [g(\"Envelope4 SQ80 Level 1\", 0.5), g(\"Envelope4 SQ80 Level 2\", 0.5), g(\"Envelope4 SQ80 Level 3\", 1)];\n    const top = 12;\n    const bot = H - 4;\n    const yOf = (v) => bot - v * (bot - top);\n    const segs = t.map((v) => 0.04 + v);\n    const hold = 0.35;\n    const total = segs.reduce((a, b) => a + b, 0) + hold;\n    const sx = (W - 8) / total;\n    const pts = [[4, yOf(0)]];\n    let x = 4;\n    for (let k = 0; k < 3; k++) {\n      x += segs[k] * sx;\n      pts.push([x, yOf(l[k])]);\n    }\n    x += hold * sx;\n    pts.push([x, yOf(l[2])]);\n    x += segs[3] * sx;\n    pts.push([x, yOf(0)]);\n    ctx.strokeStyle = GREY;\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(0, bot + 0.5);\n    ctx.lineTo(W, bot + 0.5);\n    ctx.stroke();\n    ctx.strokeStyle = GREEN;\n    ctx.beginPath();\n    pts.forEach(([px, py], k) => (k ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));\n    ctx.stroke();\n    ctx.fillStyle = GREEN;\n    for (let k = 1; k < 4; k++) {\n      ctx.fillRect(pts[k][0] - 1.5, pts[k][1] - 1.5, 3, 3);\n    }\n    // The live output level as a white dot riding the sustain plateau.\n    const lvl = last(output);\n    state.lvl = (state.lvl ?? 0) * 0.6 + lvl * 0.4;\n    if (state.lvl > 0.01) {\n      ctx.fillStyle = WHITE;\n      ctx.beginPath();\n      ctx.arc((pts[3][0] + pts[4][0]) / 2, yOf(clamp(state.lvl, 0, 1)), 3, 0, Math.PI * 2);\n      ctx.fill();\n    }\n    text(ctx, \"AMP ENV\", 3, 2, GREY);\n    text(ctx, [\"T1\", \"T2\", \"T3\", \"REL\"].map((n, k) => `${n} ${Math.round(t[k] * 63)}`).join(\"  \"), W - 3, 2, GREY, \"right\");\n  },\n\n  lfo_screen(lcd) {\n    const { ctx, width: W, height: H, params, now } = lcd;\n    ctx.fillStyle = \"#000\";\n    ctx.fillRect(0, 0, W, H);\n    if (W < 20 || H < 30) return;\n    const colors = [BLUE, GREEN, ORANGE];\n    const rowH = H / 3;\n    for (let i = 0; i < 3; i++) {\n      const n = `LFO${i + 1}`;\n      const rate = clamp(params[`${n} Rate Unsync`] ?? 0.15, 0, 1);\n      const amp = clamp(params[`${n} Amplitude`] ?? 1, 0, 1);\n      const delay = clamp(params[`${n} Delay`] ?? 0, 0, 1);\n      const kind = Math.round(clamp(params[`${n} Waveform`] ?? 0, 0, 1) * 5);\n      const mid = rowH * i + rowH / 2 + 4;\n      const half = (rowH / 2 - 6) * amp;\n      const cycles = 1 + rate * 7;\n      const x0 = delay * W * 0.4;\n      const phase = (now / 1000) * (0.2 + rate * 2);\n      ctx.strokeStyle = GREY;\n      ctx.lineWidth = 1;\n      ctx.beginPath();\n      ctx.moveTo(0, mid + 0.5);\n      ctx.lineTo(W, mid + 0.5);\n      ctx.stroke();\n      ctx.strokeStyle = colors[i];\n      ctx.beginPath();\n      ctx.moveTo(0, mid);\n      ctx.lineTo(x0, mid);\n      for (let px = x0; px <= W; px += 1) {\n        const ramp = delay > 0 ? clamp((px - x0) / (W * 0.2), 0, 1) : 1;\n        const p = ((px - x0) / Math.max(1, W - x0)) * cycles + phase;\n        ctx.lineTo(px, mid - lfoShape(kind, p, i) * half * ramp);\n      }\n      ctx.stroke();\n      text(ctx, `${i + 1}`, 2, rowH * i + 1, colors[i]);\n    }\n  },\n};\n",
+              "vertical": {
+                "cols": 4,
+                "rows": 16,
+                "widgets": {},
+                "tabs": [
+                  {
+                    "name": "OSC",
+                    "widgets": {
+                      "dco1": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "DCO1",
+                        "color": "#3d7dff26"
+                      },
+                      "wave1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Wave",
+                        "bind": "DCO1 Wave",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lvl1": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Level",
+                        "bind": "DCA1 Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "oct1": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "label": "Oct",
+                        "bind": "DCO1 Octave",
+                        "options": [
+                          {
+                            "label": "-2",
+                            "value": 0
+                          },
+                          {
+                            "label": "-1",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "0",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "4",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "semi1": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "label": "Semi",
+                        "bind": "DCO1 Semi",
+                        "options": [
+                          {
+                            "label": "-12",
+                            "value": 0
+                          },
+                          {
+                            "label": "-11",
+                            "value": 0.041666666666666664
+                          },
+                          {
+                            "label": "-10",
+                            "value": 0.08333333333333333
+                          },
+                          {
+                            "label": "-9",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "-8",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "-7",
+                            "value": 0.20833333333333334
+                          },
+                          {
+                            "label": "-6",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "-5",
+                            "value": 0.2916666666666667
+                          },
+                          {
+                            "label": "-4",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "-3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "-2",
+                            "value": 0.4166666666666667
+                          },
+                          {
+                            "label": "-1",
+                            "value": 0.4583333333333333
+                          },
+                          {
+                            "label": "0",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.5416666666666666
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.5833333333333334
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.7083333333333334
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.7916666666666666
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "9",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "10",
+                            "value": 0.9166666666666666
+                          },
+                          {
+                            "label": "11",
+                            "value": 0.9583333333333334
+                          },
+                          {
+                            "label": "12",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "on1": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "label": "On",
+                        "bind": "DCA1 ON/OFF"
+                      },
+                      "fine1": {
+                        "type": "number",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "label": "Fine",
+                        "bind": "DCO1 Fine",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dco2": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "DCO2",
+                        "color": "#3d7dff26"
+                      },
+                      "wave2": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Wave",
+                        "bind": "DCO2 Wave",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lvl2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Level",
+                        "bind": "DCA2 Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "oct2": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Oct",
+                        "bind": "DCO2 Octave",
+                        "options": [
+                          {
+                            "label": "-2",
+                            "value": 0
+                          },
+                          {
+                            "label": "-1",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "0",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "4",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "semi2": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Semi",
+                        "bind": "DCO2 Semi",
+                        "options": [
+                          {
+                            "label": "-12",
+                            "value": 0
+                          },
+                          {
+                            "label": "-11",
+                            "value": 0.041666666666666664
+                          },
+                          {
+                            "label": "-10",
+                            "value": 0.08333333333333333
+                          },
+                          {
+                            "label": "-9",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "-8",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "-7",
+                            "value": 0.20833333333333334
+                          },
+                          {
+                            "label": "-6",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "-5",
+                            "value": 0.2916666666666667
+                          },
+                          {
+                            "label": "-4",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "-3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "-2",
+                            "value": 0.4166666666666667
+                          },
+                          {
+                            "label": "-1",
+                            "value": 0.4583333333333333
+                          },
+                          {
+                            "label": "0",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.5416666666666666
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.5833333333333334
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.7083333333333334
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.7916666666666666
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "9",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "10",
+                            "value": 0.9166666666666666
+                          },
+                          {
+                            "label": "11",
+                            "value": 0.9583333333333334
+                          },
+                          {
+                            "label": "12",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "on2": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "label": "On",
+                        "bind": "DCA2 ON/OFF"
+                      },
+                      "fine2": {
+                        "type": "number",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "label": "Fine",
+                        "bind": "DCO2 Fine",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "dco3": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "DCO3",
+                        "color": "#3d7dff26"
+                      },
+                      "wave3": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Wave",
+                        "bind": "DCO3 Wave",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lvl3": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Level",
+                        "bind": "DCA3 Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "oct3": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "label": "Oct",
+                        "bind": "DCO3 Octave",
+                        "options": [
+                          {
+                            "label": "-2",
+                            "value": 0
+                          },
+                          {
+                            "label": "-1",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "0",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "4",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "semi3": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "label": "Semi",
+                        "bind": "DCO3 Semi",
+                        "options": [
+                          {
+                            "label": "-12",
+                            "value": 0
+                          },
+                          {
+                            "label": "-11",
+                            "value": 0.041666666666666664
+                          },
+                          {
+                            "label": "-10",
+                            "value": 0.08333333333333333
+                          },
+                          {
+                            "label": "-9",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "-8",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "-7",
+                            "value": 0.20833333333333334
+                          },
+                          {
+                            "label": "-6",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "-5",
+                            "value": 0.2916666666666667
+                          },
+                          {
+                            "label": "-4",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "-3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "-2",
+                            "value": 0.4166666666666667
+                          },
+                          {
+                            "label": "-1",
+                            "value": 0.4583333333333333
+                          },
+                          {
+                            "label": "0",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "1",
+                            "value": 0.5416666666666666
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.5833333333333334
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "4",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "5",
+                            "value": 0.7083333333333334
+                          },
+                          {
+                            "label": "6",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "7",
+                            "value": 0.7916666666666666
+                          },
+                          {
+                            "label": "8",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "9",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "10",
+                            "value": 0.9166666666666666
+                          },
+                          {
+                            "label": "11",
+                            "value": 0.9583333333333334
+                          },
+                          {
+                            "label": "12",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "on3": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 2,
+                        "label": "On",
+                        "bind": "DCA3 ON/OFF"
+                      },
+                      "fine3": {
+                        "type": "number",
+                        "col": 2,
+                        "row": 11,
+                        "colSpan": 2,
+                        "label": "Fine",
+                        "bind": "DCO3 Fine",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "voice": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 4,
+                        "rowSpan": 4,
+                        "label": "VOICE",
+                        "color": "#6b6b6b33"
+                      },
+                      "glide": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Glide",
+                        "bind": "Glide Time",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "detune": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 12,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Detune",
+                        "bind": "Unison Detune",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "unison": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 14,
+                        "colSpan": 2,
+                        "label": "Unison",
+                        "bind": "Unison_On"
+                      },
+                      "mono": {
+                        "type": "toggle",
+                        "col": 2,
+                        "row": 14,
+                        "colSpan": 2,
+                        "label": "Mono",
+                        "bind": "Mono"
+                      },
+                      "sync2": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 15,
+                        "colSpan": 2,
+                        "label": "Sync 2",
+                        "bind": "DCO 2 Sync"
+                      },
+                      "am2": {
+                        "type": "number",
+                        "col": 2,
+                        "row": 15,
+                        "colSpan": 2,
+                        "label": "AM 2",
+                        "bind": "DCO 2 AM",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  },
+                  {
+                    "name": "VCF",
+                    "widgets": {
+                      "vcf": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 9,
+                        "label": "VCF",
+                        "color": "#ff6a1a26"
+                      },
+                      "cutoff": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Cutoff",
+                        "bind": "Filter Cutoff Frequency",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "res": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Res",
+                        "bind": "Filter Resonance",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "keytrk": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "KeyTrk",
+                        "bind": "Filter Keyboard Tracking",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "drift": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Drift",
+                        "bind": "Filter Cutoff Dispersion",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "res_drift": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "ResDrft",
+                        "bind": "Filter Resonance Dispersion",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vcf_src1": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Src 1",
+                        "bind": "VCF Cutoff Mod Source 1",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "LFO 1",
+                            "value": 0.0625
+                          },
+                          {
+                            "label": "LFO 2",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "LFO 3",
+                            "value": 0.1875
+                          },
+                          {
+                            "label": "Env 1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Env 2",
+                            "value": 0.3125
+                          },
+                          {
+                            "label": "Env 3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Env 4 (DCA 4)",
+                            "value": 0.4375
+                          },
+                          {
+                            "label": "Velocity",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Velocity-Exp",
+                            "value": 0.5625
+                          },
+                          {
+                            "label": "Keyboard 1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Keyboard 2",
+                            "value": 0.6875
+                          },
+                          {
+                            "label": "ModWheel",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Expression",
+                            "value": 0.8125
+                          },
+                          {
+                            "label": "Breath",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Aftertouch",
+                            "value": 0.9375
+                          },
+                          {
+                            "label": "ModMixer",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "vcf_src2": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Src 2",
+                        "bind": "VCF Cutoff Mod Source 2",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "LFO 1",
+                            "value": 0.0625
+                          },
+                          {
+                            "label": "LFO 2",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "LFO 3",
+                            "value": 0.1875
+                          },
+                          {
+                            "label": "Env 1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Env 2",
+                            "value": 0.3125
+                          },
+                          {
+                            "label": "Env 3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Env 4 (DCA 4)",
+                            "value": 0.4375
+                          },
+                          {
+                            "label": "Velocity",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Velocity-Exp",
+                            "value": 0.5625
+                          },
+                          {
+                            "label": "Keyboard 1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Keyboard 2",
+                            "value": 0.6875
+                          },
+                          {
+                            "label": "ModWheel",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Expression",
+                            "value": 0.8125
+                          },
+                          {
+                            "label": "Breath",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Aftertouch",
+                            "value": 0.9375
+                          },
+                          {
+                            "label": "ModMixer",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "vcf_amt1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amt 1",
+                        "bind": "VCF Cutoff Mod Amount 1",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vcf_amt2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amt 2",
+                        "bind": "VCF Cutoff Mod Amount 2",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "filter_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "ENV",
+                    "widgets": {
+                      "amp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 8,
+                        "label": "AMP ENV",
+                        "color": "#3ec96b26"
+                      },
+                      "t1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "T1",
+                        "bind": "Envelope4 SQ80 Time 1",
+                        "min": 0,
+                        "max": 1,
+                        "step": 0.015873015873015872
+                      },
+                      "t2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "T2",
+                        "bind": "Envelope4 SQ80 Time 2",
+                        "min": 0,
+                        "max": 1,
+                        "step": 0.015873015873015872
+                      },
+                      "t3": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "T3",
+                        "bind": "Envelope4 SQ80 Time 3",
+                        "min": 0,
+                        "max": 1,
+                        "step": 0.015873015873015872
+                      },
+                      "t4": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Release",
+                        "bind": "Envelope4 SQ80 Release Time",
+                        "min": 0,
+                        "max": 1,
+                        "step": 0.015873015873015872
+                      },
+                      "l1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "L1",
+                        "bind": "Envelope4 SQ80 Level 1",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "L2",
+                        "bind": "Envelope4 SQ80 Level 2",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "l3": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Sustain",
+                        "bind": "Envelope4 SQ80 Level 3",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "vel": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Vel",
+                        "bind": "Envelope4 SQ80 Velocity Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "env_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "LFO 1-2",
+                    "widgets": {
+                      "lfo1": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "LFO1",
+                        "color": "#ffffff14"
+                      },
+                      "lfo1_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "LFO1 Rate Unsync",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo1_amt": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "LFO1 Amplitude",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo1_delay": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Delay",
+                        "bind": "LFO1 Delay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo1_init": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Init",
+                        "bind": "LFO1 Initial Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo1_wave": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "label": "Wave",
+                        "bind": "LFO1 Waveform",
+                        "options": [
+                          {
+                            "label": "Triangle",
+                            "value": 0
+                          },
+                          {
+                            "label": "Ramp",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "Noise",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "Sine",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "Saw",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "lfo2": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "LFO2",
+                        "color": "#ffffff14"
+                      },
+                      "lfo2_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "LFO2 Rate Unsync",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo2_amt": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 5,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "LFO2 Amplitude",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo2_delay": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Delay",
+                        "bind": "LFO2 Delay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo2_init": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Init",
+                        "bind": "LFO2 Initial Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo2_wave": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 4,
+                        "label": "Wave",
+                        "bind": "LFO2 Waveform",
+                        "options": [
+                          {
+                            "label": "Triangle",
+                            "value": 0
+                          },
+                          {
+                            "label": "Ramp",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "Noise",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "Sine",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "Saw",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "lfo_screen": {
+                        "type": "lcdscreen",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 4,
+                        "rowSpan": 3
+                      }
+                    }
+                  },
+                  {
+                    "name": "LFO 3",
+                    "widgets": {
+                      "lfo3": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 5,
+                        "label": "LFO3",
+                        "color": "#ffffff14"
+                      },
+                      "lfo3_rate": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Rate",
+                        "bind": "LFO3 Rate Unsync",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo3_amt": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Depth",
+                        "bind": "LFO3 Amplitude",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo3_delay": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Delay",
+                        "bind": "LFO3 Delay",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo3_init": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Init",
+                        "bind": "LFO3 Initial Level",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "lfo3_wave": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "label": "Wave",
+                        "bind": "LFO3 Waveform",
+                        "options": [
+                          {
+                            "label": "Triangle",
+                            "value": 0
+                          },
+                          {
+                            "label": "Ramp",
+                            "value": 0.2
+                          },
+                          {
+                            "label": "Square",
+                            "value": 0.4
+                          },
+                          {
+                            "label": "Noise",
+                            "value": 0.6
+                          },
+                          {
+                            "label": "Sine",
+                            "value": 0.8
+                          },
+                          {
+                            "label": "Saw",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "MOD",
+                    "widgets": {
+                      "pm1": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "PITCH1",
+                        "color": "#3d7dff1a"
+                      },
+                      "pm1_src1": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Src 1",
+                        "bind": "DCO1 Pitch Mod Source 1",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "LFO 1",
+                            "value": 0.0625
+                          },
+                          {
+                            "label": "LFO 2",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "LFO 3",
+                            "value": 0.1875
+                          },
+                          {
+                            "label": "Env 1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Env 2",
+                            "value": 0.3125
+                          },
+                          {
+                            "label": "Env 3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Env 4 (DCA 4)",
+                            "value": 0.4375
+                          },
+                          {
+                            "label": "Velocity",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Velocity-Exp",
+                            "value": 0.5625
+                          },
+                          {
+                            "label": "Keyboard 1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Keyboard 2",
+                            "value": 0.6875
+                          },
+                          {
+                            "label": "ModWheel",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Expression",
+                            "value": 0.8125
+                          },
+                          {
+                            "label": "Breath",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Aftertouch",
+                            "value": 0.9375
+                          },
+                          {
+                            "label": "ModMixer",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "pm1_src2": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "Src 2",
+                        "bind": "DCO1 Pitch Mod Source 2",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "LFO 1",
+                            "value": 0.0625
+                          },
+                          {
+                            "label": "LFO 2",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "LFO 3",
+                            "value": 0.1875
+                          },
+                          {
+                            "label": "Env 1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Env 2",
+                            "value": 0.3125
+                          },
+                          {
+                            "label": "Env 3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Env 4 (DCA 4)",
+                            "value": 0.4375
+                          },
+                          {
+                            "label": "Velocity",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Velocity-Exp",
+                            "value": 0.5625
+                          },
+                          {
+                            "label": "Keyboard 1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Keyboard 2",
+                            "value": 0.6875
+                          },
+                          {
+                            "label": "ModWheel",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Expression",
+                            "value": 0.8125
+                          },
+                          {
+                            "label": "Breath",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Aftertouch",
+                            "value": 0.9375
+                          },
+                          {
+                            "label": "ModMixer",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "pm1_amt1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amt 1",
+                        "bind": "DCO1 Pitch Mod Amount 1",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pm1_amt2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 1,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amt 2",
+                        "bind": "DCO1 Pitch Mod Amount 2",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pm2": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "PITCH2",
+                        "color": "#3d7dff1a"
+                      },
+                      "pm2_src1": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 3,
+                        "colSpan": 2,
+                        "label": "Src 1",
+                        "bind": "DCO2 Pitch Mod Source 1",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "LFO 1",
+                            "value": 0.0625
+                          },
+                          {
+                            "label": "LFO 2",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "LFO 3",
+                            "value": 0.1875
+                          },
+                          {
+                            "label": "Env 1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Env 2",
+                            "value": 0.3125
+                          },
+                          {
+                            "label": "Env 3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Env 4 (DCA 4)",
+                            "value": 0.4375
+                          },
+                          {
+                            "label": "Velocity",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Velocity-Exp",
+                            "value": 0.5625
+                          },
+                          {
+                            "label": "Keyboard 1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Keyboard 2",
+                            "value": 0.6875
+                          },
+                          {
+                            "label": "ModWheel",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Expression",
+                            "value": 0.8125
+                          },
+                          {
+                            "label": "Breath",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Aftertouch",
+                            "value": 0.9375
+                          },
+                          {
+                            "label": "ModMixer",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "pm2_src2": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 3,
+                        "colSpan": 2,
+                        "label": "Src 2",
+                        "bind": "DCO2 Pitch Mod Source 2",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "LFO 1",
+                            "value": 0.0625
+                          },
+                          {
+                            "label": "LFO 2",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "LFO 3",
+                            "value": 0.1875
+                          },
+                          {
+                            "label": "Env 1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Env 2",
+                            "value": 0.3125
+                          },
+                          {
+                            "label": "Env 3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Env 4 (DCA 4)",
+                            "value": 0.4375
+                          },
+                          {
+                            "label": "Velocity",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Velocity-Exp",
+                            "value": 0.5625
+                          },
+                          {
+                            "label": "Keyboard 1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Keyboard 2",
+                            "value": 0.6875
+                          },
+                          {
+                            "label": "ModWheel",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Expression",
+                            "value": 0.8125
+                          },
+                          {
+                            "label": "Breath",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Aftertouch",
+                            "value": 0.9375
+                          },
+                          {
+                            "label": "ModMixer",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "pm2_amt1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amt 1",
+                        "bind": "DCO2 Pitch Mod Amount 1",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pm2_amt2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amt 2",
+                        "bind": "DCO2 Pitch Mod Amount 2",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pm3": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "PITCH3",
+                        "color": "#3d7dff1a"
+                      },
+                      "pm3_src1": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Src 1",
+                        "bind": "DCO3 Pitch Mod Source 1",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "LFO 1",
+                            "value": 0.0625
+                          },
+                          {
+                            "label": "LFO 2",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "LFO 3",
+                            "value": 0.1875
+                          },
+                          {
+                            "label": "Env 1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Env 2",
+                            "value": 0.3125
+                          },
+                          {
+                            "label": "Env 3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Env 4 (DCA 4)",
+                            "value": 0.4375
+                          },
+                          {
+                            "label": "Velocity",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Velocity-Exp",
+                            "value": 0.5625
+                          },
+                          {
+                            "label": "Keyboard 1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Keyboard 2",
+                            "value": 0.6875
+                          },
+                          {
+                            "label": "ModWheel",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Expression",
+                            "value": 0.8125
+                          },
+                          {
+                            "label": "Breath",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Aftertouch",
+                            "value": 0.9375
+                          },
+                          {
+                            "label": "ModMixer",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "pm3_src2": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "label": "Src 2",
+                        "bind": "DCO3 Pitch Mod Source 2",
+                        "options": [
+                          {
+                            "label": "None",
+                            "value": 0
+                          },
+                          {
+                            "label": "LFO 1",
+                            "value": 0.0625
+                          },
+                          {
+                            "label": "LFO 2",
+                            "value": 0.125
+                          },
+                          {
+                            "label": "LFO 3",
+                            "value": 0.1875
+                          },
+                          {
+                            "label": "Env 1",
+                            "value": 0.25
+                          },
+                          {
+                            "label": "Env 2",
+                            "value": 0.3125
+                          },
+                          {
+                            "label": "Env 3",
+                            "value": 0.375
+                          },
+                          {
+                            "label": "Env 4 (DCA 4)",
+                            "value": 0.4375
+                          },
+                          {
+                            "label": "Velocity",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Velocity-Exp",
+                            "value": 0.5625
+                          },
+                          {
+                            "label": "Keyboard 1",
+                            "value": 0.625
+                          },
+                          {
+                            "label": "Keyboard 2",
+                            "value": 0.6875
+                          },
+                          {
+                            "label": "ModWheel",
+                            "value": 0.75
+                          },
+                          {
+                            "label": "Expression",
+                            "value": 0.8125
+                          },
+                          {
+                            "label": "Breath",
+                            "value": 0.875
+                          },
+                          {
+                            "label": "Aftertouch",
+                            "value": 0.9375
+                          },
+                          {
+                            "label": "ModMixer",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "pm3_amt1": {
+                        "type": "knob",
+                        "col": 0,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amt 1",
+                        "bind": "DCO3 Pitch Mod Amount 1",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "pm3_amt2": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 7,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amt 2",
+                        "bind": "DCO3 Pitch Mod Amount 2",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "arp": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 4,
+                        "rowSpan": 3,
+                        "label": "ARP",
+                        "color": "#6b6b6b33"
+                      },
+                      "arp_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Arp",
+                        "bind": "Arpeggiator ON/OFF"
+                      },
+                      "arp_mode": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 9,
+                        "colSpan": 2,
+                        "label": "Mode",
+                        "bind": "Arpeggiator Mode",
+                        "options": [
+                          {
+                            "label": "Up",
+                            "value": 0
+                          },
+                          {
+                            "label": "Down",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "Ordered",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "Reversed",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "Inc",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "Exc",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "Random",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_oct": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 10,
+                        "colSpan": 2,
+                        "label": "Oct",
+                        "bind": "Arpeggiator Octave Range",
+                        "options": [
+                          {
+                            "label": "1",
+                            "value": 0
+                          },
+                          {
+                            "label": "2",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "3",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "4",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_rate": {
+                        "type": "dropdown",
+                        "col": 2,
+                        "row": 10,
+                        "colSpan": 2,
+                        "label": "Rate",
+                        "bind": "Arpeggiator Rate (Synced)",
+                        "options": [
+                          {
+                            "label": "1",
+                            "value": 0
+                          },
+                          {
+                            "label": "1/2",
+                            "value": 0.16666666666666666
+                          },
+                          {
+                            "label": "1/4",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "1/8",
+                            "value": 0.5
+                          },
+                          {
+                            "label": "1/16",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "1/32",
+                            "value": 0.8333333333333334
+                          },
+                          {
+                            "label": "1/64",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "arp_type": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 11,
+                        "colSpan": 4,
+                        "label": "Sync",
+                        "bind": "Arpeggiator Rate Type",
+                        "options": [
+                          {
+                            "label": "Hertz",
+                            "value": 0
+                          },
+                          {
+                            "label": "Sync",
+                            "value": 0.3333333333333333
+                          },
+                          {
+                            "label": "Sync Triplets",
+                            "value": 0.6666666666666666
+                          },
+                          {
+                            "label": "Sync Dotted",
+                            "value": 1
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "FX",
+                    "widgets": {
+                      "fx": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "FX",
+                        "color": "#ff3b3026"
+                      },
+                      "fx_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 0,
+                        "colSpan": 2,
+                        "label": "FX On",
+                        "bind": "Effect Section On/Off"
+                      },
+                      "fx_route": {
+                        "type": "dropdown",
+                        "col": 0,
+                        "row": 1,
+                        "colSpan": 3,
+                        "label": "Route",
+                        "bind": "Effect Routing",
+                        "options": [
+                          {
+                            "label": "Serial",
+                            "value": 0
+                          },
+                          {
+                            "label": "Parallel",
+                            "value": 1
+                          }
+                        ]
+                      },
+                      "slot1": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "FX1",
+                        "color": "#ff3b3026"
+                      },
+                      "fx1_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "On",
+                        "bind": "FX1 On/Off"
+                      },
+                      "fx1_mix": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 2,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amount",
+                        "bind": "FX1 Dry/Wet",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "slot2": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "FX2",
+                        "color": "#ff3b3026"
+                      },
+                      "fx2_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "On",
+                        "bind": "FX2 On/Off"
+                      },
+                      "fx2_mix": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 4,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amount",
+                        "bind": "FX2 Dry/Wet",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "slot3": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "FX3",
+                        "color": "#ff3b3026"
+                      },
+                      "fx3_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "On",
+                        "bind": "FX3 On/Off"
+                      },
+                      "fx3_mix": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 6,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amount",
+                        "bind": "FX3 Dry/Wet",
+                        "min": 0,
+                        "max": 1
+                      },
+                      "slot4": {
+                        "type": "group",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 4,
+                        "rowSpan": 2,
+                        "label": "FX4",
+                        "color": "#ff3b3026"
+                      },
+                      "fx4_on": {
+                        "type": "toggle",
+                        "col": 0,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "On",
+                        "bind": "FX4 On/Off"
+                      },
+                      "fx4_mix": {
+                        "type": "knob",
+                        "col": 2,
+                        "row": 8,
+                        "colSpan": 2,
+                        "rowSpan": 2,
+                        "label": "Amount",
+                        "bind": "FX4 Dry/Wet",
+                        "min": 0,
+                        "max": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "params": {}
+          }
+        ],
+        "out": [
+          {
+            "to": "MIX",
+            "gain": 1
+          }
+        ]
+      },
+      "MIX": {
+        "from": "MIX",
+        "use": [],
+        "out": [
+          {
+            "to": "OUT",
+            "gain": 1
+          }
+        ]
+      }
+    },
+    "tracks": [
+      "melody"
+    ],
+    "videoTracks": [],
+    "trackColors": {
+      "melody": "#9a5ad3"
+    },
+    "trackSignals": {
+      "melody": "midi"
+    },
+    "trackClips": {
+      "melody": [
+        {
+          "ref": "melody",
+          "start": 0,
+          "tc": "1:1",
+          "len": 4,
+          "kind": "midi"
+        }
+      ]
+    },
+    "modules": {},
+    "warnings": []
+  },
+  "video": null
+}

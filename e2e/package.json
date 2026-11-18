@@ -1,0 +1,28 @@
+{
+  "name": "@studio/e2e",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "e2e": "playwright test",
+    "e2e:android": "playwright test -c playwright.android.config.ts",
+    "e2e:ios": "playwright test -c playwright.ios.config.ts",
+    "e2e:install": "playwright install chromium",
+    "typecheck": "tsc --noEmit",
+    "e2e:conformance": "playwright test -c playwright.conformance.config.ts"
+  },
+  "dependencies": {
+    "@studio/env": "*",
+    "@studio/oidc": "*",
+    "@studio/engine-tunnel": "*",
+    "@studio/song-schema": "*",
+    "fflate": "^0.8.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^22.10.0",
+    "@types/ws": "^8.5.12",
+    "typescript": "^7.0.2"
+  }
+}

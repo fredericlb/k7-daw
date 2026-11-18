@@ -1,0 +1,378 @@
+{
+  "accountKeys": [
+    {
+      "email": "e2e@st0.app",
+      "key": "e2e_st0_app-4d47282391"
+    },
+    {
+      "email": "a.b@x.io",
+      "key": "a_b_x_io-653cd77989"
+    },
+    {
+      "email": "a_b@x.io",
+      "key": "a_b_x_io-2d79defecc"
+    },
+    {
+      "email": "Frédéric 🎛@ex.com",
+      "key": "Fr_d_ric____ex_com-4c84ad490b"
+    },
+    {
+      "email": "quote\"back\\slash@x",
+      "key": "quote_back_slash_x-44c885967e"
+    }
+  ],
+  "tickets": [
+    {
+      "key": "dev-secret:files",
+      "user": "e2e@st0.app",
+      "admin": false,
+      "now": 1761000000000,
+      "ttl": 43200000,
+      "ticket": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY"
+    },
+    {
+      "key": "dev-secret:files",
+      "user": "ann@x",
+      "admin": true,
+      "now": 1761000000000,
+      "ttl": 43200000,
+      "ticket": "eyJ1IjoiYW5uQHgiLCJleHAiOjE3NjEwNDMyMDAwMDAsImEiOjF9.kUhzlMhdlTNkzH8Ya_leZ_tGVR_zwxyP9W_UiZPKfJg"
+    },
+    {
+      "key": "s3cr3t/with+chars=:files",
+      "user": "Frédéric 🎛 \"q\" \\ \n",
+      "admin": false,
+      "now": 1761000000000,
+      "ttl": 43200000,
+      "ticket": "eyJ1IjoiRnLDqWTDqXJpYyDwn46bIFwicVwiIFxcIFxuIiwiZXhwIjoxNzYxMDQzMjAwMDAwfQ.f6kESToHuNjuUwq3z_ccMrMWd-YDiQ6tqyDCGogoD20"
+    }
+  ],
+  "reads": [
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY",
+      "now": 1761000000000,
+      "read": {
+        "user": "e2e@st0.app",
+        "admin": false,
+        "engineId": null
+      }
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~engine-1",
+      "now": 1761000000000,
+      "read": {
+        "user": "e2e@st0.app",
+        "admin": false,
+        "engineId": "engine-1"
+      }
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~engine-1~more",
+      "now": 1761000000000,
+      "read": {
+        "user": "e2e@st0.app",
+        "admin": false,
+        "engineId": "engine-1"
+      }
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~",
+      "now": 1761000000000,
+      "read": {
+        "user": "e2e@st0.app",
+        "admin": false,
+        "engineId": null
+      }
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9",
+      "now": 1761000000000,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.AAAA",
+      "now": 1761000000000,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "not-a-ticket",
+      "now": 1761000000000,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "",
+      "now": 1761000000000,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY",
+      "now": 1761043200000,
+      "read": {
+        "user": "e2e@st0.app",
+        "admin": false,
+        "engineId": null
+      }
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~engine-1",
+      "now": 1761043200000,
+      "read": {
+        "user": "e2e@st0.app",
+        "admin": false,
+        "engineId": "engine-1"
+      }
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~engine-1~more",
+      "now": 1761043200000,
+      "read": {
+        "user": "e2e@st0.app",
+        "admin": false,
+        "engineId": "engine-1"
+      }
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~",
+      "now": 1761043200000,
+      "read": {
+        "user": "e2e@st0.app",
+        "admin": false,
+        "engineId": null
+      }
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9",
+      "now": 1761043200000,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.AAAA",
+      "now": 1761043200000,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "not-a-ticket",
+      "now": 1761043200000,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "",
+      "now": 1761043200000,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY",
+      "now": 1761043200001,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~engine-1",
+      "now": 1761043200001,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~engine-1~more",
+      "now": 1761043200001,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY~",
+      "now": 1761043200001,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9",
+      "now": 1761043200001,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.AAAA",
+      "now": 1761043200001,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "not-a-ticket",
+      "now": 1761043200001,
+      "read": null
+    },
+    {
+      "key": "dev-secret:files",
+      "presented": "",
+      "now": 1761043200001,
+      "read": null
+    }
+  ],
+  "serviceEnv": {
+    "parent": {
+      "PATH": "/bin",
+      "Path": "C:\\bin",
+      "SystemRoot": "C:\\Windows",
+      "NODE_COMPILE_CACHE": "/c",
+      "STUDIO_ENGINE": "/e",
+      "STUDIO_LIVE_SYNC": "0",
+      "LC_ALL": "C",
+      "XDG_RUNTIME_DIR": "/run",
+      "PLAYWRIGHT_BROWSERS_PATH": "/p",
+      "SESSION_SECRET": "s",
+      "OIDC_CLIENT_SECRET": "s",
+      "API_TOKEN_SECRET": "s",
+      "STUDIO_RENDER_KEY": "s",
+      "STUDIO_SYNC_TOKEN": "s",
+      "K7_TOKEN": "s",
+      "K7_FRONT_SECRET": "s"
+    },
+    "env": {
+      "PATH": "/bin",
+      "Path": "C:\\bin",
+      "SystemRoot": "C:\\Windows",
+      "NODE_COMPILE_CACHE": "/c",
+      "STUDIO_ENGINE": "/e",
+      "LC_ALL": "C",
+      "XDG_RUNTIME_DIR": "/run",
+      "PLAYWRIGHT_BROWSERS_PATH": "/p"
+    }
+  },
+  "caps": [
+    {
+      "env": {},
+      "limit": null,
+      "cap": 50
+    },
+    {
+      "env": {},
+      "limit": 6442450944,
+      "cap": 12
+    },
+    {
+      "env": {},
+      "limit": 1073741824,
+      "cap": 1
+    },
+    {
+      "env": {},
+      "limit": 1099511627776,
+      "cap": 50
+    },
+    {
+      "env": {
+        "STUDIO_FILE_SERVICE_HEAP_MB": "1024"
+      },
+      "limit": 6442450944,
+      "cap": 12
+    },
+    {
+      "env": {
+        "STUDIO_FILE_SERVICE_HEAP_MB": "128"
+      },
+      "limit": 6442450944,
+      "cap": 18
+    },
+    {
+      "env": {
+        "STUDIO_MAX_FILE_SERVICES": "7"
+      },
+      "limit": 6442450944,
+      "cap": 7
+    },
+    {
+      "env": {
+        "STUDIO_MAX_FILE_SERVICES": "zero"
+      },
+      "limit": null,
+      "cap": 50
+    },
+    {
+      "env": {
+        "STUDIO_MAX_FILE_SERVICES": " 3 "
+      },
+      "limit": null,
+      "cap": 3
+    }
+  ],
+  "ranges": [
+    {
+      "spec": "22000-23000",
+      "range": {
+        "first": 22000,
+        "last": 23000
+      }
+    },
+    {
+      "spec": " 22000 - 23000 ",
+      "range": {
+        "first": 22000,
+        "last": 23000
+      }
+    },
+    {
+      "spec": "22000",
+      "range": null
+    },
+    {
+      "spec": "23000-22000",
+      "range": null
+    },
+    {
+      "spec": "0-10",
+      "range": null
+    },
+    {
+      "spec": "1-70000",
+      "range": null
+    },
+    {
+      "spec": "",
+      "range": null
+    },
+    {
+      "spec": "1--2",
+      "range": null
+    },
+    {
+      "spec": "a-b",
+      "range": null
+    }
+  ],
+  "reserved": [
+    {
+      "spec": "22000, 22001,nope,0",
+      "ports": [
+        22000,
+        22001
+      ]
+    },
+    {
+      "spec": "",
+      "ports": []
+    },
+    {
+      "spec": "65536,1",
+      "ports": [
+        1
+      ]
+    }
+  ]
+}
