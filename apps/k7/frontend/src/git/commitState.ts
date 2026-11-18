@@ -5,7 +5,7 @@ import type { Identity } from "./gitApi";
 import type { StatusEntry } from "./gitTypes";
 
 /** Why Commit is dimmed, as a key of the strings, or null. */
-export type CommitBlock = "noChanges" | "noMessage" | null;
+type CommitBlock = "noChanges" | "noMessage" | null;
 
 export interface CommitView {
   rows: StatusEntry[];

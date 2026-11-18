@@ -1,4 +1,4 @@
-//! separations.rs — the registry of `remoteSeparation.ts` and `separationId` of `separateJobs.ts`, with the clock a caller gives (2330).
+//! separations.rs — the registry of separation jobs and their id, with the clock a caller gives (2330).
 //! What a reader gets wrong: a request that outlives its record (the same work started again once done) must not write
 //! into the new one, so each `start` hands back a generation the later calls name.
 

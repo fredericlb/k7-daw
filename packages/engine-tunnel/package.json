@@ -6,14 +6,8 @@
   "description": "The engine tunnel: one outbound WebSocket from an engine's supervisor to the server that lists it, carrying virtual channels to the engine and the files those channels name. This is its agent and its frames; the hub is the Rust front's. See docs/tunnel.md.",
   "exports": {
     "./agent": "./agent.ts",
-    "./channel": "./channel.ts",
     "./frames": "./frames.ts",
-    "./rtc": "./rtc.ts",
-    "./backpressure": "./backpressure.ts",
-    "./upgrade": "./upgrade.ts",
-    "./test-bad-frame": "./testBadFrame.ts",
     "./jobs-client": "./jobsClient.ts",
-    "./job-spelling": "./jobSpelling.ts",
     "./test-core": "./testCore.ts"
   },
   "scripts": {

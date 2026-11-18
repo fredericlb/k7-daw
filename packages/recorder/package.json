@@ -7,7 +7,6 @@
   "exports": {
     "./format": "./src/format.ts",
     "./liveValue": "./src/liveValue.ts",
-    "./metronome": "./src/useMetronome.ts",
     "./webmDuration": "./src/webmDuration.ts"
   },
   "peerDependencies": {

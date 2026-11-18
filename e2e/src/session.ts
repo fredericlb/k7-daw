@@ -10,29 +10,14 @@ const COOKIE_NAME = "studio.sid";
 // The backend's env.yaml section, the one whose SESSION_SECRET signs its cookies.
 const SERVICE = "k7-backend";
 
-/** True when env.yaml starts the front as a device (`STUDIO_LOCAL_USER`), where every session is the one local user. */
-export function deviceBed(): boolean {
-  try {
-    return backendEnv().STUDIO_LOCAL_USER === "1";
-  } catch {
-    return false;
-  }
-}
-
-/** The account a spec's `user` is: itself on a server, the one local user on a device bed. */
-export const acct = (user: SessionUser): SessionUser =>
-  deviceBed() ? E2E_USER : user;
-
-/** A dedicated account on a server; on a device bed the local user itself, the only account a device has (e2e/docs/e2e.md). */
-export const E2E_USER: SessionUser = deviceBed()
-  ? ({
-      sub: "dev-user",
-      name: "Local user",
-      email: "dev@example.com",
-      groups: [],
-      local: true,
-    } as SessionUser)
-  : { sub: "e2e", name: "E2E", email: "e2e@st0.app", groups: [] };
+/** The local user, the only account a device has (e2e/docs/e2e.md). */
+export const E2E_USER: SessionUser = {
+  sub: "dev-user",
+  name: "Local user",
+  email: "dev@example.com",
+  groups: [],
+  local: true,
+} as SessionUser;
 
 /** The env.yaml above this directory; a worktree lives under the checkout that holds it. */
 function findEnvFile(): string {

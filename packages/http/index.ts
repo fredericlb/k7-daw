@@ -1,16 +1,7 @@
 // @studio/http — the Express layer shared by k7's backends: route
-// wrapping/validation, Range-aware file streaming, and per-request origin
-// derivation. Importing this also declares `req.user`.
-// Multipart uploads live at @studio/http/upload (keeps multer optional).
+// wrapping/validation and per-request origin derivation. Importing this
+// also declares `req.user`.
 
 export { type AuthUser, sub } from "./express.ts";
 export { publicOrigin, redirectUriFor } from "./origin.ts";
-export { ownerGuard } from "./ownership.ts";
 export { HttpError, validate, wrap } from "./route.ts";
-export {
-  DEFAULT_CACHE_CONTROL,
-  etagListed,
-  fileEtag,
-  notModified,
-  streamFile,
-} from "./stream.ts";

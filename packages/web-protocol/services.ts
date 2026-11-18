@@ -1,10 +1,9 @@
-// services.ts — where each studio service answers. Every one is k7's origin, `app.<domain>`: pl8
-// (the media library) is served BY k7, and `docs.<domain>` is the same app showing its
-// documentation alone. `st0.app` and its `play.` / `k7.` aliases are FORMER hosts that
+// services.ts — where k7 answers: its origin, `app.<domain>`, and `docs.<domain>` is the same app
+// showing its documentation alone. `st0.app` and its `play.` / `k7.` aliases are FORMER hosts that
 // saved URLs still reach, each read as the current origin. Browser-safe: no node imports, because
 // the SPAs, the file service and the supervisor all have to agree about this — docs/addresses.md.
 
-export type StudioService = "k7" | "pl8";
+export type StudioService = "k7";
 
 /** The alias hosts k7 also answers on — former addresses, kept for saved URLs. */
 const ALIAS_LABELS = ["play", "k7"];
@@ -18,9 +17,6 @@ const LEGACY_HOSTS: Record<string, string> = {
   "st0.app": "app.k7.rocks",
   "priv.st0.app": "app.priv.k7.rocks",
 };
-
-/** The services with an address of their own — the others are served by k7's process. */
-type Addressed = Exclude<StudioService, "pl8">;
 
 /**
  * k7's OWN hostname, given any studio hostname — an alias's label stripped back off, `docs.`
@@ -42,56 +38,6 @@ function k7Hostname(hostname: string): string {
   return LEGACY_HOSTS[host] ?? host;
 }
 
-/** A former host's successor, its `play.` and `k7.` aliases included, or null: by name only, so another deployment's hosts are never rewritten. */
-function successorOf(hostname: string): string | null {
-  if (LEGACY_HOSTS[hostname]) return LEGACY_HOSTS[hostname];
-  for (const label of ALIAS_LABELS) {
-    const rest = hostname.slice(label.length + 1);
-    if (hostname.startsWith(`${label}.`) && LEGACY_HOSTS[rest])
-      return LEGACY_HOSTS[rest];
-  }
-  return null;
-}
-
-/** `url` moved off a former host onto its successor, scheme, path and query kept; any other URL as it was — docs/addresses.md. */
-export function currentStudioUrl(url: string): string {
-  let parsed: URL;
-  try {
-    parsed = new URL(url);
-  } catch {
-    return url;
-  }
-  const next = successorOf(parsed.hostname);
-  if (!next) return url;
-  const bare = url === parsed.origin;
-  parsed.hostname = next;
-  parsed.port = "";
-  // An origin stays an origin: URL would add a "/" the stored value never had.
-  return bare ? parsed.origin : parsed.toString();
-}
-
-/** A relay's host, read on its current host: with an account, what makes two links the same. */
-export const serverHost = (url: string): string => {
-  try {
-    return new URL(currentStudioUrl(url)).host;
-  } catch {
-    return url;
-  }
-};
-
-/** The server a relay URL belongs to, as an http(s) origin on its current host; "" for no URL at all. */
-export function originOfRelay(url: string): string {
-  try {
-    const u = new URL(currentStudioUrl(url));
-    return `${u.protocol === "ws:" ? "http:" : "https:"}//${u.host}`;
-  } catch {
-    return "";
-  }
-}
-
-/** The id a hub's own relay goes by: one per hub, whatever port it listens on. */
-export const OWN_LINK = "own";
-
 /** Whether `hostname` is the documentation's host — the app showing its docs and nothing else. */
 export const isDocsHost = (hostname: string): boolean =>
   hostname.startsWith(`${DOCS_LABEL}.`);
@@ -100,11 +46,8 @@ export const isDocsHost = (hostname: string): boolean =>
 export const isLegacyHost = (hostname: string): boolean =>
   !isDocsHost(hostname) && k7Hostname(hostname) !== hostname;
 
-/** The hosted studio. A constant and not a setting, for the same reason the paths are. */
-export const STUDIO_ORIGIN = "https://app.k7.rocks";
-
 /** Each backend's port — what a SERVER calls, since node does not trust the dev CA; see docs/addresses.md. */
-export const SERVICE_PORTS: Record<Addressed, number> = {
+export const SERVICE_PORTS: Record<StudioService, number> = {
   k7: 8789,
 };
 
@@ -112,7 +55,7 @@ export const SERVICE_PORTS: Record<Addressed, number> = {
 export const PORTS_ENV = "STUDIO_PORTS";
 export const PORTS_GLOBAL = "__STUDIO_PORTS__";
 
-/** `k7=18789` as a partial table; an unknown name (pl8 included) or a bad number is dropped. */
+/** `k7=18789` as a partial table; an unknown name or a bad number is dropped. */
 export function parsePorts(
   spec: string,
 ): Partial<Record<StudioService, number>> {
@@ -131,7 +74,7 @@ export function parsePorts(
   return out;
 }
 
-/** SERVICE_PORTS, with what the host moved, and pl8 on k7's — a phone app runs on its own port. */
+/** SERVICE_PORTS, with what the host moved — a phone app runs on its own port. */
 export function servicePorts(): Record<StudioService, number> {
   const g = globalThis as {
     [PORTS_GLOBAL]?: unknown;
@@ -140,10 +83,7 @@ export function servicePorts(): Record<StudioService, number> {
   const fromPage = g[PORTS_GLOBAL];
   const spec =
     typeof fromPage === "string" ? fromPage : g.process?.env?.[PORTS_ENV];
-  const ports = spec
-    ? { ...SERVICE_PORTS, ...parsePorts(spec) }
-    : SERVICE_PORTS;
-  return { ...ports, pl8: ports.k7 };
+  return spec ? { ...SERVICE_PORTS, ...parsePorts(spec) } : SERVICE_PORTS;
 }
 
 /** Where a service answers on the machine it runs on. See SERVICE_PORTS for when to prefer it. */
@@ -170,15 +110,6 @@ export function serviceUrl(origin: string, _service: StudioService): string {
     : `${parsed.protocol}//${base}`;
 }
 
-/**
- * How an engine registry says what it is: `GET <registry>/api/registry/hello` answers
- * `{ service: REGISTRY_SERVICE }`, unauthenticated. The supervisor asks BEFORE connecting to an
- * address, since a heartbeat carries the engine's token — a URL that is not a studio must never
- * receive one. It proves the software, not the owner: anyone can run a registry.
- */
-export const REGISTRY_HELLO_PATH = "/api/registry/hello";
-export const REGISTRY_SERVICE = "k7-registry";
-
 /** A host where services are told apart by PORT rather than subdomain — a bare dev run. */
 const LOOPBACK = /^(localhost|127(\.\d{1,3}){3}|\[::1\])$/;
 
@@ -202,48 +133,4 @@ export function peerAddress(req: {
 }): string | undefined {
   const vouched = (req as { [FRONT_PEER]?: string })[FRONT_PEER];
   return vouched ?? req.socket.remoteAddress;
-}
-
-/**
- * Which studio family a URL belongs to, as one key: k7's origin, whichever service was named —
- * or, on a loopback host where every service is a port of the same host, that host alone.
- * "" for a string that is not a URL.
- */
-export function studioFamily(url: string): string {
-  let parsed: URL;
-  try {
-    parsed = new URL(url);
-  } catch {
-    return "";
-  }
-  if (isLoopbackHost(parsed.hostname))
-    return `${parsed.protocol}//${parsed.hostname}`;
-  return serviceUrl(parsed.origin, "k7");
-}
-
-/**
- * The ONE engine registry — k7's origin — for any URL of a studio family, the `play.` and `k7.`
- * aliases included: an engine heartbeats there, and k7 lists its engines from there. On a loopback host
- * a service is its port, so k7's backend port stands in. "" for a string that is not a URL.
- */
-export function engineRegistryUrl(url: string): string {
-  let parsed: URL;
-  try {
-    parsed = new URL(url);
-  } catch {
-    return "";
-  }
-  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "";
-  if (isLoopbackHost(parsed.hostname))
-    return `${parsed.protocol}//${parsed.hostname}:${servicePorts().k7}`;
-  return serviceUrl(parsed.origin, "k7");
-}
-
-/** The bare origin of any studio URL; "" for a string that is not a URL at all, never a throw. */
-export function studioOrigin(url: string): string {
-  try {
-    return new URL(url).origin;
-  } catch {
-    return "";
-  }
 }

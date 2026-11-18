@@ -66,7 +66,7 @@ nothing is fetched. They answer `/account/libraries*` (the admin flag is the tic
 | each runtime's secret is 32 random bytes, handed in its environment alone, and is its gate | `k7_hub::account::random_secret` | `tests/files_hub.rs` (a forged secret is a 401) |
 | `/api/files-hub/internal` answers only a held runtime's secret, compared in constant time, whatever else the request carries | `hub/answers.rs` `internal`, `State::account_of_secret` | `tests/files_hub.rs`; `filesHub.spec.ts` |
 | a server answers 410 to every `/api/files` path but the libraries', and its cut makes no account folder | `hub/proxy.rs` `files`, `hub/answers.rs` `cold_run`, `Services::cut` | `tests/files_hub.rs`; `serverFiles.spec.ts` |
-| the libraries have their own secret; their admin flag comes from the ticket or the session alone | `hub/proxy.rs` | `tests/files_hub.rs`; `filesLibraries.spec.ts` |
+| the libraries have their own secret; their admin flag comes from the ticket or the session alone | `hub/proxy.rs` | `tests/files_hub.rs` |
 | an account's environment is the allow-list: no session, token, OIDC, render or front secret reaches it, whatever its name | `k7_hub::env` | `tests/all/vectors.rs` (`hub-vectors.json`) |
 | only a claim binds an engine: the registry is asked `holds` for the account before any path is bound | `k7_hub::binding` | `filesHub.spec.ts` (an unclaimed engine leaves the files reachable) |
 | the shares' bearer the front mints is ephemeral, held in this process, accepted only with `exp: 0` and its id held for its subject | `hub.rs` `verify_service_token` | read in the code |

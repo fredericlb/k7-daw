@@ -4,7 +4,7 @@
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { expect, test } from "@playwright/test";
-import { deviceBed, sessionCookies } from "../../src/session.ts";
+import { sessionCookies } from "../../src/session.ts";
 
 const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
 const upstream = process.env.CONFORMANCE_UPSTREAM;
@@ -165,37 +165,6 @@ test("a missing asset, /api and /auth are Express's 404, never the shell", async
   const folder = await raw("/assets?x=1");
   expect(folder.status).toBe(301);
   expect(folder.headers.location).toBe("/assets/?x=1");
-});
-
-test("the root domain shows its page and sends every other address to it", async () => {
-  test.skip(
-    deviceBed(),
-    "a device answers its own machine's Host only: last_routes.rs holds the host routing",
-  );
-  const host = { host: "k7.rocks" };
-  const page = await raw("/", { headers: host });
-  expect(page.status).toBe(200);
-  expect(page.headers["content-type"]).toBe("text/html; charset=utf-8");
-  expect(page.headers["cache-control"]).toBe("no-cache");
-  expect(page.body.toString()).toContain("<h1>Coming soon</h1>");
-  expect(page.headers.etag).toMatch(/^W\/"[0-9a-f]+-[\w+/]{27}"$/);
-  const again = await raw("/", {
-    headers: { ...host, "if-none-match": page.headers.etag },
-  });
-  expect(again.status).toBe(304);
-  const away = await raw("/conformance?x=1", { headers: host });
-  expect(away.status).toBe(302);
-  expect(away.headers.location).toBe("/");
-  expect(away.headers.vary).toBe("Accept");
-  expect(away.body.toString()).toBe("Found. Redirecting to /");
-  const html = await raw("/x", {
-    headers: { ...host, accept: "text/html,*/*;q=0.8" },
-  });
-  expect(html.body.toString()).toBe("<p>Found. Redirecting to /</p>");
-  const written = await raw("/", { method: "POST", headers: host });
-  expect(written.status).toBe(302);
-  const health = await raw("/api/health", { headers: host });
-  expect(health.status).toBe(200);
 });
 
 test("a bearer that does not verify is refused even beside a valid session", async () => {

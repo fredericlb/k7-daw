@@ -10,8 +10,7 @@
     "./video": "./src/video/index.ts",
     "./video/camera/opener": "./src/video/camera/opener.ts",
     "./video/camera/remoteCamera": "./src/video/camera/remoteCamera.ts",
-    "./turntables/engine": "./src/turntables/engine.ts",
-    "./transcribe": "./src/transcription/transcribe.ts"
+    "./turntables/engine": "./src/turntables/engine.ts"
   },
   "scripts": {
     "i18n": "paraglide-js compile --emit-ts-declarations --output-structure locale-modules --strategy localStorage baseLocale --silent",

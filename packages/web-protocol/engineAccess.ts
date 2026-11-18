@@ -142,7 +142,7 @@ export interface PublicEngine {
   /** The server's own engine: its tunnel presented the render key — packages/engine-tunnel/docs/jobs.md. */
   server?: boolean;
   /** The chains THIS MACHINE separates with, by `want` (`stems`, `instrumental`) — its own settings, from its
-      `engine-host.json`; a cut of a library song with no chain named uses them (../stem-separation/docs/stemSplit.md). */
+      `engine-host.json`; a cut of a library song with no chain named uses them (engine/k7-supervisor/docs/stemSplit.md). */
   chains?: { stems?: string; instrumental?: string };
   /** What the asking account is to it — apps/k7/backend-rs/docs/engine/ownership.md; absent from an older registry. */
   access?: EngineAccessRole;

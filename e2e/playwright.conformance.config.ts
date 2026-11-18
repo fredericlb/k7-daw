@@ -3,7 +3,6 @@
 // Files run side by side, except a LANE's, which share a state no name of theirs keeps apart and run one at a time.
 import { readdirSync } from "node:fs";
 import { defineConfig } from "@playwright/test";
-import { deviceBed } from "./src/session.ts";
 
 /** Each lane is a project of one worker, the longest first; the lanes and the rest run beside one another (docs/conformance.md). */
 const LANES: Record<string, string[]> = {
@@ -21,7 +20,6 @@ const LANES: Record<string, string[]> = {
     "serviceChains",
     "serviceProjects",
     "serviceRenders",
-    "serviceRig",
     "serviceWorkspaces",
   ],
   // The engine registry and the session's engine binding: a registered or claimed engine is every spec's to see.
@@ -29,14 +27,12 @@ const LANES: Record<string, string[]> = {
 };
 
 // A device has one account, so every spec that holds its file service or its served project shares it: one lane.
-if (deviceBed()) {
-  const own = readdirSync("./specs/conformance")
-    .filter((f) => /^(service|engineLink|files)[A-Za-z]*\.spec\.ts$/.test(f))
-    .map((f) => f.replace(/\.spec\.ts$/, ""));
-  for (const lane of Object.keys(LANES))
-    LANES[lane] = LANES[lane].filter((n) => !own.includes(n));
-  LANES.service = [...LANES.service, ...own];
-}
+const own = readdirSync("./specs/conformance")
+  .filter((f) => /^(service|engineLink|files)[A-Za-z]*\.spec\.ts$/.test(f))
+  .map((f) => f.replace(/\.spec\.ts$/, ""));
+for (const lane of Object.keys(LANES))
+  LANES[lane] = LANES[lane].filter((n) => !own.includes(n));
+LANES.service = [...LANES.service, ...own];
 
 const file = (names: string[]) =>
   new RegExp(`[\\\\/](${names.join("|")})\\.spec\\.ts$`);

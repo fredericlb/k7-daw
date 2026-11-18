@@ -1,6 +1,6 @@
 # Serving a file: validators and caching
 
-`streamFile` (`stream.ts`) serves a file with Range support, and every answer carries an `ETag`
+The Rust front's file route (`http_file.rs`) serves a file with Range support, and every answer carries an `ETag`
 and a `Last-Modified`. A media player replays, seeks and reloads the same file all the time; with
 a validator, each of those after the first costs a 304 instead of the whole file again.
 

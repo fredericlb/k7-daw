@@ -7,56 +7,29 @@
   "exports": {
     ".": "./src/index.ts",
     "./theme.css": "./src/theme.css",
-    "./alert": "./src/alert.tsx",
-    "./ask": "./src/ask.tsx",
-    "./icon-picker": "./src/icon-picker.tsx",
-    "./locale-picker": "./src/locale-picker.tsx",
     "./sign-in-screen": "./src/sign-in-screen.tsx",
-    "./splash": "./src/splash.tsx",
-    "./starfield": "./src/starfield.tsx",
-    "./toast": "./src/toast.tsx",
-    "./app-header": "./src/app-header.tsx",
-    "./avatar": "./src/avatar.tsx",
     "./button": "./src/button.tsx",
     "./badge": "./src/badge.tsx",
     "./card": "./src/card.tsx",
     "./input": "./src/input.tsx",
     "./textarea": "./src/textarea.tsx",
-    "./label": "./src/label.tsx",
-    "./field": "./src/field.tsx",
     "./file-tree": "./src/file-tree.tsx",
-    "./form": "./src/form.tsx",
-    "./hamburger-menu": "./src/hamburger-menu.tsx",
     "./icons": "./src/icons.ts",
     "./icons/all": "./src/icons-all.ts",
-    "./frediverse-mark": "./src/frediverse-mark.tsx",
-    "./checkbox": "./src/checkbox.tsx",
     "./popover": "./src/popover.tsx",
     "./select": "./src/select.tsx",
-    "./separator": "./src/separator.tsx",
-    "./sheet": "./src/sheet.tsx",
     "./switch": "./src/switch.tsx",
     "./table": "./src/table.tsx",
     "./tabs": "./src/tabs.tsx",
-    "./timeline": "./src/timeline.tsx",
-    "./tooltip": "./src/tooltip.tsx",
     "./user-menu": "./src/user-menu.tsx",
-    "./calendar": "./src/calendar.tsx",
     "./dialog": "./src/dialog.tsx",
     "./dev-perf": "./src/dev-perf.ts",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
-    "./lib/droppedEntries": "./src/lib/droppedEntries.ts",
     "./lib/utils": "./src/lib/utils.ts"
   },
   "peerDependencies": {
     "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "react-hook-form": "^7.81.0"
-  },
-  "peerDependenciesMeta": {
-    "react-hook-form": {
-      "optional": true
-    }
+    "react-dom": "^19.2.7"
   },
   "dependencies": {
     "@fontsource/rubik-80s-fade": "^5.3.0",
