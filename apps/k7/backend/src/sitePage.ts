@@ -27,7 +27,7 @@ const PASSES = [/^\/app_downloads(\/|$)/, /^\/favicon\.ico$/];
 export const SITE_PAGE = `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark"><meta name="theme-color" content="#07031F">
-<title>k7 — coming soon</title><style>
+<title>K7 DAW — coming soon</title><style>
 html,body{margin:0;height:100%;background:#07031F;color:#e9e9ee;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
 main{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;padding:24px;box-sizing:border-box}
 svg{display:block;width:min(80vw,520px);height:auto}

@@ -13,7 +13,7 @@ import { VERSION } from "../version";
 import { LicenseText } from "./LicenseText";
 
 /** Where the complete source is published: the address the AGPL's offer names. */
-export const SOURCE_URL = "https://github.com/fredericlb/k7";
+export const SOURCE_URL = "https://github.com/fredericlb/k7-daw";
 
 /** The notices and their texts, a chunk of their own that only this page fetches. */
 const NoticesSection = lazy(() =>
@@ -33,7 +33,7 @@ export function AboutPage() {
   return (
     <HomeShell>
       <PageFrame title={m["about.title"]()} narrow>
-        <Section title="k7" hint={m["about.tagline"]()}>
+        <Section title="K7 DAW" hint={m["about.tagline"]()}>
           <Row
             // version.ts is the frontend's one version source, whatever feeds it (../../docs/about.md).
             label={m["about.version"]({ version: VERSION })}

@@ -14,7 +14,7 @@ export const PINS = join(
 );
 
 // The prerelease whose assets are the pinned debs, filled by mirror-termux-debs.mjs.
-export const MIRROR_REPO = "fredericlb/k7";
+export const MIRROR_REPO = "fredericlb/k7-daw";
 export const MIRROR_TAG = "termux-debs";
 
 // Termux's own pool under its two hostnames, the first also the index `--pin` reads.

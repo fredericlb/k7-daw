@@ -57,7 +57,7 @@ android {
         val dirs = standalone["dirs"] as Map<*, *>
         buildConfigField("String", "ENGINE_ROOT_DIRS", "\"${dirs["STUDIO_FILES_ROOT"]};${dirs["STUDIO_MEDIATEK"]}\"")
         buildConfigField("String", "RELEASE_STAMP", "\"\"")
-        manifestPlaceholders["appLabel"] = "k7"
+        manifestPlaceholders["appLabel"] = "K7 DAW"
     }
 
     buildFeatures { buildConfig = true }
@@ -89,7 +89,7 @@ android {
             applicationIdSuffix = ".e2e"
             versionNameSuffix = "-e2e"
             buildConfigField("int", "STANDALONE_PORT", E2E_PORT.toString())
-            manifestPlaceholders["appLabel"] = "k7 e2e"
+            manifestPlaceholders["appLabel"] = "K7 DAW e2e"
             matchingFallbacks += "debug"
         }
     }
