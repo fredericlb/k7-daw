@@ -20,7 +20,6 @@ import { type DroppedProject, ImportProject } from "./ImportProject";
 import { LibrariesNotice } from "./LibrariesNotice";
 import { RepoList } from "./RepoList";
 import { RepoTree } from "./RepoTree";
-import { SharesEndNotice } from "./SharesEndNotice";
 import {
   type AccountFiles,
   copyProject as copyProjectOp,
@@ -248,7 +247,6 @@ export function ProjectsPane({
         />
         {/* FIRST when it says anything: nothing else here works until a library is cloned. */}
         <LibrariesNotice libraries={libraries} />
-        <SharesEndNotice />
         {ws ? (
           <RepoTree
             workspace={ws}

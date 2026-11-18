@@ -435,7 +435,6 @@
   "libs.noticeMissing": "No library yet — k7 opens no project without one.",
   "libs.noticeFailed": "The app holds no folder for some libraries.",
   "home.libraries": "Libraries",
-  "home.sharesEnd": "Sharing projects by link ends {date}. A new way to share is coming.",
   "libs.versions": "versions {list}",
   "libs.noVersion": "no published version",
   "libs.needsLevel": "v{version} needs level {level}",
