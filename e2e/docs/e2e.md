@@ -201,25 +201,13 @@ hold off a closed lid on battery.
 One worker runs the specs in order: they share one account's workspace and one engine, which serves
 one account at a time.
 
-## A second place to run the suites: the macOS agent
+## The Mac's bed
 
-OneDev's `e2e macos` runs the web suite, the conformance suite or both on the macOS agent, against a dev
-session of the agent's own (`engine/scripts/ci/e2e-macos.sh`); `conformance macos` is the conformance
-suite alone. An agent runs that script on the Mac's own beds; on OneDev both jobs are started by hand, with a
-ref, a suite and file filters:
-
-```bash
-T=$(tr -d '\r\n' < ~/.config/onedev/token)
-curl -sS -H "Authorization: Bearer $T" -H 'Content-Type: application/json' https://dev.frediver.se/~api/job-runs -d '{
-  "@type": "JobRunOnCommit", "projectId": 16, "commitHash": "<a commit of refName>", "refName": "refs/heads/<branch>", "jobName": "e2e macos",
-  "params": {"suite": ["web"], "filter": ["transport library"], "ref": []}, "reason": "e2e on the Mac"}'
-```
-
-Its artifacts are the HTML reports, Playwright's JSON, the failed specs' traces, every process's log and
-`summary.txt` (the counts) with `timings.txt`. A red build is a failed spec or a bed that did not come up.
-Every parameter is sent, `[]` for an empty one; a `ref` that is a branch name is read as OneDev's branch. With the
-builds warm, both suites take about seven minutes, the web suite's length, since they run side by side; a cold
-tree first compiles the engine for twelve.
+`engine/scripts/ci/e2e-macos.sh` runs the web suite, the conformance suite or both on the Mac, against a dev session
+of its own; an agent starts it through `scripts/agent/bed.sh` (below). Its results are the HTML reports, Playwright's
+JSON, the failed specs' traces, every process's log and `summary.txt` (the counts) with `timings.txt`. A red run is a
+failed spec or a bed that did not come up. With the builds warm, both suites take about seven minutes, the web
+suite's length, since they run side by side; a cold tree first compiles the engine for twelve.
 
 | choice | why |
 |---|---|
@@ -227,16 +215,14 @@ tree first compiles the engine for twelve.
 | the front, the backend and Vite started as `npm run dev` starts them (`dev-front.mjs`, the backend's `with-env.mjs`), on ports 28789, 28790 and 25223, all on `127.0.0.1` | the same session as Windows', so a difference is the platform's; the Mac may run a dev session or a tray of its own on the usual ports, and its application firewall drops a LAN connection to an unsigned binary |
 | the command-line engine (`k7-supervisor --config`), listed at the bed's front over loopback, on 28765 | an engine heartbeating from loopback is every local account's (`apps/k7/backend-rs/docs/engine/ownership.md`); a tray would hold 18789 and `~/.k7`, the Mac's own |
 | `HOME` under `~/k7-trees/e2e-macos-bed`, wiped at every run, an env.yaml with a new secret, no instrument downloaded | nothing of the Mac's own `~/.k7` or `~/.studio` is read or written, and the bed is paired with no server: the specs that publish or sync stay away from production |
-| the release front built into `~/.cache/k7-macbed-<tree name>` (`--target-dir`, handed to `dev-front.mjs` as `K7_FRONT_TARGET_DIR`) | a `target` inside the worktree makes `gate.sh` refuse the tree, and two slots must not share one build folder |
+| the release front built into `~/.cache/k7-macbed-<tree name>` (`--target-dir`, handed to `dev-front.mjs` as `K7_FRONT_TARGET_DIR`) | a `target` inside the worktree makes `gate.sh` refuse the tree, and two worktrees must not share one build folder |
 | `STUDIO_HOME` given to the engine, `STUDIO_PORTS=k7=28789` to every process | macOS gives the engine the account's home whatever `HOME` says, and the supervisor reads any loopback registry as k7's port, 8789 unless that names another. Tracktion's `~/Library/Studio/Settings.xml` (the audio device) stays the Mac's, shared with any other engine there |
 | one suite takes slot 1 on the ports above and `~/k7-trees/e2e-macos-bed` (`E2E_BED` names another); `both` takes slots 1 and 2 together, slot 2 a hundred ports higher in `~/k7-trees/e2e-macos-bed-2`, and runs the web suite on the first and the conformance suite on the second at the same time; the engine build, which empties a folder of the shared dependencies, is taken in turn | the suites run one after the other cost the conformance suite's three minutes on every full bed; on one bed they would clash, since a device has one account and the conformance service lane holds its file service and served project; a slot whose ports already listen, or whose lock's owner is gone, is judged by that, not by its lock alone |
 | the two beds share one `env.yaml` holding what they share (the secret, the device switches); each bed's folders (`STUDIO_FILES_ROOT`, `STUDIO_MEDIATEK`, `K7_FRONT_CACHE`) reach its processes as variables, and the second bed logs under `conformance-bed/logs`, judged by `bedCounters.mjs` as a conformance run | the backend finds `env.yaml` by walking up from its folder and a key there beats the environment, so a tree holds one; the counters read one front's log |
 | Playwright stops a run at its tenth failure (`--max-failures`, `E2E_MAX_FAILURES`, 0 for none) | a branch that breaks something basic otherwise waits out every test's timeout: over an hour for nothing a short run does not already say |
 | the bed starts the suites only once the front's relay answers something other than 503, and a stop is done when the bed's four ports are free | the front answers `/auth/me` before its relay runs, so a spec started in that gap meets 503 and then 409 on every first call; a bed that cannot get a relay fails in minutes with the front's log, not after a whole suite of 409s |
 | the engine, the front and `node_modules` kept warm in `~/k7-trees/tree-e2e-macos`, through `ciTree.mjs` | a run after a small push builds only what changed |
-| the harness is the job workspace's script, the tree the tested ref's | a by-hand `ref` runs with today's harness; it must still hold `dev-front.mjs`'s port overrides |
 | Playwright's Chromium and the render page (`k7-picture/page.mjs`) built at every run, for the conformance suite as well as the web one | `picture render` drives that Chromium with that page, and fails without either |
-| `ci/e2e/` branches run no `lint and test macos` nor the Rust checks | they would compile beside the suites, on the same cores |
 
 The speakers play: the transport spec sounds through the Mac's default output.
 

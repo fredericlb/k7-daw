@@ -14,7 +14,6 @@ places: OneDev, where the jobs run on the project's own machines, and GitHub's `
 | `lint and test macos` (`lint:locks`, the engine testbed and `npm run ci:local` — the container's checks plus `lint:docs` — natively on the macOS agent: `engine/scripts/ci/lint-test-macos.sh`) | by hand |
 | `rust checks macos` and `rust checks windows` (clippy and the tests of `apps/k7/backend-rs` under cargo-nextest, natively on each agent: `engine/scripts/ci/rust-checks-*`, [rust-builds.md](rust-builds.md)) | by hand |
 | `rust checks` (the same on Linux, in a container whose cache uploads with the `cache-upload-token` job secret) | by hand only |
-| `e2e macos` (the web and conformance suites against a dev session of the macOS agent's own: `engine/scripts/ci/e2e-macos.sh`, [e2e.md](../e2e/docs/e2e.md)), `conformance macos` | by hand, with a ref, a suite and file filters |
 
 | choice | why |
 |---|---|

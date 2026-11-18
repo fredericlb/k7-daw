@@ -186,11 +186,11 @@ How a build stays fast and where a branch is checked — `docs/rust-builds.md`, 
   (`engine/scripts/sccache.mjs`); an ad-hoc cargo script adds `eval "$(node engine/scripts/sccache.mjs dev --export)"`, an agent's
   `eval "$(node engine/scripts/sccache.mjs agent --export)"` (four jobs, line tables only).
   Never `sccache --stop-server`: the servers are shared.
-- **A branch is checked on the Mac, never through OneDev**: no CI job releases, and Windows is set aside until the
-  user brings it back (`docs/agent-playbook.md`). A milestone ends with `bash scripts/agent/gate.sh --milestone` (the quick
+- **A branch is checked on the Mac**: no CI job releases, and Windows is set aside until the user brings it back
+  (`docs/agent-playbook.md`). A milestone ends with `bash scripts/agent/gate.sh --milestone` (the quick
   checks, `check:changed`, `mac-checks.sh`); before a merge, `gate.sh` adds `win-clippy.sh` and `android-check.sh`, and
   `npm run ci:local` runs on `main` after merges. Never push `main`.
-- **The web and conformance suites run on the Mac's e2e beds**, two at once (`engine/scripts/ci/e2e-macos.sh`, `e2e/docs/e2e.md`).
+- **The web and conformance suites run on the Mac's own e2e beds, never in CI**, two at once (`engine/scripts/ci/e2e-macos.sh`, `e2e/docs/e2e.md`).
 - **A test server listens on `127.0.0.1`**, never on every interface: on macOS another process's loopback bind
   shadows it.
 
