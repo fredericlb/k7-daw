@@ -1,12 +1,10 @@
 # The k7 image — why its Dockerfile is staged the way it is
 
-One image is k7 — the editor —, `dev.frediver.se/frediverse/k7/k7-webapp`. Its Dockerfile builds
+One image is k7's hosted half, `dev.frediver.se/frediverse/k7/k7-webapp`. Its Dockerfile builds
 from the repo root (`apps/k7/docker/Dockerfile`) and pays for two expensive things: an `npm ci`
 over the workspace, and the C toolchain `ssh2` builds its optional crypto binding with.
 
-The server's engine is a second image, `dev.frediver.se/frediverse/k7/k7-runtime`, apart
-because it compiles C++ (`docs/server-engine.md`), and the Raspberry Pi's a third,
-`k7-runtime-pi` (`docs/pi-engine.md`).
+The Raspberry Pi's engine is the other image, `k7-runtime-pi` (`docs/pi-engine.md`).
 
 ## What the image serves
 
@@ -18,11 +16,11 @@ answers no sign-in, no account's files, no share and no application page.
 | choice | why |
 |---|---|
 | the front, the Express backend and the compose file stay as they are | the publishing of builds and feeds works unchanged (`APP_RELEASE_TOKEN`), and the image is the one place the hosts are served from |
-| the Express `@studio/oidc` sign-in code stays in the backend | it is deferred code, listed in `docs/inventaire.md` (D2); the compose file's `OIDC_*` variables feed it |
+| the compose file still sets `OIDC_ISSUER` and `OIDC_CLIENT_ID` | the front refuses to start without them (`auth_guard.rs`), though no one signs in here |
 
 ## One Node version: 24
 
-The image's stages, GitHub's checks (through `.nvmrc`), OneDev's and the bundles' esbuild target all
+The image's stages, GitHub's checks (through `.nvmrc`) and the bundles' esbuild target all
 name Node 24, the active LTS: a test run on one version and a server on another is a bug found in
 production. Its `node:sqlite`, the shares' comments store, needs no `--experimental-sqlite`, and
 it has an alpine image. A move to the next LTS changes every `node:24-*` image tag, `.nvmrc`, the
@@ -68,20 +66,18 @@ pile them up. A `dsp` child starts with an empty environment and so without it.
 ## tini is PID 1, in the image
 
 The front answers every account's files, and it starts ffmpeg for a video or an
-mp3, the engine for a render and chromium for a picture. A front that dies before its children — killed past its stop
+mp3 and chromium for a picture. A front that dies before its children — killed past its stop
 grace — leaves them re-parented to PID 1. Node never reaps a child it did
 not spawn, so with node as PID 1 each one becomes a zombie, and one still running burns CPU for
 nobody. So the image's `ENTRYPOINT` is `tini`, which reaps every orphan and forwards the stop
 signal; the `CMD` is `start.sh`, which passes that signal to node and to the front (below). It is in the
 image and not `init: true` in the compose file because the image runs elsewhere too — a bare
 `docker run`, another orchestrator — and an init that only one deployment supplies is one the
-others lack. tini only reaps: killing what a dead front left running is not its job. The server's
-engine image runs under tini for the same reason (`engine/docker/Dockerfile`).
+others lack. tini only reaps: killing what a dead front left running is not its job.
 
 ## Two processes: the Rust front, and node behind it
 
-The image runs k7's Rust front (`apps/k7/backend-rs/docs/front.md`) on 8789, the port Traefik and the server's
-engine reach, and node's backend behind it on `127.0.0.1:8790`. `apps/k7/docker/start.sh` starts both under tini.
+The image runs k7's Rust front (`apps/k7/backend-rs/docs/front.md`) on 8789, the port Traefik reaches, and node's backend behind it on `127.0.0.1:8790`. `apps/k7/docker/start.sh` starts both under tini.
 
 | choice | why |
 |---|---|
@@ -97,7 +93,7 @@ engine reach, and node's backend behind it on `127.0.0.1:8790`. `apps/k7/docker/
 | the bundle is `backend.mjs` alone, and the image runs `backend.mjs` and `k7-front` alone: no node file service, no libraries' service, an image of some 2.21 GB | the relay's rooms, the blobs and the history are files under `STUDIO_FILES_ROOT`, the front their one writer |
 | the front's compiled modules are in `/home/node/.cache/k7-front` (`K7_FRONT_CACHE`) | a compiled module is machine code, so its folder is the container user's own and on no volume |
 | the front's code root is its own folder, `/usr/local/share/k7/code` (`K7_CODE_ROOT`), staged by `apps/k7/backend-rs/scripts/stageCodeRoot.mjs` in the frontend build, some 700 KB | the front's file service reads `@meta`, `commands.yaml`, the demos and the sample video there; the checkout copied into `/app` goes when node does (phase 6.6), this folder does not |
-| `K7_FRONT_TRUST_HOPS=1` | Traefik is the one proxy before the front; the engine on the compose network sends no forwarded headers, so its own address is what is read. A container sharing Traefik's network can still name any non-loopback client address, which moves only the rate limits and the same-network listing: ownership and "this machine" read the socket (`apps/k7/backend-rs/docs/front.md`). A deployment that knows Traefik's address sets `K7_FRONT_TRUSTED_PROXIES` to it |
+| `K7_FRONT_TRUST_HOPS=1` | Traefik is the one proxy before the front. A container sharing Traefik's network can still name any non-loopback client address, which moves only the rate limits and the same-network listing: ownership and "this machine" read the socket (`apps/k7/backend-rs/docs/front.md`). A deployment that knows Traefik's address sets `K7_FRONT_TRUSTED_PROXIES` to it |
 | a static musl binary from `rust:alpine`, built from `apps/k7/backend-rs` alone with `--locked` | the runtime is alpine, and a change anywhere else in the repo rebuilds nothing of it |
 
 ## The Rust front is built with thin LTO
@@ -106,9 +102,7 @@ engine reach, and node's backend behind it on `127.0.0.1:8790`. `apps/k7/docker/
 tray's is, not fat LTO at one unit. One unit makes every crate a single thread, and fat LTO adds a
 serial pass over the whole binary — Wasmtime's Cranelift, chromiumoxide — at the
 end of the build. What it changes is the COLD build, the one a new toolchain, a dependency bump or an
-emptied cache mount pays: on twelve threads it is under half. With the dependencies cached, OneDev's
-image build takes about as long either way (15 min 10 s fat, alone on the host; 16 min 22 s thin,
-beside one `lint and test`), so the job's hour is lost to other jobs sharing the host, not to the profile.
+emptied cache mount pays: on twelve threads it is under half.
 
 | measured on Windows 11, 12 threads, `cargo build --release -p k7-front --timings` | fat, 1 unit | thin, 16 units |
 |---|---|---|
@@ -126,10 +120,8 @@ environment names takes a one-byte write: a full or read-only disk is a fault th
 somebody acts. The report keeps the shape the healthcheck and the conformance suite read, and
 no account's runtime is out of process, so no start can be stuck (`apps/k7/backend-rs/docs/files/hub.md`).
 `/api/health` stays as the liveness probe: no session, no disk, only that the event loop answers.
-The server's engine waits for the healthcheck (`service_healthy`) rather than dialling a k7 still starting.
 
-`docker/docker-compose.yml` caps k7 and the engine with separate `mem_limit`s, so a render or an
-import on k7 cannot starve the engine's null sink. Inside k7's limit the front, the backend and the
+`docker/docker-compose.yml` caps k7 with a `mem_limit`. Inside it the front, the backend and the
 programs the front starts share one budget, and an OOM kill there takes the whole container
 down. Every service's json-file log is rotated (`LOG_MAX_SIZE`, `LOG_MAX_FILE`).
 
@@ -157,28 +149,28 @@ the image build just doesn't find it a second time.
 An image is built locally from its Dockerfile when a deployment needs one, and tagged by hand
 with the version stamp (`docs/versioning.md`); `k7.yml` only checks the code.
 
-## The engine compiles only on a source change
+## The Pi engine compiles only on a source change
 
 The engine's compile lives in cache mounts, which a registry cache does not carry and a fresh runner
-starts without: a push that changes no input of the compile reuses the compiled layer whole, and one
-that does compiles cold. So the engine Dockerfiles read a context of their own,
-`engine/docker/Dockerfile.dockerignore` and `Dockerfile.pi.dockerignore`, which BuildKit takes in
+starts without: a build that changes no input of the compile reuses the compiled layer whole, and one
+that does compiles cold. So the Pi Dockerfile reads a context of its own,
+`engine/docker/Dockerfile.pi.dockerignore`, which BuildKit takes in
 place of the root `.dockerignore`: every `docs/` folder and every `.md` is left out, since the
-engine folders' notes change about as often as their sources and each such push would otherwise
-compile the whole engine for nothing. The two files repeat the root's build-output exclusions, which
-they replace.
+engine folders' notes change about as often as their sources and each such change would otherwise
+compile the whole engine for nothing. The file repeats the root's build-output exclusions, which
+it replaces.
 
-## The deployment pulls from OneDev's registry, logged in
+## The deployment pulls from the project's registry, logged in
 
-`docker/docker-compose.yml` names `dev.frediver.se/frediverse/k7/k7-webapp` and `…/k7-runtime`,
-the images pushed to OneDev's registry. That registry answers nobody anonymously, so the deploy host signs in once,
+`docker/docker-compose.yml` names `dev.frediver.se/frediverse/k7/k7-webapp`,
+the image pushed to the project's registry. That registry answers nobody anonymously, so the deploy host signs in once,
 `docker login dev.frediver.se`, as a user who may read the project, with an access token for a
 password; the login is kept in the host's Docker config and every later pull uses it.
 
 ## Deploying, and rolling back
 
 A deploy is `docker/deploy.sh <APP_VERSION>`, run on the host beside the compose file and its `.env`.
-It writes the version into `.env`, pulls k7 and the engine, restarts the stack, and waits up to
+It writes the version into `.env`, pulls k7, restarts the stack, and waits up to
 `READY_TIMEOUT` (180 s) for k7's `/api/ready`. If k7 does not get there, it writes the previous
 `APP_VERSION` back, restarts on it, and exits non-zero with k7's last log lines.
 
@@ -197,7 +189,7 @@ Or simply `./deploy.sh <that version>`, which checks and reverts the same way.
 
 **Between deploys**, `autoheal` (`willfarrell/autoheal`, pinned) restarts a container labelled
 `autoheal=true` once its healthcheck says unhealthy: Docker's own `restart:` acts on an exit only, so a
-backend wedged but alive stays wedged. Only k7 carries the label, the engine having no healthcheck; it
+backend wedged but alive stays wedged. Only k7 carries the label; it
 reaches the Docker socket, which is root on the host, and has no network.
 
 ## The process runs as `node`, and its volumes must be `node`'s

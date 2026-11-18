@@ -74,7 +74,7 @@ The account's files live on the server. When a project opens on an engine, the f
 | `engine/k7-supervisor/` | The supervisor (C++20, IXWebSocket + mbedTLS, libdatachannel, ONNX Runtime, miniz) |
 | `engine/k7-android/` | The Android app (Kotlin, Capacitor) |
 | `engine/scripts/` | Build and packaging scripts for the engine and supervisor |
-| `engine/docker/` | The server engine's image |
+| `engine/docker/` | The Raspberry Pi engine's image |
 | `packages/engine-protocol/` | Wire types, ProjectDoc types, sessions, the binary audio frame |
 | `packages/engine-client/` | The Node client and `~/.k7` path helpers |
 | `packages/engine-browser/` | The browser client, React stores, access/probe/choose/lease, pairing, WebRTC socket, audio stream player |

@@ -1,30 +1,8 @@
-# The hosted half only: k7 (the editor AND the media library) in its OWN
-# image and container — no nginx, see apps/k7/docker/Dockerfile. The musicians' engines run on their own machines, and reach this stack through the tunnel their
-# supervisor dials (packages/engine-tunnel/docs/tunnel.md); the `engine` service is one more of
-# those, the server's own, which dials k7 over the container network (docs/server-engine.md).
-# The accounts' WORKSPACES live here, in k7, one file service per account
-# (apps/k7/backend-rs/docs/files/hub.md).
+# The hosted half: ONE k7 image, which serves k7.rocks (the root site, /app_downloads and the update feeds)
+# and docs.k7.rocks (the documentation) and nothing else — see apps/k7/docker/Dockerfile and docs/images.md.
+# k7 itself runs on devices: no engine, no account's workspaces and no media library live here.
 #
-# THREE containers, and autoheal beside them: Traefik routes k7 by Host() straight to its own backend port (no nginx to
-# hand off to), and k7 answers everything on that hostname; the engine is reached on the container network only. k7 also
-# answers the `play.` and `k7.` hosts, aliases kept for the share links and registry URLs saved against them. That's the topology env.yaml's
-# COOKIE_DOMAIN/TRUSTED_ORIGINS document.
-#
-# The shared login — one "studio.sid" good on every host — comes from cookieDomain/trustedOrigins
-# being resolved by every setupAuth() call (packages/oidc) straight from the SAME
-# COOKIE_DOMAIN/TRUSTED_ORIGINS/SESSION_SECRET below, repeated on every service because each is
-# its own process with its own environment. The media API's CORS is separate and open to every
-# origin regardless.
-
-x-shared-auth: &shared-auth
-  SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET — see .env.example}
-  COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
-  TRUSTED_ORIGINS: ${TRUSTED_ORIGINS:-}
-  # Required: unset, k7 refuses to start rather than sign every visitor in as one dev user.
-  OIDC_ISSUER: ${OIDC_ISSUER:?set OIDC_ISSUER — see .env.example}
-  OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:?set OIDC_CLIENT_ID — see .env.example}
-  OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:-}
-  OIDC_SCOPES: ${OIDC_SCOPES:-}
+# Traefik routes both hosts straight to the backend's port; autoheal restarts the container when its healthcheck fails.
 
 # Docker's json-file logs grow without end unless capped; every service takes this.
 x-logging: &logging
@@ -35,83 +13,38 @@ x-logging: &logging
 
 services:
   k7:
-    # Required, so a deploy names the build it runs and the engine below runs the same one (docs/versioning.md).
+    # Required, so a deploy names the build it runs (docs/versioning.md).
     image: dev.frediver.se/frediverse/k7/k7-webapp:${APP_VERSION:-0.1.0}
     restart: unless-stopped
     logging: *logging
-    # The backend, every account's file service and their ffmpeg children share this; the engine has its own below.
     mem_limit: ${K7_MEM_LIMIT:-6g}
-    # The image's HEALTHCHECK asks /api/ready; the engine below waits for it.
     environment:
-      <<: *shared-auth
-      # Signs the media library's bearer tokens — see docs/tokens.md.
-      # Unset falls back to a value derived from SESSION_SECRET, which works but
-      # ties token validity to the login secret's rotation; set it explicitly.
-      API_TOKEN_SECRET: ${API_TOKEN_SECRET:-}
-      # Without this, @studio/mediatek defaults to a per-machine state dir
-      # (~/.k7/mediatek) instead of the volume below, and the library is empty.
-      STUDIO_MEDIATEK: /library
-      # The accounts' workspaces, and the only place they live — engines hold copies, never workspaces.
-      STUDIO_FILES_ROOT: /workspaces
-      # Who edits the libraries every account shares.
-      AUTH_ADMIN_GROUPS: ${AUTH_ADMIN_GROUPS:-}
-      # Recognises the engine service as the render machine, since this image has no engine binary.
-      STUDIO_RENDER_KEY: ${RENDER_KEY:-}
-      # 1: list the render machine only (apps/k7/backend-rs/docs/engine/heartbeat.md).
-      STUDIO_REGISTRY_REQUIRE_DEVICE: ${REGISTRY_REQUIRE_DEVICE:-0}
-      # The provider clients whose sign-in pairs a machine with no browser; the front no longer reads it.
-      STUDIO_PAIR_CLIENTS: ${PAIR_CLIENTS:-}
+      SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET — see .env.example}
+      # The front refuses to start without an issuer and a client id, even though nobody signs in here (apps/k7/backend-rs/crates/k7-front/src/auth_guard.rs).
+      OIDC_ISSUER: ${OIDC_ISSUER:?set OIDC_ISSUER — see .env.example}
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:?set OIDC_CLIENT_ID — see .env.example}
       # The bearer a developer publishes the apps' builds with; empty refuses every upload (docs/app-downloads.md).
       APP_RELEASE_TOKEN: ${APP_RELEASE_TOKEN:-}
-      # The hosts that show the coming-soon page rather than the app — the k7-site router below.
+      # The hosts that show the root site rather than the documentation — the k7-site router below.
       STUDIO_SITE_HOSTS: ${SITE_DOMAIN:-k7.rocks},www.${SITE_DOMAIN:-k7.rocks}
     volumes:
+      # The published builds (STUDIO_APP_RELEASES_DIR) and the prefs live under /data.
       - data:/data
-      # The media library IS this volume — apps/k7/docker/Dockerfile.
-      - library:/library
-      - workspaces:/workspaces
     networks:
       - traefik
     labels:
       # The autoheal service below restarts it when the image's HEALTHCHECK says unhealthy.
       - autoheal=true
       - traefik.enable=true
-      # docs. is the same app showing its documentation. The st0.app hosts are former ones, kept: saved share links and registries name them.
-      - traefik.http.routers.k7.rule=Host(`${K7_DOMAIN:-app.k7.rocks}`) || Host(`${DOCS_DOMAIN:-docs.k7.rocks}`) || Host(`${LEGACY_DOMAIN:-st0.app}`) || Host(`${PL8_DOMAIN:-play.st0.app}`) || Host(`${K7_ALIAS_DOMAIN:-k7.st0.app}`)
+      - traefik.http.routers.k7.rule=Host(`${DOCS_DOMAIN:-docs.k7.rocks}`)
       - traefik.http.routers.k7.entrypoints=websecure
       - traefik.http.routers.k7.tls.certresolver=${TRAEFIK_CERTRESOLVER:-letsencrypt}
       - traefik.http.services.k7.loadbalancer.server.port=8789
-      # The root domain and www.: the coming-soon page, and /app_downloads, the apps' download page and update feed (apps/k7/backend/docs/site.md).
+      # The root domain and www.: the root site, and /app_downloads, the apps' download page and update feed.
       - traefik.http.routers.k7-site.rule=Host(`${SITE_DOMAIN:-k7.rocks}`) || Host(`www.${SITE_DOMAIN:-k7.rocks}`)
       - traefik.http.routers.k7-site.entrypoints=websecure
       - traefik.http.routers.k7-site.tls.certresolver=${TRAEFIK_CERTRESOLVER:-letsencrypt}
       - traefik.http.routers.k7-site.service=k7
-
-  # The server's own engine — engine/docker/Dockerfile. Not routed through Traefik: it publishes no
-  # port, and browsers reach it through k7's relay like any machine's (docs/server-engine.md).
-  engine:
-    image: dev.frediver.se/frediverse/k7/k7-runtime:${APP_VERSION:-0.1.0}
-    restart: unless-stopped
-    logging: *logging
-    # Kept apart from k7's: a render or an import there must not take the server's engine down with it.
-    mem_limit: ${ENGINE_MEM_LIMIT:-4g}
-    depends_on:
-      k7:
-        condition: service_healthy
-    environment:
-      # k7's registry on the container network; the supervisor dials its tunnel from the same address.
-      STUDIO_REGISTRY_URL: ${ENGINE_REGISTRY_URL:-http://k7:8789}
-      STUDIO_INSECURE_REGISTRIES: ${ENGINE_INSECURE_REGISTRIES:-k7}
-      # The name the engine pickers show.
-      STUDIO_MACHINE_NAME: ${ENGINE_NAME:-k7 server}
-      # Every sampled instrument, since this machine has no Downloads tab to choose them in.
-      STUDIO_INSTRUMENTS: ${ENGINE_INSTRUMENTS:-all}
-      # The same key as k7's: presented on the tunnel, it makes this engine k7's render machine.
-      STUDIO_RENDER_KEY: ${RENDER_KEY:-}
-    volumes:
-      - engine-home:/engine-home
-    networks:
-      - traefik
 
   # Docker's `restart:` acts on an exit only: a wedged k7 that keeps answering errors is never restarted
   # without this, which watches the `autoheal=true` containers' health (docs/images.md).
@@ -135,10 +68,4 @@ networks:
     external: true
 
 volumes:
-  library:
-  workspaces:
   data:
-  # Mounted by no service: data no part of k7 reads, kept on the host as it is.
-  k7-data:
-  pocketbase-data:
-  engine-home:
