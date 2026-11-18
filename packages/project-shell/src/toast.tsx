@@ -2,7 +2,7 @@
 // library. Render <Toaster/> once at the app root; call `showToast({ message, variant })` from
 // anywhere. Stacks bottom-right, or top-right by `placement`. A SUCCESS leaves after `duration`, a
 // WARNING after a longer one; an ERROR stays until dismissed, and hovering any of them holds it.
-// A FORK of @studio/ui/toast, which nothing imports: patch this one — docs/toast.md.
+// The only toast of studio: patch it here — docs/toast.md.
 
 import { CheckCircle2, TriangleAlert, X, XCircle } from "@studio/ui/icons";
 import { type CSSProperties, useEffect, useState } from "react";

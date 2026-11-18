@@ -3,8 +3,8 @@
 use std::fs;
 use std::sync::Arc;
 
-use k7_libraries::{Body, Libraries, Request, Store};
-use serde_json::{Value, json};
+use k7_libraries::{Libraries, Request, Store};
+use serde_json::json;
 
 use crate::support::Root;
 
@@ -16,30 +16,6 @@ fn seeded(root: &Root) -> Arc<Libraries> {
     let seed = root.0.join("seed").to_string_lossy().into_owned();
     let store = Arc::new(Store::new(&root.0.join("data"), Some(&seed)));
     Libraries::new(store, SECRET.into())
-}
-
-async fn ask(
-    svc: &Arc<Libraries>,
-    method: &str,
-    target: &str,
-    admin: bool,
-    body: &Value,
-) -> (u16, Value) {
-    let (path, query) = target.split_once('?').unwrap_or((target, ""));
-    let bytes = body.to_string().into_bytes();
-    let r = svc
-        .answer(&Request {
-            method,
-            path,
-            query,
-            secret: Some(SECRET),
-            admin,
-            body: &bytes,
-        })
-        .await;
-    match r.body {
-        Body::Json(v) => (r.status, v),
-    }
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]

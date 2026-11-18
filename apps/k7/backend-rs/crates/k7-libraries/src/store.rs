@@ -7,16 +7,13 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
 use k7_file_service::atomic::write_atomic;
-use k7_file_service::libraries::is_library_name;
 use k7_file_service::paths::resolve_all;
-use k7x::edit::js_trim;
 use serde_json::{Map, Value, json};
 
 use crate::copy::copy_tree;
 use crate::dirs::{
-    DRAFT, LEGACY_MANIFEST, LIBRARY_LEVEL, MANIFEST, UNPINNED_VERSION, is_copy_of_seed, is_husk,
-    own_manifest, publishable, publishable_from, read_manifest, upgrade_manifest, version_numbers,
-    write_first_manifest,
+    DRAFT, LEGACY_MANIFEST, MANIFEST, UNPINNED_VERSION, is_copy_of_seed, is_husk, own_manifest,
+    publishable, read_manifest, upgrade_manifest, version_numbers, write_first_manifest,
 };
 use crate::list::{Note, library_folders, parse_list, rm, stamp};
 use crate::manifest::{Manifest, stringify_manifest};

@@ -12,20 +12,9 @@ mod routes;
 mod store;
 
 pub use copy::copy_tree;
-pub use dirs::{
-    DRAFT, LIBRARY_LEVEL, MANIFEST, is_husk, publishable, publishable_from, version_numbers,
-};
+pub use dirs::{DRAFT, MANIFEST, is_husk, publishable, version_numbers};
 pub use list::Note;
 pub use manifest::{Manifest, parse_legacy_manifest, parse_manifest, stringify_manifest};
 pub use reply::{Body, Reply};
 pub use routes::{JSON_BODY_MAX, Libraries, Request};
 pub use store::{DEFAULT_LIBRARY, Store, parse_seed, settings_problem};
-
-/// A number's text as JavaScript spells the whole and the plain fractional ones.
-pub(crate) fn number_text(n: f64) -> String {
-    if n.fract() == 0.0 && n.abs() < 1e21 {
-        format!("{}", n as i64)
-    } else {
-        format!("{n}")
-    }
-}
