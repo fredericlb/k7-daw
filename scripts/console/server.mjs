@@ -3,7 +3,7 @@
 // the root): PowerShell TABS in ConPTYs this service owns, so they survive their
 // viewers; every browser sees the same tabs and types into the same shells (a `claude`
 // session in one outlives the tab that launched it). The Tilt UI runs the dev session
-// and has no stdin; this page is its terminal-shaped companion. See docs/remote.md.
+// and has no stdin; this page is its terminal-shaped companion.
 
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
@@ -22,7 +22,7 @@ const PORT = 8797; // free: the proxy routes 3001-3006, 5173, 5223-5225, 8080, 8
 const SCROLLBACK_CAP = 1 << 20; // ~1 MiB of raw PTY output per tab, enough for a post-mortem
 const MAX_TABS = 12; // a runaway "+" should not fork-bomb the machine
 const MAX_NAME = 24; // a tab label the bar can still show
-// Derived from the git.exe on PATH, never `where bash`: System32's is WSL's (../../docs/remote.md).
+// Derived from the git.exe on PATH, never `where bash`: System32's is WSL's.
 function findGitBash() {
   const r = spawnSync("where.exe", ["git.exe"], { encoding: "utf8" });
   for (const line of (r.stdout ?? "").split(/\r?\n/)) {
@@ -295,7 +295,7 @@ http.on("error", (e) => {
   process.exit(1);
 });
 
-// 0.0.0.0 and NOT loopback: the LAN proxy is on another machine (../../docs/remote.md).
+// 0.0.0.0 and NOT loopback: the LAN proxy is on another machine.
 http.listen(PORT, "0.0.0.0", () => {
   console.log(
     `  console → https://console.priv.frediver.se/  (shells: ${Object.keys(SHELLS).join(", ")}; cwd: ${CWD})`,

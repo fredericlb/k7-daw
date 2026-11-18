@@ -47,9 +47,7 @@ Each is described in [Lints and conventions](./06-lints-and-conventions.md).
 
 | Script | Runs | Purpose |
 |---|---|---|
-| `vscode` | `node scripts/vscode.mjs` | VS Code in the browser on port 8798. |
 | `console` | `node scripts/console/server.mjs` (after installing its own dependencies) | Shared terminal tabs on port 8797. |
-| `remote:install`, `remote:uninstall`, `remote:status` | `node scripts/remote.mjs …` | Windows logon tasks that keep `vscode` and `console` running. |
 
 ## Workspace scripts worth knowing
 

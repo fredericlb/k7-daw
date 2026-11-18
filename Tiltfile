@@ -2,7 +2,7 @@
 # its own restartable resource, web UI at http://localhost:10350, instead of one TUI
 # where a crash is all-or-nothing. The task list comes from scripts/tilt-tasks.mjs
 # (derived from the workspace, so an app joins by existing). turbo keeps build/test —
-# Tilt only owns `dev`. See docs/dev.md and docs/remote.md.
+# Tilt only owns `dev`. See docs/dev.md.
 
 version_settings(check_updates=False)
 analytics_settings(enable=False)
