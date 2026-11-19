@@ -26,7 +26,7 @@ Identity**.
 | commits to pull | **Pull** |
 | **Commit first** | you changed files since the last commit: commit them, then pull |
 
-On an iPhone, an iPad or a Mac, the workspaces live in the app's iCloud container when the build is
+On an iPhone or an iPad, the workspaces live in the app's iCloud container when the build is
 signed for it, and iCloud moves them between your Apple devices.
 
 ## When two sides collide

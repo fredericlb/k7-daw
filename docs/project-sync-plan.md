@@ -184,7 +184,7 @@ holds the mechanism; `engine/k7-runtime/docs/ios.md` the Apple side.
 | `webdav` becomes the next `main` once git sync works and the iOS and macOS test round passes | the local-first workspaces, W10 and git are one product; `main` keeps shipping until then |
 | the new crate and its transports start now; the removal of the share waits for W10f and W10g on `webdav` | the removal and W10 touch the same capture and hub files |
 | the médiathèque's removal lands on `main` and reaches `webdav` before the share's removal | what W10 kept "for the médiathèque" (the device's pairing, the shares) can then go with it rather than be kept twice |
-| the key and the list need the Mac-as-iPad app's `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD` on and a signing team | an unsigned build has no iCloud entitlement; CI's unsigned `.ipa` runs with no list |
+| the key and the list need a signing team | an unsigned build has no iCloud entitlement; CI's unsigned `.ipa` runs with no list |
 
 ## Apple's portal, the user's part
 

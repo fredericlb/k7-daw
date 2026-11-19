@@ -13,7 +13,7 @@ enum AudioSession {
         if started { return }
         started = true
         let center = NotificationCenter.default
-        // Off the main thread: describe() asks the audio daemon, and a Mac posts hundreds of these a second.
+        // Off the main thread: describe() asks the audio daemon.
         center.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: logQueue) { note in
             let raw = note.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt ?? 0
             routeChanged(reason(raw))

@@ -43,8 +43,7 @@ enum EngineBridge {
         let mic = AVAudioApplication.shared.recordPermission == .granted
         startedWithMic = mic
         // iOS asks for the microphone as soon as inputs open: without it granted, outputs only (MicAccess.swift).
-        // On a Mac a granted microphone opens its input at the first armed track ("arm"), not at start (docs/ios.md).
-        setenv("STUDIO_ENGINE_INPUTS", mic ? (ProcessInfo.processInfo.isiOSAppOnMac ? "arm" : "1") : "0", 1)
+        setenv("STUDIO_ENGINE_INPUTS", mic ? "1" : "0", 1)
         let thread = Thread {
             let code = Int(k7_engine_serve(Int32(port)))
             lock.lock()
