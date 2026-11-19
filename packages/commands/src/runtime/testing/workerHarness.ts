@@ -8,9 +8,20 @@ import { Worker } from "node:worker_threads";
 import { bundleRuntime } from "../../../scripts/bundleRuntime.mjs";
 import { client } from "../protocol.ts";
 
-/** Builds the Worker into `dist` and starts it; `stop()` ends the thread. */
+let build:
+  | Promise<{ dist: string; built: { files: { path: string }[] } }>
+  | undefined;
+
+/** Builds the Worker into the first `dist` asked, once per process, and starts a thread over it; `stop()` ends it. */
 export async function startWorker(dist: string) {
-  const built = await bundleRuntime({ target: "worker", outdir: dist });
+  const started =
+    build ??
+    bundleRuntime({ target: "worker", outdir: dist }).then(
+      (b: { files: { path: string }[] }) => ({ dist, built: b }),
+    );
+  build = started;
+  const { dist: shared, built } = await started;
+  dist = shared;
   mkdirSync(dist, { recursive: true });
   const entry = join(dist, "harness.mjs");
   writeFileSync(

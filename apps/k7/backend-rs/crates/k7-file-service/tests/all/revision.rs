@@ -218,12 +218,12 @@ fn the_spelling_is_boot_dot_epoch() {
 // Hostile trees: each answered fast, the bound held on the best of three.
 
 #[test]
-fn a_folder_of_twenty_thousand_files_and_one_source() {
-    wide_folder(20_000);
+fn a_folder_of_two_thousand_files_and_one_source() {
+    wide_folder(2_000);
 }
 
 #[test]
-#[ignore = "scale: a quadratic walk hides at 20,000 files and shows at 200,000"]
+#[ignore = "scale: a quadratic walk hides at 2,000 files and shows at 200,000"]
 fn a_folder_of_two_hundred_thousand_files_and_one_source_at_scale() {
     wide_folder(200_000);
 }

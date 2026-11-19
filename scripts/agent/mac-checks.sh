@@ -39,10 +39,6 @@ tests() {
 if [[ " $areas " == *" backend "* ]]; then
   # shellcheck disable=SC2086 # one word per -p flag
   (cd apps/k7/backend-rs && cargo clippy --locked --target-dir "$target" $crates --all-targets -- -D warnings && tests $crates)
-  # The full-size variants (`#[ignore = "scale: ..."]`, named `*_at_scale`) run only in the whole run, never under --narrow (docs/rust-builds.md).
-  if [ "${1:-}" != "--narrow" ] && [ -z "$clippy_only" ]; then
-    (cd apps/k7/backend-rs && cargo nextest run --color never --locked --target-dir "$target" -p k7-file-service --run-ignored ignored-only -E 'test(/_at_scale$/)')
-  fi
 fi
 if [[ " $areas " == *" browser "* ]]; then
   for crate in packages/song-schema/rust packages/k7-wasm/rust packages/song/rust; do

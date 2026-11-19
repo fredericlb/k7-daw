@@ -33,6 +33,7 @@ fn engine_at(home: &Path, env: Vec<(String, String)>) -> Arc<LocalEngine> {
         roots: vec![home.join("files"), home.join("mediatek")],
         env,
         backoff: quick(),
+        stop_grace: Duration::from_secs(1),
     })
 }
 
@@ -231,6 +232,7 @@ async fn a_supervisor_that_will_not_start_is_said_and_retried() {
         roots: vec![],
         env: vec![],
         backoff: quick(),
+        stop_grace: Duration::from_secs(1),
     });
     engine.start();
     until(|| (log_of(&h).matches("could not start supervisor").count() >= 2).then_some(())).await;

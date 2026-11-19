@@ -1,6 +1,7 @@
 //! git_fetch.rs — when a workspace with a remote fetches: at open, every 5 minutes while the page says it is in front, when it
 //! comes back to the front, and no more than every 30 minutes after a failure, which is said once.
-//! What a reader gets wrong: `Cadence` holds no clock, the caller passes seconds, so the rules are tested without waiting.
+//! What a reader gets wrong: `Cadence` holds no clock, the caller passes seconds, so the rules are tested without waiting;
+//! `wake` rouses the fetching task at once, since its own look is only every `LOOK`.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -28,18 +29,22 @@ pub struct Cadence {
     last_try: Option<u64>,
     failing: bool,
     pub last: Option<Outcome>,
+    /// Notified when a fetch becomes wanted, so a user opening a workspace does not wait out `LOOK`.
+    pub wake: Arc<tokio::sync::Notify>,
 }
 
 impl Cadence {
     /// The workspace was opened: fetch as soon as it is in front.
     pub fn opened(&mut self) {
         self.wanted = true;
+        self.wake.notify_one();
     }
 
     /// The page reports at `now` that it is in front or away; coming back to the front asks for a fetch.
     pub fn focus(&mut self, front: bool, now: u64) {
         if front && !self.in_front(now) {
             self.wanted = true;
+            self.wake.notify_one();
         }
         self.front = front;
         self.said_at = now;
@@ -201,5 +206,15 @@ mod tests {
         c.focus(false, 1);
         c.focus(true, 59);
         assert!(!c.due(60), "a failing host is not asked at every return");
+    }
+
+    #[tokio::test]
+    async fn opening_a_workspace_wakes_the_fetching_task_at_once() {
+        let mut c = Cadence::default();
+        c.opened();
+        let wake = c.wake.clone();
+        tokio::time::timeout(Duration::from_secs(1), wake.notified())
+            .await
+            .expect("an opened workspace does not wait out the look");
     }
 }
