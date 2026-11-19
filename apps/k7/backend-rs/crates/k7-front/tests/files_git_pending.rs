@@ -11,7 +11,7 @@ use http_support::cookie;
 async fn a_workspace_with_a_pending_merge_refuses_a_write_with_423_and_another_does_not() {
     let account = k7_hub::account::LOCAL_ACCOUNT_KEY;
     let (front, root) = device_front_with(|root| {
-        let home = root.join("files").join(&account);
+        let home = root.join("files").join(account);
         for w in ["waiting", "mine"] {
             std::fs::create_dir_all(home.join("workspace").join(w)).unwrap();
             std::fs::write(home.join("workspace").join(w).join("notes.md"), "old").unwrap();
