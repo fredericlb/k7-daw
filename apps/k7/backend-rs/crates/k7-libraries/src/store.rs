@@ -1,5 +1,5 @@
 //! store.rs — the origin's LIBRARIES: the one list (`<dataRoot>/libraries.json`) and one folder per library under
-//! `<dataRoot>/libraries/<name>`, its frozen versions `1/`, `2/`… and the `draft/` only admins write. `libraries.ts`.
+//! `<dataRoot>/libraries/<name>`, and its frozen versions `1/`, `2/`… `libraries.ts`.
 //! What a reader gets wrong: every change is copied into a dot-named sibling and renamed, so no reader sees half of one.
 
 use std::fs;
@@ -11,7 +11,7 @@ use serde_json::{Map, Value, json};
 
 use crate::copy::copy_tree;
 use crate::dirs::{
-    DRAFT, MANIFEST, UNPINNED_VERSION, is_copy_of_seed, is_husk, publishable, read_manifest,
+    MANIFEST, UNPINNED_VERSION, is_copy_of_seed, is_husk, publishable, read_manifest,
     version_numbers, write_first_manifest,
 };
 use crate::list::{Note, library_folders, parse_list, rm, stamp};
@@ -85,7 +85,6 @@ impl Store {
                     "name": n,
                     "present": self.home.join(n).exists(),
                     "versions": versions,
-                    "draft": self.home.join(n).join(DRAFT).exists(),
                 })
             })
             .collect();
@@ -97,20 +96,15 @@ impl Store {
         Value::Object(reply)
     }
 
-    /// Give every listed library (or only `name`) its folder, and its draft when asked.
-    pub fn ensure(&self, name: Option<&str>, draft: bool) -> Vec<Note> {
+    /// Give every listed library (or only `name`) its folder.
+    pub fn ensure(&self, name: Option<&str>) -> Vec<Note> {
         let _q = self.serial();
         let mut notes = Vec::new();
         for l in self.settings() {
             if name.is_some_and(|n| n != l) {
                 continue;
             }
-            let note = self.ensure_one(&l);
-            if !draft || note.state == "failed" {
-                notes.push(note);
-            } else {
-                notes.push(self.ensure_draft(&l).unwrap_or(note));
-            }
+            notes.push(self.ensure_one(&l));
         }
         notes
     }
@@ -251,42 +245,5 @@ impl Store {
             gone.len(),
             list.join(", ")
         )
-    }
-
-    /// Give library `name` the draft its admins edit, copied from its newest version; None when it has one.
-    fn ensure_draft(&self, name: &str) -> Option<Note> {
-        let at = self.home.join(name);
-        let draft = at.join(DRAFT);
-        if draft.exists() {
-            return None;
-        }
-        let newest = version_numbers(&at).last().copied().unwrap_or(0);
-        let partial = self.home.join(format!(".drafting-{}", stamp()));
-        let skipped = at.join(newest.to_string()).join(MANIFEST);
-        let done = (|| -> std::io::Result<()> {
-            if newest > 0 {
-                copy_tree(&at.join(newest.to_string()), &partial, &|src| {
-                    src != skipped
-                })?;
-            } else {
-                fs::create_dir_all(&partial)?;
-            }
-            fs::rename(&partial, &draft)
-        })();
-        Some(match done {
-            Ok(()) => Note::new(
-                name,
-                "current",
-                if newest > 0 {
-                    format!("draft copied from version {newest}")
-                } else {
-                    "empty draft".into()
-                },
-            ),
-            Err(e) => {
-                rm(&partial);
-                Note::failed(name, &e)
-            }
-        })
     }
 }

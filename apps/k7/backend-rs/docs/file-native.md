@@ -32,9 +32,8 @@ Every piece answers on every host (`service/default_pieces.txt`, one file for th
 | 1030 | `is_library_name`, `version_of_dir` and the reserved names are held to `moduleTypes.ts` and `libraryVersions.ts` by a test that reads their text | one rule in two languages, kept honest |
 | 1031 | `workspace_pins` walks from the workspace up to the root of the disk for the nearest `_library-pins.k7x`; a read or parse failure is no pins and ends the walk; a text with a lone surrogate is `Declined(LossyText)`; a file past 16 MiB is declined. A value is `"draft"` or an integer of at least 1, read from the tree's scalars (one past `u32` is clamped, naming a folder that does not exist either way) | a native read never writes, and the TypeScript's walk leaves the workspace too |
 | 1032 DEPARTS | `name in pins` reads own keys only. The TypeScript's plain object answers `true` for a library named `constructor`, and joins the source of a function to the library's path | a prototype's key is no pin |
-| 1033 | `library_root` in the TypeScript's order: `account` is `<studio>/library`; standing inside a version of this library, that version; a pin, through the version folder; an admin's overlay; version 1. A library's folder holds versions when one `readdir` finds a version folder in it | `libraryRoot` and `libraryVersionRoot` |
-| 1034 | Overlays are derived at each request from `admin` and the disk, never held. A library added since can differ from the TypeScript's memory until its flag flips; that difference is logged and read by hand | no second memory |
-| 1035 | `library_of` keeps no linear search: the path is cut below the libraries' home, its first segment is the name, the account's folder is one prefix test, an overlay lives under its library's home | the module catalogue asks it per row |
+| 1033 | `library_root` in the TypeScript's order: `account` is `<studio>/library`; standing inside a version of this library, that version; a pin, through the version folder; version 1. A library's folder holds versions when one `readdir` finds a version folder in it | `libraryRoot` and `libraryVersionRoot` |
+| 1035 | `library_of` keeps no linear search: the path is cut below the libraries' home, its first segment is the name, the account's folder is one prefix test, a library's folder is under its home | the module catalogue asks it per row |
 
 ## Reads
 
@@ -67,7 +66,6 @@ What the TypeScript itself gets wrong, which a native read copies or leaves open
 | a UNC home | read as a path, with no share-aware gate |
 | a path swapped for a link between the gate and the open | closed at the leaf (1059), open in the folders above it |
 | a hard link that leads out of a workspace | no gate sees it |
-| a draft pin | a pin of `"draft"` is read with its overlay |
 
 ## Limits and capacity
 

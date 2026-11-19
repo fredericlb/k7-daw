@@ -48,10 +48,10 @@ fn a_machine_adds_the_seed_once_however_often_it_is_ensured() {
     let root = Root::new();
     let seed = seed_in(&root);
     let store = store(&root, &seed);
-    store.ensure(None, false);
+    store.ensure(None);
     seed_declares_2(&seed);
     for _ in 0..3 {
-        store.ensure(None, false);
+        store.ensure(None);
     }
     assert_eq!(folders(&store), ["1", "2"]);
     assert!(store.home.join("k7-core/2/library.k7x").exists());
@@ -60,7 +60,7 @@ fn a_machine_adds_the_seed_once_however_often_it_is_ensured() {
 /// A machine that ran a looping hub: versions 2..6 copied, then undone to their folders and `.gitkeep`.
 fn runaway(root: &Root, seed: &str) {
     let before = store(root, seed);
-    before.ensure(None, false);
+    before.ensure(None);
     for v in 2..=6 {
         let at = before.home.join(format!("k7-core/{v}"));
         fs::create_dir_all(at.join("samples")).unwrap();
@@ -76,7 +76,7 @@ fn husks_are_swept_where_the_seed_takes_its_own_number() {
     runaway(&root, &seed);
     seed_declares_2(&seed);
     let store = store(&root, &seed);
-    let notes = store.ensure(None, false);
+    let notes = store.ensure(None);
     assert_eq!(notes[0].state, "seeded");
     assert!(
         notes[0].note.starts_with("version 2 added "),
@@ -105,7 +105,7 @@ fn a_version_holding_a_file_is_never_swept() {
     let at = root.0.join("data/libraries/k7-core");
     fs::write(at.join("3/modules/fx/kept.k7x"), "x(1)\n").unwrap();
     let store = store(&root, &seed);
-    store.ensure(None, false);
+    store.ensure(None);
     assert_eq!(folders(&store), ["1", "3"]);
 }
 
@@ -114,7 +114,7 @@ fn a_machine_with_only_the_seed_lists_it_and_holds_no_other_version() {
     let root = Root::new();
     let seed = seed_in(&root);
     let store = store(&root, &seed);
-    let notes = store.ensure(None, false);
+    let notes = store.ensure(None);
     assert_eq!(notes[0].state, "seeded", "{}", notes[0].note);
     let view = store.view(&notes);
     let listed: Vec<&str> = view["libraries"]

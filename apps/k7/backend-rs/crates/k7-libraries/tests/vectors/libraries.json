@@ -399,58 +399,6 @@
   }
  },
  {
-  "name": "a draft leaves the newest version's manifest behind",
-  "kind": "store",
-  "tree": {
-   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
-   "seed/k7-core/.git/": "",
-   "seed/k7-core/library.k7x": "name(\"k7-core\")\nversion(5)\nrequires(1)\nnotes(\"five\")\n"
-  },
-  "seed": "$ROOT/seed",
-  "steps": [
-   {
-    "op": "ensure",
-    "draft": true
-   },
-   {
-    "op": "view"
-   }
-  ],
-  "results": [
-   [
-    {
-     "name": "k7-core",
-     "state": "current",
-     "note": "draft copied from version 5"
-    }
-   ],
-   {
-    "libraries": [
-     {
-      "name": "k7-core",
-      "present": true,
-      "versions": [
-       {
-        "version": 5,
-        "requires": 1,
-        "notes": "five"
-       }
-      ],
-      "draft": true
-     }
-    ]
-   }
-  ],
-  "after": {
-   "data/libraries/k7-core/5/library.k7x": "name(\"k7-core\")\nversion(5)\nrequires(1)\nnotes(\"five\")\n",
-   "data/libraries/k7-core/5/modules/mix.k7x": "plugin(\"mixer\")\n",
-   "data/libraries/k7-core/draft/modules/mix.k7x": "plugin(\"mixer\")\n",
-   "seed/k7-core/.git/": "",
-   "seed/k7-core/library.k7x": "name(\"k7-core\")\nversion(5)\nrequires(1)\nnotes(\"five\")\n",
-   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
-  }
- },
- {
   "name": "an ensure asked for one library leaves the others",
   "kind": "store",
   "tree": {
@@ -560,25 +508,7 @@
     "op": "ask",
     "method": "POST",
     "path": "/libraries/sync",
-    "body": {
-     "name": "k7-core",
-     "draft": true
-    }
-   },
-   {
-    "op": "ask",
-    "method": "POST",
-    "path": "/libraries/sync",
     "body": {}
-   },
-   {
-    "op": "ask",
-    "method": "POST",
-    "path": "/libraries/sync",
-    "body": {
-     "name": "k7-core",
-     "draft": "yes"
-    }
    },
    {
     "op": "ask",
@@ -587,30 +517,6 @@
    }
   ],
   "results": [
-   {
-    "status": 200,
-    "body": {
-     "notes": [
-      {
-       "name": "k7-core",
-       "state": "current",
-       "note": "here"
-      }
-     ]
-    }
-   },
-   {
-    "status": 200,
-    "body": {
-     "notes": [
-      {
-       "name": "k7-core",
-       "state": "current",
-       "note": "draft copied from version 1"
-      }
-     ]
-    }
-   },
    {
     "status": 200,
     "body": {
@@ -645,7 +551,6 @@
   "after": {
    "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
    "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
-   "data/libraries/k7-core/draft/modules/mix.k7x": "plugin(\"mixer\")\n",
    "seed/k7-core/.git/": "",
    "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
   }

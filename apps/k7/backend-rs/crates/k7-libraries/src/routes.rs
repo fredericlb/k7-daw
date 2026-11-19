@@ -67,7 +67,7 @@ impl Libraries {
         self.first
             .get_or_init(|| async {
                 let store = self.store.clone();
-                let notes = tokio::task::spawn_blocking(move || store.ensure(None, false))
+                let notes = tokio::task::spawn_blocking(move || store.ensure(None))
                     .await
                     .unwrap_or_default();
                 self.settled.store(true, Ordering::Release);
@@ -134,7 +134,7 @@ impl Libraries {
         if method == "GET" && sub == "/" {
             let view = self
                 .blocking(move |s| {
-                    let notes = s.ensure(None, false);
+                    let notes = s.ensure(None);
                     s.view(&notes)
                 })
                 .await?;
@@ -143,16 +143,15 @@ impl Libraries {
         Ok(error(404, format!("no {method} {}", req.path)))
     }
 
-    /// `POST /libraries/sync`: the folders made sure of, an admin's draft too.
+    /// `POST /libraries/sync`: the folders made sure of.
     async fn sync(self: &Arc<Self>, req: &Request<'_>) -> Result<Reply, String> {
         let body = match json_body_of(req) {
             Ok(b) => b,
             Err(r) => return Ok(r),
         };
         let name = body.get("name").and_then(Value::as_str).map(str::to_string);
-        let draft = body.get("draft") == Some(&Value::Bool(true));
         let notes = self
-            .blocking(move |s| s.ensure(name.as_deref(), draft))
+            .blocking(move |s| s.ensure(name.as_deref()))
             .await?;
         Ok(Reply::json(
             200,

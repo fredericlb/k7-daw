@@ -9,9 +9,6 @@ use crate::manifest::{Manifest, parse_manifest, stringify_manifest};
 
 /// A manifest in its k7x spelling.
 pub const MANIFEST: &str = "library.k7x";
-/// A manifest before it was k7x.
-/// The folder an admin edits a library in.
-pub const DRAFT: &str = "draft";
 /// A workspace's recycle bin, never published.
 const RECYCLE_DIR: &str = "_recycle_bin";
 /// The version a library written before versions is.

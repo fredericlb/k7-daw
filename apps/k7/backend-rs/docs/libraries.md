@@ -22,7 +22,7 @@ front answers them itself
 | a copy goes into a dot-named sibling and is renamed into place, eight files in flight | no reader sees half of a version |
 | a name from a request is checked as a library name, a version as a folder's spelling, before either becomes a path | a name with `..` or a version named `1e0` never reaches the disk |
 | a seed's or a version's links are skipped, never followed | a seed archive with a link must not copy a file from outside it into a public version |
-| a dot-named file is neither copied from a draft into a version nor served from one | a draft's `.env` must not become public; the listing already hid dot-names |
+| a dot-named file is not copied into a version nor served from one | a `.env` must not become public; the listing already hid dot-names |
 
 ## The routes
 
@@ -55,7 +55,7 @@ front answers them itself
 | frozen chains are written into the account's own library as ordinary chains | every chain reader already walks the account's library first |
 | the machine's standing answers (which chain separates, which makes an instrumental) are its settings, answered before a workspace is resolved, chosen among the libraries' cold chains | no project is open when they are set |
 | a model a chain needs is fetched from the module's own `model_url`, never one the caller sends, and a model already present answers `job: null` | a route can only download what a library already names; a stale menu costs nothing |
-| a chain's bench edits no origin library and changes no overlay, and what `chain save` writes from it goes to the account's own library | a bench is generated and keeps nothing |
+| a chain's bench edits no origin library, and what `chain save` writes from it goes to the account's own library | a bench is generated and keeps nothing |
 
 ## Where it answers differently, on purpose
 

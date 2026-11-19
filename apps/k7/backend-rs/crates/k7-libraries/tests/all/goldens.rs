@@ -45,7 +45,7 @@ fn step(root: &Root, store: &Arc<Store>, s: &Value) -> Value {
                 .map(|n| json!({ "name": n }))
                 .collect::<Vec<_>>()
         ),
-        "ensure" => notes(&store.ensure(s["target"].as_str(), s["draft"] == json!(true))),
+        "ensure" => notes(&store.ensure(s["target"].as_str())),
         "versions" => Value::Array(
             store
                 .versions(str_of(s, "name"))
@@ -86,7 +86,7 @@ fn step(root: &Root, store: &Arc<Store>, s: &Value) -> Value {
 /// A step that touches no file of the fixture (the ones a parallel pair holds).
 fn step_alone(store: &Arc<Store>, s: &Value) -> Value {
     match str_of(s, "op") {
-        "ensure" => notes(&store.ensure(s["target"].as_str(), s["draft"] == json!(true))),
+        "ensure" => notes(&store.ensure(s["target"].as_str())),
         other => panic!("no parallel step {other}"),
     }
 }
@@ -201,5 +201,5 @@ async fn every_scenario_of_the_typescript_replays() {
         assert_eq!(root.dump(), want_tree, "{name}: the tree left behind");
         ran += 1;
     }
-    assert!(ran >= 12, "{ran} scenarios");
+    assert!(ran >= 11, "{ran} scenarios");
 }

@@ -95,7 +95,7 @@ async fn a_link_in_a_seed_or_a_version_serves_nothing_outside() {
         &root.0.join("data2"),
         Some(&root.0.join("seed").to_string_lossy()),
     ));
-    let notes = store.ensure(None, false);
+    let notes = store.ensure(None);
     assert_eq!(notes[0].state, "seeded", "{}", notes[0].note);
     let v1 = root.0.join("data2/libraries/k7-core/1");
     assert!(v1.join("mix.k7x").exists());

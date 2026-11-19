@@ -12,7 +12,7 @@ mod routes;
 mod store;
 
 pub use copy::copy_tree;
-pub use dirs::{DRAFT, MANIFEST, is_husk, publishable, version_numbers};
+pub use dirs::{MANIFEST, is_husk, publishable, version_numbers};
 pub use list::Note;
 pub use manifest::{Manifest, parse_manifest, stringify_manifest};
 pub use reply::{Body, Reply};
