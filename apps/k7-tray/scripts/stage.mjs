@@ -17,6 +17,7 @@ import { fileURLToPath } from "node:url";
 import { run, windowsTar } from "../../../engine/scripts/buildTools.mjs";
 import { stageEngine } from "../../../engine/scripts/stageEngine.mjs";
 import { stageCodeRoot } from "../../k7/backend-rs/scripts/stageCodeRoot.mjs";
+import { signStaged } from "./macSign.mjs";
 
 /** The node the backend runs on: Node 24 LTS, as .nvmrc says; bumped by hand, its checksum read from nodejs.org. */
 const NODE_VERSION = "24.22.0";
@@ -128,5 +129,10 @@ const node = await nodeBinary();
 const name = process.platform === "win32" ? "node.exe" : "node";
 copyFileSync(node, join(out, "node", name));
 chmodSync(join(out, "node", name), 0o755);
+
+// Notarization refuses any unsigned Mach-O inside the bundle, and Tauri signs only the main binary (docs/macos.md).
+if (process.platform === "darwin") {
+  console.log(`· signed ${signStaged(out)} binaries`);
+}
 
 console.log(`staged in ${out}`);
