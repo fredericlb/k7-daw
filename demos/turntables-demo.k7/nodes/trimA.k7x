@@ -10,7 +10,7 @@
 // What it is for: two records cut ten years apart do not arrive at the same level, and
 // nothing in this project normalises loudness. This is what puts them on the same footing
 // so that 0 dB on either channel fader means the same thing.
-extends("@k7-core/audio/zz_utility/trim")
+extends("@workspace/audio/zz_utility/trim")
 params({
   // Unity, in the MIDDLE of the travel: the rest of a trim is "whatever the record gives".
   Trim: 0,

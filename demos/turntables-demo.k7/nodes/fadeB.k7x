@@ -13,7 +13,7 @@
 //
 // The module is NOT copied into this project: pl8 owns the only editable catalogue, so a
 // copy here would be a second Fade nobody maintains — packages/song/docs/nodes.md.
-extends("@k7-core/audio/zz_utility/fade")
+extends("@workspace/audio/zz_utility/fade")
 params({
   // Centred, like the fader that drives it: both decks at half, which is where a set starts.
   Level: 0.5,
