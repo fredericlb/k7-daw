@@ -1,0 +1,59 @@
+// The DESK, and what each of its controls drives.
+//
+// A surface: a special view the project asks its editor to draw (packages/song/docs/surfaces.md).
+// `split` means a PANE — a slot in the layout, over the graph, the way the arrangement sits
+// in a song. Press its number, or fullscreen it, exactly as you would any other pane.
+//
+// `mapping` is keyed by the CONTROL, because this is about a desk: a control drives at
+// most one param, and two targets on one fader is a thing you cannot see going wrong. The
+// reverse is allowed — two controls may name the same param, and both move it.
+//
+// `module` is the name the CHAINS file uses, not a médiathèque ref: a set has two uses
+// of the tempo module, and a ref could not tell them apart. That ambiguity is exactly why
+// these bindings are not in the module's own `controller.k7x`, which belongs to the
+// device and is shared by every use of it — a MIDI CC is a property of the device, a desk
+// control is a property of THIS set.
+//
+// `param` is spelled as the module's ui.k7x binds it, so this file, the panel and a MIDI
+// map line up key for key.
+//
+// The control ids: see packages/k7-plugins/docs/turntables/controls.md for the list.
+//
+// `playlist` is what the song browser lists — the twelve songs to hand tonight rather
+// than the two hundred and seventy-nine on the volume. A NAME under `_playlists/` at the
+// root of the repository, not a path: the folder is fixed. Write the playlists themselves
+// in k7, under the cog. See packages/song/docs/playlists.md.
+//
+// This demo's list is `_playlists/turntables-demo.k7x`: two beats kept in `records/`.
+type("turntables")
+layout("split")
+playlist("turntables-demo")
+mapping({
+  crossfade: { module: "fadeA", param: "Level", invert: true, also: { module: "fadeB", param: "Level" } },
+  "deckA.tempo": { module: "tempoA", param: "Target BPM" },
+  "deckB.tempo": { module: "tempoB", param: "Target BPM" },
+  "deckA.eqLow": { module: "eqA", param: "Low-shelf gain" },
+  "deckA.eqMid": { module: "eqA", param: "Mid gain 1" },
+  "deckA.eqHigh": { module: "eqA", param: "High-shelf gain" },
+  "deckB.eqLow": { module: "eqB", param: "Low-shelf gain" },
+  "deckB.eqMid": { module: "eqB", param: "Mid gain 1" },
+  "deckB.eqHigh": { module: "eqB", param: "High-shelf gain" },
+  "deckA.filter": { module: "filterA", param: "Sweep" },
+  "deckB.filter": { module: "filterB", param: "Sweep" },
+  "deckA.cue": { module: "cueA", param: "Level" },
+  "deckB.cue": { module: "cueB", param: "Level" },
+  "deckA.trim": { module: "trimA", param: "Trim" },
+  "deckB.trim": { module: "trimB", param: "Trim" },
+  "deckA.level": { module: "levelA", param: "Gain" },
+  "deckB.level": { module: "levelB", param: "Gain" },
+  "deckA.echo": { module: "echoA", param: "@mix" },
+  "deckB.echo": { module: "echoB", param: "@mix" },
+  "deckA.stemDrums": { module: "platterDrumsA", param: "Gain" },
+  "deckA.stemBass": { module: "platterBassA", param: "Gain" },
+  "deckA.stemOther": { module: "platterOtherA", param: "Gain" },
+  "deckA.stemVocals": { module: "platterVocalsA", param: "Gain" },
+  "deckB.stemDrums": { module: "platterDrumsB", param: "Gain" },
+  "deckB.stemBass": { module: "platterBassB", param: "Gain" },
+  "deckB.stemOther": { module: "platterOtherB", param: "Gain" },
+  "deckB.stemVocals": { module: "platterVocalsB", param: "Gain" },
+})

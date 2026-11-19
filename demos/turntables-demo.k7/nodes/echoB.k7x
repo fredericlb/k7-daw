@@ -1,0 +1,27 @@
+// Deck B's ECHO — a feedback delay, the only effect on this strip past the filter.
+//
+// AFTER the level, and that placement is the entire feature: an echo-out is cutting the
+// channel and letting the repeats ring on, which works because what you cut is the delay's
+// INPUT and not its output. Wired before the fader it would be cut along with everything else.
+//
+// `mix` is what the desk's knob moves — the ENGINE's dry/wet around the delay, whose own is
+// held at full wet (engine/k7-runtime/docs/mix.md) — and it rests at 0: an effect you drop
+// into a chain must not be heard before somebody asks for it.
+//
+// `Time` is in MILLISECONDS and follows nothing: the desk knows each deck's BPM, but no
+// binding carries it here yet. See packages/k7-plugins/docs/turntables/fx.md.
+// The delay's ECHO engine: the one of them whose Time is in milliseconds.
+extends("@k7-core/audio/delay")
+engine("echo")
+engines({
+  echo: {
+    params: {
+      // A dotted eighth at 120 BPM — the dub delay that displaces rather than doubles.
+      Time: 375,
+      // Three or four audible repeats: enough to hear, little enough not to pile up.
+      Feedback: 0.45,
+    },
+  },
+})
+// DRY at rest. This is the one the desk drives.
+mix(0)
