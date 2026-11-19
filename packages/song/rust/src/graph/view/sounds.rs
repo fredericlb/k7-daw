@@ -1,11 +1,10 @@
-// graph/view/sounds.rs — the sounds a node draws a pad for, a Faust module's slots, and a live input's numeric channels.
+// graph/view/sounds.rs — the sounds a node draws a pad for, and a live input's numeric channels.
 // A reader would get wrong that a rack with no sound is `[]`, present, so its node still draws the "+" a kit starts with.
 
 use super::web::WebRackSound;
 use crate::graph::{Channel, GraphModule};
 use crate::modules::{ParamValue, RackType};
 use crate::resolve::{InstrumentType, resolved_rack, resolved_type};
-use indexmap::IndexMap;
 
 /// A rack's sounds in note order, then by code point of the symbol; none for a module that is no rack.
 pub fn rack_sounds(m: &GraphModule<'_>) -> Option<Vec<WebRackSound>> {
@@ -65,38 +64,6 @@ pub fn kit_sounds(m: &GraphModule<'_>) -> Option<Vec<WebRackSound>> {
         .collect();
     out.sort_by(|a, b| a.note.cmp(&b.note).then_with(|| a.symbol.cmp(&b.symbol)));
     Some(out)
-}
-
-/// A module's chosen files: its asset params, plus a FAUST module's sound slots, every text param it has.
-pub fn faust_slots(m: &GraphModule<'_>) -> Option<IndexMap<String, String>> {
-    let assets = m.m.assets.clone();
-    let faust =
-        m.m.authored
-            .plugin
-            .as_ref()
-            .and_then(|p| p.plugin_type.as_deref())
-            .is_some_and(|t| t.eq_ignore_ascii_case("faust"));
-    if !faust {
-        return assets;
-    }
-    let slots: Vec<(&String, &String)> =
-        m.m.authored
-            .params
-            .iter()
-            .flatten()
-            .filter_map(|(k, v)| match v {
-                ParamValue::Text(t) => Some((k, t)),
-                ParamValue::Number(_) => None,
-            })
-            .collect();
-    if slots.is_empty() {
-        return assets;
-    }
-    let mut merged = assets.unwrap_or_default();
-    for (k, v) in slots {
-        merged.insert(k.clone(), v.clone());
-    }
-    Some(merged)
 }
 
 /// An input's channels when the file states them as NUMBERS, else none.

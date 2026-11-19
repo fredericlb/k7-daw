@@ -23,5 +23,5 @@ fi
 cd "$root/engine/k7-android"
 # The configuration cache skips Gradle's configuring phase when the build scripts did not change.
 ./gradlew --no-daemon --configuration-cache :app:buildFront :app:stageBackend :app:compileE2eKotlin \
-  -x buildEngine -x buildSupervisor -x stageEngine -x stageFaustLibs
+  -x buildEngine -x buildSupervisor -x stageEngine
 echo "android-check: passed"

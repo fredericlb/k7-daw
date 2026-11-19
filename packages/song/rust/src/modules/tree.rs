@@ -5,8 +5,8 @@ use super::assets::{Files, Places};
 use super::decorate::stamp_files;
 use super::merge::merge_authored;
 use super::types::{
-    DSP_FILE, DSP_TYPE, ENGINES_DIR, FAUST_FILE, FAUST_TYPE, JSDSP_FILE, JSDSP_TYPE, MODULE_FILE, MODULE_OWN_BASES,
-    MODULE_TYPES, TypeMeta, engine_ref_of, is_name, module_key, ports,
+    DSP_FILE, DSP_TYPE, ENGINES_DIR, JSDSP_FILE, JSDSP_TYPE, MODULE_FILE, MODULE_OWN_BASES, MODULE_TYPES, TypeMeta,
+    engine_ref_of, is_name, module_key, ports,
 };
 use super::weight::module_entries;
 use super::{LoadedModule, Module};
@@ -257,7 +257,6 @@ impl Walk<'_> {
         match authored.plugin.as_ref().and_then(|p| p.plugin_type.as_deref()) {
             Some(JSDSP_TYPE) => m.jsdsp = Some(join(folder, JSDSP_FILE)),
             Some(DSP_TYPE) => m.jsdsp = Some(join(folder, DSP_FILE)),
-            Some(FAUST_TYPE) => m.faust = Some(join(folder, FAUST_FILE)),
             _ => {}
         }
         m.folder_abs = Some(folder.to_owned());

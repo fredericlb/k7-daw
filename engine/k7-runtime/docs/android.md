@@ -28,7 +28,7 @@ elsewhere is something it can ADD, never something it needs. `BackendHost.kt` is
 | k7's view opens straight on `/` when the WebView holds a `studio.sid` cookie (`BackendHost.home`) | `/auth/local` is a redirect before any app code, on every cold start; a cookie whose session is gone costs one bounce, since the page then says nobody and the fallback above loads `/auth/local` |
 | the phone's own studio pinned FIRST in the supervisor's list, before it starts | the supervisor's saved list overrides `$STUDIO_REGISTRY_URL`, so a phone that already listed a studio would never see its own otherwise |
 | the front runs in the app's process, with no node and no child for it | the front holds the file hub and every account's file service itself (`apps/k7/backend-rs/docs/files.md`); the page, the library it seeds and its code root ride in the zip (`apps/k7/backend-rs/scripts/stageBundle.mjs`) |
-| one `backend.zip` asset, unpacked once per install | the front reads files, not assets; the APK's `lastUpdateTime` marks the copy, as for Faust's libraries |
+| one `backend.zip` asset, unpacked once per install | the front reads files, not assets; the APK's `lastUpdateTime` marks the copy |
 | the Rust front's code root rides in `backend.zip` as `code/` (`apps/k7/backend-rs/scripts/stageCodeRoot.mjs`, some 700 KB), named to the front as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video there (`apps/k7/backend-rs/docs/service.md`); a folder of its own, beside the page and the library |
 | an update writes only the files whose CRC or size changed, and deletes those the new bundle lacks | the bundle is some 20 MB unpacked, and an update rewriting all of it holds the start back; `.entries` keeps each file's CRC and size, the ones Gradle's `Zip` writes in every local header. An entry without them is always written, and the `.installed` marker is removed first and written last, so an unpack cut short is redone |
 | cleartext allowed for `127.0.0.1` only (`engine/k7-android/app/src/main/res/xml/network_security_config.xml`) | the local studio is plain http, as under the tray, and every other host stays https |
@@ -500,16 +500,6 @@ To check on a phone: `adb logcat -s k7-runtime` shows the buffer at open and eve
 | `-Dtls_model(x)=unused` on `tracktion_graph.cpp` | the rpmalloc it compiles in pins its thread heap to initial-exec TLS, and Android's loader refuses that in a library opened by `System.loadLibrary` — the app dies loading the engine. The rewrite turns the attribute into `unused`. A compile OPTION, because CMake drops function-style definitions silently. `llvm-readelf -d libk7runtime.so` must not show `STATIC_TLS`. |
 | `CMAKE_POLICY_VERSION_MINIMUM=3.5` | Oboe's own `CMakeLists.txt`, which JUCE adds on Android, declares a minimum CMake 4 refuses. |
 
-## Faust's libraries travel as assets
-
-`import("stdfaust.lib")` is resolved when the engine compiles a module, so the libraries must be on
-the phone, as files: the Faust compiler opens them by path, and an asset is not one. Gradle copies
-the 43 `.lib` files — 2 MB — out of the folder the engine's CMake cache names (`STUDIO_FAUST_LIBS`),
-and fails when `stdfaust.lib` is not there, as the desktop staging does. The app unpacks them into
-its files once per install, marking the copy done only once every file is written, and names the
-folder in `STUDIO_FAUST_LIBS`, which `faustLibrariesDir()` reads before looking beside an executable
-this platform does not have.
-
 ## On a Windows machine
 
 The APK builds on Windows too, for a phone on the desk without a round trip through CI: NDK
@@ -593,8 +583,6 @@ through `adb forward`:
 | supervisor start | 145 trusted roots read; engine started by the app with the supervisor's identity |
 | connecting a studio (a stand-in registry through `adb reverse`) | hello answered, a heartbeat every 5 s carrying id, LAN addresses, name and performance |
 | Quit | deregister sent, pidfile and host lock removed, both processes gone |
-| a Faust module importing `stdfaust.lib` (−6 dB with `ba.db2linear`) | compiles, no warning; the note's peak halves, 0.64 → 0.32 |
-| the same importing a library that does not exist | `faust: ERROR : unable to open file nosuch.lib`, and the audio passes untouched |
 | an HTTPS studio whose certificate a private CA signed | refused; after importing that CA (DER) 146 roots, the engine adopted, connected and heartbeating; after forgetting it 145 and refused again — one engine start throughout |
 | importing a file that is not a certificate | refused with a message; nothing stored, nothing restarted |
 | `--probe https://app.priv.k7.rocks` with Android's CAs only | an k7 registry: nothing to import for a publicly certified studio |

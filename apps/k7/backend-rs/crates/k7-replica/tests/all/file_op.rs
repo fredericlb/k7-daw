@@ -63,7 +63,7 @@ fn every_file_op_for_is_nodes_with_the_native_half_never_crossing() {
     println!(
         "fileOpFor vectors: {total} ({plain} not k7x, {through} k7x, {hashed} with beforeHash)"
     );
-    assert_eq!((total, plain, through, hashed), (1048, 105, 943, 16));
+    assert_eq!((total, plain, through, hashed), (1040, 105, 935, 16));
 }
 
 #[test]

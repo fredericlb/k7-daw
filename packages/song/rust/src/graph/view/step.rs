@@ -3,7 +3,7 @@
 
 use super::choices::{Walk, Walks, fill};
 use super::flags::{PluginFlags, flags_of, param_defaults, shown_ui, stage_of, takes_stage};
-use super::sounds::{faust_slots, kit_sounds, numeric_channels, rack_sounds};
+use super::sounds::{kit_sounds, numeric_channels, rack_sounds};
 use super::web::{Params, WebAutomation, WebChainStep, WebModelDownload, WebPortIn, WebPortOut};
 use crate::curves::CurveFile;
 use crate::graph::{GraphModule, NodePlace, Spend};
@@ -116,7 +116,7 @@ pub(super) fn body(
             })
             .collect()
     });
-    s.assets = faust_slots(m);
+    s.assets = m.m.assets.clone();
     s.base = a.base.clone().filter(|b| !b.is_empty());
     s.shader = a.shader.as_ref().map(|x| x.0.clone()).filter(|x| !x.is_empty());
     s.events = (m.category == Some("instruments")).then(|| vec!["note-on".to_owned()]);

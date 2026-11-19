@@ -17,7 +17,7 @@ render plays a pattern like anything else.
 
 Tidal is Haskell evaluated at run time: a GHC toolchain beside the engine, and OSC out — the same
 socket-and-look-ahead problem, local. Strudel is the same pattern language already, and its three
-packages are plain JS. QuickJS is a small C interpreter that FetchContent builds like Faust.
+packages are plain JS. QuickJS is a small C interpreter that FetchContent builds like the rest.
 
 Measured (M-series, Release): events identical to Node's on every pattern tried, boot 34 ms and
 2 MiB per lane, a pattern evaluates in 0.6–3 ms, a quarter-cycle query in 0.2 ms mean, 0.6 ms

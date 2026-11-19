@@ -1,8 +1,8 @@
 // stage.mjs — everything the Xcode project takes from outside it, laid out under build/staged: the engine and the
 // supervisor as xcframeworks, the Rust front as a static library, the CA bundle as pinned in pins.json (checked by its
-// SHA-256), Faust's libraries, the shell page as `cap copy` would lay it out, and what the front reads. Run BEFORE
+// SHA-256), the shell page as `cap copy` would lay it out, and what the front reads. Run BEFORE
 // Xcode: it plans an xcframework's slices when the build starts, so one staged mid-build is not seen.
-// Usage: node engine/k7-ios/scripts/stage.mjs [--sim] [--only=engine,supervisor,embed,cacert,faust,shell,backend]
+// Usage: node engine/k7-ios/scripts/stage.mjs [--sim] [--only=engine,supervisor,embed,cacert,shell,backend]
 // See engine/k7-runtime/docs/ios.md.
 
 import { execFileSync } from "node:child_process";
@@ -11,7 +11,6 @@ import {
   cpSync,
   existsSync,
   mkdirSync,
-  readdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
@@ -137,31 +136,6 @@ if (wanted("embed")) {
 
 if (wanted("cacert")) {
   cpSync(await pinned("cacert"), join(resources, "cacert.pem"));
-}
-
-// Faust's standard libraries, which `import("stdfaust.lib")` opens by path at run time: from the folder the engine's CMake cache names.
-if (wanted("faust")) {
-  const cacheFile = join(
-    repo,
-    "engine/k7-runtime/build",
-    preset,
-    "CMakeCache.txt",
-  );
-  const line = existsSync(cacheFile)
-    ? readFileSync(cacheFile, "utf8")
-        .split("\n")
-        .find((l) => l.startsWith("STUDIO_FAUST_LIBS:"))
-    : undefined;
-  const dir = line?.slice(line.indexOf("=") + 1);
-  if (!dir || !existsSync(join(dir, "stdfaust.lib")))
-    throw new Error(
-      `no Faust libraries at '${dir}' — build the engine first (--only=engine)`,
-    );
-  const out = join(resources, "faust-libs");
-  rmSync(out, { recursive: true, force: true });
-  mkdirSync(out, { recursive: true });
-  for (const f of readdirSync(dir).filter((n) => n.endsWith(".lib")))
-    cpSync(join(dir, f), join(out, f));
 }
 
 // The shell page Android shows too, laid out as `cap copy` lays it: public/ beside the config Capacitor reads at start.

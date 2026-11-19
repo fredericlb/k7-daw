@@ -161,7 +161,7 @@ params({ Depth: 3 })
 
 A name in quotes reads a parameter, a block named above it with `.as("x")`, a feedback wire declared with `wires("fb")` (written by a `delay` or `allpass` ending in `.into("fb")`), or `"sr"`, the sample rate. A block inside a block is emitted first. `.repeat(3)` puts the same block three times in series. The parameters come from the file, so two modules with different graphs are two different-looking devices of the same plugin type — knobs, dropdowns and drag-to-bind all work without the engine knowing anything about them.
 
-The file is **decoded** every time the project compiles, which costs microseconds, so there is nothing to rebuild and nothing to cache. A file that does not read plays the sound through untouched and says which line is wrong: `line 3: graph[1].output[0].amul[0]: "dyr" names nothing`. A loop, a function or a computed number is not in the vocabulary: that is what a Faust module is for.
+The file is **decoded** every time the project compiles, which costs microseconds, so there is nothing to rebuild and nothing to cache. A file that does not read plays the sound through untouched and says which line is wrong: `line 3: graph[1].output[0].amul[0]: "dyr" names nothing`. A loop, a function or a computed number is not in the vocabulary.
 
 The older type `jsdsp`, with a `jsdsp.ts`, is not built any more: it plays the `jsdsp.json` beside it, and a module with none passes the sound through. Write its graph as a `dsp.k7x` and change its type to `dsp`.
 
@@ -454,8 +454,8 @@ the same node on either set.
 
 ```k7x schema=Module
 extends("@k7-core/instruments/wurli-v2") // set 1: the VST
-alternative("faust")
-alternatives([name("faust").extends("@workspace/instruments/faust-wurli")])
+alternative("rhodes")
+alternatives([name("rhodes").extends("@workspace/instruments/rhodes")])
 ```
 
 Not on a **lane**, nor on a lane's **fader**: their sets change their settings — clips, levels —

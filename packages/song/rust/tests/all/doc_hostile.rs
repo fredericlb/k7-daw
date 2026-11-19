@@ -28,18 +28,26 @@ fn modules_line(pairs: &[(String, String)]) -> String {
     format!("modules({{ {} }})\n", body.join(", "))
 }
 
-// 317, 323: 200 steps naming one Faust source of 900 KB read it once and weigh it at every copy, so the walk is capped.
+fn big_graph(nodes: usize) -> String {
+    format!(
+        "{{\"params\":[{{\"name\":\"gain\"}}],\"nodes\":[{}]}}\n",
+        vec!["{\"type\":\"gain\"}"; nodes].join(",")
+    )
+}
+
+// 323: 200 steps naming one jsdsp graph of 900 KB weigh it at every copy, so the walk is capped.
 #[test]
-fn one_faust_source_named_by_many_steps_is_read_once_and_weighed_each_time() {
+fn one_graph_named_by_many_steps_is_weighed_each_time() {
     let mut files = vec![
         ("nodes/gtr.k7x".to_owned(), lane("")),
-        ("nodes/dsp.dsp".to_owned(), "process = _;\n".repeat(64_000)),
+        ("nodes/jsdsp.ts".to_owned(), "export {}\n".to_owned()),
+        ("nodes/jsdsp.json".to_owned(), big_graph(60_000)),
     ];
     let mut pairs = Vec::new();
     for i in 0..200 {
         files.push((
             format!("nodes/f{i}.k7x"),
-            "plugin({ type: \"faust\", name: \"f\" })\n".to_owned(),
+            "plugin({ type: \"jsdsp\", name: \"f\" })\n".to_owned(),
         ));
         pairs.push((
             if i == 0 {
@@ -52,7 +60,7 @@ fn one_faust_source_named_by_many_steps_is_read_once_and_weighed_each_time() {
     }
     pairs.push(("f199".to_owned(), "\"MIX\"".to_owned()));
     files.push(("graph.k7x".to_owned(), modules_line(&pairs)));
-    let c = timed("200 steps of one Faust source", || run(files));
+    let c = timed("200 steps of one graph", || run(files));
     let f = c.engine.as_ref().expect_err("capped");
     assert_eq!(
         f.diagnostics.len(),

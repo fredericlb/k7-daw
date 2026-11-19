@@ -9,7 +9,7 @@ component can carry one line per decision. Its state lives in three hooks — th
 ## Four files, four autosaves
 
 A module is **four documents on disk** — `module.k7x` (what it is), `ui.k7x` (how it is drawn),
-and, when it has them, its own DSP source (a `jsdsp` or `faust` module) and the `widgets.js` that
+and, when it has them, its own DSP source (a `jsdsp` or `dsp` module) and the `widgets.js` that
 draws its screens. Its PRESETS are not among them: a preset is a file of the presets tree, kept
 apart from the module and chosen on a graph node (`packages/song/docs/userPresets.md`).
 

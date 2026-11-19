@@ -25,10 +25,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(MSVC AND CMAKE_GENERATOR MATCHES "Visual Studio")
     add_compile_options(/MP /FS)
 endif()
-# The Visual Studio generator defines _MBCS on every target and Ninja does not; Faust's Windows code branches on it.
-if(MSVC AND NOT CMAKE_GENERATOR MATCHES "Visual Studio")
-    add_compile_definitions(_MBCS)
-endif()
 
 # -----------------------------------------------------------------------------
 # Shared dependencies (fetched once here, consumed by the packages below)
@@ -65,7 +61,7 @@ function(studio_patch_command out script)
     set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${script}"
         "${CMAKE_CURRENT_SOURCE_DIR}/engine/eurorack/patches/studio_replace.cmake")
 endfunction()
-foreach(_patch faust sfizz surge ixwebsocket)
+foreach(_patch sfizz surge ixwebsocket)
     studio_patch_command(STUDIO_PATCH_${_patch} "${CMAKE_CURRENT_SOURCE_DIR}/engine/patches/${_patch}.cmake")
 endforeach()
 studio_patch_command(STUDIO_PATCH_tracktion "${CMAKE_CURRENT_SOURCE_DIR}/engine/patches/tracktion.cmake"
@@ -134,61 +130,6 @@ FetchContent_Declare(rtneural
     GIT_TAG        95c3c0f987a6fe903e7eec71e797405dbed7caf7
     GIT_SUBMODULES ""
     SOURCE_SUBDIR  studio-does-not-build-this)
-
-# --- Faust : compile a module's `dsp.dsp` at runtime (engine) ------------------
-#
-# The INTERPRETER backend, not LLVM. It is already in libfaust's static library by default
-# (build/backends/interp.cmake), it needs no LLVM at all, and it costs ~4 MB in the linked
-# binary where LLVM would cost tens. Measured, with the three traps that came with it:
-# engine/k7-runtime/docs/faust.md.
-#
-# The backend selection is normally made by preloading that file with cmake's `-C`, which
-# FetchContent cannot do — so the same variables are FORCEd here instead. They have to be set
-# BEFORE MakeAvailable, like every other flag that has to reach a fetched target.
-set(C_BACKEND      OFF              CACHE STRING "" FORCE)
-set(CPP_BACKEND    "STATIC DYNAMIC" CACHE STRING "" FORCE)
-set(CMAJOR_BACKEND OFF              CACHE STRING "" FORCE)
-set(CSHARP_BACKEND OFF              CACHE STRING "" FORCE)
-set(DLANG_BACKEND  OFF              CACHE STRING "" FORCE)
-set(FIR_BACKEND    OFF              CACHE STRING "" FORCE)
-set(INTERP_BACKEND OFF              CACHE STRING "" FORCE)
-set(INTERP_COMP_BACKEND "STATIC DYNAMIC" CACHE STRING "" FORCE)
-set(JAVA_BACKEND   OFF              CACHE STRING "" FORCE)
-set(JAX_BACKEND    OFF              CACHE STRING "" FORCE)
-set(JULIA_BACKEND  OFF              CACHE STRING "" FORCE)
-set(JSFX_BACKEND   OFF              CACHE STRING "" FORCE)
-set(LLVM_BACKEND   OFF              CACHE STRING "" FORCE)
-set(OLDCPP_BACKEND OFF              CACHE STRING "" FORCE)
-set(RUST_BACKEND   OFF              CACHE STRING "" FORCE)
-set(TEMPLATE_BACKEND OFF            CACHE STRING "" FORCE)
-set(WASM_BACKEND   OFF              CACHE STRING "" FORCE)
-# The static library and nothing else: no `faust` command-line compiler, no OSC or HTTP
-# servers (the latter wants libmicrohttpd), no emscripten targets.
-set(INCLUDE_STATIC     ON  CACHE BOOL "" FORCE)
-set(INCLUDE_DYNAMIC    OFF CACHE BOOL "" FORCE)
-set(INCLUDE_EXECUTABLE OFF CACHE BOOL "" FORCE)
-set(INCLUDE_OSC        OFF CACHE BOOL "" FORCE)
-set(INCLUDE_HTTP       OFF CACHE BOOL "" FORCE)
-set(INCLUDE_EMCC       OFF CACHE BOOL "" FORCE)
-set(INCLUDE_WASM_GLUE  OFF CACHE BOOL "" FORCE)
-
-# `libraries/` is a SUBMODULE (grame-cncm/faustlibraries) and it is not optional: it is where
-# `import("stdfaust.lib")` resolves. Without it the build succeeds and every module fails to
-# compile at RUNTIME, which is the worst place to find out. Named explicitly rather than
-# recursing, because the other eight submodules are oboe, clap and friends — hundreds of MB
-# for architectures we do not build. Two archives: the tag's, and faustlibraries' at the commit it pins.
-FetchContent_Declare(faust
-    DOWNLOAD_COMMAND ${CMAKE_COMMAND} -DSRC=<SOURCE_DIR>
-        -DURL0=https://codeload.github.com/grame-cncm/faust/tar.gz/refs/tags/2.85.9
-        -DSHA0=a615582af7729b93428a8fd987f9b34261a748f4270ff9608ea9b7b3c5d474da
-        -DURL1=https://codeload.github.com/grame-cncm/faustlibraries/tar.gz/78a72d4998dec43e20492ef9b78d1a785b3dc864
-        -DSHA1=6331b79fff8f767039bb3097aa4bd3df9421c792eab0524a7a47347c0dfc44cb
-        -DDIR1=libraries
-        -P "${CMAKE_CURRENT_SOURCE_DIR}/engine/patches/archive-fetch.cmake"
-    UPDATE_COMMAND ""
-    # poly-dsp.h prints on the audio thread at every voice steal; explained in the script.
-    PATCH_COMMAND ${STUDIO_PATCH_faust}
-    SOURCE_SUBDIR  build)
 
 # --- sfizz : plays SFZ instruments, for SfzPlugin ------------------------------
 # BSD-2, a C++ sampler library: an instrument is a `.sfz` text and the samples it names, so a
@@ -403,7 +344,7 @@ if(WIN32)
     add_compile_definitions(JUCE_ASIO=1)
 endif()
 
-FetchContent_MakeAvailable(nlohmann_json ixwebsocket tracktion_engine nam_core eigen rtneural faust quickjs
+FetchContent_MakeAvailable(nlohmann_json ixwebsocket tracktion_engine nam_core eigen rtneural quickjs
                            eurorack stmlib)
 # sfizz is C++14/17 code (its own pick on MSVC is 17), and ours is 20, under which std::result_of is gone and abseil
 # changes types: built at 17 everywhere, its public header — the only one we include — being plain std.
@@ -431,14 +372,6 @@ if(STUDIO_PHONE)
     add_subdirectory(${tracktion_engine_SOURCE_DIR}/modules/juce ${tracktion_engine_BINARY_DIR}/juce)
     add_subdirectory(${tracktion_engine_SOURCE_DIR}/modules ${tracktion_engine_BINARY_DIR}/modules)
 endif()
-
-# Where engine/CMakeLists.txt finds the headers and the standard libraries. The LIBRARY itself
-# is linked as the `staticlib` TARGET rather than by path — see the note there.
-#
-# The second is a RUNTIME path, not a build one: `import("stdfaust.lib")` is resolved when a
-# module is compiled, which happens while the engine runs. See FaustPlugin::faustLibrariesDir.
-set(STUDIO_FAUST_SRC "${faust_SOURCE_DIR}" CACHE INTERNAL "Faust source")
-set(STUDIO_FAUST_LIBS "${faust_SOURCE_DIR}/libraries" CACHE INTERNAL "Faust standard libraries")
 
 # Where engine/CMakeLists.txt picks the NAM sources and Eigen's headers up from.
 set(STUDIO_NAM_DIR "${nam_core_SOURCE_DIR}" CACHE INTERNAL "NeuralAmpModelerCore source")

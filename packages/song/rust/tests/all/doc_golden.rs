@@ -75,7 +75,7 @@ fn every_golden_engine_document_decodes_strictly_and_re_encodes_equal() {
         }
     }
     assert!(failures.is_empty(), "{}", failures.join("\n"));
-    assert_eq!((all.len(), docs, nulls), (177, 175, 2));
+    assert_eq!((all.len(), docs, nulls), (174, 172, 2));
     assert!(found > 1000, "the integer walker saw {found} fields");
 }
 

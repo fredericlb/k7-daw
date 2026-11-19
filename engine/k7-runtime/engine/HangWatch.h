@@ -19,7 +19,7 @@ enum class Hang { none, callback, messageThread };
 
 // A callback inside the graph this long is not slow, it is stuck: nothing short of a restart frees the audio thread.
 constexpr std::uint32_t kStuckCallbackMs = 10000;
-// A message thread silent this long is wedged: longer than any first apply or Faust compile takes.
+// A message thread silent this long is wedged: longer than any first apply takes.
 constexpr std::uint32_t kStuckMessageThreadMs = 60000;
 // A look that comes this late means the whole process was asleep, not that a thread hung.
 constexpr std::uint32_t kSuspendGapMs = 5000;

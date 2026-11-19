@@ -102,7 +102,7 @@ writes it to the take's wav. The message thread only starts and stops takes and 
 state frame reports.
 
 It cannot share the message thread, because that thread stalls for whole seconds — a first
-`applyFull` instantiating plugins, a Faust compile — and a take drained there laps its ring during
+`applyFull` instantiating plugins — and a take drained there laps its ring during
 any stall longer than the ring, and adds a disk write to every state tick besides.
 
 **The writer holds the nodes, never the session map.** A node is shared between its session and the

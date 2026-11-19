@@ -63,7 +63,7 @@ pub fn plugin_needs(
         if name.is_empty() {
             continue;
         }
-        // jsdsp, Faust and offline are built from the project's own source, on whichever engine plays it.
+        // jsdsp and offline are built from the project's own source, on whichever engine plays it.
         if format != "internal" && !EXTERNAL_FORMATS.contains(&format.as_str()) {
             continue;
         }

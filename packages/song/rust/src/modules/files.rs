@@ -1,7 +1,7 @@
 // modules/files.rs — the params whose value is a FILE, the library folders such a file may come from, and what reaches the engine.
 // A reader would get wrong that `ir` and `model` are not alike: `model` is also the module's own `assets/`, `ir` is a library's alone.
 
-use super::types::{DSP_TYPE, FAUST_TYPE, JSDSP_TYPE, KNOWN_PLUGIN_TYPES};
+use super::types::{DSP_TYPE, JSDSP_TYPE, KNOWN_PLUGIN_TYPES};
 
 /// The params whose value is a FILE the plugin loads, from the module's own `assets/` or the model cache.
 pub const FILE_PARAMS: [&str; 2] = ["model", "onnx"];
@@ -55,5 +55,5 @@ pub fn is_library_file_of(family: &str, path: &str) -> bool {
 /// Whether a module's `plugin.type` becomes an engine plugin; `offline` does not, its pass writes to disk first.
 pub fn reaches_engine(raw_type: &str) -> bool {
     let t = raw_type.to_lowercase();
-    t == "internal" || t == JSDSP_TYPE || t == DSP_TYPE || t == FAUST_TYPE || is_external_format(&t)
+    t == "internal" || t == JSDSP_TYPE || t == DSP_TYPE || is_external_format(&t)
 }

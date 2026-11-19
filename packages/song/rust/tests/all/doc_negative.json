@@ -334,92 +334,6 @@
   }
  },
  {
-  "name": "plugin-faust-with-files",
-  "category": "plugins",
-  "ts": true,
-  "mem": true,
-  "files": {
-   "project.k7x": "project({ name: \"n\" })\n",
-   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
-   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
-   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"w.wav\", gain: 1 })\n",
-   "nodes/dsp.dsp": "process = _;\n",
-   "w.wav": "x"
-  },
-  "expect": {
-   "stopped": [],
-   "warned": [],
-   "doc": {
-    "/tracks/0/plugins/0/faustDsp": "process = _;\n",
-    "/tracks/0/plugins/0/faustFiles#len": 1
-   },
-   "freezes": {}
-  }
- },
- {
-  "name": "plugin-faust-file-missing",
-  "category": "plugins",
-  "ts": true,
-  "mem": true,
-  "files": {
-   "project.k7x": "project({ name: \"n\" })\n",
-   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
-   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
-   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"gone.wav\" })\n",
-   "nodes/dsp.dsp": "process = _;\n"
-  },
-  "expect": {
-   "stopped": [],
-   "warned": [],
-   "doc": {
-    "/tracks/0/plugins/0/faustFiles/Table": "gone.wav"
-   },
-   "freezes": {}
-  }
- },
- {
-  "name": "plugin-faust-file-escapes",
-  "category": "plugins",
-  "ts": true,
-  "mem": true,
-  "files": {
-   "project.k7x": "project({ name: \"n\" })\n",
-   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
-   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
-   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"../../x.wav\" })\n",
-   "nodes/dsp.dsp": "process = _;\n"
-  },
-  "expect": {
-   "stopped": [],
-   "warned": [],
-   "doc": {
-    "/tracks/0/plugins/0/faustDsp": "process = _;\n",
-    "/tracks/0/plugins/0/faustFiles": null
-   },
-   "freezes": {}
-  }
- },
- {
-  "name": "plugin-faust-source-missing",
-  "category": "plugins",
-  "ts": true,
-  "mem": true,
-  "files": {
-   "project.k7x": "project({ name: \"n\" })\n",
-   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
-   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
-   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\n"
-  },
-  "expect": {
-   "stopped": [],
-   "warned": [],
-   "doc": {
-    "/tracks/0/plugins/0/faustDsp": null
-   },
-   "freezes": {}
-  }
- },
- {
   "name": "rack-samples",
   "category": "racks",
   "ts": true,
@@ -1744,28 +1658,6 @@
    "doc": {
     "/tracks/0/id": "9",
     "/tracks/1/id": "10"
-   },
-   "freezes": {}
-  }
- },
- {
-  "name": "faust-file-in-the-workspace-modules",
-  "category": "plugins",
-  "ts": true,
-  "mem": true,
-  "files": {
-   "project.k7x": "project({ name: \"n\" })\n",
-   "graph.k7x": "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n",
-   "nodes/gtr.k7x": "extends(\"@meta/track\")\n",
-   "nodes/f.k7x": "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"../_modules/t.wav\" })\n",
-   "nodes/dsp.dsp": "process = _;\n",
-   "../_modules/t.wav": "w"
-  },
-  "expect": {
-   "stopped": [],
-   "warned": [],
-   "doc": {
-    "/tracks/0/plugins/0/faustFiles#len": 1
    },
    "freezes": {}
   }

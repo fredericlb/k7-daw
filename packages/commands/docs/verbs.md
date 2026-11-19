@@ -228,13 +228,6 @@ splitting the lane's chain in two and renaming its file, which nobody asked for.
 project has no chain to put a step in, so there it is a node and a cable. A lane something already
 feeds is refused (`runCarriesInput`), the input being the one thing a lane takes.
 
-## `node param` on a Faust node takes a FILE for a string
-
-A Faust program's knobs are all numbers, so on a node that compiles to the Faust host a value that
-is not one names the sound file of the program's `soundfile` slot of that name
-(`packages/song/docs/faustFiles.md`). A library ref is checked against the `wavetables/` and
-`samples/` the panel's picker offers, the way `setFileParam` checks an `ir`; `none` clears it.
-
 ## `task …` — the workspace's TODOS.md, addressed by number
 
 The four task verbs write `TODOS.md` at the WORKSPACE root (`h.repoDir`), never the song's folder,
