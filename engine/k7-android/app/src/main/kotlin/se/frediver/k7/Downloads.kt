@@ -123,36 +123,36 @@ class Downloads(private val activity: AppCompatActivity) {
     }
 }
 
-/** Which downloads of a view are fetched by its page (download.js) rather than handed outside, for AppViewsPlugin. */
+/** Which downloads of k7's view are fetched by its page (download.js) rather than handed outside, for AppViewsPlugin. */
 class DownloadRoutes(
     private val downloadJs: String,
-    private val appOf: (Uri) -> String?,
+    private val isK7: (Uri) -> Boolean,
     private val outside: (Uri) -> Unit,
 ) {
-    // Each view's script, injected for its app's origin only and swapped when the studio changes.
-    private val scripts = mutableMapOf<String, Pair<String, ScriptHandler>>()
+    // The view's script, injected for k7's origin only.
+    private var script: Pair<String, ScriptHandler>? = null
 
-    /** download.js for `id`'s app origin alone: the bridge drops another origin's messages, so its clicks must stay the WebView's. */
-    fun inject(id: String, view: WebView, address: Uri) {
+    /** download.js for k7's origin alone: the bridge drops another origin's messages, so its clicks must stay the WebView's. */
+    fun inject(view: WebView, address: Uri) {
         if (!WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) return
         val origin = "${address.scheme}://${address.host}" + (if (address.port != -1) ":${address.port}" else "")
-        if (scripts[id]?.first == origin) return
-        scripts.remove(id)?.second?.remove()
-        scripts[id] = origin to WebViewCompat.addDocumentStartJavaScript(view, downloadJs, setOf(origin))
+        if (script?.first == origin) return
+        script?.second?.remove()
+        script = origin to WebViewCompat.addDocumentStartJavaScript(view, downloadJs, setOf(origin))
     }
 
-    /** `id`'s view destroyed: its script went with it, and the next view needs its own. */
-    fun forget(id: String) {
-        scripts.remove(id)
+    /** The view destroyed: its script went with it, and the next view needs its own. */
+    fun forget() {
+        script = null
     }
 
-    /** What the WebView itself would download: the app's own files are fetched by its page and saved, the rest go outside. */
-    fun fromListener(view: WebView, id: String, url: Uri, disposition: String?, mime: String?) {
-        val onApp = view.url?.let { appOf(Uri.parse(it)) } == id
+    /** What the WebView itself would download: k7's own files are fetched by its page and saved, the rest go outside. */
+    fun fromListener(view: WebView, url: Uri, disposition: String?, mime: String?) {
+        val onApp = view.url?.let { isK7(Uri.parse(it)) } == true
         val ours = when (url.scheme?.lowercase()) {
             "data" -> true
-            "blob" -> appOf(Uri.parse(url.schemeSpecificPart)) == id
-            else -> appOf(url) == id
+            "blob" -> isK7(Uri.parse(url.schemeSpecificPart))
+            else -> isK7(url)
         }
         if (!onApp || !ours) return outside(url)
         val name = disposition?.let { URLUtil.guessFileName(url.toString(), it, mime) } ?: ""

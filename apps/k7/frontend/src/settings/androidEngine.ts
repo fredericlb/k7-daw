@@ -28,8 +28,6 @@ interface EngineState
 export interface EngineSnapshot {
   state?: EngineState;
   engineExit?: number;
-  /** k7's origin for the studio the app's views open. */
-  studio: string | null;
 }
 
 const phone = window as { k7Android?: Channel; k7Ios?: Channel };
@@ -71,7 +69,6 @@ export function engineCall<T = Record<string, never>>(
     | "casInfo"
     | "importCa"
     | "forgetCas"
-    | "chooseStudio"
     | "immersive"
     | "setImmersive"
     | "quit",

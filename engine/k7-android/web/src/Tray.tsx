@@ -1,7 +1,7 @@
-// Tray.tsx — this page's one screen, seen while no studio app covers it: the supervisor's snapshot
+// Tray.tsx — this page's one screen, seen while k7 does not cover it: the supervisor's snapshot
 // and the few commands a phone needs — pair a LAN device, trust a private CA, quit.
-// With a studio open, k7's settings draw the same (apps/k7/frontend/src/settings/AndroidEngineSection.tsx).
-// The forms are collapsed: the phone's own studio needs none of them, and the first screen is the engine's state.
+// With k7 open, its settings draw the same (apps/k7/frontend/src/settings/AndroidEngineSection.tsx).
+// The forms are collapsed: the phone's own backend needs none of them, and the first screen is the engine's state.
 
 import { Capacitor } from "@capacitor/core";
 import { Button } from "@studio/ui/button";
@@ -18,7 +18,7 @@ const SYSTEM_CAS_INLINE = ON_IOS ? "the built-in CAs" : "Android's CAs";
 export interface TrayProps {
   state: SupervisorState | null;
   engineExit: number | null;
-  /** The open studio's certificate was refused: the private CA is the likely fix, so it opens. */
+  /** k7's certificate was refused: the private CA is the likely fix, so it opens. */
   certFailed: boolean;
 }
 

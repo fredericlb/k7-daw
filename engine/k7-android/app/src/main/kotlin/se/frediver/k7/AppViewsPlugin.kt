@@ -1,8 +1,8 @@
-// AppViewsPlugin.kt — the studio apps, each in a full-screen WebView of its own over the shell page (web/src/App.tsx,
-// AppViews), under a status-bar strip painted the colour of the app's own header; who is signed in is k7's home page's. They load from
-// the connected studio rather than from this APK: each app is same-origin with its backend (`/api`, `/auth`, cookie
-// sessions), so a bundled copy would be an app with no server. A view is made the first time it is shown and then
-// only hidden, so an app keeps its state — a track playing in k7's media library — while another is on screen.
+// AppViewsPlugin.kt — k7 in one full-screen WebView over the shell page (web/src/App.tsx, AppViews), under a
+// status-bar strip painted the colour of k7's own header; who is signed in is k7's home page's. The page loads from
+// this phone's own backend rather than from this APK: it is same-origin with its backend (`/api`, `/auth`, cookie
+// sessions), so a bundled copy would be an app with no server. The view is made the first time it is shown and then
+// only hidden, so k7 keeps its state, a track playing in the media library included, while the shell page is on screen.
 // See docs/android.md.
 
 package se.frediver.k7
@@ -48,9 +48,8 @@ class AppViewsPlugin : Plugin() {
     private lateinit var frame: FrameLayout
     // Under the status bar, in the visible app's top colour.
     private lateinit var strip: View
-    private var studio: String? = null
     private lateinit var appBridge: StudioBridge
-    private val colors = mutableMapOf<String, Int>()
+    private var color = Color.TRANSPARENT
     private var lightBarsBefore = false
     private lateinit var topColorJs: String
     private lateinit var accountJs: String
@@ -58,11 +57,9 @@ class AppViewsPlugin : Plugin() {
     private lateinit var backJs: String
     private lateinit var downloads: DownloadRoutes
     private val onBackend: (BackendHost.Status) -> Unit = { s -> bridge.executeOnMainThread { notifyListeners("backend", statusJs(s)) } }
-    private val views = mutableMapOf<String, WebView>()
-    // The address each view was last pointed at by `apps`: a changed studio reloads it, a tab switch does not.
-    private val loaded = mutableMapOf<String, String>()
-    private var apps: Map<String, Uri> = emptyMap()
-    private var visible: String? = null
+    private var view: WebView? = null
+    private var loaded = false
+    private var visible = false
     private var topPx = 0
     // The navigation bar and the keyboard, measured up from the WINDOW's bottom, which the frame may already stop short of.
     private var bottomInsetPx = 0
@@ -72,17 +69,17 @@ class AppViewsPlugin : Plugin() {
     private lateinit var pickFiles: ActivityResultLauncher<Intent>
     private var chooser: ValueCallback<Array<Uri>>? = null
     private var localSignInAt = 0L
-    // This plugin's number among those the process made, for the views lost before it (RendererLoss.kt).
+    // This plugin's number among those the process made, for the view lost before it (RendererLoss.kt).
     private var generation = 0
 
     override fun load() {
         generation = RendererLoss.nextGeneration()
-        // The shell page's renderer is every view's: the apps it drew are marked lost, and the activity made again.
-        bridge.addWebViewListener(RendererLoss.shell(activity, bridge.webView) { why -> views.keys.forEach { RendererLoss.lost(it, generation, why) } })
+        // The shell page's renderer is the view's: k7 is marked lost, and the activity made again.
+        bridge.addWebViewListener(RendererLoss.shell(activity, bridge.webView) { why -> RendererLoss.lost(VIEW, generation, why) })
         // The shell page's ports too, from BuildConfig: its bundle's own are standalone.json's, and the e2e build has another (main.tsx).
         if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT))
             WebViewCompat.addDocumentStartJavaScript(bridge.webView, "window.$PORTS_GLOBAL='${BackendHost.PORTS_SPEC}';", setOf("https://localhost"))
-        // Over the page's WebView, in the same layout, the whole screen: the shell page is only seen with no studio.
+        // Over the page's WebView, in the same layout, the whole screen: the shell page is only seen while k7 is not up.
         frame = FrameLayout(context).apply { visibility = View.GONE }
         (bridge.webView.parent as ViewGroup).addView(
             frame,
@@ -90,7 +87,7 @@ class AppViewsPlugin : Plugin() {
         )
         strip = View(context)
         frame.addView(strip, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 0))
-        // The views start below the status bar and the cutout, stop short of the navigation bar and the keyboard, and in landscape clear both sides.
+        // The view starts below the status bar and the cutout, stop short of the navigation bar and the keyboard, and in landscape clear both sides.
         ViewCompat.setOnApplyWindowInsetsListener(frame) { _, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
             topPx = bars.top
@@ -106,27 +103,26 @@ class AppViewsPlugin : Plugin() {
         topColorJs = context.assets.open("top-color.js").bufferedReader().use { it.readText() }
         accountJs = context.assets.open("account.js").bufferedReader().use { it.readText() }
         mediaSessionJs = context.assets.open("media-session.js").bufferedReader().use { it.readText() }
-        downloads = DownloadRoutes(context.assets.open("download.js").bufferedReader().use { it.readText() }, ::appOf, ::openOutside)
+        downloads = DownloadRoutes(context.assets.open("download.js").bufferedReader().use { it.readText() }, ::isK7, ::openOutside)
         backJs = context.assets.open("back.js").bufferedReader().use { it.readText() }
         appBridge = StudioBridge(
             activity,
-            ::appOf,
-            onColor = { id, color ->
-                colors[id] = color
-                if (id == visible) paint()
+            ::isK7,
+            onColor = {
+                color = it
+                if (visible) paint()
             },
             onAccount = { name -> activity.runOnUiThread { onAccount(name) } },
-            onChooseStudio = { notifyListeners("studio", JSObject().put("origin", it)) },
         )
 
         // Back is the page's first (back.js), then the view's history, then the system's: the task moves back on 12+, the activity finishes on 10 and 11.
         back = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
-                val view = views[visible] ?: return passBack()
-                view.evaluateJavascript(backJs) { used ->
+                val shown = view?.takeIf { visible } ?: return passBack()
+                shown.evaluateJavascript(backJs) { used ->
                     when {
                         used == "true" -> Unit
-                        view.canGoBack() -> view.goBack()
+                        shown.canGoBack() -> shown.goBack()
                         else -> passBack()
                     }
                     syncBack()
@@ -151,23 +147,18 @@ class AppViewsPlugin : Plugin() {
         BackendHost.unwatch(onBackend)
         appBridge.destroy()
         pickFiles.unregister()
-        views.values.forEach { it.destroy() }
-        views.clear()
+        view?.destroy()
+        view = null
     }
 
     @PluginMethod
     fun show(call: PluginCall) {
-        val id = call.getString("id") ?: return call.reject("no id")
-        val given = call.getObject("apps") ?: return call.reject("no apps")
-        val url = call.getString("url")
-        val studio = call.getString("studio")
-        // The phone's own studio is not up yet on a first run, which is still unpacking: wait rather than fail.
-        if (studio == BackendHost.ORIGIN) BackendHost.whenReady(
-            { bridge.executeOnMainThread { show(call, id, given, url, studio) } },
+        // The phone's own backend is not up yet on a first run, which is still unpacking: wait rather than fail.
+        BackendHost.whenReady(
+            { bridge.executeOnMainThread { showNow(call) } },
             // Given up on (BackendHost.kt): the shell page's retry is what asks it to start again.
-            { why -> bridge.executeOnMainThread { loadFailed(id, "k7 could not start: $why"); call.resolve() } },
+            { why -> bridge.executeOnMainThread { loadFailed("k7 could not start: $why"); call.resolve() } },
         )
-        else bridge.executeOnMainThread { show(call, id, given, url, studio) }
     }
 
     /** Where the phone's own backend is: `starting` (with `step`, `progress`), `ready` or `failed` (with `message`); then `backend` events. */
@@ -189,32 +180,25 @@ class AppViewsPlugin : Plugin() {
         call.resolve()
     }
 
-    private fun show(call: PluginCall, id: String, given: JSObject, url: String?, studio: String?) {
-        apps = given.keys().asSequence().associateWith { Uri.parse(given.getString(it)) }
-        val address = apps[id]?.toString() ?: return call.reject("no address for $id")
+    private fun showNow(call: PluginCall) {
         // Lost under the activity before this one: said once, so the page's Retry, not a reload, makes it again.
-        RendererLoss.unseen(id, generation)?.let { why ->
-            loadFailed(id, why)
+        RendererLoss.unseen(VIEW, generation)?.let { why ->
+            loadFailed(why)
             return call.resolve()
         }
-        appBridge.setStudio(studio)
-        this.studio = studio
-        val view = views.getOrPut(id) { create(id) }
-        downloads.inject(id, view, Uri.parse(address))
-        // On the phone's own studio k7 opens as the local user, as the desktop window does (BackendHost.home).
-        when {
-            url != null -> view.loadUrl(url)
-            loaded[id] != address -> view.loadUrl(if (studio == BackendHost.ORIGIN && id == "k7") BackendHost.home() else address)
-        }
-        loaded[id] = address
-        views.forEach { (key, v) -> v.visibility = if (key == id) View.VISIBLE else View.GONE }
-        visible = id
+        val v = view ?: create().also { view = it }
+        downloads.inject(v, Uri.parse(BackendHost.ORIGIN))
+        // k7 opens as the local user, as the desktop window does (BackendHost.home).
+        if (!loaded) v.loadUrl(BackendHost.home())
+        loaded = true
+        v.visibility = View.VISIBLE
+        visible = true
         frame.visibility = View.VISIBLE
         // A frame that was gone may never have been given the insets.
         ViewCompat.requestApplyInsets(frame)
         place()
         paint()
-        view.requestFocus()
+        v.requestFocus()
         syncBack()
         call.resolve()
     }
@@ -222,7 +206,7 @@ class AppViewsPlugin : Plugin() {
     @PluginMethod
     fun hideAll(call: PluginCall) = bridge.executeOnMainThread {
         frame.visibility = View.GONE
-        visible = null
+        visible = false
         barIcons().isAppearanceLightStatusBars = lightBarsBefore
         bridge.webView.requestFocus()
         syncBack()
@@ -230,27 +214,24 @@ class AppViewsPlugin : Plugin() {
     }
 
     @PluginMethod
-    fun reload(call: PluginCall) {
-        val id = call.getString("id") ?: return call.reject("no id")
-        bridge.executeOnMainThread {
-            views[id]?.reload()
-            call.resolve()
-        }
+    fun reload(call: PluginCall) = bridge.executeOnMainThread {
+        view?.reload()
+        call.resolve()
     }
 
-    /** Who the studio says is signed in; on the phone's own studio nobody means back to the local user, as on desktop. */
+    /** Who k7 says is signed in; nobody means back to the local user, as on desktop. */
     private fun onAccount(name: String?) {
-        if (name != null || studio != BackendHost.ORIGIN) return
+        if (name != null) return
         val now = System.currentTimeMillis()
         // Once in a while at most: a local sign-in that keeps failing must not reload forever.
         if (now - localSignInAt < LOCAL_SIGN_IN_GAP_MS) return
         localSignInAt = now
-        views["k7"]?.loadUrl(BackendHost.LOCAL_HOME)
+        view?.loadUrl(BackendHost.LOCAL_HOME)
     }
 
     private fun place() {
         strip.layoutParams = strip.layoutParams.apply { height = topPx }
-        views.values.forEach { v ->
+        view?.let { v ->
             v.layoutParams = (v.layoutParams as FrameLayout.LayoutParams).apply {
                 topMargin = topPx
                 leftMargin = leftPx
@@ -271,16 +252,15 @@ class AppViewsPlugin : Plugin() {
 
     // Until the page has said, the shell page's own background shows through.
     private fun paint() {
-        val color = colors[visible] ?: Color.TRANSPARENT
         strip.setBackgroundColor(color)
         if (color != Color.TRANSPARENT) barIcons().isAppearanceLightStatusBars = ColorUtils.calculateLuminance(color) > 0.5
     }
 
     private fun barIcons() = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
 
-    // Taken whenever an app is on screen, since only the page knows whether it has something open to close.
+    // Taken whenever k7 is on screen, since only the page knows whether it has something open to close.
     private fun syncBack() {
-        back.isEnabled = views[visible] != null
+        back.isEnabled = visible && view != null
     }
 
     /** The Back nobody here used, handed to the activity with this callback out of the way. */
@@ -291,22 +271,22 @@ class AppViewsPlugin : Plugin() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun create(id: String): WebView = WebView(context).apply {
+    private fun create(): WebView = WebView(context).apply {
         // The splash's colour until the page paints, not the WebView's black between the shell and k7's splash.
         setBackgroundColor(ContextCompat.getColor(context, R.color.splash_background))
         settings.javaScriptEnabled = true
         settings.domStorageEnabled = true
         settings.mediaPlaybackRequiresUserGesture = false
-        // target=_blank and window.open reach onCreateWindow, where a link to a sibling app becomes a tab switch.
+        // target=_blank and window.open reach onCreateWindow, where the link goes outside.
         settings.setSupportMultipleWindows(true)
         settings.javaScriptCanOpenWindowsAutomatically = true
-        // How an app can tell it is inside this one, should it ever need to.
+        // How the page can tell it is inside this app, should it ever need to.
         settings.userAgentString = "${settings.userAgentString} k7-android"
-        webViewClient = AppClient(id)
+        webViewClient = AppClient()
         webChromeClient = AppChrome()
-        setDownloadListener { url, _, disposition, mime, _ -> downloads.fromListener(this, id, Uri.parse(url), disposition, mime) }
-        appBridge.attach(this, id)
-        // The phone's own studio is a loopback one, whose pages derive each service's address from this table, as the desktop's preload gives it.
+        setDownloadListener { url, _, disposition, mime, _ -> downloads.fromListener(this, Uri.parse(url), disposition, mime) }
+        appBridge.attach(this)
+        // The phone's own backend is a loopback one, whose pages derive each service's address from this table, as the desktop's preload gives it.
         if (WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)) {
             WebViewCompat.addDocumentStartJavaScript(this, "window.$PORTS_GLOBAL='${BackendHost.PORTS_SPEC}';", setOf(BackendHost.ORIGIN))
             // Before the page's own scripts, which may set a media session as they load; StudioBridge checks the origin.
@@ -322,9 +302,11 @@ class AppViewsPlugin : Plugin() {
         )
     }
 
-    /** Which app `url` is one of, by origin; null for anywhere else. */
-    private fun appOf(url: Uri): String? =
-        apps.entries.firstOrNull { (_, home) -> home.scheme == url.scheme && home.host == url.host && home.port == url.port }?.key
+    /** Whether `url` is k7's own origin. */
+    private fun isK7(url: Uri): Boolean {
+        val home = Uri.parse(BackendHost.ORIGIN)
+        return home.scheme == url.scheme && home.host == url.host && home.port == url.port
+    }
 
     /** Somewhere this app does not show: the browser, the mail app, the dialer — and only those, by scheme. */
     private fun openOutside(url: Uri) {
@@ -340,46 +322,31 @@ class AppViewsPlugin : Plugin() {
         }
     }
 
-    /** A link the user followed into another tab's app: the page switches tab, and that view loads it. */
-    private fun navigate(id: String, url: Uri) =
-        notifyListeners("navigate", JSObject().put("id", id).put("url", url.toString()))
+    /** k7 did not load: the shell page takes over, with the tray and a retry, since no page is there to reach settings in. */
+    private fun loadFailed(why: String) =
+        notifyListeners("loadError", JSObject().put("message", why))
 
-    /** The studio did not answer: the shell page takes over, with the tray and a retry, since no app is there to reach settings in. */
-    private fun loadFailed(id: String, why: String) =
-        notifyListeners("loadError", JSObject().put("id", id).put("message", why))
-
-    /** A view whose renderer is gone, never to be used again: made anew by the next show, after the shell page's Retry. */
-    private fun drop(id: String, view: WebView, why: String) {
-        RendererLoss.lost(id, generation, why)
-        if (views[id] !== view) return
-        views.remove(id)
-        loaded.remove(id)
-        downloads.forget(id)
-        frame.removeView(view)
-        view.destroy()
+    /** The view's renderer is gone, never to be used again: made anew by the next show, after the shell page's Retry. */
+    private fun drop(gone: WebView, why: String) {
+        RendererLoss.lost(VIEW, generation, why)
+        if (view !== gone) return
+        view = null
+        loaded = false
+        downloads.forget()
+        frame.removeView(gone)
+        gone.destroy()
         syncBack()
-        loadFailed(id, why)
+        loadFailed(why)
     }
 
-    /** Where a new window was headed: a sibling app's tab, or outside. */
-    private fun route(url: Uri) {
-        val to = appOf(url)
-        if (to != null) navigate(to, url) else openOutside(url)
-    }
-
-    private inner class AppClient(private val id: String) : WebViewClient() {
+    private inner class AppClient : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
             val url = request.url
             if (url.scheme != "http" && url.scheme != "https") {
                 openOutside(url)
                 return true
             }
-            // Only a link the user followed moves tabs; a redirect or a script's navigation stays put.
-            if (!request.isForMainFrame || !request.hasGesture() || request.isRedirect) return false
-            val to = appOf(url) ?: return false
-            if (to == id) return false
-            navigate(to, url)
-            return true
+            return false
         }
 
         override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) = syncBack()
@@ -391,35 +358,35 @@ class AppViewsPlugin : Plugin() {
 
         // Every view must claim its renderer's loss, or Android ends the process, engine and all (RendererLoss.kt).
         override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
-            drop(id, view, RendererLoss.why(detail))
+            drop(view, RendererLoss.why(detail))
             return true
         }
 
         override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
-            if (request.isForMainFrame) loadFailed(id, error.description.toString())
+            if (request.isForMainFrame) loadFailed(error.description.toString())
         }
 
-        // A studio behind the user's own CA: the WebView knows only Android's, so the CAs the tray was
-        // given (TrustedCas) are asked here — the same ones the supervisor trusts.
+        // Imported CAs: the WebView knows only Android's, so the ones the tray was given (TrustedCas)
+        // are asked here — the same ones the supervisor trusts.
         @SuppressLint("WebViewClientOnReceivedSslError")
         override fun onReceivedSslError(view: WebView, handler: SslErrorHandler, error: SslError) {
             if (TrustedCas.vouch(context, error)) return handler.proceed()
             handler.cancel()
-            // The studio's own certificate, not some embed's: nothing of the app can load.
-            if (appOf(Uri.parse(error.url)) == id) loadFailed(id, "the studio's certificate is not trusted")
+            // k7's own certificate, not some embed's: nothing of the app can load.
+            if (isK7(Uri.parse(error.url))) loadFailed("k7's certificate is not trusted")
         }
     }
 
     private inner class AppChrome : WebChromeClient() {
-        // The microphone and the camera, to the studio's own apps only, each asked on first need (PageCapture.kt).
+        // The microphone and the camera, to k7's own page only, each asked on first need (PageCapture.kt).
         override fun onPermissionRequest(request: PermissionRequest) {
-            val devices = PageCapture.devices(request.resources, appOf(request.origin) != null)
+            val devices = PageCapture.devices(request.resources, isK7(request.origin))
             activity.runOnUiThread {
                 val main = activity as? MainActivity
                 if (devices == null || main == null) return@runOnUiThread request.deny()
                 // Blocked for good: the page hears why its getUserMedia failed, beside the native dialog.
                 PageCapture.answer(request, devices, main::access) { device ->
-                    views.values.forEach { it.evaluateJavascript("dispatchEvent(new CustomEvent('${device.event}'))", null) }
+                    view?.evaluateJavascript("dispatchEvent(new CustomEvent('${device.event}'))", null)
                 }
             }
         }
@@ -440,14 +407,16 @@ class AppViewsPlugin : Plugin() {
             return true
         }
 
-        // A new window is never opened: a throwaway view learns where it was headed, and that is routed (WindowProbe.kt).
+        // A new window is never opened: a throwaway view learns where it was headed, and that goes outside (WindowProbe.kt).
         override fun onCreateWindow(view: WebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message): Boolean {
-            WindowProbe.answer(context, resultMsg) { route(it) }
+            WindowProbe.answer(context, resultMsg) { openOutside(it) }
             return true
         }
     }
 
     companion object {
+        // The one view's key where the helpers keep state per view (RendererLoss, Busy).
+        private const val VIEW = "k7"
         private const val LOCAL_SIGN_IN_GAP_MS = 5_000L
         // web-protocol's PORTS_GLOBAL, the name every page reads the loopback ports from.
         private const val PORTS_GLOBAL = "__STUDIO_PORTS__"

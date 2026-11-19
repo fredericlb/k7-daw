@@ -1,5 +1,5 @@
 // Backend.tsx — the phone's own k7 while it is not up yet (BackendHost.kt): a first run unpacks for a few seconds,
-// and a start that failed says why with a Retry, since no app view can open on a studio that never answered.
+// and a start that failed says why with a Retry, since k7 cannot open on a backend that never answered.
 // The wait is the startup splash, full screen over the tray, on the colour the native launch screen drew (k7's docs/icons.md).
 
 import { Button } from "@studio/ui/button";
