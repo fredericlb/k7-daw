@@ -19,7 +19,7 @@ OS must be the 64-bit Pi OS — the image is arm64 only.
 
 | choice | why |
 |---|---|
-| built on an arm64 machine, not on the Pi | the engine is Tracktion, JUCE, sfizz, Surge, Faust and Eigen; on 1 GB of RAM a unity file swaps for hours. An Apple Silicon Mac builds `linux/arm64` natively. |
+| built on an arm64 machine, not on the Pi | the engine is Tracktion, JUCE, sfizz, Surge and Eigen; on 1 GB of RAM a unity file swaps for hours. An Apple Silicon Mac builds `linux/arm64` natively. |
 | `-mcpu=cortex-a53` | schedules for the Pi 3's in-order core, where Eigen's inner loops gain most; the instructions stay ARMv8.0, so a Pi 4 or 5 runs the same image. No `-march=native` anywhere, which would have built for the build machine. |
 | ALSA straight to the card, no PulseAudio | the server image needs Pulse for a clock it lacks; a Pi has a card, and a sound server in between is latency and CPU on the one machine that has neither to spare. |
 | `type hw`, not `plughw` | a rate the card refuses fails loudly in the log instead of costing a resampler. |

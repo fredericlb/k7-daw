@@ -34,7 +34,6 @@ those lanes are checked for playing, not for sound.
 | `surge-synth.k7` | a chord into Surge XT on the library's default patch, no `base` set | `specs/app/surge.spec.ts`: the engine document names `Pads/Bell Pad`, then the lane and play |
 | `eurorack.k7` | Mutable Instruments engines: mu-macro-osc on plaits (into mu-clouds) and on braids, and mu-rings, one lane each | `specs/app/engines.spec.ts`: the engine document names `mu-plaits`, `mu-clouds`, `mu-braids`, `mu-rings`, then the lanes and play |
 | `eurorack-surge.k7` | a Plaits node and a Surge XT node in one project: Surge's renamed plaits/clouds/stmlib must not clash | `specs/app/engines.spec.ts`: `mu-plaits` and `Surge XT` on `Pads/Bell Pad`, then both lanes and play |
-| `faust.k7` | notes into the Faust wavetable synth through the Faust moog-ladder engine of `lowpass` | `specs/app/engines.spec.ts`: both nodes are `Faust` with their source inline, then the lane and play |
 | `sampler.k7` | notes into `@k7-core/instruments/sampler` (Tracktion's Sampler) | `specs/app/engines.spec.ts`: the node is a Sampler (`test.fail`: type `builtin` is dropped), then the lane and play |
 | `library-module.k7` | a node extending an `@k7-core` library module | the lane, then play |
 | `jsdsp-fx.k7` | jsdsp library effects in series after a synth: chorus and phaser (`classic`), overdrive (`one-knob`), auto-wah | `specs/app/effects.spec.ts`: four `DSP Graph` plugins with their graphs' params, then the lane and play |

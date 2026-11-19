@@ -20,8 +20,6 @@ pub const CONSOLE_HALVES: [&str; 2] = ["channel", "buss"];
 
 const DSP_GRAPH_PLUGIN: &str = "DSP Graph";
 const MIDI_GRAPH_PLUGIN: &str = "MIDI Graph";
-const FAUST_TYPE: &str = "faust";
-const FAUST_PLUGIN: &str = "Faust";
 
 /// A system as a picker lists it: the ref a project names, and what to call it.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
@@ -79,9 +77,6 @@ pub fn engine_plugin(plugin: Option<&Plugin>, fallback: &str, emits: Option<&str
         };
         return (host.to_owned(), fallback.to_owned());
     }
-    if kind == FAUST_TYPE {
-        return (FAUST_PLUGIN.to_owned(), fallback.to_owned());
-    }
     if kind == "internal" {
         return (name.to_owned(), fallback.to_owned());
     }
@@ -103,7 +98,7 @@ pub struct HalfPlugin {
     pub role: String,
     pub enabled: bool,
     pub params: IndexMap<String, f64>,
-    /// Whether the engine name is the plugin's own id (a jsdsp, faust or internal half, or one with no name).
+    /// Whether the engine name is the plugin's own id (a jsdsp or internal half, or one with no name).
     #[serde(skip)]
     named_by_id: bool,
 }

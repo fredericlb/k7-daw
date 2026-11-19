@@ -43,10 +43,6 @@ choose. The type folder already says which a module is; making the author say it
 `plugin:` would be a second answer, free to disagree with the first. `moduleEmits` is that one
 answer, and `nodeProject.ts` is where it is asked.
 
-The same holds for `faust`, whose host is `Faust` either way: a Faust program that takes MIDI is a
-polyphonic INSTRUMENT, not a note effect, and `engine/k7-runtime/docs/faust.md` says how the
-program itself declares that.
-
 ## The scan cache — engineCatalogue.ts
 
 `<state>/exts.json` is a CONTRACT path: the C++ engine writes and reads the same file
@@ -111,3 +107,17 @@ engine module without pulling `node:fs` in behind it, and it is re-exported from
 the same reason plus one more: the BUILDER has to recognise `extends: "@meta/IN"` to know it is
 editing an input, and it runs in a browser
 ([inputChannels.md](../../ui-module-builder/docs/inputChannels.md)).
+
+## The four gates
+
+A `plugin.type` word must be known to four places, and the one you forget says nothing: forgetting the
+second makes the module disappear *silently* from the compiled document.
+
+| file | what it does |
+|---|---|
+| `moduleRefs.ts` `dspSourceFor` | resolves a DSP source against the module's folder |
+| `compile/plugins.ts` `reachesEngine` | the compiler's gate: an unknown type is dropped without a word |
+| `graphDoc.ts` `known` | the node's colour: red means "the engine cannot load this" |
+| `enginePlugin` (engine-protocol/build.ts) | the mapping onto the built-in plugin |
+
+The Rust crate holds the same four (`modules/files.rs`, `graph/view/flags.rs`, `console.rs`).

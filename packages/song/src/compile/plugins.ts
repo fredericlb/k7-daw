@@ -16,7 +16,6 @@ import { isSurgePatch } from "../basePreset";
 import { confineTo } from "../confine";
 import { envelopeFires } from "../curveConditions";
 import { bakeAdsr, bakeCurve, loadCurves } from "../curves";
-import { faustFilesOf } from "../faustFiles";
 import { resolvedRack, resolvedType } from "../moduleResolve";
 import {
   heldParams,
@@ -29,12 +28,10 @@ import {
   DSP_TYPE,
   EXTERNAL_PLUGIN_FORMATS,
   enginePlugin,
-  FAUST_TYPE,
   JSDSP_TYPE,
   OFFLINE_TYPE,
 } from "../project";
 import { tapOutsFor } from "../tapOuts";
-import { wsRead } from "../yaml/workspaceFile";
 import type { CompileInputs } from "./inputs";
 import { jsDspGraph } from "./jsDspGraph";
 import type { ChainOwnership } from "./ownership";
@@ -49,15 +46,6 @@ function numericParams(
   return out;
 }
 
-// A module's Faust source as text: no build step, because the compiler is on the engine's side — see docs/faustModules.md.
-function readFaustSource(source: string): string | undefined {
-  try {
-    return wsRead(source) || undefined;
-  } catch {
-    return undefined;
-  }
-}
-
 /** Whether a module's `plugin.type` becomes an engine plugin; `offline` does not, its pass writes to disk first. */
 export function reachesEngine(rawType: string): boolean {
   const t = rawType.toLowerCase();
@@ -65,7 +53,6 @@ export function reachesEngine(rawType: string): boolean {
     t === "internal" ||
     t === JSDSP_TYPE ||
     t === DSP_TYPE ||
-    t === FAUST_TYPE ||
     EXTERNAL_PLUGIN_FORMATS.has(t)
   );
 }
@@ -250,16 +237,6 @@ export function compilePlugins(
           if (!src) return {};
           // A source that does not build still sends a graph, so the engine never plays its default one (docs/graphModel.md).
           return { dspGraph: jsDspGraph(String(src)).graph };
-        })(),
-        // The Faust source, likewise inline, and a plain read: the compiler is in the ENGINE, so nothing here memoises.
-        ...(() => {
-          const src = module.faust;
-          if (!src) return {};
-          const text = readFaustSource(String(src));
-          if (!text) return {};
-          // …and the files its `soundfile` slots play, named by the node's string params (docs/faustFiles.md).
-          const files = faustFilesOf(module.params, dir);
-          return { faustDsp: text, ...(files ? { faustFiles: files } : {}) };
         })(),
         // The feeder of the module's SECOND input port, as a lane; only the first is carried — see docs/ports.md.
         ...(() => {

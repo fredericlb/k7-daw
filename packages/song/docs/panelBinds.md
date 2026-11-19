@@ -16,7 +16,7 @@ Arturia's instruments keep switches, bypasses and room selectors out of it.
 
 **It runs only where the plugins are.** An external has to be installed and scanned to be dumped,
 so this is a check run on a machine with the library's plugins, never in CI; a panel whose plugin
-cannot be built is reported as not checked rather than as clean. jsdsp, Faust and offline modules
+cannot be built is reported as not checked rather than as clean. jsdsp and offline modules
 are not checked either: their params are their own source's, and the builder already writes those.
 
 **Names are compared exactly**, as the engine compares them. A bind that differs from an exposed

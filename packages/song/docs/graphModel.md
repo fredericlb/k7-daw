@@ -306,7 +306,7 @@ Intersecting the EVENT's window has NO fallback: an event window disjoint from t
 empty and plays nothing, where a malformed material window meant "the file is wrong, keep the
 notes".
 
-## `dsp` and Faust
+## `dsp`
 
 A module's DSP graph is DATA: a `dsp.k7x` of `params`, `wires` and `graph`, which the song crate decodes on every
 compile into the graph JSON `@studio/dsp`'s builder prints from a `jsdsp.ts`, byte for byte
@@ -314,10 +314,7 @@ compile into the graph JSON `@studio/dsp`'s builder prints from a `jsdsp.ts`, by
 needs no child, no cache and no sandbox: a decode costs microseconds, and an account's file can do nothing a
 parser does not already bound (64 copies of a `repeat`, 1,024 nodes, 64 nested calls).
 
-Faust needs none of that either: the compiler is on the other side of the wire, so what the engine wants
-is the `.dsp` itself, with nothing to commit beyond the source.
-
-Neither is fatal, and neither is silent. One broken effect must not take a song down, and it must
+A broken DSP is neither fatal nor silent. One broken effect must not take a song down, and it must
 not sound like a working one either. A `dsp.k7x` that does not decode (a syntax error, a name that names
 nothing, a missing file) keeps its node, and the compile sends a graph with no node, which both hosts
 pass through (`src/compile/jsDspGraph.ts`, `packages/song/rust/src/jsdsp`). It never sends NO graph: a host given
@@ -337,7 +334,7 @@ builder prints from its `jsdsp.ts`, and the song crate's `dsp_literal` test hold
 
 Only a KNOWN plugin format reaches the engine, and a format this gate does not know is dropped
 from the compiled doc SILENTLY — nothing warns, because a step whose module compiles to nothing is
-how a bypass looks. Adding a format means adding it here (`faustModules.md` lists the four doors).
+how a bypass looks. Adding a format means adding it here (`enginePlugin.md` lists the four gates).
 
 `params` reach the engine as numbers only. A file-valued param (`model`) is authored in the same map,
 because to the person editing the module it IS one of the plugin's controls, but the wire's params
@@ -443,9 +440,9 @@ shared module orphans the panel drawn for it.
 ## The DSP source of a module
 
 The PLUGIN TYPE decides which file: `plugin.type: dsp` means `dsp.k7x` in the module's own
-folder (`jsdsp`, the older type, `jsdsp.ts`), `plugin.type: faust` the `dsp.dsp` beside it. ONE statement says both, rather than a field
+folder (`jsdsp`, the older type, `jsdsp.ts`). ONE statement says it, rather than a field
 naming the file beside a `plugin:` block that says nothing about it — two things to keep in step,
 and the interesting one is the one nobody reads. So a module with the type but no file is a module
 whose source is missing, rather than one that silently loads a graph host with nothing in it. ONE
-function covers the two languages and returns the FIELD rather than a path, so the
+function covers both types and returns the FIELD rather than a path, so the
 type-to-filename mapping lives in one place.

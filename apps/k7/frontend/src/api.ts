@@ -10,11 +10,7 @@ import { engineAccess } from "@studio/engine-browser/access";
 import type { Compatibility, PluginNeed } from "@studio/engine-browser/compat";
 import type { EnginePrefs } from "@studio/engine-browser/registry";
 import type { ParamMeta } from "@studio/engine-protocol";
-import {
-  DSP_FILE,
-  FAUST_FILE,
-  JSDSP_FILE,
-} from "@studio/engine-protocol/build";
+import { DSP_FILE, JSDSP_FILE } from "@studio/engine-protocol/build";
 // The reader `@studio/engine-browser` wants: it owns the routes, this app owns the errors.
 import { readJson as json } from "@studio/http-client/call";
 import { upload } from "@studio/http-client/upload";
@@ -326,8 +322,6 @@ function dspStub(ref: string, file: string): string {
     return `${head} Params and graph, as data: see the DSP authoring page.\nparams({ Level: { min: 0, max: 1, default: 1 } })\ngraph([output(amul(input(0), "Level"))])\n`;
   if (file === JSDSP_FILE)
     return `${head} Export the graph the engine will host.\nexport default {};\n`;
-  if (file === FAUST_FILE)
-    return `${head} The engine compiles this.\nimport("stdfaust.lib");\n\nprocess = _, _;\n`;
   return `${head}\n`;
 }
 

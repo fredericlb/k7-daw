@@ -19,8 +19,8 @@ describe("the plugin type a module file declares", () => {
   });
 
   it("reads the object form spread over lines, and a quoted key", () => {
-    expect(pluginTypeOf('plugin({\n  name: "X",\n  type: "faust",\n})\n')).toBe(
-      "faust",
+    expect(pluginTypeOf('plugin({\n  name: "X",\n  type: "dsp",\n})\n')).toBe(
+      "dsp",
     );
     expect(pluginTypeOf('plugin({ "type": "jsdsp" })\n')).toBe("jsdsp");
   });

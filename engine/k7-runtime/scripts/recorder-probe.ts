@@ -39,10 +39,6 @@ const track = (id: string, plugins: unknown[]) => ({
   plugins, sends: [], automation: [],
 });
 
-// A Faust program that differs per document, so every apply compiles it again rather than reusing one.
-const faust = (n: number) =>
-  `process = _ : *(${(0.5 + n / 1000).toFixed(4)}) : +~*(0.${(n % 9) + 1});`;
-
 /** The recorder's lane, always the same, then `n` heavy lanes that change with every document. */
 const doc = (n: number) => ({
   name: `recorder-probe-${n}`, tempo: 120, sampleRate: 48000, timeSigNumerator: 4,
@@ -56,7 +52,6 @@ const doc = (n: number) => ({
     ...Array.from({ length: n === 0 ? 0 : EXTRA_TRACKS + (n % 2) }, (_, i) =>
       track(`heavy${i}`, [
         plugin(`heavy${i}:osc`, i % 2 ? "studio_macro_oscillator_2" : "studio_resonator", "instrument"),
-        plugin(`heavy${i}:fx`, "studio_faust", "audioFX", { faustDsp: faust(n * 100 + i) }),
       ])),
   ],
 });

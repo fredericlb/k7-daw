@@ -48,7 +48,7 @@ The left column lists the module's files. A tab gets `*` when it has unsaved cha
 |---|---|---|
 | module | always | The module file, as text. |
 | panel | always | The panel file, as text, beside the visual grid. |
-| dsp | the module is `dsp`, `jsdsp` or `faust` | `dsp.k7x`, `jsdsp.ts` or `dsp.dsp`. |
+| dsp | the module is `dsp` or `jsdsp` | `dsp.k7x` or `jsdsp.ts`. |
 | widgets | the panel has an LCD screen, or the file exists | `widgets.js`. |
 | parameters | always | The list of parameters you can bind. |
 

@@ -1,14 +1,13 @@
-# DSP as data and Faust
+# DSP as data
 
 Some modules do not host a plugin: their sound processing is described in a file inside the module
-folder, which you can open and change. There are two kinds.
+folder, which you can open and change.
 
 | Module type | File | Language | Runs as |
 |---|---|---|---|
 | `dsp` | `dsp.k7x` | k7x data, describing a graph of DSP blocks | The engine's DSP Graph (audio) or MIDI Graph (notes) processor |
-| `faust` | `dsp.dsp` | Faust | The engine's Faust processor, which compiles it |
 
-Both are edited in the [module builder](./45-module-builder.md)'s **dsp** tab. A module of the older type
+It is edited in the [module builder](./45-module-builder.md)'s **dsp** tab. A module of the older type
 `jsdsp`, with a `jsdsp.ts`, still plays the `jsdsp.json` beside it, but k7 no longer builds the TypeScript:
 write its graph as a `dsp.k7x` and change its type to `dsp`.
 
@@ -51,8 +50,7 @@ inside a call is a node whose result is read once.
 | Shape of the file | `.as("name")` names a node, `.into("wire")` makes a `delay` or `allpass` write a feedback wire, `.repeat(n)` puts the same node `n` times in series |
 
 A module whose type folder is `transformers` (MIDI in, MIDI out) builds a MIDI graph; any other
-builds an audio graph. Anything that needs a loop, a function or a computed number is a job for
-Faust.
+builds an audio graph. A loop, a function or a computed number is not in the vocabulary.
 
 ### Examples in k7-core
 
@@ -65,22 +63,3 @@ and `cold/normalize`.
 
 To start your own, create a module (`module new audio/mytrim`), set its `plugin` to
 `{ type: "dsp", name: "..." }`, and write a `dsp.k7x` beside it, starting from one of these.
-
-## Faust
-
-A `faust` module holds its program in `dsp.dsp`, compiled by the engine:
-
-```js
-// k7-core/modules/instruments/synth/wavetable/module.k7x
-plugin({ type: "faust", name: "Wavetable" })
-params({
-  Table: "@k7-core/basic.wav",
-  Position: 0,
-  Cutoff: 8000,
-})
-```
-
-Every control the Faust program declares is a parameter you can bind on the panel and automate. A
-parameter whose value is a file (here `Table`, a library wavetable) is loaded for the program to
-read. `k7-core` has two Faust modules: `instruments/synth/wavetable` and the `moog-ladder` engine
-of `audio/lowpass`.

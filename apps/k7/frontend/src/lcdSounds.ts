@@ -1,7 +1,7 @@
 // lcdSounds.ts — the sound files a module's screens draw (`lcd.sound(slot)`), fetched from the file
 // service and decoded HERE as a WAV, mono, at the file's own length: the browser's decodeAudioData
 // resamples to its context's rate, and a 2048-sample wavetable frame would stop being 2048 samples.
-// A library ref is tried in `wavetables/`, then `samples/` — what the compile tries (song's faustFiles.md).
+// A library ref is tried in `wavetables/`, then `samples/`.
 
 import type { LcdSounds } from "@studio/ui-chains/lcdScreen";
 import { mediaUrl } from "./api";

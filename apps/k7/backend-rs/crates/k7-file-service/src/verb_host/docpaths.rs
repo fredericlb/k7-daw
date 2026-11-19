@@ -56,9 +56,6 @@ fn plugin(m: &Mapper, p: &mut PluginDoc) -> Result<(), Error> {
     {
         *v = m.field(v)?;
     }
-    for v in p.faust_files.iter_mut().flat_map(|f| f.values_mut()) {
-        *v = m.field(v)?;
-    }
     for b in p.pattern_banks.iter_mut().flatten() {
         *b = m.field(b)?;
     }

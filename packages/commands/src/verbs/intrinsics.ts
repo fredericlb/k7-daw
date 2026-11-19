@@ -178,35 +178,6 @@ export async function setFileParam(
   }
 }
 
-/** A Faust slot's sound: a library's `wavetables/` or `samples/` file, or `@project/…`, as the picker offers; `none` clears. */
-export async function setFaustSound(
-  h: CommandHost,
-  module: string,
-  slot: string,
-  file: string,
-): Promise<void> {
-  const clearing = file === "none";
-  if (!clearing && file.startsWith("@")) {
-    const offered = [
-      ...libraryFiles("wavetables", h.songPath),
-      ...libraryFiles("samples", h.songPath),
-    ];
-    if (!offered.includes(file)) {
-      h.refuse([
-        `no '${file}' in the libraries' wavetables/ or samples/ — they have: ${offered.slice(0, 8).join(", ") || "nothing yet"}`,
-      ]);
-      return;
-    }
-  }
-  try {
-    setModuleAsset(h.songPath, module, slot, clearing ? null : file);
-    h.log([`${module}: ${slot} ${clearing ? "cleared" : `plays ${file}`}`]);
-    await h.reload();
-  } catch (e) {
-    h.refuse([`node param ${slot} failed: ${(e as Error).message}`]);
-  }
-}
-
 /** Write one intrinsic and say where it landed — the file may be the workspace's SHARED one; docs/verbs.md. */
 export async function setIntrinsic(
   h: CommandHost,

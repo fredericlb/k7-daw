@@ -6,8 +6,6 @@ import { join } from "node:path";
 import {
   DSP_FILE,
   DSP_TYPE,
-  FAUST_FILE,
-  FAUST_TYPE,
   JSDSP_FILE,
   JSDSP_TYPE,
 } from "@studio/engine-protocol/build";
@@ -35,13 +33,12 @@ import { trackModules } from "./trackModule";
 export function dspSourceFor(
   value: Record<string, unknown>,
   folder: string,
-): Pick<LoadedModule, "jsdsp" | "faust"> {
+): Pick<LoadedModule, "jsdsp"> {
   const type = String(
     (value.plugin as { type?: unknown } | undefined)?.type ?? "",
   );
   if (type === JSDSP_TYPE) return { jsdsp: join(folder, JSDSP_FILE) };
   if (type === DSP_TYPE) return { jsdsp: join(folder, DSP_FILE) };
-  if (type === FAUST_TYPE) return { faust: join(folder, FAUST_FILE) };
   return {};
 }
 

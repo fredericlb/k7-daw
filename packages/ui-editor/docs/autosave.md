@@ -167,7 +167,7 @@ overrule the rule. Whoever asked does not change whether the document compiles.
 | k7 `EditorTab` | the open project file — plus its findings drawn in the gutter beside the server's |
 | k7 `ChainsBuilder`, `ModuleSidePane` | a library chain's file, and a module's own file from the side pane |
 | k7 `PlaylistEditor` | a playlist in `_playlists/` — not a project file, so it hands the hook its own `validate` |
-| `@studio/ui-module-builder` | **four** at once: `module.k7x`, `ui.k7x`, a jsdsp or Faust source, `widgets.js` |
+| `@studio/ui-module-builder` | **four** at once: `module.k7x`, `ui.k7x`, a jsdsp source, `widgets.js` |
 
 The builder is the one worth reading twice. Four files, four autosaves, deliberately not one
 save that walks them in order: they are four documents with four schemas, and a half-typed

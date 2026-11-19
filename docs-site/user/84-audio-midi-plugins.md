@@ -62,7 +62,7 @@ The details of recording and mapping are in the arranging and chains sections of
 
 ### Which plugins the engine loads
 
-On Windows, macOS and Linux, the engine hosts **VST3** and **LADSPA** plugins found in the standard install locations for each format. The Android engine hosts no third-party plugins. Every engine also has its built-in modules (the sampler, amp modeling, Faust and JavaScript DSP, the eurorack modules, Surge XT on Windows, macOS and Linux, and the others listed in the chains section).
+On Windows, macOS and Linux, the engine hosts **VST3** and **LADSPA** plugins found in the standard install locations for each format. The Android engine hosts no third-party plugins. Every engine also has its built-in modules (the sampler, amp modeling and JavaScript DSP, the eurorack modules, Surge XT on Windows, macOS and Linux, and the others listed in the chains section).
 
 The engine scans for plugins in separate processes, one plugin at a time, so a plugin that crashes during the scan does not take the engine down. The result is cached on the machine, and only new or changed plugins are scanned again.
 

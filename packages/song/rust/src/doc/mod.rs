@@ -31,7 +31,7 @@ pub use own_mix::{
     own_mix_side, owns_blend, takes_input_volume, takes_output_volume,
 };
 pub use recorder::{OUTPUT_RECORDER_ID, RECORDER_PLUGIN, recorder_plugin, with_output_recorder};
-pub use texts::{MAX_FAUST, jsdsp_finding};
+pub use texts::jsdsp_finding;
 pub use types::{
     AutomationDoc, GroupDoc, InputFromDoc, PluginDoc, ProjectDoc, RackSoundDoc, SendDoc, TapOutDoc, TrackDoc,
     text_weight,

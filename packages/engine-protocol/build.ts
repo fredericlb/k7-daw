@@ -119,14 +119,6 @@ export const MIDI_GRAPH_PLUGIN = "MIDI Graph";
 /** The DSP source a `jsdsp` module carries: a fixed NAME, so a module stays a folder you can copy without rewriting anything inside it. */
 export const JSDSP_FILE = "jsdsp.ts";
 
-/** A module whose DSP is the Faust source beside it — `jsdsp`'s sibling, differing only in WHO compiles; packages/song/docs/faustModules.md. */
-export const FAUST_TYPE = "faust";
-/** …and the built-in that runs one: a host handed a source rather than a graph. */
-export const FAUST_PLUGIN = "Faust";
-
-/** The DSP source a `faust` module carries. Fixed, for the reason JSDSP_FILE is. */
-export const FAUST_FILE = "dsp.dsp";
-
 /** The plugin type a mixer module instantiates — an internal plugin reaches the engine under its DISPLAY name, so this is what a PluginDoc carries. */
 export const MIXER_PLUGIN = "Mixer";
 
@@ -155,8 +147,6 @@ export function enginePlugin(
       type: emits === "midi" ? MIDI_GRAPH_PLUGIN : DSP_GRAPH_PLUGIN,
       name: fallback,
     };
-  // …and its sibling, whose source the ENGINE compiles. Same shape of mapping, same reason.
-  if (type === FAUST_TYPE) return { type: FAUST_PLUGIN, name: fallback };
   if (type === "internal") return { type: name, name: fallback };
   if (EXTERNAL_PLUGIN_FORMATS.has(type.toLowerCase()))
     return { type, name: name || fallback };

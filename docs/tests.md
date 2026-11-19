@@ -70,12 +70,12 @@ build included. `npm run test:all --workspace k7-runtime` adds the slow two. The
 the script, so a new test is fast unless it says otherwise, and the script's target list comes from
 `ctest -N` rather than being spelled out twice.
 
-**It skips rather than configures.** Configuring fetches Tracktion, JUCE and Faust — minutes and a
+**It skips rather than configures.** Configuring fetches Tracktion and JUCE — minutes and a
 network. A tree with no `build/<preset>/CMakeCache.txt` therefore prints what to run and exits 0:
 
 ```
   SKIPPED — engine/k7-runtime has no build/dev-gcc.
-  The C++ tests need a configured tree; configuring fetches Tracktion and Faust.
+  The C++ tests need a configured tree; configuring fetches Tracktion.
 
     cmake --preset dev-gcc
 ```
@@ -88,44 +88,10 @@ with `$STUDIO_MOTEUR_PRESET`.
 
 A genuine failure still fails: ctest exits 8 on a failing test and the script forwards that status.
 
-### The one C++ test that is load-sensitive — OPEN
-
-`studio_faust_tests` carries a perf assertion, `Faust_test.cpp:400`:
-
-```
-FAIL [the_interpreter_is_fast_enough_to_put_in_series]
-     Faust_test.cpp:400: CHECK(load < 50.0)
-```
-
-Measured on this machine: **19,7 %** of the block budget quiet (eight `moogladder` in series,
-1,05 ms per 256-frame block), against a ceiling of **50**. It passes alone, every time, and used
-to fail when 47 turbo tasks shared the CPU. `npm run test` runs one
-workspace at a time by default, so nothing else contends with `ctest` for CPU during that run.
-CI's `--jobs 4` never reaches it, since CI has no configured engine tree; whether the margin holds
-beside other workspaces is unverified.
-
-Its own comment says *"a generous ceiling on purpose: it catches an ORDER of magnitude, not a
-performance target"* — but 50 against 19,7 is **2,5×**, not an order of magnitude. The comment and
-the number disagree, and the number is the one that decides whether the suite is green.
-
-Wiring the C++ suite into `npm run test` is what exposed this; it was never reached before. Three
-ways out, none taken yet because the choice belongs to whoever owns the engine's perf contract:
-
-1. Raise the ceiling to what the comment claims. Real-time is 100 %, which is also the meaningful
-   line for "can eight of these run in series", and leaves 5× over the measured value.
-2. Label it `slow`, like the two Tracktion-linked targets — but that would take the Faust
-   **compile** coverage out of the default run with it, and that is the half worth having: it is
-   the test that was missing when a module reached somebody's library without ever compiling.
-3. Leave it, and accept that the repo-wide suite is red whenever the machine is busy.
-
-Until then it is the ONE known flake in the suite, and it is a real signal about the machine
-rather than about the code — the same lesson as the 64-lane benches in
-[constat.md](constat.md).
-
 ### One build directory, one builder
 
 Two MSBuild runs in the same `build/<preset>` collide, and the failure looks like a compile error
-in Faust or Tracktion rather than like contention — which is exactly how it reads when it happens.
+in Tracktion rather than like contention — which is exactly how it reads when it happens.
 Hit twice while writing this page: once by running `test` and `test:all` at the same time, and it
 is the same hazard `npm run dev` carries, because the tray task watches and rebuilds the engine
 in that very directory (`dev-tray.mjs`, and see [dev.md](dev.md)). If the C++ tests fail with a

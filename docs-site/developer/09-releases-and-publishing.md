@@ -50,7 +50,7 @@ Environment variables the build reads:
 | Variable | Effect |
 |---|---|
 | `STUDIO_ENGINE_PRESET`, `STUDIO_SUPERVISOR_PRESET` | CMake preset names. |
-| `STUDIO_FETCHCONTENT_DIR` | Where CMake keeps downloaded dependency sources (Tracktion, JUCE, Faust and others), so they are fetched once. |
+| `STUDIO_FETCHCONTENT_DIR` | Where CMake keeps downloaded dependency sources (Tracktion, JUCE and others), so they are fetched once. |
 | `STUDIO_COMPILER_LAUNCHER` | Compiler launcher read by the presets (`sccache` or `ccache`). |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | Compiler parallelism; the build scripts default to cores minus two. |
 

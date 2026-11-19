@@ -21,7 +21,7 @@ app (`STUDIO_ENGINE_IN_APP`: Android, iOS), where leaving takes the app with it,
 hang instead.
 
 60 s for the message thread because it legitimately stalls for seconds: a first `applyFull`
-instantiating every plugin, a Faust compile. Plugin scans and probes run elsewhere (a child process,
+instantiating every plugin. Plugin scans and probes run elsewhere (a child process,
 the detached work threads), so nothing expected comes near a minute.
 
 The check that the callback is merely BUSY — inside for half a second, so a device reopen is not

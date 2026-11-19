@@ -18,7 +18,6 @@ import {
 import type { CommandHost, SidHandler } from "../commands.ts";
 import {
   setBuiltinOutParam,
-  setFaustSound,
   setFileParam,
   setIntrinsic,
 } from "./intrinsics.ts";
@@ -75,15 +74,6 @@ export const NODE_PARAM_VERBS: Record<string, SidHandler> = {
     // …and a FILE-valued one (`model`, `onnx`), whose value is a filename read at BUILD time — setFileParam.
     if (isFileParam(param) || isLibraryFileParam(param)) {
       await setFileParam(h, module, param, rawValue);
-      return;
-    }
-    // …and a FAUST module's sound slot: a Faust knob is always a number, so a string there names a file (docs/verbs.md).
-    if (
-      !Number.isFinite(Number(rawValue)) &&
-      collectPluginModules(h.project()).find((b) => b.module === module)
-        ?.type === "Faust"
-    ) {
-      await setFaustSound(h, module, param, rawValue);
       return;
     }
     const value = Number(rawValue);

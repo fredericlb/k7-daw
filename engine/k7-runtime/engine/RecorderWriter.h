@@ -1,5 +1,5 @@
 // RecorderWriter.h — the ONE thread that moves recorder rings onto disk, so a take is written
-// while the message thread is busy building a graph or compiling Faust. JUCE-free and
+// while the message thread is busy building a graph. JUCE-free and
 // header-only, so tests/ has it in the fast binary. See docs/recorder.md.
 //
 // What a reader gets wrong: it holds the NODES, never the session map. A job is either the

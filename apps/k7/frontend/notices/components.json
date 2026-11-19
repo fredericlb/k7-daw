@@ -95,28 +95,6 @@
       "vendor": ["runtime:rtneural-src/LICENSE"]
     },
     {
-      "name": "Faust",
-      "version": "2.85.9",
-      "source": "engine/k7-runtime/CMakeLists.txt",
-      "license": "LGPL-2.1-or-later",
-      "url": "https://github.com/grame-cncm/faust",
-      "where": ["engine"],
-      "fetchContent": ["faust"],
-      "text": "faust.txt",
-      "vendor": ["runtime:faust-src/COPYING.txt"]
-    },
-    {
-      "name": "Faust libraries",
-      "version": "78a72d4998dec43e20492ef9b78d1a785b3dc864",
-      "source": "engine/k7-runtime/CMakeLists.txt",
-      "license": "MIT AND LicenseRef-STK-4.3 AND LGPL-2.1-or-later AND GPL-3.0-or-later",
-      "url": "https://github.com/grame-cncm/faustlibraries",
-      "where": ["engine"],
-      "note": "Each function declares its own licence in its .lib file; most are MIT or STK-4.3.",
-      "text": "faustlibraries.txt",
-      "vendor": ["runtime:faust-src/libraries/licenses/stk-4.3.0.md"]
-    },
-    {
       "name": "sfizz",
       "version": "1.2.3",
       "source": "engine/k7-runtime/CMakeLists.txt",

@@ -1,7 +1,6 @@
 #include "SeekRelease.h"
 
 #include "ArpeggiatorPlugin.h"
-#include "FaustPlugin.h"
 #include "GraphDspPlugin.h"
 #include "MidiGraphPlugin.h"
 #include "PatternPlugin.h"
@@ -30,7 +29,7 @@ bool clearsInPlace(te::Plugin* p)
 bool holdsNotesOrTail(te::Plugin* p)
 {
     return clearsInPlace(p)
-        || dynamic_cast<FaustPlugin*>(p) != nullptr || dynamic_cast<GraphDspPlugin*>(p) != nullptr
+        || dynamic_cast<GraphDspPlugin*>(p) != nullptr
         || dynamic_cast<SfzPlugin*>(p) != nullptr || dynamic_cast<eurorack::EurorackPlugin*>(p) != nullptr
         || dynamic_cast<MidiGraphPlugin*>(p) != nullptr || dynamic_cast<ArpeggiatorPlugin*>(p) != nullptr
         || dynamic_cast<PatternPlugin*>(p) != nullptr

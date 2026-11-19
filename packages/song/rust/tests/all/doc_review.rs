@@ -124,26 +124,6 @@ fn rack_symbols_that_are_integers_come_first_and_ascending() {
     assert_eq!(symbols, ["4", "36"]);
 }
 
-// 318: a Faust file under the workspace's modules is inside the project roots, so the slot keeps it.
-#[test]
-fn a_faust_file_in_the_workspace_modules_is_kept() {
-    let d = doc_of(&[
-        ("project.k7x", P),
-        ("graph.k7x", "modules({ \"gtr\": [\"f\"], \"f\": [\"MIX\"] })\n"),
-        ("nodes/gtr.k7x", &lane("")),
-        (
-            "nodes/f.k7x",
-            "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"../_modules/t.wav\", Away: \"../../../etc/x.wav\" })\n",
-        ),
-        ("nodes/dsp.dsp", "process = _;\n"),
-        ("ws/_modules/t.wav", "w"),
-    ]);
-    let files = d.tracks[0].plugins[0].faust_files.as_ref().expect("faust files");
-    assert_eq!(files.get("Table").map(String::as_str), Some("/p/ws/_modules/t.wav"));
-    // A path past every root is the Source's `Outside`, and the slot is left out.
-    assert!(!files.contains_key("Away"), "{files:?}");
-}
-
 // 380: a failure's stops are in the compile's diagnostics too, the references and wirings among them.
 #[test]
 fn a_failure_keeps_its_stops_in_the_diagnostics() {
@@ -193,12 +173,19 @@ fn hang_bound() -> Duration {
     Duration::from_secs(if cfg!(target_env = "musl") { 60 } else { 15 })
 }
 
-fn faust_chain(k: usize, tune: usize, curve: bool) -> Compiled {
+fn jsdsp_chain(k: usize, tune: usize, curve: bool) -> Compiled {
     const STEPS: usize = 62;
     let mut files = vec![
         ("project.k7x".to_owned(), P.to_owned()),
         ("nodes/gtr.k7x".to_owned(), lane("")),
-        ("nodes/dsp.dsp".to_owned(), "process = _;\n".repeat(k)),
+        ("nodes/jsdsp.ts".to_owned(), "export {}\n".to_owned()),
+        (
+            "nodes/jsdsp.json".to_owned(),
+            format!(
+                "{{\"params\":[{{\"name\":\"gain\"}}],\"nodes\":[{}]}}\n",
+                vec!["{\"type\":\"gain\"}"; k].join(",")
+            ),
+        ),
         (
             "curves/c.k7x".to_owned(),
             "type(\"custom\")\npoints([time(\"1:1:1\").value(0), time(\"2:1:1\").value(1)])\n".to_owned(),
@@ -213,7 +200,7 @@ fn faust_chain(k: usize, tune: usize, curve: bool) -> Compiled {
         };
         files.push((
             format!("nodes/f{i}.k7x"),
-            format!("plugin({{ type: \"faust\", name: \"f\" }})\n{autos}"),
+            format!("plugin({{ type: \"jsdsp\", name: \"f\" }})\n{autos}"),
         ));
         let from = if i == 0 {
             "gtr".to_owned()
@@ -241,11 +228,11 @@ fn faust_chain(k: usize, tune: usize, curve: bool) -> Compiled {
 #[test]
 fn a_budget_spent_by_the_bake_is_an_error_and_no_document() {
     let t = Instant::now();
-    // The smallest Faust source whose plugins alone pass the budget.
-    let (mut lo, mut hi) = (1, 80_000);
+    // The smallest graph whose plugins alone pass the budget.
+    let (mut lo, mut hi) = (1, 65_000);
     while lo < hi {
         let mid = (lo + hi) / 2;
-        if faust_chain(mid, 0, false).engine.is_err() {
+        if jsdsp_chain(mid, 0, false).engine.is_err() {
             hi = mid;
         } else {
             lo = mid + 1;
@@ -253,7 +240,7 @@ fn a_budget_spent_by_the_bake_is_an_error_and_no_document() {
     }
     let mut at_the_bake = 0;
     for tune in 0..70 {
-        let c = faust_chain(lo - 1, tune, true);
+        let c = jsdsp_chain(lo - 1, tune, true);
         if c.spent.doc > BUDGET {
             let f = c.engine.as_ref().expect_err("a spent budget gives no document");
             at_the_bake += usize::from(f.diagnostics.iter().any(|d| d.file == "project.k7x"));

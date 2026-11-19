@@ -2,7 +2,7 @@
 
 The engine is a headless C++20 program built on Tracktion Engine (and so on JUCE). It receives a compiled `ProjectDoc` over a WebSocket, turns it into a live Tracktion `Edit`, plays it on the audio device, and pushes transport, meters and other state back about twenty times a second. It never reads a song file.
 
-Read [Engine architecture](./80-engine-architecture.md) first for where it sits. **Do not build it casually:** a cold build fetches Tracktion, JUCE, Faust, sfizz, Surge and more, and takes tens of minutes. See [Building and shipping engines](./87-engine-build-and-shipping.md).
+Read [Engine architecture](./80-engine-architecture.md) first for where it sits. **Do not build it casually:** a cold build fetches Tracktion, JUCE, sfizz, Surge and more, and takes tens of minutes. See [Building and shipping engines](./87-engine-build-and-shipping.md).
 
 ## Source layout
 
@@ -56,7 +56,6 @@ Before any of these, `main()` compares the `ProjectDoc` layout as seen by three 
 | `STUDIO_ENGINE_HOST` | `serve()` | Bind address. Default `127.0.0.1`; the supervisor sets `0.0.0.0` for LAN browsers. |
 | `STUDIO_AUDIO_TO_BROWSER` | `serve()` | `1` tells every driving page to play the master broadcast (the server engine's null sink). |
 | `STUDIO_HOME` | state paths | The state folder (default `~/.k7`): plugin cache, pairing, load guard markers, instruments. |
-| `STUDIO_FAUST_LIBS` | Faust | Where `stdfaust.lib` and friends are resolved at run time. |
 | `STUDIO_RENDER_TRACE` | offline render | Prints render progress. |
 | `STUDIO_ENGINE_ROOTS` | path roots | Extra read/write roots, split on the platform's path-list separator |
 | `STUDIO_ENGINE_ALLOWED_ORIGINS` | `serve()` | Comma-separated page origins allowed beside the built-in ones; the supervisor sets it from its registries' origins |
@@ -107,7 +106,7 @@ To add a field to `ProjectDoc`: add it to `engine/k7-runtime/engine/ProjectDoc.h
 
 | Group | Plugins |
 |---|---|
-| Instruments | SFZ Player (sfizz), Surge XT (desktop only), Faust, the eurorack ports in `engine/k7-runtime/engine/eurorack/` (`mu-plaits`, `mu-braids`, `mu-rings`, `mu-elements`, `mu-clouds`, `mu-warps`, `mu-peaks`, `mu-tides`) |
+| Instruments | SFZ Player (sfizz), Surge XT (desktop only), the eurorack ports in `engine/k7-runtime/engine/eurorack/` (`mu-plaits`, `mu-braids`, `mu-rings`, `mu-elements`, `mu-clouds`, `mu-warps`, `mu-peaks`, `mu-tides`) |
 | DSP | Neural Amp Modeler (NAM core, plus RTNeural models), DSP Graph (the JavaScript DSP interpreter), MIDI Graph, Arpeggiator, Pattern (Strudel) |
 | Mixing | Mixer, Master gain, Quick Master, Mix Split / Mix Blend |
 | Taps and decks | Waveform Tap, Broadcast Tap, Recorder, Turntable |
@@ -135,7 +134,7 @@ Other generators in the same workspace: `gen:builtin-params` (writes `packages/s
 
 ## Tests
 
-`engine/k7-runtime/tests/CMakeLists.txt` builds small binaries that compile the JUCE-free sources directly, so they build in seconds and need no audio device: `studio_engine_tests` (the diff), `studio_docjson_tests`, `studio_pairing_tests`, `studio_session_tests`, and suites for the turntable loop, warp markers, recorder tap, arpeggiator, dither, acceleration limiter, note clock, watchdog, MIDI graph, DSP graph, Faust, pattern schedule, sample banks, Strudel host, eurorack and amp models.
+`engine/k7-runtime/tests/CMakeLists.txt` builds small binaries that compile the JUCE-free sources directly, so they build in seconds and need no audio device: `studio_engine_tests` (the diff), `studio_docjson_tests`, `studio_pairing_tests`, `studio_session_tests`, and suites for the turntable loop, warp markers, recorder tap, arpeggiator, dither, acceleration limiter, note clock, watchdog, MIDI graph, DSP graph, pattern schedule, sample banks, Strudel host, eurorack and amp models.
 
 ```sh
 npm test --workspace k7-runtime        # builds the studio_* targets in the platform's preset, runs them

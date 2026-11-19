@@ -1,13 +1,11 @@
-// useModuleFiles.ts — the builder's four files: `module.k7x`, the `ui.k7x` beside it, a jsdsp or
-// Faust source, and `widgets.js`. Read from the store, edited as buffers, saved together by one
+// useModuleFiles.ts — the builder's four files: `module.k7x`, the `ui.k7x` beside it, a jsdsp
+// source, and `widgets.js`. Read from the store, edited as buffers, saved together by one
 // button and never by a timer, since on a shared module a save is a publish. Every "dirty" is
 // DERIVED from what is on disk, never a flag. See docs/builder.md.
 
 import {
   DSP_FILE,
   DSP_TYPE,
-  FAUST_FILE,
-  FAUST_TYPE,
   JSDSP_FILE,
   JSDSP_TYPE,
 } from "@studio/engine-protocol/build";
@@ -37,7 +35,6 @@ import type { ModuleStore } from "./store";
 const DSP_SOURCE: Record<string, string> = {
   [DSP_TYPE]: DSP_FILE,
   [JSDSP_TYPE]: JSDSP_FILE,
-  [FAUST_TYPE]: FAUST_FILE,
 };
 
 /** The `plugin(…)` statement's `type` off the RAW text: a regex, because mid-edit the document routinely does not parse. */
