@@ -105,7 +105,6 @@ import.
 | package | subpath |
 |---|---|
 | `engine-tunnel` | `/rtc` |
-| `song` | `/uiMigrate` |
 | `project-shell` | `/files` — published, so its importer may be outside this repository |
 
 Shrinking the map deletes nothing: it documents the real surface.

@@ -1,18 +1,14 @@
 // scaffold.rs — a new project's files: the `arrangement` archetype and the `video` one, which adds a lane of picture over it.
-// A reader would get wrong that the files a scaffold answers are the CHAIN project's: the graph and `nodes/` are gone by then.
+// A reader would get wrong that a new project is written as chain files: no `graph.k7x`, no `nodes/`, and the ids are minted in a fixed order.
 
-use crate::confine::Env;
 use crate::error::{Res, fail, io_error};
 use crate::fs::Fs;
 use crate::ids::NewId;
-use crate::migrate_files::migrate_to_chain_files;
 use crate::paths::{dirname, join, relative, resolve};
-use crate::scaffold_files::{ARRANGEMENT, VIDEO_EXTRA};
+use crate::scaffold_files::{ARRANGEMENT, ARRANGEMENT_CHAINS, VIDEO_CHAINS, VIDEO_EXTRA};
 use crate::shared_folders::SHARED_MODULES_PATH;
 use crate::sugar::is_doc_file;
-use crate::video_outputs::{add_render_sound, add_video_run, no_modules_map};
 use crate::workspace_doc::ws_write_text;
-use k7x::edit::Document;
 use song::Kind;
 
 pub const RENDER_AUDIO_LEVEL: u32 = 5;
@@ -70,51 +66,42 @@ fn project_text(name: &str, picture: bool) -> String {
     )
 }
 
-/// The `arrangement` archetype's files, keyed by project-relative path, in the order they are written.
+/// Mint `count` ids and put them where a chain file says `<idN>`, N counting from 1.
+pub(crate) fn with_ids(files: &[(&str, &str)], count: usize, new_id: NewId) -> Vec<(String, String)> {
+    let ids: Vec<String> = (0..count).map(|_| new_id()).collect();
+    files
+        .iter()
+        .map(|(k, t)| {
+            let text = ids
+                .iter()
+                .enumerate()
+                .fold((*t).to_owned(), |text, (i, id)| text.replace(&format!("<id{}>", i + 1), id));
+            ((*k).to_owned(), text)
+        })
+        .collect()
+}
+
+fn statics(files: &[(&str, &str)]) -> Vec<(String, String)> {
+    files.iter().map(|(k, t)| ((*k).to_owned(), (*t).to_owned())).collect()
+}
+
+/// The `arrangement` archetype's files, chain files and all, keyed by project-relative path.
 #[must_use]
-pub fn project_files(name: &str) -> Vec<(String, String)> {
+pub fn project_files(name: &str, new_id: NewId) -> Vec<(String, String)> {
     let mut out = vec![("project.k7x".to_owned(), project_text(name, false))];
-    out.extend(ARRANGEMENT.iter().map(|(k, t)| ((*k).to_owned(), (*t).to_owned())));
+    out.extend(statics(ARRANGEMENT));
+    out.extend(with_ids(ARRANGEMENT_CHAINS, 7, new_id));
     out
 }
 
-/// The song's graph with the PICTURE's two outputs SPLICED in, by the open path's own edit.
-fn video_graph(base: &str) -> Res<String> {
-    let mut doc = Document::new(base);
-    let mut header = doc.header();
-    header.extend(
-        [
-            "",
-            "…and the same pair for the PICTURE, which this project has: `RENDER` is where the video",
-            "lanes composite — every one of them arrives there, as every audio lane arrives at `MIX` —",
-            "and `VIDEO_OUT` is the frame that leaves. Put a video_effects module on the run between",
-            "them and it works the whole composited frame. `RENDER#audio` is the sound the picture",
-            "leaves with: the mix, here; unwire it and the export is silent. See packages/song/docs/videoOutputs.md.",
-        ]
-        .map(str::to_owned),
-    );
-    doc.set_header(&header)?;
-    if !add_video_run(&mut doc.at(&[]))? || !add_render_sound(&mut doc.at(&[]))? {
-        return no_modules_map();
-    }
-    Ok(doc.text().to_owned())
-}
-
 /// The `video` project's files: the arrangement ADDED to rather than restated.
-///
-/// # Errors
-/// A base graph the edit refuses.
-pub fn video_project_files(name: &str) -> Res<Vec<(String, String)>> {
-    let mut out = project_files(name);
-    for (k, t) in &mut out {
-        match k.as_str() {
-            "project.k7x" => *t = project_text(name, true),
-            "graph.k7x" => *t = video_graph(t)?,
-            _ => {}
-        }
-    }
-    out.extend(VIDEO_EXTRA.iter().map(|(k, t)| ((*k).to_owned(), (*t).to_owned())));
-    Ok(out)
+#[must_use]
+pub fn video_project_files(name: &str, new_id: NewId) -> Vec<(String, String)> {
+    let mut out = vec![("project.k7x".to_owned(), project_text(name, true))];
+    out.extend(statics(ARRANGEMENT));
+    out.extend(statics(VIDEO_EXTRA));
+    out.extend(with_ids(VIDEO_CHAINS, 9, new_id));
+    out
 }
 
 /// Write a project's file map under `dir`, making the folders it implies; a `.k7x` must read, anything else goes as given.
@@ -160,13 +147,12 @@ pub fn ensure_workspace_synth(fs: &mut dyn Fs, dir: &str) -> Res<()> {
     Ok(())
 }
 
-/// Write a new project's files (the `video` shape copies `sample_video` in), then convert them to chain files.
+/// Write a new project's files (the `video` shape copies `sample_video` in) and answer the files it holds.
 ///
 /// # Errors
-/// A missing sample, the conversion's failures, or what the writes fail with.
+/// A missing sample, or what the writes fail with.
 pub fn scaffold(
     fs: &mut dyn Fs,
-    env: &Env,
     dir: &str,
     name: &str,
     shape: TimelineShape,
@@ -175,9 +161,9 @@ pub fn scaffold(
 ) -> Res<Vec<String>> {
     let picture = shape == TimelineShape::Video;
     let files = if picture {
-        video_project_files(name)?
+        video_project_files(name, new_id)
     } else {
-        project_files(name)
+        project_files(name, new_id)
     };
     write_project_files(fs, dir, &files)?;
     ensure_workspace_synth(fs, dir)?;
@@ -190,7 +176,7 @@ pub fn scaffold(
         let to = join(&[&folder, "sample.mp4"]);
         fs.write_atomic(&to, bytes).map_err(|e| io_error(&e, "copyfile", &to))?;
     }
-    as_chain_project(fs, env, dir, new_id)
+    Ok(files_under(fs, dir))
 }
 
 /// Every file under `at`, project-relative, folder by folder in name order.
@@ -207,13 +193,10 @@ fn walk(fs: &dyn Fs, root: &str, at: &str, out: &mut Vec<String>) {
     }
 }
 
-/// Convert a just-written project to chain files and answer the files it now holds.
-///
-/// # Errors
-/// What the migration fails with.
-pub fn as_chain_project(fs: &mut dyn Fs, env: &Env, dir: &str, new_id: NewId) -> Res<Vec<String>> {
-    migrate_to_chain_files(fs, env, dir, new_id, false)?;
+/// The files a project holds, project-relative and in name order.
+#[must_use]
+pub fn files_under(fs: &dyn Fs, dir: &str) -> Vec<String> {
     let mut out = vec![];
     walk(fs, dir, dir, &mut out);
-    Ok(out)
+    out
 }

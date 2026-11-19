@@ -11,7 +11,6 @@ import {
   libraryManifest,
   libraryVersions,
   newestRunnableVersion,
-  workspacePins,
 } from "@studio/song/sharedFolders";
 import { wsEdit } from "@studio/song/yaml/workspaceDoc";
 import {
@@ -23,7 +22,6 @@ import {
   parseLibraryPins,
   pinnedVersion,
 } from "@studio/song-schema/libraryVersions";
-import { LEGACY_LIBRARY_PINS_FILE } from "@studio/song-schema/libraryVersionsLegacy";
 import type { SidHandler } from "../commands.ts";
 import { splitWords } from "./shared.ts";
 
@@ -35,12 +33,7 @@ function readPins(
   const abs = join(h.repoDir, LIBRARY_PINS_FILE);
   return {
     abs,
-    pins: existsSync(abs)
-      ? parseLibraryPins(readFileSync(abs, "utf8"))
-      : // A legacy YAML pins file is upgraded by song on this read, so the edit below lands in the .k7x one.
-        existsSync(join(h.repoDir, LEGACY_LIBRARY_PINS_FILE))
-        ? workspacePins(h.repoDir)
-        : {},
+    pins: existsSync(abs) ? parseLibraryPins(readFileSync(abs, "utf8")) : {},
   };
 }
 

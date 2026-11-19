@@ -153,7 +153,7 @@ fn attempt(file: &File, v: &Json) -> Attempt {
         Outcome::Ret(r) => {
             let mut actual = map_strings(&r, &scrub);
             let mut got: Json = serde_json::to_value(file.changes(&before, &fs, only.as_deref())).unwrap_or(Json::Null);
-            if matches!(fname, "asChainProject" | "scaffold") && !file.module.starts_with("golden/") {
+            if fname == "scaffold" && !file.module.starts_with("golden/") {
                 by_appearance(first_uuid(&seen), &mut [&mut actual, &mut got]);
             }
             let mut bad = Vec::new();
@@ -225,7 +225,7 @@ fn replay(name: &str) -> (usize, Tally) {
     (file.vectors.len(), t)
 }
 
-const LANE_REPLAYED: usize = 1057;
+const LANE_REPLAYED: usize = 1047;
 
 #[test]
 fn the_lane_and_module_side_replays_its_vectors() {

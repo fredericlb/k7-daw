@@ -15,7 +15,7 @@ the library forks, the engine module's fork, a new project's files, the mixer's 
 | `preferences_file.rs` answers a leftover `preferences.yaml` with the "does not read" problem, never with defaults | a mutator that saved over it would lose what the file holds |
 | channel numbers in the preferences stay `f64` | the TypeScript keeps JavaScript numbers; `Number("0x10")` and `Number(null)` are what a hand-written file may hold, and `js_text.rs` spells them |
 | `module_fork` takes the engine catalogue and the panel's text from the host | the loader and the panel library stay TypeScript; the host reads them and the crate writes what they say |
-| `scaffold` writes the files and stops before the conversion to chain files, which fails with its own sentence | `migrateToChainFiles` is the node side's (3g); `scaffold_files.rs` is the TypeScript's text, kept equal by the golden replay |
+| `scaffold_files.rs` and `scaffold_live.rs` hold the chain files' text, ids marked `<idN>` | the golden replay of `scaffold` keeps the text and the order the ids are minted in |
 | the sample video of the `video` shape is a byte slice the host gives | the crate bundles no binary |
 | the library forks' `module.k7x` test keeps the TypeScript's unescaped dot (`module` + any character + `k7x`) | a file named `module-k7x` is a module file to the TypeScript, and its answers are the contract |
 | the library versions' digest is SHA-256 over each file's relative path, a NUL and its bytes, in UTF-16 name order | the digest is compared and never stored, but the same walk keeps the two sides' answers equal |

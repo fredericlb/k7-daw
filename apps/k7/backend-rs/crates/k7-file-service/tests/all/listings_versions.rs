@@ -155,6 +155,4 @@ fn the_constants_are_the_typescripts() {
     assert!(versions.contains(&format!("export const LIBRARY_LEVEL = {LIBRARY_LEVEL};")));
     assert!(versions.contains("export const UNPINNED_VERSION = 1;"));
     assert!(versions.contains("export const LIBRARY_MANIFEST = \"library.k7x\";"));
-    let legacy = ts("packages/song-schema/src/libraryVersionsLegacy.ts");
-    assert!(legacy.contains("export const LEGACY_LIBRARY_MANIFEST = \"library.yaml\";"));
 }

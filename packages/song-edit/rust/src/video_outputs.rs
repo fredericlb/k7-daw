@@ -7,7 +7,7 @@ use crate::chain_graph_edit::edit_project_graph;
 use crate::chain_item_edit::{CHAINS_DIR, is_chain_project};
 use crate::chain_project::read_chain_project;
 use crate::confine::Env;
-use crate::error::{Res, fail};
+use crate::error::Res;
 use crate::format_level::RENDER_AUDIO_LEVEL;
 use crate::format_stamp::{declared_level, stamp_format_level};
 use crate::fs::Fs;
@@ -63,14 +63,6 @@ pub fn add_render_sound(doc: &mut Scope) -> Res<bool> {
         Ok(()) => {}
     }
     Ok(true)
-}
-
-/// The failure a scaffold raises when its base graph has no `modules` map.
-///
-/// # Errors
-/// Always.
-pub fn no_modules_map<T>() -> Res<T> {
-    fail("scaffold: the base graph has no `modules` map to add RENDER to")
 }
 
 /// Wire the mix into RENDER#audio ONCE, the first time a build of level 5 opens it, then stamp it.

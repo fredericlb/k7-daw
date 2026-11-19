@@ -22,11 +22,8 @@ pub const NAMES: &[(&str, &[&str])] = &[
     (
         "song/scaffold",
         &[
-            "projectFiles",
-            "videoProjectFiles",
             "writeProjectFiles",
             "scaffoldSynth",
-            "asChainProject",
             "scaffold",
         ],
     ),
@@ -40,10 +37,6 @@ pub const NAMES: &[(&str, &[&str])] = &[
         ],
     ),
 ];
-
-fn files_json(f: &[(String, String)]) -> Json {
-    Json::Object(f.iter().map(|(k, t)| (k.clone(), json!(t))).collect())
-}
 
 pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
     let fs = &mut *cx.fs;
@@ -114,8 +107,6 @@ pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
                 |r| json!({ "ref": r.reference, "folder": r.folder, "leaf": r.leaf, "type": r.kind }),
             )),
         ("song/moduleFork", "chainsUsing") => Ok(json!(module_fork::chains_using(&s(a, 0), &s(a, 1)))),
-        ("song/scaffold", "projectFiles") => Ok(files_json(&scaffold::project_files(&s(a, 0)))),
-        ("song/scaffold", "videoProjectFiles") => done(scaffold::video_project_files(&s(a, 0)), |f| files_json(&f)),
         ("song/scaffold", "writeProjectFiles") => {
             let files: Vec<(String, String)> = at(a, 1)
                 .as_object()
@@ -141,11 +132,6 @@ pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
                 ))
             })
         }
-        ("song/scaffold", "asChainProject") => {
-            done(scaffold::as_chain_project(fs, env, &s(a, 0), &mut *cx.new_id), |l| {
-                json!(l)
-            })
-        }
         ("song/scaffold", "scaffold") => {
             let shape = if s(a, 2) == "video" {
                 scaffold::TimelineShape::Video
@@ -154,7 +140,7 @@ pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
             };
             // The video shape copies the sample the host names in the fourth argument.
             let sample = at(a, 3).as_str().map(str::as_bytes);
-            let out = scaffold::scaffold(fs, env, &s(a, 0), &s(a, 1), shape, sample, &mut *cx.new_id);
+            let out = scaffold::scaffold(fs, &s(a, 0), &s(a, 1), shape, sample, &mut *cx.new_id);
             done(out, |l| json!(l))
         }
         _ => return None,

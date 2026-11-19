@@ -81,10 +81,10 @@ pub fn run(cx: &mut Ctx, _module: &str, f: &str, a: &[Json]) -> Option<Out> {
             if opt(a, 2).as_deref() == Some("graph") {
                 done(sl::scaffold_live_graph(fs, &dir, &name), |l| strs(&l))
             } else {
-                done(sl::scaffold_live(fs, env, &dir, &name, &mut *cx.new_id), |l| strs(&l))
+                done(sl::scaffold_live(fs, &dir, &name, &mut *cx.new_id), |l| strs(&l))
             }
         }
-        "scaffoldLiveVideo" => done(sl::scaffold_live_video(fs, env, &dir, &s(a, 1), &mut *cx.new_id), |l| {
+        "scaffoldLiveVideo" => done(sl::scaffold_live_video(fs, &dir, &s(a, 1), &mut *cx.new_id), |l| {
             strs(&l)
         }),
         "chainGraphText" => done(cge::chain_graph_text(fs, &dir), |t| json!(t)),

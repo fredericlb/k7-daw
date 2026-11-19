@@ -30,8 +30,8 @@ fn knows_the_names_and_versions_the_typescript_does() {
     assert!(types.contains("FIXED_NAMESPACES = [\"engine\", \"workspace\"]"));
     assert!(types.contains("export const ACCOUNT_LIBRARY = \"account\";"));
     assert!(
-        types.contains("\"studio\", // LEGACY_META_NS")
-            && types.contains("\"mediatek\", // LEGACY_MEDIATEK_NS")
+        types.contains("\"studio\", // an older name of @meta")
+            && types.contains("\"mediatek\", // an older name of the default library")
     );
     assert!(
         ts("packages/song-schema/src/metaRefs.ts").contains("export const META_NS = \"@meta\";")
@@ -56,9 +56,6 @@ fn knows_the_names_and_versions_the_typescript_does() {
     assert!(
         versions.contains("DRAFT_VERSION = \"draft\"")
             && versions.contains("LIBRARY_PINS_FILE = \"_library-pins.k7x\"")
-    );
-    assert!(
-        ts("packages/song-schema/src/libraryVersionsLegacy.ts").contains("\"_library-pins.yaml\"")
     );
 }
 

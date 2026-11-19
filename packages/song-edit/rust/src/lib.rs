@@ -51,7 +51,6 @@ pub mod material_file;
 pub mod material_notes;
 pub mod material_window;
 pub mod mem_fs;
-pub mod migrate_files;
 pub mod module_file;
 pub mod module_fork;
 pub mod module_io;

@@ -88,16 +88,9 @@ the next `track new`.
 - **`track new`** writes it with the lane (`stripNewLane`), as do a timeline lane's copy and a
   picture's sound lane. A strip that cannot be wired is *said* rather than thrown, and a project
   with no `graph.k7x` yet is given one, the lane and its strip arriving together.
-- **`scripts/migrateTrackMixer.ts`** gives one to every lane that predates the rule, sound and
-  picture (`stripLanes`, the back-fill a project's open runs for its picture lanes). Dry by
-  default, idempotent, and through the k7x document, so `graph.k7x` keeps its comments.
 - **The importer** writes one per lane it emits (`packages/translator/docs/import.md`), as a NODE
   on k7's own `@meta/audio/mixer` — it does not go through this file, a foreign
   project's chain being built from scratch with nothing to splice into.
 
-```
-npx tsx packages/song/scripts/migrateTrackMixer.ts <projet.k7> [more…] [--write]
-```
-
-The decision and the writes are split — `planLaneStrip` then `applyLaneStrip` — so the dry run
-reports what it would actually do instead of promising something it has not worked out.
+The decision and the writes are split — `planLaneStrip` then `applyLaneStrip` — so a plan can be read
+before anything is written.

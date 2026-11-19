@@ -2036,10 +2036,6 @@
 # The shared `_modules` holds what someone WROTE — a jsdsp module's source, a rack's
 # sample map. The engine's plugins are not files: its scan is the catalogue, so there is
 # nothing to populate and nothing to keep in step. `module rescan plugins` refreshes it.
-# A one-shot repair of a project written to an older format is a SCRIPT, run on a folder,
-# rather than a verb offered in every session's palette for ever:
-#
-#   npx tsx packages/song/scripts/migrateUis.ts <project>      panels out into the _ui/ library
 # Sets one plugin param on a module node, writing it to the module's own .cue.
 # `param` is the engine's display name for it ("Filter Freq"), which is what the
 # module UI's widgets bind to — and what `list params` prints.

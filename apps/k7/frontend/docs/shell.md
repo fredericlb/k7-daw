@@ -611,7 +611,7 @@ graph doc carries no plugin type), the graph says what each looks like and what 
 **Every audio lane has a strip**, and `track new` writes it with the lane
 ([packages/song/docs/trackMixer.md](../../../../packages/song/docs/trackMixer.md)): a module of
 plugin type `Mixer` (`trackMixer`, `MIXER_PLUGIN`) last in the lane's run.
-`scripts/migrateTrackMixer.ts` gives one to a lane that has not got one.
+`track new` writes it with the lane.
 
 A song can still have **none** — one whose lanes all run into buses, or one with no `graph.k7x` at
 all. So the button stays **disabled** at zero and says why in its tooltip, and `ui panel mix` opened

@@ -37,11 +37,9 @@ its `id`. Link levels, which segments cannot carry, travel apart (`loadLinkLevel
 Writes go the other way: a graph edit is a transform over segments, written back as chain files by
 `writeChainProject`; the two directions must round-trip.
 
-New `arrangement`, `video` and `live` projects are scaffolded as a graph and then converted by
-`migrateToChainFiles` (`packages/song/src/chainsMigrateFiles.ts`), so a new project and a migrated
-one cannot differ. `migrationBlocker` refuses what the migration cannot carry: `assemblies/` and
-`views/` name nodes, and a surface with a `mapping` binds node params — which is why a `mix` set
-stays in the graph layout.
+New `arrangement`, `video` and `live` projects are scaffolded as chain files directly
+(`packages/song-edit/rust/src/scaffold_files.rs`). `assemblies/` and `views/` name nodes, and a
+surface with a `mapping` binds node params — which is why a `mix` set stays in the graph layout.
 
 ## The compile, in order
 
