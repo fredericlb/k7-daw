@@ -3,7 +3,7 @@
 
 use crate::doc_support;
 
-use doc_support::{AMP, compiled, doc_of, lane, project, stopped};
+use doc_support::{AMP, compiled, lane, project, stopped};
 use song::files::Severity;
 
 const GRAPH_OK: &str = "{\"params\":[{\"name\":\"gain\"}],\"nodes\":[{\"type\":\"gain\"}]}\n";
