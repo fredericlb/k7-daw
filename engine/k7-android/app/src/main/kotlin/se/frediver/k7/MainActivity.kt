@@ -3,13 +3,11 @@
 // media library among its pages) in full-screen views of their own. The page is web/, bundled; the two plugins registered here are
 // its only way to the native half. Leaving this activity quits the supervisor and ends the process, which is also the
 // only way to restart an engine (EngineBridge). The services only keep the process in front while it is busy (Busy.kt).
-// A sideloaded release keeps itself current from k7.rocks/app_downloads (Updates.kt).
 // See docs/android.md.
 
 package se.frediver.k7
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -54,24 +52,16 @@ class MainActivity : BridgeActivity() {
         camera = DeviceAccess(this, Device.CAMERA)
         // The studio the views open, before the engine that lists itself there (BackendHost.kt).
         BackendHost.start(this)
-        // Before the engine: a build whose engine crashes at boot still asks for the one that fixes it.
-        Updates.start(this)
         // Never held up by the microphone: without it the engine opens its device output only (DeviceAccess.kt).
-        // After quick crashes in a row the engine is left off this once, and the update offered (BootGuard.kt).
+        // After quick crashes in a row the engine is left off this once, and the person asked (BootGuard.kt).
         if (BootGuard.enter(this)) BootGuard.offer(this) else SupervisorHost.start(this)
         Busy.start(this)
-        Updates.handle(this, intent)
     }
 
     // A dialog or the keyboard may bring the bars back: full screen is asked again once the window is ours.
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) Immersive.apply(this)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        Updates.handle(this, intent)
     }
 
     /** The asker for `device`, as a page's getUserMedia needs it (PageCapture.kt). */

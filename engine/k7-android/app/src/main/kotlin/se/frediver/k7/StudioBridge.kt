@@ -117,11 +117,6 @@ class StudioBridge(
             }
             "forgetCas" -> EngineOps.forgetCas(activity, answer)
             "chooseStudio" -> chooseStudio(arg.optString("origin"), answer)
-            // The home menu's Check for updates; the answer comes as toasts and the install dialog (Updates.kt).
-            "checkUpdates" -> {
-                Updates.checkNow(activity)
-                ok(JSONObject())
-            }
             // The Engine page's Full screen switch, a setting of this device (Immersive.kt).
             "immersive" -> ok(JSONObject().put("on", Immersive.isOn(activity)))
             "setImmersive" -> {
