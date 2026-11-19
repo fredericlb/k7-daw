@@ -1,9 +1,8 @@
-// StudioBridge.swift — what the studio apps in AppViews' views may ask of this app, over one script message handler
-// that `window.k7Ios` wraps in the protocol Android's `k7Android` speaks: every app reports its top colour, who
-// is signed in, what it plays and what keeps it busy; ONLY k7, checked by origin on every message, reaches the
-// engine (apps/k7/frontend/src/settings/androidEngine.ts). The handler is offered to every origin, since the studio
-// can change; each message is checked instead. k7's origin may be a remote studio, so it gets a short list of
-// commands, and a new studio needs the user's yes. See engine/k7-runtime/docs/ios.md.
+// StudioBridge.swift — what k7's page in AppViews' view may ask of this app, over one script message handler
+// that `window.k7Ios` wraps in the protocol Android's `k7Android` speaks: the page reports its top colour, who
+// is signed in, what it plays and what keeps it busy, and reaches the engine
+// (apps/k7/frontend/src/settings/androidEngine.ts). The handler is offered to every origin, so each message is
+// checked for k7's own instead. See engine/k7-runtime/docs/ios.md.
 
 import UIKit
 import UniformTypeIdentifiers
@@ -12,15 +11,13 @@ import WebKit
 final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, UIDocumentPickerDelegate {
     static let name = "k7Ios"
 
-    /// Which app an origin is, or nil for anywhere else.
-    private let appOf: (URL) -> String?
-    private let onColor: (String, UIColor) -> Void
-    /// Who the studio says is signed in, nil for nobody (account.js).
+    /// Whether an origin is k7's own.
+    private let isK7: (URL) -> Bool
+    private let onColor: (UIColor) -> Void
+    /// Who k7 says is signed in, nil for nobody (account.js).
     private let onAccount: (String?) -> Void
-    private let onChooseStudio: (String) -> Void
     // The k7 page listening now: a reload hands over a new one with its `listen`.
     private weak var k7: WKWebView?
-    private var studio: String?
     private var pickedCa: ((URL?) -> Void)?
 
     /// The document-start script that gives a page the channel, in the shape Android's WebMessageListener object has.
@@ -45,25 +42,16 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
     })();
     """
 
-    init(appOf: @escaping (URL) -> String?, onColor: @escaping (String, UIColor) -> Void,
-         onAccount: @escaping (String?) -> Void, onChooseStudio: @escaping (String) -> Void) {
-        self.appOf = appOf
+    init(isK7: @escaping (URL) -> Bool, onColor: @escaping (UIColor) -> Void, onAccount: @escaping (String?) -> Void) {
+        self.isK7 = isK7
         self.onColor = onColor
         self.onAccount = onAccount
-        self.onChooseStudio = onChooseStudio
         super.init()
         SupervisorHost.shared.listen(self)
     }
 
     func destroy() {
         SupervisorHost.shared.unlisten(self)
-    }
-
-    /// The studio the views open now, k7's origin; the panel marks it.
-    func setStudio(_ origin: String?) {
-        if origin == studio { return }
-        studio = origin
-        push()
     }
 
     /// One message to a page, as the channel's `message` event; on the main thread.
@@ -77,32 +65,30 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
     }
 
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let view = message.webView, let id = (view as? AppWebView)?.appId else { return }
-        // The view's own app and nothing else: a page it wandered off to gets no answer.
+        guard let view = message.webView as? AppWebView else { return }
+        // k7's own origin and nothing else: a page the view wandered off to gets no answer.
         let origin = message.frameInfo.securityOrigin
         var parts = URLComponents()
         parts.scheme = origin.protocol
         parts.host = origin.host
         if origin.port != 0 { parts.port = origin.port }
-        guard message.frameInfo.isMainFrame, let url = parts.url, appOf(url) == id,
+        guard message.frameInfo.isMainFrame, let url = parts.url, isK7(url),
               let text = message.body as? String, let data = text.data(using: .utf8),
               let msg = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else { return }
         switch msg["t"] as? String {
         case "color":
-            if let hex = msg["value"] as? String, let color = UIColor(hex: hex) { onColor(id, color) }
+            if let hex = msg["value"] as? String, let color = UIColor(hex: hex) { onColor(color) }
         case "account":
             onAccount(msg["name"] as? String)
         case "media":
             MediaPlayback.update(msg, from: view)
         case "busy":
-            Busy.shared.report(view: id, msg)
+            Busy.shared.report(view: "k7", msg)
         case "listen":
-            if id == "k7" {
-                k7 = view
-                push()
-            }
+            k7 = view
+            push()
         case "call":
-            if id == "k7" { call(view, id: msg["id"] as? Int ?? 0, method: msg["method"] as? String ?? "", arg: msg["arg"] as? [String: Any] ?? [:]) }
+            call(view, id: msg["id"] as? Int ?? 0, method: msg["method"] as? String ?? "", arg: msg["arg"] as? [String: Any] ?? [:])
         default:
             break
         }
@@ -116,7 +102,7 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
         let known = SupervisorHost.shared.known()
         DispatchQueue.main.async { [self] in
             guard let k7 else { return }
-            var snapshot: [String: Any] = ["t": "snapshot", "studio": studio ?? NSNull()]
+            var snapshot: [String: Any] = ["t": "snapshot"]
             if let state = known.state { snapshot["state"] = state }
             if let exit = known.engineExit { snapshot["engineExit"] = exit }
             Self.post(snapshot, to: k7)
@@ -150,8 +136,6 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
             }
         case "forgetCas":
             EngineOps.forgetCas(done: answer)
-        case "chooseStudio":
-            chooseStudio(arg["origin"] as? String ?? "", answer)
         case "quit":
             answer(.success([:]))
             AppDelegate.quit()
@@ -167,31 +151,6 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
         }
         if Self.allowed.contains(cmd) { return send() }
         answer(.failure(Self.refusal("command \(cmd) is not allowed")))
-    }
-
-    private func chooseStudio(_ origin: String, _ answer: @escaping (Result<[String: Any], Error>) -> Void) {
-        guard Self.isStudioUrl(origin), let url = URL(string: origin), let host = url.host,
-              url.scheme == "https" || Self.isLoopback(host) else {
-            return answer(.failure(Self.refusal("a studio must be https")))
-        }
-        let open = {
-            self.onChooseStudio(origin)
-            answer(.success([:]))
-        }
-        if Self.isLoopback(host) || listed(url) { return open() }
-        Dialogs.confirm("k7", "Open k7 on the studio at\n\n\(origin) ?", yes: "Open") { yes in
-            yes ? open() : answer(.failure(Self.refusal("declined")))
-        }
-    }
-
-    /// Whether `origin` is one of the studios the supervisor lists: the host itself, or the family above a `play.`/`k7.` alias.
-    private func listed(_ origin: URL) -> Bool {
-        let instances = SupervisorHost.shared.known().state?["instances"] as? [[String: Any]] ?? []
-        guard let host = origin.host?.lowercased() else { return false }
-        return instances.contains { row in
-            guard let url = URL(string: row["url"] as? String ?? ""), let h = url.host?.lowercased() else { return false }
-            return url.scheme == origin.scheme && (h == host || h.hasSuffix(".\(host)"))
-        }
     }
 
     // The document picker, for a certificate file; nil when the user cancelled.
@@ -224,18 +183,6 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
         "engine.start", "engine.stop", "engine.restart", "audio.priority", "lan.open",
         "plugins.rescan", "instruments.download", "instruments.remove",
     ]
-
-    // An address the dialog can show as it is: http(s), a host, short, and no whitespace to forge lines with.
-    private static func isStudioUrl(_ url: String) -> Bool {
-        guard url.count <= 200, !url.contains(where: \.isWhitespace), let u = URL(string: url),
-              let scheme = u.scheme, ["http", "https"].contains(scheme), let host = u.host, !host.isEmpty else { return false }
-        return true
-    }
-
-    private static func isLoopback(_ host: String) -> Bool {
-        let h = host.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
-        return ["localhost", "127.0.0.1", "::1"].contains(h)
-    }
 }
 
 extension UIColor {

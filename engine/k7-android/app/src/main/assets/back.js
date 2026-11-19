@@ -1,4 +1,4 @@
-// back.js — evaluated in the visible studio app on the system Back (AppViewsPlugin.kt); its value says whether the page used it.
+// back.js — evaluated in k7's view on the system Back (AppViewsPlugin.kt); its value says whether the page used it.
 // A Radix dialog, sheet, popover or menu pushes no history, so Back closes it with the Escape it already answers to.
 // A page may take Back itself: a cancelled `k7:back` event on window counts as used.
 (() => {

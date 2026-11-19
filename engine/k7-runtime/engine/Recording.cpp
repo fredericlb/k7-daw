@@ -251,10 +251,6 @@ EngineHost::ArmResult EngineHost::setArmed(const std::string& session, const std
     if (td->inputChannels.empty())
         return refuse("track \"" + trackId + "\" has no input — nothing to record");
 
-    // A device opened without inputs gets them now: arming is what needs them (docs/ios.md).
-    if (armed.value_or(true) && impl_->inputsOnArm && !openDeferredInputs())
-        return refuse("the audio input could not be opened");
-
     auto ti = findTrackInput(impl_->session(session).edit.get(), impl_->engine, impl_->session(session).current, trackId);
     if (ti.instance == nullptr) {
         // The song declares an input this interface doesn't offer, so arming would capture nothing.

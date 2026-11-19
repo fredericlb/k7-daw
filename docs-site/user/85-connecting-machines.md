@@ -27,7 +27,7 @@ An engine trusts any program on its own machine. A device that connects **direct
 
 On the device:
 
-1. The engine picker shows *This device isn't paired with <machine>* with an explanation: over the local network the engine only answers devices its machine has approved.
+1. The second-device menu (`/external`) shows *This device isn't paired with <machine>* with an explanation: over the local network the engine only answers devices its machine has approved.
 2. Click **Pair this device**.
 3. The device shows a six-digit code: *Approve on the machine running the engine — check it shows this code*.
 

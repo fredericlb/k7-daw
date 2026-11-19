@@ -1,17 +1,15 @@
-// AppViews.swift — the studio apps, each in a full-screen WKWebView of its own over the shell page (web/src/App.tsx,
-// AppViews), under a status-bar strip painted the colour of the app's own header. They load from the connected
-// studio, never from this app: each app is same-origin with its backend (`/api`, `/auth`, cookie sessions). A view
-// is made the first time it is shown and then only hidden, so an app keeps its state while another is on screen.
+// AppViews.swift — k7 in one full-screen WKWebView over the shell page (web/src/App.tsx, AppViews), under a
+// status-bar strip painted the colour of k7's own header. It loads from this phone's own backend, never from this
+// app: the page is same-origin with its backend (`/api`, `/auth`, cookie sessions). The view is made the first time it
+// is shown and then only hidden, so k7 keeps its state while the shell page is on screen.
 // The same plugin, methods and events as AppViewsPlugin.kt on Android. See engine/k7-runtime/docs/ios.md.
 
 import Capacitor
 import UIKit
 import WebKit
 
-/// A view that knows which app it shows, for the bridge's origin check.
-final class AppWebView: WKWebView {
-    var appId = ""
-}
+/// k7's view, told apart from the shell page's own WKWebView.
+final class AppWebView: WKWebView {}
 
 @objc(AppViewsPlugin)
 public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, WKUIDelegate {
@@ -26,21 +24,18 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
     ]
 
     private let frame = UIView()
-    // Under the status bar, in the visible app's top colour.
+    // Under the status bar, in k7's top colour.
     private let strip = UIView()
-    private var studio: String?
     private var appBridge: StudioBridge!
-    private var colors: [String: UIColor] = [:]
-    private var views: [String: AppWebView] = [:]
-    // The address each view was last pointed at by `apps`: a changed studio reloads it, a tab switch does not.
-    private var loaded: [String: String] = [:]
-    private var apps: [String: URL] = [:]
-    private var visible: String?
+    private var color: UIColor = .clear
+    private var view: AppWebView?
+    private var loaded = false
+    private var visible = false
     private var localSignInAt = Date.distantPast
     private var backendWatch: UUID?
     private var scripts: [WKUserScript] = []
-    // When each view's content process died lately, for the reload cap.
-    private var contentLost: [String: [Date]] = [:]
+    // When the view's content process died lately, for the reload cap.
+    private var contentLost: [Date] = []
     private static let maxReloads = 2
     private static let reloadWindow: TimeInterval = 60
 
@@ -64,13 +59,12 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         ])
         scripts = Self.pageScripts()
         appBridge = StudioBridge(
-            appOf: { [weak self] in self?.appOf($0) },
-            onColor: { [weak self] id, color in
-                self?.colors[id] = color
-                if id == self?.visible { self?.paint() }
+            isK7: { [weak self] in self?.isK7($0) ?? false },
+            onColor: { [weak self] color in
+                self?.color = color
+                if self?.visible == true { self?.paint() }
             },
-            onAccount: { [weak self] name in DispatchQueue.main.async { self?.onAccount(name) } },
-            onChooseStudio: { [weak self] origin in self?.notifyListeners("studio", data: ["origin": origin]) }
+            onAccount: { [weak self] name in DispatchQueue.main.async { self?.onAccount(name) } }
         )
         backendWatch = BackendHost.shared.watch { [weak self] status in
             DispatchQueue.main.async { self?.notifyListeners("backend", data: Self.statusJs(status)) }
@@ -82,14 +76,14 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         appBridge?.destroy()
     }
 
-    /// The scripts every view runs: the channel, the loopback ports, the media session at document start; colour and account once loaded.
+    /// The scripts the view runs: the channel, the loopback ports, the media session at document start; colour and account once loaded.
     private static func pageScripts() -> [WKUserScript] {
         func asset(_ name: String) -> String {
             guard let url = Bundle.main.url(forResource: name, withExtension: "js", subdirectory: "page-scripts"),
                   let text = try? String(contentsOf: url, encoding: .utf8) else { return "" }
             return text
         }
-        // web-protocol's PORTS_GLOBAL, for the phone's own studio only, whose pages derive each service's address from it.
+        // web-protocol's PORTS_GLOBAL, for the phone's own backend only, whose pages derive each service's address from it.
         let ports = "if (location.origin === \(Self.jsString(BackendHost.origin))) window.__STUDIO_PORTS__ = \(Self.jsString(BackendHost.portsSpec));"
         return [
             WKUserScript(source: StudioBridge.channelScript, injectionTime: .atDocumentStart, forMainFrameOnly: true),
@@ -106,23 +100,15 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
     }
 
     @objc func show(_ call: CAPPluginCall) {
-        guard let id = call.getString("id") else { return call.reject("no id") }
-        guard let given = call.getObject("apps") else { return call.reject("no apps") }
-        let url = call.getString("url")
-        let studio = call.getString("studio")
-        // The phone's own studio may still be starting: wait rather than fail.
-        if studio == BackendHost.origin {
-            BackendHost.shared.whenReady({ [weak self] in
-                DispatchQueue.main.async { self?.show(call, id: id, given: given, url: url, studio: studio) }
-            }, failed: { [weak self] why in
-                DispatchQueue.main.async {
-                    self?.loadFailed(id, "k7 could not start: \(why)")
-                    call.resolve()
-                }
-            })
-        } else {
-            DispatchQueue.main.async { self.show(call, id: id, given: given, url: url, studio: studio) }
-        }
+        // The phone's own backend may still be starting: wait rather than fail.
+        BackendHost.shared.whenReady({ [weak self] in
+            DispatchQueue.main.async { self?.showNow(call) }
+        }, failed: { [weak self] why in
+            DispatchQueue.main.async {
+                self?.loadFailed("k7 could not start: \(why)")
+                call.resolve()
+            }
+        })
     }
 
     /// Where the phone's own backend is: `starting` (with `step`), `ready` or `failed` (with `message`); then `backend` events.
@@ -143,22 +129,13 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         call.resolve()
     }
 
-    private func show(_ call: CAPPluginCall, id: String, given: JSObject, url: String?, studio: String?) {
-        apps = given.compactMapValues { ($0 as? String).flatMap(URL.init(string:)) }
-        guard let address = apps[id]?.absoluteString else { return call.reject("no address for \(id)") }
-        // On the phone's own studio a view opens as the local user, as the desktop window does.
-        let home = studio == BackendHost.origin && id == "k7" ? BackendHost.home : address
-        appBridge.setStudio(studio)
-        self.studio = studio
-        let view = views[id] ?? create(id)
-        if let url, let to = URL(string: url) {
-            view.load(URLRequest(url: to))
-        } else if loaded[id] != home, let to = URL(string: home) {
-            view.load(URLRequest(url: to))
-        }
-        loaded[id] = home
-        for (key, v) in views { v.isHidden = key != id }
-        visible = id
+    private func showNow(_ call: CAPPluginCall) {
+        let v = view ?? create()
+        // k7 opens as the local user, as the desktop window does.
+        if !loaded, let to = URL(string: BackendHost.home) { v.load(URLRequest(url: to)) }
+        loaded = true
+        v.isHidden = false
+        visible = true
         frame.isHidden = false
         frame.superview?.bringSubviewToFront(frame)
         paint()
@@ -168,32 +145,30 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
     @objc func hideAll(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [self] in
             frame.isHidden = true
-            visible = nil
+            visible = false
             MainViewController.current?.statusBarDark = false
             call.resolve()
         }
     }
 
     @objc func reload(_ call: CAPPluginCall) {
-        guard let id = call.getString("id") else { return call.reject("no id") }
         DispatchQueue.main.async { [self] in
-            views[id]?.reload()
+            view?.reload()
             call.resolve()
         }
     }
 
-    /// Who the studio says is signed in; on the phone's own studio nobody means back to the local user.
+    /// Who k7 says is signed in; nobody means back to the local user.
     private func onAccount(_ name: String?) {
-        guard name == nil, studio == BackendHost.origin else { return }
+        guard name == nil else { return }
         // Once in a while at most: a local sign-in that keeps failing must not reload forever.
         if Date().timeIntervalSince(localSignInAt) < Self.localSignInGap { return }
         localSignInAt = Date()
-        if let to = URL(string: BackendHost.home) { views["k7"]?.load(URLRequest(url: to)) }
+        if let to = URL(string: BackendHost.home) { view?.load(URLRequest(url: to)) }
     }
 
     // Until the page has said, the shell page's own background shows through.
     private func paint() {
-        let color = visible.flatMap { colors[$0] } ?? .clear
         strip.backgroundColor = color
         var white: CGFloat = 0
         if color != .clear, color.getWhite(&white, alpha: nil) {
@@ -201,18 +176,17 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         }
     }
 
-    private func create(_ id: String) -> AppWebView {
+    private func create() -> AppWebView {
         let config = WKWebViewConfiguration()
         config.allowsInlineMediaPlayback = true
         config.mediaTypesRequiringUserActionForPlayback = []
-        // How an app can tell it is inside this one, should it ever need to.
+        // How the page can tell it is inside this app, should it ever need to.
         config.applicationNameForUserAgent = "k7-ios"
         config.preferences.javaScriptCanOpenWindowsAutomatically = true
         let content = config.userContentController
         content.add(appBridge, name: StudioBridge.name)
         scripts.forEach(content.addUserScript)
         let view = AppWebView(frame: .zero, configuration: config)
-        view.appId = id
         view.navigationDelegate = self
         view.uiDelegate = self
         // The edge swipe is iOS's Back: the view's own history first.
@@ -228,7 +202,7 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
             view.leadingAnchor.constraint(equalTo: frame.safeAreaLayoutGuide.leadingAnchor),
             view.trailingAnchor.constraint(equalTo: frame.safeAreaLayoutGuide.trailingAnchor),
         ])
-        views[id] = view
+        self.view = view
         return view
     }
 
@@ -238,9 +212,10 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
     private static let inspectable = false
     #endif
 
-    /// Which app `url` is one of, by origin; nil for anywhere else.
-    private func appOf(_ url: URL) -> String? {
-        apps.first { _, home in home.scheme == url.scheme && home.host == url.host && home.port == url.port }?.key
+    /// Whether `url` is k7's own origin.
+    private func isK7(_ url: URL) -> Bool {
+        guard let home = URL(string: BackendHost.origin) else { return false }
+        return home.scheme == url.scheme && home.host == url.host && home.port == url.port
     }
 
     /// Somewhere this app does not show: Safari, Mail, the phone — and only those, by scheme.
@@ -250,25 +225,16 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         UIApplication.shared.open(url)
     }
 
-    /// A link the user followed into another tab's app: the page switches tab, and that view loads it.
-    private func navigate(_ id: String, _ url: URL) {
-        notifyListeners("navigate", data: ["id": id, "url": url.absoluteString])
-    }
-
-    /// The studio did not answer: the shell page takes over, with the tray and a retry, since no app is there to reach settings in.
-    private func loadFailed(_ id: String, _ why: String) {
-        notifyListeners("loadError", data: ["id": id, "message": why])
-    }
-
-    private func route(_ url: URL) {
-        if let to = appOf(url) { navigate(to, url) } else { openOutside(url) }
+    /// k7 did not load: the shell page takes over, with the tray and a retry, since no page is there to reach settings in.
+    private func loadFailed(_ why: String) {
+        notifyListeners("loadError", data: ["message": why])
     }
 
     // MARK: WKNavigationDelegate
 
     public func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction,
                         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        guard let url = action.request.url, let id = (webView as? AppWebView)?.appId else { return decisionHandler(.allow) }
+        guard let url = action.request.url else { return decisionHandler(.allow) }
         if action.shouldPerformDownload { return decisionHandler(.download) }
         let scheme = url.scheme?.lowercased()
         if scheme != "http" && scheme != "https" {
@@ -277,11 +243,7 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
             openOutside(url)
             return decisionHandler(.cancel)
         }
-        // Only a link the user followed moves tabs; a redirect or a script's navigation stays put.
-        guard action.navigationType == .linkActivated, action.targetFrame?.isMainFrame != false,
-              let to = appOf(url), to != id else { return decisionHandler(.allow) }
-        navigate(to, url)
-        decisionHandler(.cancel)
+        decisionHandler(.allow)
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor response: WKNavigationResponse,
@@ -310,25 +272,24 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         let e = error as NSError
         if e.domain == NSURLErrorDomain && e.code == NSURLErrorCancelled { return }
         if e.domain == "WebKitErrorDomain" && e.code == 102 { return }
-        if let id = (webView as? AppWebView)?.appId { loadFailed(id, e.localizedDescription) }
+        loadFailed(e.localizedDescription)
     }
 
     // A page killed as it loads would reload forever: past two reloads in a minute, the shell's Retry takes over.
     public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        let id = (webView as? AppWebView)?.appId ?? ""
         let now = Date()
-        let recent = (contentLost[id] ?? []).filter { now.timeIntervalSince($0) < Self.reloadWindow }
+        let recent = contentLost.filter { now.timeIntervalSince($0) < Self.reloadWindow }
         if recent.count >= Self.maxReloads {
-            hostLog("content process of \(id) lost a third time in a minute: no reload, the shell's Retry takes over")
-            contentLost[id] = []
-            return loadFailed(id, "the page stopped again as it loaded")
+            hostLog("content process lost a third time in a minute: no reload, the shell's Retry takes over")
+            contentLost = []
+            return loadFailed("the page stopped again as it loaded")
         }
-        contentLost[id] = recent + [now]
-        hostLog("content process of \(id) lost: reload \(recent.count + 1) of \(Self.maxReloads)")
+        contentLost = recent + [now]
+        hostLog("content process lost: reload \(recent.count + 1) of \(Self.maxReloads)")
         webView.reload()
     }
 
-    // A studio behind the user's own CA: the views know only iOS's roots, so the CAs the tray was given are asked too.
+    // A backend behind the user's own CA: the view knows only iOS's roots, so the CAs the tray was given are asked too.
     public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge,
                         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
@@ -341,22 +302,20 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         }
         hostLog("trust: \(host) refused")
         completionHandler(.cancelAuthenticationChallenge, nil)
-        // The studio's own certificate, not some embed's: nothing of the app can load.
-        if let id = (webView as? AppWebView)?.appId, apps[id]?.host == host {
-            loadFailed(id, "the studio's certificate is not trusted")
-        }
+        // k7's own certificate, not some embed's: nothing of the app can load.
+        if URL(string: BackendHost.origin)?.host == host { loadFailed("k7's certificate is not trusted") }
     }
 
     // MARK: WKUIDelegate
 
-    // A new window is never opened: where it was headed is routed instead.
+    // A new window is never opened: where it was headed goes outside instead.
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
                         for action: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        if let url = action.request.url, url.absoluteString != "about:blank" { route(url) }
+        if let url = action.request.url, url.absoluteString != "about:blank" { openOutside(url) }
         return nil
     }
 
-    // The microphone, to the studio's own apps only, once iOS grants it, asked here on first need (MicAccess.swift).
+    // The microphone, to k7's own page only, once iOS grants it, asked here on first need (MicAccess.swift).
     public func webView(_ webView: WKWebView, requestMediaCapturePermissionFor origin: WKSecurityOrigin,
                         initiatedByFrame frame: WKFrameInfo, type: WKMediaCaptureType,
                         decisionHandler: @escaping (WKPermissionDecision) -> Void) {
@@ -364,15 +323,15 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         parts.scheme = origin.protocol
         parts.host = origin.host
         if origin.port != 0 { parts.port = origin.port }
-        guard type == .microphone, let url = parts.url, appOf(url) != nil else {
-            hostLog("microphone: \(type == .microphone ? "not a studio origin (\(parts.url?.absoluteString ?? "-"), studios \(apps.values.map(\.absoluteString)))" : "not a microphone"), denied")
+        guard type == .microphone, let url = parts.url, isK7(url) else {
+            hostLog("microphone: \(type == .microphone ? "not k7's origin (\(parts.url?.absoluteString ?? "-"))" : "not a microphone"), denied")
             return decisionHandler(.deny)
         }
         MicAccess.request { [weak self] answer in
             decisionHandler(answer == .granted ? .grant : .deny)
             // Blocked for good: the page hears why its getUserMedia failed, beside the native dialog.
             if answer == .blocked {
-                self?.views.values.forEach { $0.evaluateJavaScript("dispatchEvent(new CustomEvent('k7:mic-denied'))") }
+                self?.view?.evaluateJavaScript("dispatchEvent(new CustomEvent('k7:mic-denied'))")
             }
         }
     }

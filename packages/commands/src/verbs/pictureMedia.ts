@@ -21,6 +21,10 @@ import { splitWords } from "./shared.ts";
 /** What a browser plays as it is, so a machine with no ffmpeg needs do nothing for it. */
 const BROWSER_PLAYS = /\.(mp4|m4v|webm)$/i;
 
+/** The page's own user agent: the Worker's `process.platform` is always "linux", so it says nothing. */
+const onAndroid = () =>
+  typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+
 /** The copies one clip still needs, as the ask that makes them, or null when it needs none. */
 async function clipWork(
   ref: string,
@@ -40,7 +44,7 @@ async function clipWork(
   if (!facts) return { say: `${ref}: ${source} has no picture`, ask: null };
   const plan = planVideo(
     facts,
-    process.platform === "android" ? ANDROID_PLAYABLE_CODECS : PLAYABLE_CODECS,
+    onAndroid() ? ANDROID_PLAYABLE_CODECS : PLAYABLE_CODECS,
   );
   const have = (rel: string | undefined) =>
     !!rel && existsSync(resolve(h.songPath, rel));

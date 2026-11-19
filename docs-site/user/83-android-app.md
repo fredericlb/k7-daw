@@ -63,4 +63,4 @@ When k7 does not load, the app shows its **tray** instead of k7: the same engine
 
 ## The name other people see
 
-Engine pickers show the phone under the device name you set in Android's settings (*About phone*), or its model name if you set none.
+k7 shows the phone under the device name you set in Android's settings (*About phone*), or its model name if you set none.

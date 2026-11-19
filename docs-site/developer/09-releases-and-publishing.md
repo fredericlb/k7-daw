@@ -1,7 +1,7 @@
 # Releases and publishing
 
 No CI job builds or publishes a release: every file below is built on a developer's machine, by the
-commands in this page, when one is needed. Four **npm packages** are published by hand as well.
+commands in this page, when one is needed.
 
 ## What a build makes
 
@@ -77,29 +77,3 @@ npm ci
 cd engine/k7-android && ./gradlew assembleDebug
 # app/build/outputs/apk/debug/app-debug.apk
 ```
-
-## Publishing npm packages
-
-Four packages are consumed by another repository by version, still as raw TypeScript:
-
-| Package | Version | `files` |
-|---|---|---|
-| `@studio/web-protocol` | `0.1.1` | `*.ts` except tests, `docs` |
-| `@studio/engine-protocol` | `0.1.1` | `*.ts` except tests, `docs` |
-| `@studio/engine-browser` | `0.1.1` | `src` except tests, `docs` |
-| `@studio/project-shell` | `0.1.1` | `src` except tests, `docs` |
-
-They are the only packages without `"private": true` that carry `"publishConfig": { "access":
-"restricted" }`. Their `exports` point at `.ts` files exactly as inside the repository, so a consumer
-needs a TypeScript-aware bundler or loader. No script or workflow in this repository publishes them:
-publishing is a manual `npm publish` from the package folder, after bumping its `version`.
-
-Rules that follow from this:
-
-- A change to one of these four packages can break the external consumer; bump the version when
-  publishing a change to their exports.
-- Their runtime `dependencies` are only each other (`web-protocol` and `engine-browser` depend on
-  `engine-protocol`, `engine-browser` and `project-shell` on `web-protocol`). `project-shell` lists
-  the private `@studio/graph-model` and `@studio/song-schema` only as **optional** peer
-  dependencies, for the subpaths that need them; keep any new dependency on a private package
-  optional in the same way, or the consumer cannot install the package.

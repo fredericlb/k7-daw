@@ -58,7 +58,7 @@ from what you were reading. The same entries in the same place on every page say
 are on, so none of the others carries a back button of its own.
 
 Its foot carries the downloads button, and on the rail the user menu below it. The queue
-and the engine selector are the BAR's, at its right end (below). The drawer the sidebar becomes inside a
+and the engine slot are the BAR's, at its right end (below). The drawer the sidebar becomes inside a
 project carries no user menu of its own either: it is the header's there, as here.
 
 ## The home bar
@@ -69,13 +69,13 @@ no home page mounts a player, so it is the standby bar holding the home's own co
 to a folded sidebar at its left edge is always there.
 
 **Its two ends are fixed.** At the left, the fold/unfold and the command bar's opener (`commandBar.md`).
-At the right, **a page's own control** when it has one, then **the engine selector**. It is the
+At the right, **a page's own control** when it has one, then **the engine slot**. It is the
 bar's because the engine is a live control that must never leave the screen, and the row is where
 the eye already goes for what plays. The standby bar says NOTHING about the silence: the message
 filled the one row people look at for controls, and an empty bar already says it.
 
-**The engine selector is the bar's** (`shell.md`), on every home page and with the sidebar out or folded: the engine it shows
-is the one a project opens on, so it has to stay chosen and in sight.
+**The engine slot is the bar's** (`shell.md`), on every home page and with the sidebar out or folded: the engine it shows
+is the one a project opens on, so it has to stay in sight.
 
 **The sidebar has ONE control, and it never moves**: the bar's left edge — the bottom-left of the window
 — holds a fold button while the sidebar is out and an unfold button while it is folded (`HomeFrame.tsx`,
@@ -148,8 +148,8 @@ turn from the page, those are four round trips one after the other on a phone �
 the list — before a single row could be drawn.
 
 What can be read and set **without an engine** is what saves installation day: the libraries here
-are asked of the server. A page an engine picker would strike out entirely would be a page where
-nothing can be set until there is an engine.
+are asked of the server. A page that needed an engine to draw would be a page where
+nothing can be set until there is one.
 
 ### On a phone, the service that lists is the one still starting
 

@@ -105,9 +105,7 @@ fixtures over HTTP as on the other targets — and takes the page of the k7 view
 WebViews, the one on the backend's origin. The fixtures go into the e2e app's local user, whose
 data is its own.
 
-Two things the run does that a person does once by hand. It writes the phone's engine into the
-account's preferences, since a project page picks no engine on its own and a fresh install has
-none remembered. And a spec's `page.screenshot` is the phone's screen, taken over adb: a WebView
+A spec's `page.screenshot` is the phone's screen, taken over adb: a WebView
 never answers DevTools' capture, and the k7 view is what the screen shows.
 
 ## Feature projects

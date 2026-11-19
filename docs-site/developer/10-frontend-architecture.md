@@ -15,7 +15,7 @@
 2. `/external` — the second device's menu of surfaces (`src/components/ExternalIndex.tsx`);
 3. anything else naming a project — `AuthGate` → `EngineGate` → `ProjectGate` → `App`, or `ExternalSurface` when the address ends in `/@external/<surface>`.
 
-The gate stack is the reason no screen ever has a half-configured transport: `AuthGate` (`src/components/AuthGate.tsx`) requires a session, `EngineGate` picks and leases an engine (Engines section), `ProjectGate` (`src/components/ProjectGate.tsx`, wrapping `@studio/project-shell`'s gate — see [project-shell](./11-project-shell.md)) resolves the workspace, waits for sync, opens the project and configures the file transport. Only then does `App` mount, keyed by `workspace/project` so switching remounts cleanly.
+The gate stack is the reason no screen ever has a half-configured transport: `AuthGate` (`src/components/AuthGate.tsx`) requires a session, `EngineGate` finds this device's engine and leases it (Engines section), `ProjectGate` (`src/components/ProjectGate.tsx`, wrapping `@studio/project-shell`'s gate — see [project-shell](./11-project-shell.md)) resolves the workspace, waits for sync, opens the project and configures the file transport. Only then does `App` mount, keyed by `workspace/project` so switching remounts cleanly.
 
 The project is the router's **basename** (`projectBasename`), so the router can only write below it: `src/routes.ts` cannot rewrite the project away, and a reload re-reads the address. There is no session storage of "the current project".
 

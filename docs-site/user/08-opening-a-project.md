@@ -2,29 +2,19 @@
 
 Opening a project means two things: showing it in the editor, and handing it to an **engine**, the
 program that plays it on a machine with an audio interface. This page follows what happens between
-the click on the home page and the first note, and how to choose which project the engine plays.
+the click on the home page and the first note, and how the engine takes the project.
 
 ## What happens when you open a project
 
 Click a project on the home page (or open its address). k7 then goes through these steps, showing a
 screen for each one that takes time.
 
-### 1. An engine is chosen
+### 1. The engine is found
 
-k7 lists the engines your account can use and measures each one. It picks one for you, in this
-order:
-
-1. the engine that has the plugins this project uses;
-2. then the one with the best latency class;
-3. then the best performance score.
-
-Among equals, it prefers the engine your account chose last, then this machine's own engine.
-
-If no engine is usable, the **Select an engine** screen appears. Each row shows an engine with its
-latency (hover it to see network and audio-interface latency separately), or **unreachable**.
-Click a usable engine to choose it; the choice is remembered on your account. **Refresh** measures
-them again. While nothing is usable, the screen also offers to pair this device as an engine. Setting
-up and pairing engines is covered in the engines section of this guide.
+k7 looks for the audio engine on this device and measures it. The project opens beside that search,
+so you can read and edit your song while it runs. The bar's engine button shows the result: a green
+dot when the engine is connected, grey while it is searched for, amber when there is none. With no
+engine running, nothing plays: open the button and choose **Engine settings** to start it.
 
 ### 2. The libraries are checked
 
@@ -53,7 +43,7 @@ it does declare (the DJ desk for a `mix` project, the chains graph for a `live` 
 |---|---|
 | **That project isn't in the workspace** | It was renamed or removed since the link was made. Go back to Projects and open it again. |
 | "This workspace holds no project yet…" | Add a project from the home page. Opening a workspace from its **Create the first project** link shows the first-project page instead. |
-| **Can't reach this engine's files** | The engine's file service did not answer. Retry, or choose another engine. |
+| **Can't reach this engine's files** | The engine's file service did not answer. Retry, or restart the engine from its settings. |
 | **The project could not be loaded on the engine** | Some audio files did not reach the engine's machine, so the project was not sent (its clips would be silent). Click **Reload project**. |
 | "The engine crashed and was restarted…" | The project is sent again automatically. Anything playing stopped. |
 | A module needs a sampled instrument "…which is not on the engine's machine" | Download that instrument on the engine's machine (on a computer running the desktop app: the engine page's Downloads, from **Engine Settings…** in the desktop app menu). |
@@ -107,7 +97,7 @@ reopen it where you left off.
 |---|---|
 | Back arrow, top left | Goes to the home page. |
 | `ui workspace quit` | Unloads the project from the engine, unless another of your tabs is still using it, and goes to the home page. |
-| `ui engine` | Goes back to the engine picker, to choose another engine. |
+| `ui engine` | Opens the engine's settings. |
 
 ## The bench
 

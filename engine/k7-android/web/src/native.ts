@@ -71,10 +71,6 @@ interface K7RuntimePlugin {
 
 export const K7Runtime = registerPlugin<K7RuntimePlugin>("K7Runtime");
 
-/** The studio apps with a view of their own — the media library is a page of k7's. */
-export type AppId = "k7";
-export const APP_IDS: AppId[] = ["k7"];
-
 /** The phone's own backend: starting (unpacking with the fraction done, on a first run, then launching), ready, or failed with why. */
 export interface BackendStatus {
   state: "starting" | "ready" | "failed";
@@ -84,20 +80,11 @@ export interface BackendStatus {
 }
 
 interface AppViewsPlugin {
-  /**
-   * Show `id`'s view, creating it on first use. It loads `url` when given, else `apps[id]` when it
-   * has nothing loaded yet or its origin changed. `apps` is every app's address: a link from one to
-   * another switches view instead (`navigate`). `studio` is the one k7's settings mark as open.
-   */
-  show(options: {
-    id: AppId;
-    apps: Record<AppId, string>;
-    studio: string;
-    url?: string;
-  }): Promise<void>;
-  /** Back to this page alone: the tray. The views keep running, hidden. */
+  /** Show k7's view, creating it on first use; it loads the phone's own backend, once that answers. */
+  show(): Promise<void>;
+  /** Back to this page alone: the tray. The view keeps running, hidden. */
   hideAll(): Promise<void>;
-  reload(options: { id: AppId }): Promise<void>;
+  reload(): Promise<void>;
   /** Where the phone's own backend is (BackendHost.kt); `backend` events follow every change. */
   backend(): Promise<BackendStatus>;
   /** Start the phone's own backend again after it failed. */
@@ -106,20 +93,10 @@ interface AppViewsPlugin {
     event: "backend",
     listener: (status: BackendStatus) => void,
   ): Promise<PluginListenerHandle>;
-  /** A view followed a link to another app: show that one, at that URL. */
-  addListener(
-    event: "navigate",
-    listener: (to: { id: AppId; url: string }) => void,
-  ): Promise<PluginListenerHandle>;
-  /** k7's settings picked which connected studio the views open. */
-  addListener(
-    event: "studio",
-    listener: (to: { origin: string }) => void,
-  ): Promise<PluginListenerHandle>;
-  /** A view's page did not load: nothing in it can reach k7's settings, so this page shows. */
+  /** The view's page did not load: nothing in it can reach k7's settings, so this page shows. */
   addListener(
     event: "loadError",
-    listener: (failed: { id: AppId; message: string }) => void,
+    listener: (failed: { message: string }) => void,
   ): Promise<PluginListenerHandle>;
 }
 

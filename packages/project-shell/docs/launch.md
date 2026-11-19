@@ -199,7 +199,7 @@ the prefix cannot change without a navigation that remounts the gate anyway.
 `ProjectGateStrings` is mostly required, and some groups are not: the **bench**'s wait
 (`benchWorkspace`, `benchFetching`), the **idle** screen (`idleTitle`, `idleBody`, `resume`), and the missing screen's two
 address hints (`localUsage`, `retiredAddress`) and the `details` label over the raw message are optional
-too: the package is published, and an addition must not break an app that pinned it.
+too: they are the screens a build of the gate may be structurally unable to reach.
 Both are screens an app may be structurally unable to reach — the bench is a `.k7` project, which
 an app reading another suffix never opens, and an app that passes no `idleTimeoutMs` never leaves
 the running phase. Required, they would each be made to translate a card nobody can see. The gate
@@ -243,9 +243,7 @@ The address vocabulary itself lives one level lower still, in
 `@studio/web-protocol/projects`, beside the suffix rule it depends on: k7's home page
 **writes** these addresses and every editor **reads** them back, which makes it a wire contract
 rather than an app's habit. Neither end of the contract is where the vocabulary lives, and that
-is the point. `launch.ts` here is what the apps import — k7 from this tree, an app outside this repository
-through the published package (`docs/publishing.md`), which is why a change to an export here is
-a versioned change.
+is the point. `launch.ts` here is what the apps import.
 
 Each app keeps what is genuinely its own: k7 adds waveforms, video, export, the timeline's
 tracks. The wording is each app's too — k7 has paraglide — which is why the gate takes a

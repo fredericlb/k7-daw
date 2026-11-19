@@ -65,8 +65,7 @@ The shell page is Android's own (`engine/k7-android/web`), built by the same wor
 (`EnginePlugin.swift`, `AppViews.swift`). k7 gets `window.k7Ios` (`StudioBridge.swift`), the protocol of
 Android's `window.k7Android` under the platform's name. `apps/k7/frontend/src/settings/androidEngine.ts` takes
 whichever is there, and the three page scripts both apps inject accept either (`engine/k7-android/app/src/main/assets`).
-Only k7 may call the engine, checked by origin on every message, with Android's short list of commands and its
-native confirmations.
+The page calls the engine, checked by origin on every message, with Android's short list of commands.
 
 Where iOS does a thing itself, the app lets it:
 
@@ -78,7 +77,7 @@ Where iOS does a thing itself, the app lets it:
 | the window's insets | the safe area; the strip under the status bar is painted the app's top colour, and the status bar's icons follow its luminance |
 | a renderer lost: the view destroyed, the shell's Retry makes a new one (`RendererLoss.kt`) | WebKit keeps the view usable, so a view whose content process died reloads, twice in a minute at most; past that the shell page is told with a `loadError` and its Retry reloads, since a page that runs out of memory as it loads would otherwise reload forever |
 
-The microphone goes to the studio's apps only. It is asked at the first launch, and the engine waits for the
+The microphone goes to k7's own origin only. It is asked at the first launch, and the engine waits for the
 answer (`MicAccess.swift`): inputs open once with the device, so a grant given before the start is the one that
 needs no restart. A recording app without its microphone is not worth the wait it saves, and the wait happens
 once. A run with `K7_TEST_HOOKS` skips that prompt, since nobody answers it. A refusal iOS remembers offers the

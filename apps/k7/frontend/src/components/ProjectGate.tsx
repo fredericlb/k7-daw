@@ -31,7 +31,6 @@ export function ProjectGate({
   engineUrl,
   engineSearching,
   external,
-  onChangeEngine,
   onIdle,
   onResume,
   onPhase,
@@ -46,8 +45,6 @@ export function ProjectGate({
   engineSearching: boolean;
   /** A surface's name, when this tab was opened on ONE surface — the gates above are the same either way, only the rendering differs. */
   external?: string | null;
-  /** Passed straight through to the settings menu: the engine choice belongs to the gate ABOVE this one. */
-  onChangeEngine: () => void;
   /** The session went to sleep — the lease belongs to the gate ABOVE, so this only forwards the news (@studio/project-shell/docs/idle.md). */
   onIdle: () => void;
   /** …and taking it back. */
@@ -143,7 +140,6 @@ export function ProjectGate({
               // The RAW email, not a slug: `sessionFor` does the slugging, so this half and the file service cannot drift.
               userEmail={userEmail}
               onQuitWorkspace={quit}
-              onChangeEngine={onChangeEngine}
               engine={engine ?? undefined}
               engineSearching={engineSearching}
             />

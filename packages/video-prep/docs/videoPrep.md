@@ -31,8 +31,9 @@ preview is previewed as it is, and one that needs a copy is named, with what it 
 The playable list is what every browser decodes, which leaves HEVC out. On Android the browser is
 the WebView, which hands HEVC to the phone's hardware decoder, so `ANDROID_PLAYABLE_CODECS` adds it
 and what the phone's camera records plays without a copy. A 10-bit HDR recording is still refused:
-whether a WebView takes it depends on the phone. The list is chosen by `process.platform`, so it is
-the platform of the file service, which on the phone is also where the page runs.
+whether a WebView takes it depends on the phone. The list is chosen by the user agent of the page
+whose Worker runs the verb (`Android`): the Worker's `process.platform` is a shim that always says
+`linux`, and the page is what decodes.
 
 The file probed and copied is an upload, so both open it under `-protocol_whitelist file,pipe`
 through `@studio/ffmpeg`'s `input()` (`packages/ffmpeg/docs/ffmpeg.md`): a crafted container must

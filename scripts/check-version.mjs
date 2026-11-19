@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // check-version.mjs — the release version has ONE source, the root package.json's `version`; this keeps
 // every copy equal: each private workspace's package.json, its package-lock entry, the iOS project's
-// MARKETING_VERSION. The four published packages keep their own semver and are skipped (docs/publishing.md).
+// MARKETING_VERSION.
 // `--tag <vX.Y.Z>` also refuses a release tag that is not `v` + that version; `--set <X.Y.Z>` rewrites every
 // copy, the root's included. See docs/versioning.md.
 
@@ -11,12 +11,6 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
-const PUBLISHED = new Set([
-  "@studio/web-protocol",
-  "@studio/engine-protocol",
-  "@studio/engine-browser",
-  "@studio/project-shell",
-]);
 const PBXPROJ = "engine/k7-ios/k7.xcodeproj/project.pbxproj";
 const SEMVER = /^\d+\.\d+\.\d+$/;
 
@@ -65,11 +59,8 @@ const lockPaths = [""];
 for (const dir of workspaceDirs()) {
   const file = `${dir}/package.json`;
   const manifest = JSON.parse(read(file));
-  if (PUBLISHED.has(manifest.name)) continue;
   if (manifest.private !== true) {
-    errors.push(
-      `${file}: neither private nor one of the four published packages (docs/publishing.md)`,
-    );
+    errors.push(`${file}: not private`);
     continue;
   }
   lockPaths.push(dir);

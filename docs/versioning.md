@@ -14,7 +14,6 @@ in a commit on `main`, then the tag on that commit.
 |---|---|
 | the root package.json, not a `VERSION` file | npm already requires a `version` in every manifest, so a separate file would be one more copy, not one fewer; node, Gradle and Tauri all read JSON |
 | every private workspace carries the same version | a manifest must hold some version, and a stale one is read as a claim; `npm run lint:version`, a blocking step of `k7.yml`, refuses a copy that differs |
-| the four published packages keep their own | their consumers outside this repository pin them by semver, and their version moves with their API, not with a release ([publishing.md](publishing.md)) |
 | `--set` writes every copy, the lockfile and the iOS project included | a bump is one command; nobody edits sixty manifests by hand |
 
 Each artefact derives its name from it:

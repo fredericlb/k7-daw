@@ -75,7 +75,7 @@ test("/settings draws every section with its controls, a tab at a time", async (
   watch.assertClean();
 });
 
-test("/settings/engine lists the engines this account may use, off the tray", {
+test("/settings/engine opens as a route change, off the tray", {
   tag: "@tier4",
 }, async ({ k7 }) => {
   const page = await k7.open("/settings");
@@ -86,10 +86,7 @@ test("/settings/engine lists the engines this account may use, off the tray", {
   // Reached the way the account menu reaches it: a route change, not a load.
   await routeTo(page, "/settings/engine");
   await expect(
-    page.getByRole("heading", { level: 1, name: "Engines" }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { level: 3, name: "Engines" }),
+    page.getByRole("heading", { level: 1, name: "Engine" }),
   ).toBeVisible();
   watch.assertClean();
 });
@@ -99,7 +96,7 @@ test("/settings/engine opens when loaded by its address", {
 }, async ({ k7 }) => {
   const page = await k7.open("/settings/engine");
   await expect(
-    page.getByRole("heading", { level: 1, name: "Engines" }),
+    page.getByRole("heading", { level: 1, name: "Engine" }),
   ).toBeVisible({ timeout: 10_000 });
 });
 

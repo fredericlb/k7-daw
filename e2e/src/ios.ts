@@ -91,19 +91,6 @@ async function studioState(api: APIRequestContext): Promise<string> {
   return engines.length > 0 ? "up" : "no engine listed yet";
 }
 
-/** Remembers the phone's engine for the account, as a first pick does (apps/k7/frontend/docs/shell.md). */
-async function rememberEngine(api: APIRequestContext): Promise<void> {
-  const [engine] = (await (await api.get("/api/engines")).json()) as {
-    id: string;
-  }[];
-  const prefs = (await (await api.get("/api/preferences")).json()) as object;
-  const res = await api.put("/api/preferences", {
-    data: { ...prefs, engineId: engine?.id },
-  });
-  if (!res.ok())
-    throw new Error(`preferences: ${res.status()} ${await res.text()}`);
-}
-
 /** `engine-host.json`'s port set before launch: no SIMCTL_CHILD variable moves it, and the supervisor reads it once. */
 function pinEnginePort(udid: string): void {
   const dir = join(
@@ -182,7 +169,6 @@ export const ios = base.extend<{ k7: K7 }, { phone: Phone }>({
           },
         )
         .toBe("up");
-      await rememberEngine(api);
       await seedFixtures(await FileService.connect(api, IOS_ORIGIN));
       const browser = await webkit.launch();
       const context = await browser.newContext({

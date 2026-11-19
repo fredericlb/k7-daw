@@ -1,5 +1,5 @@
 // EngineTakenBanner.tsx — the strip over the open project once somebody else took its engine: who
-// took it, "take it back" (which IS opening the project again), and the full engine list. It floats
+// took it, and "take it back" (which IS opening the project again). It floats
 // rather than pushing the editor down, so the gate's tree, and the project under it, never remount.
 // See ../../docs/shell.md, "When somebody else takes the engine".
 
@@ -11,11 +11,9 @@ import { type Taken, takenBanner } from "./engineTaken";
 export function EngineTakenBanner({
   taken,
   onTakeBack,
-  onOpenList,
 }: {
   taken: Taken;
   onTakeBack: () => void;
-  onOpenList: () => void;
 }) {
   const b = takenBanner(taken);
   const title =
@@ -52,10 +50,6 @@ export function EngineTakenBanner({
               : m["project.takeProjectBack"]()}
           </Button>
         )}
-        {/* The same entry as the speaker's menu in the sidebar, under the same name. */}
-        <Button size="sm" variant="outline" onClick={onOpenList}>
-          {m["engineSwitch.allEngines"]()}
-        </Button>
       </div>
     </div>
   );

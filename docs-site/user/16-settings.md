@@ -40,7 +40,7 @@ Every input and output module of the song — the project's own and those inheri
 
 The device's identity, and:
 
-- **Engine** (`ui engine`) — back to the engine picker,
+- **Engine** (`ui engine`) — the engine's settings page,
 - **Quit workspace** (`ui workspace quit`),
 - **Language** — English or Français.
 

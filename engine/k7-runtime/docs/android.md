@@ -72,12 +72,11 @@ copies. The engine refuses any file outside its roots (`pathRoots.md`), so `Engi
 `apps/k7/backend-rs/standalone.json` (`BackendHost.engineRoots`). Without them a project plays with
 every clip, sample, patch and model dropped.
 
-## The app is also where the studio is used: k7, full screen
+## The app is k7, full screen
 
-`MainActivity` is a Capacitor `BridgeActivity`. With a studio connected, **the screen is k7, edge
-to edge, and nothing of the app's own**: no header, no tab bar. k7 is the one app with a view, so
-`APP_IDS` (`engine/k7-android/web/src/native.ts`) holds k7 alone. A phone has no room for a second
-header above the app's own.
+`MainActivity` is a Capacitor `BridgeActivity`. Once the phone's own backend answers, **the screen is k7,
+edge to edge, and nothing of the app's own**: no header, no tab bar. The app is a shell for k7 alone, with
+one view, one origin and no way to open another app or another backend.
 
 The status bar above the app is painted **the colour of that app's top edge**, so the app's
 header reads as running up under it. That colour is measured, not declared: `assets/top-color.js`
@@ -97,8 +96,7 @@ pads them.
 **This phone's engine is set in k7's settings** (the home page's cog), because on the phone
 k7 is the only screen there is: the engine's state, the private CA,
 Quit (`apps/k7/frontend/docs/settings.md`). The page bundled in the APK, `engine/k7-android/web`,
-is only seen while there is **no studio to open**, while the phone's own k7 is **still starting or
-failed to**, or while the open one **fails to load** — then no app is on screen to reach settings in,
+is only seen while the phone's own k7 is **still starting or failed to**, or while k7 **fails to load** — then no app is on screen to reach settings in,
 so it draws the same tray with a Retry. Its private CA form is
 collapsed, since the phone's own k7 needs none.
 
@@ -110,49 +108,41 @@ studio page is dark-only (`@studio/ui/theme.css`, and k7's `color-scheme: dark`)
 change is the window behind a loading page and the native dialogs, a white flash and white boxes
 over a dark app.
 
-Each app's WebView is painted #07031F (`R.color.splash_background`) until its page draws: between the
+k7's WebView is painted #07031F (`R.color.splash_background`) until its page draws: between the
 shell's "launching" and k7's own splash it would otherwise show a black frame, which reads as a crash.
 
 Two ways from the page to the native half:
 
 - **The shell page** uses two plugins `MainActivity` registers itself, typed once in
   `web/src/native.ts`: **`K7Runtime`** (`EnginePlugin.kt`), `SupervisorHost`'s snapshots and
-  commands; **`AppViews`** (`AppViewsPlugin.kt`), one native WebView per app over the page. Each is
-  created the first time it is shown and only hidden after that, so an app keeps its state while
-  another is on screen. With k7 the only app, that is what keeps it alive under the desktop app page.
-- **The studio app** gets `window.k7Android` (`StudioBridge.kt`), an androidx.webkit
-  WebMessageListener. Every app posts its top colour on it; **only k7, checked by origin on
-  every message, may call the engine** (`apps/k7/frontend/src/settings/androidEngine.ts`). The
-  object is offered to every origin because the studio can change under a view that already
-  exists, and a listener's origin rules are fixed when it is added; the check is per message
-  instead. k7's origin is whichever studio is open, possibly a remote one, so a script on it is
-  not trusted with the supervisor: `command` takes the eight the engine page sends on a computer (`engine.start|stop|restart`,
+  commands; **`AppViews`** (`AppViewsPlugin.kt`), k7's one native WebView over the page. It is
+  created the first time it is shown and only hidden after that, so k7 keeps its state while
+  the shell page is on screen.
+- **k7's page** gets `window.k7Android` (`StudioBridge.kt`), an androidx.webkit
+  WebMessageListener. It posts its top colour on it and **calls the engine, checked by origin on
+  every message** (`apps/k7/frontend/src/settings/androidEngine.ts`): the object is offered to every
+  origin, since a listener's origin rules are fixed when it is added, and a page the view
+  wandered off to gets no answer. A script on k7's page is still not trusted with the
+  supervisor: `command` takes the eight the engine page sends on a computer (`engine.start|stop|restart`,
   `audio.priority`, `lan.open`, `plugins.rescan`, `instruments.download|remove`, as the desktop app's front allows,
   `apps/k7/backend-rs/docs/localEngine.md`) and anything else is refused —
   `shutdown`, `session.drop`, `registry.deregister`, `weburi.*` and pairing included, which the panel never sends.
-  `chooseStudio` takes `https` origins, or this phone's own loopback one; an origin no listed studio
-  answers on asks the user first too. A dialog a page cannot draw or click is what stops a script
-  from listing the engine at a studio of its own and moving k7 there.
 
-**The apps load from a studio, never from the shell page.** Each app is same-origin with its backend
-(relative `/api` and `/auth`, cookie sessions), so it is served by one: this phone's own by default.
-The page takes the studios from the supervisor's own list, the phone's own first, and gives the view
-`serviceUrl(origin, "k7")`, the mapping `UserMenu` uses — or, for the loopback one, `localServiceUrl`,
-which is why the shell page and every view on the phone's own studio get `__STUDIO_PORTS__` (a
-document-start script). With several studios connected, k7's settings pick
-which one the apps open.
+**k7 loads from the phone's own backend, never from the shell page.** The page is same-origin with its backend
+(relative `/api` and `/auth`, cookie sessions), so the backend serves it: the Rust front, on the loopback port
+`BuildConfig` names. That is why the shell page and the view get `__STUDIO_PORTS__` (a document-start
+script), and why no studio is chosen anywhere: the app has one origin (`BackendHost.ORIGIN`).
 
-What the app views do that a browser would do on its own:
+What k7's view does that a browser would do on its own:
 
-- **A link to an app with a view switches to it** instead of opening a window: `target=_blank` and
-  cross-app links go to that app's view, at that URL. Only a link the *user* followed does this; a
-  redirect stays in its view. Other hosts in a new window open in the browser. Every page of k7
-  is same-origin with its `/auth`, so the views need no third-party cookies. Only `http`, `https`,
+- **A new window opens in the browser** instead: `target=_blank` and `window.open` reach
+  `onCreateWindow`, whose throwaway view only learns where the window was headed. Every page of k7
+  is same-origin with its `/auth`, so the view needs no third-party cookies. Only `http`, `https`,
   `mailto` and `tel` are handed to another app; any other scheme a page names is dropped, since a
   `file:` or `intent:` URI handed out exposes or launches what it should not.
-- **The microphone and the camera** go to the studio's apps only (a picture lane's take, the `live-video`
+- **The microphone and the camera** go to k7's own origin only (a picture lane's take, the `live-video`
   webcam), and only once the app holds RECORD_AUDIO or CAMERA, asked for when a page first wants it (below).
-- **The private CA** covers the app views too: a certificate the WebView refuses only for its unknown issuer
+- **The private CA** covers the view too: a certificate the WebView refuses only for its unknown issuer
   is accepted when `TrustedCas` holds that certificate or its issuer. The WebView hands over the leaf
   alone, so a studio whose certificate hangs off an intermediate needs the intermediate imported.
   What `CertTrust` decides, since the WebView's own checks are skipped once it is asked: an imported
@@ -301,20 +291,20 @@ stopped, and when the shell page's renderer keeps dying.
 A WebView's renderer killed for memory, or crashed, ends the app's process unless every view it
 drew claims the loss — and the engine, the backend's parent and a take in progress are in that
 process. On Android every view of an app shares the one renderer, so a loss reaches the shell page
-and every app view together (`RendererLoss.kt`).
+and k7's view together (`RendererLoss.kt`).
 
 | choice | why |
 |---|---|
-| every app view claims its loss in `onRenderProcessGone`, is destroyed, and the shell page is told with a `loadError` | a dead view can never load again; the shell's Retry makes a new one |
+| the view claims its loss in `onRenderProcessGone`, is destroyed, and the shell page is told with a `loadError` | a dead view can never load again; the shell's Retry makes a new one |
 | the shell page's view claims its loss through a Capacitor `WebViewListener`, and the activity is made again | it is the bridge's view, which only a new activity replaces; `recreate()` is no quit, so the engine and the backend keep running |
-| the apps lost before the activity was made again say so at their next `show`, once | the new shell page would otherwise reload k7 straight into the page that ran out of memory; the person's Retry is what loads it |
+| a view lost before the activity was made again says so at the next `show`, once | the new shell page would otherwise reload k7 straight into the page that ran out of memory; the person's Retry is what loads it |
 | the shell made again more than three times in a minute is offered Restart k7 instead | the shell page itself dying would loop forever |
 | the throwaway view behind `window.open` (`WindowProbe.kt`) claims its loss too | it shares the renderer, and one view left unclaimed is enough to end the process |
 
 ## No sign-in in the app
 
-The phone opens its own studio only, as the local user: the app has no sign-in to a server, no
-pairing and no studio to connect to, so no view navigates to `/auth/login` and the app answers no
+The phone opens its own backend only, as the local user: the app has no sign-in to a server, no
+pairing and no studio to connect to, so the view never navigates to `/auth/login` and the app answers no
 `<app id>://` link. The shell page lists no
 studio forms; what it keeps is the engine's state, the LAN pairing and the private CA below.
 
