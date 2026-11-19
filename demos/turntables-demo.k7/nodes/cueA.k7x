@@ -12,7 +12,7 @@
 // the interface, named once per MACHINE in preferences.yaml. A machine with no
 // second pair plays this bus nowhere at all — never into the room, which is measured in
 // engine/k7-runtime/scripts/cue-bus.ts. See packages/song/docs/cue.md.
-extends("@workspace/audio/zz_utility/fade")
+extends("@workspace/audio/turntables/fade")
 params({
   // SILENT at rest: a set starts with nothing in the headphones, and the button is what opens it.
   Level: 0,

@@ -8,6 +8,6 @@
 // corners sit outside the material, at 20 kHz and 20 Hz.
 //
 // The engine is named for the same reason the EQ's is.
-extends("@workspace/audio/filter")
+extends("@workspace/audio/turntables/filter")
 engine("sweep")
 engines({ sweep: { params: { Sweep: 0 } } })

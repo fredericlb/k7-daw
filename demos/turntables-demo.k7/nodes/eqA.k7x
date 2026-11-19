@@ -12,7 +12,7 @@
 //
 // The EQ module has several engines; the desk's is Tracktion's, named so a change of default
 // moves no deck (packages/song/docs/engines.md).
-extends("@workspace/audio/eq")
+extends("@workspace/audio/turntables/eq")
 engine("tracktion")
 engines({
   tracktion: {

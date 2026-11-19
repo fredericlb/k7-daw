@@ -11,7 +11,7 @@
 // `Time` is in MILLISECONDS and follows nothing: the desk knows each deck's BPM, but no
 // binding carries it here yet. See packages/k7-plugins/docs/turntables/fx.md.
 // The delay's ECHO engine: the one of them whose Time is in milliseconds.
-extends("@workspace/audio/delay")
+extends("@workspace/audio/turntables/delay")
 engine("echo")
 engines({
   echo: {

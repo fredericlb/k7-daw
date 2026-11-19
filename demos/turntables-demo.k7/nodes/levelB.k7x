@@ -10,7 +10,7 @@
 //
 // It sits AFTER the cue tap, which is what pre-fade listen means: pulling this fader down
 // must not take the deck out of your headphones.
-extends("@workspace/audio/zz_utility/gain")
+extends("@workspace/audio/turntables/gain")
 params({
   // 0 dB = unity. A channel fader rests OPEN; it is the crossfader that decides what is heard.
   Gain: 0,

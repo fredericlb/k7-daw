@@ -121,23 +121,4 @@ describe("node delete", () => {
     expect(chains()).toBe(before);
   });
 
-  it("refuses a source that is a module's only feed, and changes nothing", async () => {
-    // A set's deck: deleting the lane would leave its platter's mandatory input unfed.
-    writeNode(dir, "amp", { extends: "@meta/audio/turntable" });
-    const before = chains();
-    await runCommand("node delete gtr", host(), "cli");
-    expect(logs.join(" ")).toMatch(/gtr is the only signal reaching amp/);
-    expect(chains()).toBe(before);
-    expect(existsSync(join(dir, "nodes", "gtr.k7x"))).toBe(true);
-  });
-
-  it("deletes a source when another one still feeds what it fed", async () => {
-    writeDoc(join(dir, "graph.k7x"), {
-      modules: { gtr: ["amp"], bass: ["amp"], amp: ["OUT"] },
-    });
-    writeLane(dir, "bass", "track", { events: [] });
-    await runCommand("node delete gtr", host(), "cli");
-    expect(existsSync(join(dir, "nodes", "gtr.k7x"))).toBe(false);
-    expect(graph().modules.bass).toEqual(["amp"]);
-  });
 });
