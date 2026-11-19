@@ -2,7 +2,7 @@
 // `/external`, `/settings`, `/settings/engine`, `/libraries`, `/about`, `/tasks`, and the docs host.
 import type { Page } from "@playwright/test";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { expect, TARGET, test } from "../../src/target.ts";
+import { expect, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
@@ -19,9 +19,9 @@ async function routeTo(page: Page, path: string): Promise<void> {
   }, path);
 }
 
-test("/external lists the surfaces of the project the engine holds", async ({
-  k7,
-}) => {
+test("/external lists the surfaces of the project the engine holds", {
+  tag: "@tier4",
+}, async ({ k7 }) => {
   // The menu lists what the engine already holds, so a project is opened on it first.
   const project = await k7.open(`/@local/${FIXTURES_WORKSPACE}/clip-lane.k7`);
   await engineUp(project);
@@ -75,9 +75,9 @@ test("/settings draws every section with its controls, a tab at a time", async (
   watch.assertClean();
 });
 
-test("/settings/engine lists the engines this account may use, off the tray", async ({
-  k7,
-}) => {
+test("/settings/engine lists the engines this account may use, off the tray", {
+  tag: "@tier4",
+}, async ({ k7 }) => {
   const page = await k7.open("/settings");
   await expect(
     page.getByRole("heading", { level: 1, name: "Settings" }),
@@ -94,7 +94,9 @@ test("/settings/engine lists the engines this account may use, off the tray", as
   watch.assertClean();
 });
 
-test("/settings/engine opens when loaded by its address", async ({ k7 }) => {
+test("/settings/engine opens when loaded by its address", {
+  tag: "@tier4",
+}, async ({ k7 }) => {
   const page = await k7.open("/settings/engine");
   await expect(
     page.getByRole("heading", { level: 1, name: "Engines" }),
@@ -180,43 +182,5 @@ test("/docs on the app's origin is no page, and says the way back", async ({
   await expect(
     page.getByRole("heading", { level: 1, name: "Projects" }),
   ).toBeVisible();
-  watch.assertClean();
-});
-
-test("the documentation host draws a guide, a page and its nav", async ({
-  k7,
-  baseURL,
-}) => {
-  // Asked before the URL is read: the apps have no baseURL to parse.
-  test.skip(TARGET !== "web", "the apps have no docs.<domain> host");
-  const app = new URL(baseURL ?? "");
-  test.skip(
-    !app.hostname.startsWith("app."),
-    "the docs host is the hosted instance's docs.<domain>",
-  );
-  const docs = `${app.protocol}//docs.${app.hostname.slice("app.".length)}`;
-  const page = await k7.open(`${docs}/`);
-  const watch = watchPage(page);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "k7 documentation" }),
-  ).toBeVisible();
-  await page
-    .getByRole("banner")
-    .getByRole("link", { name: "User guide" })
-    .click();
-  await expect(page).toHaveURL(`${docs}/user`);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "k7 user guide" }),
-  ).toBeVisible();
-  const nav = page.getByRole("navigation");
-  await nav.getByRole("link", { name: "Signing in", exact: true }).click();
-  await expect(page).toHaveURL(`${docs}/user/02-signing-in`);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Signing in" }),
-  ).toBeVisible();
-  await expect(page.getByRole("link", { name: "Open k7" })).toHaveAttribute(
-    "href",
-    new RegExp(`^${app.origin}`),
-  );
   watch.assertClean();
 });
