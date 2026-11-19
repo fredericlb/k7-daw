@@ -1,6 +1,6 @@
-// jsdsp/mod.rs — a DSP module's graph: a `dsp.k7x` decoded on every read.
+// jsdsp/mod.rs — a DSP module's graph: a `dsp.k7x` decoded on every read, or a legacy `jsdsp.json` read and never rebuilt.
 // A reader would get wrong that a bad graph stops anything: it plays as a pass-through and the state says why (decision 350).
-// Nothing runs a module's code; docs/dsp-literal-plan.md and docs/graphModel.md, "`dsp`".
+// Nothing runs a module's code any more; docs/dsp-literal-plan.md and docs/graphModel.md, "`dsp`".
 
 mod validate;
 
@@ -24,6 +24,8 @@ pub enum GraphState {
     Missing,
     /// The graph is there and cannot be read; the sentence says why, without the file's words.
     Invalid(String),
+    /// A legacy `jsdsp.json`, which plays with no word: nothing builds a `jsdsp.ts` any more.
+    Orphan,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -32,6 +34,15 @@ pub struct JsDspGraph {
     pub text: Arc<str>,
     pub state: GraphState,
     pub json_path: String,
+}
+
+/// The cache file of a legacy jsdsp source: `.ts`, `.tsx`, `.js` or `.jsx` dropped, then `.json` (decision 349).
+pub fn cache_of(source: &str) -> String {
+    let base = [".tsx", ".jsx", ".ts", ".js"]
+        .iter()
+        .find_map(|ext| source.strip_suffix(ext))
+        .unwrap_or(source);
+    format!("{base}.json")
 }
 
 /// What reading a graph's file found: its text, or why it is no graph.
@@ -75,30 +86,34 @@ fn read_text(source: &dyn Source, path: &str, what: &str) -> Result<Read, Source
     })
 }
 
-/// The graph of the DSP source at `path`, a `dsp.k7x` decoded (decisions 350 to 353, 1901); any other path has none.
+/// The graph of the DSP source at `path`: a `dsp.k7x` decoded, any other path a legacy `jsdsp.ts`'s committed cache (decisions 350 to 353, 1901).
 pub fn jsdsp_graph(source: &dyn Source, path: &str) -> Result<JsDspGraph, SourceError> {
+    let literal = path.ends_with(".k7x");
+    let json_path = if literal { path.to_owned() } else { cache_of(path) };
+    let what = if literal { "dsp.k7x" } else { "jsdsp.json" };
     let pass = |state| JsDspGraph {
         text: Arc::from(PASS_THROUGH_GRAPH),
         state,
-        json_path: path.to_owned(),
+        json_path: json_path.clone(),
     };
-    if !path.ends_with(".k7x") {
-        return Ok(pass(GraphState::Missing));
-    }
-    let text = match read_text(source, path, "dsp.k7x")? {
+    let text = match read_text(source, &json_path, what)? {
         Read::Absent => return Ok(pass(GraphState::Missing)),
         Read::Refused(why) => return Ok(pass(GraphState::Invalid(why))),
         Read::Text(text) => text,
     };
-    let graph = match decode_reason(path, &text) {
-        Ok(graph) => graph,
-        Err(why) => return Ok(pass(GraphState::Invalid(why))),
+    let (graph, state) = if literal {
+        match decode_reason(path, &text) {
+            Ok(graph) => (graph, GraphState::Fresh),
+            Err(why) => return Ok(pass(GraphState::Invalid(why))),
+        }
+    } else {
+        (text, GraphState::Orphan)
     };
     Ok(match validate_graph(&graph) {
         Ok(()) => JsDspGraph {
             text: Arc::from(graph),
-            state: GraphState::Fresh,
-            json_path: path.to_owned(),
+            state,
+            json_path,
         },
         Err(why) => pass(GraphState::Invalid(why)),
     })
