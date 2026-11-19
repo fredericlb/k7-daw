@@ -73,14 +73,15 @@ mod imp {
 
 #[cfg(not(windows))]
 mod imp {
-    pub const BREAKAWAY: u32 = 0;
     pub fn init() -> Result<(), String> {
         Ok(())
     }
     pub fn release() {}
 }
 
-pub use imp::{init, release, BREAKAWAY};
+#[cfg(windows)]
+use imp::BREAKAWAY;
+pub use imp::{init, release};
 
 /// Spawn what must outlive the tray (the browser, an editor) out of its job; inside it when the tray's own parent forbids leaving.
 #[cfg(windows)]

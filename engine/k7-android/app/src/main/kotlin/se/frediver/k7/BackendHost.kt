@@ -1,14 +1,11 @@
-// BackendHost.kt — k7's own backend on the phone, so the app is standalone like the desktop one: the
-// bundle the packaged desktop app runs too (apps/k7/backend/scripts/bundle.mjs) under Termux's node
-// (scripts/termux-tools.mjs). Port, environment
-// and folders are the desktop's, from apps/k7/backend/standalone.json. The tools are lib*.so files run
-// from the native library directory; every name a program looks up is a symlink to one. See docs/android.md.
+// BackendHost.kt — k7's backend on the phone: the Rust front (apps/k7/backend-rs) in this process, answering the
+// studio's own port by itself. Port, environment and folders are the desktop's, from
+// apps/k7/backend-rs/standalone.json. The page, the library it seeds and the front's code root ride in one zip the
+// app unpacks. One front per PROCESS, like the supervisor: a start that failed is the one thing a retry redoes. See docs/android.md.
 
 package se.frediver.k7
 
 import android.content.Context
-import android.os.SystemClock
-import android.system.Os
 import android.util.Log
 import org.json.JSONObject
 import java.io.File
@@ -17,7 +14,7 @@ import java.net.URL
 import java.security.SecureRandom
 import java.util.zip.ZipInputStream
 
-/** One per PROCESS, like the supervisor: the backend outlives a recreated activity. */
+/** One per PROCESS, like the supervisor: the front outlives a recreated activity. */
 object BackendHost {
     /** standalone.json's port, the desktop app's. */
     const val PORT = BuildConfig.STANDALONE_PORT
@@ -26,7 +23,7 @@ object BackendHost {
     const val PORTS_SPEC = "k7=$PORT"
     /** Where a signed-out view lands: the local user, unless a session is already there. */
     const val LOCAL_HOME = "$ORIGIN/auth/local?return_to=%2F"
-    // The session cookie apps/k7/backend/src/server.ts names.
+    // The session cookie the front names (apps/k7/backend-rs/docs/sessions.md).
     private const val SESSION_COOKIE = "studio.sid"
 
     /** k7's first page: `/` straight away when the WebView holds a session, else through the local sign-in; a stale one is caught by account.js. */
@@ -35,19 +32,13 @@ object BackendHost {
         return if (cookies?.split(';')?.any { it.trim().startsWith("$SESSION_COOKIE=") } == true) "$ORIGIN/" else LOCAL_HOME
     }
 
-    private var process: Process? = null
     private var app: Context? = null
     private var dirs: Dirs? = null
     private var started = false
     private var stopping = false
     private var ready = false
-    // Why the backend is given up on, until a view asks again; null while it runs or is being relaunched.
+    // Why the front is given up on, until a view asks again; null while it runs or is being started.
     private var failure: String? = null
-    private var quickExits = 0
-    // Exits by SIGKILL, counted apart: Android's phantom process killer is no crash at boot (docs/android.md).
-    private var killedExits = 0
-    // Opened by the running backend's READY_LINE on its stdout.
-    private var up: Pair<Process, java.util.concurrent.CountDownLatch>? = null
     private val waiting = mutableListOf<Waiter>()
     private var status = Status("starting")
     private val watchers = mutableListOf<(Status) -> Unit>()
@@ -85,91 +76,54 @@ object BackendHost {
         attempt()
     }
 
-    /** `then` once the backend has answered — at once if it has — or `failed` once it is given up on; either on any thread. */
+    /** `then` once the front has answered — at once if it has — or `failed` once it is given up on; either on any thread. */
     fun whenReady(then: () -> Unit, failed: (String) -> Unit) {
         val now = synchronized(this) { ready.also { if (!it) waiting.add(Waiter(then, failed)) } }
-        // A view asking after the backend was given up on is the user's retry.
+        // A view asking after the start was given up on is the user's retry.
         if (now) then() else retry()
     }
 
-    /** The user's retry — a view asking again, or the shell page's Retry: a backend given up on starts over, with a fresh count of quick exits. */
+    /** The user's retry — a view asking again, or the shell page's Retry: a start given up on is made again. */
     fun retry() {
         val again = synchronized(this) {
             (failure != null && started).also {
-                if (it) {
-                    failure = null
-                    quickExits = 0
-                    killedExits = 0
-                }
+                if (it) failure = null
             }
         }
         if (again) attempt()
     }
 
-    /** SIGTERM, which the backend answers by stopping; killed after `timeoutMs`. */
+    /** The front stopped, which stops the supervisor it runs; nothing when it does not run. */
     fun stop(timeoutMs: Long) {
-        val p = synchronized(this) {
-            stopping = true
-            process
-        } ?: return
-        p.destroy()
-        if (!p.waitFor(timeoutMs, java.util.concurrent.TimeUnit.MILLISECONDS)) ChildKill.kill(p, NODE_MARKER)
+        synchronized(this) { stopping = true }
+        val done = java.util.concurrent.CountDownLatch(1)
+        Thread({ RustFront.stop(); done.countDown() }, "k7-front-stop").start()
+        done.await(timeoutMs, java.util.concurrent.TimeUnit.MILLISECONDS)
     }
 
-    /** Launch unless one runs, then wait for its answer; a launch that exits first is left to its waiter thread. */
+    /** Start the front unless it runs, then wait for its answer. */
     private fun attempt() {
         val context = synchronized(this) { app } ?: return
-        Thread(body@{
-            var launched: Process? = null
+        Thread({
             try {
                 report(Status("starting"))
                 val d = synchronized(this) { dirs } ?: prepare(context).also { synchronized(this) { dirs = it } }
                 report(Status("starting", "launching"))
-                // The front first, on the views' port: the waits below go through it, a 502 until node listens.
-                RustFront.start(PORT, upstreamPort, sharedEnv(context, d))
-                val p = synchronized(this) { if (stopping) null else process ?: launch(context, d) } ?: return@body
-                launched = p
-                if (!waitUp(p)) return@body
-                Log.i(TAG, "backend up on $ORIGIN")
+                if (synchronized(this) { stopping }) return@Thread
+                RustFront.start(PORT, sharedEnv(context, d))
+                waitUp()
+                Log.i(TAG, "front up on $ORIGIN")
                 report(Status("ready"))
                 val run = synchronized(this) {
                     ready = true
                     waiting.toList().also { waiting.clear() }
                 }
                 run.forEach { it.then() }
-                Thread({ probe(p) }, "k7-backend-health").start()
             } catch (e: Exception) {
-                Log.e(TAG, "backend did not start: ${e.message}", e)
-                fail(e.message ?: "k7's backend did not start")
-                // Given up on, it goes: a Retry must launch afresh, not wait on the same wedged process.
-                launched?.let(::discard)
+                Log.e(TAG, "front did not start: ${e.message}", e)
+                fail(e.message ?: "k7's front did not start")
             }
         }, "k7-backend-start").start()
-    }
-
-    /** Killed, and no longer the one running, so nothing reuses it; its waiter thread sees the exit. */
-    private fun discard(p: Process) {
-        synchronized(this) {
-            if (process === p) {
-                process = null
-                ready = false
-            }
-        }
-        ChildKill.kill(p, NODE_MARKER)
-    }
-
-    /** Health every PROBE_EVERY_MS once up: a backend that stops answering PROBE_MISSES times in a row is killed, and relaunched by watch. */
-    private fun probe(p: Process) {
-        var misses = 0
-        while (true) {
-            Thread.sleep(PROBE_EVERY_MS)
-            if (!p.isAlive || synchronized(this) { stopping || process !== p }) return
-            // Node's own port: the front answers /api/health itself, so through it a wedged node would never miss.
-            misses = if (answers("/api/health", PROBE_TIMEOUT_MS, "http://127.0.0.1:$upstreamPort")) 0 else misses + 1
-            if (misses < PROBE_MISSES) continue
-            Log.w(TAG, "backend stopped answering; killed, to be relaunched")
-            return discard(p)
-        }
     }
 
     /** Whether `path` on `origin` answers 200 within `timeoutMs`. */
@@ -205,19 +159,16 @@ object BackendHost {
     fun engineRoots(context: Context): List<File> =
         BuildConfig.ENGINE_ROOT_DIRS.split(';').filter { it.isNotEmpty() }.map { File(rootDir(context), it) }
 
-    private class Dirs(val root: File, val bundle: File, val tools: File, val cacert: File, val table: JSONObject)
+    private class Dirs(val root: File, val bundle: File, val table: JSONObject)
 
     private fun prepare(context: Context): Dirs {
         val root = rootDir(context)
         val bundle = unpack(context, File(root, "backend"))
-        val tools = layOutTools(context, File(root, "tools"))
-        val cacert = File(bundle, "cacert.pem")
-        File(root, "home").mkdirs()
         val table = JSONObject(File(bundle, TABLE).readText())
-        return Dirs(root, bundle, tools, cacert, table)
+        return Dirs(root, bundle, table)
     }
 
-    /** The bundle, out of the APK's assets and onto disk, where node reads it; per install, writing only the files that changed. */
+    /** The bundle, out of the APK's assets and onto disk, where the front reads it; per install, writing only the files that changed. */
     private fun unpack(context: Context, dir: File): File {
         val marker = File(dir, ".installed")
         val stamp = context.packageManager.getPackageInfo(context.packageName, 0).lastUpdateTime.toString()
@@ -257,12 +208,9 @@ object BackendHost {
             val name = f.relativeTo(dir).invariantSeparatorsPath
             if (name !in names && name !in OWN_FILES && (f.isFile || f.list()?.isEmpty() == true)) f.delete()
         }
-        // The CA bundle and the versions travel as their own assets, beside the zip.
-        for (name in listOf("cacert.pem", "termux-versions.json"))
-            context.assets.open("$TOOLS_ASSETS/$name").use { from -> File(dir, name).outputStream().use(from::copyTo) }
         manifest.writeText(after.entries.joinToString("") { (name, key) -> "$name\t$key\n" })
         marker.writeText(stamp)
-        Log.i(TAG, "unpacked the backend: $count files written of ${after.size}")
+        Log.i(TAG, "unpacked the bundle: $count files written of ${after.size}")
         return dir
     }
 
@@ -285,25 +233,7 @@ object BackendHost {
         override fun read(b: ByteArray, off: Int, len: Int): Int = super.read(b, off, len).also(::add)
     }
 
-    /** `bin/` of symlinks into the native library directory, which moves on every update, so redone each start. */
-    private fun layOutTools(context: Context, dir: File): File {
-        val lib = context.applicationInfo.nativeLibraryDir
-        dir.deleteRecursively()
-        val links = mapOf(
-            "bin/node" to "libk7node.so",
-        )
-        for ((name, target) in links) {
-            val at = File(dir, name)
-            at.parentFile?.mkdirs()
-            Os.symlink("$lib/$target", at.absolutePath)
-        }
-        return dir
-    }
-
-    /** Node's own port, behind the front: drawn once per process, so a relaunch finds the front still pointing at it. */
-    private val upstreamPort: Int by lazy { java.net.ServerSocket(0, 1, java.net.InetAddress.getLoopbackAddress()).use { it.localPort } }
-
-    /** What node and the front are both told: the table's environment, its folders, the session secret, the switches and what node runs with. */
+    /** What the front is told: the table's environment, its folders, the session secret and the switches. */
     private fun sharedEnv(context: Context, dirs: Dirs): Map<String, String> {
         val out = mutableMapOf<String, String>()
         val env = dirs.table.getJSONObject("env")
@@ -321,9 +251,10 @@ object BackendHost {
         out["STUDIO_LIBRARY_SEED"] = "k7-core=" + File(dirs.bundle, dirs.table.getString("library")).absolutePath
         // The front's code root, unpacked from backend.zip: what its actor reads (apps/k7/backend-rs/docs/service.md).
         out["K7_CODE_ROOT"] = File(dirs.bundle, "code").absolutePath
-        // The user's own CAs for the front's outbound calls (a paired server, the hunt), as node is handed them (docs/android.md).
+        // The page, built into the bundle at its repo path (apps/k7/backend-rs/scripts/stageBundle.mjs).
+        out["K7_FRONTEND_DIST"] = File(dirs.bundle, "apps/k7/frontend/dist").absolutePath
+        // The user's own CAs for the front's outbound calls (a paired server, the hunt) (docs/android.md).
         TrustedCas.file(context).takeIf { it.isFile }?.let { out["K7_EXTRA_CA_CERTS"] = it.absolutePath }
-        out.putAll(processEnv(context, dirs))
         return out
     }
 
@@ -350,107 +281,23 @@ object BackendHost {
         return secret
     }
 
-    @Synchronized
-    private fun launch(context: Context, dirs: Dirs): Process {
-        val lib = context.applicationInfo.nativeLibraryDir
-        val p = ProcessBuilder("$lib/libk7node.so", File(dirs.bundle, NODE_MARKER).absolutePath).apply {
-            directory(dirs.root)
-            redirectErrorStream(true)
-            environment().apply {
-                put("NODE_OPTIONS", "--experimental-sqlite")
-                put("PORT", upstreamPort.toString())
-                // The views' port, the front's: what the supervisor is pinned to (apps/k7/backend/src/server.ts).
-                put("K7_FRONT_PORT", PORT.toString())
-                // The front's proof that a request came through it (apps/k7/backend/src/front.ts).
-                put("K7_FRONT_SECRET", RustFront.secret)
-                put("STUDIO_PORTS", PORTS_SPEC)
-                // Printed once it listens: the wait below wakes on it rather than polling.
-                put("STUDIO_READY_LINE", READY_LINE)
-                // The desktop's table: the public OIDC client, the local user, a host-only cookie; the folders; the secret.
-                // The node process's own (processEnv) are in it too.
-                putAll(sharedEnv(context, dirs))
-            }
-        }.start()
-        process = p
-        val listening = java.util.concurrent.CountDownLatch(1)
-        up = p to listening
-        val since = SystemClock.elapsedRealtime()
-        val out = ProcessLines.pump(p.inputStream, "k7-backend-out", { Log.i(TAG, it) }) {
-            if (it == READY_LINE) listening.countDown() else Log.i(TAG, it)
-        }
-        Thread({ watch(p, since, out) }, "k7-backend-wait").start()
-        return p
-    }
-
-    /** A crash is relaunched on a doubling delay; after MAX_QUICK_EXITS short runs in a row it is given up on (docs/android.md). */
-    private fun watch(p: Process, since: Long, out: Thread) {
-        val code = p.waitFor()
-        ProcessLines.finish(out, p.inputStream, DRAIN_MS)
-        // A SIGKILL from outside — Android's phantom process killer, the low-memory killer — is no crash of the backend's.
-        val killed = code == KILLED_EXIT
-        Log.w(TAG, "backend exited ($code)" + if (killed) ", killed by the system" else "")
-        val delay = synchronized(this) {
-            if (process === p) process = null
-            ready = false
-            if (stopping || failure != null) return
-            if (SystemClock.elapsedRealtime() - since >= HEALTHY_MS) {
-                quickExits = 0
-                killedExits = 0
-            }
-            val n = if (killed) ++killedExits else ++quickExits
-            if (n < (if (killed) MAX_KILLED_EXITS else MAX_QUICK_EXITS)) minOf(RELAUNCH_FIRST_MS shl (n - 1), RELAUNCH_MAX_MS) else null
-        }
-        if (delay == null) {
-            val times = if (killed) "was killed $MAX_KILLED_EXITS" else "stopped $MAX_QUICK_EXITS"
-            return fail("k7's backend $times times in a row (last exit code $code)")
-        }
-        report(Status("starting", "launching"))
-        Thread.sleep(delay)
-        val again = synchronized(this) { !stopping && failure == null && process == null }
-        if (again) attempt()
-    }
-
-    /** Until node answers its health on its own port, once its library is in place; false if `p` exits first. */
-    private fun waitUp(p: Process): Boolean {
-        val listening = synchronized(this) { up?.takeIf { it.first === p }?.second }
+    /** Until the front answers its health on the studio's port; the library gate is the front's own (docs/android.md). */
+    private fun waitUp() {
         val end = System.currentTimeMillis() + READY_MS
         while (System.currentTimeMillis() < end) {
-            if (!p.isAlive) return false
-            // Node's own port, which listens only once its library is in place; the registry is the front's.
-            if (answers("/api/health", 500, "http://127.0.0.1:$upstreamPort")) return true
-            // Woken by the backend's READY_LINE; a bundle that never prints it is still found, by a slower poll.
-            if (listening != null && listening.count > 0) listening.await(POLL_MS, java.util.concurrent.TimeUnit.MILLISECONDS)
-            else Thread.sleep(RETRY_MS)
+            if (answers("/api/health", 500)) return
+            Thread.sleep(RETRY_MS)
         }
         throw IllegalStateException("no answer on $ORIGIN within $READY_MS ms")
     }
 
     private const val TAG = "k7-backend"
-    // What the backend prints once it listens, when STUDIO_READY_LINE asks it to (apps/k7/backend/src/server.ts).
-    private const val READY_LINE = "k7-backend-ready"
-    // What node's command line holds, the bundle's entry, for ChildKill to find it.
-    private const val NODE_MARKER = "bin/backend.mjs"
-    private const val POLL_MS = 1_000L
-    // How long an exited process's last lines may take to drain before its reader is cut off.
-    private const val DRAIN_MS = 2_000L
     private const val RETRY_MS = 200L
-    // What Process.waitFor returns for a child ended by SIGKILL: 128 + 9.
-    private const val KILLED_EXIT = 137
-    private const val MAX_KILLED_EXITS = 20
-    private const val PROBE_EVERY_MS = 20_000L
-    private const val PROBE_TIMEOUT_MS = 5_000
-    private const val PROBE_MISSES = 3
     private const val BUNDLE_ASSET = "backend.zip"
     private const val TABLE = "standalone.json"
-    private const val TOOLS_ASSETS = "termux"
     // Each unpacked file's CRC and size, what the next update compares against.
     private const val ENTRIES = ".entries"
     // Written beside the zip's files, so never stale.
-    private val OWN_FILES = setOf(".installed", ENTRIES, "cacert.pem", "termux-versions.json")
+    private val OWN_FILES = setOf(".installed", ENTRIES)
     private const val READY_MS = 60_000L
-    private const val RELAUNCH_FIRST_MS = 2_000L
-    private const val RELAUNCH_MAX_MS = 60_000L
-    // A run this long is no crash at boot: the count of quick exits starts over.
-    private const val HEALTHY_MS = 60_000L
-    private const val MAX_QUICK_EXITS = 6
 }

@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-// dev-front.mjs — the dev session's Rust front (the Tiltfile's `k7-front`): on 8789, in front of the
-// TypeScript backend `k7-backend` runs on 8790, given env.yaml's `k7-backend` section, since the front
-// reads the values that backend reads (apps/k7/backend-rs/docs/front.md, docs/dev.md).
+// dev-front.mjs — the dev session's Rust front (the Tiltfile's `k7-front`): on 8789, given env.yaml's `k7-front`
+// section (apps/k7/backend-rs/docs/front.md, docs/dev.md).
 
 import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
@@ -9,27 +8,21 @@ import { fileURLToPath } from "node:url";
 import { loadServiceEnv } from "@studio/env";
 import { sccacheEnv } from "../../../../engine/scripts/sccache.mjs";
 
-const backendRs = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../backend-rs",
-);
-const service = loadServiceEnv("k7-backend");
+const backendRs = join(dirname(fileURLToPath(import.meta.url)), "..");
+const service = loadServiceEnv("k7-front");
 const env = {
   ...process.env,
   ...service,
   // A second session on the machine, the macOS agent's e2e bed, names other ports (engine/scripts/ci/e2e-macos.sh).
   K7_FRONT_LISTEN: process.env.K7_FRONT_LISTEN || "127.0.0.1:8789",
-  K7_FRONT_UPSTREAM: process.env.K7_FRONT_UPSTREAM || "127.0.0.1:8790",
-  // The dev session's own: k7-backend's dev script gives its backend the same (../package.json).
+  // The dev session's own, which the e2e specs behind the internal seam name too.
   K7_FRONT_SECRET: "k7-dev-front",
   // Vite proxies every page request, and its X-Forwarded-* name the page's origin.
   K7_FRONT_TRUST_HOPS: "1",
-  // The registry, the relay and the tunnel hub answered here; the backend reaches them over the seam (docs/dev.md).
+  // The registry, the relay and the tunnel hub answered here (docs/dev.md).
   K7_ENGINE_CORE: "front",
-  // The file hub, its relay and pairing answered here, the backend having none (docs/dev.md).
+  // The file hub, its relay and pairing answered here (docs/dev.md).
   K7_FILES: "front",
-  // The backend's last routes answered here, the page from frontend/dist as node served it (docs/dev.md).
-  K7_LAST_ROUTES: process.env.K7_LAST_ROUTES ?? "front",
   // rustc through sccache when the machine has it: a new worktree's first build then reuses the dependencies (docs/rust-builds.md).
   ...sccacheEnv("dev"),
 };

@@ -4,7 +4,7 @@
 // same methods and events (engine/k7-ios/k7/EnginePlugin.swift, AppViews.swift). Typed here once; nothing else calls registerPlugin.
 
 import { type PluginListenerHandle, registerPlugin } from "@capacitor/core";
-import standalone from "../../../../apps/k7/backend/standalone.json";
+import standalone from "../../../../apps/k7/backend-rs/standalone.json";
 
 /** The phone's own backend's ports, as BackendHost.kt starts it: the desktop app's, from the table both share. */
 export const LOCAL_PORTS = `k7=${standalone.port}`;

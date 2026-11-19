@@ -1,20 +1,13 @@
 #!/usr/bin/env node
-// dev-tray.mjs — the native half of the dev session: builds the C++ engine, the native supervisor, k7's backend bundle
-// and the tray, runs the tray on the repo's own builds, then watches the engine, the supervisor and the tray's Rust
+// dev-tray.mjs — the native half of the dev session: builds the C++ engine, the native supervisor, the front's bundle
+// (the page and the library) and the tray, runs the tray on the repo's own builds, then watches the engine, the supervisor and the tray's Rust
 // and rebuilds+restarts on save. One process owns every watch because every rebuild needs the SAME tree stopped
 // first — a running image cannot be relinked on Windows. See docs/dev.md.
 
 import { spawn, spawnSync } from "node:child_process";
-import {
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  statSync,
-  watch,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, readdirSync, statSync, watch } from "node:fs";
 import { basename, dirname, join } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { stopAll } from "../engine/scripts/devEngine.mjs";
 import { sccacheEnv } from "../engine/scripts/sccache.mjs";
 import { CROSS } from "../engine/scripts/stageEngine.mjs";
@@ -30,13 +23,11 @@ const trayDir = join(repo, "apps", "k7-tray");
 const tauriDir = join(trayDir, "src-tauri");
 // The Rust front, which the tray links: its crates are in the tray's binary (apps/k7/backend-rs/docs/front.md).
 const frontDir = join(repo, "apps", "k7", "backend-rs");
-// The backend bundle the dev tray runs, rebuilt at every start of the task; gitignored.
+// The bundle the dev tray reads (the library it seeds), rebuilt at every start of the task; gitignored.
 const bundleDir = join(trayDir, ".dev", "backend");
 
-// The page the tray's backend serves: k7-frontend's Vite, for HMR on 18789 — set it empty for the built one (docs/dev.md).
+// The page the tray's front serves: k7-frontend's Vite, for HMR on 18789 — set it empty for the built one (docs/dev.md).
 const devFrontend = process.env.K7_DEV_FRONTEND ?? "http://localhost:5223";
-// …and its backend, from source and restarted on save, the engine with it — `bundle` runs the bundled one (docs/dev.md).
-const watchBackend = process.env.K7_DEV_BACKEND !== "bundle";
 
 // Long enough that a formatter's write burst is one rebuild, short enough to feel like a save.
 const DEBOUNCE_MS = 500;
@@ -142,7 +133,7 @@ function buildEngine() {
     );
 }
 
-/** The backend bundle, with k7's frontend built inside unless the page comes from Vite (apps/k7-tray/scripts/stage.mjs). */
+/** The bundle, with k7's frontend built inside unless the page comes from Vite (apps/k7-tray/scripts/stage.mjs). */
 function buildBundle() {
   if (!devFrontend)
     run(
@@ -151,19 +142,20 @@ function buildBundle() {
       repo,
       "the frontend build",
     );
-  const bundle = join(repo, "apps", "k7", "backend", "scripts", "bundle.mjs");
+  const bundle = join(
+    repo,
+    "apps",
+    "k7",
+    "backend-rs",
+    "scripts",
+    "stageBundle.mjs",
+  );
   run(
     "node",
     devFrontend ? [bundle, bundleDir, "--no-frontend"] : [bundle, bundleDir],
     repo,
-    "the backend bundle",
+    "the bundle",
   );
-  // The entry the tray runs, made the source under `tsx watch`; the rest of the bundle still seeds the library.
-  if (watchBackend)
-    writeFileSync(
-      join(bundleDir, "bin", "backend.mjs"),
-      `import ${JSON.stringify(pathToFileURL(join(repo, "scripts", "devTrayBackend.mjs")).href)};\n`,
-    );
 }
 
 // ── is a binary older than the sources it came from? ─────────────────────────
@@ -251,7 +243,7 @@ function launchTray() {
     tray = null;
   });
   log(
-    `tray up (pid ${tray.pid}) — k7 at http://127.0.0.1:18789${devFrontend ? `, its page from ${devFrontend}` : ""}${watchBackend ? ", its backend from source, restarted on save" : ""}, the merged log in ~/.k7/.studio.log`,
+    `tray up (pid ${tray.pid}) — k7 at http://127.0.0.1:18789${devFrontend ? `, its page from ${devFrontend}` : ""}, the merged log in ~/.k7/.studio.log`,
   );
 }
 
