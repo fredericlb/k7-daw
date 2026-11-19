@@ -9,7 +9,6 @@ import {
   type APIRequestContext,
   expect,
   request as playwright,
-  test,
 } from "@playwright/test";
 import { base, signedIn } from "./instance.ts";
 import type { SessionUser } from "./sessionCookie.ts";
@@ -63,14 +62,6 @@ export class Service {
     });
     expect(res.status()).toBe(200);
     const ticket = (await res.json()).ticket;
-    // A server answers 410 to every workspace path: the specs that edit one belong to a device's bed.
-    const probe = await request.get("/api/files/health", {
-      headers: { "x-studio-engine-token": ticket },
-    });
-    test.skip(
-      probe.status() === 410,
-      "a server edits no workspace: a device bed",
-    );
     return new Service(request, ticket, user.email ?? "");
   }
 

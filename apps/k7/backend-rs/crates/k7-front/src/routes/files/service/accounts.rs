@@ -3,34 +3,14 @@
 
 use std::collections::BTreeMap;
 use std::sync::Arc;
-use std::sync::atomic::{AtomicBool, Ordering};
 
 use k7_file_service::songs::{SongSessions, Songs};
 use k7_hub::account::{Account as HubAccount, Names};
 use k7_hub::env::{STDIN_STOP_ENV, service_env};
 
-/// The song sessions' heap on a server, in MB (docs/service.md).
-const SERVER_HEAP_MB: usize = 384;
-
-/// …and where the front is embedded (the tray, the phones), whose whole app must fit (docs/service.md).
-const EMBEDDED_HEAP_MB: usize = 192;
-
-/// Set once by an embedded start: the sessions then take an embedded host's share.
-static EMBEDDED: AtomicBool = AtomicBool::new(false);
-
-/// The front runs inside a host's own process (`embedded.rs`).
-pub fn set_embedded() {
-    EMBEDDED.store(true, Ordering::Relaxed);
-}
-
-/// The heap the accounts' song sessions are sized for, in bytes.
+/// The heap the accounts' song sessions are sized for, in bytes: an embedded host's, whose whole app must fit (docs/service.md).
 pub fn sessions_heap() -> usize {
-    let mb = if EMBEDDED.load(Ordering::Relaxed) {
-        EMBEDDED_HEAP_MB
-    } else {
-        SERVER_HEAP_MB
-    };
-    mb << 20
+    192 << 20
 }
 
 /// An account's song sessions and its environment, handed to the pieces (docs/service.md).

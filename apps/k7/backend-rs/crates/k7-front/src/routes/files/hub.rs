@@ -24,8 +24,6 @@ use crate::settings::Settings;
 
 /// The account the libraries' service is held under; every real account's slug ends in `-<hash>`, this one cannot.
 const LIBRARIES: &str = "_libraries";
-/// The home a server's cut resolves its chain in, under the data root; no account's slug can be it either.
-const CUT: &str = "_cut";
 /// How long a standalone's files wait for its libraries before they answer anyway (`docs/files.md`, "The libraries' service").
 const LIBRARY_WAIT: Duration = Duration::from_secs(45);
 
@@ -54,8 +52,6 @@ pub struct State {
     pub(crate) bindings: Arc<k7_hub::binding::Bindings>,
     /// How the libraries' runtime is named and given its environment.
     pub(crate) libraries: Arc<Names>,
-    /// How a server's cut context is named: the libraries' folders, no account's.
-    pub(crate) cut: Arc<Names>,
     /// The origin's libraries, made at launch where a code root is (`service/libraries.rs`).
     pub(crate) library_native: OnceLock<Arc<super::service::libraries::Native>>,
     pub(crate) seam: Arc<Seam>,
@@ -108,16 +104,9 @@ impl State {
         &self.data_root
     }
 
-    /// What `/api/ready` reports of the hub: the accounts' runtimes held now; nothing starts, so nothing waits or is capped.
+    /// What `/api/ready` reports of the hub: the accounts' runtimes held now.
     pub fn status(&self) -> Value {
-        let running = self.files().map_or(0, |f| f.service.running());
-        json!({
-            "running": running,
-            "starting": 0,
-            "cap": k7_hub::account::REPORTED_CAP,
-            "oldestStartMs": 0,
-            "lastStartError": Value::Null,
-        })
+        json!({ "running": self.files().map_or(0, |f| f.service.running()) })
     }
 
     /// The account's runtime, made now rather than by its first request; a failure is that request's.

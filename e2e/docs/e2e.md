@@ -266,7 +266,7 @@ reference's reports.
 | on a device bed every spec holding the account's file service or served project runs in one lane (`playwright.conformance.config.ts`) | the specs' separate accounts are one account here, so two of them at once would cut each other's calls |
 | the bench (`/workspaces/bench`, New chain) is not run on a device bed | the bed's `k7-core` is a draft, not a published version a tray installs, and the bench's rig declines (`would-throw`) on it; a server's releases are not made on a device |
 | `bed.sh` and `gate.sh` take no mode | there is one bed; a second mode would prove less of what ships |
-| what only a server does (the 410 on `/api/files`, the door's refusals, the export routes, the session as a server serves it) is held by the front's Rust tests (`files_hub.rs`, `files_export.rs`, `tokens.rs`, `auth.rs`), not by a spec | a spec cannot meet a server on a device bed, and a Rust test starts either front on its own folder |
+| what only a server does (the door's refusals, the export routes, the session as a server serves it) is held by the front's Rust tests (`files_hub.rs`, `files_export.rs`, `tokens.rs`, `auth.rs`), not by a spec | a spec cannot meet a server on a device bed, and a Rust test starts either front on its own folder |
 
 ## The Mac bed retries once under load
 

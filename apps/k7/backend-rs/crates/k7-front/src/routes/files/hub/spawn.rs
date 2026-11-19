@@ -12,7 +12,7 @@ use k7_hub::Log;
 use k7_hub::account::Names;
 use serde_json::Value;
 
-use super::{CUT, LIBRARIES, State};
+use super::{LIBRARIES, State};
 use crate::AppState;
 use crate::settings::Settings;
 
@@ -116,14 +116,6 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
         Box::pin(async move { env })
     });
 
-    // A server's cut resolves its chain here: the libraries' folders under a home of its own, no account's.
-    let (root, home) = (data_root.clone(), data_root.join(CUT));
-    let mut cut = Names::new(Arc::new(move |_: &str| (CUT.to_string(), home.clone())));
-    cut.env = Arc::new(move |_, _| {
-        let libs = root.join("libraries").display().to_string();
-        Box::pin(async move { BTreeMap::from([("STUDIO_LIBRARIES_HOME".to_string(), libs)]) })
-    });
-
     State {
         data_root,
         mediatek_root,
@@ -137,12 +129,11 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
         names: Arc::new(files),
         bindings: Arc::default(),
         libraries: Arc::new(libraries),
-        cut: Arc::new(cut),
         library_native: OnceLock::new(),
         seam,
         log,
         app,
-        settled: Arc::new(AtomicBool::new(!machine)),
+        settled: Arc::new(AtomicBool::new(false)),
         started: OnceLock::new(),
         tasks: Mutex::new(Vec::new()),
     }

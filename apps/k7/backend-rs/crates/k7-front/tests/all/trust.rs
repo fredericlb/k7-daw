@@ -1,5 +1,5 @@
 //! A server under a private CA is refused with Mozilla's roots alone, and reached once the host names that CA's PEM
-//! (`K7_EXTRA_CA_CERTS`, else `NODE_EXTRA_CA_CERTS`): the roots every outbound call of the front is built with.
+//! (`K7_EXTRA_CA_CERTS`): the roots every outbound call of the front is built with.
 
 use std::io::{Read, Write};
 use std::net::TcpListener;
@@ -82,16 +82,16 @@ async fn a_private_ca_is_trusted_once_the_host_names_it() {
 
     let ca = fixture("ca.pem").display().to_string();
     assert_eq!(
-        k7_front::trust::configure(None, Some(&ca)),
+        k7_front::trust::configure(Some(&ca)),
         Ok(1),
-        "NODE_EXTRA_CA_CERTS is read when K7's is unset"
+        "K7_EXTRA_CA_CERTS is read"
     );
     assert_eq!(get(port).await, Ok(200));
 
     let missing = fixture("none.pem").display().to_string();
     assert!(
-        k7_front::trust::configure(Some(&missing), Some(&ca)).is_err(),
-        "K7_EXTRA_CA_CERTS wins, and a missing file is said"
+        k7_front::trust::configure(Some(&missing)).is_err(),
+        "a missing file is said"
     );
     assert!(
         k7_front::trust::read(&fixture("server.key")).is_err(),

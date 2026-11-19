@@ -1,5 +1,5 @@
-// ready.spec.ts — `/api/ready`, what the image's healthcheck asks: answered to this machine only, by its peer and by
-// the Host it names; each volume probed with a write it removes, and the file hub's starts. Raw requests, since a
+// ready.spec.ts — `/api/ready`: answered to this machine only, by its peer and by
+// the Host it names; each volume probed with a write it removes, and the file hub's running accounts. Raw requests, since a
 // fetch will not send a Host of its choosing. The volumes are CONFORMANCE_FILES_ROOT's when it is given.
 import { readdirSync } from "node:fs";
 import { expect, test } from "@playwright/test";
@@ -9,31 +9,15 @@ import { rawRequest } from "../../src/wire.ts";
 
 const host = new URL(base).host;
 
-test("a machine asking itself is answered: every volume ok, no problem, and how the file hub is doing", async () => {
+test("a machine asking itself is answered: every volume ok, no problem, and how many accounts the file hub holds", async () => {
   const res = await rawRequest("/api/ready", { host });
   expect(res.status).toBe(200);
   const body = JSON.parse(res.body);
   expect(Object.keys(body)).toEqual(["ok", "problems", "volumes", "files"]);
   expect(body).toMatchObject({ ok: true, problems: [] });
   expect(Object.values(body.volumes).every((v) => v === "ok")).toBe(true);
-  expect(Object.keys(body.files)).toEqual([
-    "running",
-    "starting",
-    "cap",
-    "oldestStartMs",
-    "lastStartError",
-  ]);
+  expect(Object.keys(body.files)).toEqual(["running"]);
   expect(body.files.running).toBeGreaterThanOrEqual(0);
-  expect(body.files.starting).toBeGreaterThanOrEqual(0);
-  expect(body.files.cap).toBeGreaterThanOrEqual(1);
-  expect(body.files.cap).toBeLessThanOrEqual(50);
-  expect(body.files.oldestStartMs).toBeGreaterThanOrEqual(0);
-  // A failed start is said with when it failed, as the TypeScript backend's hub answered it: `{ at, message }`.
-  if (body.files.lastStartError !== null)
-    expect(body.files.lastStartError).toEqual({
-      at: expect.any(Number),
-      message: expect.any(String),
-    });
 });
 
 test("a request naming another host is refused, whatever its peer", async () => {

@@ -54,13 +54,6 @@ test.beforeAll(async ({ request }) => {
     headers: signedIn(FILES_USER),
   });
   ticket = (await hello.json()).ticket;
-  const probe = await request.get("/api/files/health", {
-    headers: withTicket(),
-  });
-  test.skip(
-    probe.status() === 410,
-    "a server answers 410: serverFiles.spec.ts",
-  );
   const made = await request.post("/api/files/workspaces", {
     data: { name: ws },
     headers: withTicket(),
@@ -69,13 +62,7 @@ test.beforeAll(async ({ request }) => {
 });
 
 test.afterAll(async ({ request }) => {
-  if (
-    !ticket ||
-    (
-      await request.get("/api/files/health", { headers: withTicket() })
-    ).status() === 410
-  )
-    return;
+  if (!ticket) return;
   // A workspace removed before its replica joined the relay can be brought back by a listing: removed until it stays gone.
   const gone = async () =>
     !(await names(request, withTicket())).names.includes(ws) &&

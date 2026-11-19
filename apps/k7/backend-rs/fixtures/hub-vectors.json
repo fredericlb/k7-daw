@@ -212,7 +212,6 @@
       "PATH": "/bin",
       "Path": "C:\\bin",
       "SystemRoot": "C:\\Windows",
-      "NODE_COMPILE_CACHE": "/c",
       "STUDIO_ENGINE": "/e",
       "STUDIO_LIVE_SYNC": "0",
       "LC_ALL": "C",
@@ -220,7 +219,6 @@
       "PLAYWRIGHT_BROWSERS_PATH": "/p",
       "SESSION_SECRET": "s",
       "OIDC_CLIENT_SECRET": "s",
-      "API_TOKEN_SECRET": "s",
       "STUDIO_SYNC_TOKEN": "s",
       "K7_TOKEN": "s",
       "K7_FRONT_SECRET": "s"
@@ -229,7 +227,6 @@
       "PATH": "/bin",
       "Path": "C:\\bin",
       "SystemRoot": "C:\\Windows",
-      "NODE_COMPILE_CACHE": "/c",
       "STUDIO_ENGINE": "/e",
       "LC_ALL": "C",
       "XDG_RUNTIME_DIR": "/run",

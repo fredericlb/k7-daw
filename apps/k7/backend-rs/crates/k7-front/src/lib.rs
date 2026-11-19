@@ -267,8 +267,7 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
         .merge(bare)
         .fallback(declined)
         .with_state(state.clone());
-    let router = routes::engine::with_hooks(router, &state)
-        .layer(from_fn_with_state(state.clone(), peer::screen_forwarded));
+    let router = routes::engine::with_hooks(router, &state);
     (router, state)
 }
 
@@ -296,10 +295,7 @@ fn trust_extra_cas(config: &Config) {
     // k7's git transports and libgit2's config search paths, set once before any repository is opened.
     k7_git::init();
     let setting = |k: &str| config.env.get(k).cloned().or_else(|| std::env::var(k).ok());
-    match trust::configure(
-        setting("K7_EXTRA_CA_CERTS").as_deref(),
-        setting("NODE_EXTRA_CA_CERTS").as_deref(),
-    ) {
+    match trust::configure(setting("K7_EXTRA_CA_CERTS").as_deref()) {
         Ok(0) => {}
         Ok(n) => eprintln!("k7-front: trusting {n} more certificate authorities beside Mozilla's"),
         Err(e) => eprintln!(

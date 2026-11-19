@@ -14,7 +14,7 @@ use subtle::ConstantTimeEq;
 
 use super::accounts::{self, Account as Acct};
 use super::native;
-use super::switch::{code_root, removed_line};
+use super::switch::code_root;
 
 /// What every account hears when the front has no code root: node is never started in the front's place.
 const NO_CODE_ROOT: &str = "file service: no code root holds the Rust file service's files (K7_CODE_ROOT, or a checkout above the front)";
@@ -61,14 +61,6 @@ impl Held {
     }
 }
 
-/// What a server's cut resolves its chain in: the libraries' own context, no account's (`docs/files/hub.md`).
-pub struct Cut {
-    pub account: Account,
-    pub acct: Arc<Acct>,
-    pub code_root: PathBuf,
-    pub log: Log,
-}
-
 /// The accounts the front serves and what they are made from.
 pub struct Services {
     /// The song sessions' heap in bytes, the server's or an embedded host's.
@@ -88,16 +80,10 @@ pub struct Services {
     pub(super) log: Log,
     /// Set once the stop began: no account is made after it (2671).
     stopping: AtomicBool,
-    /// The cut's context on a server, made by its first cut.
-    cut: tokio::sync::OnceCell<Arc<Cut>>,
 }
 
 impl Services {
     pub fn new(env: &BTreeMap<String, String>, log: Log) -> Services {
-        // A host that still names a removed switch is told once, and starts all the same (C6).
-        if let Some(line) = removed_line(env) {
-            log(&line);
-        }
         let code_root = code_root(env);
         match &code_root {
             Some(r) => log(&format!(
@@ -118,27 +104,7 @@ impl Services {
             joined: Mutex::default(),
             log,
             stopping: AtomicBool::new(false),
-            cut: tokio::sync::OnceCell::new(),
         }
-    }
-
-    /// The context a server resolves a cut's chain in: the libraries' folders, no account's prefs or drafts.
-    pub async fn cut(&self, names: &Names) -> Result<Arc<Cut>, String> {
-        let made = self
-            .cut
-            .get_or_try_init(|| async {
-                let code_root = self.code_root.clone().ok_or(NO_CODE_ROOT)?;
-                let account = accounts::identity(names, &self.base, "", &random_secret()?).await?;
-                let acct = Acct::make(account.env.clone(), self.heap);
-                Ok::<_, String>(Arc::new(Cut {
-                    account,
-                    acct,
-                    code_root,
-                    log: self.log.clone(),
-                }))
-            })
-            .await?;
-        Ok(made.clone())
     }
 
     /// Where `packages/` and `demos/` are read, when one holds the file service's files.

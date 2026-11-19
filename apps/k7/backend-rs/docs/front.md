@@ -16,7 +16,6 @@ no family takes ends in the last routes (`last.md`), never in another process. T
 | with no trusted hop, `X-Forwarded-Host` is dropped and `X-Forwarded-Proto` is `http` | a client must not choose the origin the front derives its redirect URIs from |
 | a forwarded address that names loopback, from a socket that is not loopback, is replaced by the socket's own | a hop count trusts whatever stood one hop away: on a network shared with other containers, any of them could otherwise claim to be this machine |
 | "this machine" — a registry engine's `loopback_seen`, so its use by the account and the relay dialling `127.0.0.1` — is a loopback client address, which only a loopback socket gives (above); a hint naming loopback is never dialled on its own | an engine on this machine is every signed-in account's; that must not be one header away. The socket alone would not do either: behind the dev session's Vite every socket is loopback, a LAN engine's included |
-| `K7_FRONT_TRUSTED_PROXIES` (CIDRs) believes `X-Forwarded-*` only from a socket in the set, and walks `X-Forwarded-For` past the set's members; a peer outside it has every forwarded header dropped | a hop count cannot tell Traefik from a neighbour on its network; a set can. Unset, the hop arithmetic stands, since the deployment's proxy address is not known to the image |
 | the front draws its own seams' secret per process when none is given (`Config::settled`) | the internal seam and the engine slots need a secret no client knows |
 | a debug build optimizes its dependencies (`opt-level = 2` for every non-workspace package), the tray's workspace too | the front runs the song compiler and the WASM modules in Wasmtime: at opt-level 0 a conformance run takes two to three times longer; the workspace's own crates stay unoptimized, so an edit still rebuilds in seconds |
 | what the state keeps never holds the state: a door's routes are kept without it and given it per request, a middleware or hook kept there holds it weakly | a router given the state, or a closure holding it, kept inside that state keeps it alive for good: the families' services, sockets and child processes outlive a stopped front, and a test binary never exits; `src/stop_tests.rs` stops a front after each door answered and checks the state is let go |
@@ -26,7 +25,7 @@ no family takes ends in the last routes (`last.md`), never in another process. T
 | choice | why |
 |---|---|
 | every outbound TLS call (Claude, the git listings) is built from one root store, `k7_front::trust` | a self-hosted server under the person's own CA is reached by all of them, or by none |
-| Mozilla's roots (`webpki-roots`), plus the PEM file the host names in `K7_EXTRA_CA_CERTS`, else `NODE_EXTRA_CA_CERTS` | a self-hosted server under the person's own CA is trusted by every outbound call; a file is a dependency nothing else is: `rustls-pki-types`' PEM reader is already rustls' |
+| Mozilla's roots (`webpki-roots`), plus the PEM file the host names in `K7_EXTRA_CA_CERTS` | a self-hosted server under the person's own CA is trusted by every outbound call; a file is a dependency nothing else is: `rustls-pki-types`' PEM reader is already rustls' |
 | no OS store | the OS store needs `rustls-native-certs`, a crate not taken. The supervisor reads the OS store on a desktop for the engine's own calls (`engine/k7-supervisor`) |
 | read once, at the front's start, before any client is built; an unreadable file is said and leaves Mozilla's roots | a trust store that moves under running clients would be two answers for one server |
 
@@ -64,9 +63,8 @@ way it ends is said, by the front where it still can, by whoever started it wher
 | `K7_LOCAL_ENGINE` | unset | `front` on a device runs the machine's supervisor here (`local.md`) |
 | `K7_FRONTEND_DIST` | `apps/k7/frontend/dist` above the front | the built page the last routes serve |
 | `K7_DEV_FRONTEND` | unset | a running Vite the last routes stream the page from, as the dev tray asks |
-| `K7_EXTRA_CA_CERTS` | unset, else `NODE_EXTRA_CA_CERTS` | a PEM file of certificate authorities every outbound TLS call trusts beside Mozilla's roots, read once at start |
+| `K7_EXTRA_CA_CERTS` | unset | a PEM file of certificate authorities every outbound TLS call trusts beside Mozilla's roots, read once at start |
 | `K7_FRONT_TRUST_HOPS` | `0` | proxies before the front whose `X-Forwarded-*` is believed: `1` behind Traefik or the dev Caddy |
-| `K7_FRONT_TRUSTED_PROXIES` | unset | the proxies' addresses or CIDRs, comma- or space-separated; set, only they are believed and the hop count is 1; an entry that is not one stops the front |
 
 The routes read their settings from `ENV_KEYS` in `src/config.rs`: `SESSION_SECRET`, `STUDIO_LOCAL_USER`, the prefs and auth folders…
 

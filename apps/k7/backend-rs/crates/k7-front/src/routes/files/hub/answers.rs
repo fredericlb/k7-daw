@@ -86,12 +86,6 @@ fn refused(message: &str) -> Response {
     error(StatusCode::UNPROCESSABLE_ENTITY, message)
 }
 
-/// What a cut shares with the machine: an account's folders on a device, the libraries' alone on a server.
-enum Roots {
-    Account(std::path::PathBuf, String),
-    Libraries,
-}
-
 /// `POST /api/internal/files/cold-run`: what a cut of this account's runs, and what it shares with the machine.
 pub async fn cold_run(State(state): State<Arc<AppState>>, req: Request) -> Response {
     let hub = &files_of(&state).hub;
@@ -108,23 +102,13 @@ pub async fn cold_run(State(state): State<Arc<AppState>>, req: Request) -> Respo
     if let Some(why) = files.service.refusal(&user) {
         return refused(why);
     }
-    let (roots_of, asked): (Roots, _) = if hub.is_device() {
-        match files.service.held(&user, &hub.names).await {
-            Ok(h) => {
-                let (home, slug) = (h.account.home.clone(), h.account.slug.clone());
-                let asked = service::internal::cold_run(&h, &chain, &want).await;
-                (Roots::Account(home, slug), asked)
-            }
-            Err(e) => return refused(&e),
-        }
-    } else {
-        match files.service.cut(&hub.cut).await {
-            Ok(c) => (
-                Roots::Libraries,
-                service::internal::cut_run(&c, &chain, &want).await,
-            ),
-            Err(e) => return refused(&e),
-        }
+    let (home, slug, asked) = match files.service.held(&user, &hub.names).await {
+        Ok(h) => (
+            h.account.home.clone(),
+            h.account.slug.clone(),
+            service::internal::cold_run(&h, &chain, &want).await,
+        ),
+        Err(e) => return refused(&e),
     };
     let (status, r) = match asked {
         Ok(r) => r,
@@ -140,14 +124,7 @@ pub async fn cold_run(State(state): State<Arc<AppState>>, req: Request) -> Respo
         .cloned()
         .filter(|o| !o.is_null())
         .unwrap_or(json!([]));
-    let roots = match roots_of {
-        Roots::Account(home, slug) => {
-            k7_hub::binding::cut_roots(&home, &slug, &hub.mediatek_root, &model)
-        }
-        Roots::Libraries => {
-            k7_hub::binding::library_cut_roots(&hub.data_root, &hub.mediatek_root, &model)
-        }
-    };
+    let roots = k7_hub::binding::cut_roots(&home, &slug, &hub.mediatek_root, &model);
     Json(json!({ "model": model, "outputs": outputs, "roots": roots })).into_response()
 }
 
@@ -165,22 +142,13 @@ pub async fn slot(State(state): State<Arc<AppState>>, req: Request) -> Response 
     if let Some(why) = files.service.refusal(&user) {
         return refused(why);
     }
-    let (roots_of, asked) = if hub.is_device() {
-        match files.service.held(&user, &hub.names).await {
-            Ok(h) => (
-                Roots::Account(h.account.home.clone(), h.account.slug.clone()),
-                service::internal::slot(&h, &r#ref).await,
-            ),
-            Err(e) => return refused(&e),
-        }
-    } else {
-        match files.service.cut(&hub.cut).await {
-            Ok(c) => (
-                Roots::Libraries,
-                service::internal::cut_slot(&c, &r#ref).await,
-            ),
-            Err(e) => return refused(&e),
-        }
+    let (home, slug, asked) = match files.service.held(&user, &hub.names).await {
+        Ok(h) => (
+            h.account.home.clone(),
+            h.account.slug.clone(),
+            service::internal::slot(&h, &r#ref).await,
+        ),
+        Err(e) => return refused(&e),
     };
     let (status, r) = match asked {
         Ok(r) => r,
@@ -191,14 +159,8 @@ pub async fn slot(State(state): State<Arc<AppState>>, req: Request) -> Response 
             &field(&r, "error").unwrap_or(format!("could not compile the slot ({status})")),
         );
     }
-    let roots = match roots_of {
-        Roots::Account(home, slug) => {
-            let mut roots = k7_hub::binding::roots_for(&home, &slug, Some(&hub.mediatek_root));
-            // The account's own library too, read-only: an account chain's models are there, not in a workspace.
-            roots.push(json!({ "remote": home.join("library").display().to_string(), "name": format!("lib-{slug}"), "writable": false }));
-            roots
-        }
-        Roots::Libraries => k7_hub::binding::library_slot_roots(&hub.data_root, &hub.mediatek_root),
-    };
+    let mut roots = k7_hub::binding::roots_for(&home, &slug, Some(&hub.mediatek_root));
+    // The account's own library too, read-only: an account chain's models are there, not in a workspace.
+    roots.push(json!({ "remote": home.join("library").display().to_string(), "name": format!("lib-{slug}"), "writable": false }));
     Json(json!({ "slot": r, "roots": roots })).into_response()
 }

@@ -1,17 +1,9 @@
-# The file hub — a device's workspaces, a server's libraries
+# The file hub — a device's workspaces and the libraries
 
-A workspace lives on the device that edits it and travels between devices through git
-(`git.md`). A **server** edits none. So the front has two modes, told by `STUDIO_LOCAL_USER`:
-
-| | a device (the tray, a phone) | a server |
-|---|---|---|
-| `/api/files/*` | answered by the user's account runtime in the front | **410**, with one sentence naming the tray and the phone apps |
-| `/api/files/account/libraries*` | the origin's libraries | the same |
-| `/api/files-hub` (the hello) | a ticket for the local user | a ticket |
-| an account runtime | one, for the local user | **none**, whoever signs in |
-
-The 410 is answered before the ticket or the session is read: a server has nothing to hide behind it.
-`$STUDIO_FILES_ROOT` is still required, since the libraries live in it.
+A workspace lives on the device that edits it and travels between devices through git (`git.md`). The hub answers
+`/api/files/*` with the user's account runtime in the front, the origin's libraries under `/api/files/account/libraries*`,
+and the hello (`/api/files-hub`) with a ticket for the local user. `$STUDIO_FILES_ROOT` is required, since the
+libraries live in it.
 
 ## An account's runtime is the front's own, on a device
 
@@ -21,24 +13,16 @@ The hub runs no process. The local user's files are answered by that account's r
 (`STUDIO_FILE_SERVICE_ENTRY`, `STUDIO_LIBRARY_SERVICE_ENTRY`, `STUDIO_MAX_FILE_SERVICES`,
 `STUDIO_FILES_WATCH`) starts all the same and the front says once that it no longer reads them.
 
-One person and no account competing for memory: the runtime is never reaped.
-`State::is_device` is the one test: `warm` does nothing on a server, so a sign-in there makes no runtime.
+One person and no account competing for memory: the runtime lives until the front stops.
 
 An account's folder is `accountKey(email)` (`k7_hub::account`): the readable slug **and** a hash
 of the exact email, since a slug alone folds `a.b@` and `a_b@` into one folder.
 
-## A server's cut resolves in the libraries' context
+## A cut resolves in the account's runtime
 
-The médiathèque's stem cut and an engine's slots ask the hub for a chain (`POST /api/internal/files/cold-run`). On a device that is the
-account's runtime, with its chain setting. On a server it is `Services::cut`, a
-context of the libraries alone (`$STUDIO_FILES_ROOT/_cut`, no prefs, published versions only), and the roots the
-engine's machine is shown are the médiathèque (writable, for the stems), the libraries and the model's own folder.
-
-| choice | why |
-|---|---|
-| the account's `stemsChain` and `instrumentalChain` do not apply on a server; a cut names its chain, else the engine's | an account's own chains are local to each device and never synced |
-| the account's workspace and models are no root of a cut | a server holds no account runtime to resolve a project against |
-| the engine slots' compile (`/api/internal/files/slot`) takes the same context on a server: a chain of the libraries, shared with the machine as `libs` and the médiathèque, both read-only | a slot of an account's own chain is a device's |
+The médiathèque's stem cut and an engine's slots ask the hub for a chain (`POST /api/internal/files/cold-run`,
+`/slot`): the account's runtime resolves it, with its chain setting, and the roots the engine's machine is shown are
+the account's own folders.
 
 ### The environment is what the host adds, not the front's
 
@@ -48,12 +32,9 @@ secrets — the session and token signing keys, the OIDC client secret — and a
 runtime needs none of them. The hazard runs
 one way: a variable a program starts reading and nobody adds to the list is silently unset there.
 
-### `/api/ready` keeps node's figures
+### `/api/ready` reports the running accounts
 
-The readiness reports `running`, `starting`, `cap`, `oldestStartMs` and `lastStartError` because the image's
-healthcheck and the conformance suite read that shape. `running` is the accounts' runtimes held now; nothing
-starts out of process, so the other figures are fixed (`starting` and `oldestStartMs` zero, no failed start,
-`cap` the largest figure the shape ever held). A full hub is no longer a state, and a start can no longer be stuck.
+The readiness answers `ok`, the volumes it probed and `files.running`, the accounts' runtimes held now.
 
 ## A ticket says who is calling
 

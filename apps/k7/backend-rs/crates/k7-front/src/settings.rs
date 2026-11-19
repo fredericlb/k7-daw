@@ -20,8 +20,6 @@ pub struct Settings {
     pub build: String,
     /// Proxies before the front whose `X-Forwarded-*` is believed.
     pub trust_hops: usize,
-    /// `K7_FRONT_TRUSTED_PROXIES`: when set, only a socket peer in it is believed, and `trust_hops` is 1 (`peer::screen`).
-    pub trusted_proxies: Option<Vec<crate::peer::Cidr>>,
     /// `K7_CAMERA_ICE_SERVERS`, as written: the STUN and TURN servers handed to both ends of a remote camera.
     pub camera_ice_servers: Option<String>,
     /// `SESSION_SECRET` as written, `""` when unset: what the file hub's ticket key derives from.
@@ -44,7 +42,7 @@ pub struct Settings {
     pub supervisor_env: Vec<(String, String)>,
     /// Where the engines' bindings live: `STUDIO_ENGINES_DIR`, else `<mediatek>/.engines`.
     pub engines_dir: PathBuf,
-    /// The tunnel's upload limits, as `uploadLimits` reads them.
+    /// The tunnel's upload limits.
     pub upload_limits: k7_engine::tunnel::uploads::UploadLimits,
     /// `K7_ENGINE_CORE=front`: the registry, the relay and the hub answered here, not by the backend (`docs/engine.md`).
     pub engine_core: bool,
@@ -85,9 +83,6 @@ impl Settings {
                     .unwrap_or_else(|| home.join(".k7"))
                     .join("mediatek")
             });
-        // An entry that is not one trusts nothing more: `Config::from_env` refuses it before.
-        let proxies = get("K7_FRONT_TRUSTED_PROXIES")
-            .map(|v| crate::peer::parse_proxies(&v).unwrap_or_default());
         let dev_stub = crate::auth_guard::dev_stub_allowed(env);
         let dev_secret = || {
             if dev_stub {
@@ -109,8 +104,7 @@ impl Settings {
                 // `.auth` in the media's folder, where the session's revocations and the accounts' keys live.
                 .or_else(|| Some(mediatek.join(".auth"))),
             build: get("APP_VERSION").unwrap_or_else(|| "dev".into()),
-            trust_hops: if proxies.is_some() { 1 } else { trust_hops },
-            trusted_proxies: proxies,
+            trust_hops,
             camera_ice_servers: get("K7_CAMERA_ICE_SERVERS"),
             raw_session_secret: env.get("SESSION_SECRET").cloned().unwrap_or_default(),
             engines_dir: raw("STUDIO_ENGINES_DIR")
@@ -139,7 +133,7 @@ impl Settings {
                     }
                     seen
                 }),
-            upload_limits: k7_engine::tunnel::uploads::UploadLimits::from_settings(&|k| raw(k)),
+            upload_limits: k7_engine::tunnel::uploads::UploadLimits::default(),
             local_engine_front: get("K7_LOCAL_ENGINE").as_deref() == Some("front"),
             supervisor_bin: raw("K7_SUPERVISOR_BIN").map(PathBuf::from),
             supervisor_home: raw("K7_SUPERVISOR_HOME")

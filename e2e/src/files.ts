@@ -1,6 +1,6 @@
 // files.ts — the e2e account's file service, reached the way the browser reaches it: through /api/files with a hub ticket.
 // Writes go over HTTP, never to disk: the capture reads a folder deleted behind its back as an edit (docs/e2e.md).
-import { type APIRequestContext, type Page, test } from "@playwright/test";
+import type { APIRequestContext, Page } from "@playwright/test";
 import { until } from "./until.ts";
 import { runVerb, type VerbService } from "./verbs.ts";
 
@@ -33,14 +33,6 @@ export class FileService {
       path: string;
       ticket: string;
     };
-    // A server answers 410 to every workspace path: the specs that edit one belong to a device's bed.
-    const probe = await request.get(`${origin}${path}/health`, {
-      headers: { [TICKET_HEADER]: ticket },
-    });
-    test.skip(
-      probe.status() === 410,
-      "a server edits no workspace: a device bed",
-    );
     return new FileService(request, `${origin}${path}`, ticket);
   }
 

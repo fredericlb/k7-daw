@@ -13,12 +13,6 @@ use song::{DiskSource, PathRule, Roots};
 /// Workspaces held, the least recently asked dropped (decision 704).
 pub const MAX_WORKSPACES: usize = 4;
 
-/// The heap of an embedded runtime, which `switch.rs` names in megabytes and a Config default sits under.
-const EMBEDDED_HEAP: usize = 192 << 20;
-
-/// The sessions' budget for a runtime above the embedded heap, whatever its heap (decision 1506: one constant, easy to reverse).
-const SERVER_BUDGET: usize = 256 << 20;
-
 /// A workspace key longer than this is no path.
 const MAX_WS: usize = 8_192;
 
@@ -56,11 +50,7 @@ const _: () = {
 impl Sessions {
     fn new(heap: usize) -> Sessions {
         // A runtime of a phone's size shares its memory with the whole backend: a quarter, not a half (decision 808).
-        let budget = if heap <= EMBEDDED_HEAP {
-            heap / 4
-        } else {
-            SERVER_BUDGET
-        };
+        let budget = heap / 4;
         Sessions {
             slots: Vec::new(),
             tick: 0,

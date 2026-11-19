@@ -16,8 +16,6 @@ static RUNNING: Mutex<Option<Running>> = Mutex::new(None);
 pub fn start(config: crate::Config) -> Result<u16, i32> {
     // A host that chose no sink for the front's last words gets stderr (`exit.rs`).
     crate::exit::watch(None);
-    // The song sessions take an embedded host's share of memory here (docs/service.md).
-    crate::routes::files::service::set_embedded();
     if let Some(refused) = crate::auth_guard::refusal(&config.env) {
         eprintln!("{refused}");
         return Err(-5);

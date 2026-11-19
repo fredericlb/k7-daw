@@ -213,5 +213,5 @@ Each is answered in under five seconds, thirty on musl.
 | the disk Source's real-path checks cost on Windows (a handle per directory) | measured over 2,000 folders in a release build: on the A069P a plain `lstat` 3.80 ms, a first pass of the Source 22.95 ms, the same Source again 9.03 ms; on this Mac 2.35, 19.03 and 3.96 ms (`disk_cost.rs`); about 19 ms per 2,000 folders on both, so the per-compile memo is enough on the phone, and a memo that outlives a compile waits for the Windows figure, which only `rust checks windows` gives |
 | a `binary` file with no digest hashes as one byte (747) | reads as not ready, as `#<len>` does |
 | a refusal kept for a folder with a mount below it answers for that folder alone | every path below it that was asked is an entry of its own, and the mount below is allowed by the disk too |
-| the engine document of a full-size project is 35 MB, the session over 175 MB (808) | measured: the runtime's heap is 192 MB when embedded (96 MiB is the `Config` default) and 384 MB on a server; accepted by 916 |
+| the engine document of a full-size project is 35 MB, the session over 175 MB (808) | measured: the runtime's heap is 192 MB (96 MiB is the `Config` default); accepted by 916 |
 

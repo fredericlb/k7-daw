@@ -12,9 +12,6 @@ use crate::env::STDIN_STOP_ENV;
 /// Where a hub's lines go.
 pub type Log = Arc<dyn Fn(&str) + Send + Sync>;
 
-/// The most accounts a server's readiness reports it can hold: a runtime is not a process, so nothing refuses past it.
-pub const REPORTED_CAP: usize = 50;
-
 /// A boxed future, for the callbacks the hub gives.
 pub type BoxFuture<T> = Pin<Box<dyn Future<Output = T> + Send>>;
 

@@ -122,16 +122,7 @@ async fn ready_answers_this_machine_only() {
             .all(|x| x == "ok")
     );
     let files: Vec<&String> = v["files"].as_object().unwrap().keys().collect();
-    assert_eq!(
-        files,
-        [
-            "running",
-            "starting",
-            "cap",
-            "oldestStartMs",
-            "lastStartError"
-        ]
-    );
+    assert_eq!(files, ["running"]);
     let r = send(&f, "GET", "/api/ready", &[("host", "example.com")], "").await;
     assert_eq!(
         (r.status, r.body.as_str()),

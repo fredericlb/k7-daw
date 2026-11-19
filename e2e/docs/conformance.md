@@ -45,7 +45,6 @@ what it shares is made its own:
 |---|---|
 | the hello and its ticket's signed shape, `/api/files`' gate (header, `?token=`, `~engine`), the identity headers replaced, a body streamed both ways, the internal seam's refusals | `filesHub.spec.ts` |
 | the server's workspaces read file by file for a device to download: list, manifest, file, refusals, the door's token | `files_export.rs` (Rust, a server front seeded on disk) |
-| a server's `/api/files` answering 410, the libraries and the hello kept, the cut resolved in the libraries' context and making no account | `files_hub.rs`; the door's files prefixes in `routes/files/mod.rs`'s `is_door_path` test (Rust) |
 | `/api/ready`: loopback by Host, its volumes and the hub's starts | `ready.spec.ts` |
 
 | family (phase 6.5) | spec |
@@ -96,7 +95,7 @@ what it shares is made its own:
 | the engine spec counts the node file services `/api/ready` reports before and after, and finds none more | a binding held on a node process would start one for every request naming an engine; the count is the one thing a client can read of the processes behind the hub |
 | what needs a real engine's plugins, a second backend is not covered: auto-freeze (a VST and its scan), a process step kept on an engine, the prefetch, `.dawproject` and `.als` imports, the 1000-step ring, a conflict set aside and settled through the service | they need a VST scan, a second machine or a second replica writing the same value |
 | what needs a second machine is not covered: the hub's 503 while a service starts or is held off after a crash | a server refuses the one, and the others need a file service that fails or a second backend |
-| every bed runs the front as a device (`STUDIO_LOCAL_USER`), so the specs that edit a workspace (`service*`, `files*`, `workspace-ui`) run; a server's own behaviour (the 410) is held by Rust tests, not here | a server edits no workspace and is fading away; a device's account is the only runtime (`e2e.md`, "The beds are devices") |
+| every bed runs the front as a device (`STUDIO_LOCAL_USER`), so the specs that edit a workspace (`service*`, `files*`, `workspace-ui`) run | a device's account is the only runtime (`e2e.md`, "The beds are devices") |
 | `auth.spec.ts` (the session and the tokens), `cameras.spec.ts`, `settings.spec.ts`, the engines' (`engines.spec.ts`), the local engine's (`localEngine.spec.ts`) and the file hub's (`files*`, `sync*`, `ready`, `service*`) run against the front only | the backend has no copy of those routes left to compare with: their reference is the front and the committed vectors |
 | the local engine's specs run against a machine's own backend only (`/api/local` answering), and send no command that changes the engine; the tray's status and the internal seam take `CONFORMANCE_TRAY_TOKEN` and `CONFORMANCE_INTERNAL_SECRET` | a throwaway local-user backend is the test bed (`apps/k7/backend-rs/docs/local.md`); against the person's tray, a rescan or a slot would be theirs |
 | on a phone, the forwarded ports are NOT 18789 (`adb forward tcp:28789 tcp:18789`) | 18789 on a computer running the tray is that tray's own backend: a forward onto it fails, and the specs then test the computer |

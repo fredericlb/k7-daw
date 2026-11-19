@@ -23,13 +23,11 @@ pub struct Config {
 }
 
 /// What the routes read of the environment a host hands the front.
-pub const ENV_KEYS: [&str; 46] = [
-    "K7_FRONT_TRUSTED_PROXIES",
+pub const ENV_KEYS: [&str; 38] = [
     "K7_EXTRA_CA_CERTS",
     "SESSION_SECRET",
     "STUDIO_LOCAL_USER",
     "STUDIO_DEV_AUTH",
-    "API_TOKEN_SECRET",
     "STUDIO_PREFS_DIR",
     "STUDIO_AUTH_DIR",
     "STUDIO_MEDIATEK",
@@ -45,8 +43,6 @@ pub const ENV_KEYS: [&str; 46] = [
     "STUDIO_PORTS",
     "STUDIO_ENGINE",
     "STUDIO_ENGINES_DIR",
-    "STUDIO_TUNNEL_MAX_UPLOAD_BYTES",
-    "STUDIO_TUNNEL_UPLOAD_BYTES_PER_HOUR",
     "K7_ENGINE_CORE",
     "K7_FRONT_CACHE",
     "K7_FILES",
@@ -54,14 +50,10 @@ pub const ENV_KEYS: [&str; 46] = [
     "ANTHROPIC_BASE_URL",
     // The file hub's, and what it hands each account's runtime (`routes/files/hub`, `k7_hub::env`).
     "STUDIO_LIBRARY_SEED",
-    "NODE_ENV",
-    "NODE_EXTRA_CA_CERTS",
-    "NODE_COMPILE_CACHE",
     "STUDIO_CHROMIUM",
     "STUDIO_DEMOS",
     "STUDIO_ENGINE_ROOTS",
     "STUDIO_MODELS",
-    "STUDIO_PARSE_CACHE",
     "STUDIO_RENDER_DEBUG",
     "STUDIO_RENDER_TRACE",
     "STUDIO_WHISPER_MODEL",
@@ -84,9 +76,6 @@ impl Config {
     pub fn from_vars(get: impl Fn(&str) -> Option<String>) -> Result<Self, String> {
         let var = |name: &str| get(name).filter(|v| !v.is_empty());
         let listen = var("K7_FRONT_LISTEN").unwrap_or_else(|| "127.0.0.1:8789".into());
-        if let Some(p) = var("K7_FRONT_TRUSTED_PROXIES") {
-            crate::peer::parse_proxies(&p).map_err(|e| format!("K7_FRONT_TRUSTED_PROXIES: {e}"))?;
-        }
         let config = Config {
             listen: listen
                 .parse()

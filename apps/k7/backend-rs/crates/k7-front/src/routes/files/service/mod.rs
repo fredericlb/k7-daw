@@ -34,9 +34,8 @@ use k7_hub::account::{Account, Names};
 use serde_json::json;
 
 pub use self::accounts::Account as Acct;
-pub use self::accounts::set_embedded;
 use self::routes::{Call, Route};
-pub use self::services::{Cut, FRONT_CAPTURE, Held, Services};
+pub use self::services::{FRONT_CAPTURE, Held, Services};
 pub use self::switch::code_root;
 pub use self::window::Window;
 use super::json_answer;

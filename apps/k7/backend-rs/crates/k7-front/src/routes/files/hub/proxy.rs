@@ -1,6 +1,5 @@
 //! proxy.rs — `/api/files/*` on a device, answered by its user's runtime in the front (`docs/files/hub.md`): the ticket
-//! or the session says who, the engine a request names is bound to the account. A server answers the libraries' paths
-//! and 410 to the rest. What a reader gets wrong: the libraries' paths never reach the account's runtime.
+//! or the session says who, the engine a request names is bound to the account. What a reader gets wrong: the libraries' paths never reach the account's runtime.
 
 use std::sync::Arc;
 
@@ -18,14 +17,6 @@ use crate::web::error;
 /// Who the session says is calling.
 pub(super) fn session_of(state: &AppState, req: &Request) -> Option<Signed> {
     crate::session::signed(req.headers(), &state.settings, &state.revocations)
-}
-
-/// What a server answers for a workspace path: its workspaces are downloaded, and k7 runs on a device.
-fn gone() -> Response {
-    error(
-        StatusCode::GONE,
-        "workspaces are not edited on this server: open them in k7 on a computer (the tray) or on a phone, and download them from the home page",
-    )
 }
 
 fn is_libraries(path: &str) -> bool {
@@ -76,10 +67,6 @@ fn header(h: &HeaderMap, name: &str) -> Option<String> {
 /// `/api/files[/*]`: the ticket or the session says who, the libraries' paths go to their service, the rest to the account's.
 pub async fn files(State(state): State<Arc<AppState>>, req: Request) -> Response {
     let hub = &files_of(&state).hub;
-    let rest = req.uri().path().strip_prefix("/api/files").unwrap_or("");
-    if !hub.is_device() && !is_libraries(rest) {
-        return gone();
-    }
     if !hub.ready() && writes(&req) {
         return starting();
     }

@@ -1,5 +1,5 @@
 //! trust.rs — the roots every outbound TLS call of the front trusts: Mozilla's, plus the PEM bundle the host names in
-//! `K7_EXTRA_CA_CERTS` (else `NODE_EXTRA_CA_CERTS`, which hosts gave node), so a server under the person's own CA is reached.
+//! `K7_EXTRA_CA_CERTS`, so a server under the person's own CA is reached.
 //! What a reader gets wrong: a client built before `configure` trusts Mozilla's alone — the front configures first.
 
 use std::path::Path;
@@ -11,8 +11,8 @@ use rustls::pki_types::pem::PemObject;
 static EXTRA: RwLock<Vec<CertificateDer<'static>>> = RwLock::new(Vec::new());
 
 /// The settings' bundle, read once: how many certificates it added, or why none was.
-pub fn configure(k7: Option<&str>, node: Option<&str>) -> Result<usize, String> {
-    let Some(file) = k7.or(node).map(str::trim).filter(|f| !f.is_empty()) else {
+pub fn configure(k7: Option<&str>) -> Result<usize, String> {
+    let Some(file) = k7.map(str::trim).filter(|f| !f.is_empty()) else {
         return Ok(0);
     };
     let certs = read(Path::new(file))?;

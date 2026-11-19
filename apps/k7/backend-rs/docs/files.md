@@ -18,14 +18,13 @@ and the hub starts no node process: every account's file service is the front's 
 
 ## The hub
 
-The ticket, the routes to a device's account runtime, the libraries and a server's 410 for every other workspace path: `crates/k7-hub` (tickets, the allow-list, the
+The ticket, the routes to a device's account runtime and the libraries: `crates/k7-hub` (tickets, the allow-list, the
 account names and environments, the engine bindings, the caches' sweep, with no HTTP framework) and
 `crates/k7-front/src/routes/files/hub/` (the routes). The ticket, the allow-list and the claim are
 [files/hub.md](files/hub.md); this table is how the front does it.
 
 | choice | why |
 |---|---|
-| a front that is not a device (`STUDIO_LOCAL_USER` unset) makes no account runtime: `/api/files` answers 410 but for the libraries, `warm` does nothing, the cut resolves in the libraries' context ([files/hub.md](files/hub.md)) | a server edits no workspace; devices share them over WebDAV or SFTP |
 | the hub starts nothing: no node child, no port, no cap, no crash backoff, no dev watch; a host still naming `K7_NODE`, `STUDIO_FILE_SERVICE_ENTRY`, `STUDIO_LIBRARY_SERVICE_ENTRY`, `STUDIO_MAX_FILE_SERVICES` or `STUDIO_FILES_WATCH` gets one log line | every account's runtime is the front's own, so a process per account would be a second owner of the account's files (`service.md`) |
 | an account's environment is `k7_hub::env`'s allow-list taken from this process's environment, overlaid by the host's `Config.env`, then the account's own values (`Names`) | a host that embeds the front hands its settings through `Config.env` alone; every name a runtime reads is therefore in `ENV_KEYS` too |
 | without a code root every account's files and the libraries answer a 503 naming it, never a start of something else | the files are the front's or nothing |
@@ -64,7 +63,6 @@ nothing is fetched. They answer `/account/libraries*` and
 | the identity a client sends is ignored (`x-studio-user`, `x-studio-hub-secret`, `x-studio-engine-token`): the account served is the ticket's or the session's | `hub/proxy.rs` `files` | `tests/files_hub.rs`; `filesHub.spec.ts` |
 | each runtime's secret is 32 random bytes, handed in its environment alone, and is its gate | `k7_hub::account::random_secret` | `tests/files_hub.rs` (a forged secret is a 401) |
 | `/api/files-hub/internal` answers only a held runtime's secret, compared in constant time, whatever else the request carries | `hub/answers.rs` `internal`, `State::account_of_secret` | `tests/files_hub.rs`; `filesHub.spec.ts` |
-| a server answers 410 to every `/api/files` path but the libraries', and its cut makes no account folder | `hub/proxy.rs` `files`, `hub/answers.rs` `cold_run`, `Services::cut` | `tests/files_hub.rs`; `serverFiles.spec.ts` |
 | the libraries have their own secret | `hub/proxy.rs` | `tests/files_hub.rs` |
 | an account's environment is the allow-list: no session, token, OIDC, render or front secret reaches it, whatever its name | `k7_hub::env` | `tests/all/vectors.rs` (`hub-vectors.json`) |
 | only a claim binds an engine: the registry is asked `holds` for the account before any path is bound | `k7_hub::binding` | `filesHub.spec.ts` (an unclaimed engine leaves the files reachable) |

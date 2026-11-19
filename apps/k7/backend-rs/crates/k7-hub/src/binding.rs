@@ -65,33 +65,6 @@ pub fn cut_roots(home: &Path, slug: &str, mediatek: &Path, model: &str) -> Vec<V
     roots
 }
 
-/// What a cut shares on a server, with no account: the library writable, the libraries and the model's folder read-only.
-pub fn library_cut_roots(data_root: &Path, mediatek: &Path, model: &str) -> Vec<Value> {
-    let libs = data_root.join("libraries");
-    let mut roots = vec![
-        root(mediatek, "mediatek", true),
-        json!({ "remote": libs.display().to_string(), "name": "libs", "writable": false, "perChild": true }),
-    ];
-    let held = |r: &Value| Path::new(model).starts_with(r["remote"].as_str().unwrap_or_default());
-    let at = Path::new(model);
-    if at.is_absolute()
-        && let Some(dir) = at.parent()
-        && !roots.iter().any(held)
-    {
-        roots.push(root(dir, "model-cut", false));
-    }
-    roots
-}
-
-/// What a server's slot shares with the machine: the libraries and the media, both read-only.
-pub fn library_slot_roots(data_root: &Path, mediatek: &Path) -> Vec<Value> {
-    let libs = data_root.join("libraries");
-    vec![
-        json!({ "remote": libs.display().to_string(), "name": "libs", "writable": false, "perChild": true }),
-        root(mediatek, "mediatek", false),
-    ]
-}
-
 async fn drop_paths(seam: &Seam, slug: &str, paths: Vec<String>, log: &Log) {
     for p in paths {
         if let Err(e) = seam.unbind(&p).await {

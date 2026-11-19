@@ -21,9 +21,6 @@ pub const SYSTEM: &[&str] = &[
     "LANG",
     "LANGUAGE",
     "TZ",
-    "NODE_ENV",
-    "NODE_EXTRA_CA_CERTS",
-    "NODE_COMPILE_CACHE",
     "SSL_CERT_FILE",
     "SSL_CERT_DIR",
     "HTTP_PROXY",
@@ -60,7 +57,6 @@ pub const SYSTEM: &[&str] = &[
 
 /// What the file service's code and the engine it runs read.
 pub const STUDIO: &[&str] = &[
-    "K7_LOOP_SITES",
     "STUDIO_CHROMIUM",
     "STUDIO_DEMOS",
     "STUDIO_ENGINE",
@@ -69,7 +65,6 @@ pub const STUDIO: &[&str] = &[
     "STUDIO_LIBRARIES_HOME",
     "STUDIO_MEDIATEK",
     "STUDIO_MODELS",
-    "STUDIO_PARSE_CACHE",
     "STUDIO_RENDER_DEBUG",
     "STUDIO_RENDER_TRACE",
     "STUDIO_WHISPER_MODEL",
@@ -119,12 +114,5 @@ mod tests {
             out.keys().collect::<Vec<_>>(),
             ["LC_ALL", "PATH", "STUDIO_ENGINE"]
         );
-    }
-
-    #[test]
-    fn lets_the_loop_sites_switch_through_to_an_account() {
-        assert!(allowed("K7_LOOP_SITES"));
-        let out = service_env([("K7_LOOP_SITES", "1"), ("K7_TOKEN", "s")]);
-        assert_eq!(out.keys().collect::<Vec<_>>(), ["K7_LOOP_SITES"]);
     }
 }

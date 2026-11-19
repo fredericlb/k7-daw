@@ -1,11 +1,10 @@
-//! internal.rs — the media's cut: its chain resolved in the account's own context on a device, in the libraries'
-//! on a server (`docs/files/hub.md`). What a reader gets wrong: the answer is shaped as node's route answered it.
+//! internal.rs — the media's cut: its chain resolved in the account's own context (`docs/files/hub.md`). What a reader gets wrong: the answer is shaped as node's route answered it.
 
 use serde_json::{Value, json};
 
+use super::Held;
 use super::native::{self, Tag};
 use super::native::{bench, chains};
-use super::{Cut, Held};
 
 /// `/hub/cold-chain`'s answer (`resolveColdRun`): `{model, outputs}`, or the refusal's status.
 pub async fn cold_run(held: &Held, chain: &str, want: &str) -> Result<(u16, Value), String> {
@@ -19,13 +18,6 @@ pub async fn cold_run(held: &Held, chain: &str, want: &str) -> Result<(u16, Valu
         want,
     )
     .await
-}
-
-/// A server's cut: the libraries' context, so no account's chain setting.
-pub async fn cut_run(cut: &Cut, chain: &str, want: &str) -> Result<(u16, Value), String> {
-    let a = &cut.account;
-    let at = (&cut.acct, cut.code_root.as_path());
-    resolve(&a.env, &a.slug, at, &cut.log, chain, want).await
 }
 
 async fn resolve(
@@ -56,13 +48,6 @@ async fn resolve(
 pub async fn slot(held: &Held, r#ref: &str) -> Result<(u16, Value), String> {
     let a = &held.account;
     let run = bench::Run::of(&held.acct, &a.env, &a.slug, &held.code_root, &held.log);
-    compile(run, r#ref).await
-}
-
-/// A server's slot: a chain of the libraries compiled in their context, no account's chain and no drafts.
-pub async fn cut_slot(cut: &Cut, r#ref: &str) -> Result<(u16, Value), String> {
-    let a = &cut.account;
-    let run = bench::Run::of(&cut.acct, &a.env, &a.slug, &cut.code_root, &cut.log);
     compile(run, r#ref).await
 }
 
