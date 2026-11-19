@@ -10,9 +10,8 @@ workspaces racing for CPU is what made it **red because the machine was busy**, 
 perf assertion below is the one test still sensitive to that, which is why a developer's run
 stays sequential unless asked. `npm run typecheck` goes through the same runner, and CI runs it
 (`--jobs 2`) beside the tests and the two lints, so the four together use the CPU the tests leave. The generous
-timeouts later in this page are cheap insurance kept regardless. OneDev passes `--jobs 2` to the tests too:
-its image builds compile on the same host while they run, and at four, tests that touch the disk took over
-thirty seconds there.
+timeouts later in this page are cheap insurance kept regardless: on a shared host at four jobs, tests that touch the disk took over
+thirty seconds beside a build.
 
 This page is the reason the numbers in `vitest.config.ts` are what they are.
 
@@ -164,9 +163,9 @@ isolation, which is the worst shape a flake can have.
 `forks` gives each file its own process, so the env var is the isolation it already looks
 like. It costs a process start per file.
 
-## The Rust suite runs under cargo-nextest on the agents
+## The Rust suite runs under cargo-nextest on the Mac
 
-`rust checks windows` and `rust checks macos` run `apps/k7/backend-rs`'s tests with `cargo nextest run`:
+`mac-checks.sh` runs `apps/k7/backend-rs`'s tests with `cargo nextest run`:
 each test in its own process, so a test that leans on another's process-wide state — an environment
 variable, a cache filled earlier, a lock meant to serialize — fails there first. `cargo test` stays
-what a developer runs and the fallback on an agent without nextest ([rust-builds.md](rust-builds.md)).
+what a developer runs and the fallback on a machine without nextest ([rust-builds.md](rust-builds.md)).

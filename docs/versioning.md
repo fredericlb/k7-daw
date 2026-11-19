@@ -53,9 +53,7 @@ process (nginx) to supervise alongside the backend. Traefik reaches it directly 
 keeps answering
 (`packages/web-protocol/docs/addresses.md`).
 
-`engine/k7-runtime` and `engine/k7-supervisor` are not in k7's image. The server's own engine is
-an image of its own, `k7-runtime`, which is tagged with k7's stamp and has no SPA to show it
-([server-engine.md](server-engine.md)). The tray, `apps/k7-tray`, is in no image.
+`engine/k7-runtime` and `engine/k7-supervisor` are not in k7's image. The tray, `apps/k7-tray`, is in no image.
 
 Two containers on one hostname each ship and restart on their own, so a crash in one does not
 recycle the other. Inside k7's image the trade is the same: the editor and the library are one
@@ -136,7 +134,7 @@ strip the variable from and no stale bundle to worry about: every build reads it
 
 `ARG APP_VERSION=dev` in the Dockerfile covers a plain `docker build` — including
 a hand-run `docker build`, so a locally built image reads `dev`. CI's images are
-`dev.frediver.se/frediverse/k7/k7-webapp` and `…/k7-runtime` ([images.md](images.md)); nothing
+`dev.frediver.se/frediverse/k7/k7-webapp` ([images.md](images.md)); nothing
 deployed pulls a hand-built one.
 
 `?? "dev"` at each render site covers `vite dev` and a bare `vite build`, where the
@@ -162,23 +160,6 @@ away for whoever asks which image this is.
 
 k7 serves its own `frontend/dist` directly (`express.static` in `src/server.ts`), with no nginx
 and no location list to keep in step with the SPA's `base`.
-
-## The checkout credential
-
-Every OneDev `CheckoutStep` uses
-
-```yaml
-    cloneCredential:
-      type: HttpCredential
-      accessTokenSecret: submodule-token
-```
-
-and `engine/scripts/ciTree.mjs` sends the same token as an HTTP header: the project is private, and
-the default credential does not cover what those steps fetch.
-
-**`submodule-token` is a job secret in studio's OneDev project settings, not in this
-repo.** Secrets are per-project. If checkout fails after a fresh setup, that secret is the first
-thing to check — a missing one fails with an unresolved-secret error, a wrong one with a 401.
 
 ## The shell is asked again on every load, its assets never
 

@@ -349,19 +349,17 @@
       "apk": ["ttf-freefont"]
     },
     {
-      "name": "Debian packages of the server's engine image",
+      "name": "Debian packages of the Raspberry Pi engine image",
       "version": null,
       "license": "LGPL-2.1-or-later AND MIT AND GPL-2.0-or-later",
       "url": "https://www.debian.org",
       "where": ["engine"],
-      "note": "tini, ca-certificates, PulseAudio, ALSA, FreeType, Fontconfig and libcurl, under debian:bookworm-slim.",
+      "note": "tini, ca-certificates, ALSA, FreeType, Fontconfig and libcurl, under debian:bookworm-slim.",
       "apt": [
         "tini",
         "ca-certificates",
-        "pulseaudio",
-        "pulseaudio-utils",
         "libasound2",
-        "libasound2-plugins",
+        "alsa-utils",
         "libfreetype6",
         "libfontconfig1",
         "libcurl4"

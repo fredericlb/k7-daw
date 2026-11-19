@@ -39,14 +39,6 @@ fn said(synced: &[String]) -> String {
 pub async fn stocked(env: &BTreeMap<String, String>, code_root: &Path, log: &Log) -> bool {
     let (home, src, examples) = places(env, code_root);
     let _lock = locks::write(&home.studio).await;
-    // Workspaces left in the iCloud container come first, so Examples there is the one the mirror then brings up to date.
-    let (target, said_log) = (workspace_dir(&home), log.clone());
-    let _ = tokio::task::spawn_blocking(move || {
-        k7_roam::container::migrate_host(Path::new(&target), &|l| {
-            said_log(&format!("   iCloud container | {l}"))
-        });
-    })
-    .await;
     let synced = tokio::task::spawn_blocking(move || {
         // No demos folder is the TypeScript's `demos up to date`: it mirrors nothing and says so.
         src.map(|s| mirror(&s, &examples)).unwrap_or_default()

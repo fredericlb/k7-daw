@@ -36,7 +36,7 @@ engine's machine is shown are the médiathèque (writable, for the stems), the l
 
 | choice | why |
 |---|---|
-| the account's `stemsChain` and `instrumentalChain` do not apply on a server; a cut names its chain, else the engine's | an account's own chains are local to each device and never synced (decision 3106 of `docs/webdav-removal-brief.md`) |
+| the account's `stemsChain` and `instrumentalChain` do not apply on a server; a cut names its chain, else the engine's | an account's own chains are local to each device and never synced |
 | no admin draft overlay on a cut | a draft reaches no cut until it is published |
 | the account's workspace and models are no root of a cut | a server holds no account runtime to resolve a project against |
 | the engine slots' compile (`/api/internal/files/slot`) takes the same context on a server: a chain of the libraries, shared with the machine as `libs` and the médiathèque, both read-only | a slot of an account's own chain is a device's |

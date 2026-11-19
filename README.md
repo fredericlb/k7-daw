@@ -40,8 +40,7 @@ directory. See [docs/dev.md](docs/dev.md).
 
 `engine/k7-runtime` is a CMake/JUCE/Tracktion C++ project, `engine/k7-supervisor` a C++ program
 beside it — run from the command line as `k7-supervisor --config engine.json`, or carried by
-the tray, `apps/k7-tray`, through k7's backend. The `k7-runtime` image (`docs/server-engine.md`) is still
-built; the tray is in no image —
+the tray, `apps/k7-tray`, through k7's backend. The tray is in no image —
 each `docker/Dockerfile` names the workspaces it installs rather than globbing. The moteur
 deliberately declares no `build` script at all, so `npm run build --workspaces --if-present` can
 never try to compile C++. They have their own commands:

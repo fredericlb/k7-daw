@@ -52,7 +52,6 @@ pub const ENV_KEYS: [&str; 57] = [
     "K7_TRAY_TOKEN",
     "K7_RELEASE",
     "STUDIO_FILES_ROOT",
-    "K7_ICLOUD_LEGACY",
     "STUDIO_PORTS",
     "STUDIO_ENGINE",
     "STUDIO_RENDER_KEY",

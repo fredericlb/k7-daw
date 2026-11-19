@@ -150,10 +150,8 @@ The scripts run on native Windows (Node, MSVC, Git Bash). What they do different
   every file of a `core.autocrlf=true` checkout.
 - **Engine preset**: `windows-msvc` locally; CI uses `windows-msvc-ninja` for compiler caching.
 
-Three scripts exist for a Windows dev box reached remotely; they are not part of the dev session:
+One script exists for a Windows dev box reached remotely; it is not part of the dev session:
 
 | Command | What it does |
 |---|---|
-| `npm run vscode` | `scripts/vscode.mjs`: VS Code's `code serve-web` on port 8798, opening on the user's home with Git Bash as terminal. A busy port counts as success. |
 | `npm run console` | `scripts/console/server.mjs`: shared terminal tabs on port 8797 (PowerShell in ConPTYs owned by the service, so they outlive the browser tab; at most 12 tabs). Installs its own dependencies first. |
-| `npm run remote:install` / `remote:uninstall` / `remote:status` | `scripts/remote.mjs`: registers (or removes, or reports) Windows logon tasks that keep the two services above running outside Tilt, relaunched with backoff, logging to the temp folder. `scripts/hidden.vbs` runs them without a console window. |

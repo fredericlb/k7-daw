@@ -7,7 +7,7 @@ use std::sync::Arc;
 
 use git2::{Repository, RepositoryInitOptions};
 
-use crate::{Result, gitlink, ignore};
+use crate::{Result, ignore};
 
 /// Whether a file is on this device: a placeholder or an evicted file is present-but-not-here, never a removal.
 pub trait Present: Send + Sync {
@@ -33,9 +33,6 @@ pub struct Repo {
 impl Repo {
     /// The repository whose files are `workdir` and whose git folder is `gitdir`.
     pub fn open(workdir: &Path, gitdir: &Path) -> Result<Repo> {
-        if gitdir == workdir.join(".git") {
-            gitlink::restore_gitdir(workdir)?;
-        }
         let git = Repository::open(gitdir)?;
         git.set_workdir(workdir, false)?;
         Repo::wrap(git, workdir, gitdir)

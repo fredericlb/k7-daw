@@ -1,6 +1,6 @@
 #!/bin/bash
-# e2e-macos.sh — OneDev's "e2e macos" and "conformance macos": a dev session of its own on the macOS agent, then the suites.
-# Run by ciTree.mjs in ~/k7-trees/tree-e2e-macos, or by scripts/agent/bed.sh from a worktree; the script tests the tree it runs in.
+# e2e-macos.sh — the Mac bed: a dev session of its own, then the web and conformance suites.
+# Run by scripts/agent/bed.sh from a worktree; the script tests the tree it runs in.
 # The session never shares a port, a home or an engine with what the Mac runs otherwise: its own ports and a HOME under
 # ~/k7-trees/e2e-macos-bed, wiped at each run, paired with nothing (e2e/docs/e2e.md, "A second place to run the suites").
 # E2E_SUITE: web, conformance or both; E2E_FILTER: Playwright's file filters, space-separated; E2E_MAX_FAILURES (10, 0 for none).

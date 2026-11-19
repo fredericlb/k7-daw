@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # win-clippy.sh — clippy for x86_64-pc-windows-gnu on a Mac or Linux, before a ci/ push: what only Windows compiles (a cfg-gated import, a Windows-only API) fails here in a minute.
 # `--narrow` checks the backend crates touched since K7_CRATES_BASE and their dependents, and the browser crates only when the branch touched them.
-# It checks and never links or runs: a test that fails only on Windows still needs OneDev's "rust checks windows" (docs/rust-builds.md).
+# It checks and never links or runs: a test that fails only on Windows needs a Windows machine (docs/rust-builds.md).
 set -euo pipefail
 # The tree checked is the one it is run from, so one copy of the script serves every worktree.
 root="$(git rev-parse --show-toplevel)"

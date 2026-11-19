@@ -232,7 +232,7 @@ describe("this repository's notices", () => {
       ),
     ].flatMap((m) => (m[1] ?? "").trim().split(/\s+/));
     const apt = (
-      runtime("engine/docker/Dockerfile").match(
+      runtime("engine/docker/Dockerfile.pi").match(
         /--no-install-recommends([\s\S]*?)&&/,
       )?.[1] ?? ""
     )
