@@ -26,7 +26,7 @@ export default defineConfig({
     { name: "seed", testMatch: /seed\.setup\.ts/, dependencies: ["setup"] },
     {
       name: "web",
-      testMatch: /app\/.*\.spec\.ts/,
+      testMatch: /specs[\\/]app[\\/].*\.spec\.ts/,
       dependencies: ["seed"],
       use: {
         ...devices["Desktop Chrome"],
