@@ -205,7 +205,7 @@ fn command(app: &AppHandle, token: &str, upstream: u16, secret: &str) -> Result<
     #[cfg(windows)]
     {
         use std::os::windows::process::CommandExt;
-        c.creation_flags(0x0800_0000); // CREATE_NO_WINDOW: the tray is windowless
+        c.creation_flags(0x0800_0000); // CREATE_NO_WINDOW: node gets no console
     }
     Ok(c)
 }

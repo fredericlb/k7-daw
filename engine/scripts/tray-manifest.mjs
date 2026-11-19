@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// tray-manifest.mjs — `--dir <dist> --version <semver>`: merge the per-platform fragments trayRelease.mjs wrote into
+// tray-manifest.mjs — `--dir <dist> --version <semver>`: merge the per-platform fragments trayRelease.mjs wrote (the
+// `k7-tray-updater_` of the last release too) into
 // the one latest.json tauri-plugin-updater reads, then drop the fragments. Run when a tray release is published.
 // See docs/app-downloads.md.
 
@@ -18,7 +19,7 @@ if (!dir || !version) {
 }
 
 const fragments = readdirSync(dir).filter((f) =>
-  /^k7-tray-updater_.*\.json$/.test(f),
+  /^k7-(?:daw|tray)-updater_.*\.json$/.test(f),
 );
 const platforms = {};
 for (const f of fragments) {

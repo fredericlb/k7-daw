@@ -131,6 +131,7 @@
   "filesGate.blockedTitle": "This page isn't allowed to reach the engine",
   "filesGate.blockedBody": "The file service is running, but it refused this page's origin ({origin}). Approve it from the engine's menu-bar icon: Settings… ▸ k7 instances, then retry.",
   "filesGate.downBody": "Nothing answered at {base}. The engine's file service is probably stopped — start it from the menu-bar icon.",
+  "midi.unavailableDesktop": "No Web MIDI in this window — open k7 in the browser (K7 DAW's tray menu: Open in Browser) to record MIDI",
   "midi.unavailable": "No MIDI — Web MIDI was refused or is unavailable here",
   "midi.noMidiIn": "Nothing records MIDI into {track}: wire a MIDI node to it",
   "transport.region": "Transport",

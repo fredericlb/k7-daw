@@ -2,20 +2,24 @@
 name = "k7-tray"
 version = "0.1.0"
 edition = "2021"
-description = "k7's tray: runs k7's local backend, which runs the engine, and leads the browser to it"
+description = "K7 DAW, the desktop app: a window and a tray icon on k7's local backend, which runs the engine"
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
-# Short on purpose: the tray starts one process and draws one line. What k7 does happens in the backend and the
+# Short on purpose: the app starts one process, draws one line and one window. What k7 does happens in the backend and the
 # supervisor; a crate added here for logic is logic in the wrong place (docs/tray.md).
 [dependencies]
-# tray-icon: TrayIconBuilder; image-png: the cassette the tray icon is drawn from. The tray opens no window.
+# tray-icon: TrayIconBuilder; image-png: the cassette the tray icon is drawn from.
 tauri = { version = "2", features = ["tray-icon", "image-png"] }
 tauri-plugin-single-instance = "2"
 tauri-plugin-autostart = "2"
+# The login entry the windowless tray registered under its old name, found and removed (src/autostart.rs); the plugin's own crate.
+auto-launch = "0.6"
 tauri-plugin-updater = "2"
 tauri-plugin-dialog = "2"
+# The window's size, position and maximized state, between launches (not its visibility: a login starts it hidden).
+tauri-plugin-window-state = "2"
 # The backend's status answer and standalone.json, both JSON.
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -41,6 +45,10 @@ windows = { version = "0.61", features = [
   "Win32_System_JobObjects",
   "Win32_System_Threading",
 ] }
+
+# The Linux webview's settings (src/webview_linux.rs): the version Tauri's own wry links, so there is one copy.
+[target.'cfg(target_os = "linux")'.dependencies]
+webkit2gtk = { version = "=2.0.2", features = ["v2_38"] }
 
 # File and line in a backtrace, no variables: less than half the target folder; CARGO_PROFILE_DEV_DEBUG=2 for a debugger (docs/rust-builds.md).
 [profile.dev]

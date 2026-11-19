@@ -125,7 +125,7 @@ when it pins its own (`apps/k7/backend-rs/docs/localEngine.md`).
 `K7_DEV_FRONTEND=http://localhost:5223`, and the tray's backend then streams every request it would have
 answered from `frontend/dist` to that Vite instead (`apps/k7/backend/src/devFrontend.ts`); `/api` and
 `/auth` stay its own. So the local PWA is developed on its real origin — its service worker, its cookie,
-its storage, the tray's own "Open k7" — rather than on a stand-in port. HMR's websocket goes to Vite's own port,
+its storage, the tray's own "Open in Browser" — rather than on a stand-in port. HMR's websocket goes to Vite's own port,
 `ws://127.0.0.1:5223`, which is why k7's `vite.config.ts` names it in `server.ws`: left
 to the page, a page on 18789 would look for Vite on 18789. With `k7-frontend` down, 18789 answers
 a 502 naming it. `K7_DEV_FRONTEND=` (empty) before `npm run dev` brings back the built page.

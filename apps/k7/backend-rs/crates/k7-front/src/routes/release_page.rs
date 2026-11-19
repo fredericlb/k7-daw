@@ -1,5 +1,5 @@
 //! release_page.rs — `/app_downloads`, the one page where people get k7's apps: the release, the latest build
-//! of main, then the tray's two.
+//! of main, then K7 DAW's two (the desktop app, whose files live under `tray/`).
 //! The thing a reader would get wrong: its dates are ICU's `dateStyle: long, timeStyle: short` in Europe/Paris,
 //! written out here by hand for English and French, the only two languages the page speaks.
 
@@ -9,8 +9,9 @@ use crate::routes::release_store::{Channel, Release, civil};
 pub type ProductBuilds = [Option<Release>; 2];
 
 // What the page offers, in this order; the rest (latest*.yml, blockmaps, SHA256SUMS) is the updater's or the curious's.
-const KINDS: [(&str, &str); 6] = [
+const KINDS: [(&str, &str); 7] = [
     (".exe", "Windows"),
+    (".dmg", "macOS"),
     (".AppImage", "Linux (AppImage)"),
     (".deb", "Linux (.deb)"),
     (".apk", "Android"),
@@ -41,11 +42,11 @@ const EN: Labels = Labels {
     snapshot_note: "Built from every push to main: newer, less tested.",
     none: "No build published yet.",
     published: "published",
-    updates: "The tray and the Android app update themselves; with the tray's .deb, download again from here.",
+    updates: "K7 DAW and the Android app update themselves; with the .deb of K7 DAW, download again from here.",
     sums: "Checksums",
-    mac: "On a Mac, k7 is the iOS app, run as Designed for iPad on Apple Silicon.",
-    tray: "Tray",
-    tray_note: "The engine alone, run from the system tray, for a machine that plays what k7 sends it. It updates itself.",
+    mac: "On a Mac with Apple Silicon, k7 is K7 DAW (the .dmg below, macOS 13 or later).",
+    tray: "K7 DAW",
+    tray_note: "k7 in its own window, with its audio engine on this computer, and an icon in the system tray. It updates itself.",
 };
 
 const FR: Labels = Labels {
@@ -56,11 +57,11 @@ const FR: Labels = Labels {
     snapshot_note: "Construite à chaque push sur main : plus récente, moins testée.",
     none: "Aucune build publiée pour l'instant.",
     published: "publiée le",
-    updates: "Le tray et l'app Android se mettent à jour seuls ; avec le .deb du tray, retéléchargez ici.",
+    updates: "K7 DAW et l'app Android se mettent à jour seuls ; avec le .deb de K7 DAW, retéléchargez ici.",
     sums: "Sommes de contrôle",
-    mac: "Sur un Mac, k7 est l'app iOS, lancée en « Conçue pour iPad » sur Apple Silicon.",
-    tray: "Tray",
-    tray_note: "Le moteur seul, lancé depuis la zone de notification, pour une machine qui joue ce que k7 lui envoie. Il se met à jour seul.",
+    mac: "Sur un Mac Apple Silicon, k7 est K7 DAW (le .dmg ci-dessous, macOS 13 ou plus).",
+    tray: "K7 DAW",
+    tray_note: "k7 dans sa propre fenêtre, avec son moteur audio sur cet ordinateur, et une icône dans la zone de notification. Il se met à jour seul.",
 };
 
 fn escape_html(s: &str) -> String {
@@ -466,6 +467,29 @@ mod tests {
         ] {
             assert_eq!(prefers_french(header), french, "{header:?}");
         }
+    }
+
+    #[test]
+    fn a_dmg_is_offered_and_the_updater_archive_beside_it_is_not() {
+        use crate::routes::release_store::ReleaseFile;
+        let file = |name: &str| ReleaseFile {
+            name: name.into(),
+            bytes: 5_000_000,
+        };
+        let release = Release {
+            channel: "release",
+            stamp: "v1.2.3".into(),
+            published_at: String::new(),
+            files: vec![
+                file("k7-daw_v1.2.3_macos-arm64.dmg"),
+                file("k7-daw_v1.2.3_macos-arm64.app.tar.gz"),
+            ],
+            published_ms: 0,
+        };
+        let html = section(true, Channel::Release, &release, &EN);
+        assert!(html.contains(">macOS</a>"));
+        assert!(html.contains("k7-daw_v1.2.3_macos-arm64.dmg"));
+        assert!(!html.contains(".app.tar.gz"));
     }
 
     #[test]

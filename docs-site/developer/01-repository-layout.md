@@ -9,7 +9,7 @@ the module library k7 ships with. It is one npm workspace tree driven from the r
 
 | Folder | What lives there |
 |---|---|
-| `apps/` | The applications: `apps/k7` (the web app: `frontend/` and `backend/`) and `apps/k7-tray` (the tray: k7 on a computer, a windowless Tauri app that runs k7's backend and opens k7 in the browser). |
+| `apps/` | The applications: `apps/k7` (the web app: `frontend/` and `backend/`) and `apps/k7-tray` (K7 DAW: k7 on a computer, a Tauri app with a window and a tray icon that runs k7's backend and shows k7). |
 | `packages/` | The shared `@studio/*` packages, consumed as raw TypeScript source. |
 | `engine/` | The native side: `k7-runtime` (the C++ audio engine), `k7-supervisor` (the C++ program that runs and watches it), `k7-android` (the phone app, Gradle), `scripts` (the Node scripts that build and package the native binaries) and `docker` (the server engine's image). |
 | `k7-core/` | The default module library, as plain files: modules, chains, assemblies, presets, impulse responses, amp models, samples, wavetables. |

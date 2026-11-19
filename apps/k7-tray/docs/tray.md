@@ -1,36 +1,39 @@
-# The tray
+# K7 DAW: the app and its tray
 
-The tray is k7 on Windows and Linux. A Mac runs the iOS app, Designed for iPad (`engine/k7-runtime/docs/ios.md`):
-no tray is released for macOS. The tray's code still builds and runs there, for the developer's session
-(`docs/dev.md`), which is why its macOS branches (menu-bar activation, `open`, the microphone key) stay.
+K7 DAW is k7 on a computer: Windows, Linux and macOS (Apple silicon). It is a Tauri app with one window
+(`docs/desktop.md`) and an icon in the system tray, which starts k7's backend and the engine behind it. The iOS app,
+Designed for iPad, is the other way to k7 on a Mac (`engine/k7-runtime/docs/ios.md`); `docs/macos.md` is the Mac's.
 
 ## Names, and the ones a rename may not touch
 
-The binary and the displayed name are `k7-tray`; the engine it runs is `k7-runtime`. Those are build
-artifacts, which the next build replaces.
+The product is **K7 DAW**. The binary and the Cargo package stay `k7-tray` (`mainBinaryName`), as does the folder: the
+process name is what the dev session's stop, Task Manager habits and the updater's restart know it by. The engine it
+runs is `k7-runtime`.
 
-**`org.parapluie.studio.engine-tray`, the bundle identifier, is frozen.** It is the app's identity on Windows and
-Linux, and it names
-the folder the backend keeps its state in (the OS's per-app folder), so moving it reads as a first launch.
+**`org.parapluie.studio.engine-tray`, the bundle identifier, is frozen**, on every OS. It is the app's identity on
+Windows and Linux, and it names the folder the backend keeps its state in (the OS's per-app folder), so moving it
+reads as a first launch.
 
 Neither may `<state>` (`~/.k7`) move, nor what is under it, nor the `STUDIO_*` variables
 (`packages/engine-client/docs/paths.md`).
 
-## k7 on a computer is the web app, opened in a browser
+## k7 in a window, and in the browser
 
-The tray opens no window. It starts k7's backend on `127.0.0.1` and opens that address in the person's
-browser, where k7 installs as an app (its manifest and service worker are the bundled build's).
+The window shows the page the backend serves on `127.0.0.1`; the tray menu's "Open in Browser" opens the same page
+in the person's browser, where k7 installs as a web app.
 
 | choice | why |
 |---|---|
-| the browser, not a window of ours | one rendering engine to test against, the one the app is developed in; no tabs, menus or window chrome to maintain |
-| `127.0.0.1`, not `localhost` | loopback is a secure context, so the page installs and its service worker runs; `127.0.0.1` is the address every loopback check names |
+| a window of our own, on the system's webview (`docs/desktop.md`, `docs/webviews.md`) | k7 is an instrument: it wants its own Dock and taskbar entry, its own audio and camera permissions, and no browser tabs around it |
+| the browser stays one menu entry away | Web MIDI exists in Chrome and Edge, and not in the macOS and Linux webviews |
+| `127.0.0.1`, not `localhost` | loopback is a secure context, so the page's service worker and media APIs work; `127.0.0.1` is the address every loopback check names |
 | the port fixed by `standalone.json` (18789) | a page's storage and its installed app are keyed on the origin, port included |
 | offline by construction | the page, its backend, the file services and the engine are all on this machine; only a git push or pull needs the network |
 | the engine is the machine's own | an HTTPS page cannot open `ws://` to the LAN, and no server relays; a remote engine returns with the app's second-device rework (`docs/inventaire.md`) |
 
-The page tells it is served by a machine's own backend from that backend (`GET /api/local`), never from a
-preload: the bundle is the same one every host serves (`apps/k7/frontend/docs/localApp.md`).
+The page tells it is served by a machine's own backend from that backend (`GET /api/local`), and that it is in
+K7 DAW's window from `window.k7Desktop`, which the host sets before the page's own code: the bundle is the same one
+every host serves (`apps/k7/frontend/docs/localApp.md`).
 
 ## One process, and the front runs the supervisor
 
@@ -69,24 +72,25 @@ own, on the table's port; node listens behind it on a loopback port drawn at eac
 
 ## Why Tauri
 
-The tray needs an icon, a menu and a dialog, and no webview at all. Tauri gives those in a few megabytes of
-Rust, where Electron would add about 300 MB and a Chromium for a window nobody opens. Rust also gives the
-Windows job object directly (`job.rs`).
+The app needs a window, a tray icon, a menu and a dialog, and the system's webview is enough for k7's page. Tauri
+gives those in a few megabytes of Rust, where Electron would add about 300 MB and a Chromium to keep current. Rust
+also gives the Windows job object directly (`job.rs`). The price is three webviews to test against
+(`docs/webviews.md`).
 
-## The microphone on the developer's Mac
+## The microphone on a Mac
 
-On macOS the microphone grant belongs to the responsible app: the engine records through the backend and the
-supervisor the dev tray launched, so the tray asks, and its Info.plist carries `NSMicrophoneUsageDescription`.
-Without it macOS hands the engine silence: the take is written, all zeros.
+The grant belongs to the responsible app, which is why K7 DAW asks, not the engine: `docs/macos.md`.
 
 ## Updates
 
-The tray keeps itself current from `k7.rocks/app_downloads/tray/<channel>/latest.json` with
+K7 DAW keeps itself current from `k7.rocks/app_downloads/tray/<channel>/latest.json` with
 tauri-plugin-updater (`docs/app-downloads.md` at the root).
 
 | choice | why |
 |---|---|
-| tauri-plugin-updater, not our own download | it installs on Windows and the AppImage, and checks every update's signature |
+| tauri-plugin-updater, not our own download | it installs on Windows, the AppImage and the macOS app, and checks every update's signature |
+| the feed's path keeps `tray/` and the files are `k7-daw_<stamp>_<os>-<arch>.<ext>` | installed apps poll that URL for good; `latest.json` carries the file URLs, so the names are free |
+| `tray:build` turns the update archives on, with the public key in the config, only when `K7_UPDATER_PUBKEY` and `TAURI_SIGNING_PRIVATE_KEY` are both set; a stamped release build without them is refused at packaging | the CLI signs with the key it finds in `plugins.updater.pubkey`, and an archive without its signature is one no install accepts; half a key is an error, not a silent unsigned build |
 | signed, with the key in CI secrets | the upload token alone would let whoever holds it ship code every tray runs; the public key is built in (`K7_UPDATER_PUBKEY`), and a build without it has no updater rather than one that trusts anything |
 | the channel from the release stamp | a tag follows `release` and takes a higher tag; a snapshot follows `snapshot`, which only ever holds `main`'s latest build, and takes any other one; `dev` asks nothing |
 | told once per build, the menu's check always answers, a switch to turn it off | as the phone's check does; kept in `updates.json` beside the backend's state |
@@ -120,7 +124,7 @@ A tray that ends without its stop (killed, crashed) leaves nothing behind on Win
 
 ## When the backend will not come up
 
-Every state the tray can end in has a way out short of quitting it: the menu's **Restart k7** stops the
+Every state the app can end in has a way out short of quitting it: the menu's **Restart K7 DAW** stops the
 backend as Quit does and starts it again.
 
 | choice | why |
@@ -131,7 +135,8 @@ backend as Quit does and starts it again.
 
 ## Launch at login
 
-The autostart plugin: a login item on Windows, an XDG autostart entry on Linux.
+The autostart plugin: a login item on Windows, an XDG autostart entry on Linux, a LaunchAgent on macOS. The entry
+carries `--autostart` (`docs/desktop.md`).
 
 ## The merged log
 

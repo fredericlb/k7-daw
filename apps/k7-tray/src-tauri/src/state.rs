@@ -31,7 +31,8 @@ pub struct Menus {
     /// The line under it while an instrument downloads, in the menu only then.
     pub downloads: MenuItem<Wry>,
     pub downloads_shown: bool,
-    pub open: MenuItem<Wry>,
+    /// Open in Browser: only once the page answers.
+    pub browser: MenuItem<Wry>,
     pub menu: Menu<Wry>,
     pub autostart: CheckMenuItem<Wry>,
     pub auto_update: CheckMenuItem<Wry>,

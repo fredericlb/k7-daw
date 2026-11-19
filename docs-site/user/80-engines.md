@@ -15,7 +15,7 @@ You never start the engine by hand. You start the supervisor, and it starts the 
 
 | Where | How you get it | Page |
 |---|---|---|
-| A desktop or laptop, used in its browser | The **k7 tray** runs k7, the supervisor and the engine on the computer; you open k7 in your browser | [The tray](./82-desktop-app.md) |
+| A desktop or laptop | **K7 DAW** runs k7, the supervisor and the engine on the computer, and shows k7 in its window | [K7 DAW](./82-desktop-app.md) |
 | A desktop, laptop or small server, with no window | The **command-line engine**: `k7-supervisor --config engine.json` | [The command-line engine](./81-command-line-engine.md) |
 | An Android phone | The **k7 Android app** | [The Android app](./83-android-app.md) |
 
@@ -95,7 +95,7 @@ Each download is checked against a fixed checksum before it is unpacked. Downloa
 ## Where to go next
 
 - [The command-line engine](./81-command-line-engine.md)
-- [k7 on your computer: the tray](./82-desktop-app.md)
+- [K7 DAW, k7 on your computer](./82-desktop-app.md)
 - [The Android app](./83-android-app.md)
 - [Audio interfaces, MIDI and plugins](./84-audio-midi-plugins.md)
 - [Reaching an engine](./85-connecting-machines.md)

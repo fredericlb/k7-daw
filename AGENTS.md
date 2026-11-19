@@ -30,7 +30,7 @@ the zone's `docs/` directory is where the justification belongs:
 | the native supervisor | `engine/k7-supervisor/docs/` |
 | the Android app | `engine/k7-runtime/docs/android.md` |
 | the iOS app | `engine/k7-runtime/docs/ios.md` |
-| the tray (k7 on Windows and Linux) | `apps/k7-tray/docs/` |
+| K7 DAW, the desktop app (Windows, Linux, macOS; the tray) | `apps/k7-tray/docs/` |
 | k7's backend in Rust (the front, the session cookie, the embed) | `apps/k7/backend-rs/docs/` |
 | the machine's supervisor run by k7's front | `apps/k7/backend-rs/docs/local.md` |
 | the engine's build scripts | `engine/scripts/docs/` |
@@ -65,7 +65,7 @@ the production image, and the repo-wide pages in `docs/`. The short map:
 | `engine/scripts` | builds the engine and supervisor, packages the CLI archive and the tray's release files |
 | `apps/k7` | the text-first DAW — frontend (React/Vite) + backend (Express: prefs, the file hub, AI organize; the session and the engine registry are `backend-rs`'s Rust front; k7 runs on devices only, no hosted app) (its own `AGENTS.md`) |
 | `apps/k7/backend-rs` | k7's backend in Rust, phase by phase: the front that proxies what is not ported yet (`docs/rust-backend-plan.md`) |
-| `apps/k7-tray` | k7 on a Windows or Linux computer (a Mac runs the iOS app, Designed for iPad): a windowless Tauri app in the system tray that runs k7's backend on `127.0.0.1:18789`, which runs the machine's supervisor and engine; k7 opens in the browser. Built locally (`apps/k7-tray/docs/`) |
+| `apps/k7-tray` | K7 DAW, k7 on Windows, Linux and macOS (Apple silicon): a Tauri app with a window and a tray icon that runs k7's backend on `127.0.0.1:18789`, which runs the machine's supervisor and engine; k7 shows in its window, or in the browser from the tray's menu. Built locally on each OS (`apps/k7-tray/docs/`) |
 | `packages/` | `@studio/*`, consumed as raw TypeScript through `exports` subpaths (a bare deep import fails on purpose); four are published (`docs/publishing.md`); the UI kit (`ui`), `i18n`, `http`, `oidc`, `env`, `vite-config` and `tsconfig` are k7's own, with no other consumer |
 | `k7-core/` | the `@k7-core` modules library, the seed every library folder is copied from |
 | `e2e/` | the Playwright functional suite (`e2e/docs/`) |
