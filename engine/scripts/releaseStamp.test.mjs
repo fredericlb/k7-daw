@@ -4,6 +4,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -62,6 +63,34 @@ describe("releaseStamp", () => {
     assert.equal(cli("version", ""), ROOT);
   });
 
+  it("serves the macOS updater from the app archive and lists the dmg beside it", () => {
+    const root = mkdtempSync(join(tmpdir(), "release-stamp-"));
+    try {
+      const bundle = join(root, "bundle");
+      mkdirSync(join(bundle, "macos"), { recursive: true });
+      mkdirSync(join(bundle, "dmg"), { recursive: true });
+      writeFileSync(join(bundle, "macos", "K7 DAW.app.tar.gz"), "");
+      writeFileSync(join(bundle, "macos", "K7 DAW.app.tar.gz.sig"), "sig\n");
+      writeFileSync(join(bundle, "dmg", "K7 DAW_0.1.0_aarch64.dmg"), "");
+      const release = mkdtempSync(join(root, "out-"));
+      const f = packageTray({
+        bundle,
+        release,
+        stamp: "v1.2.3",
+        platform: "macos",
+        arch: "arm64",
+      });
+      assert.equal(
+        f["darwin-aarch64"].url,
+        "https://k7.rocks/app_downloads/tray/release/k7-daw_v1.2.3_macos-arm64.app.tar.gz",
+      );
+      assert.ok(existsSync(join(release, "k7-daw_v1.2.3_macos-arm64.dmg")));
+      assert.ok(existsSync(join(release, "k7-daw-updater_macos-arm64.json")));
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it("names the tray's updater URLs under the channel, and `snapshot` for an unstamped build", () => {
     const root = mkdtempSync(join(tmpdir(), "release-stamp-"));
     try {
@@ -83,13 +112,13 @@ describe("releaseStamp", () => {
       const at = "https://k7.rocks/app_downloads/tray";
       assert.equal(
         url("v1.2.3"),
-        `${at}/release/k7-tray_v1.2.3_windows-x64.exe`,
+        `${at}/release/k7-daw_v1.2.3_windows-x64.exe`,
       );
       assert.equal(
         url("snapshot-9f2c1ab"),
-        `${at}/snapshot/k7-tray_snapshot-9f2c1ab_windows-x64.exe`,
+        `${at}/snapshot/k7-daw_snapshot-9f2c1ab_windows-x64.exe`,
       );
-      assert.equal(url("dev"), `${at}/snapshot/k7-tray_dev_windows-x64.exe`);
+      assert.equal(url("dev"), `${at}/snapshot/k7-daw_dev_windows-x64.exe`);
     } finally {
       rmSync(root, { recursive: true, force: true });
     }

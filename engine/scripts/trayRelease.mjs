@@ -1,6 +1,7 @@
-// trayRelease.mjs — the tray's release files from what `tauri build` left in apps/k7-tray/src-tauri/target, named for
+// trayRelease.mjs — K7 DAW's release files from what `tauri build` left in apps/k7-tray/src-tauri/target, named for
 // a stamp like every other file of a release, plus one fragment of the updater's latest.json per platform, which
-// tray-manifest.mjs merges in the publish job. See docs/app-downloads.md.
+// tray-manifest.mjs merges in the publish job. The feed stays at `tray/<channel>/latest.json`: installed apps poll it.
+// See docs/app-downloads.md.
 
 import {
   copyFileSync,
@@ -27,11 +28,19 @@ const KINDS = [
     updater: "linux-x86_64",
   },
   { dir: "deb", match: /\.deb$/, ext: ".deb" },
+  // The macOS download is the .dmg; the updater takes the .app.tar.gz, which only the feed names.
+  { dir: "dmg", match: /\.dmg$/, ext: ".dmg" },
+  {
+    dir: "macos",
+    match: /\.app\.tar\.gz$/,
+    ext: ".app.tar.gz",
+    updater: "darwin-aarch64",
+  },
 ];
 
 /** Copy the installers into `release`, renamed; returns the updater fragment, or null when the build was not signed. */
 export function packageTray({ bundle, release, stamp, platform, arch }) {
-  const name = (ext) => `k7-tray_${stamp}_${platform}-${arch}${ext}`;
+  const name = (ext) => `k7-daw_${stamp}_${platform}-${arch}${ext}`;
   // An unstamped build's fragment is never published, so its URLs name `snapshot` rather than no channel.
   const channel = channelOf(stamp) ?? "snapshot";
   const fragment = {};
@@ -56,7 +65,7 @@ export function packageTray({ bundle, release, stamp, platform, arch }) {
       `no installer under ${bundle} — run \`npm run tray:build --workspace k7-tray\` first`,
     );
   if (!Object.keys(fragment).length) return null;
-  const at = join(release, `k7-tray-updater_${platform}-${arch}.json`);
+  const at = join(release, `k7-daw-updater_${platform}-${arch}.json`);
   writeFileSync(at, `${JSON.stringify(fragment, null, 2)}\n`);
   console.log(`✔ ${at}`);
   return fragment;
