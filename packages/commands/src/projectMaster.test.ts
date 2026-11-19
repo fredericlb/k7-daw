@@ -3,7 +3,7 @@
 // being ACCEPTED (Tracktion clamps it, so the file would disagree with the sound for ever), unity
 // being written instead of removed, and the two spellings drifting apart.
 
-import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadProject } from "@studio/song/project";
@@ -39,6 +39,7 @@ beforeEach(() => {
   dir = mkdtempSync(join(tmpdir(), "td-master-"));
   writeDoc(join(dir, "project.k7x"), { project: { name: "t", tempo: 120 } });
   mkdirSync(join(dir, "nodes"), { recursive: true });
+  writeFileSync(join(dir, "graph.k7x"), "modules({})\n", "utf8");
 });
 afterEach(() => rmSync(dir, { recursive: true, force: true }));
 
