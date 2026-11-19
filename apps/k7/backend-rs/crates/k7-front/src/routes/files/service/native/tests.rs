@@ -45,7 +45,6 @@ pub(super) fn ctx(dir: &std::path::Path, tag: Tag, rel: &str, lines: &Lines) -> 
         home: Home {
             studio: studio.clone(),
             libraries: dir.join("libraries").display().to_string(),
-            admin: false,
         },
         root: dir.join("home/workspace/songs").display().to_string(),
         workspace: "songs".into(),

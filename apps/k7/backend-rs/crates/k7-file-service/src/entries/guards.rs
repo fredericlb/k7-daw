@@ -2,7 +2,7 @@
 //! What a reader gets wrong: a guard's sentence names the caller's path (`to_rel`), never the server's, and the order IS the answer.
 
 use super::EntryError;
-use crate::libraries::{ACCOUNT_LIBRARY, Library, library_of, overlay_root};
+use crate::libraries::{ACCOUNT_LIBRARY, Library, library_of};
 use crate::paths::{climbs_out, is_within, join, relative, resolve_all};
 use crate::rel::to_rel;
 use crate::space::Space;
@@ -36,28 +36,23 @@ pub fn in_shared_modules(path: &str) -> bool {
     path.split(['\\', '/']).any(|s| s == SHARED_MODULES_DIR)
 }
 
-/// `isLibraryRootEditable`: the account's own library, or the root the admin's overlay reads (a version never is).
-pub fn library_writable(space: &Space<'_>, lib: &Library) -> bool {
+/// `isLibraryRootEditable`: the account's own library; a published version never is.
+pub fn library_writable(lib: &Library) -> bool {
     lib.name == ACCOUNT_LIBRARY
-        || overlay_root(space.home(), &lib.name)
-            .is_some_and(|r| resolve_all(&[&r]) == resolve_all(&[&lib.root]))
 }
 
-/// `assertLibraryWritable`: a library is written only by an admin, and only its draft.
+/// `assertLibraryWritable`: only the account's own library is written.
 pub fn assert_library_writable(space: &Space<'_>, abs: &str, verb: &str) -> Result<(), EntryError> {
     let Some(lib) = library_of(space.home(), abs) else {
         return Ok(());
     };
-    if library_writable(space, &lib) {
+    if library_writable(&lib) {
         return Ok(());
     }
     let rel = to_rel(space, abs);
-    let editable = overlay_root(space.home(), &lib.name).is_some();
-    Err(refused(if editable {
-        format!("can't {verb} '{rel}': a published version never changes — edit the draft")
-    } else {
-        format!("can't {verb} '{rel}': only the origin's admins edit a library")
-    }))
+    Err(refused(format!(
+        "can't {verb} '{rel}': a library is not edited from here"
+    )))
 }
 
 /// `guardShared`: the library rule, then `_modules`' fixed structure.
@@ -96,7 +91,7 @@ pub fn guard_mutable(
     };
     if abs == home || lib.is_some_and(|l| l.root == abs) {
         return Err(refused(format!(
-            "can't {verb} '{}': the libraries are listed by the admins, not moved from a workspace",
+            "can't {verb} '{}': the libraries are listed, not moved from a workspace",
             to_rel(space, abs)
         )));
     }

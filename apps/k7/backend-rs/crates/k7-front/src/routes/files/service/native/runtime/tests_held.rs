@@ -44,7 +44,7 @@ async fn the_captures_feed_moves_the_module_watch_with_no_watcher_of_its_own() {
         ..
     } = &rig;
     let env = instances.environment("a@x.org", "s").await.unwrap().env;
-    let studio = k7_file_service::libraries::Home::of(&env, false).studio;
+    let studio = k7_file_service::libraries::Home::of(&env).studio;
     let root = std::path::Path::new(&studio).join("workspace/songs");
     let project = root.join("p.k7");
     std::fs::create_dir_all(project.join("nodes")).unwrap();

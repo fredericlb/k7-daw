@@ -1,4 +1,4 @@
-//! ticket.rs — who is calling `/api/files`, as the hub signs it: base64url JSON `{u, exp, a?}`,
+//! ticket.rs — who is calling `/api/files`, as the hub signs it: base64url JSON `{u, exp}`,
 //! a dot, its HMAC-SHA256 under the hub's key; the engine the caller drives rides after a `~`, unsigned on purpose.
 //! What a reader gets wrong: `split("~", 2)` keeps the first two pieces, so a second `~` cuts the engine's id.
 
@@ -16,7 +16,6 @@ pub const TICKET_TTL_MS: f64 = 12.0 * 60.0 * 60_000.0;
 #[derive(Clone, Debug, PartialEq)]
 pub struct Ticket {
     pub user: String,
-    pub admin: bool,
     pub engine_id: Option<String>,
 }
 
@@ -26,12 +25,11 @@ fn sign(key: &[u8], payload: &str) -> String {
     URL_SAFE_NO_PAD.encode(mac.finalize().into_bytes())
 }
 
-/// A ticket naming `user`, and whether the session made them an admin, until `now + ttl_ms`.
-pub fn mint(key: &[u8], user: &str, admin: bool, now: f64, ttl_ms: f64) -> String {
+/// A ticket naming `user` until `now + ttl_ms`.
+pub fn mint(key: &[u8], user: &str, now: f64, ttl_ms: f64) -> String {
     let user = serde_json::to_string(user).unwrap_or_default();
     let exp = k7_js::number::to_string(now + ttl_ms);
-    let admin = if admin { ",\"a\":1" } else { "" };
-    let payload = URL_SAFE_NO_PAD.encode(format!("{{\"u\":{user},\"exp\":{exp}{admin}}}"));
+    let payload = URL_SAFE_NO_PAD.encode(format!("{{\"u\":{user},\"exp\":{exp}}}"));
     let sig = sign(key, &payload);
     format!("{payload}.{sig}")
 }
@@ -60,10 +58,8 @@ pub fn read(key: &[u8], presented: &str, now: f64) -> Option<Ticket> {
     if exp < now {
         return None;
     }
-    let admin = body.get("a").and_then(Value::as_f64) == Some(1.0);
     Some(Ticket {
         user: user.to_string(),
-        admin,
         engine_id,
     })
 }
@@ -74,13 +70,12 @@ mod tests {
 
     #[test]
     fn reads_what_it_mints_until_it_expires() {
-        let t = mint(b"k", "ann@x", true, 1000.0, 50.0);
+        let t = mint(b"k", "ann@x", 1000.0, 50.0);
         let read_at = |now| read(b"k", &t, now);
         assert_eq!(
             read_at(1050.0),
             Some(Ticket {
                 user: "ann@x".into(),
-                admin: true,
                 engine_id: None
             })
         );

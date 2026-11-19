@@ -42,7 +42,7 @@ pub async fn live(who: &Who<'_>, path: &str, req: Request) -> Result<Response, R
         return Err(req);
     };
     let account = &who.held.account;
-    let home = Home::of(&account.env, who.admin);
+    let home = Home::of(&account.env);
     if which == Which::Get {
         let view =
             tokio::task::spawn_blocking(move || k7_file_service::preferences::view(&home)).await;

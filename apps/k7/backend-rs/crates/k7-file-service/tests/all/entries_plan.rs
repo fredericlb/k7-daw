@@ -11,7 +11,7 @@ use support::entries::{Fx, delete, folder, mv, rename, said, upload};
 fn a_folder_is_made_where_it_is_asked_and_takes_one_segment() {
     let fx = Fx::new("p-folder");
     assert_eq!(
-        said(&fx, false, folder("song.k7/clips", "takes2")),
+        said(&fx, folder("song.k7/clips", "takes2")),
         serde_json::json!({ "path": "song.k7/clips/takes2" })
     );
     assert_eq!(
@@ -22,37 +22,37 @@ fn a_folder_is_made_where_it_is_asked_and_takes_one_segment() {
     );
     // `basename` reduces rather than rejects: nothing lands outside the clicked folder.
     assert_eq!(
-        said(&fx, false, folder("song.k7/clips", "../../evil")),
+        said(&fx, folder("song.k7/clips", "../../evil")),
         serde_json::json!({ "path": "song.k7/clips/evil" })
     );
     assert_eq!(
-        said(&fx, false, folder("song.k7/clips", "a/inner")),
+        said(&fx, folder("song.k7/clips", "a/inner")),
         serde_json::json!({ "path": "song.k7/clips/inner" })
     );
     assert_eq!(
-        said(&fx, false, folder(".", "top")),
+        said(&fx, folder(".", "top")),
         serde_json::json!({ "path": "top" })
     );
     assert_eq!(
-        said(&fx, false, folder("/", "top")),
+        said(&fx, folder("/", "top")),
         serde_json::json!({ "path": "top" })
     );
     assert_eq!(
-        said(&fx, false, folder("song.k7/clips///", "t")),
+        said(&fx, folder("song.k7/clips///", "t")),
         serde_json::json!({ "path": "song.k7/clips/t" })
     );
     // A folder not there yet is made whole.
     assert_eq!(
-        said(&fx, false, folder("no/such", "x")),
+        said(&fx, folder("no/such", "x")),
         serde_json::json!({ "path": "no/such/x" })
     );
     // The name asked, not the name the disk would make (1236).
     assert_eq!(
-        said(&fx, false, folder(".", "x.")),
+        said(&fx, folder(".", "x.")),
         serde_json::json!({ "path": "x." })
     );
     assert_eq!(
-        said(&fx, false, folder(".", "x ")),
+        said(&fx, folder(".", "x ")),
         serde_json::json!({ "path": "x" })
     );
 }
@@ -64,19 +64,15 @@ fn a_folder_refuses_a_bad_name_a_bin_a_shared_module_and_a_clobber() {
         "..", ".", "   ", "", "  .. ", "\u{feff}", "\u{3000}", "a/..",
     ] {
         let want = format!("invalid folder name: {bad}");
-        assert_eq!(
-            fx.refusal(false, folder("song.k7/clips", bad)),
-            want,
-            "{bad:?}"
-        );
+        assert_eq!(fx.refusal(folder("song.k7/clips", bad)), want, "{bad:?}");
     }
     fx.s.dir("studio/workspace/songs/_recycle_bin");
     assert_eq!(
-        fx.refusal(false, folder("_recycle_bin", "nope")),
+        fx.refusal(folder("_recycle_bin", "nope")),
         "can't create a folder in the recycle bin"
     );
     assert!(
-        fx.refusal(false, folder("_modules/audio", "mine"))
+        fx.refusal(folder("_modules/audio", "mine"))
             .contains("a shared module is edited in place")
     );
     assert_eq!(
@@ -86,22 +82,18 @@ fn a_folder_refuses_a_bad_name_a_bin_a_shared_module_and_a_clobber() {
         })
     );
     assert_eq!(
-        fx.refusal(false, folder("song.k7/clips", "takes")),
+        fx.refusal(folder("song.k7/clips", "takes")),
         "already exists: song.k7/clips/takes"
     );
     assert_eq!(
-        fx.refusal(false, folder("../outside", "x")),
+        fx.refusal(folder("../outside", "x")),
         "path escapes the workspace: ../outside/x"
     );
-    // A library: an admin may, an account may not.
+    // A library: no account may.
     let at = "_libraries/k7-core/modules/audio";
     assert_eq!(
-        said(&fx, true, folder(at, "new")),
-        serde_json::json!({ "path": "_libraries/k7-core/modules/audio/new" })
-    );
-    assert_eq!(
-        fx.refusal(false, folder(at, "new")),
-        "can't create a folder in '_libraries/k7-core/modules/audio/new': only the origin's admins edit a library"
+        fx.refusal(folder(at, "new")),
+        "can't create a folder in '_libraries/k7-core/modules/audio/new': a library is not edited from here"
     );
 }
 
@@ -119,7 +111,7 @@ fn a_rename_keeps_its_parent_takes_one_segment_and_says_what_it_did() {
         })
     );
     assert_eq!(
-        said(&fx, false, rename("song.k7/clips", "cuts")),
+        said(&fx, rename("song.k7/clips", "cuts")),
         serde_json::json!({ "path": "song.k7/cuts" })
     );
     assert_eq!(
@@ -135,20 +127,20 @@ fn a_rename_keeps_its_parent_takes_one_segment_and_says_what_it_did() {
         })
     );
     assert_eq!(
-        fx.refusal(false, rename("a.txt", "b.txt")),
+        fx.refusal(rename("a.txt", "b.txt")),
         "already exists: b.txt"
     );
     assert_eq!(
-        said(&fx, false, rename("a.txt", "../up.txt")),
+        said(&fx, rename("a.txt", "../up.txt")),
         serde_json::json!({ "path": "up.txt" })
     );
     assert_eq!(
-        fx.refusal(false, rename("a.txt", "a.YML")),
+        fx.refusal(rename("a.txt", "a.YML")),
         "a.YML: a workspace file is .k7x, not YAML"
     );
     for bad in ["..", ".", "  ", "/", "\u{feff}"] {
         assert_eq!(
-            fx.refusal(false, rename("a.txt", bad)),
+            fx.refusal(rename("a.txt", bad)),
             format!("invalid name: {bad}"),
             "{bad:?}"
         );
@@ -160,7 +152,7 @@ fn a_rename_keeps_its_parent_takes_one_segment_and_says_what_it_did() {
         })
     );
     assert_eq!(
-        fx.refusal(false, rename("none.txt", "z.txt")),
+        fx.refusal(rename("none.txt", "z.txt")),
         "no such file or folder: none.txt"
     );
 }
@@ -197,31 +189,31 @@ fn what_a_rename_may_not_touch_is_refused_in_words() {
     fx.s.file("studio/workspace/songs/_recycle_bin/old/x", "x");
     fx.s.dir("studio/workspace/songs/band/song2.k7");
     assert_eq!(
-        fx.refusal(false, rename(".", "x")),
+        fx.refusal(rename(".", "x")),
         "can't rename the workspace root"
     );
     assert_eq!(
-        fx.refusal(false, rename("_recycle_bin", "x")),
+        fx.refusal(rename("_recycle_bin", "x")),
         "'_recycle_bin' is already in the recycle bin"
     );
     assert_eq!(
-        fx.refusal(false, rename("_recycle_bin/old", "x")),
+        fx.refusal(rename("_recycle_bin/old", "x")),
         "'_recycle_bin/old' is already in the recycle bin"
     );
     assert_eq!(
-        fx.refusal(false, rename("song.k7", "x")),
+        fx.refusal(rename("song.k7", "x")),
         "can't rename the active project's folder — stop it first, then rename it"
     );
     assert_eq!(
-        fx.refusal(false, rename("_libraries", "x")),
-        "can't rename '../../../libraries': the libraries are listed by the admins, not moved from a workspace"
+        fx.refusal(rename("_libraries", "x")),
+        "can't rename '../../../libraries': the libraries are listed, not moved from a workspace"
     );
     assert_eq!(
-        fx.refusal(true, rename("_libraries/k7-core", "x")),
-        "can't rename '_libraries/k7-core': the libraries are listed by the admins, not moved from a workspace"
+        fx.refusal(rename("_libraries/k7-core", "x")),
+        "can't rename '_libraries/k7-core': the libraries are listed, not moved from a workspace"
     );
     assert!(
-        fx.refusal(false, rename("_modules", "x"))
+        fx.refusal(rename("_modules", "x"))
             .contains("a shared module is edited in place")
     );
     // Inside the active project everything is fair game.
@@ -231,7 +223,7 @@ fn what_a_rename_may_not_touch_is_refused_in_words() {
     );
     // A path that is no library.
     assert_eq!(
-        fx.refusal(false, rename("_libraries/Nobody/x", "y")),
+        fx.refusal(rename("_libraries/Nobody/x", "y")),
         "names no library: _libraries/Nobody/x"
     );
 }
@@ -247,7 +239,7 @@ fn a_move_goes_into_a_folder_and_refuses_what_it_cannot() {
         })
     );
     assert_eq!(
-        said(&fx, false, mv("song.k7/clips/takes", "song.k7/sequences")),
+        said(&fx, mv("song.k7/clips/takes", "song.k7/sequences")),
         serde_json::json!({ "path": "song.k7/sequences/takes" })
     );
     // Onto the folder it sits in, the same answer as a rename to its own name.
@@ -258,34 +250,34 @@ fn a_move_goes_into_a_folder_and_refuses_what_it_cannot() {
         })
     );
     assert_eq!(
-        fx.refusal(false, mv("song.k7/clips", "song.k7/clips/takes")),
+        fx.refusal(mv("song.k7/clips", "song.k7/clips/takes")),
         "can't move 'clips' into itself"
     );
     fx.s.file("studio/workspace/songs/song.k7/sequences/riff.k7x", "");
     assert_eq!(
-        fx.refusal(false, mv("song.k7/clips/riff.k7x", "song.k7/sequences")),
+        fx.refusal(mv("song.k7/clips/riff.k7x", "song.k7/sequences")),
         "already exists: song.k7/sequences/riff.k7x"
     );
     assert_eq!(
-        fx.refusal(false, mv("song.k7/clips/takes", "song.k7/clips/riff.k7x")),
+        fx.refusal(mv("song.k7/clips/takes", "song.k7/clips/riff.k7x")),
         "not a folder: song.k7/clips/riff.k7x"
     );
     assert_eq!(
-        fx.refusal(false, mv("song.k7/clips/takes", "song.k7/nope")),
+        fx.refusal(mv("song.k7/clips/takes", "song.k7/nope")),
         "not a folder: song.k7/nope"
     );
     fx.s.dir("studio/workspace/songs/elsewhere");
     assert_eq!(
-        fx.refusal(false, mv("song.k7", "elsewhere")),
+        fx.refusal(mv("song.k7", "elsewhere")),
         "can't move the active project's folder — stop it first, then move it"
     );
     fx.s.dir("studio/workspace/songs/_recycle_bin");
     assert_eq!(
-        fx.refusal(false, mv("song.k7/clips/riff.k7x", "_recycle_bin")),
+        fx.refusal(mv("song.k7/clips/riff.k7x", "_recycle_bin")),
         "can't move something into the recycle bin — delete it instead"
     );
     assert_eq!(
-        fx.refusal(false, mv("song.k7/clips/riff.k7x", "../")),
+        fx.refusal(mv("song.k7/clips/riff.k7x", "../")),
         "path escapes the workspace: ../"
     );
     assert_eq!(
@@ -303,7 +295,7 @@ fn three_hundred_deletes_of_one_name_have_no_bound() {
         fx.s.file(&format!("studio/workspace/songs/_recycle_bin/x-{n}"), "");
     }
     assert_eq!(
-        said(&fx, false, delete("x")),
+        said(&fx, delete("x")),
         serde_json::json!({ "recycled": "_recycle_bin/x-301" })
     );
 }
@@ -312,28 +304,25 @@ fn three_hundred_deletes_of_one_name_have_no_bound() {
 fn what_a_delete_may_not_touch() {
     let fx = Fx::new("p-delete-no");
     fx.s.file("studio/workspace/songs/_recycle_bin/old", "x");
+    assert_eq!(fx.refusal(delete(".")), "can't delete the workspace root");
     assert_eq!(
-        fx.refusal(false, delete(".")),
-        "can't delete the workspace root"
-    );
-    assert_eq!(
-        fx.refusal(false, delete("_recycle_bin")),
+        fx.refusal(delete("_recycle_bin")),
         "'_recycle_bin' is already in the recycle bin"
     );
     assert_eq!(
-        fx.refusal(false, delete("_recycle_bin/old")),
+        fx.refusal(delete("_recycle_bin/old")),
         "'_recycle_bin/old' is already in the recycle bin"
     );
     assert_eq!(
-        fx.refusal(false, delete("song.k7")),
+        fx.refusal(delete("song.k7")),
         "can't delete the active project's folder — stop it first, then delete it"
     );
     assert_eq!(
-        fx.refusal(false, delete("_libraries")),
-        "can't delete '../../../libraries': the libraries are listed by the admins, not moved from a workspace"
+        fx.refusal(delete("_libraries")),
+        "can't delete '../../../libraries': the libraries are listed, not moved from a workspace"
     );
     assert!(
-        fx.refusal(false, delete("_modules/audio"))
+        fx.refusal(delete("_modules/audio"))
             .contains("module populate")
     );
 }
@@ -348,34 +337,34 @@ fn an_upload_is_judged_by_its_trimmed_segments_and_its_rel() {
         })
     );
     assert_eq!(
-        said(&fx, false, upload("media", "take/one.bin")),
+        said(&fx, upload("media", "take/one.bin")),
         serde_json::json!({ "path": "media/take/one.bin" })
     );
     assert_eq!(
-        said(&fx, false, upload("media/", " a / b .txt")),
+        said(&fx, upload("media/", " a / b .txt")),
         serde_json::json!({ "path": "media/a/b .txt" })
     );
     assert_eq!(
-        said(&fx, false, upload(" sub ", "x.bin")),
+        said(&fx, upload(" sub ", "x.bin")),
         serde_json::json!({ "path": " sub /x.bin" })
     );
     assert_eq!(
-        said(&fx, false, upload("", "x\\y\\z.bin")),
+        said(&fx, upload("", "x\\y\\z.bin")),
         serde_json::json!({ "path": "x/y/z.bin" })
     );
     for bad in ["../e.bin", "a/../b", "..", ".", "  ", "/", "a/./b"] {
         assert_eq!(
-            fx.refusal(false, upload(".", bad)),
+            fx.refusal(upload(".", bad)),
             format!("invalid filename: {bad}"),
             "{bad:?}"
         );
     }
     assert_eq!(
-        fx.refusal(false, upload(".", "b.yaml")),
+        fx.refusal(upload(".", "b.yaml")),
         "b.yaml: a workspace file is .k7x, not YAML"
     );
     assert_eq!(
-        fx.refusal(false, upload("song.k7", "x.YML")),
+        fx.refusal(upload("song.k7", "x.YML")),
         "song.k7/x.YML: a workspace file is .k7x, not YAML"
     );
     fx.s.file("studio/workspace/songs/there.bin", "x");
@@ -386,23 +375,12 @@ fn an_upload_is_judged_by_its_trimmed_segments_and_its_rel() {
         })
     );
     assert!(
-        fx.refusal(false, upload("_modules", "ir.wav"))
+        fx.refusal(upload("_modules", "ir.wav"))
             .contains("can't add a file to '_modules/ir.wav'")
     );
     assert_eq!(
-        said(
-            &fx,
-            true,
-            upload("_libraries/k7-core/modules/audio/verb", "ir.wav")
-        ),
-        serde_json::json!({ "path": "_libraries/k7-core/modules/audio/verb/ir.wav" })
-    );
-    assert_eq!(
-        fx.refusal(
-            false,
-            upload("_libraries/k7-core/modules/audio/verb", "ir.wav")
-        ),
-        "can't add a file to '_libraries/k7-core/modules/audio/verb/ir.wav': only the origin's admins edit a library"
+        fx.refusal(upload("_libraries/k7-core/modules/audio/verb", "ir.wav")),
+        "can't add a file to '_libraries/k7-core/modules/audio/verb/ir.wav': a library is not edited from here"
     );
 }
 

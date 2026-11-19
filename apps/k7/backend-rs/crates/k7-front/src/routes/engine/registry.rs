@@ -12,10 +12,8 @@ use axum::response::{IntoResponse, Response};
 use hyper::StatusCode;
 use k7_engine::js::{invalid_type, number_issues, string_issues};
 use k7_engine::registry::heartbeat::read_heartbeat;
-use k7_engine::registry::owners::Role;
 use k7_engine::registry::{ClaimRequest, ClaimResult, HeartbeatInput, Refused};
 use serde_json::{Map, Value, json};
-use subtle::ConstantTimeEq;
 
 use super::{client_ip, engine_of, holder_of, with_session};
 use crate::AppState;
@@ -59,10 +57,6 @@ fn refusal(why: Refused) -> (StatusCode, &'static str) {
     }
 }
 
-/// What a heartbeat with no render key is told when `STUDIO_REGISTRY_REQUIRE_DEVICE=1`.
-const SERVER_ENGINES_ONLY: &str =
-    "this studio lists its own engine only, which proves itself with the render key";
-
 /// `validate`'s answer: every issue's message, joined, and no path.
 pub(super) fn invalid(issues: Vec<String>) -> Response {
     error(StatusCode::BAD_REQUEST, &issues.join("; "))
@@ -100,11 +94,6 @@ pub async fn heartbeat(
 ) -> Response {
     let engine = engine_of(&state);
     let ip = client_ip(&req, peer, &state.settings);
-    let key = req
-        .headers()
-        .get("x-studio-render-key")
-        .and_then(|v| v.to_str().ok())
-        .map(str::to_string);
     let body = match read_json(req).await {
         Ok((_, b)) => b,
         Err(r) => return r,
@@ -126,27 +115,6 @@ pub async fn heartbeat(
     };
     let id = b.id.clone();
     let host = b.hostname.clone();
-    let render = engine.render_key.as_deref().is_some_and(|k| {
-        key.as_deref()
-            .is_some_and(|g| !g.is_empty() && bool::from(g.as_bytes().ct_eq(k.as_bytes())))
-    });
-    if !render {
-        let verb = if engine.require_device {
-            "refused"
-        } else {
-            "took"
-        };
-        engine.complain.say(
-            &format!("{id}|unpaired"),
-            &format!(
-                "{verb} a heartbeat from {} with no render key",
-                who(&id, &host, &ip)
-            ),
-        );
-        if engine.require_device {
-            return error(StatusCode::UNAUTHORIZED, SERVER_ENGINES_ONLY);
-        }
-    }
     let cleaned = b.cleaned.clone();
     if !cleaned.is_empty() {
         engine.complain.say(
@@ -214,12 +182,6 @@ pub async fn deregister(State(state): State<Arc<AppState>>, req: Request) -> Res
     Json(json!({ "ok": true })).into_response()
 }
 
-/// What the request's account is to engine `id`, the server's engine its admins' own.
-fn role_for(state: &AppState, id: &str, holder: &str) -> Role {
-    let core = &engine_of(state).core;
-    core.registry.role(id, holder, core.hub.is_renderer(id))
-}
-
 pub async fn engines(
     State(state): State<Arc<AppState>>,
     ConnectInfo(peer): ConnectInfo<SocketAddr>,
@@ -232,51 +194,33 @@ pub async fn engines(
 /// The engines `s`'s account may see from `ip`, each usable one with a relay ticket.
 pub(super) fn list_for(state: &AppState, ip: &str, s: &Signed) -> Response {
     let viewer = holder_of(&s.user);
-    let admin = crate::session::is_admin(&s.user, &state.settings);
     let core = &engine_of(state).core;
     let now = core.clock.now_ms();
     let list: Vec<Value> = core
         .registry
         .list(Some(ip), &viewer)
         .into_iter()
-        .filter_map(|e| {
-            let base = role_for(state, &e.id, &viewer);
-            let access = if base == Role::Server && admin {
-                Role::Owner
-            } else {
-                base
-            };
+        .map(|e| {
             let mut o = e.json;
-            match access {
-                Role::None => return None,
-                Role::Unowned => {
-                    if !e.same_source_ip
-                        && let Some(Value::Object(a)) = o.get_mut("addresses")
-                    {
-                        a.insert("lanIps".into(), json!([]));
-                    }
-                    o.insert("access".into(), json!("unowned"));
+            if core.registry.may_use(&e.id, &viewer) {
+                o.insert("access".into(), json!("owner"));
+                o.insert(
+                    "proxyTicket".into(),
+                    json!(core.tickets.issue(&e.id, &viewer, now)),
+                );
+                if core.hub.has(&e.id) {
+                    o.insert("rtc".into(), json!(true));
                 }
-                _ => {
-                    o.insert("access".into(), json!(access.as_str()));
-                    if access == Role::Shared
-                        && let Some(owner) = core.registry.owner_of(&e.id)
-                    {
-                        o.insert("ownedBy".into(), json!(owner.owner));
-                    }
-                    o.insert(
-                        "proxyTicket".into(),
-                        json!(core.tickets.issue(&e.id, &viewer, now)),
-                    );
-                    if core.hub.has(&e.id) {
-                        o.insert("rtc".into(), json!(true));
-                    }
-                    if base == Role::Server {
-                        o.insert("server".into(), json!(true));
-                    }
+            } else {
+                // An engine off this machine is listed for its LAN hint alone, to the network it is on.
+                if !e.same_source_ip
+                    && let Some(Value::Object(a)) = o.get_mut("addresses")
+                {
+                    a.insert("lanIps".into(), json!([]));
                 }
+                o.insert("access".into(), json!("unowned"));
             }
-            Some(Value::Object(o))
+            Value::Object(o)
         })
         .collect();
     Json(Value::Array(list)).into_response()
@@ -366,26 +310,12 @@ fn select_for(
     }
     // WHO comes from the session, never from the body.
     let holder = holder_of(user);
-    let access = role_for(state, &id, &holder);
-    if access == Role::Unowned {
+    if !reg.may_use(&id, &holder) {
         say(
             format!("{id}|select-unowned"),
-            "its heartbeat proves no account here".into(),
+            "it does not run on this machine".into(),
         );
-        let body = json!({ "error": "unowned", "message": "this engine belongs to no account here — add this server from the engine's machine, signed in" });
-        return (StatusCode::FORBIDDEN, Json(body)).into_response();
-    }
-    if !access.may_use() {
-        let who_asked = if holder.is_empty() {
-            "an anonymous session"
-        } else {
-            holder.as_str()
-        };
-        say(
-            format!("{id}|select-owner|{holder}"),
-            format!("{who_asked} neither owns it nor was shared it"),
-        );
-        let body = json!({ "error": "not-yours", "message": "this engine belongs to another account, which has not shared it with you" });
+        let body = json!({ "error": "unowned", "message": "this engine does not run on this device, and a device uses its own engine only" });
         return (StatusCode::FORBIDDEN, Json(body)).into_response();
     }
     match reg.claim(

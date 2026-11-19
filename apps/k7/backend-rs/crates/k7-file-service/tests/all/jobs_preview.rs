@@ -197,7 +197,6 @@ fn world(tmp: &Tmp, sc: &Value) -> World {
     let home = Home {
         studio: tmp.at("studio"),
         libraries: tmp.at("libraries"),
-        admin: false,
     };
     let project = tmp.at(sc["active"].as_str().unwrap());
     let roots = project_roots(&home, &project, &tmp.at("no-meta"), &tmp.at("no-models"));

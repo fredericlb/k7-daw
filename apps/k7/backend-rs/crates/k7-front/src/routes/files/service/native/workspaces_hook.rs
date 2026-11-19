@@ -90,7 +90,7 @@ fn acct(who: &Who<'_>) -> Acct {
         .map_or_else(String::new, |r| r.display().to_string());
     Acct {
         runtime: who.held.runtime.clone(),
-        home: Home::of(&account.env, who.admin),
+        home: Home::of(&account.env),
         account: account.slug.clone(),
         log: who.log.clone(),
         demos_from: (account.env.get("STUDIO_DEMOS").cloned(), code),

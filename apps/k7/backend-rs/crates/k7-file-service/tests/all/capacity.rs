@@ -55,7 +55,7 @@ fn sixty_four_capacity_projects_in_one_workspace() {
     for n in 1..64 {
         make(&s, n);
     }
-    let h = s.home(false);
+    let h = s.home();
     let limits = Limits::default();
     let space = Space::open(&h, &s.path("ws"));
     let mut best = std::time::Duration::MAX;
@@ -125,7 +125,7 @@ fn module_libraries_over_eight_copies_of_k7_core() {
         pins.push_str(&format!("{name}(3)\n"));
     }
     s.file("ws/_library-pins.k7x", &pins);
-    let h = s.home(false);
+    let h = s.home();
     let limits = Limits::default();
     let space = Space::open(&h, &s.path("ws"));
     let mut best = std::time::Duration::MAX;
@@ -170,7 +170,7 @@ fn one_cap128_project_walk_and_memo_hit() {
     let s = Scratch::new("capacity-revision");
     s.dir("ws");
     make(&s, 0);
-    let (dir, h) = (s.path("ws/cap000.k7"), s.home(false));
+    let (dir, h) = (s.path("ws/cap000.k7"), s.home());
     let mut walks: Vec<Duration> = (0..30)
         .map(|_| {
             let t0 = Instant::now();

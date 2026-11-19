@@ -53,23 +53,19 @@ impl Fx {
         self.s.path(&format!("libraries/k7-core/{rel}"))
     }
 
-    /// The plan of `op` for an account, an admin or not, over the real disk.
-    pub fn run(&self, admin: bool, op: Op<'_>) -> Result<Outcome, EntryError> {
-        let h = self.s.home(admin);
+    /// The plan of `op` for the account, over the real disk.
+    pub fn run(&self, op: Op<'_>) -> Result<Outcome, EntryError> {
+        let h = self.s.home();
         plan(&Space::open(&h, &self.root), &op, &Disk)
     }
 
     pub fn user(&self, op: Op<'_>) -> Result<Outcome, EntryError> {
-        self.run(false, op)
-    }
-
-    pub fn admin(&self, op: Op<'_>) -> Result<Outcome, EntryError> {
-        self.run(true, op)
+        self.run(op)
     }
 
     /// The refusal's sentence, or a panic when the plan went through.
-    pub fn refusal(&self, admin: bool, op: Op<'_>) -> String {
-        match self.run(admin, op) {
+    pub fn refusal(&self, op: Op<'_>) -> String {
+        match self.run(op) {
             Err(e) => e.to_string(),
             Ok(o) => panic!("{op:?} was planned: {o:?}"),
         }
@@ -113,11 +109,10 @@ impl Probe for Drive {
 }
 
 /// The home of a `C:/` account.
-pub fn drive_home(admin: bool) -> Home {
+pub fn drive_home() -> Home {
     Home {
         studio: "C:/Work/studio".into(),
         libraries: "C:/Work/libs".into(),
-        admin,
     }
 }
 
@@ -138,8 +133,8 @@ pub fn upload<'a>(dir: &'a str, name: &'a str) -> Op<'a> {
 }
 
 /// The body a plan answers, spelt as the route does.
-pub fn said(fx: &Fx, admin: bool, op: Op<'_>) -> serde_json::Value {
-    let h = fx.s.home(admin);
+pub fn said(fx: &Fx, op: Op<'_>) -> serde_json::Value {
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
-    answer_of(&space, &fx.run(admin, op).unwrap())
+    answer_of(&space, &fx.run(op).unwrap())
 }

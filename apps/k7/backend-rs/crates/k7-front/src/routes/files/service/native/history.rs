@@ -57,7 +57,7 @@ pub async fn live(who: &Who<'_>, path: &str, req: Request) -> Result<Response, R
     let Some(kind) = Kind::of(req.method(), path) else {
         return Err(req);
     };
-    let home = Home::of(&who.held.account.env, who.admin);
+    let home = Home::of(&who.held.account.env);
     let account = Captures::global().account(&home.studio);
     let owner = || claim_root(&who.held.account.home, who.user);
     Ok(hook(account.as_ref(), who.user, &home, kind, owner, req).await)

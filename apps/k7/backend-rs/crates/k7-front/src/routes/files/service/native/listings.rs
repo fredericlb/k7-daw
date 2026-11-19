@@ -82,7 +82,6 @@ pub fn live_ctx(who: &Who<'_>, headers: &HeaderMap, query: &str) -> Option<Ctx> 
         Some(Tag::ModuleLibraries),
         &Req {
             env: &account.env,
-            admin: who.admin,
             slug: &account.slug,
             workspace: &name,
             root: &root,

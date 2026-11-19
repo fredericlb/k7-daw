@@ -92,7 +92,6 @@ fn every_archetype_is_written_as_scaffolds_json_holds_it() {
         let home = Home {
             studio: s.path("home"),
             libraries: s.path("libraries"),
-            admin: false,
         };
         let space = Space::open(&home, &ws);
         let mut n = 0;

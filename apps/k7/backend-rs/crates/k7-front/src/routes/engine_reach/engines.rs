@@ -19,10 +19,10 @@ use crate::AppState;
 #[derive(Clone, Debug, PartialEq)]
 pub struct View {
     pub id: String,
-    pub role: String,
+    /// The caller's account may use it: it runs on this device.
+    pub usable: bool,
     pub holds: bool,
     pub tunnel: bool,
-    pub renderer: bool,
     pub score: Option<f64>,
     /// The chains the ENGINE's machine separates with, by `want` — absent from an older supervisor.
     pub chains: Option<k7_engine::registry::heartbeat::Chains>,
@@ -102,10 +102,9 @@ pub fn reach(state: &AppState) -> Reach<'_> {
 fn core_view(core: &k7_engine::Core, id: &str, score: Option<f64>, holder: &str) -> View {
     View {
         id: id.to_string(),
-        role: core.registry.role(id, holder, false).as_str().to_string(),
+        usable: core.registry.may_use(id, holder),
         holds: core.registry.holds(id, holder),
         tunnel: core.hub.has(id),
-        renderer: core.hub.is_renderer(id),
         score,
         // The machine's own chains travel on its heartbeat (stemSplit.md).
         chains: core.registry.get(id).and_then(|e| e.chains),
@@ -126,19 +125,16 @@ impl Reach<'_> {
         }))
     }
 
-    /// A channel to engine `id` (None: the render machine) sharing `roots`; None when it holds no tunnel here.
+    /// A channel to engine `id` sharing `roots`; None when it holds no tunnel here.
     pub async fn open(
         &self,
-        id: Option<&str>,
+        id: &str,
         roots: Vec<Root>,
         kind: Kind,
         _timeout: Duration,
     ) -> Result<Option<Link>, String> {
         let core = self.0;
-        let Some(id) = id.map(str::to_string).or_else(|| core.hub.renderer()) else {
-            return Ok(None);
-        };
-        let Some(ch) = core.hub.open(&id, roots.clone(), kind, false) else {
+        let Some(ch) = core.hub.open(id, roots.clone(), kind, false) else {
             return Ok(None);
         };
         let (link, out, events) = Link::pair();

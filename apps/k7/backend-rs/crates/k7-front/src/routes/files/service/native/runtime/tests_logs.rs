@@ -250,7 +250,6 @@ async fn the_logs_route_answers_the_workspace_refusals_then_the_logs() {
     let who = Who {
         held: &held,
         user: "a@x.org",
-        admin: false,
         device: false,
         log: &svc.log,
         code_root: None,

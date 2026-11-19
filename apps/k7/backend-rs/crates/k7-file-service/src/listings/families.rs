@@ -18,7 +18,7 @@ const GRAPH_FILE: &str = "graph.k7x";
 const NODES_DIR: &str = "nodes";
 const ASSEMBLY_FILE: &str = "assembly.k7x";
 
-/// The names of the libraries in the libraries' home, sorted (1415); an admin's overlays are those same folders.
+/// The names of the libraries in the libraries' home, sorted (1415).
 pub fn library_names(home: &Home) -> Vec<String> {
     let Ok(read) = std::fs::read_dir(&home.libraries) else {
         return Vec::new();

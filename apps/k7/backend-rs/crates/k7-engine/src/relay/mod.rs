@@ -98,13 +98,9 @@ impl Sinks for Relay {
     fn holds(&self) -> bool {
         self.core.registry.holds(&self.id, &self.holder)
     }
-    // Asked per frame: a share withdrawn mid-socket stops the token at once.
+    // Asked per frame: an engine that stops running here stops the token at once.
     fn may_read_token(&self) -> bool {
-        let server = self.core.hub.is_renderer(&self.id);
-        self.core
-            .registry
-            .role(&self.id, &self.holder, server)
-            .may_use()
+        self.core.registry.may_use(&self.id, &self.holder)
     }
     fn to_engine(&mut self, f: Frame) {
         match &self.upstream {

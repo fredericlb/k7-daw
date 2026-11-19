@@ -1,12 +1,11 @@
 //! registry — the engines a heartbeat listed, the CLAIMS saying which project each drives for whom, and the
-//! two stores that outlive a listing (the secret bindings, the owners). The
-//! claim's three rules are `apps/k7/backend-rs/docs/engine/claim.md`; the token proves nothing (`token.md` there).
+//! store that outlives a listing (the secret bindings). The claim's three rules are
+//! `apps/k7/backend-rs/docs/engine/claim.md`; the token proves nothing (`token.md` there).
 
 pub mod bindings;
 mod claims;
 pub mod heartbeat;
 mod list;
-pub mod owners;
 pub mod state_file;
 pub mod ticket;
 
@@ -22,7 +21,6 @@ pub use list::Listed;
 use crate::clock::Clock;
 use crate::log::Sink;
 use bindings::{Bindings, Verdict};
-use owners::{Assigned, Owners, Ownership, Role, role_of};
 
 /// No heartbeat for this long and the engine is presumed gone; one beats every ~5 s.
 pub const REGISTRY_TTL_MS: i64 = 15_000;
@@ -143,12 +141,11 @@ pub(crate) struct State {
     engines: IndexMap<String, Entry>,
     arrivals: IndexMap<String, (i64, u32)>,
     pub(crate) bindings: Bindings,
-    pub(crate) owners: Owners,
     max_engines: usize,
     per_ip: u32,
 }
 
-/// The registry: one lock over the listing, the claims, the bindings and the owners, never held across an await.
+/// The registry: one lock over the listing, the claims and the bindings, never held across an await.
 pub struct Registry {
     state: Mutex<State>,
     pub clock: Clock,
@@ -157,7 +154,7 @@ pub struct Registry {
 /// Where the registry keeps what outlives a listing, and its limits.
 #[derive(Default)]
 pub struct Options {
-    /// The host's state dir; None keeps the bindings and owners in memory.
+    /// The host's state dir; None keeps the bindings in memory.
     pub state_dir: Option<std::path::PathBuf>,
     pub max_engines: Option<usize>,
     pub new_ids_per_ip_per_minute: Option<u32>,
@@ -172,8 +169,7 @@ impl Registry {
             state: Mutex::new(State {
                 engines: IndexMap::new(),
                 arrivals: IndexMap::new(),
-                bindings: Bindings::new(file(bindings::BINDINGS_FILE), log.clone(), now),
-                owners: Owners::new(file(owners::OWNERS_FILE), log, now),
+                bindings: Bindings::new(file(bindings::BINDINGS_FILE), log, now),
                 max_engines: opts.max_engines.unwrap_or(MAX_ENGINES),
                 per_ip: opts
                     .new_ids_per_ip_per_minute
@@ -280,48 +276,14 @@ impl Registry {
         true
     }
 
-    /// `engineRole`: what `holder` is to engine `id`; an engine on this machine is every signed-in account's.
-    pub fn role(&self, id: &str, holder: &str, server: bool) -> Role {
+    /// Whether `holder` may use engine `id`: the device's account, on an engine running on this machine.
+    pub fn may_use(&self, id: &str, holder: &str) -> bool {
         let now = self.clock.now_ms();
-        let mut s = self.lock();
-        if !holder.is_empty() && s.get(id, now).is_some_and(|e| on_this_machine(e, now)) {
-            return Role::Owner;
-        }
-        role_of(s.owners.get(id), holder, server)
-    }
-
-    pub fn owner_of(&self, id: &str) -> Option<Ownership> {
-        self.lock().owners.get(id).cloned()
-    }
-
-    pub fn assign_owner(&self, id: &str, owner: &str) -> Assigned {
-        let now = self.clock.now_ms();
-        self.lock().owners.assign(id, owner, now)
-    }
-
-    pub fn share(&self, id: &str, emails: &[String], everyone: Option<bool>) -> bool {
-        self.lock().owners.share(id, emails, everyone)
-    }
-
-    pub fn release_owner(&self, id: &str) -> bool {
-        self.lock().owners.release(id)
-    }
-
-    /// Every ownership record, with its machine's hostname when listed.
-    pub fn owners(&self) -> Vec<(String, Ownership, Option<String>)> {
-        let now = self.clock.now_ms();
-        let mut s = self.lock();
-        let all: Vec<(String, Ownership)> = s
-            .owners
-            .all()
-            .map(|(i, o)| (i.clone(), o.clone()))
-            .collect();
-        all.into_iter()
-            .map(|(id, o)| {
-                let host = s.get(&id, now).map(|e| e.hostname.clone());
-                (id, o, host)
-            })
-            .collect()
+        !holder.is_empty()
+            && self
+                .lock()
+                .get(id, now)
+                .is_some_and(|e| on_this_machine(e, now))
     }
 
     /// The bindings' verdict for a secret, for the testbed.

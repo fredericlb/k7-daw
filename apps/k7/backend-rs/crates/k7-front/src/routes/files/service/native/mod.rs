@@ -69,7 +69,6 @@ pub use tag::{Piece, Tag};
 pub struct Req<'a> {
     /// The account's environment: where `STUDIO_HOME` and the libraries are.
     pub env: &'a BTreeMap<String, String>,
-    pub admin: bool,
     pub slug: &'a str,
     /// The workspace's name; for `/media` the query's, which may be unchecked.
     pub workspace: &'a str,
@@ -147,7 +146,7 @@ impl Ctx {
         Ctx {
             tag,
             touches: true,
-            home: Home::of(req.env, req.admin),
+            home: Home::of(req.env),
             root: req.root.to_string(),
             workspace: req.workspace.to_string(),
             rel,

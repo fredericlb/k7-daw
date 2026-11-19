@@ -167,8 +167,8 @@ pub fn slot_of(
     scratch: &str,
 ) -> Result<SlotFile, BenchError> {
     let home = libs.home;
-    // A draft overlay and a machine with no library are refused with a sentence (4-7).
-    if home.admin || library_names(home).is_empty() {
+    // A machine with no library is refused with a sentence (4-7).
+    if library_names(home).is_empty() {
         return Err(Declined::WouldThrow.into());
     }
     let root = workspace_root(home);

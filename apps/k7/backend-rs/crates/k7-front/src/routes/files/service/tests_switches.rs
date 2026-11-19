@@ -126,7 +126,6 @@ fn who<'a>(f: &'a Front, held: &'a Held) -> Who<'a> {
     Who {
         held,
         user: "c@d.org",
-        admin: false,
         device: false,
         log: &f.svc.log,
         code_root: None,

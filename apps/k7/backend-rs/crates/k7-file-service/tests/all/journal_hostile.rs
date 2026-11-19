@@ -163,7 +163,7 @@ fn an_entry_of_ten_mib_round_trips() {
 #[test]
 fn two_thousand_stores_a_store_that_is_a_file_and_names_of_sixteen_kib() {
     let s = Scratch::new("jh-stores");
-    let home = s.home(false);
+    let home = s.home();
     for n in 0..2_000 {
         std::fs::create_dir_all(s.path(&format!("studio/.history/p{n}-000000000000"))).unwrap();
     }

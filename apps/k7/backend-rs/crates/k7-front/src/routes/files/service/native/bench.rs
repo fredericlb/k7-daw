@@ -53,12 +53,11 @@ impl Run {
         acct: &Arc<Acct>,
         env: &BTreeMap<String, String>,
         slug: &str,
-        admin: bool,
         code_root: &Path,
         log: &k7_hub::Log,
     ) -> Run {
         Run {
-            home: Home::of(env, admin),
+            home: Home::of(env),
             code_root: code_root.display().to_string(),
             env: env.clone(),
             acct: acct.clone(),
@@ -378,7 +377,6 @@ pub async fn live(who: &Who<'_>, path: &str, req: Request) -> Result<Response, R
         &who.held.acct,
         &account.env,
         &account.slug,
-        who.admin,
         code_root,
         who.log,
     );

@@ -1,9 +1,8 @@
 //! The engine core held to `fixtures/engine-vectors.json`, the committed reference: a heartbeat read and
-//! cleaned in the same words, share lists and roles, a job respelt, the frames a slow peer may lose.
+//! cleaned in the same words, a job respelt, the frames a slow peer may lose.
 
 use k7_engine::frame::Frame;
 use k7_engine::registry::heartbeat::read_heartbeat;
-use k7_engine::registry::owners::{Ownership, clean_shares, role_of};
 use k7_engine::tunnel::backpressure::is_droppable;
 use k7_engine::tunnel::frames::Root;
 use k7_engine::tunnel::spelling::tunnel_spelling;
@@ -25,33 +24,6 @@ fn heartbeats_read_as_the_typescript_reads_them() {
             Err(e) => json!({ "ok": false, "error": e }),
         };
         assert_eq!(got, v["out"], "{}", v["input"]);
-    }
-}
-
-#[test]
-fn shares_and_roles_as_the_typescript_reads_them() {
-    let v = vectors();
-    for s in v["shares"].as_array().unwrap() {
-        let raw: Vec<String> = serde_json::from_value(s["raw"].clone()).unwrap();
-        let got = match clean_shares(&raw) {
-            Ok(emails) => json!({ "ok": true, "emails": emails }),
-            Err(bad) => json!({ "ok": false, "bad": bad }),
-        };
-        assert_eq!(got, s["out"], "{raw:?}");
-    }
-    for r in v["roles"].as_array().unwrap() {
-        let o = (!r["o"].is_null()).then(|| Ownership {
-            owner: r["o"]["owner"].as_str().unwrap().into(),
-            shared: serde_json::from_value(r["o"]["shared"].clone()).unwrap(),
-            everyone: r["o"]["everyone"].as_bool().unwrap(),
-            since: 0.0,
-        });
-        let got = role_of(
-            o.as_ref(),
-            r["holder"].as_str().unwrap(),
-            r["server"].as_bool().unwrap(),
-        );
-        assert_eq!(got.as_str(), r["out"], "{r}");
     }
 }
 

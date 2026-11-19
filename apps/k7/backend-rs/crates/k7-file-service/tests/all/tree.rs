@@ -9,7 +9,7 @@ use serde_json::{Value, json};
 use support::{Scratch, can_link, link};
 
 fn walk(s: &Scratch, limits: &Limits) -> Result<Tree, Declined> {
-    let h = s.home(false);
+    let h = s.home();
     tree(&Space::open(&h, &s.path("ws")), limits)
 }
 

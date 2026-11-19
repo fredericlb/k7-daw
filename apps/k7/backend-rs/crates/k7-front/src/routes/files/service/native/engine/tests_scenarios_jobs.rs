@@ -41,7 +41,7 @@ pub(super) async fn route(a: &Account, method: &str, target: &str, body: Value) 
     let deps = Deps {
         engine: e,
         jobs: e.jobs.get().expect("held by `hold`"),
-        home: k7_file_service::libraries::Home::of(&env, false),
+        home: k7_file_service::libraries::Home::of(&env),
         env: &env,
         code_root: code_root(),
     };

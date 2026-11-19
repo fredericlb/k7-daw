@@ -40,7 +40,7 @@ fn every_op<'a>(a: &'a str, b: &'a str) -> [Op<'a>; 5] {
 #[test]
 fn the_gate_s_hostile_paths_are_answered_fast_through_every_op() {
     let fx = Fx::new("h-gate");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     let long = "a".repeat(MAX_REL + 1);
     let slashes = "/".repeat(8000);
@@ -255,7 +255,7 @@ fn an_upload_of_a_thousand_segments_or_into_a_file_is_answered() {
     assert!(t < BOUND, "{t:?}");
     // A `dir` that is a file: the plan sees nothing there yet, and the first half fails to make its parents.
     fx.s.file("studio/workspace/songs/afile", "x");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     let Ok(Outcome::Upload { abs }) = fx.user(Op::Upload {
         dir: "afile",

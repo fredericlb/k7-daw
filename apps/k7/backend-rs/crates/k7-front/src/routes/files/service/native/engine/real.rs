@@ -41,8 +41,6 @@ struct Facts {
 pub struct RealHost {
     rt: tokio::runtime::Handle,
     home: Home,
-    /// The admin stamp while no jobs are held; with jobs, the jobs' `Thawed` holds the account's one flag.
-    admin: std::sync::atomic::AtomicBool,
     thawed: OnceLock<Arc<Thawed>>,
     code_root: String,
     env: BTreeMap<String, String>,
@@ -69,7 +67,6 @@ impl RealHost {
         Arc::new(RealHost {
             rt: tokio::runtime::Handle::current(),
             home,
-            admin: false.into(),
             thawed: OnceLock::new(),
             code_root,
             env: acct.env.clone(),
@@ -80,33 +77,18 @@ impl RealHost {
         })
     }
 
-    /// The hub's stamp of the request in hand: who edits the libraries follows it.
-    pub fn note_admin(&self, admin: bool) {
-        match self.thawed.get() {
-            Some(t) => t.note_admin(admin),
-            None => self
-                .admin
-                .store(admin, std::sync::atomic::Ordering::Relaxed),
-        }
-    }
-
-    /// The jobs' memory of the interactive asks: the admin stamp goes there (one flag per account).
+    /// The jobs' memory of the interactive asks.
     pub fn hold_thawed(&self, thawed: Arc<Thawed>) {
         let _ = self.thawed.set(thawed);
     }
 
-    /// The account's home with the stamp of the last request.
+    /// The account's home.
     pub fn home_now(&self) -> Home {
         self.home()
     }
 
     fn home(&self) -> Home {
-        let mut h = self.home.clone();
-        h.admin = match self.thawed.get() {
-            Some(t) => t.admin(),
-            None => self.admin.load(std::sync::atomic::Ordering::Relaxed),
-        };
-        h
+        self.home.clone()
     }
 
     /// The account's native side the host reads the sessions from.

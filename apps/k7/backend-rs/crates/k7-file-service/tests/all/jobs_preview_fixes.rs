@@ -50,7 +50,6 @@ fn ask(tmp: &Tmp, project: &str, compiles: bool, req: PreviewReq) -> Result<Stri
     let home = Home {
         studio: tmp.at("studio"),
         libraries: tmp.at("libraries"),
-        admin: false,
     };
     let project = tmp.at(project);
     let roots = project_roots(&home, &project, &tmp.at("no-meta"), &tmp.at("no-models"));
@@ -147,7 +146,6 @@ fn a_backslash_workspace_root_holds_an_absolute_audio_path() {
     let home = Home {
         studio: tmp.at("studio"),
         libraries: tmp.at("libraries"),
-        admin: false,
     };
     let project = tmp.at("ws/p.k7");
     let roots = project_roots(&home, &project, &tmp.at("no-meta"), &tmp.at("no-models"));

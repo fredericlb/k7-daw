@@ -17,14 +17,14 @@ fn exists(a: &Acct, rel: &str) -> bool {
 fn a_new_name_is_made_whole_and_a_second_make_is_false() {
     let a = Acct::new("ws-life-make");
     let h = a.home();
-    assert_eq!(plan_make(&h, false, "songs"), Ok(true));
+    assert_eq!(plan_make(&h, "songs"), Ok(true));
     assert!(
         !exists(&a, "studio/workspace/songs"),
         "a plan creates nothing"
     );
     assert_eq!(make(&h, "songs"), Ok(true));
     assert!(exists(&a, "studio/workspace/songs"));
-    assert_eq!(plan_make(&h, false, "songs"), Ok(false));
+    assert_eq!(plan_make(&h, "songs"), Ok(false));
     assert_eq!(make(&h, "songs"), Ok(false));
 }
 
@@ -32,10 +32,10 @@ fn a_new_name_is_made_whole_and_a_second_make_is_false() {
 fn the_parent_folders_are_made_too() {
     let a = support::Scratch::new("ws-life-parents");
     a.dir("libraries/k7-core");
-    let h = a.home(true);
+    let h = a.home();
     assert_eq!(make(&h, "first"), Ok(true));
     assert!(std::fs::metadata(a.path("studio/workspace/first")).is_ok());
-    assert_eq!(plan_make(&h, true, "second"), Ok(true));
+    assert_eq!(plan_make(&h, "second"), Ok(true));
 }
 
 #[test]
@@ -43,7 +43,7 @@ fn a_name_the_allow_list_refuses_is_invalid() {
     let a = Acct::new("ws-life-invalid");
     for bad in ["", ".", "..", "a/b", " a", "a\\b", "é", "-x"] {
         assert_eq!(
-            plan_make(&a.home(), false, bad),
+            plan_make(&a.home(), bad),
             Err(WsError::Invalid { name: bad.into() }),
             "{bad:?}"
         );
@@ -65,13 +65,13 @@ fn a_name_the_allow_list_refuses_is_invalid() {
 #[test]
 fn with_no_library_on_disk_the_make_is_declined_before_the_name_is_judged() {
     let s = support::Scratch::new("ws-life-nolib");
-    let h = s.home(false);
+    let h = s.home();
     assert_eq!(
-        plan_make(&h, false, "songs"),
+        plan_make(&h, "songs"),
         Err(WsError::Declined(Declined::NoLibraries))
     );
     assert_eq!(
-        plan_make(&h, false, ".."),
+        plan_make(&h, ".."),
         Err(WsError::Declined(Declined::NoLibraries))
     );
     // A file, or a name no library may have, is not a library.
@@ -79,11 +79,11 @@ fn with_no_library_on_disk_the_make_is_declined_before_the_name_is_judged() {
     s.dir("libraries/Not-A-Name");
     s.dir("libraries/engine");
     assert_eq!(
-        plan_make(&h, false, "songs"),
+        plan_make(&h, "songs"),
         Err(WsError::Declined(Declined::NoLibraries))
     );
     s.dir("libraries/k7-core");
-    assert_eq!(plan_make(&h, false, "songs"), Ok(true));
+    assert_eq!(plan_make(&h, "songs"), Ok(true));
 }
 
 #[test]
@@ -91,7 +91,7 @@ fn a_make_of_the_other_case_is_what_the_disk_says() {
     let a = Acct::new("ws-life-case");
     make(&a.home(), "Songs").unwrap();
     let folds = std::fs::metadata(a.s.path("studio/workspace/songs")).is_ok();
-    assert_eq!(plan_make(&a.home(), false, "songs"), Ok(!folds));
+    assert_eq!(plan_make(&a.home(), "songs"), Ok(!folds));
 }
 
 #[test]

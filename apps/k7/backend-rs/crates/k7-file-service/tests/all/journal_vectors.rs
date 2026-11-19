@@ -49,7 +49,6 @@ fn names_the_store_as_history_store_for_does() {
     let home = Home {
         studio: "/h".into(),
         libraries: "/l".into(),
-        admin: false,
     };
     let rows = vectors()["store"].as_array().unwrap().clone();
     for r in &rows {
@@ -110,7 +109,7 @@ fn judges_put_file_as_the_typescripts_own_route_does_1760() {
     use k7_file_service::space::Space;
     use k7_file_service::tree::Limits;
     let s = support::Scratch::new("jv-put");
-    let home = s.home(false);
+    let home = s.home();
     let rows = vectors()["put"].as_array().unwrap().clone();
     assert!(rows.len() >= 400, "{} cases", rows.len());
     let (mut writes, mut refusals, mut declined, mut shim) = (0, 0, 0, 0);

@@ -60,11 +60,6 @@ async fn availability_and_the_binding_are_answered_from_memory() {
     let dir = scratch("mem");
     let none = real_driver(&rig.link, env_of(&dir, &[]));
     assert!(!none.renderer_available() && !none.bound());
-    let own = real_driver(
-        &rig.link,
-        env_of(&dir, &[("STUDIO_RENDER_JOBS_URL", "ws://127.0.0.1:1")]),
-    );
-    assert!(own.renderer_available() && !own.bound());
     rig.link
         .bind(&json!({ "url": rig.engine.url, "engineId": "e1", "jobsUrl": "ws://127.0.0.1:2" }));
     assert!(none.renderer_available() && none.bound());
@@ -104,22 +99,16 @@ async fn a_machines_render_is_copied_into_the_folder_and_its_staging_removed() {
 }
 
 #[tokio::test]
-async fn a_machine_that_fails_hands_the_render_to_the_next_and_a_base_folder_is_refused() {
+async fn a_machine_that_fails_answers_its_error_and_a_base_folder_is_refused() {
     let rig = Rig::new("drv-next").await;
-    let (bad, good) = (FakeJobs::start().await, FakeJobs::start().await);
+    let bad = FakeJobs::start().await;
     bad.ends(JobEnd::Error("no vst".into()));
-    good.ends(JobEnd::Rendered { stems: vec![] });
     rig.link
         .bind(&json!({ "url": rig.engine.url, "engineId": "e1", "jobsUrl": bad.url }));
     let dir = scratch("next");
-    let d = real_driver(
-        &rig.link,
-        env_of(&dir, &[("STUDIO_RENDER_JOBS_URL", &good.url)]),
-    );
-    assert_eq!(
-        run(&d, &dir.join("out"), false, None).await.unwrap()["mix"],
-        "mix.wav"
-    );
+    let d = real_driver(&rig.link, env_of(&dir, &[]));
+    let failed = run(&d, &dir.join("out"), false, None).await.unwrap_err();
+    assert!(failed.contains("no vst"), "{failed}");
     assert_eq!(bad.asked().len(), 1);
     let refused = run(&d, &dir.join("o2"), false, Some("/base"))
         .await

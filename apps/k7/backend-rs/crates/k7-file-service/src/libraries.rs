@@ -1,6 +1,5 @@
-//! libraries.rs — where a library is read from: the account's own, a pinned version, an admin's draft overlay.
+//! libraries.rs — where a library is read from: the account's own, or a pinned version.
 //! `sharedFolders.ts`' `libraryRoot` and `libraryOf`, with the names and versions of `moduleTypes.ts` and `libraryVersions.ts`.
-//! What a reader gets wrong: overlays are derived from the admin stamp and the disk at each call, never kept (1034).
 
 use std::collections::{BTreeMap, HashMap};
 use std::io::Read;
@@ -30,17 +29,16 @@ pub const RESERVED: [&str; 6] = [
     "mediatek",
 ];
 
-/// Where the account's state and libraries are, and whether the hub stamped the request an admin's.
+/// Where the account's state and libraries are.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Home {
     pub studio: String,
     pub libraries: String,
-    pub admin: bool,
 }
 
 impl Home {
     /// `studioHome()` and `librariesHome()` of the account's environment (1025).
-    pub fn of(env: &BTreeMap<String, String>, admin: bool) -> Home {
+    pub fn of(env: &BTreeMap<String, String>) -> Home {
         let get = |k: &str| env.get(k).map(String::as_str).filter(|v| !v.is_empty());
         let user = get("HOME").or_else(|| get("USERPROFILE")).unwrap_or("/");
         let default = join(&[user, ".k7"]);
@@ -49,11 +47,7 @@ impl Home {
             Some(shared) => resolve_all(&[shared]),
             None => join(&[&studio, "libraries"]),
         };
-        Home {
-            studio,
-            libraries,
-            admin,
-        }
+        Home { studio, libraries }
     }
 
     /// The account's own library, beside its workspaces.
@@ -193,20 +187,6 @@ fn version_root(home: &Home, name: &str, v: Version) -> String {
     }
 }
 
-/// Where an admin edits library `name` (1034): its draft, or the whole folder of one not laid out as versions.
-pub fn overlay_root(home: &Home, name: &str) -> Option<String> {
-    if !home.admin || !std::fs::symlink_metadata(home.library_home(name)).is_ok_and(|m| m.is_dir())
-    {
-        return None;
-    }
-    let library = home.library_home(name);
-    Some(if is_versioned(home, name) {
-        join(&[&library, "draft"])
-    } else {
-        library
-    })
-}
-
 thread_local! {
     static LIBRARY_OF_CALLS: std::cell::Cell<u64> = const { std::cell::Cell::new(0) };
 }
@@ -235,14 +215,6 @@ pub fn library_of(home: &Home, path: &str) -> Option<Library> {
     let name = segs.next().unwrap_or("");
     if !is_library_name(name) {
         return None;
-    }
-    if let Some(root) = overlay_root(home, name)
-        && !climbs_out(&relative(&root, &abs))
-    {
-        return Some(Library {
-            name: name.into(),
-            root,
-        });
     }
     let library = home.library_home(name);
     if is_versioned(home, name) {
@@ -281,5 +253,5 @@ pub fn library_root(home: &Home, name: &str, from: Option<&str>) -> Result<Strin
     if let Some(v) = pins.get(name) {
         return Ok(version_root(home, name, *v));
     }
-    Ok(overlay_root(home, name).unwrap_or_else(|| version_root(home, name, Version::Number(1))))
+    Ok(version_root(home, name, Version::Number(1)))
 }

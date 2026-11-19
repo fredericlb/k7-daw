@@ -23,7 +23,6 @@ async fn a_write_whose_client_left_still_tells_the_bundle() {
         &dir,
         Tag::Rename,
         json!({ "path": "a.txt", "name": "b.txt" }),
-        false,
         &lines,
     );
     let task = tokio::spawn(async move { routes::dispatch(H::Rename, &c).await });
@@ -56,7 +55,6 @@ async fn two_workspaces_of_one_account_write_one_at_a_time() {
         &dir,
         Tag::Rename,
         json!({ "path": "a.txt", "name": "b.txt" }),
-        false,
         &lines,
     );
     let first =
@@ -66,7 +64,6 @@ async fn two_workspaces_of_one_account_write_one_at_a_time() {
         &dir,
         Tag::Rename,
         json!({ "path": "c.txt", "name": "d.txt" }),
-        false,
         &lines,
     );
     let root = other.display().to_string();

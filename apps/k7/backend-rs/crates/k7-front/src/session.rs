@@ -91,28 +91,6 @@ pub fn https(headers: &HeaderMap, settings: &Settings) -> bool {
             .is_some_and(|p| p.split(',').next() == Some("https"))
 }
 
-/// `isAdminRequest`: a group of the session in `$AUTH_ADMIN_GROUPS`, case aside; the dev stub holds them all when `dev_admin`.
-pub fn is_admin(user: &Map<String, Value>, settings: &Settings) -> bool {
-    let admin: Vec<String> = settings
-        .admin_groups
-        .iter()
-        .map(|g| g.to_lowercase())
-        .collect();
-    if admin.is_empty() {
-        return false;
-    }
-    if settings.dev_admin && user.get("sub").and_then(Value::as_str) == Some("dev-user") {
-        return true;
-    }
-    user.get("groups")
-        .and_then(Value::as_array)
-        .is_some_and(|gs| {
-            gs.iter()
-                .filter_map(Value::as_str)
-                .any(|g| admin.contains(&g.to_lowercase()))
-        })
-}
-
 /// The signed-in user of a request, `signed_in` with the https the edge reports.
 pub fn signed(
     headers: &HeaderMap,
@@ -228,12 +206,5 @@ mod tests {
                 && first.contains("samesite=lax; httponly")
                 && !first.contains("secure")
         );
-    }
-
-    #[test]
-    fn a_device_as_the_tray_starts_it_has_no_admin() {
-        let r = settings(true);
-        assert!(r.admin_groups.is_empty() && !r.dev_admin);
-        assert!(!is_admin(&local_user(), &r));
     }
 }

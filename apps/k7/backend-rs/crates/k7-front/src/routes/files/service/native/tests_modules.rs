@@ -37,59 +37,26 @@ const MODULE: &str = "_libraries/k7-core/modules/audio/verb";
 const FX: &str = "_libraries/k7-core/modules/audio/fx";
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_library_module_moved_repoints_its_song_and_asks_the_bundle_nothing() {
+async fn a_library_module_is_not_moved_from_here_and_nothing_is_told() {
     let dir = fixture("m-move");
     let lines = Lines::default();
-    let go = |body: Value| {
-        let c = request(&dir, Tag::LibraryMove, body, true, &lines);
-        async move { text(routes::dispatch(H::LibraryMove, &c).await).await }
-    };
-    let (status, body) = go(json!({ "path": MODULE, "toDir": FX })).await;
-    assert_eq!(status, 200, "{body}");
-    let v: Value = serde_json::from_str(&body).unwrap();
-    assert_eq!(v["path"], format!("{FX}/verb"));
-    assert_eq!(v["to"], "@k7-core/audio/fx/verb");
-    assert_eq!(v["repointed"], json!(["song.k7/nodes/v.k7x"]));
-    let songs = dir.join("home/workspace/songs");
-    assert_eq!(
-        std::fs::read_to_string(songs.join("song.k7/nodes/v.k7x")).unwrap(),
-        "extends(\"@k7-core/audio/fx/verb\")\n"
-    );
-    assert_eq!(calls::of(&songs.display().to_string()), ["before", "after"]);
-    // Another library is refused in the route's words, with nothing told.
-    let (status, body) =
-        go(json!({ "path": MODULE, "toDir": "_libraries/other/modules/audio" })).await;
-    assert_eq!(status, 400, "{body}");
-    assert!(body.contains("a module stays in its library"), "{body}");
-    assert_eq!(calls::of(&songs.display().to_string()).len(), 2);
-}
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_library_move_waits_for_the_journals_gate() {
-    let dir = fixture("m-gate");
-    let lines = Lines::default();
-    let songs = dir.join("home/workspace/songs").display().to_string();
-    let held = k7_file_service::journal::Journals::global()
-        .exclusive(&k7_file_service::paths::resolve_all(&[&songs]))
-        .await;
     let c = request(
         &dir,
         Tag::LibraryMove,
         json!({ "path": MODULE, "toDir": FX }),
-        true,
         &lines,
     );
-    let task = tokio::spawn(async move { text(routes::dispatch(H::LibraryMove, &c).await).await });
-    tokio::time::sleep(Duration::from_millis(300)).await;
-    assert!(!task.is_finished(), "the move ran inside a held gate");
+    let (status, body) = text(routes::dispatch(H::LibraryMove, &c).await).await;
+    assert_eq!(status, 400, "{body}");
+    assert!(body.contains("a library is not edited from here"), "{body}");
     assert!(dir.join("libraries/k7-core/modules/audio/verb").is_dir());
-    drop(held);
-    assert_eq!(task.await.unwrap().0, 200);
+    let songs = dir.join("home/workspace/songs");
+    assert!(calls::of(&songs.display().to_string()).is_empty());
 }
 
 /// A `/module` call whose context carries the code root, as a docs-bearing route's does.
 fn module_call(dir: &std::path::Path, tag: Tag, body: Value, shared: &Lines) -> routes::Call {
-    let mut c = request(dir, tag, body, false, shared);
+    let mut c = request(dir, tag, body, shared);
     let code = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
     if let Some(n) = c.native.as_mut() {
         n.docs = Some(super::docs::Docs::of_env(&code, &Default::default()));
@@ -230,36 +197,6 @@ async fn a_node_and_a_clone_are_made_natively_in_the_open_project_and_a_node_wai
     assert!(!songs.join("song.k7/nodes/lead.k7x").exists());
     drop(held);
     assert_eq!(task.await.unwrap().0, 200);
-}
-
-// An admin's move inside a versioned library's draft lands and repoints; one into a published version is refused.
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn an_admin_moves_a_module_within_a_versioned_librarys_draft() {
-    let dir = fixture("m-draft");
-    let lib = dir.join("libraries/k7-core");
-    std::fs::create_dir_all(lib.join("draft")).unwrap();
-    std::fs::rename(lib.join("modules"), lib.join("draft/modules")).unwrap();
-    std::fs::create_dir_all(lib.join("1/modules/audio/fx/old")).unwrap();
-    std::fs::write(
-        lib.join("1/modules/audio/fx/old/module.k7x"),
-        "extends(\"@engine/reverb\")\n",
-    )
-    .unwrap();
-    let lines = Lines::default();
-    let go = |body: Value| {
-        let c = request(&dir, Tag::LibraryMove, body, true, &lines);
-        async move { text(routes::dispatch(H::LibraryMove, &c).await).await }
-    };
-    let (status, body) =
-        go(json!({ "path": MODULE, "toDir": "_libraries/k7-core/1/modules/audio/fx" })).await;
-    assert_eq!(status, 400, "{body}");
-    assert!(lib.join("draft/modules/audio/verb").is_dir(), "{body}");
-    let (status, body) = go(json!({ "path": MODULE, "toDir": FX })).await;
-    assert_eq!(status, 200, "{body}");
-    assert!(lib.join("draft/modules/audio/fx/verb/module.k7x").is_file());
-    assert!(!lib.join("draft/modules/audio/verb").exists());
-    let v: Value = serde_json::from_str(&body).unwrap();
-    assert_eq!(v["repointed"], json!(["song.k7/nodes/v.k7x"]));
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]

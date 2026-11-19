@@ -148,7 +148,7 @@ async fn repaired(p: &Proj, root: &str, plan: &k7_file_service::projects::open::
         if let Some(Ok(asked)) = asked
             && asked.active.is_some()
         {
-            site.prewarm(root, p.home.admin, asked);
+            site.prewarm(root, asked);
         }
     }
 }

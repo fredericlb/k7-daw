@@ -199,8 +199,8 @@ pub async fn bind_engine(
         return Ok(());
     }
     let roots = Value::Array(roots_for(&acct.home, &acct.slug, mediatek));
-    let path = seam.bind(Some(id), &roots, "engine", Some(true)).await?;
-    let jobs = match seam.bind(Some(id), &roots, "jobs", None).await {
+    let path = seam.bind(id, &roots, "engine", Some(true)).await?;
+    let jobs = match seam.bind(id, &roots, "jobs", None).await {
         Ok(j) => j,
         Err(e) => {
             drop_paths(seam, &acct.slug, vec![path], log).await;
@@ -268,10 +268,7 @@ pub fn write_scan_copy(plugins: &Value, file: &Path) -> std::io::Result<bool> {
 
 /// The engine's plugin list, written as `<home>/exts.json`, and again when a scan running at the bind ends.
 async fn refresh_plugins(seam: Arc<Seam>, acct: Arc<Bound>, id: String, log: Log) {
-    let Some(mut ch) = seam
-        .open(Some(&id), &json!([]), "engine", PLUGINS_TIMEOUT)
-        .await
-    else {
+    let Some(mut ch) = seam.open(&id, &json!([]), "engine", PLUGINS_TIMEOUT).await else {
         return;
     };
     let at = acct.home.join("exts.json");

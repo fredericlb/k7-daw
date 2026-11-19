@@ -43,7 +43,7 @@ async fn a_new_folder_lands_beside_its_uploaded_samples() {
             text_op("_modules/audio/eq/module.k7x", "module(1)\n"),
         ]),
     );
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(status, 200, "{ans}");
     assert_eq!(
         std::fs::read_to_string(b.ws("imp.k7/project.k7x")).unwrap(),
@@ -64,7 +64,7 @@ async fn a_name_taken_is_a_409_and_the_folder_stays() {
     std::fs::write(b.ws("imp.k7/project.k7x"), "project(2)\n").unwrap();
     b.upload("imp.k7/clips/a.wav");
     let body = b.create("imp.k7", json!([text_op("imp.k7/other.k7x", "x(1)\n")]));
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(status, 409, "{ans}");
     assert_eq!(ans["taken"], json!(true));
     assert_eq!(
@@ -89,7 +89,7 @@ async fn a_commit_that_fails_removes_the_folder_and_its_samples() {
             text_op("_modules/audio/eq/module.k7x", "module(1)\n"),
         ]),
     );
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(status, if cfg!(windows) { 404 } else { 400 }, "{ans}");
     assert!(
         !b.ws("imp.k7").exists(),
@@ -121,24 +121,24 @@ async fn a_refused_set_removes_the_new_folder_and_a_bad_name_touches_nothing() {
         ),
     ] {
         b.upload("imp.k7/clips/a.wav");
-        let (status, ans) = b.changes(false, b.create("imp.k7", ops.clone())).await;
+        let (status, ans) = b.changes(b.create("imp.k7", ops.clone())).await;
         assert_eq!(status, want, "{ops}: {ans}");
         assert!(!b.ws("imp.k7").exists(), "{ops}");
     }
     b.upload("keep/a.wav");
     for name in ["../x", "a/b", "a\\b", "_modules", ".hidden", "", ".."] {
-        let (status, ans) = b.changes(false, b.create(name, json!([]))).await;
+        let (status, ans) = b.changes(b.create(name, json!([]))).await;
         assert_eq!(status, 400, "{name}: {ans}");
     }
     // `create` is for the workspace alone: a project's `at` is refused, and the folder is not touched.
     let mut at_project = b.create("keep", json!([]));
     at_project["at"] = json!("p.k7");
-    assert_eq!(b.changes(false, at_project).await.0, 400);
+    assert_eq!(b.changes(at_project).await.0, 400);
     assert!(b.ws("keep/a.wav").exists());
     // The shared texts of an ordinary workspace set are still only the shared texts.
     let plain =
         json!({ "at": "", "base": "x", "label": "x", "ops": [text_op("imp.k7/x.k7x", "x(1)\n")] });
-    assert_eq!(b.changes(false, plain).await.0, 403);
+    assert_eq!(b.changes(plain).await.0, 403);
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 
@@ -149,17 +149,17 @@ async fn a_discard_takes_the_samples_and_spares_a_project() {
     b.upload("imp.k7/clips/a.wav");
     let mut body = b.create("imp.k7", json!([]));
     body["discard"] = json!(true);
-    let (status, ans) = b.changes(false, body.clone()).await;
+    let (status, ans) = b.changes(body.clone()).await;
     assert_eq!((status, &ans["discarded"]), (200, &json!(true)), "{ans}");
     assert!(!b.ws("imp.k7").exists());
     // The same ask on a folder that holds a project changes nothing.
     std::fs::create_dir_all(b.ws("mine.k7")).unwrap();
     std::fs::write(b.ws("mine.k7/project.k7x"), "project(2)\n").unwrap();
     body["create"] = json!("mine.k7");
-    assert_eq!(b.changes(false, body.clone()).await.0, 200);
+    assert_eq!(b.changes(body.clone()).await.0, 200);
     assert!(b.ws("mine.k7/project.k7x").exists());
     // A bad name is the same 400 as for a set, and `at` must be empty.
     body["create"] = json!("../x");
-    assert_eq!(b.changes(false, body).await.0, 400);
+    assert_eq!(b.changes(body).await.0, 400);
     let _ = std::fs::remove_dir_all(&b.dir);
 }

@@ -1,4 +1,4 @@
-//! The bench's guards: nothing is handed back once the rig was rewritten, the rig writes only into its own folder, an admin is declined before any write.
+//! The bench's guards: nothing is handed back once the rig was rewritten, the rig writes only into its own folder.
 
 use std::collections::BTreeMap;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -24,7 +24,6 @@ fn world(name: &str) -> (Scratch, Home) {
     let home = Home {
         studio: s.path("home"),
         libraries: s.path("libraries"),
-        admin: false,
     };
     (s, home)
 }
@@ -64,17 +63,6 @@ fn a_decline_after_the_rewrite_is_a_refusal_and_the_next_open_splices() {
     assert!(!std::path::Path::new(&s.path("home/workspace/Banc/bench-source.json")).exists());
     assert!(open(&home, chain, true).0.is_ok());
     assert!(std::fs::read_to_string(&graph).unwrap().contains("verb"));
-}
-
-// An admin is declined before anything is written.
-#[test]
-fn an_admin_is_declined_and_nothing_is_written() {
-    let (s, mut home) = world("eb-admin");
-    home.admin = true;
-    let (done, wrote) = open(&home, "@k7-core/solo/live.k7", true);
-    assert!(matches!(done, Err(BenchError::Declined(_))), "{done:?}");
-    assert!(!wrote);
-    assert!(!std::path::Path::new(&s.path("home/workspace/Banc/live.k7")).exists());
 }
 
 // The rig's disk reads the libraries and writes only into the bench's folder.

@@ -67,7 +67,7 @@ fn equal_inputs_answer_one_token_and_the_memo_takes_no_walk() {
     // 1310, 1320
     let (s, root, dir) = project("revs-same");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let first = m.token(&h, &root, Some(&dir), false);
     for _ in 0..5 {
         assert_eq!(m.token(&h, &root, Some(&dir), false), first);
@@ -80,7 +80,7 @@ fn equal_inputs_answer_one_token_and_the_memo_takes_no_walk() {
 fn a_moved_feed_walks_and_a_changed_project_takes_a_new_token() {
     let (s, root, dir) = project("revs-moved");
     let (m, f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let first = m.token(&h, &root, Some(&dir), false);
     s.file("ws/p.k7/graph.k7x", "b");
     // Nothing heard: the memo answers, and the edit waits for the feed or the ceiling.
@@ -100,7 +100,7 @@ fn a_rename_moves_the_token() {
     // 1311
     let (s, root, dir) = project("revs-rename");
     let (m, f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let first = m.token(&h, &root, Some(&dir), false);
     std::fs::rename(s.path("ws/p.k7/main.k7x"), s.path("ws/p.k7/other.k7x")).unwrap();
     f.tick.fetch_add(1, Ordering::Relaxed);
@@ -112,7 +112,7 @@ fn a_bump_moves_the_token_and_the_next_ask_walks() {
     // 1306
     let (s, root, dir) = project("revs-bump");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let first = m.token(&h, &root, Some(&dir), false);
     m.bump(&root);
     let second = m.token(&h, &root, Some(&dir), false);
@@ -125,7 +125,7 @@ fn a_fresh_ask_walks_and_never_answers_from_the_memo() {
     // 1305: an `after` taken inside a mutation sees the write the watcher has not reported yet
     let (s, root, dir) = project("revs-fresh");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let before = m.token(&h, &root, Some(&dir), true);
     s.file("ws/p.k7/graph.k7x", "b");
     let after = m.token(&h, &root, Some(&dir), true);
@@ -137,7 +137,7 @@ fn a_fresh_ask_walks_and_never_answers_from_the_memo() {
 fn no_active_project_is_none_and_follows_the_mutations() {
     let (s, root, _dir) = project("revs-none");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let a = m.token(&h, &root, None, false);
     assert!(a.starts_with("none:"));
     assert_eq!(m.token(&h, &root, None, false), a);
@@ -152,7 +152,7 @@ fn an_event_landing_during_the_walk_is_not_absorbed() {
     let (s, root, dir) = project("revs-midwalk");
     let (m, f) = memo();
     f.chatty.store(true, Ordering::Relaxed);
-    let h = s.home(false);
+    let h = s.home();
     m.token(&h, &root, Some(&dir), false);
     m.token(&h, &root, Some(&dir), false);
     assert_eq!(m.walks(), 2);
@@ -163,7 +163,7 @@ fn a_feed_that_loses_every_event_is_found_by_the_ceiling() {
     // 1321: moved within 10 s, `missed` counted
     let (s, root, dir) = project("revs-lossy");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let first = m.token(&h, &root, Some(&dir), false);
     s.file("ws/p.k7/graph.k7x", "b");
     advance(5);
@@ -184,7 +184,7 @@ fn a_feed_that_is_down_walks_at_every_ask() {
     let (s, root, dir) = project("revs-down");
     let (m, f) = memo();
     f.down.store(true, Ordering::Relaxed);
-    let h = s.home(false);
+    let h = s.home();
     let first = m.token(&h, &root, Some(&dir), false);
     for _ in 0..4 {
         assert_eq!(m.token(&h, &root, Some(&dir), false), first);
@@ -200,7 +200,7 @@ fn another_project_walks_and_a_walk_past_a_limit_never_repeats() {
     s.file(&format!("ws/deep.k7/{}x.k7x", "d/".repeat(300)), "");
     let (root, a, deep) = (s.path("ws"), s.path("ws/a.k7"), s.path("ws/deep.k7"));
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let ta = m.token(&h, &root, Some(&a), false);
     let t1 = m.token(&h, &root, Some(&deep), false);
     let t2 = m.token(&h, &root, Some(&deep), false);
@@ -215,7 +215,7 @@ fn a_thousand_asks_from_eight_threads_make_one_walk_and_one_token() {
     // 1315
     let (s, root, dir) = project("revs-threads");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let tokens: Vec<Vec<String>> = std::thread::scope(|scope| {
         let hs: Vec<_> = (0..8)
             .map(|_| {
@@ -238,7 +238,7 @@ fn sixty_five_roots_asked_in_turn_leave_the_oldest_unwatched() {
     // 1325
     let s = Scratch::new("revs-many");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let mut tokens = Vec::new();
     let mut roots = Vec::new();
     for i in 0..=MAX_WATCHED {
@@ -265,7 +265,7 @@ fn a_root_idle_for_fifteen_minutes_is_unwatched() {
     s.file("a/p.k7/x.k7x", "");
     s.file("b/p.k7/x.k7x", "");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     m.token(&h, &s.path("a"), Some(&s.path("a/p.k7")), false);
     advance(16 * 60);
     m.token(&h, &s.path("b"), Some(&s.path("b/p.k7")), false);
@@ -277,7 +277,7 @@ fn a_forgotten_root_asked_again_takes_a_token_never_given_before() {
     // 1325: the epoch is the process's
     let (s, root, dir) = project("revs-forget");
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let first = m.token(&h, &root, Some(&dir), false);
     m.forget(&root);
     assert!(!m.is_watched(&root));
@@ -293,7 +293,7 @@ fn a_removal_forgets_every_root_below_the_account_s_workspaces_and_no_other() {
         s.file(&format!("{ws}/p.k7/x.k7x"), "");
     }
     let (m, _f) = memo();
-    let h = s.home(false);
+    let h = s.home();
     let ask = |ws: &str| m.token(&h, &s.path(ws), Some(&s.path(&format!("{ws}/p.k7"))), false);
     let before: Vec<String> = ["home/workspace/a", "home/workspace/b", "other/c"]
         .map(ask)

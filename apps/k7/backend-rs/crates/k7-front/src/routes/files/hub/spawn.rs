@@ -1,5 +1,5 @@
 //! spawn.rs — what the hub is built from and launched with: the accounts' and the libraries' environments (the
-//! account's own values, the sync target, the render machine, the media's bearer), the libraries' runtime, a server's cut
+//! account's own values, the sync target, the media's bearer), the libraries' runtime, a server's cut
 //! context and the caches' sweep. Choices: `docs/files.md`.
 
 use std::collections::{BTreeMap, HashMap};
@@ -99,20 +99,12 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
         let slug = k7_hub::account::account_key(user);
         (slug.clone(), root.join(slug))
     }));
-    let (s, r, t) = (seam.clone(), data_root.clone(), service_tokens.clone());
+    let (r, t) = (data_root.clone(), service_tokens.clone());
     let (m, api) = (mediatek_root.clone(), settings.api_token_secret.clone());
-    let paths: Arc<Mutex<HashMap<String, String>>> = Arc::default();
     // Every account is the front's where it has a code root, and it captures.
     let beside = super::super::service::code_root(env).is_some();
     files.env = Arc::new(move |slug, user| {
-        let (s, r, t, m, api, paths) = (
-            s.clone(),
-            r.clone(),
-            t.clone(),
-            m.clone(),
-            api.clone(),
-            paths.clone(),
-        );
+        let (r, t, m, api) = (r.clone(), t.clone(), m.clone(), api.clone());
         Box::pin(async move {
             let mut env = BTreeMap::new();
             env.insert(
@@ -126,9 +118,6 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
             // The account's capture is the front's: no workspace joins a relay.
             if beside {
                 env.insert(super::super::service::FRONT_CAPTURE.into(), "1".into());
-            }
-            if let Some(url) = render_target(&s, &r, &slug, &m, &paths).await {
-                env.insert("STUDIO_RENDER_JOBS_URL".into(), url);
             }
             env.insert("STUDIO_MEDIATEK".into(), m.display().to_string());
             env.insert("MEDIATEK_URL".into(), format!("http://127.0.0.1:{port}"));
@@ -191,42 +180,6 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
         started: OnceLock::new(),
         tasks: Mutex::new(Vec::new()),
     }
-}
-
-/// Where an account's service renders when it has no engine and no bound machine: the deployment's render machine.
-async fn render_target(
-    seam: &Arc<k7_hub::seam::Seam>,
-    data_root: &Path,
-    slug: &str,
-    mediatek: &Path,
-    paths: &Mutex<HashMap<String, String>>,
-) -> Option<String> {
-    let hub = seam.hub().await.ok()?;
-    if hub.get("rendersEnabled") != Some(&Value::Bool(true)) {
-        return None;
-    }
-    let known = paths
-        .lock()
-        .unwrap_or_else(|p| p.into_inner())
-        .get(slug)
-        .cloned();
-    let path = match known {
-        Some(p) => p,
-        None => {
-            let roots = Value::Array(k7_hub::binding::roots_for(
-                &data_root.join(slug),
-                slug,
-                Some(mediatek),
-            ));
-            let p = seam.bind(None, &roots, "jobs", None).await.ok()?;
-            paths
-                .lock()
-                .unwrap_or_else(|p| p.into_inner())
-                .insert(slug.to_string(), p.clone());
-            p
-        }
-    };
-    Some(seam.ws_url(&path))
 }
 
 /// The libraries made and watched until their first `ensure` settles; the local user warmed.

@@ -43,7 +43,7 @@ impl World {
                 s.file(p, t);
             }
         }
-        let home = s.home(false);
+        let home = s.home();
         let bench = s.path("studio/workspace/Banc/live.k7");
         let repo = repo();
         let mut libraries = vec![Library {

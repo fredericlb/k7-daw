@@ -1,9 +1,8 @@
 //! thawed.rs — the modules a person is editing, left live per project folder, in the order they were thawed (2310), and what the
-//! interactive asks tell the freezer: the last admin stamp (APPROVED, review B3 decisions 1 and 2).
+//! interactive asks tell the freezer.
 //! What a reader gets wrong: the key is `resolve(dir)` as node spelled it, and the order is what 1o's compile key hashes (1505).
 
 use std::collections::HashMap;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Mutex, PoisonError};
 
 use k7_file_service::paths::resolve_all;
@@ -12,21 +11,11 @@ use k7_file_service::paths::resolve_all;
 #[derive(Default)]
 pub struct Thawed {
     folders: Mutex<HashMap<String, Vec<String>>>,
-    admin: AtomicBool,
 }
 
 impl Thawed {
     fn dirs(&self) -> std::sync::MutexGuard<'_, HashMap<String, Vec<String>>> {
         self.folders.lock().unwrap_or_else(PoisonError::into_inner)
-    }
-
-    /// The stamp of the last request that came with one, as the TypeScript's `followAdmin` keeps it.
-    pub fn note_admin(&self, admin: bool) {
-        self.admin.store(admin, Ordering::Relaxed);
-    }
-
-    pub fn admin(&self) -> bool {
-        self.admin.load(Ordering::Relaxed)
     }
 
     /// The modules left live in `dir`, first thawed first.
@@ -115,14 +104,5 @@ mod tests {
             h.join().unwrap();
         }
         assert_eq!(t.of("/p").len(), 200);
-    }
-
-    // What the freezer's compile reads of the interactive asks: the failed builds as the last ask left them, and the admin stamp.
-    #[test]
-    fn the_freezer_reads_what_the_last_interactive_ask_left() {
-        let t = Thawed::default();
-        assert!(!t.admin());
-        t.note_admin(true);
-        assert!(t.admin());
     }
 }

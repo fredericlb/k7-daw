@@ -23,7 +23,7 @@ fn a_thousand_recycles_of_one_name_find_the_bins_one_thousandth() {
     }
     let h = a.home();
     let disk = Counting::default();
-    let plan = plan_recycle(&Space::open(&h, &root), false, "a.k7", &disk).unwrap();
+    let plan = plan_recycle(&Space::open(&h, &root), "a.k7", &disk).unwrap();
     assert_eq!(plan.answer, r#"{"recycled":"_recycle_bin/a.k7-1000"}"#);
     // One probe per name tried, and the gate's own, never one per name already seen twice.
     let exists = disk.exists.load(std::sync::atomic::Ordering::Relaxed);
@@ -47,7 +47,7 @@ fn a_rename_is_one_call_whatever_the_folder_holds() {
     }
     let h = a.home();
     let disk = Counting::default();
-    let plan = plan_rename(&Space::open(&h, &root), false, "a.k7", "b.k7", &disk)
+    let plan = plan_rename(&Space::open(&h, &root), "a.k7", "b.k7", &disk)
         .unwrap()
         .unwrap();
     assert!(disk.total() < 40, "{} probes", disk.total());
@@ -96,7 +96,7 @@ fn the_spelling_lookup_reads_the_folders_it_names_counted_and_bounded() {
         a.s.dir(&format!("studio/workspace/songs/crowd{n}/p.k7"));
         let (h, disk) = (a.home(), Counting::default());
         let rel = format!("crowd{n}/p.k7");
-        plan_rename(&Space::open(&h, &root), false, &rel, "q.k7", &disk).unwrap();
+        plan_rename(&Space::open(&h, &root), &rel, "q.k7", &disk).unwrap();
         (disk.spells.load(Relaxed), disk.read.load(Relaxed))
     };
     let ((spells, small), (spells_big, large)) = (reads(10), reads(40));
@@ -108,13 +108,7 @@ fn the_spelling_lookup_reads_the_folders_it_names_counted_and_bounded() {
     );
     let (h, disk) = (a.home(), Counting::default());
     disk.cap.store(20, Relaxed);
-    let declined = plan_rename(
-        &Space::open(&h, &root),
-        false,
-        "crowd40/p.k7",
-        "q.k7",
-        &disk,
-    );
+    let declined = plan_rename(&Space::open(&h, &root), "crowd40/p.k7", "q.k7", &disk);
     assert!(
         matches!(
             declined,

@@ -71,7 +71,6 @@ pub const STUDIO: &[&str] = &[
     "STUDIO_MODELS",
     "STUDIO_PARSE_CACHE",
     "STUDIO_RENDER_DEBUG",
-    "STUDIO_RENDER_JOBS_URL",
     "STUDIO_RENDER_TRACE",
     "STUDIO_WHISPER_MODEL",
     "FFMPEG_BIN",
@@ -114,7 +113,6 @@ mod tests {
             ("OIDC_CLIENT_SECRET", "s"),
             ("STUDIO_SYNC_TOKEN", "s"),
             ("K7_TOKEN", "s"),
-            ("STUDIO_RENDER_KEY", "s"),
         ];
         let out = service_env(parent);
         assert_eq!(

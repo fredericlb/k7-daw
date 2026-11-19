@@ -145,10 +145,10 @@ mod tests {
     #[tokio::test]
     async fn settles_on_the_last_reply_of_its_own_id_and_refuses_on_an_error() {
         let core = core();
-        let mut agent = agent(&core, "e1", false).await;
+        let mut agent = agent(&core, "e1").await;
         let reach = Reach(&core);
         let mut link = reach
-            .open(Some("e1"), vec![], Kind::Jobs, Duration::from_secs(1))
+            .open("e1", vec![], Kind::Jobs, Duration::from_secs(1))
             .await
             .unwrap()
             .unwrap();

@@ -12,7 +12,7 @@ use serde_json::Value;
 use support::{Scratch, can_link, link, link_file};
 
 fn run(s: &Scratch, which: Listing, limits: &Limits) -> Result<Listed, Declined> {
-    let h = s.home(false);
+    let h = s.home();
     s.dir("ws");
     list(
         &Space::open(&h, &s.path("ws")),
@@ -49,7 +49,7 @@ fn the_libraries_are_the_named_folders_sorted_and_a_link_is_none() {
         link(&s.path("elsewhere"), &s.path("libraries/linked")).unwrap();
     }
     // 1415: a dirent's type decides, no link is followed, and a reserved or ill-spelt name is none.
-    assert_eq!(library_names(&s.home(false)), ["k7-core", "ok-2", "zed"]);
+    assert_eq!(library_names(&s.home()), ["k7-core", "ok-2", "zed"]);
 }
 
 #[test]
@@ -58,7 +58,7 @@ fn the_account_library_comes_first_and_only_a_family_that_exists_is_a_root() {
     s.dir("studio/library/chains");
     s.dir("libraries/k7-core/chains");
     s.dir("libraries/zed/modules");
-    let h = s.home(false);
+    let h = s.home();
     let libs = account_libraries(&h, None).unwrap();
     let roots = family_roots(&h, &libs, "chains");
     let names: Vec<&str> = roots.iter().map(|r| r.name.as_str()).collect();

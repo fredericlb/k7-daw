@@ -1,4 +1,4 @@
-//! The bench and the slot's guards at the front: an admin and an empty libraries home are handed back untouched, the bench waits for the journal's gate, the hub's ask is native.
+//! The bench and the slot's guards at the front: an empty libraries home is handed back untouched, the bench waits for the journal's gate, the hub's ask is native.
 
 use std::time::Duration;
 
@@ -6,13 +6,7 @@ use super::bench::slot_for_hub;
 use super::tests_bench::{bench_file, fixture, run_in};
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn an_admin_and_a_machine_with_no_library_are_handed_back_with_nothing_written() {
-    let dir = fixture("b-decline", true);
-    let mut run = run_in(&dir);
-    run.home.admin = true;
-    assert!(run.bench("@k7-core/solo/live.k7").await.is_none());
-    assert!(run.slot("@k7-core/solo").await.is_none());
-    assert!(!dir.join("home/workspace/Banc/live.k7").exists());
+async fn a_machine_with_no_library_is_handed_back_with_nothing_written() {
     let bare = fixture("b-nolib", true);
     std::fs::remove_dir_all(bare.join("libraries/k7-core")).unwrap();
     let run = run_in(&bare);

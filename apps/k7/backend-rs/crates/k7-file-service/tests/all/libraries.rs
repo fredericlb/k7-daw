@@ -69,25 +69,25 @@ fn a_home_is_the_accounts_environment_spelt_with_slashes() {
             .map(|(k, v)| (k.to_string(), v.to_string()))
             .collect::<BTreeMap<_, _>>()
     };
-    let h = Home::of(&env(&[("STUDIO_HOME", "/data/k7/"), ("HOME", "/h")]), true);
+    let h = Home::of(&env(&[("STUDIO_HOME", "/data/k7/"), ("HOME", "/h")]));
     assert_eq!(
-        (h.studio.as_str(), h.libraries.as_str(), h.admin),
-        ("/data/k7", "/data/k7/libraries", true)
+        (h.studio.as_str(), h.libraries.as_str()),
+        ("/data/k7", "/data/k7/libraries")
     );
-    let h = Home::of(
-        &env(&[("HOME", "/home/me"), ("STUDIO_LIBRARIES_HOME", "/hub/libs")]),
-        false,
-    );
+    let h = Home::of(&env(&[
+        ("HOME", "/home/me"),
+        ("STUDIO_LIBRARIES_HOME", "/hub/libs"),
+    ]));
     assert_eq!(
         (h.studio.as_str(), h.libraries.as_str()),
         ("/home/me/.k7", "/hub/libs")
     );
-    let h = Home::of(&env(&[("STUDIO_HOME", "C:\\Users\\me\\k7")]), false);
+    let h = Home::of(&env(&[("STUDIO_HOME", "C:\\Users\\me\\k7")]));
     assert_eq!(
         (h.studio.as_str(), h.libraries.as_str()),
         ("C:/Users/me/k7", "C:/Users/me/k7/libraries")
     );
-    assert_eq!(Home::of(&env(&[]), false).studio, "/.k7");
+    assert_eq!(Home::of(&env(&[])).studio, "/.k7");
 }
 
 #[test]
@@ -153,7 +153,7 @@ fn a_big_pins_file_is_read_whole_and_fast() {
 fn a_pin_names_own_keys_only() {
     // 1032: the TypeScript's `name in pins` is true for a prototype's key; here a name is pinned or it is not.
     let s = Scratch::new("pins-own");
-    let h = s.home(false);
+    let h = s.home();
     s.dir("libraries/constructor");
     s.dir("w");
     assert_eq!(
@@ -165,7 +165,7 @@ fn a_pin_names_own_keys_only() {
 #[test]
 fn a_library_root_is_decided_in_the_typescripts_order() {
     let s = Scratch::new("order");
-    let (h, admin) = (s.home(false), s.home(true));
+    let h = s.home();
     let lib = |n: &str| format!("{}/{n}", h.libraries);
     s.dir("libraries/versioned/1");
     s.dir("libraries/versioned/2");
@@ -194,21 +194,12 @@ fn a_library_root_is_decided_in_the_typescripts_order() {
         library_root(&h, "drafted", Some(&from)).unwrap(),
         format!("{}/draft", lib("drafted"))
     );
-    // No pin: version 1, or an admin's draft overlay.
+    // No pin: version 1.
     assert_eq!(
         library_root(&h, "versioned", None).unwrap(),
         format!("{}/1", lib("versioned"))
     );
-    assert_eq!(
-        library_root(&admin, "versioned", None).unwrap(),
-        format!("{}/draft", lib("versioned"))
-    );
-    assert_eq!(library_root(&admin, "flat", None).unwrap(), lib("flat"));
-    // The pin outranks the overlay.
-    assert_eq!(
-        library_root(&admin, "versioned", Some(&from)).unwrap(),
-        format!("{}/2", lib("versioned"))
-    );
+    assert_eq!(library_root(&h, "flat", None).unwrap(), lib("flat"));
     // Standing inside a version of the library, that version.
     s.dir("w2");
     let inside = format!("{}/1/modules", lib("versioned"));
@@ -221,7 +212,7 @@ fn a_library_root_is_decided_in_the_typescripts_order() {
 #[test]
 fn a_library_is_found_from_a_path_without_a_search() {
     let s = Scratch::new("of");
-    let (h, admin) = (s.home(false), s.home(true));
+    let h = s.home();
     let lib = |n: &str| format!("{}/{n}", h.libraries);
     s.dir("libraries/versioned/1/x");
     s.dir("libraries/versioned/draft");
@@ -252,14 +243,10 @@ fn a_library_is_found_from_a_path_without_a_search() {
         l(&h, &format!("{}/x", lib("flat"))),
         Some(("flat".into(), lib("flat")))
     );
-    // An admin's overlay answers for a path in the draft; the published version still answers to itself.
+    // A path in the draft folder answers to the draft.
     assert_eq!(
-        l(&admin, &format!("{}/draft/f", lib("versioned"))),
+        l(&h, &format!("{}/draft/f", lib("versioned"))),
         Some(("versioned".into(), format!("{}/draft", lib("versioned"))))
-    );
-    assert_eq!(
-        l(&admin, &format!("{}/1/x", lib("versioned"))),
-        Some(("versioned".into(), format!("{}/1", lib("versioned"))))
     );
     for no in [
         h.libraries.clone(),
@@ -274,7 +261,7 @@ fn a_library_is_found_from_a_path_without_a_search() {
 #[test]
 fn a_library_with_no_version_folders_and_one_with_two_thousand_cost_one_listing() {
     let s = Scratch::new("many");
-    let h = s.home(false);
+    let h = s.home();
     s.dir("libraries/flat/modules");
     let many = s.dir("libraries/many");
     for i in 1..=2_000 {
@@ -298,7 +285,7 @@ fn a_library_with_no_version_folders_and_one_with_two_thousand_cost_one_listing(
 #[test]
 fn the_account_s_folder_answers_before_a_pin() {
     let s = Scratch::new("account-first");
-    let h = s.home(false);
+    let h = s.home();
     s.file("w/_library-pins.k7x", "account(3)\n");
     assert_eq!(
         library_root(&h, "account", Some(&s.path("w"))).unwrap(),

@@ -35,7 +35,6 @@ fn tickets_minted_and_read_as_the_typescript_does() {
         let minted = k7_hub::ticket::mint(
             s(&c["key"]).as_bytes(),
             s(&c["user"]),
-            c["admin"].as_bool().unwrap(),
             c["now"].as_f64().unwrap(),
             c["ttl"].as_f64().unwrap(),
         );
@@ -52,7 +51,6 @@ fn tickets_minted_and_read_as_the_typescript_does() {
             None => assert!(want.is_null(), "{c}"),
             Some(t) => {
                 assert_eq!(t.user, s(&want["user"]), "{c}");
-                assert_eq!(t.admin, want["admin"].as_bool().unwrap(), "{c}");
                 assert_eq!(t.engine_id.as_deref(), want["engineId"].as_str(), "{c}");
             }
         }

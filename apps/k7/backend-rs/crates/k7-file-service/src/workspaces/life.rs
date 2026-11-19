@@ -25,7 +25,7 @@ fn has_library(home: &Home) -> bool {
 }
 
 /// `createWorkspace` judged: whether it would be created. No library on disk is declined (1662), whose refusal asks the hub.
-pub fn plan_make(home: &Home, _admin: bool, name: &str) -> Result<bool, WsError> {
+pub fn plan_make(home: &Home, name: &str) -> Result<bool, WsError> {
     if !has_library(home) {
         return Err(Declined::NoLibraries.into());
     }

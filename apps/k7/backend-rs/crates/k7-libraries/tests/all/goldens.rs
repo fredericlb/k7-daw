@@ -145,7 +145,6 @@ async fn route_scenario(sc: &Value) -> (Root, Vec<Value>) {
             path,
             query,
             secret: Some(SECRET),
-            admin: s["admin"] == json!(true),
             body: &body,
         };
         let r = svc.answer(&req).await;
@@ -203,5 +202,5 @@ async fn every_scenario_of_the_typescript_replays() {
         assert_eq!(root.dump(), want_tree, "{name}: the tree left behind");
         ran += 1;
     }
-    assert!(ran >= 17, "{ran} scenarios");
+    assert!(ran >= 16, "{ran} scenarios");
 }

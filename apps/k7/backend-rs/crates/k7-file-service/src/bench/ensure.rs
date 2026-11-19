@@ -51,22 +51,16 @@ fn refused<T>(e: impl ToString) -> Result<T, BenchError> {
 /// The bench `project` names: made fresh, unless it holds that chain already with edits not saved.
 ///
 /// # Errors
-/// `Declined` where the route is refused (an admin, no library, no pins), only before the first write, which sets `wrote`;
+/// `Declined` where the route is refused (no library, no pins), only before the first write, which sets `wrote`;
 /// `Refused` with the sentence of a chain that cannot be played, or of one that could not be made after the rig was rewritten.
 pub fn ensure_bench(libs: &Libs<'_>, project: &str, wrote: &AtomicBool) -> Result<(), BenchError> {
     let Some(chain) = bench_chain_of(project) else {
         return refused(format!("'{project}' is no bench"));
     };
     if let Some(c) = chain.as_deref().filter(|c| is_bare_library(c)) {
-        return refused(format!(
-            "'{c}' is a library, not a chain — an admin edits it from any project"
-        ));
+        return refused(format!("'{c}' is a library, not a chain"));
     }
     let home = libs.home;
-    // A draft overlay and a machine with no library are refused with a sentence (4-7).
-    if home.admin {
-        return Err(Declined::WouldThrow.into());
-    }
     if library_names(home).is_empty() {
         return Err(Declined::NoLibraries.into());
     }

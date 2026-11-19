@@ -36,55 +36,43 @@ fn shared_modules_is_a_segment_by_either_separator() {
 }
 
 #[test]
-fn only_an_admin_s_draft_and_the_account_library_are_writable() {
+fn only_the_account_library_is_writable() {
     let fx = Fx::new("g-writable");
-    let user = fx.s.home(false);
-    let admin = fx.s.home(true);
+    let user = fx.s.home();
     let at = fx.lib("modules/audio/verb");
-    let (u, a) = (Space::open(&user, &fx.root), Space::open(&admin, &fx.root));
+    let u = Space::open(&user, &fx.root);
     let lib = library_of(&user, &at).unwrap();
-    assert!(!library_writable(&u, &lib));
-    assert!(library_writable(&a, &library_of(&admin, &at).unwrap()));
+    assert!(!library_writable(&lib));
     let account = Library {
         name: "account".into(),
         root: user.account_home(),
     };
-    assert!(library_writable(&u, &account));
+    assert!(library_writable(&account));
     assert_eq!(
         refused(assert_library_writable(&u, &at, "rename")),
-        "can't rename '_libraries/k7-core/modules/audio/verb': only the origin's admins edit a library"
+        "can't rename '_libraries/k7-core/modules/audio/verb': a library is not edited from here"
     );
-    assert!(assert_library_writable(&a, &at, "rename").is_ok());
     // A workspace path is no library's.
     assert!(assert_library_writable(&u, &fx.at("song.k7/clips"), "rename").is_ok());
 }
 
 #[test]
-fn a_published_version_never_changes_even_for_an_admin() {
+fn a_published_version_never_changes() {
     let fx = Fx::new("g-version");
     fx.s.file("libraries/drums/1/modules/a/module.k7x", "x");
-    fx.s.dir("libraries/drums/draft/modules");
-    let admin = fx.s.home(true);
-    let space = Space::open(&admin, &fx.root);
+    let home = fx.s.home();
+    let space = Space::open(&home, &fx.root);
     let published = fx.s.path("libraries/drums/1/modules/a");
     assert_eq!(
         refused(assert_library_writable(&space, &published, "delete")),
-        "can't delete '_libraries/drums/modules/a': a published version never changes — edit the draft"
-    );
-    assert!(
-        assert_library_writable(
-            &space,
-            &fx.s.path("libraries/drums/draft/modules"),
-            "delete"
-        )
-        .is_ok()
+        "can't delete '_libraries/drums/modules/a': a library is not edited from here"
     );
 }
 
 #[test]
 fn the_shared_modules_folder_is_refused_after_the_library_rule() {
     let fx = Fx::new("g-shared");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     assert_eq!(
         refused(guard_shared(
@@ -100,7 +88,7 @@ fn the_shared_modules_folder_is_refused_after_the_library_rule() {
 #[test]
 fn the_bin_is_the_workspace_s_own_and_a_drive_root_folds_its_case() {
     let fx = Fx::new("g-bin");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     assert!(is_recycled(&space, &fx.at("_recycle_bin")));
     assert!(is_recycled(&space, &fx.at("_recycle_bin/a/b")));
@@ -108,7 +96,6 @@ fn the_bin_is_the_workspace_s_own_and_a_drive_root_folds_its_case() {
     let posix = k7_file_service::libraries::Home {
         studio: "/srv/studio".into(),
         libraries: "/srv/libs".into(),
-        admin: false,
     };
     let p = Space::open(&posix, "/srv/songs");
     assert!(is_recycled(&p, "/srv/songs/_recycle_bin/a"));
@@ -119,7 +106,7 @@ fn the_bin_is_the_workspace_s_own_and_a_drive_root_folds_its_case() {
     assert!(!is_recycled(&space, &fx.at("my_recycle_bin")));
     // A library's bin is not "recycled" in the TypeScript either.
     assert!(!is_recycled(&space, &fx.lib("_recycle_bin/x")));
-    let drive = drive_home(false);
+    let drive = drive_home();
     let c = Space::open(&drive, "C:/Work/songs");
     assert!(is_recycled(&c, "c:/work/songs/_RECYCLE_BIN/x"));
     assert!(!is_recycled(&c, "C:/Work/songs/_recycle_bins"));
@@ -128,12 +115,12 @@ fn the_bin_is_the_workspace_s_own_and_a_drive_root_folds_its_case() {
 #[test]
 fn guard_mutable_refuses_in_the_typescript_s_order() {
     let fx = Fx::new("g-mutable");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     let active = fx.at("song.k7");
     let run = |abs: &str, verb: &str| refused(guard_mutable(&space, Some(&active), abs, verb));
     assert_eq!(run(&fx.root, "rename"), "can't rename the workspace root");
-    let lib_say = "the libraries are listed by the admins, not moved from a workspace";
+    let lib_say = "the libraries are listed, not moved from a workspace";
     assert_eq!(
         run(&h.libraries, "move"),
         format!("can't move '../../../libraries': {lib_say}")
@@ -145,7 +132,7 @@ fn guard_mutable_refuses_in_the_typescript_s_order() {
     // A library entry the account may not write: the library rule before the bin's and the project's.
     assert_eq!(
         run(&fx.lib("modules"), "rename"),
-        "can't rename '_libraries/k7-core/modules': only the origin's admins edit a library"
+        "can't rename '_libraries/k7-core/modules': a library is not edited from here"
     );
     assert_eq!(
         run(&fx.at("_modules/x"), "move"),
@@ -174,7 +161,7 @@ fn guard_mutable_refuses_in_the_typescript_s_order() {
 
 #[test]
 fn a_drive_root_guards_as_the_shim_does() {
-    let drive = drive_home(false);
+    let drive = drive_home();
     let space = Space::open(&drive, "C:/Work/songs");
     let active = "C:/Work/songs/Song.k7";
     assert_eq!(
@@ -201,14 +188,14 @@ fn a_drive_root_guards_as_the_shim_does() {
     );
     assert_eq!(
         refused(guard_mutable(&space, None, "C:/Work/libs", "move")),
-        "can't move '../libs': the libraries are listed by the admins, not moved from a workspace"
+        "can't move '../libs': the libraries are listed, not moved from a workspace"
     );
 }
 
 #[test]
 fn a_library_path_answers_to_its_virtual_folder_and_a_module_to_its_ref() {
     let fx = Fx::new("g-ref");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     let verb = fx.lib("modules/audio/verb");
     let lib = library_of(&h, &verb).unwrap();

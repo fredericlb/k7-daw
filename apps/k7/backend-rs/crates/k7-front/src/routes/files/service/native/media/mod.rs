@@ -99,7 +99,7 @@ impl Config {
     pub fn of(env: &BTreeMap<String, String>, code_root: &std::path::Path) -> Config {
         Config {
             env: env.clone(),
-            studio_home: k7_file_service::libraries::Home::of(env, false).studio,
+            studio_home: k7_file_service::libraries::Home::of(env).studio,
             engine: crate::routes::files::service::machine::engine_binary(
                 env.get("STUDIO_ENGINE").map(String::as_str),
                 code_root,

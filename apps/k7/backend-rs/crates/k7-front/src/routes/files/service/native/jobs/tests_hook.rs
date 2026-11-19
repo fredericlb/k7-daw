@@ -54,7 +54,6 @@ async fn front(tag: &str) -> Front {
 type Outcome = Result<(u16, Value), Vec<u8>>;
 
 struct Ask<'a> {
-    admin: bool,
     user: &'a str,
     workspace: Option<&'a str>,
 }
@@ -62,7 +61,6 @@ struct Ask<'a> {
 impl Default for Ask<'_> {
     fn default() -> Self {
         Ask {
-            admin: false,
             user: "a@b.c",
             workspace: Some("songs"),
         }
@@ -74,7 +72,6 @@ impl Front {
         let who = Who {
             held: &self.held,
             user: o.user,
-            admin: o.admin,
             device: false,
             log: &self.log,
             code_root: None,
@@ -176,23 +173,4 @@ async fn the_workspace_is_judged_before_the_fields() {
     };
     let r = f.ask(other, "POST", "/auto-freeze/thaw", body).await;
     assert_eq!(r.as_ref().map(|(s, _)| *s), Ok(403), "{r:?}");
-}
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn the_hubs_admin_stamp_reaches_the_one_flag() {
-    let f = front("hook-admin").await;
-    let jobs = f.held.engine.as_ref().unwrap().jobs.get().unwrap().clone();
-    assert!(!jobs.thawed.admin());
-    let path = "/plugin-params?format=VST3&id=u1";
-    let admin = Ask {
-        admin: true,
-        ..Ask::default()
-    };
-    f.ask(admin, "GET", path, Vec::new()).await.unwrap();
-    assert!(jobs.thawed.admin());
-    assert!(f.held.engine.as_ref().unwrap().host.home_now().admin);
-    f.ask(Ask::default(), "GET", path, Vec::new())
-        .await
-        .unwrap();
-    assert!(!jobs.thawed.admin());
 }

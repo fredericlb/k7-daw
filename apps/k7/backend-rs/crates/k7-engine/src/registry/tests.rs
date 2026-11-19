@@ -74,10 +74,7 @@ fn a_loopback_hint_without_a_loopback_socket_is_not_this_machine() {
     };
     reg.upsert(forged).unwrap();
     assert!(!reg.on_this_machine("forged"));
-    assert_ne!(
-        reg.role("forged", "someone@example.org", false),
-        Role::Owner
-    );
+    assert!(!reg.may_use("forged", "someone@example.org"));
     let local = HeartbeatInput {
         beat: beat("local"),
         public_ip_hint: Some("127.0.0.1".into()),
@@ -85,7 +82,8 @@ fn a_loopback_hint_without_a_loopback_socket_is_not_this_machine() {
     };
     reg.upsert(local).unwrap();
     assert!(reg.on_this_machine("local"));
-    assert_eq!(reg.role("local", "someone@example.org", false), Role::Owner);
+    assert!(reg.may_use("local", "someone@example.org"));
+    assert!(!reg.may_use("local", ""));
 }
 
 #[test]

@@ -84,7 +84,7 @@ async fn owned(state: &AppState, caller: &Caller, id: &str) -> Result<(), Respon
             StatusCode::NOT_FOUND,
             &format!("no engine '{id}' is registered"),
         )),
-        Ok(Some(v)) if v.role != "owner" => Err(fail(
+        Ok(Some(v)) if !v.usable => Err(fail(
             StatusCode::FORBIDDEN,
             "only the engine's owner names what it separates with",
         )),
@@ -95,7 +95,7 @@ async fn owned(state: &AppState, caller: &Caller, id: &str) -> Result<(), Respon
 /// One `chains` request on `id`'s machine, answered with the chains as they then stand there.
 async fn ask(state: &AppState, id: &str, body: Value) -> Response {
     let link = match reach(state)
-        .open(Some(id), Vec::<Root>::new(), Kind::Jobs, OPEN_JOBS)
+        .open(id, Vec::<Root>::new(), Kind::Jobs, OPEN_JOBS)
         .await
     {
         Ok(Some(l)) => l,

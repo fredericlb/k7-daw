@@ -8,7 +8,6 @@ mod chains_tests;
 #[cfg(feature = "test-hooks")]
 pub mod hooks;
 mod internal;
-mod ownership;
 mod registry;
 pub(crate) mod upgrade;
 
@@ -18,7 +17,7 @@ use std::sync::Arc;
 use axum::Router;
 use axum::extract::Request;
 use axum::response::Response;
-use axum::routing::{MethodRouter, delete, get, post};
+use axum::routing::{MethodRouter, get, post};
 use hyper::Method;
 use hyper::StatusCode;
 use k7_engine::Core;
@@ -39,9 +38,6 @@ pub struct Engine {
     /// Once a minute per (engine, complaint).
     pub complain: Throttled,
     pub log: Sink,
-    /// `STUDIO_REGISTRY_REQUIRE_DEVICE=1`: a heartbeat bearing no render key is refused.
-    pub require_device: bool,
-    pub render_key: Option<String>,
 }
 
 /// Whether the core answers `method` on `path` (the engine core ON); anything else there is the backend's.
@@ -54,7 +50,7 @@ pub fn owns(method: &Method, path: &str) -> bool {
             .is_some_and(|id| !id.is_empty() && !id.contains('/'))
     };
     match path {
-        "/api/registry/hello" | "/api/engines" | "/api/engines/owners" => get,
+        "/api/registry/hello" | "/api/engines" => get,
         "/api/registry/heartbeat"
         | "/api/registry/deregister"
         | "/api/engine/select"
@@ -63,11 +59,7 @@ pub fn owns(method: &Method, path: &str) -> bool {
         _ if path.starts_with("/api/engine-tunnel/local/") => get,
         _ if id_then("/api/engine/", "/ws") => get,
         _ if id_then("/api/engine/", "/rtc") => post,
-        _ if id_then("/api/engines/", "/shares") => get || *method == Method::PUT,
         _ if id_then("/api/engines/", "/chains") => get || *method == Method::PUT,
-        _ if id_then("/api/engines/", "/owner") => {
-            *method == Method::DELETE || *method == Method::OPTIONS
-        }
         _ => internal::owns(method, path),
     }
 }
@@ -103,7 +95,6 @@ impl Engine {
                 state_dir: Some(settings.engines_dir.clone()),
                 ..Default::default()
             },
-            render_key: settings.render_key.clone(),
             uploads: settings.upload_limits,
             ..Default::default()
         };
@@ -114,8 +105,6 @@ impl Engine {
             core,
             complain: Throttled::new(log.clone(), clock),
             log,
-            require_device: settings.require_device,
-            render_key: settings.render_key.clone(),
         })
     }
 }
@@ -148,12 +137,6 @@ pub fn routes() -> (Routes, (Routes, Routes)) {
         .route("/api/engine/select", p(post(registry::select)))
         .route("/api/engine/release", p(post(registry::release)))
         .route("/api/engine/{id}/rtc", p(post(registry::rtc)))
-        .route("/api/engines/owners", p(get(ownership::owners)))
-        .route(
-            "/api/engines/{id}/shares",
-            p(get(ownership::shares).put(ownership::put_shares)),
-        )
-        .route("/api/engines/{id}/owner", p(delete(ownership::give_up)))
         .route(
             "/api/engines/{id}/chains",
             p(get(chains::chains).put(chains::set)),

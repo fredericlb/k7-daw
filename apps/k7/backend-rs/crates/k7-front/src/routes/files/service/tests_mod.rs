@@ -51,7 +51,7 @@ async fn a_name_with_no_folder_is_no_workspace_and_is_not_made() {
     let _ = std::fs::remove_dir_all(&dir);
     let studio = dir.display().to_string().replace('\\', "/");
     let env = std::collections::BTreeMap::from([("STUDIO_HOME".to_string(), studio)]);
-    let home = k7_file_service::libraries::Home::of(&env, false);
+    let home = k7_file_service::libraries::Home::of(&env);
     let ws = k7_file_service::workspaces::names::workspace_dir(&home);
     std::fs::create_dir_all(format!("{ws}/band")).unwrap();
     assert!(is_workspace(&home, "band").await);

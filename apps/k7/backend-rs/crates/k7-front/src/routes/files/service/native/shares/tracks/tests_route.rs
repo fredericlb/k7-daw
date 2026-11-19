@@ -259,7 +259,6 @@ async fn a_refusal_before_the_first_byte_sets_the_cookie_with_its_sentence() {
     let home = k7_file_service::libraries::Home {
         studio: base.join("home").display().to_string(),
         libraries: base.join("libs").display().to_string(),
-        admin: false,
     };
     let d = Deps {
         acct: Arc::new(a),

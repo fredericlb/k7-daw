@@ -16,7 +16,7 @@ use support::{Scratch, can_link, link};
 const BOUND: Duration = Duration::from_secs(if cfg!(target_env = "musl") { 60 } else { 15 });
 
 fn run(s: &Scratch, which: Listing, limits: &Limits) -> Result<Listed, Declined> {
-    let h = s.home(false);
+    let h = s.home();
     s.dir("ws");
     list(
         &Space::open(&h, &s.path("ws")),
@@ -113,7 +113,7 @@ fn a_nest_three_hundred_deep_is_declined_and_the_stack_holds() {
         Declined::TooDeep
     );
     // Within the limit it finishes, on a thread with a small stack: nothing recurses.
-    let (home, ws) = (s.home(false), s.path("ws"));
+    let (home, ws) = (s.home(), s.path("ws"));
     let limits = Limits {
         max_depth: 400,
         ..Limits::default()

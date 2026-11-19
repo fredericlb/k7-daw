@@ -289,9 +289,9 @@ impl Freezing {
     }
 }
 
-/// The account's home as the last request stamped it, as `followAdmin` does (review B3 decision 2).
+/// The account's home.
 pub(super) fn home_of(docs: &Docs) -> Home {
-    Home::of(&docs.env, docs.thawed.as_ref().is_some_and(|t| t.admin()))
+    Home::of(&docs.env)
 }
 
 /// The project's engine view compiled, whose `freezes` are the freezer's to read.

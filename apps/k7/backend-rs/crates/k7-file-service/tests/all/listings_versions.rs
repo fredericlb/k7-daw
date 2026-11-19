@@ -19,7 +19,7 @@ fn rows(
     s: &Scratch,
     remote: &Remote,
 ) -> Result<std::collections::HashMap<String, VersionRow>, Declined> {
-    versions_at(&s.home(false), &s.path("ws"), remote, &Limits::default())
+    versions_at(&s.home(), &s.path("ws"), remote, &Limits::default())
 }
 
 fn remote(name: &str, versions: &[(u32, u32)]) -> Remote {
@@ -126,7 +126,7 @@ fn a_levels_row_carries_its_version_in_the_literals_order() {
     s.file("ws/_library-pins.k7x", "k7-core(1)\n");
     s.file("libraries/k7-core/1/library.k7x", &manifest(1, 1));
     s.file("libraries/k7-core/2/library.k7x", &manifest(2, 1));
-    let h = s.home(false);
+    let h = s.home();
     let l = module_libraries(
         &Space::open(&h, &s.path("ws")),
         &Remote::default(),

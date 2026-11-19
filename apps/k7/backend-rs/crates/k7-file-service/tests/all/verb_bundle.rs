@@ -50,7 +50,7 @@ fn made_with(fx: &Fx, models: String) -> Value {
         ..Roots::default()
     };
     build(&Inputs {
-        home: &fx.s.home(false),
+        home: &fx.s.home(),
         root: &fx.root,
         project: &fx.at("song.k7"),
         at: "song.k7",

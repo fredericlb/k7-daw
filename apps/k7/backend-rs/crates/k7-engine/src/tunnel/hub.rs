@@ -7,8 +7,6 @@ use std::sync::atomic::Ordering;
 use std::sync::{Arc, Mutex, MutexGuard};
 use std::time::Duration;
 
-use indexmap::IndexSet;
-use subtle::ConstantTimeEq;
 use tokio::io::{AsyncRead, AsyncWrite};
 use tokio_tungstenite::WebSocketStream;
 
@@ -26,8 +24,6 @@ pub type Verify = Arc<dyn Fn(&str, &str, Option<&str>) -> bool + Send + Sync>;
 
 pub struct HubOptions {
     pub verify: Verify,
-    /// The key a tunnel presents to be the server's render machine; None, no tunnel is one.
-    pub render_key: Option<String>,
     /// Keepalive period; a tunnel silent for two is dropped.
     pub ping_ms: u64,
     pub uploads: UploadLimits,
@@ -37,8 +33,7 @@ pub struct HubOptions {
 }
 
 struct LocalBinding {
-    /// None is the render machine, whichever tunnel holds the render key when a client connects.
-    engine_id: Option<String>,
+    engine_id: String,
     roots: Vec<Root>,
     kind: Kind,
     synced: bool,
@@ -48,10 +43,6 @@ struct LocalBinding {
 struct State {
     tunnels: HashMap<String, Arc<Tunnel>>,
     locals: HashMap<String, LocalBinding>,
-    /// The engines whose tunnel presented the render key, most recent last.
-    renderers: IndexSet<String>,
-    /// The same, kept while their tunnel is down: the server role outlives a drop.
-    rendered: HashSet<String>,
     /// Engines already said to be refused for their protocol.
     outdated: HashSet<String>,
     pinging: bool,
@@ -81,7 +72,6 @@ pub struct TunnelAsk<'a> {
     pub secret: Option<&'a str>,
     /// `x-studio-engine-protocol` as sent.
     pub protocol: Option<&'a str>,
-    pub render_key: Option<&'a str>,
 }
 
 /// `engineProtocolOf`: anything but a positive integer, absent included, reads as 1.
@@ -154,10 +144,10 @@ impl Hub {
         t.signal(sdp, timeout).await
     }
 
-    /// A loopback path reaching engine `id` (None: the render machine) with `roots` shared.
+    /// A loopback path reaching engine `engine_id` with `roots` shared.
     pub fn bind_local(
         &self,
-        engine_id: Option<&str>,
+        engine_id: &str,
         roots: Vec<Root>,
         kind: Kind,
         synced: bool,
@@ -169,16 +159,16 @@ impl Hub {
     pub fn bind_local_as(
         &self,
         key: String,
-        engine_id: Option<&str>,
+        engine_id: &str,
         roots: Vec<Root>,
         kind: Kind,
         synced: bool,
     ) -> String {
         let binding = LocalBinding {
-            engine_id: engine_id.map(str::to_string),
+            engine_id: engine_id.to_string(),
             roots,
             kind,
-            synced: synced && engine_id.is_some(),
+            synced,
         };
         self.lock().locals.insert(key.clone(), binding);
         format!("{TUNNEL_PATH}/local/{key}")
@@ -195,32 +185,8 @@ impl Hub {
         &self.epoch
     }
 
-    pub fn renders_enabled(&self) -> bool {
-        self.opts.render_key.is_some()
-    }
-
-    /// The render machine's id while its tunnel is up, the most recent if several hold the key.
-    pub fn renderer(&self) -> Option<String> {
-        let s = self.lock();
-        s.renderers
-            .iter()
-            .rfind(|id| s.tunnels.contains_key(*id))
-            .cloned()
-    }
-
-    /// Whether engine `id`'s last tunnel presented the render key, up or not.
-    pub fn is_renderer(&self, id: &str) -> bool {
-        self.lock().rendered.contains(id)
-    }
-
-    /// Marks an engine as the render machine without a tunnel, for the testbed's stubs.
-    #[cfg(feature = "test-hooks")]
-    pub fn mark_rendered(&self, id: &str) {
-        self.lock().rendered.insert(id.to_string());
-    }
-
-    /// The checks before a tunnel's 101, in `acceptTunnel`'s order; Ok says whether it is the render machine.
-    pub fn check_tunnel(&self, ask: &TunnelAsk) -> Result<bool, Deny> {
+    /// The checks before a tunnel's 101, in `acceptTunnel`'s order.
+    pub fn check_tunnel(&self, ask: &TunnelAsk) -> Result<(), Deny> {
         // Checked BEFORE the incumbent is touched: a refused newcomer leaves the live tunnel where it is.
         if ask.id.is_empty()
             || ask.token.is_empty()
@@ -240,20 +206,11 @@ impl Hub {
             return Err(Deny::Reason(426, reason));
         }
         self.lock().outdated.remove(ask.id);
-        let offered = ask.render_key.unwrap_or("");
-        let renders = !offered.is_empty() && self.opts.render_key.is_some();
-        // A wrong key is refused, not ignored: a render machine that is not one must say so in its log.
-        if !offered.is_empty() {
-            let key = self.opts.render_key.as_deref().unwrap_or("");
-            if !renders || !bool::from(offered.as_bytes().ct_eq(key.as_bytes())) {
-                return Err(Deny::Status(403));
-            }
-        }
-        Ok(renders)
+        Ok(())
     }
 
     /// Serves a tunnel whose upgrade passed `check_tunnel`, until its socket ends.
-    pub async fn serve_tunnel<S>(self: Arc<Self>, id: String, renders: bool, ws: WebSocketStream<S>)
+    pub async fn serve_tunnel<S>(self: Arc<Self>, id: String, ws: WebSocketStream<S>)
     where
         S: AsyncRead + AsyncWrite + Unpin + Send + 'static,
     {
@@ -269,24 +226,13 @@ impl Hub {
         let old = {
             let mut s = self.lock();
             let old = s.tunnels.insert(id.clone(), t.clone());
-            // Re-added, so the newest render machine is the one a render reaches.
-            s.renderers.shift_remove(&id);
-            if renders {
-                s.renderers.insert(id.clone());
-                s.rendered.insert(id.clone());
-            } else {
-                s.rendered.remove(&id);
-            }
             old
         };
         // One tunnel per engine: a reconnect, verified above, replaces the socket it outlived.
         if let Some(old) = old {
             old.peer.terminate();
         }
-        (self.opts.log)(&format!(
-            "{id} up{}",
-            if renders { " (render machine)" } else { "" }
-        ));
+        (self.opts.log)(&format!("{id} up"));
         while let Some(ev) = events.recv().await {
             match ev {
                 Event::Frame(f) => t.on_frame(f),
@@ -301,7 +247,6 @@ impl Hub {
             let mine = s.tunnels.get(&id).is_some_and(|x| Arc::ptr_eq(x, &t));
             if mine {
                 s.tunnels.remove(&id);
-                s.renderers.shift_remove(&id);
             }
             mine
         };
@@ -316,13 +261,7 @@ impl Hub {
         let Some(b) = s.locals.get(key).filter(|_| loopback) else {
             return Err(Deny::Status(403));
         };
-        let engine = b.engine_id.clone().or_else(|| {
-            s.renderers
-                .iter()
-                .rfind(|id| s.tunnels.contains_key(*id))
-                .cloned()
-        });
-        match engine.and_then(|e| s.tunnels.get(&e).cloned()) {
+        match s.tunnels.get(&b.engine_id).cloned() {
             Some(tunnel) => Ok(local::Target {
                 tunnel,
                 roots: b.roots.clone(),
@@ -384,7 +323,6 @@ mod tests {
         Hub::new(
             HubOptions {
                 verify: Arc::new(|_, _, _| true),
-                render_key: None,
                 ping_ms: 20_000,
                 uploads: UploadLimits::default(),
                 min_protocol: 1,
@@ -406,13 +344,13 @@ mod tests {
         let (a, b) = (hub(), hub());
         assert_ne!(a.epoch(), b.epoch());
         assert_eq!(a.epoch(), a.epoch());
-        let path = a.bind_local(Some("e1"), vec![], Kind::Engine, true);
+        let path = a.bind_local("e1", vec![], Kind::Engine, true);
         let key = local_key(&path).unwrap().to_string();
         assert_eq!(key.len(), 32);
         assert_eq!(status(&a, &key), 503);
         assert_eq!(status(&b, &key), 403);
         assert_eq!(
-            b.bind_local_as(key.clone(), Some("e1"), vec![], Kind::Engine, true),
+            b.bind_local_as(key.clone(), "e1", vec![], Kind::Engine, true),
             path
         );
         assert_eq!(status(&b, &key), 503);

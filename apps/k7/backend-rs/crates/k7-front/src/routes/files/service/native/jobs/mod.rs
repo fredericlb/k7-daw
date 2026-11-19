@@ -86,7 +86,7 @@ impl Awaited {
 
 /// What the front does for the stand-ins' asks: K4 implements it over the link, the renderer and the jobs path.
 pub trait Driver: Send + Sync + 'static {
-    /// Whether some machine can render: this one's engine binary, the bound jobs path, or the server's render machine.
+    /// Whether some machine can render: this one's engine binary, the bound jobs path, or the bound machine's.
     fn renderer_available(&self) -> bool;
     /// Whether a machine's jobs path is bound, which decides whether a cut can start.
     fn bound(&self) -> bool;

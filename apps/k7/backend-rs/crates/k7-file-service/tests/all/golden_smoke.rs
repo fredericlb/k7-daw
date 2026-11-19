@@ -113,7 +113,7 @@ fn the_staged_corpus_compiles_natively_and_the_two_broken_name_their_files() {
         .iter()
         .map(|(k, v)| (k.clone(), v.as_str().unwrap_or("").to_owned()))
         .collect();
-    let home = Home::of(&env, false);
+    let home = Home::of(&env);
     let (mut decoded, mut refused) = (Vec::new(), Vec::new());
     for p in manifest["projects"].as_array().expect("projects") {
         let abs = p["abs"].as_str().expect("abs");

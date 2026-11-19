@@ -17,7 +17,6 @@ fn home() -> Home {
     Home {
         studio: "/studio".into(),
         libraries: "/libs".into(),
-        admin: false,
     }
 }
 
@@ -64,7 +63,7 @@ fn the_workspace_gate_words_its_refusals_as_the_typescript_does() {
 fn a_library_path_is_confined_to_that_library_and_nothing_else_below_the_folder_is_a_path() {
     let s = Scratch::new("libs");
     let ws = s.dir("studio/workspace/songs");
-    let h = s.home(false);
+    let h = s.home();
     s.file("libraries/k7-core/modules/a.k7x", "x");
     s.dir("studio/library");
     let space = Space::open(&h, &ws);

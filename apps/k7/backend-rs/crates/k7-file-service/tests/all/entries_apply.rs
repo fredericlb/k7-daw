@@ -166,7 +166,7 @@ fn a_folder_is_made_whole_and_a_file_in_the_way_is_an_io_failure() {
 #[test]
 fn the_upload_s_halves_make_the_parents_then_rename_a_hidden_temp() {
     let fx = Fx::new("a-upload");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     let abs = fx.at("media/take/one.bin");
     let tmp = upload_begin(&space, &abs).unwrap();
@@ -212,19 +212,17 @@ fn the_upload_s_halves_make_the_parents_then_rename_a_hidden_temp() {
 }
 
 #[test]
-fn an_upload_into_a_library_lands_for_an_admin_and_not_for_an_account() {
+fn an_upload_into_a_library_is_refused() {
     let fx = Fx::new("a-upload-lib");
     let abs = fx.lib("modules/audio/verb/ir.wav");
-    let (admin, user) = (fx.s.home(true), fx.s.home(false));
-    let (a, u) = (Space::open(&admin, &fx.root), Space::open(&user, &fx.root));
-    let tmp = upload_begin(&a, &abs).unwrap();
+    let user = fx.s.home();
+    let u = Space::open(&user, &fx.root);
+    let tmp = upload_begin(&u, &abs).unwrap();
     std::fs::write(&tmp, "w").unwrap();
     assert!(
         matches!(upload_end(&u, &abs, &tmp), Err(EntryError::Refused(_))),
-        "1290: the draft is an admin's"
+        "1290: a library is not written from a workspace"
     );
-    assert_eq!(upload_end(&a, &abs, &tmp), Ok(()));
-    assert_eq!(std::fs::read_to_string(&abs).unwrap(), "w");
 }
 
 #[test]
@@ -235,7 +233,7 @@ fn a_link_is_moved_as_itself() {
     }
     fx.s.file("studio/workspace/songs/target.txt", "t");
     link_file(&fx.at("target.txt"), &fx.at("lnk")).unwrap();
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     let done = plan(
         &space,
@@ -267,7 +265,7 @@ fn a_link_is_moved_as_itself() {
 fn a_target_made_between_the_plan_and_the_rename_is_replaced_as_the_referee_does() {
     let fx = Fx::new("a-race");
     fx.s.file("studio/workspace/songs/a.txt", "from");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     let done = plan(
         &space,
@@ -289,7 +287,7 @@ fn a_target_made_between_the_plan_and_the_rename_is_replaced_as_the_referee_does
 #[test]
 fn no_answer_carries_a_verbatim_prefix() {
     let fx = Fx::new("a-prefix");
-    let h = fx.s.home(false);
+    let h = fx.s.home();
     let space = Space::open(&h, &fx.root);
     fx.s.file("studio/workspace/songs/a.txt", "x");
     for op in [

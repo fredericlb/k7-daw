@@ -10,7 +10,7 @@ use serde_json::{Value, json};
 use support::{Scratch, can_link, link, link_file};
 
 fn run(s: &Scratch, which: Listing, limits: &Limits) -> Result<Listed, Declined> {
-    let h = s.home(false);
+    let h = s.home();
     list(
         &Space::open(&h, &s.path("ws")),
         which,
@@ -108,7 +108,7 @@ fn a_lone_surrogate_escape_is_the_typescripts_and_a_large_text_is_declined() {
 fn the_text_of_a_playlist_is_asked_for_before_it_is_read() {
     let s = Scratch::new("pl-admit");
     s.file("ws/_playlists/a.k7x", "title(\"A\")\n");
-    let h = s.home(false);
+    let h = s.home();
     let space = Space::open(&h, &s.path("ws"));
     let asked = std::sync::Mutex::new(Vec::new());
     let r = list_gated(

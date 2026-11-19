@@ -25,7 +25,6 @@ fn an_ask_after_a_bump_never_waits_for_a_walk_begun_before_it() {
     let home = Home {
         studio: at("studio"),
         libraries: at("libraries"),
-        admin: false,
     };
     let m: &'static Revisions = Box::leak(Box::new(Revisions::with_feed(
         Box::new(Still),

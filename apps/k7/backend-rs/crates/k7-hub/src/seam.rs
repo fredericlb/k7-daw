@@ -33,7 +33,7 @@ pub fn encode_uri_component(s: &str) -> String {
 
 #[derive(Clone)]
 struct Held {
-    engine_id: Option<String>,
+    engine_id: String,
     roots: Value,
     kind: String,
     synced: Option<bool>,
@@ -106,17 +106,14 @@ impl Seam {
         Self::json("an engine", r).map(Some)
     }
 
-    /// What the tunnel hub says of the render machine, and its epoch.
+    /// What the tunnel hub says of itself: its epoch.
     pub async fn hub(&self) -> Result<Value, String> {
         Self::json("the hub", self.call(Method::GET, "/hub", None).await?)
     }
 
     async fn post(&self, b: &Held, key: Option<&str>) -> Result<(String, Option<String>), String> {
         let mut body = Map::new();
-        body.insert(
-            "engineId".into(),
-            b.engine_id.clone().map_or(Value::Null, Value::String),
-        );
+        body.insert("engineId".into(), b.engine_id.clone().into());
         body.insert("roots".into(), b.roots.clone());
         body.insert("kind".into(), b.kind.clone().into());
         if let Some(s) = b.synced {
@@ -140,16 +137,16 @@ impl Seam {
         ))
     }
 
-    /// A loopback path reaching engine `engine_id`, or the render machine when None; kept until `unbind`.
+    /// A loopback path reaching engine `engine_id`; kept until `unbind`.
     pub async fn bind(
         self: &Arc<Self>,
-        engine_id: Option<&str>,
+        engine_id: &str,
         roots: &Value,
         kind: &str,
         synced: Option<bool>,
     ) -> Result<String, String> {
         let mut b = Held {
-            engine_id: engine_id.map(str::to_string),
+            engine_id: engine_id.to_string(),
             roots: roots.clone(),
             kind: kind.to_string(),
             synced,
@@ -257,13 +254,13 @@ impl Seam {
     /// A socket to engine `engine_id` through a one-shot binding, or None when it has no tunnel or the upgrade fails.
     pub async fn open(
         &self,
-        engine_id: Option<&str>,
+        engine_id: &str,
         roots: &Value,
         kind: &str,
         timeout: Duration,
     ) -> Option<Channel> {
         let b = Held {
-            engine_id: engine_id.map(str::to_string),
+            engine_id: engine_id.to_string(),
             roots: roots.clone(),
             kind: kind.to_string(),
             synced: None,

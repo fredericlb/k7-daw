@@ -491,7 +491,7 @@
         "libraries/k7-core/chains/withpreset.k7x": "steps([\n  id(\"77777777-7777-4777-8777-777777777777\").extends(\"@k7-core/audio/verb\"),\n  to([chain(\"@out\")]),\n])\n",
         "libraries/k7-core/vstpresets/77777777-7777-4777-8777-777777777777.vstpreset": "VSTPRESET"
       },
-      "thrown": "'@k7-core' is a library, not a chain — an admin edits it from any project",
+      "thrown": "'@k7-core' is a library, not a chain",
       "changed": {}
     },
     {

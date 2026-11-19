@@ -20,7 +20,7 @@ use super::workspaces_start::stocked;
 use super::{Piece, Tag};
 
 /// An account of its own over `dir`, answering, with a library on disk (a make asks for one).
-pub(super) fn ws_acct(dir: &Path, who: &str, admin: bool) -> (Acct, Lines) {
+pub(super) fn ws_acct(dir: &Path, who: &str) -> (Acct, Lines) {
     std::fs::create_dir_all(dir.join("libraries/k7-core/modules")).unwrap();
     let lines = Lines::default();
     let a = Acct {
@@ -28,7 +28,6 @@ pub(super) fn ws_acct(dir: &Path, who: &str, admin: bool) -> (Acct, Lines) {
         home: Home {
             studio: crate::routes::files::service::native::tests::slashed(&dir.join("home")),
             libraries: dir.join("libraries").display().to_string(),
-            admin,
         },
         account: who.into(),
         log: log_to(&lines),
@@ -95,7 +94,7 @@ fn request(method: &str, path: &str, body: &str, json_type: bool) -> Request {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn the_hook_parses_then_checks_the_owner_then_answers() {
     let dir = scratch("w-hook");
-    let (a, _) = ws_acct(&dir, "w-hook", false);
+    let (a, _) = ws_acct(&dir, "w-hook");
     let post = |b: &str| request("POST", "/workspaces", b, true);
     // A body that does not parse is answered before the owner is asked, as the live router does.
     let r = hook(&a, Kind::Make, || panic!("owner"), post("{nope"))
@@ -141,7 +140,7 @@ async fn the_hook_parses_then_checks_the_owner_then_answers() {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn sixty_four_makes_of_one_name_create_it_once_and_pin_it_once() {
     let dir = scratch("w-race");
-    let (a, _) = ws_acct(&dir, "w-race", false);
+    let (a, _) = ws_acct(&dir, "w-race");
     let mut all = Vec::new();
     for _ in 0..64 {
         let a = a.clone();
@@ -173,7 +172,7 @@ async fn sixty_four_makes_of_one_name_create_it_once_and_pin_it_once() {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn a_removal_asks_in_order_and_outlives_a_client_that_hangs_up() {
     let dir = scratch("w-remove");
-    let (a, _) = ws_acct(&dir, "w-remove", false);
+    let (a, _) = ws_acct(&dir, "w-remove");
     let doomed = dir.join("home/workspace/doomed");
     std::fs::create_dir_all(doomed.join("p.k7")).unwrap();
     std::fs::create_dir_all(dir.join("home/workspace/.active-projects")).unwrap();
@@ -218,7 +217,7 @@ async fn a_removal_asks_in_order_and_outlives_a_client_that_hangs_up() {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn no_lock_is_held_across_let_go_so_another_act_goes_on() {
     let dir = scratch("w-lock");
-    let (a, _) = ws_acct(&dir, "w-lock", false);
+    let (a, _) = ws_acct(&dir, "w-lock");
     std::fs::create_dir_all(dir.join("home/workspace/slow")).unwrap();
     let root = root_of(&dir, "slow");
     let held = calls::hold(&root, "letGo");
@@ -245,7 +244,7 @@ async fn no_lock_is_held_across_let_go_so_another_act_goes_on() {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn the_listing_memo_follows_acts_and_the_roots_mtime() {
     let dir = scratch("w-memo");
-    let (a, _) = ws_acct(&dir, "w-memo", false);
+    let (a, _) = ws_acct(&dir, "w-memo");
     let ws = dir.join("home/workspace");
     let list = |a: &Acct| {
         let a = a.clone();
@@ -285,7 +284,7 @@ async fn the_listing_memo_follows_acts_and_the_roots_mtime() {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn a_copy_joins_both_ends_first_and_tells_the_list_after_its_writes() {
     let dir = scratch("w-copy");
-    let (a, _) = ws_acct(&dir, "w-copy", false);
+    let (a, _) = ws_acct(&dir, "w-copy");
     let ws = dir.join("home/workspace");
     std::fs::create_dir_all(ws.join("songs/s.k7")).unwrap();
     std::fs::write(ws.join("songs/s.k7/project.k7x"), "project({})\n").unwrap();
@@ -315,7 +314,7 @@ async fn a_copy_joins_both_ends_first_and_tells_the_list_after_its_writes() {
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn a_copy_to_a_missing_workspace_under_a_native_capture_is_a_404_and_makes_no_folder() {
     let dir = scratch("w-copy-cap");
-    let (a, _) = ws_acct(&dir, "w-copy-cap", false);
+    let (a, _) = ws_acct(&dir, "w-copy-cap");
     let ws = dir.join("home/workspace");
     std::fs::create_dir_all(ws.join("songs/s.k7")).unwrap();
     std::fs::write(ws.join("songs/s.k7/project.k7x"), "project({})\n").unwrap();
@@ -354,7 +353,7 @@ async fn a_copy_to_a_missing_workspace_under_a_native_capture_is_a_404_and_makes
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn a_remove_and_a_copy_into_it_at_once_end_with_the_workspace_gone() {
     let dir = scratch("w-both");
-    let (a, _) = ws_acct(&dir, "w-both", false);
+    let (a, _) = ws_acct(&dir, "w-both");
     let ws = dir.join("home/workspace");
     std::fs::create_dir_all(ws.join("songs/s.k7")).unwrap();
     std::fs::create_dir_all(ws.join("target")).unwrap();
@@ -414,7 +413,7 @@ async fn a_name_of_the_folders_other_case_is_asked_in_the_folders_own_spelling()
         std::fs::remove_dir_all(dir).unwrap();
         return;
     }
-    let (a, _) = ws_acct(&dir, "w-case", false);
+    let (a, _) = ws_acct(&dir, "w-case");
     let copy = json!({ "from": "casey", "path": "s.k7", "to": "target", "name": "c.k7" });
     assert_eq!(go(&a, Kind::Copy, copy).await.0, 200);
     // The destination is told its list changed under the name it has on disk, not the one asked.

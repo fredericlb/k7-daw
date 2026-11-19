@@ -32,7 +32,6 @@ pub struct Core {
 /// What the core is built from.
 pub struct CoreOptions {
     pub registry: registry::Options,
-    pub render_key: Option<String>,
     pub ping_ms: u64,
     pub min_protocol: u32,
     pub uploads: tunnel::uploads::UploadLimits,
@@ -44,7 +43,6 @@ impl Default for CoreOptions {
     fn default() -> Self {
         CoreOptions {
             registry: registry::Options::default(),
-            render_key: None,
             ping_ms: 20_000,
             min_protocol: 1,
             uploads: Default::default(),
@@ -79,7 +77,6 @@ impl Core {
             let hub = Hub::new(
                 tunnel::hub::HubOptions {
                     verify,
-                    render_key: opts.render_key,
                     ping_ms: opts.ping_ms,
                     uploads: opts.uploads,
                     min_protocol: opts.min_protocol,

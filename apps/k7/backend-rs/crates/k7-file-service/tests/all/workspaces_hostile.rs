@@ -224,7 +224,7 @@ fn a_project_of_3000_files_is_planned_and_copied_within_the_bound() {
         name: "big.k7",
     };
     let t0 = Instant::now();
-    let plan = plan_copy(&a.home(), false, &ask, &Limits::default()).unwrap();
+    let plan = plan_copy(&a.home(), &ask, &Limits::default()).unwrap();
     assert!(t0.elapsed() < BOUND, "{:?}", t0.elapsed());
     // Counted, not timed: writing 3,000 files on a loaded disk says nothing of a hang.
     assert_eq!(plan.entries.len(), 1 + 30 + 3_000 + 1);

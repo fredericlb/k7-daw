@@ -78,7 +78,6 @@ fn an_audition_of_64_kib_nul_and_ten_thousand_ats_is_answered_in_the_typescripts
     let home = Home {
         studio: tmp.at("studio"),
         libraries: tmp.at("libraries"),
-        admin: false,
     };
     let project = tmp.at("ws/p.k7");
     let roots = project_roots(&home, &project, &tmp.at("m"), &tmp.at("models"));

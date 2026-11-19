@@ -33,9 +33,9 @@ impl Bed {
         )
     }
 
-    pub(super) async fn changes(&self, admin: bool, body: Value) -> (u16, Value) {
+    pub(super) async fn changes(&self, body: Value) -> (u16, Value) {
         let lines = &self.lines;
-        let c = request(&self.dir, Tag::Changes, body, admin, lines);
+        let c = request(&self.dir, Tag::Changes, body, lines);
         let (status, t) = text(routes::dispatch(H::Changes, &c).await).await;
         (status, serde_json::from_str(&t).unwrap_or(Value::Null))
     }
@@ -76,7 +76,7 @@ async fn a_set_is_one_step_that_undo_restores_whole() {
         { "kind": "remove", "file": "p.k7/gone.txt", "was": was("bye") },
     ]));
     let before = body["base"].clone();
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(status, 200, "{ans}");
     assert_eq!(ans["revBefore"], before);
     assert_ne!(ans["rev"], before);
@@ -110,7 +110,7 @@ async fn a_set_is_one_step_that_undo_restores_whole() {
     let memo = Revisions::global().token(&b.home(), &b.gate_root(), Some(&b.gate_project()), false);
     assert_eq!(ans["rev"], json!(memo));
     let next = json!({ "at": "p.k7", "base": ans["rev"], "label": "again", "ops": [text_op("p.k7/a.k7x", "a(3)\n", was("a(2)\n"))] });
-    assert_eq!(b.changes(false, next).await.0, 200);
+    assert_eq!(b.changes(next).await.0, 200);
     assert_eq!(b.ans(Tag::Undo, json!({})).await.1["applied"], json!(true));
     assert_eq!(b.file("a.k7x"), "a(2)\n");
     assert_eq!(b.ans(Tag::Undo, json!({})).await.1["applied"], json!(true));
@@ -132,7 +132,7 @@ async fn a_stale_base_or_was_is_a_409_that_writes_and_journals_nothing() {
     ]);
     let mut body = b.set(ops.clone());
     body["base"] = json!("not-a-token");
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(status, 409, "{ans}");
     assert_eq!(
         (
@@ -147,19 +147,19 @@ async fn a_stale_base_or_was_is_a_409_that_writes_and_journals_nothing() {
         text_op("p.k7/a.k7x", "mine(1)\n", json!(text_hash("opened\n"))),
         text_op("p.k7/z.txt", "z", json!(null))
     ]));
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(
         (status, ans["stale"].clone(), ans["project"].clone()),
         (409, json!(["p.k7/a.k7x"]), json!(false))
     );
     assert_eq!((b.file("a.k7x"), b.has("z.txt")), ("disk\n".into(), false));
     assert_eq!(b.steps().await, json!([]));
-    assert_eq!(b.changes(false, b.set(ops)).await.0, 200);
+    assert_eq!(b.changes(b.set(ops)).await.0, 200);
     assert_eq!(b.file("a.k7x"), "mine(1)\n");
     // Another project is not the open one.
     let mut body = b.set(json!([]));
     body["at"] = json!("other.k7");
-    assert_eq!(b.changes(false, body).await.0, 409);
+    assert_eq!(b.changes(body).await.0, 409);
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 
@@ -184,7 +184,7 @@ async fn a_refusal_or_a_failure_midway_writes_nothing() {
         ),
     ] {
         let (status, ans) = b
-            .changes(false, b.set(json!([first.clone(), second.clone()])))
+            .changes(b.set(json!([first.clone(), second.clone()])))
             .await;
         assert_eq!(status, want, "{second}: {ans}");
         assert!(ans["error"].is_string());
@@ -192,13 +192,10 @@ async fn a_refusal_or_a_failure_midway_writes_nothing() {
     }
     assert_eq!(b.steps().await, json!([]));
     let (_, ans) = b
-        .changes(
-            false,
-            b.set(json!([
-                first.clone(),
-                text_op("p.k7/n.k7x", "extends(\"unterminated\n", json!(null))
-            ])),
-        )
+        .changes(b.set(json!([
+            first.clone(),
+            text_op("p.k7/n.k7x", "extends(\"unterminated\n", json!(null))
+        ])))
         .await;
     assert_eq!(ans["file"], json!("p.k7/n.k7x"));
     assert!(ans["error"].as_str().unwrap().starts_with("p.k7/n.k7x: "));
@@ -212,24 +209,21 @@ async fn a_set_past_its_limits_is_a_413() {
     let many: Vec<Value> = (0..=2_000)
         .map(|i| text_op(&format!("p.k7/m/{i}.txt"), "x", json!(null)))
         .collect();
-    let (status, ans) = b.changes(false, b.set(Value::Array(many))).await;
+    let (status, ans) = b.changes(b.set(Value::Array(many))).await;
     assert_eq!(status, 413, "{ans}");
     assert_eq!(ans["error"], json!("a change set carries at most 2000 ops"));
     let big = "x".repeat((8 << 20) + 1);
     let (status, _) = b
-        .changes(
-            false,
-            b.set(json!([text_op("p.k7/big.txt", &big, json!(null))])),
-        )
+        .changes(b.set(json!([text_op("p.k7/big.txt", &big, json!(null))])))
         .await;
     assert_eq!(status, 413);
     assert!(!b.has("m") && !b.has("big.txt"));
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 
-// 3-B8, the library gate: a library is written by an admin, and by no one else, inside a set.
+// 3-B8, the library gate: a library is written by no one, inside a set.
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_library_is_written_by_an_admin_alone() {
+async fn a_library_is_written_by_no_one() {
     let b = Bed::new("ch-libs").await;
     let lib = b.dir.join("libraries/k7-core/modules/audio/verb");
     std::fs::create_dir_all(&lib).unwrap();
@@ -242,24 +236,18 @@ async fn a_library_is_written_by_an_admin_alone() {
             json!(text_hash("m(1)\n"))
         ),
     ]);
-    let (status, ans) = b.changes(false, b.set(ops.clone())).await;
+    let (status, ans) = b.changes(b.set(ops.clone())).await;
     assert_eq!(status, 403, "{ans}");
     assert!(
         ans["error"]
             .as_str()
             .unwrap()
-            .contains("only the origin's admins edit a library")
+            .contains("a library is not edited from here")
     );
     assert!(!b.has("in-project.txt"), "the whole set is refused");
     assert_eq!(
         std::fs::read_to_string(lib.join("module.k7x")).unwrap(),
         "m(1)\n"
-    );
-    let (status, ans) = b.changes(true, b.set(ops)).await;
-    assert_eq!(status, 200, "{ans}");
-    assert_eq!(
-        std::fs::read_to_string(lib.join("module.k7x")).unwrap(),
-        "m(2)\n"
     );
     let _ = std::fs::remove_dir_all(&b.dir);
 }
@@ -269,10 +257,7 @@ async fn a_library_is_written_by_an_admin_alone() {
 async fn the_engine_is_pushed_on_request_and_the_bundle_told_once() {
     let b = Bed::new("ch-push").await;
     let (status, _) = b
-        .changes(
-            false,
-            b.set(json!([text_op("p.k7/a.k7x", "x(1)\n", json!(null))])),
-        )
+        .changes(b.set(json!([text_op("p.k7/a.k7x", "x(1)\n", json!(null))])))
         .await;
     assert_eq!(status, 200);
     assert_eq!(calls::of(&b.root), ["hold", "after", "release"]);
@@ -280,13 +265,13 @@ async fn the_engine_is_pushed_on_request_and_the_bundle_told_once() {
     body["base"] = json!(b.token());
     body["reload"] = json!(true);
     body["ops"][0]["was"] = json!(text_hash("x(1)\n"));
-    assert_eq!(b.changes(false, body).await.0, 200);
+    assert_eq!(b.changes(body).await.0, 200);
     let all = calls::of(&b.root);
     assert_eq!(all.iter().filter(|c| *c == "push").count(), 1, "{all:?}");
     // A set that moves nothing pushes nothing.
     let mut same = b.set(json!([text_op("p.k7/a.k7x", "x(2)\n", json!(null))]));
     same["reload"] = json!(true);
-    assert_eq!(b.changes(false, same).await.0, 200);
+    assert_eq!(b.changes(same).await.0, 200);
     assert_eq!(
         calls::of(&b.root).iter().filter(|c| *c == "push").count(),
         1
@@ -316,7 +301,7 @@ async fn a_set_is_captured_as_one_batch_named_by_the_verb_line() {
         text_op("p.k7/r2.txt", "two", json!(null)),
         text_op("p.k7/r3.txt", "three", json!(null)),
     ]);
-    assert_eq!(b.changes(false, b.set(ops)).await.0, 200);
+    assert_eq!(b.changes(b.set(ops)).await.0, 200);
     until("the set's batch", || count() > first).await;
     tokio::time::sleep(Duration::from_millis(600)).await;
     let log = tail().unwrap();
@@ -358,7 +343,7 @@ async fn the_routes_are_named_and_a_bundle_without_the_compiler_is_a_503() {
     }
     let b = Bed::new("ch-table").await;
     let lines = &b.lines;
-    let c = request(&b.dir, Tag::VerbBundle, json!({}), false, lines);
+    let c = request(&b.dir, Tag::VerbBundle, json!({}), lines);
     let (status, _) = text(routes::dispatch(H::VerbBundle, &c).await).await;
     assert_eq!(status, 503);
     let _ = std::fs::remove_dir_all(&b.dir);
@@ -384,10 +369,10 @@ async fn the_answers_rev_is_still_the_token_after_the_journal_ends() {
         let was = std::fs::read_to_string(on_disk).ok().map(|t| text_hash(&t));
         let mut body = b.set(json!([text_op(file, text, json!(was))]));
         body["reload"] = json!(true);
-        let (status, ans) = b.changes(false, body).await;
+        let (status, ans) = b.changes(body).await;
         assert_eq!(status, 200, "set {n}: {ans}");
         let empty = json!({ "at": "p.k7", "base": ans["rev"], "label": "probe", "ops": [] });
-        let (status, again) = b.changes(false, empty).await;
+        let (status, again) = b.changes(empty).await;
         assert_eq!(
             status, 200,
             "set {n}: an empty set at the answer's rev: {again}"
@@ -402,20 +387,20 @@ async fn a_skipped_set_lands_without_a_step() {
     let b = Bed::new("ch-skip").await;
     let mut body = b.set(json!([text_op("p.k7/a.k7x", "pin(1)\n", json!(null))]));
     body["journal"] = json!("skip");
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(status, 200, "{ans}");
     assert_eq!(b.file("a.k7x"), "pin(1)\n");
     assert_eq!(b.steps().await.as_array().map(Vec::len), Some(0));
     assert_eq!(ans["rev"], json!(b.token()));
     let mut bad = b.set(json!([]));
     bad["journal"] = json!("other");
-    assert_eq!(b.changes(false, bad).await.0, 400);
+    assert_eq!(b.changes(bad).await.0, 400);
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 
-// Z1-3: an empty `at` is the workspace alone (shared texts only), and `_libraries/…` names a chain the person writes (an admin).
+// Z1-3: an empty `at` is the workspace alone (shared texts only), and `_libraries/…` names a chain nobody writes.
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn an_empty_at_writes_the_shared_texts_and_a_chain_is_the_admins() {
+async fn an_empty_at_writes_the_shared_texts_and_a_library_chain_is_refused() {
     let b = Bed::new("ch-targets").await;
     let none = || Revisions::global().token(&b.home(), &b.gate_root(), None, false);
     let alone = |ops: Value, base: String| json!({ "at": "", "base": base, "label": "library upgrade", "ops": ops });
@@ -424,7 +409,7 @@ async fn an_empty_at_writes_the_shared_texts_and_a_chain_is_the_admins() {
         json!([text_op("_playlists/a.txt", "one", json!(null))]),
         none(),
     );
-    let (status, ans) = b.changes(false, ok).await;
+    let (status, ans) = b.changes(ok).await;
     assert_eq!(status, 200, "{ans}");
     assert_eq!(ans["rev"], json!(none()));
     assert_eq!(
@@ -436,14 +421,14 @@ async fn an_empty_at_writes_the_shared_texts_and_a_chain_is_the_admins() {
     assert_eq!(b.steps().await.as_array().map(Vec::len), Some(0));
     // A project's file is not a shared text.
     let bad = alone(json!([text_op("p.k7/x.txt", "x", json!(null))]), none());
-    let (status, ans) = b.changes(false, bad).await;
+    let (status, ans) = b.changes(bad).await;
     assert_eq!(status, 403, "{ans}");
     assert!(!b.has("x.txt"));
     // A name that climbs out of a shared folder is judged where it lands, not as it is spelled.
     b.put("a.k7x", "keep(1)\n");
     for name in ["_playlists/../p.k7/a.k7x", "_modules\\..\\p.k7\\a.k7x"] {
         let climb = alone(json!([text_op(name, "a(2)\n", json!(null))]), none());
-        let (status, ans) = b.changes(false, climb).await;
+        let (status, ans) = b.changes(climb).await;
         assert_eq!(status, 403, "{name}: {ans}");
     }
     // A move deletes its source: the source must be a shared text too.
@@ -451,9 +436,9 @@ async fn an_empty_at_writes_the_shared_texts_and_a_chain_is_the_admins() {
         json!([{ "kind": "move", "from": "p.k7/a.k7x", "file": "_modules/x.k7x" }]),
         none(),
     );
-    assert_eq!(b.changes(false, mv).await.0, 403);
+    assert_eq!(b.changes(mv).await.0, 403);
     assert_eq!(b.file("a.k7x"), "keep(1)\n");
-    // A chain of a library: forbidden to a person who is not its admin, written by the admin, and it is the chain's token.
+    // A chain of a library is forbidden, and it is the chain's token.
     let chain = b.dir.join("libraries/k7-core/chains/c1");
     std::fs::create_dir_all(&chain).unwrap();
     std::fs::write(chain.join("chain.k7x"), "c(1)\n").unwrap();
@@ -468,24 +453,22 @@ async fn an_empty_at_writes_the_shared_texts_and_a_chain_is_the_admins() {
         Some(&chain.display().to_string()),
         true,
     );
-    assert_eq!(b.changes(false, chain_set(tok.clone())).await.0, 403);
+    assert_eq!(b.changes(chain_set(tok.clone())).await.0, 403);
     // The target alone is gated, whatever the ops: an empty set on the chain is the same 403.
     let empty = json!({ "at": at, "base": tok, "label": "graph pin", "ops": [] });
-    assert_eq!(b.changes(false, empty).await.0, 403);
-    let (status, ans) = b.changes(true, chain_set(tok)).await;
-    assert_eq!(status, 200, "{ans}");
+    assert_eq!(b.changes(empty).await.0, 403);
     assert_eq!(
         std::fs::read_to_string(chain.join("chain.k7x")).unwrap(),
-        "c(2)\n"
+        "c(1)\n"
     );
-    // A chain set may not write the open project either (admin or not).
+    // A chain set may not write the open project either.
     let out = json!({ "at": at, "base": "x", "label": "graph pin", "ops": [
         text_op("p.k7/a.k7x", "a(2)\n", json!(null))] });
-    assert_eq!(b.changes(true, out).await.0, 403);
+    assert_eq!(b.changes(out).await.0, 403);
     assert_eq!(b.file("a.k7x"), "keep(1)\n");
     // A name that is neither the open project nor a library is the other project's 409.
     let other = json!({ "at": "other.k7", "base": b.token(), "label": "x", "ops": [] });
-    assert_eq!(b.changes(false, other).await.0, 409);
+    assert_eq!(b.changes(other).await.0, 409);
     let _ = std::fs::remove_dir_all(&b.dir);
 }
 
@@ -504,7 +487,7 @@ async fn a_writer_inside_the_push_is_not_taken_into_the_answers_rev() {
     });
     let mut body = b.set(json!([text_op("p.k7/a.k7x", "a(1)\n", json!(null))]));
     body["reload"] = json!(true);
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(status, 200, "{ans}");
     assert_ne!(
         ans["rev"],
@@ -512,6 +495,6 @@ async fn a_writer_inside_the_push_is_not_taken_into_the_answers_rev() {
         "the other tab's commit is in the token now, not in our answer"
     );
     let empty = json!({ "at": "p.k7", "base": ans["rev"], "label": "probe", "ops": [] });
-    assert_eq!(b.changes(false, empty).await.0, 409);
+    assert_eq!(b.changes(empty).await.0, 409);
     let _ = std::fs::remove_dir_all(&b.dir);
 }

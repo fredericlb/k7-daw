@@ -28,13 +28,8 @@ pub struct Site {
 
 impl Site {
     /// The prewarm of `ws`'s active project, begun now and run on in a task; a cancel begun after it retires it.
-    pub(in crate::routes::files::service::native) fn prewarm(
-        &self,
-        ws: &str,
-        admin: bool,
-        asked: Asked,
-    ) {
-        let Ok(session) = self.session(ws, admin, asked) else {
+    pub(in crate::routes::files::service::native) fn prewarm(&self, ws: &str, asked: Asked) {
+        let Ok(session) = self.session(ws, asked) else {
             return;
         };
         let media = self.media.clone();
@@ -50,11 +45,10 @@ impl Site {
     }
 
     /// The locator of workspace `ws`, with the ask given (review fix 6).
-    pub(super) fn session(&self, ws: &str, admin: bool, asked: Asked) -> Result<Session, String> {
+    pub(super) fn session(&self, ws: &str, asked: Asked) -> Result<Session, String> {
         let name = basename(ws);
         let rq = Req {
             env: &self.env,
-            admin,
             slug: &self.slug,
             workspace: &name,
             root: ws,
@@ -66,7 +60,7 @@ impl Site {
         };
         let mut ctx = Ctx::of(Tag::ProjectDoc, &rq);
         ctx.touches = false;
-        Ok(Session::given(ctx, self.media.lites.clone(), admin, asked))
+        Ok(Session::given(ctx, self.media.lites.clone(), asked))
     }
 }
 

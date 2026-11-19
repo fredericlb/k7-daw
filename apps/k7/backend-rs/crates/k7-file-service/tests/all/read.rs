@@ -14,7 +14,7 @@ use support::{Scratch, can_link, link, link_file};
 const BOUND: Duration = Duration::from_secs(if cfg!(target_env = "musl") { 60 } else { 15 });
 
 fn read(s: &Scratch, rel: &str, limits: &Limits) -> Result<FileText, ReadError> {
-    let h = s.home(false);
+    let h = s.home();
     read_text(&Space::open(&h, &s.path("ws")), rel, limits)
 }
 
@@ -226,7 +226,7 @@ fn a_file_the_gate_does_not_admit_is_declined_busy_once_its_size_is_known() {
     let s = Scratch::new("admit");
     s.file("ws/big.txt", &"b".repeat(5_000));
     s.file("ws/small.txt", "s");
-    let h = s.home(false);
+    let h = s.home();
     let space = Space::open(&h, &s.path("ws"));
     let admit = |n: u64| n < 1_000;
     assert_eq!(

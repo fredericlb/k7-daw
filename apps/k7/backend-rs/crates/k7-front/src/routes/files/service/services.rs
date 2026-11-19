@@ -46,8 +46,6 @@ pub struct Held {
     pub members: native::runtime::stop::Members,
     /// The native capture runs for this account: a hidden server's workspaces are then the capture's to name (2650).
     pub native_capture: bool,
-    /// The admin flag of the last request: its overlays are the drafts while it is set.
-    pub admin: AtomicBool,
     /// The account's waveforms, downloads and takes (1l).
     pub media: Option<Arc<native::media::Media>>,
     /// The account's engine link (2210): it lives and dies with the account.
@@ -284,7 +282,6 @@ impl Services {
             runtime,
             members: native::runtime::stop::Members::default(),
             native_capture,
-            admin: AtomicBool::new(false),
             media,
             engine,
             used: AtomicU64::new(k7_hub::account::now_ms()),
@@ -428,7 +425,6 @@ impl Held {
             runtime: None,
             members: native::runtime::stop::Members::default(),
             native_capture,
-            admin: AtomicBool::new(false),
             media: None,
             engine,
             used: AtomicU64::new(0),
@@ -479,7 +475,7 @@ mod tests {
         let a = instances.environment("a@x.org", "s").await.unwrap();
         // A's account lock is held, so A's mirror waits behind it.
         let held_a =
-            native::locks::write(&k7_file_service::libraries::Home::of(&a.env, false).studio).await;
+            native::locks::write(&k7_file_service::libraries::Home::of(&a.env).studio).await;
         let (svc2, inst2) = (svc.clone(), instances.clone());
         let waiting = tokio::spawn(async move { svc2.held("a@x.org", &inst2).await.map(|_| ()) });
         tokio::time::sleep(Duration::from_millis(300)).await;

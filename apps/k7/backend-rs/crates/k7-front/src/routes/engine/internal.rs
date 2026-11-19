@@ -108,10 +108,9 @@ fn view(state: &AppState, id: &str, hostname: &str, score: Option<f64>, holder: 
     json!({
         "id": id,
         "hostname": hostname,
-        "role": core.registry.role(id, holder, false).as_str(),
+        "role": if core.registry.may_use(id, holder) { "owner" } else { "unowned" },
         "holds": core.registry.holds(id, holder),
         "tunnel": core.hub.has(id),
-        "renderer": core.hub.is_renderer(id),
         "score": score.map(k7_engine::js::num),
     })
 }
@@ -148,15 +147,13 @@ async fn engine(
 async fn hub(State(state): State<Arc<AppState>>) -> Response {
     let hub = &engine_of(&state).core.hub;
     Json(json!({
-        "rendersEnabled": hub.renders_enabled(),
-        "renderer": hub.renderer(),
         "epoch": hub.epoch(),
     }))
     .into_response()
 }
 
 /// What `bindBody` reads: the engine, its roots, the kind, synced, and a key the caller held.
-type Binding = (Option<String>, Vec<Root>, Kind, bool, Option<String>);
+type Binding = (String, Vec<Root>, Kind, bool, Option<String>);
 
 /// A key its caller held before a restart, never one it made up: as long as the drawn ones.
 fn held_key(k: &str) -> bool {
@@ -168,8 +165,7 @@ fn held_key(k: &str) -> bool {
 /// `bindBody`: the binding asked for, or the first issue.
 fn read_binding(b: &Value) -> Result<Binding, String> {
     let engine_id = match b.get("engineId") {
-        Some(Value::Null) => None,
-        Some(Value::String(s)) if !s.is_empty() => Some(s.clone()),
+        Some(Value::String(s)) if !s.is_empty() => s.clone(),
         Some(Value::String(_)) => {
             return Err("Too small: expected string to have >=1 characters".into());
         }
@@ -236,10 +232,9 @@ async fn bind(State(state): State<Arc<AppState>>, req: Request) -> Response {
         Err(e) => error(StatusCode::BAD_REQUEST, &e),
         Ok((engine_id, roots, kind, synced, key)) => {
             let hub = &engine_of(&state).core.hub;
-            let id = engine_id.as_deref();
             let path = match key {
-                Some(key) => hub.bind_local_as(key, id, roots, kind, synced),
-                None => hub.bind_local(id, roots, kind, synced),
+                Some(key) => hub.bind_local_as(key, &engine_id, roots, kind, synced),
+                None => hub.bind_local(&engine_id, roots, kind, synced),
             };
             let body = json!({ "path": path, "epoch": hub.epoch() });
             (StatusCode::CREATED, Json(body)).into_response()

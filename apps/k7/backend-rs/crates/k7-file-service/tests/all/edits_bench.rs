@@ -74,7 +74,6 @@ fn replay(name: &str, ask: impl Fn(&Libs<'_>, &Home, &Value) -> Result<Value, Be
         let home = Home {
             studio: s.path("home"),
             libraries: s.path("libraries"),
-            admin: false,
         };
         let env: BTreeMap<String, String> = [
             ("STUDIO_HOME".to_owned(), home.studio.clone()),
@@ -150,7 +149,6 @@ fn the_bench_folder_is_where_the_account_keeps_it() {
     let home = Home {
         studio: "/h".to_owned(),
         libraries: "/h/libraries".to_owned(),
-        admin: false,
     };
     assert_eq!(bench_dir(&home), "/h/workspace/Banc/live.k7");
     let _ = Arc::new(());
@@ -221,7 +219,6 @@ fn a_hostile_step_id_in_the_bench_source_writes_nothing_outside_the_account() {
     let home = Home {
         studio: s.path("home"),
         libraries: s.path("libraries"),
-        admin: false,
     };
     let env: BTreeMap<String, String> = [
         ("STUDIO_HOME".to_owned(), home.studio.clone()),
@@ -268,7 +265,6 @@ fn a_decline_after_the_chain_landed_is_a_refusal_not_a_handback() {
     let home = Home {
         studio: s.path("home"),
         libraries: s.path("libraries"),
-        admin: false,
     };
     let env: BTreeMap<String, String> = [
         ("STUDIO_HOME".to_owned(), home.studio.clone()),

@@ -5,8 +5,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/audio/verb",
-    "newName": "warm",
-    "admin": false
+    "newName": "warm"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -57,8 +56,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/audio/verb/module.k7x",
-    "newName": "warm",
-    "admin": false
+    "newName": "warm"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -109,8 +107,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/audio/plain",
-    "newName": "other",
-    "admin": false
+    "newName": "other"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -159,8 +156,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/audio/verb",
-    "newName": "plain",
-    "admin": false
+    "newName": "plain"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -205,8 +201,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/audio/verb",
-    "newName": "verb",
-    "admin": false
+    "newName": "verb"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -251,8 +246,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/audio/verb",
-    "newName": "a/b",
-    "admin": false
+    "newName": "a/b"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -297,8 +291,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/audio/ghost",
-    "newName": "g",
-    "admin": false
+    "newName": "g"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -343,8 +336,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/zzz/verb",
-    "newName": "g",
-    "admin": false
+    "newName": "g"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -389,8 +381,7 @@
    "fn": "cloneModule",
    "args": {
     "path": "_modules/audio/verb",
-    "newName": "warm",
-    "admin": false
+    "newName": "warm"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",

@@ -112,7 +112,7 @@ fn deps(who: &Who<'_>, engine: &Arc<Engine>, root: &Path) -> Option<Deps> {
     let code_root = who.code_root?;
     let account = &who.held.account;
     let env = &account.env;
-    let home = Home::of(env, who.admin);
+    let home = Home::of(env);
     let docs = Docs::of(&who.held.acct, code_root).with_thawed(jobs.thawed.clone());
     let tmp = ["TMPDIR", "TEMP", "TMP"]
         .iter()

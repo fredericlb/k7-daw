@@ -54,11 +54,11 @@ fn a_link_is_renamed_and_recycled_as_itself_and_a_dangling_one_is_refused_by_the
     let ghost = fx.s.path("ghost-target");
     link_file(&ghost, &fx.at("dangling")).unwrap();
     assert_eq!(
-        fx.refusal(false, rename("dangling", "d2")),
+        fx.refusal(rename("dangling", "d2")),
         "path escapes the workspace: dangling"
     );
     assert_eq!(
-        fx.refusal(false, delete("dangling")),
+        fx.refusal(delete("dangling")),
         "path escapes the workspace: dangling"
     );
 }
@@ -71,18 +71,18 @@ fn a_dangling_link_is_refused_by_the_gate() {
     }
     link_file(&fx.s.path("nowhere"), &fx.at("dead")).unwrap();
     assert_eq!(
-        fx.refusal(false, rename("dead", "alive")),
+        fx.refusal(rename("dead", "alive")),
         "path escapes the workspace: dead"
     );
     assert_eq!(
-        fx.refusal(false, folder(".", "dead")),
+        fx.refusal(folder(".", "dead")),
         "path escapes the workspace: dead"
     );
 }
 
 #[test]
 fn a_drive_root_plans_lexically_and_folds_the_bin_s_case() {
-    let h = drive_home(false);
+    let h = drive_home();
     let space = Space::open(&h, "C:/Work/songs");
     let disk = Drive::new(
         &[
@@ -176,11 +176,10 @@ fn a_home_spelt_with_backslashes_still_refuses_the_libraries_folder_before_any_e
     let h = k7_file_service::libraries::Home {
         studio: "C:\\Work\\studio".into(),
         libraries: "C:\\Work\\libs".into(),
-        admin: false,
     };
     let space = Space::open(&h, "C:/Work/studio/workspace/songs");
     let disk = Drive::new(&[], &["C:/Work/libs", "C:/Work/studio/workspace/songs"]);
-    let said = "can't rename '../../../libs': the libraries are listed by the admins, not moved from a workspace";
+    let said = "can't rename '../../../libs': the libraries are listed, not moved from a workspace";
     assert_eq!(
         plan(&space, &rename("_libraries", "libs"), &disk),
         Err(EntryError::Refused(said.into()))

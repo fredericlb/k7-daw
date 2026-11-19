@@ -394,16 +394,7 @@ fn modules(
 
 /// The copy judged, in the TypeScript's order, with nothing written: both ends' names and presence, the source's
 /// guards, the destination's, the name, then every entry, playlist and module it would write.
-pub fn plan_copy(
-    home: &Home,
-    admin: bool,
-    ask: &CopyAsk<'_>,
-    limits: &Limits,
-) -> Result<CopyPlan, WsError> {
-    let home = Home {
-        admin,
-        ..home.clone()
-    };
+pub fn plan_copy(home: &Home, ask: &CopyAsk<'_>, limits: &Limits) -> Result<CopyPlan, WsError> {
     let (_, src_root) = end(&home, ask.from)?;
     let (dest_name, dest_root) = end(&home, ask.to)?;
     let src_space = Space::open(&home, &src_root);

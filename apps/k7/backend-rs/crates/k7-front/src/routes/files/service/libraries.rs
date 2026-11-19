@@ -55,8 +55,8 @@ pub async fn start(
     Some(made.await)
 }
 
-/// A request for the libraries under `target`: the client's identity dropped, the hub's admin stamp given, the body read whole.
-pub async fn answer(native: &Native, target: &str, admin: bool, req: Request) -> Response {
+/// A request for the libraries under `target`: the client's identity dropped, the body read whole.
+pub async fn answer(native: &Native, target: &str, req: Request) -> Response {
     let method = req.method().as_str().to_string();
     // librariesRoutes.ts' `jsonBody` refuses past the file service's JSON limit, with this sentence.
     let bytes = match http_body_util::Limited::new(req.into_body(), body::JSON_LIMIT)
@@ -79,7 +79,6 @@ pub async fn answer(native: &Native, target: &str, admin: bool, req: Request) ->
             path,
             query,
             secret: Some(&native.secret),
-            admin,
             body: &bytes,
         })
         .await;
@@ -109,7 +108,6 @@ mod tests {
         n: &Native,
         method: &str,
         target: &str,
-        admin: bool,
         headers: &[(&str, &str)],
         body: Body,
     ) -> (u16, String) {
@@ -117,7 +115,7 @@ mod tests {
         for (k, v) in headers {
             b = b.header(*k, *v);
         }
-        let r = answer(n, target, admin, b.body(body).unwrap()).await;
+        let r = answer(n, target, b.body(body).unwrap()).await;
         let status = r.status().as_u16();
         (
             status,
@@ -134,20 +132,12 @@ mod tests {
             svc: n.svc.clone(),
             secret: "not-the-secret".into(),
         });
-        let (status, text) = ask(
-            &wrong,
-            "GET",
-            "/account/libraries",
-            true,
-            &[],
-            Body::empty(),
-        )
-        .await;
+        let (status, text) = ask(&wrong, "GET", "/account/libraries", &[], Body::empty()).await;
         assert_eq!(
             (status, text.as_str()),
             (401, r#"{"error":"not from this service's file hub"}"#)
         );
-        let (status, _) = ask(&n, "GET", "/account/libraries", true, &[], Body::empty()).await;
+        let (status, _) = ask(&n, "GET", "/account/libraries", &[], Body::empty()).await;
         assert_eq!(status, 200);
     }
 
@@ -156,12 +146,12 @@ mod tests {
         let n = native("refusals");
         n.svc.first_ensure().await;
         let big = Body::from(vec![b' '; body::JSON_LIMIT + 1]);
-        let (status, text) = ask(&n, "POST", "/libraries/sync", true, &[], big).await;
+        let (status, text) = ask(&n, "POST", "/libraries/sync", &[], big).await;
         assert_eq!(
             (status, text.as_str()),
             (413, r#"{"error":"body over 8388608 bytes"}"#)
         );
-        let (_, text) = ask(&n, "GET", "/nowhere", false, &[], Body::empty()).await;
+        let (_, text) = ask(&n, "GET", "/nowhere", &[], Body::empty()).await;
         assert_eq!(text, r#"{"error":"no GET /nowhere"}"#);
     }
 }

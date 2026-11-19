@@ -85,7 +85,7 @@ fn every_scenario_of_the_typescripts_own_listings_is_written_the_same() {
             skipped += 1;
             continue;
         }
-        let home = s.home(row["admin"].as_bool().unwrap());
+        let home = s.home();
         let space = Space::open(&home, &s.path("ws"));
         let with_engine = name.contains("engine");
         for (key, which) in LISTINGS {

@@ -60,11 +60,10 @@ impl Scratch {
         p
     }
 
-    pub fn home(&self, admin: bool) -> Home {
+    pub fn home(&self) -> Home {
         Home {
             studio: self.path("studio"),
             libraries: self.path("libraries"),
-            admin,
         }
     }
 }

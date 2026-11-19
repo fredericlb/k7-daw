@@ -29,7 +29,7 @@ pub(super) async fn device(name: &str) -> Dev {
     env.insert("STUDIO_HOME".to_string(), path);
     Dev {
         acct,
-        home: Home::of(&env, false),
+        home: Home::of(&env),
         _dir: dir,
     }
 }

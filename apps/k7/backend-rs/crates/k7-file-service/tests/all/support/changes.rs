@@ -22,14 +22,14 @@ pub fn body(ops: Value) -> Value {
     json!({ "at": PROJECT, "base": "t1", "label": "verb line", "ops": ops })
 }
 
-pub fn planned(fx: &Fx, admin: bool, ops: Value) -> Result<Planned, Refusal> {
+pub fn planned(fx: &Fx, ops: Value) -> Result<Planned, Refusal> {
     let req = parse(&body(ops))?;
-    let h = fx.s.home(admin);
+    let h = fx.s.home();
     plan(&Space::open(&h, &fx.root), &req.ops)
 }
 
-pub fn refused(fx: &Fx, admin: bool, ops: Value) -> Refusal {
-    planned(fx, admin, ops).expect_err("the set was planned")
+pub fn refused(fx: &Fx, ops: Value) -> Refusal {
+    planned(fx, ops).expect_err("the set was planned")
 }
 
 pub fn text(file: &str, text: &str, was: Value) -> Value {
@@ -107,7 +107,7 @@ pub fn land(
     fx: &Fx,
     ops: Value,
 ) -> Result<k7_file_service::changes::commit::Landed, k7_file_service::changes::commit::Failed> {
-    let p = planned(fx, true, ops).expect("planned");
+    let p = planned(fx, ops).expect("planned");
     commit(&Real, &p, &mut |_| {})
 }
 

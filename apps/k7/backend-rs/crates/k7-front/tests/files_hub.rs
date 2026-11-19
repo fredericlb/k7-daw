@@ -34,12 +34,9 @@ async fn the_hub_in_the_front() {
     let hello = send(front, "GET", "/api/files-hub", &session).await.json();
     assert_eq!(
         hello.as_object().unwrap().keys().collect::<Vec<_>>(),
-        ["path", "ticket", "admin"]
+        ["path", "ticket"]
     );
-    assert_eq!(
-        (hello["path"].clone(), hello["admin"].clone()),
-        (json!("/api/files"), json!(false))
-    );
+    assert_eq!(hello["path"], json!("/api/files"));
     let ticket = hello["ticket"].as_str().unwrap().to_string();
     let payload = read_ticket(&ticket);
     assert_eq!(
@@ -59,7 +56,6 @@ async fn the_hub_in_the_front() {
         ("x-studio-engine-token", ticket.as_str()),
         ("x-studio-user", "eve@x"),
         ("x-studio-hub-secret", "forged"),
-        ("x-studio-admin", "1"),
         ("authorization", "Bearer forged"),
         ("x-studio-engine-id", "no-such-engine"),
     ];

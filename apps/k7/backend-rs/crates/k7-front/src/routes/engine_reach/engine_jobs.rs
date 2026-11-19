@@ -119,7 +119,7 @@ fn refused(issues: Option<String>) -> Option<Response> {
     issues.map(|e| fail(StatusCode::BAD_REQUEST, &e))
 }
 
-/// `owned`: engine `id` as the caller sees it must be theirs.
+/// `owned`: engine `id` must be one this device's account may use.
 #[allow(clippy::result_large_err, reason = "the refusal is the answer itself")]
 async fn owned(state: &AppState, caller: &Caller, id: &str) -> Result<(), Response> {
     let user = caller.user().unwrap_or_default();
@@ -132,7 +132,7 @@ async fn owned(state: &AppState, caller: &Caller, id: &str) -> Result<(), Respon
             StatusCode::NOT_FOUND,
             &format!("no engine '{id}' is registered"),
         )),
-        Ok(Some(v)) if v.role != "owner" => Err(fail(
+        Ok(Some(v)) if !v.usable => Err(fail(
             StatusCode::FORBIDDEN,
             "only the engine's owner sets what it plays",
         )),
@@ -148,10 +148,7 @@ async fn job(
     roots: Vec<Root>,
     total: Option<Duration>,
 ) -> Response {
-    let link = match reach(state)
-        .open(Some(id), roots, Kind::Jobs, OPEN_JOBS)
-        .await
-    {
+    let link = match reach(state).open(id, roots, Kind::Jobs, OPEN_JOBS).await {
         Ok(Some(l)) => l,
         Ok(None) => return fail(StatusCode::SERVICE_UNAVAILABLE, NOT_CONNECTED),
         Err(e) => {

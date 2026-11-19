@@ -157,24 +157,15 @@ async fn the_first_half_of_an_open_asks_the_hub_and_pins_the_workspace() {
     let said = heard.lock().unwrap().join("\n").to_lowercase();
     assert!(said.contains("post /libraries/sync"), "{said}");
     assert!(said.contains("x-studio-hub-secret: sec"), "{said}");
-    assert!(said.contains("{\"draft\":false}"), "{said}");
+    assert!(said.contains("{}"), "{said}");
     let pins = std::fs::read_to_string(format!("{}/_library-pins.k7x", a.ws)).unwrap();
     assert_eq!(pins, "k7-core(1)\n");
-    // A tree open pins too, and an admin's workspace is pinned to the draft.
-    let mut admin = wired(&a, &url);
-    admin.home.admin = true;
+    // A tree open pins too.
     let other = format!("{}/home/workspace/other", a.dir.display());
     std::fs::create_dir_all(&other).unwrap();
-    assert!(prepare(&admin, &other).await.is_ok(), "a tree open failed");
+    assert!(prepare(&p, &other).await.is_ok(), "a tree open failed");
     let pins = std::fs::read_to_string(format!("{other}/_library-pins.k7x")).unwrap();
-    assert_eq!(pins, "k7-core(\"draft\")\n");
-    assert!(
-        heard
-            .lock()
-            .unwrap()
-            .iter()
-            .any(|h| h.contains("{\"draft\":true}"))
-    );
+    assert_eq!(pins, "k7-core(1)\n");
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]

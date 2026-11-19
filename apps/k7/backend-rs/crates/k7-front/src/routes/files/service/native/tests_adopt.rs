@@ -40,12 +40,12 @@ async fn a_staged_output_is_adopted_only_once_its_job_ended_with_its_value() {
         "0123456789abcdef0123456789abcdef",
     ] {
         stage(&b, job);
-        let (status, ans) = b.changes(false, b.set(adopt(job))).await;
+        let (status, ans) = b.changes(b.set(adopt(job))).await;
         assert_eq!(status, 400, "{job}: {ans}");
         assert!(!b.has("mix.wav"), "{job} landed");
     }
     stage(&b, &done);
-    let (status, ans) = b.changes(false, b.set(adopt(&done))).await;
+    let (status, ans) = b.changes(b.set(adopt(&done))).await;
     assert_eq!(status, 200, "{ans}");
     assert!(b.has("mix.wav"));
     // The step is the journal's: an undo takes the adopted file back.

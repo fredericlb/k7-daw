@@ -23,7 +23,7 @@ fn table() -> std::sync::MutexGuard<'static, HashMap<String, Arc<Shares>>> {
 
 /// The account's key: its state folder, which the hook and the asks both know.
 pub fn key(env: &std::collections::BTreeMap<String, String>) -> String {
-    k7_file_service::libraries::Home::of(env, false).studio
+    k7_file_service::libraries::Home::of(env).studio
 }
 
 /// The account's shares, made on its first need; the front's one count report is started with the first.

@@ -52,7 +52,7 @@ fn child_writes() {
 fn until_moved(m: &Revisions, s: &Scratch, root: &str, dir: &str, was: &str) -> Option<Duration> {
     let t0 = Instant::now();
     while t0.elapsed() < BOUND {
-        if m.token(&s.home(false), root, Some(dir), false) != was {
+        if m.token(&s.home(), root, Some(dir), false) != was {
             return Some(t0.elapsed());
         }
         std::thread::sleep(Duration::from_millis(5));
@@ -63,22 +63,22 @@ fn until_moved(m: &Revisions, s: &Scratch, root: &str, dir: &str, was: &str) -> 
 /// Waits for a canary write to move the token (the stream is live), then for a quiet second; polls up to `BOUND`.
 fn settle(m: &Revisions, s: &Scratch, root: &str, dir: &str) -> String {
     let by = Instant::now() + BOUND;
-    let was = m.token(&s.home(false), root, Some(dir), false);
+    let was = m.token(&s.home(), root, Some(dir), false);
     std::fs::write(format!("{dir}/settle-canary.k7x"), "canary").unwrap();
     while Instant::now() < by {
-        if m.token(&s.home(false), root, Some(dir), false) != was {
+        if m.token(&s.home(), root, Some(dir), false) != was {
             break;
         }
         std::thread::sleep(Duration::from_millis(20));
     }
-    let mut last = m.token(&s.home(false), root, Some(dir), false);
+    let mut last = m.token(&s.home(), root, Some(dir), false);
     while Instant::now() < by {
         std::thread::sleep(Duration::from_millis(50));
-        let now = m.token(&s.home(false), root, Some(dir), false);
+        let now = m.token(&s.home(), root, Some(dir), false);
         if now == last && m.walks() > 0 {
             let walks = m.walks();
             std::thread::sleep(Duration::from_secs(1));
-            if m.token(&s.home(false), root, Some(dir), false) == now && m.walks() == walks {
+            if m.token(&s.home(), root, Some(dir), false) == now && m.walks() == walks {
                 return now;
             }
         }
@@ -141,7 +141,7 @@ fn a_takes_media_does_not_move_the_token() {
         std::thread::sleep(Duration::from_millis(10));
     }
     std::thread::sleep(Duration::from_millis(400));
-    assert_eq!(m.token(&s.home(false), &root, Some(&dir), false), was);
+    assert_eq!(m.token(&s.home(), &root, Some(&dir), false), was);
     assert_eq!(m.walks(), walks);
 }
 
@@ -152,10 +152,10 @@ fn the_walk_does_not_dirty_its_own_memo() {
     s.file("ws/p.k7/lanes/l.k7x", "");
     let was = settle(&m, &s, &root, &dir);
     // The first ask after the settle may still take the walk that keeps the token; it is not counted.
-    m.token(&s.home(false), &root, Some(&dir), false);
+    m.token(&s.home(), &root, Some(&dir), false);
     let walks = m.walks();
     for _ in 0..20 {
-        assert_eq!(m.token(&s.home(false), &root, Some(&dir), false), was);
+        assert_eq!(m.token(&s.home(), &root, Some(&dir), false), was);
         std::thread::sleep(Duration::from_millis(20));
     }
     assert_eq!(m.walks(), walks);
@@ -169,7 +169,7 @@ fn a_root_removed_while_watched_is_no_panic_and_walks_afterwards() {
     w.unwatch(&root);
     std::fs::remove_dir_all(s.path("ws")).unwrap();
     std::thread::sleep(Duration::from_millis(200));
-    let t = m.token(&s.home(false), &root, Some(&dir), false);
+    let t = m.token(&s.home(), &root, Some(&dir), false);
     assert!(!t.is_empty());
     assert!(w.generation(&root).is_none() || w.watched() <= 1);
 }

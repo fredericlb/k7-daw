@@ -230,7 +230,7 @@ fn a_real_nest_past_the_depth_bound_is_declined_before_a_byte_is_written() {
     };
     let c = ask("songs", "winter.k7", "albums", "w.k7");
     assert_eq!(
-        plan_copy(&a.home(), false, &c, &few).err(),
+        plan_copy(&a.home(), &c, &few).err(),
         Some(WsError::Declined(Declined::TooDeep))
     );
     assert!(!has(&a, "albums", "w.k7"));
@@ -300,7 +300,7 @@ fn the_entries_are_counted_before_anything_is_written() {
     };
     let c = ask("songs", "winter.k7", "albums", "w.k7");
     assert_eq!(
-        plan_copy(&a.home(), false, &c, &few).err(),
+        plan_copy(&a.home(), &c, &few).err(),
         Some(WsError::Declined(Declined::TooMany))
     );
     assert!(!has(&a, "albums", "w.k7"));
@@ -313,7 +313,7 @@ fn the_entries_are_counted_before_anything_is_written() {
         ..Limits::default()
     };
     assert_eq!(
-        plan_copy(&a.home(), false, &c, &small).err(),
+        plan_copy(&a.home(), &c, &small).err(),
         Some(WsError::Declined(Declined::TooLarge))
     );
 }

@@ -43,7 +43,7 @@ pub(super) fn run_in(dir: &Path) -> Run {
     ]
     .into();
     Run {
-        home: Home::of(&env, false),
+        home: Home::of(&env),
         code_root: Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("../../../../..")
             .display()

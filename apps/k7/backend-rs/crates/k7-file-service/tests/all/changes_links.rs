@@ -18,7 +18,6 @@ fn a_read_op_is_stale_when_the_file_moved_and_writes_nothing() {
     let set = |was: serde_json::Value| {
         planned(
             &fx,
-            true,
             json!([{ "kind": "read", "file": "song.k7/a.txt", "was": was }]),
         )
         .unwrap()
@@ -37,7 +36,6 @@ fn a_read_op_is_stale_when_the_file_moved_and_writes_nothing() {
     );
     let absent = planned(
         &fx,
-        true,
         json!([{ "kind": "read", "file": "song.k7/none.txt", "was": null }]),
     )
     .unwrap();
@@ -46,7 +44,6 @@ fn a_read_op_is_stale_when_the_file_moved_and_writes_nothing() {
     assert!(
         planned(
             &fx,
-            true,
             json!([
                 { "kind": "read", "file": "song.k7/a.txt", "was": text_hash("old a") },
                 text("song.k7/a.txt", "new", json!(text_hash("old a"))),
@@ -65,7 +62,6 @@ fn a_read_op_is_stale_when_the_file_moved_and_writes_nothing() {
     // The gates cover a read: a path out of the workspace is forbidden, not stale.
     let r = refused(
         &fx,
-        true,
         json!([{ "kind": "read", "file": "../x", "was": null }]),
     );
     assert_eq!(r.status(), 403, "{r}");
@@ -92,7 +88,7 @@ mod unix {
             json!({ "kind": "move", "from": "song.k7/m.txt", "file": "song.k7/linked/m.txt" }),
             json!({ "kind": "adopt", "job": "j1", "out": "a.wav", "file": "song.k7/linked/a.wav" }),
         ] {
-            let r = refused(&fx, true, json!([o.clone()]));
+            let r = refused(&fx, json!([o.clone()]));
             assert_eq!(r.status(), 403, "{o}: {r}");
         }
         assert_eq!(std::fs::read_dir(&outside).unwrap().count(), 0);
@@ -109,14 +105,12 @@ mod unix {
         for from in ["song.k7/ln.txt", "song.k7/dir/secret.txt"] {
             let r = refused(
                 &fx,
-                true,
                 json!([{ "kind": "copy", "from": from, "file": "song.k7/c9.txt" }]),
             );
             assert!(matches!(r.status(), 400 | 403), "{from}: {r}");
         }
         let r = refused(
             &fx,
-            true,
             json!([{ "kind": "move", "from": "song.k7/ln.txt", "file": "song.k7/m9.txt" }]),
         );
         assert!(matches!(r.status(), 400 | 403), "{r}");
@@ -132,13 +126,13 @@ mod unix {
         symlink(fx.s.path("outside"), fx.s.path("studio/.job-out/j1")).unwrap();
         let adopt =
             json!([{ "kind": "adopt", "job": "j1", "out": "a.wav", "file": "song.k7/a.wav" }]);
-        let r = refused(&fx, true, adopt.clone());
+        let r = refused(&fx, adopt.clone());
         assert_eq!(r.status(), 400, "{r}");
         std::fs::remove_file(fx.s.path("studio/.job-out/j1")).unwrap();
         std::fs::remove_dir(fx.s.path("studio/.job-out")).unwrap();
         symlink(fx.s.path("outside"), fx.s.path("studio/.job-out")).unwrap();
         fx.s.file("outside/j1/a.wav", "RIFF");
-        let r = refused(&fx, true, adopt);
+        let r = refused(&fx, adopt);
         assert_eq!(r.status(), 400, "{r}");
     }
 }

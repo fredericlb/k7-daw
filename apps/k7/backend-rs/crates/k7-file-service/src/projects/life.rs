@@ -29,10 +29,9 @@ pub struct MovePlan {
     pub answer: String,
 }
 
-/// `renameProject`'s guards (2041); `None` is the name it has (answer with `kept_answer`). `_admin` rides in `Space`'s home.
+/// `renameProject`'s guards (2041); `None` is the name it has (answer with `kept_answer`).
 pub fn plan_rename(
     space: &Space<'_>,
-    _admin: bool,
     rel: &str,
     name: &str,
     probe: &dyn Probe,
@@ -84,7 +83,6 @@ pub fn kept_answer(space: &Space<'_>, rel: &str, probe: &dyn Probe) -> Result<St
 /// `deleteProject`'s guards (2042, 2094); `dest` is the bin's first free name.
 pub fn plan_recycle(
     space: &Space<'_>,
-    _admin: bool,
     rel: &str,
     probe: &dyn Probe,
 ) -> Result<MovePlan, ProjError> {

@@ -4,8 +4,7 @@
    "name": "a node, unnamed",
    "fn": "createNode",
    "args": {
-    "path": "_modules/audio/verb",
-    "admin": false
+    "path": "_modules/audio/verb"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -53,8 +52,7 @@
    "name": "a node, unnamed again",
    "fn": "createNode",
    "args": {
-    "path": "_modules/audio/verb",
-    "admin": false
+    "path": "_modules/audio/verb"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -104,8 +102,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/verb",
-    "node": "lead",
-    "admin": false
+    "node": "lead"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -154,8 +151,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/verb/module.k7x",
-    "node": "lead",
-    "admin": false
+    "node": "lead"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -204,8 +200,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/verb",
-    "node": "lead",
-    "admin": false
+    "node": "lead"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -251,8 +246,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/verb",
-    "node": "plain",
-    "admin": false
+    "node": "plain"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -301,8 +295,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/verb",
-    "node": "a b",
-    "admin": false
+    "node": "a b"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -347,8 +340,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/ghost",
-    "node": "g",
-    "admin": false
+    "node": "g"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -393,8 +385,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/zzz/verb",
-    "node": "g",
-    "admin": false
+    "node": "g"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -439,8 +430,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/4osc",
-    "node": "built",
-    "admin": false
+    "node": "built"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -489,8 +479,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/io/CAM",
-    "node": "cam",
-    "admin": false
+    "node": "cam"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -539,8 +528,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/io/OUT",
-    "node": "out",
-    "admin": false
+    "node": "out"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -585,8 +573,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/verb",
-    "node": "lead",
-    "admin": false
+    "node": "lead"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -630,8 +617,7 @@
    "fn": "createNode",
    "args": {
     "path": "_modules/audio/verb",
-    "node": "lead",
-    "admin": false
+    "node": "lead"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",

@@ -14,7 +14,7 @@ use support::{Scratch, can_link, link, link_file};
 
 fn run(s: &Scratch, limits: &Limits) -> Result<Listed, Declined> {
     s.dir("ws");
-    let h = s.home(false);
+    let h = s.home();
     list(
         &Space::open(&h, &s.path("ws")),
         Listing::ModuleLibraries,
@@ -279,7 +279,6 @@ fn a_drive_root_spells_every_level() {
     let home = Home {
         studio: "C:/Users/a/.k7".into(),
         libraries: "C:/Users/a/.k7/libraries".into(),
-        admin: false,
     };
     let space = Space::open(&home, "C:/Users/a/.k7/workspace/songs");
     let libs = [Library {

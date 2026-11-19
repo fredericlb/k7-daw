@@ -32,10 +32,6 @@ pub struct Settings {
     pub app_release_max_bytes: f64,
     /// `K7_CAMERA_ICE_SERVERS`, as written: the STUN and TURN servers handed to both ends of a remote camera.
     pub camera_ice_servers: Option<String>,
-    /// `$AUTH_ADMIN_GROUPS`, comma-separated; empty admits nobody.
-    pub admin_groups: Vec<String>,
-    /// The dev stub on purpose, whose `dev-user` then holds every admin group (`auth_guard.rs`).
-    pub dev_admin: bool,
     /// `SESSION_SECRET` as written, `""` when unset: what the file hub's ticket key derives from.
     pub raw_session_secret: String,
     /// The instance's data folder, `$STUDIO_MEDIATEK` or `<STUDIO_HOME or ~/.k7>/mediatek`.
@@ -56,11 +52,7 @@ pub struct Settings {
     pub release: String,
     /// Every setting the front was given, which the supervisor gets over this process's environment.
     pub supervisor_env: Vec<(String, String)>,
-    /// The deployment's render key, which the server's own engine presents (`STUDIO_RENDER_KEY`, trimmed).
-    pub render_key: Option<String>,
-    /// `STUDIO_REGISTRY_REQUIRE_DEVICE=1`: a heartbeat must bear the render key.
-    pub require_device: bool,
-    /// Where the engines' bindings and owners live: `STUDIO_ENGINES_DIR`, else `<mediatek>/.engines`.
+    /// Where the engines' bindings live: `STUDIO_ENGINES_DIR`, else `<mediatek>/.engines`.
     pub engines_dir: PathBuf,
     /// The tunnel's upload limits, as `uploadLimits` reads them.
     pub upload_limits: k7_engine::tunnel::uploads::UploadLimits,
@@ -146,22 +138,11 @@ impl Settings {
                 * 1024.0
                 * 1024.0,
             camera_ice_servers: get("K7_CAMERA_ICE_SERVERS"),
-            admin_groups: env
-                .get("AUTH_ADMIN_GROUPS")
-                .map(|v| {
-                    v.split(',')
-                        .map(|g| g.trim().to_string())
-                        .filter(|g| !g.is_empty())
-                        .collect()
-                })
-                .unwrap_or_default(),
-            dev_admin: raw("STUDIO_DEV_AUTH").as_deref() == Some("1"),
             raw_session_secret: env.get("SESSION_SECRET").cloned().unwrap_or_default(),
             engines_dir: raw("STUDIO_ENGINES_DIR")
                 .map(PathBuf::from)
                 .unwrap_or_else(|| mediatek.join(".engines")),
             mediatek_dir: mediatek,
-            render_key: get("STUDIO_RENDER_KEY"),
             engine_core: raw("K7_ENGINE_CORE").as_deref() == Some("front"),
             front_cache: raw("K7_FRONT_CACHE").map(PathBuf::from).unwrap_or_else(|| {
                 raw("STUDIO_HOME")
@@ -184,7 +165,6 @@ impl Settings {
                     }
                     seen
                 }),
-            require_device: raw("STUDIO_REGISTRY_REQUIRE_DEVICE").as_deref() == Some("1"),
             upload_limits: k7_engine::tunnel::uploads::UploadLimits::from_settings(&|k| raw(k)),
             api_token_secret: raw("API_TOKEN_SECRET").unwrap_or_else(|| {
                 match raw("SESSION_SECRET") {

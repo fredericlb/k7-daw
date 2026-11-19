@@ -105,7 +105,7 @@ fn every_path_passes_the_gates_and_one_bad_path_refuses_the_set() {
             "names no library: _libraries/UPPER/a.txt",
         ),
     ] {
-        let r = refused(&fx, true, json!([ok.clone(), text(bad, "x", json!(null))]));
+        let r = refused(&fx, json!([ok.clone(), text(bad, "x", json!(null))]));
         assert_eq!((r.status(), r.to_string().as_str()), (403, want), "{bad}");
     }
     // The gates cover every kind's paths, a read source too.
@@ -116,32 +116,31 @@ fn every_path_passes_the_gates_and_one_bad_path_refuses_the_set() {
         json!({ "kind": "move", "from": "song.k7/clips/riff.k7x", "file": "../x" }),
         json!({ "kind": "adopt", "job": "j1", "out": "a.wav", "file": "../x" }),
     ] {
-        assert_eq!(refused(&fx, true, json!([o.clone()])).status(), 403, "{o}");
+        assert_eq!(refused(&fx, json!([o.clone()])).status(), 403, "{o}");
     }
-    assert!(planned(&fx, true, json!([ok])).is_ok());
+    assert!(planned(&fx, json!([ok])).is_ok());
 }
 
-// A library is written by the origin's admins alone, and only below its draft root.
+// A library is not written from here.
 #[test]
-fn a_library_is_written_by_an_admin_alone() {
+fn a_library_is_not_written() {
     let fx = Fx::new("c-libs");
     let ops = json!([text(
         "_libraries/k7-core/modules/audio/verb/module.k7x",
-        "extends(\"@engine/reverb\")\n// admin\n",
+        "extends(\"@engine/reverb\")\n",
         json!(null)
     )]);
-    let r = refused(&fx, false, ops.clone());
+    let r = refused(&fx, ops.clone());
     assert_eq!(r.status(), 403);
     assert_eq!(
         r.to_string(),
-        "can't write '_libraries/k7-core/modules/audio/verb/module.k7x': only the origin's admins edit a library"
+        "can't write '_libraries/k7-core/modules/audio/verb/module.k7x': a library is not edited from here"
     );
-    assert!(planned(&fx, true, ops).is_ok());
     // A copy out of a library is a read; a move out of one is a write there.
     let copy = json!([{ "kind": "copy", "from": "_libraries/k7-core/modules/audio/verb/module.k7x", "file": "song.k7/v.k7x" }]);
-    assert!(planned(&fx, false, copy).is_ok());
+    assert!(planned(&fx, copy).is_ok());
     let take = json!([{ "kind": "move", "from": "_libraries/k7-core/modules/audio/verb/module.k7x", "file": "song.k7/v.k7x" }]);
-    assert_eq!(refused(&fx, false, take).status(), 403);
+    assert_eq!(refused(&fx, take).status(), 403);
 }
 
 // What a text op may not be: a binary, YAML; and what two ops may not do: name one file.
@@ -149,11 +148,11 @@ fn a_library_is_written_by_an_admin_alone() {
 fn a_text_op_names_no_binary_no_yaml_and_no_file_twice() {
     let fx = Fx::new("c-names");
     assert_eq!(
-        refused(&fx, true, json!([text("song.k7/a.wav", "x", json!(null))])).to_string(),
+        refused(&fx, json!([text("song.k7/a.wav", "x", json!(null))])).to_string(),
         "cannot edit a binary file"
     );
     assert_eq!(
-        refused(&fx, true, json!([text("song.k7/a.yml", "x", json!(null))])).to_string(),
+        refused(&fx, json!([text("song.k7/a.yml", "x", json!(null))])).to_string(),
         "song.k7/a.yml: a workspace file is .k7x, not YAML"
     );
     let twice = json!([
@@ -161,13 +160,13 @@ fn a_text_op_names_no_binary_no_yaml_and_no_file_twice() {
         text("song.k7/./a.txt", "2", json!(null))
     ]);
     assert_eq!(
-        refused(&fx, true, twice).to_string(),
+        refused(&fx, twice).to_string(),
         "two ops name 'song.k7/./a.txt'"
     );
     let moved = json!([{ "kind": "move", "from": "song.k7/clips/riff.k7x", "file": "song.k7/r.k7x" }, text("song.k7/clips/riff.k7x", "x", json!("h"))]);
-    assert_eq!(refused(&fx, true, moved).status(), 400);
+    assert_eq!(refused(&fx, moved).status(), 400);
     let read_written = json!([text("song.k7/a.txt", "1", json!(null)), { "kind": "copy", "from": "song.k7/a.txt", "file": "song.k7/b.txt" }]);
-    assert_eq!(refused(&fx, true, read_written).status(), 400);
+    assert_eq!(refused(&fx, read_written).status(), 400);
     for (o, why) in [
         (
             json!({ "kind": "copy", "from": "song.k7/clips", "file": "song.k7/c" }),
@@ -190,7 +189,7 @@ fn a_text_op_names_no_binary_no_yaml_and_no_file_twice() {
             "'j1/a.wav': no such file",
         ),
     ] {
-        let r = refused(&fx, true, json!([o]));
+        let r = refused(&fx, json!([o]));
         assert_eq!((r.status(), r.to_string().as_str()), (400, why));
     }
 }
@@ -200,11 +199,7 @@ fn a_text_op_names_no_binary_no_yaml_and_no_file_twice() {
 fn a_written_k7x_that_does_not_parse_is_a_422() {
     let fx = Fx::new("c-parse");
     let garbage = "extends(\"unterminated\n";
-    let r = refused(
-        &fx,
-        true,
-        json!([text("song.k7/n.k7x", garbage, json!(null))]),
-    );
+    let r = refused(&fx, json!([text("song.k7/n.k7x", garbage, json!(null))]));
     assert_eq!(r.status(), 422);
     match &r {
         Refusal::Unparsable { file, error } => {
@@ -217,7 +212,6 @@ fn a_written_k7x_that_does_not_parse_is_a_422() {
     assert!(
         planned(
             &fx,
-            true,
             json!([
                 text("song.k7/n.txt", garbage, json!(null)),
                 text("song.k7/n.k7x", "x(1)\n", json!(null))
@@ -230,14 +224,10 @@ fn a_written_k7x_that_does_not_parse_is_a_422() {
         text("song.k7/n.k7x", garbage, json!(null)),
         text("../x.txt", "x", json!(null))
     ]);
-    assert_eq!(refused(&fx, true, both).status(), 403);
+    assert_eq!(refused(&fx, both).status(), 403);
     // Unparsable outranks stale: a `was` that moved is never reached.
     fx.s.file("studio/workspace/songs/song.k7/n.k7x", "x(2)\n");
-    let p = refused(
-        &fx,
-        true,
-        json!([text("song.k7/n.k7x", garbage, json!("old"))]),
-    );
+    let p = refused(&fx, json!([text("song.k7/n.k7x", garbage, json!("old"))]));
     assert_eq!(p.status(), 422);
 }
 
@@ -246,7 +236,7 @@ fn a_written_k7x_that_does_not_parse_is_a_422() {
 fn a_stale_base_is_judged_by_the_token_and_by_each_was() {
     let fx = Fx::new("c-fresh");
     fx.s.file("studio/workspace/songs/song.k7/a.txt", "disk");
-    let set = |was: Value| planned(&fx, true, json!([text("song.k7/a.txt", "mine", was)])).unwrap();
+    let set = |was: Value| planned(&fx, json!([text("song.k7/a.txt", "mine", was)])).unwrap();
     // The token alone.
     assert_eq!(
         fresh(&set(json!(text_hash("disk"))), "t1", "t2"),
@@ -280,16 +270,10 @@ fn a_stale_base_is_judged_by_the_token_and_by_each_was() {
             project: false
         })
     );
-    let fresh_file = planned(
-        &fx,
-        true,
-        json!([text("song.k7/new.txt", "n", json!(null))]),
-    )
-    .unwrap();
+    let fresh_file = planned(&fx, json!([text("song.k7/new.txt", "n", json!(null))])).unwrap();
     assert_eq!(fresh(&fresh_file, "t1", "t1"), Ok(()));
     let gone = planned(
         &fx,
-        true,
         json!([text("song.k7/new.txt", "n", json!(text_hash("was there")))]),
     )
     .unwrap();
@@ -303,7 +287,6 @@ fn a_stale_base_is_judged_by_the_token_and_by_each_was() {
     // A save of what the file already holds is no conflict, as `PUT /file` lets it through.
     let same = planned(
         &fx,
-        true,
         json!([text("song.k7/a.txt", "disk", json!(text_hash("opened")))]),
     )
     .unwrap();
@@ -318,7 +301,6 @@ fn a_remove_and_a_destination_are_judged_too() {
     fx.s.file("studio/workspace/songs/song.k7/b.bin.txt", "b");
     let p = planned(
         &fx,
-        true,
         json!([{ "kind": "remove", "file": "song.k7/a.txt", "was": text_hash("opened") }]),
     )
     .unwrap();
@@ -331,20 +313,18 @@ fn a_remove_and_a_destination_are_judged_too() {
     );
     let p = planned(
         &fx,
-        true,
         json!([{ "kind": "remove", "file": "song.k7/a.txt", "was": text_hash("disk") }]),
     )
     .unwrap();
     assert_eq!(fresh(&p, "t1", "t1"), Ok(()));
     let p = planned(
         &fx,
-        true,
         json!([{ "kind": "remove", "file": "song.k7/a.txt", "was": null }]),
     )
     .unwrap();
     assert!(fresh(&p, "t1", "t1").is_err());
     let copy = |replace: bool| {
-        planned(&fx, true, json!([{ "kind": "copy", "from": "song.k7/b.bin.txt", "file": "song.k7/a.txt", "replace": replace }])).unwrap()
+        planned(&fx, json!([{ "kind": "copy", "from": "song.k7/b.bin.txt", "file": "song.k7/a.txt", "replace": replace }])).unwrap()
     };
     assert_eq!(
         fresh(&copy(false), "t1", "t1"),

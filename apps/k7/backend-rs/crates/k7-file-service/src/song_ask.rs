@@ -7,9 +7,7 @@ use song::roots::Library as RootLibrary;
 use song::{PathRule, Roots};
 
 use crate::confine::Probe;
-use crate::libraries::{
-    ACCOUNT_LIBRARY, Home, is_library_name, library_of, library_root, overlay_root,
-};
+use crate::libraries::{ACCOUNT_LIBRARY, Home, is_library_name, library_of, library_root};
 use crate::paths::{climbs_out, dirname, join, relative, resolve_all, resolve_in};
 use crate::space::Declined;
 
@@ -76,13 +74,10 @@ pub fn song_roots(input: &Input<'_>, probe: &dyn Probe) -> Result<Roots, Decline
     }];
     for name in &names {
         let root = library_root(home, name, Some(&project))?;
-        let editable = home.admin
-            && overlay_root(home, name)
-                .is_some_and(|o| resolve_all(&[&o]) == resolve_all(&[&root]));
         libraries.push(RootLibrary {
             name: name.clone(),
             root,
-            editable,
+            editable: false,
         });
     }
     // `libraryReadRoots()`: the account's, each library's own folder, each overlay's; then a family folder that is a link.
@@ -95,13 +90,6 @@ pub fn song_roots(input: &Input<'_>, probe: &dyn Probe) -> Result<Roots, Decline
     add(home.account_home());
     for name in &names {
         add(home.library_home(name));
-    }
-    if home.admin {
-        for name in &names {
-            if let Some(o) = overlay_root(home, name) {
-                add(resolve_all(&[&o]));
-            }
-        }
     }
     for lib in &libraries {
         for family in FAMILIES {

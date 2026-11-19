@@ -232,7 +232,7 @@ pub async fn live(who: &Who<'_>, path: &str, req: Request) -> Result<Response, R
         .map_or_else(String::new, |r| r.display().to_string());
     let p = Proj {
         runtime: who.held.runtime.clone(),
-        home: Home::of(&account.env, who.admin),
+        home: Home::of(&account.env),
         account: account.slug.clone(),
         log: who.log.clone(),
         demos_from: (account.env.get("STUDIO_DEMOS").cloned(), code),
@@ -307,8 +307,8 @@ pub(super) fn plan_of(
 ) -> Result<Option<MovePlan>, ProjError> {
     let space = Space::open(home, root);
     match kind {
-        Kind::Recycle => plan_recycle(&space, home.admin, rel, &Disk).map(Some),
-        _ => plan_rename(&space, home.admin, rel, name, &Disk),
+        Kind::Recycle => plan_recycle(&space, rel, &Disk).map(Some),
+        _ => plan_rename(&space, rel, name, &Disk),
     }
 }
 

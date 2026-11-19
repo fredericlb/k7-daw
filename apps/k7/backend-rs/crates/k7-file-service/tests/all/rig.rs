@@ -20,7 +20,7 @@ fn vectors() -> Vec<Value> {
 
 fn prefs(s: &Scratch, text: &str) -> Result<Value, Declined> {
     s.file("studio/preferences.k7x", text);
-    rig(&s.home(false))
+    rig(&s.home())
 }
 
 #[test]
@@ -42,10 +42,7 @@ fn the_empty_rig_is_the_defaults_shape_and_not_an_empty_object() {
         r#"{"channels":{"in":[],"out":[]}}"#
     );
     let s = Scratch::new("rig-none");
-    assert_eq!(
-        rig(&s.home(false)).unwrap().to_string(),
-        empty_rig().to_string()
-    );
+    assert_eq!(rig(&s.home()).unwrap().to_string(), empty_rig().to_string());
 }
 
 #[test]
@@ -69,13 +66,13 @@ fn a_preferences_file_is_read_and_a_text_that_is_not_a_mapping_is_the_empty_rig(
 fn an_empty_file_or_an_absent_one_beside_a_yaml_is_the_typescripts_to_upgrade() {
     let s = Scratch::new("rig-legacy");
     s.file("studio/preferences.yaml", "audioDevice: x\n");
-    assert_eq!(rig(&s.home(false)), Err(Declined::LegacyPreferences));
+    assert_eq!(rig(&s.home()), Err(Declined::LegacyPreferences));
     s.file("studio/preferences.k7x", "");
-    assert_eq!(rig(&s.home(false)), Err(Declined::LegacyPreferences));
+    assert_eq!(rig(&s.home()), Err(Declined::LegacyPreferences));
     // A k7x that reads wins over a YAML, which is never read again.
     s.file("studio/preferences.k7x", "cueOutput([1, 2])\n");
     assert_eq!(
-        rig(&s.home(false)).unwrap()["cueOutput"],
+        rig(&s.home()).unwrap()["cueOutput"],
         serde_json::json!([1, 2])
     );
     // Nothing was written: the YAML stays and no backup or lock appeared.
@@ -94,14 +91,14 @@ fn an_empty_file_alone_a_folder_and_a_link_to_nothing_are_the_empty_rig() {
     assert_eq!(prefs(&s, "").unwrap(), empty_rig());
     std::fs::remove_file(s.path("studio/preferences.k7x")).unwrap();
     s.dir("studio/preferences.k7x");
-    assert_eq!(rig(&s.home(false)).unwrap(), empty_rig());
+    assert_eq!(rig(&s.home()).unwrap(), empty_rig());
     std::fs::remove_dir(s.path("studio/preferences.k7x")).unwrap();
     #[cfg(unix)]
     {
         std::os::unix::fs::symlink(s.path("nowhere"), s.path("studio/preferences.k7x")).unwrap();
         // A link to nothing is the empty rig even with a YAML beside it: it is not consulted.
         s.file("studio/preferences.yaml", "audioDevice: x\n");
-        assert_eq!(rig(&s.home(false)).unwrap(), empty_rig());
+        assert_eq!(rig(&s.home()).unwrap(), empty_rig());
     }
 }
 
@@ -133,7 +130,7 @@ fn a_file_past_the_limit_is_declined_and_never_read() {
         .open(s.path("studio/preferences.k7x"))
         .unwrap();
     f.set_len(65 << 20).unwrap();
-    assert_eq!(rig(&s.home(false)), Err(Declined::TooLarge));
+    assert_eq!(rig(&s.home()), Err(Declined::TooLarge));
 }
 
 #[test]

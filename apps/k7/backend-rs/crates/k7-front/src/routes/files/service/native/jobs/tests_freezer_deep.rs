@@ -78,14 +78,3 @@ async fn the_freezers_compile_asks_with_what_the_interactive_asks_and_the_thaw_l
     let p = docs::prepare_with(&home_of(&docs), &docs, asked).unwrap();
     assert_eq!(p.ask.thawed, ["a0"]);
 }
-
-#[tokio::test]
-async fn the_freezers_home_follows_the_last_admin_stamp() {
-    let f = fixture("fzd-admin", false).await;
-    let docs = docs_of(&f);
-    assert!(!home_of(&docs).admin);
-    f.jobs.thawed.note_admin(true);
-    assert!(home_of(&docs).admin);
-    f.jobs.thawed.note_admin(false);
-    assert!(!home_of(&docs).admin);
-}

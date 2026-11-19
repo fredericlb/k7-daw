@@ -1,6 +1,6 @@
 //! upgrade.rs — the three WebSockets the core accepts, in the order they are checked before the 101:
 //! a browser's relay socket (its ticket names the engine and the account), a supervisor's tunnel (its token,
-//! its secret, its protocol, its render key), and a loopback client on a bound path. A request that is no
+//! its secret, its protocol), and a loopback client on a bound path. A request that is no
 //! upgrade goes to the backend; a refusal is a bare status, as `deny` writes it.
 
 use std::net::SocketAddr;
@@ -17,7 +17,7 @@ use hyper::{Method, StatusCode};
 use hyper_util::rt::TokioIo;
 use k7_engine::registry::is_loopback_address;
 use k7_engine::tunnel::frames::{
-    TUNNEL_PROTOCOL_HEADER, TUNNEL_RENDER_KEY_HEADER, TUNNEL_SECRET_HEADER, TUNNEL_TOKEN_HEADER,
+    TUNNEL_PROTOCOL_HEADER, TUNNEL_SECRET_HEADER, TUNNEL_TOKEN_HEADER,
 };
 use k7_engine::tunnel::hub::{Deny, TunnelAsk, local_key};
 use k7_engine::{relay, tunnel};
@@ -184,20 +184,16 @@ pub async fn tunnel(
         header(TUNNEL_TOKEN_HEADER).unwrap_or_default(),
         header(TUNNEL_SECRET_HEADER),
     );
-    let (protocol, key) = (
-        header(TUNNEL_PROTOCOL_HEADER),
-        header(TUNNEL_RENDER_KEY_HEADER),
-    );
+    let protocol = header(TUNNEL_PROTOCOL_HEADER);
     let ask = TunnelAsk {
         id: &id,
         token: &token,
         secret: secret.as_deref().filter(|s| !s.is_empty()),
         protocol: protocol.as_deref(),
-        render_key: key.as_deref(),
     };
     match hub.check_tunnel(&ask) {
         Err(d) => deny(d),
-        Ok(renders) => handshake(req, move |ws| Box::pin(hub.serve_tunnel(id, renders, ws))),
+        Ok(()) => handshake(req, move |ws| Box::pin(hub.serve_tunnel(id, ws))),
     }
 }
 

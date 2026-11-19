@@ -26,7 +26,6 @@ fn a_node_says_what_it_extends_and_which_params_it_sets_itself() {
     let home = Home {
         studio: s.path("home"),
         libraries: s.path("libraries"),
-        admin: false,
     };
     let (root, project) = (s.path("ws"), s.path("ws/song"));
     let code = crate::reads_golden::code();

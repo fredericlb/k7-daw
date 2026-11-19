@@ -24,7 +24,6 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
             "STUDIO_MEDIATEK",
             root.join("mediatek").display().to_string(),
         ),
-        ("AUTH_ADMIN_GROUPS", "Admins".to_string()),
     ]
     .iter()
     .map(|(k, v)| (k.to_string(), v.clone()))

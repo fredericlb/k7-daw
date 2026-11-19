@@ -24,7 +24,7 @@ pub async fn start(
     log: &Log,
     watch: Option<Arc<k7_file_service::modwatch::Watch>>,
 ) {
-    let home = Home::of(env, false);
+    let home = Home::of(env);
     let bundle = FrontBundle::new(&home.studio, slug, watch, engine);
     let studio = home.studio.clone();
     let host = Host {
@@ -44,7 +44,7 @@ pub async fn start(
 
 /// Stops an account's captures, each ledger saved; where no runtime is at hand the stop is not waited for.
 pub fn stop(env: &BTreeMap<String, String>) {
-    let studio = Home::of(env, false).studio;
+    let studio = Home::of(env).studio;
     // The account named now, not when the task runs: a start made meanwhile is never the one stopped.
     let Some(acct) = Captures::global().account(&studio) else {
         return;
@@ -56,7 +56,7 @@ pub fn stop(env: &BTreeMap<String, String>) {
 
 /// `stop`, waited: the account's captures have ended and each ledger is saved when this returns.
 pub async fn stop_waited(env: &BTreeMap<String, String>) {
-    let studio = Home::of(env, false).studio;
+    let studio = Home::of(env).studio;
     if let Some(acct) = Captures::global().account(&studio) {
         Captures::global().stop_this(&studio, &acct).await;
     }

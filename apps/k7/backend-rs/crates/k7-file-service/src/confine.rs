@@ -2,7 +2,7 @@
 //! links on disk. The disk is a `Probe`, so a test spells Windows roots and links on any host (1022).
 //! What a reader gets wrong: each call looks at the disk afresh; nothing is remembered across requests.
 
-use crate::libraries::{Home, overlay_root};
+use crate::libraries::Home;
 use crate::paths::{dirname, is_within, join, resolve_all};
 use crate::song_ask::{library_names, workspace_dir_of};
 
@@ -100,12 +100,6 @@ pub fn project_roots(home: &Home, project: &str, meta_modules: &str, models: &st
         home.account_home(),
     ];
     roots.extend(names.iter().map(|n| home.library_home(n)));
-    roots.extend(
-        names
-            .iter()
-            .filter_map(|n| overlay_root(home, n))
-            .map(|o| resolve_all(&[&o])),
-    );
     roots.extend([
         meta_modules.to_owned(),
         join(&[&home.studio, ".renders"]),

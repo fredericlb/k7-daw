@@ -72,11 +72,10 @@ pub async fn hook(
     let Some(jobs) = engine.jobs.get() else {
         return Err(req);
     };
-    engine.host.note_admin(who.admin);
     let deps = Deps {
         engine,
         jobs,
-        home: Home::of(&who.held.account.env, who.admin),
+        home: Home::of(&who.held.account.env),
         env: &who.held.account.env,
         code_root: who
             .code_root

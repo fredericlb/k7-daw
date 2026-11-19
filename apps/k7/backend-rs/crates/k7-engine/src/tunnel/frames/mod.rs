@@ -10,7 +10,6 @@ use crate::js;
 pub const TUNNEL_PATH: &str = "/api/engine-tunnel";
 pub const TUNNEL_TOKEN_HEADER: &str = "x-studio-engine-token";
 pub const TUNNEL_SECRET_HEADER: &str = "x-studio-tunnel-secret";
-pub const TUNNEL_RENDER_KEY_HEADER: &str = "x-studio-render-key";
 pub const TUNNEL_PROTOCOL_HEADER: &str = "x-studio-engine-protocol";
 /// File chunks are cut to this.
 pub const CHUNK_BYTES: usize = 256 * 1024;

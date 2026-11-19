@@ -48,7 +48,7 @@ async fn the_write_lock_is_free_while_the_format_is_stamped() {
     let mut body = body;
     body["base"] = json!(b.token());
     let b2 = b.clone();
-    let running = tokio::spawn(async move { b2.changes(false, body).await });
+    let running = tokio::spawn(async move { b2.changes(body).await });
     until("the bundle was told", || {
         calls::of(&b.root).iter().any(|c| c == "after")
     })
@@ -101,7 +101,7 @@ async fn another_project_is_open_is_its_own_409_after_the_gates() {
     let b = Bed::new("chf-open").await;
     let mut body = b.set(json!([op("p.k7/a.txt", "x", json!(null))]));
     body["at"] = json!("other.k7");
-    let (status, ans) = b.changes(false, body.clone()).await;
+    let (status, ans) = b.changes(body.clone()).await;
     assert_eq!((status, ans["open"].clone()), (409, json!("p.k7")), "{ans}");
     assert_eq!(
         (ans["project"].clone(), ans["stale"].clone()),
@@ -111,14 +111,14 @@ async fn another_project_is_open_is_its_own_409_after_the_gates() {
     assert!(!b.has("a.txt"));
     body["ops"] = json!([op("../escape.txt", "x", json!(null))]);
     assert_eq!(
-        b.changes(false, body).await.0,
+        b.changes(body).await.0,
         403,
         "forbidden beats the wrong project"
     );
     // A stale base on the right project has no `open`.
     let mut body = b.set(json!([]));
     body["base"] = json!("not-a-token");
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!((status, ans.get("open").is_none()), (409, true));
     let _ = std::fs::remove_dir_all(&b.dir);
 }
@@ -131,7 +131,7 @@ async fn a_read_op_makes_a_stale_set_a_409_and_writes_nothing() {
     let read = |was: &str| json!({ "kind": "read", "file": "p.k7/m.k7x", "was": text_hash(was) });
     let write = op("p.k7/w.txt", "w", json!(null));
     let (status, ans) = b
-        .changes(false, b.set(json!([read("m(0)\n"), write.clone()])))
+        .changes(b.set(json!([read("m(0)\n"), write.clone()])))
         .await;
     assert_eq!(
         (status, ans["stale"].clone()),
@@ -140,12 +140,10 @@ async fn a_read_op_makes_a_stale_set_a_409_and_writes_nothing() {
     );
     assert!(!b.has("w.txt"));
     assert_eq!(b.steps().await, json!([]));
-    let (status, ans) = b
-        .changes(false, b.set(json!([read("m(1)\n"), write])))
-        .await;
+    let (status, ans) = b.changes(b.set(json!([read("m(1)\n"), write]))).await;
     assert_eq!(status, 200, "{ans}");
     assert_eq!(b.file("m.k7x"), "m(1)\n");
-    let (status, ans) = b.changes(false, b.set(json!([read("m(1)\n")]))).await;
+    let (status, ans) = b.changes(b.set(json!([read("m(1)\n")]))).await;
     assert_eq!((status, ans["changed"].clone()), (200, json!([])), "{ans}");
     assert_eq!(ans["rev"], ans["revBefore"]);
     let _ = std::fs::remove_dir_all(&b.dir);
@@ -265,7 +263,7 @@ async fn a_set_that_writes_seconds_raises_the_format() {
     let mut body = json!({ "at": "p.k7", "base": "x", "label": LABEL,
         "ops": [op("p.k7/nodes/fx.k7x", lane, json!(null))] });
     body["base"] = json!(b.token());
-    let (status, ans) = b.changes(false, body).await;
+    let (status, ans) = b.changes(body).await;
     assert_eq!(status, 200, "{ans}");
     assert!(b.file("project.k7x").contains("format(2)"));
     let _ = std::fs::remove_dir_all(&b.dir);

@@ -23,13 +23,12 @@ pub struct Config {
 }
 
 /// What the routes read of the environment a host hands the front.
-pub const ENV_KEYS: [&str; 53] = [
+pub const ENV_KEYS: [&str; 50] = [
     "K7_FRONT_TRUSTED_PROXIES",
     "K7_EXTRA_CA_CERTS",
     "SESSION_SECRET",
     "STUDIO_LOCAL_USER",
     "STUDIO_DEV_AUTH",
-    "AUTH_ADMIN_GROUPS",
     "API_TOKEN_SECRET",
     "STUDIO_PREFS_DIR",
     "STUDIO_AUTH_DIR",
@@ -49,8 +48,6 @@ pub const ENV_KEYS: [&str; 53] = [
     "STUDIO_FILES_ROOT",
     "STUDIO_PORTS",
     "STUDIO_ENGINE",
-    "STUDIO_RENDER_KEY",
-    "STUDIO_REGISTRY_REQUIRE_DEVICE",
     "STUDIO_ENGINES_DIR",
     "STUDIO_TUNNEL_MAX_UPLOAD_BYTES",
     "STUDIO_TUNNEL_UPLOAD_BYTES_PER_HOUR",

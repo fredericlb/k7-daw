@@ -43,7 +43,7 @@ impl Bed {
         let s = Scratch::new(name);
         let root = s.dir("ws");
         let dir = s.dir("ws/proj.k7");
-        let home = s.home(false);
+        let home = s.home();
         let revs: &'static Revisions = Box::leak(Box::new(Revisions::with_feed(
             Box::new(NoFeed),
             Instant::now,

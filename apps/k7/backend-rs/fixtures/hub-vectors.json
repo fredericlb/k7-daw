@@ -25,23 +25,13 @@
     {
       "key": "dev-secret:files",
       "user": "e2e@st0.app",
-      "admin": false,
       "now": 1761000000000,
       "ttl": 43200000,
       "ticket": "eyJ1IjoiZTJlQHN0MC5hcHAiLCJleHAiOjE3NjEwNDMyMDAwMDB9.-6SUDEJkH0Ls9P25bhUbwF4ehQuOWfRU66NLidVU_QY"
     },
     {
-      "key": "dev-secret:files",
-      "user": "ann@x",
-      "admin": true,
-      "now": 1761000000000,
-      "ttl": 43200000,
-      "ticket": "eyJ1IjoiYW5uQHgiLCJleHAiOjE3NjEwNDMyMDAwMDAsImEiOjF9.kUhzlMhdlTNkzH8Ya_leZ_tGVR_zwxyP9W_UiZPKfJg"
-    },
-    {
       "key": "s3cr3t/with+chars=:files",
       "user": "Frédéric 🎛 \"q\" \\ \n",
-      "admin": false,
       "now": 1761000000000,
       "ttl": 43200000,
       "ticket": "eyJ1IjoiRnLDqWTDqXJpYyDwn46bIFwicVwiIFxcIFxuIiwiZXhwIjoxNzYxMDQzMjAwMDAwfQ.f6kESToHuNjuUwq3z_ccMrMWd-YDiQ6tqyDCGogoD20"
@@ -54,7 +44,6 @@
       "now": 1761000000000,
       "read": {
         "user": "e2e@st0.app",
-        "admin": false,
         "engineId": null
       }
     },
@@ -64,7 +53,6 @@
       "now": 1761000000000,
       "read": {
         "user": "e2e@st0.app",
-        "admin": false,
         "engineId": "engine-1"
       }
     },
@@ -74,7 +62,6 @@
       "now": 1761000000000,
       "read": {
         "user": "e2e@st0.app",
-        "admin": false,
         "engineId": "engine-1"
       }
     },
@@ -84,7 +71,6 @@
       "now": 1761000000000,
       "read": {
         "user": "e2e@st0.app",
-        "admin": false,
         "engineId": null
       }
     },
@@ -118,7 +104,6 @@
       "now": 1761043200000,
       "read": {
         "user": "e2e@st0.app",
-        "admin": false,
         "engineId": null
       }
     },
@@ -128,7 +113,6 @@
       "now": 1761043200000,
       "read": {
         "user": "e2e@st0.app",
-        "admin": false,
         "engineId": "engine-1"
       }
     },
@@ -138,7 +122,6 @@
       "now": 1761043200000,
       "read": {
         "user": "e2e@st0.app",
-        "admin": false,
         "engineId": "engine-1"
       }
     },
@@ -148,7 +131,6 @@
       "now": 1761043200000,
       "read": {
         "user": "e2e@st0.app",
-        "admin": false,
         "engineId": null
       }
     },
@@ -239,7 +221,6 @@
       "SESSION_SECRET": "s",
       "OIDC_CLIENT_SECRET": "s",
       "API_TOKEN_SECRET": "s",
-      "STUDIO_RENDER_KEY": "s",
       "STUDIO_SYNC_TOKEN": "s",
       "K7_TOKEN": "s",
       "K7_FRONT_SECRET": "s"

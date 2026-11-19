@@ -67,7 +67,7 @@ impl Engine {
             .filter_map(|r| r["remote"].as_str().map(str::to_string))
             .collect();
         let host = RealHost::new(
-            Home::of(&account.env, false),
+            Home::of(&account.env),
             code_root.display().to_string(),
             acct.clone(),
         );
@@ -152,7 +152,6 @@ pub async fn live_hook(who: &Who<'_>, path: &str, req: Request) -> Result<Respon
         _ if post && path == "/engine/sync/retry" => Tag::EngineSyncRetry,
         _ => return super::super::jobs::routes::hook(who, &engine, path, req).await,
     };
-    engine.host.note_admin(who.admin);
     match tag {
         Tag::Workspace => poll(&engine, who, req).await,
         Tag::EngineServed => Ok(served(&engine, who)),
@@ -193,7 +192,7 @@ async fn poll(e: &Arc<Engine>, who: &Who<'_>, req: Request) -> Result<Response, 
     };
     let root = root.display().to_string();
     let account = &who.held.account;
-    let home = Home::of(&account.env, who.admin);
+    let home = Home::of(&account.env);
     let code = who
         .code_root
         .map_or_else(String::new, |r| r.display().to_string());
@@ -286,7 +285,7 @@ async fn act(
         }
         _ => {
             session.forget_failure();
-            let home = Home::of(&who.held.account.env, who.admin);
+            let home = Home::of(&who.held.account.env);
             let r2 = root.clone();
             let active = blocking(move || Space::open(&home, &r2).active().ok().flatten())
                 .await

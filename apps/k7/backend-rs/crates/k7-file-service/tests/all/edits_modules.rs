@@ -69,11 +69,9 @@ fn sorted(mut v: Value) -> Value {
 
 /// The two writes a route makes after its plan, done plainly: the folder renamed, then the refs repointed.
 fn run(c: &Value, s: &Scratch) -> Result<Value, String> {
-    let admin = c["args"]["admin"].as_bool().unwrap();
     let home = Home {
         studio: s.path("home"),
         libraries: s.path("libraries"),
-        admin,
     };
     let root = s.path("ws");
     let space = Space::open(&home, &root);
@@ -146,7 +144,7 @@ fn run(c: &Value, s: &Scratch) -> Result<Value, String> {
 
 fn replay(name: &str) {
     let all = cases(name);
-    assert!(all.len() >= 8);
+    assert!(all.len() >= 3);
     for c in &all {
         let label = c["name"].as_str().unwrap();
         let s = Scratch::new(&format!(
@@ -224,7 +222,6 @@ fn a_clone_refuses_links() {
         let home = Home {
             studio: s.path("home"),
             libraries: s.path("libraries"),
-            admin: false,
         };
         let space = Space::open(&home, &s.path("home/workspace/songs"));
         let before = std::fs::read_dir(s.path("home/workspace/songs/_modules/audio"))
@@ -254,7 +251,6 @@ fn a_nodes_presets_replay_the_typescript() {
         let home = Home {
             studio: s.path("home"),
             libraries: s.path("libraries"),
-            admin: false,
         };
         let code = format!("{}/../../../../..", env!("CARGO_MANIFEST_DIR"));
         let got = node_presets(
@@ -279,7 +275,6 @@ fn created(c: &Value, s: &Scratch) -> Result<Value, String> {
     let home = Home {
         studio: s.path("home"),
         libraries: s.path("libraries"),
-        admin: false,
     };
     let root = s.path(c["args"]["workspace"].as_str().unwrap());
     let space = Space::open(&home, &root);

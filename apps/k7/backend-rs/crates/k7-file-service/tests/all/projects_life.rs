@@ -27,12 +27,12 @@ fn said<T: std::fmt::Debug>(r: Result<T, ProjError>) -> String {
 
 fn rename(a: &Acct, root: &str, rel: &str, name: &str) -> Result<Option<MovePlan>, ProjError> {
     let h = a.home();
-    plan_rename(&Space::open(&h, root), false, rel, name, &Disk)
+    plan_rename(&Space::open(&h, root), rel, name, &Disk)
 }
 
 fn recycle(a: &Acct, root: &str, rel: &str) -> Result<MovePlan, ProjError> {
     let h = a.home();
-    plan_recycle(&Space::open(&h, root), false, rel, &Disk)
+    plan_recycle(&Space::open(&h, root), rel, &Disk)
 }
 
 #[test]
@@ -117,36 +117,13 @@ fn a_rename_s_name_is_cleaned_as_the_shim_cleans_it() {
 fn a_library_s_project_is_refused_to_an_account_that_may_not_edit_it() {
     let (a, root) = songs("pl-lib");
     a.s.dir("libraries/drums/demo.k7");
-    let sentence =
-        "can't rename '_libraries/drums/demo.k7': only the origin's admins edit a library";
+    let sentence = "can't rename '_libraries/drums/demo.k7': a library is not edited from here";
     assert_eq!(
         said(rename(&a, &root, "_libraries/drums/demo.k7", "x.k7")),
         sentence
     );
-    let del = "can't delete '_libraries/drums/demo.k7': only the origin's admins edit a library";
+    let del = "can't delete '_libraries/drums/demo.k7': a library is not edited from here";
     assert_eq!(said(recycle(&a, &root, "_libraries/drums/demo.k7")), del);
-}
-
-#[test]
-fn an_admin_s_recycle_of_a_library_s_project_goes_to_the_library_s_own_bin() {
-    // W7: the library's bin, never the workspace's, so no account's library loses a project to another's bin.
-    let (a, root) = songs("pl-libbin");
-    a.s.dir("libraries/drums/demo.k7");
-    a.s.dir("libraries/drums/_recycle_bin/demo.k7");
-    let home = a.s.home(true);
-    let plan = plan_recycle(
-        &Space::open(&home, &root),
-        true,
-        "_libraries/drums/demo.k7",
-        &Disk,
-    )
-    .unwrap();
-    let libs = a.s.path("libraries");
-    assert_eq!(plan.dest, format!("{libs}/drums/_recycle_bin/demo.k7-2"));
-    assert_eq!(
-        plan.answer,
-        r#"{"recycled":"_libraries/drums/_recycle_bin/demo.k7-2"}"#
-    );
 }
 
 #[test]
@@ -280,24 +257,22 @@ fn a_drive_home_plans_both_acts_through_a_fake_disk() {
         ];
         let dirs: Vec<&str> = dirs.iter().map(String::as_str).collect();
         let disk = Drive::new(&[], &dirs);
-        let h = drive_home(false);
+        let h = drive_home();
         let sp = Space::open(&h, root);
         let base = sp.root().to_string();
-        let plan = plan_rename(&sp, false, "a.k7", "b.k7", &disk)
-            .unwrap()
-            .unwrap();
+        let plan = plan_rename(&sp, "a.k7", "b.k7", &disk).unwrap().unwrap();
         assert_eq!(
             (plan.abs, plan.dest),
             (format!("{base}/a.k7"), format!("{base}/b.k7"))
         );
         assert_eq!(
-            plan_rename(&sp, false, "a.k7", "A.k7", &disk)
+            plan_rename(&sp, "a.k7", "A.k7", &disk)
                 .unwrap()
                 .unwrap()
                 .answer,
             r#"{"path":"A.k7"}"#
         );
-        let bin = plan_recycle(&sp, false, "a.k7", &disk).unwrap();
+        let bin = plan_recycle(&sp, "a.k7", &disk).unwrap();
         assert_eq!(bin.dest, format!("{base}/_recycle_bin/a.k7-2"));
         assert!(!bin.dest.contains(r"\\?\"));
     }
@@ -325,7 +300,7 @@ fn the_disk_s_part_moves_the_folder_and_makes_the_bin() {
     let (a, root) = songs("pl-apply");
     let h = a.home();
     let sp = Space::open(&h, &root);
-    let plan = plan_recycle(&sp, false, "a.k7", &Disk).unwrap();
+    let plan = plan_recycle(&sp, "a.k7", &Disk).unwrap();
     apply_recycle(
         &sp,
         &plan,
@@ -337,9 +312,7 @@ fn the_disk_s_part_moves_the_folder_and_makes_the_bin() {
     assert!(!std::path::Path::new(&plan.abs).exists());
     assert!(std::path::Path::new(&format!("{root}/_recycle_bin/a.k7/project.k7x")).exists());
     a.project("songs", "c.k7", "");
-    let mv = plan_rename(&sp, false, "c.k7", "d.k7", &Disk)
-        .unwrap()
-        .unwrap();
+    let mv = plan_rename(&sp, "c.k7", "d.k7", &Disk).unwrap().unwrap();
     apply_rename(
         &mv,
         &k7_file_service::entries::apply::Disk,
@@ -369,7 +342,7 @@ fn a_recycle_under_a_held_handle_answers_its_code() {
     let (a, root) = songs("pl-held");
     let h = a.home();
     let sp = Space::open(&h, &root);
-    let plan = plan_recycle(&sp, false, "a.k7", &Disk).unwrap();
+    let plan = plan_recycle(&sp, "a.k7", &Disk).unwrap();
     let held = Flaky {
         fail: Cell::new(u32::MAX),
         calls: Cell::new(0),

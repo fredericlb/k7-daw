@@ -309,13 +309,10 @@ fn devices(a: &super::tests_real::Account) -> Vec<String> {
 async fn a_redial_replays_the_preferences_as_they_stand() {
     let a = super::tests_real::account("prefs").await;
     let file = a.dir.join("home/preferences.k7x");
-    let home = k7_file_service::libraries::Home::of(
-        &std::collections::BTreeMap::from([(
-            "STUDIO_HOME".to_string(),
-            crate::routes::files::service::native::tests::slashed(&a.dir.join("home")),
-        )]),
-        false,
-    );
+    let home = k7_file_service::libraries::Home::of(&std::collections::BTreeMap::from([(
+        "STUDIO_HOME".to_string(),
+        crate::routes::files::service::native::tests::slashed(&a.dir.join("home")),
+    )]));
     let file = std::path::Path::new(&home.studio).join(file.file_name().unwrap());
     std::fs::create_dir_all(&home.studio).unwrap();
     std::fs::write(&file, "audioDevice({ name: \"X\" })\n").unwrap();

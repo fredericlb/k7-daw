@@ -115,7 +115,7 @@ pub fn upload_begin(_space: &Space<'_>, abs: &str) -> Result<String, EntryError>
 pub fn upload_end(space: &Space<'_>, abs: &str, tmp: &str) -> Result<(), EntryError> {
     let inside = is_within(space.root(), abs)
         || crate::libraries::library_of(space.home(), abs)
-            .is_some_and(|l| super::guards::library_writable(space, &l));
+            .is_some_and(|l| super::guards::library_writable(&l));
     if !inside || dirname(tmp) != dirname(abs) {
         return Err(EntryError::Refused(format!(
             "not an upload of this workspace: {abs}"

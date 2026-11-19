@@ -24,7 +24,7 @@ impl Acct {
     }
 
     pub fn home(&self) -> Home {
-        self.s.home(false)
+        self.s.home()
     }
 
     /// A workspace folder; the path of it.

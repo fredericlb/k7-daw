@@ -62,7 +62,7 @@ impl Rig {
         Deps {
             engine,
             jobs: engine.jobs.get().unwrap(),
-            home: Home::of(&self.env, false),
+            home: Home::of(&self.env),
             env: &self.env,
             code_root: code_root(),
         }

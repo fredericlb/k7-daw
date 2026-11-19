@@ -16,7 +16,7 @@ use super::proxy::{email_of, libraries, session_of};
 use crate::AppState;
 use crate::web::{error, read_json_within};
 
-/// `GET /api/files-hub`, behind the session: the ticket naming the account, and whether it is an admin.
+/// `GET /api/files-hub`, behind the session: the ticket naming the account.
 pub async fn hello(State(state): State<Arc<AppState>>, req: Request) -> Response {
     let hub = &files_of(&state).hub;
     // No gate: a ticket names an account, and the page asks for it to be able to ask for anything at all.
@@ -27,15 +27,13 @@ pub async fn hello(State(state): State<Arc<AppState>>, req: Request) -> Response
     let response = if user.is_empty() {
         error(StatusCode::UNAUTHORIZED, "no user on the session")
     } else {
-        let admin = crate::session::is_admin(&signed.user, &state.settings);
         let ticket = k7_hub::ticket::mint(
             &hub.ticket_key,
             &user,
-            admin,
             crate::session::now_ms(),
             k7_hub::ticket::TICKET_TTL_MS,
         );
-        Json(json!({ "path": "/api/files", "ticket": ticket, "admin": admin })).into_response()
+        Json(json!({ "path": "/api/files", "ticket": ticket })).into_response()
     };
     crate::session::with_cookies(response, &signed)
 }
@@ -66,7 +64,7 @@ pub async fn internal(State(state): State<Arc<AppState>>, req: Request) -> Respo
     };
     let method = req.method().clone();
     if method == Method::POST && path == "/libraries/sync" {
-        return libraries(&state, &path, false, req).await;
+        return libraries(&state, &path, req).await;
     }
     error(StatusCode::NOT_FOUND, &format!("no {method} {path}"))
 }

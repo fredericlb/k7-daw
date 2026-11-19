@@ -257,7 +257,7 @@ async fn listing(a: &Acct, kind: Kind) -> Option<Response> {
 async fn make_one(a: &Acct, name: &str) -> Option<Response> {
     let lock = locks::write(&a.home.studio).await;
     let (home, n) = (a.home.clone(), name.to_string());
-    let planned = blocking(move || plan_make(&home, home.admin, &n)).await?;
+    let planned = blocking(move || plan_make(&home, &n)).await?;
     match planned {
         Err(WsError::Declined(d)) => {
             a.declined(Tag::WorkspaceMake, d.as_str());
@@ -290,13 +290,7 @@ async fn make_one(a: &Acct, name: &str) -> Option<Response> {
                     None => return error(500, "internal error"),
                 }
                 #[cfg(test)]
-                step(
-                    &a,
-                    &root,
-                    "pinsMade",
-                    json!({ "ws": root, "admin": a.home.admin }),
-                )
-                .await;
+                step(&a, &root, "pinsMade", json!({ "ws": root })).await;
             }
             memo::dropped(&a.account);
             json_answer(200, &json!({ "created": created }))
@@ -407,7 +401,7 @@ async fn copy_one(a: &Acct, body: &Value) -> Option<Response> {
             to: &to,
             name: &name,
         };
-        plan_copy(&home, home.admin, &ask, &Limits::default())
+        plan_copy(&home, &ask, &Limits::default())
     })
     .await?;
     let plan = match planned {

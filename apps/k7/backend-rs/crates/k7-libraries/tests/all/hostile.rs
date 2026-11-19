@@ -38,7 +38,6 @@ async fn a_request_that_is_not_the_hubs_is_answered_nothing() {
                 path: "/account/libraries",
                 query: "",
                 secret,
-                admin: true,
                 body,
             })
             .await;
@@ -56,7 +55,6 @@ async fn a_request_that_is_not_the_hubs_is_answered_nothing() {
             path: "/status",
             query: "",
             secret: Some(""),
-            admin: true,
             body,
         })
         .await;
@@ -69,7 +67,6 @@ async fn a_request_that_is_not_the_hubs_is_answered_nothing() {
             path: "/libraries/sync",
             query: "",
             secret: Some(SECRET),
-            admin: true,
             body: &big,
         })
         .await;

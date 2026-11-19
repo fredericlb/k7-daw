@@ -87,7 +87,7 @@ const REASONS: &[(&str, u16, &str)] = &[
     (
         "would-throw",
         422,
-        "the request asks for what this server does not do: an administrator's draft overlay, a name it cannot read, or a write it cannot make",
+        "the request asks for what this server does not do: a name it cannot read, or a write it cannot make",
     ),
     ("service", 503, "file service: the runtime did not answer"),
     ("lost", 503, "file service: the answer was lost"),

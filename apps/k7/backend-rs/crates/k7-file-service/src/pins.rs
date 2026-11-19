@@ -20,9 +20,9 @@ fn bare(name: &str) -> bool {
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Pinning {
     Newest,
-    /// The open's pins: the draft for an admin, version 1 (before versions existed) for anyone else.
+    /// The open's pins: version 1, before versions existed.
     Opened,
-    /// A made workspace's pins: the draft for an admin, the newest runnable version for anyone else.
+    /// A made workspace's pins: the newest runnable version.
     Made,
 }
 
@@ -31,12 +31,12 @@ pub fn ensure_fresh(home: &Home, root: &str) -> Result<bool, Declined> {
     ensure(home, root, Pinning::Newest)
 }
 
-/// `ensureLibraryPins(root, {fresh: true, admin})`, which a made workspace runs: an admin's pins name the draft.
+/// `ensureLibraryPins(root, {fresh: true})`, which a made workspace runs.
 pub fn ensure_made(home: &Home, root: &str) -> Result<bool, Declined> {
     ensure(home, root, Pinning::Made)
 }
 
-/// `ensureLibraryPins(root, {fresh: false, admin})`, which `/open` runs: a workspace from before versions keeps version 1.
+/// `ensureLibraryPins(root, {fresh: false})`, which `/open` runs: a workspace from before versions keeps version 1.
 pub fn ensure_opened(home: &Home, root: &str) -> Result<bool, Declined> {
     ensure(home, root, Pinning::Opened)
 }
@@ -54,10 +54,9 @@ fn ensure(home: &Home, root: &str, how: Pinning) -> Result<bool, Declined> {
         if !bare(&name) {
             return Err(Declined::WouldThrow);
         }
-        let version = match (how, home.admin) {
-            (Pinning::Opened | Pinning::Made, true) => "\"draft\"".to_string(),
-            (Pinning::Opened, false) => "1".to_string(),
-            (Pinning::Newest | Pinning::Made, _) => {
+        let version = match how {
+            Pinning::Opened => "1".to_string(),
+            Pinning::Newest | Pinning::Made => {
                 newest_here(home, &name, &Limits::default())?.to_string()
             }
         };

@@ -8,7 +8,7 @@ use k7_file_service::confine::project_roots;
 fn a_home_with_no_library_gives_the_project_the_workspace_and_the_fixed_roots() {
     let s = Scratch::new("roots-plain");
     let project = s.dir("studio/workspace/ws/p.k7");
-    let got = project_roots(&s.home(false), &project, "/code/meta", "/models");
+    let got = project_roots(&s.home(), &project, "/code/meta", "/models");
     let studio = s.path("studio");
     assert_eq!(
         got,
@@ -24,7 +24,7 @@ fn a_home_with_no_library_gives_the_project_the_workspace_and_the_fixed_roots() 
 }
 
 #[test]
-fn the_libraries_come_first_and_then_the_overlays_an_admin_writes() {
+fn the_libraries_come_first() {
     let s = Scratch::new("roots-order");
     let project = s.dir("studio/workspace/ws/p.k7");
     s.dir("libraries/b/1");
@@ -33,21 +33,12 @@ fn the_libraries_come_first_and_then_the_overlays_an_admin_writes() {
     s.file("libraries/not-a-folder", "x");
     let at = |home| project_roots(home, &project, "/m", "/o")[3..7].to_vec();
     assert_eq!(
-        at(&s.home(false)),
+        at(&s.home()),
         [
             s.path("libraries/a"),
             s.path("libraries/b"),
             "/m".into(),
             s.path("studio/.renders")
-        ]
-    );
-    assert_eq!(
-        project_roots(&s.home(true), &project, "/m", "/o")[3..7],
-        [
-            s.path("libraries/a"),
-            s.path("libraries/b"),
-            s.path("libraries/a"),
-            s.path("libraries/b/draft")
         ]
     );
 }
@@ -56,6 +47,6 @@ fn the_libraries_come_first_and_then_the_overlays_an_admin_writes() {
 fn a_project_outside_the_workspaces_stands_in_its_parent_folder() {
     let s = Scratch::new("roots-outside");
     let project = s.dir("elsewhere/p.k7");
-    let got = project_roots(&s.home(false), &project, "/m", "/o");
+    let got = project_roots(&s.home(), &project, "/m", "/o");
     assert_eq!(got[..2], [project, s.path("elsewhere")]);
 }

@@ -86,7 +86,7 @@ async fn make(tag: &str, lane: bool) -> Account {
         crate::routes::files::service::native::tests_account::HEAP,
     );
     let host = RealHost::new(
-        Home::of(&env, false),
+        Home::of(&env),
         code_root.display().to_string(),
         acct.clone(),
     );

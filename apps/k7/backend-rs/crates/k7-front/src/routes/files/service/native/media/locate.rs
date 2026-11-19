@@ -75,26 +75,24 @@ impl Memo {
 pub struct Session {
     pub ctx: Ctx,
     pub memo: Arc<Memo>,
-    pub admin: bool,
     /// What `nativeAsk` answered, given by a host call; none makes the session ask itself.
     given: Option<Asked>,
 }
 
 impl Session {
-    pub fn new(ctx: Ctx, memo: Arc<Memo>, admin: bool) -> Session {
+    pub fn new(ctx: Ctx, memo: Arc<Memo>) -> Session {
         Session {
             ctx,
             memo,
-            admin,
             given: None,
         }
     }
 
     /// A session that never asks the account: a verb holds it while it waits on a host call (review fix 6).
-    pub(super) fn given(ctx: Ctx, memo: Arc<Memo>, admin: bool, asked: Asked) -> Session {
+    pub(super) fn given(ctx: Ctx, memo: Arc<Memo>, asked: Asked) -> Session {
         Session {
             given: Some(asked),
-            ..Session::new(ctx, memo, admin)
+            ..Session::new(ctx, memo)
         }
     }
 
@@ -104,16 +102,16 @@ impl Session {
                 let a = a.clone();
                 Box::pin(async move { Ok(a) })
             }
-            None => Box::pin(ask(self.ctx.clone(), self.admin)),
+            None => Box::pin(ask(self.ctx.clone())),
         }
     }
 }
 
-async fn ask(ctx: Ctx, admin: bool) -> Result<Asked, Why> {
+async fn ask(ctx: Ctx) -> Result<Asked, Why> {
     ctx.docs.as_ref().ok_or(Why::Decline("no-docs"))?;
-    let mut home = ctx.home.clone();
-    home.admin = admin;
-    docs::asked_of(&home, &ctx.root).await.map_err(Why::Decline)
+    docs::asked_of(&ctx.home, &ctx.root)
+        .await
+        .map_err(Why::Decline)
 }
 
 impl Locator for Session {

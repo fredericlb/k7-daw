@@ -17,15 +17,8 @@ use super::{Tag, locks};
 use crate::routes::files::service::routes::{self, H};
 
 /// A call of `h` with `body` answered natively, for the workspace of `dir`.
-pub(super) fn request(
-    dir: &std::path::Path,
-    tag: Tag,
-    body: Value,
-    admin: bool,
-    lines: &Lines,
-) -> routes::Call {
-    let mut c = ctx(dir, tag, "", lines);
-    c.home.admin = admin;
+pub(super) fn request(dir: &std::path::Path, tag: Tag, body: Value, lines: &Lines) -> routes::Call {
+    let c = ctx(dir, tag, "", lines);
     call(dir, "", body, Some(c))
 }
 
@@ -46,7 +39,7 @@ async fn answering_writes_the_disk_and_tells_the_bundle_before_and_after() {
     std::fs::create_dir_all(songs.join("sub")).unwrap();
     let lines = Lines::default();
     let go = |tag: Tag, body: Value| {
-        let c = request(&dir, tag, body, false, &lines);
+        let c = request(&dir, tag, body, &lines);
         async move { text(routes::dispatch(handler(tag), &c).await).await }
     };
     assert_eq!(
@@ -101,7 +94,7 @@ async fn answering_writes_the_disk_and_tells_the_bundle_before_and_after() {
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_library_module_renamed_repoints_its_refs_in_the_songs() {
+async fn a_library_module_is_not_renamed_and_its_refs_stay() {
     let dir = scratch("e-repoint");
     let songs = dir.join("home/workspace/songs");
     let module = dir.join("libraries/k7-core/modules/audio/verb");
@@ -122,30 +115,16 @@ async fn a_library_module_renamed_repoints_its_refs_in_the_songs() {
         &dir,
         Tag::Rename,
         json!({ "path": "_libraries/k7-core/modules/audio/verb", "name": "hall" }),
-        true,
         &lines,
     );
     let (status, body) = text(routes::dispatch(H::Rename, &c).await).await;
-    assert_eq!(status, 200, "{body}");
-    let v: Value = serde_json::from_str(&body).unwrap();
-    assert_eq!(v["path"], "_libraries/k7-core/modules/audio/hall");
-    assert!(
-        v["repointed"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .any(|f| f == "song.k7/nodes/v.k7x"),
-        "{body}"
-    );
+    assert_eq!(status, 400, "{body}");
+    assert!(body.contains("a library is not edited from here"), "{body}");
     assert_eq!(
         std::fs::read_to_string(songs.join("song.k7/nodes/v.k7x")).unwrap(),
-        "extends(\"@k7-core/audio/hall\")\n"
+        "extends(\"@k7-core/audio/verb\")\n"
     );
-    assert!(
-        dir.join("libraries/k7-core/modules/audio/hall/module.k7x")
-            .is_file()
-    );
-    assert_eq!(calls::of(&songs.display().to_string()), ["before", "after"]);
+    assert!(module.join("module.k7x").is_file());
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 8)]
@@ -162,7 +141,6 @@ async fn sixty_four_renames_of_one_workspace_are_served_one_at_a_time() {
             &dir,
             Tag::Rename,
             json!({ "path": format!("a{i}"), "name": format!("b{i}") }),
-            false,
             &lines,
         );
         all.push(tokio::spawn(async move {
@@ -192,7 +170,6 @@ async fn a_second_write_waits_for_the_lock_and_the_table_forgets_what_nobody_hol
         &dir,
         Tag::Folder,
         json!({ "dir": ".", "name": "later" }),
-        false,
         &lines,
     );
     let task = tokio::spawn(async move { text(routes::dispatch(H::Folder, &c).await).await.0 });
@@ -302,7 +279,6 @@ async fn a_native_move_cancels_the_prewarm_itself_with_no_workspace_in_the_runti
         &dir,
         Tag::Rename,
         json!({ "path": "a.txt", "name": "b.txt" }),
-        false,
         &lines,
     );
     c.media = Some(media.clone());

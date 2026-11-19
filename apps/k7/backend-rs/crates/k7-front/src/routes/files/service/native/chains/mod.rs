@@ -135,18 +135,16 @@ fn what_of(tag: Tag) -> Option<What> {
 pub fn ctx_of(
     tag: Tag,
     env: &BTreeMap<String, String>,
-    admin: bool,
     slug: &str,
     log: &k7_hub::Log,
     held: Option<(&Arc<Acct>, &std::path::Path)>,
 ) -> Ctx {
-    let home = k7_file_service::libraries::Home::of(env, admin);
+    let home = k7_file_service::libraries::Home::of(env);
     let root = join(&[&home.studio, "workspace", "Banc"]);
     let mut ctx = Ctx::of(
         tag,
         &Req {
             env,
-            admin,
             slug,
             workspace: "Banc",
             root: &root,
@@ -173,7 +171,6 @@ pub fn live_ctx(
     let ctx = ctx_of(
         tag,
         &a.env,
-        who.admin,
         &a.slug,
         who.log,
         who.code_root.map(|r| (&who.held.acct, r)),
@@ -367,7 +364,7 @@ pub async fn live(who: &Who<'_>, path: &str, req: axum::extract::Request, ctx: C
     }
 }
 
-/// The hub's cut answered natively, an admin's over its drafts; `None` is a decline, said by the caller (1p-D15).
+/// The hub's cut answered natively; `None` is a decline, said by the caller (1p-D15).
 pub async fn cold_run_answer(ctx: &Ctx, want: &str, chain: &str) -> Option<(u16, Value)> {
     let what = What::Run {
         want: want.to_owned(),

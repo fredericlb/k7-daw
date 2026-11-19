@@ -88,7 +88,6 @@ pub(super) async fn workspace_file(
         .to_string();
     let nreq = native::Req {
         env: &who.held.account.env,
-        admin: who.admin,
         slug: &who.held.account.slug,
         workspace: ws,
         root: &workspaces,
@@ -188,7 +187,6 @@ async fn upload(who: &Who<'_>, query: &str, req: Request) -> Response {
     let ws = root.display().to_string();
     let nreq = native::Req {
         env: &who.held.account.env,
-        admin: who.admin,
         slug: &who.held.account.slug,
         workspace: &wsname,
         root: &ws,

@@ -148,9 +148,8 @@ fn replays_every_vector_of_the_projects_rules() {
                 let home = Home {
                     studio: format!("{base}/studio"),
                     libraries: format!("{base}/libraries"),
-                    admin: false,
                 };
-                let planned = plan_rename(&Space::open(&home, root), false, "a.k7", name, &Disk);
+                let planned = plan_rename(&Space::open(&home, root), "a.k7", name, &Disk);
                 match (c["app"].as_str(), planned) {
                     (None, Err(ProjError::Refused(said))) => {
                         assert!(said.contains(&format!("'{clean}' should end in")), "{said}")
@@ -179,7 +178,6 @@ fn replays_every_vector_of_the_projects_rules() {
                 let home = Home {
                     studio: format!("{base}/studio"),
                     libraries: format!("{base}/libraries"),
-                    admin: false,
                 };
                 let sp = Space::open(&home, root);
                 let got = match plan_open(&sp, rel, &Disk) {

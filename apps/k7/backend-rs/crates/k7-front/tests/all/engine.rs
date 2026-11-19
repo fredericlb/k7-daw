@@ -143,8 +143,6 @@ async fn on_the_front_answers() {
     .await;
     assert_eq!(status, 200);
     let hub: serde_json::Value = serde_json::from_str(&body).unwrap();
-    assert_eq!(hub["rendersEnabled"], false);
-    assert_eq!(hub["renderer"], serde_json::Value::Null);
     let epoch = hub["epoch"].as_str().unwrap().to_string();
     assert!(epoch.len() >= 16, "{body}");
     // A binding re-established under the key its caller held, and a key shorter than a drawn one refused.
@@ -169,7 +167,7 @@ async fn on_the_front_answers() {
             "POST",
             "/api/internal/engine/bindings",
             &seam,
-            &format!(r#"{{"engineId":null,"roots":[],"kind":"jobs","key":{bad}}}"#),
+            &format!(r#"{{"engineId":"e1","roots":[],"kind":"jobs","key":{bad}}}"#),
         )
         .await;
         assert_eq!(status, 400, "{bad}");

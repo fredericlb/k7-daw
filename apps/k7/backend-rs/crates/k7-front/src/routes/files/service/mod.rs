@@ -49,7 +49,6 @@ pub struct Pass;
 pub struct Who<'a> {
     pub held: &'a Held,
     pub user: &'a str,
-    pub admin: bool,
     /// Whether the front is a device's own (`STUDIO_LOCAL_USER`), which the git routes need.
     pub device: bool,
     pub log: &'a k7_hub::Log,
@@ -203,12 +202,11 @@ pub async fn answer(
     files: &super::Files,
     names: &Arc<Names>,
     user: &str,
-    admin: bool,
     target: &str,
     req: Request,
 ) -> Result<Response, Pass> {
     // The place a native decline notes its reason, for the refusal that follows (4-7).
-    native::refuse::scoped(answer_scoped(files, names, user, admin, target, req)).await
+    native::refuse::scoped(answer_scoped(files, names, user, target, req)).await
 }
 
 /// `getWorkspace`'s test: a name with no folder is not a workspace, and naming it never makes one.
@@ -228,7 +226,6 @@ async fn answer_scoped(
     files: &super::Files,
     names: &Arc<Names>,
     user: &str,
-    admin: bool,
     target: &str,
     mut req: Request,
 ) -> Result<Response, Pass> {
@@ -252,12 +249,9 @@ async fn answer_scoped(
             ));
         }
     };
-    held.admin
-        .store(admin, std::sync::atomic::Ordering::Relaxed);
     let who = Who {
         held: &held,
         user,
-        admin,
         device: files.hub.is_device(),
         log: &svc.log,
         code_root: svc.code_root.as_deref(),
@@ -284,7 +278,7 @@ async fn answer_scoped(
             .unwrap_or_else(|p| p.into_inner())
             .insert(key.clone());
         if first {
-            let home = k7_file_service::libraries::Home::of(&held.account.env, false);
+            let home = k7_file_service::libraries::Home::of(&held.account.env);
             let there = is_workspace(&home, w).await;
             match k7_capture::Captures::global()
                 .account(&home.studio)
@@ -422,7 +416,6 @@ async fn answer_scoped(
     }
     let req = native::Req {
         env: &who.account().env,
-        admin: who.admin,
         slug: &who.account().slug,
         workspace: &name,
         root: &root,

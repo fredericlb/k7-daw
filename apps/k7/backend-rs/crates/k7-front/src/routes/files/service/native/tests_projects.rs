@@ -53,7 +53,6 @@ pub(super) fn proj(dir: &Path, who: &str) -> (Proj, Lines) {
         home: Home {
             studio: crate::routes::files::service::native::tests::slashed(&dir.join("home")),
             libraries: dir.join("libraries").display().to_string(),
-            admin: false,
         },
         account: who.into(),
         log: log_to(&lines),
@@ -93,7 +92,7 @@ pub(super) async fn go(p: &Proj, kind: Kind, dir: &Path, body: Value) -> (u16, S
 
 /// A real project of the crate's own scaffold, made natively.
 pub(super) async fn make(dir: &Path, name: &str) {
-    let home = k7_file_service::libraries::Home::of(&super::tests_docs::env_of(dir), false);
+    let home = k7_file_service::libraries::Home::of(&super::tests_docs::env_of(dir));
     let root = root_of(dir);
     let code = super::tests_docs::code_root().display().to_string();
     let mut mint = || {

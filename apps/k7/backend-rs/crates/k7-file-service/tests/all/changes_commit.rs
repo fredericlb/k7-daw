@@ -29,7 +29,7 @@ fn a_failure_at_any_step_writes_nothing() {
     let reference = {
         let fx = Fx::new("c-atomic-ref");
         seed(&fx);
-        let p = planned(&fx, true, ops()).unwrap();
+        let p = planned(&fx, ops()).unwrap();
         let landed = commit(&Real, &p, &mut |_| {}).unwrap();
         assert!(landed.structural);
         tree(&fx.root)
@@ -38,7 +38,7 @@ fn a_failure_at_any_step_writes_nothing() {
     let renames = {
         let fx = Fx::new("c-atomic-count");
         seed(&fx);
-        let p = planned(&fx, true, ops()).unwrap();
+        let p = planned(&fx, ops()).unwrap();
         let fs = Flaky::at(usize::MAX);
         commit(&fs, &p, &mut |_| {}).unwrap();
         fs.renames.load(Ordering::SeqCst)
@@ -48,7 +48,7 @@ fn a_failure_at_any_step_writes_nothing() {
         let fx = Fx::new(&format!("c-atomic-{n}"));
         seed(&fx);
         let before = tree(&fx.root);
-        let p = planned(&fx, true, ops()).unwrap();
+        let p = planned(&fx, ops()).unwrap();
         let err = commit(&Flaky::at(n), &p, &mut |_| {}).expect_err("the Nth rename was refused");
         assert!(err.what.contains("injected"), "{err:?}");
         assert_eq!(tree(&fx.root), before, "after a failure at rename {n}");
@@ -57,7 +57,7 @@ fn a_failure_at_any_step_writes_nothing() {
     let done = {
         let fx = Fx::new("c-atomic-done");
         seed(&fx);
-        let p = planned(&fx, true, ops()).unwrap();
+        let p = planned(&fx, ops()).unwrap();
         let fs = Flaky::at(renames);
         commit(&fs, &p, &mut |_| {}).unwrap();
         tree(&fx.root)
@@ -82,7 +82,6 @@ fn a_failure_while_staging_leaves_no_folder_behind() {
     fx.s.file("studio/workspace/songs/song.k7/block", "file");
     let p = planned(
         &fx,
-        true,
         json!([
             text("song.k7/x/y/a.txt", "a", json!(null)),
             text("song.k7/block/b.txt", "b", json!(null)),
@@ -148,7 +147,6 @@ fn a_binary_about_to_go_is_snapshotted_and_a_text_is_not() {
     fx.s.file("studio/workspace/songs/song.k7/src.wav", "S");
     let p = planned(
         &fx,
-        true,
         json!([
             { "kind": "remove", "file": "song.k7/a.wav", "was": null },
             { "kind": "copy", "from": "song.k7/src.wav", "file": "song.k7/b.wav", "replace": true },

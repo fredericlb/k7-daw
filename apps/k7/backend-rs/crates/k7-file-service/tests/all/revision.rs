@@ -201,7 +201,7 @@ fn a_limit_makes_the_walk_unknowable() {
 #[test]
 fn the_outside_files_are_the_newest_of_three_and_a_missing_one_is_zero() {
     let s = Scratch::new("rev-outside");
-    let h = s.home(false);
+    let h = s.home();
     assert_eq!(outside_newest(&h), 0.0);
     stamped(&s, "studio/exts.json", 5);
     stamped(&s, "studio/preferences.yaml", 9);

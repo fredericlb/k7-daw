@@ -234,13 +234,9 @@ fn a_drive_home_lists_as_the_shim_does() {
     let h = Home {
         studio: "C:/Work/studio".into(),
         libraries: "C:/Work/libs".into(),
-        admin: false,
     };
     assert_eq!(workspace_dir(&h), "C:/Work/studio/workspace");
-    let h = Home::of(
-        &[("USERPROFILE".to_string(), "C:\\Users\\me".to_string())].into(),
-        false,
-    );
+    let h = Home::of(&[("USERPROFILE".to_string(), "C:\\Users\\me".to_string())].into());
     assert_eq!(workspace_dir(&h), "C:/Users/me/.k7/workspace");
     // The model has no disk to ask there: a drive that is not on this host lists nothing, and does not fail.
     assert!(folder_names(&workspace_dir(&h)).is_empty());

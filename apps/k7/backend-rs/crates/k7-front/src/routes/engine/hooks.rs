@@ -2,7 +2,6 @@
 //! registry and the hub directly, stub `verify`. Compiled only with `test-hooks`, mounted
 //! only by `k7-engine-testbed`; the routes under test are the front's own, unchanged.
 
-use std::collections::HashMap;
 use std::sync::Arc;
 
 use axum::extract::{Path, State};
@@ -159,34 +158,6 @@ async fn hook(
         "engineForProject" => json!(reg.engine_for_project(&s(&b, "project"))),
         "onThisMachine" => json!(reg.on_this_machine(&id)),
         "binding" => json!(reg.binding(&id, opt(&b, "secret").as_deref())),
-        "ownerGet" => reg
-            .owner_of(&id)
-            .map_or(Value::Null, |o| Value::Object(o.json())),
-        "ownerAssign" => json!(match reg.assign_owner(&id, &s(&b, "owner")) {
-            k7_engine::registry::owners::Assigned::Same => "same",
-            k7_engine::registry::owners::Assigned::New => "new",
-            k7_engine::registry::owners::Assigned::Moved => "moved",
-        }),
-        "ownerShare" => {
-            let emails: Vec<String> = b
-                .get("emails")
-                .and_then(Value::as_array)
-                .map(|a| {
-                    a.iter()
-                        .filter_map(Value::as_str)
-                        .map(str::to_string)
-                        .collect()
-                })
-                .unwrap_or_default();
-            json!(reg.share(&id, &emails, b.get("everyone").and_then(Value::as_bool)))
-        }
-        "ownerRelease" => json!(reg.release_owner(&id)),
-        "ownersAll" => Value::Array(
-            reg.owners()
-                .into_iter()
-                .map(|(i, o, _)| json!([i, Value::Object(o.json())]))
-                .collect(),
-        ),
         "ticket" => json!(
             core.tickets
                 .issue(&id, &s(&b, "holder"), core.clock.now_ms())
@@ -196,12 +167,6 @@ async fn hook(
             None => Value::Null,
         },
         "hubHas" => json!(hub.has(&id)),
-        "hubRenderer" => json!(hub.renderer()),
-        "hubRendersEnabled" => json!(hub.renders_enabled()),
-        "hubMarkRendered" => {
-            hub.mark_rendered(&id);
-            Value::Null
-        }
         "hubBind" => {
             let roots: Vec<Root> =
                 serde_json::from_value(b.get("roots").cloned().unwrap_or(json!([])))
@@ -212,7 +177,7 @@ async fn hook(
                 Kind::Engine
             };
             let synced = b.get("synced").and_then(Value::as_bool).unwrap_or(false);
-            json!(hub.bind_local(opt(&b, "engineId").as_deref(), roots, kind, synced))
+            json!(hub.bind_local(&s(&b, "engineId"), roots, kind, synced))
         }
         "hubUnbind" => {
             hub.unbind_local(&s(&b, "path"));

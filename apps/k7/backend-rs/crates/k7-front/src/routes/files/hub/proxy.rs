@@ -104,11 +104,6 @@ pub async fn files(State(state): State<Arc<AppState>>, req: Request) -> Response
             "no valid files ticket, and no session",
         );
     }
-    let admin = match (&ticket, &session) {
-        (Some(t), _) => t.admin,
-        (None, Some(s)) => crate::session::is_admin(&s.user, &state.settings),
-        _ => false,
-    };
     let path = req.uri().path().strip_prefix("/api/files").unwrap_or("");
     let path = if path.is_empty() {
         "/".to_string()
@@ -120,11 +115,11 @@ pub async fn files(State(state): State<Arc<AppState>>, req: Request) -> Response
         None => path.clone(),
     };
     let response = if is_libraries(&path) {
-        libraries(&state, &target, admin, req).await
+        libraries(&state, &target, req).await
     } else {
         let engine = header(req.headers(), "x-studio-engine-id")
             .or_else(|| ticket.and_then(|t| t.engine_id));
-        forward(&state, &user, admin, engine, &target, req).await
+        forward(&state, &user, engine, &target, req).await
     };
     match &session {
         Some(s) => crate::session::with_cookies(response, s),
@@ -157,7 +152,6 @@ async fn bind(state: &AppState, user: &str, engine: Option<&str>) {
 async fn forward(
     state: &AppState,
     user: &str,
-    admin: bool,
     engine: Option<String>,
     target: &str,
     req: Request,
@@ -172,7 +166,7 @@ async fn forward(
     }
     let engine = engine.filter(|e| !e.is_empty());
     bind(state, user, engine.as_deref()).await;
-    match service::answer(files, &files.hub.names, user, admin, target, req).await {
+    match service::answer(files, &files.hub.names, user, target, req).await {
         Ok(r) => r,
         // The front takes every account that has a code root, and one without was refused above.
         Err(Pass) => error(StatusCode::SERVICE_UNAVAILABLE, "file service unavailable"),
@@ -180,17 +174,10 @@ async fn forward(
 }
 
 /// A request for the libraries, under `target`; 503 while the front's own are not made.
-pub(super) async fn libraries(
-    state: &AppState,
-    target: &str,
-    admin: bool,
-    req: Request,
-) -> Response {
+pub(super) async fn libraries(state: &AppState, target: &str, req: Request) -> Response {
     let hub = &files_of(state).hub;
     match hub.library_native.get() {
-        Some(native) => {
-            crate::routes::files::service::libraries::answer(native, target, admin, req).await
-        }
+        Some(native) => crate::routes::files::service::libraries::answer(native, target, req).await,
         None => error(
             StatusCode::SERVICE_UNAVAILABLE,
             files_of(state).service.libraries_refusal(),

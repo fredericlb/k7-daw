@@ -47,7 +47,7 @@ impl DriverEnv {
     }
 }
 
-/// The driver the front runs: this machine's engine when it has one, else the bound machine, else the server's render machine.
+/// The driver the front runs: this machine's engine when it has one, else the bound machine.
 pub fn real_driver(link: &EngineLink, env: DriverEnv) -> Arc<dyn Driver> {
     let bin = engine_binary(env.var("STUDIO_ENGINE"), &env.code_root);
     Arc::new(RealDriver {
@@ -70,10 +70,9 @@ struct RealDriver {
 }
 
 impl RealDriver {
-    /// The jobs paths a render may go to, in the TypeScript's order: the bound machine, then the server's own.
+    /// The jobs paths a render may go to: the bound machine's.
     fn machines(&self) -> Vec<String> {
-        let own = self.env.var("STUDIO_RENDER_JOBS_URL").map(str::to_owned);
-        self.link.jobs_url().into_iter().chain(own).collect()
+        self.link.jobs_url().into_iter().collect()
     }
 }
 

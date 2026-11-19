@@ -62,7 +62,7 @@ fn replays_every_guard_of_a_rename_and_a_recycle_in_the_typescripts_order() {
     let s = Scratch::new("pg-move");
     build(&s, fixture["entries"].as_array().unwrap());
     let root = s.path("ws");
-    let home = s.home(false);
+    let home = s.home();
     let (mut renames, mut recycles, mut refused) = (0, 0, 0);
     for c in &all {
         let (f, rel) = (c["fn"].as_str().unwrap(), c["rel"].as_str().unwrap_or(""));
@@ -77,7 +77,7 @@ fn replays_every_guard_of_a_rename_and_a_recycle_in_the_typescripts_order() {
         let (got, after) = if f == "rename" {
             let name = c["name"].as_str().unwrap();
             renames += 1;
-            match plan_rename(&sp, false, rel, name, &Disk) {
+            match plan_rename(&sp, rel, name, &Disk) {
                 Ok(None) => (
                     Ok(answer_of(&kept_answer(&sp, rel, &Disk).unwrap())),
                     active.map(String::from),
@@ -93,7 +93,7 @@ fn replays_every_guard_of_a_rename_and_a_recycle_in_the_typescripts_order() {
             }
         } else {
             recycles += 1;
-            match plan_recycle(&sp, false, rel, &Disk) {
+            match plan_recycle(&sp, rel, &Disk) {
                 Ok(plan) => (
                     Ok(answer_of(&plan.answer)),
                     (!plan.was_active)
@@ -163,7 +163,7 @@ fn replays_defaultproject_over_markers_of_every_shape_and_every_byte_the_typescr
             std::fs::create_dir_all(k7_file_service::paths::dirname(&marker_of(&root))).unwrap();
             std::fs::write(marker_of(&root), unhex(h)).unwrap();
         }
-        let home = s.home(false);
+        let home = s.home();
         let got = default_project(&Space::open(&home, &root), &Limits::default());
         assert_eq!(
             got.map(|o| o.map_or(Value::Null, Value::from)),
@@ -205,7 +205,7 @@ fn names_a_project_as_projectinfoof_does_or_declines_a_text_it_cannot_keep() {
             s.dir("ws/a.k7");
         }
         mark(&root, Some("a.k7"));
-        let home = s.home(false);
+        let home = s.home();
         match project_info(&Space::open(&home, &root)) {
             Ok(body) => {
                 named += 1;

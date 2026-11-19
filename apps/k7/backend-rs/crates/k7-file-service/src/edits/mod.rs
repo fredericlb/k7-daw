@@ -19,10 +19,10 @@ pub use staged::StagedFs;
 use song_edit::confine::Env;
 use song_edit::paths::join;
 
-use crate::libraries::{Home, library_root, overlay_root};
+use crate::libraries::{Home, library_root};
 use crate::listings::families::library_names;
 
-/// The roots song-edit reads from: the account's libraries, an admin's drafts, the engine's meta modules.
+/// The roots song-edit reads from: the account's libraries and the engine's meta modules.
 pub fn env_of(home: &Home, code_root: &str) -> Env {
     // A code root given as a relative path is made absolute: a mount must be.
     let code = if song_edit::winpath::to_posix(code_root).is_some() {
@@ -38,13 +38,6 @@ pub fn env_of(home: &Home, code_root: &str) -> Env {
         &posix(&join(&[&code, "packages/song/meta"])),
     );
     env.libraries_home.clone_from(&home.libraries);
-    if home.admin {
-        for name in library_names(home) {
-            if let Some(root) = overlay_root(home, &name) {
-                env.overlays.push((name, root));
-            }
-        }
-    }
     edge::posix_env(env)
 }
 
@@ -82,7 +75,6 @@ mod tests {
         let home = Home {
             studio: "C:\\Users\\a\\.k7".into(),
             libraries: "C:\\Users\\a\\.k7\\libraries".into(),
-            admin: false,
         };
         let env = env_of(&home, "C:\\code");
         assert_eq!(env.studio_home, "/C:/Users/a/.k7");

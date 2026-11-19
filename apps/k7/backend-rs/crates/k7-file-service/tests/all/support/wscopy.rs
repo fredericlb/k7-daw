@@ -44,7 +44,7 @@ pub fn ask<'a>(from: &'a str, path: &'a str, to: &'a str, name: &'a str) -> Copy
 }
 
 pub fn plan(a: &Acct, c: &CopyAsk<'_>) -> Result<CopyPlan, WsError> {
-    plan_copy(&a.home(), false, c, &Limits::default())
+    plan_copy(&a.home(), c, &Limits::default())
 }
 
 /// The plan, written; the plan back.

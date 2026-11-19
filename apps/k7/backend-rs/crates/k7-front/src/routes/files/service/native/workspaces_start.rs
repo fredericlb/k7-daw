@@ -16,7 +16,7 @@ use super::locks;
 
 /// The demos' folder and Examples' for an account, or none where there is no bundle.
 fn places(env: &BTreeMap<String, String>, code_root: &Path) -> (Home, Option<String>, String) {
-    let home = Home::of(env, false);
+    let home = Home::of(env);
     let src = demos_dir(
         env.get("STUDIO_DEMOS").map(String::as_str),
         &code_root.display().to_string(),

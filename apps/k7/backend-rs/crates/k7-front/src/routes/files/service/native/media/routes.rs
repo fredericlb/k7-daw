@@ -106,7 +106,6 @@ pub async fn live_hook(who: &Who<'_>, path: &str, req: Request) -> Result<Respon
     let locator = |name: &str, root: &str, query: &str| -> Arc<dyn Locator> {
         let rq = Req {
             env: &account.env,
-            admin: who.admin,
             slug: &account.slug,
             workspace: name,
             root,
@@ -118,7 +117,7 @@ pub async fn live_hook(who: &Who<'_>, path: &str, req: Request) -> Result<Respon
         };
         let mut ctx = Ctx::of(Tag::ProjectDoc, &rq);
         ctx.touches = false;
-        Arc::new(Session::new(ctx, media.lites.clone(), who.admin))
+        Arc::new(Session::new(ctx, media.lites.clone()))
     };
     let resolve = |h: &HeaderMap| workspace(who, h).map(|(n, r)| (n, r.display().to_string()));
     let owner = || claim_root(&who.held.account.home, who.user);

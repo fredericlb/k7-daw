@@ -36,7 +36,6 @@ pub fn mounted(c: &Value, tag: &str) -> (Scratch, Home) {
     let home = Home {
         studio: s.path("home"),
         libraries: s.path("libraries"),
-        admin: false,
     };
     (s, home)
 }

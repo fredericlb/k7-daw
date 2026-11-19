@@ -53,7 +53,6 @@ impl Front {
         let who = Who {
             held: &self.held,
             user: "a@b.c",
-            admin: false,
             device: false,
             log: &self.log,
             code_root: None,

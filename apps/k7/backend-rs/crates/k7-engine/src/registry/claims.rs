@@ -2,7 +2,6 @@
 //! wins and displaces under the rules; a RENEWAL (its secret) holds while that secret is registered, and
 //! says which of three ways it went otherwise (`apps/k7/backend-rs/docs/engine/claim.md`).
 
-use super::owners::{Role, role_of};
 use super::{ENGINE_ASSIGN_TTL_MS, Entry, Holder, REGISTRY_TTL_MS, Registry, State};
 
 /// An open or a renewal.
@@ -208,42 +207,6 @@ impl Registry {
         }
         prune(e, now);
         e.holders.values().any(|h| h.holder == holder)
-    }
-
-    /// Drops every claim on `id` whose account `keep` refuses.
-    pub fn evict(&self, id: &str, keep: impl Fn(&str) -> bool) {
-        let now = self.clock.now_ms();
-        if let Some(e) = self.lock().get(id, now) {
-            e.holders.retain(|_, h| keep(&h.holder));
-        }
-    }
-
-    /// Drops every claim on `id` of an account that may no longer use it: an owner moved.
-    pub fn evict_unusable(&self, id: &str, server: bool) {
-        let now = self.clock.now_ms();
-        let mut s = self.lock();
-        let owner = s.owners.get(id).cloned();
-        let Some(e) = s.get(id, now) else { return };
-        let local = super::on_this_machine(e, now);
-        e.holders.retain(|_, h| {
-            let role = if !h.holder.is_empty() && local {
-                Role::Owner
-            } else {
-                role_of(owner.as_ref(), &h.holder, server)
-            };
-            role.may_use()
-        });
-    }
-
-    /// Drops every claim on `id` of an account its owner no longer shares it with.
-    pub fn evict_unshared(&self, id: &str) {
-        let now = self.clock.now_ms();
-        let mut s = self.lock();
-        let owner = s.owners.get(id).cloned();
-        if let Some(e) = s.get(id, now) {
-            e.holders
-                .retain(|_, h| role_of(owner.as_ref(), &h.holder, false) != Role::None);
-        }
     }
 
     /// Which engine drives this project now.

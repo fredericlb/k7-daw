@@ -15,16 +15,11 @@ use tokio_tungstenite::tungstenite::protocol::Role;
 pub async fn agent(
     core: &Arc<k7_engine::Core>,
     id: &str,
-    renders: bool,
 ) -> WebSocketStream<tokio::io::DuplexStream> {
     let (a, b) = tokio::io::duplex(1 << 20);
     let server = WebSocketStream::from_raw_socket(a, Role::Server, None).await;
     let client = WebSocketStream::from_raw_socket(b, Role::Client, None).await;
-    tokio::spawn(
-        core.hub
-            .clone()
-            .serve_tunnel(id.to_string(), renders, server),
-    );
+    tokio::spawn(core.hub.clone().serve_tunnel(id.to_string(), server));
     for _ in 0..100 {
         if core.hub.has(id) {
             break;
@@ -54,10 +49,7 @@ pub async fn say(agent: &mut WebSocketStream<tokio::io::DuplexStream>, v: Value)
 
 pub fn core() -> Arc<k7_engine::Core> {
     k7_engine::Core::new(
-        k7_engine::CoreOptions {
-            render_key: Some("rk".into()),
-            ..Default::default()
-        },
+        k7_engine::CoreOptions::default(),
         k7_engine::Clock::default(),
     )
 }
@@ -65,7 +57,7 @@ pub fn core() -> Arc<k7_engine::Core> {
 #[tokio::test]
 async fn an_in_process_link_holds_what_is_sent_until_the_engine_answers() {
     let core = core();
-    let mut agent = agent(&core, "e1", true).await;
+    let mut agent = agent(&core, "e1").await;
     let reach = Reach(&core);
     let roots = vec![Root {
         remote: "/srv/lib".into(),
@@ -74,10 +66,10 @@ async fn an_in_process_link_holds_what_is_sent_until_the_engine_answers() {
         per_child: None,
     }];
     let mut link = reach
-        .open(None, roots, Kind::Engine, Duration::from_secs(1))
+        .open("e1", roots, Kind::Engine, Duration::from_secs(1))
         .await
         .unwrap()
-        .expect("the render machine");
+        .expect("the engine");
     link.tx.text(r#"{"type":"hello"}"#.into());
     let open = read(&mut agent).await;
     assert_eq!(open["t"], "open");
@@ -101,7 +93,7 @@ async fn an_in_process_link_holds_what_is_sent_until_the_engine_answers() {
     assert_eq!(read(&mut agent).await, json!({ "t": "close", "ch": ch }));
     assert!(
         reach
-            .open(Some("nobody"), vec![], Kind::Jobs, Duration::from_secs(1))
+            .open("nobody", vec![], Kind::Jobs, Duration::from_secs(1))
             .await
             .unwrap()
             .is_none()

@@ -309,7 +309,7 @@ async fn an_account_refused_by_the_stop_leaves_no_native_capture_running() {
     } = &rig;
     let probe = svc.held("probe@x.org", instances).await.unwrap();
     assert!(probe.native_capture, "the rig's capture is not native");
-    let studio = k7_file_service::libraries::Home::of(&probe.account.env, false).studio;
+    let studio = k7_file_service::libraries::Home::of(&probe.account.env).studio;
     assert!(k7_capture::Captures::global().account(&studio).is_some());
     drop(probe);
     let one = svc.making.lock().await;
@@ -321,7 +321,6 @@ async fn an_account_refused_by_the_stop_leaves_no_native_capture_running() {
     assert_eq!(parked.await.unwrap().err().as_deref(), Some("stopping"));
     let studio = k7_file_service::libraries::Home::of(
         &instances.environment("a@x.org", "s").await.unwrap().env,
-        false,
     )
     .studio;
     let left = k7_capture::Captures::global().account(&studio);
@@ -341,7 +340,7 @@ async fn the_accounts_stop_awaits_its_captures_ledgers() {
     } = &rig;
     let h = svc.held("a@x.org", instances).await.unwrap();
     assert!(h.native_capture, "the rig's capture is not native");
-    let studio = k7_file_service::libraries::Home::of(&h.account.env, false).studio;
+    let studio = k7_file_service::libraries::Home::of(&h.account.env).studio;
     assert!(k7_capture::Captures::global().account(&studio).is_some());
     let line = super::stop::stop_all(vec![h.clone()], Duration::from_secs(30)).await;
     assert!(line.is_none(), "{line:?}");

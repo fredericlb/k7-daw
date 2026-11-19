@@ -32,7 +32,7 @@ fn roots(
 
 fn plain(s: &Scratch) -> (Home, String) {
     let project = s.dir("studio/workspace/ws/p.k7");
-    (s.home(false), project)
+    (s.home(), project)
 }
 
 #[test]
@@ -95,18 +95,6 @@ fn libraries_are_listed_by_bytes_kept_by_their_name_and_flagged_by_their_root() 
             .filter(|l| l.name != "account")
             .all(|l| !l.editable)
     );
-    let admin = roots(&s.home(true), &project, "/code", &BTreeMap::new()).unwrap();
-    // An admin writes each draft; a pinned published version is not writable, a pinned `draft` of a folder with no versions is.
-    assert_eq!(
-        admin
-            .libraries
-            .iter()
-            .map(|l| l.editable)
-            .collect::<Vec<_>>(),
-        [true, true, false, true, true]
-    );
-    assert_eq!(admin.libraries[2].root, s.path("libraries/a/1"));
-    assert!(admin.also_readable.contains(&s.path("libraries/a/draft")));
 }
 
 #[test]
@@ -182,7 +170,7 @@ fn the_environment_names_the_models_and_the_banks_as_javascript_reads_it() {
 fn a_project_inside_a_library_is_at_that_librarys_level() {
     let s = Scratch::new("ask-inlib");
     let project = s.dir("libraries/lib/p.k7");
-    let got = roots(&s.home(false), &project, "/code", &BTreeMap::new()).unwrap();
+    let got = roots(&s.home(), &project, "/code", &BTreeMap::new()).unwrap();
     assert_eq!(got.workspace_namespace.as_deref(), Some("lib"));
     assert_eq!(got.confine, Some(s.path("libraries/lib")));
 }
@@ -194,7 +182,7 @@ fn windows_spelled_homes_and_code_roots_keep_their_drive_and_slashes() {
         .iter()
         .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
         .collect();
-    let home = Home::of(&env, false);
+    let home = Home::of(&env);
     let project = "C:/Users/a/.k7/workspace/ws/p.k7";
     let got = roots(&home, project, r"C:\k7", &env).unwrap();
     assert_eq!(got.project, project);

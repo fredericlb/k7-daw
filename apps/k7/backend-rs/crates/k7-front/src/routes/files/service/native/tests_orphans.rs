@@ -66,7 +66,7 @@ fn fixture(name: &str) -> std::path::PathBuf {
 async fn get(dir: &std::path::Path, h: H, query: &str) -> (u16, Value) {
     let lines = Lines::default();
     let tag = Tag::of(h).unwrap();
-    let mut c = request(dir, tag, json!({}), false, &lines);
+    let mut c = request(dir, tag, json!({}), &lines);
     let code = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
     if let Some(n) = c.native.as_mut() {
         n.docs = Some(super::docs::Docs::of_env(&code, &Default::default()));

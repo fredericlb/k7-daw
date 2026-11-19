@@ -1,7 +1,6 @@
 //! routes.rs — the libraries' service behind the hub's secret: `/account/libraries` (read only), `/libraries/sync` and `/status`,
 //! answered as `libraryCore.ts` and `librariesRoutes.ts` do.
-//! What a reader gets wrong: the caller checks who asks; `answer` believes the admin stamp it is handed, and the secret
-//! gate only keeps a request that is not the hub's out.
+//! What a reader gets wrong: the caller checks who asks; the secret gate only keeps a request that is not the hub's out.
 
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -25,8 +24,6 @@ pub struct Request<'a> {
     pub query: &'a str,
     /// The hub's `x-studio-hub-secret`, as the request carried it.
     pub secret: Option<&'a str>,
-    /// The hub's admin stamp, which the client cannot set.
-    pub admin: bool,
     pub body: &'a [u8],
 }
 
@@ -136,12 +133,11 @@ impl Libraries {
             "" => "/",
             s => s,
         };
-        let (method, admin) = (req.method, req.admin);
+        let method = req.method;
         if method == "GET" && sub == "/" {
-            // An admin's list has every draft made, so the Libraries page offers the publish before any project opened.
             let view = self
                 .blocking(move |s| {
-                    let notes = s.ensure(None, admin);
+                    let notes = s.ensure(None, false);
                     s.view(&notes)
                 })
                 .await?;

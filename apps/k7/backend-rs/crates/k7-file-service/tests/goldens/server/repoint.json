@@ -1,186 +1,11 @@
 {
  "cases": [
   {
-   "name": "a library module renamed, its refs and the refs below it",
-   "fn": "rename",
-   "args": {
-    "path": "_libraries/k7-core/modules/audio/verb",
-    "name": "hall",
-    "admin": true
-   },
-   "tree": {
-    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/verb:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/verb#out\")\n",
-    "ws/song.k7/nodes/y.k7x": "extends(\"@k7-core/audio/fx/old/inner\")\n",
-    "ws/song.k7/nodes/z.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "ws/song.k7/nodes/n.k7x": "extends(\"@k7-core/audio/verbose\")\n",
-    "ws/other.k7/project.k7x": "project({ name: \"other\" })\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/notes.txt": "plain\n",
-    "ws/_library-pins.k7x": "k7-pub(3)\n",
-    "libraries/k7-core/modules/transformers/cat/n/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verbose/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/old/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/deep/x/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/engines/e/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/transformers/arp/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "libraries/k7-core/assemblies/as.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/c/q/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/mine/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
-   },
-   "ret": {
-    "path": "_libraries/k7-core/modules/audio/hall",
-    "repointed": [
-     "_libraries/k7-core/chains/ch.k7x",
-     "other.k7/nodes/o.k7x",
-     "song.k7/nodes/v.k7x",
-     "song.k7/nodes/w.k7x",
-     "song.k7/nodes/x.k7x"
-    ]
-   },
-   "changed": {
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/hall\")\n",
-    "libraries/k7-core/modules/audio/hall/module.k7x": "extends(\"@engine/reverb\")\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/hall\")\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/hall\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/hall:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/hall#out\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": null
-   }
-  },
-  {
-   "name": "a category renamed takes every module in it along",
-   "fn": "rename",
-   "args": {
-    "path": "_libraries/k7-core/modules/audio/fx",
-    "name": "filters",
-    "admin": true
-   },
-   "tree": {
-    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/verb:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/verb#out\")\n",
-    "ws/song.k7/nodes/y.k7x": "extends(\"@k7-core/audio/fx/old/inner\")\n",
-    "ws/song.k7/nodes/z.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "ws/song.k7/nodes/n.k7x": "extends(\"@k7-core/audio/verbose\")\n",
-    "ws/other.k7/project.k7x": "project({ name: \"other\" })\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/notes.txt": "plain\n",
-    "ws/_library-pins.k7x": "k7-pub(3)\n",
-    "libraries/k7-core/modules/transformers/cat/n/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verbose/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/old/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/deep/x/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/engines/e/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/transformers/arp/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "libraries/k7-core/assemblies/as.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/c/q/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/mine/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
-   },
-   "ret": {
-    "path": "_libraries/k7-core/modules/audio/filters",
-    "repointed": [
-     "_libraries/k7-core/assemblies/as.k7x",
-     "song.k7/nodes/y.k7x",
-     "song.k7/nodes/z.k7x"
-    ]
-   },
-   "changed": {
-    "libraries/k7-core/assemblies/as.k7x": "extends(\"@k7-core/audio/filters/old\")\n",
-    "libraries/k7-core/modules/audio/filters/deep/x/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/filters/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/filters/old/module.k7x": "extends(\"@engine/reverb\")\n",
-    "ws/song.k7/nodes/y.k7x": "extends(\"@k7-core/audio/filters/old/inner\")\n",
-    "ws/song.k7/nodes/z.k7x": "extends(\"@k7-core/audio/filters/old\")\n",
-    "libraries/k7-core/modules/audio/fx/deep/x/module.k7x": null,
-    "libraries/k7-core/modules/audio/fx/dup/module.k7x": null,
-    "libraries/k7-core/modules/audio/fx/old/module.k7x": null
-   }
-  },
-  {
-   "name": "a name that is a prefix of another module",
-   "fn": "rename",
-   "args": {
-    "path": "_libraries/k7-core/modules/audio/verb",
-    "name": "verbs",
-    "admin": true
-   },
-   "tree": {
-    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/verb:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/verb#out\")\n",
-    "ws/song.k7/nodes/y.k7x": "extends(\"@k7-core/audio/fx/old/inner\")\n",
-    "ws/song.k7/nodes/z.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "ws/song.k7/nodes/n.k7x": "extends(\"@k7-core/audio/verbose\")\n",
-    "ws/other.k7/project.k7x": "project({ name: \"other\" })\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/notes.txt": "plain\n",
-    "ws/_library-pins.k7x": "k7-pub(3)\n",
-    "libraries/k7-core/modules/transformers/cat/n/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verbose/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/old/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/deep/x/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/engines/e/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/transformers/arp/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "libraries/k7-core/assemblies/as.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/c/q/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/mine/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
-   },
-   "ret": {
-    "path": "_libraries/k7-core/modules/audio/verbs",
-    "repointed": [
-     "_libraries/k7-core/chains/ch.k7x",
-     "other.k7/nodes/o.k7x",
-     "song.k7/nodes/v.k7x",
-     "song.k7/nodes/w.k7x",
-     "song.k7/nodes/x.k7x"
-    ]
-   },
-   "changed": {
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/verbs\")\n",
-    "libraries/k7-core/modules/audio/verbs/module.k7x": "extends(\"@engine/reverb\")\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/verbs\")\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verbs\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/verbs:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/verbs#out\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": null
-   }
-  },
-  {
    "name": "a module of the account's library",
    "fn": "rename",
    "args": {
     "path": "_libraries/account/modules/audio/mine",
-    "name": "yours",
-    "admin": true
+    "name": "yours"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -225,53 +50,11 @@
    }
   },
   {
-   "name": "an engine",
-   "fn": "rename",
-   "args": {
-    "path": "_libraries/k7-core/modules/audio/engines/e",
-    "name": "f",
-    "admin": true
-   },
-   "tree": {
-    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/verb:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/verb#out\")\n",
-    "ws/song.k7/nodes/y.k7x": "extends(\"@k7-core/audio/fx/old/inner\")\n",
-    "ws/song.k7/nodes/z.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "ws/song.k7/nodes/n.k7x": "extends(\"@k7-core/audio/verbose\")\n",
-    "ws/other.k7/project.k7x": "project({ name: \"other\" })\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/notes.txt": "plain\n",
-    "ws/_library-pins.k7x": "k7-pub(3)\n",
-    "libraries/k7-core/modules/transformers/cat/n/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verbose/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/old/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/deep/x/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/engines/e/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/transformers/arp/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "libraries/k7-core/assemblies/as.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/c/q/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/mine/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
-   },
-   "thrown": "an engine is picked by its name (`engine: <name>` in every node using it), which renaming would strand — make a new engine instead",
-   "changed": {}
-  },
-  {
-   "name": "a library that only an admin edits",
+   "name": "a library",
    "fn": "rename",
    "args": {
     "path": "_libraries/k7-core/modules/audio/verb",
-    "name": "hall",
-    "admin": false
+    "name": "hall"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -303,7 +86,7 @@
     "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
     "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
    },
-   "thrown": "can't rename '_libraries/k7-core/modules/audio/verb': only the origin's admins edit a library",
+   "thrown": "can't rename '_libraries/k7-core/modules/audio/verb': a library is not edited from here",
    "changed": {}
   },
   {
@@ -311,8 +94,7 @@
    "fn": "rename",
    "args": {
     "path": "_libraries/k7-pub/modules/audio/p",
-    "name": "r",
-    "admin": true
+    "name": "r"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -344,91 +126,7 @@
     "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
     "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
    },
-   "thrown": "can't rename '_libraries/k7-pub/modules/audio/p': a published version never changes — edit the draft",
-   "changed": {}
-  },
-  {
-   "name": "a name that is taken",
-   "fn": "rename",
-   "args": {
-    "path": "_libraries/k7-core/modules/audio/verb",
-    "name": "dup",
-    "admin": true
-   },
-   "tree": {
-    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/verb:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/verb#out\")\n",
-    "ws/song.k7/nodes/y.k7x": "extends(\"@k7-core/audio/fx/old/inner\")\n",
-    "ws/song.k7/nodes/z.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "ws/song.k7/nodes/n.k7x": "extends(\"@k7-core/audio/verbose\")\n",
-    "ws/other.k7/project.k7x": "project({ name: \"other\" })\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/notes.txt": "plain\n",
-    "ws/_library-pins.k7x": "k7-pub(3)\n",
-    "libraries/k7-core/modules/transformers/cat/n/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verbose/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/old/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/deep/x/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/engines/e/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/transformers/arp/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "libraries/k7-core/assemblies/as.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/c/q/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/mine/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
-   },
-   "thrown": "already exists: _libraries/k7-core/modules/audio/dup",
-   "changed": {}
-  },
-  {
-   "name": "the same name",
-   "fn": "rename",
-   "args": {
-    "path": "_libraries/k7-core/modules/audio/verb",
-    "name": "verb",
-    "admin": true
-   },
-   "tree": {
-    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/verb:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/verb#out\")\n",
-    "ws/song.k7/nodes/y.k7x": "extends(\"@k7-core/audio/fx/old/inner\")\n",
-    "ws/song.k7/nodes/z.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "ws/song.k7/nodes/n.k7x": "extends(\"@k7-core/audio/verbose\")\n",
-    "ws/other.k7/project.k7x": "project({ name: \"other\" })\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/notes.txt": "plain\n",
-    "ws/_library-pins.k7x": "k7-pub(3)\n",
-    "libraries/k7-core/modules/transformers/cat/n/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verbose/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/old/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/deep/x/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/engines/e/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/transformers/arp/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "libraries/k7-core/assemblies/as.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/c/q/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/mine/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
-   },
-   "ret": {
-    "path": "_libraries/k7-core/modules/audio/verb"
-   },
+   "thrown": "can't rename '_libraries/k7-pub/modules/audio/p': a library is not edited from here",
    "changed": {}
   },
   {
@@ -436,8 +134,7 @@
    "fn": "rename",
    "args": {
     "path": "notes.txt",
-    "name": "memo.txt",
-    "admin": true
+    "name": "memo.txt"
    },
    "tree": {
     "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
@@ -475,62 +172,6 @@
    "changed": {
     "ws/memo.txt": "plain\n",
     "ws/notes.txt": null
-   }
-  },
-  {
-   "name": "a song that does not parse is left as it is",
-   "fn": "rename",
-   "args": {
-    "path": "_libraries/k7-core/modules/audio/verb",
-    "name": "hall",
-    "admin": true
-   },
-   "tree": {
-    "ws/song.k7/project.k7x": "project({ name: \"song\" })\n",
-    "ws/song.k7/nodes/v.k7x": "extends(\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/verb:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/verb#out\")\n",
-    "ws/song.k7/nodes/y.k7x": "extends(\"@k7-core/audio/fx/old/inner\")\n",
-    "ws/song.k7/nodes/z.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "ws/song.k7/nodes/n.k7x": "extends(\"@k7-core/audio/verbose\")\n",
-    "ws/other.k7/project.k7x": "project({ name: \"other\" })\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "ws/notes.txt": "plain\n",
-    "ws/_library-pins.k7x": "k7-pub(3)\n",
-    "libraries/k7-core/modules/transformers/cat/n/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/verbose/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/old/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/dup/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/fx/deep/x/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/audio/engines/e/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/modules/transformers/arp/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/verb\")\n",
-    "libraries/k7-core/assemblies/as.k7x": "extends(\"@k7-core/audio/fx/old\")\n",
-    "libraries/other/modules/audio/z/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/p/module.k7x": "extends(\"@engine/reverb\")\n",
-    "libraries/k7-pub/3/modules/audio/c/q/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/mine/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/modules/audio/cat/m/module.k7x": "extends(\"@engine/reverb\")\n",
-    "home/library/chains/c.k7x": "extends(\"@account/audio/mine\")\n"
-   },
-   "ret": {
-    "path": "_libraries/k7-core/modules/audio/hall",
-    "repointed": [
-     "_libraries/k7-core/chains/ch.k7x",
-     "other.k7/nodes/o.k7x",
-     "song.k7/nodes/w.k7x",
-     "song.k7/nodes/x.k7x"
-    ]
-   },
-   "changed": {
-    "libraries/k7-core/chains/ch.k7x": "extends(\"@k7-core/audio/hall\")\n",
-    "libraries/k7-core/modules/audio/hall/module.k7x": "extends(\"@engine/reverb\")\n",
-    "ws/other.k7/nodes/o.k7x": "extends(\"@k7-core/audio/hall\")\n",
-    "ws/song.k7/nodes/w.k7x": "extends(\"@k7-core/audio/hall:main\")\n",
-    "ws/song.k7/nodes/x.k7x": "extends(\"@k7-core/audio/hall#out\")\n",
-    "libraries/k7-core/modules/audio/verb/module.k7x": null
    }
   }
  ]

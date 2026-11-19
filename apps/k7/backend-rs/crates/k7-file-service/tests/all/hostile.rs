@@ -36,7 +36,7 @@ fn wide_listing(n: u32) {
             });
         }
     });
-    let h = s.home(false);
+    let h = s.home();
     // The bound is on the best of three, so a busy machine's one slow turn is not the code's.
     let mut best = Duration::MAX;
     for _ in 0..3 {
@@ -77,7 +77,7 @@ fn a_nest_three_hundred_deep_is_declined_and_the_stack_holds() {
     let s = Scratch::new("deep");
     let rel = "d/".repeat(300);
     s.dir(&format!("ws/{rel}"));
-    let h = s.home(false);
+    let h = s.home();
     let t0 = Instant::now();
     let r = tree(&Space::open(&h, &s.path("ws")), &Limits::default());
     assert_eq!(r.unwrap_err(), Declined::TooDeep);
@@ -87,7 +87,7 @@ fn a_nest_three_hundred_deep_is_declined_and_the_stack_holds() {
         ..Limits::default()
     };
     let ws = s.path("ws");
-    let home = s.home(false);
+    let home = s.home();
     let t = std::thread::Builder::new()
         .stack_size(256 * 1024)
         .spawn(move || tree(&Space::open(&home, &ws), &limits).unwrap())
@@ -104,7 +104,7 @@ fn names_at_the_file_system_s_limit_are_written_whole() {
     let long = "n".repeat(250);
     s.file(&format!("ws/{long}.txt"), "");
     s.dir(&format!("ws/{}", "é".repeat(100)));
-    let h = s.home(false);
+    let h = s.home();
     let t = tree(&Space::open(&h, &s.path("ws")), &Limits::default()).unwrap();
     let v: serde_json::Value = serde_json::from_str(&t.json).unwrap();
     assert_eq!(v[1]["name"].as_str().map(str::len), Some(254));
@@ -118,7 +118,7 @@ fn hidden_entries_alone_pass_the_limit() {
     for i in 0..300 {
         s.file(&format!("ws/.cache{i}"), "");
     }
-    let h = s.home(false);
+    let h = s.home();
     let r = tree(
         &Space::open(&h, &s.path("ws")),
         &Limits {

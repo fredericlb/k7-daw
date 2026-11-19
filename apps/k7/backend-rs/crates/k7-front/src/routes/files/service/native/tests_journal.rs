@@ -52,7 +52,7 @@ impl Bed {
     }
 
     pub(super) fn call(&self, tag: Tag, body: Value) -> routes::Call {
-        request(&self.dir, tag, body, false, &self.lines)
+        request(&self.dir, tag, body, &self.lines)
     }
 
     pub(super) async fn go(&self, tag: Tag, body: Value) -> (u16, String) {

@@ -84,9 +84,6 @@ pub(super) struct Asked {
     rev: Option<String>,
     #[serde(default)]
     thawed: Vec<String>,
-    /// Made by the front for the freezer, not by an interactive ask: it reads what the asks left.
-    #[serde(skip)]
-    own: bool,
     /// A folder other than the open project (a library chain's graph): no automatic freezes are drawn.
     #[serde(skip)]
     other: bool,
@@ -99,7 +96,6 @@ impl Asked {
             active: Some(active.to_owned()),
             rev,
             thawed: Vec::new(),
-            own: true,
             other: false,
         }
     }
@@ -110,7 +106,6 @@ impl Asked {
             active: None,
             rev: None,
             thawed: Vec::new(),
-            own: false,
             other: false,
         }
     }
@@ -267,9 +262,6 @@ pub(super) fn prepare_with(
     let rule = roots.paths;
     let key = k7_file_service::songs::key_of(&ws, rule).map_err(|_| "workspace")?;
     let (disk, _) = k7_file_service::songs::disk_of(&roots).map_err(|_| "mounts")?;
-    if let (Some(t), false) = (&docs.thawed, asked.own) {
-        t.note_admin(home.admin);
-    }
     let ask = Ask {
         roots,
         rig,

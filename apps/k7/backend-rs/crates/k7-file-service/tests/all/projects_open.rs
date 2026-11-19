@@ -212,7 +212,7 @@ fn a_drive_home_opens_through_a_fake_disk_with_no_case_to_fold() {
         let dirs: Vec<&str> = dirs.iter().map(String::as_str).collect();
         let file = format!("{root}/f.k7");
         let disk = Drive::new(&[&file], &dirs);
-        let h = drive_home(false);
+        let h = drive_home();
         let sp = Space::open(&h, root);
         let got = |rel: &str| plan_open(&sp, rel, &disk);
         let base = sp.root().to_string();

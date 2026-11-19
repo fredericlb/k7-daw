@@ -25,7 +25,6 @@ async fn a_docs_route_reads_the_thawed_list_of_the_jobs_the_engine_holds() {
     let ask = |thawed| {
         let req = Req {
             env: &env,
-            admin: false,
             slug: "me",
             workspace: "songs",
             root: "/r",
@@ -40,17 +39,4 @@ async fn a_docs_route_reads_the_thawed_list_of_the_jobs_the_engine_holds() {
     let held = ask(Some(&jobs.thawed)).thawed.unwrap();
     assert_eq!(held.of("/w/p.k7"), ["gtr"]);
     assert!(ask(None).thawed.is_none());
-}
-
-// The hub's stamp feeds the jobs' memory, with no docs piece on (review K4 fix 1).
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn the_hubs_stamp_reaches_the_jobs_thawed() {
-    let a = account("jobs-feed").await;
-    let engine = a.engine.clone().unwrap();
-    engine.hold_jobs(&BTreeMap::new(), &code_root());
-    let thawed = engine.jobs.get().unwrap().thawed.clone();
-    assert!(!thawed.admin());
-    engine.host.note_admin(true);
-    assert!(thawed.admin());
-    assert!(engine.host.home_now().admin);
 }

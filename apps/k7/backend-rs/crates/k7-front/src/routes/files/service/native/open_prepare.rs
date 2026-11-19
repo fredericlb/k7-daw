@@ -8,7 +8,6 @@ use http_body_util::Full;
 use hyper::body::Bytes;
 use hyper::header::CONTENT_TYPE;
 use k7_file_service::libraries::Home;
-use serde_json::json;
 
 use super::entries::blocking;
 use super::listings::http;
@@ -20,7 +19,7 @@ const HUB_BOUND: Duration = Duration::from_secs(120);
 
 /// The account's native capture, where the front captures for it.
 pub(super) fn capture_of(who: &Who<'_>) -> Option<Arc<k7_capture::account::Account>> {
-    let home = Home::of(&who.held.account.env, who.admin);
+    let home = Home::of(&who.held.account.env);
     k7_capture::Captures::global().account(&home.studio)
 }
 
@@ -54,18 +53,16 @@ pub(super) async fn prepare(p: &Proj, root: &str) -> Result<(), Failure> {
 async fn refresh_libraries(p: &Proj) {
     let Some(hub) = &p.hub else { return };
     let _turn = TURN.lock().await;
-    if let Err(e) = sync(hub, p.home.admin).await {
+    if let Err(e) = sync(hub).await {
         p.say("warn", &format!("[libraries] {e}"));
     }
 }
 
-async fn sync(hub: &(String, String), draft: bool) -> Result<(), String> {
+async fn sync(hub: &(String, String)) -> Result<(), String> {
     let req = hyper::Request::post(format!("{}/libraries/sync", hub.0))
         .header(CONTENT_TYPE, "application/json")
         .header("x-studio-hub-secret", hub.1.as_str())
-        .body(Full::new(Bytes::from(
-            json!({ "draft": draft }).to_string(),
-        )))
+        .body(Full::new(Bytes::from("{}")))
         .map_err(|e| e.to_string())?;
     let work = async {
         let res = http().request(req).await.map_err(|e| e.to_string())?;

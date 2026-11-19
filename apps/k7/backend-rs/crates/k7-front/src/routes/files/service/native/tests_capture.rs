@@ -68,7 +68,7 @@ async fn a_removal_ends_the_capture_in_the_registrys_account() {
     use super::tests_workspaces::{go, ws_acct};
     use super::workspaces::Kind;
     let dir = scratch("w-end");
-    let (a, _) = ws_acct(&dir, "w-end", false);
+    let (a, _) = ws_acct(&dir, "w-end");
     let home = crate::routes::files::service::native::tests::slashed(&dir.join("home"));
     let root = format!("{home}/workspace/doomed");
     std::fs::create_dir_all(format!("{root}/p.k7")).unwrap();

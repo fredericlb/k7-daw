@@ -223,7 +223,7 @@ pub async fn live(who: &Who<'_>, path: &str, req: Request) -> Result<Response, R
     if let Some(refused) = server_refusal(who.device || test_bed()) {
         return Ok(refused);
     }
-    let home = Home::of(&who.held.account.env, who.admin);
+    let home = Home::of(&who.held.account.env);
     if !claim_root(&who.held.account.home, who.user) {
         return Ok(json_answer(
             403,
