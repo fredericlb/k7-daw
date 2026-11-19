@@ -14,6 +14,5 @@ mod engine;
 mod files_ready;
 mod last_routes;
 mod leaves;
-mod proxy;
 mod routes;
 mod trust;

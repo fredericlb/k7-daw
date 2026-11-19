@@ -32,23 +32,23 @@ pub fn routes() -> Routes {
     Router::new()
         .route(
             "/api/engine-slots/{id}/slots",
-            get(slots).post(save).fallback(crate::proxied),
+            get(slots).post(save).fallback(crate::declined),
         )
         .route(
             "/api/engine-slots/{id}/slots/{slot}/enable",
-            post(enable).fallback(crate::proxied),
+            post(enable).fallback(crate::declined),
         )
         .route(
             "/api/engine-slots/{id}/slots/{slot}/footswitch",
-            post(footswitch).fallback(crate::proxied),
+            post(footswitch).fallback(crate::declined),
         )
         .route(
             "/api/engine-slots/{id}/slot/disable",
-            post(disable).fallback(crate::proxied),
+            post(disable).fallback(crate::declined),
         )
         .route(
             "/api/engine-slots/{id}/slots/{slot}",
-            delete(remove).fallback(crate::proxied),
+            delete(remove).fallback(crate::declined),
         )
 }
 

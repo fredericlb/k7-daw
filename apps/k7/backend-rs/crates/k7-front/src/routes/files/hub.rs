@@ -178,7 +178,7 @@ pub async fn launch(state: &Arc<AppState>) {
 
 /// Its routes behind the chain.
 pub fn routes() -> Routes {
-    let p = |m: axum::routing::MethodRouter<Arc<AppState>>| m.fallback(crate::proxied);
+    let p = |m: axum::routing::MethodRouter<Arc<AppState>>| m.fallback(crate::declined);
     Router::new()
         .route("/api/files-hub", p(get(answers::hello)))
         .route("/api/files-hub/internal", any(answers::internal))
@@ -195,7 +195,6 @@ pub fn bare() -> Routes {
 /// Its share of the seam's file half, under `/api/internal/files`, behind the seam's gate.
 pub fn seam() -> Routes {
     Router::new()
-        .route("/api/internal/files/hub", get(answers::runs))
         .route("/api/internal/files/cold-run", post(answers::cold_run))
         .route("/api/internal/files/slot", post(answers::slot))
 }

@@ -76,8 +76,6 @@ pub struct Settings {
     pub files_root: Option<PathBuf>,
     /// The volumes `/api/ready` probes, as `volumesFromEnv` names them.
     pub ready_volumes: Vec<String>,
-    /// `K7_LAST_ROUTES=front` with the file hub here: the backend's last routes answered by the front (`routes/last`).
-    pub last_routes: bool,
     /// The built page, `K7_FRONTEND_DIST`; None looks for `apps/k7/frontend/dist` above the front.
     pub frontend_dist: Option<PathBuf>,
     /// `K7_DEV_FRONTEND`: a running Vite that serves the page in its place, as the dev tray asks.
@@ -117,7 +115,6 @@ impl Settings {
             }
         };
         let files_front = get("K7_FILES").as_deref() == Some("front");
-        let last_routes = get("K7_LAST_ROUTES").as_deref() == Some("front") && files_front;
         Settings {
             session_secret: get("SESSION_SECRET").unwrap_or_else(dev_secret),
             local_user: get("STUDIO_LOCAL_USER").as_deref() == Some("1"),
@@ -127,8 +124,8 @@ impl Settings {
             auth_dir: get("STUDIO_AUTH_DIR")
                 .map(PathBuf::from)
                 .or_else(|| get("STUDIO_MEDIATEK").map(|m| PathBuf::from(m).join(".auth")))
-                // With no backend to defer to, `authDir`'s own default: `.auth` in the media's folder.
-                .or_else(|| last_routes.then(|| mediatek.join(".auth"))),
+                // `.auth` in the media's folder, where the session's revocations and the accounts' keys live.
+                .or_else(|| Some(mediatek.join(".auth"))),
             site_hosts: get("STUDIO_SITE_HOSTS")
                 .unwrap_or_else(|| "k7.rocks www.k7.rocks".into())
                 .split([' ', ','])
@@ -158,8 +155,7 @@ impl Settings {
                         .collect()
                 })
                 .unwrap_or_default(),
-            dev_admin: raw("STUDIO_DEV_AUTH").as_deref() == Some("1")
-                && (raw("OIDC_ISSUER").is_none() || raw("OIDC_CLIENT_ID").is_none()),
+            dev_admin: raw("STUDIO_DEV_AUTH").as_deref() == Some("1"),
             raw_session_secret: env.get("SESSION_SECRET").cloned().unwrap_or_default(),
             engines_dir: raw("STUDIO_ENGINES_DIR")
                 .map(PathBuf::from)
@@ -174,7 +170,6 @@ impl Settings {
                     .join("front-cache")
             }),
             files_front,
-            last_routes,
             frontend_dist: raw("K7_FRONTEND_DIST").map(PathBuf::from),
             dev_frontend: raw("K7_DEV_FRONTEND"),
             anthropic_base_url: raw("ANTHROPIC_BASE_URL")

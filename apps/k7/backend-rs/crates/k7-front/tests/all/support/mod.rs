@@ -4,7 +4,7 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 
 pub struct Front {
     pub addr: SocketAddr,
@@ -14,11 +14,6 @@ pub struct Front {
 pub async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     let root = std::env::temp_dir().join(format!("k7-front-auth-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
-    let gone = TcpListener::bind("127.0.0.1:0")
-        .await
-        .unwrap()
-        .local_addr()
-        .unwrap();
     let mut env: std::collections::BTreeMap<String, String> = [
         ("SESSION_SECRET", "test-secret"),
         ("STUDIO_AUTH_DIR", root.join("auth").to_str().unwrap()),
@@ -31,7 +26,6 @@ pub async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     }
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: gone.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,

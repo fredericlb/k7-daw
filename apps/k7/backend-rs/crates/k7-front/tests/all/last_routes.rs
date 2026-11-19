@@ -1,13 +1,11 @@
-//! `K7_LAST_ROUTES=front`: the built page and its fallback, Express's 404, the site page, the bearer
-//! guard and the seam's `verify-token`, answered with a backend that counts every connection and must see none.
+//! The last routes: the built page and its fallback, the 404 page, the site page, the bearer
+//! guard and the seam's `verify-token`.
 //! What a reader gets wrong: the hub's services cannot start here, which none of these routes needs.
 
 use std::net::SocketAddr;
-use std::sync::Arc;
-use std::sync::atomic::{AtomicUsize, Ordering};
 
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 
 struct Reply {
     status: u16,
@@ -66,21 +64,6 @@ async fn send(
     }
 }
 
-/// A backend that answers nothing and counts who called it.
-async fn counting_backend() -> (SocketAddr, Arc<AtomicUsize>) {
-    let l = TcpListener::bind("127.0.0.1:0").await.unwrap();
-    let addr = l.local_addr().unwrap();
-    let seen = Arc::new(AtomicUsize::new(0));
-    let counted = seen.clone();
-    tokio::spawn(async move {
-        while let Ok((s, _)) = l.accept().await {
-            counted.fetch_add(1, Ordering::Relaxed);
-            drop(s);
-        }
-    });
-    (addr, seen)
-}
-
 fn cookie() -> String {
     let now = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
@@ -96,7 +79,7 @@ fn cookie() -> String {
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn the_last_routes_ask_the_backend_nothing() {
+async fn the_last_routes_answer() {
     let root = std::env::temp_dir().join(format!("k7-front-last-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let dist = root.join("dist");
@@ -104,7 +87,6 @@ async fn the_last_routes_ask_the_backend_nothing() {
     std::fs::write(dist.join("index.html"), "<!doctype html><p>shell</p>").unwrap();
     std::fs::write(dist.join("assets/app-1.js"), "console.log(1)").unwrap();
     std::fs::write(dist.join("assets/app-1.js.gz"), b"\x1f\x8bgz").unwrap();
-    let (backend, seen) = counting_backend().await;
     let env = [
         ("SESSION_SECRET", "test-secret".to_string()),
         ("STUDIO_AUTH_DIR", root.join("auth").display().to_string()),
@@ -118,7 +100,6 @@ async fn the_last_routes_ask_the_backend_nothing() {
         ),
         ("K7_ENGINE_CORE", "front".into()),
         ("K7_FILES", "front".into()),
-        ("K7_LAST_ROUTES", "front".into()),
         ("K7_FRONTEND_DIST", dist.display().to_string()),
     ]
     .into_iter()
@@ -126,7 +107,6 @@ async fn the_last_routes_ask_the_backend_nothing() {
     .collect();
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: backend.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,
@@ -258,6 +238,5 @@ async fn the_last_routes_ask_the_backend_nothing() {
     .await;
     assert_eq!(refused.status, 401);
 
-    assert_eq!(seen.load(Ordering::Relaxed), 0, "the backend was asked");
     let _ = std::fs::remove_dir_all(&root);
 }

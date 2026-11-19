@@ -30,25 +30,28 @@ pub fn is_slots_path(path: &str) -> bool {
         .is_some_and(|rest| rest.is_empty() || rest.starts_with('/'))
 }
 
-/// The seams to the backend, held once the front can check sessions as the backend does.
+/// The seam the slot routes ask, held once the front can check sessions and holds an engine core.
 pub struct Seams {
-    /// The backend's engine seam, for the reach of an engine when the front holds no engine core.
-    pub engine_seam: seam::Seam,
-    /// The backend's file half, asked for a bearer's subject and the account's file service's jobs.
+    /// The seam's file half, asked for a bearer's subject and the account's file service's jobs.
     pub(crate) seam: seam::Seam,
 }
 
 impl Seams {
-    /// The seams when the front can check sessions as the backend does.
+    /// The seam when the front can check sessions and holds an engine core.
     pub fn start(config: &crate::Config, settings: &Settings, seam: &str) -> Option<Arc<Seams>> {
         if !settings.claims_sessions() {
             eprintln!(
-                "k7-front: the engine slots need the auth folder (STUDIO_AUTH_DIR or STUDIO_MEDIATEK); they stay the backend's"
+                "k7-front: the engine slots need the auth folder (STUDIO_AUTH_DIR or STUDIO_MEDIATEK); they are not answered"
+            );
+            return None;
+        }
+        if !settings.engine_core {
+            eprintln!(
+                "k7-front: the engine slots need K7_ENGINE_CORE=front; they are not answered"
             );
             return None;
         }
         Some(Arc::new(Seams {
-            engine_seam: seam::Seam::new(&config.upstream, &config.secret),
             seam: seam::Seam::new(seam, &config.secret),
         }))
     }
@@ -67,7 +70,7 @@ pub fn seams_of(state: &AppState) -> &Seams {
         .expect("claimed only with the seams answered here")
 }
 
-/// The slot routes, each falling back to the backend for a method it does not own.
+/// The slot routes, each declining a method it does not own.
 pub fn routes() -> Routes {
     engine_jobs::routes()
 }

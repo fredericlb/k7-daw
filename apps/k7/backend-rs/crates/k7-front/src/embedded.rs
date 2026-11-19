@@ -97,7 +97,6 @@ mod tests {
     fn starts_once_then_stops() {
         let config = crate::Config {
             listen: "127.0.0.1:0".parse().unwrap(),
-            upstream: "127.0.0.1:9".into(),
             secret: "s".into(),
             trust_hops: 0,
             env: [("STUDIO_LOCAL_USER".to_string(), "1".to_string())].into(),
@@ -113,7 +112,6 @@ mod tests {
     fn a_host_without_sign_in_is_refused() {
         let config = crate::Config {
             listen: "127.0.0.1:0".parse().unwrap(),
-            upstream: "127.0.0.1:9".into(),
             secret: "s".into(),
             trust_hops: 0,
             env: Default::default(),

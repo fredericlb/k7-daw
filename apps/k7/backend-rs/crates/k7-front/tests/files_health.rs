@@ -5,7 +5,7 @@
 mod files_hub_support;
 mod http_support;
 
-use files_hub_support::{backend, send};
+use files_hub_support::send;
 use http_support::cookie;
 use serde_json::json;
 
@@ -38,7 +38,6 @@ async fn the_actor_answers_its_health_with_no_node() {
     .collect();
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: backend().await.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,

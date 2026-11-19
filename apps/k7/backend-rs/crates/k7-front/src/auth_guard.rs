@@ -1,15 +1,15 @@
-//! auth_guard.rs — `apps/k7/backend/src/authGuard.ts`'s refusal, ported word for word: a host whose sign-in
-//! would fall back on the dev stub, which signs ANY visitor in as one shared "Dev User", or whose session
-//! secret is guessable, must not start. Checked by every host's start (`Config::from_env`, `embedded::start`).
+//! auth_guard.rs — a host that signs no one in as a local user, and is no dev session, must hold a session secret
+//! nobody can guess; it is refused at start otherwise. Checked by every host's start (`Config::from_env`,
+//! `embedded::start`). What a reader gets wrong: no sign-in provider exists, so a secret is the only thing checked.
 
 use std::collections::BTreeMap;
 
-/// The literal @studio/oidc's `setupAuth` signs with when `SESSION_SECRET` is unset.
+/// The public development default a session secret must never be.
 pub const DEFAULT_SESSION_SECRET: &str = "dev-insecure-secret-change-me";
 /// Shorter is guessable; the tray's and the phones' generated secret is 64 hex characters.
 const MIN_SESSION_SECRET: usize = 32;
 
-/// The line node prints after the reasons, before it exits.
+/// The line printed after the reasons, before the start is refused.
 pub const REFUSING: &str = "refusing to start; set STUDIO_DEV_AUTH=1 only for a local dev session";
 
 /// A device's own backend and an explicit dev session are the two that may run the stub.
@@ -23,11 +23,7 @@ pub fn auth_refusals(env: &BTreeMap<String, String>) -> Vec<String> {
     if dev_stub_allowed(env) {
         return Vec::new();
     }
-    let set = |k: &str| env.get(k).is_some_and(|v| !v.is_empty());
     let mut reasons = Vec::new();
-    if !set("OIDC_ISSUER") || !set("OIDC_CLIENT_ID") {
-        reasons.push("OIDC_ISSUER and OIDC_CLIENT_ID must both be set, or every visitor is signed in as the dev user".to_string());
-    }
     let secret = env.get("SESSION_SECRET").map_or("", String::as_str);
     if secret == DEFAULT_SESSION_SECRET {
         reasons.push("SESSION_SECRET is the public development default".to_string());
@@ -40,7 +36,7 @@ pub fn auth_refusals(env: &BTreeMap<String, String>) -> Vec<String> {
     reasons
 }
 
-/// The refusal as node prints it, `FATAL: ` before each line; None when the environment may start.
+/// The refusal as printed, `FATAL: ` before each line; None when the environment may start.
 pub fn refusal(env: &BTreeMap<String, String>) -> Option<String> {
     let reasons = auth_refusals(env);
     if reasons.is_empty() {
@@ -62,44 +58,21 @@ mod tests {
             .collect()
     }
 
-    /// The cases of `authGuard.test.ts`.
     #[test]
-    fn refuses_as_node_does() {
+    fn refuses_a_guessable_secret_unless_a_device_or_a_dev_session() {
         let good = "0123456789abcdef0123456789abcdef";
-        assert!(
-            auth_refusals(&env(&[
-                ("OIDC_ISSUER", "https://id"),
-                ("OIDC_CLIENT_ID", "k7"),
-                ("SESSION_SECRET", good)
-            ]))
-            .is_empty()
-        );
+        assert!(auth_refusals(&env(&[("SESSION_SECRET", good)])).is_empty());
         assert!(auth_refusals(&env(&[("STUDIO_DEV_AUTH", "1")])).is_empty());
         assert!(auth_refusals(&env(&[("STUDIO_LOCAL_USER", "1")])).is_empty());
         assert_eq!(
             auth_refusals(&env(&[])),
-            [
-                "OIDC_ISSUER and OIDC_CLIENT_ID must both be set, or every visitor is signed in as the dev user",
-                "SESSION_SECRET must be at least 32 characters (it is 0)",
-            ]
+            ["SESSION_SECRET must be at least 32 characters (it is 0)"]
         );
         assert_eq!(
-            auth_refusals(&env(&[
-                ("OIDC_ISSUER", "https://id"),
-                ("OIDC_CLIENT_ID", "k7"),
-                ("SESSION_SECRET", DEFAULT_SESSION_SECRET)
-            ])),
+            auth_refusals(&env(&[("SESSION_SECRET", DEFAULT_SESSION_SECRET)])),
             ["SESSION_SECRET is the public development default"]
         );
-        assert_eq!(
-            auth_refusals(&env(&[
-                ("OIDC_ISSUER", "https://id"),
-                ("SESSION_SECRET", good)
-            ]))
-            .len(),
-            1
-        );
-        assert!(auth_refusals(&env(&[("STUDIO_DEV_AUTH", "0")])).len() == 2);
+        assert_eq!(auth_refusals(&env(&[("STUDIO_DEV_AUTH", "0")])).len(), 1);
         let r = refusal(&env(&[])).unwrap();
         assert!(r.ends_with(
             "FATAL: refusing to start; set STUDIO_DEV_AUTH=1 only for a local dev session"

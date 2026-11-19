@@ -1,19 +1,18 @@
-//! k7-front — the strangler in front of k7's TypeScript backend: the routes ported to Rust answer here,
-//! every other request goes through to the TypeScript backend unchanged. Choices: `apps/k7/backend-rs/docs/front.md`.
-//! The thing a reader would get wrong: behind the front every TS socket is loopback, so the real peer
-//! travels in `x-k7-peer`, believed only with the shared secret (`apps/k7/backend/src/front.ts`).
+//! k7-front — k7's backend: the session, the preferences, the file hub, the engine core, the built page.
+//! Choices: `apps/k7/backend-rs/docs/front.md`. The thing a reader would get wrong: a request no family
+//! owns is answered by `routes::last` (the page, else a 404), never handed to another process.
 
 mod atomic;
 pub mod auth_guard;
 mod config;
 pub mod embedded;
 pub mod exit;
+mod hop;
 mod https;
 mod js;
 mod listen;
 mod peer;
 mod prefs_schema;
-mod proxy;
 mod routes;
 mod session;
 mod settings;
@@ -48,11 +47,10 @@ use axum::response::Response;
 use axum::routing::{MethodRouter, get, post};
 use hyper::Method;
 
-/// What every handler reads: the backend's settings, the revocations, and the proxy a declined request goes to.
+/// What every handler reads: the settings, the revocations and the last routes a declined request ends in.
 pub struct AppState {
     pub settings: Settings,
     pub revocations: k7_auth::Revocations,
-    pub proxy: Arc<proxy::Proxy>,
     pub app_releases: routes::app_releases::Stores,
     pub cameras: routes::cameras::Cameras,
     /// The machine's engine, when a device's host gave it to the front (`docs/local.md`).
@@ -63,15 +61,15 @@ pub struct AppState {
     pub engine: Option<routes::engine::Engine>,
     /// `K7_FRONT_SECRET`, which also gates the internal seam.
     pub front_secret: String,
-    /// The seams the engine slots ask, once the front can check sessions as the backend does (`routes/engine_reach`).
+    /// The seams the engine slots ask, once the front can check sessions (`routes/engine_reach`).
     pub seams: Option<Arc<routes::engine_reach::Seams>>,
     /// The file hub, when the front is told to answer it (`K7_FILES=front`, `routes/files`).
     pub files: Option<Arc<routes::files::Files>>,
-    /// The backend's last routes, when the front is told to answer them (`K7_LAST_ROUTES=front`, `routes/last`).
-    pub last: Option<Arc<routes::last::Last>>,
+    /// What no family answers: the built page and the 404 (`routes/last`).
+    pub last: Arc<routes::last::Last>,
 }
 
-/// Whether the front answers `method` on a sign-in path; anything else there is the backend's.
+/// Whether the front answers `method` on a sign-in path; anything else there is declined.
 fn owns_auth(method: &Method, path: &str, local_user: bool) -> Option<bool> {
     let read = matches!(*method, Method::GET | Method::HEAD | Method::OPTIONS);
     Some(match path {
@@ -82,24 +80,20 @@ fn owns_auth(method: &Method, path: &str, local_user: bool) -> Option<bool> {
     })
 }
 
-/// A route behind the session: owned when the front can check sessions as the backend does, else proxied.
+/// A route behind the session: owned when the front can check sessions, else declined.
 fn sessioned(route: MethodRouter<Arc<AppState>>) -> MethodRouter<Arc<AppState>> {
-    route.fallback(proxied)
+    route.fallback(declined)
 }
 
-pub(crate) async fn proxied(
+pub(crate) async fn declined(
     State(state): State<Arc<AppState>>,
     peer: ConnectInfo<SocketAddr>,
     req: Request,
 ) -> Response {
-    // Under `K7_LAST_ROUTES=front` nothing goes to the backend: what it would answer is answered here.
-    if state.last.is_some() {
-        return routes::last::answer(state, peer, req).await;
-    }
-    proxy::forward(State(state.proxy.clone()), peer, req).await
+    routes::last::answer(state, peer, req).await
 }
 
-/// Ahead of the guard: a method, a host or a session the front cannot answer as the backend would goes to it untouched.
+/// Ahead of the guard: a method, a host or a session the front cannot answer here ends in the last routes.
 async fn claim(
     State(state): State<Arc<AppState>>,
     peer: ConnectInfo<SocketAddr>,
@@ -116,7 +110,7 @@ async fn claim(
     if let Some((owned, family)) = local {
         let session = !family || routes::local::needs_session(path);
         if !owned || session && !state.settings.claims_sessions() {
-            return proxied(State(state), peer, req).await;
+            return declined(State(state), peer, req).await;
         }
         return next.run(req).await;
     }
@@ -130,38 +124,38 @@ async fn claim(
     let method = req.method();
     let slots = state.seams.is_some() && !site;
     let files = state.files.as_ref().is_some_and(|f| f.owned());
-    // The file hub's paths move together, on every host: under the switch the backend runs no hub.
+    // The file hub's paths move together, on every host.
     if routes::files::is_files_path(path) {
         if files {
             return next.run(req).await;
         }
-        return proxied(State(state), peer, req).await;
+        return declined(State(state), peer, req).await;
     }
-    // The engine slots' paths move together: all here, or all the backend's.
+    // The engine slots' paths move together: all here, or all declined.
     if routes::engine_reach::is_slots_path(path) {
         if slots {
             return next.run(req).await;
         }
-        return proxied(State(state), peer, req).await;
+        return declined(State(state), peer, req).await;
     }
-    // The engine core's paths move together: all here, or all the backend's.
+    // The engine core's paths move together: all here, or all declined.
     if routes::engine::is_engine_path(path) {
         if state.engine.is_none() || site || !routes::engine::owns(method, path) {
-            return proxied(State(state), peer, req).await;
+            return declined(State(state), peer, req).await;
         }
         return next.run(req).await;
     }
     let releases = routes::app_releases::is_family_path(path);
     let uploads = path.starts_with("/api/app-releases/");
     let needs_session = path != "/api/health" && !releases;
-    // Behind the backend's `/api` guard a bearer is checked by the backend, not here.
+    // A library bearer on a session route is the `/api` guard's, which `routes::last` answers.
     let guarded = path == "/api/preferences" || path.starts_with("/api/ai/");
     let bearer = req
         .headers()
         .get(hyper::header::AUTHORIZATION)
         .and_then(|v| v.to_str().ok())
         .is_some_and(|v| v.len() >= 6 && v[..6].eq_ignore_ascii_case("bearer"));
-    // An upload path owns its two writes only: the backend's bearer check answers every other method there.
+    // An upload path owns its two writes only: the last routes answer every other method there.
     let owned_method = if let Some(owned) = owns_auth(method, path, state.settings.local_user) {
         owned
     } else if uploads {
@@ -179,7 +173,7 @@ async fn claim(
         || needs_session && !state.settings.claims_sessions()
         || releases && state.settings.local_user
     {
-        return proxied(State(state), peer, req).await;
+        return declined(State(state), peer, req).await;
     }
     next.run(req).await
 }
@@ -187,10 +181,10 @@ async fn claim(
 /// What `build` gives `serve_with` besides the router: the state, whose hub, engine and streams it stops.
 type Built = (Router, Arc<AppState>);
 
-/// The routes Rust owns, the proxy their fallback, with the hub's limits chosen and the state kept for `serve_with` to stop.
+/// The routes, the last routes their fallback, with the hub's limits chosen and the state kept for `serve_with` to stop.
 fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
     let settings = Settings::new(&config.env, config.trust_hops);
-    // A proxy set fixes the hop count the proxy stamps with too.
+    // A trusted-proxies list fixes the hop count.
     let config = &Config {
         trust_hops: settings.trust_hops,
         ..config.clone()
@@ -205,17 +199,16 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
     let cameras = routes::cameras::Cameras::new(settings.camera_ice_servers.as_deref(), limits);
     let local = routes::local::Local::from_settings(&settings, port);
     let local_user = settings.local_user;
-    // The seam's file half is asked of this front once it holds the hub, of the backend before.
-    let seam = routes::files::seam_addr(config, &settings, port);
+    // The seam's file half is this front's own.
+    let seam = format!("127.0.0.1:{port}");
     let engine = routes::engine::Engine::start(&settings);
     routes::files::service::native::media::direct::keep_module_in(settings.front_cache.clone());
     let seams = routes::engine_reach::Seams::start(config, &settings, &seam);
     let files = routes::files::Files::start(config, &settings, port);
-    let last = routes::last::Last::start(config, &settings, files.is_some());
+    let last = routes::last::Last::start(&settings);
     let state = Arc::new(AppState {
         settings,
         revocations,
-        proxy: proxy::Proxy::new(config),
         app_releases,
         cameras,
         local,
@@ -228,7 +221,10 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
     });
     let (engine_guarded, engine_bare) = routes::engine::routes();
     let owned = Router::new()
-        .route("/api/health", get(routes::health::health).fallback(proxied))
+        .route(
+            "/api/health",
+            get(routes::health::health).fallback(declined),
+        )
         .route(
             "/api/preferences",
             sessioned(get(routes::prefs::get).put(routes::prefs::put)),
@@ -278,7 +274,7 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
         .merge(routes::files::routes())
         .route_layer(from_fn_with_state(state.clone(), web::guard))
         .route_layer(from_fn_with_state(state.clone(), claim));
-    // Outside the web chain, as the TypeScript serves them: the upgrades never cross Express, the seam has its own gate.
+    // Outside the web chain: the upgrades never cross the guards, the seam has its own gate.
     let (upgrades, seam) = routes::files::with_bare(engine_bare);
     let bare = routes::engine::gate_internal(state.clone(), (upgrades, seam))
         .route_layer(from_fn_with_state(state.clone(), claim));
@@ -292,11 +288,11 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
         // The internal seam's local half, with its own gate in place of the chain (`docs/local.md`).
         .route(
             "/api/internal/engine/local",
-            get(routes::local::internal::local).fallback(proxied),
+            get(routes::local::internal::local).fallback(declined),
         )
         .merge(owned)
         .merge(bare)
-        .fallback(proxied)
+        .fallback(declined)
         .with_state(state.clone());
     let router = routes::engine::with_hooks(router, &state)
         .layer(from_fn_with_state(state.clone(), peer::screen_forwarded));

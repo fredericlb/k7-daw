@@ -111,9 +111,6 @@ async fn no_sign_in_route_is_left_to_the_front() {
         "/auth/handoff/redeem",
     ] {
         let r = send(f.addr, "GET", path, &[], "").await;
-        assert_eq!(
-            r.status, 502,
-            "{path} goes to the backend, which has no such route"
-        );
+        assert_eq!(r.status, 404, "{path} is no route of this front");
     }
 }

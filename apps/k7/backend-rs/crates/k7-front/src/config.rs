@@ -1,5 +1,5 @@
-//! config.rs — what the front is told: where it listens, the TypeScript backend behind it, the secret
-//! that backend checks, and how many proxies in front of it are trusted to name the client.
+//! config.rs — what the front is told: where it listens, the secret of its own seams, and how many proxies in
+//! front of it are trusted to name the client.
 
 use std::collections::BTreeMap;
 use std::net::SocketAddr;
@@ -11,30 +11,25 @@ use serde::Deserialize;
 pub struct Config {
     /// The address the front listens on.
     pub listen: SocketAddr,
-    /// The TypeScript backend, `host:port`, spoken to in plain HTTP/1.1; empty when the front runs alone.
-    #[serde(default)]
-    pub upstream: String,
-    /// The secret the backend's `K7_FRONT_SECRET` holds, and the front's own seams'; drawn per process when it runs alone.
+    /// The secret of the front's own seams (the internal API, the engine slots); drawn per process when empty.
     #[serde(default)]
     pub secret: String,
     /// Proxies in front of this one whose `X-Forwarded-*` is believed, as Express's `trust proxy` counts them.
     #[serde(default)]
     pub trust_hops: usize,
-    /// The backend's own settings the ported routes read (`ENV_KEYS`), as the TypeScript backend is given them.
+    /// The settings the routes read (`ENV_KEYS`).
     #[serde(default)]
     pub env: BTreeMap<String, String>,
 }
 
-/// What the ported routes read of the TypeScript backend's environment, under the same names.
-pub const ENV_KEYS: [&str; 57] = [
+/// What the routes read of the environment a host hands the front.
+pub const ENV_KEYS: [&str; 54] = [
     "K7_FRONT_TRUSTED_PROXIES",
     "K7_EXTRA_CA_CERTS",
     "SESSION_SECRET",
     "STUDIO_LOCAL_USER",
     "STUDIO_DEV_AUTH",
     "AUTH_ADMIN_GROUPS",
-    "OIDC_ISSUER",
-    "OIDC_CLIENT_ID",
     "API_TOKEN_SECRET",
     "STUDIO_PREFS_DIR",
     "STUDIO_AUTH_DIR",
@@ -82,14 +77,13 @@ pub const ENV_KEYS: [&str; 57] = [
     "FFPROBE_BIN",
     "DIRT_SAMPLES",
     "STRUDEL_SAMPLES",
-    // The backend's last routes (`routes/last`).
-    "K7_LAST_ROUTES",
+    // The page and its fallback (`routes/last`).
     "K7_FRONTEND_DIST",
     "K7_DEV_FRONTEND",
 ];
 
 impl Config {
-    /// From `K7_FRONT_LISTEN`, `K7_FRONT_UPSTREAM`, `K7_FRONT_SECRET`, `K7_FRONT_TRUST_HOPS` and `ENV_KEYS`.
+    /// From `K7_FRONT_LISTEN`, `K7_FRONT_SECRET`, `K7_FRONT_TRUST_HOPS` and `ENV_KEYS`.
     pub fn from_env() -> Result<Self, String> {
         Self::from_vars(|name| std::env::var(name).ok())
     }
@@ -105,14 +99,6 @@ impl Config {
             listen: listen
                 .parse()
                 .map_err(|e| format!("K7_FRONT_LISTEN {listen:?}: {e}"))?,
-            // No backend unless one is named, once the front answers every route itself; node's port else.
-            upstream: var("K7_FRONT_UPSTREAM").unwrap_or_else(|| {
-                if answers_all(&|k| var(k)) {
-                    String::new()
-                } else {
-                    "127.0.0.1:8790".into()
-                }
-            }),
             secret: var("K7_FRONT_SECRET").unwrap_or_default(),
             trust_hops: match var("K7_FRONT_TRUST_HOPS") {
                 Some(n) => n
@@ -125,30 +111,15 @@ impl Config {
                 .filter_map(|k| var(k).map(|v| (k.to_string(), v)))
                 .collect(),
         };
-        // node's own start-up refusal, before anything listens (`auth_guard`).
+        // A guessable session secret refuses the start before anything listens (`auth_guard`).
         if let Some(refused) = crate::auth_guard::refusal(&config.env) {
             return Err(refused);
         }
         config.settled()
     }
 
-    /// A backend named needs its secret (fail-closed); no backend needs every route answered here, and draws its own seams' secret.
+    /// The front's seams need a secret no client knows: one is drawn per process when none is named.
     pub fn settled(mut self) -> Result<Self, String> {
-        if !self.upstream.is_empty() {
-            if self.secret.is_empty() {
-                return Err("K7_FRONT_SECRET is not set: the backend could not tell a client from this front".into());
-            }
-            return Ok(self);
-        }
-        let env = self.env.clone();
-        if !answers_all(&|k| {
-            env.get(k)
-                .cloned()
-                .or_else(|| std::env::var(k).ok())
-                .filter(|v| !v.is_empty())
-        }) {
-            return Err("no backend is named (K7_FRONT_UPSTREAM), and K7_LAST_ROUTES, K7_FILES and K7_ENGINE_CORE are not all front: nothing would answer the backend's routes".into());
-        }
         if self.secret.is_empty() {
             let mut b = [0u8; 32];
             getrandom::fill(&mut b)
@@ -157,18 +128,6 @@ impl Config {
         }
         Ok(self)
     }
-
-    /// Whether a backend is behind this front.
-    pub fn has_backend(&self) -> bool {
-        !self.upstream.is_empty()
-    }
-}
-
-/// Whether the front answers every route itself: the last routes, the file hub and the engine core all `front`.
-fn answers_all(get: &dyn Fn(&str) -> Option<String>) -> bool {
-    ["K7_LAST_ROUTES", "K7_FILES", "K7_ENGINE_CORE"]
-        .iter()
-        .all(|k| get(k).as_deref() == Some("front"))
 }
 
 #[cfg(test)]
@@ -185,46 +144,27 @@ mod tests {
         Config::from_vars(|k| map.get(k).cloned())
     }
 
-    const ALONE: [(&str, &str); 4] = [
-        ("K7_LAST_ROUTES", "front"),
-        ("K7_FILES", "front"),
-        ("K7_ENGINE_CORE", "front"),
-        ("STUDIO_LOCAL_USER", "1"),
-    ];
-
     #[test]
-    fn runs_alone_with_no_backend_and_no_secret_once_it_answers_every_route() {
-        let c = from(&ALONE).expect("a front alone starts");
-        assert!(!c.has_backend());
+    fn draws_its_own_secret_per_process_when_none_is_named() {
+        let pairs = [("STUDIO_LOCAL_USER", "1")];
+        let c = from(&pairs).expect("a front starts alone");
         assert_eq!(c.secret.len(), 64, "its own seams' secret is drawn");
         assert_ne!(
-            from(&ALONE).unwrap().secret,
+            from(&pairs).unwrap().secret,
             c.secret,
             "per process, never a constant"
         );
     }
 
     #[test]
-    fn a_named_backend_still_needs_the_secret() {
-        let mut pairs = ALONE.to_vec();
-        pairs.push(("K7_FRONT_UPSTREAM", "127.0.0.1:8790"));
-        assert!(from(&pairs).unwrap_err().contains("K7_FRONT_SECRET"));
-        pairs.push(("K7_FRONT_SECRET", "s"));
-        assert_eq!(from(&pairs).unwrap().upstream, "127.0.0.1:8790");
+    fn a_named_secret_is_kept() {
+        let c = from(&[("STUDIO_LOCAL_USER", "1"), ("K7_FRONT_SECRET", "s")]).unwrap();
+        assert_eq!(c.secret, "s");
     }
 
     #[test]
-    fn without_every_switch_the_backend_is_node_s_and_its_secret_required() {
-        let some = [
-            ("K7_FILES", "front"),
-            ("K7_ENGINE_CORE", "front"),
-            ("STUDIO_LOCAL_USER", "1"),
-        ];
-        assert!(from(&some).unwrap_err().contains("K7_FRONT_SECRET"));
-        let c = Config {
-            upstream: String::new(),
-            ..from(&[("K7_FRONT_SECRET", "s"), ("STUDIO_LOCAL_USER", "1")]).unwrap()
-        };
-        assert!(c.settled().unwrap_err().contains("no backend is named"));
+    fn a_guessable_session_secret_refuses_the_start_unless_a_device() {
+        assert!(from(&[]).unwrap_err().contains("SESSION_SECRET"));
+        assert!(from(&[("STUDIO_LOCAL_USER", "1")]).is_ok());
     }
 }

@@ -66,7 +66,7 @@ pub fn core() -> Arc<k7_engine::Core> {
 async fn an_in_process_link_holds_what_is_sent_until_the_engine_answers() {
     let core = core();
     let mut agent = agent(&core, "e1", true).await;
-    let reach = Reach::Core(&core);
+    let reach = Reach(&core);
     let roots = vec![Root {
         remote: "/srv/lib".into(),
         name: "lib".into(),

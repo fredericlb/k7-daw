@@ -42,7 +42,7 @@ pub fn owns(method: &Method, path: &str) -> bool {
 }
 
 pub fn routes() -> Router<Arc<AppState>> {
-    let p = |m: axum::routing::MethodRouter<Arc<AppState>>| m.fallback(crate::proxied);
+    let p = |m: axum::routing::MethodRouter<Arc<AppState>>| m.fallback(crate::declined);
     Router::new()
         .route(&format!("{BASE}/engines"), p(get(engines)))
         .route(&format!("{BASE}/engines/{{id}}"), p(get(engine)))

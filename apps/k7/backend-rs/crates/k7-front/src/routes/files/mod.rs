@@ -1,7 +1,7 @@
-//! files — the file hub answered by the front under `K7_FILES=front` (phase 5a, `docs/rust-phase5-plan.md`): the
-//! accounts' file services and their proxy, the libraries, devices and pairing,
-//! the device door's files, `/api/ready` and the seam's file half. Choices: `apps/k7/backend-rs/docs/files.md`.
-//! What a reader gets wrong: the switch takes the family only once the backend says it runs no hub of its own.
+//! files — the file hub answered by the front under `K7_FILES=front` (`docs/files.md`): the accounts' file
+//! services and their proxy, the libraries, devices and pairing, the device door's files, `/api/ready` and the
+//! seam's file half. Choices: `apps/k7/backend-rs/docs/files.md`.
+//! What a reader gets wrong: without the switch the family's paths are declined, since nothing else runs a hub.
 
 pub mod hub;
 pub mod ready;
@@ -9,7 +9,6 @@ pub mod service;
 
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::time::Duration;
 
 use axum::Router;
 
@@ -22,12 +21,8 @@ pub type Routes = Router<Arc<AppState>>;
 /// The hub's own prefixes: every path under them is the family's (`docs/files.md`, "The switch").
 const PREFIXES: [&str; 3] = ["/api/files", "/api/files-hub", "/api/ready"];
 
-/// The seam's file half that stays the backend's: its bearers, the services' bearer, and what it runs.
-const SEAM_KEPT: [&str; 3] = [
-    "/api/internal/files/verify-token",
-    "/api/internal/files/service-token",
-    "/api/internal/files/hub",
-];
+/// The seam's file half the front does not take through the hub: its bearers and the services' bearer.
+const SEAM_KEPT: [&str; 1] = ["/api/internal/files/verify-token"];
 
 fn under(path: &str, prefix: &str) -> bool {
     path.strip_prefix(prefix)
@@ -45,21 +40,10 @@ pub fn is_files_path(path: &str) -> bool {
     false
 }
 
-/// Where the front's own callers ask the seam's file half: this front once it holds the hub, the backend before.
-pub fn seam_addr(config: &crate::Config, settings: &Settings, port: u16) -> String {
-    if settings.files_front {
-        format!("127.0.0.1:{port}")
-    } else {
-        config.upstream.clone()
-    }
-}
-
 /// The file hub in the front, and what its routes need beside it.
 pub struct Files {
-    /// Set once the backend answered that it runs no hub.
+    /// Set once the hub is launched.
     owned: AtomicBool,
-    upstream: String,
-    secret: String,
     /// The accounts' file services, the libraries' service and the proxy to them (`hub.rs`).
     pub hub: hub::State,
     /// The accounts' native services (`service/`).
@@ -67,14 +51,14 @@ pub struct Files {
 }
 
 impl Files {
-    /// The family's state when the switch is on and the front can check sessions as the backend does.
+    /// The family's state when the switch is on and the front can check sessions.
     pub fn start(config: &crate::Config, settings: &Settings, port: u16) -> Option<Arc<Files>> {
         if !settings.files_front {
             return None;
         }
         if !settings.claims_sessions() {
             eprintln!(
-                "k7-front: K7_FILES=front needs the auth folder (STUDIO_AUTH_DIR or STUDIO_MEDIATEK); the file hub stays the backend's"
+                "k7-front: K7_FILES=front needs the auth folder (STUDIO_AUTH_DIR or STUDIO_MEDIATEK); the file hub is not answered"
             );
             return None;
         }
@@ -82,20 +66,18 @@ impl Files {
             && std::env::var_os("STUDIO_FILES_ROOT").is_none()
         {
             eprintln!(
-                "k7-front: K7_FILES=front needs STUDIO_FILES_ROOT, where the accounts' workspaces live; the file hub stays the backend's"
+                "k7-front: K7_FILES=front needs STUDIO_FILES_ROOT, where the accounts' workspaces live; the file hub is not answered"
             );
             return None;
         }
         if !settings.engine_core {
             eprintln!(
-                "k7-front: K7_FILES=front needs K7_ENGINE_CORE=front, whose registry asks the hub about device tokens; the file hub stays the backend's"
+                "k7-front: K7_FILES=front needs K7_ENGINE_CORE=front, whose registry asks the hub about device tokens; the file hub is not answered"
             );
             return None;
         }
         Some(Arc::new(Files {
             owned: AtomicBool::new(false),
-            upstream: config.upstream.clone(),
-            secret: config.secret.clone(),
             hub: hub::State::new(config, settings, port),
             service: service::Services::new(
                 &config.env,
@@ -109,21 +91,8 @@ impl Files {
         self.owned.load(Ordering::Relaxed)
     }
 
-    /// Ask the backend, until it answers, whether it runs a hub; the front takes the family only if not.
+    /// Launch the hub, and take the family from then on.
     pub async fn launch(self: Arc<Self>, state: Arc<AppState>) {
-        // Under `K7_LAST_ROUTES=front` no backend is asked: the front answers for it.
-        while state.last.is_none() {
-            match backend_runs_hub(&self.upstream, &self.secret).await {
-                Ok(true) => {
-                    eprintln!(
-                        "k7-front: the backend runs the file hub, so K7_FILES=front is not followed here; give it the switch too"
-                    );
-                    return;
-                }
-                Ok(false) => break,
-                Err(()) => tokio::time::sleep(Duration::from_secs(1)).await,
-            }
-        }
         self.owned.store(true, Ordering::Relaxed);
         eprintln!("k7-front: the file hub is answered here (K7_FILES=front)");
         hub::launch(&state).await;
@@ -136,33 +105,6 @@ impl Files {
             self.hub.stop().await;
         }
     }
-}
-
-/// `GET /api/internal/files/hub` at the backend: whether it runs a hub; Err while it does not answer.
-async fn backend_runs_hub(upstream: &str, secret: &str) -> Result<bool, ()> {
-    use http_body_util::BodyExt;
-    let client = hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new())
-        .build(hyper_util::client::legacy::connect::HttpConnector::new());
-    let req = hyper::Request::get(format!("http://{upstream}/api/internal/files/hub"))
-        .header("x-k7-internal", secret)
-        .body(axum::body::Body::empty())
-        .map_err(|_| ())?;
-    let ask = async {
-        let res = client.request(req).await.ok()?;
-        let status = res.status();
-        let bytes = res.into_body().collect().await.ok()?.to_bytes();
-        // An older backend does not know the question: it runs a hub.
-        if status == hyper::StatusCode::NOT_FOUND {
-            return Some(true);
-        }
-        let v: serde_json::Value = serde_json::from_slice(&bytes).ok()?;
-        v.get("runs").and_then(serde_json::Value::as_bool)
-    };
-    tokio::time::timeout(Duration::from_secs(3), ask)
-        .await
-        .ok()
-        .flatten()
-        .ok_or(())
 }
 
 /// The front's file hub, which `claim` let through only when it is owned.
@@ -187,7 +129,7 @@ pub fn json_answer(status: u16, body: &serde_json::Value) -> axum::response::Res
     r
 }
 
-/// The family's routes behind the backend's chain (security headers, the loopback lock, CORS).
+/// The family's routes behind the web chain (security headers, the loopback lock, CORS).
 pub fn routes() -> Routes {
     Router::new().merge(hub::routes()).merge(ready::routes())
 }
@@ -216,7 +158,6 @@ mod tests {
         for p in [
             "/api/filesx",
             "/api/internal/files/verify-token",
-            "/api/internal/files/hub",
             "/api/sync",
             "/api/readyz",
         ] {

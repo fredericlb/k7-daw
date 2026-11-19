@@ -1,14 +1,12 @@
-//! peer.rs — who the client is, decided once here so the TypeScript backend never has to guess:
-//! Express's `trust proxy` arithmetic over `X-Forwarded-For`, and the headers the backend is handed.
-//! A forwarded address never makes a client loopback: only the socket can (`docs/front.md`).
+//! peer.rs — who the client is, decided once here: `trust proxy` arithmetic over `X-Forwarded-For`, and the
+//! forwarded headers a client cannot forge. A forwarded address never makes a client loopback: only the socket can
+//! (`docs/front.md`).
 
 use std::net::IpAddr;
 
 use hyper::HeaderMap;
 use hyper::header::{HeaderName, HeaderValue};
 
-pub const FRONT_SECRET: HeaderName = HeaderName::from_static("x-k7-front");
-pub const FRONT_PEER: HeaderName = HeaderName::from_static("x-k7-peer");
 const FORWARDED_FOR: HeaderName = HeaderName::from_static("x-forwarded-for");
 const FORWARDED_PROTO: HeaderName = HeaderName::from_static("x-forwarded-proto");
 const FORWARDED_HOST: HeaderName = HeaderName::from_static("x-forwarded-host");
@@ -157,40 +155,6 @@ pub(crate) fn canonical(peer: IpAddr) -> String {
     }
 }
 
-/// Rewrites a request's headers for the backend: the front's own are never a client's, and the forwarded ones are ours.
-pub fn stamp(headers: &mut HeaderMap, peer: IpAddr, secret: &str, hops: usize) {
-    let forwarded: Vec<String> = headers
-        .get_all(&FORWARDED_FOR)
-        .iter()
-        .filter_map(|v| v.to_str().ok())
-        .map(String::from)
-        .collect();
-    let client = client_address(
-        peer,
-        (!forwarded.is_empty())
-            .then(|| forwarded.join(","))
-            .as_deref(),
-        hops,
-    );
-    headers.remove(&FRONT_SECRET);
-    headers.remove(&FRONT_PEER);
-    headers.remove(&FORWARDED_FOR);
-    if hops == 0 {
-        headers.remove(&FORWARDED_HOST);
-        headers.insert(FORWARDED_PROTO, HeaderValue::from_static("http"));
-    }
-    if let Ok(v) = HeaderValue::from_str(&client) {
-        headers.insert(FORWARDED_FOR, v);
-    }
-    if let (Ok(s), Ok(p)) = (
-        HeaderValue::from_str(secret),
-        HeaderValue::from_str(&canonical(peer)),
-    ) {
-        headers.insert(FRONT_SECRET, s);
-        headers.insert(FRONT_PEER, p);
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -206,20 +170,6 @@ mod tests {
         assert_eq!(client_address(peer, Some("1.1.1.1, 2.2.2.2"), 1), "2.2.2.2");
         assert_eq!(client_address(peer, Some("1.1.1.1, 2.2.2.2"), 2), "1.1.1.1");
         assert_eq!(client_address(peer, Some("1.1.1.1"), 5), "1.1.1.1");
-    }
-
-    #[test]
-    fn a_client_cannot_name_itself() {
-        let mut h = HeaderMap::new();
-        h.insert(FRONT_PEER, HeaderValue::from_static("127.0.0.1"));
-        h.insert(FRONT_SECRET, HeaderValue::from_static("guess"));
-        h.insert(FORWARDED_FOR, HeaderValue::from_static("127.0.0.1"));
-        h.insert(FORWARDED_HOST, HeaderValue::from_static("evil"));
-        stamp(&mut h, "203.0.113.9".parse().unwrap(), "s", 0);
-        assert_eq!(h.get(&FRONT_PEER).unwrap(), "203.0.113.9");
-        assert_eq!(h.get(&FRONT_SECRET).unwrap(), "s");
-        assert_eq!(h.get(&FORWARDED_FOR).unwrap(), "203.0.113.9");
-        assert!(h.get(&FORWARDED_HOST).is_none());
     }
 
     #[test]

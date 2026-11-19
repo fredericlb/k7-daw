@@ -1,5 +1,5 @@
-//! seam.rs — what the engine routes ask of the TypeScript backend over the internal seam's file half
-//! (`packages/engine-registry/docs/internalSeam.md`): whose a bearer is, and a job of the account's file service.
+//! seam.rs — what the engine routes ask of this front over the internal seam's file half (`apps/k7/backend-rs/docs/engine/reach.md`):
+//! whose a bearer is, and a job of the account's file service.
 //! What a reader gets wrong: an answer is cached by the token's hash, a refusal briefly and a subject longer.
 
 use std::collections::HashMap;
@@ -60,11 +60,6 @@ impl Seam {
             ASK_TIMEOUT,
         )
         .await
-    }
-
-    /// The address questions go to, `host:port`.
-    pub fn upstream(&self) -> &str {
-        &self.upstream
     }
 
     /// One question to the seam at `path`, given `timeout` to answer.

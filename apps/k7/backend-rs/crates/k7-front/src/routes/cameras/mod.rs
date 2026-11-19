@@ -101,8 +101,8 @@ pub async fn socket(
     peer: ConnectInfo<SocketAddr>,
     req: Request,
 ) -> Response {
-    if !crate::proxy::is_upgrade(req.headers()) {
-        return crate::proxied(State(state), peer, req).await;
+    if !crate::hop::is_upgrade(req.headers()) {
+        return crate::declined(State(state), peer, req).await;
     }
     let query = req.uri().query().unwrap_or("");
     let param = |k: &str| {
