@@ -9,7 +9,6 @@
 #include "EngineTypes.h"       // Tracktion/JUCE + the te/tt/fs aliases
 #include "EngineHostImpl.h"    // struct EngineHost::Impl (device members touch impl_->engine)
 
-#include "RestartCoalescer.h"
 
 #include <algorithm>
 #include <atomic>
@@ -21,11 +20,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-#if JUCE_IOS
-// The patched JUCE iOS device stamps its own restarts on a Mac (engine/patches/tracktion.cmake).
-namespace juce { extern std::atomic<std::int64_t> studioIosRestartMs; }
-#endif
 
 namespace studio {
 
@@ -346,13 +340,6 @@ void EngineHost::resetCallbackCost() {
 // A callback inside this long is busy rather than stalled: the watchdog leaves it alone. Longer than any block takes.
 constexpr juce::uint32 kBusyCallbackMs = 500;
 
-#if JUCE_IOS
-constexpr std::int64_t kJuceRestartGraceMs = 3000;
-std::int64_t steadyNowMs() {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
-}
-#endif
-
 // Reopen the OPEN device when its callback has stopped: the same device, never the remembered one — docs/audioDevice.md.
 void EngineHost::checkAudioCallback() {
     auto& dm = impl_->engine.getDeviceManager();
@@ -367,10 +354,6 @@ void EngineHost::checkAudioCallback() {
         if (ageMs(juce::Time::getMillisecondCounter(), entered) >= kBusyCallbackMs) return;   // busy, not stalled: no check counted, no reopen
     }
 
-#if JUCE_IOS
-    // JUCE restarts the iPad app's device itself on a Mac, and a counter reset by that is no stall (docs/ios.md).
-    if (RestartCoalescer::recentlyRestarted(steadyNowMs(), juce::studioIosRestartMs.load(), kJuceRestartGraceMs)) return;
-#endif
     switch (watchdog.check(dev != nullptr, callbackCost().runs)) {
         case CallbackWatchdog::Action::none:
             return;
@@ -408,36 +391,6 @@ void EngineHost::checkAudioCallback() {
                   << now->getActiveOutputChannels().countNumberOfSetBits() << " out\n";
     else
         warn("audio interface '" + name + "' could not be reopened");
-}
-
-bool EngineHost::openDeferredInputs() {
-    if (!impl_->inputsOnArm) return true;
-    auto& dm = impl_->engine.getDeviceManager();
-    auto& jdm = dm.deviceManager;
-    const auto prev = jdm.getAudioDeviceSetup();
-    if (prev.outputDeviceName.isEmpty()) return false;
-    auto setup = prev;
-    setup.inputDeviceName = prev.outputDeviceName;
-    int channels = 1;
-    if (auto* cur = jdm.getCurrentAudioDevice()) channels = std::max(1, cur->getInputChannelNames().size());
-    setup.useDefaultInputChannels = false;
-    setup.inputChannels.clear();
-    setup.inputChannels.setRange(0, channels, true);
-    const auto err = jdm.setAudioDeviceSetup(setup, true);
-    if (err.isNotEmpty()) {
-        warn("could not open the audio input: " + err.toStdString());
-        jdm.setAudioDeviceSetup(prev, true);
-        dm.rescanWaveDeviceList();
-        return false;
-    }
-    impl_->inputsOnArm = false;
-    dm.rescanWaveDeviceList();
-    applyPreferredBufferSize(jdm);
-    publishAudioTiming();
-    reconnectTrackInputs({});
-    impl_->callbackWatchdog.reopened(callbackCost().runs);
-    std::cerr << "[device] input opened for the first armed track\n";
-    return true;
 }
 
 // The device closed and reopened from the setup JUCE holds, as the watchdog's reopen does; a closed device is one it leaves alone — docs/ios.md.

@@ -1,4 +1,4 @@
-// media-session.js — run at document start in every studio app's view (AppViewsPlugin.kt). Android's WebView has
+// media-session.js — run at document start in k7's view (AppViewsPlugin.kt). Android's WebView has
 // no Media Session API at all, so this stands one in, then copies what the page tells it to the app's native session
 // (MediaPlayback.kt, `media`) and hands the system's buttons back to the page's own handlers (`media-action`). It also
 // reports, as `busy`, a microphone the page holds open and a screen wake lock it holds (Busy.kt), and stands in for the

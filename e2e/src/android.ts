@@ -64,20 +64,7 @@ async function studioState(api: APIRequestContext): Promise<string> {
   return engines.length > 0 ? "up" : "no engine listed yet";
 }
 
-/** Remembers the phone's engine for the account, as a first pick does: a project page picks none on its own (apps/k7/frontend/docs/shell.md). */
-async function rememberEngine(api: APIRequestContext): Promise<void> {
-  const [engine] = (await (await api.get("/api/engines")).json()) as {
-    id: string;
-  }[];
-  const prefs = (await (await api.get("/api/preferences")).json()) as object;
-  const res = await api.put("/api/preferences", {
-    data: { ...prefs, engineId: engine?.id },
-  });
-  if (!res.ok())
-    throw new Error(`preferences: ${res.status()} ${await res.text()}`);
-}
-
-/** The page of the app's k7 view: one WebView per app shares the process's DevTools socket with the shell page. */
+/** The page of the app's k7 view: the view shares the process's DevTools socket with the shell page. */
 async function k7View(device: AndroidDevice): Promise<Page> {
   let found: Page | undefined;
   await expect
@@ -149,7 +136,6 @@ export const android = base.extend<{ k7: K7 }, { phone: Phone }>({
           },
         )
         .toBe("up");
-      await rememberEngine(api);
       await seedFixtures(await FileService.connect(api, PHONE_ORIGIN));
       const view = await k7View(device);
       await use({ device, view, request: api });

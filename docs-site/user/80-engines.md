@@ -25,23 +25,11 @@ One machine runs one supervisor. If you start a second one, it stops with `an en
 
 The engine of a device is the one k7 on that device runs, and k7 lists it. With the desktop app this happens automatically for the k7 on your computer, and on the phone for the phone's own k7. The command-line engine can still be listed at registries named by the `registryUrls` key. [Reaching an engine](./85-connecting-machines.md) explains how the browser reaches the engine.
 
-## How k7 picks an engine for a project
+## How k7 finds the engine for a project
 
-When you open a project, k7 lists the engines of the device and **measures** each one before it opens the editor. It opens a connection to the engine, asks it who it is, and times the round trip. The engine also reports its audio buffer size, which adds latency. The sum of the two is the engine's latency for you.
+k7 always plays on the engine of this device. When you open a project, it opens a connection to that engine, asks it who it is, and times the round trip. The engine also reports its audio buffer size, which adds latency. The sum of the two is the engine's latency for you.
 
-Any engine that is listed may be a stranger's, so k7 only picks an engine without asking when it trusts it. A **trusted** engine is one of these:
-
-- the engine you chose yourself last time (k7 remembers your choice on this device, not in the browser tab);
-- an engine reached **directly**, on this computer or on your local network, rather than through a relay;
-
-Among the trusted engines that answered and that nobody else is using, k7 picks in this order:
-
-1. **Compatibility.** The engine that has every plugin the project uses comes first. An engine that is missing a plugin would play the song wrong.
-2. **The engine you chose last time.** A faster engine elsewhere does not override your choice.
-3. **The engine on this machine.** An engine reached through `127.0.0.1` is the one whose speakers are in front of you.
-4. **The latency band**, then the machine's performance score, then the latency in milliseconds.
-
-When no trusted engine is usable, k7 shows the **Select an engine** screen, even if only one engine answered. Picking an engine there makes it the one you chose, so it is trusted from then on. It lists every engine with its latency, its performance score and an **in use** badge when it is busy. Only your own projects are named; another person's use reads as *in use* and nothing more. Click **Use** to pick one, or **Refresh** to measure again. While the screen is open, k7 measures again every 15 seconds. If the list is empty, the screen says: *No engine found. k7 needs an audio engine to play your project: start the k7 desktop app on this computer (or k7-supervisor), then Refresh.*
+The project opens beside this search. If no engine answers, the project stays open and silent, and the bar's engine button says so; open it and choose **Engine settings** to start the engine. The button looks again for the engine each time it opens.
 
 ### Latency bands
 

@@ -179,7 +179,7 @@ function AccountTab({ onRun }: { onRun: (line: string) => Promise<void> }) {
         </div>
       </div>
       <div className="my-1 border-t border-border" />
-      {/* The engine is remembered on the ACCOUNT, so this is the one way back to the picker. */}
+      {/* The engine's settings page: whether it runs and which audio interface it takes. */}
       <button
         type="button"
         className={row}

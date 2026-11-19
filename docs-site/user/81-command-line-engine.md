@@ -48,7 +48,7 @@ To keep the engine on one port whatever else runs on the machine, for a firewall
 
 The supervisor reads the file, starts the engine, lists it at the studios you named, and runs until you press Ctrl-C (or the process receives SIGTERM or SIGHUP). On stop it first removes the engine from every studio's list, then stops the engine. It prints `[host] running from the config file; Ctrl-C to stop` once it is up.
 
-Before the engine starts, the supervisor measures the machine for about a second (CPU speed, cores, disk, memory). The resulting performance score is what the engine pickers show.
+Before the engine starts, the supervisor measures the machine for about a second (CPU speed, cores, disk, memory). The resulting performance score is what the engine's figures show.
 
 ## The config file
 
@@ -75,7 +75,7 @@ The config file is a JSON object. Every key is optional. A key with a wrong type
 | `audioDevice`, `audioFallback` | strings | none | One preferred interface and one fallback. Read only when `audioPriority` is missing or empty; they become a two-line `audioPriority`. |
 | `instruments` | array of strings | see below | The sampled instruments this machine keeps. Names come from the table in [Engines](./80-engines.md#sampled-instruments). The word `"all"` anywhere in the list keeps every instrument. Missing instruments are downloaded when the supervisor starts. |
 | `onnxProviders` | array of strings | empty (CPU) | What stem separation runs on, in order of preference: `cpu`, `dml` (DirectML, Windows), `cuda`, `coreml`. Names are lowercased and duplicates dropped. Empty means the CPU. |
-| `machineName` | string | the computer's host name | The name engine pickers show for this machine. |
+| `machineName` | string | the computer's host name | The name k7 shows for this machine. |
 | `extraCaCerts` | string (file path) | none | A PEM file of extra certificate authorities to trust. Use it when your studio's HTTPS certificate is signed by your own CA. The supervisor already trusts the operating system's certificates. |
 
 If `instruments` is not in the file at all, the supervisor keeps whatever instruments are already on the machine and downloads nothing new.

@@ -66,6 +66,7 @@ import { useStore } from "zustand";
 import k7Logo from "../icon/k7.svg";
 import { useAndroidBusy } from "./androidBusy";
 import { aiOrganize, api, engines, moduleStore } from "./api";
+import { go } from "./appNav";
 import { DECK_ICONS, STUDIO_ICONS } from "./chainsIcons";
 import type { MaybeClipboard } from "./clipboard";
 import { shownNamers } from "./clipNameWords";
@@ -131,13 +132,11 @@ import {
   nodeMenu,
   withAmbient,
 } from "./contextMenu";
-import { useEngineChoice } from "./engineChoice";
 import { fixedMaster, TARGET_DB, trimFor } from "./gainTrim";
 import type { ClipGridHandle } from "./gridCaret";
 import { firstTimeFor, givesChannel, hasAudibleInput } from "./headphonesHint";
 import { useCameras } from "./hooks/useCameras";
 import { useCommandKeys } from "./hooks/useCommandKeys";
-import { useEngineCompat } from "./hooks/useEngineCompat";
 import { useEngineLink } from "./hooks/useEngineLink";
 import { useInputDevices } from "./hooks/useInputDevices";
 import { useInstrumentStatus } from "./hooks/useInstrumentStatus";
@@ -178,6 +177,7 @@ import {
   touchesSounds,
 } from "./lcdSounds";
 import { libraryModuleRef } from "./libraryTree";
+import { useLocalEngine } from "./localEngine";
 import { confirmMenuItem } from "./menuConfirm";
 import { menuTarget } from "./menuTitle";
 import { midiInDeviceFor, midiInLanes, midiInPlayed } from "./midiIn";
@@ -190,6 +190,7 @@ import { m } from "./paraglide/messages.js";
 import { type PendingEdit, pendingOf } from "./pendingEdits";
 import type { PendingNode } from "./pendingNode";
 import { setServiceProcesses } from "./processes";
+import { ENGINE_SETTINGS_ROUTE } from "./projects/api";
 import {
   type EditFocus,
   keepIfEqual,
@@ -297,7 +298,6 @@ export default function App({
   engineLatency,
   userEmail,
   onQuitWorkspace,
-  onChangeEngine,
   engine,
   engineSearching = false,
 }: {
@@ -307,8 +307,6 @@ export default function App({
   /** Who is logged in — feeds the SESSION id, so two people on one engine hold two projects. */
   userEmail: string;
   onQuitWorkspace: () => void;
-  /** Back to the engine picker — the settings panel's Compte tab. */
-  onChangeEngine: () => void;
   /** The engine playing this project, for the header's engine menu. */
   engine?: RankedEngine;
   /** No engine yet, and the gate is still looking for one: the project is drawn meanwhile (docs/shell.md). */
@@ -868,15 +866,6 @@ export default function App({
   // Read by `onLaneToggle`, which must not re-bind every time the picture doc is refetched.
   const videoTracksRef = useLatest(videoTracks);
 
-  // Has the engine every plugin the open project uses? The header's warning when not — hooks/useEngineCompat.ts.
-  const engineCompat = useEngineCompat(
-    engineRef,
-    connected,
-    ws?.activeProject ?? null,
-    rev,
-    !!engine?.filesHosted,
-  );
-
   // Commit a finished picture drag — hooks/useVideoEdits.ts, shared with the surface a second device draws.
   const applyVideoEdit = useVideoEdits(
     ws?.activeProject ?? ".",
@@ -947,6 +936,11 @@ export default function App({
   useEffect(() => {
     setEditorPopin(false);
   }, [chosen]);
+
+  const onOpenEngineSettings = useCallback(
+    () => void go(ENGINE_SETTINGS_ROUTE),
+    [],
+  );
 
   // Optimistic, like the mixer: the editor switches modality on the click and the write's answer settles it.
   const toggleVim = useCallback(async () => {
@@ -1709,7 +1703,7 @@ export default function App({
     videoArmed,
     setVideoArmed,
     toggleVim,
-    onChangeEngine,
+    onOpenEngineSettings,
     onQuitWorkspace,
     locales,
     setLocale: (l) => setLocale(l as typeof locale),
@@ -2619,13 +2613,12 @@ export default function App({
   const engineLink = (
     <EngineLink connected={connected} latency={engineLatency} />
   );
-  // The project bar's engine slot, right of the pages: the engine's state, the gate's engines and where this browser hears them (docs/shell.md).
-  const engineChoice = useEngineChoice();
-  const barEngine = !engineChoice ? null : (
+  // The project bar's engine slot, right of the pages: the engine's state and where this device hears it (docs/shell.md).
+  const localEngine = useLocalEngine();
+  const barEngine = !localEngine ? null : (
     <BarEngine
       current={engine ?? null}
       searching={engineSearching}
-      compat={engineCompat}
       audioToBrowser={audioToBrowser}
       stats={engineLink}
       status={
@@ -2637,7 +2630,7 @@ export default function App({
             ? "searching"
             : "none"
       }
-      choice={engineChoice}
+      onOpen={localEngine.searchAgain}
       toolSize={toolSize}
     />
   );

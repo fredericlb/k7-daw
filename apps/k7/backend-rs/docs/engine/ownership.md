@@ -14,7 +14,7 @@ An engine **on this backend's own machine** is the account's to use. Every other
 | `owner` — runs on this machine | yes | yes | yes |
 | `unowned` — any other engine | yes, LAN addresses only to its own network | no | **403** `unowned` |
 
-The wire keeps the name `owner` for the first row: the Engines card and the picker read it as "yours".
+The wire keeps the name `owner` for the first row: the engine cards read it as "yours".
 An anonymous session — no email, no subject — can neither use an engine nor claim one.
 
 ## What decides "on this machine"

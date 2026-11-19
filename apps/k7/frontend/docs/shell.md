@@ -3,22 +3,18 @@
 ## What wraps the editor (`main.tsx`)
 
 The gates, outermost first: **AuthGate** (the machine's local user must hold a session),
-**EngineGate** (find which registered engine to drive, without asking: the one most COMPATIBLE
-with the project — it has the plugins the project uses, `engineCompat.ts` — then the best latency
-class, then the strongest machine by performance score, among TRUSTED engines only — the one the
-account chose before, one this browser reached on its own machine or network, or the server's own;
-anyone may register an engine, so any other one waits in the list for a click —
-`@studio/engine-browser/docs/access.md`, "Who is taken unasked"), and **ProjectGate** (rendered by
-EngineGate: resolve the workspace this editor was opened on into a folder, then mount the editor).
+**EngineGate** (find this device's own engine, without asking: the one on this machine among
+what the registry lists, reached directly on this machine or registered by this device's own account — an
+unowned engine is never taken, and none is offered), and **ProjectGate** (rendered by EngineGate: resolve the workspace this editor was opened on into a folder, then mount the editor).
 Several tabs may open one project at once; there is no single-tab lease.
 
 **The project opens BEFORE its engine is found, and without one at all.** The files are the
 server's file hub's, which answers with no engine bound, so EngineGate opens the project on the
 hub's own ticket and looks for an engine beside it. Someone who has never heard of an engine must
-still see their song: a full-screen picker in front of it read as "k7 does not work". The editor's
-link asks for its URL on every dial and waits for the search's answer, so the engine picked by the
-search is reached without a reconnect delay; a pick made later — from the sidebar, or the list drawn
-over the project — remounts the editor, as a switch always did. Once an engine is held, the files'
+still see their song: a full-screen wait in front of it read as "k7 does not work". The editor's
+link asks for its URL on every dial and waits for the search's answer, so the engine found by the
+search is reached without a reconnect delay; an engine found later — the bar's menu looks again when it
+opens — is joined without a remount, unless its files are not the hub's. Once an engine is held, the files'
 ticket names it, and that is what binds it at the hub (`apps/k7/backend-rs/docs/files/hub.md`).
 
 **Every wait is one bar along the bottom** (`@studio/project-shell/progress`), never a screen: the
@@ -101,7 +97,7 @@ answer that came back hid the not-found screen the address deserved.
 **Losing the claim keeps the project on screen**, under a banner (`EngineTakenBanner.tsx`), rather
 than replacing it. Two tabs or two people on one machine otherwise could not even read their
 timeline while the other one played. What stops is what needs the engine: the link hangs up and
-its URL answers null (`EngineChoice.detached`), so transport and live parameters are dead and the
+its URL answers null (`LocalEngine.detached`, `localEngine.ts`), so transport and live parameters are dead and the
 bar reads "no engine". It has to hang up itself: the other project may be in this account's own
 engine session, and a socket left open would drive it.
 
@@ -113,12 +109,8 @@ then on is the other tab's project; this tab's writes reach the engine once it i
 **Taking it back IS opening the project again**: the gate resolves anew (so `/open` runs) and the
 claim that follows carries no secret, which displaces the other tab — which gets the same banner.
 It is a press, never a timer: two tabs re-claiming on their own flicker the project between them
-for ever. Resuming from the idle card and picking an engine from the list are the same open. On an
-engine that is not ours (`refused`) there is nothing to take back, and the banner offers only the
-list.
-
-**The second button is "All engines…"**, the speaker menu's own entry under its own name, opening
-the same list. Settings holds no engine choice, so a sentence sending people there sent them nowhere.
+for ever. Resuming from the idle card is the same open. On an engine that is not ours (`refused`) there is
+nothing to take back, and the banner offers nothing.
 
 **The banner floats** over the editor rather than pushing it down: wrapping the gate in a new
 element only while taken would move it in the tree, remount it, and re-run `/open` — a take-back
@@ -277,7 +269,7 @@ under the panes, and the footer under that. The bar fills the mini player's slot
 | `track` | the clock and the peekable minimap |
 | the host's controls | the **master meter**, right of the minimap |
 | `trail`, at the right edge | the pane row and the frame's toggle — or, on a phone, the one menu that also holds the side panels' buttons |
-| `end`, after `trail` | the **engine selector**: an icon button with the engine's state as a dot, opening the engines and where you hear them — on a phone, behind the bar's `More controls` chevron with the home pages' run |
+| `end`, after `trail` | the **engine selector**: an icon button with the engine's state as a dot, opening the engine's state and where you hear it — on a phone, behind the bar's `More controls` chevron with the home pages' run |
 
 **No brand name and no build stamp.** The brand is what the home page says — repeating it over a song
 names the tool rather than the work — and the stamp goes with it, being the tooltip of that name on the
@@ -326,21 +318,21 @@ it CLOSES the drawer too, one control meaning one thing in both worlds. A click 
 The edge is MEASURED, since the bar's height depends on what it holds and it floats over the editor
 popin. The drawer carries no button of its own, and no engine block: inside a project the engine is the bar's.
 
-**There is ONE engine selector** (`components/BarEngine.tsx`). In a project it is in the project
+**There is ONE engine slot** (`components/BarEngine.tsx`), and it names no choice: the engine is this
+device's own. In a project it is in the project
 bar's engine slot, right of the right slot: the engine is what plays, so it stands with what plays
 rather than one drawer away. On the home pages it is above the sidebar's user menu, or in the home
 bar while the sidebar is folded (`projects.md`, "The home bar").
 It is **an icon button with a dot**: green while the link is up, red when it is down, amber with no
-engine (or one missing a plugin), grey while one is looked for. One glyph, because the bar's right end
+engine, grey while one is looked for. One glyph, because the bar's right end
 is crowded on any screen and the state is what is glanced at; the words are in its tooltip and its menu.
 
-**Its menu is the engines and where you hear them.** At the top, WHERE THE SOUND COMES OUT, in the
+**Its menu is the engine's state and where you hear it.** At the top, WHERE THE SOUND COMES OUT, in the
 same words on both bars (`components/engineWords.tsx`) — "Sound on <machine>", or "Sound in this
 browser" — since a laptop driving the desktop at home is silent with no other clue; with no engine it
-reads "No sound — choose an engine". Then every engine found, MEASURED when the menu opens rather than
-kept, each with its rating — the Q badge, the performance — and the reason it cannot be picked when it
-cannot (in use, too old, to pair). **All engines…** opens the full list, the one that pairs a device.
-Last, two radios: **Plays on This machine** or **The engine**.
+reads "No sound — the engine is not running". Under it the engine's figures, an entry to its settings
+page (`/settings/engine`, where it is started and restarted) and, last, two radios: **Plays on This machine** or **The engine**.
+Opening the menu looks for the engine again when none was found.
 
 **This machine** subscribes to the engine's master broadcast and plays it in this browser
 (`listenHere.ts`, `@studio/engine-browser`'s `engineOutput`); **The engine** is its own speakers. It
@@ -349,20 +341,10 @@ The engine's speakers play on either way: its interface is one per process and s
 session on it, so a page cannot silence it for itself. An engine whose `whoami` says `audioToBrowser`
 has no speakers at all: it is heard here whatever the radio says, and **The engine** is disabled.
 
-- **In a project** the menu holds the gate's list and pick (`engineChoice.ts`): a pick remounts the
-  project on that engine — the files are the server's, so a switch costs the playing position and
-  nothing else. The figures under the name are `EngineLink`'s.
-- **On a home page** there is no session (`components/HomeEngine.tsx`): it shows the engine
-  remembered on the account (else the policy's pick), with the probe's latency and performance, and a
-  pick there is remembered on the account, so it is what the next project opens on. The probe is
-  shared for 30 s, since the bar a page docks remounts the slot and a probe reaches every engine.
-  It is the engine a project opens on (`homeEngine.ts`): one screen, one answer to which machine plays.
-
-A **warning triangle** follows the name in the menu, and the dot turns amber, when that engine lacks a plugin the open project uses —
-its compatibility under 100 — and its tooltip says the score and which plugins are missing
-(`hooks/useEngineCompat.ts`). Scored in the browser when the files are the server's, by the file
-service beside the engine when they live on its machine (`/project-compat`). Nothing is drawn while either half is unknown: a warning that might
-be false is worse than none.
+- **In a project** the figures under the name are `EngineLink`'s.
+- **On a home page** there is no session (`components/HomeEngine.tsx`): it shows the probe's latency and
+  performance for the engine on this machine. The probe is shared for 30 s, since the bar a page docks
+  remounts the slot.
 
 ### One colour per meaning, across every view
 
@@ -1721,7 +1703,7 @@ that opens and stays blank for seconds, which reads as the app hanging rather th
 The screens that are not the home page are therefore `lazy()`: `App`, `EngineGate`, `ExternalIndex`,
 and the home's own other pages — the libraries,
 the tasks and both settings pages. One address is ever taken, so one of them is ever fetched. `ProjectGate` loads
-`App` the same way and starts its download as it mounts, so the engine picker and the project gate draw while
+`App` the same way and starts its download as it mounts, so the project gate draws while
 the editor arrives; an `import App` there would make every gate wait for the whole editor.
 
 Inside the editor, what opens on demand loads on demand: the module and assembly builders, the video export

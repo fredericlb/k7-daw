@@ -166,7 +166,7 @@ These only change what you see; they never edit the song.
 | `ui playlists`, `ui references`, `ui resources`, `ui tasks`, `ui history`, `ui share` | | Opens or closes that side panel. |
 | `ui vim` | | Turns the editor's vim mode on or off. |
 | `ui language` | `<language>` | Changes the interface language: `en` or `fr`. |
-| `ui engine` | | Back to the engine picker. |
+| `ui engine` | | Opens the engine's settings. |
 | `ui workspace quit` | | Leaves this workspace. |
 | `ui help` | | Shows the help page. |
 | `ui pin` | `<path>` | Pins a file to the top of the file tree, or unpins it. |

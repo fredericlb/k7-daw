@@ -1,12 +1,9 @@
-// StudioBridge.kt — what the studio apps in AppViewsPlugin's views may ask of this app, over one
-// WebMessageListener (`window.k7Android`). Every app reports the colour at the top of its page
-// (assets/top-color.js), which paints the status bar above it, who is signed in (assets/account.js), and what it plays
-// (assets/media-session.js, to MediaPlayback), what keeps it busy (`busy`, to Busy), and the files it saves
-// (assets/download.js, to Downloads); ONLY k7, checked by origin, reaches
-// the engine and full screen: its settings panel is this phone's tray (apps/k7/frontend/src/settings/androidEngine.ts).
-// The object is offered to every origin, since the studio can change; each message is checked instead.
-// k7's origin may be a remote studio, so it gets a short list of commands, and a new studio needs the user's yes.
-// See docs/android.md.
+// StudioBridge.kt — what k7's page in AppViewsPlugin's view may ask of this app, over one WebMessageListener
+// (`window.k7Android`). The page reports the colour at the top of it (assets/top-color.js), which paints the status
+// bar above it, who is signed in (assets/account.js), what it plays (assets/media-session.js, to MediaPlayback), what
+// keeps it busy (`busy`, to Busy), the files it saves (assets/download.js, to Downloads), and calls the engine and
+// full screen: its settings panel is this phone's tray (apps/k7/frontend/src/settings/androidEngine.ts).
+// The object is offered to every origin, so each message is checked for k7's own instead. See docs/android.md.
 
 package se.frediver.k7
 
@@ -17,7 +14,6 @@ import android.util.Log
 import android.webkit.WebView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.JavaScriptReplyProxy
 import androidx.webkit.WebViewCompat
@@ -26,19 +22,15 @@ import org.json.JSONObject
 
 class StudioBridge(
     private val activity: AppCompatActivity,
-    /** Which app an origin is, or null for anywhere else. */
-    private val appOf: (Uri) -> String?,
-    private val onColor: (id: String, color: Int) -> Unit,
-    /** Who the studio says is signed in, null for nobody (assets/account.js). */
+    /** Whether an origin is k7's own. */
+    private val isK7: (Uri) -> Boolean,
+    private val onColor: (color: Int) -> Unit,
+    /** Who k7 says is signed in, null for nobody (assets/account.js). */
     private val onAccount: (name: String?) -> Unit,
-    private val onChooseStudio: (origin: String) -> Unit,
 ) : SupervisorHost.Listener {
     // The k7 page listening now: a reload hands over a new one with its `listen`.
     private var k7: JavaScriptReplyProxy? = null
-    private var studio: String? = null
     private var pickedCa: ((Uri?) -> Unit)? = null
-    // One confirmation on screen at a time: a page asking again while one is up is refused, not queued.
-    private var asking = false
     private val downloads = Downloads(activity)
     private val pickCa: ActivityResultLauncher<Intent> =
         activity.activityResultRegistry.register("k7-bridge-ca", ActivityResultContracts.StartActivityForResult()) {
@@ -57,30 +49,23 @@ class StudioBridge(
         downloads.destroy()
     }
 
-    /** The studio the views open now, k7's origin; the panel marks it. */
-    fun setStudio(origin: String?) {
-        if (origin == studio) return
-        studio = origin
-        push()
-    }
-
-    fun attach(view: WebView, id: String) {
+    fun attach(view: WebView) {
         if (!WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) return
         WebViewCompat.addWebMessageListener(view, NAME, setOf("*")) { _, message, origin, isMainFrame, reply ->
-            // The view's own app and nothing else: a page it wandered off to gets no answer.
-            if (!isMainFrame || appOf(origin) != id) return@addWebMessageListener
+            // k7's own origin and nothing else: a page the view wandered off to gets no answer.
+            if (!isMainFrame || !isK7(origin)) return@addWebMessageListener
             val msg = runCatching { JSONObject(message.data ?: "") }.getOrNull() ?: return@addWebMessageListener
             when (msg.optString("t")) {
-                "color" -> runCatching { Color.parseColor(msg.getString("value")) }.onSuccess { onColor(id, it) }
+                "color" -> runCatching { Color.parseColor(msg.getString("value")) }.onSuccess { onColor(it) }
                 "account" -> onAccount(if (msg.isNull("name")) null else msg.optString("name"))
                 "media" -> MediaPlayback.update(activity, msg, reply)
-                "busy" -> Busy.report(id, msg)
+                "busy" -> Busy.report("k7", msg)
                 "dl-start", "dl-chunk", "dl-end", "dl-fail" -> downloads.onMessage(msg, reply)
-                "listen" -> if (id == "k7") {
+                "listen" -> {
                     k7 = reply
                     push()
                 }
-                "call" -> if (id == "k7") call(reply, msg.optInt("id"), msg.optString("method"), msg.optJSONObject("arg") ?: JSONObject())
+                "call" -> call(reply, msg.optInt("id"), msg.optString("method"), msg.optJSONObject("arg") ?: JSONObject())
             }
         }
     }
@@ -91,7 +76,7 @@ class StudioBridge(
 
     private fun push() {
         val (state, exit) = SupervisorHost.known()
-        val snapshot = JSONObject().put("t", "snapshot").put("studio", studio ?: JSONObject.NULL)
+        val snapshot = JSONObject().put("t", "snapshot")
         state?.let { snapshot.put("state", it) }
         exit?.let { snapshot.put("engineExit", it) }
         activity.runOnUiThread { k7?.postMessage(snapshot.toString()) }
@@ -116,7 +101,6 @@ class StudioBridge(
                 pickCa.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*"))
             }
             "forgetCas" -> EngineOps.forgetCas(activity, answer)
-            "chooseStudio" -> chooseStudio(arg.optString("origin"), answer)
             // The Engine page's Full screen switch, a setting of this device (Immersive.kt).
             "immersive" -> ok(JSONObject().put("on", Immersive.isOn(activity)))
             "setImmersive" -> {
@@ -145,50 +129,6 @@ class StudioBridge(
         }
     }
 
-    private fun chooseStudio(origin: String, answer: (Result<JSONObject>) -> Unit) {
-        val uri = Uri.parse(origin)
-        val host = uri.host
-        if (!isStudioUrl(origin) || host.isNullOrEmpty() || !(uri.scheme == "https" || isLoopback(host))) {
-            Log.w(TAG, "refused studio $origin: https only, but for this phone's own")
-            return answer(Result.failure(SecurityException("a studio must be https")))
-        }
-        val open = {
-            onChooseStudio(origin)
-            answer(Result.success(JSONObject()))
-        }
-        if (isLoopback(host) || listed(uri)) open() else confirm("Open k7 on the studio at\n\n$origin ?", "Open", open, answer)
-    }
-
-    /** Whether `origin` is one of the studios the supervisor lists: the host itself, or the family above a `play.`/`k7.` alias. */
-    private fun listed(origin: Uri): Boolean {
-        val instances = SupervisorHost.known().first?.optJSONArray("instances") ?: return false
-        val host = origin.host?.lowercase() ?: return false
-        return (0 until instances.length()).any { i ->
-            val url = Uri.parse(instances.optJSONObject(i)?.optString("url") ?: "")
-            val h = url.host?.lowercase()
-            url.scheme == origin.scheme && h != null && (h == host || h.endsWith(".$host"))
-        }
-    }
-
-    // The user's yes in a native dialog, which a page can neither draw nor click; a dismissal is a no.
-    private fun confirm(question: String, yes: String, onYes: () -> Unit, answer: (Result<JSONObject>) -> Unit) {
-        activity.runOnUiThread {
-            if (asking || activity.isFinishing) return@runOnUiThread answer(Result.failure(SecurityException("busy")))
-            asking = true
-            var said = false
-            AlertDialog.Builder(activity)
-                .setTitle("k7")
-                .setMessage(question)
-                .setPositiveButton(yes) { _, _ -> said = true }
-                .setNegativeButton("Cancel", null)
-                .setOnDismissListener {
-                    asking = false
-                    if (said) onYes() else answer(Result.failure(SecurityException("declined")))
-                }
-                .show()
-        }
-    }
-
     companion object {
         const val NAME = "k7Android"
         private const val TAG = "k7-bridge"
@@ -198,14 +138,5 @@ class StudioBridge(
             "engine.start", "engine.stop", "engine.restart", "audio.priority", "lan.open",
             "plugins.rescan", "instruments.download", "instruments.remove",
         )
-
-        // An address the dialog can show as it is: http(s), a host, short, and no whitespace to forge lines with.
-        private fun isStudioUrl(url: String): Boolean {
-            val uri = Uri.parse(url)
-            return url.length <= 200 && url.none(Char::isWhitespace) && uri.scheme in setOf("http", "https") && !uri.host.isNullOrEmpty()
-        }
-
-        private fun isLoopback(host: String) =
-            host.lowercase().removePrefix("[").removeSuffix("]") in setOf("localhost", "127.0.0.1", "::1")
     }
 }

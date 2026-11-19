@@ -1,42 +1,35 @@
-// engineWords.tsx — what an engine selector SAYS: where the sound comes out, the hint, the
-// incompatibility warning and the icon, for the project bar and the home pages' bar alike, so the
-// two never word one engine two ways. See ../../docs/shell.md.
+// engineWords.tsx — what the engine slot SAYS: where the sound comes out, the hint and the icon,
+// for the project bar and the home pages' bar alike, so the two never word the engine two ways.
+// See ../../docs/shell.md.
 
-import type { Compatibility } from "@studio/engine-browser/compat";
-import { Loader2, TriangleAlert, Volume2, VolumeX } from "@studio/ui/icons";
+import { Loader2, Volume2, VolumeX } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import type { ReactNode } from "react";
 import { m } from "../paraglide/messages.js";
 import type { RankedEngine } from "../types";
 
-/** What the selector shows and does — App's live session in a project, `HomeEngine`'s probe on the home pages. */
+/** What the slot shows — App's live session in a project, `HomeEngine`'s probe on the home pages. */
 export interface EngineSelectorProps {
   current: RankedEngine | null;
-  /** The first engine is still being looked for. */
+  /** The engine is still being looked for. */
   searching: boolean;
-  /** How compatible `current` is with the open project; under 100 draws a warning. */
-  compat?: Compatibility | null;
   /** The engine's sound is played by this page rather than by its own machine. */
   audioToBrowser?: boolean;
   /** The figures beside the name — the session's link in a project, the probe's elsewhere. */
   stats?: ReactNode;
 }
 
-/** An engine's name as every picker says it: its machine. */
+/** The engine's name as the slot says it: its machine. */
 export function engineName(r: RankedEngine): string {
   return r.engine.hostname || r.engine.id.slice(0, 8);
 }
 
-/** What the selector says and shows, for the bar's engine slot (BarEngine.tsx). */
+/** What the slot says and shows. */
 export function engineWords({
   current,
   searching,
-  compat,
   audioToBrowser = false,
-}: Pick<
-  EngineSelectorProps,
-  "current" | "searching" | "compat" | "audioToBrowser"
->) {
+}: Pick<EngineSelectorProps, "current" | "searching" | "audioToBrowser">) {
   // Where the sound comes out, said in words: a laptop driving the desktop at home is otherwise silent with no reason given.
   const label = current
     ? audioToBrowser
@@ -50,13 +43,6 @@ export function engineWords({
       ? m["engineSwitch.hintHere"]({ engine: engineName(current) })
       : m["engineSwitch.hint"]({ engine: engineName(current) })
     : m["engineSwitch.noSoundHint"]();
-  const incompatible =
-    compat && compat.score < 100
-      ? m["engineSwitch.incompatible"]({
-          score: compat.score,
-          missing: compat.missing.map((p) => p.name).join(", "),
-        })
-      : null;
   const Icon = current ? Volume2 : searching ? Loader2 : VolumeX;
   const icon = (
     <Icon
@@ -67,19 +53,5 @@ export function engineWords({
       )}
     />
   );
-  return { label, hint, incompatible, icon };
-}
-
-/** The incompatibility triangle, beside the engine's name. */
-export function EngineWarning({ text }: { text: string }) {
-  return (
-    <span
-      className="flex shrink-0 text-amber-500"
-      title={text}
-      role="img"
-      aria-label={text}
-    >
-      <TriangleAlert className="h-3.5 w-3.5" />
-    </span>
-  );
+  return { label, hint, icon };
 }

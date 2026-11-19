@@ -108,9 +108,12 @@ export const PANEL_COMMANDS: LocalCommand[] = [
   },
   {
     name: "ui engine",
-    readable: { en: "Choose another engine", fr: "Choisir un autre moteur" },
+    readable: {
+      en: "Open the engine's settings",
+      fr: "Ouvrir les réglages du moteur",
+    },
     run: (ctx) => {
-      ctx.onChangeEngine();
+      ctx.onOpenEngineSettings();
       return true;
     },
   },

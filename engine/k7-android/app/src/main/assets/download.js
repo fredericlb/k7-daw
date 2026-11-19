@@ -1,4 +1,4 @@
-// download.js — a document-start script in a studio app's view (AppViewsPlugin.kt), and run again by its download listener:
+// download.js — a document-start script in k7's view (AppViewsPlugin.kt), and run again by its download listener:
 // a file the page saves is fetched HERE, where a blob: URL resolves and the session cookie goes along, and handed to
 // Downloads.kt over `k7Android` in acknowledged base64 chunks. An <a download> click on a blob:, data: or same-origin
 // URL is taken before the WebView's own download, whose listener could no longer read a blob revoked meanwhile.

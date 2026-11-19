@@ -7,7 +7,6 @@
 // configureFileApi once an engine is chosen and the workspace is resolved (see ProjectGate).
 
 import { engineAccess } from "@studio/engine-browser/access";
-import type { Compatibility, PluginNeed } from "@studio/engine-browser/compat";
 import type { EnginePrefs } from "@studio/engine-browser/registry";
 import type { ParamMeta } from "@studio/engine-protocol";
 import { DSP_FILE, JSDSP_FILE } from "@studio/engine-protocol/build";
@@ -150,23 +149,13 @@ export const api = {
   // The active project's imported audio and video clips, played over `mediaUrl` (../docs/resources.md).
   resources: () => fget<{ resources: ProjectResource[] }>("/resources"),
 
-  // --- What a project asks of its engine (engineCompat.ts) ---
+  // --- What a project asks of its engine ---
 
-  projectPlugins: (project: string) =>
-    fget<{ plugins: PluginNeed[] }>(
-      `/project-plugins?project=${encodeURIComponent(project)}`,
-    ),
   // Copy the project to the engine's machine again after a copy failed — apps/k7/backend-rs/docs/file-engine.md.
   retryEngineSync: () => fsend<{ ok: true }>("POST", "/engine/sync/retry", {}),
   // Leave an automatically frozen VST live while it is edited — packages/song/docs/autoFreeze.md.
   thawAutoFreeze: (module: string, on = true) =>
     fsend<{ ok: true }>("POST", "/auto-freeze/thaw", { module, on }),
-  // …scored by the file service itself against its engine's scan: only meaningful beside the engine, not on the server.
-  projectCompat: (project: string) =>
-    fget<{ compat: Compatibility | null }>(
-      `/project-compat?project=${encodeURIComponent(project)}`,
-    ),
-
   // --- A node's model, fetched onto this machine (the right-click's "Download model") ---
 
   /** Start fetching the model a NODE names from its module's `model_url`; `job: null` is "already here". */

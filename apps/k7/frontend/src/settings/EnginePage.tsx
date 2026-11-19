@@ -1,13 +1,15 @@
-// EnginePage.tsx — `/settings/engine`, the user menu's Engine. On the desktop app, this machine's engine under five tabs:
-// Engine (whether it runs, which audio interface it takes first, whether its network may use it unpaired), Instruments, Chains (what it separates with), Plugins, and the engines this account may use.
+// EnginePage.tsx — `/settings/engine`, the user menu's Engine. On the desktop app, this machine's engine under four tabs:
+// Engine (whether it runs, which audio interface it takes first, whether its network may use it unpaired), Instruments, Chains (what it separates with) and Plugins.
 // What the command-line engine reads from its config file; the desktop app hands its user no such file. Anywhere else,
-// those engines alone, and the phone's own first. See ../../docs/settings.md.
+// the phone's own engine. See ../../docs/settings.md.
 
 import { ArrowDown, ArrowUp } from "@studio/ui/icons";
 import { Switch } from "@studio/ui/switch";
 import { m } from "../paraglide/messages.js";
 import { HomeShell } from "../projects/HomeFrame";
 import { PageFrame } from "../projects/PageFrame";
+import { AndroidEngineSection } from "./AndroidEngineSection";
+import { onAndroid } from "./androidEngine";
 import { ChainsSection } from "./ChainsSection";
 import {
   type DesktopEngineSnapshot,
@@ -19,7 +21,6 @@ import {
   useOnDesktopEngine,
 } from "./desktopEngine";
 import { InstrumentsSection } from "./InstrumentsSection";
-import { RegisteredEngines } from "./RegisteredEngines";
 import { Action, Row, Section } from "./Section";
 import { SettingsTabs } from "./SettingsTabs";
 import { SlotsSection } from "./SlotsSection";
@@ -209,13 +210,17 @@ export function EnginePage() {
 
   return (
     <HomeShell>
-      <PageFrame
-        title={here ? m["engine.title"]() : m["engine.titleEngines"]()}
-        narrow
-      >
+      <PageFrame title={m["engine.title"]()} narrow>
         {here === undefined ? null : !here ? (
           <div className="flex min-w-0 flex-col gap-4">
-            <RegisteredEngines onTray={false} />
+            {/* On the phone the app is the engine's machine: this is where its engine is set. */}
+            {onAndroid ? (
+              <AndroidEngineSection />
+            ) : (
+              <p className="text-muted-foreground text-xs">
+                {m["settings.trayHint"]()}
+              </p>
+            )}
           </div>
         ) : (
           <SettingsTabs
@@ -241,11 +246,6 @@ export function EnginePage() {
                 key: "plugins",
                 label: m["engine.tabPlugins"](),
                 content: pluginsTab,
-              },
-              {
-                key: "engines",
-                label: m["engine.tabEngines"](),
-                content: <RegisteredEngines onTray />,
               },
             ]}
           />

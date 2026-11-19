@@ -1,12 +1,8 @@
 {
   "name": "@studio/web-protocol",
-  "version": "0.5.0",
+  "version": "0.1.0",
   "type": "module",
-  "files": [
-    "*.ts",
-    "!*.test.ts",
-    "docs"
-  ],
+  "private": true,
   "description": "The shapes the browser and the services agree on \u2014 the engine registry, the workspace and project listings, the quality vocabulary. Types and constants only, no runtime dependency, which is what lets both clients read the same numbers.",
   "types": "./types.ts",
   "exports": {
@@ -31,10 +27,7 @@
   "devDependencies": {
     "vitest": "^4.1.10"
   },
-  "publishConfig": {
-    "access": "restricted"
-  },
   "dependencies": {
-    "@studio/engine-protocol": "^0.3.0"
+    "@studio/engine-protocol": "*"
   }
 }

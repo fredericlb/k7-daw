@@ -332,8 +332,6 @@ public:
 
     // Once a second: when the OPEN device has stopped calling back, reopen that same device and re-wire the inputs. MESSAGE THREAD ONLY. docs/audioDevice.md.
     void checkAudioCallback();
-    // Reopen the device with its input once, when a Mac running the iPad app deferred it; false when it could not.
-    bool openDeferredInputs();
     // Once a second, Android only: a device that underran gets the next buffer size up, to a cap. MESSAGE THREAD ONLY. docs/android.md.
     void checkXRuns();
     // Close the open device, or reopen it as it was: the iOS app idle behind another app lets go of audio, so iOS may suspend it. MESSAGE THREAD ONLY. docs/ios.md.

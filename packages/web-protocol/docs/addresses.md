@@ -18,8 +18,6 @@ once, browser-safe, and nowhere else. See `apps/k7/frontend/docs/projects.md` an
 `serviceUrl(origin, service)` answers the origin of any URL it is given, so a page never spells a host.
 On a bare loopback host (`localhost`, a dev run) services are told apart by PORT instead.
 
-An app outside this repository reads this table through the published package
-(`docs/publishing.md`).
 
 What you land on is your own WORK: the editor's home page, at k7's origin, lists the workspaces,
 the projects and the libraries. The

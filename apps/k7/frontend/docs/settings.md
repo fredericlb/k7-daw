@@ -209,10 +209,9 @@ tab. It stays under the `settings/` prefix, so it takes no workspace name
 holds follows the machine. Served by the desktop app's backend — `GET /api/local` says this backend runs the
 engine (`localApp.md`) — it is this machine's engine: its state, its audio interface ranking, its
 plugins and its instruments, reached through k7's front, which runs the supervisor
-(`apps/k7/backend-rs/docs/localEngine.md`), since the supervisor opens no socket, with the engines this
-account may use as its last tab. Inside the Android app it opens on the phone's engine. Anywhere else
-it is the engines this account may use (`settings/RegisteredEngines.tsx`), with the sentence saying a
-computer's engine is set on that computer.
+(`apps/k7/backend-rs/docs/localEngine.md`), since the supervisor opens no socket. Inside the phone's
+app it opens on the phone's engine. Anywhere else it carries the sentence saying a computer's engine is
+set on that computer. No page lists or chooses among engines: the app drives the one on this device.
 
 ## About is beside it, not in it
 

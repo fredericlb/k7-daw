@@ -75,7 +75,7 @@ enum TestHooks {
 
     static func find(_ root: UIView?) -> AppWebView? {
         guard let root else { return nil }
-        if let web = root as? AppWebView, web.appId == "k7" { return web }
+        if let web = root as? AppWebView { return web }
         for child in root.subviews { if let found = find(child) { return found } }
         return nil
     }

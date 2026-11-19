@@ -313,7 +313,7 @@ address. Hold it in a query string and a session instead, and a tab handed a pro
 not exist can never get out of it. Read
 `packages/project-shell/docs/launch.md` before touching any of this.
 
-The gate itself is that package's too, published for apps outside this repository (`docs/publishing.md`); `components/ProjectGate.tsx`
+The gate itself is that package's too; `components/ProjectGate.tsx`
 is a wrapper holding this app's wording and what to render once the project is open.
 
 **There is no workspace picker anywhere in this app**, and a folder under

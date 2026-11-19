@@ -4,7 +4,7 @@ Every client talks to the engine over one WebSocket: JSON text messages both way
 
 ## The package
 
-`packages/engine-protocol` is one of the four packages published for apps outside this repository (as raw TypeScript). Its subpaths:
+`packages/engine-protocol` Its subpaths:
 
 | Subpath | File | Content | Emits code |
 |---|---|---|---|

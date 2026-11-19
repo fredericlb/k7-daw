@@ -142,7 +142,7 @@ export interface LocalCtx {
 
   // The account and the session.
   toggleVim: () => Promise<void>;
-  onChangeEngine: () => void;
+  onOpenEngineSettings: () => void;
   onQuitWorkspace: () => void;
   locales: readonly string[];
   setLocale: (l: string) => void;

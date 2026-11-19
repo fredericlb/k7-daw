@@ -100,9 +100,7 @@ Consequences of that choice:
 The per-account file service is not a package: it is the Rust crate
 `apps/k7/backend-rs/crates/k7-file-service`, held by the front.
 
-Four packages are published by version for consumers outside this repository: `web-protocol`,
-`engine-protocol`, `engine-browser` and `project-shell` (see
-[Releases and publishing](./09-releases-and-publishing.md)). Every other package is private to the tree.
+Every package is private to the tree.
 
 ### The packages by area
 

@@ -1,14 +1,9 @@
 {
   "name": "@studio/engine-browser",
-  "version": "0.3.4",
+  "version": "0.1.0",
   "type": "module",
-  "files": [
-    "src",
-    "!src/**/*.test.ts",
-    "!src/**/*.test.tsx",
-    "docs"
-  ],
-  "description": "The browser's WebSocket link to the C++ engine, and the React store over its ~20 Hz state push. The counterpart of @studio/engine-client (Node) — and the only browser implementation there is, deliberately.",
+  "private": true,
+  "description": "The browser's WebSocket link to the C++ engine, and the React store over its ~20 Hz state push. The counterpart of @studio/engine-client (Node) \u2014 and the only browser implementation there is, deliberately.",
   "types": "./src/engine.ts",
   "exports": {
     ".": "./src/engine.ts",
@@ -40,13 +35,10 @@
     "ws": "^8.18.0"
   },
   "dependencies": {
-    "@studio/engine-protocol": "^0.3.0",
-    "@studio/web-protocol": "^0.5.0"
+    "@studio/engine-protocol": "*",
+    "@studio/web-protocol": "*"
   },
   "peerDependencies": {
     "react": "^19.2.7"
-  },
-  "publishConfig": {
-    "access": "restricted"
   }
 }

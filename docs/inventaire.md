@@ -104,7 +104,7 @@ import.
 | package | subpath |
 |---|---|
 | `engine-tunnel` | `/rtc` |
-| `project-shell` | `/files` — published, so its importer may be outside this repository |
+| `project-shell` | `/files` |
 
 Shrinking the map deletes nothing: it documents the real surface.
 
@@ -250,7 +250,6 @@ The front serves `/auth/local`, `/auth/me` and `/auth/logout` and nothing of a p
 ## Left on the phones and the supervisor after the pairing left
 
 - **`weburi.add`, `weburi.pair` and `weburi.remove` in `engine/k7-supervisor`** stay: the CLI engine and the Pi image ship the supervisor unchanged, and the phones no longer send them. They go with the CLI engine's rework (`registryUrls`, the registry URL in `Url.cpp`).
-- **`chooseStudio` and the shell's `studio` event** (`StudioBridge.kt`, `StudioBridge.swift`, `AppViews`) stay: the phone's own studio is the only one offered, and the plumbing is what a second device's rework would reuse.
 - **`CameraMode.tsx` and the `camera mode` verb** stay behind `CAMERA_MODE_LISTED` in `homeCommands.ts`: cameras return as an app feature.
 
 ## 8. Deferred reworks, and the code that waits for them
@@ -263,7 +262,7 @@ a multi-account server is kept whole, tested, and listed here so `lint:dead` deb
 |---|---|---|
 | **D2** the accounts | the multi-account file hub (`k7-hub` accounts: a slug and a home per user, the cache sweep over every account), the session code (section 7), the libraries' `draft` folders (`k7-libraries`' `ensure(.., draft)`, the `draft` version of a pin, `song-edit`'s `overlays`) | a slice that makes the hub single-account and drops the library draft model |
 | **D3** engine claims | the claim's `holder` strings and the displacement rules between holders (`routes/engine/registry.rs`, `k7-engine/src/registry/claims.rs`, `apps/k7/backend-rs/docs/engine/claim.md`), the `unowned` listing of an engine off this machine | the engine registry's rework with the remote engines, which is tier 4's |
-| the app's **second-device rework** | `/external` (`ExternalIndex`, `apps/k7/frontend/docs/external.md`), the camera mode behind `CAMERA_MODE_LISTED`, the engine tunnel hub, `chooseStudio` and the shell's `studio` event, `weburi.add`/`pair`/`remove` in the supervisor, `engine.example.json`'s `registryUrls`, the registry URL in `Url.cpp`, `STUDIO_REGISTRY_URL`, `k7-local`'s settings | the rework that makes a second device and a remote camera features of the app; the CLI engine and the Pi image ship unchanged until then |
+| the app's **second-device rework** | `/external` (`ExternalIndex`, `apps/k7/frontend/docs/external.md`), the camera mode behind `CAMERA_MODE_LISTED`, the engine tunnel hub, `weburi.add`/`pair`/`remove` in the supervisor, `engine.example.json`'s `registryUrls`, the registry URL in `Url.cpp`, `STUDIO_REGISTRY_URL`, `k7-local`'s settings | the rework that makes a second device and a remote camera features of the app; the CLI engine and the Pi image ship unchanged until then |
 
 `k7-sync`'s `relay/` module may be dead, since only the capture's history uses the crate: a
 `lint:dead` question of its own.
