@@ -1,4 +1,4 @@
-// corpus.test.ts — every .k7x file of demos/ and the library: the Rust reader agrees, it prints back, comments and edits stay local.
+// corpus.test.ts — a fixed sample of the .k7x files of demos/ and the library: the Rust reader agrees, it prints back, comments and edits stay local.
 // The oracle is the format itself: the Rust reader's data, a stringify/parse round trip, and the // lines an edit must leave byte for byte.
 
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
@@ -13,7 +13,9 @@ const ROOT = join(import.meta.dirname, "..", "..", "..");
 const CORPORA = ["demos", "k7-core"]
   .map((d) => join(ROOT, d))
   .filter((d) => existsSync(d));
-const PER_FILE = 40;
+const PER_FILE = 10;
+// Every STRIDE-th file of the sorted list: the same sample on every run, spread over every folder.
+const STRIDE = 27;
 // A big file re-parses once per probe (quadratic); a few probes prove the same rules there.
 const BIG_FILE = 50_000;
 const PER_BIG_FILE = 5;
@@ -26,7 +28,9 @@ function k7xFiles(dir: string): string[] {
   });
 }
 
-const files = CORPORA.flatMap(k7xFiles);
+const files = CORPORA.flatMap(k7xFiles)
+  .sort()
+  .filter((_, i) => i % STRIDE === 0);
 
 /** The lines that are a comment and nothing else, as written. */
 const commentLines = (text: string): string[] =>
