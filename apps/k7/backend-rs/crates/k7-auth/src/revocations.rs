@@ -1,6 +1,5 @@
-//! revocations.rs — each subject's "not before" epoch, `session-revocations.json`, shared with the TypeScript
-//! backend as `createSessionRevocations({ file })` shares it: read when the file changed, and a revocation
-//! re-reads the file and keeps the later epoch of each subject, so neither process undoes the other's.
+//! revocations.rs — each subject's "not before" epoch, `session-revocations.json`: read when the file changed,
+//! and a revocation re-reads the file and keeps the later epoch of each subject.
 
 use std::path::PathBuf;
 

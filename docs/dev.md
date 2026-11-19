@@ -64,7 +64,7 @@ The root `build` and `test` scripts stay outside this list — Tilt only owns th
 |---|---|
 | `apps/k7/backend-rs/scripts/dev-front.mjs` hands the front env.yaml's `k7-front` section | the session secret above all, and env.yaml is the only place the dev session's settings are |
 | a fixed secret, `k7-dev-front`, written in that script | the conformance specs behind the internal seam send it; a dev session is one machine's loopback |
-| every host (the dev session, the tray, the phone, the image) runs all fifteen native pieces answering: the list is the front's own default (`default_pieces.txt` beside `service/switch.rs`), and no variable switches one off; a host that still sets a removed one gets one log line | one behaviour on every host |
+| every host (the dev session, the tray, the phone) runs all fifteen native pieces answering: the list is the front's own default (`default_pieces.txt` beside `service/switch.rs`), and no variable switches one off | one behaviour on every host |
 | `K7_FRONT_TRUST_HOPS=1` | Vite is the hop before the front, and its `X-Forwarded-Host`/`-Proto` name the page's origin |
 | `cargo run --release` | the conformance suite and the pages run against it all day; the first build takes a minute, an edit a few seconds |
 | rustc through sccache when the machine has it, in that script and in the tray task's cargo builds | a new worktree's first build reuses the dependencies another one compiled; the settings, and how to turn it off, are in [rust-builds.md](rust-builds.md) |

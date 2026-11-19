@@ -1,6 +1,6 @@
 # The Rust front
 
-`k7-front` is k7's backend: it listens on a device's loopback port (or the image's 8789) and answers the
+`k7-front` is k7's backend: it listens on a device's loopback port (8789 by default) and answers the
 session, the preferences, the file hub, the engine core, the apps' downloads and the built page. A request
 no family takes ends in the last routes (`last.md`), never in another process. The plan and its phases are
 `docs/rust-backend-plan.md`.

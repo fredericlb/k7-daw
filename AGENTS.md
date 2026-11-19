@@ -63,8 +63,8 @@ the production image, and the repo-wide pages in `docs/`. The short map:
 | `engine/k7-supervisor` | C++ supervisor of the engine machine: starts and watches the engine, holds the tunnel, runs the jobs its backend asks (its own `AGENTS.md`) |
 | `engine/k7-android`, `engine/k7-ios` | the engine and supervisor on a phone, with k7's backend bundled (`engine/k7-runtime/docs/android.md`, `ios.md`) |
 | `engine/scripts` | builds the engine and supervisor, packages the CLI archive and the tray's release files |
-| `apps/k7` | the text-first DAW — frontend (React/Vite) + backend (Express: prefs, the file hub, AI organize; the session and the engine registry are `backend-rs`'s Rust front; k7 runs on devices only, no hosted app) (its own `AGENTS.md`) |
-| `apps/k7/backend-rs` | k7's backend in Rust, phase by phase: the front that proxies what is not ported yet (`docs/rust-backend-plan.md`) |
+| `apps/k7` | the text-first DAW — frontend (React/Vite) + `backend-rs`, its Rust front; k7 runs on devices only, no hosted app (its own `AGENTS.md`) |
+| `apps/k7/backend-rs` | k7's backend in Rust: one process answering the session, the preferences, the file hub, AI organize, the engine registry and the built page (`docs/rust-backend-plan.md`) |
 | `apps/k7-tray` | K7 DAW, k7 on Windows, Linux and macOS (Apple silicon): a Tauri app with a window and a tray icon that runs k7's backend on `127.0.0.1:18789`, which runs the machine's supervisor and engine; k7 shows in its window, or in the browser from the tray's menu. Built locally on each OS (`apps/k7-tray/docs/`) |
 | `packages/` | `@studio/*`, consumed as raw TypeScript through `exports` subpaths (a bare deep import fails on purpose); four are published (`docs/publishing.md`); the UI kit (`ui`), `i18n`, `http`, `oidc`, `env`, `vite-config` and `tsconfig` are k7's own, with no other consumer |
 | `k7-core/` | the `@k7-core` modules library, the seed every library folder is copied from |

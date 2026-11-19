@@ -1,5 +1,5 @@
 //! account.rs — `/auth/logout` and `/auth/me`: the session the cookie holds, and the end of it.
-//! What a reader gets wrong: a logout everywhere is written where the backend reads it, so both processes drop the session.
+//! What a reader gets wrong: a logout everywhere is written to the revocations file, which every session read checks.
 
 use std::sync::Arc;
 

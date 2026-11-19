@@ -1,7 +1,6 @@
 //! session.rs — `requireAuth` for the routes the front owns: the `studio.sid` cookie through `k7-auth`, the
-//! revocations both processes write (re-read when their file changes, since a logout everywhere may happen
-//! in either), and a device's rewrite of any other session to its local user. A session refused for its
-//! stamps answers 401 without the cleared cookie the backend would also send (`docs/front.md`).
+//! revocations (re-read when their file changes), and a device's rewrite of any other session to its local
+//! user. A session refused for its stamps answers 401 without a cleared cookie (`docs/front.md`).
 
 use std::path::Path;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};

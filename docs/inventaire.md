@@ -247,8 +247,7 @@ The front serves `/auth/local`, `/auth/me` and `/auth/logout` and nothing of a p
 
 | kept | where | why |
 |---|---|---|
-| `auth_guard.rs` and the `OIDC_ISSUER`, `OIDC_CLIENT_ID` keys of `ENV_KEYS` | `k7-front/src` | the refusal mirrors Express's `authGuard.ts`, whose `setupAuth` still runs for `/auth/me` (D2) |
-| `setupAuth`, `devAdmin.ts`, `cors.ts`'s `COOKIE_DOMAIN` and `TRUSTED_ORIGINS` | `apps/k7/backend/src` | Express's remaining session code (D2) |
+| `auth_guard.rs` | `k7-front/src` | the refusal of a short or public session secret, which a front started past it would sign with (D2) |
 
 ## Left on the phones and the supervisor after the pairing left
 
@@ -264,7 +263,7 @@ a multi-account server is kept whole, tested, and listed here so `lint:dead` deb
 
 | name | what stays | what removes it |
 |---|---|---|
-| **D2** the accounts | the multi-account file hub (`k7-hub` accounts: a slug and a home per user, the cache sweep over every account), Express's `@studio/oidc` `setupAuth` and its session code (section 7), the libraries' `draft` folders (`k7-libraries`' `ensure(.., draft)`, the `draft` version of a pin, `song-edit`'s `overlays`) | a slice that makes the hub single-account and drops the library draft model |
+| **D2** the accounts | the multi-account file hub (`k7-hub` accounts: a slug and a home per user, the cache sweep over every account), the session code (section 7), the libraries' `draft` folders (`k7-libraries`' `ensure(.., draft)`, the `draft` version of a pin, `song-edit`'s `overlays`) | a slice that makes the hub single-account and drops the library draft model |
 | **D3** engine claims | the claim's `holder` strings and the displacement rules between holders (`routes/engine/registry.rs`, `k7-engine/src/registry/claims.rs`, `apps/k7/backend-rs/docs/engine/claim.md`), the `unowned` listing of an engine off this machine | the engine registry's rework with the remote engines, which is tier 4's |
 | the app's **second-device rework** | `/external` (`ExternalIndex`, `apps/k7/frontend/docs/external.md`), the camera mode behind `CAMERA_MODE_LISTED`, the engine tunnel hub, `chooseStudio` and the shell's `studio` event, `weburi.add`/`pair`/`remove` in the supervisor, `engine.example.json`'s `registryUrls`, the registry URL in `Url.cpp`, `STUDIO_REGISTRY_URL`, `k7-local`'s settings | the rework that makes a second device and a remote camera features of the app; the CLI engine and the Pi image ship unchanged until then |
 

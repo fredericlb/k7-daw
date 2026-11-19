@@ -1,6 +1,6 @@
-//! env.rs — the environment an account's file service starts with: the ALLOW-list,
-//! taken from the hub's. What a reader gets wrong: a variable the file service starts reading must be added
-//! here and to `ENV_KEYS`, or it is silently unset there.
+//! env.rs — the environment an account's runtime is given: the ALLOW-list, taken from the process's own.
+//! What a reader gets wrong: a variable the runtime starts reading must be added here and to `ENV_KEYS`,
+//! or it is silently unset there; no process starts, the front reads the map back.
 
 use std::collections::BTreeMap;
 
