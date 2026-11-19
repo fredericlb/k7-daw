@@ -44,6 +44,8 @@ export default defineConfig({
   // A dev machine's share: the backend under test runs on it too. CONFORMANCE_WORKERS=1 is the serial run.
   workers: Number(process.env.CONFORMANCE_WORKERS) || 4,
   retries: 0,
+  // Tier 4 (remote engines, remote cameras) is deferred: its specs run only with E2E_TIER4=1 (docs/conformance.md).
+  grepInvert: process.env.E2E_TIER4 ? undefined : /@tier4/,
   reporter: [["list"]],
   use: {
     baseURL: process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789",

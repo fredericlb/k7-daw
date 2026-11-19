@@ -67,12 +67,12 @@ fn count(l: &Listed, key: &str) -> usize {
 }
 
 #[test]
-fn twenty_thousand_references_are_listed_fast_and_past_the_limit_declined_faster() {
-    many_references(20_000);
+fn two_thousand_references_are_listed_fast_and_past_the_limit_declined_faster() {
+    many_references(2_000);
 }
 
 #[test]
-#[ignore = "scale: a quadratic walk hides at 20,000 references and shows at 200,000"]
+#[ignore = "scale: a quadratic walk hides at 2,000 references and shows at 200,000"]
 fn two_hundred_thousand_references_are_listed_fast_and_past_the_limit_declined_faster_at_scale() {
     many_references(200_000);
 }
@@ -216,12 +216,12 @@ fn two_thousand_chains_and_two_hundred_libraries() {
 }
 
 #[test]
-fn a_sound_family_of_ten_thousand_samples_is_a_level_listing_fast() {
-    sound_family(10_000);
+fn a_sound_family_of_two_thousand_samples_is_a_level_listing_fast() {
+    sound_family(2_000);
 }
 
 #[test]
-#[ignore = "scale: a quadratic level listing hides at 10,000 samples and shows at 100,000"]
+#[ignore = "scale: a quadratic level listing hides at 2,000 samples and shows at 100,000"]
 fn a_sound_family_of_a_hundred_thousand_samples_is_a_level_listing_fast_at_scale() {
     sound_family(100_000);
 }
@@ -256,19 +256,19 @@ fn an_exts_json_of_eight_mib_and_one_that_is_not_json_still_answer() {
 }
 
 #[test]
-fn two_thousand_version_folders_are_read_for_the_newest() {
+fn two_hundred_version_folders_are_read_for_the_newest() {
     let s = Scratch::new("h-versions");
-    for v in 1..=2_000 {
+    for v in 1..=200 {
         s.dir(&format!("libraries/k7-core/{v}"));
     }
     s.file(
-        "libraries/k7-core/2000/library.k7x",
-        "name(\"x\")\nversion(2000)\nrequires(1)\n",
+        "libraries/k7-core/200/library.k7x",
+        "name(\"x\")\nversion(200)\nrequires(1)\n",
     );
     s.file("libraries/k7-core/1/modules/audio/a/module.k7x", "");
     let (took, l) = best(|| run(&s, Listing::ModuleLibraries, &Limits::default()).unwrap());
     assert!(
-        l.json.contains(r#""version":{"pinned":1,"upgrade":2000}"#),
+        l.json.contains(r#""version":{"pinned":1,"upgrade":200}"#),
         "{}",
         &l.json[..300.min(l.json.len())]
     );

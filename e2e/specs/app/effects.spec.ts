@@ -1,4 +1,4 @@
-// effects.spec.ts — library effects, note transformers and a cold pass reach the engine as the plugins they compile to, and play.
+// effects.spec.ts — library effects, note transformers and a cold pass reach the engine as the plugins they compile to, and one of them plays.
 // The engine document is the proof a module was sent; a cold module's measuring pass runs only under `clip process` (packages/song/docs/coldModules.md).
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, type K7, TARGET, test } from "../../src/target.ts";
@@ -99,10 +99,6 @@ test.describe("Airwindows", () => {
     ]);
     expect(doc.masterPlugins.map((p) => p.type)).toContain("Console 6 Buss");
   });
-
-  test("the Airwindows chain plays", async ({ k7 }) => {
-    await playsClean(k7, "airwindows.k7", "melody");
-  });
 });
 
 test.describe("note transformers", () => {
@@ -124,10 +120,6 @@ test.describe("note transformers", () => {
       "Semitones",
     ]);
   });
-
-  test("the transformed notes play", async ({ k7 }) => {
-    await playsClean(k7, "transformers.k7", "melody");
-  });
 });
 
 test.describe("cold normalize", () => {
@@ -143,10 +135,6 @@ test.describe("cold normalize", () => {
       Target: -6,
       Peak: 0,
     });
-  });
-
-  test("the unmeasured normalizer plays", async ({ k7 }) => {
-    await playsClean(k7, PROJECT, "drums");
   });
 
   test("clip process measures the tone and bakes it at Target", async ({

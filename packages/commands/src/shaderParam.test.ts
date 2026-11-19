@@ -30,7 +30,12 @@ beforeEach(() => {
   logs.length = 0;
   refusals.length = 0;
   ws = mkdtempSync(join(tmpdir(), "td-shparam-"));
-  cpSync(join(REPO, "demos"), ws, { recursive: true });
+  cpSync(join(REPO, "demos", "_modules"), join(ws, "_modules"), {
+    recursive: true,
+  });
+  cpSync(join(REPO, "demos", "video-demo.k7"), join(ws, "video-demo.k7"), {
+    recursive: true,
+  });
   song = join(ws, "video-demo.k7");
   stripLanes(song, pictureLanes);
 });

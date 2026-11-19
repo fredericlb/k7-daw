@@ -8,7 +8,9 @@ const headers = signedIn();
 const nobody = "00000000-0000-4000-8000-000000000000";
 const INVALID = "Invalid input: expected string, received undefined";
 
-test("every engine job route is behind the session", async ({ playwright }) => {
+test("every engine job route is behind the session", { tag: "@tier4" }, async ({
+  playwright,
+}) => {
   const anonymous = await playwright.request.newContext({ baseURL: base });
   for (const [method, path] of [
     ["GET", `/api/engine-slots/${nobody}/slots`],
@@ -21,9 +23,9 @@ test("every engine job route is behind the session", async ({ playwright }) => {
   await anonymous.dispose();
 });
 
-test("an engine's slots are its owner's: an unknown engine is a 404, a body is checked first", async ({
-  request,
-}) => {
+test("an engine's slots are its owner's: an unknown engine is a 404, a body is checked first", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const at = `/api/engine-slots/${nobody}`;
   for (const [method, path, data] of [
     ["GET", `${at}/slots`, undefined],

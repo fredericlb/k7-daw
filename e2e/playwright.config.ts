@@ -12,6 +12,8 @@ export default defineConfig({
   // One worker: the specs share the e2e account's workspace and one engine.
   workers: 1,
   retries: 0,
+  // Tier 4 (remote engines, the second device) is deferred: its specs run only with E2E_TIER4=1 (docs/e2e.md).
+  grepInvert: process.env.E2E_TIER4 ? undefined : /@tier4/,
   reporter: [["list"], ["html", { outputFolder: "./report", open: "never" }]],
   // A dev server sends a page's modules one request each, and a cold page can take longer than the default 5 s to draw.
   expect: { timeout: 15_000 },

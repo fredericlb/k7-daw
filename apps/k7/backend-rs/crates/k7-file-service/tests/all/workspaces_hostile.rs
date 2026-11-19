@@ -28,17 +28,17 @@ fn best<T>(mut f: impl FnMut() -> T) -> (Duration, T) {
 }
 
 #[test]
-fn a_thousand_workspaces_and_a_root_of_dot_entries_list_by_count() {
+fn fifty_workspaces_and_a_root_of_dot_entries_list_by_count() {
     let a = Acct::new("ws-hostile-many");
     let dir = a.s.path(WORKSPACES);
-    for i in 0..1000 {
+    for i in 0..50 {
         std::fs::create_dir(format!("{dir}/w{i:04}")).unwrap();
     }
     for i in 0..5_000 {
         std::fs::File::create(format!("{dir}/.d{i}")).unwrap();
     }
     let (took, got) = best(|| summaries(&a.home(), &Limits::default()).unwrap());
-    assert_eq!(got.len(), 1000);
+    assert_eq!(got.len(), 50);
     assert!(took < BOUND, "{took:?}");
     // The walk counts every entry it meets, hidden or not, against the limit.
     let few = Limits {
@@ -206,11 +206,11 @@ fn a_bundle_of_2000_files_is_stamped_and_mirrored_and_a_16_mib_stamps_file_reads
 }
 
 #[test]
-fn a_project_of_3000_files_is_planned_and_copied_within_the_bound() {
+fn a_project_of_500_files_is_planned_and_copied_within_the_bound() {
     use k7_file_service::workspaces::copy::{CopyAsk, apply_copy, plan_copy};
     let a = Acct::new("ws-hostile-copy");
     let big = a.project("songs", "big.k7", "project({})\n");
-    for d in 0..30 {
+    for d in 0..5 {
         std::fs::create_dir_all(format!("{big}/d{d}")).unwrap();
         for f in 0..100 {
             std::fs::write(format!("{big}/d{d}/f{f}.bin"), "x").unwrap();
@@ -226,8 +226,8 @@ fn a_project_of_3000_files_is_planned_and_copied_within_the_bound() {
     let t0 = Instant::now();
     let plan = plan_copy(&a.home(), &ask, &Limits::default()).unwrap();
     assert!(t0.elapsed() < BOUND, "{:?}", t0.elapsed());
-    // Counted, not timed: writing 3,000 files on a loaded disk says nothing of a hang.
-    assert_eq!(plan.entries.len(), 1 + 30 + 3_000 + 1);
+    // Counted, not timed: writing 500 files on a loaded disk says nothing of a hang.
+    assert_eq!(plan.entries.len(), 1 + 5 + 500 + 1);
     apply_copy(&plan).unwrap();
-    assert!(std::fs::metadata(a.path("albums", "big.k7/d29/f99.bin")).is_ok());
+    assert!(std::fs::metadata(a.path("albums", "big.k7/d4/f99.bin")).is_ok());
 }

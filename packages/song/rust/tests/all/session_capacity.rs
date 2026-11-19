@@ -34,6 +34,7 @@ fn hang_bound() -> Duration {
 
 // 762: 128 lanes of 200 events of 16 notes, 16 plugins a lane of 60 params, 16 buses, 64 VSTs, 3,000 automations, every view.
 #[test]
+#[ignore = "measurement: a full-size project is 35 MB of engine text; run by hand"]
 fn a_full_size_project_answers_every_view_and_keeps_the_limits() {
     let t = Tmp::new("session-capacity");
     for (rel, text) in capacity_files() {

@@ -10,7 +10,11 @@ use k7_file_service::media::names::{Take as Named, inside_dir, outside_sentence,
 use super::{Counts, Counts as C};
 
 /// The landing wait's own numbers, the TypeScript's (2452).
+#[cfg(not(test))]
 pub const LANDING: Duration = Duration::from_secs(20);
+// A refused take waits the landing out too, so a test shortens it.
+#[cfg(test)]
+pub const LANDING: Duration = Duration::from_millis(400);
 pub const LOOK: Duration = Duration::from_millis(250);
 
 /// What a take may be read from, and how long a mirrored one is waited for.

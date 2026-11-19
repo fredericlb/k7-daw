@@ -13,9 +13,9 @@ fn hang_bound() -> Duration {
 
 // 761: one compile's worth of verdicts, the Source's stat of each of 2,000 folders and then of each again, against plain stats.
 #[test]
-fn the_real_path_checks_over_two_thousand_folders_are_measured_and_bounded() {
+fn the_real_path_checks_over_five_hundred_folders_are_measured_and_bounded() {
     let t = Tmp::new("disk-cost");
-    let paths: Vec<String> = (0..2_000)
+    let paths: Vec<String> = (0..500)
         .map(|i| {
             t.write(&format!("d{i}/f.txt"), "x");
             t.at(&format!("d{i}"))

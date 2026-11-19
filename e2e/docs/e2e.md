@@ -118,7 +118,7 @@ HTTP, through the same routes the browser uses: the workspace is removed and rec
 
 The service validates nothing on write, so whether a fixture is a valid project is a test of its
 own (`specs/app/fixtures.spec.ts`), separate from what the screen does with it
-(`specs/app/features.spec.ts`).
+(`specs/app/features.spec.ts`, which draws each fixture and never plays it: the live play is `transport.spec.ts`'s, and the golden render of the conformance suite judges each fixture's sound).
 
 A spec whose subject is not one project builds what it needs at run time, in a workspace of its
 own: the `@k7-core` library module by module (`library.spec.ts`), the app's routes, the home page's
@@ -135,6 +135,16 @@ A spec runs on both targets unless what it checks exists on one only, and then i
 A spec that has found a bug keeps asserting the right behaviour under `test.fail`, with the bug in
 its reason: the run stays green, and turns red the day the bug is fixed, which is the reminder to
 drop the mark.
+
+## Tier 4 specs are tagged `@tier4` and off by default
+
+Remote engines, remote cameras and the second-device routes are deferred, so their specs (`cameras`, `engines` and `engineJobs` in the
+conformance suite, `/external` and `/settings/engine` in `routes.spec.ts`) carry `{ tag: "@tier4" }` and both configs invert the
+tag unless `E2E_TIER4=1` is set. They stay as the second-device rework's spec rather than being deleted; a bed never runs them, and
+the cameras ticket's 61-s expiry sleep is one of them.
+
+A live play is paid once per kind of path, not once per fixture: opening a project on the engine costs about 4.5 s, so a spec that
+only needs the clock to move shares `transport.spec.ts`, `effects.spec.ts` (the jsdsp chain) and `engines.spec.ts` (eurorack-surge, two plugin kinds).
 
 ## Play is pressed once, when it is offered
 

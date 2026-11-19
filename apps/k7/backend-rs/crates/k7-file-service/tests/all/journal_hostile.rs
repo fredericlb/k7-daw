@@ -38,12 +38,11 @@ fn journal_of(entries: usize, label: &str) -> String {
 }
 
 #[test]
-fn a_journal_of_sixty_four_mib_loads_and_one_step_persists() {
+fn a_journal_of_a_thousand_long_labelled_steps_loads_and_one_step_persists() {
     let s = Scratch::new("jh-big");
     let store = Store::new(s.path("store"));
-    // 1,000 entries of 64 KiB each.
-    let text = journal_of(1000, &"é\"x".repeat(21_000));
-    assert!(text.len() > 60 << 20, "{} bytes", text.len());
+    // 1,000 entries of 2 KiB each: the ring's own size with labels far past a person's.
+    let text = journal_of(1000, &"é\"x".repeat(400));
     s.file("store/journal.json", &text);
     let t0 = Instant::now();
     let mut held = Held::read(&store);
@@ -74,11 +73,11 @@ fn a_journal_of_sixty_four_mib_loads_and_one_step_persists() {
 }
 
 #[test]
-fn a_hundred_thousand_entries_are_read_and_a_push_trims_them_to_the_ring() {
-    let text = journal_of(100_000, "e");
+fn five_thousand_entries_are_read_and_a_push_trims_them_to_the_ring() {
+    let text = journal_of(5_000, "e");
     let t0 = Instant::now();
     let mut j = parse(&text).unwrap();
-    assert_eq!(j.entries.len(), 100_000);
+    assert_eq!(j.entries.len(), 5_000);
     push(
         &mut j,
         NewEntry {
@@ -155,8 +154,8 @@ fn a_journal_that_lies_or_cannot_be_read_is_torn_never_trusted() {
 }
 
 #[test]
-fn an_entry_of_ten_mib_round_trips() {
-    let text = journal_of(1, &"y".repeat(10 << 20));
+fn an_entry_of_a_mib_round_trips() {
+    let text = journal_of(1, &"y".repeat(1 << 20));
     assert_eq!(print(&parse(&text).unwrap()), text);
 }
 

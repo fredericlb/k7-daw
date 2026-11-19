@@ -25,9 +25,18 @@ pub fn ensure(ctx: &Ctx, root: &Path, cadence: Arc<Mutex<Cadence>>) {
         return;
     }
     let (net, root) = (ctx.net.clone(), root.to_path_buf());
+    let wake = cadence
+        .lock()
+        .unwrap_or_else(|p| p.into_inner())
+        .wake
+        .clone();
     tokio::spawn(async move {
         loop {
-            tokio::time::sleep(LOOK).await;
+            // A wanted fetch wakes the task at once; otherwise it looks every LOOK.
+            tokio::select! {
+                () = tokio::time::sleep(LOOK) => {}
+                () = wake.notified() => {}
+            }
             let due = cadence.lock().unwrap_or_else(|p| p.into_inner()).due(now());
             if !root.is_dir() {
                 break;

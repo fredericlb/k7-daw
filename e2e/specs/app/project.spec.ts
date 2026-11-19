@@ -4,13 +4,8 @@ import { expect, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
-const EXAMPLES = [
-  "crossfade-demo",
-  "node-demo",
-  "rack-demo",
-  "synth-demo",
-  "video-demo",
-];
+// One demo, the one with a picture: the golden suite renders all five and judges their sound.
+const EXAMPLES = ["video-demo"];
 
 for (const name of EXAMPLES) {
   test(`${name} opens on the engine`, async ({ k7 }) => {

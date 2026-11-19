@@ -98,7 +98,7 @@ fn a_decode_that_writes_nothing_and_never_exits_is_killed_at_the_deadline() {
     let pidfile = d.join("pid");
     let e = env(&[("PIDFILE", pidfile.to_str().unwrap())]);
     let t = Instant::now();
-    let said = run(&bin, &e, Instant::now() + Duration::from_secs(3), &|| false).unwrap_err();
+    let said = run(&bin, &e, Instant::now() + Duration::from_secs(1), &|| false).unwrap_err();
     assert!(said.contains("took longer than"), "{said}");
     assert!(t.elapsed() < Duration::from_secs(10));
     assert!(!alive(&pid_of(&pidfile)), "the child is gone");
@@ -140,7 +140,7 @@ fn a_child_that_closes_its_output_and_keeps_running_is_killed_at_the_deadline() 
     let pidfile = d.join("pid");
     let e = env(&[("PIDFILE", pidfile.to_str().unwrap())]);
     let t = Instant::now();
-    let said = run(&bin, &e, Instant::now() + Duration::from_secs(2), &|| false).unwrap_err();
+    let said = run(&bin, &e, Instant::now() + Duration::from_secs(1), &|| false).unwrap_err();
     assert!(said.contains("took longer than"), "{said}");
     assert!(t.elapsed() < Duration::from_secs(10), "{:?}", t.elapsed());
     assert!(!alive(&pid_of(&pidfile)), "the child is gone");

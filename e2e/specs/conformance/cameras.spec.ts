@@ -102,18 +102,18 @@ function upgradeStatus(query: string): Promise<number> {
   });
 }
 
-test("the list and the ticket sit behind the session", async ({
-  playwright,
-}) => {
+test("the list and the ticket sit behind the session", {
+  tag: "@tier4",
+}, async ({ playwright }) => {
   const anonymous = await playwright.request.newContext({ baseURL: base });
   expect((await anonymous.get("/api/cameras")).status()).toBe(401);
   expect((await anonymous.post("/api/cameras/ticket")).status()).toBe(401);
   await anonymous.dispose();
 });
 
-test("a camera is listed under its cleaned, unique name while its socket is open", async ({
-  request,
-}) => {
+test("a camera is listed under its cleaned, unique name while its socket is open", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const before = await names(request);
   expect(before).not.toContain("Conformance cam");
   const a = await open(request, "role=camera&name=%20%20Conformance%09cam%20");
@@ -140,9 +140,9 @@ test("a camera is listed under its cleaned, unique name while its socket is open
   ).toEqual(before);
 });
 
-test("a viewer's negotiation reaches the camera it named, and back", async ({
-  request,
-}) => {
+test("a viewer's negotiation reaches the camera it named, and back", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const cam = await open(request, "role=camera&name=Conformance%20stage");
   const { name } = await cam.next();
   const viewer = await open(request, "role=viewer");
@@ -189,9 +189,9 @@ test("a viewer's negotiation reaches the camera it named, and back", async ({
   await cam.closed;
 });
 
-test("a camera that goes off closes its viewers and leaves the list", async ({
-  request,
-}) => {
+test("a camera that goes off closes its viewers and leaves the list", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const cam = await open(request, "role=camera&name=Conformance%20off");
   await cam.next();
   const viewer = await open(request, "role=viewer");
@@ -207,9 +207,9 @@ test("a camera that goes off closes its viewers and leaves the list", async ({
   ).not.toContain("Conformance off");
 });
 
-test("an upgrade without a good ticket is refused 401, a bad role 400", async ({
-  request,
-}) => {
+test("an upgrade without a good ticket is refused 401, a bad role 400", {
+  tag: "@tier4",
+}, async ({ request }) => {
   expect(await upgradeStatus("role=viewer")).toBe(401);
   const t = await ticket(request);
   const [payload] = t.split(".");
@@ -218,9 +218,9 @@ test("an upgrade without a good ticket is refused 401, a bad role 400", async ({
   expect(await upgradeStatus(`ticket=${t}`)).toBe(400);
 });
 
-test("an account past its cameras or its viewers is refused 429", async ({
-  request,
-}) => {
+test("an account past its cameras or its viewers is refused 429", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const open8: Socket[] = [];
   const on = (await names(request)).length;
   for (let i = on; i < 8; i++)
@@ -244,7 +244,9 @@ test("an account past its cameras or its viewers is refused 429", async ({
   ).toHaveLength(on);
 });
 
-test("a ticket expires after a minute", async ({ request }) => {
+test("a ticket expires after a minute", { tag: "@tier4" }, async ({
+  request,
+}) => {
   test.setTimeout(90_000);
   const t = await ticket(request);
   // Time is the subject: a minute is the ticket's life, and only a minute passing shows it ends.

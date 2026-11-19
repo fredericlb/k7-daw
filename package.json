@@ -32,6 +32,7 @@
     "lint:rustfmt": "bash scripts/lint-rustfmt.sh",
     "lint:comments": "node scripts/check-comments.mjs",
     "lint:version": "node scripts/check-version.mjs",
+    "lint:generated": "node scripts/agent/generated-check.mjs",
     "lint:dead": "knip",
     "lint:panels": "tsx packages/song/scripts/checkPanelBinds.ts",
     "lint:layouts": "tsx packages/ui-module-builder/scripts/checkLayouts.ts",

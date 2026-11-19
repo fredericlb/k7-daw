@@ -48,7 +48,7 @@ done
 
 ## The C++ suite: two tiers, and a skip that says so
 
-`engine/k7-runtime` has `"test": "node scripts/run-tests.mjs"`, so
+`engine/k7-runtime` has `"test": "node scripts/run-tests.mjs && node scripts/run-supervisor-tests.mjs"` (the second runs `engine/k7-supervisor`'s one test binary, under a second, and skips the same way when its `build/<preset>` is not configured), so
 `npm run test` compiles and runs it like any other workspace. Three
 things that script does, each because the obvious version is wrong:
 

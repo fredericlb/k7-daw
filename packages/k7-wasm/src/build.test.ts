@@ -1,5 +1,5 @@
-// build.test.ts — the checked-in module and types are the ones the Rust sources and the bindings binary make.
-// A reader would get wrong that it needs no cargo: it hashes files, so a stale build fails in WSL as on Windows.
+// build.test.ts — the checked-in module is one of the right shape, and the source hash follows the bytes it covers.
+// A reader would get wrong that it proves freshness: `npm run lint:generated` compares the checked-in hashes to the sources.
 
 import {
   cpSync,
@@ -17,10 +17,9 @@ import {
   INCLUDED,
   pathDeps,
   rustSourceHash,
-  typesHash,
 } from "../scripts/rustSources.mjs";
 import { call, wasmReady } from "./abi.ts";
-import { SOURCES, TYPES, WASM } from "./k7Wasm.generated.ts";
+import { SOURCES, WASM } from "./k7Wasm.generated.ts";
 import { SONG_SOURCES, SONG_WASM } from "./k7WasmSong.generated.ts";
 
 const EXPORTS = [
@@ -34,17 +33,9 @@ const EXPORTS = [
 ];
 
 describe("the WebAssembly module", () => {
-  it("is built from the Rust sources as they are", () => {
-    expect(rustSourceHash()).toBe(SOURCES);
-  });
-
   it("builds the verbs' module, with the compiler, from the same sources", () => {
     expect(SONG_SOURCES).toBe(SOURCES);
     expect(SONG_WASM.length).toBeGreaterThan(WASM.length * 5);
-  });
-
-  it("carries the types as the bindings binary wrote them", () => {
-    expect(typesHash()).toBe(TYPES);
   });
 
   it("is built from the crates it hashes, every path dependency of the facade among them", () => {
@@ -75,10 +66,10 @@ describe("the WebAssembly module", () => {
         mkdirSync(dirname(join(copy, file)), { recursive: true });
         cpSync(join(root, file), join(copy, file));
       }
-      expect(rustSourceHash(copy)).toBe(SOURCES);
+      expect(rustSourceHash(copy)).toBe(rustSourceHash());
       const lib = join(copy, "packages/song/rust/src/lib.rs");
       writeFileSync(lib, `${readFileSync(lib, "utf8")} `);
-      expect(rustSourceHash(copy)).not.toBe(SOURCES);
+      expect(rustSourceHash(copy)).not.toBe(rustSourceHash());
     } finally {
       rmSync(copy, { recursive: true, force: true });
     }
@@ -101,10 +92,10 @@ describe("the WebAssembly module", () => {
         mkdirSync(dirname(join(copy, file)), { recursive: true });
         cpSync(join(root, file), join(copy, file));
       }
-      expect(rustSourceHash(copy)).toBe(SOURCES);
+      expect(rustSourceHash(copy)).toBe(rustSourceHash());
       const table = join(copy, INCLUDED[0]);
       writeFileSync(table, `${readFileSync(table, "utf8")} `);
-      expect(rustSourceHash(copy)).not.toBe(SOURCES);
+      expect(rustSourceHash(copy)).not.toBe(rustSourceHash());
     } finally {
       rmSync(copy, { recursive: true, force: true });
     }
