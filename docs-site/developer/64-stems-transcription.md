@@ -56,4 +56,4 @@ Choices:
 - **SRT as the stored text**, so the file is a subtitle file as is. `parseSrt` accepts both `,` and `.` before milliseconds because the two CLIs differ.
 - **Whichever whisper the machine has.** `CLIS` tries `whisper` (openai-whisper) then `whisper-cli` (whisper.cpp, which needs `STUDIO_WHISPER_MODEL`). A missing binary (ENOENT) is skipped; one that ran and failed is the error, with no fallback, to avoid a second model download. No image in this repository installs whisper, so it runs only where somebody installed it beside the file service.
 
-Tests: `packages/k7-plugins/src/transcription/transcribe.test.ts` (SRT round trip, dialects) and `trackTranscribe.test.ts` (the verb's refusals and writes). `packages/k7-plugins/src/composition.test.ts` checks that both composition lists install into the registries cleanly and stay independent lists.
+Tests: `packages/k7-plugins/src/transcription/trackTranscribe.test.ts` (the verb's refusals and writes). `packages/k7-plugins/src/composition.test.ts` checks that both composition lists install into the registries cleanly and stay independent lists.

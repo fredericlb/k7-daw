@@ -104,7 +104,7 @@ source, and a start before the sequence. Nothing is written when any of it refus
 almost all of it is one question: **what a sequence's LENGTH is**. It is the WINDOW, and a sequence
 states one in either of two ways — a `from`/`to` pair of timecodes, or nothing at all, in which
 case the length is the notes' extent **rounded up to the bar**. That second rule is the compiler's
-(`packages/song/src/nodeProject.ts`), and it is restated here rather than approximated: a doubling
+(the song crate's compile), and it is restated here rather than approximated: a doubling
 that read the last note's end as the length would move the copies by three beats where the sequence
 plays four, and every pass after the first would drift.
 

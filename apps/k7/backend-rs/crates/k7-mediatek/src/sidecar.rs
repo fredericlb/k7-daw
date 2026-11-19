@@ -1,6 +1,5 @@
-//! sidecar.rs — the `{file}.cache` beside an audio file, as `packages/audio-analysis/src/sidecar.ts` writes and
-//! reads it: the fields in their order at their fixed precision (`toFixed`), and a version below 4 refused.
-//! What a reader gets wrong: the text is the format, node and Rust write the same bytes and read each other's.
+//! sidecar.rs — the `{file}.cache` beside an audio file: the fields in their order at their fixed precision (`toFixed`), and a version below 4 refused.
+//! What a reader gets wrong: the text is the format, and what a sidecar holds on disk is read back as written.
 
 use std::path::{Path, PathBuf};
 

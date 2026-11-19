@@ -105,7 +105,7 @@ export function useOutputRecording(opts: {
   setStatus: (s: string) => void;
 }): OutputRecording {
   const { store, engine, project, hasPicture, pictureKnown, setStatus } = opts;
-  // Present once the engine runs a document carrying the hidden recorder (packages/song/src/outputRecorder.ts).
+  // Present once the engine runs a document carrying the hidden recorder (the song crate's output recorder).
   const hasAudio = useStoreState(store, (s) =>
     Boolean(s.recorders?.[OUTPUT_RECORDER_ID]),
   );

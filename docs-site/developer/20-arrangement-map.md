@@ -23,11 +23,11 @@ is the one after.
 | Note views | `apps/k7/frontend/src/components/PianoRoll.tsx`, `apps/k7/frontend/src/hooks/useRollGestures.ts`, `rollDrag.ts`, `rollMode.ts`; `SequencerPanel.tsx`, `apps/k7/frontend/src/hooks/useStepPads.ts`, `stepGrid.ts`; `ClipViewModes.tsx`; grid caret in `apps/k7/frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
 | Curve editor | `apps/k7/frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveKnob.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
 | MIDI | `apps/k7/frontend/src/webmidi.ts`, `midiIn.ts`, `midiControl.ts`, `midiActivity.ts`, `apps/k7/frontend/src/hooks/useMidiRecording.ts`, `apps/k7/frontend/src/hooks/useMidiControl.ts`, `apps/k7/frontend/src/components/MidiTakeRoll.tsx` |
-| Takes | `apps/k7/frontend/src/takes.ts`, `takeCounter.ts`, `apps/k7/frontend/src/hooks/useTakeRecording.ts`, `apps/k7/frontend/src/components/TakesView.tsx`, `TakeRow.tsx`, `CompStrip.tsx`; server side `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/engine/queue.rs` (the arm), `packages/take-render/src/recordTake.ts` |
+| Takes | `apps/k7/frontend/src/takes.ts`, `takeCounter.ts`, `apps/k7/frontend/src/hooks/useTakeRecording.ts`, `apps/k7/frontend/src/components/TakesView.tsx`, `TakeRow.tsx`, `CompStrip.tsx`; server side `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/engine/queue.rs` (the arm) |
 | Mixer state | `apps/k7/frontend/src/hooks/useTrackControls.ts`, `mixerStrips.ts`; strips drawn by `packages/ui-chains-react/src/DomChains.tsx` |
 | Master meter | `apps/k7/frontend/src/components/MasterMeter.tsx`, `gainTrim.ts`, `packages/engine-browser/src/meter.ts` |
 | Mastering surface | `apps/k7/frontend/src/components/MasteringTab.tsx`, `apps/k7/frontend/src/mastering/controls.ts`, `apps/k7/frontend/src/mastering/bindings.ts` |
-| Export | `apps/k7/frontend/src/exportArgs.ts`, `apps/k7/frontend/src/hooks/useShare.ts`, `apps/k7/frontend/src/components/SharePanel.tsx`; `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/shares/export.rs`, `packages/take-render/src/renderers.ts` |
+| Export | `apps/k7/frontend/src/exportArgs.ts`, `apps/k7/frontend/src/hooks/useShare.ts`, `apps/k7/frontend/src/components/SharePanel.tsx`; `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/shares/export.rs` |
 | Offline renders | `packages/take-render/src/` (renderer, material split/consolidate, recorded takes) |
 | Bouncing through a chain | `packages/audio-passes/src/processChain.ts`, `peakPass.ts`, `coldPass.ts` |
 | Import | `packages/translator/src/` (`dawproject.ts`, `ableton.ts`, `abletonZip.ts`, `emit.ts`, `params.ts`), run in the verbs Worker (`packages/commands/src/runtime/importer.ts`) |

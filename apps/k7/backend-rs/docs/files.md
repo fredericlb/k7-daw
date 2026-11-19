@@ -85,7 +85,7 @@ node might have merged.
 | trust decision | what proves it | pinned by |
 |---|---|---|
 | the merge writes what node writes, byte for byte | 4,419 vectors from node, every envelope compared | `tests/all/settle.rs` |
-| the text merge writes what node writes, and parks what node parks | 3,032 `diff3Merge` vectors from node-diff3, and every non-k7x settle vector answered natively | `k7-sync/tests/all/diff3.rs` |
+| the text merge parks what a conflict parks | every non-k7x settle vector answered natively | `k7-sync/tests/all/diff3.rs` |
 | a hostile text cannot hold a thread in the merge | a work budget and a cap on candidates, counted, not timed | `diff3.rs`' `a_degenerate_text_runs_out_of_budget_instead_of_hours` |
 
 ## AI organize
@@ -116,16 +116,7 @@ has no `/api/ai` route: a request the front hands it there meets its `/api` guar
 
 ### The proofs
 
-`fixtures/organize-vectors.json` was written by a server-side route that ran the whole conversation, with the real
-SDK, against a fake Messages API, for 16 cases: a good panel, mistakes then repaired on an update, not JSON then
-repaired on Haiku (no `effort`), mistakes twice, a refusal with and without its reason, `max_tokens`, an
-HTTP error in JSON and in text, a 529 retried after its `retry-after-ms`, an `error` event mid-stream, a
-dropped stream, a stream that ends before `message_stop`, an empty stream, and two bodies zod refuses. Every
-stream is written in 97-byte pieces, a character split across two at times. It holds the replies, each request the SDK sent (seven headers and the body) and the NDJSON streamed back,
-and is the reference as committed: the route and its generator are gone.
-`crates/k7-front/src/turn_vectors.rs` plays the same replies from a Rust twin of the fake, turn by turn, and requires the
-same requests byte for byte and the NDJSON each turn is the server's part of; `packages/panel-rules/src/aiLoop.test.ts`
-drives the page's loop with the same replies. `crates/k7-front/tests/all/ai_turn.rs` runs the guards through a whole front.
+`packages/panel-rules/src/aiLoop.test.ts` drives the page's loop with recorded model replies. `crates/k7-front/tests/all/ai_turn.rs` runs the guards through a whole front.
 
 Not proven: the abort on a closed tab (timing, read in the code); a timeout or a connection error (the messages are
 the SDK's constants); a real Claude answer.
@@ -134,9 +125,9 @@ the SDK's constants); a real Claude answer.
 
 | trust decision | what proves it | pinned by |
 |---|---|---|
-| the account's key leaves only to `ANTHROPIC_BASE_URL` (the API's own host otherwise), over TLS with the front's roots, and never to the page | the vectors read `x-api-key` at the fake; the page's body names a model and a key and neither is used | `turn_vectors.rs`, `ai_turn.rs` |
+| the account's key leaves only to `ANTHROPIC_BASE_URL` (the API's own host otherwise), over TLS with the front's roots, and never to the page | the turn tests read `x-api-key` at the fake; the page's body names a model and a key and neither is used | `ai_turn.rs` |
 | a body is parsed under 2 MB before the session is read, the session checked before the key, the key before the shape | the order of `post_turn` | `ai_turn.rs` |
-| a turn is bounded: five messages, a 200 KB prompt, 64,000 output tokens, 8 MiB of stream | the shape check and the stream cut | `turn.rs`' tests, `turn_vectors.rs` |
+| a turn is bounded: five messages, a 200 KB prompt, 64,000 output tokens, 8 MiB of stream | the shape check and the stream cut | `turn.rs`' tests |
 
 ## Answers chosen on purpose
 

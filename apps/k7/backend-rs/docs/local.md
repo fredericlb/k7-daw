@@ -37,7 +37,7 @@ the 1 s→30 s backoff reset after 20 s, `shutdown` then the pipe closed,
 | on Windows, `CREATE_NO_WINDOW` and `CREATE_NEW_PROCESS_GROUP`, and no job of the host's | Rust puts a child in no job, so the supervisor's own kill-on-close job is the only one, held by the host alone; the new group keeps a console's Ctrl-C from ending the supervisor before its deregister |
 | `chrono` for the local time of the merged log's `HH:MM:SS` and macOS's process start | a time zone from every OS (Android and iOS included) without FFI; it is the desktop app's already |
 | the pidfile proof in `k7-local`, which the desktop app links too | one verdict for both Rust callers, the one `PidFile.cpp` gives |
-| a snapshot serialized key for key in the order of the supervisor's fixtures | the page and the conformance suite read fixed bytes; `fixtures/local-vectors.json`, committed, holds the supervisor's own fixtures to it |
+| a snapshot serialized key for key in the order of the supervisor's fixtures | the page and the conformance suite read fixed bytes |
 | one SSE event per state frame | a snapshot carries `down: null` with it, so one frame says everything |
 
 ## The internal seam's local half
@@ -64,5 +64,3 @@ a built `k7-supervisor` run by the front, with a real backend behind it, the eng
 stopped with the supervisor, and its deregistration checked. The conformance specs are
 `e2e/specs/conformance/localEngine.spec.ts`.
 
-`fixtures/local-vectors.json` is the committed reference the Rust is held to (`crates/k7-front/src/local_vectors.rs`);
-it changes on purpose only, with the supervisor's fixtures (`supervisorHost.md`).

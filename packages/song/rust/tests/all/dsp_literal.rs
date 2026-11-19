@@ -1,5 +1,5 @@
-// dsp_literal.rs — every module's `dsp.k7x` decodes byte for byte to the graph the TypeScript builder prints from its `jsdsp.ts`.
-// A reader would get wrong where the references come from: dsp_vectors.json is generated from the TypeScript (makeVectors.mts), not from a committed jsdsp.json.
+// dsp_literal.rs — every module's `dsp.k7x` decodes byte for byte to the graph the engine reads, frozen in dsp_vectors.json.
+// A reader would get wrong where the references come from: the file is a golden with no generator, so a module's DSP change edits it by hand.
 
 use song::dsp_literal::decode;
 use song::jsdsp::validate_graph;

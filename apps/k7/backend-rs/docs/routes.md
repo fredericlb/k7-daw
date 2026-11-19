@@ -57,7 +57,6 @@ Each reads its state from disk on every request, from files the previous release
 | choice | why |
 |---|---|
 | zod's messages are written out by hand for the three bodies these routes check | the browser shows `error` as it is; the vectors hold every message |
-| shared vectors, `fixtures/leaf-vectors.json`, written by the TypeScript these routes replaced and kept as committed: the AI settings' patch and key hint | the AI patch and key hint; the file is the reference, and `src/vectors.rs` fails when Rust disagrees |
 
 ## The session
 

@@ -35,7 +35,6 @@ needs the auth folder, as every session route does (`front.md`), and stays off w
 | every socket has a reader task and a writer task, the writer's queue counted in bytes | backpressure reads a peer's unsent bytes (`bufferedAmount`); a tunnel counts each channel's apart, so a stalled reader's channel closes alone (`packages/engine-tunnel/docs/backpressure.md`) |
 | the registry's state behind one lock, never held across an await | the claims and the bindings change together; nothing in them waits on a socket |
 | `indexmap` for every map whose order shows (a crate serde_json already brought) | the listing's order and the bytes of `engine-bindings.json` are insertion order, as the previous release reads and writes them |
-| committed vectors, `fixtures/engine-vectors.json` | the heartbeat's cleanings and their wording, a job's respelling and the droppable frames, as a client reads them; `tests/vectors.rs` fails when the core disagrees, and the file changes on purpose only |
 
 ## The testbed
 

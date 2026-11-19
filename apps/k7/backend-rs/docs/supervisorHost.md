@@ -47,8 +47,7 @@ engine's CMake points `HostProtocol_test.cpp` at `schema/fixtures/`. The choices
   says: an `error` absent when empty, `downloads` absent when empty, `pluginCount` null, `paths`
   folded from two fields, a fixed key order. The writer stays, and the fixtures hold it to the schema.
 - **The fixtures are what holds each side.** `HostProtocol_test.cpp` compares the writer with them
-  byte for byte, and `apps/k7/backend-rs/fixtures/local-vectors.json` carries them for `k7-local`'s
-  snapshot, so a change to the schema changes its fixtures in the same commit.
+  byte for byte, so a change to the schema changes its fixtures in the same commit.
 - **A snapshot has every list and no null.** A frame may leave an empty list out and writes null
   for "none"; `crates/k7-local/src/protocol.rs` fills them, so a page reads one shape whatever the
   supervisor's version left out.

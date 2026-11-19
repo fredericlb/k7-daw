@@ -25,7 +25,7 @@ verbs:
 |---|---|
 | `track mute` | The lane's bypass in the graph (`bypassed:`), since a lane is a module. |
 | `track solo` | Membership of `soloed:` at the root of `project.k7x`; several at once, resolved by the engine. |
-| `track highlight` | Membership of `highlighted:`; the compile (`packages/song/src/highlight.ts`) adds 10 dB to the last strip's output. |
+| `track highlight` | Membership of `highlighted:`; the song crate's compile adds 10 dB to the last strip's output. |
 
 `apps/k7/frontend/src/hooks/useTrackControls.ts` is the one implementation the timeline buttons, the graph's lane controls
 and the `m`/`s` keys share: an optimistic flip, the command, then a reload scoped to the files it

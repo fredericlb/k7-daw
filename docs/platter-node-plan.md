@@ -20,7 +20,7 @@ the desk's `withDecks` invents no plugin. What that buys:
 |---|---|---|
 | `PluginDoc.deckFile` | `packages/engine-protocol/project.ts` | already a first-class field, commented "TURNTABLE modules only — the record the platter OWNS" |
 | loading the record | `engine/k7-runtime/engine/EditBuilder.cpp` | `dynamic_cast<studio::TurntablePlugin*>` on whatever the plugin is — generic, like `namFile` and `irFile` just above |
-| naming a built-in | `packages/song/src/nodeProject.ts` | `plugin: { type: internal, name: … }` is already how the EQ's `tracktion` engine names Tracktion's equaliser |
+| naming a built-in | the song crate's compile (`packages/song/rust/src/doc/plugin.rs`) | `plugin: { type: internal, name: … }` is already how the EQ's `tracktion` engine names Tracktion's equaliser |
 
 The engine does not ask where the plugin came from. It builds one from `p.type`, and if it happens
 to be a platter, it puts its record on. A platter compiled from a module takes exactly the same

@@ -66,9 +66,9 @@ relative to `exports/`, so a project folder copied whole relinks as it is.
 
 The engine plays sound and cannot read a video container on every platform, so each video clip
 gets its first audio stream extracted to `<name>.sound.wav` beside the video
-(`packages/audio-analysis/src/extract.ts`: ffmpeg, else the engine's `--decode`), recorded as the
+(ffmpeg, else the engine's `--decode`, in the Rust verb host), recorded as the
 clip's `sound`. In a node project nothing else is made: the picture lane's own `#audio` half plays
-it, as the engine track `<lane>#audio` (`packages/song/src/nodeProject.ts`), straight to MIX unless
+it, as the engine track `<lane>#audio` (the song crate's compile), straight to MIX unless
 `"<lane>#audio"` is wired in `graph.k7x`. A chain project spells no port, so there one audio lane is
 created with `video_source: <lane>` and no events of its own, plus its mixer strip. At compile,
 `packages/song/src/videoSound.ts` derives the sound clips from the picture lane's shots: each shot

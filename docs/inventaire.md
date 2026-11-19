@@ -77,7 +77,6 @@ without anyone seeing it.
 | a library module's `jsdsp.ts` | kept one library version beside its `dsp.k7x` as the vectors' reference; the compiler never reads it (the type is `dsp`). Nothing imports it, and `knip.json` declares `k7-core/modules/**/jsdsp.ts` an entry. |
 | `demos/**/jsdsp.ts` | same: a demo module's reference for its `dsp.k7x`. |
 | `packages/ui-chains-react/src/DomChains.stories.tsx` | picked up by `.storybook/main.ts`'s glob. |
-| `packages/dsp/src/emit.ts` | the package's `build` script (`tsx src/emit.ts`). A pass looking only at `bin` and esbuild entries declares it dead; **a `package.json` `scripts` entry is a caller.** |
 
 `@studio/dsp` is also the author-facing API published to users
 (`apps/k7/docs/25-syntax-instruments.md`), and the C++ pastes its generated JSON
@@ -117,7 +116,6 @@ other plumbing stays reachable by relative import inside the package.
 | what | where | note |
 |---|---|---|
 | `probeLocalEngine` | `packages/engine-browser/src/probe.ts` | the registry does this work. Deleting a loopback probe nothing replays is to be decided, not left to rot. |
-| type `Signal` | `packages/dsp/src/index.ts` | `@deprecated`, not one reference left in the whole repo. |
 
 ### SYMBOLS, not files
 

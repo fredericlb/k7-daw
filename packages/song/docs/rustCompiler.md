@@ -227,7 +227,7 @@ wired to a route: what lands before it changes no answer. Sizes are the Rust and
 | when | gate |
 |---|---|
 | every sub-step | `cargo fmt --check`, clippy `-D warnings` native and `--target wasm32-unknown-unknown --no-default-features`, the crate's tests; the TypeScript tests of the area ported as Rust tests, the behaviour cases (a case that pins a message's wording or a legacy form is dropped and listed) |
-| every sub-step from 2a | the stage's dump: `rust/tests/all/stages.rs` compiles the staged golden corpus (`packages/song/scripts/stageCorpus.ts`) to the stage and compares, with `compare.rs`, against what a node script writes of the TypeScript's same stage; every difference is fixed or added to the allow list with its reason |
+| every sub-step from 2a | the crate's own tests over the golden corpus's decisions, `rust/tests/all/` |
 | 2h | every golden `engine` document decodes into the Rust `ProjectDoc` with unknown fields denied, and the corpus compiles equal enough to it |
 | 2l | the backend's version stamp equals the facade's `version` answer, and a test that a changed `song` source changes both; the 5d conformance set and the web suite on a bed; `e2e macos` |
 | 2m, the step's end | the corpus as a smoke test: every archetype, demo and e2e fixture compiles (the two broken ones fail naming their file), the engine loads each, and `--render` of four bars of each archetype and demo is not silent; `mac-checks.sh` |

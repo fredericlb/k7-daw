@@ -13,7 +13,7 @@ kept here so it can be tested under Node.
 | `packages/song-strudel/src/engineEntry.ts` | What the engine calls, installed as `globalThis.k7Strudel`: `load(code)` (evaluate with `@strudel/transpiler`; a throw keeps the previous pattern), `laneEvents`/`laneEventsJson` (one lane's events: its own label's, plus every unclaimed label for the catch-all lane), `labels`/`labelsJson`. Results cross to C++ as JSON strings. |
 | `engine/k7-runtime/scripts/gen-strudel-bundle.mjs` | Bundles `engineEntry.ts` with `@strudel/core`, `@strudel/mini` and `@strudel/transpiler` (pinned at 1.1.0 in `packages/song-strudel/package.json`) into the engine. |
 | `engine/k7-runtime/engine/PatternSchedule.h` | Turns cycles into time: one cycle is one bar (`beatsPerCycle` from the metre), at the edit's tempo. |
-| `packages/song/src/enginePattern.ts` | The compile side: `patternPlugins` gives each half of a pattern lane a `studio_pattern` plugin carrying `patternSource`, `patternLabel` (the lane name), `patternCatchAll`, `patternClaimed`, `patternPlays` (`notes`, `samples` or `both`), `patternBanks`. `patternShares` decides the catch-all: the file's first lane by name. `patternFiles` lists the files whose save is a recompile. |
+| `packages/song/rust/src/clips/doc.rs` | The compile side: `patternPlugins` gives each half of a pattern lane a `studio_pattern` plugin carrying `patternSource`, `patternLabel` (the lane name), `patternCatchAll`, `patternClaimed`, `patternPlays` (`notes`, `samples` or `both`), `patternBanks`. `patternShares` decides the catch-all: the file's first lane by name. `patternFiles` lists the files whose save is a recompile. |
 
 ## Choices
 

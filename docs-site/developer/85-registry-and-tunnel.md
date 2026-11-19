@@ -101,7 +101,7 @@ A `synced` channel (the server copied every file already) is only rewritten. The
 | `prefetch` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/media/prefetch.rs`, `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/journal_undo.rs` |
 | `send-up` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/journal_undo.rs` |
 | `local` | `apps/k7/backend-rs/crates/k7-front/src/routes/engine_reach/engine_jobs.rs` |
-| `render` | `packages/take-render/src/renderers.ts`, `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/freezer.rs` |
+| `render` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/freezer.rs` |
 | `log` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/runtime/logs.rs` |
 | `onnx-providers` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/verb_host/onnx.rs` |
 

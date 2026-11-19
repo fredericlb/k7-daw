@@ -229,7 +229,7 @@ A module card ends in a BAR (`.dgx-foot`, `FOOTER_H` tall, which `nodeSize` adds
 it covers none of it). A strip draws none: it has neither a stage nor attribute sets.
 
 Its LEFT holds the engine's stage (`engine/k7-runtime/docs/mix.md`) — the up to three values the engine
-wraps a plugin in, carried on the step as `stage` (`packages/song/src/ownMix.ts`) — as small knobs
+wraps a plugin in, carried on the step as `stage` (the song crate) — as small knobs
 (`FOOT_KNOB_PX`) in signal order: IN, MIX, OUT, each only when the stage has it, its name the tooltip.
 They are ordinary widgets (a drag, a typed value, a MIDI map). Its CENTRE holds the node's badges —
 the engine's `!`, the snowflake when it is frozen or frozen automatically, and what the plugin costs —

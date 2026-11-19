@@ -24,11 +24,9 @@ front's `POST /api/ai/organize/turn` makes **one** model turn with the account's
 
 ## What proves it
 
-`apps/k7/backend-rs/fixtures/organize-vectors.json` was written by the server-side route that ran the
-whole conversation, with the real SDK against a fake Claude. It is kept as committed and referees both halves:
+The two halves are held by:
 
 | proof | covers |
 |---|---|
 | `packages/panel-rules/src/aiLoop.test.ts` | sixteen cases: the same model replies draw the same turns (prompt, schema, repair message) and end the same way; a model's junk, a broken `widgets.js` and a request that is no request |
-| `apps/k7/backend-rs/crates/k7-front/src/turn_vectors.rs` | the same replies, played by a fake Claude, make the same requests byte for byte and the same NDJSON per turn; a slow turn is kept warm; ten megabytes are cut; a refused model is the API's sentence |
 | `apps/k7/backend-rs/crates/k7-front/tests/all/ai_turn.rs` | the guards in their order (session, key, size, shape), and that only the account's key and model reach Claude |

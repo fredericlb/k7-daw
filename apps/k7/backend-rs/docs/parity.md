@@ -21,9 +21,8 @@ Rust disagrees. A vector file is regenerated on purpose, never as a side effect 
 
 | proof | covers | does not cover |
 |---|---|---|
-| `number-vectors.json`, `k7-js/tests/all/number.rs` | a million doubles from a shared PRNG (raw bits, the unit interval, exact binary ties, hundredths, 61 magnitudes), each through `toFixed(0, 2, 4, 6)`, `String` and `Math.round`; 100,000 texts through `textHash`; 30 edge cases | digits above 6 and below 0 for `toFixed` — the files use 2, 4 and 6 |
+| `number-vectors.json`, `k7-js/tests/all/number.rs` | 30 edge cases, each through `toFixed(0, 2, 4, 6)`, `String` and `Math.round`, as node printed them: a snapshot, not a generator | the bulk of the doubles and the texts a larger set once covered |
 
-`makeNumberVectors.ts <batches> <out>` writes the file; `K7_NUMBER_VECTORS` names one for the ignored tests.
 
 ## The phones
 
@@ -114,9 +113,7 @@ A whole text whose file moved, merged against its base (`mergeTexts`), is `k7_sy
 
 | proof | what |
 |---|---|
-| `fixtures/diff3-vectors.json` (3.8 MB), frozen: 3,032 merges (1,716 of them conflicting), node's `diff3Merge` answer byte for byte (219 past 800 characters as their SHA-256) and `mergeTexts`' text | the 41 distinct whole-text merges the settle vectors hold (live-sync's `textMerge`, `room` and `converge` tests, the settle cases); 41 edge cases (equal, disjoint, adjacent, overlapping, false conflicts, both inserting at one place, empty texts, CRLF and lone CR, no last newline, BOM, combining and astral characters, lines named like `Object.prototype`'s members); 2,938 seeded random edits over small line pools, so lines repeat; six texts of 5,000 and 6,500 lines; six adversarial ones (500 to 900 lines over two to four distinct lines, 2,000 lines with a blank in 8, 400 equal lines, half a 3,000-line text moved); one in seven with `excludeFalseConflicts: false` |
-| `crates/k7-sync/tests/all/diff3.rs` | every vector above; then every one of the 241 non-k7x settles of `settle-vectors.json` (82 with a base) answered by the native settle as node's `settleFileOp` and `applyFileOp` answered, with a `Js` that panics if asked |
-| `diff3.rs`' unit test | the gallop against node's linear scan, ported as written, on 20,000 random pairs over 1 to 8 distinct lines |
+| `crates/k7-sync/tests/all/diff3.rs` | every one of the 241 non-k7x settles of `settle-vectors.json` (82 with a base) answered by the native settle as node's `settleFileOp` and `applyFileOp` answered, with a `Js` that panics if asked |
 
 ### Measured costs
 

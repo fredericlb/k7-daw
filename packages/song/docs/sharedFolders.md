@@ -62,9 +62,8 @@ none of them needs a line changed. `DEFAULT_LIBRARY` is that name, and a BARE ch
 as a bench address or a machine setting written earlier may hold one) is read as `@k7-core/bass/di`.
 
 **Nothing is put IN a library, and this repo ships no modules to put.** The library is the
-reference: what is in it is what its projects inherit. Modules written with `@studio/dsp` are
-authored straight into a library; what the library gains is argued in
-[packages/dsp/docs/catalogue.md](../../dsp/docs/catalogue.md). A new library is empty, every ref
+reference: what is in it is what its projects inherit. Modules whose DSP is a `dsp.k7x` are
+authored straight into a library. A new library is empty, every ref
 into it resolves to nothing until modules are put there, and an unresolved ref is **not** a compile
 error, so such a project reads as one whose modules are bypassed.
 

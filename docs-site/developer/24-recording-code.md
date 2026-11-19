@@ -82,8 +82,8 @@ back to an output port of the same name when there is one.
 ## Audio takes
 
 The engine writes the take into the project's `clips/` and reports
-`{type:"recorded", track, file, start, length}`. The file service files it with
-`packages/take-render/src/recordTake.ts`: renamed to `<track>_<bar.beat>_<stamp>.wav` (`fileStamp`),
+`{type:"recorded", track, file, start, length}`. The file service files it:
+renamed to `<track>_<bar.beat>_<stamp>.wav` (`fileStamp`),
 declared in `clips/<id>.k7x`, then either placed on the lane (`addTakeToTrack`) or added as a take of
 an event (`addTakeToEvent`) when the session is take-armed for that track. The count-in comes from
 `count_in` in the song's settings (default one bar); the frontend uses it only to skip the pre-roll

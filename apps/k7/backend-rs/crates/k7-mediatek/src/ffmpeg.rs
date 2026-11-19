@@ -1,5 +1,4 @@
-//! ffmpeg.rs — a file the waveform module cannot open, read through ffprobe and ffmpeg as `decodeWithFfmpeg` in
-//! `packages/audio-analysis/src/decode.ts` reads it: the stream's facts first, then every channel as f32le, at its rate.
+//! ffmpeg.rs — a file the waveform module cannot open, read through ffprobe and ffmpeg: the stream's facts first, then every channel as f32le, at its rate.
 //! What a reader gets wrong: only local files are opened (`-protocol_whitelist file,pipe`), and a missing ffprobe is
 //! asked for once per process, after which the module's own refusal is the answer.
 

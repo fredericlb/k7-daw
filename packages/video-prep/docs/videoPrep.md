@@ -35,7 +35,7 @@ whether a WebView takes it depends on the phone. The list is chosen by `process.
 the platform of the file service, which on the phone is also where the page runs.
 
 The file probed and copied is an upload, so both open it under `-protocol_whitelist file,pipe`
-through `@studio/ffmpeg`'s `input()` (`packages/ffmpeg/docs/ffmpeg.md`): a crafted container must
+by the Rust verb host: a crafted container must
 not make the file service fetch a URL.
 
 ## The plan is pure

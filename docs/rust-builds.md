@@ -111,25 +111,3 @@ code): that one still needs a Windows machine.
 | a timed test is not loosened to fold: one that fails only folded keeps its own binary, with its reason in `main.rs`'s header | a bound that passes alone and fails beside other tests is measuring the neighbours |
 | a new test file goes in `tests/all/` and is listed in `main.rs`; a file of its own at `tests/` is only for one of the hazards above, named in that header | a new top-level file is one more binary to link at every run |
 
-## The stage gates run on the Mac
-
-`scripts/stage-gates.sh`, one of `npm run ci:local`'s jobs, compares the song crate with the
-TypeScript over the golden corpus, the sweeps and the twins.
-
-| choice | why |
-|---|---|
-| on the Mac, in no CI job | the gates hold on any platform, and cost minutes a CI would pay on every push |
-| skipped when nothing they read changed since the merge-base with `main`; `--all` runs them | they read the song crate, its TypeScript, the file service and the corpus; a branch elsewhere gains nothing from their 9 minutes on the Mac |
-| the sweeps are never cut | the views and graph gates hold floors on the sweeps' counts: a gate without its sweep fails |
-| the TypeScript's outputs (the staged corpus, every dump, the smoke stage) are cached in `~/.cache/k7-stage-dumps/<key>/`, the newest 3 kept; `--fresh` ignores the cache, `--key` prints the key | most port work changes Rust only, and the TypeScript half is most of a cold run |
-| the key hashes everything the dumps read: `packages` (but not the song crates' Rust sources, which the dump scripts do not import; their JSON cases, which they read, count), the compiler's `js/`, `k7-core`, `demos`, `e2e/fixtures`, the lockfile, and the sweeps' sizes and seeds; committed, modified and untracked files alike | the dump scripts import most of `packages` through `@studio/*`, so a narrower list would hold a stale dump after an edit it missed; a Rust-only change leaves the key alone, a TypeScript one changes it |
-| the twins and the cargo gates are never cached | Rust writes the twins and TypeScript checks them; the gates are what is under test |
-| a hit clones the cached trees (`cp -cR`, an APFS clone) and rewrites the folder paths they spell | the first compile repairs the staged tree it reads, and the dumps name the folder they were staged in, the doc dump's own `tree/` among them |
-| the cache is stored before any gate runs | a gate that reads the staged tree changes it |
-
-Measured on the Mac with other agents' builds running (load average 25, so the times below move
-with it): `--all --fresh` took 15 to 29 minutes (15:03 at best, 28:40 at worst); the same run
-with a one-line change under `packages/song/rust/src` and the cache warm took 7:38 at best and
-15:03 at worst. What a hit leaves is the gates' own tests, about 12 minutes of test time under
-that load, and the song crate's rebuild. The counts every gate prints, and the twin check's, are
-identical between a fresh run and a cached one.

@@ -66,7 +66,6 @@ build started alone, silent, in a scratch home, its environment cleared:
 
 | scenario | file | what is compared |
 |---|---|---|
-| an edit while a freezable module is thawed; the plugin queries; an audition; a thaw (live, then frozen); an armed take | `engine/tests_scenarios_jobs.rs`, replayed by `engine/tests_frames.rs` | the frames, against the traces recorded from the TypeScript (`k7-front/tests/fixtures/frames/`) |
 | a render, a freezer pass, `renderAll` and a cut | the crate's and the front's own tests (`tests_render`, `tests_freezer*`, `tests_separate`, `tests_driver`) | no recorded trace reaches them alone |
 | the local render on the sine fixture | `jobs/tests_jobs_live.rs`, `#[ignore]`, `K7_LIVE_ENGINE_BIN` | the `data` chunks of the native and the TypeScript renderer |
 

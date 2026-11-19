@@ -23,7 +23,7 @@ its maximum, one holding only *dry* at its minimum (`holdOwnMix`). A live set of
 refused with a warning. The names are the ones `ownMixSide` reads in `@studio/song-schema`, so the
 compile and the engine agree on which params these are.
 
-WHICH modules own their blend is the compile's decision (`packages/song/src/ownMix.ts`): an EFFECT
+WHICH modules own their blend is the compile's decision (the song crate's `stage_of`, `packages/song/rust/src/`): an EFFECT
 (`audio/`) with at most one declared input. The compile always sends such a module's `@mix` — its
 `mix:`, else 1 — and `@mix` arriving at all is what tells the engine to hold. Two exceptions, both
 decided by what a module IS rather than by a list of names:

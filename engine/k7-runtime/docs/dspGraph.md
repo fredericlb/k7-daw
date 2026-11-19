@@ -3,10 +3,9 @@
 `engine/k7-runtime/engine/DspGraph.{h,cpp}` is the interpreter; `GraphDspPlugin` exposes it as an audio
 plugin and `MidiGraphPlugin` as a MIDI one. What the graph receives is the JSON `@studio/dsp` emits.
 
-**The emitting side has its own page and it is not repeated here**:
-[`packages/dsp/docs/builder.md`](../../../packages/dsp/docs/builder.md) holds the builder's reasons
-— the three types, `geolerp` refusing a descending pair, `input(port)`, what the vocabulary refuses
-to grow. This page holds what the **engine** does with the description once it has it.
+**The describing side has its own page and it is not repeated here**:
+[`docs/dsp-literal-plan.md`](../../../docs/dsp-literal-plan.md) holds the vocabulary of a module's `dsp.k7x`
+and what it refuses. This page holds what the **engine** does with the description once it has it.
 
 ## The experiment
 
@@ -219,9 +218,8 @@ reaches the frontend: without that, it is a module that looks fine and does noth
 graph with no MIDI node in a MIDI plugin is a module pointed at the wrong carrier, and saying so is
 all that distinguishes it from a broken transposer.
 
-`GraphDspPlugin`'s fallback is the auto-wah, **GENERATED**: it is `packages/dsp/graphs/autowah.json`
-word for word, pasted rather than read because the engine reads no file, and `autowah.test.ts`
-compares the two so the copy cannot drift. `MidiGraphPlugin`'s is a transposition of zero, written
+`GraphDspPlugin`'s fallback is the auto-wah, pasted into the source rather than read because the
+engine reads no file; it is the graph of `k7-core`'s auto-wah `dsp.k7x`. `MidiGraphPlugin`'s is a transposition of zero, written
 by hand and tiny: there is nothing there worth generating.
 
 `canSidechain()` would already answer yes from the channel count alone; saying it explicitly is what

@@ -78,7 +78,7 @@ export default {
 
 `PanelFrame` and `PanelVisible` in `lcdScreen.ts` are the contract: the module's params and
 assets, and `ampModel` — `{ kind, knobs }` — when it loads an amp model the file service could read
-(`packages/song/src/ampModel.ts`). Each widget id answered `false` is not drawn; an id left out
+(the song crate). Each widget id answered `false` is not drawn; an id left out
 stays. A screen cannot be called `visible`.
 
 **It is code, not a condition in the panel file.** What decides a widget's presence is as open as what a screen
