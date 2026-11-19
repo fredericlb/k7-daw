@@ -1,16 +1,13 @@
-# Versioning and the deployment pipeline
+# Versioning
 
 What a build is called, and how that name reaches the screen. Two names answer two questions:
 **which release is this?** — the VERSION, `0.1.0`, one for the whole repository — and **which
-build of it?** — the STAMP, `26.08031412` for an image, `snapshot-9f2c1ab` or the tag itself for a
-tray, engine or phone build. The image half mirrors what `../phare` does, with one deliberate difference
-noted below.
+build of it?** — the STAMP, `snapshot-9f2c1ab` or the tag itself for a tray, engine or phone build.
 
 ## One version, in the root package.json
 
 The root `package.json`'s `version` is the release version of everything this repository ships:
-the served image, the server's engine, the tray, the command-line engine, the APK, the
-iPhone app. A `vX.Y.Z` tag is a release of exactly that version, and `scripts/check-version.mjs --tag`
+the tray, the command-line engine, the APK, the iPhone app. A `vX.Y.Z` tag is a release of exactly that version, and `scripts/check-version.mjs --tag`
 refuses any other tag. So a release is two steps: `node scripts/check-version.mjs --set X.Y.Z`
 in a commit on `main`, then the tag on that commit.
 
@@ -25,9 +22,8 @@ Each artefact derives its name from it:
 
 | artefact | release | snapshot |
 |---|---|---|
-| image tags | `:X.Y.Z`, the stamp, the commit | `:latest`, the stamp, the commit |
-| `/api/health` | `version` (the backend's package.json copy) and `build` (the stamp) | same |
-| the SPA's tooltip | `0.1.0 (26.08031412)` | same |
+| `/api/health` | `version` (the backend's package.json copy) and `build` (`$APP_VERSION`, `dev` when unset) | same |
+| the SPA's tooltip | `0.1.0 (dev)`, the stamp being `$VITE_APP_VERSION` when a build sets it | same |
 | engine and supervisor `build` | `v0.1.0` | `0.1.0-snapshot-9f2c1ab`; `0.1.0-dev` locally |
 | tray bundle version | `0.1.0` | `0.1.0-snapshot-9f2c1ab`, a semver prerelease |
 | Android `versionName` / iOS `MARKETING_VERSION` | `0.1.0` | `0.1.0-snapshot-9f2c1ab` / `0.1.0` |
@@ -41,132 +37,30 @@ differ between the workflow that built a snapshot and the one that built its rel
 a full history: the jobs that build a phone app check out with `fetch-depth: 0` and no blobs, and
 Gradle refuses a shallow clone rather than count one commit.
 
-**A tag does not move `:latest`.** A tag may name an older commit than `main`'s tip, and `:latest`
-follows `main`; the release's own tag, `:X.Y.Z`, is the one a deploy names.
+## The stamp in the page
 
-## One image built here, and why k7 does not share phare's shape
-
-`apps/k7/docker/Dockerfile` builds k7's image — the editor: one process, no nginx — the front serves its own built frontend directly
-(`apps/k7/backend-rs/docs/last.md`). It starts from a plain alpine image, since there's no second
-process (nginx) to supervise alongside the front. Traefik reaches it directly by hostname
-(`docker/docker-compose.yml`) — at the root domain and on the `play.` and `k7.` aliases, which k7
-keeps answering
-(`packages/web-protocol/docs/addresses.md`).
-
-`engine/k7-runtime` and `engine/k7-supervisor` are not in k7's image. The tray, `apps/k7-tray`, is in no image.
-
-Two containers on one hostname each ship and restart on their own, so a crash in one does not
-recycle the other. Inside k7's image the trade is the same: the editor and the library are one
-process and restart together.
-
-## The image's stamp
-
-```
-`compute build version` step (date, Europe/Paris)  →  stamp   e.g. "26.08031412"
-  ├─ the image push  ─────────────────────────→  dev.frediver.se/frediverse/k7/k7-webapp:26.08031412
-  └─ --build-arg APP_VERSION=<stamp>
-       → Dockerfile frontend-build stage:  ENV VITE_APP_VERSION=$APP_VERSION
-         → vite inlines import.meta.env.VITE_APP_VERSION as a literal → the stamp in k7's chrome
-       → Dockerfile runtime stage:         ENV APP_VERSION=$APP_VERSION → /api/health's `build`
-```
-
-The image tag and the stamp in the SPA come from ONE `version` job, so they cannot disagree. The
-runtime stage declares the stamp last, so a new one rebuilds no layer above it.
-
-`YY.MMDDHHmm` in Europe/Paris — `26.08031412` is 3 August 2026, 14:12. Sortable,
-readable at a glance, and short enough to sit in a header without crowding it. The
-computation falls back to UTC if the builder image lacks timezone data, so a missing
-tzdata shifts the stamp by an hour or two rather than failing the build.
-
-The image also carries the commit hash, and `:latest` or, for a release, `:X.Y.Z`. Each has its
-use: the version you deploy, the commit you can `git show`, the stamp you can read. Only the
-commit's is pushed before the tests pass; the others follow once they have ([images.md](images.md)).
-Inside, the image says the same thing without its tag: `org.opencontainers.image.version` (`X.Y.Z`
-for a release, `X.Y.Z-snapshot-<commit>` otherwise, as the tray snapshot names itself) and
-`org.opencontainers.image.revision`, so `docker inspect` answers on a host that pulled it by digest.
-
-## A deploy names its build
-
-`docker/docker-compose.yml` takes the k7 and engine tags from `APP_VERSION`, and its default is the
-release the repository is at — `scripts/check-version.mjs` keeps it equal to the root version and
-`--set` rewrites it. So the compose file of a release tag starts that release with an empty `.env`,
-and `APP_VERSION` is for pinning anything else: a stamp, a commit. The default is never `:latest`,
-which moves with every publish, so a stack started on it runs whatever was newest when each
-container last pulled — the two halves can differ, and the answer to "which image is that?" is
-no longer in the deploy's own files. One variable for both images keeps the web app and the
-server's engine on the same commit.
-
-## Why `ENV` and not phare's `RUN VITE_APP_VERSION=… npm run build`
-
-**This is the one place studio deliberately does not copy phare.**
-
-Phare writes the variable as a command prefix on the `RUN` line. That works there because
-its monolith builds each SPA on its own `RUN`… and would not survive being written as a
-chain, which is the shape any one `RUN` building several SPAs takes. k7 builds one SPA today, so
-a command prefix would be harmless here; `ENV` is kept because it stays right when a second build
-joins the `RUN`, and the prefix does not.
-
-Written as a chain, a shell command-prefix assignment applies to the first command only, so
-`VITE_APP_VERSION=x npm run build -w a && npm run build -w b` stamps `a` and silently ships `b`
-as `dev`. Nothing fails; you just get a wrong SPA in a correctly tagged image — the worst
-combination, because the tag says the stamp is right.
-
-`ENV` in the `frontend-build` stage covers whatever that `RUN` runs. That stage is a throwaway
-whose only export is `dist/`, so the variable reaches no runtime image.
-
-## Two things that would silently break it
-
-Both produce a working build that ships the wrong stamp — no error, no warning.
-
-1. **Moving `ARG APP_VERSION` before the first `FROM`.** A build arg declared in the
-   global scope is not visible inside a stage unless re-declared there; it would expand
-   to empty.
-
-2. **Renaming the variable to something without the `VITE_` prefix.** There is no
-   `define` block anywhere; the mechanism is Vite's default `envPrefix`. A
-   `BUILD_VERSION` would simply not be inlined.
-
-Neither the Dockerfile's `npm run build --workspace <x>` nor the root `npm run build`
-(`npm run build --workspaces --if-present`) caches anything, so there is no cache key to
-strip the variable from and no stale bundle to worry about: every build reads it fresh.
-
-## The fallback is `dev`, twice
-
-`ARG APP_VERSION=dev` in the Dockerfile covers a plain `docker build` — including
-a hand-run `docker build`, so a locally built image reads `dev`. CI's images are
-`dev.frediver.se/frediverse/k7/k7-webapp` ([images.md](images.md)); nothing
-deployed pulls a hand-built one.
-
-`?? "dev"` at each render site covers `vite dev` and a bare `vite build`, where the
-variable is absent entirely. `??` and not `||`: an explicitly empty
-`VITE_APP_VERSION=` renders as an empty string rather than `dev`, which is a real if
-harmless edge.
-
-Both layers exist so the stamp can never render `undefined`.
+`apps/k7/frontend/src/version.ts` reads `import.meta.env.VITE_APP_VERSION ?? "dev"`, and the front's
+`/api/health` reads `$APP_VERSION` the same way. `??` and not `||`: an explicitly empty
+`VITE_APP_VERSION=` renders as an empty string rather than `dev`, which is a real if harmless edge. The
+variable keeps the `VITE_` prefix, which is Vite's default `envPrefix`: a name without it is not inlined, and the build
+ships `dev` with no warning. Both layers exist so the stamp can never render `undefined`.
 
 ## Where it shows
 
-One SPA, one image:
+| app | SPA | render site |
+|---|---|---|
+| k7 | `k7-frontend` | `apps/k7/frontend/src/projects/HomeSidebar.tsx` — tooltip on the sidebar's title, on every home page |
 
-| image | where it answers | SPA | render site |
-|---|---|---|---|
-| k7 | `/` (root of its own subdomain) | `k7-frontend` | `apps/k7/frontend/src/projects/HomeSidebar.tsx` — tooltip on the sidebar's title, on every home page |
-
-`VERSION` is read at module scope so it constant-folds into the bundle.
-
-In k7's home sidebar the version and the stamp are a
+`VERSION` is read at module scope so it constant-folds into the bundle. In k7's home sidebar the version and the stamp are a
 tooltip on the app's name and never visible text: nobody needs it in the moment, and it is one hover
-away for whoever asks which image this is.
-
-k7 serves its own `frontend/dist` directly (`express.static` in `src/server.ts`), with no nginx
-and no location list to keep in step with the SPA's `base`.
+away for whoever asks which build this is.
 
 ## The shell is asked again on every load, its assets never
 
-k7 serves its own `frontend/dist` from the backend (`src/server.ts`), with two
+The front serves the built `frontend/dist` (`apps/k7/backend-rs/docs/last.md`), with two
 cache rules. `index.html` — and every other file outside `assets/`, the manifest and the icons —
 goes out `no-cache`: a browser may keep it, but asks the server before each use, so the first load
-after a deploy is the new build. Files under `assets/` go out `immutable` for a year: Vite names
+after an update is the new build. Files under `assets/` go out `immutable` for a year: Vite names
 each one after a hash of its content, so a name never comes back with other bytes, and a new
 `index.html` names the new ones. Express's default (`max-age=0`) would have had the browser
 re-check every chunk on every load for nothing.
@@ -176,5 +70,5 @@ browsers serve a stale `max-age=0` copy and a `no-cache` one is not served unche
 
 A **service worker** is the other cache, and it ignores these headers for what it precached. k7
 registers one (`apps/k7/frontend/src/appMain.tsx`, `packages/vite-config/docs/pwa.md` for how
-a deploy reaches an open tab). An app on an iPhone's home screen can still be RESUMED
+an update reaches an open tab). An app on an iPhone's home screen can still be RESUMED
 from memory without any request at all; closing it in the app switcher is what makes it load.

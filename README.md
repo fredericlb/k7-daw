@@ -25,10 +25,9 @@ cp env.example.yaml env.yaml   # then fill in the secrets
 npm run dev                    # every app, plus the engine
 ```
 
-In dev the studio is a device on loopback, **http://127.0.0.1:5223** — k7 at the root, no login — and its
-documentation answers at **https://docs.priv.k7.rocks**; in production k7 runs on the devices
-(tray, phone, Mac), and the server only serves `k7.rocks` and `docs.k7.rocks`
-(`docs/images.md`).
+In dev the studio is a device on loopback, **http://127.0.0.1:5223** — k7 at the root, no login; in
+production k7 runs on the devices (tray, phone, Mac). `k7.rocks` is a static site, built from this repository
+and served by GitHub Pages: a front page, and the documentation at `k7.rocks/docs` (`docs/site.md`).
 Nothing here terminates TLS. See [docs/dev.md](docs/dev.md).
 
 `npm run dev` runs the whole repository as one Tilt session — every app's frontend and
@@ -40,8 +39,7 @@ directory. See [docs/dev.md](docs/dev.md).
 
 `engine/k7-runtime` is a CMake/JUCE/Tracktion C++ project, `engine/k7-supervisor` a C++ program
 beside it — run from the command line as `k7-supervisor --config engine.json`, or carried by
-the tray, `apps/k7-tray`, through k7's backend. The tray is in no image —
-each `docker/Dockerfile` names the workspaces it installs rather than globbing. The moteur
+the tray, `apps/k7-tray`, through k7's backend. The moteur
 deliberately declares no `build` script at all, so `npm run build --workspaces --if-present` can
 never try to compile C++. They have their own commands:
 
@@ -53,10 +51,6 @@ npm run engine:build                         # engine + supervisor, staged into 
 `engine/k7-runtime/build` is large (~30 GB) and fully gitignored. It bakes absolute paths into
 its caches, so **moving or renaming the repo requires wiping it** — otherwise the build
 fails looking for the old path.
-
-## Images
-
-See [docs/images.md](docs/images.md) — the images CI builds and what each holds.
 
 ## License
 

@@ -4,7 +4,7 @@
 
 | Tool | Why |
 |---|---|
-| Node.js 24 (`engines` in `package.json`; CI and the image use the same version, `.nvmrc`) | Everything TypeScript. The backend relies on `node:sqlite`, which needs no flag on it. |
+| Node.js 24 (`engines` in `package.json`; CI uses the same version, `.nvmrc`) | Everything TypeScript. The backend relies on `node:sqlite`, which needs no flag on it. |
 | npm 10 | The workspace manager (`devEngines` in `package.json`). |
 | [Tilt](https://docs.tilt.dev/install.html) | Runs the dev session. `npm run dev` exits with a pointer to the install page if `tilt` is missing. |
 | CMake, Ninja and a C++ toolchain (AppleClang on macOS, MSVC on Windows) | Only for the `k7-tray` resource, which builds and runs the engine (and Rust, for the tray itself and the supervisor's audio decoder). |
@@ -90,8 +90,7 @@ its top-level folder (`apps` or `engine`). The resource is named after the packa
 | k7 backend | `8789` (`PORT`) | Also the production port. |
 | k7 frontend | `5223`, or `$STUDIO_WEB_PORT` | `strictPort`: a clash is a hard failure. Proxies `/api` and `/auth` to the backend, and upgrades WebSockets on `/api/engine` and `/api/sync`. The backend URL can be moved with `$STUDIO_BACKEND_URL`. |
 
-The frontend dev server answers the loopback page (`http://127.0.0.1:5223`) and the docs host `docs.priv.k7.rocks`
-(`scripts/dev-hosts.mjs`), and points HMR at its own port. `$STUDIO_WEB_PORT` moves that port.
+The frontend dev server answers the loopback page (`http://127.0.0.1:5223`) and points HMR at its own port. `$STUDIO_WEB_PORT` moves that port.
 `STUDIO_POLL=1` switches the file watcher to polling for trees where native file events do not arrive.
 
 ### The `k7-tray` resource

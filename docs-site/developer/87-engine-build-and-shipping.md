@@ -11,7 +11,7 @@ Both projects define the same preset names in their `CMakePresets.json`. Build o
 | `dev-gcc` | Linux | Default on Linux for development; RelWithDebInfo, because at `-O0` the DSP cannot keep up |
 | `dev-clang` | Linux | Clang alternative |
 | `asan` | Linux (engine only) | Debug with AddressSanitizer and UBSan |
-| `release-gcc` | Linux | Release; used by the release script and the server image |
+| `release-gcc` | Linux | Release; used by the release script |
 | `windows-msvc` | Windows | Visual Studio 2026 generator; `/MP` and `/FS` are set |
 | `windows-msvc-ninja` | Windows | Same compiler under Ninja, so CI's compiler cache works; embedded debug info |
 | `macos-clang` | macOS | Ninja + AppleClang |
@@ -29,7 +29,7 @@ Platform dependencies fetched at configure time: the Steinberg ASIO SDK on Windo
 | `engine/k7-runtime/scripts/run-tests.mjs` | Builds and runs the `studio_*` test targets in the platform's preset, under the same lock; skips an unconfigured tree |
 | `engine/scripts/supervisorBuild.mjs` | `buildSupervisor(repo)` (preset from `$STUDIO_SUPERVISOR_PRESET` or the platform), `findSupervisor(repo)` (newest build, Debug last) |
 | `engine/scripts/build-engine.mjs` | `npm run engine:build`: builds the engine (preset from `$STUDIO_ENGINE_PRESET` or the platform: `macos-clang`, `windows-msvc`, `release-gcc`) and the supervisor, then stages the command-line engine into `dist/k7-runtime/` with `stageEngine` and copies `engine.example.json` as `engine.json` |
-| `engine/scripts/package-release.mjs --kind engine\|tray [--stamp <s>]` | Into `dist/release/`: `engine` archives `dist/k7-runtime/` as `k7-runtime_<stamp>_<platform>-<arch>.tar.gz` (`.zip` on Windows, made with System32's bsdtar); `tray` renames the installers `tauri build` left under `apps/k7-tray/src-tauri/target` (K7 DAW's) to `k7-daw_<stamp>_<platform>-<arch>.<ext>` and writes the platform's fragment of the updater's `latest.json` (`engine/scripts/trayRelease.mjs`). The stamp comes from `--stamp`, `$STUDIO_RELEASE_STAMP`, or `dev`. |
+| `engine/scripts/package-release.mjs --kind engine\|tray [--stamp <s>]` | Into `dist/release/`: `engine` archives `dist/k7-runtime/` as `k7-runtime_<stamp>_<platform>-<arch>.tar.gz` (`.zip` on Windows, made with System32's bsdtar); `tray` renames the installers `tauri build` left under `apps/k7-tray/src-tauri/target` (K7 DAW's) to `k7-daw_<stamp>_<platform>-<arch>.<ext>` (`engine/scripts/trayRelease.mjs`). The stamp comes from `--stamp`, `$STUDIO_RELEASE_STAMP`, or `dev`. |
 | `engine/scripts/buildTools.mjs` | `distDir`, and `run` with the Windows shell quirk |
 | `engine/scripts/devEngine.mjs` | What the dev session stops before a relink: every running tray, supervisor and engine (a running image cannot be relinked on Windows) |
 | `scripts/dev-tray.mjs` | The dev session's tray task (the k7-tray workspace's `dev` script): build the engine, the supervisor, the backend bundle and the tray, run the tray on them, rebuild and restart on save |

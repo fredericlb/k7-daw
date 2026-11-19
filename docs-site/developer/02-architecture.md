@@ -87,7 +87,6 @@ Where engine machines run:
 | Command-line engine (`k7-supervisor --config <file>`) | `engine/k7-supervisor`, staged by `engine/scripts/build-engine.mjs` |
 | K7 DAW | `apps/k7-tray`: a Tauri app with a window and a tray icon that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`) and the file services, and the window (or the browser) shows k7 |
 | Android app | `engine/k7-android`: the engine as a library, the supervisor as a program, and k7's backend bundled |
-| Raspberry Pi engine | `engine/docker/Dockerfile.pi`: a container with the command-line engine, playing through the Pi's sound card |
 
 ## Data flow for one edit
 
@@ -105,4 +104,4 @@ details of these steps.
 ## What runs in production
 
 k7 runs on devices: the tray and the phone apps carry the backend, bundled, and run it locally (see
-[Releases and publishing](./09-releases-and-publishing.md)). The k7 image only serves `k7.rocks` and `docs.k7.rocks` (see [Images and deployment](./08-images-and-deployment.md)).
+[Releases and publishing](./09-releases-and-publishing.md)). `k7.rocks` is a static site (see [Versioning and the static site](./08-versioning-and-site.md)).

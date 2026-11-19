@@ -8,7 +8,7 @@ file where there is none, `plan.ts` decides, and `transcode.ts` runs ffmpeg.
 
 Unlike a shot's sound (`packages/audio-analysis/docs/analysis.md`), a video copy has no engine
 fallback: the engine decodes audio only. Without ffmpeg there is nothing to make, and the verb says
-so rather than guessing. The hosted image has ffmpeg (`docs/images.md`). A desktop needs it
+so rather than guessing. A desktop needs it
 installed. The phone has none (`engine/k7-runtime/docs/android.md`).
 
 ## Without ffmpeg, an mp4, a .mov, a WebM or an mkv is still read

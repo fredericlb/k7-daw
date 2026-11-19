@@ -21,7 +21,6 @@ a server has no GPU, so WebGL runs on SwiftShader (`--use-angle=swiftshader
 | `packages/song-video/src/sceneFrom.ts` | builds the scene, `use: "export"`, with the job's own media URLs |
 | `packages/ui-eyes/src/renderPage.ts` | the page Chromium loads: fetches the job, decodes the mixdown, calls `exportScene`, posts the result |
 | `packages/song-schema/src/renderSettings.ts` | the one parser of `size=`, `quality=`, `from=`, `to=`, shared with `project export video` |
-| `apps/k7/docker/Dockerfile` | installs Alpine's `chromium` with `font-noto` and `ttf-freefont`, sets `STUDIO_CHROMIUM` |
 
 ## The job
 
@@ -58,7 +57,7 @@ needs no account and no cookie. A stream error mid-file ends that response, neve
 
 The command answers immediately ("rendering the picture in the background …") and a second render
 while one runs is refused. The result is visible as the new file in `exports/`; progress appears in
-the file service's log. To use it outside the image, install Chromium (or Chrome) on the file
+the file service's log. Install Chromium (or Chrome) on the file
 service's machine or set `STUDIO_CHROMIUM`.
 
 The behaviour is pinned by `packages/commands/src/pictureRender.test.ts`, which checks the verb's

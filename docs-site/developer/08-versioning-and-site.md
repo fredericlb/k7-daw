@@ -1,61 +1,24 @@
-# Images, deployment and versioning
+# Versioning and the static site
 
-The server side of k7 ships as one Docker image built from this repository, run by
-`docker/docker-compose.yml` behind an external Traefik. k7 itself runs on devices, so the image only
-serves `k7.rocks` (the root site, the downloads page and the update feeds) and `docs.k7.rocks` (this
-documentation).
+k7 runs on devices, so this repository deploys no server. `k7.rocks` is a static site built from it and
+served by GitHub Pages: a front page, and this documentation under `k7.rocks/docs`.
 
-| Image | Dockerfile | Registry name |
-|---|---|---|
-| k7 web app: the backend and the built frontend | `apps/k7/docker/Dockerfile` | `dev.frediver.se/frediverse/k7/k7-webapp` |
+## The site
 
-It builds with the repository root as context:
+`.github/workflows/pages.yml` runs `node scripts/buildSite.mjs dist-site` and deploys the result with
+`actions/upload-pages-artifact` and `actions/deploy-pages`. The script builds the documentation as its own Vite
+bundle (`apps/k7/frontend/vite.docs.config.ts`, base `/docs/`), copies `site/` (the front page) beside it, writes an
+`index.html` for every documentation page, a `404.html`, a `CNAME` of `k7.rocks` and a `.nojekyll`.
 
-```bash
-docker build -f apps/k7/docker/Dockerfile --build-arg APP_VERSION=dev .
-```
-
-`.dockerignore` keeps `node_modules`, `dist`, `.git`, `.claude`, `env.yaml`, logs, Storybook output
-and the native build folders (`engine/k7-runtime/build`, `engine/k7-supervisor/build`) out of the
-build context.
-
-## The k7 web app image
-
-The stages:
-
-| Stage | Base | Does |
-|---|---|---|
-| `manifests` | `node:24-alpine` | Copies the repository and extracts only every `package.json`, `package-lock.json` and `.npmrc`, so the install layers depend on manifests alone. |
-| `toolchain` | `node:24-alpine` | Adds `python3`, `make`, `g++` (for `ssh2`'s optional native crypto binding) and the manifests. |
-| `deps` | `toolchain` | `npm ci` of the whole workspace, with an npm cache mount. |
-| `frontend-build` | `deps` | Copies the sources, sets `VITE_APP_VERSION` from the `APP_VERSION` build argument, runs `vite build` for `k7-frontend`. No typecheck here: CI typechecks separately. |
-| `runtime` | `alpine` | Adds `ffmpeg`, `tini` and chromium; copies the Rust front, the front's code root and the built frontend into `apps/k7/frontend/dist`. |
-
-Runtime settings:
-
-| Setting | Value |
+| Piece | Where |
 |---|---|
-| Command | `k7-front`, through `apps/k7/docker/start.sh` |
-| `PORT` | `8789` (exposed) |
-| Volumes | `/data` (`STUDIO_PREFS_DIR=/data/prefs`), `/library` (`STUDIO_MEDIATEK`), `/workspaces` |
+| the front page: the stores and the release page | `site/index.html` |
+| the documentation bundle | `apps/k7/frontend/docs-entry/`, `src/docs/` |
+| the pages, user and developer guides | `docs-site/` |
+| the assembly and the workflow | `scripts/buildSite.mjs`, `.github/workflows/pages.yml` |
 
-The runtime stage starts from a plain alpine image, runs no node and has no nginx: the front serves
-the SPA itself.
-
-## The compose file
-
-`docker/docker-compose.yml` runs two services on an external `traefik` network: `k7` and `autoheal`,
-which restarts `k7` when its healthcheck says unhealthy. Copy `docker/.env.example` to `docker/.env`,
-fill it in, and run `docker compose up -d`; later deploys go through `docker/deploy.sh <APP_VERSION>`.
-
-| Variable | Purpose |
-|---|---|
-| `SESSION_SECRET` | Required: compose refuses to start without it. At least 32 characters. |
-| `OIDC_ISSUER`, `OIDC_CLIENT_ID` | Required, though nobody signs in on this host: the front refuses to start without them. |
-| `APP_RELEASE_TOKEN` | The bearer a developer publishes the apps' builds with; empty refuses every upload. |
-| `DOCS_DOMAIN`, `SITE_DOMAIN`, `TRAEFIK_CERTRESOLVER` | The two Traefik routers: the documentation host, and the root domain with `www.`. |
-
-The `data` volume holds the published builds and the prefs.
+Mobile apps come from the stores, and desktop builds from the repository's GitHub release page: no app updates itself and
+no server publishes a build. `docs/site.md` has the steps that turn Pages on for the repository and point the domain at it.
 
 ## The version and the stamp
 
@@ -63,24 +26,13 @@ The release version is the root `package.json`'s `version` (for example `0.1.0`)
 private workspace's `package.json`; `npm run lint:version` (`scripts/check-version.mjs`) checks the
 copies and `node scripts/check-version.mjs --set X.Y.Z` writes them all. See `docs/versioning.md`.
 
-The image's stamp is computed as `YY.MMDDHHmm` in the Europe/Paris time
-zone, for example `26.10161432`. It is:
+A build may carry a stamp: `VITE_APP_VERSION` for the frontend build and `APP_VERSION` for the front.
+`apps/k7/frontend/src/version.ts` exports `VERSION` as `<version> (<stamp>)` (`"dev"` for the stamp when unset),
+and the home sidebar shows it as the tooltip of the `k7` wordmark (`apps/k7/frontend/src/projects/HomeSidebar.tsx`);
+`/api/health` answers `{ ok, version, build }`.
 
-- passed as `--build-arg APP_VERSION=<stamp>` to the image, which sets `VITE_APP_VERSION` for the
-  frontend build and `APP_VERSION` in the runtime stage. `apps/k7/frontend/src/version.ts` exports
-  `VERSION` as `<version> (<stamp>)` (`"dev"` for the stamp when unset), and the home sidebar shows
-  it as the tooltip of the `k7` wordmark (`apps/k7/frontend/src/projects/HomeSidebar.tsx`);
-  `/api/health` answers `{ ok, version, build }`;
-- a tag the `publish` job adds to every image.
-
-Images are first pushed under the commit hash only. The stamp and `:latest` are added once
-`k7.yml` has passed for that commit (and the publish fails if it never ran), so nothing deployable
-points at an untested commit. A `vX.Y.Z` tag must equal the root version; its run adds the stamp
-and `:X.Y.Z` and leaves `:latest` to `main`. A deploy sets `APP_VERSION` in `docker/.env` to a
-version, a stamp or a commit hash — compose refuses to start without it — and it applies to the image.
-
-The backend serves the frontend shell with `Cache-Control: no-cache` and the hashed files under
-`assets/` as `public, max-age=31536000, immutable`, so a new deployment is picked up on the next page
+The front serves the frontend shell with `Cache-Control: no-cache` and the hashed files under
+`assets/` as `public, max-age=31536000, immutable`, so a new build is picked up on the next page
 load. A request for a hashed asset that no longer exists returns 404 rather than the shell.
 
 Engine, tray and phone releases use a different stamp: see [Releases and publishing](./09-releases-and-publishing.md).

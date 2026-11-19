@@ -1,7 +1,7 @@
 # Plan: k7's backend in Rust
 
-The goal is ONE backend, in Rust, on every device: the tray, Android and iOS (the server image only serves downloads and documentation).
-No node runs on any device or in the image (no Termux node, no NodeMobile, no bundled `backend.mjs`): the
+The goal is ONE backend, in Rust, on every device: the tray, Android and iOS (no server hosts it).
+No node runs on any device (no Termux node, no NodeMobile, no bundled `backend.mjs`): the
 tray and the phones run the backend inside their own process. The frontend stays TypeScript.
 The TypeScript the backend runs in QuickJS (the compiler, the verbs, the file service's logic) is
 replaced later by Rust and WASM: `docs/rust-wasm-port-plan.md`, a feature request.
@@ -54,12 +54,12 @@ process of its own and already reaches the hub over a socket.
 | 3. the session and the leaves | `/auth/*` and the API tokens; the analysis, uploads, AI organize | the on-disk corpus read and written byte for byte; a token minted by either implementation accepted by the other's gate |
 | 4. the engine core, in one move | the registry, the relay and its gate, the tunnel hub; the file hub with its libraries, blob store and history log; the local engine and supervisor-host; the routes that hold them in memory — stems, engine slots, engine-local | phase 2's tests and `engine-tunnel`'s two-agent suite against both hubs; a TypeScript replica syncs against a Rust relay and the reverse; a security review |
 | 5. file service and compiler | file-service, the compiler, jsdsp, renders, `.dawproject` import, picture; `/api/ready`; the file hub, left by phase 4 — the survey, order and decisions are `docs/rust-phase5-plan.md` | golden ProjectDocs over `k7-core`, the demos and the e2e fixtures |
-| 6. cut-over (done) | the tray links the backend, Android and iOS load it, the image's backend is one binary; `apps/k7/backend`, node, Termux and `bundle.mjs` are gone | the functional suite on the web, the phone and the tray; one published version per switch before its TypeScript goes |
+| 6. cut-over (done) | the tray links the backend, Android and iOS load it, the backend is one binary; `apps/k7/backend`, node, Termux and `bundle.mjs` are gone | the functional suite on the web, the phone and the tray; one published version per switch before its TypeScript goes |
 
-The front is the backend in the dev session, the tray, the server image and every phone build
+The front is the backend in the dev session, the tray and every phone build
 (`apps/k7/backend-rs/docs/front.md`, `routes.md`). It owns the session (`/auth/local`, `/auth/logout`, `/auth/me`),
 the preferences, the engine registry and tunnel hub, the file hub and the file service, the libraries (frozen to the
-bundled seed), the AI settings, the app releases and the built page; the embed carries it on a phone
+bundled seed), the AI settings and the built page; the embed carries it on a phone
 (`apps/k7/backend-rs/docs/embed.md`).
 
 ## What it costs
