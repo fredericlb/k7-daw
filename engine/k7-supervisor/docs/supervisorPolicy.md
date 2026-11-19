@@ -90,7 +90,7 @@ Every URL, whichever tier it came from, is read as its family's **one registry, 
 `packages/web-protocol/services.ts` — `Url_test.cpp` replays that file's cases): `https://app.k7.rocks`,
 `https://docs.k7.rocks` and the former hosts `https://st0.app` and `https://play.st0.app` all mean
 `https://app.k7.rocks`, and any loopback URL means
-`http://localhost:8789` — or k7's port in `$STUDIO_PORTS` when a host moved it, as the tray
+`http://localhost:8789` — or k7's port in `$STUDIO_PORTS` when a host moved it, as the desktop app
 does (`packages/web-protocol/docs/addresses.md`). The registry is mounted by k7's backend
 (`apps/k7/backend-rs/docs/engine/shared.md`), so a supervisor that saved `https://play.st0.app` still
 heartbeats the right place. The answer is a **list**, one per studio this engine is connected to, deduped.
@@ -144,7 +144,7 @@ there is no other way to pin a registry: every add goes through this one.
 `weburi.pair <origin>␟<token>` is `weburi.add` with the device token the studio minted for the
 account this machine paired: asked the same way, then the token saved under the registry URL the
 heartbeat looks it up by, before the list, so the first heartbeat already carries it. The pages never
-send it, and the tray's backend no longer does (a server lists no device's engine and refuses such a heartbeat,
+send it, and the desktop app's backend no longer does (a server lists no device's engine and refuses such a heartbeat,
 `apps/k7/backend-rs/docs/engine/heartbeat.md`); the phone apps send it once a pairing is stored, through
 the command rather than the file, since a running supervisor saves its own settings over a file
 written behind it. `weburi.remove` forgets the studio's token with it.
@@ -182,7 +182,7 @@ server asks for it over the jobs channel (`readLog` in `MachineJobs.cpp`), since
 machine.
 
 Under an app a line is **not** echoed to stderr: stderr is what the app files under its own tag, in
-its own log (the merged log under `[host]` under the tray, logcat on the phone), and an echo would put every line
+its own log (the merged log under `[host]` under the desktop app, logcat on the phone), and an echo would put every line
 in two places. Run from a config file there is no app, and every line is echoed — stderr is then the
 only place a terminal sees it.
 

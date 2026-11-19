@@ -1,6 +1,6 @@
 # AGENTS.md — k7-supervisor
 
-The engine machine's supervisor, in C++, run two ways: spawned by an app (k7's backend under the tray, the phone)
+The engine machine's supervisor, in C++, run two ways: spawned by an app (k7's backend under the desktop app, the phone)
 and driven over NDJSON on stdio, or on its own as the command-line engine, `k7-supervisor --config
 <file>`. Either way it starts or adopts `k7-runtime`, keeps it listed at the studios it is connected
 to, holds the tunnel a server reaches the machine through, and runs the jobs the server hands it. Why
@@ -18,7 +18,7 @@ build/macos-clang/k7_supervisor_tests
 ```
 
 The first configure fetches mbedTLS, IXWebSocket, libdatachannel and ONNX Runtime; after that a
-build is seconds. `npm run dev` rebuilds it on save and restarts it, with the tray that runs it (`scripts/dev-tray.mjs`).
+build is seconds. `npm run dev` rebuilds it on save and restarts it, with the desktop app that runs it (`scripts/dev-desktop.mjs`).
 
 The unit tests need no device, no network and no engine. The tunnel is tested by
 `packages/engine-tunnel`'s suites, which pick up the built `tunnel_harness` and run every case

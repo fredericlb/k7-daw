@@ -154,7 +154,7 @@ announces its own. `engine/k7-runtime/scripts/track-delta.ts` exercises the thre
 
 ### The numbers are bounded where they arrive
 
-`docFromJson` is a trust boundary, not a formality: under the supervisor the engine binds `0.0.0.0`,
+`docFromJson` is a trust boundary, not a formality: with the LAN open the engine binds `0.0.0.0`,
 so a document can come from anything on the LAN. What Tracktion divides by or the builder loops over
 is bounded there, with a `warn()` when a value is replaced:
 

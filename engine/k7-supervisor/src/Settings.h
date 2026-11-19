@@ -31,8 +31,8 @@ struct Settings {
     std::optional<std::vector<std::string>> instruments;
     /** The device token each studio paired this machine with, by registry URL: what a studio that lists paired machines only asks. */
     std::map<std::string, std::string> deviceTokens;
-    /** A device on this machine's network drives the engine unpaired; off, it pairs first (engine/k7-runtime/docs/pairing.md). */
-    bool lanOpen = true;
+    /** The engine listens on every interface and a device on this network drives it unpaired; off, the engine is loopback only (engine/k7-runtime/docs/pairing.md). */
+    bool lanOpen = false;
     /** The studios held a token for were listed once; after that only a pairing or a removal changes the list. */
     bool pairingsListed = false;
     /** The chain this machine separates with, by `want` — its own, since it runs on this machine's CPU, GPU and models. */

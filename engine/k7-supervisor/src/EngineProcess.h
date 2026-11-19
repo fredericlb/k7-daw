@@ -43,8 +43,8 @@ std::vector<int> candidatePorts(int first, bool fixed);
 /** The origins of the studios this machine is listed at, comma-separated: the engine's `STUDIO_ENGINE_ALLOWED_ORIGINS`. */
 std::string allowedOrigins(const std::vector<std::string>& registryUrls);
 
-/** Bring an engine up on the first free candidate port — in safe mode when `safeModeCrashes` > 0 — or adopt ours, letting `origins` in; blocking, call it off the loop. */
-StartResult start(const EngineIdentity& identity, int firstPort, bool portFixed, const std::string& origins, int safeModeCrashes = 0);
+/** Bring an engine up on the first free candidate port — in safe mode when `safeModeCrashes` > 0, on every interface only when `lan` — or adopt ours, letting `origins` in; blocking, call it off the loop. */
+StartResult start(const EngineIdentity& identity, int firstPort, bool portFixed, const std::string& origins, int safeModeCrashes = 0, bool lan = false);
 
 /** Stop the engine the pidfile names, its whole process tree, and clear the pidfile. */
 void stop();

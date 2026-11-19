@@ -177,9 +177,10 @@ struct Supervisor::Impl {
         auto id = identity;
         const int port = settings.port;
         const bool fixed = settings.portFixed;
+        const bool lan = settings.lanOpen;
         // The studios it is listed at may open it from their pages; one added later counts from the next start.
         const std::string origins = engine::allowedOrigins(registryUrls);
-        loop.work<engine::StartResult>([id, port, fixed, origins, safeModeCrashes] { return engine::start(id, port, fixed, origins, safeModeCrashes); },
+        loop.work<engine::StartResult>([id, port, fixed, origins, safeModeCrashes, lan] { return engine::start(id, port, fixed, origins, safeModeCrashes, lan); },
                                        [this, done, safeModeCrashes](engine::StartResult r) {
                                            starting = false;
                                            // Every reader of the port follows it: the queries, the tunnels, the next heartbeat's presence.
