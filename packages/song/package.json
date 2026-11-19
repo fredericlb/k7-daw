@@ -73,7 +73,6 @@
     "@studio/web-protocol": "*",
     "yaml": "^2.5.0",
     "zod": "^4.4.3",
-    "@studio/dsp": "*",
     "@studio/k7-wasm": "*",
     "@studio/k7x": "*",
     "@studio/song-schema": "*",

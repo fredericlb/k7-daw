@@ -3,8 +3,8 @@
 // 4K source previewed as it is.
 
 import { describe, expect, it } from "vitest";
+import type { VideoFacts } from "./plan";
 import { ANDROID_PLAYABLE_CODECS, planVideo } from "./plan";
-import type { VideoFacts } from "./probe";
 
 const mp4 = "mov,mp4,m4a,3gp,3g2,mj2";
 const facts = (over: Partial<VideoFacts> = {}): VideoFacts => ({

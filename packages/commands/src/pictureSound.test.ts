@@ -2,7 +2,6 @@
 // wrong silently: a clip's existing `sound:` extracted over, a lane made beside the half (two
 // sounds), and a removed sound clip that takes its shot's picture with it.
 
-import { execFileSync } from "node:child_process";
 import {
   cpSync,
   existsSync,
@@ -21,7 +20,6 @@ import { beatsToPosition } from "@studio/song-schema/timecode";
 import { listVideoPlacements } from "@studio/song-schema/yaml/videoTrackFile";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
-import { nodeMediaMembers } from "./nodeMedia.ts";
 import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 
 beforeAll(compileReady);
@@ -40,17 +38,7 @@ const host = () =>
     log: (l: string[]) => logs.push(...l),
     refuse: (l: string[]) => refusals.push(...l),
     reload: () => {},
-    ...nodeMediaMembers(),
   }) as never;
-
-const hasFfmpeg = (() => {
-  try {
-    execFileSync("ffmpeg", ["-version"], { stdio: "ignore" });
-    return true;
-  } catch {
-    return false;
-  }
-})();
 
 beforeEach(() => {
   logs.length = 0;
@@ -189,34 +177,4 @@ describe("picture sound", () => {
     await runCommand("picture sound nope", host(), "cli");
     expect(refusals.join("\n")).toMatch(/no picture lane 'nope'/);
   });
-
-  it.skipIf(!hasFfmpeg)(
-    "extracts a video's sound beside it and names it on the clip",
-    async () => {
-      execFileSync("ffmpeg", [
-        "-v",
-        "error",
-        "-f",
-        "lavfi",
-        "-i",
-        "color=c=black:s=64x64:d=0.5",
-        "-f",
-        "lavfi",
-        "-i",
-        "sine=frequency=440:duration=0.5",
-        "-shortest",
-        join(song, "clips", "shot.mp4"),
-      ]);
-      writeDoc(join(song, "clips", "shot.k7x"), { source: "clips/shot.mp4" });
-      await runCommand("picture sound main", host(), "cli");
-      expect(refusals).toEqual([]);
-      expect(existsSync(join(song, "clips", "shot.sound.wav"))).toBe(true);
-      expect(
-        parse(readFileSync(join(song, "clips", "shot.k7x"), "utf8")).sound,
-      ).toBe("clips/shot.sound.wav");
-      expect(compileDisk(song).tracks.some((t) => t.id === "main#audio")).toBe(
-        true,
-      );
-    },
-  );
 });

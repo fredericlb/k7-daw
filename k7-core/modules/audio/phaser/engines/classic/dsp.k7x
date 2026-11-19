@@ -1,4 +1,4 @@
-// Phaser — the DSP as data, read by the song crate into the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Phaser — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 // Tracktion's phaser, stage for stage: its knobs are plain plugin state, so a curve could never move them.
 params({
   Depth: { min: 0, max: 10, default: 5 },

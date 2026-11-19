@@ -7,7 +7,6 @@ use k7_file_service::media::KEEP;
 use k7_file_service::media::models::{Fetch, FetchEvent, Job, Models, uuid_v4};
 use k7_file_service::media::names::model_cache_path;
 
-use crate::support::media::section;
 
 fn models() -> Models {
     let mut n = 0u8;
@@ -25,35 +24,6 @@ fn start(m: &mut Models, file: &str, url: &str, now: Instant) -> (Job, Option<Fe
         false,
         now,
     )
-}
-
-#[test]
-fn replays_every_refusal_and_every_model_already_there() {
-    let now = Instant::now();
-    let rows = section("downloads");
-    assert!(rows.len() >= 16);
-    for row in rows {
-        let (file, url) = (row["file"].as_str().unwrap(), row["url"].as_str().unwrap());
-        let dest = model_cache_path("/m", file);
-        let (job, fetch) = models().start(
-            file,
-            url,
-            dest.as_deref(),
-            row["exists"].as_bool().unwrap(),
-            now,
-        );
-        assert!(fetch.is_none(), "{file} {url}: nothing to fetch");
-        let want = &row["job"];
-        assert_eq!(job.file, want["file"].as_str().unwrap());
-        assert_eq!(job.url, want["url"].as_str().unwrap());
-        assert_eq!(
-            (job.received, job.total, job.done),
-            (0, None, true),
-            "{file} {url}"
-        );
-        assert_eq!(job.error.as_deref(), want["error"].as_str(), "{file} {url}");
-        assert!(row["idIsUuid"].as_bool().unwrap());
-    }
 }
 
 #[test]

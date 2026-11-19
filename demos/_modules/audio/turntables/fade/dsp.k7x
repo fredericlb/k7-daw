@@ -1,3 +1,3 @@
-// Fade — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Fade — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({ Level: { min: 0, max: 1, default: 1 } })
 graph([output(amul(input(0), "Level"))])

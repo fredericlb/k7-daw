@@ -1,4 +1,4 @@
-// Flanger — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Flanger — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({
   Rate: { min: 0.05, max: 10, default: 0.4 },
   Depth: { min: 0, max: 8, default: 3 },

@@ -23,7 +23,6 @@
       "!**/*.json",
       "!**/*.jsonc",
       "!engine/k7-runtime",
-      "!**/waveformWasm.generated.ts",
       "!**/k7WasmSong.generated.ts",
       "!**/hostProtocol.generated.ts"
     ]

@@ -8,7 +8,6 @@ pub mod engine;
 pub mod entries;
 pub mod jobs;
 pub mod journal;
-pub mod media;
 pub mod projects;
 pub mod ws;
 pub mod wscopy;

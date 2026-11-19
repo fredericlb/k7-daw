@@ -1,4 +1,4 @@
-// Parametric EQ — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Parametric EQ — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({
   "Low Freq": { min: 20, max: 1000, default: 100 },
   "Low Gain": { min: -18, max: 18, default: 0 },

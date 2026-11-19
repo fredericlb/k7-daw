@@ -6,17 +6,43 @@
 // field set to `undefined` takes the parameter default, so a "without this capability" test
 // exercises a host that has it. Both read as green.
 
-import { measureFilePeakDb } from "@studio/audio-passes/peakPass";
-import { findEngineBinary } from "@studio/engine-client/engineBinary";
 import type {
   AudioDeviceInfo,
   PluginInfo,
 } from "@studio/engine-client/engineClient";
 import type { ProjectDoc } from "@studio/song/project";
-import { localRenderer } from "@studio/take-render/renderer";
 import { wavSeconds } from "@studio/take-render/wavLength";
 import type { CommandHost } from "./commands.ts";
-import { nodeMediaMembers } from "./nodeMedia.ts";
+import type { VideoFacts } from "./hostTypes.ts";
+
+/** A playable 10 s clip, what the fake probe answers for any file. */
+const FACTS: VideoFacts = {
+  codec: "h264",
+  width: 1920,
+  height: 1080,
+  pixFmt: "yuv420p",
+  fps: 25,
+  seconds: 10,
+  container: "mov,mp4,m4a,3gp,3g2,mj2",
+};
+
+/** Media members that run no tool: the host is a made-up one, the tools are the Rust front's. */
+function fakeMedia(): Pick<
+  CommandHost,
+  "probe" | "extractSound" | "prepare" | "playlistStems"
+> {
+  return {
+    probe: async () => FACTS,
+    extractSound: async () => null,
+    prepare: async (ask) => ({
+      started: true,
+      line: `${ask.clip}: prepared (fake)`,
+    }),
+    playlistStems: async ({ songs }) => ({
+      songs: songs.map((song) => ({ song, state: "absent" as const })),
+    }),
+  };
+}
 
 /** What a test reads afterwards: both channels' lines, kept apart as the verb keeps them. */
 export interface HostLog {
@@ -29,7 +55,6 @@ export function testHost(
   over: Partial<CommandHost> = {},
 ): CommandHost & { lines: HostLog } {
   const lines: HostLog = { log: [], refuse: [] };
-  const bin = findEngineBinary();
   const host: CommandHost & { lines: HostLog } = {
     lines,
     songPath: "",
@@ -47,15 +72,11 @@ export function testHost(
     showNativePluginUI: () => {},
     getPlugins: async () => [] as PluginInfo[],
     getAudioDevices: async () => [] as AudioDeviceInfo[],
-    // The engine of this machine, as a server host supplies it; absent with no binary.
-    render: bin ? localRenderer(bin) : undefined,
-    peak: bin ? (file) => measureFilePeakDb(bin, file) : undefined,
+    // No engine renders or measures here: a test that wants one passes its own.
+    render: undefined,
+    peak: undefined,
     seconds: wavSeconds,
-    // The media members of this machine, reading the host's own background and cold step as it ends up.
-    ...nodeMediaMembers({
-      background: () => host.background,
-      runColdStep: () => host.runColdStep,
-    }),
+    ...fakeMedia(),
     ...over,
   };
   return host;

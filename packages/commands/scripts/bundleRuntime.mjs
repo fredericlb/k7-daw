@@ -22,18 +22,9 @@ const SERVER_ONLY = [
   "shims/childProcess.ts",
   "engine-client/src/engineBinary",
   "engine-client/src/engineClient",
-  "audio-passes/src/peakPass.ts",
   "take-render/src/renderer.ts",
   "take-render/src/wavLength.ts",
-  "video-prep/src/probe.ts",
-  "video-prep/src/transcode.ts",
-  "audio-analysis/src/extract",
-  "audio-analysis/src/pool",
-  "k7-plugins/src/transcription/transcribe.ts",
-  "ffmpeg/src/",
-  "take-render/src/render.ts",
   "engine-tunnel/",
-  "audio-analysis/src/decode",
 ];
 
 /** The server-only modules a build's metafile still holds, by the path that names them (relative to the cwd, so only the package part is matched). */

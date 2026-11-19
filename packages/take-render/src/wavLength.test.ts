@@ -1,8 +1,8 @@
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { floatFormat, wavHeader } from "@studio/audio-analysis/wav";
 import { afterAll, describe, expect, it } from "vitest";
+import { floatFormat, wavHeader } from "./wav";
 import { wavSeconds } from "./wavLength";
 
 const dir = mkdtempSync(join(tmpdir(), "k7-wavlength-"));

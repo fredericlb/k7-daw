@@ -28,8 +28,6 @@ pub mod testkit;
 #[cfg(test)]
 mod tests_flow;
 #[cfg(test)]
-mod tests_frames;
-#[cfg(test)]
 mod tests_hostile;
 #[cfg(test)]
 mod tests_jobs_wired;
@@ -45,12 +43,6 @@ pub(crate) mod tests_real;
 mod tests_review;
 #[cfg(test)]
 mod tests_routes;
-#[cfg(test)]
-mod tests_scenarios;
-#[cfg(test)]
-mod tests_scenarios_jobs;
-#[cfg(test)]
-mod tests_scene;
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex, MutexGuard, Weak};

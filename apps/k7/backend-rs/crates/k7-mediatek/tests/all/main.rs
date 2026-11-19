@@ -3,8 +3,5 @@
 
 mod engine_watchdog;
 mod sidecar_atomic;
-mod transcode;
-mod video_copy;
 mod video_probe;
 mod video_read;
-mod whisper;

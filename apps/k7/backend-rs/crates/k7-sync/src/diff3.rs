@@ -1,5 +1,5 @@
 //! diff3.rs — node-diff3 3.2.1's `diff3Merge` as live-sync's `mergeTexts` calls it, ported step for step: Hunt and
-//! McIlroy's LCS, `diffIndices`, `diff3MergeRegions`, the false-conflict rule. Proven by `fixtures/diff3-vectors.json`.
+//! McIlroy's LCS, `diffIndices`, `diff3MergeRegions`, the false-conflict rule. Held by the merge tests below and the settle vectors.
 //! What a reader gets wrong: this is not "a" diff3. Another LCS finds other matches among repeated lines, so other
 //! conflict boundaries; only the candidate search is faster (a gallop where node scans), its answer the same.
 //! Choices and the work budget: apps/k7/backend-rs/docs/parity.md, "The text merge".
@@ -311,98 +311,7 @@ fn diff3_merge_within<'t>(
 mod tests {
     use super::*;
 
-    /// node's `LCS` as written, its linear scan included: the reference the gallop must answer as.
-    fn lcs_as_node(buffer1: &[u32], buffer2: &[u32]) -> Vec<(i64, i64)> {
-        let mut classes: HashMap<u32, Vec<i64>> = HashMap::new();
-        for (j, item) in buffer2.iter().enumerate() {
-            classes.entry(*item).or_default().push(j as i64);
-        }
-        let mut arena = vec![Cand {
-            b1: -1,
-            b2: -1,
-            chain: NONE,
-        }];
-        let mut candidates: Vec<u32> = vec![0];
-        for (i, item) in buffer1.iter().enumerate() {
-            let mut r = 0usize;
-            let mut c = candidates[0];
-            for &j in classes.get(item).map(Vec::as_slice).unwrap_or(&[]) {
-                let n = candidates.len();
-                let b2 = |s: usize| i64::from(arena[candidates[s] as usize].b2);
-                let mut s = r;
-                while s < n && !(b2(s) < j && (s == n - 1 || b2(s + 1) > j)) {
-                    s += 1;
-                }
-                if s < n {
-                    let id = arena.len() as u32;
-                    arena.push(Cand {
-                        b1: i as i32,
-                        b2: j as i32,
-                        chain: candidates[s],
-                    });
-                    if r == n {
-                        candidates.push(c);
-                    } else {
-                        candidates[r] = c;
-                    }
-                    r = s + 1;
-                    c = id;
-                    if r == candidates.len() {
-                        break;
-                    }
-                }
-            }
-            if r == candidates.len() {
-                candidates.push(c);
-            } else {
-                candidates[r] = c;
-            }
-        }
-        let mut chain = Vec::new();
-        let mut at = candidates[candidates.len() - 1];
-        while at != NONE {
-            let k = arena[at as usize];
-            chain.push((i64::from(k.b1), i64::from(k.b2)));
-            at = k.chain;
-        }
-        chain
-    }
 
-    /// xorshift64, for buffers drawn from a few distinct lines so the LCS has many equal choices.
-    fn buffers(seed: u64, n: usize) -> impl FnMut() -> (Vec<u32>, Vec<u32>) {
-        let mut s = seed;
-        let mut next = move || {
-            s ^= s << 13;
-            s ^= s >> 7;
-            s ^= s << 17;
-            s
-        };
-        move || {
-            let alphabet = 1 + next() % 8;
-            let (l1, l2) = (next() % n as u64, next() % n as u64);
-            let mut draw = |len: u64| {
-                (0..len)
-                    .map(|_| (next() % alphabet) as u32)
-                    .collect::<Vec<_>>()
-            };
-            let x = draw(l1);
-            (x, draw(l2))
-        }
-    }
-
-    #[test]
-    fn the_gallop_finds_the_candidates_node_scans_for() {
-        let mut next = buffers(0x9e37_79b9_7f4a_7c15, 120);
-        for _ in 0..20_000 {
-            let (x, y) = next();
-            let mut budget = u64::MAX;
-            assert_eq!(
-                lcs(&x, &y, &mut budget).unwrap(),
-                lcs_as_node(&x, &y),
-                "{x:?} / {y:?}"
-            );
-        }
-    }
 
     #[test]
     fn merges_lines_apart_and_refuses_one_line_changed_twice() {

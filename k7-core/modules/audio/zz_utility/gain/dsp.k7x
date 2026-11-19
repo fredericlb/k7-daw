@@ -1,3 +1,3 @@
-// Gain — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Gain — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({ Gain: { min: -60, max: 6, default: 0 } })
 graph([output(amul(input(0), fromdb("Gain")))])

@@ -28,5 +28,6 @@ engine/scripts/ci/*.cmd text eol=crlf
 # Built from sources, never merged by hand: a conflict keeps one side, then `npm run rebuild:generated` (docs/agents.md).
 packages/k7-wasm/src/k7Wasm.generated.ts merge=rebuilt
 packages/k7-wasm/src/k7WasmSong.generated.ts merge=rebuilt
-packages/audio-analysis/src/waveformWasm.generated.ts merge=rebuilt
+packages/audio-analysis/waveform.wasm merge=rebuilt
+packages/audio-analysis/waveform.wasm.sources merge=rebuilt
 packages/song/rust/src/modules/types_generated.rs merge=rebuilt

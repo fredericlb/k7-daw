@@ -17,7 +17,7 @@ export type {
   RenderManifest,
   RenderOptions,
 } from "@studio/take-render/renderTypes";
-export type { VideoFacts } from "@studio/video-prep/probe";
+export type { VideoFacts } from "@studio/video-prep/plan";
 
 /** What the sound extract found: the frames written, at which rate, over how many channels. */
 export interface SoundFacts {

@@ -13,7 +13,6 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
-import { nodeMediaMembers } from "./nodeMedia.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const DEMO = join(here, "..", "..", "..", "demos", "video-demo.k7");
@@ -29,7 +28,6 @@ const host = (extra: Record<string, unknown> = {}) =>
     log: (l: string[]) => logs.push(...l),
     refuse: (l: string[]) => refusals.push(...l),
     reload: () => {},
-    ...nodeMediaMembers(),
     ...extra,
   }) as never;
 

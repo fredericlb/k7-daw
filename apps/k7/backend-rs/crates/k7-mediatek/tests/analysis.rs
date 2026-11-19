@@ -3,7 +3,6 @@
 //! `Math.exp`/`Math.log2` replayed over the same draws. The ignored test takes a real library's copies (`K7_ANALYSIS_VECTORS`).
 
 use std::path::{Path, PathBuf};
-use std::time::Instant;
 
 use k7_js::math::{exp, log2};
 use k7_mediatek::analyse::analyse_file;
@@ -247,41 +246,3 @@ fn writes_the_sidecar_node_writes() {
     let _ = std::fs::remove_dir_all(&dir);
 }
 
-#[test]
-#[ignore = "takes K7_ANALYSIS_VECTORS, a real library's audio from makeAnalysisVectors.ts <out> <folder>"]
-fn writes_the_sidecar_node_writes_for_a_real_library() {
-    no_ffprobe();
-    let file = std::env::var("K7_ANALYSIS_VECTORS").expect("K7_ANALYSIS_VECTORS");
-    let v: Value = serde_json::from_str(&std::fs::read_to_string(file).unwrap()).unwrap();
-    let root = PathBuf::from(v["root"].as_str().unwrap());
-    let dir = scratch("corpus");
-    let waveform = Waveform::new(Some(&std::env::temp_dir().join("k7-stream-cache"))).unwrap();
-    let (mut node_ms, mut rust_ms, mut differ) = (0.0, 0.0, Vec::new());
-    let files = v["files"].as_array().unwrap();
-    for f in files {
-        let name = f["name"].as_str().unwrap();
-        let copy = dir.join(f["copy"].as_str().unwrap());
-        std::fs::copy(root.join(name), &copy).unwrap();
-        let t = Instant::now();
-        let got = analysed(&waveform, &copy);
-        rust_ms += t.elapsed().as_secs_f64() * 1000.0;
-        node_ms += f["ms"].as_f64().unwrap_or(0.0);
-        let ok = ["sidecar", "envelope", "error"]
-            .iter()
-            .all(|k| got[k] == f[*k]);
-        if !ok {
-            differ.push(format!("{name}: {got} against {f}"));
-        }
-        let _ = std::fs::remove_file(&copy);
-        let _ = std::fs::remove_file(cache_path(&copy));
-    }
-    println!(
-        "{} files, {} differ; node {:.0} ms, Rust {:.0} ms",
-        files.len(),
-        differ.len(),
-        node_ms,
-        rust_ms
-    );
-    let _ = std::fs::remove_dir_all(&dir);
-    assert!(differ.is_empty(), "{}", differ.join("\n"));
-}

@@ -1,13 +1,11 @@
 // isNoFfmpeg: a verb catches a missing tool by NAME, since the server's class and the Worker's share nothing else.
 
-import { NoFfmpegError as ServerError } from "@studio/video-prep/probe";
 import { describe, expect, it } from "vitest";
 import { isNoFfmpeg, NoFfmpegError } from "./hostTypes.ts";
 
 describe("isNoFfmpeg", () => {
-  it("knows this package's error, the server's, and an error rebuilt by name", () => {
+  it("knows this package's error and an error rebuilt by name", () => {
     expect(isNoFfmpeg(new NoFfmpegError("ffprobe"))).toBe(true);
-    expect(isNoFfmpeg(new ServerError("ffprobe", "needed"))).toBe(true);
     // A host maps its 503 code to a fresh Error named so, which is all a cloned error keeps.
     const rebuilt = new Error("x");
     rebuilt.name = "NoFfmpegError";

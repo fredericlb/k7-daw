@@ -1,5 +1,4 @@
-// Auto Wah — the DSP as data, read by the song crate into the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
-// The reasons behind each stage are jsdsp.ts's comments; this file is the same graph, node for node.
+// Auto Wah — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({
   Low: { min: 60, max: 8000, default: 200 },
   High: { min: 60, max: 8000, default: 2400 },

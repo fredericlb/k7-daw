@@ -1,4 +1,4 @@
 name("k7-core")
-version(6)
+version(7)
 requires(2)
-notes("The 21 DSP modules are written as data, a dsp.k7x each, decoded by the compiler instead of built from a jsdsp.ts; needs level 2.")
+notes("The 21 DSP modules are written as data, a dsp.k7x each, decoded by the compiler; needs level 2.")

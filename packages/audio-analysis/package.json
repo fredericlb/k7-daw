@@ -2,33 +2,8 @@
   "name": "@studio/audio-analysis",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
-  "description": "Measuring and re-encoding an audio FILE: decode it (the engine's `--decode` where there is one, WebAssembly otherwise, ffmpeg for a format WebAssembly cannot open), build the `{file}.cache` sidecar — peak/RMS/three-band envelope, onsets, tempo — read its true peak, and write it again as Opus/WebM, FLAC or WAV on a worker pool. The only producer of the sidecar. Node-only, unlike @studio/audio-probe, which only MEASURES already-decoded audio. Consumed as source.",
-  "exports": {
-    "./peak": "./src/peak.ts",
-    "./extract": "./src/extract.ts",
-    "./wav": "./src/wav.ts",
-    "./pool": "./src/pool.ts",
-    "./transcode": "./src/transcode.ts"
-  },
+  "description": "The Rust audio measure, decoders and encoders (rust/), built to WebAssembly for the Rust front to embed (waveform.wasm). No TypeScript.",
   "scripts": {
-    "build": "tsc --noEmit",
-    "dev": "tsc --noEmit --watch --preserveWatchOutput",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "build:wasm": "node scripts/buildWasm.mjs",
-    "bench:measure": "tsx bench/measure.ts"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "@studio/audio-probe": "*",
-    "@studio/ffmpeg": "*"
-  },
-  "devDependencies": {
-    "@types/node": "^22.10.0",
-    "typescript": "^7.0.2",
-    "vitest": "^4.1.10"
+    "build:wasm": "node scripts/buildWasm.mjs"
   }
 }

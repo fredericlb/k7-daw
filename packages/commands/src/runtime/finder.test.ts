@@ -25,7 +25,7 @@ describe("the Worker's server-only modules", () => {
     expect(left).toEqual([]);
   });
 
-  // song's chainProject and autoFreeze hash with node:crypto, which the Worker never calls.
+  // song's chainProject hashes with node:crypto, which the Worker never calls.
   it("leaves external only the song package's own `node:crypto`", () => {
     expect(leftover).toEqual(["node:crypto"]);
   });
@@ -33,15 +33,15 @@ describe("the Worker's server-only modules", () => {
   it("names a server module by its package, whatever folder the build ran from", () => {
     const metafile = {
       inputs: {
-        "../ffmpeg/src/ffmpeg.ts": {},
+        "../engine-client/src/engineBinary.ts": {},
         "../audio-passes/src/resolveChain.ts": {},
-        "../take-render/src/render.ts": {},
+        "../take-render/src/renderer.ts": {},
         "src/runtime/shims/childProcess.ts": {},
       },
     };
     expect(serverInputs(metafile)).toEqual([
-      "../ffmpeg/src/ffmpeg.ts",
-      "../take-render/src/render.ts",
+      "../engine-client/src/engineBinary.ts",
+      "../take-render/src/renderer.ts",
       "src/runtime/shims/childProcess.ts",
     ]);
   });

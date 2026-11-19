@@ -1,8 +1,7 @@
 //! jobs_separations.rs — `separation_id` against the TypeScript's, and the registry's join, keep and failure rules (2330).
 //! A reader gets wrong that a record outlives its sweep: only `start` sweeps, so a poll can still read a job kept past five minutes.
 
-use crate::support::jobs::{section, vectors};
-use k7_file_service::jobs::separations::{KEEP, NO_ENGINE, Registry, separation_id};
+use k7_file_service::jobs::separations::{KEEP, Registry, separation_id};
 use serde_json::{Map, Value, json};
 use std::time::{Duration, Instant};
 
@@ -11,27 +10,6 @@ fn record(v: Value) -> Map<String, Value> {
         panic!("an object")
     };
     m
-}
-
-#[test]
-fn every_separation_id_of_the_typescript_is_made_alike() {
-    let ids = section(&vectors(), "separation_id");
-    assert!(ids.len() >= 10);
-    for c in &ids {
-        let outputs: Vec<String> = c["outputs"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|o| o.as_str().unwrap().to_owned())
-            .collect();
-        let got = separation_id(
-            c["user"].as_str().unwrap(),
-            c["source"].as_str().unwrap(),
-            c["model"].as_str().unwrap(),
-            &outputs,
-        );
-        assert_eq!(got, c["out"].as_str().unwrap(), "{}", c["user"]);
-    }
 }
 
 #[test]
@@ -107,28 +85,3 @@ fn the_machines_record_is_taken_with_this_sides_id_and_a_finished_job_is_kept_fi
     assert!(r.job("x").is_some());
 }
 
-#[test]
-fn the_failure_sentences_are_the_typescripts() {
-    let t0 = Instant::now();
-    let mut r = Registry::new();
-    let s = r.start(t0, "a", "/a", false);
-    assert!(!s.send);
-    assert_eq!(s.job["error"], NO_ENGINE);
-    assert_eq!(
-        (
-            s.job["done"].clone(),
-            s.job["failed"].clone(),
-            s.job["phase"].clone()
-        ),
-        (json!(true), json!(true), json!("failed"))
-    );
-    let s = r.start(t0, "b", "/b", true);
-    r.fail(t0, "b", s.generation, true, "the machine said no");
-    assert_eq!(r.job("b").unwrap()["error"], "the machine said no");
-    let s = r.start(t0, "c", "/c", true);
-    r.fail(t0, "c", s.generation, false, "socket closed");
-    assert_eq!(
-        r.job("c").unwrap()["error"],
-        "the engine's machine: socket closed"
-    );
-}

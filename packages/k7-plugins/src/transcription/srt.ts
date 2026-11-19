@@ -1,5 +1,5 @@
 // srt.ts — the transcript as SRT text: a segment list written out and read back, in the SOURCE video's own seconds.
-// Pure, so the verb counts cues in the browser's Worker while whisper itself runs on a server (transcribe.ts).
+// Pure, so the verb counts cues in the browser's Worker while whisper itself runs on the Rust front's verb host.
 
 /** One spoken segment, in the SOURCE video's own seconds. */
 export interface TranscriptSegment {

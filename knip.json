@@ -29,9 +29,8 @@
       "entry": [
         "scripts/*.mjs",
         "scripts/**/*.mjs",
-        "demos/**/jsdsp.ts",
         "demos/_modules/**/widgets.js",
-        "k7-core/modules/**/{jsdsp.ts,widgets.js}",
+        "k7-core/modules/**/widgets.js",
         "apps/k7/backend-rs/scripts/*.mjs",
         "engine/k7-android/app/src/main/assets/*.js"
       ]
@@ -49,7 +48,7 @@
       "entry": [
         "specs/*.setup.ts",
         "scripts/*.ts",
-        "fixtures/_modules/**/{jsdsp.ts,widgets.js}"
+        "fixtures/_modules/**/widgets.js"
       ],
       "ignoreUnresolved": ["./gradlew"]
     },

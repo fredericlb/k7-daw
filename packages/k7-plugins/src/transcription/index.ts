@@ -1,7 +1,7 @@
 // index.ts — the transcription plugin: `track transcribe <track_in> <track_out>` — whisper
 // listens to the video a picture lane places, and the transcript lands as subtitles placed on
 // the picture lane <track_out>. The verb hosts in the CORE `track` family (its attribution is the installer's);
-// everything the verb needs travelled with it (transcribe.ts, transcribeTrack.ts).
+// everything the verb needs travelled with it (transcribeTrack.ts).
 
 import { definePlugin, type K7Plugin } from "@studio/k7-sdk/plugin";
 import { transcribeTrack } from "./transcribeTrack";

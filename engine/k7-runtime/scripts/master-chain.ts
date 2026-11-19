@@ -7,9 +7,9 @@
 //   npx tsx engine/k7-runtime/scripts/master-chain.ts
 // See packages/song/docs/masterChain.md and docs/masterVolume.md.
 
-import { measureFilePeak } from "../../../packages/audio-analysis/src/peak.ts";
 import { findEngineBinary } from "../../../packages/engine-client/src/engineBinary.ts";
 import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { peakOf } from "./wav.ts";
 
 /** Two seconds of a 4OSC note — loud, and identical in both renders. */
 const base = {
@@ -43,9 +43,9 @@ const base = {
   ],
 };
 
-/** The file's true peak in dBFS, decoded by the engine and measured by @studio/audio-analysis. */
-async function peakDb(bin: string, file: string): Promise<number> {
-  return (await measureFilePeak(file, { engineBin: bin })).peakDb;
+/** The file's true peak in dBFS, read from the render's wav. */
+async function peakDb(_bin: string, file: string): Promise<number> {
+  return peakOf(file);
 }
 
 async function main() {

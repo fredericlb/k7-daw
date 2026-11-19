@@ -28,7 +28,7 @@ fn a_node_says_what_it_extends_and_which_params_it_sets_itself() {
         libraries: s.path("libraries"),
     };
     let (root, project) = (s.path("ws"), s.path("ws/song"));
-    let code = crate::reads_golden::code();
+    let code = format!("{}/../../../../..", env!("CARGO_MANIFEST_DIR"));
     let r = Reading {
         home: &home,
         code_root: &code,

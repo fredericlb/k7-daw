@@ -1,4 +1,4 @@
-// Chorus (classic) — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Chorus (classic) — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({
   Depth: { min: 0, max: 20, default: 3 },
   Speed: { min: 0, max: 10, default: 1 },

@@ -19,10 +19,6 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {
-    "@studio/ffmpeg": "*",
-    "mediabunny": "^1.50.8"
-  },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "typescript": "^7.0.2",
