@@ -17,11 +17,10 @@ ours starts goes through it: the dev session's `k7-front` and tray (`dev-front.m
 | never required: no sccache, one log line, an uncached build | a machine without it must still build; a `RUSTC_WRAPPER` naming a missing program fails every cargo command |
 | set by the scripts, not by a repo-wide `.cargo/config.toml` | a `rustc-wrapper` there would break every machine without sccache |
 | a `RUSTC_WRAPPER` already in the environment wins, `RUSTC_WRAPPER=` turns the cache off | a developer's own setting is not replaced by the dev default |
-| one server per use, each on its own port: the dev session on sccache's default (4226, its default folder), the lasting trees on 4227 (`~/k7-trees/sccache`), the Rust checks on 4228 (`sccache-rust` beside it) | a server keeps the folder and the size it was started with: one shared server would take whichever settings started it, and a job ending could cut a dev build |
-| outside Windows each account's ports moved by `100 × (uid % 100)` (`userPort` in `engine/scripts/sccache.mjs`), a `SCCACHE_SERVER_PORT` already set kept | a server writes its outputs as the user who started it: one account's builds through another's server fail on `Permission denied` |
-| 10 GB for the dev cache, 15 GB for the lasting trees (C++ and Rust), 5 GB for the checks: 30 GB on a machine | the disk is shared with the engine's build folders |
+| one server on sccache's default port (4226) and folder, for the dev session and the agents | a server keeps the folder and the size it was started with, so every use asks for the same |
+| outside Windows the port moved by `100 × (uid % 100)` (`userPort` in `engine/scripts/sccache.mjs`), a `SCCACHE_SERVER_PORT` already set kept | a server writes its outputs as the user who started it: one account's builds through another's server fail on `Permission denied` |
+| 10 GB for the cache | the disk is shared with the engine's build folders |
 | a target folder named with `--target-dir`, never `CARGO_TARGET_DIR` | sccache puts every `CARGO_*` variable in its key: a per-branch `CARGO_TARGET_DIR` would make each branch miss what the others compiled |
-| the lasting trees' server left running, to its idle timeout | the engine and the APK builds share it; a stop at the end of one would cut the other |
 
 What sccache does not cache: a workspace crate built incrementally (every workspace member in a
 debug build), a `bin`, `cdylib` or `proc-macro` crate, and a compile whose paths changed. What it

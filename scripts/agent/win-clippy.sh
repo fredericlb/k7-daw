@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# win-clippy.sh — clippy for x86_64-pc-windows-gnu on a Mac or Linux, before a ci/ push: what only Windows compiles (a cfg-gated import, a Windows-only API) fails here in a minute.
+# win-clippy.sh — clippy for x86_64-pc-windows-gnu on a Mac or Linux, before a merge: what only Windows compiles (a cfg-gated import, a Windows-only API) fails here in a minute.
 # `--narrow` checks the backend crates touched since K7_CRATES_BASE and their dependents, and the browser crates only when the branch touched them.
 # The K7 DAW crate (apps/k7-tray/src-tauri) is checked too, whole, or when the branch touched it under `--narrow`; `--tray` checks it alone.
 # It checks and never links or runs: a test that fails only on Windows needs a Windows machine (docs/rust-builds.md).

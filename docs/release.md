@@ -26,7 +26,7 @@ that branch only while it counts against the same 10 GB and pushes main's out.
 (`node_modules`) are saved under a new hash whenever their inputs move; nothing reads an older
 generation again, and left alone it stays until eviction, which takes the least recently used entry,
 often one still needed. `caches.yml` keeps the newest entry per ref and family — the key without its
-trailing timestamp or hash — and deletes the rest. `gh cache list --sort size_in_bytes` shows what the
+trailing hash — and deletes the rest. `gh cache list --sort size_in_bytes` shows what the
 10 GB holds.
 
 `k7-core` is a plain folder of the

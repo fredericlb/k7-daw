@@ -1,5 +1,5 @@
-// sccache.mjs — finds sccache and gives the environment that sends a build's rustc (and, for a CI tree, its
-// C++ compiler) through it. Never required: a machine without sccache builds uncached and says so once.
+// sccache.mjs — finds sccache and gives the environment that sends a build's rustc through it.
+// Never required: a machine without sccache builds uncached and says so once.
 // The trap: a server keeps the folder and size it was started with, so each use has its own port (docs/rust-builds.md).
 // `node engine/scripts/sccache.mjs <use>` prints the variables as KEY=VALUE lines, for the .cmd steps and the sh loops that read lines.
 // `--export` prints `export KEY='VALUE'` instead, for `eval`: a bare KEY=VALUE through eval sets shell variables cargo never sees.
@@ -12,13 +12,7 @@ import { fileURLToPath } from "node:url";
 
 const windows = process.platform === "win32";
 
-/** The folder for the lasting trees and caches; outside Windows not ~/k7-ci, which the macOS checks prune. */
-export const ciRoot = () =>
-  windows
-    ? join(process.env.LOCALAPPDATA ?? homedir(), "k7-ci")
-    : join(homedir(), "k7-trees");
-
-// dir under ciRoot(), or none for sccache's own default; the sizes add up to the 30 GB docs/rust-builds.md gives it.
+// Each use keeps sccache's own folder and default port; the size is the one docs/rust-builds.md gives it.
 const USES = {
   dev: { size: "10G" },
   // An agent's builds: dev's cache, a fixed share of the cores, and no debugger's debug info (docs/rust-builds.md).
@@ -30,8 +24,6 @@ const USES = {
       CARGO_PROFILE_DEV_DEBUG: "line-tables-only",
     },
   },
-  tree: { dir: "sccache", size: "15G", port: "4227" },
-  checks: { dir: "sccache-rust", size: "5G", port: "4228" },
 };
 
 /** sccache's path: the PATH, then WinGet's package folder, then Homebrew's and cargo's bins. */
@@ -75,20 +67,19 @@ export function sccacheEnv(use, { log = console.log, env = process.env } = {}) {
     log("sccache: not on this machine, compiling uncached");
     return { ...extra };
   }
-  const port = env.SCCACHE_SERVER_PORT ?? userPort(spec.port);
+  const port = env.SCCACHE_SERVER_PORT ?? userPort();
   return {
     ...extra,
     RUSTC_WRAPPER: exe,
     SCCACHE_CACHE_SIZE: spec.size,
-    ...(spec.dir && { SCCACHE_DIR: join(ciRoot(), spec.dir) }),
     ...(port && { SCCACHE_SERVER_PORT: port }),
   };
 }
 
-/** A use's port moved by the account's uid outside Windows: a server runs as the user who started it, and writes as that user. */
-export function userPort(base, uid = windows ? undefined : process.getuid?.()) {
-  if (uid === undefined) return base;
-  return String(Number(base ?? "4226") + 100 * (uid % 100));
+/** sccache's default port, moved by the account's uid outside Windows: a server runs as the user who started it, and writes as that user. */
+export function userPort(uid = windows ? undefined : process.getuid?.()) {
+  if (uid === undefined) return undefined;
+  return String(4226 + 100 * (uid % 100));
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

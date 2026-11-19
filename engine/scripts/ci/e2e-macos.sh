@@ -25,19 +25,17 @@ lock() {
 }
 unlock() { [ "$(cat "$1/pid" 2> /dev/null)" = $$ ] && rm -rf "$1"; return 0; }
 ports_of() { local o=$(( ($1 - 1) * 100 )); echo $((28789 + o)) $((28790 + o)) $((25223 + o)) $((28765 + o)); }
-# A slot is free when its ports are silent and its lock is not held by a living run; slot 1 also by the old hand-taken lock.
+# A slot is free when its ports are silent; its lock, taken after, says a living run holds it.
 free_slot() {
   # shellcheck disable=SC2046 # the four ports are words
-  listening $(ports_of "$1") && return 1
-  [ "$1" != 1 ] || [ ! -d "$HOME/k7-trees/e2e-macos-bed.lock" ] || return 1
-  return 0
+  ! listening $(ports_of "$1")
 }
 slots=()
 deps_lock="$STUDIO_FETCHCONTENT_DIR/.e2e-engine-build.lock"
 release_slots() { local n; for n in ${slots[@]+"${slots[@]}"}; do unlock "$HOME/k7-trees/e2e-macos-slot-$n.lock"; done; }
 trap 'unlock "$deps_lock"; release_slots' EXIT
 # `both` takes slots 1 and 2 together; one suite takes the first free of E2E_BED (1 by default).
-for _ in $(seq 240); do
+for _ in $(seq 480); do
   if [ "$suite" = both ]; then
     if free_slot 1 && free_slot 2 && lock "$HOME/k7-trees/e2e-macos-slot-1.lock"; then
       if lock "$HOME/k7-trees/e2e-macos-slot-2.lock"; then slots=(1 2); break; fi
@@ -51,7 +49,7 @@ for _ in $(seq 240); do
   fi
   sleep 30
 done
-[ "${#slots[@]}" -gt 0 ] || { echo "no bed slot came free in two hours"; exit 1; }
+[ "${#slots[@]}" -gt 0 ] || { echo "no bed slot came free in four hours"; exit 1; }
 
 # One bed's names: its ports, its folder and its logs; `bed_of <slot>` sets them for what follows.
 bed_of() {

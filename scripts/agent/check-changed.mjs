@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // check-changed.mjs — `npm run check:changed`: biome, the blocking repo lints, then typecheck + test
-// of only the workspaces the branch touches, against its merge-base with `win/main` (else `main`).
+// of only the workspaces the branch touches, against its merge-base with `main`.
 // `--dependents` adds every workspace that depends on a touched one; `--base <ref>`, `--jobs N`, `--dry`.
 // A file outside every workspace runs the lints only; a Rust manifest adds lint:locks, docs/agents.md.
 
@@ -24,11 +24,7 @@ function sh(cmd, argv) {
   return r.status === 0 ? r.stdout.trim() : undefined;
 }
 
-const ref =
-  opt("--base") ??
-  ["win/main", "main"].find((r) =>
-    sh("git", ["rev-parse", "--verify", "-q", r]),
-  );
+const ref = opt("--base") ?? "main";
 const base = sh("git", ["merge-base", "HEAD", ref]);
 if (!base) {
   console.error(`check:changed: no merge-base with ${ref}`);

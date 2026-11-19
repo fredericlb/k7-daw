@@ -1,5 +1,5 @@
 // areas.mjs — prints which Rust areas a branch touched since `main`, as words: `backend`, `browser`, both or none.
-// The base is K7_AREAS_BASE (the gate sets it to local main), else origin's main (docs/rust-builds.md).
+// The base is K7_AREAS_BASE (the gate sets it), else local main (docs/rust-builds.md).
 // What a reader gets wrong: when the base cannot be fetched or read, it prints both; skipping on a doubt is never the answer.
 import { execFileSync } from "node:child_process";
 
@@ -10,12 +10,7 @@ const git = (...args) =>
   }).trim();
 const BOTH = "backend browser";
 // What makes every area run: the checks' own scripts and the build's configuration.
-const ALL = [
-  ".github/workflows/",
-  "engine/scripts/ci/",
-  "engine/scripts/sccache.mjs",
-  "rust-toolchain",
-];
+const ALL = ["engine/scripts/sccache.mjs", "rust-toolchain"];
 const BROWSER = [
   "packages/song/rust/",
   "packages/song-schema/rust/",
@@ -28,13 +23,7 @@ const BACKEND = ["apps/k7/backend-rs/", "package-lock.json", ...BROWSER];
 
 function changed() {
   try {
-    // K7_AREAS_BASE names a local ref instead, to try the rule on a machine.
-    let ref = process.env.K7_AREAS_BASE;
-    if (!ref) {
-      ref = "refs/remotes/origin/main";
-      git("fetch", "--quiet", "origin", `+refs/heads/main:${ref}`);
-    }
-    const base = git("merge-base", "HEAD", ref);
+    const base = git("merge-base", "HEAD", process.env.K7_AREAS_BASE ?? "main");
     // Against the working tree, so a local run counts what is not committed yet; a clean checkout is the same either way.
     return git("diff", "--name-only", base).split("\n").filter(Boolean);
   } catch {

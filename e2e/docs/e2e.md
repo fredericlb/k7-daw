@@ -220,15 +220,14 @@ suite's length, since they run side by side; a cold tree first compiles the engi
 | the two beds share one `env.yaml` holding what they share (the secret, the device switches); each bed's folders (`STUDIO_FILES_ROOT`, `STUDIO_MEDIATEK`, `K7_FRONT_CACHE`) reach its processes as variables, and the second bed logs under `conformance-bed/logs`, judged by `bedCounters.mjs` as a conformance run | the backend finds `env.yaml` by walking up from its folder and a key there beats the environment, so a tree holds one; the counters read one front's log |
 | Playwright stops a run at its tenth failure (`--max-failures`, `E2E_MAX_FAILURES`, 0 for none) | a branch that breaks something basic otherwise waits out every test's timeout: over an hour for nothing a short run does not already say |
 | the bed starts the suites only once the front's relay answers something other than 503, and a stop is done when the bed's four ports are free | the front answers `/auth/me` before its relay runs, so a spec started in that gap meets 503 and then 409 on every first call; a bed that cannot get a relay fails in minutes with the front's log, not after a whole suite of 409s |
-| the engine, the front and `node_modules` kept warm in `~/k7-trees/tree-e2e-macos`, through `ciTree.mjs` | a run after a small push builds only what changed |
 | Playwright's Chromium and the render page (`k7-picture/page.mjs`) built at every run, for the conformance suite as well as the web one | `picture render` drives that Chromium with that page, and fails without either |
 
 The speakers play: the transport spec sounds through the Mac's default output.
 
 ## The bed dispatcher: `scripts/agent/bed.sh`
 
-An agent never runs `e2e-macos.sh` itself: `scripts/agent/bed.sh` waits for the Mac's bed slot and runs it there.
-It takes the macOS script's parameters as environment (`E2E_SUITE`, `E2E_FILTER`, `K7_BED_SOUND`), run from
+An agent never runs `e2e-macos.sh` itself: `scripts/agent/bed.sh` runs it from the branch's worktree, and the script
+waits for a free bed slot. It takes the macOS script's parameters as environment (`E2E_SUITE`, `E2E_FILTER`, `K7_BED_SOUND`), run from
 the branch's worktree. The front runs one mode, every piece native: a bed names no switch.
 
 ```bash
@@ -249,7 +248,7 @@ reference's reports.
 | choice | why |
 |---|---|
 | the Mac only, one bed at a time; a run waits for the bed's slot 1 to be free | k7 is a Mac app for now: Linux and Windows have no bed, and a failure only they show is not looked for |
-| the bed is free when its slot-1 lock has no living owner and its ports are silent, and a lock folder in `~/.cache/k7-bed` is held from that decision until the slot is locked | the same slot rule `e2e-macos.sh` applies, read before starting; two agents deciding in the same second would both see it free |
+| a slot is taken by a lock folder made with `mkdir`, whose owner's pid is checked, once its ports are silent; a run waits up to four hours | `mkdir` is atomic, so two agents deciding in the same second cannot both take it, and a lock whose owner is gone is taken over |
 | the bed runs the working tree, and says so when the tree is dirty | the Mac's script runs in the tree it is given |
 | one mode, no switch named by `bed.sh` or the bed scripts | every host runs the whole native front; a second mode would test a front no host runs |
 | the counters are judged by the bed script itself, 32 s after the suites, while the front is up | each counter line is logged at a 30 s tick: a front stopped before it loses the last line, and a run read short |

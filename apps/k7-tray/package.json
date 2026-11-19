@@ -4,7 +4,7 @@
   "private": true,
   "description": "K7 DAW, the desktop app, on Tauri: a window on k7's backend, started on 127.0.0.1 (which runs the machine's supervisor and engine), and a tray icon with one status line. See docs/tray.md and docs/desktop.md.",
   "author": "F <fred@parapluie.org>",
-  "homepage": "https://app.k7.rocks",
+  "homepage": "https://k7.rocks",
   "type": "module",
   "scripts": {
     "stage": "node scripts/stage.mjs",
