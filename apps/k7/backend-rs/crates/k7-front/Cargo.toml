@@ -33,7 +33,6 @@ k7-local.workspace = true
 # The registry, the relay and the tunnel hub (docs/engine.md).
 k7-engine.workspace = true
 k7-js.workspace = true
-sha1.workspace = true
 # The media core: the waveform module, the analysis, the decodes and the transcodes (docs/file-media.md).
 k7-mediatek.workspace = true
 # The file hub, the relay and the pairing under `K7_FILES=front` (docs/files.md).
@@ -54,7 +53,7 @@ song = { path = "../../../../../packages/song/rust" }
 tokio-tungstenite.workspace = true
 tower.workspace = true
 futures-util.workspace = true
-# fs: the apps' uploads and downloads stream to and from disk (src/routes/app_releases.rs); time: the camera sockets' ping; rt: SQLite off the async threads.
+# fs: files stream to and from disk; time: the camera sockets' ping; rt: SQLite off the async threads.
 tokio = { workspace = true, features = ["fs", "time", "rt", "process"] }
 url.workspace = true
 # The tracks export: a .mid per track and the zip that holds them (docs/tracks-export.md).

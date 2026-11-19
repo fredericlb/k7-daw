@@ -9,7 +9,6 @@ pub(crate) mod express;
 mod frontend;
 mod internal;
 mod send;
-mod site;
 
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -18,8 +17,8 @@ use axum::Router;
 use axum::extract::{ConnectInfo, Request, State};
 use axum::middleware::from_fn_with_state;
 use axum::response::{IntoResponse, Response};
+use hyper::StatusCode;
 use hyper::header::{CONNECTION, HeaderValue, SET_COOKIE};
-use hyper::{HeaderMap, StatusCode};
 use tower::ServiceExt;
 
 use crate::AppState;
@@ -89,16 +88,7 @@ async fn after_chain(State(state): State<Arc<AppState>>, req: Request) -> Respon
 
 /// The order after the chain: the site page, the `/api` guard, then the page.
 async fn route(state: &Arc<AppState>, req: Request) -> Response {
-    let hostname = hostname(req.headers(), &state.settings);
     let path = req.uri().path().to_string();
-    if state
-        .settings
-        .site_hosts
-        .contains(&hostname.to_ascii_lowercase())
-        && !site::passes(&path)
-    {
-        return site::answer(&req);
-    }
     if under(&path, "/api") {
         return api::answer(state, req).await;
     }
@@ -124,37 +114,12 @@ fn under(path: &str, prefix: &str) -> bool {
         .is_some_and(|rest| rest.is_empty() || rest.starts_with('/'))
 }
 
-/// `req.hostname`: the host the client addressed, its port dropped, a bracketed IPv6 literal kept whole.
-fn hostname(headers: &HeaderMap, settings: &Settings) -> String {
-    let host = crate::web::request_host(headers, settings);
-    let offset = if host.starts_with('[') {
-        host.find(']').map_or(0, |i| i + 1)
-    } else {
-        0
-    };
-    match host[offset..].find(':') {
-        Some(i) => host[..offset + i].to_string(),
-        None => host,
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn a_hostname_drops_its_port_only() {
-        let settings = Settings::new(&Default::default(), 0);
-        let mut h = HeaderMap::new();
-        for (host, want) in [
-            ("app.k7.rocks:8789", "app.k7.rocks"),
-            ("[::1]:18789", "[::1]"),
-            ("[::1]", "[::1]"),
-            ("k7.rocks", "k7.rocks"),
-        ] {
-            h.insert(hyper::header::HOST, HeaderValue::from_static(host));
-            assert_eq!(hostname(&h, &settings), want);
-        }
+    fn under_is_a_path_boundary() {
         assert!(under("/api", "/api") && under("/api/x", "/api") && !under("/apix", "/api"));
     }
 }

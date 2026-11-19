@@ -4,13 +4,7 @@
 import type { NoticeEntry, Where } from "../../notices/types";
 
 /** Every place a component ships, in the order the page offers them. */
-export const WHERES: Where[] = [
-  "web",
-  "server",
-  "engine",
-  "desktop",
-  "android",
-];
+export const WHERES: Where[] = ["web", "engine", "desktop", "android"];
 
 export function filterNotices(
   entries: NoticeEntry[],

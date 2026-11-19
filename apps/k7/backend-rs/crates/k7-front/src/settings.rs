@@ -17,19 +17,11 @@ pub struct Settings {
     pub prefs_dir: PathBuf,
     /// Where the session revocations live; None when the front cannot tell, and then owns no session route.
     pub auth_dir: Option<PathBuf>,
-    /// The root domain's hosts, where the backend answers a page and not the API.
-    pub site_hosts: Vec<String>,
     pub build: String,
     /// Proxies before the front whose `X-Forwarded-*` is believed.
     pub trust_hops: usize,
     /// `K7_FRONT_TRUSTED_PROXIES`: when set, only a socket peer in it is believed, and `trust_hops` is 1 (`peer::screen`).
     pub trusted_proxies: Option<Vec<crate::peer::Cidr>>,
-    /// Where the apps' builds are kept: `STUDIO_APP_RELEASES_DIR`, else `~/.studio/app-releases`.
-    pub app_releases_dir: PathBuf,
-    /// The CI's upload bearer; None refuses every upload.
-    pub app_release_token: Option<String>,
-    /// One uploaded file's ceiling in bytes, `APP_RELEASE_MAX_MB` (2048 by default) as `Number()` reads it.
-    pub app_release_max_bytes: f64,
     /// `K7_CAMERA_ICE_SERVERS`, as written: the STUN and TURN servers handed to both ends of a remote camera.
     pub camera_ice_servers: Option<String>,
     /// `$AUTH_ADMIN_GROUPS`, comma-separated; empty admits nobody.
@@ -126,25 +118,9 @@ impl Settings {
                 .or_else(|| get("STUDIO_MEDIATEK").map(|m| PathBuf::from(m).join(".auth")))
                 // `.auth` in the media's folder, where the session's revocations and the accounts' keys live.
                 .or_else(|| Some(mediatek.join(".auth"))),
-            site_hosts: get("STUDIO_SITE_HOSTS")
-                .unwrap_or_else(|| "k7.rocks www.k7.rocks".into())
-                .split([' ', ','])
-                .filter(|h| !h.is_empty())
-                .map(str::to_ascii_lowercase)
-                .collect(),
             build: get("APP_VERSION").unwrap_or_else(|| "dev".into()),
             trust_hops: if proxies.is_some() { 1 } else { trust_hops },
             trusted_proxies: proxies,
-            app_releases_dir: raw("STUDIO_APP_RELEASES_DIR")
-                .map(PathBuf::from)
-                .unwrap_or_else(|| home.join(".studio").join("app-releases")),
-            app_release_token: raw("APP_RELEASE_TOKEN"),
-            app_release_max_bytes: get("APP_RELEASE_MAX_MB")
-                .and_then(|v| v.parse::<f64>().ok())
-                .filter(|n| *n != 0.0 && !n.is_nan())
-                .unwrap_or(2048.0)
-                * 1024.0
-                * 1024.0,
             camera_ice_servers: get("K7_CAMERA_ICE_SERVERS"),
             admin_groups: env
                 .get("AUTH_ADMIN_GROUPS")

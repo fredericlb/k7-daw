@@ -102,7 +102,7 @@ function fixture() {
     here: notices,
     roots: [
       { dir: "app", where: "web" },
-      { dir: "server", where: "server" },
+      { dir: "server", where: "desktop" },
     ],
   });
 }
@@ -114,7 +114,7 @@ describe("the generator, on a made-up tree", () => {
   );
 
   it("lists a package reached from two apps once, shipped in both", () => {
-    expect(byId.get("shared@2.0.0")?.where).toEqual(["server", "web"]);
+    expect(byId.get("shared@2.0.0")?.where).toEqual(["desktop", "web"]);
     expect(notices.entries.filter((e) => e.name === "shared")).toHaveLength(1);
   });
 
@@ -214,29 +214,6 @@ describe("this repository's notices", () => {
       file.components.flatMap((c) => c.fetchContent ?? []),
     );
     expect(fetched.filter((n) => !listed.has(n))).toEqual([]);
-  });
-
-  it("accounts for every OS package the two runtime images install", () => {
-    const runtime = (f: string) => read(f).split(/ AS runtime/)[1] ?? "";
-    const apk = [
-      ...runtime("apps/k7/docker/Dockerfile").matchAll(
-        /apk add --no-cache ([^\n\\]+)/g,
-      ),
-    ].flatMap((m) => (m[1] ?? "").trim().split(/\s+/));
-    const apt = (
-      runtime("engine/docker/Dockerfile.pi").match(
-        /--no-install-recommends([\s\S]*?)&&/,
-      )?.[1] ?? ""
-    )
-      .replace(/\\/g, " ")
-      .trim()
-      .split(/\s+/);
-    expect(apk.length).toBeGreaterThan(0);
-    expect(apt.length).toBeGreaterThan(0);
-    const listed = new Set(
-      file.components.flatMap((c) => [...(c.apk ?? []), ...(c.apt ?? [])]),
-    );
-    expect([...apk, ...apt].filter((p) => !listed.has(p))).toEqual([]);
   });
 
   it("keeps each hand-written version where the build pins it", () => {

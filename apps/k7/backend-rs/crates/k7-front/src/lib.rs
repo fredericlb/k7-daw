@@ -51,7 +51,6 @@ use hyper::Method;
 pub struct AppState {
     pub settings: Settings,
     pub revocations: k7_auth::Revocations,
-    pub app_releases: routes::app_releases::Stores,
     pub cameras: routes::cameras::Cameras,
     /// The machine's engine, when a device's host gave it to the front (`docs/local.md`).
     pub local: Option<Arc<routes::local::Local>>,
@@ -114,15 +113,9 @@ async fn claim(
         }
         return next.run(req).await;
     }
-    let host = web::request_host(req.headers(), &state.settings);
-    let hostname = host
-        .rsplit_once(':')
-        .map_or(host.as_str(), |(h, _)| h)
-        .to_ascii_lowercase();
-    let site = state.settings.site_hosts.contains(&hostname);
     let path = req.uri().path();
     let method = req.method();
-    let slots = state.seams.is_some() && !site;
+    let slots = state.seams.is_some();
     let files = state.files.as_ref().is_some_and(|f| f.owned());
     // The file hub's paths move together, on every host.
     if routes::files::is_files_path(path) {
@@ -140,14 +133,12 @@ async fn claim(
     }
     // The engine core's paths move together: all here, or all declined.
     if routes::engine::is_engine_path(path) {
-        if state.engine.is_none() || site || !routes::engine::owns(method, path) {
+        if state.engine.is_none() || !routes::engine::owns(method, path) {
             return declined(State(state), peer, req).await;
         }
         return next.run(req).await;
     }
-    let releases = routes::app_releases::is_family_path(path);
-    let uploads = path.starts_with("/api/app-releases/");
-    let needs_session = path != "/api/health" && !releases;
+    let needs_session = path != "/api/health";
     // A library bearer on a session route is the `/api` guard's, which `routes::last` answers.
     let guarded = path == "/api/preferences" || path.starts_with("/api/ai/");
     let bearer = req
@@ -155,11 +146,8 @@ async fn claim(
         .get(hyper::header::AUTHORIZATION)
         .and_then(|v| v.to_str().ok())
         .is_some_and(|v| v.len() >= 6 && v[..6].eq_ignore_ascii_case("bearer"));
-    // An upload path owns its two writes only: the last routes answer every other method there.
     let owned_method = if let Some(owned) = owns_auth(method, path, state.settings.local_user) {
         owned
-    } else if uploads {
-        method == Method::PUT || method == Method::POST && path.ends_with("/publish")
     } else {
         matches!(*method, Method::GET | Method::HEAD | Method::OPTIONS)
             || (path == "/api/preferences" && method == Method::PUT)
@@ -167,12 +155,7 @@ async fn claim(
             || (path == "/api/ai/settings" && method == Method::PUT)
             || (path == "/api/ai/organize/turn" && method == Method::POST)
     };
-    if !owned_method
-        || site && needs_session
-        || guarded && bearer
-        || needs_session && !state.settings.claims_sessions()
-        || releases && state.settings.local_user
-    {
+    if !owned_method || guarded && bearer || needs_session && !state.settings.claims_sessions() {
         return declined(State(state), peer, req).await;
     }
     next.run(req).await
@@ -195,7 +178,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
             .as_deref()
             .unwrap_or(std::path::Path::new("")),
     );
-    let app_releases = routes::app_releases::Stores::new(&settings.app_releases_dir);
     let cameras = routes::cameras::Cameras::new(settings.camera_ice_servers.as_deref(), limits);
     let local = routes::local::Local::from_settings(&settings, port);
     let local_user = settings.local_user;
@@ -209,7 +191,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
     let state = Arc::new(AppState {
         settings,
         revocations,
-        app_releases,
         cameras,
         local,
         closing: tokio::sync::watch::channel(false).0,
@@ -229,7 +210,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
             "/api/preferences",
             sessioned(get(routes::prefs::get).put(routes::prefs::put)),
         )
-        .merge(routes::app_releases::router())
         .route("/api/cameras", sessioned(get(routes::cameras::list)))
         .route(
             "/api/cameras/ticket",

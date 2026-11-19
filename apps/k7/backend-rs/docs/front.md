@@ -79,6 +79,5 @@ object for those settings: an embedded front cannot be handed an environment of 
 |---|---|
 | the dev session | the Tiltfile's `k7-front`, on 127.0.0.1:8789, one trusted hop (Vite) — `docs/dev.md` |
 | the tray | linked into the tray, on 18789 — `apps/k7-tray/docs/tray.md` |
-| the server image | `k7-front` on 8789, one trusted hop (Traefik), alone under `apps/k7/docker/start.sh` — `docs/images.md` |
 | Android | `libk7_embed.so` in the app's process, on the studio's port — `engine/k7-runtime/docs/android.md` |
 | iOS | `k7-embed` linked into the app — `engine/k7-runtime/docs/ios.md` |

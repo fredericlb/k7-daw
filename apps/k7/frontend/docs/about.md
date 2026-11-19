@@ -39,10 +39,9 @@ browser bundle holds, which is the safe direction for a notice.
 ## The hand list, and what keeps it honest
 
 What npm does not install is `notices/components.json`: the libraries CMake fetches for the
-engine and its supervisor, the Termux packages of the phone, the OS packages of the two runtime
-images, the sound font the score player plays through. Each names its licence, where it
+engine and its supervisor, the Termux packages of the phone, the sound font the score player plays through. Each names its licence, where it
 ships, and its own notice under `notices/texts/`. `collect.test.ts` fails when a
-`FetchContent_Declare`, a pinned Termux package, or an `apk`/`apt` package of a runtime image has
+`FetchContent_Declare` or a pinned Termux package has
 no entry, and when a hand-written version is no longer in the file that pins it. A version the
 tree already pins elsewhere (Termux) is READ from there, never copied.
 

@@ -1,5 +1,5 @@
 // lastRoutes.spec.ts — the last routes as a client sees them: the built page and its fallback, the 404 page,
-// the site page, the `/api` guard's bearer, the device door's refusals and the seam's bearer check (e2e/docs/conformance.md).
+// the `/api` guard's bearer, the device door's refusals and the seam's bearer check (e2e/docs/conformance.md).
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { expect, test } from "@playwright/test";

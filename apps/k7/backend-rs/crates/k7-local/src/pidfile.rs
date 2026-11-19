@@ -182,7 +182,7 @@ pub fn alive(pid: u32) -> bool {
         )
         .is_some_and(|out| out.contains(&format!("\"{pid}\"")))
     }
-    // procfs, not `ps`: busybox's (the server image is Alpine) has no `-p`, and a zombie has died already.
+    // procfs, not `ps`: busybox's (Alpine) has no `-p`, and a zombie has died already.
     #[cfg(any(target_os = "linux", target_os = "android"))]
     {
         proc_stat(pid)

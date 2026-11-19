@@ -95,7 +95,7 @@ request outside the job's own path.
 | risk | answer |
 |---|---|
 | the server's browser used as a fetcher | 2506 |
-| chromium's DevTools port reachable by every local process while a render runs | accepted on the server image ([service.md](service.md)); raised for desktops |
+| chromium's DevTools port reachable by every local process while a render runs | accepted; raised for desktops |
 | a film, a mixdown or a `uuid` written through a link | 2556, 2522, 2531 |
 | the engine's `--render` writes `~/Library/Studio/Settings.xml` whatever `HOME` says (measured) | harness runs kept few, said in each report; the engine's settings folder comes with `K7_SETTINGS_DIR` |
 | the films differ for a reason outside the job | the table above; the job's text compared first |

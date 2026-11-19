@@ -71,7 +71,6 @@ The media the file service reaches is `src/media/`: the waveform module runs in 
 | a checkout (dev, a test bed) | the checkout itself | found above the front's working directory or executable |
 | the tray | `resources/code`, staged by `apps/k7-tray/scripts/stage.mjs` | `K7_CODE_ROOT` in the front's `Config.env` (`backend.rs`) |
 | Android | `code/` in `backend.zip`, staged by the `stageCodeRoot` task | `K7_CODE_ROOT` from `BackendHost.kt` |
-| the server image | `/usr/local/share/k7/code` | `K7_CODE_ROOT` in the Dockerfile |
 
 | choice | why |
 |---|---|

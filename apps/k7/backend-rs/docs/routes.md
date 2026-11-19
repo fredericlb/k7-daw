@@ -5,8 +5,7 @@ A route is the front's once the conformance suite (`e2e/docs/conformance.md`) pa
 | route | owned since | what it declines |
 |---|---|---|
 | `GET /api/health` | phase 1 | nothing |
-| `GET`, `PUT /api/preferences` | phase 1 | the root domain's hosts; any front that cannot find the session revocations |
-| `PUT /api/app-releases[/tray]/<stamp>/<file>`, `POST …/<stamp>/publish`, `GET /app_downloads[/tray]/…` | phase 1 | every other method on the upload paths, which the backend's bearer check answers; the whole family on a device (`STUDIO_LOCAL_USER`), where the backend does not mount it |
+| `GET`, `PUT /api/preferences` | phase 1 | any front that cannot find the session revocations |
 | `GET /api/cameras`, `POST /api/cameras/ticket`, `WS /api/cameras/ws` | phase 1 | the same as the preferences, for all three at once; a request to the socket's path that is no upgrade |
 | `GET`, `PUT /api/ai/settings`, `GET /api/ai/organize`, `POST /api/ai/organize/turn` | phase 3 | any request with a bearer, which the backend's `/api` guard answers and no route behind it; the same as the preferences |
 | `POST /auth/logout`, `GET /auth/me` | phase 3 | the same as the preferences |
@@ -18,8 +17,8 @@ A route is the front's once the conformance suite (`e2e/docs/conformance.md`) pa
 The front also answers `/api/engine-slots`, on every host (`engine/slots.md`). A path of that family no route
 answers is declined.
 
-What a route declines (a method it does not own, a root-domain host, a session route without known revocations) ends in the last routes (`last.md`): the seam's
-`verify-token`, a bearer on `/api/preferences`, `/api/ai/*`, the root domain's hosts, the built page and its fallback, and
+What a route declines (a method it does not own, a session route without known revocations) ends in the last routes (`last.md`): the seam's
+`verify-token`, a bearer on `/api/preferences`, `/api/ai/*`, the built page and its fallback, and
 the 404 and the `/api` guard's 401 for any other path.
 
 Nobody signs in against an identity provider: `/auth/login`, `/auth/callback` and `/auth/handoff/*` are no route, and answer what a missing route does.
@@ -31,21 +30,11 @@ loopback lock, CORS and the cross-site write refusal. `src/session.rs` is `requi
 
 | choice | why |
 |---|---|
-| a request the front would answer differently is declined BEFORE that chain (`claim` in `src/lib.rs`): a method it does not own, a root-domain host, a session route without known revocations | the last routes apply the chain once, and running it twice would send `Vary` and the CORS headers twice, which a browser refuses |
+| a request the front would answer differently is declined BEFORE that chain (`claim` in `src/lib.rs`): a method it does not own, a session route without known revocations | the last routes apply the chain once, and running it twice would send `Vary` and the CORS headers twice, which a browser refuses |
 | the revocations file is read again whenever its inode, modification time or size changes, and a revocation re-reads it and keeps each subject's later epoch (`k7-auth`'s `revocations.rs`) | a logout everywhere is written by any process that shares the folder; a front that cached the file would keep honouring a revoked session, and a whole-file write from a stale copy would undo the other's revocation |
 | no auth folder known (neither `STUDIO_AUTH_DIR` nor `STUDIO_MEDIATEK`) means no session route is owned | a front that cannot see revocations must not decide who is signed in |
 | on a device, any valid session that is not the local user's is answered as the local user, with a new local session cookie | a device has one account, whatever session a page carries |
 | the preferences schema is copied (`src/prefs_schema.rs`): zod's key order, nested strangers stripped, an unknown top-level key refused | a stored document must still pass the gate on its next save; a field added to the schema is added there (`src/prefs_schema.rs`) |
-
-## The apps' downloads
-
-| choice | why |
-|---|---|
-| the store's folder layout, pointers and file names are the previous release's to the byte (`src/routes/release_store.rs`), with no lock | a rollback serves the same `STUDIO_APP_RELEASES_DIR`; one CI run publishes a stamp at a time |
-| `publishedAt` is the `current` pointer's time with its milliseconds rounded, where the file's `ETag` floors them | the feed reads as the previous release's did, which a rollback serves from the same folder |
-| the page is rendered byte for byte, its Paris dates in English and French written out by hand (`src/routes/release_page.rs`) | no ICU or time-zone crate for one line of text |
-| the family is answered on the root domain's hosts | the backend's site page answers the root domain's other paths, so `k7.rocks/app_downloads` is the same page |
-| an upload is written as its frames arrive, and a download read as the client takes it (tokio's `fs` feature, no new crate) | a file reaches 2 GB; a 300 MB round trip leaves the front at about 10 MB |
 
 ## The remote cameras
 
@@ -104,13 +93,12 @@ Hazards the front has, as the TypeScript backend had them, kept for now:
 
 | difference | why it is accepted |
 |---|---|
-| no `ETag` on a JSON or HTML answer (the preferences, the cameras' list, a release feed, the downloads page, a share's manifest and comments), so never a 304 | those answers are a few kilobytes at most, and none is cached; a downloaded FILE has the backend's validator, and its 304 |
+| no `ETag` on a JSON or HTML answer (the preferences, the cameras' list, a share's manifest and comments), so never a 304 | those answers are a few kilobytes at most, and none is cached; a downloaded FILE has the backend's validator, and its 304 |
 | no `ETag` on a share's document either | it is served `immutable` for a year, so a browser never asks again |
 | an AI key hint cut inside an emoji writes U+FFFD where JavaScript writes half a surrogate pair | no key holds one; a lone surrogate cannot be in a Rust string |
 | a sealed secret whose nonce is not 12 bytes or whose tag is not 16 does not open | node accepts other lengths, which only a hand-edited file holds; it counts as no secret, as any secret that does not open |
 | a settings file holding JSON that is not an object reads as empty | nothing ever writes one; a hand-broken file is no 500 |
 | comments are capped per share inside one write transaction | the ceiling holds against concurrent posts |
-| `/app_downloads/` redirects with a plain-text body | the body of a 301 is never shown |
 | outside `/auth` and the token routes, a session refused for its stamps gets a 401 without the cleared cookie the backend also sends | the browser keeps a cookie that keeps failing the same way; nothing reads the clearing |
 | a token label cut inside an emoji loses the whole emoji | as a device name |
 
