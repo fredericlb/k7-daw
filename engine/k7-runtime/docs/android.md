@@ -49,7 +49,7 @@ the app's process on `STANDALONE_PORT`, the one every view loads.
 | the compiled modules in `front-cache` beside the front's state (`K7_FRONT_CACHE`) | the same Rust as the desktop app's; the app's process runs from no folder the front could search up from, and a compiled module is machine code, so its folder is the app's own; a cold one costs the first scan some 20 s |
 | `BackendHost.kt` sets no file-service variable: the front runs all fifteen native pieces answering, within the embedded 192 MB heap; `engine`, `media` and `runtime` degrade as the front does with no engine bound, and none is proved on a device yet (5-13) | the pieces are the only file service there is |
 | the file hub in the front (`K7_FILES=front`, `apps/k7/backend-rs/docs/files.md`): every account's file service and the libraries' are the front's own | one hub, the same Rust as the desktop app's |
-| the front given the table's environment, its folders, the session secret, the page's folder (`K7_FRONTEND_DIST`) and the switches | it answers every route and reads the settings those routes read |
+| the front given the table's environment, its folders, the page's folder (`K7_FRONTEND_DIST`) and the switches | it answers every route and reads the settings those routes read |
 
 **A start that fails is given up on, and the user's retry redoes it.** A front that cannot start — a full disk,
 a missing library — fails the same way on every launch. Given up on, it tells the views waiting for it, and the

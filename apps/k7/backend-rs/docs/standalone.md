@@ -9,7 +9,7 @@ Three apps run the front on the user's device rather than on a server: the deskt
 The port, the environment and the state folders, read by the desktop app (`apps/k7-desktop/src-tauri/src/backend.rs`), by
 `BackendHost.kt` (the phone's, through a `BuildConfig` constant for the port and the copy inside its
 `backend.zip` for the rest) and by `BackendHost.swift`. What each host adds is only what is its own: the state
-root, the session secret it keeps there, `$STUDIO_ENGINE` where an engine binary exists, and the page's folder.
+root, `$STUDIO_ENGINE` where an engine binary exists, and the page's folder.
 
 | value | why |
 |---|---|

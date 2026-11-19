@@ -43,8 +43,7 @@ session's, whatever `x-studio-user`, the hub secret or the engine token a client
 by several accounts, trusting those would let anyone open anyone's workspace.
 
 Who it is comes from a **ticket**: `/api/files-hub`, behind the session, answers one — the
-account's email and an expiry, signed with a key derived from the session secret, so a deploy does
-not invalidate an open page. The browser sends it in the header the files gate reads, which spares every
+account's email and an expiry, signed with a key the process draws, so a ticket is read by the process that minted it. The browser sends it in the header the files gate reads, which spares every
 call a cookie across origins; `/api/files` itself has no session guard, the ticket being its gate, with
 the session as a fallback for a same-origin caller. Twelve hours, and the browser asks again after six.
 

@@ -40,7 +40,7 @@ pub struct Instance {
 pub struct State {
     data_root: PathBuf,
     mediatek_root: PathBuf,
-    /// Signs the tickets: `${SESSION_SECRET}:files`, or drawn per process.
+    /// Signs the tickets: drawn per process.
     ticket_key: Vec<u8>,
     /// What the relay recognises as the `_libraries` account; drawn per process, never written anywhere.
     library_secret: String,
