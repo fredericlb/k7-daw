@@ -113,7 +113,7 @@ void aPortOutOfRangeIsTheDefault()
 void aConfigFileSetsWhatTheEnvironmentOtherwiseCarries()
 {
     const auto env = k7::configEnvironment(
-        json::parse(R"({"machineName":" rehearsal-pc ","renderKey":"","extraCaCerts":"/ca.pem","instruments":["all"]})"));
+        json::parse(R"({"machineName":" rehearsal-pc ","extraCaCerts":"/ca.pem","instruments":["all"]})"));
     CHECK((env == std::vector<std::pair<std::string, std::string>>{
                       {"STUDIO_MACHINE_NAME", "rehearsal-pc"},
                       {"STUDIO_EXTRA_CA_CERTS", "/ca.pem"},

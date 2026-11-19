@@ -81,7 +81,6 @@ std::map<std::string, std::string> headersFor(const std::string& registry, const
         if (url::engineRegistryUrl(u) == registry) token = t;
     if (token.empty()) token = cred.envToken;
     if (!token.empty()) h["Authorization"] = "Bearer " + token;
-    if (!cred.renderKey.empty()) h["x-studio-render-key"] = cred.renderKey;
     return h;
 }
 

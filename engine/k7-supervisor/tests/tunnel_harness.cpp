@@ -1,5 +1,5 @@
 // tunnel_harness.cpp — the native tunnel agent alone, for packages/engine-tunnel's suites to drive
-// against the real TypeScript hub: `tunnel_harness <registryUrl> <id> <token> <enginePort> <cacheDir> [renderKey]`.
+// against the real TypeScript hub: `tunnel_harness <registryUrl> <id> <token> <enginePort> <cacheDir>`.
 // It answers the same two test jobs the TypeScript suite gives its own agent, and exits when stdin
 // closes — the test's way of stopping it.
 
@@ -22,8 +22,8 @@ using namespace k7::tunnel;
 
 int main(int argc, char** argv)
 {
-    if (argc != 6 && argc != 7) {
-        std::fprintf(stderr, "usage: tunnel_harness <registryUrl> <id> <token> <enginePort> <cacheDir> [renderKey]\n");
+    if (argc != 6) {
+        std::fprintf(stderr, "usage: tunnel_harness <registryUrl> <id> <token> <enginePort> <cacheDir>\n");
         return 2;
     }
     // As main.cpp does, and for the same reason: without Winsock every socket on Windows fails, silently.
@@ -36,7 +36,6 @@ int main(int argc, char** argv)
     const int port = std::atoi(argv[4]);
     o.enginePort = [port] { return port; };
     o.cacheDir = k7::paths::fromUtf8(argv[5]);
-    if (argc == 7) o.renderKey = argv[6];
     o.log = [](const std::string& m) { std::fprintf(stderr, "tunnel | %s\n", m.c_str()); };
     // Answers the same path twice: once mapped back to the server's, once under `raw` as the machine's.
     o.jobs["where"] = [](const nlohmann::json& req, const Emit& emit, JobContext&) {

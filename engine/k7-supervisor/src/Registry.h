@@ -47,8 +47,6 @@ struct Credentials {
     std::map<std::string, std::string> deviceTokens;
     /** `$STUDIO_DEVICE_TOKEN`: sent only when the registries themselves come from the environment. */
     std::string envToken;
-    /** `$STUDIO_RENDER_KEY`: the server's own engine, which no account paired. */
-    std::string renderKey;
 };
 
 Result heartbeat(const std::vector<std::string>& urls, const EngineIdentity& id, const nlohmann::json& presence,

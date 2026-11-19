@@ -167,7 +167,6 @@ struct TunnelAgent::Impl : HubLink, std::enable_shared_from_this<TunnelAgent::Im
             sock->setUrl(tunnelUrl(opts.registryUrl, opts.id));
             ix::WebSocketHttpHeaders headers{{kTokenHeader, opts.token}, {kProtocolHeader, std::to_string(wire::kEngineProtocol)}};
             if (!opts.tunnelSecret.empty()) headers[kSecretHeader] = opts.tunnelSecret;
-            if (!opts.renderKey.empty()) headers[kRenderKeyHeader] = opts.renderKey;
             sock->setExtraHeaders(headers);
             sock->setTLSOptions(tls::options());
             sock->disableAutomaticReconnection();

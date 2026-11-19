@@ -121,8 +121,7 @@ std::vector<std::pair<std::string, std::string>> configEnvironment(const nlohman
     std::vector<std::pair<std::string, std::string>> out;
     if (!raw.is_object()) return out;
     for (const auto& [key, var] : {std::pair{"machineName", "STUDIO_MACHINE_NAME"},
-                                   std::pair{"extraCaCerts", "STUDIO_EXTRA_CA_CERTS"},
-                                   std::pair{"renderKey", "STUDIO_RENDER_KEY"}})
+                                   std::pair{"extraCaCerts", "STUDIO_EXTRA_CA_CERTS"}})
         if (auto v = trim(str(raw, key)); !v.empty()) out.emplace_back(var, v);
     // "all" keeps every instrument, as `$STUDIO_INSTRUMENTS=all` does (docs/instruments.md).
     if (auto it = raw.find("instruments"); it != raw.end() && it->is_array())

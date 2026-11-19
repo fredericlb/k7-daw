@@ -24,8 +24,8 @@ with, by what the cut wants, since which module and model it runs is that machin
 downloaded models, not an account's (`engine/k7-supervisor/docs/stemSplit.md`); its owner names them
 from the studio's Engines card as well as by hand, through the `chains` job
 (`apps/k7/backend-rs/docs/engine/chains.md`), plus a single
-`deviceToken` for every studio the file names, and the three keys that otherwise come from the environment — `machineName`,
-`extraCaCerts`, `renderKey` — and `"instruments": ["all"]` for `$STUDIO_INSTRUMENTS=all`. A key the
+`deviceToken` for every studio the file names, and the two keys that otherwise come from the environment — `machineName` and
+`extraCaCerts` — and `"instruments": ["all"]` for `$STUDIO_INSTRUMENTS=all`. A key the
 file names wins over the environment; one it leaves out falls back to it, so `{}` is a valid config.
 `engine.example.json` beside this folder is the one the release archive carries.
 

@@ -160,8 +160,7 @@ A heartbeat carries `Authorization: Bearer <device token>` for THAT registry whe
 studio refuses it (`apps/k7/backend-rs/docs/engine/heartbeat.md`): `deviceTokens` in the
 settings, by registry URL, which the phone writes when it pairs; `$STUDIO_DEVICE_TOKEN` when the
 registries themselves come from the environment, never to one the user added, since a token is
-one studio's and must not reach another. `$STUDIO_RENDER_KEY` rides along as
-`x-studio-render-key`, which is how the server's own engine is listed.
+one studio's and must not reach another.
 
 ### Shutdown order
 

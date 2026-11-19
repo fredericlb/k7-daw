@@ -18,8 +18,6 @@ inline const std::string kPath = "/api/engine-tunnel";
 inline const std::string kTokenHeader = "x-studio-engine-token";
 /** The machine's tunnel secret, the credential the registry binds the id to; never the engine's, never a browser's. */
 inline const std::string kSecretHeader = "x-studio-tunnel-secret";
-/** The server's render machine proves itself with this one, a key the deployment shares — never the engine's token. */
-inline const std::string kRenderKeyHeader = "x-studio-render-key";
 /** The engine wire's version this supervisor speaks; a hub refuses one below its minimum with a 426 (packages/engine-protocol/docs/version.md). */
 inline const std::string kProtocolHeader = "x-studio-engine-protocol";
 /** File chunks are cut to this, so one large take never holds the socket for long. */
