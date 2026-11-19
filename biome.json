@@ -10,6 +10,7 @@
     "includes": [
       "**",
       "!k7-core",
+      "!demos/_modules/audio/turntables",
       "!**/node_modules",
       "!**/.tmp-*",
       "!**/dist",

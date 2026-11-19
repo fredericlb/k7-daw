@@ -1,0 +1,3 @@
+// Trim — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({ Trim: { min: -12, max: 12, default: 0 } })
+graph([output(amul(input(0), fromdb("Trim")))])

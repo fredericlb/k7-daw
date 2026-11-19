@@ -8,7 +8,7 @@
 //
 // This is what the BPM fader in Mix moves. Both at 0 is a no-op: the record plays at its
 // own tempo until the analysis has measured one and somebody has asked for another.
-extends("@k7-core/cold/tempo")
+extends("@workspace/cold/tempo")
 params({
   // Measured by the pass that reads the file — the same analysis the waveform uses.
   "Source BPM": 0,
