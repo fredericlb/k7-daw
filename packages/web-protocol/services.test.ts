@@ -3,12 +3,7 @@
 // origin is the page's own, port and all.
 
 import { afterEach, describe, expect, it } from "vitest";
-import {
-  isDocsHost,
-  parsePorts,
-  servicePorts,
-  serviceUrl,
-} from "./services.ts";
+import { parsePorts, servicePorts, serviceUrl } from "./services.ts";
 
 describe("serviceUrl", () => {
   it("echoes k7 back on whatever origin it's given, dev or prod", () => {
@@ -69,14 +64,6 @@ describe("serviceUrl", () => {
     expect(serviceUrl("http://localhost:5223", "k7")).toBe(
       "http://localhost:5223",
     );
-  });
-});
-
-describe("isDocsHost", () => {
-  it("names the documentation's host", () => {
-    expect(isDocsHost("docs.k7.rocks")).toBe(true);
-    expect(isDocsHost("docs.priv.k7.rocks")).toBe(true);
-    expect(isDocsHost("app.k7.rocks")).toBe(false);
   });
 });
 

@@ -1,10 +1,17 @@
-// DocsSite.tsx — docs.<domain>: the user guide and the developer guide of docs-site/, one page per address.
+// DocsSite.tsx — the documentation site: the user guide and the developer guide of docs-site/, one page per address.
 // It routes on the pathname itself, with no router: every link on it is a same-origin page or an anchor in one.
 
 import { Button } from "@studio/ui/button";
 import { ArrowLeft, ArrowRight, ExternalLink } from "@studio/ui/icons";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { findPage, GUIDES, guideNav, neighbours, type SitePage } from "./pages";
+import {
+  findPage,
+  GUIDES,
+  guideNav,
+  hrefOf,
+  neighbours,
+  type SitePage,
+} from "./pages";
 import { SiteMarkdown } from "./SiteMarkdown";
 
 const read = () => ({
@@ -39,7 +46,7 @@ function useLocation(): { path: string; hash: string } {
   return loc;
 }
 
-export function DocsSite({ appUrl }: { appUrl: string }) {
+export function DocsSite({ homeUrl }: { homeUrl: string }) {
   const { path, hash } = useLocation();
   const address = path + hash;
   const page = findPage(path);
@@ -63,13 +70,13 @@ export function DocsSite({ appUrl }: { appUrl: string }) {
   return (
     <div className="flex h-dvh flex-col bg-background text-foreground">
       <header className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-border px-3 py-2">
-        <a href="/" className="mr-3 shrink-0 text-sm font-semibold">
+        <a href={hrefOf("/")} className="mr-3 shrink-0 text-sm font-semibold">
           k7 docs
         </a>
         {GUIDES.map((g) => (
           <a
             key={g.guide}
-            href={`/${g.guide}`}
+            href={hrefOf(`/${g.guide}`)}
             aria-current={page?.guide === g.guide ? "true" : undefined}
             className={[
               "shrink-0 rounded px-2 py-1 text-xs hover:bg-accent hover:text-foreground",
@@ -82,8 +89,8 @@ export function DocsSite({ appUrl }: { appUrl: string }) {
           </a>
         ))}
         <Button asChild variant="secondary" size="sm" className="ml-auto">
-          <a href={appUrl} target="_blank" rel="noreferrer">
-            Open k7 <ExternalLink className="ml-1 h-3.5 w-3.5" />
+          <a href={homeUrl}>
+            k7.rocks <ExternalLink className="ml-1 h-3.5 w-3.5" />
           </a>
         </Button>
       </header>
@@ -104,7 +111,7 @@ export function DocsSite({ appUrl }: { appUrl: string }) {
                 {group.items.map((item) => (
                   <a
                     key={item.route}
-                    href={item.route}
+                    href={hrefOf(item.route)}
                     aria-current={
                       item.route === page?.route ? "page" : undefined
                     }
@@ -143,7 +150,7 @@ function Page({ page }: { page: SitePage }) {
         <footer className="mt-12 flex gap-3 border-t border-border pt-4 text-sm">
           {prev && (
             <a
-              href={prev.route}
+              href={hrefOf(prev.route)}
               className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4" /> {prev.title}
@@ -151,7 +158,7 @@ function Page({ page }: { page: SitePage }) {
           )}
           {next && (
             <a
-              href={next.route}
+              href={hrefOf(next.route)}
               className="ml-auto flex items-center gap-1 text-right text-muted-foreground hover:text-foreground"
             >
               {next.title} <ArrowRight className="h-4 w-4" />
@@ -169,7 +176,7 @@ function NotFound({ path }: { path: string }) {
       <h1 className="mb-4 text-2xl font-semibold">No page here</h1>
       <p className="text-sm text-muted-foreground">
         Nothing in the documentation answers <code>{path}</code>.{" "}
-        <a href="/" className="underline decoration-dotted">
+        <a href={hrefOf("/")} className="underline decoration-dotted">
           Back to the documentation's home
         </a>
         .

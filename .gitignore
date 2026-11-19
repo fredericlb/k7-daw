@@ -8,15 +8,13 @@ dist/
 
 storybook-static/
 
-# `turbo prune` output (the Docker deps stage generates this inside the image)
+# `turbo prune` output
 out/
 
 # vite-plugin-pwa's DEV service worker, written beside the app it serves. Generated on
 # every dev start; the built one lives in dist/ and is covered above.
 dev-dist/
 
-# Per-build-machine Docker revision counters written by build-images.sh
-.docker-revision*
 
 # macOS junk (AppleDouble resource forks + Finder metadata)
 ._*
@@ -55,3 +53,7 @@ tilt.local.yaml
 ds-bundle/
 # Cargo builds outside the tree (--target-dir); one left inside is never tracked (docs/rust-builds.md).
 target/
+
+# The static site (scripts/buildSite.mjs): the docs bundle and the assembled output.
+dist-docs/
+dist-site/

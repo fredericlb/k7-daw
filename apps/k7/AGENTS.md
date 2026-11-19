@@ -14,9 +14,8 @@ rather than inside it, because they serve every audio app in the repo — the re
 | `backend-rs` | k7's backend in Rust, the front: the session, the account's preferences, the engine registry, the file service of the device's local account and the built page (`backend-rs/docs/`). It is no npm workspace. |
 
 Dev ports: **frontend 5223, front 8789**, the dev session a device on loopback at
-`http://127.0.0.1:5223` — and at `https://docs.priv.k7.rocks`, the documentation alone, as the
-server's image answers `docs.k7.rocks` (`frontend/docs/docsSite.md`,
-`packages/web-protocol/docs/addresses.md`).
+`http://127.0.0.1:5223`; the documentation site is built apart, for `k7.rocks/docs`
+(`frontend/docs/docsSite.md`, `docs/site.md` at the root).
 
 ## The browser talks to THREE servers
 
@@ -85,7 +84,7 @@ matches before changing it:
 | `contextMenu.md` | the right-click menu, derived from the command catalogue |
 | `midi.md` | playing a module's params from a MIDI controller |
 | `docExamples.md` | how `docs.test.ts` keeps the shipped documentation honest |
-| `docsSite.md` | `docs.<domain>` — the same documentation on a host of its own, with no account and no engine |
+| `docsSite.md` | `k7.rocks/docs` — the documentation site, a static bundle of its own with no account and no engine |
 | `audit.md` | the standing stability and speed audit — what the app holds, and the lots still open |
 
 ### Three data paths (`src/api.ts`)

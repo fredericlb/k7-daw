@@ -8,13 +8,12 @@ once, browser-safe, and nowhere else. See `apps/k7/frontend/docs/projects.md` an
 
 ## Where each service answers
 
-`services.ts` states where every service is, derived from ONE origin, k7's. k7 itself runs on devices, at their own loopback address, so no host serves the app: the `app.` rows are the names the code derives, and the docs host is the one the image serves:
+`services.ts` states where every service is, derived from ONE origin, k7's. k7 itself runs on devices, at their own loopback address, so no host serves the app: the `app.` rows are the names the code derives:
 
 | service | where | dev | production |
 |---|---|---|---|
 | k7 | the origin itself | `app.priv.k7.rocks` | `app.k7.rocks` |
 | pl8 | k7's backend routes (the tokens), served BY k7 — k7's origin | `app.priv.k7.rocks` | `app.k7.rocks` |
-| docs | k7's documentation, served BY k7 on a host of its own | `docs.priv.k7.rocks` | `docs.k7.rocks` |
 
 `serviceUrl(origin, service)` answers from any studio URL — k7's or a sibling's, whose label it
 strips first — so a page never spells a host, and a deployment on a domain of its own needs nothing
@@ -27,13 +26,10 @@ What you land on is your own WORK: the editor's home page, at k7's origin, lists
 the projects and the libraries. The
 workspaces, the libraries and the deploy key are the file service's.
 
-### k7 is `app.`, and its documentation is `docs.` beside it
+### k7 is `app.`
 
-k7's origin carries the `app.` label so the documentation can have a host of its own on the same
-domain. `docs.<domain>` is routed to k7's container and served the same SPA, which, seeing that
-host (`isDocsHost`), mounts the help page alone: no gate, no engine, no session
-(`apps/k7/frontend/docs/docsSite.md`). Every service resolved from it is k7's: `docs.` reads as
-`app.` in `serviceUrl`, so the page's Back lands on the app's origin.
+k7's origin carries the `app.` label. A `docs.<domain>` host reads as it in `serviceUrl` (the documentation lives at `k7.rocks/docs`
+now, a static site: `docs/site.md` at the root), so an address that still names one lands on the app's origin.
 
 ### The former hosts — `st0.app`, `play.` and `k7.` — are permanent
 

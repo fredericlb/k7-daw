@@ -1,0 +1,49 @@
+# The static site k7.rocks: the front page and the documentation under /docs, built from this repository
+# and served by GitHub Pages (docs/site.md). The custom domain is the CNAME file scripts/buildSite.mjs writes.
+
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs-site/**"
+      - "site/**"
+      - "scripts/buildSite.mjs"
+      - "apps/k7/frontend/docs-entry/**"
+      - "apps/k7/frontend/vite.docs.config.ts"
+      - "apps/k7/frontend/src/docs/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time, and a newer one replaces a queued one rather than the running one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: ./.github/actions/node
+      - name: build the site
+        run: node scripts/buildSite.mjs dist-site
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: dist-site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
