@@ -58,48 +58,6 @@
   }
  },
  {
-  "name": "a library still in one folder moves into version 1",
-  "kind": "store",
-  "tree": {
-   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
-   "seed/k7-core/.git/": "",
-   "data/libraries/k7-core/modules/old.k7x": "x(1)\n"
-  },
-  "seed": "$ROOT/seed",
-  "steps": [
-   {
-    "op": "ensure"
-   },
-   {
-    "op": "ensure",
-    "draft": true
-   }
-  ],
-  "results": [
-   [
-    {
-     "name": "k7-core",
-     "state": "current",
-     "note": "moved into version 1"
-    }
-   ],
-   [
-    {
-     "name": "k7-core",
-     "state": "current",
-     "note": "draft copied from version 1"
-    }
-   ]
-  ],
-  "after": {
-   "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
-   "data/libraries/k7-core/1/modules/old.k7x": "x(1)\n",
-   "data/libraries/k7-core/draft/modules/old.k7x": "x(1)\n",
-   "seed/k7-core/.git/": "",
-   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
-  }
- },
- {
   "name": "a published seed installs under its own number and a newer one is added",
   "kind": "store",
   "tree": {
@@ -386,78 +344,6 @@
   }
  },
  {
-  "name": "a deployment from before k7 renames st0",
-  "kind": "store",
-  "tree": {
-   "data/libraries.json": "{\"libraries\":[{\"name\":\"st0\"},{\"name\":\"drums\"}]}",
-   "data/libraries/st0/1/a.k7x": "a\n",
-   "data/libraries/drums/1/b.k7x": "b\n",
-   "data/libraries/.sync-relay/st0/state": "s",
-   "data/libraries/.sync-relay/drums/state": "s"
-  },
-  "seed": "",
-  "steps": [
-   {
-    "op": "renameLegacy"
-   },
-   {
-    "op": "settings"
-   },
-   {
-    "op": "renameLegacy"
-   }
-  ],
-  "results": [
-   true,
-   [
-    {
-     "name": "k7-core"
-    },
-    {
-     "name": "drums"
-    }
-   ],
-   false
-  ],
-  "after": {
-   "data/libraries/drums/1/b.k7x": "b\n",
-   "data/libraries/k7-core/1/a.k7x": "a\n",
-   "data/libraries.json": "{\n  \"libraries\": [\n    {\n      \"name\": \"k7-core\"\n    },\n    {\n      \"name\": \"drums\"\n    }\n  ]\n}\n"
-  }
- },
- {
-  "name": "a list that names k7-core already keeps st0 as it is",
-  "kind": "store",
-  "tree": {
-   "data/libraries.json": "{\"libraries\":[{\"name\":\"st0\"},{\"name\":\"k7-core\"}]}",
-   "data/libraries/st0/1/a.k7x": "a\n"
-  },
-  "seed": "",
-  "steps": [
-   {
-    "op": "renameLegacy"
-   },
-   {
-    "op": "settings"
-   }
-  ],
-  "results": [
-   false,
-   [
-    {
-     "name": "st0"
-    },
-    {
-     "name": "k7-core"
-    }
-   ]
-  ],
-  "after": {
-   "data/libraries/st0/1/a.k7x": "a\n",
-   "data/libraries.json": "{\"libraries\":[{\"name\":\"st0\"},{\"name\":\"k7-core\"}]}"
-  }
- },
- {
   "name": "empty version folders are husks and are removed",
   "kind": "store",
   "tree": {
@@ -509,59 +395,6 @@
    "data/libraries/k7-core/1/library.k7x": "name(\"k7-core\")\nversion(1)\nrequires(1)\n",
    "data/libraries/k7-core/1/modules/mix.k7x": "plugin(\"mixer\")\n",
    "seed/k7-core/.git/": "",
-   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
-  }
- },
- {
-  "name": "a legacy library.yaml in a seed is upgraded in its copy",
-  "kind": "store",
-  "tree": {
-   "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n",
-   "seed/k7-core/.git/": "",
-   "seed/k7-core/library.yaml": "name: k7-core\nversion: 3\nrequires: 1\nnotes: \"from yaml\"\n"
-  },
-  "seed": "$ROOT/seed",
-  "steps": [
-   {
-    "op": "ensure"
-   },
-   {
-    "op": "versions",
-    "name": "k7-core"
-   },
-   {
-    "op": "ensure"
-   }
-  ],
-  "results": [
-   [
-    {
-     "name": "k7-core",
-     "state": "seeded",
-     "note": "copied from $ROOT/seed/k7-core"
-    }
-   ],
-   [
-    {
-     "name": "k7-core",
-     "version": 3,
-     "requires": 1,
-     "notes": "from yaml"
-    }
-   ],
-   [
-    {
-     "name": "k7-core",
-     "state": "current",
-     "note": "here"
-    }
-   ]
-  ],
-  "after": {
-   "data/libraries/k7-core/3/library.k7x": "name(\"k7-core\")\nversion(3)\nrequires(1)\nnotes(\"from yaml\")\n",
-   "data/libraries/k7-core/3/modules/mix.k7x": "plugin(\"mixer\")\n",
-   "seed/k7-core/.git/": "",
-   "seed/k7-core/library.yaml": "name: k7-core\nversion: 3\nrequires: 1\nnotes: \"from yaml\"\n",
    "seed/k7-core/modules/mix.k7x": "plugin(\"mixer\")\n"
   }
  },

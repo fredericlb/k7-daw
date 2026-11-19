@@ -1,5 +1,5 @@
-// compile/jsDspGraph.ts — a DSP module's graph: a `dsp.k7x` decoded by the song crate, or a legacy `jsdsp.json` as it is.
-// What a reader gets wrong: nothing builds a `jsdsp.ts`, and a bad graph plays a pass-through with the reason, never the engine's default.
+// compile/jsDspGraph.ts — a DSP module's graph: a `dsp.k7x` decoded by the song crate, or the `jsdsp.json` beside it where the host cannot decode.
+// What a reader gets wrong: a bad graph plays a pass-through with the reason, never the engine's default.
 
 import { basename, dirname, join } from "node:path";
 import { wsExists, wsRead } from "../yaml/workspaceFile";
@@ -15,9 +15,9 @@ export interface JsDspGraph {
   error?: string;
 }
 
-const LEGACY_CACHE = "jsdsp.json";
+const CACHE = "jsdsp.json";
 
-// A legacy cache's text when it parses, else undefined.
+// The cache's text when it parses, else undefined.
 function readCache(path: string): string | undefined {
   try {
     const text = wsRead(path);
@@ -33,15 +33,11 @@ const passThrough = (error: string): JsDspGraph => ({
   error,
 });
 
-// `.ts` and its kin drop to `.json`, as the Rust side's `cache_of` does.
-const cacheOf = (source: string): string =>
-  `${source.replace(/\.[tj]sx?$/, "")}.json`;
-
 function literalGraph(source: string): JsDspGraph {
   if (!wsExists(source))
     return passThrough(`its ${basename(source)} is missing`);
   if (!dspCanDecode()) {
-    const cached = readCache(join(dirname(source), LEGACY_CACHE));
+    const cached = readCache(join(dirname(source), CACHE));
     return cached !== undefined
       ? { graph: cached }
       : passThrough("this machine cannot decode dsp.k7x");
@@ -53,11 +49,8 @@ function literalGraph(source: string): JsDspGraph {
   }
 }
 
-/** The graph of the DSP source at `source`: a `dsp.k7x` decoded, any other path a legacy `jsdsp.ts`'s committed cache. */
+/** The graph of the DSP source at `source`: a `dsp.k7x` decoded, any other path none. */
 export function jsDspGraph(source: string): JsDspGraph {
   if (source.endsWith(".k7x")) return literalGraph(source);
-  const cached = readCache(cacheOf(source));
-  return cached !== undefined
-    ? { graph: cached }
-    : passThrough("its jsdsp.json is missing");
+  return passThrough(`${basename(source)} is not a dsp.k7x`);
 }

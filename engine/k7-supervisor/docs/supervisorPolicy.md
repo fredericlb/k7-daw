@@ -334,9 +334,7 @@ ordered list**, `audioPriority`, best first:
 A pick plus a fallback is a two-entry ranking with the precedence written out in prose instead of
 held in the order, and it cannot express the third choice: a musician with an interface, a USB
 headset and the built-in output has to leave two of the three to whichever one JUCE happens to
-enumerate. A list has no arity, so the question stops existing — and a `audioDevice` /
-`audioFallback` pair maps into it exactly as `[audioDevice, audioFallback]`, which is what
-`Settings.cpp` does on read.
+enumerate. A list has no arity, so the question stops existing.
 
 An order also cannot express a fallback ranked above nothing with no pick at all — a state a pair
 can reach and no screen can explain.

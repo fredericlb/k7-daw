@@ -109,8 +109,8 @@ export function CommandsSettings({
   );
   const rename = useCallback(
     (canonical: string, l: string, text: string) =>
-      setDraft((d) => setCommandLabel(d, canonical, l, text, locales)),
-    [locales],
+      setDraft((d) => setCommandLabel(d, canonical, l, text)),
+    [],
   );
   const move = useCallback(
     (canonical: string, by: -1 | 1) =>

@@ -120,7 +120,6 @@ pub fn create_project(
             // A staged file is text: the sample goes in empty and its bytes replace it once the set has landed.
             scaffold(
                 &mut fs,
-                &env,
                 &dir,
                 &name,
                 kind,

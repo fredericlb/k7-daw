@@ -24,8 +24,6 @@ song-edit = { path = "../../../../../packages/song-edit/rust" }
 notify.workspace = true
 # `slotIdOf` folds accents with the full NFD, as `normalize("NFD")` does.
 unicode-normalization.workspace = true
-# The legacy preferences.yaml is read once to be upgraded (preferences/yaml.rs).
-saphyr-parser.workspace = true
 # A job's id is 128 random bits (verb_host/jobs.rs).
 getrandom.workspace = true
 

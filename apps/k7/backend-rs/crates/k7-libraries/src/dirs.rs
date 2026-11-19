@@ -5,14 +5,12 @@
 use std::fs;
 use std::path::Path;
 
-use k7_file_service::atomic::write_atomic;
 
-use crate::manifest::{Manifest, parse_legacy_manifest, parse_manifest, stringify_manifest};
+use crate::manifest::{Manifest, parse_manifest, stringify_manifest};
 
 /// A manifest in its k7x spelling.
 pub const MANIFEST: &str = "library.k7x";
 /// A manifest before it was k7x.
-pub const LEGACY_MANIFEST: &str = "library.yaml";
 /// The folder an admin edits a library in.
 pub const DRAFT: &str = "draft";
 /// A workspace's recycle bin, never published.
@@ -72,37 +70,9 @@ fn read_text(p: &Path) -> Option<String> {
         .map(|b| String::from_utf8_lossy(&b).into_owned())
 }
 
-/// A version's manifest, `library.k7x` or else a legacy `library.yaml`, read where it is.
+/// A version's manifest, `library.k7x`, read where it is.
 pub fn read_manifest(dir: &Path) -> Option<Manifest> {
-    match read_text(&dir.join(MANIFEST)) {
-        Some(t) => parse_manifest(&t),
-        None => parse_legacy_manifest(&read_text(&dir.join(LEGACY_MANIFEST))?),
-    }
-}
-
-/// A legacy `library.yaml` in a folder the hub owns, upgraded once to `library.k7x`.
-pub fn upgrade_manifest(dir: &Path) {
-    let (file, legacy) = (dir.join(MANIFEST), dir.join(LEGACY_MANIFEST));
-    if file.exists() || !legacy.exists() {
-        return;
-    }
-    let Some(value) = read_text(&legacy).and_then(|t| parse_legacy_manifest(&t)) else {
-        return;
-    };
-    if write_atomic(
-        &file.to_string_lossy(),
-        stringify_manifest(&value).as_bytes(),
-    )
-    .is_err()
-    {
-        return;
-    }
-    // A copy that does not say the same thing is taken back, and the legacy file stays the truth.
-    if read_text(&file).and_then(|t| parse_manifest(&t)).as_ref() == Some(&value) {
-        let _ = fs::remove_file(&legacy);
-    } else {
-        let _ = fs::remove_file(&file);
-    }
+    parse_manifest(&read_text(&dir.join(MANIFEST))?)
 }
 
 /// Is the version whose manifest is `held` this seed, installed under its own number or, renumbered, under another?
@@ -114,15 +84,8 @@ pub fn is_copy_of_seed(held: Option<&Manifest>, seed: &Manifest) -> bool {
     }
 }
 
-/// A manifest of the hub's own folders: upgraded first, then read.
-pub fn own_manifest(dir: &Path) -> Option<Manifest> {
-    upgrade_manifest(dir);
-    read_manifest(dir)
-}
-
 /// Version 1 of a library written before versions: it asks for nothing past the first level.
 pub fn write_first_manifest(name: &str, dir: &Path) -> std::io::Result<()> {
-    upgrade_manifest(dir);
     let file = dir.join(MANIFEST);
     if file.exists() {
         return Ok(());

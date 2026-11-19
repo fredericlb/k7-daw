@@ -18,8 +18,6 @@ use crate::tree::Limits;
 
 /// The folder beside the workspaces that holds each one's open-project marker.
 const MARKERS_DIR: &str = ".active-projects";
-/// The marker a workspace once kept inside itself, which only a migration moves.
-const LEGACY_MARKER: &str = ".studio-active";
 /// The most of a marker that is read; past it the marker is no path anyone wrote.
 const MAX_MARKER: u64 = 1 << 20;
 /// A project's own file, where its tags are.
@@ -72,10 +70,6 @@ fn active_of(root: &str, markers: &str, name: &str) -> Result<Option<String>, De
     let read = fs::File::open(join(&[markers, name]))
         .and_then(|f| f.take(MAX_MARKER + 1).read_to_end(&mut bytes));
     if read.is_err() {
-        // A legacy marker is moved by a read, a write the native side never makes.
-        if fs::metadata(join(&[root, LEGACY_MARKER])).is_ok_and(|m| m.is_file()) {
-            return Err(Declined::LegacyMarker);
-        }
         return Ok(None);
     }
     let text = String::from_utf8_lossy(&bytes);

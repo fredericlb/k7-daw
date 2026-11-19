@@ -204,14 +204,7 @@ fn a_scan_the_song_crate_would_read_short_is_declined() {
 }
 
 #[test]
-fn the_open_projects_marker_and_a_library_one_are_declined() {
-    // 1420: a workspace still holding the marker it once kept inside itself is declined.
-    let s = Scratch::new("lv-marker");
-    s.file("ws/.studio-active", "song.k7");
-    assert_eq!(
-        run(&s, &Limits::default()).unwrap_err(),
-        Declined::LegacyMarker
-    );
+fn a_library_as_the_open_project_is_declined() {
     let s = Scratch::new("lv-library-active");
     s.dir("ws");
     s.file(".active-projects/ws", "_libraries/k7-core");

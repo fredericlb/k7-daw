@@ -71,7 +71,6 @@ impl Libraries {
             .get_or_init(|| async {
                 let store = self.store.clone();
                 let notes = tokio::task::spawn_blocking(move || {
-                    store.rename_legacy_default();
                     store.ensure(None, false)
                 })
                 .await

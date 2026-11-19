@@ -177,7 +177,7 @@ impl<'a> Texts<'a> {
 /// What a DSP module's graph says of it: nothing when it plays, else one ERROR in the TypeScript's own sentence.
 pub fn jsdsp_finding(g: &JsDspGraph, label: &str, name: &str) -> Option<Finding> {
     let reason = match &g.state {
-        GraphState::Fresh | GraphState::Orphan => return None,
+        GraphState::Fresh => return None,
         GraphState::Missing => format!("its {} is missing", g.json_path.rsplit('/').next().unwrap_or("")),
         GraphState::Invalid(why) => why.clone(),
     };

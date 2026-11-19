@@ -66,7 +66,6 @@ front answers them itself
 | difference | why |
 |---|---|
 | a library version of a request that is not a whole number from 1 to 999999 is a `failed` note, never a path | `String(1.5)` named a folder |
-| a legacy `library.yaml` is read as flat `key: value` lines; anything nested or folded reads as no manifest | no YAML library in Rust (decision 4-3 is open); the hub itself only wrote flat ones |
 | a body that is JSON but not an object reads as `{}` | a field of `null` must not be a 500 |
 | an error note carries the operating system's wording of Rust, not `ENOENT: …` | the state of the note is what callers read |
 

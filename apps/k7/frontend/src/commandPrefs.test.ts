@@ -99,19 +99,12 @@ describe("what a command is called", () => {
       labelOf(CMDS[0], { "clip trim": { label: { fr: "   " } } }, "fr"),
     ).toBe("Trim a clip");
   });
-
-  it("still reads a name saved BEFORE there was a field per language", () => {
-    // A bare string was one name with no language attached, so it stands for every locale, and nothing rewrites it on load.
-    const legacy = { "clip trim": { label: "Rogner" } };
-    expect(labelOf(CMDS[0], legacy, "fr")).toBe("Rogner");
-    expect(labelOf(CMDS[0], legacy, "en")).toBe("Rogner");
-  });
 });
 
 /** The space bar did not work in the settings page's name fields, and this is where it broke: `labelIn` trimmed a CONTROLLED input's value. */
 describe("the text a field is handed back", () => {
   it("is what was typed, space and all", () => {
-    const p = setCommandLabel({}, "clip trim", "fr", "Rogner ", ["en", "fr"]);
+    const p = setCommandLabel({}, "clip trim", "fr", "Rogner ");
     expect(labelIn(p["clip trim"].label, "fr")).toBe("Rogner ");
   });
 
@@ -128,40 +121,16 @@ describe("the text a field is handed back", () => {
 });
 
 describe("naming a command in one language", () => {
-  const LOCALES = ["en", "fr"];
-
   it("leaves the other languages alone", () => {
-    const one = setCommandLabel({}, "clip trim", "fr", "Rogner", LOCALES);
+    const one = setCommandLabel({}, "clip trim", "fr", "Rogner");
     expect(one["clip trim"].label).toEqual({ fr: "Rogner" });
-    const both = setCommandLabel(one, "clip trim", "en", "Trim", LOCALES);
+    const both = setCommandLabel(one, "clip trim", "en", "Trim");
     expect(both["clip trim"].label).toEqual({ fr: "Rogner", en: "Trim" });
-  });
-
-  it("EXPANDS a legacy name across the languages before editing one", () => {
-    // The migration, and the reason `locales` is a parameter: without it, renaming in French drops the name English was showing.
-    const legacy: CommandPrefs = { "clip trim": { label: "Rogner" } };
-    const next = setCommandLabel(
-      legacy,
-      "clip trim",
-      "fr",
-      "Rogner un clip",
-      LOCALES,
-    );
-    expect(next["clip trim"].label).toEqual({
-      en: "Rogner", // kept: it is what English was showing
-      fr: "Rogner un clip",
-    });
   });
 
   it("keeps the command's other overrides", () => {
     const withIcon: CommandPrefs = { "clip trim": { icon: "Scissors" } };
-    const next = setCommandLabel(
-      withIcon,
-      "clip trim",
-      "fr",
-      "Rogner",
-      LOCALES,
-    );
+    const next = setCommandLabel(withIcon, "clip trim", "fr", "Rogner");
     expect(next["clip trim"]).toEqual({
       icon: "Scissors",
       label: { fr: "Rogner" },
@@ -170,14 +139,14 @@ describe("naming a command in one language", () => {
 
   it("emptying the last field takes the override back entirely", () => {
     // An override given up must leave the document as it was — no `label: {}` behind, and no entry once nothing else is overridden.
-    const one = setCommandLabel({}, "clip trim", "fr", "Rogner", LOCALES);
-    expect(setCommandLabel(one, "clip trim", "fr", "", LOCALES)).toEqual({});
+    const one = setCommandLabel({}, "clip trim", "fr", "Rogner");
+    expect(setCommandLabel(one, "clip trim", "fr", "")).toEqual({});
   });
 
   it("emptying ONE field leaves the other naming the command", () => {
-    let p = setCommandLabel({}, "clip trim", "fr", "Rogner", LOCALES);
-    p = setCommandLabel(p, "clip trim", "en", "Trim", LOCALES);
-    p = setCommandLabel(p, "clip trim", "en", "  ", LOCALES);
+    let p = setCommandLabel({}, "clip trim", "fr", "Rogner");
+    p = setCommandLabel(p, "clip trim", "en", "Trim");
+    p = setCommandLabel(p, "clip trim", "en", "  ");
     expect(p["clip trim"].label).toEqual({ fr: "Rogner" });
   });
 });
@@ -237,15 +206,18 @@ describe("moving one", () => {
 
 describe("setting a field", () => {
   it("merges rather than replaces", () => {
-    const a = setCommandPref({}, "clip trim", { label: "Rogner" });
+    const a = setCommandPref({}, "clip trim", { label: { fr: "Rogner" } });
     const b = setCommandPref(a, "clip trim", { icon: "Scissors" });
-    expect(b["clip trim"]).toEqual({ label: "Rogner", icon: "Scissors" });
+    expect(b["clip trim"]).toEqual({
+      label: { fr: "Rogner" },
+      icon: "Scissors",
+    });
   });
 
   it("drops the entry when the last override is taken back", () => {
     // An override undone must leave the document as it was, not grow a row of empty objects every later read steps over.
-    const a = setCommandPref({}, "clip trim", { label: "Rogner" });
-    expect(setCommandPref(a, "clip trim", { label: "" })).toEqual({});
+    const a = setCommandPref({}, "clip trim", { label: { fr: "Rogner" } });
+    expect(setCommandPref(a, "clip trim", { label: undefined })).toEqual({});
   });
 
   it("leaves the other commands alone", () => {

@@ -12,7 +12,6 @@ the library forks, the engine module's fork, a new project's files, the mixer's 
 | a fresh node id comes from a `NewId` closure the host gives (`ids.rs`) | the crate reads no random source; a replay hands the ids the harvest saw, in the order the TypeScript made them |
 | `shared_folders.rs` takes the places from `Env` and reads pins through the `Fs` | the TypeScript reads `$STUDIO_HOME` and the process's overlays; the crate may read neither |
 | a pin file in the old YAML spelling is not read or upgraded | the upgrade writes and deletes files through YAML; it belongs to the native server, so a workspace with only that file answers no pins |
-| `preferences_file.rs` answers a leftover `preferences.yaml` with the "does not read" problem, never with defaults | a mutator that saved over it would lose what the file holds |
 | channel numbers in the preferences stay `f64` | the TypeScript keeps JavaScript numbers; `Number("0x10")` and `Number(null)` are what a hand-written file may hold, and `js_text.rs` spells them |
 | `module_fork` takes the engine catalogue and the panel's text from the host | the loader and the panel library stay TypeScript; the host reads them and the crate writes what they say |
 | `scaffold_files.rs` and `scaffold_live.rs` hold the chain files' text, ids marked `<idN>` | the golden replay of `scaffold` keeps the text and the order the ids are minted in |

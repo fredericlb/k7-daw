@@ -26,7 +26,7 @@ import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
 import type { AutoFreeze } from "./autoFreeze";
 import { isChainProject } from "./chainProject";
 import { confineToProject } from "./confine";
-import { assembleFolder, isFolderProject } from "./folder";
+import { isFolderProject } from "./folder";
 import { exportSub, readsAsPicture } from "./loader";
 import { compileWithAutoFreezes } from "./nodeProject";
 import { withOutputRecorder } from "./outputRecorder";
@@ -151,15 +151,15 @@ export function loadProjectWithFreezes(sourcePath: string): {
   const abs = resolve(sourcePath);
   if (isFolderProject(abs)) {
     const dir = statSync(abs).isDirectory() ? abs : dirname(abs);
-    // A node project (graph.k7x / modules/) is the graph model — compile it down (nodeProject.ts).
-    const { doc, freezes } = isGraphProject(dir)
-      ? compileWithAutoFreezes(dir)
-      : { doc: mapDoc(assembleFolder(dir), dir), freezes: [] };
+    // A project is the graph model (graph.k7x or chains/) — compile it down (nodeProject.ts).
+    if (!isGraphProject(dir))
+      throw new Error(`${dir} holds neither a graph.k7x nor a chains/ folder`);
+    const { doc, freezes } = compileWithAutoFreezes(dir);
     // Set here, not in the two compilers, so both agree by not each deciding.
     const out = { ...doc, recordDir: join(dir, "clips") };
     // A project with no timeline records its OUTPUT, with a recorder no graph names (outputRecorder.ts).
     return {
-      doc: isGraphProject(dir) ? withOutputRecorder(out, dir) : out,
+      doc: withOutputRecorder(out, dir),
       freezes,
     };
   }

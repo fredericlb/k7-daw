@@ -131,7 +131,11 @@ async fn the_nine_routes_are_answered_natively() {
 async fn a_docs_decline_is_counted_apart_from_the_reads() {
     let (dir, acct) = world("docs-apart").await;
     let lines = Lines::default();
-    std::fs::write(dir.join("home/preferences.yaml"), "channels: {}\n").unwrap();
+    std::fs::write(
+        dir.join("home/workspace/.active-projects/songs"),
+        "_libraries/x/p.k7",
+    )
+    .unwrap();
     let c = answering(&acct, &dir, Tag::ProjectDoc, &lines);
     let ours = route(&dir, H::ProjectDoc, "", Some(c)).await;
     assert_eq!(ours.0, 409, "{}", ours.1);
@@ -175,16 +179,20 @@ async fn what_the_native_side_cannot_prove_is_refused_with_a_sentence() {
     let at = route(&dir, H::Graph, "at=p.k7", Some(c)).await;
     assert_eq!(at.0, 200, "a graph of another folder: {}", at.1);
     assert_eq!(declined(), 0);
-    // A legacy preferences file: the roots cannot be made, the ask is refused with a sentence (4-7), the decline said once.
-    std::fs::write(dir.join("home/preferences.yaml"), "channels: {}\n").unwrap();
+    // A library as the open project: the roots cannot be made, the ask is refused with a sentence (4-7), the decline said once.
+    std::fs::write(
+        dir.join("home/workspace/.active-projects/songs"),
+        "_libraries/x/p.k7",
+    )
+    .unwrap();
     for asked in 1..=2u64 {
         let c = answering(&acct, &dir, Tag::Hints, &lines);
         let ours = route(&dir, H::Hints, "", Some(c)).await;
         assert_eq!(ours.0, 409, "ask {asked}: {}", ours.1);
-        assert_eq!(value(&ours.1)["declined"], "legacy-preferences");
+        assert_eq!(value(&ours.1)["declined"], "library-active");
         assert_eq!(declined(), asked, "ask {asked}");
     }
-    let legacy = |l: &String| l.contains("legacy-preferences");
+    let legacy = |l: &String| l.contains("library-active");
     let said = lines.lock().unwrap().iter().filter(|l| legacy(l)).count();
     assert_eq!(said, 1, "{:?}", lines.lock().unwrap());
     std::fs::remove_dir_all(dir).unwrap();

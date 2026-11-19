@@ -241,16 +241,10 @@ fn the_mounts_hold_under_the_host_rule() {
 }
 
 #[test]
-fn a_legacy_pins_file_is_declined_and_an_unreadable_one_is_no_pins() {
+fn an_unreadable_pins_file_is_no_pins() {
     let s = Scratch::new("ask-pins");
     let (home, project) = plain(&s);
     s.dir("libraries/a");
-    s.file("studio/workspace/ws/_library-pins.yaml", "a: 1\n");
-    assert_eq!(
-        roots(&home, &project, "/code", &BTreeMap::new()).err(),
-        Some(Declined::LegacyPins)
-    );
-    std::fs::remove_file(s.path("studio/workspace/ws/_library-pins.yaml")).unwrap();
     for text in ["this does not parse (".to_owned(), "x".repeat(100_000)] {
         s.file("studio/workspace/ws/_library-pins.k7x", &text);
         assert!(roots(&home, &project, "/code", &BTreeMap::new()).is_ok());

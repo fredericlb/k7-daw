@@ -6,9 +6,9 @@ use crate::support;
 
 use freeze_support::{Counting, fast};
 use serde_json::json;
-use song::jsdsp::{GraphState, MAX_GRAPH, NODE_TYPES, PASS_THROUGH_GRAPH, cache_of, jsdsp_graph, validate_graph};
+use song::jsdsp::{GraphState, MAX_GRAPH, NODE_TYPES, PASS_THROUGH_GRAPH, jsdsp_graph, validate_graph};
 use song::record::Recorder;
-use song::{BundleFile, DiskSource, MemSource, Source, SourceBundle, SourceError};
+use song::{DiskSource, MemSource, Source, SourceBundle, SourceError};
 use std::collections::BTreeMap;
 use support::{Tmp, spell};
 
@@ -19,36 +19,9 @@ fn world(t: &Tmp) -> DiskSource {
     DiskSource::new(&[spell(&t.0)]).expect("a source")
 }
 
-fn older(t: &Tmp, rel: &str, secs: u64) {
-    let f = std::fs::File::options().write(true).open(t.0.join(rel)).expect("open");
-    f.set_modified(std::time::SystemTime::now() - std::time::Duration::from_secs(secs))
-        .expect("mtime");
-}
-
 fn state(t: &Tmp) -> (GraphState, String) {
-    let g = jsdsp_graph(&world(t), &t.at("m/jsdsp.ts")).expect("a source");
+    let g = jsdsp_graph(&world(t), &t.at("m/dsp.k7x")).expect("a source");
     (g.state, g.text.to_string())
-}
-
-#[test]
-fn the_cache_of_a_source_drops_its_extension_and_takes_json() {
-    // decision 349
-    assert_eq!(cache_of("/m/jsdsp.ts"), "/m/jsdsp.json");
-    assert_eq!(cache_of("/m/jsdsp.tsx"), "/m/jsdsp.json");
-    assert_eq!(cache_of("/m/a.js"), "/m/a.json");
-    assert_eq!(cache_of("/m/a.jsx"), "/m/a.json");
-    assert_eq!(cache_of("/m/a.d.ts"), "/m/a.d.json");
-    assert_eq!(cache_of("/m/noext"), "/m/noext.json");
-}
-
-#[test]
-fn a_legacy_graph_beside_its_source_plays_with_no_word_and_is_never_rebuilt() {
-    // nothing builds a jsdsp.ts any more: its committed cache is the graph, newer or older than the source
-    let t = Tmp::new("js-legacy");
-    t.write("m/jsdsp.ts", "export default {};\n");
-    t.write("m/jsdsp.json", OLD_GRAPH);
-    older(&t, "m/jsdsp.json", 3600);
-    assert_eq!(state(&t), (GraphState::Orphan, OLD_GRAPH.to_owned()));
 }
 
 /// A Source of two files, whose graph file cannot be read as a bundle's non-UTF-8 one cannot.
@@ -77,7 +50,7 @@ impl Source for Stamped {
         if self.read_missing {
             return Err(SourceError::Missing);
         }
-        assert!(path.ends_with(".json"));
+        assert!(path.ends_with(".k7x"));
         Ok(GOOD.as_bytes().to_vec())
     }
 
@@ -90,46 +63,9 @@ impl Source for Stamped {
 fn a_graph_the_bundle_stats_and_cannot_read_is_not_utf8_and_not_a_missing_file() {
     // decision 344's reading of a stat'ed file the bundle cannot read, for the graph too
     let src = Stamped { read_missing: true };
-    let g = jsdsp_graph(&src, "/p/m/jsdsp.ts").expect("an answer, not needs_files");
+    let g = jsdsp_graph(&src, "/p/m/dsp.k7x").expect("an answer, not needs_files");
     assert!(matches!(g.state, GraphState::Invalid(_)), "{:?}", g.state);
     assert_eq!(&*g.text, PASS_THROUGH_GRAPH);
-}
-
-#[test]
-fn a_memory_source_reads_a_legacy_graph_like_a_disk() {
-    // decision 352: a memory stamp is a hash, so nothing is ever compared with it
-    let mem = |files: &[(&str, &str)]| {
-        let mut held = BTreeMap::new();
-        let mut names = Vec::new();
-        for (n, t) in files {
-            held.insert(
-                format!("/p/m/{n}"),
-                BundleFile {
-                    text: Some((*t).to_owned()),
-                    len: None,
-                    ..Default::default()
-                },
-            );
-            names.push(song::Entry {
-                name: (*n).to_owned(),
-                kind: song::Kind::File,
-            });
-        }
-        MemSource::from_bundle(SourceBundle {
-            format: 1,
-            mounts: vec!["/p".into()],
-            files: held,
-            lists: BTreeMap::from([("/p/m".to_owned(), names)]),
-            ..Default::default()
-        })
-        .expect("bundle")
-    };
-    let src = mem(&[("jsdsp.ts", "x"), ("jsdsp.json", GOOD)]);
-    assert!(!src.stamps_are_times());
-    let g = jsdsp_graph(&src, "/p/m/jsdsp.ts").expect("a source");
-    assert_eq!((g.state, &*g.text), (GraphState::Orphan, GOOD));
-    assert_eq!(g.json_path, "/p/m/jsdsp.json");
-    assert!(world(&Tmp::new("js-times")).stamps_are_times());
 }
 
 #[test]
@@ -147,17 +83,7 @@ fn a_source_with_no_graph_is_missing_and_plays_the_pass_through() {
     let t = Tmp::new("js-missing");
     t.mkdir("m");
     assert_eq!(state(&t), (GraphState::Missing, PASS_THROUGH_GRAPH.to_owned()));
-    t.write("m/jsdsp.ts", "export default {};\n");
-    assert_eq!(state(&t), (GraphState::Missing, PASS_THROUGH_GRAPH.to_owned()));
-}
-
-#[test]
-fn a_graph_with_no_source_is_an_orphan_and_plays_with_no_word() {
-    // decision 350
-    let t = Tmp::new("js-orphan");
-    t.write("m/jsdsp.json", GOOD);
-    assert_eq!(state(&t), (GraphState::Orphan, GOOD.to_owned()));
-}
+    }
 
 fn literal(t: &Tmp) -> (GraphState, String) {
     let g = jsdsp_graph(&world(t), &t.at("m/dsp.k7x")).expect("a source");
@@ -217,8 +143,7 @@ fn invalid(t: &Tmp) {
 fn a_graph_the_engine_cannot_read_is_invalid_and_plays_the_pass_through() {
     // jsdsp row "invalid JSON"; decision 350
     let t = Tmp::new("js-invalid");
-    t.write("m/jsdsp.ts", "x");
-    t.write("m/jsdsp.json", "{ nope");
+    t.write("m/dsp.k7x", "{ nope");
     invalid(&t);
 }
 
@@ -226,36 +151,23 @@ fn a_graph_the_engine_cannot_read_is_invalid_and_plays_the_pass_through() {
 fn a_graph_of_two_mebibytes_is_invalid_and_never_read() {
     // jsdsp row "2 MiB"; decision 350
     let t = Tmp::new("js-big");
-    t.write("m/jsdsp.ts", "x");
     t.write(
-        "m/jsdsp.json",
+        "m/dsp.k7x",
         &format!("{{\"nodes\":[],\"pad\":\"{}\"}}", "a".repeat(2 * 1024 * 1024)),
     );
     let disk = world(&t);
     let src = Counting::new(&disk);
-    let g = jsdsp_graph(&src, &t.at("m/jsdsp.ts")).expect("a source");
+    let g = jsdsp_graph(&src, &t.at("m/dsp.k7x")).expect("a source");
     assert!(matches!(g.state, GraphState::Invalid(_)));
     assert_eq!(src.reads(), 0);
-}
-
-#[test]
-fn a_graph_nested_forty_deep_is_invalid() {
-    // jsdsp row "depth 40"; decision 351
-    let t = Tmp::new("js-deep");
-    t.write("m/jsdsp.ts", "x");
-    t.write(
-        "m/jsdsp.json",
-        &format!("{{\"nodes\":[],\"x\":{}1{}}}", "[".repeat(40), "]".repeat(40)),
-    );
-    invalid(&t);
 }
 
 #[test]
 fn a_graph_that_is_not_utf8_is_invalid() {
     // jsdsp row "not UTF-8"; decision 350
     let t = Tmp::new("js-utf8");
-    t.write("m/jsdsp.ts", "x");
-    std::fs::write(t.0.join("m/jsdsp.json"), [0xff, 0xfe, b'{', b'}']).expect("write");
+    t.mkdir("m");
+    std::fs::write(t.0.join("m/dsp.k7x"), [0xff, 0xfe, b'{', b'}']).expect("write");
     invalid(&t);
 }
 
@@ -263,8 +175,7 @@ fn a_graph_that_is_not_utf8_is_invalid() {
 fn a_graph_that_is_a_folder_is_invalid() {
     // jsdsp row "a folder"; decision 350
     let t = Tmp::new("js-folder");
-    t.write("m/jsdsp.ts", "x");
-    t.mkdir("m/jsdsp.json");
+    t.mkdir("m/dsp.k7x");
     invalid(&t);
 }
 
@@ -275,8 +186,8 @@ fn a_graph_that_is_a_link_out_of_the_mounts_is_invalid() {
     let t = Tmp::new("js-link");
     let out = Tmp::new("js-link-out");
     out.write("g.json", GOOD);
-    t.write("m/jsdsp.ts", "x");
-    std::os::unix::fs::symlink(out.0.join("g.json"), t.0.join("m/jsdsp.json")).expect("link");
+    t.mkdir("m");
+    std::os::unix::fs::symlink(out.0.join("g.json"), t.0.join("m/dsp.k7x")).expect("link");
     invalid(&t);
 }
 
@@ -297,20 +208,19 @@ fn a_bundle_that_does_not_hold_the_graph_is_the_error() {
         ..Default::default()
     };
     let src = MemSource::from_bundle(bundle).expect("bundle");
-    assert_eq!(jsdsp_graph(&src, "/p/m/jsdsp.ts"), Err(SourceError::Missing));
+    assert_eq!(jsdsp_graph(&src, "/p/m/dsp.k7x"), Err(SourceError::Missing));
 }
 
 #[test]
 fn a_recorder_keeps_the_text_of_the_graph() {
     // read set: a graph is read whole, so a bundle made from the compile holds it
     let t = Tmp::new("js-record");
-    t.write("m/jsdsp.ts", "x");
-    t.write("m/jsdsp.json", GOOD);
+    t.write("m/dsp.k7x", GOOD);
     let disk = world(&t);
     let rec = Recorder::new(&disk);
-    jsdsp_graph(&rec, &t.at("m/jsdsp.ts")).expect("a source");
+    jsdsp_graph(&rec, &t.at("m/dsp.k7x")).expect("a source");
     let bundle = rec.into_bundle(&[spell(&t.0)]);
-    assert_eq!(bundle.files[&t.at("m/jsdsp.json")].text.as_deref(), Some(GOOD));
+    assert_eq!(bundle.files[&t.at("m/dsp.k7x")].text.as_deref(), Some(GOOD));
 }
 
 fn ok(v: serde_json::Value) {

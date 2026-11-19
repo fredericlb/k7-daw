@@ -114,15 +114,11 @@ fn the_nearest_pins_file_above_wins_and_a_bad_one_stops_the_walk() {
 }
 
 #[test]
-fn a_legacy_file_and_a_lossy_text_are_the_typescripts_alone() {
-    let s = Scratch::new("pins-legacy");
-    s.file("w/_library-pins.yaml", "k7-core(2)\n");
+fn the_nearest_pins_file_wins_and_a_lossy_text_is_the_typescripts_alone() {
+    let s = Scratch::new("pins-lossy");
     s.dir("w/p");
-    assert_eq!(workspace_pins(&s.path("w/p")), Err(Declined::LegacyPins));
     // Found first, whatever stands higher.
     s.file("_library-pins.k7x", "k7-core(5)\n");
-    assert_eq!(workspace_pins(&s.path("w/p")), Err(Declined::LegacyPins));
-    // The k7x beside the legacy file wins: it is the upgraded one.
     s.file("w/_library-pins.k7x", "k7-core(4)\n");
     assert_eq!(
         workspace_pins(&s.path("w/p")).unwrap().get("k7-core"),
@@ -302,13 +298,13 @@ fn the_account_s_folder_answers_before_a_pin() {
         format!("{}/library", h.studio)
     );
     // …and a pins file the Rust reader refuses does not matter to the account's library.
-    s.file("w2/_library-pins.yaml", "x(1)\n");
+    s.file("w2/_library-pins.k7x", "k7-core(\"\\ud800\")\n");
     assert_eq!(
         library_root(&h, "account", Some(&s.path("w2"))).unwrap(),
         format!("{}/library", h.studio)
     );
     assert_eq!(
         library_root(&h, "other", Some(&s.path("w2"))),
-        Err(Declined::LegacyPins)
+        Err(Declined::LossyText)
     );
 }

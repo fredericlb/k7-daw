@@ -5,8 +5,8 @@
 
 import type { MenuEntity } from "./types";
 
-/** What a person calls a command, per language; a bare string is the legacy shape and stands for every locale until that command is next edited. */
-export type CommandLabel = string | Record<string, string>;
+/** What a person calls a command, per language. */
+export type CommandLabel = Record<string, string>;
 
 /** Where a right-click may offer a command: a list of entities, `false` for nowhere at all. */
 type MenuChoice = boolean | MenuEntity[];
@@ -40,7 +40,7 @@ export function labelIn(
   locale: string,
 ): string {
   if (label === undefined) return "";
-  return typeof label === "string" ? label : (label[locale] ?? "");
+  return label[locale] ?? "";
 }
 
 /** The ENTITY a command acts on: the first word of its line, so nothing has to be authored and nothing can drift. */
@@ -193,19 +193,14 @@ export function setMenuEntities(
   return setCommandPref(prefs, canonical, { menu });
 }
 
-/** Name a command in ONE language, leaving the others: a legacy bare string is EXPANDED across `locales` first, or the rest would be dropped. */
+/** Name a command in ONE language, leaving the others. */
 export function setCommandLabel(
   prefs: CommandPrefs,
   canonical: string,
   locale: string,
   text: string,
-  locales: readonly string[],
 ): CommandPrefs {
-  const current = prefs[canonical]?.label;
-  const byLocale: Record<string, string> =
-    typeof current === "string"
-      ? Object.fromEntries(locales.map((l) => [l, current]))
-      : { ...current };
+  const byLocale: Record<string, string> = { ...prefs[canonical]?.label };
   byLocale[locale] = text;
   for (const [l, v] of Object.entries(byLocale))
     if (!v.trim()) delete byLocale[l];

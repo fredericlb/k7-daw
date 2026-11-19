@@ -36,7 +36,7 @@ generator is kept. Per home: the chain walk, each template read and its steps' f
 | 1p-D9 | A chain the reader refuses, a resolution with an error finding or a cut `extends` fold decline, and so do a file past 8 MiB or a chain past 50,000 steps; a folder chain's node that is a link out, a graph that is a folder and a preset that is a link out refuse |
 | 1p-D11 | A step's `params` are numbers or strings; any other type (a list, a map, `null`, a bool) refuses the whole chain in both languages (`params-any`), and the Rust reader's refusal declines. The work order's "copied whatever their type" does not hold |
 | 1p-D10 | The answers are `serde_json::Value`s in the literals' key order (`chains_vectors`): the account's chains sorted by ref, then the libraries' cold ones; a number is written as JavaScript writes it (`2`, not `2.0`) |
-| 1p-D12 | `stemsChain` and `instrumentalChain` come from `rig::chain_settings`, beside the rig under the same file states: a string trimmed, empty or any other type is none, the legacy YAML declines (`chains_vectors`, homes 4 to 6) |
+| 1p-D12 | `stemsChain` and `instrumentalChain` come from `rig::chain_settings`, beside the rig under the same file states: a string trimmed, empty or any other type is none (`chains_vectors`, homes 4 to 6) |
 | 1p-D13 | A resolved model path is the vocabulary's own spelling (`/`, a drive's case kept); the sentences keep the literal `~/.k7/models` (`templates.rs`' `C:/` world, `chains_cold`) |
 | 1p-D14 | `resolve_cold_run` is `resolveColdRun` rule for rule (`chains_run`, `chains_vectors`' runs); a chain holding a running step that is not offline declines |
 | 1p-D24 | A folder chain with a missing node file is never cold, while the frozen list computes `cold` from the steps that read (`chains_cold`) |
@@ -49,7 +49,7 @@ A refused template, a resolution that errs and a bound reached decline the whole
 
 | # | row |
 |---|---|
-| 1p-D7 | The bench is `<studio>/workspace/Banc/live.k7`, read and never made. A library cloned and no pins file declines (`pins`); a legacy pins file is the same decline |
+| 1p-D7 | The bench is `<studio>/workspace/Banc/live.k7`, read and never made. A library cloned and no pins file declines (`pins`) |
 | 1p-D8 | The vocabulary is built through the workspace's session in `SongSessions`, under the roots `song_roots` makes for the bench, on the compiler's stack (`stack::on_stack`); the lists share it and the walk is made once |
 | 1p-D15 | The hub's cut is answered by `chains::cold_run_answer`, a decline a refusal in its sentence (`hub/answers.rs`) |
 | 1p-D17 | No lock across an await: the sessions' lock is taken only inside the stack helper, the answering weight is taken before it |
