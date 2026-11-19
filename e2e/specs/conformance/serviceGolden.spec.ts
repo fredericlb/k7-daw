@@ -36,6 +36,8 @@ const TABLE: Record<string, Sound> = {
   "crossfade-demo.k7": "sounds",
   "rack-demo.k7": "sounds",
   "synth-demo.k7": "sounds",
+  // A set: silent until a record is loaded on a deck, as the `mix` archetype.
+  "turntables-demo.k7": "silent",
   "video-demo.k7": "sounds",
   "node-demo.k7": "sounds",
 };
