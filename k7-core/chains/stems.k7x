@@ -15,10 +15,10 @@
 
 steps([
   id("2980a2fd-0e79-42fe-ba6a-c2c28e95d147")
-    // Le séparateur de la médiathèque, sans réglage : ce module n'a pas de potard, sa seule
-    // « valeur » est le MODÈLE, et celui-là est déclaré par le module lui-même (`onnx:`) parce que
-    // 166 Mo ne voyagent pas dans un fork. Les octets sont dans ~/.studio/models sur la machine qui
-    // calcule ; si elle ne les a pas, la chaîne est refusée avant qu'une seconde ne soit dépensée.
+    // The media separator, with no setting: this module has no knob, its only "value" is the MODEL,
+    // and that one is declared by the module itself (`onnx:`) because 166 MB do not travel in a fork.
+    // The bytes are in ~/.studio/models on the machine that computes; if it lacks them, the chain
+    // is refused before a second is spent.
     .extends("@k7-core/cold/stemsplit"),
   to([chain("@out")]),
 ])

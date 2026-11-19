@@ -6,10 +6,8 @@
   "description": "The PICTURE half of a song: the video document model, the lane and chain compile, the shader catalogue, and the folder → VideoProjectDoc read that @studio/ui-eyes composites. Split out of @studio/song because a song's sound compiles without any of it. Consumed as source.",
   "exports": {
     "./videoDoc": "./src/videoDoc.ts",
-    "./videoTracks": "./src/videoTracks.ts",
     "./webVideo": "./src/webVideo.ts",
     "./sceneFrom": "./src/sceneFrom.ts",
-    "./pictureMix": "./src/pictureMix.ts",
     "./videoProject": "./src/videoProject.ts",
     "./shaders": "./src/shaders.ts",
     "./interchange/otio": "./src/interchange/otio.ts",

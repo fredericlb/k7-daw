@@ -48,7 +48,7 @@ pub struct Settings {
     pub supervisor_bin: Option<PathBuf>,
     /// The supervisor's `$STUDIO_HOME`, `K7_SUPERVISOR_HOME` or `~/.k7`.
     pub supervisor_home: PathBuf,
-    /// The folders the engine opens by path: the files root and the médiathèque, as given.
+    /// The folders the engine opens by path: the files root and the media, as given.
     pub engine_roots: Vec<PathBuf>,
     /// The bearer the tray handed over at spawn, `K7_TRAY_TOKEN`.
     pub tray_token: Option<String>,
@@ -127,7 +127,7 @@ impl Settings {
             auth_dir: get("STUDIO_AUTH_DIR")
                 .map(PathBuf::from)
                 .or_else(|| get("STUDIO_MEDIATEK").map(|m| PathBuf::from(m).join(".auth")))
-                // With no backend to defer to, `authDir`'s own default: `.auth` in the médiathèque's folder.
+                // With no backend to defer to, `authDir`'s own default: `.auth` in the media's folder.
                 .or_else(|| last_routes.then(|| mediatek.join(".auth"))),
             site_hosts: get("STUDIO_SITE_HOSTS")
                 .unwrap_or_else(|| "k7.rocks www.k7.rocks".into())

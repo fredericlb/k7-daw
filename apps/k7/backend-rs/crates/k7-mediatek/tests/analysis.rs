@@ -5,12 +5,9 @@
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
-use base64::Engine;
 use k7_js::math::{exp, log2};
 use k7_mediatek::analyse::analyse_file;
-use k7_mediatek::envelope_memo::etag;
 use k7_mediatek::sidecar::{DEFAULT_SENSITIVITY, Envelope, cache_path};
-use k7_mediatek::stream_copy::make_copy;
 use k7_mediatek::waveform::Waveform;
 use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
@@ -114,9 +111,6 @@ fn exp_and_log2_are_v8s() {
     assert_eq!(digests(0x65787, draw_exp, exp, batch, e.len()), e);
     let l = want("log2");
     assert_eq!(digests(0x6c6f67, draw_log2, log2, batch, l.len()), l);
-    for pair in v["etags"].as_array().unwrap() {
-        assert_eq!(etag(pair[0].as_str().unwrap()), pair[1].as_str().unwrap());
-    }
 }
 
 /// The vectors' `synthWav`: integers only, so both languages write the same bytes.
@@ -247,24 +241,6 @@ fn writes_the_sidecar_node_writes() {
         std::fs::write(&src, wav).unwrap();
         same(name, &analysed(&waveform, &src), w);
     }
-    let streams: Value = serde_json::from_str(
-        &std::fs::read_to_string(
-            Path::new(env!("CARGO_MANIFEST_DIR")).join("../../fixtures/stream-vectors.json"),
-        )
-        .unwrap(),
-    )
-    .unwrap();
-    for c in streams["copies"].as_array().unwrap() {
-        let name = format!("{}.flac", c["name"].as_str().unwrap());
-        let src = dir.join(&name);
-        let flac = base64::engine::general_purpose::STANDARD
-            .decode(c["flac"].as_str().unwrap())
-            .unwrap();
-        std::fs::write(&src, flac).unwrap();
-        same(&name, &analysed(&waveform, &src), want(&name));
-    }
-    let webm = make_copy(&waveform, &dir.join("tone.flac")).unwrap();
-    same("tone.webm", &analysed(&waveform, &webm), want("tone.webm"));
     let text = dir.join("song.yaml");
     std::fs::write(&text, "title: not audio\n").unwrap();
     same("song.yaml", &analysed(&waveform, &text), want("song.yaml"));

@@ -31,14 +31,6 @@ fn str_of<'a>(s: &'a Value, k: &str) -> &'a str {
     s[k].as_str().unwrap_or_default()
 }
 
-fn names(v: &Value) -> Vec<String> {
-    v.as_array()
-        .into_iter()
-        .flatten()
-        .filter_map(|n| n.as_str().map(str::to_string))
-        .collect()
-}
-
 fn notes(n: &[k7_libraries::Note]) -> Value {
     Value::Array(n.iter().map(k7_libraries::Note::json).collect())
 }
@@ -54,18 +46,6 @@ fn step(root: &Root, store: &Arc<Store>, s: &Value) -> Value {
                 .collect::<Vec<_>>()
         ),
         "ensure" => notes(&store.ensure(s["target"].as_str(), s["draft"] == json!(true))),
-        "set" => match store.set(&names(&s["names"])) {
-            Ok(reply) => json!({ "ok": true, "reply": reply }),
-            Err(e) => json!({ "error": e }),
-        },
-        "publish" => match store.publish(
-            str_of(s, "name"),
-            s["requires"].as_f64(),
-            s["notes"].as_str(),
-        ) {
-            Ok(m) => json!({ "ok": true, "manifest": m.json() }),
-            Err(e) => json!({ "error": e }),
-        },
         "versions" => Value::Array(
             store
                 .versions(str_of(s, "name"))
@@ -108,14 +88,6 @@ fn step(root: &Root, store: &Arc<Store>, s: &Value) -> Value {
 fn step_alone(store: &Arc<Store>, s: &Value) -> Value {
     match str_of(s, "op") {
         "ensure" => notes(&store.ensure(s["target"].as_str(), s["draft"] == json!(true))),
-        "publish" => match store.publish(
-            str_of(s, "name"),
-            s["requires"].as_f64(),
-            s["notes"].as_str(),
-        ) {
-            Ok(m) => json!({ "ok": true, "manifest": m.json() }),
-            Err(e) => json!({ "error": e }),
-        },
         other => panic!("no parallel step {other}"),
     }
 }
@@ -231,5 +203,5 @@ async fn every_scenario_of_the_typescript_replays() {
         assert_eq!(root.dump(), want_tree, "{name}: the tree left behind");
         ran += 1;
     }
-    assert!(ran >= 25, "{ran} scenarios");
+    assert!(ran >= 17, "{ran} scenarios");
 }

@@ -1,7 +1,7 @@
 // Separation.cpp — see Separation.h. A job runs on a thread of its own and is POLLED by whoever asked,
 // once a second, which is how a second request for the same cut joins the first. Jobs past the
 // machine's cap wait `queued` (docs/supervisor.md); an hour from its START ends a job whatever it is
-// doing. The rationale for every step is stem-separation's docs/stemSplit.md.
+// doing. The rationale for every step is docs/stemSplit.md.
 
 #include "Separation.h"
 

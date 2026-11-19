@@ -3,12 +3,12 @@
 A separation runs HT-Demucs over an audio file on an ENGINE's machine and writes four 24-bit
 WAVs — drums, bass, other, vocals — into `stems/` beside it. It is a **job to poll**, not a call
 that answers with audio. The cut is the native supervisor's (`engine/k7-supervisor/src/Separation.cpp`
-and its neighbours); this package is the seam a server hands it through.
+and its neighbours); the engine's tunnel hands it a job.
 
 ## Why it is a module, and why it cannot be a plugin
 
 A stem separator is the second **cold** module (`@studio/song`'s
-[coldModules.md](../../song/docs/coldModules.md)), and it is cold for both reasons that
+[coldModules.md](../../../packages/song/docs/coldModules.md)), and it is cold for both reasons that
 word covers at once: the answer needs the whole input, and the analysis is affordable once
 over a file and hopeless per block.
 
@@ -27,16 +27,16 @@ module vanishes from a compile with no warning at all.
 
 The wiring is real: `graph.k7x` can key a module by its output
 (`stemsplit#vocals: [ reverb ]`), the derivation carries that port along the edge, and
-the graph draws a jack per stem. See `@studio/song`'s [ports.md](../../song/docs/ports.md).
+the graph draws a jack per stem. See `@studio/song`'s [ports.md](../../../packages/song/docs/ports.md).
 
 ## Why a job, when a render is not one
 
-A render ([../../file-service/docs/renderers.md](../../file-service/docs/renderers.md)) needs no job registry: a
+A render needs no job registry: a
 few files, seconds, a caller that can simply await it. A separation is the case that turns
 every one of those over: **minutes** rather than seconds, a **person** waiting rather than a
 call awaited, **four files** to hold, and a subprocess with progress worth reporting.
 
-`separateJobs.ts` makes two choices of its own:
+The job registry (`k7-file-service`, `jobs/separations.rs`) makes two choices of its own:
 
 - **The id hashes the WORK** — `(user, source, model)` — not the destination. A separation
   collides over the *inference*, and a retry, a second tab or a remount would otherwise start
@@ -79,7 +79,7 @@ formats that need no proxy, and there 24 bits is simply the small one:
 
 What 24 bits costs is a quantisation floor at −144 dBFS, and even that is not paid in full: a
 part is scaled by its knob, so its own noise enters in proportion to the knob and vanishes with
-it ([song-schema/docs/stems.md](../../song-schema/docs/stems.md)). It is not
+it ([song-schema/docs/stems.md](../../../packages/song-schema/docs/stems.md)). It is not
 dithered, for the same order of magnitude — truncation at 24 bits is under the noise of any
 converter this will come out of, and dither would put a floor there on purpose instead.
 
@@ -98,7 +98,7 @@ own rate and `writeStem()` resamples on the way out when it differs; the rate go
 
 That matters — four parts a few milliseconds apart are a flam on every hit — but it is not
 *critical*, because the desk **plays the four parts** and never subtracts them from the record
-([song-schema/docs/stems.md](../../song-schema/docs/stems.md) has the reasons and the numbers): a
+([song-schema/docs/stems.md](../../../packages/song-schema/docs/stems.md) has the reasons and the numbers): a
 subtraction would cancel only while the two signals stay aligned to the sample, which a
 pitch-preserving stretch breaks as soon as the tempo moves.
 
@@ -205,7 +205,7 @@ than the very recording it is switched against — the desk swaps one for the ot
 on a single element — so the overshoot is clamped and SAID in the job's lines rather than mixed away.
 
 **Where it lives** is the one place this departs from
-[moduleAssets.md](../../song/docs/moduleAssets.md). That page argues a module carries its
+[moduleAssets.md](../../../packages/song/docs/moduleAssets.md). That page argues a module carries its
 material — and the argument inverts past a few hundred megabytes, where the file would be
 committed into a shared module's git repository and cloned whole by every machine that opens
 it. So the module **declares** the model as an ordinary file-valued param (`onnx:`, exactly as
@@ -267,7 +267,7 @@ submitted as dispatches each of which fits inside `TdrDelay`; only the total is 
 Two consequences beyond the number.
 
 **The run cannot be interrupted from JavaScript.** A promise raced against a timer never loses
-the race: `sess.run()` blocks the thread, so the timer never fires. `separateJobs.ts`'s hour and
+the race: `sess.run()` blocks the thread, so the timer never fires. the job's hour and
 its `worker.terminate()` are the only things that end such a run, and a job that wedges this way
 holds the worker until then.
 
@@ -367,7 +367,7 @@ the opposite reason — the section on rates above.
 `coldPass.ts` says which model and whether this machine has it, and `processWithChain` runs the
 pass in place of the bounce — no render, no repoint, four files under `stems/`. The rules that
 follow (a chain separates or treats, never both; the pass runs before the engine check) are in
-`@studio/commands`' [processChain.md](../../audio-passes/docs/processChain.md).
+`@studio/commands`' [processChain.md](../../../packages/audio-passes/docs/processChain.md).
 
 The running arrives **as a function**: the seam is `CommandHost.runColdStep`, and the file
 service's implementation is the one place that knows what "run it" means — `startSeparate` + poll,

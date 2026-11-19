@@ -158,7 +158,7 @@ them, and refusing the key would turn a working project into one that will not o
 `deadProjectFields` reports them as a warning naming the lines to delete — because "accepted and
 silently ignored" is the failure mode this codebase keeps paying for.
 
-## Which library modules a project actually names — mediatekRefs.ts
+## Which library modules a project actually names
 
 The machine caches what its projects reach for rather than mirroring a whole library, so something
 has to answer "which ones are those" — and it has to answer from the FILES, before the loader can

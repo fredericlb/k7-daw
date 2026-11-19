@@ -7,16 +7,13 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
 use k7_file_service::atomic::write_atomic;
-use k7_file_service::libraries::is_library_name;
 use k7_file_service::paths::resolve_all;
-use k7x::edit::js_trim;
 use serde_json::{Map, Value, json};
 
 use crate::copy::copy_tree;
 use crate::dirs::{
-    DRAFT, LEGACY_MANIFEST, LIBRARY_LEVEL, MANIFEST, UNPINNED_VERSION, is_copy_of_seed, is_husk,
-    own_manifest, publishable, publishable_from, read_manifest, upgrade_manifest, version_numbers,
-    write_first_manifest,
+    DRAFT, LEGACY_MANIFEST, MANIFEST, UNPINNED_VERSION, is_copy_of_seed, is_husk, own_manifest,
+    publishable, read_manifest, upgrade_manifest, version_numbers, write_first_manifest,
 };
 use crate::list::{Note, library_folders, parse_list, rm, stamp};
 use crate::manifest::{Manifest, stringify_manifest};
@@ -150,25 +147,6 @@ impl Store {
         Value::Object(reply)
     }
 
-    /// SET the list: each new library gets its folder; one dropped keeps its folder, unlisted.
-    pub fn set(&self, asked: &[String]) -> Result<Value, String> {
-        let _q = self.serial();
-        if let Some(p) = settings_problem(asked) {
-            return Err(p);
-        }
-        let notes: Vec<Note> = asked.iter().map(|n| self.ensure_one(n)).collect();
-        let failed: Vec<String> = notes
-            .iter()
-            .filter(|n| n.state == "failed")
-            .map(|n| format!("'{}': {}", n.name, n.note))
-            .collect();
-        if !failed.is_empty() {
-            return Err(failed.join("; "));
-        }
-        self.write(asked)?;
-        Ok(self.view(&notes))
-    }
-
     /// Give every listed library (or only `name`) its folder, and its draft when asked.
     pub fn ensure(&self, name: Option<&str>, draft: bool) -> Vec<Note> {
         let _q = self.serial();
@@ -197,52 +175,6 @@ impl Store {
                 own_manifest(&dir).unwrap_or_else(|| Manifest::plain(name, v, 1))
             })
             .collect()
-    }
-
-    /// Freeze library `name`'s draft as its next version; a version is never written again.
-    pub fn publish(
-        &self,
-        name: &str,
-        requires: Option<f64>,
-        notes: Option<&str>,
-    ) -> Result<Manifest, String> {
-        let _q = self.serial();
-        if !is_library_name(name) {
-            return Err(format!("'{name}' names no library"));
-        }
-        let at = self.home.join(name);
-        let draft = at.join(DRAFT);
-        if !draft.exists() {
-            return Err(format!("'{name}' has no draft to publish"));
-        }
-        // Unsaid, the previous version's: publishing must not raise the floor by accident.
-        let asked = requires.unwrap_or_else(|| {
-            self.versions(name)
-                .last()
-                .map_or(1.0, |m| m.requires as f64)
-        });
-        if asked.fract() != 0.0 || asked < 1.0 || asked > LIBRARY_LEVEL as f64 {
-            return Err(format!(
-                "'{name}' cannot require level {}: this k7 runs level {LIBRARY_LEVEL}",
-                crate::number_text(asked)
-            ));
-        }
-        let version = version_numbers(&at).last().copied().unwrap_or(0) + 1;
-        let mut manifest = Manifest::plain(name, version, asked as u64);
-        manifest.notes = notes
-            .map(|n| js_trim(n).to_string())
-            .filter(|n| !n.is_empty());
-        let partial = self.home.join(format!(".publishing-{}", stamp()));
-        let done = copy_tree(&draft, &partial, &publishable_from(&draft))
-            .and_then(|()| fs::write(partial.join(MANIFEST), stringify_manifest(&manifest)))
-            .and_then(|()| fs::rename(&partial, at.join(version.to_string())));
-        match done {
-            Ok(()) => Ok(manifest),
-            Err(e) => {
-                rm(&partial);
-                Err(e.to_string().trim().to_string())
-            }
-        }
     }
 
     /// Copy into a SIBLING and rename it into place: a dot-name is never a library.

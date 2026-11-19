@@ -1,7 +1,7 @@
 // SeparationAudio.h — the arithmetic a stem separation needs, with no model and no disk in it: how a
 // long file is cut into the fixed windows the model accepts, how the overlapping results are folded
-// back into one signal, and what a 24-bit WAV looks like. The port of stem-separation's
-// separateAudio.ts, its tests replayed; the rationale is its docs/stemSplit.md.
+// back into one signal, and what a 24-bit WAV looks like. The port of the former TypeScript
+// separateAudio, its tests replayed; the rationale is docs/stemSplit.md.
 
 #pragma once
 

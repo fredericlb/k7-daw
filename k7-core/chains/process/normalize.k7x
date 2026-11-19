@@ -6,8 +6,8 @@
 
 steps([
   id("ba2a1f1b-e497-433f-a7c3-2695e95ba40a")
-    // Le module de la médiathèque, avec sa cible. `Peak` n'est pas écrit ici : c'est la passe COLD
-    // qui le mesure et l'écrit, et une valeur figée dans le patron serait celle d'un autre fichier.
+    // The media module, with its target. `Peak` is not written here: the COLD pass measures and
+    // writes it, and a value frozen in the template would be another file's.
     .extends("@k7-core/cold/normalize")
     .params({ Target: -1 }),
   to([chain("@out")]),

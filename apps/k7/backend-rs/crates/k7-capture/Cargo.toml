@@ -14,7 +14,6 @@ k7-js.workspace = true
 k7-sync.workspace = true
 # The replica's `Confirmed` store, which the confirmed folder implements.
 k7-replica.workspace = true
-serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
 getrandom.workspace = true

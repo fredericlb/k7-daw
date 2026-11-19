@@ -7,14 +7,9 @@
   "exports": {
     "./commands": "./src/commands.ts",
     "./commandSpec": "./src/commandSpec.ts",
-    "./nodeMedia": "./src/nodeMedia.ts",
-    "./hostTypes": "./src/hostTypes.ts",
     "./runtime": "./src/runtime/runtime.ts",
-    "./runtime/remote": "./src/runtime/remote.ts",
     "./runtime/protocol": "./src/runtime/protocol.ts",
-    "./runtime/worker": "./src/runtime/worker.ts",
-    "./runtime/importer": "./src/runtime/importer.ts",
-    "./node": "./src/runtime/node.ts"
+    "./runtime/importer": "./src/runtime/importer.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

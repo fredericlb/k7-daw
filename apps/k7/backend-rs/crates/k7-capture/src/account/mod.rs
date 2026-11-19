@@ -6,7 +6,6 @@ mod attach;
 mod folders;
 mod history;
 mod history_ask;
-mod inert;
 mod join;
 mod land;
 mod out;
@@ -18,7 +17,6 @@ use crate::disk::LiveLog;
 use crate::worker::Handle;
 pub use attach::{BoxFuture, Bundle, Host};
 pub use history_ask::Ask;
-pub use inert::Inert;
 
 /// The one spelling a root is keyed by: a handler's `C:\x` and a slashed `C:/x` are the same workspace (docs/file-capture.md).
 pub fn root_key(root: &str) -> String {

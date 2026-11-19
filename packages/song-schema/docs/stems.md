@@ -1,7 +1,7 @@
 # The four stems, and what a set calls them
 
 The rationale behind `packages/song-schema/src/stems.ts`. How a separation is RUN is
-`packages/stem-separation/docs/stemSplit.md`; what the desk draws is
+`engine/k7-supervisor/docs/stemSplit.md`; what the desk draws is
 `packages/k7-plugins/docs/turntables/stems.md`.
 
 ## The order is the knowledge
@@ -55,7 +55,7 @@ signed −1 to 1 — so that at rest the output is the original file sample for 
 while the two signals stay aligned to the sample, and three things break that alignment:
 
 1. **The sample rate.** The model works at 44.1 kHz; a stem written at that rate against a 48 kHz
-   master drifts within a second. `stem-separation` writes at the record's rate.
+   master drifts within a second. the supervisor writes at the record's rate.
 2. **The decoder.** An mp3 carries an encoder delay — 1105 samples on the record measured — that
    ffmpeg trims and JUCE does not. Decoding once removes it.
 3. **Time-stretching, which cannot be fixed.** A pitch-preserving stretcher is **non-linear**: it

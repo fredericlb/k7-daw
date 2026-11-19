@@ -8,8 +8,6 @@ publish.workspace = true
 default-run = "k7-front"
 
 [dependencies]
-# aes-gcm and scrypt: the hunt's secrets, sealed as the previous release seals them (src/routes/hunt_settings/seal.rs).
-aes-gcm.workspace = true
 # ws: the remote cameras' signalling socket.
 axum = { workspace = true, features = ["ws"] }
 base64.workspace = true
@@ -24,7 +22,6 @@ hyper-util.workspace = true
 hyper-rustls.workspace = true
 rustls.workspace = true
 webpki-roots.workspace = true
-scrypt.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true

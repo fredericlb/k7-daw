@@ -9,12 +9,11 @@ import { base } from "../../src/instance.ts";
 import {
   filesUnder,
   onDisk,
-  SERVICE_USER,
   Service,
   spelledOnWindows,
   wsDir,
 } from "../../src/service.ts";
-import { acct, deviceBed } from "../../src/session.ts";
+import { E2E_USER } from "../../src/session.ts";
 import { filesRoot, freshWorkspace, textHash } from "../../src/sync.ts";
 
 const ws = freshWorkspace();
@@ -346,7 +345,7 @@ test("/media takes its identity in the query, answers the bytes, and refuses wha
   const media = (q: Record<string, string>) =>
     `/api/files/media?${new URLSearchParams(q)}`;
   const ok = {
-    user: acct(SERVICE_USER).email as string,
+    user: E2E_USER.email as string,
     workspace: ws,
     token: svc.ticket,
   };
@@ -359,7 +358,7 @@ test("/media takes its identity in the query, answers the bytes, and refuses wha
     media({ user: ok.user, workspace: ws, path: "notes/a.txt" }),
   );
   // A device answers every request as its one local user, ticket or not.
-  expect(noTicket.status()).toBe(deviceBed() ? 200 : 401);
+  expect(noTicket.status()).toBe(200);
   for (const [q, status, error] of [
     [{ token: svc.ticket }, 400, "user, workspace and path required"],
     [{ ...ok, path: "../x" }, 400, "path escapes the workspace: ../x"],
