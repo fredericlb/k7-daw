@@ -6,11 +6,10 @@ use tauri::menu::{
 };
 use tauri::{AppHandle, Manager, Wry};
 
-use crate::{backend, tray, updates, window};
+use crate::{backend, tray, window};
 
 /// The ids this menu answers to; the tray's own ids are the tray's.
 const ENGINE: &str = "app_engine";
-const UPDATES: &str = "app_updates";
 const LOGS: &str = "app_logs";
 const RELOAD: &str = "app_reload";
 const CLOSE: &str = "app_close";
@@ -20,7 +19,6 @@ pub fn install(app: &AppHandle) -> tauri::Result<()> {
     let item =
         |id: &str, text: &str, accel: Option<&str>| MenuItem::with_id(app, id, text, true, accel);
     let engine = item(ENGINE, "Engine Settings…", None)?;
-    let check = item(UPDATES, "Check for Updates…", None)?;
     let logs = item(LOGS, "Show Logs", None)?;
     let reload = item(RELOAD, "Reload", Some("CmdOrCtrl+R"))?;
     let close = item(CLOSE, "Close Window", Some("CmdOrCtrl+W"))?;
@@ -38,9 +36,6 @@ pub fn install(app: &AppHandle) -> tauri::Result<()> {
     )?;
     let (s1, s2, s3, s4) = (sep()?, sep()?, sep()?, sep()?);
     let mut first: Vec<&dyn tauri::menu::IsMenuItem<Wry>> = vec![&about, &s1, &engine];
-    if updates::available() {
-        first.push(&check);
-    }
     let hide = PredefinedMenuItem::hide(app, None)?;
     let hide_others = PredefinedMenuItem::hide_others(app, None)?;
     let quit = PredefinedMenuItem::quit(app, Some("Quit K7 DAW"))?;
@@ -95,7 +90,6 @@ pub fn install(app: &AppHandle) -> tauri::Result<()> {
 fn on_menu(app: &AppHandle, id: &str) {
     match id {
         ENGINE => window::show(app, Some("/settings/engine")),
-        UPDATES => updates::check(app, true),
         LOGS => tray::on_menu(app, "logs"),
         DOCS => tray::open_path(&backend::url(app, "/docs")),
         RELOAD => {

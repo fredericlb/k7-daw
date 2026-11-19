@@ -7,7 +7,7 @@ Designed for iPad, is the other way to k7 on a Mac (`engine/k7-runtime/docs/ios.
 ## Names, and the ones a rename may not touch
 
 The product is **K7 DAW**. The binary and the Cargo package stay `k7-tray` (`mainBinaryName`), as does the folder: the
-process name is what the dev session's stop, Task Manager habits and the updater's restart know it by. The engine it
+process name is what the dev session's stop, Task Manager habits know it by. The engine it
 runs is `k7-runtime`.
 
 **`org.parapluie.studio.engine-tray`, the bundle identifier, is frozen**, on every OS. It is the app's identity on
@@ -71,20 +71,12 @@ The grant belongs to the responsible app, which is why K7 DAW asks, not the engi
 
 ## Updates
 
-K7 DAW keeps itself current from `k7.rocks/app_downloads/tray/<channel>/latest.json` with
-tauri-plugin-updater (`docs/app-downloads.md` at the root).
+K7 DAW does not update itself: a new build is downloaded from the GitHub release page, and the person installs it.
 
 | choice | why |
 |---|---|
-| tauri-plugin-updater, not our own download | it installs on Windows, the AppImage and the macOS app, and checks every update's signature |
-| the feed's path keeps `tray/` and the files are `k7-daw_<stamp>_<os>-<arch>.<ext>` | installed apps poll that URL for good; `latest.json` carries the file URLs, so the names are free |
-| `tray:build` turns the update archives on, with the public key in the config, only when `K7_UPDATER_PUBKEY` and `TAURI_SIGNING_PRIVATE_KEY` are both set; a stamped release build without them is refused at packaging | the CLI signs with the key it finds in `plugins.updater.pubkey`, and an archive without its signature is one no install accepts; half a key is an error, not a silent unsigned build |
-| signed, with the key in CI secrets | the upload token alone would let whoever holds it ship code every tray runs; the public key is built in (`K7_UPDATER_PUBKEY`), and a build without it has no updater rather than one that trusts anything |
-| the channel from the release stamp | a tag follows `release` and takes a higher tag; a snapshot follows `snapshot`, which only ever holds `main`'s latest build, and takes any other one; `dev` asks nothing |
-| told once per build, the menu's check always answers, a switch to turn it off | as the phone's check does; kept in `updates.json` beside the front's state |
-| the front stopped before the installer runs | the installer replaces binaries the front and the engine are running, and a graceful stop deregisters the engine |
-| a `.deb` is told, not updated | it belongs to apt; Download opens the page |
-| a debug build never updates, and its menu has no update entry | it is the dev session's tray (`scripts/dev-tray.mjs`): an update would replace the binary cargo just built, whatever stamp the environment leaked into it |
+| no updater plugin, no signing key, no feed check | a self-replacing binary needs a signing key held in CI and a server for the feed; the release page needs neither, and a person who wants a newer build looks there |
+| the release files are named `k7-daw_<stamp>_<os>-<arch>.<ext>` (`engine/scripts/trayRelease.mjs`) | one name per build and platform on the release page; the stamp says the version |
 
 ## Quitting
 
@@ -107,7 +99,6 @@ A tray that ends without its stop (killed, crashed) leaves nothing behind on Win
 |---|---|
 | the tray joins a kill-on-close job object of its own at start, before it starts anything (`job.rs`) | everything it starts inherits the job: the front's own children, which no host hook reaches (the hub's file and libraries' services, a render's chromium, ffmpeg, the jsdsp jail). The supervisor's own job, held through `STUDIO_HOST_PID`, covers it and the engine alone |
 | the browser and Notepad are started out of the job (`CREATE_BREAKAWAY_FROM_JOB`, the job allowing it), and inside it when the tray's own parent forbids leaving | a browser the tray started is the person's: quitting the tray must not close their tabs |
-| kill-on-close is turned off before the updater runs the installer and restarts the tray | both must outlive this process; the front was stopped gracefully just before |
 | `K7_TRAY_SCRATCH` (a folder) and `K7_TRAY_PORT` run a debug tray on data and a port of its own, with no single-instance lock | a test of the tray's own processes, such as killing it and counting what survives, must not touch the person's tray, its data or its pairing |
 
 ## When the front will not come up

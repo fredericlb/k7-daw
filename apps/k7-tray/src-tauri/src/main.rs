@@ -21,7 +21,6 @@ mod pidkill;
 mod state;
 mod tray;
 mod trayicon;
-mod updates;
 #[cfg(target_os = "linux")]
 mod webview_linux;
 mod window;
@@ -50,9 +49,6 @@ fn main() {
     if paths::scratch().is_none() {
         builder = builder.plugin(window_state());
     }
-    if let Some(updater) = updates::plugin() {
-        builder = builder.plugin(updater);
-    }
     builder
         .manage(backend::Process::default())
         .setup(|app| {
@@ -72,7 +68,7 @@ fn main() {
             // The login entry is settled first: the menu's check reads what is on disk after the migration.
             autostart::settle(&handle);
             let autostart_on = handle.autolaunch().is_enabled().unwrap_or(false);
-            let mb = tray::build_menu(&handle, autostart_on, updates::auto_enabled(&handle))?;
+            let mb = tray::build_menu(&handle, autostart_on)?;
             let icon = TrayIconBuilder::with_id("main")
                 .icon(trayicon::render(trayicon::IconState::Loading(0)))
                 .tooltip("K7 DAW")
@@ -94,7 +90,6 @@ fn main() {
                     browser: mb.browser,
                     menu: mb.menu,
                     autostart: mb.autostart,
-                    auto_update: mb.auto_update,
                     tray: icon,
                 }),
             }));
@@ -106,7 +101,6 @@ fn main() {
             window::create(&handle, !autostart::launched_at_login())?;
             backend::spawn(&handle);
             loops::start(&handle);
-            updates::start(&handle);
 
             // SIGTERM/SIGINT stop like Quit: launchd stops a LaunchAgent that way, and Ctrl-C in dev should too.
             #[cfg(unix)]

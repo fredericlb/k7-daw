@@ -35,7 +35,6 @@ pub struct Menus {
     pub browser: MenuItem<Wry>,
     pub menu: Menu<Wry>,
     pub autostart: CheckMenuItem<Wry>,
-    pub auto_update: CheckMenuItem<Wry>,
     pub tray: TrayIcon<Wry>,
 }
 

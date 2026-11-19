@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // package-release.mjs — one release file per kind, for the platform that produced it, into dist/release/:
-// `engine` archives dist/k7-runtime/ (build-engine.mjs); `tray` renames the installers apps/k7-tray built and writes
-// its updater fragment (trayRelease.mjs).
+// `engine` archives dist/k7-runtime/ (build-engine.mjs); `tray` renames the installers apps/k7-tray built (trayRelease.mjs).
 // Named for a STAMP, not a package version, which does not move with each build. See docs/release.md.
 
 import { existsSync, mkdirSync, rmSync, statSync } from "node:fs";

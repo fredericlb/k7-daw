@@ -8,7 +8,7 @@ use tauri_plugin_autostart::ManagerExt;
 
 use crate::state::{Backend, SharedState};
 use crate::trayicon::{self, IconState};
-use crate::{backend, paths, updates, window};
+use crate::{backend, paths, window};
 
 pub struct MenuBuild {
     pub menu: Menu<Wry>,
@@ -16,14 +16,9 @@ pub struct MenuBuild {
     pub downloads: MenuItem<Wry>,
     pub browser: MenuItem<Wry>,
     pub autostart: CheckMenuItem<Wry>,
-    pub auto_update: CheckMenuItem<Wry>,
 }
 
-pub fn build_menu(
-    app: &AppHandle,
-    autostart_on: bool,
-    auto_update_on: bool,
-) -> tauri::Result<MenuBuild> {
+pub fn build_menu(app: &AppHandle, autostart_on: bool) -> tauri::Result<MenuBuild> {
     let status = MenuItem::with_id(app, "status", "Starting K7 DAW…", false, None::<&str>)?;
     // Built once, inserted under the status line only while an instrument downloads (`refresh`).
     let downloads = MenuItem::with_id(app, "downloads", "", false, None::<&str>)?;
@@ -39,33 +34,13 @@ pub fn build_menu(
         autostart_on,
         None::<&str>,
     )?;
-    let check = MenuItem::with_id(
-        app,
-        "check_updates",
-        "Check for Updates…",
-        true,
-        None::<&str>,
-    )?;
-    let auto_update = CheckMenuItem::with_id(
-        app,
-        "auto_update",
-        "Check for Updates Automatically",
-        true,
-        auto_update_on,
-        None::<&str>,
-    )?;
     let logs = MenuItem::with_id(app, "logs", "Show Logs", true, None::<&str>)?;
     let quit = MenuItem::with_id(app, "quit", "Quit K7 DAW", true, None::<&str>)?;
     let sep = || PredefinedMenuItem::separator(app);
     let (s1, s2, s3) = (sep()?, sep()?, sep()?);
-    let mut items: Vec<&dyn IsMenuItem<Wry>> = vec![
-        &status, &s1, &open, &browser, &engine, &restart, &s2, &autostart,
+    let items: Vec<&dyn IsMenuItem<Wry>> = vec![
+        &status, &s1, &open, &browser, &engine, &restart, &s2, &autostart, &logs, &s3, &quit,
     ];
-    // Shown only where an update can happen: never in the dev session's debug build, nor in one without a key.
-    if updates::available() {
-        items.extend([&check as &dyn IsMenuItem<Wry>, &auto_update]);
-    }
-    items.extend([&logs as &dyn IsMenuItem<Wry>, &s3, &quit]);
     let menu = Menu::with_items(app, &items)?;
     Ok(MenuBuild {
         menu,
@@ -73,7 +48,6 @@ pub fn build_menu(
         downloads,
         browser,
         autostart,
-        auto_update,
     })
 }
 
@@ -163,14 +137,6 @@ pub fn on_menu(app: &AppHandle, id: &str) {
         "engine" => window::show(app, Some("/settings/engine")),
         "restart" => backend::restart(app),
         "autostart" => toggle_autostart(app),
-        "check_updates" => updates::check(app, true),
-        "auto_update" => {
-            let on = !updates::auto_enabled(app);
-            updates::set_auto(app, on);
-            if let Some(m) = app.state::<SharedState>().lock().unwrap().menus.as_ref() {
-                let _ = m.auto_update.set_checked(on);
-            }
-        }
         "logs" => open_text_file(&paths::merged_log_path()),
         "quit" => app.exit(0),
         _ => {}

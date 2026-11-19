@@ -62,13 +62,6 @@ mod imp {
         }
         Ok(())
     }
-
-    /// Kill-on-close off, for a tray about to hand over to a process that must outlive it (a restart, the installer).
-    pub fn release() {
-        if let Some(&raw) = JOB.get().filter(|r| **r != 0) {
-            limit(HANDLE(raw as *mut _), JOB_OBJECT_LIMIT_BREAKAWAY_OK);
-        }
-    }
 }
 
 #[cfg(not(windows))]
@@ -76,10 +69,9 @@ mod imp {
     pub fn init() -> Result<(), String> {
         Ok(())
     }
-    pub fn release() {}
 }
 
-pub use imp::{init, release};
+pub use imp::init;
 
 /// Spawn what must outlive the tray (the browser, an editor) out of its job; inside it when the tray's own parent forbids leaving.
 #[cfg(windows)]
