@@ -1,5 +1,5 @@
 // registry.test.ts — `select` turns the registry's two "no" answers into a `ClaimLost`, never a
-// network error: 409 (the claim moved on) and 403 `not-yours` (another account's engine).
+// network error: 409 (the claim moved on) and 403 `unowned` (an engine off this device).
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ClaimLost, registryClient } from "./registry";
@@ -18,8 +18,8 @@ const answer = (status: number, body: object) =>
 afterEach(() => vi.unstubAllGlobals());
 
 describe("registryClient.select", () => {
-  it("throws a `refused` ClaimLost for another account's engine", async () => {
-    answer(403, { error: "not-yours" });
+  it("throws a `refused` ClaimLost for an engine off this device", async () => {
+    answer(403, { error: "unowned" });
     const e = await registryClient("", json)
       .select("e1", "tok", 3, null)
       .catch((x) => x);
