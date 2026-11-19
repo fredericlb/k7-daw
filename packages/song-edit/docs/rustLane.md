@@ -2,7 +2,7 @@
 
 `rust/` holds, beside the base (`rustBase.md`), the writers of a lane, a chain project's nodes and the module libraries:
 base presets, timeline rename, chain node and lane creation, the preferences file, a module's move, the account's forks,
-the library forks, the engine module's fork, the recorder nodes, a new project's files, the mixer's placement writers
+the library forks, the engine module's fork, a new project's files, the mixer's placement writers
 (`track_mix`, `placement_move`) and the timeline cut from a lane's range. Nothing routes to it yet; the TypeScript stays the source of truth until the cut
 
 ## Choices
@@ -32,7 +32,7 @@ the library forks, the engine module's fork, the recorder nodes, a new project's
 ## The proof
 
 `rust/tests/replay_lane/` replays the 3e vectors of these modules (`basePreset`, `timelineRename`, `chainCreate`,
-`preferences`, `recorderNodes`, `trackMix`, `timelineFromRange`) and the goldens of the modules the tap did not reach
+`preferences`, `trackMix`, `timelineFromRange`) and the goldens of the modules the tap did not reach
 (`preferences`, `moduleMove`, `accountFork`, `libraryForks`, `moduleFork`, `scaffold`, and the takes, seconds, alternatives
 and timelines of `trackMix` and `timelineFromRange`), harvested into `rust/tests/goldens/lane/` from the TypeScript and frozen. A golden
 file has the 3e vectors' shape, so the one replay reads both; a vector the harvest recorded without the library

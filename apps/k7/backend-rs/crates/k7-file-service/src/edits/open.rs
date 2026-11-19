@@ -1,8 +1,8 @@
-//! open.rs — the repairs of an open (3j O3) and its seconds stamp, each repair its own staged set landed whole (C10).
-//! What a reader gets wrong: a repair that fails lands nothing and the next still runs; the caller holds the account's write lock.
+//! open.rs — the repair of an open (the picture strips) and its seconds stamp, the repair's staged set landed whole (C10).
+//! What a reader gets wrong: a repair that fails lands nothing and the stamp still runs; the caller holds the account's write lock.
 
 use song_edit::ids::NewId;
-use song_edit::open_repairs::{Note, Repair, landing_failed, notes_of, run_repair};
+use song_edit::open_repairs::{Note, repair_picture_strips};
 
 use super::stamp::stamp_format_at_open;
 use super::{StagedFs, env_of};
@@ -47,31 +47,18 @@ pub fn repair_open(
     ];
     reads.extend(env.overlays.iter().map(|(_, root)| root.clone()));
     let mut out = Repaired::default();
-    for repair in Repair::ALL {
-        let outcome = match StagedFs::reading(&[project], &reads) {
-            Err(e) => landing_failed(&e.to_string()),
-            Ok(mut fs) => {
-                let outcome = run_repair(repair, &mut fs, &env, project, &mut *new_id);
-                if !outcome.is_ok() {
-                    outcome
-                } else {
-                    match fs
-                        .planned()
-                        .and_then(|set| commit(&Real, &set, &mut |_| {}).map_err(|e| e.what))
-                    {
-                        Ok(landed) => {
-                            fs.drop_emptied_dirs();
-                            out.touched |= !landed.touched.is_empty();
-                            out.structural |= landed.structural;
-                            outcome
-                        }
-                        Err(e) => landing_failed(&e),
-                    }
-                }
-            }
-        };
-        out.notes.extend(notes_of(repair, rel, outcome));
-    }
+    let staged = StagedFs::reading(&[project], &reads).map_err(|e| e.to_string()).and_then(|mut fs| {
+        let notes = repair_picture_strips(&mut fs, &env, project, rel, &mut *new_id)?;
+        let landed = fs
+            .planned()
+            .and_then(|set| commit(&Real, &set, &mut |_| {}).map_err(|e| e.what))?;
+        fs.drop_emptied_dirs();
+        out.touched |= !landed.touched.is_empty();
+        out.structural |= landed.structural;
+        Ok(notes)
+    });
+    // A repair that fails is silent: the project is left as it was.
+    out.notes.extend(staged.unwrap_or_default());
     if stamp_format_at_open(project) {
         out.touched = true;
     }

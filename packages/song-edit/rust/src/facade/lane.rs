@@ -4,7 +4,7 @@
 use super::args::{at, catalogue_of, done, fnum, opt_json, s, val_lax};
 use super::{Ctx, Out};
 use crate::{
-    Fs, MemFs, base_preset, chain_create, chain_stack, module_fork, recorder_nodes, scaffold, timeline_from_range,
+    Fs, MemFs, base_preset, chain_create, chain_stack, module_fork, scaffold, timeline_from_range,
     timeline_rename,
 };
 use serde_json::{Value as Json, json};
@@ -19,7 +19,6 @@ pub const NAMES: &[(&str, &[&str])] = &[
     ("song/chainStack", &["stackChainNode"]),
     ("song-edit/timelineFromRange", &["timelineFromRange"]),
     ("song-edit/trackMix", &["timelineFromRange"]),
-    ("song-edit/recorderNodes", &["dropRecorderNodes"]),
     (
         "song/scaffold",
         &[
@@ -78,9 +77,6 @@ pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
             chain_create::insert_chain_input(fs, &s(a, 0), &s(a, 1), &s(a, 2), &mut *cx.new_id),
             |(id, rel)| json!({ "id": id, "rel": rel }),
         ),
-        ("song-edit/recorderNodes", "dropRecorderNodes") => {
-            done(recorder_nodes::drop_recorder_nodes(fs, env, &s(a, 0)), |l| json!(l))
-        }
         ("song/chainStack", "stackChainNode") => {
             done(chain_stack::stack_chain_node(fs, &s(a, 0), &s(a, 1), &s(a, 2)), |l| {
                 json!(l)

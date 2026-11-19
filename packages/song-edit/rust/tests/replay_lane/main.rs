@@ -13,7 +13,7 @@ use harness::{File, Tally, canon, concrete, load, map_strings, report, scrub, si
 use serde_json::Value as Json;
 use shape::Outcome;
 
-const MODULES: [&str; 18] = [
+const MODULES: [&str; 17] = [
     "golden:song-edit__trackMix",
     "song-edit__timelineFromRange",
     "song-edit__trackMix",
@@ -21,7 +21,6 @@ const MODULES: [&str; 18] = [
     "golden:song__scaffold",
     "golden:song__chainStack",
     "golden:song__moduleFork",
-    "song-edit__recorderNodes",
     "song__basePreset",
     "song-edit__timelineRename",
     "song__chainCreate",
@@ -226,7 +225,7 @@ fn replay(name: &str) -> (usize, Tally) {
     (file.vectors.len(), t)
 }
 
-const LANE_REPLAYED: usize = 1060;
+const LANE_REPLAYED: usize = 1057;
 
 #[test]
 fn the_lane_and_module_side_replays_its_vectors() {

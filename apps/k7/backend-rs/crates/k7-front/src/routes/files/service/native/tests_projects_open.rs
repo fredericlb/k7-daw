@@ -178,19 +178,13 @@ pub(super) fn files_of(dir: &std::path::Path) -> Vec<(String, String)> {
     out
 }
 
-pub(super) const REC: &str = "start(true)\nsteps([\n  id(\"11111111-1111-4111-8111-111111111111\").extends(\"@meta/audio/recorder\"),\n  to([chain(\"MIX\")]),\n])\n";
-
-// 3j M3 (C9): an old project opens repaired and stamped by the native side, and a second open of it writes nothing.
+// An open stamps the format level seconds need, once: a second open writes nothing.
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn an_open_repairs_and_stamps_once_and_a_second_open_writes_nothing() {
+async fn an_open_stamps_once_and_a_second_open_writes_nothing() {
     let dir = scratch("po-repair");
-    let (mut p, lines) = proj(&dir, "po-repair");
-    // The meta modules the repairs read are found from the code root.
-    p.demos_from.1 = format!("{}/../../../..", env!("CARGO_MANIFEST_DIR"));
+    let (p, _) = proj(&dir, "po-repair");
     make(&dir, "a.k7").await;
     let folder = dir.join("home/workspace/songs/a.k7");
-    let rec = folder.join("chains/rec.k7x");
-    std::fs::write(&rec, REC).unwrap();
     let lane = std::fs::read_dir(folder.join("tracks"))
         .unwrap()
         .flatten()
@@ -204,22 +198,12 @@ async fn an_open_repairs_and_stamps_once_and_a_second_open_writes_nothing() {
     .unwrap();
     let (status, body) = go(&p, Kind::Open, &dir, json!({ "path": "a.k7" })).await;
     assert_eq!(status, 200, "{body}");
-    assert!(!rec.exists(), "the recorder node stays");
-    // The note is the native repair's: a front that skipped `repaired` would leave it unsaid.
-    let said = lines.lock().unwrap().join("\n");
-    assert!(
-        said.contains("a.k7: recorder node 11111111-1111-4111-8111-111111111111 removed"),
-        "{said}"
-    );
     let root = std::fs::read_to_string(folder.join("project.k7x")).unwrap();
     assert!(root.contains("format"), "{root}");
-    // A repair-worthy file made after the first open is left alone by the second: the repairs run once per open.
-    std::fs::write(&rec, REC).unwrap();
     let once = files_of(&folder);
     let (status, _) = go(&p, Kind::Open, &dir, json!({ "path": "a.k7" })).await;
     assert_eq!(status, 200);
     assert_eq!(files_of(&folder), once);
-    assert!(rec.exists(), "the second open ran the repairs again");
     std::fs::remove_dir_all(dir).unwrap();
 }
 
