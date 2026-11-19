@@ -16,7 +16,6 @@
 		AA0000000000000000000109 /* public in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000204 /* public */; };
 		AA0000000000000000000110 /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000205 /* capacitor.config.json */; };
 		AA0000000000000000000111 /* backend in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000206 /* backend */; };
-		AA0000000000000000000112 /* faust-libs in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000207 /* faust-libs */; };
 		AA0000000000000000000113 /* page-scripts in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000208 /* page-scripts */; };
 		AA0000000000000000000114 /* cacert.pem in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000209 /* cacert.pem */; };
 /* End PBXBuildFile section */
@@ -43,7 +42,6 @@
 		AA0000000000000000000204 /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = resources/public; sourceTree = "<group>"; };
 		AA0000000000000000000205 /* capacitor.config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = resources/capacitor.config.json; sourceTree = "<group>"; };
 		AA0000000000000000000206 /* backend */ = {isa = PBXFileReference; lastKnownFileType = folder; path = resources/backend; sourceTree = "<group>"; };
-		AA0000000000000000000207 /* faust-libs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "resources/faust-libs"; sourceTree = "<group>"; };
 		AA0000000000000000000208 /* page-scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "resources/page-scripts"; sourceTree = "<group>"; };
 		AA0000000000000000000209 /* cacert.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = resources/cacert.pem; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,7 +101,6 @@
 				AA0000000000000000000204 /* public */,
 				AA0000000000000000000205 /* capacitor.config.json */,
 				AA0000000000000000000206 /* backend */,
-				AA0000000000000000000207 /* faust-libs */,
 				AA0000000000000000000208 /* page-scripts */,
 				AA0000000000000000000209 /* cacert.pem */,
 			);
@@ -192,7 +189,6 @@
 				AA0000000000000000000109 /* public in Resources */,
 				AA0000000000000000000110 /* capacitor.config.json in Resources */,
 				AA0000000000000000000111 /* backend in Resources */,
-				AA0000000000000000000112 /* faust-libs in Resources */,
 				AA0000000000000000000113 /* page-scripts in Resources */,
 				AA0000000000000000000114 /* cacert.pem in Resources */,
 			);

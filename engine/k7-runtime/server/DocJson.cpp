@@ -128,11 +128,6 @@ studio::PluginDoc pluginFromJson(const json& p) {
     pl.sfzFile = instrumentRef(p.value("sfzFile", std::string{}));
     pl.surgePatch = readable(p.value("surgePatch", std::string{}), "surge patch");
     pl.dspGraph = p.value("dspGraph", std::string{});
-    pl.faustDsp = p.value("faustDsp", std::string{});
-    // A Faust sound file travels as one `label<TAB>path` line, so neither half may hold a tab or a newline.
-    for (auto& [label, path] : p.value("faustFiles", std::map<std::string, std::string>{}))
-        if (label.find_first_of("\t\r\n") == std::string::npos && path.find_first_of("\t\r\n") == std::string::npos)
-            if (auto file = readable(path, "faust sound file"); !file.empty()) pl.faustFiles[label] = std::move(file);
     pl.patternSource = p.value("patternSource", std::string{});
     pl.patternLabel = p.value("patternLabel", std::string{});
     pl.patternCatchAll = p.value("patternCatchAll", false);

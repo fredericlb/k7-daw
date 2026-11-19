@@ -121,7 +121,7 @@ with it, is the failure to avoid.
 ## A model that goes non-finite is reloaded
 
 A model's state can run to NaN or Inf, and it never decays back: Tracktion zeroes the output, and the
-amp is then silent until something resets it. Faust and the jsdsp graph clear themselves on the next
+amp is then silent until something resets it. The jsdsp graph clears itself on the next
 block; a model cannot, because NAM's reset is a PREWARM, far too costly for the audio thread. So the
 audio thread zeroes the bad samples and raises a flag, and a 4 Hz timer on the message thread reloads
 the model from its file — prewarmed off the audio thread, swapped under the lock like any load — and

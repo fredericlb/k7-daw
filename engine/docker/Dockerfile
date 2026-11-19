@@ -33,7 +33,7 @@ COPY packages/audio-analysis/rust packages/audio-analysis/rust
 ARG BUILD_JOBS=
 # Read by the presets into CMAKE_<LANG>_COMPILER_LAUNCHER, which they set and so override from the environment.
 ENV STUDIO_COMPILER_LAUNCHER=ccache CCACHE_DIR=/root/.ccache
-# One RUN, because staging reads the Faust libraries out of the build folder, which only a cache mount holds.
+# One RUN, because staging reads the binaries out of the build folders, which only a cache mount holds.
 RUN --mount=type=cache,target=/src/engine/k7-runtime/build,sharing=locked \
     --mount=type=cache,target=/src/engine/k7-supervisor/build,sharing=locked \
     --mount=type=cache,target=/usr/local/cargo/registry,sharing=locked \

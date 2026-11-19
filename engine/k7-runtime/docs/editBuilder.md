@@ -144,11 +144,10 @@ multiply.
 Ordering again, and each step is load-bearing:
 
 * A built-in is created from a **state tree** rather than a type name whenever the module carries
-  something the plugin must know before its constructor returns. Exactly two things qualify, for
-  one reason: a DSP graph and a Faust program each DECLARE the plugin's parameters, and Tracktion
+  something the plugin must know before its constructor returns. Exactly one thing qualifies, for
+  one reason: a DSP graph DECLARES the plugin's parameters, and Tracktion
   plugins create their `AutomatableParameter`s in the constructor and never after — so it has to
-  be on the tree already. Never both: a module names one plugin, and that plugin reads one of the
-  two properties.
+  be on the tree already.
 * `setEnabled(p.enabled)` comes **before** the preset and the params. A step written
   `enabled: false` always reached the engine and was silently dropped here, so a bypassed module
   went on processing; Tracktion's `enabled` is exactly bypass — the plugin stays in the chain and
