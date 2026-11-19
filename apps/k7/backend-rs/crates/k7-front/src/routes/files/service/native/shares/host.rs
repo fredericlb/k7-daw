@@ -16,11 +16,7 @@ use crate::routes::files::service::native::jobs::Jobs;
 pub fn script(env: &dyn Fn(&str) -> Option<String>, code_root: &Path) -> PathBuf {
     match env("K7_RENDER_PAGE").filter(|v| !v.is_empty()) {
         Some(p) => PathBuf::from(p),
-        // Built by `page.mjs` and ignored by git, so the path is joined in parts rather than named as a file.
-        None => code_root
-            .join("apps/k7/backend-rs/crates/k7-picture")
-            .join("page")
-            .join("renderPage.js"),
+        None => code_root.join("apps/k7/backend-rs/crates/k7-picture/page/renderPage.js"),
     }
 }
 
