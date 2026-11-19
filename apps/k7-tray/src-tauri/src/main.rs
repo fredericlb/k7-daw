@@ -1,13 +1,17 @@
-// main.rs — the k7 tray: a windowless Tauri app that starts k7's backend on 127.0.0.1, which runs the machine's
-// supervisor and engine, and leads the browser to it — k7 is used as a web app (an installable one) on this
-// machine. The Windows job object is created HERE, before anything spawns, so a force-killed tray takes the whole
-// stack with it. It opens no window and has no webview. See docs/tray.md.
+// main.rs — K7 DAW, the desktop app: a Tauri app with one window and a tray icon. It starts k7's backend on
+// 127.0.0.1, which runs the machine's supervisor and engine, and shows k7's page in its window. The Windows job
+// object is created HERE, before anything spawns, so a force-killed app takes the whole stack with it.
+// See docs/tray.md and docs/desktop.md.
 #![cfg_attr(
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
 
+#[cfg(target_os = "macos")]
+mod appmenu;
+mod autostart;
 mod backend;
+mod handlers;
 mod http;
 mod job;
 mod logbus;
@@ -18,6 +22,9 @@ mod state;
 mod tray;
 mod trayicon;
 mod updates;
+#[cfg(target_os = "linux")]
+mod webview_linux;
+mod window;
 
 use std::sync::{Arc, Mutex};
 use tauri::tray::TrayIconBuilder;
@@ -27,28 +34,34 @@ use tauri_plugin_autostart::{MacosLauncher, ManagerExt};
 use state::{AppState, Backend, Menus, SharedState};
 
 fn main() {
+    #[cfg(target_os = "linux")]
+    webview_linux::before_gtk();
     let mut builder = tauri::Builder::default();
-    // A second launch opens k7 in the browser; a scratch run (`K7_TRAY_SCRATCH`) is a second tray on purpose.
+    // A second launch brings the window up; a scratch run (`K7_TRAY_SCRATCH`) is a second app on purpose.
     if paths::scratch().is_none() {
         builder = builder.plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
-            tray::open_path(&backend::url(app, "/"));
+            window::show(app, None);
         }));
     }
     builder = builder
-        .plugin(tauri_plugin_autostart::init(
-            MacosLauncher::LaunchAgent,
-            None,
-        ))
+        .plugin(
+            tauri_plugin_autostart::Builder::new()
+                .macos_launcher(MacosLauncher::LaunchAgent)
+                .app_name(autostart::NAME)
+                .arg(autostart::ARG)
+                .build(),
+        )
         .plugin(tauri_plugin_dialog::init());
+    // A scratch run keeps its window state out of the person's config folder.
+    if paths::scratch().is_none() {
+        builder = builder.plugin(window_state());
+    }
     if let Some(updater) = updates::plugin() {
         builder = builder.plugin(updater);
     }
     builder
         .manage(backend::Process::default())
         .setup(|app| {
-            // Menu-bar only on macOS: no Dock icon, no app-switcher entry.
-            #[cfg(target_os = "macos")]
-            app.set_activation_policy(tauri::ActivationPolicy::Accessory);
             let handle = app.handle().clone();
 
             // Before anything spawns: job membership is inherited, so the whole stack dies with the tray.
@@ -58,7 +71,7 @@ fn main() {
             if let Err(why) = job {
                 logbus::line("host", &why);
             }
-            logbus::line("host", &format!("k7 tray {} starting", env!("K7_RELEASE")));
+            logbus::line("host", &format!("K7 DAW {} starting", env!("K7_RELEASE")));
             // The front runs in this process, whose stderr nobody reads: its panics and its stop go to the merged log.
             k7_front::exit::watch(Some(|l| logbus::line("front", l)));
 
@@ -82,7 +95,7 @@ fn main() {
                     status: mb.status,
                     downloads: mb.downloads,
                     downloads_shown: false,
-                    open: mb.open,
+                    browser: mb.browser,
                     menu: mb.menu,
                     autostart: mb.autostart,
                     auto_update: mb.auto_update,
@@ -91,6 +104,12 @@ fn main() {
             }));
             app.manage(shared);
 
+            #[cfg(target_os = "macos")]
+            appmenu::install(&handle)?;
+            // A login starts hidden; any other launch shows the splash at once.
+            window::create(&handle, !autostart::launched_at_login())?;
+            autostart::retire_old(&handle);
+            autostart::reregister(&handle);
             backend::spawn(&handle);
             loops::start(&handle);
             updates::start(&handle);
@@ -114,12 +133,24 @@ fn main() {
             Ok(())
         })
         .build(tauri::generate_context!())
-        .expect("error building the tray")
+        .expect("error building K7 DAW")
         .run(|app, event| {
-            if let RunEvent::ExitRequested { .. } = event {
-                cleanup(app);
+            match event {
+                RunEvent::ExitRequested { .. } => cleanup(app),
+                // The Dock icon of a hidden window brings it back.
+                #[cfg(target_os = "macos")]
+                RunEvent::Reopen { .. } => window::show(app, None),
+                _ => {}
             }
         });
+}
+
+/// Size, position and maximized state are kept; visibility is the launch's (a login starts hidden).
+fn window_state<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
+    use tauri_plugin_window_state::StateFlags;
+    tauri_plugin_window_state::Builder::default()
+        .with_state_flags(StateFlags::all() & !StateFlags::VISIBLE)
+        .build()
 }
 
 /// On quit: the backend stops its supervisor, which deregisters and stops the engine; the backstop catches what a

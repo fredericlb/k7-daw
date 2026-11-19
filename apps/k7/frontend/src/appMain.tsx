@@ -48,6 +48,7 @@ const HomeRoutes = lazy(() =>
 );
 
 import { PROFILING } from "@studio/project-shell/profiling";
+import { shell } from "./appShell";
 import { installFreezeWatchdog, reportCommit, tally } from "./freezeWatchdog";
 import { currentRevision } from "./hooks/useRevision";
 import { LocaleProvider } from "./i18n";
@@ -109,15 +110,13 @@ else if (first === "project") {
 if (first === "home" || first === "project") void engines.hostedFiles();
 
 /** …and the worker that makes either an installable app — a SECOND opening, not offline; its scope is `/`, and each deploy replaces it (@studio/vite-config/register). */
-// Not in a phone app's view: its files are already on the device, and the precache would copy them to flash again (docs/localApp.md).
-const phone = window as { k7Android?: unknown; k7Ios?: unknown };
-const inPhoneApp = !!(phone.k7Android ?? phone.k7Ios);
+// Not in an app's view: its files are already on the machine, and the precache would serve the previous release's page after an update (docs/localApp.md).
 if ("serviceWorker" in navigator) {
-  if (!inPhoneApp) registerWorker();
+  if (!shell.inApp) registerWorker();
   else void dropWorkers();
 }
 
-/** A phone app's view drops any registration it still holds, and the precache goes with it. */
+/** An app's view drops any registration it still holds, and the precache goes with it. */
 async function dropWorkers(): Promise<void> {
   const all = await navigator.serviceWorker.getRegistrations();
   await Promise.all(all.map((r) => r.unregister()));

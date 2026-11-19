@@ -9,6 +9,7 @@ import { Circle, Loader2, Pause, Play, Repeat, Square } from "@studio/ui/icons";
 import type { RefObject } from "react";
 import type { SetStatus } from "../hooks/useLogs";
 import { blurOnClick } from "../keys";
+import { midiUnavailableText } from "../midiMessage";
 import { m } from "../paraglide/messages.js";
 
 export function ShellTransport({
@@ -124,7 +125,7 @@ export function ShellTransport({
               // A MIDI-armed lane is recorded by THIS record too: the press is the gesture Web MIDI's request rides.
               if (!recordEnabled && midiArmed)
                 void openMidiInputs().then((ok) => {
-                  if (!ok) setStatus(m["midi.unavailable"]());
+                  if (!ok) setStatus(midiUnavailableText());
                 });
               // Turning record ON with nothing armed arms a track first, so Play does not go dead under it.
               if (!recordEnabled) armForRecord?.();

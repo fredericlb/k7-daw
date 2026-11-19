@@ -121,13 +121,13 @@ pub fn check(app: &AppHandle, manual: bool) {
 }
 
 fn say(app: &AppHandle, text: &str) {
-    app.dialog().message(text).title("k7 tray").blocking_show();
+    app.dialog().message(text).title("K7 DAW").blocking_show();
 }
 
 fn ask(app: &AppHandle, text: &str, yes: &str) -> bool {
     app.dialog()
         .message(text)
-        .title("k7 tray")
+        .title("K7 DAW")
         .buttons(MessageDialogButtons::OkCancelCustom(
             yes.into(),
             "Later".into(),
@@ -171,17 +171,14 @@ fn run(app: &AppHandle, manual: bool) {
         Err(e) => {
             logbus::line("update", &format!("check failed: {e}"));
             if manual {
-                say(
-                    app,
-                    "Could not reach k7.rocks to check for a newer k7 tray.",
-                );
+                say(app, "Could not reach k7.rocks to check for a newer K7 DAW.");
             }
             return;
         }
     };
     let Some(update) = update else {
         if manual {
-            say(app, &format!("k7 tray {} is the latest.", label(RELEASE)));
+            say(app, &format!("K7 DAW {} is the latest.", label(RELEASE)));
         }
         return;
     };
@@ -192,15 +189,12 @@ fn run(app: &AppHandle, manual: bool) {
     }
     k.told = update.version.clone();
     save(app, &k);
-    logbus::line(
-        "update",
-        &format!("k7 tray {} is available", update.version),
-    );
+    logbus::line("update", &format!("K7 DAW {} is available", update.version));
     if !self_updating() {
         if ask(
             app,
             &format!(
-                "k7 tray {} is available. The download page opens in your browser.",
+                "K7 DAW {} is available. The download page opens in your browser.",
                 update.version
             ),
             "Download",
@@ -212,7 +206,7 @@ fn run(app: &AppHandle, manual: bool) {
     if !ask(
         app,
         &format!(
-            "k7 tray {} is available. Install it now? k7 restarts once it is done.",
+            "K7 DAW {} is available. Install it now? K7 DAW restarts once it is done.",
             update.version
         ),
         "Install and Restart",
@@ -243,7 +237,7 @@ fn run(app: &AppHandle, manual: bool) {
         logbus::line("update", &format!("install failed: {e}"));
         say(
             app,
-            "The update could not be installed; k7 restarts as it was.",
+            "The update could not be installed; K7 DAW restarts as it was.",
         );
     }
     app.restart();

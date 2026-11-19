@@ -15,7 +15,7 @@ import { hasUnsavedWork } from "@studio/ui-editor/unsaved";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { isAppAddress, scopeOf } from "./address";
-import { m } from "./paraglide/messages.js";
+import { mayLeave } from "./leaveAsk";
 import { queryClient } from "./queries/client";
 import { onLeave } from "./scopeLeave";
 
@@ -59,12 +59,12 @@ function settle(): void {
   if (crossed) for (const l of listeners) l();
 }
 
-/** The browser's own prompt, said in the app: leaving loses what is not on disk. */
-const mayLeave = (): boolean =>
-  !hasUnsavedWork() || window.confirm(m["leave.unsaved"]());
-
-/** Go to `href`: drawn in place when it is one of this page's addresses, loaded otherwise. */
-export async function go(href: string, replace = false): Promise<void> {
+/** Go to `href`: drawn in place when it is one of this page's addresses, loaded otherwise; `confirmed` has asked already. */
+export async function go(
+  href: string,
+  replace = false,
+  confirmed = false,
+): Promise<void> {
   const url = new URL(href, window.location.href);
   if (!isAppAddress(url, window.location.origin, BASE)) {
     if (replace) window.location.replace(url.href);
@@ -75,7 +75,7 @@ export async function go(href: string, replace = false): Promise<void> {
   if (crossing) {
     // Typing still on its timer is written first, so only what truly cannot be is asked about.
     await flushAutosaves().catch(() => false);
-    if (!mayLeave()) return;
+    if (!confirmed && !(await mayLeave())) return;
   }
   // The router's own entry shape, so its Back and Forward keep counting (react-router's `idx`).
   const idx =
@@ -107,9 +107,14 @@ window.addEventListener("popstate", (e) => {
   const crossing = !selfPop && currentScopeKey() !== lastKey;
   // Back cannot wait, but each pane's pending write starts here, while the file API still names the project left.
   if (crossing) void flushAutosaves().catch(() => false);
-  if (crossing && !mayLeave()) {
+  if (crossing && hasUnsavedWork()) {
+    // The question cannot block: the move is undone now, and made again if the answer is yes.
+    const target = window.location.href;
     window.history.pushState(lastState, "", lastHref);
     e.stopImmediatePropagation();
+    void mayLeave().then((ok) => {
+      if (ok) return go(target, false, true);
+    });
     return;
   }
   settle();

@@ -1,6 +1,6 @@
-// tray.rs — the icon and its menu: one status line (two while an instrument downloads), Open k7, and the app's own
-// switches. The VIEW: the words come from the backend's status route or from where the backend process stands,
-// and every setting of the engine is a page of k7, opened in the browser. See docs/tray.md.
+// tray.rs — the icon and its menu: one status line (two while an instrument downloads), the window and the browser
+// routes to k7, and the app's own switches. The VIEW: the words come from the backend's status route or from where
+// the backend process stands, and every setting of the engine is a page of k7. See docs/tray.md.
 
 use tauri::menu::{CheckMenuItem, IsMenuItem, Menu, MenuItem, PredefinedMenuItem};
 use tauri::{AppHandle, Manager, Wry};
@@ -8,13 +8,13 @@ use tauri_plugin_autostart::ManagerExt;
 
 use crate::state::{Backend, SharedState};
 use crate::trayicon::{self, IconState};
-use crate::{backend, paths, updates};
+use crate::{backend, paths, updates, window};
 
 pub struct MenuBuild {
     pub menu: Menu<Wry>,
     pub status: MenuItem<Wry>,
     pub downloads: MenuItem<Wry>,
-    pub open: MenuItem<Wry>,
+    pub browser: MenuItem<Wry>,
     pub autostart: CheckMenuItem<Wry>,
     pub auto_update: CheckMenuItem<Wry>,
 }
@@ -24,12 +24,13 @@ pub fn build_menu(
     autostart_on: bool,
     auto_update_on: bool,
 ) -> tauri::Result<MenuBuild> {
-    let status = MenuItem::with_id(app, "status", "Starting k7…", false, None::<&str>)?;
+    let status = MenuItem::with_id(app, "status", "Starting K7 DAW…", false, None::<&str>)?;
     // Built once, inserted under the status line only while an instrument downloads (`refresh`).
     let downloads = MenuItem::with_id(app, "downloads", "", false, None::<&str>)?;
-    let open = MenuItem::with_id(app, "open", "Open k7", false, None::<&str>)?;
+    let open = MenuItem::with_id(app, "open", "Open K7 DAW", true, None::<&str>)?;
+    let browser = MenuItem::with_id(app, "browser", "Open in Browser", false, None::<&str>)?;
     let engine = MenuItem::with_id(app, "engine", "Engine Settings…", true, None::<&str>)?;
-    let restart = MenuItem::with_id(app, "restart", "Restart k7", true, None::<&str>)?;
+    let restart = MenuItem::with_id(app, "restart", "Restart K7 DAW", true, None::<&str>)?;
     let autostart = CheckMenuItem::with_id(
         app,
         "autostart",
@@ -54,11 +55,12 @@ pub fn build_menu(
         None::<&str>,
     )?;
     let logs = MenuItem::with_id(app, "logs", "Show Logs", true, None::<&str>)?;
-    let quit = MenuItem::with_id(app, "quit", "Quit k7 Tray", true, None::<&str>)?;
+    let quit = MenuItem::with_id(app, "quit", "Quit K7 DAW", true, None::<&str>)?;
     let sep = || PredefinedMenuItem::separator(app);
     let (s1, s2, s3) = (sep()?, sep()?, sep()?);
-    let mut items: Vec<&dyn IsMenuItem<Wry>> =
-        vec![&status, &s1, &open, &engine, &restart, &s2, &autostart];
+    let mut items: Vec<&dyn IsMenuItem<Wry>> = vec![
+        &status, &s1, &open, &browser, &engine, &restart, &s2, &autostart,
+    ];
     // Shown only where an update can happen: never in the dev session's debug build, nor in one without a key.
     if updates::available() {
         items.extend([&check as &dyn IsMenuItem<Wry>, &auto_update]);
@@ -69,7 +71,7 @@ pub fn build_menu(
         menu,
         status,
         downloads,
-        open,
+        browser,
         autostart,
         auto_update,
     })
@@ -78,7 +80,11 @@ pub fn build_menu(
 /// The badge, the status line and the downloads line, from where the backend stands and what it last said.
 fn shown(s: &crate::state::AppState) -> (IconState, String, Option<String>) {
     match &s.backend {
-        Backend::Starting => (IconState::Loading(s.spinner), "Starting k7…".into(), None),
+        Backend::Starting => (
+            IconState::Loading(s.spinner),
+            "Starting K7 DAW…".into(),
+            None,
+        ),
         Backend::Down(why) => (IconState::Error, format!("⚠ {why}"), None),
         Backend::Ready if s.said.line.is_empty() => (
             IconState::Loading(s.spinner),
@@ -112,7 +118,7 @@ pub fn tick_spinner(app: &AppHandle) {
 /// Repaint everything the menu bar says. The lock is held only to read; Tauri is called with it released.
 pub fn refresh(app: &AppHandle) {
     let shared = app.state::<SharedState>();
-    let (status, line, downloads, toggle, open, ready, tray, icon) = {
+    let (status, line, downloads, toggle, browser, ready, tray, icon) = {
         let mut s = shared.lock().unwrap();
         let (state, line, downloads) = shown(&s);
         let icon = trayicon::render(state);
@@ -126,7 +132,7 @@ pub fn refresh(app: &AppHandle) {
             line,
             (m.downloads.clone(), downloads),
             toggle,
-            m.open.clone(),
+            m.browser.clone(),
             ready,
             m.tray.clone(),
             icon,
@@ -144,15 +150,17 @@ pub fn refresh(app: &AppHandle) {
             menu.remove(&item)
         };
     }
-    let _ = open.set_enabled(ready);
+    let _ = browser.set_enabled(ready);
     let _ = tray.set_icon(Some(icon));
-    let _ = tray.set_tooltip(Some(format!("k7 — {line}")));
+    let _ = tray.set_tooltip(Some(format!("K7 DAW — {line}")));
+    window::on_status(app, ready, &line);
 }
 
 pub fn on_menu(app: &AppHandle, id: &str) {
     match id {
-        "open" => open_path(&backend::url(app, "/")),
-        "engine" => open_path(&backend::url(app, "/settings/engine")),
+        "open" => window::show(app, None),
+        "browser" => open_path(&backend::url(app, "/")),
+        "engine" => window::show(app, Some("/settings/engine")),
         "restart" => backend::restart(app),
         "autostart" => toggle_autostart(app),
         "check_updates" => updates::check(app, true),
@@ -192,6 +200,23 @@ pub fn open_path(target: &str) {
     );
     #[cfg(all(unix, not(target_os = "macos")))]
     let _ = std::process::Command::new("xdg-open").arg(target).spawn();
+}
+
+/// A file, shown in its folder: selected in Finder or Explorer, its folder opened where there is no such thing.
+pub fn reveal(path: &std::path::Path) {
+    #[cfg(target_os = "macos")]
+    let _ = std::process::Command::new("open")
+        .arg("-R")
+        .arg(path)
+        .spawn();
+    #[cfg(target_os = "windows")]
+    let _ = crate::job::spawn_outside(
+        std::process::Command::new("explorer").arg(format!("/select,{}", path.display())),
+    );
+    #[cfg(all(unix, not(target_os = "macos")))]
+    if let Some(dir) = path.parent() {
+        open_path(&dir.to_string_lossy());
+    }
 }
 
 /// A text file: Notepad on Windows, where a `.log` usually has no association.

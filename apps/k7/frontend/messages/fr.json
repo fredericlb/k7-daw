@@ -132,6 +132,7 @@
   "filesGate.blockedTitle": "Cette page n'est pas autorisée à joindre le moteur",
   "filesGate.blockedBody": "Le service de fichiers fonctionne, mais il a refusé l'origine de cette page ({origin}). Autorisez-la depuis l'icône du moteur dans la barre de menus : Settings… ▸ k7 instances, puis réessayez.",
   "filesGate.downBody": "Aucune réponse à {base}. Le service de fichiers du moteur est probablement arrêté : démarrez-le depuis l'icône de la barre de menus.",
+  "midi.unavailableDesktop": "Pas de Web MIDI dans cette fenêtre — ouvrez k7 dans le navigateur (menu de K7 DAW : Open in Browser) pour enregistrer du MIDI",
   "midi.unavailable": "Pas de MIDI — Web MIDI refusé ou indisponible ici",
   "midi.noMidiIn": "Aucun MIDI ne s'enregistre dans {track} : reliez-y un nœud MIDI",
   "transport.region": "Transport",
