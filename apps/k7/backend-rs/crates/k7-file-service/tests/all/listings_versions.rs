@@ -100,23 +100,6 @@ fn a_manifest_that_parses_badly_is_none_but_one_beside_yaml_is_declined() {
     s.file("libraries/garbled/3/library.k7x", "name(\"x\")\n");
     let got = rows(&s, &Remote::default()).unwrap();
     assert_eq!(got["garbled"].upgrade, Some(3));
-    // No native reader takes YAML: a folder of a version with `library.yaml` and no readable k7x is declined.
-    s.file("libraries/garbled/4/library.yaml", "name: x\n");
-    assert_eq!(
-        rows(&s, &Remote::default()).unwrap_err(),
-        Declined::LegacyManifest
-    );
-}
-
-#[test]
-fn legacy_pins_are_declined() {
-    let s = Scratch::new("ver-legacy-pins");
-    s.file("ws/_library-pins.yaml", "k7-core(2)\n");
-    s.file("libraries/k7-core/1/library.k7x", &manifest(1, 1));
-    assert_eq!(
-        rows(&s, &Remote::default()).unwrap_err(),
-        Declined::LegacyPins
-    );
 }
 
 #[test]
@@ -155,6 +138,4 @@ fn the_constants_are_the_typescripts() {
     assert!(versions.contains(&format!("export const LIBRARY_LEVEL = {LIBRARY_LEVEL};")));
     assert!(versions.contains("export const UNPINNED_VERSION = 1;"));
     assert!(versions.contains("export const LIBRARY_MANIFEST = \"library.k7x\";"));
-    let legacy = ts("packages/song-schema/src/libraryVersionsLegacy.ts");
-    assert!(legacy.contains("export const LEGACY_LIBRARY_MANIFEST = \"library.yaml\";"));
 }

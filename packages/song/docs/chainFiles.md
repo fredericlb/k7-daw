@@ -3,11 +3,10 @@
 A project with a `chains/` folder is a **chain project**: its signal graph is written as one file
 per chain, nodes are written INSIDE the chain that plays them, and `graph.k7x` and `nodes/` do not
 exist. A project without one is read the way [nodes.md](nodes.md) describes. Both load, so a
-project moves over with `scripts/migrateChainFiles.ts` and nothing else has to change at once.
+project in either layout is edited by the same writers.
 
-Chain files are the **main layout**: a new project is born as one, its scaffold converted by the
-same migration ([scaffold.md](scaffold.md)). A graph is what `mix` and the bench still write, and
-what an older project keeps until it is migrated.
+Chain files are the **main layout**: a new project is born as one ([scaffold.md](scaffold.md)). A
+graph is what `mix` and the bench still write.
 
 ```
 chains/ge.rythm.k7x      a chain: its steps, and where it goes
@@ -169,7 +168,7 @@ Everything downstream — the compile, the engine, the graph view, every graph e
 segment graph of [graphFile.md](graphFile.md). `chainProject.ts` builds that graph from the chain
 files (`toSegments`), keyed by lane name or node id, and writes one back (`fromSegments`). So a
 graph edit is still a transform over segments, run on the graph read from `chains/` and written
-back; the second direction is the migration too. The pair must round-trip, and
+back. The pair must round-trip, and
 `chainProject.test.ts` holds it to that.
 
 Writing back keeps what segments cannot say: a chain's name (the chain that held its head node),
@@ -212,21 +211,6 @@ A node whose card has no module to name — no `extends`, and so nothing a heade
 its place instead. A step that also carries no plugin plays nothing at all; its card says **empty
 step**, the place one hover away, so a stray one is seen for what it is and deleted.
 
-## What the migration carries over
-
-Beside nodes and lanes: a **picture lane** becomes its item, a node a graph named by a module REF
-with no node file becomes an item extending that ref, a new chain is named after the leaf of what
-its head extends, and a fade naming a stretch by its head node is rewritten to the stretch's
-subchain id. It reads and moves files through the workspace door, so a `.k7x` folder migrates as
-it is.
-
-## What the migration refuses
-
-A project whose `assemblies/`, `views/` or `surfaces/` name nodes, and a `nodes/` holding anything
-but node files, presets, `assets/` and `base/`. Each of those refers to a node by the NAME the
-migration takes away, and carrying it over is work of its own — refused by name rather than left
-pointing at nothing.
-
 ## Writing to a chain project
 
 Every writer that knows node files and `graph.k7x` writes a chain project too, through the same
@@ -253,7 +237,7 @@ text transforms; only where the text comes from changes (`chainItemEdit.ts`, `ch
   one hides it too, unless its card has a place in `layout.k7x`.
 - **A new lane** is its `tracks/` file and a `start: true` chain of its own; its strip is the next
   item of that chain.
-- **Assemblies are refused**, like the migration refuses them: a box names its members.
+- **Assemblies are refused**: a box names its members, and a chain project keeps no name for a node.
 - **The picture's run** is a chain starting at `RENDER`, written when no chain does.
 - **A duplicated lane** is a new `tracks/` file and a `start: true` chain copied from the lane item
   on: what feeds the lane — an input before it — is not copied, since two lanes on one input would

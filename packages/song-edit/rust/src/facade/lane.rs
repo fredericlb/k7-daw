@@ -4,8 +4,7 @@
 use super::args::{at, catalogue_of, done, fnum, opt_json, s, val_lax};
 use super::{Ctx, Out};
 use crate::{
-    Fs, MemFs, base_preset, chain_create, chain_stack, module_fork, recorder_nodes, scaffold, timeline_from_range,
-    timeline_rename,
+    Fs, MemFs, base_preset, chain_create, chain_stack, module_fork, scaffold, timeline_from_range, timeline_rename,
 };
 use serde_json::{Value as Json, json};
 
@@ -19,18 +18,7 @@ pub const NAMES: &[(&str, &[&str])] = &[
     ("song/chainStack", &["stackChainNode"]),
     ("song-edit/timelineFromRange", &["timelineFromRange"]),
     ("song-edit/trackMix", &["timelineFromRange"]),
-    ("song-edit/recorderNodes", &["dropRecorderNodes"]),
-    (
-        "song/scaffold",
-        &[
-            "projectFiles",
-            "videoProjectFiles",
-            "writeProjectFiles",
-            "scaffoldSynth",
-            "asChainProject",
-            "scaffold",
-        ],
-    ),
+    ("song/scaffold", &["writeProjectFiles", "scaffoldSynth", "scaffold"]),
     (
         "song/moduleFork",
         &[
@@ -41,10 +29,6 @@ pub const NAMES: &[(&str, &[&str])] = &[
         ],
     ),
 ];
-
-fn files_json(f: &[(String, String)]) -> Json {
-    Json::Object(f.iter().map(|(k, t)| (k.clone(), json!(t))).collect())
-}
 
 pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
     let fs = &mut *cx.fs;
@@ -78,9 +62,6 @@ pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
             chain_create::insert_chain_input(fs, &s(a, 0), &s(a, 1), &s(a, 2), &mut *cx.new_id),
             |(id, rel)| json!({ "id": id, "rel": rel }),
         ),
-        ("song-edit/recorderNodes", "dropRecorderNodes") => {
-            done(recorder_nodes::drop_recorder_nodes(fs, env, &s(a, 0)), |l| json!(l))
-        }
         ("song/chainStack", "stackChainNode") => {
             done(chain_stack::stack_chain_node(fs, &s(a, 0), &s(a, 1), &s(a, 2)), |l| {
                 json!(l)
@@ -118,8 +99,6 @@ pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
                 |r| json!({ "ref": r.reference, "folder": r.folder, "leaf": r.leaf, "type": r.kind }),
             )),
         ("song/moduleFork", "chainsUsing") => Ok(json!(module_fork::chains_using(&s(a, 0), &s(a, 1)))),
-        ("song/scaffold", "projectFiles") => Ok(files_json(&scaffold::project_files(&s(a, 0)))),
-        ("song/scaffold", "videoProjectFiles") => done(scaffold::video_project_files(&s(a, 0)), |f| files_json(&f)),
         ("song/scaffold", "writeProjectFiles") => {
             let files: Vec<(String, String)> = at(a, 1)
                 .as_object()
@@ -145,11 +124,6 @@ pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
                 ))
             })
         }
-        ("song/scaffold", "asChainProject") => {
-            done(scaffold::as_chain_project(fs, env, &s(a, 0), &mut *cx.new_id), |l| {
-                json!(l)
-            })
-        }
         ("song/scaffold", "scaffold") => {
             let shape = if s(a, 2) == "video" {
                 scaffold::TimelineShape::Video
@@ -158,7 +132,7 @@ pub fn run(cx: &mut Ctx, module: &str, f: &str, a: &[Json]) -> Option<Out> {
             };
             // The video shape copies the sample the host names in the fourth argument.
             let sample = at(a, 3).as_str().map(str::as_bytes);
-            let out = scaffold::scaffold(fs, env, &s(a, 0), &s(a, 1), shape, sample, &mut *cx.new_id);
+            let out = scaffold::scaffold(fs, &s(a, 0), &s(a, 1), shape, sample, &mut *cx.new_id);
             done(out, |l| json!(l))
         }
         _ => return None,

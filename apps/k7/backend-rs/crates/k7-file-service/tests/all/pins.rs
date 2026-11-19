@@ -1,10 +1,9 @@
 //! A workspace pinned afresh (3j-1's last decline, now native): the newest version of each library this machine runs,
-//! written once, named in order, never over a file that is there, and a legacy YAML refused with its reason.
+//! written once, named in order, never over a file that is there,.
 
 use crate::support;
 
 use k7_file_service::pins::{ensure_fresh, ensure_opened};
-use k7_file_service::space::Declined;
 use support::Scratch;
 
 fn manifest(version: u32, requires: u32) -> String {
@@ -38,19 +37,6 @@ fn a_workspace_with_no_pins_gets_the_newest_runnable_version_of_each_library_in_
         std::fs::read_to_string(format!("{root}/_library-pins.k7x")).unwrap(),
         "k7-core(1)\n"
     );
-}
-
-#[test]
-fn a_legacy_yaml_is_refused_and_never_upgraded_here() {
-    let s = Scratch::new("pins-legacy");
-    s.file("libraries/k7-core/1/library.k7x", &manifest(1, 1));
-    s.file("home/workspace/Banc/_library-pins.yaml", "k7-core: 1\n");
-    let root = s.path("home/workspace/Banc");
-    assert_eq!(
-        ensure_fresh(&s.home(false), &root),
-        Err(Declined::LegacyPins)
-    );
-    assert!(!std::path::Path::new(&format!("{root}/_library-pins.k7x")).exists());
 }
 
 #[test]

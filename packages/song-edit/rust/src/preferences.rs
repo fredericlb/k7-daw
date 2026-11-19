@@ -6,7 +6,6 @@ use crate::js_text::{is_positive_integer, js_string, js_to_number, js_trim};
 use k7x::edit::{StringifyOptions, Value, js_number, parse, stringify};
 
 pub const PREFERENCES_FILE: &str = "preferences.k7x";
-pub const LEGACY_PREFERENCES_FILE: &str = "preferences.yaml";
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ChannelDir {

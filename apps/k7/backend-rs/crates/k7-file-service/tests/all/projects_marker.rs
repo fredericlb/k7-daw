@@ -145,16 +145,6 @@ fn a_marker_naming_a_path_outside_the_root_is_resolved_not_confined() {
 }
 
 #[test]
-fn a_legacy_marker_with_no_marker_declines_and_a_marker_wins() {
-    let a = Acct::new("pm-legacy");
-    let root = root_of(&a);
-    a.s.file("studio/workspace/songs/.studio-active", "a.k7\n");
-    assert_eq!(read_raw(&root), Err(Declined::LegacyMarker));
-    a.marker("songs", "b.k7\n");
-    assert_eq!(read_raw(&root), Ok(Some(format!("{root}/b.k7"))));
-}
-
-#[test]
 fn a_marker_past_a_mebibyte_or_a_rel_past_the_limit_declines() {
     let a = Acct::new("pm-big");
     let root = root_of(&a);

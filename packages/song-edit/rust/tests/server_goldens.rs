@@ -6,7 +6,7 @@ use song_edit::MemFs;
 use song_edit::confine::Env;
 use song_edit::format_stamp::stamp_format_for_seconds;
 use song_edit::fs::Fs;
-use song_edit::open_repairs::run_open_repairs;
+use song_edit::open_repairs::repair_picture_strips;
 use song_edit::record_take::{Meter, RecordedTake, TakeTarget, add_take_to_event, add_take_to_track};
 use std::collections::BTreeMap;
 
@@ -137,7 +137,7 @@ fn open_cases() -> Vec<(Json, MemFs, Vec<Json>)> {
                 format!("00000000-0000-4000-8000-{n:012}")
             };
             let dir = format!("{ROOT}/p.k7");
-            let notes = run_open_repairs(&mut fs, &env, &dir, "p.k7", &mut new_id);
+            let notes = repair_picture_strips(&mut fs, &env, &dir, "p.k7", &mut new_id).unwrap_or_default();
             stamp_format_for_seconds(&mut fs, &dir);
             let said = notes
                 .iter()
@@ -151,7 +151,7 @@ fn open_cases() -> Vec<(Json, MemFs, Vec<Json>)> {
 #[test]
 fn open_repairs_replay_the_typescript() {
     let all = open_cases();
-    assert!(all.len() >= 15);
+    assert!(all.len() >= 7);
     for (c, fs, said) in &all {
         let name = c["name"].as_str().unwrap();
         assert_eq!(Json::from(said.clone()), c["ret"], "{name}");

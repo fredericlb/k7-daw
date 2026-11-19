@@ -22,13 +22,13 @@ const SONG = join(DEMOS, "synth-demo.k7");
 let ws: string;
 let dir: string;
 
-/** Rewrite the fixture's instrument as a jsdsp module, source and compiled graph beside it. */
+/** Rewrite the fixture's instrument as a dsp module, its source and the graph a node host plays beside it. */
 function asJsDsp(withGraph: boolean): void {
   const folder = join(ws, "_modules", "instruments", "synth");
   writeDoc(join(folder, "module.k7x"), {
-    plugin: { type: "jsdsp", name: "Synth" },
+    plugin: { type: "dsp", name: "Synth" },
   });
-  writeFileSync(join(folder, "jsdsp.ts"), "// dsp\n", "utf8");
+  writeFileSync(join(folder, "dsp.k7x"), "graph([])\n", "utf8");
   if (withGraph)
     writeFileSync(
       join(folder, "jsdsp.json"),
@@ -37,15 +37,15 @@ function asJsDsp(withGraph: boolean): void {
     );
 }
 
-/** A `transformers/` module whose DSP is its own jsdsp.ts, wired BEFORE the melody's instrument.
- *  A jsdsp source needs its OWN folder (the file has one fixed name), so this lives at
+/** A `transformers/` module whose DSP is its own dsp.k7x, wired BEFORE the melody's instrument.
+ *  A dsp source needs its OWN folder (the file has one fixed name), so this lives at
  *  `@workspace`, referenced directly by ref since no node instantiates it. */
 function midiGraphModule(): void {
   const folder = join(ws, "_modules", "transformers", "rpt");
   writeDoc(join(folder, "module.k7x"), {
-    plugin: { type: "jsdsp", name: "Note Repeat" },
+    plugin: { type: "dsp", name: "Note Repeat" },
   });
-  writeFileSync(join(folder, "jsdsp.ts"), "// dsp\n", "utf8");
+  writeFileSync(join(folder, "dsp.k7x"), "graph([])\n", "utf8");
   writeFileSync(
     join(folder, "jsdsp.json"),
     JSON.stringify({ params: [], nodes: [{ type: "mhold" }] }),

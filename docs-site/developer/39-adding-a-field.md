@@ -63,9 +63,8 @@ Take, as an example, a new optional number on a lane's event.
    and written as k7x.
 6. **Diagnostics.** Decide whether a broken file stops the compile (a thrown error) or is reported as a
    `Diagnostic` and skipped. A drawing aid (surfaces, assemblies) should not stop the music.
-7. **Layout migration.** If the file names nodes by name, `migrationBlocker`
-   (`packages/song/src/chainsMigrateFiles.ts`) must refuse to convert a project holding it, since a
-   chain project renames non-lane nodes to ids.
+7. **Layout.** If the file names nodes by name, it cannot live in a chain project, which keeps
+   no name for a non-lane node.
 8. **File service.** `.k7x` files already move the revision token, are journalled by
    the change set and synced by live capture. Add a route (`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/routes.rs`)
    only if the browser needs a derived view of the new kind.

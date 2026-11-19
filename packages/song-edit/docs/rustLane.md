@@ -2,7 +2,7 @@
 
 `rust/` holds, beside the base (`rustBase.md`), the writers of a lane, a chain project's nodes and the module libraries:
 base presets, timeline rename, chain node and lane creation, the preferences file, a module's move, the account's forks,
-the library forks, the engine module's fork, the recorder nodes, a new project's files, the mixer's placement writers
+the library forks, the engine module's fork, a new project's files, the mixer's placement writers
 (`track_mix`, `placement_move`) and the timeline cut from a lane's range. Nothing routes to it yet; the TypeScript stays the source of truth until the cut
 
 ## Choices
@@ -12,10 +12,9 @@ the library forks, the engine module's fork, the recorder nodes, a new project's
 | a fresh node id comes from a `NewId` closure the host gives (`ids.rs`) | the crate reads no random source; a replay hands the ids the harvest saw, in the order the TypeScript made them |
 | `shared_folders.rs` takes the places from `Env` and reads pins through the `Fs` | the TypeScript reads `$STUDIO_HOME` and the process's overlays; the crate may read neither |
 | a pin file in the old YAML spelling is not read or upgraded | the upgrade writes and deletes files through YAML; it belongs to the native server, so a workspace with only that file answers no pins |
-| `preferences_file.rs` answers a leftover `preferences.yaml` with the "does not read" problem, never with defaults | a mutator that saved over it would lose what the file holds |
 | channel numbers in the preferences stay `f64` | the TypeScript keeps JavaScript numbers; `Number("0x10")` and `Number(null)` are what a hand-written file may hold, and `js_text.rs` spells them |
 | `module_fork` takes the engine catalogue and the panel's text from the host | the loader and the panel library stay TypeScript; the host reads them and the crate writes what they say |
-| `scaffold` writes the files and stops before the conversion to chain files, which fails with its own sentence | `migrateToChainFiles` is the node side's (3g); `scaffold_files.rs` is the TypeScript's text, kept equal by the golden replay |
+| `scaffold_files.rs` and `scaffold_live.rs` hold the chain files' text, ids marked `<idN>` | the golden replay of `scaffold` keeps the text and the order the ids are minted in |
 | the sample video of the `video` shape is a byte slice the host gives | the crate bundles no binary |
 | the library forks' `module.k7x` test keeps the TypeScript's unescaped dot (`module` + any character + `k7x`) | a file named `module-k7x` is a module file to the TypeScript, and its answers are the contract |
 | the library versions' digest is SHA-256 over each file's relative path, a NUL and its bytes, in UTF-16 name order | the digest is compared and never stored, but the same walk keeps the two sides' answers equal |
@@ -32,7 +31,7 @@ the library forks, the engine module's fork, the recorder nodes, a new project's
 ## The proof
 
 `rust/tests/replay_lane/` replays the 3e vectors of these modules (`basePreset`, `timelineRename`, `chainCreate`,
-`preferences`, `recorderNodes`, `trackMix`, `timelineFromRange`) and the goldens of the modules the tap did not reach
+`preferences`, `trackMix`, `timelineFromRange`) and the goldens of the modules the tap did not reach
 (`preferences`, `moduleMove`, `accountFork`, `libraryForks`, `moduleFork`, `scaffold`, and the takes, seconds, alternatives
 and timelines of `trackMix` and `timelineFromRange`), harvested into `rust/tests/goldens/lane/` from the TypeScript and frozen. A golden
 file has the 3e vectors' shape, so the one replay reads both; a vector the harvest recorded without the library

@@ -416,8 +416,8 @@ const RESERVED_LIBRARY_NAMES: readonly string[] = [
   ...FIXED_NAMESPACES,
   ACCOUNT_LIBRARY,
   META_NS.slice(1),
-  "studio", // LEGACY_META_NS
-  "mediatek", // LEGACY_MEDIATEK_NS
+  "studio", // an older name of @meta
+  "mediatek", // an older name of the default library
 ];
 
 /** Can a library be called this? */
@@ -437,12 +437,6 @@ export function libraryRefParts(
 /** The ref a library gives the thing at `rest` inside it: `@k7-core/audio/reverb`. */
 export const libraryRef = (library: string, rest: string): string =>
   `@${library}/${rest}`;
-
-/** The other name this level answers to on disk — a NAME and not an accepted spelling, since nothing resolves it (docs/moduleTypes.md). */
-export const LEGACY_MEDIATEK_NS = "mediatek";
-
-/** The default library's name before it was `k7-core` — a NAME for the migration script alone, since nothing resolves it. */
-export const LEGACY_DEFAULT_LIBRARY = "st0";
 
 /** The folder the account's libraries answer to in a workspace's file API: `_libraries/<name>/…`, VIRTUAL — no workspace holds it on disk (docs/sharedFolders.md). */
 export const LIBRARIES_DIR = "_libraries";

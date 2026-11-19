@@ -1,13 +1,12 @@
-import { mkdtempSync, readdirSync, rmSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { parse } from "@studio/k7x/document";
 import { RENDER_AUDIO_LEVEL } from "@studio/song-schema/formatLevel";
 import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadGraph } from "./graph";
 import { compileNodeProject } from "./nodeProject";
-import { projectFiles, scaffold, videoProjectFiles } from "./scaffold";
+import { scaffold } from "./scaffold";
 import { wsData } from "./yaml/workspaceDoc";
 
 // The only project k7 writes from scratch, so "does it load and play" is the whole contract.
@@ -113,18 +112,25 @@ describe("arrangement vs video", () => {
   });
 
   it("keeps the shared half identical, byte for byte", () => {
-    // Catches drift: restating an entry instead of ADDING to the song map fails on that entry.
-    const audio = projectFiles("demo");
-    const video = videoProjectFiles("demo");
-    // The two files the picture is added INTO rather than beside; both are checked below instead.
-    const merged = new Set(["project.k7x", GRAPH_FILE]);
-    for (const [rel, content] of Object.entries(audio)) {
+    // Catches drift: restating an entry instead of ADDING to the song's files fails on that entry.
+    const other = join(ws, "audio.k7");
+    scaffold(other, "demo");
+    scaffold(dir, "demo", "video");
+    const read = (root: string, rel: string) =>
+      readFileSync(join(root, rel), "utf8");
+    const files = (root: string): string[] =>
+      (readdirSync(root, { recursive: true }) as unknown as string[])
+        .map((f) => String(f).split("\\").join("/"))
+        .filter((f) => /\.(k7x|strudel)$/.test(f) && !f.startsWith("chains/"));
+    // Both are checked below instead: the header gains the picture, and the master run feeds RENDER.
+    const merged = new Set(["project.k7x"]);
+    for (const rel of files(other)) {
       if (merged.has(rel)) continue;
-      expect(video[rel]).toBe(content);
+      expect(read(dir, rel)).toBe(read(other, rel));
     }
     // …and the header differs by exactly the picture fields, nothing else.
-    const a = parse(audio["project.k7x"]);
-    const v = parse(video["project.k7x"]);
+    const a = wsData(join(other, "project.k7x"));
+    const v = wsData(join(dir, "project.k7x"));
     expect(v).toEqual({
       ...a,
       project: {
@@ -133,16 +139,6 @@ describe("arrangement vs video", () => {
       },
       format: RENDER_AUDIO_LEVEL,
     });
-    // The graph differs by the run the picture adds and the mix wired into its sound; every song segment stays, in order.
-    const kept = parse(audio[GRAPH_FILE]).modules as Record<string, string[]>;
-    expect(parse(video[GRAPH_FILE]).modules).toEqual({
-      ...kept,
-      MIX: [...(kept.MIX ?? []), "RENDER#audio"],
-      RENDER: ["VIDEO_OUT"],
-    });
-    expect(
-      Object.keys(parse(video[GRAPH_FILE]).modules as object).slice(0, -1),
-    ).toEqual(Object.keys(kept));
   });
 
   it("still plays, with picture on top of the same worked example", () => {

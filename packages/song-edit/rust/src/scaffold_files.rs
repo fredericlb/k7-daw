@@ -1,7 +1,7 @@
-// scaffold_files.rs — the text of a new project's files, as the TypeScript's `projectFiles` writes them.
-// A reader would get wrong that this is copied text: the golden replay of `scaffold` is what keeps it equal to the TypeScript's.
+// scaffold_files.rs — the text of a new arrangement or video project's files, as the file service lays them down: chain files, one lane file per lane.
+// A reader would get wrong the `<idN>` marks: they are the lane and node ids a scaffold mints, numbered in the order the goldens hold.
 
-/// The arrangement's static files, project-relative; `project.k7x` and the video graph are built in `scaffold.rs`.
+/// The files the arrangement and the video archetype share, project-relative; `project.k7x` is built in `scaffold.rs`.
 pub const ARRANGEMENT: &[(&str, &str)] = &[
     (
         "settings.k7x",
@@ -10,50 +10,7 @@ count_in(1)
 "####,
     ),
     (
-        "nodes/synth-melody.k7x",
-        r####"// "synth-melody" — the melody lane's own 4OSC. Add `params` to change this one
-// alone; everything else comes from the module it extends.
-extends("@workspace/instruments/synth")
-"####,
-    ),
-    (
-        "nodes/synth-pad.k7x",
-        r####"// "synth-pad" — the pattern's Pad lane gets its own 4OSC, so tweaking one lane's
-// sound leaves the other's alone.
-extends("@workspace/instruments/synth")
-"####,
-    ),
-    (
-        "graph.k7x",
-        r####"// The signal graph, as SEGMENTS: each module says where its signal goes next. The
-// chains are DERIVED by following the arrows — a run breaks where the signal splits,
-// and where two signals meet (which is what a bus is).
-//
-// The LANES are here too ("melody", "pad"): a lane is a module like any other, and a
-// run is named after the lane that starts it. One map, one name space — which is why
-// the synths are "synth-melody" and "synth-pad" rather than sharing their lanes' names.
-//
-// A module is named once here, so one name means one plugin: pointing both lanes at
-// one synth would sum them into a single instrument instead.
-//
-// `bypassed([ … ])` lists the modules the signal passes through untouched — and on a
-// lane, which produces rather than passes, that IS its mute.
-//
-// Two built-in outputs: `MIX` is the mixer's sum, where every lane ends, and `OUT` is
-// the interface — which carries the song's output level as its `Volume` (the fader
-// under the header meter). The run between them is the MASTER CHAIN: put a module on
-// this line and it processes the whole mix on its way out.
-modules({
-  melody: ["synth-melody"],
-  pad: ["synth-pad"],
-  synth-melody: ["MIX"],
-  synth-pad: ["MIX"],
-  MIX: ["OUT"],
-})
-"####,
-    ),
-    (
-        "nodes/melody.k7x",
+        "tracks/melody.k7x",
         r####"// The melody lane. `@meta/track` holds events written down here — each one naming a
 // sequence or a clip, and leaving by the lane's midi or audio output accordingly.
 extends("@meta/track")
@@ -61,14 +18,14 @@ events([ref("melody").start("1:1:1")])
 "####,
     ),
     (
-        "nodes/live.k7x",
+        "tracks/live.k7x",
         r####"// A group lane: no material and no signal of its own, just members.
 extends("@meta/group-track")
 tracks(["pad", "kit"])
 "####,
     ),
     (
-        "nodes/pad.k7x",
+        "tracks/pad.k7x",
         r####"// A GENERATED lane: its clips are streamed from the pattern while the transport rolls,
 // which is why it says `strudel` where an authored lane says `events`.
 extends("@meta/strudel-track")
@@ -76,7 +33,7 @@ strudel("algo/pattern.strudel")
 "####,
     ),
     (
-        "nodes/kit.k7x",
+        "tracks/kit.k7x",
         r####"// The other half of the same pattern. Nothing here says "audio": an event whose sound
 // resolves to a sample plays as one, every other event plays as a note.
 extends("@meta/strudel-track")
@@ -137,7 +94,49 @@ layout("split")
     ),
 ];
 
-/// What the video archetype adds beside the arrangement's files.
+/// The arrangement's chain files: lanes `melody`, `pad`, `kit`, `live`, the synths of the first two, and the master run; ids 1 to 7 are minted, the first one kept by no file.
+pub const ARRANGEMENT_CHAINS: &[(&str, &str)] = &[
+    (
+        "chains/kit.k7x",
+        r####"start(true)
+steps([id("<id4>").track("kit")])
+"####,
+    ),
+    (
+        "chains/live.k7x",
+        r####"start(true)
+steps([id("<id5>").track("live")])
+"####,
+    ),
+    (
+        "chains/master.k7x",
+        r####"start("MIX")
+steps([to([chain("OUT")])])
+"####,
+    ),
+    (
+        "chains/melody.k7x",
+        r####"start(true)
+steps([
+  id("<id2>").track("melody"),
+  id("<id6>").extends("@workspace/instruments/synth"),
+  to([chain("MIX")]),
+])
+"####,
+    ),
+    (
+        "chains/pad.k7x",
+        r####"start(true)
+steps([
+  id("<id3>").track("pad"),
+  id("<id7>").extends("@workspace/instruments/synth"),
+  to([chain("MIX")]),
+])
+"####,
+    ),
+];
+
+/// What the video archetype adds beside the arrangement's shared files.
 pub const VIDEO_EXTRA: &[(&str, &str)] = &[
     (
         "surfaces/viewport.k7x",
@@ -161,7 +160,7 @@ source("clips/sample.mp4")
 "####,
     ),
     (
-        "nodes/main.k7x",
+        "tracks/main.k7x",
         r####"// A lane of picture. Every time here is DECIMAL SECONDS — picture is cut against the
 // wall clock, where the lanes above are placed in bars against the tempo. Both are drawn
 // on the one timeline, whose ruler reads either (the clock button in its header).
@@ -174,6 +173,60 @@ source("clips/sample.mp4")
 extends("@meta/picture-track")
 frame([0, 0, 1280, 720])
 events([ref("sample").start(0).length(6).from(0)])
+"####,
+    ),
+];
+
+/// The video archetype's chain files: the arrangement's, one id later, with the `main` lane and the picture's run; ids 1 to 9 are minted, the first two kept by no file.
+pub const VIDEO_CHAINS: &[(&str, &str)] = &[
+    (
+        "chains/kit.k7x",
+        r####"start(true)
+steps([id("<id5>").track("kit")])
+"####,
+    ),
+    (
+        "chains/live.k7x",
+        r####"start(true)
+steps([id("<id6>").track("live")])
+"####,
+    ),
+    (
+        "chains/main.k7x",
+        r####"start(true)
+steps([id("<id7>").track("main")])
+"####,
+    ),
+    (
+        "chains/master.k7x",
+        r####"start("MIX")
+steps([to([chain("OUT").level(1), chain("RENDER").port("audio").level(1)])])
+"####,
+    ),
+    (
+        "chains/melody.k7x",
+        r####"start(true)
+steps([
+  id("<id3>").track("melody"),
+  id("<id8>").extends("@workspace/instruments/synth"),
+  to([chain("MIX")]),
+])
+"####,
+    ),
+    (
+        "chains/pad.k7x",
+        r####"start(true)
+steps([
+  id("<id4>").track("pad"),
+  id("<id9>").extends("@workspace/instruments/synth"),
+  to([chain("MIX")]),
+])
+"####,
+    ),
+    (
+        "chains/picture.k7x",
+        r####"start("RENDER")
+steps([to([chain("VIDEO_OUT")])])
 "####,
     ),
 ];

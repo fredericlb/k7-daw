@@ -1,14 +1,19 @@
 // RENDER's sound input: the mix wired into `RENDER#audio` ONCE, at the open that first reaches level 5,
 // in a graph and in a chain project; what the graph refuses to feed it. See docs/videoOutputs.md.
 
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { RENDER_AUDIO_LEVEL } from "@studio/song-schema/formatLevel";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadGraph } from "./graph";
 import { validateIssues } from "./graphValidate";
-import { asChainProject } from "./scaffold";
 import { writeDoc } from "./testSupport";
 import { ensureVideoRun } from "./videoOutputs";
 import { wsData } from "./yaml/workspaceDoc";
@@ -60,8 +65,21 @@ describe("the open wires the mix into RENDER's sound once", () => {
   });
 
   it("does the same in a chain project, its port kept on the link", () => {
-    project('modules({ MIX: ["OUT"], RENDER: ["VIDEO_OUT"] })\n', 4);
-    asChainProject(dir);
+    writeDoc(join(dir, "project.k7x"), {
+      format: 4,
+      project: { name: "t", tempo: 120 },
+    });
+    mkdirSync(join(dir, "chains"), { recursive: true });
+    writeFileSync(
+      join(dir, "chains", "master.k7x"),
+      'start("MIX")\nsteps([to([chain("OUT")])])\n',
+      "utf8",
+    );
+    writeFileSync(
+      join(dir, "chains", "picture.k7x"),
+      'start("RENDER")\nsteps([to([chain("VIDEO_OUT")])])\n',
+      "utf8",
+    );
     ensureVideoRun(dir);
     expect(mixOut()).toEqual(["OUT", "RENDER#audio"]);
     expect(level()).toBe(RENDER_AUDIO_LEVEL);

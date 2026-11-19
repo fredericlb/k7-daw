@@ -6,7 +6,6 @@ Every route is answered by a native piece or refused with a sentence (`native/re
 |---|---|
 | a decline is a refusal with a status and a sentence, never a second implementation | a fallback is a second implementation that must agree with the first; a refusal is a known gap the sentence names |
 | `busy` is a 503 with `Retry-After: 1` | the answer exists and costs weight another request holds; the client asks again |
-| a legacy file (`.studio-active`, `_library-pins.yaml`, `preferences.yaml`, a manifest of the old shape) is a 409 whose sentence names the file | the sentence says what to do, and nothing is migrated at a read |
 | a hostile folder (too large, too deep, too many entries, a long path, text that is not UTF-8, a path that is no regular file) is a 413 or a 422 with the limit's sentence | the limits protect the server; the person is told which one they met |
 | a lost compile is a 503, a shape no native code produces a 500 `internal error` | a retry may help in the first case; nothing a client can change in the second |
 | the reason is noted by whoever declines and read back where the refusal is made: `dispatch`, the upload and media streams, the hub's internal routes | one table of reasons and sentences, and no decline site chooses a status of its own |
@@ -21,7 +20,7 @@ Every route is answered by a native piece or refused with a sentence (`native/re
 
 | reason | answer | why |
 |---|---|---|
-| the 15 of `Declined` (`busy`, the four legacy files, `library-active`, `long-path`, `lossy-text`, `no-libraries`, `not-regular`, `surfaces-outside`, `too-large`, `too-deep`, `too-many`, `would-throw`) | a refusal | each names a file or a limit a person can act on |
+| the 11 of `Declined` (`busy`, `library-active`, `long-path`, `lossy-text`, `no-libraries`, `not-regular`, `surfaces-outside`, `too-large`, `too-deep`, `too-many`, `would-throw`) | a refusal | each names a limit or a state a person can act on |
 | `no-active-project` on a docs route | the idle view | a workspace with no open project is a state of the page, not a failure |
 | a compile that fails | the compiler's sentence, a 400 on `/project-doc`, `/engine-doc` and `/graph`, the engine load's message | the song crate's findings are the one source of the sentence |
 | a chain that does not separate, or both separates and processes | the cut's own 400 sentence | the cut counts a live step as one engine plugin |

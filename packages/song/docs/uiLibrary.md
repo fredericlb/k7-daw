@@ -132,13 +132,4 @@ edits the panel. `GET /module-ui?path=` answers the panel for a module file — 
 needing one of its own. `path` may name either file of the pair, which is what lets a click on `ui.k7x` open
 the same builder as a click on `module.k7x`.
 
-## Migrating
-
-`ui migrate` (uiMigrate.ts) moves the blocks still written inline, in the project's `modules/` and in the shared
-`_modules/` beside it, and deletes them from the module files with `setModuleValue` — a one-key diff, so every
-comment and layout choice around the block survives. It is re-runnable: a module with no `ui:` left is skipped.
-
-A panel the schema refuses is **reported, not moved** — leaving it in the file it is in beats writing half of it
-somewhere new.
-
 A `_ui/` tree is **not** migrated, deliberately: a panel filed in one is orphaned and has to be redrawn.

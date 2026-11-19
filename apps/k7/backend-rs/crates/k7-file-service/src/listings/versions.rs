@@ -15,9 +15,8 @@ use crate::tree::Limits;
 pub const LIBRARY_LEVEL: u32 = 2;
 /// The version a library the pins do not name resolves to.
 pub const UNPINNED_VERSION: u32 = 1;
-/// A published version's manifest, and the YAML spelling, which is declined.
+/// A published version's manifest.
 const MANIFEST: &str = "library.k7x";
-const LEGACY_MANIFEST: &str = "library.yaml";
 
 /// The versions the origin publishes of each library, as `(version, requires)`, asked by the front (1431).
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
@@ -80,10 +79,6 @@ fn manifest_requires(lib: &Local, v: u32, limits: &Limits) -> Result<Option<u32>
         Some(bytes)
     });
     let Some(bytes) = read else {
-        // No native reader takes YAML: a manifest in that spelling is declined.
-        if std::fs::metadata(join(&[&root, LEGACY_MANIFEST])).is_ok() {
-            return Err(Declined::LegacyManifest);
-        }
         return Ok(None);
     };
     if bytes.len() as u64 > limits.max_text {
@@ -172,7 +167,7 @@ pub fn newest_here(home: &Home, name: &str, limits: &Limits) -> Result<u32, Decl
     newest(&local_versions(home, name, limits)?, &[], limits)
 }
 
-/// Each library's row for the workspace `dir` stands in; `LegacyPins` and `LegacyManifest` are declined.
+/// Each library's row for the workspace `dir` stands in.
 pub fn versions_at(
     home: &Home,
     dir: &str,

@@ -1,5 +1,5 @@
 //! bench — the bench and the slot natively (3j O8, O9): one live rig in a workspace of its own, a library chain spliced in, a chain compiled into a slot.
-//! What a reader gets wrong: `Declined` refuses the route (a legacy file, a library to pin); `Refused` is an answer, worded as the TypeScript words it.
+//! What a reader gets wrong: `Declined` refuses the route (a library to pin); `Refused` is an answer, worded as the TypeScript words it.
 
 mod ensure;
 mod frozen;

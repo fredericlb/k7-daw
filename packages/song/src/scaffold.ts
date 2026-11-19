@@ -1,8 +1,7 @@
 // scaffold.ts — the file map + writer for the two TIMELINE archetypes: `arrangement`, a
-// minimal immediately-playable node project (one MIDI track through a 4OSC synth + a live
+// minimal immediately-playable project (one MIDI track through a 4OSC synth + a live
 // Strudel pattern), and `video`, the same thing with a lane of PICTURE over it. The third
-// archetype, `mix`, is scaffoldSet.ts. The map is written as a graph and then CONVERTED to chain
-// files by the migration, so a new project and a migrated one cannot differ.
+// archetype, `mix`, is scaffoldSet.ts. A new project is written as chain files.
 // Full rationale: docs/scaffold.md, and packages/song-video/docs/picture.md for the video half.
 
 import { copyFileSync, existsSync } from "node:fs";
@@ -23,21 +22,6 @@ const SAMPLE_VIDEO = resolve(
   "video",
   "sample.mp4",
 ); // packages/song/samples/video/sample.mp4
-
-/** The `arrangement` archetype's files, keyed by project-relative path — see docs/scaffold.md. */
-export function projectFiles(name: string): Record<string, string> {
-  return stub("song/scaffold.projectFiles", name);
-}
-
-/** The `video` project's files: the arrangement ADDED to rather than restated — see docs/scaffold.md. */
-export function videoProjectFiles(name: string): Record<string, string> {
-  return stub("song/scaffold.videoProjectFiles", name);
-}
-
-/** Convert a just-written project to chain files, the main layout, and answer the files it now holds. */
-export function asChainProject(dir: string): string[] {
-  return stub("song/scaffold.asChainProject", dir);
-}
 
 /** Write a project's file map under `dir`, making the folders it implies; a `.k7x` must read, anything else goes as given. */
 export function writeProjectFiles(

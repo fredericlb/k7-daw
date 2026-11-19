@@ -82,7 +82,7 @@ async fn a_put_moves_the_token_without_waiting_for_the_watcher() {
 }
 
 #[tokio::test]
-async fn declines_a_library_project_and_a_legacy_marker() {
+async fn declines_a_library_project() {
     let _turn = TURN.lock().await;
     // 1334.
     let dir = project("rev-declined", 1);
@@ -96,9 +96,7 @@ async fn declines_a_library_project_and_a_legacy_marker() {
     .unwrap();
     assert!(revision::answer(&c).await.is_none());
     std::fs::remove_file(dir.join("home/workspace/.active-projects/songs")).unwrap();
-    std::fs::write(dir.join("home/workspace/songs/.studio-active"), "p.k7").unwrap();
-    assert!(revision::answer(&c).await.is_none());
-    assert!(counted(&super::stats::global().declined) >= before + 2);
+    assert!(counted(&super::stats::global().declined) > before);
     std::fs::remove_dir_all(dir).unwrap();
 }
 

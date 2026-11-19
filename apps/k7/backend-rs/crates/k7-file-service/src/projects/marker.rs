@@ -16,8 +16,6 @@ use crate::workspaces::names::is_project_dir;
 const LIBRARIES_DIR: &str = "_libraries";
 /// The folder beside the workspaces that holds each one's marker.
 const MARKERS_DIR: &str = ".active-projects";
-/// The marker a workspace once kept inside itself, which only a migration upgrades (2024).
-const LEGACY_MARKER: &str = ".studio-active";
 /// The most of a marker that is read; past it the marker is no path anyone wrote.
 const MAX_MARKER: u64 = 1 << 20;
 
@@ -37,7 +35,7 @@ pub fn reads_as_none(kind: ErrorKind, is_folder: impl FnOnce() -> bool) -> bool 
     }
 }
 
-/// `readActiveMarker`: the trimmed rel resolved against the root, not confined (2030); `Declined` where a migration upgrades (2024).
+/// `readActiveMarker`: the trimmed rel resolved against the root, not confined (2030); `Declined` where the file is no marker.
 pub fn read_raw(root: &str) -> Result<Option<String>, Declined> {
     let mut bytes = Vec::new();
     let read = fs::File::open(marker_of(root))
@@ -47,10 +45,6 @@ pub fn read_raw(root: &str) -> Result<Option<String>, Declined> {
         let folder = || fs::symlink_metadata(marker_of(root)).is_ok_and(|m| m.is_dir());
         if !reads_as_none(e.kind(), folder) {
             return Err(Declined::WouldThrow);
-        }
-        // A legacy marker is moved by a read, a write the native side never makes.
-        if fs::symlink_metadata(join(&[root, LEGACY_MARKER])).is_ok() {
-            return Err(Declined::LegacyMarker);
         }
         return Ok(None);
     }

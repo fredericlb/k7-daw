@@ -6,28 +6,25 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
-use k7_file_service::atomic::write_atomic;
 use k7_file_service::paths::resolve_all;
 use serde_json::{Map, Value, json};
 
 use crate::copy::copy_tree;
 use crate::dirs::{
-    DRAFT, LEGACY_MANIFEST, MANIFEST, UNPINNED_VERSION, is_copy_of_seed, is_husk, own_manifest,
-    publishable, read_manifest, upgrade_manifest, version_numbers, write_first_manifest,
+    DRAFT, MANIFEST, UNPINNED_VERSION, is_copy_of_seed, is_husk, publishable, read_manifest,
+    version_numbers, write_first_manifest,
 };
 use crate::list::{Note, library_folders, parse_list, rm, stamp};
 use crate::manifest::{Manifest, stringify_manifest};
 
 pub use crate::list::{parse_seed, settings_problem};
 
-/// The library a new install starts from, and the name it had before k7.
+/// The library a new install starts from.
 pub const DEFAULT_LIBRARY: &str = "k7-core";
-const LEGACY_DEFAULT_LIBRARY: &str = "st0";
 
 pub struct Store {
     /// Where the libraries are: what every file service gets as `$STUDIO_LIBRARIES_HOME`.
     pub home: PathBuf,
-    data_root: PathBuf,
     list_file: PathBuf,
     seed: Vec<(String, PathBuf)>,
     // Every change to the folders runs under this: two copies deciding on the same name would collide.
@@ -40,7 +37,6 @@ impl Store {
         Store {
             home: root.join("libraries"),
             list_file: root.join("libraries.json"),
-            data_root: root,
             seed: parse_seed(seed),
             queue: Mutex::new(()),
         }
@@ -52,37 +48,6 @@ impl Store {
 
     fn seed_of(&self, name: &str) -> Option<&PathBuf> {
         self.seed.iter().find(|(n, _)| n == name).map(|(_, d)| d)
-    }
-
-    /// A deployment from before k7 named its default library `st0`: it becomes `k7-core`, folder and sync state with it.
-    pub fn rename_legacy_default(&self) -> bool {
-        let list = self.settings();
-        if !list.iter().any(|l| l == LEGACY_DEFAULT_LIBRARY)
-            || list.iter().any(|l| l == DEFAULT_LIBRARY)
-        {
-            return false;
-        }
-        let (from, to) = (
-            self.home.join(LEGACY_DEFAULT_LIBRARY),
-            self.home.join(DEFAULT_LIBRARY),
-        );
-        if from.exists() && !to.exists() {
-            let _ = fs::rename(from, to);
-        }
-        if self.list_file.exists() {
-            let renamed: Vec<String> = list
-                .iter()
-                .map(|l| {
-                    if l == LEGACY_DEFAULT_LIBRARY {
-                        DEFAULT_LIBRARY.into()
-                    } else {
-                        l.clone()
-                    }
-                })
-                .collect();
-            let _ = self.write(&renamed);
-        }
-        true
     }
 
     /// The list; with none written yet, the libraries already on disk, else the seed's.
@@ -98,21 +63,6 @@ impl Store {
         } else {
             here
         }
-    }
-
-    /// Write the list, validated first, through a sibling and a rename.
-    fn write(&self, list: &[String]) -> Result<(), String> {
-        if let Some(p) = settings_problem(list) {
-            return Err(p);
-        }
-        fs::create_dir_all(&self.data_root).map_err(|e| e.to_string())?;
-        let body =
-            json!({ "libraries": list.iter().map(|n| json!({ "name": n })).collect::<Vec<_>>() });
-        let text = format!(
-            "{}\n",
-            serde_json::to_string_pretty(&body).unwrap_or_default()
-        );
-        write_atomic(&self.list_file.to_string_lossy(), text.as_bytes()).map_err(|e| e.to_string())
     }
 
     /// The list as an account sees it: each library, and whether the server holds its folder.
@@ -172,7 +122,7 @@ impl Store {
             .into_iter()
             .map(|v| {
                 let dir = at.join(v.to_string());
-                own_manifest(&dir).unwrap_or_else(|| Manifest::plain(name, v, 1))
+                read_manifest(&dir).unwrap_or_else(|| Manifest::plain(name, v, 1))
             })
             .collect()
     }
@@ -182,12 +132,9 @@ impl Store {
         let at = self.home.join(name);
         let swept = self.drop_husks(name);
         if at.exists() {
-            let migrated = self.migrate(name);
-            let note = if migrated.state == "failed" {
-                migrated
-            } else {
-                self.add_seed_version(name).unwrap_or(migrated)
-            };
+            let note = self
+                .add_seed_version(name)
+                .unwrap_or_else(|| Note::new(name, "current", "here"));
             return if swept.is_empty() {
                 note
             } else {
@@ -239,7 +186,7 @@ impl Store {
         let held = version_numbers(&at);
         if held
             .iter()
-            .any(|v| is_copy_of_seed(own_manifest(&at.join(v.to_string())).as_ref(), &manifest))
+            .any(|v| is_copy_of_seed(read_manifest(&at.join(v.to_string())).as_ref(), &manifest))
         {
             return None;
         }
@@ -253,7 +200,6 @@ impl Store {
         let partial = self.home.join(format!(".seeding-{}", stamp()));
         let done = (|| -> std::io::Result<()> {
             copy_tree(from, &partial, &publishable)?;
-            upgrade_manifest(&partial);
             if taken {
                 let renumbered = Manifest {
                     version,
@@ -307,34 +253,6 @@ impl Store {
         )
     }
 
-    /// A library still in one folder becomes its own version 1, moved whole.
-    fn migrate(&self, name: &str) -> Note {
-        let at = self.home.join(name);
-        if !version_numbers(&at).is_empty() || at.join(DRAFT).exists() {
-            return Note::new(name, "current", "here");
-        }
-        let moving = self.home.join(format!(".migrating-{}", stamp()));
-        let one = at.join(UNPINNED_VERSION.to_string());
-        let done = (|| -> std::io::Result<()> {
-            fs::rename(&at, &moving)?;
-            // The manifest before the rename: a version folder is never seen without one.
-            write_first_manifest(name, &moving)?;
-            fs::create_dir(&at)?;
-            fs::rename(&moving, &one)
-        })();
-        match done {
-            Ok(()) => Note::new(name, "current", "moved into version 1"),
-            Err(e) => {
-                // Put the folder back where it was, whatever step failed.
-                if moving.exists() && !at.join("1").exists() {
-                    rm(&at);
-                    let _ = fs::rename(&moving, &at);
-                }
-                Note::failed(name, &e)
-            }
-        }
-    }
-
     /// Give library `name` the draft its admins edit, copied from its newest version; None when it has one.
     fn ensure_draft(&self, name: &str) -> Option<Note> {
         let at = self.home.join(name);
@@ -344,14 +262,11 @@ impl Store {
         }
         let newest = version_numbers(&at).last().copied().unwrap_or(0);
         let partial = self.home.join(format!(".drafting-{}", stamp()));
-        let skipped: Vec<PathBuf> = [MANIFEST, LEGACY_MANIFEST]
-            .iter()
-            .map(|m| at.join(newest.to_string()).join(m))
-            .collect();
+        let skipped = at.join(newest.to_string()).join(MANIFEST);
         let done = (|| -> std::io::Result<()> {
             if newest > 0 {
                 copy_tree(&at.join(newest.to_string()), &partial, &|src| {
-                    !skipped.iter().any(|s| s == src)
+                    src != skipped
                 })?;
             } else {
                 fs::create_dir_all(&partial)?;

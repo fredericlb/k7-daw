@@ -1,7 +1,6 @@
 // PICTURE in a chain project (docs/chainFiles.md): a picture lane is a `track` item heading a
 // chain of its own, a shape starts the chain of the lane it draws on, and a fade's STRETCH is a
-// subchain of its lane's chain. The migration carries all three over, the segments read back the
-// same graph, and the sound the engine is handed does not change by a byte.
+// subchain of its lane's chain. The segments read all three back as a graph.
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -10,9 +9,7 @@ import { connectNodes } from "@studio/song-schema/yaml/graphFile";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { editChainGraph } from "./chainGraphEdit";
 import { readChainProject, readLayout, toSegments } from "./chainProject";
-import { migrateToChainFiles } from "./chainsMigrateFiles";
 import { loadGraph, validate } from "./graph";
-import { loadProject } from "./project";
 import { wsData } from "./yaml/workspaceDoc";
 
 let root: string;
@@ -53,32 +50,40 @@ beforeEach(() => {
   write("clips/a.k7x", 'source("a.mp4")\n');
   write("clips/a.mp4", "");
   write(
-    "nodes/main.k7x",
+    "tracks/main.k7x",
     'extends("@meta/picture-track")\nevents([\n  ref("a").start(0).length(4),\n  ref("a").start(3).length(4).fadeIn({ over: 1, chain: "iris" }),\n])\n',
   );
-  write("nodes/boxes.k7x", 'extends("@meta/picture-track")\nevents([])\n');
-  write("nodes/glow.k7x", 'extends("@workspace/shaders/glow")\n');
-  write("nodes/iris.k7x", 'extends("@workspace/shaders/iris")\n');
-  // The shape is named by its REF, with no node file: the graph may say a module outright.
+  write("tracks/boxes.k7x", 'extends("@meta/picture-track")\nevents([])\n');
+  // The lane heads its chain, the stretch is a subchain of it, and the shape starts the other lane's.
   write(
-    "graph.k7x",
-    'modules({\n  main: ["glow"],\n  glow: ["RENDER"],\n  iris: ["main"],\n  "@workspace/shapes/box": ["boxes"],\n  RENDER: ["VIDEO_OUT"],\n})\n',
+    "chains/main.k7x",
+    'start(true)\nsteps([id("e236ac58-39aa-4710-8afd-dd3e145f5514").track("main"), to([chain("glow")])])\nsubchains([id("iris").steps([id("3663c123-f41a-40d0-9a42-27b538d4faf8").extends("@workspace/shaders/iris")])])\n',
+  );
+  write(
+    "chains/glow.k7x",
+    'steps([id("078a9886-bfac-42a4-9a04-1bf1dfdb7378").extends("@workspace/shaders/glow"), to([chain("RENDER")])])\n',
+  );
+  write(
+    "chains/boxes.k7x",
+    'start(true)\nsteps([\n  id("c3abff25-19a8-49b0-9dd2-d7661d118d3e").extends("@workspace/shapes/box"),\n  id("a2584b21-cbe4-479a-9e6b-4b041d6b002e").track("boxes"),\n])\n',
+  );
+  write(
+    "chains/picture.k7x",
+    'start("RENDER")\nsteps([to([chain("VIDEO_OUT")])])\n',
   );
 });
 afterEach(() => rmSync(root, { recursive: true, force: true }));
 
 const chainData = (name: string) => wsData(join(dir, "chains", `${name}.k7x`));
 
-describe("migrating a project with picture", () => {
+describe("a chain project with picture", () => {
   it("puts a picture lane at the head of a `start: true` chain of its own", () => {
-    migrateToChainFiles(dir);
     const main = readChainProject(dir).chains.main;
     expect(main.start).toBe(true);
     expect(main.steps[0]).toMatchObject({ track: "main" });
   });
 
   it("makes the stretch a SUBCHAIN of the lane's chain, with no way out of its own", () => {
-    migrateToChainFiles(dir);
     const main = readChainProject(dir).chains.main;
     expect(main.subchains).toEqual([
       {
@@ -90,37 +95,14 @@ describe("migrating a project with picture", () => {
     ]);
   });
 
-  it("renames the fade to the subchain it now names", () => {
-    // A head node named otherwise than its leaf, so the rename is visible.
-    write("nodes/opening.k7x", 'extends("@workspace/shaders/iris")\n');
-    write(
-      "graph.k7x",
-      'modules({ main: ["glow"], glow: ["RENDER"], opening: ["main"], RENDER: ["VIDEO_OUT"] })\n',
-    );
-    write(
-      "nodes/main.k7x",
-      'extends("@meta/picture-track")\nevents([ref("a").start(3).length(4).fadeIn({ over: 1, chain: "opening" })])\n',
-    );
-    rmSync(join(dir, "nodes", "iris.k7x"));
-    migrateToChainFiles(dir);
-    // The lane's file has moved to `tracks/`, with the sound lanes'.
-    const events = wsData(join(dir, "tracks", "main.k7x")).events as {
-      fadeIn?: { chain?: string };
-    }[];
-    expect(events[0].fadeIn?.chain).toBe("iris");
-  });
-
   it("starts a SHAPE's chain, the lane it draws on following it", () => {
-    migrateToChainFiles(dir);
     const boxes = readChainProject(dir).chains.boxes;
     expect(boxes.start).toBe(true);
     expect(boxes.steps[0]).toMatchObject({ extends: "@workspace/shapes/box" });
     expect(boxes.steps[1]).toMatchObject({ track: "boxes" });
   });
 
-  it("reads back the same graph, the stretch landing on its lane", () => {
-    const before = loadGraph(dir);
-    migrateToChainFiles(dir);
+  it("reads back as segments, the stretch landing on its lane", () => {
     const after = loadGraph(dir);
     expect(validate(after)).toEqual([]);
     const iris = readChainProject(dir).chains.main.subchains?.[0].steps[0] as {
@@ -129,28 +111,11 @@ describe("migrating a project with picture", () => {
     expect(toSegments(readChainProject(dir)).graph.modules?.[iris.id]).toEqual([
       "main",
     ]);
-    // Same runs as before, keyed by id where a node lost its name.
-    const shape = (g: typeof before) =>
-      Object.values(g.chains)
-        .map(
-          (c) =>
-            `${c.from ?? ""}>${c.use.length}>${c.out.map((o) => o.to).join(",")}`,
-        )
-        .sort();
-    expect(shape(after).length).toBe(shape(before).length);
-  });
-
-  it("hands the engine the very same document", () => {
-    const strip = (d: unknown) => JSON.stringify(d).split(dir).join("DIR");
-    const before = strip(loadProject(dir));
-    migrateToChainFiles(dir);
-    expect(strip(loadProject(dir))).toBe(before);
   });
 });
 
 describe("a graph edit on a chain project with picture", () => {
   it("keeps the stretch where it was, under its id", () => {
-    migrateToChainFiles(dir);
     const glowId = Object.values(readChainProject(dir).nodes).find(
       (n) =>
         (n.value as { extends?: string }).extends === "@workspace/shaders/glow",

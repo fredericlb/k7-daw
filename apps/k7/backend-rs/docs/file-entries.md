@@ -24,7 +24,7 @@ the path model's guards and the workspace's write lock. `/library/move` is answe
 | 1222 | An entry exists when `stat` that follows links succeeds (any error is absent); a dangling link is refused by the gate (`path escapes the workspace`) before. The disk is a `Probe` the plan asks, so `C:/` workspaces are data in a test | the shim's `existsSync` |
 | 1223 | `entries.json` is frozen, harvested once from the TypeScript's own functions, called with a host that recorded the rel it was asked and threw: the cleaned name of folder, rename and upload for 300+ names, and `refuseYamlName`, `isInSharedModules`, `isPlainSegment`, `isDotSegment` | the name rules are inline expressions; the code that runs them is the referee |
 | 1224 | `ref_at` and `not_engine` port `refAt` and `assertNotEngine` over `relative(<library root>/modules, abs)`; `refs` is `Some` only for a library path under `modules/` | the ref IS the path |
-| 1225 | A `rel` past 16 KiB is `Declined(LongPath)`; a legacy marker or pins file, or a library's active project, is declined | a decline costs one call where a guess would be a wrong write |
+| 1225 | A `rel` past 16 KiB is `Declined(LongPath)`; a library's active project is declined | a decline costs one call where a guess would be a wrong write |
 | 1226 | The upload's target: `name` split on `[\\/]+`, each segment trimmed as JavaScript trims, blanks dropped; none left or a dot segment is `invalid filename: <name>`; `dir` untrimmed, `.` or empty is the root, its trailing `/` dropped; the YAML refusal on the joined rel; the gate; `guard_shared`; an existing target `Exists` (409) | measured on the TypeScript |
 
 ## Writing

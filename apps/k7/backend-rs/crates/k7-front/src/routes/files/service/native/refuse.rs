@@ -20,26 +20,6 @@ const REASONS: &[(&str, u16, &str)] = &[
         "the file service is busy; ask again in a moment",
     ),
     (
-        "legacy-manifest",
-        409,
-        "a library folder still has its pre-October manifest; open the library in an older k7 once, or remove the old manifest",
-    ),
-    (
-        "legacy-marker",
-        409,
-        "this workspace still has the pre-October .studio-active marker; open the project again from the project list, or remove the marker",
-    ),
-    (
-        "legacy-pins",
-        409,
-        "a workspace still has the pre-October _library-pins.yaml; pin its libraries again, or remove the file",
-    ),
-    (
-        "legacy-preferences",
-        409,
-        "this account still has the pre-October preferences.yaml; save the preferences again in a k7 that migrates them, or remove the file",
-    ),
-    (
         "library-active",
         409,
         "the open project is inside a library, which this request does not read",

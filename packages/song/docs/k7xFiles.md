@@ -28,8 +28,6 @@ read, listed or written. The plan this belongs to is [k7x-plan.md](../../../docs
   zod's findings back on the text by key path (`packages/song-schema/src/yaml/k7xPosition.ts`); a
   syntax error is one finding with its own line and column (`packages/song-schema/src/yaml/k7xIssues.ts`).
 - **A library's pins and manifest are workspace files too**: `_library-pins.k7x` and `library.k7x`.
-  A legacy `.yaml` one still on disk is upgraded once by whoever owns that file's I/O — read, written
-  as k7x, the `.yaml` removed (`src/sharedFolders.ts`, `src/namespaceMigrate.ts`).
 - **What is not a workspace file is read by name.** A
   machine's `preferences.k7x` under the studio home, the repository's `commands.yaml` and `env.yaml`
   are read and written by name with plain file calls, never through either module. The preferences

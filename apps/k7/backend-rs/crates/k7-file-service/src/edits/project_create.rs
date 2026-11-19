@@ -44,14 +44,16 @@ fn bare_of(raw: &str) -> String {
 }
 
 /// What each archetype's file map is, without writing it, so what it will NEED can be read first.
-fn files_of(shape: &str, name: &str) -> Result<Vec<(String, String)>, EntryError> {
-    Ok(match shape {
-        "arrangement" => project_files(name),
-        "video" => video_project_files(name).map_err(|e| refused(e.to_string()))?,
+fn files_of(shape: &str, name: &str) -> Vec<(String, String)> {
+    // The ids are minted for nothing: only the files' text is read.
+    let mut spare = || String::new();
+    match shape {
+        "arrangement" => project_files(name, &mut spare),
+        "video" => video_project_files(name, &mut spare),
         "mix" => set_project_files(label(name)),
         "live" => live_project_files(label(name)),
         _ => live_video_project_files(label(name)),
-    })
+    }
 }
 
 /// `createProjectIn`: the answer is `{project, missing}`.
@@ -118,7 +120,6 @@ pub fn create_project(
             // A staged file is text: the sample goes in empty and its bytes replace it once the set has landed.
             scaffold(
                 &mut fs,
-                &env,
                 &dir,
                 &name,
                 kind,
@@ -127,8 +128,8 @@ pub fn create_project(
             )
         }
         "mix" => scaffold_set(&mut fs, &dir, label(&name)),
-        "live" => scaffold_live(&mut fs, &env, &dir, label(&name), new_id),
-        _ => scaffold_live_video(&mut fs, &env, &dir, label(&name), new_id),
+        "live" => scaffold_live(&mut fs, &dir, label(&name), new_id),
+        _ => scaffold_live_video(&mut fs, &dir, label(&name), new_id),
     };
     made.map_err(|e| refused(e.to_string()))?;
     let set = fs.planned().map_err(refused)?;
@@ -141,7 +142,7 @@ pub fn create_project(
             return Err(refused(e.to_string()));
         }
     }
-    let missing = owed(home, code_root, space, &abs, &files_of(shape, &name)?);
+    let missing = owed(home, code_root, space, &abs, &files_of(shape, &name));
     let answer = json!({ "project": to_rel(space, &abs), "missing": missing });
     Ok(Made { answer, landed })
 }

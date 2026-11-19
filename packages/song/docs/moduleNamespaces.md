@@ -41,18 +41,6 @@ its name with a `?` on the graph, and an `extends:` that resolves to nothing is 
 `libraryModuleIssues`. Neither is silent — which is the bar a rename in this repo has to clear
 (`docs/rename-test-plan.md`).
 
-```bash
-# a project, a workspace, or the module cache itself — dry by default
-npx tsx packages/song/scripts/migrateNamespace.ts <state>/workspace/<you>/<workspace> --write
-npx tsx packages/song/scripts/migrateNamespace.ts <state>/mediatek --write
-```
-
-That script is a **text replace** on `@mediatek/` and `@st0/` (and the `st0:` key of a `_library-pins.yaml`),
-not a pass through the k7x document: a namespace appears in mapping KEYS (a chain step is one), in scalar values, inside flow sequences, and in
-the comment at the top of a panel. Reserialising to catch all four is exactly what `formatChains`
-does, and it emits a canonical document, which would eat every comment in the file. Replacing one
-unambiguous token touches nothing else: there is no other thing in this repo spelled `@mediatek` or `@st0`.
-
 ## The level comes from the LOCATION
 
 `moduleNamespaceOf(root)` answers from the path, and no root declares one. A `namespace:`

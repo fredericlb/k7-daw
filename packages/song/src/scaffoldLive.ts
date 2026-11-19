@@ -11,8 +11,9 @@ import {
   VIDEO_OUT_NODE,
 } from "@studio/song-schema/moduleTypes";
 import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
+import { stub } from "./editStub";
 import { DEFAULT_COUNT_IN } from "./project";
-import { asChainProject, writeProjectFiles } from "./scaffold";
+import { writeProjectFiles } from "./scaffold";
 
 const q = (s: string) => JSON.stringify(s);
 
@@ -143,9 +144,11 @@ export function scaffoldLive(
   name: string,
   layout: "chains" | "graph" = "chains",
 ): string[] {
+  if (layout === "chains")
+    return stub("song/scaffoldLive.scaffoldLive", dir, name);
   const files = liveProjectFiles(name);
   writeProjectFiles(dir, files);
-  return layout === "graph" ? Object.keys(files) : asChainProject(dir);
+  return Object.keys(files);
 }
 
 /** …and the `live-video` project's, which is the rig ADDED to rather than restated. */
@@ -183,6 +186,5 @@ export function liveVideoProjectFiles(name: string): Record<string, string> {
 
 /** Write a new `live-video` project: the same rig, plus a lens and the frame it draws into. */
 export function scaffoldLiveVideo(dir: string, name: string): string[] {
-  writeProjectFiles(dir, liveVideoProjectFiles(name));
-  return asChainProject(dir);
+  return stub("song/scaffoldLive.scaffoldLiveVideo", dir, name);
 }
