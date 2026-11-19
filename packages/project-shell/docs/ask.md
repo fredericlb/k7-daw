@@ -87,9 +87,7 @@ don't run, and the text ones return null.
 
 `packages/ui/src/ask.tsx` is the same design with the same `AskConfirm`/`AskText` shapes,
 and this file is a superset of it: `askChoice`, `askTextAction`, the `tool`, a host that
-takes its labels, and English rather than French when it has none. The copy stands because
-`@studio/ui` is private, while this package is published and has to carry those questions to apps
-outside the repository.
+takes its labels, and English rather than French when it has none.
 
 Two modules mean two hosts with two listeners, and a question reaches only the host of the module
 it was asked through. So **every studio package asks through this one**. A studio import of `@studio/ui/ask`

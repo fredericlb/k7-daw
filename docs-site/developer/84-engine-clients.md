@@ -18,7 +18,7 @@ The main consumers are the account's engine link in the Rust front (`apps/k7/bac
 
 ## `@studio/engine-browser` (browser)
 
-`packages/engine-browser/src/`, published for apps outside this repository like `engine-protocol`, with React as a peer dependency.
+`packages/engine-browser/src/`, with React as a peer dependency.
 
 | Subpath | File | What |
 |---|---|---|
