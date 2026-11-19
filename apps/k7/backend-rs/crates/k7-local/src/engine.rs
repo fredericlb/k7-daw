@@ -14,7 +14,7 @@ use crate::host::{Backoff, Events, Options, SupervisorHost};
 use crate::settings::pin_file;
 
 /// A supervisor takes about 4.1 s from `shutdown` to its exit on Windows: 6 s lets it end on its own.
-const STOP_GRACE: Duration = Duration::from_secs(6);
+pub const STOP_GRACE: Duration = Duration::from_secs(6);
 
 /// The last snapshot, None before the first; and why the supervisor is away, None while it answers.
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -45,10 +45,13 @@ pub struct Config {
     /// The environment the supervisor gets over this process's, before the four the host sets.
     pub env: Vec<(String, String)>,
     pub backoff: Backoff,
+    /// How long a stop waits for the supervisor to end on its own before it is killed.
+    pub stop_grace: Duration,
 }
 
 pub struct LocalEngine {
     host: Arc<SupervisorHost>,
+    stop_grace: Duration,
     state: watch::Sender<State>,
     home: PathBuf,
     registry: String,
@@ -124,6 +127,7 @@ impl LocalEngine {
         );
         Arc::new(LocalEngine {
             host,
+            stop_grace: config.stop_grace,
             state,
             home: config.home,
             registry: config.registry,
@@ -167,6 +171,6 @@ impl LocalEngine {
 
     /// Before this backend stops: the supervisor deregisters from it on the way out.
     pub async fn stop(&self) {
-        self.host.stop(STOP_GRACE).await;
+        self.host.stop(self.stop_grace).await;
     }
 }

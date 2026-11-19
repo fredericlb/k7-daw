@@ -94,7 +94,7 @@ fn a_stop_between_blocks_leaves_nothing_and_says_why() {
     let v: Value = serde_json::from_str(&std::fs::read_to_string(file).unwrap()).unwrap();
     let dir = scratch("stop");
     sources(&v, &dir);
-    let waveform = Waveform::new(None).unwrap();
+    let waveform = Waveform::new(Some(&std::env::temp_dir().join("k7-stream-cache"))).unwrap();
     let dest = dir.join("out.webm");
     let pieces = [Piece::whole(dir.join("silence.flac"))];
     let opus = Opus {

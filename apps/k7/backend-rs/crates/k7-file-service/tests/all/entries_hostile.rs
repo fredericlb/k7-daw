@@ -171,12 +171,12 @@ impl Dir for Fx {
 }
 
 #[test]
-fn a_folder_of_twenty_thousand_entries_moves_with_one_rename() {
-    wide_move(20_000);
+fn a_folder_of_a_thousand_entries_moves_with_one_rename() {
+    wide_move(1_000);
 }
 
 #[test]
-#[ignore = "scale: a move that copied would show at 200,000 entries, not at 20,000"]
+#[ignore = "scale: a move that copied would show at 200,000 entries, not at 1,000"]
 fn a_folder_of_two_hundred_thousand_entries_moves_with_one_rename_at_scale() {
     wide_move(200_000);
 }

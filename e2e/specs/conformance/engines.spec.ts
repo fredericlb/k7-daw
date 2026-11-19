@@ -63,15 +63,15 @@ function upgrade(path: string): Promise<number> {
 
 test.describe.configure({ mode: "serial" });
 
-test("says what it is, to anyone", async ({ request }) => {
+test("says what it is, to anyone", { tag: "@tier4" }, async ({ request }) => {
   const res = await request.get("/api/registry/hello");
   expect(res.status()).toBe(200);
   expect(await res.json()).toEqual({ service: "k7-registry" });
 });
 
-test("refuses a heartbeat it cannot use, the reason in the body", async ({
-  request,
-}) => {
+test("refuses a heartbeat it cannot use, the reason in the body", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const res = await request.post("/api/registry/heartbeat", { data: {} });
   expect(res.status()).toBe(400);
   expect((await res.json()).error).toBe(
@@ -79,9 +79,9 @@ test("refuses a heartbeat it cannot use, the reason in the body", async ({
   );
 });
 
-test("lists an engine whose rating is out of bounds, and says what it cleaned", async ({
-  request,
-}) => {
+test("lists an engine whose rating is out of bounds, and says what it cleaned", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const res = await request.post("/api/registry/heartbeat", { data: beat() });
   expect(res.status()).toBe(200);
   expect(await res.json()).toEqual({
@@ -97,9 +97,9 @@ test("lists an engine whose rating is out of bounds, and says what it cleaned", 
   expect((await other.json()).error).toMatch(/freed 15 s after/);
 });
 
-test("lists it to the session, with a ticket and never its token", async ({
-  request,
-}) => {
+test("lists it to the session, with a ticket and never its token", {
+  tag: "@tier4",
+}, async ({ request }) => {
   expect((await request.get("/api/engines")).status()).toBe(401);
   const res = await request.get("/api/engines", { headers: signedIn() });
   expect(res.status()).toBe(200);
@@ -122,9 +122,9 @@ test("lists it to the session, with a ticket and never its token", async ({
   expect(typeof mine?.proxyTicket).toBe("string");
 });
 
-test("tells a lapsed engine from a wrong token, and claims, renews and lets go", async ({
-  request,
-}) => {
+test("tells a lapsed engine from a wrong token, and claims, renews and lets go", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const select = (data: object) =>
     request.post("/api/engine/select", { data, headers: signedIn() });
   expect(
@@ -180,9 +180,9 @@ test("tells a lapsed engine from a wrong token, and claims, renews and lets go",
   });
 });
 
-test("relays only for a ticket of its own engine, and unlists on the engine's word", async ({
-  request,
-}) => {
+test("relays only for a ticket of its own engine, and unlists on the engine's word", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const list = (await (
     await request.get("/api/engines", { headers: signedIn() })
   ).json()) as { id: string; proxyTicket: string }[];
@@ -209,9 +209,9 @@ test("relays only for a ticket of its own engine, and unlists on the engine's wo
   ).toBe(404);
 });
 
-test("keeps the internal seam to this machine's processes that hold its secret", async ({
-  request,
-}) => {
+test("keeps the internal seam to this machine's processes that hold its secret", {
+  tag: "@tier4",
+}, async ({ request }) => {
   const res = await request.get("/api/internal/engine/hub");
   expect([res.status(), await res.json()]).toEqual([
     401,

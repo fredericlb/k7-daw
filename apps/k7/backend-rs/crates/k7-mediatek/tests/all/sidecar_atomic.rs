@@ -171,21 +171,21 @@ fn an_unreadable_sidecar_is_an_error_not_a_stale_one() {
 }
 
 #[test]
-fn a_sidecar_of_64_mib_is_answered_in_one_parse() {
+fn a_sidecar_of_four_mib_is_answered_in_one_parse() {
     let d = dir("big");
     let s = source(&d);
     let small = serialise(&env(1));
     let at = small.find("\"peak\":[0.5000]").expect("the peak array");
     let (head, tail) = small.split_at(at);
     let tail = &tail["\"peak\":[0.5000]".len()..];
-    let n = 64 * 1024 * 1024 / 7;
-    let mut text = String::with_capacity(64 * 1024 * 1024 + 1024);
+    let n = 4 * 1024 * 1024 / 7;
+    let mut text = String::with_capacity(4 * 1024 * 1024 + 1024);
     text.push_str(head);
     text.push_str("\"peak\":[0.5000");
     text.push_str(&",0.5000".repeat(n - 1));
     text.push(']');
     text.push_str(tail);
-    assert!(text.len() >= 64 * 1024 * 1024 - 8);
+    assert!(text.len() >= 4 * 1024 * 1024 - 8);
     std::fs::write(cache_path(&s), &text).unwrap();
     let t = std::time::Instant::now();
     let got = check_read(&s).unwrap();

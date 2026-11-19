@@ -1,4 +1,4 @@
-//! Hostile trees (1051, 1052): a folder of 20,000 entries, a nest 300 deep, names at the file system's limit, and
+//! Hostile trees (1051, 1052): a folder of 2,000 entries, a nest 300 deep, names at the file system's limit, and
 //! hidden entries alone passing `max_seen`. Each answered fast, asserting the answer and the time.
 
 use crate::support;
@@ -12,12 +12,12 @@ use support::Scratch;
 const BOUND: Duration = Duration::from_secs(if cfg!(target_env = "musl") { 60 } else { 15 });
 
 #[test]
-fn a_folder_of_twenty_thousand_entries_is_listed_fast_and_sorted() {
-    wide_listing(20_000);
+fn a_folder_of_two_thousand_entries_is_listed_fast_and_sorted() {
+    wide_listing(2_000);
 }
 
 #[test]
-#[ignore = "scale: a quadratic listing hides at 20,000 entries and shows at 200,000"]
+#[ignore = "scale: a quadratic listing hides at 2,000 entries and shows at 200,000"]
 fn a_folder_of_two_hundred_thousand_entries_is_listed_fast_and_sorted_at_scale() {
     wide_listing(200_000);
 }

@@ -1,4 +1,4 @@
-// engines.spec.ts — each built-in instrument engine of the @k7-core library reaches the engine as ITS plugin, and plays.
+// engines.spec.ts — each built-in instrument engine of the @k7-core library reaches the engine as ITS plugin; one project plays (the golden render judges the rest).
 // The engine document is what proves the engine was picked; the clock rolling is all a spec sees of the sound.
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, test } from "../../src/target.ts";
@@ -60,6 +60,9 @@ const ENGINES: Record<string, Engine> = {
   },
 };
 
+// eurorack-surge holds two plugin kinds, so its one live play covers the most.
+const PLAYED = "eurorack-surge.k7";
+
 for (const [project, { plugins, lanes, bug }] of Object.entries(ENGINES)) {
   test(`${project} sends each node as its engine's plugin`, async ({ k7 }) => {
     test.fail(!!bug, bug);
@@ -76,6 +79,7 @@ for (const [project, { plugins, lanes, bug }] of Object.entries(ENGINES)) {
     }
   });
 
+  if (project !== PLAYED) continue;
   test(`${project} plays`, async ({ k7 }) => {
     const page = await k7.open(`/@local/${FIXTURES_WORKSPACE}/${project}`);
     const watch = watchPage(page);

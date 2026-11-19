@@ -45,6 +45,7 @@ impl Local {
             roots: s.engine_roots.clone(),
             env: s.supervisor_env.clone(),
             backoff: Default::default(),
+            stop_grace: k7_local::engine::STOP_GRACE,
         });
         Some(Arc::new(Local {
             engine,

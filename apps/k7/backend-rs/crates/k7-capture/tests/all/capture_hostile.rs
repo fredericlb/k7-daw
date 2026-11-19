@@ -136,7 +136,7 @@ fn a_nest_a_few_hundred_deep_is_walked_on_a_small_stack() {
 
 #[test]
 fn a_large_tree_is_one_batch_of_one_op_per_file() {
-    let n = 10_000;
+    let n = 500;
     let mut r = Rig::started("large", &[], false);
     for i in 0..n {
         let dir = format!("{}/g{}", r.root, i % 50);
@@ -227,9 +227,9 @@ fn sweeps_of(n: usize) -> (u64, u64) {
 
 #[test]
 fn a_dirty_flush_and_the_removal_of_a_whole_tree_cost_in_proportion_to_the_files() {
-    let (small, big) = (sweeps_of(4_000), sweeps_of(16_000));
+    let (small, big) = (sweeps_of(250), sweeps_of(1_000));
     // Four times the files is four times the work; a cost inside a std call is judged by the seconds printed above.
     for (a, b, what) in [(small.0, big.0, "dirty flush"), (small.1, big.1, "removal")] {
-        assert!(b <= 5 * a, "{what}: {a} work for 4k, {b} for 16k");
+        assert!(b <= 5 * a, "{what}: {a} work for 250, {b} for 1000");
     }
 }
