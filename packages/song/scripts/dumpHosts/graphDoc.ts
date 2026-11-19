@@ -27,7 +27,6 @@ import { stageOf } from "@studio/song/ownMix";
 import {
   DSP_TYPE,
   EXTERNAL_PLUGIN_FORMATS,
-  FAUST_TYPE,
   JSDSP_TYPE,
   MIXER_PLUGIN,
   OFFLINE_TYPE,
@@ -50,7 +49,6 @@ import {
   paramDefaults,
   rackSounds,
   shaderChoicesFor,
-  withFaustSlots,
   withLibraryChoices,
 } from "./graphChoices.ts";
 
@@ -160,7 +158,6 @@ export function buildGraphDoc(
           fmt === "internal" ||
           fmt === JSDSP_TYPE ||
           fmt === DSP_TYPE ||
-          fmt === FAUST_TYPE ||
           fmt === OFFLINE_TYPE ||
           EXTERNAL_PLUGIN_FORMATS.has(fmt);
         const notSupported = slot && fmt === "not_supported";
@@ -236,7 +233,7 @@ export function buildGraphDoc(
               ? module.outputs.map((o) => ({ name: o.name, type: o.type }))
               : undefined,
           // As authored (inherited like params), so an asset dropdown can show what's loaded without asking the engine.
-          assets: withFaustSlots(module),
+          assets: module?.assets,
           // …and what it may choose from: the module's OWN assets/, walked — apps/k7/backend-rs/docs/file-docs.md.
           assetChoices: withLibraryChoices(
             assetChoicesFor(dir, module, moduleRefs, assets),

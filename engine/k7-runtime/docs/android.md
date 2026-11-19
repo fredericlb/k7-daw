@@ -31,7 +31,7 @@ elsewhere is something it can ADD, never something it needs. `BackendHost.kt` is
 | the pinned debs fetched from the project's own `termux-debs` prerelease on GitHub first, Termux's pool after it (`engine/k7-android/scripts/termux-debs.mjs`) | Termux's pool keeps current versions only, so a pin 404s there with the package's next upgrade, and no Termux host keeps old ones on purpose — the mirrors that still have one are only behind. A source is just a place to look: the SHA-256 decides, so the order costs no trust. The release is a PRERELEASE created with `--latest=false`, since `releases/latest` must stay the project's newest version, and its tag matches no workflow's `v*.*.*`. |
 | bumping a pin: `node engine/k7-android/scripts/termux-tools.mjs --pin`, commit, then `node engine/k7-android/scripts/mirror-termux-debs.mjs` with `gh` signed in | the mirror is filled by hand, while the pool still has those versions; it only adds the debs it lacks and never replaces one, so an old pin keeps building. `--dry-run` fetches and verifies without touching the release |
 | the backend BUNDLED (`apps/k7/backend/scripts/bundle.mjs`), the one the tray runs | tsx needs esbuild's native binary, which Termux's node cannot load (`apps/k7/backend/docs/standalone.md`) |
-| one `backend.zip` asset, unpacked once per install | node reads files, not assets; the APK's `lastUpdateTime` marks the copy, as for Faust's libraries |
+| one `backend.zip` asset, unpacked once per install | node reads files, not assets; the APK's `lastUpdateTime` marks the copy |
 | the Rust front's code root rides in `backend.zip` as `code/` (`apps/k7/backend-rs/scripts/stageCodeRoot.mjs`, some 700 KB), named to the front as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video there (`apps/k7/backend-rs/docs/service.md`); a folder of its own outlives node's bundle |
 | an update writes only the files whose CRC or size changed, and deletes those the new bundle lacks | the bundle is 68 MB unpacked, and an update rewriting all of it holds node's start back; `.entries` keeps each file's CRC and size, the ones Gradle's `Zip` writes in every local header. An entry without them is always written, and the `.installed` marker is removed first and written last, so an unpack cut short is redone |
 | node's compile cache on (`NODE_COMPILE_CACHE`, in the app's cache folder), for the backend | its bundled JavaScript is parsed at every launch otherwise, which a phone's CPU pays on the start screen; the cache is keyed by each file's contents and node's version, so an update never runs stale bytecode, and Android clearing the folder only costs one slower launch |
@@ -513,16 +513,6 @@ To check on a phone: `adb logcat -s k7-runtime` shows the buffer at open and eve
 | `-Dtls_model(x)=unused` on `tracktion_graph.cpp` | the rpmalloc it compiles in pins its thread heap to initial-exec TLS, and Android's loader refuses that in a library opened by `System.loadLibrary` — the app dies loading the engine. The rewrite turns the attribute into `unused`. A compile OPTION, because CMake drops function-style definitions silently. `llvm-readelf -d libk7runtime.so` must not show `STATIC_TLS`. |
 | `CMAKE_POLICY_VERSION_MINIMUM=3.5` | Oboe's own `CMakeLists.txt`, which JUCE adds on Android, declares a minimum CMake 4 refuses. |
 
-## Faust's libraries travel as assets
-
-`import("stdfaust.lib")` is resolved when the engine compiles a module, so the libraries must be on
-the phone, as files: the Faust compiler opens them by path, and an asset is not one. Gradle copies
-the 43 `.lib` files — 2 MB — out of the folder the engine's CMake cache names (`STUDIO_FAUST_LIBS`),
-and fails when `stdfaust.lib` is not there, as the desktop staging does. The app unpacks them into
-its files once per install, marking the copy done only once every file is written, and names the
-folder in `STUDIO_FAUST_LIBS`, which `faustLibrariesDir()` reads before looking beside an executable
-this platform does not have.
-
 ## On a Windows machine
 
 The APK builds on Windows too, for a phone on the desk without a round trip through CI: NDK
@@ -607,8 +597,6 @@ through `adb forward`:
 | supervisor start | 145 trusted roots read; engine started by the app with the supervisor's identity |
 | connecting a studio (a stand-in registry through `adb reverse`) | hello answered, a heartbeat every 5 s carrying id, LAN addresses, name and performance |
 | Quit | deregister sent, pidfile and host lock removed, both processes gone |
-| a Faust module importing `stdfaust.lib` (−6 dB with `ba.db2linear`) | compiles, no warning; the note's peak halves, 0.64 → 0.32 |
-| the same importing a library that does not exist | `faust: ERROR : unable to open file nosuch.lib`, and the audio passes untouched |
 | an HTTPS studio whose certificate a private CA signed | refused; after importing that CA (DER) 146 roots, the engine adopted, connected and heartbeating; after forgetting it 145 and refused again — one engine start throughout |
 | importing a file that is not a certificate | refused with a message; nothing stored, nothing restarted |
 | `--probe https://app.priv.k7.rocks` with Android's CAs only | an k7 registry: nothing to import for a publicly certified studio |

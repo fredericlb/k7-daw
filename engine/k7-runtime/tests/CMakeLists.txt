@@ -235,29 +235,6 @@ target_compile_definitions(studio_renderloop_tests PRIVATE
 add_test(NAME studio_renderloop_tests COMMAND studio_renderloop_tests)
 set_tests_properties(studio_renderloop_tests PROPERTIES LABELS slow)
 
-# --- Faust tests --------------------------------------------------------------
-# Faust compiled by the engine's own libfaust. JUCE-FREE, unlike the two above: it links libfaust
-# and nothing else, so it keeps the "builds in seconds, no audio device" property. One case walks a
-# module LIBRARY, named at run time by `$STUDIO_MODULES` rather than baked in here: this repo ships
-# no modules, and a library is a per-account path no build could know.
-add_executable(studio_faust_tests Faust_test.cpp)
-target_link_libraries(studio_faust_tests PRIVATE staticlib)
-target_include_directories(studio_faust_tests PRIVATE
-    "${STUDIO_FAUST_SRC}/architecture"
-    ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
-# NOMINMAX because Faust's poly-dsp.h reaches <windows.h>, whose `max`/`min` MACROS then eat
-# every `std::max(` as an illegal token after `::`. The engine's own TU dodges it by using
-# juce::jmax; this binary is JUCE-free on purpose, so it says so instead. Same rule the root
-# CMakeLists already states for <shellapi.h>.
-target_compile_definitions(studio_faust_tests PRIVATE
-    NOMINMAX
-    WIN32_LEAN_AND_MEAN
-    STUDIO_FAUST_LIBS="${STUDIO_FAUST_LIBS}")
-if (WIN32)
-    target_link_libraries(studio_faust_tests PRIVATE ws2_32)
-endif()
-add_test(NAME studio_faust_tests COMMAND studio_faust_tests)
-
 # --- Pattern lane tests -------------------------------------------------------
 # Two fast binaries for PatternPlugin's two JUCE-free halves: the schedule between the worker and the
 # audio thread (header-only), and the QuickJS host with the embedded Strudel bundle (studio_strudel).

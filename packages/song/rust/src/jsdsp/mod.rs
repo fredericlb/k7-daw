@@ -1,6 +1,6 @@
 // jsdsp/mod.rs — a DSP module's graph: a `dsp.k7x` decoded on every read.
 // A reader would get wrong that a bad graph stops anything: it plays as a pass-through and the state says why (decision 350).
-// Nothing runs a module's code; docs/dsp-literal-plan.md and docs/graphModel.md, "`jsdsp` and Faust".
+// Nothing runs a module's code; docs/dsp-literal-plan.md and docs/graphModel.md, "`dsp`".
 
 mod validate;
 

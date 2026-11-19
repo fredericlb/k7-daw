@@ -32,14 +32,13 @@ widget sandbox (below): it has no `window`, no `document`, no storage and no net
 draws with is the frame it is handed, and nothing else.
 
 `lcd.sound(slot)` is the one thing a screen asks for rather than receives: the FILE a slot of the
-module names — a Faust table — decoded mono at its own length, or `null` until it has loaded (or
+module names, decoded mono at its own length, or `null` until it has loaded (or
 with a host that loads none). The host decodes (`LcdSounds`, handed to `DomChains` as `sounds`, or provided once ABOVE every
 graph through `LcdSoundsContext` — k7 does the latter, since it mounts graphs in five places and a
 host passing it to four leaves the fifth's screens loading for ever);
 k7's reads the WAV itself (`apps/k7/frontend/src/lcdSounds.ts`), because the browser's
 `decodeAudioData` resamples to the context's rate and a 2048-sample frame would stop being one. A
-file landing repaints every screen, so a draw only has to handle the `null` it starts with. The
-library's wavetable instrument draws its table with it.
+file landing repaints every screen, so a draw only has to handle the `null` it starts with.
 
 ## An interactive screen
 

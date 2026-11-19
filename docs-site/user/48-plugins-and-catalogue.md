@@ -10,7 +10,7 @@ host and the modules the `@k7-core` library offers on top of it.
 | **Built-in processors** | Compiled into the engine, available on every machine. |
 | **VST3 plugins** | Installed on the engine's machine and found by its plugin scan. Engines on Windows, macOS and Linux only. |
 | **LADSPA plugins** | On Linux, found by the same scan. |
-| **DSP and Faust modules** | DSP described in the module folder and run by the engine. See [DSP as data and Faust](./49-dsp.md). |
+| **DSP modules** | DSP described in the module folder and run by the engine. See [DSP as data](./49-dsp.md). |
 
 AudioUnit, LV2 and CLAP plugins are not hosted. The phone app hosts no external plugins.
 
@@ -34,7 +34,7 @@ song that uses an external plugin can still play on another machine through an a
 | Family | Processors |
 |---|---|
 | Tracktion | 4OSC, Sampler, Volume & Pan, VCA, Level Meter, Equaliser, Reverb, Compressor, Chorus, Delay, Phaser, Pitch Shifter, Low-Pass Filter, MIDI Modifier, Impulse Response, and routing utilities |
-| k7 | Neural Amp Modeler, SFZ Player, Surge XT (Windows, macOS and Linux), DSP Graph, MIDI Graph, Faust, Arpeggiator, Mixer, Recorder, Quick Master |
+| k7 | Neural Amp Modeler, SFZ Player, Surge XT (Windows, macOS and Linux), DSP Graph, MIDI Graph, Arpeggiator, Mixer, Recorder, Quick Master |
 | Eurorack (Mutable Instruments ports) | Plaits, Braids, Rings, Elements, Clouds, Warps, Tides, Peaks |
 | AirWindows | A collection of 186 effects |
 
@@ -65,7 +65,7 @@ engine dropdown or `node engine`.
 | `guitar-conditioner` | built-in |
 | `highpass` | airwindows-2, airwindows, hermepass, one-knob |
 | `impulse-response` | built-in |
-| `lowpass` | tracktion, airwindows, airwindows-2, average, holt, moog-ladder, one-knob |
+| `lowpass` | tracktion, airwindows, airwindows-2, average, holt, one-knob |
 | `mu-clouds`, `mu-warps` | Eurorack texture and meta-modulator |
 | `overdrive` | drive, bass-drive, coils, cojones, density, dyno, facet, focus, high-impact, loud, mojo, nc-17, one-knob, purest-drive, spiral, spiral-2, un-box |
 | `pafnuty` | built-in |
@@ -86,7 +86,7 @@ engine dropdown or `node engine`.
 
 `a-quick-voice-clip`, `bite`, `brass-rider`, `c-strip`, `crossfade` (two inputs, `Mix` from A to
 B), `curve`, `dc-voltage`, `de-esser` (de-bess, de-ess), `ed-is-dim`, `electro-hat`, `fade`,
-`faust`, `floor`, `gain` (a level in dB, -60 to +6), `golem`, `mid-side`, `monitoring`
+`floor`, `gain` (a level in dB, -60 to +6), `golem`, `mid-side`, `monitoring`
 (monitoring, lefto-mono, mo-noam, peaks-only, righto-mono, slew-only, subs-only), `noise`,
 `phase-nudge`, `pitch-shift` (whole semitones, tempo unchanged), `quick-master`, `raw-glitters`,
 `remap`, `slew` (slew-2, acceleration, slew), `smooth`, `stereo-trim` (every-trim, herme-trim),
@@ -105,7 +105,6 @@ purest-gain), `voice-of-the-starship`, `voice-trick`, `volume-pan`.
 | `keys/electric-keys` | stereo-rhodes, clavinet, clavinet-v, stage-73-v2, wurli-v2, wurt. |
 | `keys/organ` | b-3-v2, farfisa-v, vox-continental-v2. |
 | `synth/surge-xt` | Surge XT with 608 factory patches. Engines on Windows, macOS and Linux only. |
-| `synth/wavetable` | A Faust wavetable synth reading a library wavetable. |
 | `synth/mu-elements`, `mu-macro-osc` (plaits, braids), `mu-peaks`, `mu-rings`, `mu-tides` | Eurorack voices. |
 | `synth/art-*` | Faces for Arturia instruments (Analog Lab V, ARP 2600 V3, Augmented Strings, Augmented Voices, Buchla Easel V, CMI V, CS-80 V4, CZ V, DX7 V, Emulator II V, Jun-6 V, Jup-8 V4, MS-20 V, Matrix-12 V2, Mellotron V, Mini V3, Modular V3, OP-Xa V, Piano V3, Prophet-5 V, Prophet VS V, SEM V2, Solina V2, SQ80 V, Synclavier V, Synthi V, Vocoder V). These need the plugin installed on the engine's machine. |
 
@@ -143,5 +142,5 @@ setting, not wired by hand.
 | `models/` | Amp models for `amp`. |
 | `irs/` | Impulse responses. |
 | `samples/` | Drum samples. |
-| `wavetables/` | Wavetables for `synth/wavetable`. |
+| `wavetables/` | Single-cycle wavetable frames. |
 | `presets/` | Presets for the library's modules. |

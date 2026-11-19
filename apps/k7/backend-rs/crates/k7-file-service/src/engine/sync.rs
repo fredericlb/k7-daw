@@ -95,7 +95,7 @@ pub struct Copies {
     failures: HashMap<String, SyncState>,
 }
 
-/// An inline source (`faustDsp` opens on `//`) is not a path, and a path holds no line break; `windows` is the host's spelling.
+/// An inline source is not a path, and a path holds no line break; `windows` is the host's spelling.
 fn is_path(s: &str, windows: bool) -> bool {
     if s.contains('\n') {
         return false;

@@ -116,9 +116,8 @@ t0=$SECONDS
 lap() { echo "⏱ $1: $((SECONDS - t0)) s" | tee -a "$out/timings.txt"; t0=$SECONDS; }
 
 echo "=== the engine and the supervisor (macos-clang) ==="
-# The engine build empties a folder of the shared dependencies: two beds take it in turn.
+# Two beds take the shared dependencies in turn.
 until lock "$deps_lock"; do sleep 10; done
-rm -rf "$STUDIO_FETCHCONTENT_DIR/k7-runtime/faust-src/build/lib"
 export CMAKE_BUILD_PARALLEL_LEVEL=8 CARGO_BUILD_JOBS=8
 built=0
 STUDIO_ENGINE_PRESET=macos-clang STUDIO_SUPERVISOR_PRESET=macos-clang node engine/scripts/build-engine.mjs > "$logs/build-engine.log" 2>&1 || built=1

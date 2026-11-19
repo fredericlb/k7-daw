@@ -97,7 +97,6 @@ export {
   DSP_TYPE,
   EXTERNAL_PLUGIN_FORMATS,
   enginePlugin,
-  FAUST_TYPE,
   JSDSP_TYPE,
 } from "@studio/engine-protocol/build";
 // …and the one plugin type that is NOT on the wire, so it stays in song's own vocabulary.

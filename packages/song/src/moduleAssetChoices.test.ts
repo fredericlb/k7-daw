@@ -195,7 +195,7 @@ describe("the extension a param takes", () => {
     expect(assetsForParam(files, "onnx")).toEqual(["big.onnx"]);
   });
 
-  it("filters by the FAMILY a panel names, for a slot whose name says nothing — a Faust table", () => {
+  it("filters by the FAMILY a panel names, for a slot whose name says nothing", () => {
     const files = [
       "@k7-core/akwf/fmsynth.wav",
       "@k7-core/basic.WAV",

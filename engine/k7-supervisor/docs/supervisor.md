@@ -43,7 +43,7 @@ downloads write to the disk; beside the audio callback they would be heard. So t
 audio and nothing else, and everything that can fail slowly or loudly lives here.
 
 It is its own CMake project, not a target of k7-runtime's: building it must never mean building
-Tracktion, JUCE and Faust.
+Tracktion and JUCE.
 
 ## The identity, and the one secret the engine never holds
 

@@ -2,8 +2,7 @@
 
 An account library holds more than modules: beside `modules/`, `chains/` and `assemblies/` it may
 carry **`samples/`**, **`irs/`** and **`wavetables/`**, folders of sound files any song on the account
-can use — the last one the tables a Faust wavetable instrument reads ([faustFiles.md](faustFiles.md))
-— and **`models/`**, amp models (`.nam`, or an AIDA-X / Proteus `.json`). `libraryFiles.ts` lists and
+can use — the last one single-cycle wavetable frames — and **`models/`**, amp models (`.nam`, or an AIDA-X / Proteus `.json`). `libraryFiles.ts` lists and
 resolves them; `LibraryFamily` names all seven families, and `LIBRARY_FILE_FAMILIES` (in
 `@studio/song-schema/moduleTypes`) what each file folder is walked for. The Libraries tab draws each
 of the four file folders under its library, and takes a dropped file in any of them.

@@ -21,14 +21,13 @@ fn number(v: &Value) -> String {
 }
 
 /// The module files a node names, labelled.
-const MODULE_FILES: [(&str, &str); 7] = [
+const MODULE_FILES: [(&str, &str); 6] = [
     ("path", "preset"),
     ("irFile", "impulse response"),
     ("namFile", "amp model"),
     ("surgePatch", "Surge patch"),
     ("sfzFile", "SFZ"),
     ("deckFile", "deck"),
-    ("faustDsp", "Faust"),
 ];
 
 /// The curve range of an automation lane, as a sentence.

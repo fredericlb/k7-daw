@@ -12,7 +12,6 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { confineTo, confineToProject, projectRoots } from "./confine";
-import { faustFilesOf } from "./faustFiles";
 import { resolveRackAudio } from "./loader";
 import { compileNodeProject } from "./nodeProject";
 import { loadAudioClipDoc } from "./project";
@@ -165,18 +164,5 @@ describe("the compiler", () => {
     expect(rack.symbols.HH.clip).toBe(
       join(base, "libraries", "drums", "samples", "kick.wav"),
     );
-  });
-
-  it("leaves a Faust slot that escapes unfilled", () => {
-    writeFileSync(join(project, "table.wav"), "RIFF");
-    const files = faustFilesOf(
-      {
-        a: other,
-        b: "../../../../bob/workspace/main/secret.wav",
-        c: "table.wav",
-      },
-      project,
-    );
-    expect(files).toEqual({ c: join(project, "table.wav") });
   });
 });

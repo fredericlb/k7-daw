@@ -25,7 +25,7 @@ const STAT_COST: usize = 4;
 /// What a read costs before its bytes (one per KiB): a system call, so tiny real files are not free (decision 348).
 const READ_COST: usize = 32;
 
-/// A string longer than this is never taken for a path; the text of a Faust module starts `// …` and looks absolute.
+/// A string longer than this is never taken for a path; an inline source such as a graph is not a path however it starts.
 const MAX_ABSOLUTE: usize = 4096;
 
 /// Fields that say nothing about the SOUND: a destination, a display echo, what the engine ignores.

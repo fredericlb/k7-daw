@@ -80,7 +80,7 @@ fn cold_modules_load_but_are_not_base_modules_and_own_ports_win() {
     );
 }
 
-// A jsdsp or faust module names its DSP source beside its own file.
+// A jsdsp module names its DSP source beside its own file.
 #[test]
 fn a_dsp_module_names_its_source_in_its_folder() {
     let t = Tmp::new("tree-dsp");
@@ -88,22 +88,12 @@ fn a_dsp_module_names_its_source_in_its_folder() {
         "lib/k7-core/modules/audio/js/module.k7x",
         "plugin({ type: \"jsdsp\", name: \"J\" })\n",
     );
-    t.write(
-        "lib/k7-core/modules/audio/fa/module.k7x",
-        "plugin({ type: \"faust\", name: \"F\" })\n",
-    );
     let v = vocab(&t);
     assert!(
         v.modules["@k7-core/audio/js"]
             .jsdsp
             .as_deref()
             .is_some_and(|p| p.ends_with("audio/js/jsdsp.ts"))
-    );
-    assert!(
-        v.modules["@k7-core/audio/fa"]
-            .faust
-            .as_deref()
-            .is_some_and(|p| p.ends_with("audio/fa/dsp.dsp"))
     );
 }
 

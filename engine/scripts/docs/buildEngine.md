@@ -27,7 +27,6 @@ stages its `bin/` with, so the two deliverables cannot carry different things:
 | `k7-supervisor` | what the user runs: `k7-supervisor --config engine.json` |
 | `k7-runtime` | the audio engine, which the supervisor finds beside itself |
 | ONNX Runtime | the library the supervisor loads for a stem cut |
-| `faust-libs/` | the Faust standard libraries the engine compiles against |
 | `engine.json` | a copy of `engine/k7-supervisor/engine.example.json`, to edit |
 
 One flat folder because each binary looks for the next beside itself. An archive of it is the
@@ -43,17 +42,6 @@ The supervisor LOADS ONNX Runtime rather than linking it (`engine/k7-supervisor/
 and looks for it beside itself first. Its build copies the library beside the supervisor binary, and
 the staging takes it from there. Missing is a warning, not a failure: the engine runs, and says it
 cannot cut stems.
-
-### The Faust standard libraries
-
-`import("stdfaust.lib")` is resolved when the ENGINE compiles a module — at runtime, on the
-musician's machine — so the libraries travel with it. Each preset's `CMakeCache.txt` NAMES their
-folder (`STUDIO_FAUST_LIBS`) rather than the script guessing `_deps/faust-src`: with
-`$STUDIO_FETCHCONTENT_DIR` set, as CI sets it, the sources live outside the build tree. The newest
-wins, so a stale copy from a preset nobody builds cannot ship beside a different engine.
-
-Missing is **fatal**: without it every Faust module fails to compile on the musician's machine, one
-warning at a time, from a build that reported nothing wrong.
 
 ## `dist/` is the repo's
 

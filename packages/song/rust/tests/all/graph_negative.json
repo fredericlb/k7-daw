@@ -676,7 +676,7 @@
   }
  },
  {
-  "name": "flag-strip-offline-jsdsp-faust",
+  "name": "flag-strip-offline-jsdsp",
   "category": "flags",
   "ts": true,
   "mem": true,
@@ -685,8 +685,7 @@
    "nodes/mix.k7x": "extends(\"@meta/audio/mixer\")\n",
    "nodes/off.k7x": "plugin({ type: \"offline\", name: \"Denoise\" })\nparams({ strength: 0.5 })\n",
    "nodes/js.k7x": "plugin({ type: \"jsdsp\" })\n",
-   "nodes/fa.k7x": "plugin({ type: \"faust\" })\nparams({ table: \"saw.wav\" })\n",
-   "graph.k7x": "modules({ \"mix\": [\"OUT\"], \"off\": [\"OUT\"], \"js\": [\"OUT\"], \"fa\": [\"OUT\"] })\n"
+   "graph.k7x": "modules({ \"mix\": [\"OUT\"], \"off\": [\"OUT\"], \"js\": [\"OUT\"] })\n"
   },
   "expect": {
    "issues": [],
@@ -694,7 +693,6 @@
    "pointers": {
     "/chains/mix/use/0/strip": true,
     "/chains/js/use/0/pluginId": "js:js",
-    "/chains/fa/use/0/assets/table": "saw.wav",
     "/chains/off/use/0/params/strength": 0.5
    },
    "absent": [

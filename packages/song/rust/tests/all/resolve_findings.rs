@@ -31,7 +31,7 @@ fn a_type_no_engine_loads_is_an_error_at_the_nodes_plugin_key() {
 #[test]
 fn every_known_type_the_marker_and_offline_are_left_alone() {
     let node = |t: &str| format!("plugin({{ type: \"{t}\", name: \"X\" }})\n");
-    let files: Vec<(String, String)> = ["internal", "VST3", "clap", "jsdsp", "faust", "not_supported", "offline"]
+    let files: Vec<(String, String)> = ["internal", "VST3", "clap", "jsdsp", "not_supported", "offline"]
         .iter()
         .map(|t| (format!("ws/proj/nodes/n-{t}.k7x"), node(t)))
         .collect();

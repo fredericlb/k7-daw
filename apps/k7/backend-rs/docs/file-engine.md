@@ -71,7 +71,7 @@ bytes, left alone when it says the same, since its mtime is in every project's r
 | `session_of`, `session_for`, `served_project` | 392 roots (the files root, the bench, another workspace, outside it, `C:/` and UNC spellings), 7 owners, 4 homes; `servedProject` over 1,260 cases of owner, root, project and asker |
 | `backoff` | `jitteredBackoffMs` at five draws of `Math.random`, three caps, attempts 0 to 12 |
 | `load`, `scan`, `copy`, `reconcile` | 19, 12, 9 and 7 scenarios as traces: a script of events and answers in at stated times, the engine calls, the phases, the poll's view and the console's lines out, under a turned clock (the load's traces run the real `sendDoc` and `warmDeps` on a link that records every frame, so record, a send mid dry run and a new address are traces too); the 120 s apply bound, the 60 s stall and the 10 minute scan bound among them |
-| `corpus` | over the 175 engine documents of the golden corpus, with their folders made absolute by `roots`: `collect`'s paths, the take hole for the busiest lane at three punches, the groups' mix |
+| `corpus` | over the 172 engine documents of the golden corpus, with their folders made absolute by `roots`: `collect`'s paths, the take hole for the busiest lane at three punches, the groups' mix |
 | the song ports | not here: `packages/song/rust/tests/all/ports.json`, written by the same run through `songPorts.ts`: `names_external_plugin`, `pattern_files`, `playlist_records` over small projects of their own (their files in the vector) and the 177 staged ones, and `audition_timeline` over projects the TypeScript compiled; the staged half is an ignored gate (`K7_SONG_STAGED`, `K7_SONG_DUMPS`) |
 
 ## The rows as built

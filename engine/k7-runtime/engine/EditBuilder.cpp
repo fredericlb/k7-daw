@@ -527,21 +527,11 @@ te::Plugin::Ptr makePluginFor(te::Edit& edit, const PluginDoc& p) {
             v.setProperty("banks", joined(p.patternBanks), nullptr);
             return edit.getPluginCache().createNewPlugin(v);
         }
-        // Never both: a module names one plugin, and that plugin reads one of these two properties.
-        const char* const prop = !p.dspGraph.empty() ? "graph" : (!p.faustDsp.empty() ? "faust" : nullptr);
-        if (prop == nullptr)
+        if (p.dspGraph.empty())
             return edit.getPluginCache().createNewPlugin(type, {});
         juce::ValueTree v(te::IDs::PLUGIN);
         v.setProperty(te::IDs::type, type, nullptr);
-        v.setProperty(juce::Identifier(prop),
-                      juce::String(!p.dspGraph.empty() ? p.dspGraph : p.faustDsp), nullptr);
-        // A Faust program's sound files, one `label<TAB>path` per line — neither holds a tab or a newline.
-        if (!p.faustFiles.empty()) {
-            juce::StringArray lines;
-            for (const auto& [label, path] : p.faustFiles)
-                lines.add(juce::String(label) + "\t" + juce::String(path));
-            v.setProperty("files", lines.joinIntoString("\n"), nullptr);
-        }
+        v.setProperty("graph", juce::String(p.dspGraph), nullptr);
         return edit.getPluginCache().createNewPlugin(v);
     };
     te::Plugin::Ptr plugin = isExternalFormat(p.type) ? makeExternalPlugin(edit, p) : makeBuiltIn();

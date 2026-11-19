@@ -142,7 +142,7 @@ void EurorackPlugin::applyToBuffer(const te::PluginRenderContext& ctx)
     if (!shape_.midi || ctx.bufferForMidiMessages == nullptr) {
         segment(0, n);
     } else {
-        // Cut at every message, as FaustPlugin does, so each lands on its own sample (docs/faust.md).
+        // Cut at every message so each lands on its own sample.
         const double rate = sampleRate > 0.0 ? sampleRate : hostRate_;
         int done = 0;
         auto it = ctx.bufferForMidiMessages->begin();

@@ -65,7 +65,7 @@ fn a_clip_and_a_plugin_file_under_the_roots_are_made_real() {
     let mut d = doc(track(
         vec![clip("/w/a.k7/a.wav"), clip("")],
         vec![plugin(
-            json!({ "irFile": "/s/models/m.onnx", "faustFiles": { "T": "/w/a.k7/a.wav" } }),
+            json!({ "irFile": "/s/models/m.onnx", "deckFile": "/w/a.k7/a.wav" }),
         )],
     ));
     map_doc(&mapper(&v, None), &mut d).unwrap();
@@ -77,8 +77,8 @@ fn a_clip_and_a_plugin_file_under_the_roots_are_made_real() {
         Some(t.at("studio/models/m.onnx").as_str())
     );
     assert_eq!(
-        p.faust_files.as_ref().unwrap()["T"],
-        t.at("ws/songs/a.k7/a.wav")
+        p.deck_file.as_deref(),
+        Some(t.at("ws/songs/a.k7/a.wav").as_str())
     );
 }
 
@@ -103,10 +103,6 @@ fn every_path_field_outside_the_roots_is_a_403() {
             doc(track(vec![], vec![plugin(json!({ "surgePatch": b }))])),
             doc(track(vec![], vec![plugin(json!({ "sfzFile": b }))])),
             doc(track(vec![], vec![plugin(json!({ "deckFile": b }))])),
-            doc(track(
-                vec![],
-                vec![plugin(json!({ "faustFiles": { "T": b } }))],
-            )),
             doc(track(vec![], vec![plugin(json!({ "patternBanks": [b] }))])),
             doc(track(
                 vec![],

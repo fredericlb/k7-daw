@@ -52,10 +52,6 @@ struct PluginDoc {
     std::string surgePatch;                            // the .fxp a Surge XT instrument plays — docs/surgePlugin.md
     // The DSP graph a "DSP Graph" module runs — the JSON DESCRIPTION inline, never a path (DspGraph.h); empty otherwise.
     std::string dspGraph;
-    // …and a "Faust" module's SOURCE, likewise inline, but as text for THIS side to compile (FaustPlugin.h).
-    std::string faustDsp;
-    // …and the files its `soundfile(...)` slots play, by slot label, absolute; part of its identity (docs/faust.md).
-    std::map<std::string, std::string> faustFiles;
     // A PATTERN lane's Strudel source, and how its events are picked and played (PatternPlugin.h, docs/patternPlugin.md).
     std::string patternSource;
     std::string patternLabel;
