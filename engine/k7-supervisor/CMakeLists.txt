@@ -120,14 +120,16 @@ set(NO_TESTS ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(libdatachannel)
 
 # --- ONNX Runtime : stem separation, the prebuilt library per platform, hashes pinned ---------------
+# macOS and Linux take Microsoft's NuGet package: the GitHub release archives are gone (404).
 # A SHARED library, loaded at run time from beside the executable or the tray's resources. Windows
 # takes the DirectML package, which stops at 1.24; a platform with no binary builds without separation.
 # Android is one: it is UNIX and aarch64, but the linux-aarch64 build is glibc and loads on no phone.
 # iOS takes Microsoft's CocoaPods archive, a STATIC xcframework, linked into the framework (nothing on a phone to load).
 set(K7_ORT_URL "")
 if(APPLE AND NOT IOS AND (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_OSX_ARCHITECTURES STREQUAL "arm64"))
-    set(K7_ORT_URL https://github.com/microsoft/onnxruntime/releases/download/v1.30.0/onnxruntime-osx-arm64-1.30.0.tgz)
-    set(K7_ORT_HASH 6ebb5062a934537c352937821f9fe9718e7de1a2db1122a93dd363ffd53a7012)
+    set(K7_ORT_URL https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime/1.30.0/microsoft.ml.onnxruntime.1.30.0.nupkg)
+    set(K7_ORT_HASH 30df119bd9164eaa187666d93147448fdd4a9a1a3caf83f1505daf7af2d1c5d2)
+    set(K7_ORT_RID osx-arm64)
 elseif(IOS)
     set(K7_ORT_URL https://download.onnxruntime.ai/pod-archive-onnxruntime-c-1.30.0.zip)
     set(K7_ORT_HASH e6f1670c14406fd9f082bb400ab197a9b0a9646058ca6366e440642e2b54a2ea)
@@ -135,11 +137,13 @@ elseif(WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(K7_ORT_URL https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime.directml/1.24.4/microsoft.ml.onnxruntime.directml.1.24.4.nupkg)
     set(K7_ORT_HASH 57e9f11b73437bef7a309496135d4c1f96b1a8e9ddba60013fa27bfc1d788681)
 elseif(UNIX AND NOT APPLE AND NOT ANDROID AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
-    set(K7_ORT_URL https://github.com/microsoft/onnxruntime/releases/download/v1.30.0/onnxruntime-linux-x64-1.30.0.tgz)
-    set(K7_ORT_HASH a5ed5a3cac51fbb2e90da632ae43d19212faaa20e76484e62bcb7c23ddb3b3fd)
+    set(K7_ORT_URL https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime/1.30.0/microsoft.ml.onnxruntime.1.30.0.nupkg)
+    set(K7_ORT_HASH 30df119bd9164eaa187666d93147448fdd4a9a1a3caf83f1505daf7af2d1c5d2)
+    set(K7_ORT_RID linux-x64)
 elseif(UNIX AND NOT APPLE AND NOT ANDROID AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64")
-    set(K7_ORT_URL https://github.com/microsoft/onnxruntime/releases/download/v1.30.0/onnxruntime-linux-aarch64-1.30.0.tgz)
-    set(K7_ORT_HASH e16a27a8ed330bbc698df7330b0cf56e722f354e3bcc92118682c74ef3c3e3da)
+    set(K7_ORT_URL https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime/1.30.0/microsoft.ml.onnxruntime.1.30.0.nupkg)
+    set(K7_ORT_HASH 30df119bd9164eaa187666d93147448fdd4a9a1a3caf83f1505daf7af2d1c5d2)
+    set(K7_ORT_RID linux-arm64)
 endif()
 set(K7_ORT_RUNTIME "")
 # iOS's archive under a name of its own: one fetch folder serves the Mac's desktop and iOS builds, and a name holds one download.
@@ -178,10 +182,10 @@ if(K7_ORT_URL)
             ${onnxruntime_SOURCE_DIR}/onnxruntime.xcframework/${K7_ORT_SLICE}/onnxruntime.framework/onnxruntime
             "-framework Foundation" "-framework UIKit" "-framework Network" "-framework CoreML")
     else()
-        file(GLOB K7_ORT_LIB ${onnxruntime_SOURCE_DIR}/lib/libonnxruntime.so.1.* ${onnxruntime_SOURCE_DIR}/lib/libonnxruntime.1.*.dylib)
-        list(FILTER K7_ORT_LIB EXCLUDE REGEX "dSYM")
+        # The NuGet package: one archive for macOS and Linux, a native folder per runtime identifier.
+        file(GLOB K7_ORT_LIB ${onnxruntime_SOURCE_DIR}/runtimes/${K7_ORT_RID}/native/libonnxruntime.so ${onnxruntime_SOURCE_DIR}/runtimes/${K7_ORT_RID}/native/libonnxruntime.dylib)
         list(GET K7_ORT_LIB 0 K7_ORT_LIB)
-        target_include_directories(k7_onnxruntime INTERFACE ${onnxruntime_SOURCE_DIR}/include)
+        target_include_directories(k7_onnxruntime INTERFACE ${onnxruntime_SOURCE_DIR}/build/native/include)
         set(K7_ORT_RUNTIME ${K7_ORT_LIB})
     endif()
 else()

@@ -2,8 +2,8 @@
 
 A Pi runs the same supervisor and engine as any musician's machine, as the command-line engine in a
 container, listed at a k7 instance and driven through its relay like any other
-(`docs/server-engine.md` for the server's own, which this image is a sibling of). What makes it a
-Pi image rather than the server's built for arm64 is the sound: a Pi has a real card, and a guitar
+What makes it a
+Pi image rather than a generic one built for arm64 is the sound: a Pi has a real card, and a guitar
 is played through it.
 
 ## What a Pi 3 can carry

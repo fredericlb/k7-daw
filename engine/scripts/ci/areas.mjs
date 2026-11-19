@@ -1,5 +1,5 @@
-// areas.mjs — prints which Rust areas a ci/ branch touched since `base/main`, as words: `backend`, `browser`, both or none.
-// The base is local main pushed to OneDev as `base/main`, since OneDev's own main lags (docs/rust-builds.md).
+// areas.mjs — prints which Rust areas a branch touched since `main`, as words: `backend`, `browser`, both or none.
+// The base is K7_AREAS_BASE (the gate sets it to local main), else origin's main (docs/rust-builds.md).
 // What a reader gets wrong: when the base cannot be fetched or read, it prints both; skipping on a doubt is never the answer.
 import { execFileSync } from "node:child_process";
 
@@ -11,7 +11,7 @@ const git = (...args) =>
 const BOTH = "backend browser";
 // What makes every area run: the checks' own scripts and the build's configuration.
 const ALL = [
-  ".onedev-buildspec.yml",
+  ".github/workflows/",
   "engine/scripts/ci/",
   "engine/scripts/sccache.mjs",
   "rust-toolchain",
@@ -31,11 +31,11 @@ function changed() {
     // K7_AREAS_BASE names a local ref instead, to try the rule on a machine.
     let ref = process.env.K7_AREAS_BASE;
     if (!ref) {
-      ref = "refs/remotes/origin/base/main";
-      git("fetch", "--quiet", "origin", `+refs/heads/base/main:${ref}`);
+      ref = "refs/remotes/origin/main";
+      git("fetch", "--quiet", "origin", `+refs/heads/main:${ref}`);
     }
     const base = git("merge-base", "HEAD", ref);
-    // Against the working tree, so a local run counts what is not committed yet; a CI checkout is clean either way.
+    // Against the working tree, so a local run counts what is not committed yet; a clean checkout is the same either way.
     return git("diff", "--name-only", base).split("\n").filter(Boolean);
   } catch {
     return null;

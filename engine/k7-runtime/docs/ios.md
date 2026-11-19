@@ -272,10 +272,6 @@ identifier `$(TeamIdentifierPrefix)se.frediver.k7.daw`, which the provisioning p
 | the callbacks pass only keys `ws.<id>`, and capture nothing | a C function pointer cannot capture, and nothing else of the store is the list's |
 | the change notification is logged, and the page reads the store through the front every 20 s | iCloud applies a change to the store itself; a read is always current, and no event has to cross to Rust |
 | a signed-out device or an unsigned build lists nothing from other devices and keeps its own list | the app works the same with no iCloud, and CI runs unsigned |
-| the container `iCloud.se.frediver.k7.daw` is read for one reason: `BackendHost.swift` hands the front `K7_ICLOUD_LEGACY=<container>/Documents` when it still holds anything, and the front moves each workspace folder out at the next start of an account (`k7-roam`'s `container.rs`) | the workspaces an earlier version put there must reach the device's own storage; a rename where the volume allows, else a copy checked by file count, sizes and a read of every git object, then the original is deleted |
-| a name already on the device, a file iCloud has not downloaded, or a failed check leaves the folder in the container and names it in the log; `BackendHost.swift` asks iCloud to download the evicted files at each start | nothing of the user's is overwritten, nothing is deleted before its copy is proved, and a workspace that was skipped for a missing file moves at a later start |
-| a `.git` link to `.git.nosync` is turned back into a real `.git` folder, in the move and on any open | an earlier version kept the repository under that name |
-| the container's entitlements stay for that read, and go once no container holds a workspace | without them the app cannot see the folder it must empty |
 
 ## k7 on a Mac: the iPad app
 

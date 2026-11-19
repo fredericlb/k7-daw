@@ -8,8 +8,7 @@ and the reasoning behind every number in it. The engine half is
 ## Who listens
 
 `engineOutput.ts` subscribes: it plays it for any page driving
-an engine whose `whoami` says `audioToBrowser`: the server's own engine, whose device is a null sink
-(`docs/server-engine.md` at the repo root). There, the broadcast is the ONLY way the music reaches a
+an engine whose `whoami` says `audioToBrowser`: an engine whose device is a null sink (a container without a sound card). There, the broadcast is the ONLY way the music reaches a
 person, so the measurements below are what a user hears, not a mockup's numbers.
 
 A page may also ask for it on any engine (`engineOutput(client, here)`, then `setHere`): k7's

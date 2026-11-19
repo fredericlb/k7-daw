@@ -231,7 +231,7 @@ wired to a route: what lands before it changes no answer. Sizes are the Rust and
 | every sub-step from 2a | the stage's dump: `rust/tests/all/stages.rs` compiles the staged golden corpus (`packages/song/scripts/stageCorpus.ts`) to the stage and compares, with `compare.rs`, against what a node script writes of the TypeScript's same stage; every difference is fixed or added to the allow list with its reason |
 | 2h | every golden `engine` document decodes into the Rust `ProjectDoc` with unknown fields denied, and the corpus compiles equal enough to it |
 | 2l | the backend's version stamp equals the facade's `version` answer, and a test that a changed `song` source changes both; the 5d conformance set and the web suite on a bed; `e2e macos` |
-| 2m, the step's end | the corpus as a smoke test: every archetype, demo and e2e fixture compiles (the two broken ones fail naming their file), the engine loads each, and `--render` of four bars of each archetype and demo is not silent; OneDev's `ci/` jobs |
+| 2m, the step's end | the corpus as a smoke test: every archetype, demo and e2e fixture compiles (the two broken ones fail naming their file), the engine loads each, and `--render` of four bars of each archetype and demo is not silent; `mac-checks.sh` |
 
 The golden corpus is a smoke test: `serviceGolden` and the file service's `golden_smoke` test.
 
@@ -239,7 +239,7 @@ The golden corpus is a smoke test: `serviceGolden` and the file service's `golde
 
 | choice | why |
 |---|---|
-| from 2a, OneDev's `lint and test` adds `wasm32-unknown-unknown` and runs `cargo build --locked --target wasm32-unknown-unknown --no-default-features` and its clippy in `packages/song/rust`, unconditionally; `rust checks macos` and `windows` add the crate to their loop | the browser's build must be clean before the browser uses it; macOS's present wasm build runs only where the target happens to be installed |
+| from 2a, `mac-checks.sh` adds `wasm32-unknown-unknown` and runs `cargo build --locked --target wasm32-unknown-unknown --no-default-features` and its clippy in `packages/song/rust`, whenever the song crate changes | the browser's build must be clean before the browser uses it; macOS's present wasm build runs only where the target happens to be installed |
 | the facade links `song` only when the first browser operation lands | every change to a linked crate forces the checked-in module's rebuild (`SOURCES`); an rlib built for wasm32 proves the same cleanness |
 | `scripts/check-cargo-locks.mjs` and `docs/lints.md` hold the crate's lock | as the pilot's two crates |
 

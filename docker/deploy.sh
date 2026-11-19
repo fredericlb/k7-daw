@@ -40,12 +40,12 @@ ready() {
 
 echo "deploying APP_VERSION=$next (was: ${prev:-the compose default})"
 set_version "$next"
-if ! docker compose pull k7 engine; then
+if ! docker compose pull k7; then
   echo "pull failed — APP_VERSION left at ${prev:-the compose default}" >&2
   set_version "$prev"
   exit 1
 fi
-# `up` itself fails when k7 turns unhealthy, the engine waiting on it: the check below decides either way.
+# `up` itself can fail when k7 turns unhealthy: the check below decides either way.
 # --remove-orphans stops the containers of services the compose file no longer names; their volumes stay.
 docker compose up -d --remove-orphans || true
 if ready; then

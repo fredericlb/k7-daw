@@ -3,7 +3,7 @@
 The front holds the file hub (phase 5a, `docs/rust-phase5-plan.md`): the ticket and the routes that hand each
 account to its own runtime, the libraries,
 `/api/ready` and AI organize. No TypeScript hub is left
-(`docs/rust-phase6-plan.md`, 6.3) and the hub starts no node process: every account's file service is the front's own (`service.md`). The pages of each part are under `files/`: [the hub](files/hub.md),
+and the hub starts no node process: every account's file service is the front's own (`service.md`). The pages of each part are under `files/`: [the hub](files/hub.md),
 [the history](files/history.md).
 
 ## The switch
@@ -73,8 +73,8 @@ nothing is fetched. They answer `/account/libraries*` (the admin flag is the tic
 | the seam's `cold-run`, `slot` and `hub` sit behind the seam's own gate (loopback and `K7_FRONT_SECRET`) | `routes/engine/internal.rs` `gate` | `tests/files_hub.rs` |
 
 `fixtures/hub-vectors.json` holds account keys, tickets minted and read, the allow-list and the sync target as the
-TypeScript hub answered them (its cap and port-range cases are no longer replayed); it is the reference as committed, nothing regenerates it
-(`docs/rust-phase6-plan.md`, decision 5), and `crates/k7-hub/tests/all/vectors.rs` fails when Rust disagrees.
+TypeScript hub answered them (its cap and port-range cases are no longer replayed); it is the reference as committed, nothing regenerates it,
+and `crates/k7-hub/tests/all/vectors.rs` fails when Rust disagrees.
 
 ## The settle
 
@@ -126,7 +126,7 @@ repaired on Haiku (no `effort`), mistakes twice, a refusal with and without its 
 HTTP error in JSON and in text, a 529 retried after its `retry-after-ms`, an `error` event mid-stream, a
 dropped stream, a stream that ends before `message_stop`, an empty stream, and two bodies zod refuses. Every
 stream is written in 97-byte pieces, a character split across two at times. It holds the replies, each request the SDK sent (seven headers and the body) and the NDJSON streamed back,
-and is the reference as committed: the route and its generator are gone (`docs/rust-phase6-plan.md`, decision 5).
+and is the reference as committed: the route and its generator are gone.
 `crates/k7-front/src/turn_vectors.rs` plays the same replies from a Rust twin of the fake, turn by turn, and requires the
 same requests byte for byte and the NDJSON each turn is the server's part of; `packages/panel-rules/src/aiLoop.test.ts`
 drives the page's loop with the same replies. `crates/k7-front/tests/all/ai_turn.rs` runs the guards through a whole front.

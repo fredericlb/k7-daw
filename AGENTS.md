@@ -83,99 +83,12 @@ engine registry, the relay or a gate, `docs/audit-moteur.md`. The repo's own che
 - `npm run lint:dead` — knip, non-blocking: dead and duplicated code; build-only entries go in `knip.json`.
 - `npm run lint:panels` — a panel's `bind:` against its plugin's real parameters; needs the plugins installed, not in `npm run lint` (`packages/song/docs/panelBinds.md`).
 
-# Developing on the Windows machine
-
-**Windows only** — on macOS and Linux, edit and build in the same world and run `npm run dev`.
-
-**Two checkouts, and only one of them runs anything.** Agents edit in the WSL clone `~/Src/k7`
-(ext4, its own Linux `node_modules`) — git, biome, vitest, tsc and the lints are 3–50× faster
-there. **Every build and every dev server belongs to Tilt, in the Windows checkout**
-(`npm run dev` = `tilt up`, UI at http://localhost:10350): never build by hand, and never run Tilt,
-a dev server or the engine build from WSL. Branch from `win/main`, then `git push win <branch>`;
-the branch lands in the Windows checkout, where it is merged and where Tilt runs it. Read the
-session with `tilt.exe get uiresources` / `tilt.exe logs <resource>` (`docs/dev.md`, `docs/remote.md`).
-
-**One exception: a Rust crate that touches no audio device builds and tests in WSL** (`rustup` stable with
-`clippy`, `rustfmt` and `wasm32-unknown-unknown` in `~/.cargo`; `export PATH=$HOME/.cargo/bin:$PATH`; the
-target folder named with `--target-dir ~/.cache/<name>`, never inside the tree). WSL has no sound card, so
-the engine, the supervisor and any test that opens an audio device stay on Windows.
-
-**Never use PowerShell for text in a tracked file**: it silently corrupts UTF-8 and drops accented
-arguments. Write the script with the file tool and run `bash script.sh`; edit files with the edit
-tool. PowerShell is for short ASCII commands only (`git status`, `npm run test`) — `docs/dev.md`.
-
-Don't create Pull Request, only use branches and woktress
-
-**A session on the Mac follows `docs/agent-playbook.md`**: the agents, the merges into local `main`, the
-local builds, the Rust that must hold on Windows and Linux, and the CI rounds.
-
-**A worktree needs its own `node_modules` before any other step**, even for a docs-only change: an empty
-tree breaks biome, the `@studio/*` imports and the build. In a WSL worktree `node scripts/agent/worktree-init.mjs`
-builds it (a hook runs it once `scripts/agent/claude-settings.json` is installed as `.claude/settings.json`);
-on Windows `npm ci` does. **Never run `npm install` INSIDE a workspace folder** (`packages/ui`…): it writes a
-nested `node_modules` whose React shadows the root's, and the dev server then dies on an Invalid hook call (the
-frontend's `vite.config.ts` dedupes React as a second line of defence). The tooling and the guard's limits: `docs/agents.md`.
-
-**Before committing, run `npm run check:changed`**: biome on the changed files, the blocking lints, and
-typecheck + test of the workspaces the branch touches (`--dependents` for the ones importing them).
-
 # Merging a branch
 
-A finished branch is merged by the agent, always the same way, without looking for another one. One agent
-merges at a time, so nobody rebases onto a `main` about to move:
-
-1. **Check first, without the lock**: rebase on a fresh `win/main` and run `npm run ci:local` (plus the gates
-   your branch's area needs). A generated file (the generated files, `.gitattributes`' `merge=rebuilt`) is never
-   merged by hand: git keeps one side, `npm run rebuild:generated` writes it from the merged sources.
-2. **Then take the merge lock** (`node scripts/agent/merge-lock.mjs take <branch>`; it waits while another
-   agent merges; one held past 45 minutes counts as abandoned) and rebase again on what landed meanwhile. If
-   those new commits touch none of your files nor their neighbours, `npm run check:changed` is the whole
-   re-check under the lock; otherwise re-run `ci:local` there. Hold the lock minutes, not a test run.
-3. **Commit, `git push win <branch>`, then leave the worktree** (ExitWorktree, `keep`): an isolated session
-   cannot run the Windows git below.
-4. **Merge in the Windows checkout**, with its own git, never WSL's git on `/mnt/c` (it rewrites the
-   index over 9p): `git.exe -C 'C:\Users\flb\Src\k7' merge --no-ff <branch> -m "Merge branch '<branch>': <summary>"`,
-   the summary being the branch's commit subject without its `k7: ` prefix. Leave the checkout's own
-   uncommitted files alone; on a conflict, abort (`merge --abort`), rebase the branch on `win/main` in WSL, push, retry.
-5. **Fast-forward WSL**: `git fetch win && git merge --ff-only win/main` in `~/Src/k7`, then **give the lock
-   back**: `node scripts/agent/merge-lock.mjs give <branch>`.
-6. **Restart the front, the backend and the frontend in Tilt together**: `tilt.exe trigger k7-front`,
-   `k7-backend` and `k7-frontend` (each with `--port 10350`; plus any other resource the change touches, and
-   `"(Tiltfile)"` when a `dev` script was added or removed) — never one alone, which leaves processes of two
-   revisions talking — and not while a suite targets the dev session; then check `tilt.exe logs <resource> --port 10350`.
-
-# Building and testing on Windows from the WSL clone
-
-AGENTS.md's rule stands: nothing is built IN WSL but the pure Rust crates it names, and Tilt's checkout `C:\Users\flb\Src\k7` is never
-built by hand nor switched to another branch (Tilt watches it and would rebuild the running session).
-What an agent may do is run a Windows build ON Windows, through WSL interop, in a worktree of its own.
-`scripts/agent/win-verify.sh <branch> <command...>` does the steps below in one call, from the main session:
-
-- **The verify worktree is `C:\Users\flb\Src\k7-verify`**, outside Tilt's tree. A branch reaches it by
-  `git push win <branch>`; create it once with `git worktree add --detach C:/Users/flb/Src/k7-verify <branch>`
-  run from `C:\Users\flb\Src\k7`, then `npm ci` (25 s) inside it.
-  Its build folders are its own, so it never fights Tilt's Ninja state; `buildLock.mjs` caps the compilers.
-- **Every Windows step is a script FILE run by Git Bash**: write it under
-  `C:\Users\flb\AppData\Local\Temp\k7-verify\` (`/mnt/c/...` from WSL), then run
-  `/mnt/c/Users/flb/AppData/Local/Programs/Git/bin/bash.exe -l script.sh > step.log 2>&1` and read the log.
-  Never PowerShell, never `cmd.exe` with a command line (UNC cwd warnings, and the encoding rules above).
-- **A session isolated in a WSL worktree cannot run Windows commands** (the guard cannot prove they stay in
-  the worktree): commit, push to `win`, leave the worktree, and drive Windows from the main session.
-- **Restart the Tilt session's resources yourself, from WSL**, once a change has landed in the Windows
-  checkout — never leave it to the user. `tilt.exe` is on the PATH and talks to the running session:
-  `tilt.exe trigger <resource> --port 10350` restarts one (`k7-tray`, `k7-backend`, `k7-frontend`…);
-  `tilt.exe trigger "(Tiltfile)" --port 10350` re-reads the task list, which a `dev` script added or removed
-  needs (a resource is only created or dropped then); `tilt.exe get uiresources --port 10350 -o name` lists
-  them and `tilt.exe logs <resource> --port 10350` reads one's output, to confirm the restart came up.
-- **Git Bash rewrites `/flag` arguments into paths**: `/m:6` reaches MSBuild as `m:6`. Use CMake's portable
-  `cmake --build <dir> --config RelWithDebInfo --target <t> --parallel 6`, or `MSYS_NO_PATHCONV=1`.
-- **What fails on this machine whatever the branch** — check `main` before blaming a change:
-  `k7_supervisor_tests`, which dies in `HostLock_test.cpp` (exit 127) so the files after it never run.
-- **A C++ test binary that crashes loses its `ok`/`FAIL` lines** (stdout is buffered into a file). To see
-  how far it got, add `std::setvbuf(stdout, nullptr, _IONBF, 0);` at the top of `main()` in the verify
-  worktree only, rebuild, run, then `git checkout --` the file. `winpty` does not help without a tty.
-- **A new test must hold on Windows too**: no file symlink without Developer Mode (`EPERM`), no POSIX mode
-  (a file reads `0o666`) — guard those with `process.platform === "win32"`, as `atomicWrite.test.ts` does.
+A branch works in its own worktree. To merge it: merge `main` into the branch (a generated file is never
+merged by hand: git keeps one side, `npm run rebuild:generated` writes it from the merged sources), run
+`bash scripts/agent/gate.sh` until it is green, then fast-forward local `main` to the branch (`docs/agent-playbook.md`,
+"Merging"). Never push `main`, and never use PowerShell for text in a tracked file.
 
 ## Rust builds and the CI's checks
 
@@ -196,17 +109,12 @@ How a build stays fast and where a branch is checked — `docs/rust-builds.md`, 
 
 ## Android
 
-From the verify worktree's `engine/k7-android`, under Git Bash, with
-`JAVA_HOME="/c/Program Files/Android/Android Studio/jbr"` (JDK 21; Gradle refuses newer) and
-`ANDROID_HOME=/c/Users/flb/AppData/Local/Android/Sdk` (NDK `29.0.14206865`):
-
-- **Kotlin and the bundled backend only** — what a change outside the C++ needs, about a minute:
-  `./gradlew.bat --no-daemon :app:stageBackend :app:compileE2eKotlin -x buildEngine -x buildSupervisor -x stageEngine -x stageFaustLibs -x stageTermuxTools`.
-  `preBuild` depends on `stageEngine`, so without the `-x` it first compiles the whole engine for the phone.
-- **`stageTermuxTools` fails under Git Bash** (`tar: Cannot connect to C:`): its GNU tar reads `C:` as a
-  host. The full APK (`gradlew :app:assembleE2e`) runs from a Visual Studio developer prompt (`vcvars64`,
-  Windows' own tar first on the PATH), as `engine/k7-runtime/docs/android.md` says.
+`bash scripts/agent/android-check.sh` builds the Rust front for the phone, the bundled backend and the app's Kotlin (JDK 21
+as `JAVA_HOME`, the SDK with NDK `29.0.14206865` as `ANDROID_HOME`; Gradle refuses a newer JDK). It never compiles
+the C++ engine: that is `./gradlew :app:assembleE2e` from `engine/k7-android`, as `engine/k7-runtime/docs/android.md` says.
+A new test must hold on Windows too: no file symlink without Developer Mode (`EPERM`), no POSIX mode (a file reads
+`0o666`) — guard those with `process.platform === "win32"`, as `atomicWrite.test.ts` does.
 
 ## iOS
 
-No Mac here, and no CI job builds the iPhone app: it is built in Xcode on the Mac.
+No CI job builds the iPhone app: it is built in Xcode on the Mac, and `bash scripts/agent/ios-check.sh` checks its Rust and Swift sides.

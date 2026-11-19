@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 
 const windows = process.platform === "win32";
 
-/** The shell agents' folder for OneDev's lasting trees and caches; outside Windows not ~/k7-ci, which the macOS checks prune. */
+/** The folder for the lasting trees and caches; outside Windows not ~/k7-ci, which the macOS checks prune. */
 export const ciRoot = () =>
   windows
     ? join(process.env.LOCALAPPDATA ?? homedir(), "k7-ci")

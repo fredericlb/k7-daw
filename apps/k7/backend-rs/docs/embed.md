@@ -48,7 +48,7 @@ port, is what the conformance suite passes through over `adb forward` (`e2e/docs
 Every build ships `libk7_embed.so`, built by Gradle's `buildFront` through cargo with the NDK's clang at the
 app's `minSdk`, and `RustFront.kt` runs it on the studio's port, in front of node, with a secret drawn per
 launch (`engine/k7-runtime/docs/android.md`). A release build therefore needs Rust's `aarch64-linux-android`
-target on every machine that builds one: GitHub's android job and OneDev's Windows agent add it.
+target on every machine that builds one: GitHub's android job adds it.
 
 ## In the iOS app
 

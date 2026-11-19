@@ -50,7 +50,7 @@ In both, the paths answered are under a writable root, so naming them is what up
 ## The server's render machine
 
 A hosted k7 keeps no engine binary, so it needs a machine that renders when nobody's engine is
-bound: its own `engine` service (`docs/server-engine.md` at the repo root). That machine is told
+bound: an engine container of its own. That machine is told
 apart by a **render key**, a secret the deployment gives both sides (`STUDIO_RENDER_KEY`). The
 supervisor sends it in a header beside its token when it dials the tunnel, and the hub
 (`apps/k7/backend-rs/crates/k7-engine/src/tunnel/hub.rs`) marks that tunnel as the render machine. A

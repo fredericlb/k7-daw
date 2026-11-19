@@ -271,7 +271,7 @@ reference's reports.
 
 ## The Mac bed retries once under load
 
-When a Mac bed starts with the 1-minute load average above `K7_BED_RETRY_LOAD` (default: the core count), `e2e-macos.sh` runs Playwright with `--retries=1`; a spec that passes on retry is reported `flaky` and the bed passes, one failing twice fails it. OneDev's beds keep the config's `retries: 0`.
+When a Mac bed starts with the 1-minute load average above `K7_BED_RETRY_LOAD` (default: the core count), `e2e-macos.sh` runs Playwright with `--retries=1`; a spec that passes on retry is reported `flaky` and the bed passes, one failing twice fails it.
 
 ## Selectors
 

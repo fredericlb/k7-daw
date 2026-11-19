@@ -3,8 +3,7 @@
 `K7_LAST_ROUTES=front` hands the front what the TypeScript backend still answers once the families
 are the front's: the seam's TypeScript half, the root domain's page,
 the `/api` guard, the built page with its fallback, and
-Express's own 404. With it on, the front asks node nothing, so a host can start the front alone
-(`docs/rust-phase6-plan.md`, 6.5). The code is `crates/k7-front/src/routes/last/`.
+Express's own 404. With it on, the front asks node nothing, so a host can start the front alone. The code is `crates/k7-front/src/routes/last/`.
 
 ## The choices
 

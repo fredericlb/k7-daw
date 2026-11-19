@@ -10,7 +10,7 @@ everywhere in this repo ([lints.md](lints.md), which also holds the repo's own c
 `studio` holds the music/stage apps. Every app runs on the musician's device: k7 has no hosted
 origin, so the audio side is one machine, the device's own, which is why this overview lives in the root `docs/` and not inside any one app. Two processes run on the
 musician's machine — `engine/k7-runtime` and `engine/k7-supervisor` — either on their own, as the
-command-line engine (`k7-supervisor --config <file>`), or inside an app: the tray (`apps/k7-tray`), through the k7 backend it runs, or the phone (`engine/k7-android`, `engine/k7-ios`). An engine image of their own is still built (`docs/server-engine.md`):
+command-line engine (`k7-supervisor --config <file>`), or inside an app: the tray (`apps/k7-tray`), through the k7 backend it runs, or the phone (`engine/k7-android`, `engine/k7-ios`).:
 
 | dir | language | what it is |
 |---|---|---|
@@ -48,16 +48,14 @@ still as raw TypeScript (`docs/publishing.md`); every other package stays privat
 
 **The apps run on devices.** k7 is K7 DAW (Windows, Linux, macOS), the Android app, and the iOS app (a Mac can run it as the iPad app): each carries its own front, file service, engine registry and engine, and moves workspaces by git (and iCloud keys on Apple devices). There is no hosted app, no account on a server and no server to pair with.
 
-**The server image only publishes.** `docker/docker-compose.yml` still runs ONE image of k7 (the Express backend and k7's Rust front), and it serves `k7.rocks` (the root site, `/app_downloads` and the update feeds the tray and the Android app read, `docs/app-downloads.md`) and `docs.k7.rocks` (the documentation), nothing else; `docs/images.md` keeps what the image holds and why. The command-line engine's image (`engine/docker/Dockerfile`, `docs/server-engine.md`) and the Raspberry Pi's (`docs/pi-engine.md`) are built as before. `docs/versioning.md` is the page.
+**The server image only publishes.** `docker/docker-compose.yml` still runs ONE image of k7 (the Express backend and k7's Rust front), and it serves `k7.rocks` (the root site, `/app_downloads` and the update feeds the tray and the Android app read, `docs/app-downloads.md`) and `docs.k7.rocks` (the documentation), nothing else; `docs/images.md` keeps what the image holds and why. The Raspberry Pi's engine image is the other (`docs/pi-engine.md`). `docs/versioning.md` is the page.
 
 ## The repo-wide pages in `docs/`
 
 Notes for the whole repo — CI, deployment, the dev session — are in `docs/`:
 [dev.md](dev.md) (what `npm run dev` starts), [versioning.md](versioning.md) (the
 image's stamp), [images.md](images.md) (why k7's Dockerfile is staged the way it is),
-[server-engine.md](server-engine.md) (the server's own engine: its image, its null-sink device),
-[publishing.md](publishing.md) (the four packages published for apps outside this repository), [release-scope.md](release-scope.md) (what
-the first release ships with — and what it leaves out), [release.md](release.md) (the CI that remains: OneDev's check jobs and GitHub's `k7.yml` and `caches.yml`; no job releases anything),
+[publishing.md](publishing.md) (the four packages published for apps outside this repository), [release.md](release.md) (the CI that remains: GitHub's `k7.yml` and `caches.yml`; no job releases anything),
 and the plan/recipe pages, [platter-plan.md](platter-plan.md) (the DJ deck's
 playback: a stretcher inside the platter, and the hybrid it deletes),
 [platter-node-plan.md](platter-node-plan.md) (its sequel — the platter is injected into the
@@ -70,8 +68,7 @@ Strudel-looking syntax that is parsed and never evaluated — and the phases tha
 [dsp-literal-plan.md](dsp-literal-plan.md) (a module's DSP graph as k7x data, `dsp.k7x`, decoded by
 the `song` crate into the graph `jsdsp.ts` builds, so no sandbox runs it; its vocabulary and migration),
 [rust-backend-plan.md](rust-backend-plan.md) (one backend in Rust on every host, by a strangler in
-front of the TypeScript one, its phases, gates and costs, [rust-phase4-plan.md](rust-phase4-plan.md)
-for the engine core) and
+front of the TypeScript one, its phases, gates and costs) and
 [rename-test-plan.md](rename-test-plan.md) — the latter is the METHOD for renaming an
 app, a service or a protocol prefix: the order of the phases, and the rule that every check
 carries its failure signature.

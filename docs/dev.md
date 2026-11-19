@@ -4,7 +4,6 @@
 npm run dev                        # every app + the engine, under Tilt
 npm run dev -- k7-tray k7-frontend # only the named Tilt resources
 npm run dev:tray                   # only the tray and its engine, no Tilt
-npm run vscode                     # the browser editor at /dev, on its own
 ```
 
 ## Where it answers
@@ -80,63 +79,11 @@ it on **8790**, loopback only.
 
 The front's file hub makes an account's runtime on its first request (`apps/k7/backend-rs/docs/files/hub.md`).
 
-## The browser editor — outside the session, on purpose
+## The shared terminals — `npm run console`
 
-VS Code in the browser at **https://code.priv.frediver.se** (its own origin, opening on
-the user's home, terminal defaulting to Git Bash)
-is *not* a resource in the dev session: an editor inside the session dies with it,
-which remotely means losing the only door at the exact moment you need it. On the dev
-box it is the **`studio-vscode` logon task** (see [remote.md](remote.md)); anywhere
-else, `npm run vscode` starts it alone. `storybook` (`npm run storybook`, :6006) is
-likewise its own command — a gallery you open on purpose, not something to have
-running.
-
-### How the editor task works
-
-`scripts/vscode.mjs` runs the `code serve-web` that ships with VS Code 1.82+, so there is
-nothing to install and no `code-server` (which on Windows means WSL). Two flags carry the
-whole integration:
-
-- `--default-folder`, pointed at the **user's home** — and the integrated terminal
-  defaults to **Git Bash**, which the script pins in the server's Machine settings
-  (`~/.vscode-server/data/Machine/settings.json`, merged, never overwritten). No
-  `--server-base-path`: `code.priv.frediver.se` is a whole origin, so the server serves
-  at `/` and the proxy strips nothing.
-- `--without-connection-token`, so `https://code.priv.frediver.se` opens with no handshake.
-
-**No auth is a decision, and worth stating plainly** so nobody "fixes" it by accident or
-copies the pattern somewhere it does not belong. What is served is a browsable filesystem
-*with a terminal*: anyone who can reach `code.priv.frediver.se` gets a shell on this machine. That is
-accepted here — a dev-only config on an open-source repo — and nowhere else.
-`--host 0.0.0.0`, because the LAN proxy (traefik) is another machine and reaches this
-port over the network; the LAN is the trust boundary.
-
-To put auth back, swap `--without-connection-token` for `--connection-token-file <path>`.
-`serve-web` then answers `403` to a bare `code.priv.frediver.se` and expects the `?tkn=…` URL it prints
-once; it trades that for a `vscode-tkn` cookie good for seven days. The stronger option, if
-this ever leaves a dev machine, is a forward-auth rule on the LAN proxy pointed at k7's
-backend (which owns `/auth`) so the studio session gates it.
-
-The first run downloads a server build (~100 MB) and answers `202` with a self-reloading
-"please wait" page until it is done.
-
-A busy port is reported and treated as **success**. `serve-web` exits 0 when it cannot
-bind, so the script checks the port itself — and an editor already serving that URL is
-the goal met, which is what lets the **`studio-vscode` logon task** and a by-hand
-`npm run vscode` coexist: whichever starts first serves, and the other says so and
-exits clean. The case worth knowing: a killed `serve-web` leaves a child holding the
-socket, so the port can be busy with nothing useful behind it. The message says as
-much, and `Get-NetTCPConnection -LocalPort 8798` finds the process tree to stop.
-
-## Working remotely — `code.priv.frediver.se`, `console.priv.frediver.se` and the logon tasks
-
-The dev session is something you start and stop; the *door* must not be. `npm run
-remote:install` registers two Windows logon tasks that survive the session: the
-**browser editor** at **https://code.priv.frediver.se** and the **shared shell** at
-**https://console.priv.frediver.se** — where `npm run dev` is typically launched when working
-remotely. Both are their own origins, routed by hostname on the LAN proxy, and both
-start in the **user's home** with Git Bash as the default shell. The whole design —
-and why ttyd is not the answer — is in [remote.md](remote.md).
+`scripts/console/server.mjs` serves terminal tabs (PowerShell in ConPTYs owned by the service, so they outlive the
+browser tab) at `console.priv.frediver.se`, on a Windows dev box reached remotely; it installs its own dependencies first.
+It is no resource of the dev session, which a tab would otherwise die with.
 
 ## A NEW `exports` subpath needs the dev server restarted
 
@@ -314,7 +261,7 @@ the distro through interop, so `tilt.exe get uiresources` reads the session with
 ## Shelling out on Windows — from a FILE, never through PowerShell
 
 On the Windows side, editing (claude, nvim…) happens in the `console.priv.frediver.se` tabs,
-Git Bash by default ([remote.md](remote.md)).
+Git Bash by default (`npm run console`).
 
 PowerShell is the wrong tool for anything touching this repo's text, and it fails silently:
 

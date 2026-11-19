@@ -37,7 +37,6 @@
         "engine/k7-android/scripts/termux-tools.mjs",
         "engine/k7-android/scripts/mirror-termux-debs.mjs",
         "engine/k7-ios/k7/backend-boot.mjs",
-        "engine/scripts/ciTree.mjs",
         "engine/k7-android/app/src/main/assets/*.js"
       ]
     },

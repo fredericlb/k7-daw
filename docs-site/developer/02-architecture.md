@@ -89,7 +89,7 @@ Where engine machines run:
 | Command-line engine (`k7-supervisor --config <file>`) | `engine/k7-supervisor`, staged by `engine/scripts/build-engine.mjs` |
 | K7 DAW | `apps/k7-tray`: a Tauri app with a window and a tray icon that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`) and the file services, and the window (or the browser) shows k7 |
 | Android app | `engine/k7-android`: the engine as a library, the supervisor as a program, and k7's backend bundled |
-| Server engine | `engine/docker/Dockerfile`: a container that dials k7 over the compose network and plays into a PulseAudio null sink |
+| Raspberry Pi engine | `engine/docker/Dockerfile.pi`: a container with the command-line engine, playing through the Pi's sound card |
 
 ## Data flow for one edit
 

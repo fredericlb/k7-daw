@@ -87,9 +87,6 @@ impl Files {
             );
             return None;
         }
-        if let Some(dir) = config.env.get("K7_ICLOUD_LEGACY") {
-            k7_roam::container::set_source(dir);
-        }
         if !settings.engine_core {
             eprintln!(
                 "k7-front: K7_FILES=front needs K7_ENGINE_CORE=front, whose registry asks the hub about device tokens; the file hub stays the backend's"
