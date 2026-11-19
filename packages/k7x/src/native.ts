@@ -1,4 +1,4 @@
-// native.ts — the Rust reader (rust/src/ffi.rs) where this runtime has one: WebAssembly where there is a JIT, an installed addon elsewhere.
+// native.ts — the Rust reader (rust/src/ffi.rs) where this runtime has one: WebAssembly where there is a JIT, an installed reader elsewhere.
 // A reader would get wrong that it can change an answer: it only ever answers what parse.ts would, else it declines and parse.ts runs (docs/rust.md).
 
 import { WASM } from "./k7xWasm.generated.ts";
@@ -64,37 +64,15 @@ function bytes(): Uint8Array<ArrayBuffer> {
 
 interface NodeProcess {
   env?: Record<string, string | undefined>;
-  dlopen?: (module: { exports: unknown }, path: string) => void;
 }
 const proc = (globalThis as { process?: NodeProcess }).process;
-let kind: "addon" | "wasm" | "installed" | "none" = "none";
+let kind: "wasm" | "installed" | "none" = "none";
 
-/** The Node-API build of rust/node at `path`: what a node with no WebAssembly runs, NodeMobile on iOS. */
-function addonReader(path: string): K7Reader | null {
-  try {
-    const module = { exports: {} };
-    proc?.dlopen?.(module, path);
-    kind = "addon";
-    return module.exports as K7Reader;
-  } catch (e) {
-    console.warn(
-      `k7x: K7X_ADDON ${path} did not load, parse.ts reads instead`,
-      e,
-    );
-    return null;
-  }
-}
-
-/** The reader, chosen on first use: K7X_ADDON if set, else WebAssembly, compiled synchronously where the runtime allows it. */
+/** The reader, chosen on first use: WebAssembly, compiled synchronously where the runtime allows it. */
 function current(): K7Reader | null {
   if (reader !== undefined) return reader;
   reader = null;
   if (proc?.env?.K7X_READER === "js") return reader;
-  const addon = proc?.env?.K7X_ADDON;
-  if (addon) {
-    reader = addonReader(addon);
-    return reader;
-  }
   if (!wasm) return reader;
   try {
     reader = wasmReader(new wasm.Instance(new wasm.Module(bytes())));

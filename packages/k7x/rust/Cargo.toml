@@ -6,14 +6,13 @@ description = "k7x, parsed in Rust: the same grammar and spans as packages/k7x/s
 publish = false
 
 [workspace]
-members = ["node"]
 
 [dependencies]
 bumpalo = { version = "3.20", features = ["collections"] }
 
 [lib]
 path = "src/lib.rs"
-# rlib for the bench and the Node-API addon (node/), cdylib for WebAssembly.
+# rlib for the bench, cdylib for WebAssembly.
 crate-type = ["rlib", "cdylib"]
 
 [[bin]]

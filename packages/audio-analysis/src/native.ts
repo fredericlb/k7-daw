@@ -1,4 +1,4 @@
-// native.ts — the Rust build of the measure (rust/), where this runtime has one: the app's addon in K7X_ADDON, else WebAssembly.
+// native.ts — the Rust build of the measure (rust/), where this runtime has WebAssembly.
 // A reader would get wrong that it may differ from envelope.ts: native.test.ts holds every array to the JS one, bit for bit (docs/analysis.md).
 
 import type { Correlations, Measured } from "./envelope.ts";
@@ -30,14 +30,6 @@ interface Abi {
   wf_reset(): void;
 }
 
-/** What rust/node exports for the measure, in the iOS app's addon. */
-interface Addon {
-  wfReset(): void;
-  wfPush(samples: Float32Array, channels: number): void;
-  wfMeasure(aLow: number, aHigh: number): [number, Float32Array];
-  wfAutocorr(onset: Float32Array, minLag: number, maxLag: number): Float64Array;
-}
-
 /** The six arrays of rust/src/ffi.rs's output, in its order. */
 function split(out: Float32Array, buckets: number): Measured {
   const at = (i: number) => out.slice(i * buckets, (i + 1) * buckets);
@@ -52,26 +44,12 @@ function split(out: Float32Array, buckets: number): Measured {
 }
 
 let compiled: object | null | undefined;
-let addon: Addon | null | undefined;
-let kind: "addon" | "wasm" | "none" = "none";
+let kind: "wasm" | "none" = "none";
 
 interface NodeProcess {
   env?: Record<string, string | undefined>;
-  dlopen?: (module: { exports: unknown }, path: string) => void;
 }
 const proc = (globalThis as { process?: NodeProcess }).process;
-
-function loadAddon(path: string): Addon | null {
-  try {
-    const module = { exports: {} as Partial<Addon> };
-    proc?.dlopen?.(module, path);
-    return typeof module.exports.wfMeasure === "function"
-      ? (module.exports as Addon)
-      : null;
-  } catch {
-    return null;
-  }
-}
 
 /** What the module imports: the decoder's file reads (decodeWasm.ts) and the encoders' writes (transcode.ts), which a measure never makes. */
 export interface Host {
@@ -138,31 +116,9 @@ function wasmMeasure(module: object): NativeMeasure {
   };
 }
 
-function addonMeasure(a: Addon): NativeMeasure {
-  a.wfReset();
-  return {
-    push: (samples, channels) => a.wfPush(samples, channels),
-    measure(aLow, aHigh) {
-      const [buckets, out] = a.wfMeasure(aLow, aHigh);
-      return split(out, buckets);
-    },
-    correlations: (onset, minLag, maxLag) =>
-      a.wfAutocorr(onset, minLag, maxLag),
-    close: () => a.wfReset(),
-  };
-}
-
 /** A measure for one file from the Rust build, or null where this runtime has none (envelope.ts measures then). */
 export function openMeasure(): NativeMeasure | null {
   if (proc?.env?.STUDIO_WAVEFORM === "js") return null;
-  const path = proc?.env?.K7X_ADDON;
-  if (path) {
-    addon ??= loadAddon(path);
-    if (addon) {
-      kind = "addon";
-      return addonMeasure(addon);
-    }
-  }
   const module = wasmModule();
   if (!module) return null;
   kind = "wasm";

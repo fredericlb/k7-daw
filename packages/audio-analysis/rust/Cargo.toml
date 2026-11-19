@@ -7,7 +7,7 @@ publish = false
 
 [lib]
 path = "src/lib.rs"
-# rlib for the tests and the Node-API addon (packages/k7x/rust/node), cdylib for WebAssembly.
+# rlib for the tests, cdylib for WebAssembly.
 crate-type = ["rlib", "cdylib"]
 
 [profile.release]

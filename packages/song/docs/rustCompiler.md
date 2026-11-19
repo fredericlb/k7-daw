@@ -67,7 +67,7 @@ Every input the TypeScript compile takes, read off its code (`src/compile/inputs
 
 | input | the TypeScript reads it | the crate takes it |
 |---|---|---|
-| the project's files: `project.k7x`, `settings.k7x`, `graph.k7x`, `chains/`, `modules/`, `nodes/`, `tracks/`, `clips/`, `sequences/`, `timelines/`, `curves/`, `surfaces/`, `assemblies/`, `mix.k7x`, the layout and link levels, `.strudel` patterns, `vstpresets/` | `node:fs`, through `yamlCache` and `parseStore` | through the Source, under the `project` root |
+| the project's files: `project.k7x`, `settings.k7x`, `graph.k7x`, `chains/`, `modules/`, `nodes/`, `tracks/`, `clips/`, `sequences/`, `timelines/`, `curves/`, `surfaces/`, `assemblies/`, `mix.k7x`, the layout and link levels, `.strudel` patterns, `vstpresets/` | `node:fs`, through `yamlCache` | through the Source, under the `project` root |
 | the workspace's `_modules/` beside the project | `moduleLibraryDirs` | through the Source, under the `workspace` root |
 | the libraries: which ones, at which version, and which an admin overlays | `librariesHome`, `workspacePins`, `setLibraryOverlays`, `libraryRoot` (pins and manifests) | `Roots::libraries`, a list of `{name, root, editable}` the HOST resolves; the crate never reads a pin or a manifest |
 | each library's families (`modules`, `chains`, `assemblies`, `console`, `samples`, `irs`, `wavetables`, `models`) | `libraryFamilyRoots` | through the Source, under each library's root |
@@ -81,7 +81,7 @@ Every input the TypeScript compile takes, read off its code (`src/compile/inputs
 | the pattern lanes' sample banks | `samples/`, `$DIRT_SAMPLES`, `$STRUDEL_SAMPLES` | `Roots::sample_banks`; the engine reads them, the compile only names them |
 | a jsdsp module's graph | `jsdsp.json` when no older than `jsdsp.ts`, else a build in the jail, which writes it | `jsdsp.json` through the Source, always; a stale or missing one is a diagnostic, never a build (below) |
 | an audio file's length, for the browser's lanes | `wavSeconds`, the WAV header, memoised | a range read of the header through the Source |
-| the environment: `STUDIO_HOME`, `STUDIO_LIBRARIES_HOME`, `STUDIO_MODELS`, `DIRT_SAMPLES`, `STRUDEL_SAMPLES`, `STUDIO_PARSE_CACHE` | `process.env` | none: the host turns each into a root |
+| the environment: `STUDIO_HOME`, `STUDIO_LIBRARIES_HOME`, `STUDIO_MODELS`, `DIRT_SAMPLES`, `STRUDEL_SAMPLES` | `process.env` | none: the host turns each into a root |
 
 | choice | why |
 |---|---|
@@ -96,7 +96,7 @@ The crate's `Cache` is one value per workspace, owned by the host, passed to eve
 
 | what | keyed by | replaces |
 |---|---|---|
-| a file's decoded data and its issues | its path and settled stamp | `yamlCache.ts`, `parseStore.ts` |
+| a file's decoded data and its issues | its path and settled stamp | `yamlCache.ts` |
 | the module vocabulary (the modules, refs and module folders of every root but the project, 2b; panels and MIDI maps join it at 2c) | its read set: the stamp of every file, the entries of every listing, every absent path, re-checked before reuse (2b decisions 25 to 27) | `moduleCache.ts`'s stamp walk, `stampWalk.ts`'s worker, k7-compile's `host/walk.rs` memo |
 | a compile's whole answer | its request and the stamps of everything it read (its read set), re-stat'ed before reuse | a per-view memo kept beside it |
 | a fingerprinted file's digest | its path and stamp | `autoFreeze.ts`' `digests` |

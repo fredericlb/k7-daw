@@ -63,9 +63,9 @@ describe("the Rust reader", () => {
     );
   });
 
-  it(`runs here, as ${process.env.K7X_ADDON ? "the addon" : "WebAssembly"}`, async () => {
+  it("runs here, as WebAssembly", async () => {
     expect(await nativeReady()).toBe(true);
-    expect(nativeKind()).toBe(process.env.K7X_ADDON ? "addon" : "wasm");
+    expect(nativeKind()).toBe("wasm");
     expect(nativeData("a(1)")).toEqual({ a: 1 });
   });
 

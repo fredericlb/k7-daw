@@ -7,7 +7,6 @@ import { readFileSync, statSync } from "node:fs";
 // How old an mtime must be to be trusted as a key — this cache's whole correctness, and not only
 // this one's, which is why the window has one spelling. See docs/moduleCache.md.
 import { SETTLE_MS } from "../moduleCache";
-import { parseKey, storedParse, storeParse } from "./parseStore";
 import { k7xData } from "./workspaceFile";
 
 /** How many parsed files to hold. A song is ~200 of them, its module libraries ~800 more. */
@@ -60,15 +59,9 @@ export function settledParse<T>(
     memo.set(key, hit);
     return hit.value as T;
   }
-  // On disk, by CONTENT: what the last process parsed, or the bundle's own library already parsed — parseStore.ts.
   const raw = readFileSync(path, "utf8");
-  const at = parseKey(kind, path, raw);
-  const stored = storedParse(at);
-  const direct =
-    stored || !fromData ? undefined : dataRead(path, raw, fromData);
-  const value = stored ? (stored.value as T) : (direct ?? parse(raw));
-  // A file still settling is being typed: each of its versions would only churn the store.
-  if (!stored && settled) storeParse(at, value);
+  const direct = fromData ? dataRead(path, raw, fromData) : undefined;
+  const value = direct ?? parse(raw);
   if (!settled) {
     // Still inside the window where the next write could reuse this stamp — storing it would hit later.
     memo.delete(key);

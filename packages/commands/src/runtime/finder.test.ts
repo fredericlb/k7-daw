@@ -25,7 +25,7 @@ describe("the Worker's server-only modules", () => {
     expect(left).toEqual([]);
   });
 
-  // song's chainProject, autoFreeze and parseStore hash with node:crypto, which the Worker never calls.
+  // song's chainProject and autoFreeze hash with node:crypto, which the Worker never calls.
   it("leaves external only the song package's own `node:crypto`", () => {
     expect(leftover).toEqual(["node:crypto"]);
   });

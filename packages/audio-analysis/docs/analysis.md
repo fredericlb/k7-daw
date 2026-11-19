@@ -238,10 +238,8 @@ pulling a decoder into the bundle.
 The pass over every sample — the mono sum, peak/RMS, the three bands, the tempo onset envelope —
 and the tempo's autocorrelation run in `rust/` where the runtime has a build of it: WebAssembly
 (`src/waveformWasm.generated.ts`, checked in, since the file service loads this package as raw
-TypeScript) wherever there is a JIT, and on iOS, whose V8 has none and so no WebAssembly either,
-the app's Node-API addon (`packages/k7x/rust/node`, the one native library the app loads,
-`K7X_ADDON`). `src/envelope.ts` stays the reference and the fallback, and `STUDIO_WAVEFORM=js`
-forces it.
+TypeScript) wherever there is a JIT. `src/envelope.ts` stays the reference and the fallback, and
+`STUDIO_WAVEFORM=js` forces it.
 
 The two must write the same sidecar, or a decode on one host would rewrite every cache another
 made — so nothing that could differ is computed twice. The followers' coefficients and the tempo

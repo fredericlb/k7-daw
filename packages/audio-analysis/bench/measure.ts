@@ -57,9 +57,7 @@ function time(label: string, f: () => number, runs: number): void {
 }
 
 const jitless = process.execArgv.includes("--jitless");
-console.log(
-  `five minutes of 48 kHz stereo; jitless ${jitless}; K7X_ADDON ${process.env.K7X_ADDON ? "set" : "unset"}`,
-);
+console.log(`five minutes of 48 kHz stereo; jitless ${jitless}`);
 const runs = jitless ? 3 : 7;
 time("envelope.ts (JS)", js, runs);
 let rustOk = true;

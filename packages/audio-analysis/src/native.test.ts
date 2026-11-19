@@ -1,5 +1,5 @@
 // native.test.ts — the Rust measure answers what envelope.ts answers: every array bit for bit, every sidecar byte for byte.
-// A reader would get wrong which build runs: WebAssembly always, the addon too when rust/node is built (scripts/buildAddon.mjs in packages/k7x).
+// A reader would get wrong which build runs: WebAssembly alone.
 
 import { execFileSync } from "node:child_process";
 import { copyFileSync, existsSync, mkdtempSync, readFileSync } from "node:fs";
@@ -21,7 +21,6 @@ import { serialiseSidecar } from "./sidecar.ts";
 import { SOURCES } from "./waveformWasm.generated.ts";
 
 const ROOT = join(import.meta.dirname, "..", "..", "..");
-const ADDON = join(ROOT, "packages/k7x/rust/target/release/k7x.node");
 
 /** A seeded generator, so every run measures the same signal. */
 function rng(seed: number): () => number {
@@ -146,13 +145,7 @@ function expectSame(got: Measured, want: Measured): void {
     expect(sameBits(got[k], want[k]), k).toBe(true);
 }
 
-const builds = [
-  { label: "WebAssembly", addon: false },
-  ...(existsSync(ADDON) ? [{ label: "the addon", addon: true }] : []),
-];
-
 afterEach(() => {
-  delete process.env.K7X_ADDON;
   delete process.env.STUDIO_WAVEFORM;
 });
 
@@ -164,36 +157,34 @@ describe("the Rust measure", () => {
     ).toBe(SOURCES);
   });
 
-  for (const build of builds)
-    describe(`through ${build.label}`, () => {
-      it.each(SIGNALS.map((s) => [s.name, s]))("%s", (_, s) => {
-        if (build.addon) process.env.K7X_ADDON = ADDON;
-        const parts = chunks(s);
-        const mono = parts.map((p) =>
-          monoFromInterleaved(p, s.channels, p.length / s.channels),
-        );
-        const facts = {
-          sampleRate: s.rate,
-          channels: s.channels,
-          frames: s.frames,
-        };
-        const want = buildEnvelope({ ...facts, mono }, "fp", 2);
+  describe("through WebAssembly", () => {
+    it.each(SIGNALS.map((s) => [s.name, s]))("%s", (_, s) => {
+      const parts = chunks(s);
+      const mono = parts.map((p) =>
+        monoFromInterleaved(p, s.channels, p.length / s.channels),
+      );
+      const facts = {
+        sampleRate: s.rate,
+        channels: s.channels,
+        frames: s.frames,
+      };
+      const want = buildEnvelope({ ...facts, mono }, "fp", 2);
 
-        const native = openMeasure();
-        expect(native).not.toBeNull();
-        if (!native) return;
-        expect(measureKind()).toBe(build.addon ? "addon" : "wasm");
-        for (const p of parts) native.push(p, s.channels);
-        const { aLow, aHigh } = followers(s.rate);
-        const measured = native.measure(aLow, aHigh);
-        expectSame(measured, measureMono(mono, s.frames, s.rate));
-        const got = envelopeFrom(measured, facts, "fp", 2, native.correlations);
-        native.close();
-        expect(serialiseSidecar(got)).toBe(serialiseSidecar(want));
-        if (s.name.startsWith("a click track"))
-          expect(got.bpm).toBeCloseTo(120, 0);
-      });
+      const native = openMeasure();
+      expect(native).not.toBeNull();
+      if (!native) return;
+      expect(measureKind()).toBe("wasm");
+      for (const p of parts) native.push(p, s.channels);
+      const { aLow, aHigh } = followers(s.rate);
+      const measured = native.measure(aLow, aHigh);
+      expectSame(measured, measureMono(mono, s.frames, s.rate));
+      const got = envelopeFrom(measured, facts, "fp", 2, native.correlations);
+      native.close();
+      expect(serialiseSidecar(got)).toBe(serialiseSidecar(want));
+      if (s.name.startsWith("a click track"))
+        expect(got.bpm).toBeCloseTo(120, 0);
     });
+  });
 
   const ffmpeg = (() => {
     try {

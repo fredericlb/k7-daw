@@ -1,5 +1,5 @@
 // crypto.ts — `node:crypto` in the verbs' Worker: the synchronous sha1 and sha256 digests song hashes with, and randomUUID.
-// What a reader gets wrong: the digests must equal node's bit for bit — they name freeze renders and parse-cache keys.
+// What a reader gets wrong: the digests must equal node's bit for bit — they name freeze renders.
 
 type Bytes = string | ArrayBufferView;
 
