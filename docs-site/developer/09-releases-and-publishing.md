@@ -63,7 +63,7 @@ demos and the `k7-core` library), the engine binaries via `stageEngine`, and a p
 Node 24; on a Mac, `stage` also signs every binary of the resources (`apps/k7-tray/docs/macos.md`).
 `npm run build --workspace k7-tray` then runs `tauri build`: an NSIS installer on Windows,
 a `dmg` and the updater's `.app.tar.gz` on macOS, an AppImage and a `.deb` on Linux; a build without the updater
-key passes `--config '{"bundle":{"createUpdaterArtifacts":false}}'`.
+key writes no update archives, and `package-release.mjs --kind tray` refuses a stamped build without them (`K7_UPDATER_PUBKEY` with `TAURI_SIGNING_PRIVATE_KEY` makes `tray:build` sign).
 
 `stageEngine` takes the binaries from `$STUDIO_PREBUILT_BIN` when it is set, instead of from the
 local build folders, to package the tray around an engine archive without compiling anything. `package-release.mjs --kind tray` copies each installer

@@ -77,11 +77,9 @@ gives those in a few megabytes of Rust, where Electron would add about 300 MB an
 also gives the Windows job object directly (`job.rs`). The price is three webviews to test against
 (`docs/webviews.md`).
 
-## The microphone on the developer's Mac
+## The microphone on a Mac
 
-On macOS the microphone grant belongs to the responsible app: the engine records through the backend and the
-supervisor the dev tray launched, so the tray asks, and its Info.plist carries `NSMicrophoneUsageDescription`.
-Without it macOS hands the engine silence: the take is written, all zeros.
+The grant belongs to the responsible app, which is why K7 DAW asks, not the engine: `docs/macos.md`.
 
 ## Updates
 
@@ -92,7 +90,7 @@ tauri-plugin-updater (`docs/app-downloads.md` at the root).
 |---|---|
 | tauri-plugin-updater, not our own download | it installs on Windows, the AppImage and the macOS app, and checks every update's signature |
 | the feed's path keeps `tray/` and the files are `k7-daw_<stamp>_<os>-<arch>.<ext>` | installed apps poll that URL for good; `latest.json` carries the file URLs, so the names are free |
-| `createUpdaterArtifacts` is on: a build needs `TAURI_SIGNING_PRIVATE_KEY`, or `--config` turning it off for a local one | an update archive without its signature is one no install accepts |
+| `tray:build` turns the update archives on, with the public key in the config, only when `K7_UPDATER_PUBKEY` and `TAURI_SIGNING_PRIVATE_KEY` are both set; a stamped release build without them is refused at packaging | the CLI signs with the key it finds in `plugins.updater.pubkey`, and an archive without its signature is one no install accepts; half a key is an error, not a silent unsigned build |
 | signed, with the key in CI secrets | the upload token alone would let whoever holds it ship code every tray runs; the public key is built in (`K7_UPDATER_PUBKEY`), and a build without it has no updater rather than one that trusts anything |
 | the channel from the release stamp | a tag follows `release` and takes a higher tag; a snapshot follows `snapshot`, which only ever holds `main`'s latest build, and takes any other one; `dev` asks nothing |
 | told once per build, the menu's check always answers, a switch to turn it off | as the phone's check does; kept in `updates.json` beside the backend's state |

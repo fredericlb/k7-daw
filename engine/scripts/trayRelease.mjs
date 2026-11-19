@@ -64,7 +64,14 @@ export function packageTray({ bundle, release, stamp, platform, arch }) {
     throw new Error(
       `no installer under ${bundle} — run \`npm run tray:build --workspace k7-tray\` first`,
     );
-  if (!Object.keys(fragment).length) return null;
+  if (!Object.keys(fragment).length) {
+    // A stamped build is a published one: without its signatures the installed apps would never hear of it.
+    if (channelOf(stamp))
+      throw new Error(
+        `${stamp} has no updater signatures: build it with K7_UPDATER_PUBKEY and TAURI_SIGNING_PRIVATE_KEY set`,
+      );
+    return null;
+  }
   const at = join(release, `k7-daw-updater_${platform}-${arch}.json`);
   writeFileSync(at, `${JSON.stringify(fragment, null, 2)}\n`);
   console.log(`✔ ${at}`);

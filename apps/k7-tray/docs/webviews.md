@@ -25,4 +25,5 @@ uses what is below, so what a webview lacks is a limit of K7 DAW and not of k7.
 | Linux: the DMA-BUF renderer is turned off when NVIDIA's proprietary driver is loaded and the variable is not set | WebKitGTK 2.42 and later draw a blank window with it |
 | Linux packages depend on GStreamer's base and good plugins and recommend bad and libav; the AppImage bundles the media framework | WebKitGTK decodes, plays and records through GStreamer |
 | Linux is built on Ubuntu 22.04 (webkit2gtk-4.1); Debian 12 and Ubuntu 22.04 are the floor | the oldest system whose WebKitGTK k7 runs on |
-| Windows: the installer embeds the WebView2 bootstrapper | the install works offline |
+| Windows: the installer embeds the WebView2 bootstrapper | it installs the runtime where it is missing (Windows 10 and 11 ship it); the bootstrapper downloads it, so a machine without the runtime and without a network needs an `offlineInstaller` build |
+| no F11 or native full screen on Windows and Linux; the page's own fullscreen request is best effort (the webview's bounds only, on Windows) | a window key handler is future work |

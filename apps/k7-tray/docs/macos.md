@@ -20,7 +20,7 @@ before programs), at the end of `npm run stage`, with the hardened runtime.
 
 | binary | entitlements | why |
 |---|---|---|
-| the app | JIT, audio input, camera | Wasmtime compiles machine code in the front; the page asks for the camera, the microphone belongs to the engine it launches |
+| the app | JIT, audio input, camera | Wasmtime compiles machine code in the front; the page asks for the camera, and the engine it launches records through the app's microphone grant |
 | node | JIT, unsigned executable memory, no library validation | V8 and the native addons the backend loads |
 | the engine (`k7-runtime`) | audio input, unsigned executable memory, no library validation | it records, and hosts plugins (AU, VST3) signed by others |
 | the supervisor and the ONNX dylib | the hardened runtime alone | they do nothing that needs more |
@@ -37,11 +37,11 @@ The identity is `$APPLE_SIGNING_IDENTITY`, else `-`: an ad-hoc signature, which 
 The DMG then runs on the Mac that built it; any other Mac's Gatekeeper refuses it. An ad-hoc build is a new identity
 at every build, so the microphone and camera grants are asked again after each rebuild.
 
-A local build needs no updater key:
+A local build needs no updater key, and writes no update archives; stage and `tray:build` take the same identity, or notarization refuses the mix:
 
 ```
 npm run stage --workspace k7-tray
-npx tauri build --config '{"bundle":{"createUpdaterArtifacts":false}}'   # in apps/k7-tray
+npm run tray:build --workspace k7-tray   # no updater key: no update archives
 ```
 
 A DMG's window layout is set through Finder with AppleScript, which times out on a busy or headless Mac; `CI=true`

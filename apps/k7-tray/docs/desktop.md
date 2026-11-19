@@ -41,6 +41,12 @@ Full Screen), Window, Help. Windows and Linux have none: the tray menu and the p
 | Close (Cmd-W) hides the window | the same rule as the close button |
 | the Dock icon stays, with the status item | a windowed app without a Dock entry, an app menu and Cmd-Tab is not a Mac app |
 
+A webview calls the navigation handler for subframes too: a cross-origin iframe would be sent to the browser, so a page
+that embeds one needs the handler taught first (today's only frame is `srcdoc`, `about:`). The page keeps Tauri's own
+injected internals, but there is no capability and no command handler, so every call from it is refused.
+
+After a gap in the backend the window reloads the page: what the backend never received is lost with it either way.
+
 ## The tray menu
 
 "Open K7 DAW" brings the window up; "Open in Browser" opens the same address in the browser, which is also the way

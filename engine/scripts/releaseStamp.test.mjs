@@ -91,6 +91,27 @@ describe("releaseStamp", () => {
     }
   });
 
+  it("refuses a stamped tray build without signatures, and lets an unstamped one through", () => {
+    const root = mkdtempSync(join(tmpdir(), "release-stamp-"));
+    try {
+      const bundle = join(root, "bundle");
+      mkdirSync(join(bundle, "nsis"), { recursive: true });
+      writeFileSync(join(bundle, "nsis", "k7-tray-setup.exe"), "");
+      const run = (stamp) =>
+        packageTray({
+          bundle,
+          release: mkdtempSync(join(root, "out-")),
+          stamp,
+          platform: "windows",
+          arch: "x64",
+        });
+      assert.throws(() => run("v1.2.3"), /no updater signatures/);
+      assert.equal(run("dev"), null);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it("names the tray's updater URLs under the channel, and `snapshot` for an unstamped build", () => {
     const root = mkdtempSync(join(tmpdir(), "release-stamp-"));
     try {

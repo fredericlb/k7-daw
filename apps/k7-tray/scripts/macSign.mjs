@@ -10,8 +10,7 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const macos = join(here, "..", "src-tauri", "macos");
 
-/** The entitlements a binary runs with, by its name; none means the hardened runtime alone. */
-// `node` is signed only while the bundle stages one: the walk finds what is there.
+// Entitlements by binary name; none means the hardened runtime alone, and a name not staged is simply not found.
 const ENTITLEMENTS = {
   node: "node.entitlements",
   "k7-runtime": "engine.entitlements",

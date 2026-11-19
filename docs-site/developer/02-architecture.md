@@ -87,7 +87,7 @@ Where engine machines run:
 | Form | Code |
 |---|---|
 | Command-line engine (`k7-supervisor --config <file>`) | `engine/k7-supervisor`, staged by `engine/scripts/build-engine.mjs` |
-| The tray | `apps/k7-tray`: a windowless Tauri app that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`), the file services, and the person opens k7 in their browser |
+| K7 DAW | `apps/k7-tray`: a Tauri app with a window and a tray icon that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`) and the file services, and the window (or the browser) shows k7 |
 | Android app | `engine/k7-android`: the engine as a library, the supervisor as a program, and k7's backend bundled |
 | Server engine | `engine/docker/Dockerfile`: a container that dials k7 over the compose network and plays into a PulseAudio null sink |
 

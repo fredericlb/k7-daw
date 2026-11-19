@@ -9,7 +9,7 @@
   "scripts": {
     "stage": "node scripts/stage.mjs",
     "dev": "node ../../scripts/dev-tray.mjs",
-    "tray:build": "tauri build",
+    "tray:build": "node scripts/trayBuild.mjs",
     "tauri": "tauri",
     "test": "node --test \"scripts/*.test.mjs\" \"../../engine/scripts/*.test.mjs\" \"../k7/backend-rs/scripts/*.test.mjs\""
   },

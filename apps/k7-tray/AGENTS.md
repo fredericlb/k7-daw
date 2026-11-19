@@ -56,7 +56,7 @@ would run.
 - `npm run dev` (Tilt) or `npm run dev:tray` (alone) — builds the engine, the supervisor, k7's backend bundle and
   the tray, runs the tray on them, and rebuilds and restarts on save. `cargo build` in `src-tauri` alone is enough
   to run `target/debug/k7-tray.exe` on staged resources.
-- `npm run tray:build --workspace k7-tray` — the installers (a local build without the updater key adds `--config '{"bundle":{"createUpdaterArtifacts":false}}'`, `docs/macos.md`); `node engine/scripts/package-release.mjs --kind tray`
+- `npm run tray:build --workspace k7-tray` — the installers (signed for the updater only with `K7_UPDATER_PUBKEY` and `TAURI_SIGNING_PRIVATE_KEY` both set, `docs/tray.md`); `node engine/scripts/package-release.mjs --kind tray`
   renames them for a release.
 
 ## Verify
