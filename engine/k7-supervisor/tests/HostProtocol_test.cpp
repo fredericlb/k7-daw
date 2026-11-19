@@ -37,6 +37,7 @@ void aFullSnapshotIsTheFullFixture()
     s.error = "engine binary not found (build it)";
     s.safeMode = SafeMode{3, "Diva"};
     s.ownsEngine = true;
+    s.lanOpen = true;
     s.engineId = "e1";
     s.enginePort = 8766;
     s.registryUrl = "https://app.k7.rocks";

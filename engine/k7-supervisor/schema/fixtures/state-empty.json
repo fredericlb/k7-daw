@@ -14,7 +14,7 @@
   "audioDevices": [],
   "audioPriority": [],
   "audioMenuSig": "",
-  "lanOpen": true,
+  "lanOpen": false,
   "editPlugins": [],
   "editPluginsSig": "",
   "sessions": [],
