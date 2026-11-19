@@ -26,7 +26,7 @@ fi
 [ "${1:-}" != "--narrow" ] || [ -n "$(git -C "$root" diff --name-only "${K7_AREAS_BASE:-main}" -- apps/k7-tray)" ] || tray=0
 # shellcheck disable=SC2086 # one word per -p flag
 [ -z "$crates" ] || (cd "$root/apps/k7/backend-rs" && cargo clippy "${win[@]}" $crates -- -D warnings)
-[ "$tray" = 0 ] || (cd "$root/apps/k7-tray/src-tauri" && cargo clippy "${win[@]}" -- -D warnings)
+[ "$tray" = 0 ] || (cd "$root/apps/k7-tray/src-tauri" && PATH="$bin:$PATH" cargo clippy "${win[@]}" -- -D warnings)
 [[ " $areas " == *" browser "* ]] || { echo "win-clippy: clean (no browser crate touched)"; exit 0; }
 for crate in packages/song-schema/rust packages/k7-wasm/rust packages/song/rust; do
   (cd "$root/$crate" && cargo clippy "${win[@]}" --features ts -- -D warnings)

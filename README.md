@@ -7,7 +7,7 @@ The music and stage apps of the frediverse.
 | `apps/k7` | text-first DAW — the web editor; the origin's front door | `127.0.0.1:5223` |
 | `engine/k7-runtime` | the native C++ audio engine (JUCE/Tracktion) | — |
 | `engine/k7-supervisor` | the engine machine's supervisor: starts and watches the engine, holds its tunnel | — |
-| `apps/k7-tray` | k7 on Windows and Linux (Tauri, in the system tray; a Mac runs the iOS app): runs k7's backend, which runs the supervisor and its engine; k7 opens in the browser | — |
+| `apps/k7-tray` | K7 DAW, the desktop app for Windows, Linux and macOS (Tauri: a window and a tray icon): runs k7's backend, which runs the supervisor and its engine, and shows k7 in its window | — |
 
 `packages/` is k7-daw's shared tier, all `@studio/*` and consumed as raw
 TypeScript source: the song compiler, the command layer, the engine client and

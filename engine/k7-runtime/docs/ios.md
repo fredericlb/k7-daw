@@ -279,8 +279,9 @@ identifier `$(TeamIdentifierPrefix)se.frediver.k7.daw`, which the provisioning p
 
 ## k7 on a Mac: the iPad app
 
-k7 on a Mac is this app, run as a "Designed for iPad" app on Apple silicon (Intel Macs are not served). No tray is
-released for macOS. `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES` in both app configs does it; Mac Catalyst stays off.
+k7 on a Mac is K7 DAW, the desktop app (`apps/k7-tray/docs/macos.md`). This app also runs there, as a "Designed for iPad"
+app on Apple silicon (Intel Macs are not served), and stays buildable; the desktop app has none of the limits below (one
+`iOS Audio` device, the sandbox, no plugins, a development profile). `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES` in both app configs does it; Mac Catalyst stays off.
 Everything the phone does works: the backend, the page, the engine, sound, the microphone, import and the window.
 
 | choice | why |

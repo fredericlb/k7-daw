@@ -1,19 +1,22 @@
 # AGENTS.md — the tray
 
-**k7 on a computer.** A windowless Tauri app in the system tray (Windows, Linux; a Mac runs the iOS app, and builds the tray only for the dev session). It runs k7's Rust front in its own
-process on `127.0.0.1:<standalone.json port>`, and starts one process, node running k7's backend bundle behind it.
-The front runs the machine's supervisor (`engine/k7-supervisor`) and so its engine, and holds the engine registry. The person uses k7 in their browser, at that address, as an
-installable web app. The tray shows one status line and opens k7.
+**K7 DAW, k7 on a computer** (Windows, Linux, macOS on Apple silicon). A Tauri app with one window and a tray icon.
+It runs k7's Rust front in its own process on `127.0.0.1:<standalone.json port>`, and starts one process, node running
+k7's backend bundle behind it. The front runs the machine's supervisor (`engine/k7-supervisor`) and so its engine, and
+holds the engine registry. The window shows k7 at that address, on the system's webview; the tray's "Open in Browser"
+shows it in the person's browser. The tray shows one status line and the window's way back.
 
-It has no webview and no settings of its own: every setting of the engine is a page of k7
-(`/settings/engine`), which reaches the supervisor through k7's front (`apps/k7/backend-rs/docs/localEngine.md`).
+The page has no IPC and no native power: every setting of the engine is a page of k7 (`/settings/engine`), which
+reaches the supervisor through k7's front (`apps/k7/backend-rs/docs/localEngine.md`). The host only decides what the
+window may navigate to, download and ask for (`src/handlers.rs`).
 
-All Rust lives under `src-tauri/src/`. `docs/tray.md` says what was decided and why.
+All Rust lives under `src-tauri/src/`. `docs/tray.md` says what was decided and why; `docs/desktop.md` is the window,
+`docs/webviews.md` the three webviews, `docs/macos.md` signing and the DMG.
 
 ## Lifetime
 
 ```
-tray (Tauri, windowless)        ← the process the user kills; creates the Job Object
+K7 DAW (Tauri: window + tray)   ← the process the user kills; creates the Job Object
  ├─ k7's front (a thread)       ← k7_front::embedded, on the table's port
  │   └─ k7-supervisor           ← run by the front over stdio (k7-local); its stdin closing is its stop
  │       └─ k7-runtime
@@ -35,6 +38,8 @@ tray (Tauri, windowless)        ← the process the user kills; creates the Job 
   supervisor, the bearer, the stamp), readiness on node's own `/api/registry/hello`, the backoff, the stop.
 - **`loops.rs`** — the status poll (`/api/local/tray`, under the bearer) and the spinner.
 - **`tray.rs`** — the menu. Draws what the backend words; computes nothing.
+- **`window.rs`**, **`handlers.rs`**, **`appmenu.rs`** (macOS), **`webview_linux.rs`**, **`autostart.rs`** — the window and
+  what the webview may do, the Mac's menu bar, WebKitGTK's settings, the login item.
 - **`paths.rs`** — node, the bundle, the supervisor: the staged resources, else the checkout's builds. A miss
   is said on the status line, never a silent empty tray.
 - **`updates.rs`** — tauri-plugin-updater on the tray's channel feed (`docs/tray.md`).
@@ -42,7 +47,7 @@ tray (Tauri, windowless)        ← the process the user kills; creates the Job 
 
 ## Build / run
 
-Builds belong to Windows, never to WSL (root `AGENTS.md`). `dev` is the dev session's `k7-tray` resource
+Builds belong to the machine of their OS (a Mac builds the `.dmg`; Windows and Linux builds are the person's), never WSL's (root `AGENTS.md`). `dev` is the dev session's `k7-tray` resource
 (`scripts/dev-tray.mjs`, `docs/dev.md`); the installers are `tray:build`, never `build`, which the root `npm run build`
 would run.
 
@@ -51,12 +56,12 @@ would run.
 - `npm run dev` (Tilt) or `npm run dev:tray` (alone) — builds the engine, the supervisor, k7's backend bundle and
   the tray, runs the tray on them, and rebuilds and restarts on save. `cargo build` in `src-tauri` alone is enough
   to run `target/debug/k7-tray.exe` on staged resources.
-- `npm run tray:build --workspace k7-tray` — the installers; `node engine/scripts/package-release.mjs --kind tray`
+- `npm run tray:build --workspace k7-tray` — the installers (a local build without the updater key adds `--config '{"bundle":{"createUpdaterArtifacts":false}}'`, `docs/macos.md`); `node engine/scripts/package-release.mjs --kind tray`
   renames them for a release.
 
 ## Verify
 
 `cargo test` in `src-tauri`; the backend's side is `npx vitest run src/localEngine` in `apps/k7/backend`.
-Behavioural check: start the tray, open k7 from its menu, open a project and play it; then quit and confirm the
+Behavioural check: start the app, let the window reach k7, open a project and play it; close the window and bring it back from the tray; then quit and confirm the
 engine stops. Force-kill the tray and confirm nothing survives: no `node.exe`, `k7-supervisor.exe` or
 `k7-runtime.exe` of its tree, and the k7 port and the engine's free.

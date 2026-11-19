@@ -29,7 +29,7 @@ mod window;
 use std::sync::{Arc, Mutex};
 use tauri::tray::TrayIconBuilder;
 use tauri::{Manager, RunEvent};
-use tauri_plugin_autostart::{MacosLauncher, ManagerExt};
+use tauri_plugin_autostart::ManagerExt;
 
 use state::{AppState, Backend, Menus, SharedState};
 
@@ -44,13 +44,7 @@ fn main() {
         }));
     }
     builder = builder
-        .plugin(
-            tauri_plugin_autostart::Builder::new()
-                .macos_launcher(MacosLauncher::LaunchAgent)
-                .app_name(autostart::NAME)
-                .arg(autostart::ARG)
-                .build(),
-        )
+        .plugin(autostart::plugin())
         .plugin(tauri_plugin_dialog::init());
     // A scratch run keeps its window state out of the person's config folder.
     if paths::scratch().is_none() {

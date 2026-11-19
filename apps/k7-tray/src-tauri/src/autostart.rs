@@ -32,6 +32,16 @@ pub fn reregister(app: &AppHandle) {
     }
 }
 
+/// The plugin: the entry's name and argument pinned, a LaunchAgent on macOS.
+pub fn plugin<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
+    let builder = tauri_plugin_autostart::Builder::new()
+        .app_name(NAME)
+        .arg(ARG);
+    #[cfg(target_os = "macos")]
+    let builder = builder.macos_launcher(tauri_plugin_autostart::MacosLauncher::LaunchAgent);
+    builder.build()
+}
+
 /// What the login item is called, pinned: it is the entry's key on every OS.
 pub const NAME: &str = "K7 DAW";
 /// The name the windowless tray registered under, before the product was renamed.

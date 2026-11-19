@@ -1,7 +1,7 @@
 # CI: what runs, and what releases nothing
 
-No CI job builds or publishes a release. An artefact — the Mac app, the iPhone app, the APK, the
-tray, an image — is built locally by a developer when one is needed. CI only checks the code, in two
+No CI job builds or publishes a release. An artefact — the Mac app, the iPhone app, the APK, K7 DAW (the
+desktop app), an image — is built locally by a developer when one is needed. CI only checks the code, in two
 places: OneDev, where the jobs run on the project's own machines, and GitHub's `k7.yml`.
 
 ## On OneDev
