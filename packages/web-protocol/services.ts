@@ -42,10 +42,6 @@ function k7Hostname(hostname: string): string {
 export const isDocsHost = (hostname: string): boolean =>
   hostname.startsWith(`${DOCS_LABEL}.`);
 
-/** Whether `hostname` is an alias or a former host, whose pages move to k7's own origin. */
-export const isLegacyHost = (hostname: string): boolean =>
-  !isDocsHost(hostname) && k7Hostname(hostname) !== hostname;
-
 /** Each backend's port — what a SERVER calls, since node does not trust the dev CA; see docs/addresses.md. */
 export const SERVICE_PORTS: Record<StudioService, number> = {
   k7: 8789,
@@ -116,21 +112,3 @@ const LOOPBACK = /^(localhost|127(\.\d{1,3}){3}|\[::1\])$/;
 /** Whether `hostname` (a URL's, brackets and all for IPv6) is one where services are ports rather than subdomains. */
 export const isLoopbackHost = (hostname: string): boolean =>
   LOOPBACK.test(hostname);
-
-/** A socket peer address on this machine — `127.0.0.0/8`, `::1`, or either IPv4 one in its IPv4-mapped spelling. */
-export function isLoopbackAddress(address: string | undefined): boolean {
-  if (!address) return false;
-  const a = address.replace(/^::ffff:/i, "");
-  return a === "::1" || /^127(\.\d{1,3}){3}$/.test(a);
-}
-
-/** Where the backend records the peer the Rust front vouched for (apps/k7/backend/src/front.ts); a client cannot set a symbol. */
-export const FRONT_PEER: unique symbol = Symbol.for("k7.frontPeer");
-
-/** The address a request came from: the front's word for it when it vouched, else the socket's. */
-export function peerAddress(req: {
-  socket: { remoteAddress?: string };
-}): string | undefined {
-  const vouched = (req as { [FRONT_PEER]?: string })[FRONT_PEER];
-  return vouched ?? req.socket.remoteAddress;
-}

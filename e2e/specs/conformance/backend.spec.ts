@@ -1,5 +1,4 @@
-// backend.spec.ts — what any k7 backend answers, whichever language serves it: the session cookie, a body,
-// a stream and an upgrade. `CONFORMANCE_FRONT=1` adds what only the Rust front answers (e2e/docs/conformance.md).
+// backend.spec.ts — what the front answers: the session cookie, a body, a stream and an upgrade (e2e/docs/conformance.md).
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { expect, test } from "@playwright/test";
@@ -20,7 +19,7 @@ test("health answers without a session", async ({ request }) => {
   expect((await res.json()).ok).toBe(true);
 });
 
-test("the session cookie @studio/oidc mints is read", async ({ request }) => {
+test("the session cookie the suite mints is read", async ({ request }) => {
   expect((await request.get("/auth/me")).status()).toBe(401);
   const res = await request.get("/auth/me", { headers: { cookie: cookie() } });
   expect(res.status()).toBe(200);
@@ -105,39 +104,7 @@ test("a write from another site is refused, and its preflight granted nothing", 
   expect(pre.headers()["access-control-allow-origin"]).toBeUndefined();
 });
 
-test("what one implementation writes, the other reads", async ({ request }) => {
-  const upstream = process.env.CONFORMANCE_UPSTREAM;
-  test.skip(
-    !upstream,
-    "CONFORMANCE_UPSTREAM names the backend behind the front",
-  );
-  const headers = { cookie: cookie() };
-  const prefs = await (
-    await request.get("/api/preferences", { headers })
-  ).json();
-  const marked = { ...prefs, playbackTarget: `conformance-${Date.now()}` };
-  expect(
-    (await request.put("/api/preferences", { headers, data: marked })).status(),
-  ).toBe(200);
-  const read = await request.get(new URL("/api/preferences", upstream).href, {
-    headers,
-  });
-  expect(await read.json()).toEqual(marked);
-  const back = await request.put(new URL("/api/preferences", upstream).href, {
-    headers,
-    data: prefs,
-  });
-  expect(back.status()).toBe(200);
-  expect(
-    await (await request.get("/api/preferences", { headers })).json(),
-  ).toEqual(prefs);
-});
-
 test("the front owns its own health route", async ({ request }) => {
-  test.skip(
-    process.env.CONFORMANCE_FRONT !== "1",
-    "only the Rust front answers it",
-  );
   const res = await request.get("/api/front/health");
   expect((await res.json()).ok).toBe(true);
 });

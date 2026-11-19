@@ -6,11 +6,11 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
-import type { SessionUser } from "@studio/oidc";
 import { clickWav } from "../../src/instance.ts";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";
 import { E2E_USER } from "../../src/session.ts";
+import type { SessionUser } from "../../src/sessionCookie.ts";
 import { type Frame, StandInEngine } from "../../src/standInEngine.ts";
 import { freshWorkspace } from "../../src/sync.ts";
 import { until } from "../../src/until.ts";

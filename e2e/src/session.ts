@@ -4,11 +4,11 @@
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { loadServiceEnv } from "@studio/env";
-import { type SessionUser, sessionCookieHeader } from "@studio/oidc";
+import { type SessionUser, sessionCookieHeader } from "./sessionCookie.ts";
 
 const COOKIE_NAME = "studio.sid";
-// The backend's env.yaml section, the one whose SESSION_SECRET signs its cookies.
-const SERVICE = "k7-backend";
+// The front's env.yaml section, the one whose SESSION_SECRET signs its cookies.
+const SERVICE = "k7-front";
 
 /** The local user, the only account a device has (e2e/docs/e2e.md). */
 export const E2E_USER: SessionUser = {
@@ -50,7 +50,7 @@ export function sessionCookies(
     iat,
   });
   const { hostname } = new URL(baseURL);
-  // Matches what the backend sets: Domain=COOKIE_DOMAIN with SameSite=None, host-only and Lax otherwise.
+  // Matches what the front sets: Domain=COOKIE_DOMAIN with SameSite=None, host-only and Lax otherwise.
   const domain = env.COOKIE_DOMAIN || hostname;
   const sameSite = env.COOKIE_DOMAIN ? ("None" as const) : ("Lax" as const);
   return header.split("; ").map((pair) => {

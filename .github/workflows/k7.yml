@@ -40,13 +40,6 @@ jobs:
       - name: typecheck + build
         run: npm run build --workspace=apps/k7 --workspace=packages --if-present
 
-      # the backend has only a `typecheck` script — no `build` — so neither step above
-      # covers it. Run it directly rather than adding a script to its package.json
-      # purely to satisfy CI.
-      - name: typecheck the k7 backend
-        working-directory: apps/k7/backend
-        run: npx tsc --noEmit
-
   supervisor:
     name: supervisor (native)
     runs-on: ubuntu-latest

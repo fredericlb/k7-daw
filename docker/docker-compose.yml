@@ -2,7 +2,7 @@
 # and docs.k7.rocks (the documentation) and nothing else — see apps/k7/docker/Dockerfile and docs/images.md.
 # k7 itself runs on devices: no engine, no account's workspaces and no media library live here.
 #
-# Traefik routes both hosts straight to the backend's port; autoheal restarts the container when its healthcheck fails.
+# Traefik routes both hosts straight to the front's port; autoheal restarts the container when its healthcheck fails.
 
 # Docker's json-file logs grow without end unless capped; every service takes this.
 x-logging: &logging
@@ -20,9 +20,6 @@ services:
     mem_limit: ${K7_MEM_LIMIT:-6g}
     environment:
       SESSION_SECRET: ${SESSION_SECRET:?set SESSION_SECRET — see .env.example}
-      # The front refuses to start without an issuer and a client id, even though nobody signs in here (apps/k7/backend-rs/crates/k7-front/src/auth_guard.rs).
-      OIDC_ISSUER: ${OIDC_ISSUER:?set OIDC_ISSUER — see .env.example}
-      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:?set OIDC_CLIENT_ID — see .env.example}
       # The bearer a developer publishes the apps' builds with; empty refuses every upload (docs/app-downloads.md).
       APP_RELEASE_TOKEN: ${APP_RELEASE_TOKEN:-}
       # The hosts that show the root site rather than the documentation — the k7-site router below.
