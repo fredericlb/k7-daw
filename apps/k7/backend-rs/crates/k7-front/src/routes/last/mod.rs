@@ -5,9 +5,9 @@
 
 mod api;
 mod dev_frontend;
-pub(crate) mod express;
 mod frontend;
-mod send;
+
+pub(crate) use frontend::not_found;
 
 use std::sync::Arc;
 
@@ -16,7 +16,7 @@ use axum::extract::{Request, State};
 use axum::middleware::from_fn_with_state;
 use axum::response::{IntoResponse, Response};
 use hyper::StatusCode;
-use hyper::header::{CONNECTION, HeaderValue, SET_COOKIE};
+use hyper::header::{CONNECTION, HeaderValue};
 use tower::ServiceExt;
 
 use crate::AppState;
@@ -61,22 +61,9 @@ pub async fn answer(state: Arc<AppState>, req: Request) -> Response {
     }
 }
 
-/// Everything after CORS: on a device, any other account's session is rewritten as the local user's.
+/// Everything after CORS.
 async fn after_chain(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let rewrite = state
-        .settings
-        .local_user
-        .then(|| crate::session::signed(req.headers(), &state.settings, &state.revocations))
-        .flatten()
-        .map(|s| s.set_cookies)
-        .unwrap_or_default();
-    let mut response = route(&state, req).await;
-    if !response.headers().contains_key(SET_COOKIE) {
-        for c in rewrite {
-            response.headers_mut().append(SET_COOKIE, c);
-        }
-    }
-    response
+    route(&state, req).await
 }
 
 /// The order after the chain: the site page, the `/api` guard, then the page.
@@ -94,7 +81,7 @@ async fn tail(state: &Arc<AppState>, req: Request) -> Response {
     let last = &state.last;
     if let Some(dev) = &last.dev {
         if under(&path, "/api") || under(&path, "/auth") {
-            return express::not_found(req.method(), req.uri().path(), false);
+            return not_found();
         }
         return dev.forward(req).await;
     }

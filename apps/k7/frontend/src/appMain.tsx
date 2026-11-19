@@ -25,7 +25,7 @@ import {
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { type Scope, scopeOf } from "./address";
-import { engines } from "./api";
+import { api, engines } from "./api";
 import { currentScopeKey, subscribeAddress, useScopeWatch } from "./appNav";
 import { AuthGate } from "./components/AuthGate";
 
@@ -106,8 +106,12 @@ else if (first === "project") {
   // The editor is the longest download of any start: begun here, not once ProjectGate mounts after the sign-in check.
   loadApp().catch(() => {});
 }
-// The file hub's hello needs only the cookie, so it runs beside /auth/me rather than after it (`@studio/engine-browser/access`).
-if (first === "home" || first === "project") void engines.hostedFiles();
+// The file hub's hello needs the cookie, which /auth/me hands over: it asks once that answered (`@studio/engine-browser/access`).
+if (first === "home" || first === "project")
+  void api.getMe().then(
+    () => engines.hostedFiles(),
+    () => {},
+  );
 
 /** …and the worker that makes either an installable app — a SECOND opening, not offline; its scope is `/`, and each deploy replaces it (@studio/vite-config/register). */
 // Not in an app's view: its files are already on the machine, and the precache would serve the previous release's page after an update (docs/localApp.md).

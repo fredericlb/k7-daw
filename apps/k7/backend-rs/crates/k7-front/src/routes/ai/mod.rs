@@ -18,7 +18,7 @@ use crate::AppState;
 use crate::atomic::write_atomic;
 use crate::js::{invalid_type, trim, truthy, utf16_len};
 use crate::routes::prefs::{file_for, pretty};
-use crate::session::{Signed, signed, with_cookies};
+use crate::session::{LOCAL_SUB, holds};
 use crate::web::{error, read_json_within};
 
 /// The model asked for when the account names none (`DEFAULT_AI_MODEL`).
@@ -110,22 +110,13 @@ pub fn parse_patch(body: &Value) -> Result<(Change, Change), String> {
     }
 }
 
-/// `subOf`: the session's `sub`, when it is a non-empty string.
-pub(crate) fn sub_of(signed: &Signed) -> Option<String> {
-    signed
-        .user
-        .get("sub")
-        .and_then(Value::as_str)
-        .filter(|s| !s.is_empty())
-        .map(str::to_string)
-}
-
 /// The account's stored settings: None for none, Err for a file that is there and cannot be read.
-pub(crate) fn read_for_update(
-    state: &AppState,
-    sub: &str,
-) -> Result<Option<Map<String, Value>>, ()> {
-    let path = state.settings.prefs_dir.join("ai").join(file_for(sub));
+pub(crate) fn read_for_update(state: &AppState) -> Result<Option<Map<String, Value>>, ()> {
+    let path = state
+        .settings
+        .prefs_dir
+        .join("ai")
+        .join(file_for(LOCAL_SUB));
     match std::fs::read(&path) {
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(None),
         Err(_) => Err(()),
@@ -138,56 +129,41 @@ pub(crate) fn read_for_update(
 }
 
 /// The signed-in account, or the 401 `requireAuth` answers.
-fn account(state: &AppState, req: &Request) -> Result<(Signed, Option<String>), Box<Response>> {
-    let Some(s) = signed(req.headers(), &state.settings, &state.revocations) else {
-        return Err(Box::new(error(StatusCode::UNAUTHORIZED, "unauthenticated")));
-    };
-    let sub = sub_of(&s);
-    Ok((s, sub))
+fn account(state: &AppState, req: &Request) -> Result<(), Box<Response>> {
+    if holds(req.headers(), &state.settings) {
+        Ok(())
+    } else {
+        Err(Box::new(error(StatusCode::UNAUTHORIZED, "unauthenticated")))
+    }
 }
 
 /// GET `/settings`: the view of what is stored.
 pub async fn get_settings(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let (signed, sub) = match account(&state, &req) {
-        Ok(a) => a,
-        Err(r) => return *r,
-    };
-    let Some(sub) = sub else {
-        return with_cookies(
-            error(StatusCode::UNAUTHORIZED, "no user on the session"),
-            &signed,
-        );
-    };
-    let stored = read_for_update(&state, &sub).ok().flatten();
-    with_cookies(
-        axum::Json(view_of(stored.as_ref())).into_response(),
-        &signed,
-    )
+    if let Err(r) = account(&state, &req) {
+        return *r;
+    }
+    let stored = read_for_update(&state).ok().flatten();
+    axum::Json(view_of(stored.as_ref())).into_response()
 }
 
 /// PUT `/settings`: the patch merged onto what is stored, never onto a file that could not be read.
 pub async fn put_settings(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let session = signed(req.headers(), &state.settings, &state.revocations);
+    let session = holds(req.headers(), &state.settings);
     // Parsed before the session is checked, ahead of every guard.
     let body = match read_json_within(req, AI_BODY_LIMIT).await {
         Ok((_, v)) => v,
         Err(r) => return r,
     };
-    let Some(signed) = session else {
+    if !session {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
-    let sub = sub_of(&signed);
-    let answer = |r: Response| with_cookies(r, &signed);
-    let Some(sub) = sub else {
-        return answer(error(StatusCode::UNAUTHORIZED, "no user on the session"));
-    };
+    }
     let (key, model) = match parse_patch(&body) {
         Ok(p) => p,
-        Err(issues) => return answer(error(StatusCode::BAD_REQUEST, &issues)),
+        Err(issues) => return error(StatusCode::BAD_REQUEST, &issues),
     };
-    let Ok(current) = read_for_update(&state, &sub) else {
+    let Ok(current) = read_for_update(&state) else {
         let message = "the AI settings could not be read, so nothing was changed";
-        return answer(error(StatusCode::INTERNAL_SERVER_ERROR, message));
+        return error(StatusCode::INTERNAL_SERVER_ERROR, message);
     };
     let mut next = current.unwrap_or_default();
     for (name, change) in [("apiKey", key), ("model", model)] {
@@ -202,22 +178,27 @@ pub async fn put_settings(State(state): State<Arc<AppState>>, req: Request) -> R
         }
     }
     let dir = state.settings.prefs_dir.join("ai");
-    if write_atomic(&dir, &file_for(&sub), &pretty(&Value::Object(next.clone()))).is_err() {
-        return answer(error(
+    if write_atomic(
+        &dir,
+        &file_for(LOCAL_SUB),
+        &pretty(&Value::Object(next.clone())),
+    )
+    .is_err()
+    {
+        return error(
             StatusCode::INTERNAL_SERVER_ERROR,
             "the AI settings could not be stored",
-        ));
+        );
     }
-    answer(axum::Json(view_of(Some(&next))).into_response())
+    axum::Json(view_of(Some(&next))).into_response()
 }
 
 /// GET `/organize`: whether the button should exist, and the model a click would use.
 pub async fn get_organize(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let (signed, sub) = match account(&state, &req) {
-        Ok(a) => a,
-        Err(r) => return *r,
-    };
-    let stored = sub.and_then(|sub| read_for_update(&state, &sub).ok().flatten());
+    if let Err(r) = account(&state, &req) {
+        return *r;
+    }
+    let stored = read_for_update(&state).ok().flatten();
     let keyed = stored
         .as_ref()
         .and_then(|s| s.get("apiKey"))
@@ -229,5 +210,5 @@ pub async fn get_organize(State(state): State<Arc<AppState>>, req: Request) -> R
         .cloned()
         .unwrap_or_else(|| Value::String(DEFAULT_AI_MODEL.into()));
     let body = json!({ "enabled": keyed, "model": if keyed { model } else { Value::Null } });
-    with_cookies(axum::Json(body).into_response(), &signed)
+    axum::Json(body).into_response()
 }

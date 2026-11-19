@@ -119,11 +119,7 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
     State {
         data_root,
         mediatek_root,
-        ticket_key: if settings.raw_session_secret.is_empty() {
-            random_hex(32).into_bytes()
-        } else {
-            format!("{}:files", settings.raw_session_secret).into_bytes()
-        },
+        ticket_key: random_hex(32).into_bytes(),
         library_secret,
         device: machine,
         names: Arc::new(files),

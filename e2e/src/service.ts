@@ -11,7 +11,7 @@ import {
   request as playwright,
 } from "@playwright/test";
 import { base, signedIn } from "./instance.ts";
-import type { SessionUser } from "./sessionCookie.ts";
+import type { SessionUser } from "./session.ts";
 import { accountDir, filesRoot } from "./sync.ts";
 import { until } from "./until.ts";
 import {

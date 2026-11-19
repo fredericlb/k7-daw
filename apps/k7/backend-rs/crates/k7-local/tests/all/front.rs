@@ -12,7 +12,7 @@ use tokio::net::TcpStream;
 
 const FAKE: &str = env!("CARGO_BIN_EXE_k7-fake-supervisor");
 const SECRET: &str = "front-secret";
-const SESSION: &str = "session-secret";
+const TOKEN: &str = "test-token-0123456789abcdef0123456789abcdef";
 
 struct Front {
     addr: SocketAddr,
@@ -31,7 +31,7 @@ async fn front_with(name: &str, engine: bool) -> Front {
     let _ = std::fs::remove_dir_all(&home);
     std::fs::create_dir_all(&home).unwrap();
     let env = [
-        ("SESSION_SECRET", SESSION),
+        ("K7_SESSION_TOKEN", TOKEN),
         ("STUDIO_LOCAL_USER", "1"),
         ("K7_ENGINE_CORE", "front"),
         ("K7_LOCAL_ENGINE", if engine { "front" } else { "" }),
@@ -67,17 +67,7 @@ async fn front_with(name: &str, engine: bool) -> Front {
 }
 
 fn cookie() -> String {
-    let user = json!({ "sub": "dev-user", "name": "Local user", "email": "dev@example.com", "groups": [], "local": true });
-    let now = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis() as f64;
-    k7_auth::cookie_header(
-        user.as_object().unwrap().clone(),
-        "studio.sid",
-        SESSION,
-        now,
-    )
+    format!("k7.sid={TOKEN}")
 }
 
 struct Reply {

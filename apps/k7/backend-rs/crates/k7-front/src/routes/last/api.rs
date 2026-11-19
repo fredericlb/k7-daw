@@ -9,12 +9,12 @@ use hyper::{Method, StatusCode};
 
 use crate::AppState;
 use crate::routes::prefs;
-use crate::session::signed;
+use crate::session::holds;
 use crate::web::error;
 
 /// A request under `/api` no family took.
 pub async fn answer(state: &Arc<AppState>, req: Request) -> Response {
-    if signed(req.headers(), &state.settings, &state.revocations).is_none() {
+    if !holds(req.headers(), &state.settings) {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
     }
     let read = matches!(*req.method(), Method::GET | Method::HEAD);

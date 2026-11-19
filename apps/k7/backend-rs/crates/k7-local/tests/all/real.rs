@@ -64,23 +64,18 @@ async fn watch_until(addr: &str, cookie: &str, done: impl Fn(&Value) -> bool) ->
     }
 }
 
-fn cookie(secret: &str) -> String {
-    let user = serde_json::json!({ "sub": "dev-user", "name": "Local user", "email": "dev@example.com", "groups": [], "local": true });
-    let now = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis() as f64;
-    k7_auth::cookie_header(user.as_object().unwrap().clone(), "studio.sid", secret, now)
+fn cookie(token: &str) -> String {
+    format!("k7.sid={token}")
 }
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "needs a built k7-supervisor and a TypeScript backend"]
 async fn a_real_supervisor_is_run_snapshotted_commanded_and_stopped() {
     let home = PathBuf::from(var("K7_REAL_HOME"));
-    let secret = var("K7_REAL_SESSION_SECRET");
+    let secret = var("K7_REAL_SESSION_TOKEN");
     let listen = var("K7_REAL_LISTEN");
     let env = [
-        ("SESSION_SECRET", secret.clone()),
+        ("K7_SESSION_TOKEN", secret.clone()),
         ("STUDIO_LOCAL_USER", "1".into()),
         ("K7_LOCAL_ENGINE", "front".into()),
         ("K7_SUPERVISOR_BIN", var("K7_REAL_SUPERVISOR")),

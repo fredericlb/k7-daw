@@ -15,9 +15,8 @@ use k7_engine::registry::heartbeat::read_heartbeat;
 use k7_engine::registry::{ClaimRequest, ClaimResult, HeartbeatInput, Refused};
 use serde_json::{Map, Value, json};
 
-use super::{client_ip, engine_of, holder_of, with_session};
+use super::{client_ip, engine_of, holder, with_session};
 use crate::AppState;
-use crate::session::Signed;
 use crate::web::{error, read_json};
 
 /// Who a refusal is about, as the log names it.
@@ -188,12 +187,12 @@ pub async fn engines(
     req: Request,
 ) -> Response {
     let ip = client_ip(&req, peer, &state.settings);
-    with_session(&state, &req, |s| list_for(&state, &ip, s))
+    with_session(&state, &req, || list_for(&state, &ip))
 }
 
 /// The engines `s`'s account may see from `ip`, each usable one with a relay ticket.
-pub(super) fn list_for(state: &AppState, ip: &str, s: &Signed) -> Response {
-    let viewer = holder_of(&s.user);
+pub(super) fn list_for(state: &AppState, ip: &str) -> Response {
+    let viewer = holder();
     let core = &engine_of(state).core;
     let now = core.clock.now_ms();
     let list: Vec<Value> = core
@@ -227,15 +226,14 @@ pub(super) fn list_for(state: &AppState, ip: &str, s: &Signed) -> Response {
 }
 
 pub async fn select(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let Some(signed) = crate::session::signed(req.headers(), &state.settings, &state.revocations)
-    else {
+    if !crate::session::holds(req.headers(), &state.settings) {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
-    select_as(&state, signed, req).await
+    }
+    select_inner(&state, req).await
 }
 
-/// A claim for `signed`'s account, whose identity never comes from the body.
-pub(super) async fn select_as(state: &AppState, signed: Signed, req: Request) -> Response {
+/// A claim for the device's account, whose identity never comes from the body.
+async fn select_inner(state: &AppState, req: Request) -> Response {
     let body = match read_json(req).await {
         Ok((_, b)) => b,
         Err(r) => return r,
@@ -266,15 +264,13 @@ pub(super) async fn select_as(state: &AppState, signed: Signed, req: Request) ->
     let (Some(id), Some(token), Some(project), Some(secret), true) =
         (id, token, project, secret, issues.is_empty())
     else {
-        return crate::session::with_cookies(invalid(issues), &signed);
+        return invalid(issues);
     };
-    let answer = select_for(state, &signed.user, id, token, project, secret);
-    crate::session::with_cookies(answer, &signed)
+    select_for(state, id, token, project, secret)
 }
 
 fn select_for(
     state: &AppState,
-    user: &Map<String, Value>,
     id: String,
     token: String,
     project: Option<String>,
@@ -309,7 +305,7 @@ fn select_for(
         );
     }
     // WHO comes from the session, never from the body.
-    let holder = holder_of(user);
+    let holder = holder();
     if !reg.may_use(&id, &holder) {
         say(
             format!("{id}|select-unowned"),
@@ -356,15 +352,14 @@ fn select_for(
 }
 
 pub async fn release(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let Some(signed) = crate::session::signed(req.headers(), &state.settings, &state.revocations)
-    else {
+    if !crate::session::holds(req.headers(), &state.settings) {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
-    release_as(&state, signed, req).await
+    }
+    release_inner(&state, req).await
 }
 
 /// A claim let go, the body's secret naming it.
-pub(super) async fn release_as(state: &AppState, signed: Signed, req: Request) -> Response {
+async fn release_inner(state: &AppState, req: Request) -> Response {
     let body = match read_json(req).await {
         Ok((_, b)) => b,
         Err(r) => return r,
@@ -372,15 +367,14 @@ pub(super) async fn release_as(state: &AppState, signed: Signed, req: Request) -
     let mut issues = Vec::new();
     let id = field(&mut issues, required(body.get("id")));
     let secret = field(&mut issues, required(body.get("secret")));
-    let answer = match (id, secret) {
+    match (id, secret) {
         (Some(id), Some(secret)) => {
             // 200 either way: this arrives by `sendBeacon` from a page already going.
             engine_of(state).core.registry.release(&id, &secret);
             Json(json!({ "ok": true })).into_response()
         }
         _ => invalid(issues),
-    };
-    crate::session::with_cookies(answer, &signed)
+    }
 }
 
 /// An SDP offer is a few kilobytes; the bound keeps an open route from buffering more.
@@ -391,21 +385,20 @@ pub async fn rtc(
     Path(id): Path<String>,
     req: Request,
 ) -> Response {
-    let Some(signed) = crate::session::signed(req.headers(), &state.settings, &state.revocations)
-    else {
+    if !crate::session::holds(req.headers(), &state.settings) {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
+    }
     let body = match read_json(req).await {
         Ok((_, b)) => b,
         Err(r) => return r,
     };
     let sdp = match string_issues(body.get("sdp"), 1, MAX_SDP, None) {
         Ok(s) => s,
-        Err(issues) => return crate::session::with_cookies(invalid(issues), &signed),
+        Err(issues) => return invalid(issues),
     };
     let core = &engine_of(&state).core;
     // A data channel reaches the engine as its own machine would, so only a claim holder gets one.
-    let answer = if !core.registry.holds(&id, &holder_of(&signed.user)) {
+    if !core.registry.holds(&id, &holder()) {
         error(
             StatusCode::FORBIDDEN,
             "claim this engine before opening a direct link",
@@ -416,6 +409,5 @@ pub async fn rtc(
             // 503 and not 500: the engine is simply not reachable this way, and the relay still is.
             Err(e) => error(StatusCode::SERVICE_UNAVAILABLE, &e),
         }
-    };
-    crate::session::with_cookies(answer, &signed)
+    }
 }

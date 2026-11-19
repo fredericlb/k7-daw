@@ -17,7 +17,7 @@ const PING: Duration = Duration::from_millis(300);
 async fn front(name: &str) -> SocketAddr {
     let root = std::env::temp_dir().join(format!("k7-front-cameras-{name}-{}", std::process::id()));
     let env = [
-        ("SESSION_SECRET", "test-secret".to_string()),
+        ("K7_SESSION_TOKEN", crate::http_support::TOKEN.to_string()),
         (
             "STUDIO_AUTH_DIR",
             root.join("auth").to_str().unwrap().to_string(),
@@ -48,23 +48,13 @@ async fn front(name: &str) -> SocketAddr {
     rx.await.unwrap()
 }
 
-fn cookie(sub: &str) -> String {
-    let user = json!({ "sub": sub, "email": "a@b.c" })
-        .as_object()
-        .unwrap()
-        .clone();
-    let now = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis() as f64;
-    k7_auth::cookie_header(user, "studio.sid", "test-secret", now)
-}
-
-async fn http(addr: SocketAddr, method: &str, path: &str, sub: Option<&str>) -> (u16, String) {
+async fn http(addr: SocketAddr, method: &str, path: &str, signed: bool) -> (u16, String) {
     let mut s = TcpStream::connect(addr).await.unwrap();
-    let c = sub
-        .map(|s| format!("Cookie: {}\r\n", cookie(s)))
-        .unwrap_or_default();
+    let c = if signed {
+        format!("Cookie: {}\r\n", crate::http_support::cookie())
+    } else {
+        String::new()
+    };
     let raw = format!(
         "{method} {path} HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\nContent-Length: 0\r\n{c}\r\n"
     );
@@ -79,8 +69,8 @@ async fn http(addr: SocketAddr, method: &str, path: &str, sub: Option<&str>) -> 
     (status, body)
 }
 
-async fn list(addr: SocketAddr, sub: &str) -> Vec<String> {
-    let (_, body) = http(addr, "GET", "/api/cameras", Some(sub)).await;
+async fn list(addr: SocketAddr) -> Vec<String> {
+    let (_, body) = http(addr, "GET", "/api/cameras", true).await;
     let v: Value = serde_json::from_str(&body).unwrap();
     v.as_array()
         .unwrap()
@@ -89,8 +79,8 @@ async fn list(addr: SocketAddr, sub: &str) -> Vec<String> {
         .collect()
 }
 
-async fn ticket(addr: SocketAddr, sub: &str) -> String {
-    let (status, body) = http(addr, "POST", "/api/cameras/ticket", Some(sub)).await;
+async fn ticket(addr: SocketAddr) -> String {
+    let (status, body) = http(addr, "POST", "/api/cameras/ticket", true).await;
     assert_eq!(status, 200, "{body}");
     let v: Value = serde_json::from_str(&body).unwrap();
     v["ticket"].as_str().unwrap().to_string()
@@ -104,8 +94,8 @@ async fn open(addr: SocketAddr, query: &str) -> Result<Ws, u16> {
     }
 }
 
-async fn connect(addr: SocketAddr, sub: &str, query: &str) -> Ws {
-    open(addr, &format!("ticket={}&{query}", ticket(addr, sub).await))
+async fn connect(addr: SocketAddr, query: &str) -> Ws {
+    open(addr, &format!("ticket={}&{query}", ticket(addr).await))
         .await
         .unwrap()
 }
@@ -136,13 +126,16 @@ async fn settle() {
 #[tokio::test]
 async fn the_list_and_the_ticket_sit_behind_the_session() {
     let addr = front("session").await;
-    assert_eq!(http(addr, "GET", "/api/cameras", None).await.0, 401);
-    assert_eq!(http(addr, "POST", "/api/cameras/ticket", None).await.0, 401);
+    assert_eq!(http(addr, "GET", "/api/cameras", false).await.0, 401);
     assert_eq!(
-        http(addr, "GET", "/api/cameras", Some("ana")).await,
+        http(addr, "POST", "/api/cameras/ticket", false).await.0,
+        401
+    );
+    assert_eq!(
+        http(addr, "GET", "/api/cameras", true).await,
         (200, "[]".to_string())
     );
-    let (_, body) = http(addr, "POST", "/api/cameras/ticket", Some("ana")).await;
+    let (_, body) = http(addr, "POST", "/api/cameras/ticket", true).await;
     let v: Value = serde_json::from_str(&body).unwrap();
     assert_eq!(
         v["iceServers"],
@@ -158,23 +151,22 @@ async fn an_upgrade_is_refused_without_a_ticket_a_role_or_room() {
         open(addr, "ticket=forged.x&role=viewer").await.err(),
         Some(401)
     );
-    let t = ticket(addr, "ana").await;
+    let t = ticket(addr).await;
     assert_eq!(
         open(addr, &format!("ticket={t}&role=boss")).await.err(),
         Some(400)
     );
-    let mut a = connect(addr, "ana", "role=camera&name=iPad").await;
+    let mut a = connect(addr, "role=camera&name=iPad").await;
     assert_eq!(
         next(&mut a).await,
         json!({ "type": "hello", "name": "iPad" })
     );
-    let mut b = connect(addr, "ana", "role=camera&name=ipad").await;
+    let mut b = connect(addr, "role=camera&name=ipad").await;
     assert_eq!(
         next(&mut b).await,
         json!({ "type": "hello", "name": "ipad (2)" })
     );
-    assert_eq!(list(addr, "ana").await, ["iPad", "ipad (2)"]);
-    assert!(list(addr, "bob").await.is_empty());
+    assert_eq!(list(addr).await, ["iPad", "ipad (2)"]);
     assert_eq!(
         open(addr, &format!("ticket={t}&role=camera&name=x"))
             .await
@@ -184,15 +176,15 @@ async fn an_upgrade_is_refused_without_a_ticket_a_role_or_room() {
     a.close(None).await.unwrap();
     b.close(None).await.unwrap();
     settle().await;
-    assert!(list(addr, "ana").await.is_empty());
+    assert!(list(addr).await.is_empty());
 }
 
 #[tokio::test]
 async fn a_viewers_negotiation_reaches_the_camera_it_named_and_back() {
     let addr = front("relay").await;
-    let mut cam = connect(addr, "ana", "role=camera&name=Stage%20%20left").await;
+    let mut cam = connect(addr, "role=camera&name=Stage%20%20left").await;
     assert_eq!(next(&mut cam).await["name"], "Stage left");
-    let mut viewer = connect(addr, "ana", "role=viewer").await;
+    let mut viewer = connect(addr, "role=viewer").await;
     say(
         &mut viewer,
         json!({ "type": "want", "label": "remote:stage" }),
@@ -252,11 +244,9 @@ async fn a_viewers_negotiation_reaches_the_camera_it_named_and_back() {
 }
 
 #[tokio::test]
-async fn a_camera_going_off_closes_its_viewers_and_another_accounts_is_never_paired() {
+async fn a_camera_going_off_closes_its_viewers() {
     let addr = front("off").await;
-    let mut bob = connect(addr, "bob", "role=camera&name=Bob%20cam").await;
-    next(&mut bob).await;
-    let mut viewer = connect(addr, "ana", "role=viewer").await;
+    let mut viewer = connect(addr, "role=viewer").await;
     say(
         &mut viewer,
         json!({ "type": "want", "label": "remote:Bob cam" }),
@@ -266,7 +256,7 @@ async fn a_camera_going_off_closes_its_viewers_and_another_accounts_is_never_pai
         next(&mut viewer).await,
         json!({ "type": "problem", "text": "no remote camera is on" })
     );
-    let mut cam = connect(addr, "ana", "role=camera&name=Drums").await;
+    let mut cam = connect(addr, "role=camera&name=Drums").await;
     next(&mut cam).await;
     say(
         &mut viewer,
@@ -288,14 +278,13 @@ async fn a_camera_going_off_closes_its_viewers_and_another_accounts_is_never_pai
     cam.close(None).await.unwrap();
     assert_eq!(next(&mut viewer).await, json!({ "close": 1001 }));
     settle().await;
-    assert!(list(addr, "ana").await.is_empty());
-    assert_eq!(list(addr, "bob").await, ["Bob cam"]);
+    assert!(list(addr).await.is_empty());
 }
 
 #[tokio::test]
 async fn a_socket_that_stops_answering_pings_is_dropped() {
     let addr = front("ping").await;
-    let t = ticket(addr, "ana").await;
+    let t = ticket(addr).await;
     let mut s = TcpStream::connect(addr).await.unwrap();
     let raw = format!(
         "GET /api/cameras/ws?ticket={t}&role=camera&name=mute HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: Upgrade\r\nUpgrade: websocket\r\nSec-WebSocket-Version: 13\r\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n"
@@ -305,26 +294,23 @@ async fn a_socket_that_stops_answering_pings_is_dropped() {
     s.read_exact(&mut head).await.unwrap();
     assert_eq!(&head, b"HTTP/1.1 101");
     settle().await;
-    assert_eq!(list(addr, "ana").await, ["mute"]);
+    assert_eq!(list(addr).await, ["mute"]);
     tokio::time::sleep(PING * 3).await;
-    assert!(list(addr, "ana").await.is_empty());
+    assert!(list(addr).await.is_empty());
 }
 
 #[tokio::test]
 async fn a_frame_past_the_cap_drops_its_socket() {
     let addr = front("cap").await;
-    let mut cam = connect(addr, "ana", "role=camera&name=big").await;
+    let mut cam = connect(addr, "role=camera&name=big").await;
     next(&mut cam).await;
     let _ = cam.send(Message::text("x".repeat(64 * 1024 + 1))).await;
     settle().await;
-    assert!(list(addr, "ana").await.is_empty());
+    assert!(list(addr).await.is_empty());
 }
 
 #[tokio::test]
 async fn a_request_to_the_socket_that_is_no_upgrade_is_declined() {
     let addr = front("plain").await;
-    assert_eq!(
-        http(addr, "GET", "/api/cameras/ws", Some("ana")).await.0,
-        404
-    );
+    assert_eq!(http(addr, "GET", "/api/cameras/ws", true).await.0, 404);
 }

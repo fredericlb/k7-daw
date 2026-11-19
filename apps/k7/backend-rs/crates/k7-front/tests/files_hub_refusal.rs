@@ -6,13 +6,12 @@ mod http_support;
 
 use files_hub_support::{device_front, send};
 use http_support::cookie;
-use serde_json::json;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 #[tokio::test(flavor = "multi_thread")]
 async fn a_refusal_on_the_headers_alone_reaches_the_caller() {
     let (front, root) = device_front().await;
-    let ann = cookie(json!({ "sub": "a", "email": "ann@x", "groups": [] }));
+    let ann = cookie();
     // The account's first request makes its home; a workspace folder in it is what an upload names.
     let session = [("cookie", ann.as_str())];
     assert_eq!(

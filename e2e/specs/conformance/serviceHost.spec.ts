@@ -14,7 +14,7 @@ import { bundleRuntime } from "../../../packages/commands/scripts/bundleRuntime.
 import { base } from "../../src/instance.ts";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";
-import type { SessionUser } from "../../src/sessionCookie.ts";
+import type { SessionUser } from "../../src/session.ts";
 import { StandInEngine } from "../../src/standInEngine.ts";
 import { freshWorkspace } from "../../src/sync.ts";
 import { until } from "../../src/until.ts";

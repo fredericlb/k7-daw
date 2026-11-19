@@ -22,10 +22,9 @@ use hyper::Method;
 use hyper::StatusCode;
 use k7_engine::Core;
 use k7_engine::log::{Sink, Throttled};
-use serde_json::{Map, Value};
 
 use crate::AppState;
-use crate::session::{Signed, signed, with_cookies};
+use crate::session::{LOCAL_EMAIL, holds};
 use crate::settings::Settings;
 use crate::web::error;
 
@@ -79,12 +78,6 @@ impl Engine {
     /// The core, when the front is told to answer it and can check sessions as the backend does.
     pub fn start(settings: &Settings) -> Option<Engine> {
         if !settings.engine_core {
-            return None;
-        }
-        if !settings.claims_sessions() {
-            eprintln!(
-                "k7-front: K7_ENGINE_CORE=front needs the auth folder (STUDIO_AUTH_DIR or STUDIO_MEDIATEK); the engine core stays the backend's"
-            );
             return None;
         }
         let clock = k7_engine::Clock::default();
@@ -156,28 +149,21 @@ pub fn engine_of(state: &AppState) -> &Engine {
         .expect("claimed only with the engine core on")
 }
 
-/// `claimHolder`: the session's email, else its subject, else no account.
-pub fn holder_of(user: &Map<String, Value>) -> String {
-    let pick = |k: &str| {
-        user.get(k)
-            .and_then(Value::as_str)
-            .filter(|s| !s.is_empty())
-    };
-    pick("email")
-        .or_else(|| pick("sub"))
-        .unwrap_or("")
-        .to_string()
+/// `claimHolder`: the device's one account.
+pub fn holder() -> String {
+    LOCAL_EMAIL.to_string()
 }
 
 /// `requireAuth`, then `answer` with the session; the cookies a device's rewrite started go with it.
 pub fn with_session(
     state: &AppState,
     req: &Request,
-    answer: impl FnOnce(&Signed) -> Response,
+    answer: impl FnOnce() -> Response,
 ) -> Response {
-    match signed(req.headers(), &state.settings, &state.revocations) {
-        Some(s) => with_cookies(answer(&s), &s),
-        None => error(StatusCode::UNAUTHORIZED, "unauthenticated"),
+    if holds(req.headers(), &state.settings) {
+        answer()
+    } else {
+        error(StatusCode::UNAUTHORIZED, "unauthenticated")
     }
 }
 

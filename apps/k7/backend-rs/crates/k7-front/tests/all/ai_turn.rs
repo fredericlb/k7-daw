@@ -11,14 +11,8 @@ use crate::support::{Front, Reply, front, send};
 
 const SECRET_KEY: &str = "sk-ant-api03-secret-wxyz";
 
-fn cookie(sub: &str) -> String {
-    let user = json!({ "sub": sub }).as_object().unwrap().clone();
-    let now = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis() as f64;
-    let header = k7_auth::cookie_header(user, "studio.sid", "test-secret", now);
-    format!("Cookie: {header}")
+fn cookie() -> String {
+    format!("Cookie: {}", crate::http_support::cookie())
 }
 
 /// What the fake Claude saw of each request: the key header and the body.
@@ -90,7 +84,7 @@ async fn started(name: &str, base: &str) -> (Front, String) {
         ],
     )
     .await;
-    (f, cookie("acct|1"))
+    (f, cookie())
 }
 
 async fn post(f: &Front, cookie: &str, body: &str) -> Reply {

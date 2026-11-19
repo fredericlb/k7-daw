@@ -37,20 +37,19 @@ gates the workspaces, and neither a person nor a test reaches "create a workspac
 
 ## It answers its own machine only
 
-`/auth/local` hands a session to whoever asks, so the front must be unreachable by anyone but the
-person at the machine — a venue's Wi-Fi is full of strangers. Three locks, each for a different way in:
+`/auth/me` hands its token to whoever asks, so the front must be unreachable by anyone but the
+person at the machine — a venue's Wi-Fi is full of strangers. Two locks, each for a different way in:
 
 | lock | what it stops |
 |---|---|
-| each host binds `127.0.0.1` (`Config.listen`) instead of every interface | a device on the same network opening `http://<ip>:<port>/auth/local` |
-| the loopback lock (`src/web.rs`) on every route while `STUDIO_LOCAL_USER=1`: the peer address AND the `Host` header must be loopback | DNS rebinding: a page whose name resolves to `127.0.0.1` reaches the port from the user's own browser, and only its `Host` gives it away |
-| `/auth/local` checks both again (`src/routes/auth/local.rs`) | the same, should a host ever start the local user without the other two |
+| each host binds `127.0.0.1` (`Config.listen`) instead of every interface | a device on the same network opening `http://<ip>:<port>/auth/me` |
+| the loopback lock (`src/web.rs`) on every route: the peer address AND the `Host` header must be loopback | DNS rebinding: a page whose name resolves to `127.0.0.1` reaches the port from the user's own browser, and only its `Host` gives it away |
 
 Nothing on another device needs this front. A device on the network drives the **engine**, on
 the engine's own port and once paired (`engine/k7-runtime/docs/pairing.md`). The QR codes the page
 draws rebase onto `lanUrls`, which a machine's own front leaves empty (`apps/k7/frontend/src/App.tsx`), so they show no code rather than
 a link into this port (`apps/k7/frontend/docs/shell.md`); serving k7's pages to a tablet from here
-would mean lifting all three locks, and a login of its own for the tablet. The supervisor, the file
+would mean lifting both locks, and a login of its own for the tablet. The supervisor, the file
 services and the page all reach the front on `127.0.0.1`. The locks cover HTTP routes; a
 WebSocket upgrade is answered by its own listener and is that listener's to check.
 

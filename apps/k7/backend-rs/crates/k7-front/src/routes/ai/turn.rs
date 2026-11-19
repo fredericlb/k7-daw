@@ -14,10 +14,10 @@ use serde_json::{Map, Value, json};
 use tokio::sync::mpsc::{UnboundedSender, unbounded_channel};
 
 use super::claude::{Claude, Failure};
-use super::{AI_BODY_LIMIT, DEFAULT_AI_MODEL, read_for_update, sub_of};
+use super::{AI_BODY_LIMIT, DEFAULT_AI_MODEL, read_for_update};
 use crate::AppState;
 use crate::js::{truthy, utf16_len};
-use crate::session::{signed, with_cookies};
+use crate::session::holds;
 use crate::web::{error, read_json_within};
 
 /// The heartbeat's period: the last status again, for an idle-timing proxy.
@@ -93,15 +93,15 @@ pub fn parse_turn(body: &Value) -> Result<Turn, String> {
 
 /// POST `/organize/turn`: the body parsed ahead of every guard, then the session, the key, the shape, the stream.
 pub async fn post_turn(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let session = signed(req.headers(), &state.settings, &state.revocations);
+    let session = holds(req.headers(), &state.settings);
     let body = match read_json_within(req, AI_BODY_LIMIT).await {
         Ok((_, v)) => v,
         Err(r) => return r,
     };
-    let Some(signed) = session else {
+    if !session {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
-    let stored = sub_of(&signed).and_then(|sub| read_for_update(&state, &sub).ok().flatten());
+    }
+    let stored = read_for_update(&state).ok().flatten();
     let field = |k: &str| {
         stored
             .as_ref()
@@ -112,15 +112,15 @@ pub async fn post_turn(State(state): State<Arc<AppState>>, req: Request) -> Resp
     };
     let Some(key) = field("apiKey") else {
         let message = "no Claude key for this account — set one in the settings panel";
-        return with_cookies(error(StatusCode::NOT_FOUND, message), &signed);
+        return error(StatusCode::NOT_FOUND, message);
     };
     let model = field("model").unwrap_or_else(|| DEFAULT_AI_MODEL.into());
     let base = state.settings.anthropic_base_url.clone();
     let turn = match parse_turn(&body) {
         Ok(t) => t,
-        Err(m) => return with_cookies(error(StatusCode::BAD_REQUEST, &m), &signed),
+        Err(m) => return error(StatusCode::BAD_REQUEST, &m),
     };
-    with_cookies(answer(&base, key, model, turn, HEARTBEAT), &signed)
+    answer(&base, key, model, turn, HEARTBEAT)
 }
 
 /// The NDJSON stream of one turn; a closed tab drops the request to Claude.

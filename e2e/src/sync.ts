@@ -3,8 +3,8 @@
 // The account key and textHash are spelled here again on purpose: a spec never calls the code it checks.
 import { createHash, randomBytes } from "node:crypto";
 import { join } from "node:path";
+import type { SessionUser } from "./session.ts";
 import { E2E_USER } from "./session.ts";
-import type { SessionUser } from "./sessionCookie.ts";
 
 /** The file hub's account: its file service and the workspaces the spec makes in it are the suite's alone. */
 export const FILES_USER: SessionUser = {

@@ -27,7 +27,6 @@ serde_json.workspace = true
 sha2.workspace = true
 subtle.workspace = true
 httpdate.workspace = true
-k7-auth.workspace = true
 # The machine's supervisor, hosted over stdio when a device's host gives the local engine to the front (docs/local.md).
 k7-local.workspace = true
 # The registry, the relay and the tunnel hub (docs/engine.md).
@@ -52,6 +51,8 @@ song = { path = "../../../../../packages/song/rust" }
 # The relay's and the hub's sockets, served over the upgrades the front accepts itself.
 tokio-tungstenite.workspace = true
 tower.workspace = true
+# The built page: precompressed files, ranges, conditional GETs (docs/last.md).
+tower-http.workspace = true
 futures-util.workspace = true
 # fs: files stream to and from disk; time: the camera sockets' ping; rt: SQLite off the async threads.
 tokio = { workspace = true, features = ["fs", "time", "rt", "process"] }
@@ -62,7 +63,6 @@ zip.workspace = true
 
 [dev-dependencies]
 git2.workspace = true
-k7-auth.workspace = true
 sha2.workspace = true
 # `tokio::time::pause` and `advance`, for the freezer's 3 s timer test.
 tokio = { workspace = true, features = ["test-util"] }

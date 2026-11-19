@@ -1,130 +1,95 @@
-//! session.rs — `requireAuth` for the routes the front owns: the `studio.sid` cookie through `k7-auth`, the
-//! revocations (re-read when their file changes), and a device's rewrite of any other session to its local
-//! user. A session refused for its stamps answers 401 without a cleared cookie (`docs/front.md`).
+//! session.rs — the one proof a page gives: the per-install token, as the `k7.sid` cookie. It keeps any other
+//! website from calling the loopback API; it names no one, a device has one user. Choices: `docs/sessions.md`.
 
 use std::path::Path;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use axum::response::Response;
 use hyper::HeaderMap;
-use hyper::header::{COOKIE, HeaderValue, SET_COOKIE};
-use k7_auth::Revocations;
-use serde_json::{Map, Value, json};
+use hyper::header::{COOKIE, HeaderValue};
+use serde_json::{Value, json};
+use subtle::ConstantTimeEq;
 
 use crate::settings::Settings;
 
-pub const COOKIE_NAME: &str = "studio.sid";
+pub const COOKIE_NAME: &str = "k7.sid";
+/// The token's file under the auth folder.
+const TOKEN_FILE: &str = "session-token";
 
-/// A signed-in request's user, and the cookies to send back when the front started a session.
-#[derive(Clone)]
-pub struct Signed {
-    pub user: Map<String, Value>,
-    pub set_cookies: Vec<HeaderValue>,
+/// The token this install answers to: the file's, else a new one written with the owner alone allowed to read it.
+pub fn load_token(dir: &Path) -> String {
+    let file = dir.join(TOKEN_FILE);
+    if let Some(t) = std::fs::read_to_string(&file)
+        .ok()
+        .map(|t| t.trim().to_string())
+        .filter(|t| t.len() >= 32)
+    {
+        return t;
+    }
+    let mut raw = [0u8; 32];
+    getrandom::fill(&mut raw).expect("no OS randomness");
+    let token: String = raw.iter().map(|b| format!("{b:02x}")).collect();
+    if let Err(e) = std::fs::create_dir_all(dir).and_then(|()| write_private(&file, &token)) {
+        // Without a file the token lasts as long as this process: the page is granted a new one on its next start.
+        eprintln!("k7-front: the session token was not kept: {e}");
+    }
+    token
 }
 
-/// The per-subject "not before" epochs, `session-revocations.json` under the auth folder.
-pub fn revocations(auth_dir: &Path) -> Revocations {
-    Revocations::new(auth_dir.join("session-revocations.json"))
+#[cfg(unix)]
+fn write_private(file: &Path, text: &str) -> std::io::Result<()> {
+    use std::io::Write;
+    use std::os::unix::fs::OpenOptionsExt;
+    let mut f = std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .mode(0o600)
+        .open(file)?;
+    f.write_all(text.as_bytes())
 }
 
-pub(crate) fn now_ms() -> f64 {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_millis() as f64
+#[cfg(not(unix))]
+fn write_private(file: &Path, text: &str) -> std::io::Result<()> {
+    std::fs::write(file, text)
 }
 
-/// The user a request is signed in as, under the backend's rules; None answers 401.
-pub fn signed_in(
-    headers: &HeaderMap,
-    settings: &Settings,
-    revocations: &Revocations,
-    https: bool,
-) -> Option<Signed> {
-    let header = headers
+/// Whether a request's cookies carry the token, compared in constant time; false answers 401.
+pub fn holds(headers: &HeaderMap, settings: &Settings) -> bool {
+    let held = headers
         .get_all(COOKIE)
         .iter()
         .filter_map(|v| v.to_str().ok())
-        .collect::<Vec<_>>()
-        .join("; ");
-    let pairs = k7_auth::parse_cookie_header(&header);
-    let get = |n: &str| pairs.iter().find(|(k, _)| k == n).map(|(_, v)| v.as_str());
-    let session = k7_auth::open(
-        COOKIE_NAME,
-        get(COOKIE_NAME)?,
-        get(&format!("{COOKIE_NAME}.sig"))?,
-        &settings.session_secret,
-    )?;
-    let user =
-        k7_auth::valid_session_user(&session, now_ms(), k7_auth::GROUPS_MAX_AGE_MS, |sub| {
-            revocations.not_before(sub)
-        })?;
-    if settings.local_user && user.get("local") != Some(&Value::Bool(true)) {
-        let local = local_user();
-        let set_cookies = session_cookies(local.clone(), settings, https);
-        return Some(Signed {
-            user: local,
-            set_cookies,
+        .flat_map(|h| h.split(';'))
+        .filter_map(|p| p.trim().split_once('='))
+        .any(|(k, v)| {
+            k == COOKIE_NAME && bool::from(v.as_bytes().ct_eq(settings.session_token.as_bytes()))
         });
-    }
-    Some(Signed {
-        user,
-        set_cookies: Vec::new(),
-    })
+    held && !settings.session_token.is_empty()
 }
 
-/// The answer, carrying the session cookies the front started, if it did.
-pub fn with_cookies(mut response: Response, signed: &Signed) -> Response {
-    for c in &signed.set_cookies {
-        response.headers_mut().append(SET_COOKIE, c.clone());
-    }
-    response
+/// The `Set-Cookie` value that hands a page the token: no script reads it, no other site sends it.
+pub fn grant(settings: &Settings) -> HeaderValue {
+    HeaderValue::from_str(&format!(
+        "{COOKIE_NAME}={}; Path=/; HttpOnly; SameSite=Strict; Max-Age=31536000",
+        settings.session_token
+    ))
+    .expect("a hex token is a header value")
 }
 
-/// Whether a trusted edge says the page is on https, which a new cookie is then marked for.
-pub fn https(headers: &HeaderMap, settings: &Settings) -> bool {
-    settings.trust_hops > 0
-        && headers
-            .get("x-forwarded-proto")
-            .and_then(|v| v.to_str().ok())
-            .is_some_and(|p| p.split(',').next() == Some("https"))
-}
-
-/// The signed-in user of a request, `signed_in` with the https the edge reports.
-pub fn signed(
-    headers: &HeaderMap,
-    settings: &Settings,
-    revocations: &Revocations,
-) -> Option<Signed> {
-    signed_in(headers, settings, revocations, https(headers, settings))
-}
-
-/// The stub email of a device's one account and of the dev sign-in: nobody's real address.
+/// The stub email of a device's one account: nobody's real address, and the name its files folder is derived from.
 pub const LOCAL_EMAIL: &str = "dev@example.com";
+/// The subject its preferences file is named after.
+pub const LOCAL_SUB: &str = "dev-user";
 
-/// A device's one account.
-pub fn local_user() -> Map<String, Value> {
-    json!({ "sub": "dev-user", "name": "Local user", "email": LOCAL_EMAIL, "groups": [], "local": true })
-        .as_object()
-        .cloned()
-        .unwrap_or_default()
+/// What `/auth/me` says of the device's one account.
+pub fn local_user() -> Value {
+    json!({ "sub": LOCAL_SUB, "name": "Local user", "email": LOCAL_EMAIL, "groups": [], "local": true })
 }
 
-/// The two `Set-Cookie` values cookie-session sends for a new session of `user`.
-fn session_cookies(user: Map<String, Value>, settings: &Settings, https: bool) -> Vec<HeaderValue> {
-    let header = k7_auth::cookie_header(user, COOKIE_NAME, &settings.session_secret, now_ms());
-    let expires = httpdate::fmt_http_date(
-        SystemTime::now() + Duration::from_millis(k7_auth::SESSION_MAX_AGE_MS as u64),
-    );
-    let attributes = if https {
-        format!("; path=/; expires={expires}; samesite=lax; secure; httponly")
-    } else {
-        format!("; path=/; expires={expires}; samesite=lax; httponly")
-    };
-    header
-        .split("; ")
-        .filter_map(|pair| HeaderValue::from_str(&format!("{pair}{attributes}")).ok())
-        .collect()
+pub(crate) fn now_ms() -> f64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_millis() as f64
 }
 
 #[cfg(test)]
@@ -132,78 +97,54 @@ mod tests {
     use super::*;
     use std::collections::BTreeMap;
 
-    fn settings(local: bool) -> Settings {
+    fn settings(token: &str) -> Settings {
         let mut env = BTreeMap::new();
-        env.insert("SESSION_SECRET".to_string(), "s".to_string());
-        if local {
-            env.insert("STUDIO_LOCAL_USER".to_string(), "1".to_string());
-        }
+        env.insert("K7_SESSION_TOKEN".to_string(), token.to_string());
         Settings::new(&env, 0)
     }
 
-    fn with_cookie(user: Value) -> HeaderMap {
-        let header = k7_auth::cookie_header(
-            user.as_object().unwrap().clone(),
-            COOKIE_NAME,
-            "s",
-            now_ms(),
-        );
+    fn with_cookie(value: &str) -> HeaderMap {
         let mut h = HeaderMap::new();
-        h.insert(COOKIE, HeaderValue::from_str(&header).unwrap());
+        h.insert(COOKIE, HeaderValue::from_str(value).unwrap());
         h
     }
 
     #[test]
-    fn reads_a_session_and_refuses_none() {
-        let dir = std::env::temp_dir().join("k7-front-session-test-none");
-        let r = revocations(&dir);
-        let s = settings(false);
-        assert!(signed_in(&HeaderMap::new(), &s, &r, false).is_none());
-        let signed = signed_in(
-            &with_cookie(json!({ "sub": "a", "email": "a@b" })),
-            &s,
-            &r,
-            false,
-        )
-        .unwrap();
-        assert_eq!(signed.user["sub"], "a");
-        assert!(signed.set_cookies.is_empty());
-    }
-
-    #[test]
-    fn a_revocation_written_later_is_seen() {
-        let dir = std::env::temp_dir().join(format!("k7-front-revoke-{}", std::process::id()));
-        std::fs::create_dir_all(&dir).unwrap();
-        let r = revocations(&dir);
-        let s = settings(false);
-        let h = with_cookie(json!({ "sub": "a" }));
-        assert!(signed_in(&h, &s, &r, false).is_some());
-        std::fs::write(
-            dir.join("session-revocations.json"),
-            format!("{{\"a\": {}}}", now_ms() + 10_000.0),
-        )
-        .unwrap();
-        assert!(signed_in(&h, &s, &r, false).is_none());
-        std::fs::remove_dir_all(&dir).unwrap();
-    }
-
-    #[test]
-    fn a_device_turns_any_session_into_its_local_user() {
-        let r = revocations(&std::env::temp_dir().join("k7-front-session-test-local"));
-        let signed = signed_in(
-            &with_cookie(json!({ "sub": "someone" })),
-            &settings(true),
-            &r,
-            false,
-        )
-        .unwrap();
-        assert_eq!(signed.user["sub"], "dev-user");
-        assert_eq!(signed.set_cookies.len(), 2);
-        let first = signed.set_cookies[0].to_str().unwrap();
+    fn only_the_installs_token_signs_in() {
+        let s = settings(&"a".repeat(40));
+        let token = &s.session_token;
+        assert!(!holds(&HeaderMap::new(), &s));
+        assert!(holds(
+            &with_cookie(&format!("x=1; {COOKIE_NAME}={token}")),
+            &s
+        ));
+        assert!(!holds(&with_cookie(&format!("{COOKIE_NAME}={token}b")), &s));
+        assert!(!holds(&with_cookie(&format!("other={token}")), &s));
+        let granted = grant(&s);
+        let line = granted.to_str().unwrap();
+        assert!(line.contains("HttpOnly") && line.contains("SameSite=Strict"));
         assert!(
-            first.starts_with("studio.sid=")
-                && first.contains("samesite=lax; httponly")
-                && !first.contains("secure")
+            !line.contains("Secure"),
+            "a device's page is http on loopback"
         );
+    }
+
+    #[test]
+    fn a_token_is_kept_across_starts_and_private() {
+        let dir = std::env::temp_dir().join(format!("k7-front-token-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let first = load_token(&dir);
+        assert_eq!(first.len(), 64);
+        assert_eq!(load_token(&dir), first, "the second start reads the file");
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            let mode = std::fs::metadata(dir.join(TOKEN_FILE))
+                .unwrap()
+                .permissions()
+                .mode();
+            assert_eq!(mode & 0o077, 0, "the owner alone reads it");
+        }
+        std::fs::remove_dir_all(&dir).unwrap();
     }
 }

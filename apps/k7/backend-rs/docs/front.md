@@ -66,7 +66,7 @@ way it ends is said, by the front where it still can, by whoever started it wher
 | `K7_EXTRA_CA_CERTS` | unset | a PEM file of certificate authorities every outbound TLS call trusts beside Mozilla's roots, read once at start |
 | `K7_FRONT_TRUST_HOPS` | `0` | proxies before the front whose `X-Forwarded-*` is believed: `1` behind Traefik or the dev Caddy |
 
-The routes read their settings from `ENV_KEYS` in `src/config.rs`: `SESSION_SECRET`, `STUDIO_LOCAL_USER`, the prefs and auth folders…
+The routes read their settings from `ENV_KEYS` in `src/config.rs`: `K7_SESSION_TOKEN`, `STUDIO_LOCAL_USER`, the prefs and auth folders…
 
 The same fields, camelCased, are the JSON a host hands `k7_front_start` (`embed.md`), with an `env`
 object for those settings: an embedded front cannot be handed an environment of its own.

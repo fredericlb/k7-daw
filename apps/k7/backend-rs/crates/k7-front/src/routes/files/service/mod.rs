@@ -158,7 +158,7 @@ fn unnamed(who: &Who<'_>, req: &Request, path: &str) -> Response {
     }
     match workspace(who, req.headers()) {
         Err(r) => *r,
-        Ok(_) => crate::routes::last::express::not_found(req.method(), path, false),
+        Ok(_) => crate::routes::last::not_found(),
     }
 }
 

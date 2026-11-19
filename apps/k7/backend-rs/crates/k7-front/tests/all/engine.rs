@@ -13,7 +13,7 @@ async fn front(engine_core: bool) -> SocketAddr {
     ));
     let _ = std::fs::remove_dir_all(&root);
     let mut env: std::collections::BTreeMap<String, String> = [
-        ("SESSION_SECRET", "test-secret".to_string()),
+        ("K7_SESSION_TOKEN", crate::http_support::TOKEN.to_string()),
         (
             "STUDIO_AUTH_DIR",
             root.join("auth").to_string_lossy().into_owned(),
@@ -93,18 +93,7 @@ async fn on_the_front_answers() {
         send(front, "GET", "/api/registry/hello", &[], "").await,
         (200, r#"{"service":"k7-registry"}"#.into())
     );
-    let cookie = k7_auth::cookie_header(
-        serde_json::json!({ "email": "ann@x" })
-            .as_object()
-            .unwrap()
-            .clone(),
-        "studio.sid",
-        "test-secret",
-        std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
-            .as_millis() as f64,
-    );
+    let cookie = crate::http_support::cookie();
     let (status, body) = send(front, "GET", "/api/engines", &[("cookie", &cookie)], "").await;
     assert_eq!(status, 200, "{body}");
     assert_eq!(body, "[]");

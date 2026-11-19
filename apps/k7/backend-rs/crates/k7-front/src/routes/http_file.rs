@@ -179,15 +179,6 @@ fn finish(builder: hyper::http::response::Builder, body: Body) -> Response {
         .unwrap_or_else(|_| StatusCode::INTERNAL_SERVER_ERROR.into_response())
 }
 
-/// `length` bytes of `file` from where it stands, read as the client takes them.
-pub(crate) fn file_body(file: tokio::fs::File, length: u64) -> Body {
-    Body::new(FileBody {
-        file,
-        remaining: length,
-        buf: vec![0; CHUNK.min(length as usize).max(1)],
-    })
-}
-
 /// A file read a chunk at a time as the client takes it; dropping it, on an abort, closes the file.
 struct FileBody {
     file: tokio::fs::File,

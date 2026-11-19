@@ -37,12 +37,6 @@ impl Local {
     pub fn from_settings(s: &Settings, port: u16) -> Option<Arc<Self>> {
         let wanted = s.local_user && s.local_engine_front;
         let bin = s.supervisor_bin.clone().filter(|_| wanted)?;
-        if !s.claims_sessions() {
-            eprintln!(
-                "k7-front: K7_LOCAL_ENGINE=front, but no auth folder is known: this machine runs no engine"
-            );
-            return None;
-        }
         let engine = LocalEngine::new(k7_local::engine::Config {
             bin,
             home: s.supervisor_home.clone(),
@@ -119,9 +113,4 @@ pub fn owns(method: &Method, path: &str) -> Option<bool> {
 /// Whether `path` is a device's own whatever runs its engine: the probe and the tray's status line.
 pub fn is_device_path(path: &str) -> bool {
     path == "/api/local"
-}
-
-/// Whether the family's `path` sits behind the session.
-pub fn needs_session(path: &str) -> bool {
-    path.starts_with("/api/local/engine")
 }

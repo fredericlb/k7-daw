@@ -50,12 +50,6 @@ impl Files {
         if !settings.files_front {
             return None;
         }
-        if !settings.claims_sessions() {
-            eprintln!(
-                "k7-front: K7_FILES=front needs the auth folder (STUDIO_AUTH_DIR or STUDIO_MEDIATEK); the file hub is not answered"
-            );
-            return None;
-        }
         if !config.env.contains_key("STUDIO_FILES_ROOT")
             && std::env::var_os("STUDIO_FILES_ROOT").is_none()
         {

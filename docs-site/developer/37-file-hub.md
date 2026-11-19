@@ -80,7 +80,6 @@ nothing is fetched.
 |---|---|---|
 | `STUDIO_FILES_ROOT` | the front | Required data root. |
 | `STUDIO_LOCAL_USER` | the front | `1` makes the front a device's own. |
-| `SESSION_SECRET` | the front | Derives the ticket key; without it tickets die with the process. |
 | `STUDIO_LIBRARY_SEED` | `k7-libraries` | Where new libraries are seeded from. |
 
 ## Tests

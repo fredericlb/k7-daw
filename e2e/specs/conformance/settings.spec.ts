@@ -1,14 +1,14 @@
 // settings.spec.ts — an account's AI settings: their gates, their refusals, and a
 // write read back; only the front serves them (e2e/docs/conformance.md). Every write is put back.
 import { expect, test } from "@playwright/test";
-import { E2E_USER, sessionCookies } from "../../src/session.ts";
+import { sessionCookies } from "../../src/session.ts";
 
 const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
 
 test.describe.configure({ mode: "serial" });
 
-const cookieOf = (groups: string[] = []) => ({
-  cookie: sessionCookies(base, { ...E2E_USER, groups })
+const cookieOf = () => ({
+  cookie: sessionCookies(base)
     .map((c) => `${c.name}=${c.value}`)
     .join("; "),
 });

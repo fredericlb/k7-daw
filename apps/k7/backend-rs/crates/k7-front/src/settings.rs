@@ -1,29 +1,22 @@
-//! settings.rs — the TypeScript backend's own settings, read under the same names and defaults, so a
-//! route answers the same in either language. A setting the front cannot know leaves its routes to the
-//! backend (`claims_sessions`), never to a guess.
+//! settings.rs — what the front reads of the environment a host hands it, under one name and one default each.
 
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
-/// @studio/oidc's default, which `auth_guard` refuses outside a dev session or a device, and read only there.
-const DEV_SECRET: &str = crate::auth_guard::DEFAULT_SESSION_SECRET;
-
 #[derive(Clone, Debug)]
 pub struct Settings {
-    /// `SESSION_SECRET`; @studio/oidc's default only where the dev stub may run, else empty, and then the front claims no session.
-    pub session_secret: String,
+    /// This install's token, the cookie a page presents (`docs/sessions.md`): `K7_SESSION_TOKEN`, else the auth folder's file, read at `build`.
+    pub session_token: String,
     /// A device's backend: one local user, and nobody but this machine answered.
     pub local_user: bool,
     pub prefs_dir: PathBuf,
-    /// Where the session revocations live; None when the front cannot tell, and then owns no session route.
-    pub auth_dir: Option<PathBuf>,
+    /// Where the install's token lives.
+    pub auth_dir: PathBuf,
     pub build: String,
     /// Proxies before the front whose `X-Forwarded-*` is believed.
     pub trust_hops: usize,
     /// `K7_CAMERA_ICE_SERVERS`, as written: the STUN and TURN servers handed to both ends of a remote camera.
     pub camera_ice_servers: Option<String>,
-    /// `SESSION_SECRET` as written, `""` when unset: what the file hub's ticket key derives from.
-    pub raw_session_secret: String,
     /// The instance's data folder, `$STUDIO_MEDIATEK` or `<STUDIO_HOME or ~/.k7>/mediatek`.
     pub mediatek_dir: PathBuf,
     /// `K7_LOCAL_ENGINE=front`: on a device, the front runs the supervisor and the backend does not (`docs/local.md`).
@@ -81,30 +74,20 @@ impl Settings {
                     .unwrap_or_else(|| home.join(".k7"))
                     .join("mediatek")
             });
-        let dev_stub = crate::auth_guard::dev_stub_allowed(env);
-        let dev_secret = || {
-            if dev_stub {
-                DEV_SECRET.to_string()
-            } else {
-                String::new()
-            }
-        };
+        let auth_dir = get("STUDIO_AUTH_DIR")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| mediatek.join(".auth"));
         let files_front = get("K7_FILES").as_deref() == Some("front");
         Settings {
-            session_secret: get("SESSION_SECRET").unwrap_or_else(dev_secret),
+            session_token: get("K7_SESSION_TOKEN").unwrap_or_default(),
             local_user: get("STUDIO_LOCAL_USER").as_deref() == Some("1"),
             prefs_dir: get("STUDIO_PREFS_DIR")
                 .map(PathBuf::from)
                 .unwrap_or_else(|| home.join(".studio").join("prefs").join("k7")),
-            auth_dir: get("STUDIO_AUTH_DIR")
-                .map(PathBuf::from)
-                .or_else(|| get("STUDIO_MEDIATEK").map(|m| PathBuf::from(m).join(".auth")))
-                // `.auth` in the media's folder, where the session's revocations and the accounts' keys live.
-                .or_else(|| Some(mediatek.join(".auth"))),
+            auth_dir,
             build: env!("K7_VERSION").into(),
             trust_hops,
             camera_ice_servers: get("K7_CAMERA_ICE_SERVERS"),
-            raw_session_secret: env.get("SESSION_SECRET").cloned().unwrap_or_default(),
             engines_dir: raw("STUDIO_ENGINES_DIR")
                 .map(PathBuf::from)
                 .unwrap_or_else(|| mediatek.join(".engines")),
@@ -144,10 +127,5 @@ impl Settings {
             release: raw("K7_RELEASE").unwrap_or_else(|| env!("K7_VERSION").into()),
             supervisor_env: env.iter().map(|(k, v)| (k.clone(), v.clone())).collect(),
         }
-    }
-
-    /// Whether the front may answer a route behind the session: it must know where revocations are.
-    pub fn claims_sessions(&self) -> bool {
-        self.auth_dir.is_some() && !self.session_secret.is_empty()
     }
 }

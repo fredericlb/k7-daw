@@ -1,4 +1,4 @@
-// auth.spec.ts — the session as a client sees it: /auth/me and logout.
+// auth.spec.ts — the session as a client sees it: /auth/me hands over the install's token, and only that token signs in.
 import { expect, test } from "@playwright/test";
 import { E2E_USER, sessionCookies } from "../../src/session.ts";
 
@@ -9,61 +9,39 @@ const e2eCookie = (): string =>
     .map((c) => `${c.name}=${c.value}`)
     .join("; ");
 
-interface Reply {
-  status: number;
-  location: string;
-  /** The `name=value` pairs the answer set, as a browser sends them back. */
-  cookies: string;
-  setCookies: string[];
-  headers: Headers;
-  body: string;
-}
-
-async function http(
-  url: string,
-  init: RequestInit & { headers?: Record<string, string> } = {},
-): Promise<Reply> {
-  const res = await fetch(url, { redirect: "manual", ...init });
-  const setCookies = res.headers.getSetCookie();
-  return {
-    status: res.status,
-    location: res.headers.get("location") ?? "",
-    cookies: setCookies
-      .map((c) => c.split(";")[0])
-      .filter((p) => p.indexOf("=") < p.length - 1)
-      .join("; "),
-    setCookies,
-    headers: res.headers,
-    body: await res.text(),
-  };
-}
-
-test("/auth/me is never cached, signed in or out", async () => {
-  const out = await http(`${base}/auth/me`);
-  expect(out.status).toBe(401);
+test("/auth/me is never cached, and hands the token to a page that holds none", async () => {
+  const out = await fetch(`${base}/auth/me`);
+  expect(out.status).toBe(200);
   expect(out.headers.get("cache-control")).toBe("no-store");
-  const signed = await http(`${base}/auth/me`, {
+  expect(JSON.parse(await out.text()).user.sub).toBe(E2E_USER.sub);
+  const granted = out.headers.getSetCookie()[0] ?? "";
+  expect(granted).toMatch(/^k7\.sid=[0-9a-f]+;/);
+  expect(granted).toMatch(/HttpOnly/);
+  expect(granted).toMatch(/SameSite=Strict/);
+  const held = await fetch(`${base}/auth/me`, {
     headers: { cookie: e2eCookie() },
   });
-  expect(signed.status).toBe(200);
-  expect(signed.headers.get("cache-control")).toBe("no-store");
-  expect(JSON.parse(signed.body).user.sub).toBe(E2E_USER.sub);
+  expect(held.status).toBe(200);
+  expect(held.headers.getSetCookie()).toEqual([]);
 });
 
-test("logout refuses another site and clears the cookie for this one", async () => {
-  const cross = await http(`${base}/auth/logout`, {
-    method: "POST",
-    headers: { cookie: e2eCookie(), origin: "https://evil.example" },
+test("a page on another site is given no token", async () => {
+  const cross = await fetch(`${base}/auth/me`, {
+    headers: { "sec-fetch-site": "cross-site" },
   });
   expect(cross.status).toBe(403);
-  const out = await http(`${base}/auth/logout`, {
-    method: "POST",
+  expect(cross.headers.getSetCookie()).toEqual([]);
+});
+
+test("a route behind the session answers the token alone", async () => {
+  const bare = await fetch(`${base}/api/preferences`);
+  expect(bare.status).toBe(401);
+  const wrong = await fetch(`${base}/api/preferences`, {
+    headers: { cookie: "k7.sid=not-the-token" },
+  });
+  expect(wrong.status).toBe(401);
+  const held = await fetch(`${base}/api/preferences`, {
     headers: { cookie: e2eCookie() },
   });
-  expect(out.status).toBe(200);
-  expect(JSON.parse(out.body)).toEqual({ ok: true });
-  expect(out.setCookies[0]).toMatch(
-    /^studio\.sid=; path=\/; expires=Thu, 01 Jan 1970 00:00:00 GMT;.* httponly$/,
-  );
-  expect(out.setCookies[1]).toMatch(/^studio\.sid\.sig=[\w-]+; path=\//);
+  expect(held.status).toBe(200);
 });

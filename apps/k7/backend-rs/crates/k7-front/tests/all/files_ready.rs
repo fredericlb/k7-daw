@@ -6,8 +6,6 @@ use std::net::SocketAddr;
 use serde_json::Value;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
-const SECRET: &str = "test-secret";
-
 struct Front {
     addr: SocketAddr,
 }
@@ -19,7 +17,7 @@ async fn front(extra: &[(&str, &str)]) -> Front {
     let _ = std::fs::remove_dir_all(&root);
     let path = |p: &str| root.join(p).to_string_lossy().into_owned();
     let mut env: std::collections::BTreeMap<String, String> = [
-        ("SESSION_SECRET", SECRET.to_string()),
+        ("K7_SESSION_TOKEN", crate::http_support::TOKEN.to_string()),
         ("STUDIO_AUTH_DIR", path("auth")),
         ("STUDIO_FILES_ROOT", path("files")),
         ("STUDIO_PREFS_DIR", path("prefs")),

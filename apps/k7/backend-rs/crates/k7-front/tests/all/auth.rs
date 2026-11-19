@@ -1,104 +1,91 @@
-//! The session a device has, through the front: `/auth/local` signs the local user in, `/auth/me` reads it, a
-//! logout everywhere is written where the TypeScript backend reads it, and no sign-in route is left to a provider.
+//! The session a device has, through the front: `/auth/me` hands a page the install's token, the routes behind
+//! the session answer that token alone, a page on another site gets none, and no sign-in route is left.
 
-use crate::support;
+use crate::support::{front, send};
 
-use support::{front, send};
+fn token_of(cookies: &str) -> &str {
+    cookies.strip_prefix("k7.sid=").expect("the k7.sid cookie")
+}
 
 #[tokio::test]
-async fn a_device_signs_its_local_user_in_and_rewrites_any_other() {
-    let f = front("local", &[("STUDIO_LOCAL_USER", "1")]).await;
-    let local = send(f.addr, "GET", "/auth/local?return_to=%2Fx", &[], "").await;
-    assert_eq!((local.status, local.header("location")), (302, Some("/x")));
-    let me = send(
-        f.addr,
-        "GET",
-        "/auth/me",
-        &[("Cookie", &local.cookies())],
-        "",
+async fn a_page_is_given_the_installs_token_and_only_that_token_signs_in() {
+    let f = front(
+        "grant",
+        &[("STUDIO_LOCAL_USER", "1"), ("K7_SESSION_TOKEN", "")],
     )
     .await;
+    let me = send(f.addr, "GET", "/auth/me", &[], "").await;
+    assert_eq!(me.status, 200);
     assert!(me.body.contains("\"local\":true"), "{}", me.body);
     assert_eq!(me.header("cache-control"), Some("no-store"));
-    let away = send(
+    let line = me.header("set-cookie").expect("the token is handed over");
+    assert!(
+        line.contains("HttpOnly") && line.contains("SameSite=Strict"),
+        "{line}"
+    );
+    let cookie = me.cookies();
+    let file = std::fs::read_to_string(f.auth.join("session-token")).unwrap();
+    assert_eq!(
+        token_of(&cookie),
+        file.trim(),
+        "the cookie is the file's token"
+    );
+    let held = send(f.addr, "GET", "/auth/me", &[("Cookie", &cookie)], "").await;
+    assert!(
+        held.header("set-cookie").is_none(),
+        "a page that holds it is not handed it again"
+    );
+    let prefs = send(
         f.addr,
         "GET",
-        "/auth/local?return_to=https%3A%2F%2Fevil.example",
-        &[],
-        "",
-    )
-    .await;
-    assert_eq!(away.header("location"), Some("/"));
-}
-
-#[tokio::test]
-async fn a_session_that_is_not_the_local_users_is_rewritten_on_a_device() {
-    let f = front("rewrite", &[("STUDIO_LOCAL_USER", "1")]).await;
-    let other = k7_auth::cookie_header(
-        serde_json::json!({ "sub": "ann", "name": "Ann", "email": "ann@x" })
-            .as_object()
-            .unwrap()
-            .clone(),
-        "studio.sid",
-        "test-secret",
-        std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
-            .as_millis() as f64,
-    );
-    let me = send(f.addr, "GET", "/auth/me", &[("Cookie", &other)], "").await;
-    assert!(
-        me.body.contains("Ann"),
-        "/auth/me sits before the rewrite: {}",
-        me.body
-    );
-    let prefs = send(f.addr, "GET", "/api/preferences", &[("Cookie", &other)], "").await;
-    assert_eq!(prefs.status, 200);
-    assert!(
-        prefs.headers.iter().any(|(k, _)| k == "set-cookie"),
-        "the session routes sit after it"
-    );
-}
-
-#[tokio::test]
-async fn logout_everywhere_is_written_where_the_backend_reads_it() {
-    let f = front("logout", &[("STUDIO_LOCAL_USER", "1")]).await;
-    let cookie = send(f.addr, "GET", "/auth/local", &[], "").await.cookies();
-    // A copy kept elsewhere was issued before the logout: on a fast host both could fall in one millisecond.
-    tokio::time::sleep(std::time::Duration::from_millis(5)).await;
-    let cross = send(
-        f.addr,
-        "POST",
-        "/auth/logout?everywhere=1",
-        &[("Cookie", &cookie), ("Sec-Fetch-Site", "cross-site")],
-        "",
-    )
-    .await;
-    assert_eq!(cross.status, 403);
-    let out = send(
-        f.addr,
-        "POST",
-        "/auth/logout?everywhere=1",
+        "/api/preferences",
         &[("Cookie", &cookie)],
         "",
     )
     .await;
-    assert_eq!(out.status, 200);
-    assert!(out.headers.iter().any(|(k, v)| k == "set-cookie"
-        && v.starts_with("studio.sid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT")));
-    let file = std::fs::read_to_string(f.auth.join("session-revocations.json")).unwrap();
-    assert!(file.starts_with("{\n  \"dev-user\": "), "{file}");
-    let me = send(f.addr, "GET", "/auth/me", &[("Cookie", &cookie)], "").await;
-    assert_eq!(me.status, 401, "the copy kept elsewhere is dead too");
+    assert_eq!(prefs.status, 200);
+    let bare = send(f.addr, "GET", "/api/preferences", &[], "").await;
+    assert_eq!(bare.status, 401);
+    let wrong = send(
+        f.addr,
+        "GET",
+        "/api/preferences",
+        &[("Cookie", "k7.sid=not-the-token")],
+        "",
+    )
+    .await;
+    assert_eq!(wrong.status, 401);
+}
+
+#[cfg(unix)]
+#[tokio::test]
+async fn the_token_is_kept_for_the_owner_alone() {
+    use std::os::unix::fs::PermissionsExt;
+    let f = front(
+        "private",
+        &[("STUDIO_LOCAL_USER", "1"), ("K7_SESSION_TOKEN", "")],
+    )
+    .await;
+    let mode = std::fs::metadata(f.auth.join("session-token"))
+        .unwrap()
+        .permissions()
+        .mode();
+    assert_eq!(mode & 0o077, 0);
 }
 
 #[tokio::test]
-async fn an_anonymous_me_is_a_401_with_no_provider() {
-    let f = front("noprovider", &[("STUDIO_LOCAL_USER", "1")]).await;
-    let me = send(f.addr, "GET", "/auth/me", &[], "").await;
-    assert_eq!(me.status, 401);
-    let health = send(f.addr, "GET", "/api/health", &[], "").await;
-    assert_eq!(health.status, 200);
+async fn a_page_on_another_site_is_given_nothing() {
+    let f = front("cross", &[("STUDIO_LOCAL_USER", "1")]).await;
+    let me = send(
+        f.addr,
+        "GET",
+        "/auth/me",
+        &[("Sec-Fetch-Site", "cross-site")],
+        "",
+    )
+    .await;
+    assert_eq!(me.status, 403);
+    assert!(me.header("set-cookie").is_none());
 }
 
 #[tokio::test]
@@ -107,10 +94,13 @@ async fn no_sign_in_route_is_left_to_the_front() {
     for path in [
         "/auth/login",
         "/auth/callback",
+        "/auth/local",
+        "/auth/logout",
         "/auth/handoff/issue",
-        "/auth/handoff/redeem",
     ] {
         let r = send(f.addr, "GET", path, &[], "").await;
         assert_eq!(r.status, 404, "{path} is no route of this front");
     }
+    let health = send(f.addr, "GET", "/api/health", &[], "").await;
+    assert_eq!(health.status, 200);
 }

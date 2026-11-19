@@ -5,11 +5,10 @@ A route is the front's once the conformance suite (`e2e/docs/conformance.md`) pa
 | route | owned since | what it declines |
 |---|---|---|
 | `GET /api/health` | phase 1 | nothing |
-| `GET`, `PUT /api/preferences` | phase 1 | any front that cannot find the session revocations |
+| `GET`, `PUT /api/preferences` | phase 1 | a method it does not own |
 | `GET /api/cameras`, `POST /api/cameras/ticket`, `WS /api/cameras/ws` | phase 1 | the same as the preferences, for all three at once; a request to the socket's path that is no upgrade |
 | `GET`, `PUT /api/ai/settings`, `GET /api/ai/organize`, `POST /api/ai/organize/turn` | phase 3 | the same as the preferences |
-| `POST /auth/logout`, `GET /auth/me` | phase 3 | the same as the preferences |
-| `GET /auth/local` on a device | phase 3 | off a device, where the backend does not mount it either; the same as the preferences |
+| `GET /auth/me` | phase 3 | the same as the preferences |
 | `GET /api/local` | phase 4a; on every device since 6.1 (`local.md`) | off a device, where the backend answers 404 |
 | `GET /api/local/engine[/events]`, `POST /api/local/engine/{cmd,slots}`, `GET /api/internal/engine/local` | phase 4a, behind `K7_LOCAL_ENGINE=front` (`local.md`) | all of it unless a device's host turned the switch on |
 | `GET /api/registry/hello`, `POST …/heartbeat`, `POST …/deregister`, `GET /api/engines`, `POST /api/engine/{select,release}`, `POST /api/engine/<id>/rtc`, `WS /api/engine/<id>/ws`, `WS /api/engine-tunnel[/local/<key>]`, `GET /api/internal/engine/engines[/<id>]`, `GET …/hub`, `POST`, `DELETE …/bindings` | phase 4a, behind `K7_ENGINE_CORE=front` (`engine.md`) | all of it unless the switch is on; every other method there, a request to a socket's path that is no upgrade, the root domain's hosts, the seam's local half |
@@ -17,7 +16,7 @@ A route is the front's once the conformance suite (`e2e/docs/conformance.md`) pa
 The front also answers `/api/engine-slots`, on every host (`engine/slots.md`). A path of that family no route
 answers is declined.
 
-What a route declines (a method it does not own, a session route without known revocations) ends in the last routes (`last.md`): the seam's
+What a route declines (a method it does not own) ends in the last routes (`last.md`): the seam's
 the built page and its fallback, and
 the 404 and the `/api` guard's 401 for any other path.
 
@@ -26,14 +25,11 @@ Nobody signs in against an identity provider: `/auth/login`, `/auth/callback` an
 ## What every owned route goes through
 
 `src/web.rs` applies the backend's own chain, in its order: the security headers, a device's
-loopback lock, CORS and the cross-site write refusal. `src/session.rs` is `requireAuth`.
+loopback lock, CORS and the cross-site write refusal. `src/session.rs` is `requireAuth`: the token cookie (`sessions.md`).
 
 | choice | why |
 |---|---|
-| a request the front would answer differently is declined BEFORE that chain (`claim` in `src/lib.rs`): a method it does not own, a session route without known revocations | the last routes apply the chain once, and running it twice would send `Vary` and the CORS headers twice, which a browser refuses |
-| the revocations file is read again whenever its inode, modification time or size changes, and a revocation re-reads it and keeps each subject's later epoch (`k7-auth`'s `revocations.rs`) | a logout everywhere is written by any process that shares the folder; a front that cached the file would keep honouring a revoked session, and a whole-file write from a stale copy would undo the other's revocation |
-| no auth folder known (neither `STUDIO_AUTH_DIR` nor `STUDIO_MEDIATEK`) means no session route is owned | a front that cannot see revocations must not decide who is signed in |
-| on a device, any valid session that is not the local user's is answered as the local user, with a new local session cookie | a device has one account, whatever session a page carries |
+| a request the front would answer differently is declined BEFORE that chain (`claim` in `src/lib.rs`): a method it does not own | the last routes apply the chain once, and running it twice would send `Vary` and the CORS headers twice, which a browser refuses |
 | the preferences schema is copied (`src/prefs_schema.rs`): zod's key order, nested strangers stripped, an unknown top-level key refused | a stored document must still pass the gate on its next save; a field added to the schema is added there (`src/prefs_schema.rs`) |
 
 ## The remote cameras
@@ -61,31 +57,21 @@ Each reads its state from disk on every request, from files the previous release
 
 ## The session
 
-`src/routes/auth/` holds the device's session: `/auth/me`, `/auth/logout` and `/auth/local`, which signs the
-machine's own user in. `/auth/{logout,me}` come before a device's
-rewrite to its local user, so `/auth/me` there names the account the cookie holds, and `/auth/local` and the token
-routes after it. There is no provider: a machine has one account, and a cookie is only ever minted for it.
+`src/routes/auth.rs` is `GET /auth/me`, which hands a page the install's token and says who the one user is;
+the token and its cookie are `sessions.md`. There is no provider, no sign-out and no `/auth/local`.
 
 | choice | why |
 |---|---|
-| the session cookie is written as cookie-session 2 and the `cookies` library write it (`k7-auth`'s `cookie_session.rs`): found by their pattern in the raw header, rewritten only when it changed, a refused user dropped and the rest kept, a cleared session sent as an empty cookie dated 1970 with a real `.sig`, a bad signature clearing `.sig`, `SameSite=Lax`, `Secure` only behind a trusted https edge | a browser keeps whatever the `Set-Cookie` lines say, so they are part of the contract; the conformance suite compares them |
-| the cookie is host-only: no `Domain`, no trusted sibling origin | a session shared across subdomains served a hosted instance; a device's page is one loopback origin |
-| a return target is a path on this origin, anything else is `/` | `/auth/local` is reachable from a link, and a redirect off the machine would hand it a session cookie's page |
-| a signed-in `/auth/me` warms the account's hub in the background (`src/routes/auth/warm.rs`) | the files are warm by the time the page asks (`files.md`) |
+| a signed-in `/auth/me` warms the account's hub in the background | the files are warm by the time the page asks (`files.md`) |
 | the outgoing HTTPS client is `src/https.rs`: `hyper-rustls`, `rustls` on `ring`, and `webpki-roots` | `ring` is already in the desktop app's build, where `aws-lc-rs` compiles C with CMake and NASM on Windows and for every phone target |
 | TLS trusts Mozilla's roots (`webpki-roots`) and the host's `K7_EXTRA_CA_CERTS` (`front.md`), not the OS store | it is one list on the desktop app and the phones, and needs no JNI start on Android |
-| frozen vectors, `fixtures/auth-vectors.json` | `k7-auth`'s `tests/all/auth_vectors.rs` fails when Rust mints or opens other bytes than the stored tokens |
-
-The vectors are fixtures, written once: a format change edits them on purpose, never by a generator.
 
 ## Known and accepted
 
-Hazards the front has, as the TypeScript backend had them, kept for now:
-
 | hazard | why it is accepted for now |
 |---|---|
-| on a device, `/auth/local` gives a full session to any process of the machine that can reach loopback and names a loopback `Host`: on Android any app | the device has one person, and the desktop app and the phones open their page this way; the fix is a per-install secret the app's page carries, which every host would have to hand its page first |
-| loopback origins are credentialed CORS origins (`web.rs`): any page a browser on the machine opens can drive the desktop app | the desktop app's own page is a loopback origin; the fix is the same per-install secret |
+| any process of the machine that reaches loopback and names a loopback `Host` is given the token: on Android any app | the device has one person; what stops a web page is the token, and what stops the network is the loopback bind (`standalone.md`) |
+| loopback origins are credentialed CORS origins (`web.rs`): a page on another loopback port the browser opens can read the answers | the desktop app's own page is a loopback origin |
 
 ## Where the front answers differently, on purpose
 

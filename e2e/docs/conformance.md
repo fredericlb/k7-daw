@@ -70,11 +70,10 @@ what it shares is made its own:
 
 | choice | why |
 |---|---|
-| Playwright's request API, in `e2e/` | the session is minted the way the functional suite mints it (`src/session.ts`, the instance's `SESSION_SECRET` from `env.yaml`), so a spec signs in as the e2e account without the identity provider |
+| Playwright's request API, in `e2e/` | the token cookie is the functional suite's (`src/session.ts`, the instance's `K7_SESSION_TOKEN` from `env.yaml`), so a spec signs in as the local user without the identity provider |
 | every spec states what a client sees, never how the backend does it | the same spec must hold for an implementation in another language |
 | what proxies break gets a spec of its own: a body round-trip, the first frame of an event stream before its end, an upgrade refused with 404 | buffering, a dropped body and a swallowed upgrade are the faults a front introduces and a page only shows as a hang |
 | writes are no-ops: the preferences and the AI settings are read and written back as they were, and a secret is only added where the instance had none, then removed | it runs against a live dev session, on the e2e account; a secret cannot be read back, so one the instance holds is never replaced |
-| the auth specs mint and revoke the e2e account's tokens, and never log it out everywhere | a logout everywhere revokes a subject's every session, which must never be the e2e account's on a live session |
 | the engine job routes are checked for their refusals only | a cut, a slot saved or a song sent changes the engine's machine |
 | a spec's capture goes under a day of the 1990s, checked absent first, and removed by that day | no person recorded on that day, so a removal by day takes nobody's capture |
 | an absolute path is refused as `/etc/passwd` everywhere and as `C:/Windows/win.ini` only when the server is Windows, which the file service's root says by its drive (`serverOnWindows` in `src/service.ts`) | on Linux a drive letter is a plain name inside the folder, a 404; the runner's own platform says nothing about the server's |

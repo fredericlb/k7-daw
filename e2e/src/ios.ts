@@ -173,7 +173,6 @@ export const ios = base.extend<{ k7: K7 }, { phone: Phone }>({
       await expect
         .poll(
           async () => {
-            await api.get("/auth/local", { maxRedirects: 0 }).catch(() => null);
             return studioState(api);
           },
           {
@@ -194,8 +193,8 @@ export const ios = base.extend<{ k7: K7 }, { phone: Phone }>({
         baseURL: IOS_ORIGIN,
       });
       const view = await context.newPage();
-      // The local user, as the app's own view signs in.
-      await view.goto(`${IOS_ORIGIN}/auth/local?return_to=%2F`);
+      // The page asks `/auth/me` for its token itself.
+      await view.goto(`${IOS_ORIGIN}/`);
       await view.waitForLoadState("networkidle");
       await use({ view, context, request: api });
       await browser.close();

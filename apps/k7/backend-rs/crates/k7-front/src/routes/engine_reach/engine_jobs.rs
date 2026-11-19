@@ -13,11 +13,13 @@ use k7_engine::js::{invalid_type, number_issues, string_issues};
 use k7_engine::tunnel::frames::{Kind, Root};
 use serde_json::{Map, Value, json};
 
-use super::caller::{Caller, session_only};
+use super::caller::session_only;
 use super::engines::reach;
 use super::job::{JOB_IDLE, JOB_TOTAL, of_type, request_job};
 use super::{Routes, answer, fail, seams_of};
 use crate::AppState;
+use crate::routes::engine::holder;
+use crate::session::LOCAL_EMAIL;
 use crate::web::read_json;
 
 /// How long a save may take, its files crossing first.
@@ -51,23 +53,9 @@ pub fn routes() -> Routes {
         )
 }
 
-fn text<'a>(user: &'a Map<String, Value>, k: &str) -> Option<&'a str> {
-    user.get(k)
-        .and_then(Value::as_str)
-        .filter(|s| !s.is_empty())
-}
-
-/// `claimHolder`: the session's email, else its subject.
-pub fn holder(user: &Map<String, Value>) -> String {
-    text(user, "email")
-        .or_else(|| text(user, "sub"))
-        .unwrap_or("")
-        .to_string()
-}
-
 /// `requireAuth`: the session alone.
 #[allow(clippy::result_large_err, reason = "the refusal is the answer itself")]
-fn session(state: &AppState, req: &Request) -> Result<Caller, Response> {
+fn session(state: &AppState, req: &Request) -> Result<(), Response> {
     session_only(state, req).map_err(|r| *r)
 }
 
@@ -110,9 +98,8 @@ fn refused(issues: Option<String>) -> Option<Response> {
 
 /// `owned`: engine `id` must be one this device's account may use.
 #[allow(clippy::result_large_err, reason = "the refusal is the answer itself")]
-async fn owned(state: &AppState, caller: &Caller, id: &str) -> Result<(), Response> {
-    let user = caller.user().unwrap_or_default();
-    match reach(state).view(id, &holder(&user)).await {
+async fn owned(state: &AppState, id: &str) -> Result<(), Response> {
+    match reach(state).view(id, &holder()).await {
         Err(e) => {
             eprintln!("engine slots: {e}");
             Err(fail(StatusCode::INTERNAL_SERVER_ERROR, "internal error"))
@@ -163,16 +150,15 @@ async fn job(
     }
 }
 
-/// The caller, then `owned`, then the job `body`; the answer carries the session's cookies.
+/// The session, then `owned`, then the job `body`.
 async fn owner_job(state: Arc<AppState>, req: Request, id: String, body: Value) -> Response {
-    let caller = match session(&state, &req) {
-        Ok(c) => c,
-        Err(r) => return r,
-    };
-    if let Err(r) = owned(&state, &caller, &id).await {
-        return caller.finish(r);
+    if let Err(r) = session(&state, &req) {
+        return r;
     }
-    caller.finish(job(&state, &id, body, Vec::new(), None).await)
+    if let Err(r) = owned(&state, &id).await {
+        return r;
+    }
+    job(&state, &id, body, Vec::new(), None).await
 }
 
 async fn slots(
@@ -225,22 +211,21 @@ async fn footswitch(
     Path((id, slot)): Path<(String, String)>,
     req: Request,
 ) -> Response {
-    let caller = match session(&state, &req) {
-        Ok(c) => c,
-        Err(r) => return r,
-    };
+    if let Err(r) = session(&state, &req) {
+        return r;
+    }
     let body = match read_json(req).await {
         Ok((_, b)) => b,
-        Err(r) => return caller.finish(r),
+        Err(r) => return r,
     };
     if let Some(r) = refused(footswitch_issues(&body)) {
-        return caller.finish(r);
+        return r;
     }
-    if let Err(r) = owned(&state, &caller, &id).await {
-        return caller.finish(r);
+    if let Err(r) = owned(&state, &id).await {
+        return r;
     }
     let body = json!({ "type": "slot-footswitch", "slotId": slot, "cc": body["cc"] });
-    caller.finish(job(&state, &id, body, Vec::new(), None).await)
+    job(&state, &id, body, Vec::new(), None).await
 }
 
 /// `POST /:id/slots`: `{ ref }`, the account's chain compiled by its file service, then saved on the machine.
@@ -249,33 +234,30 @@ async fn save(
     Path(id): Path<String>,
     req: Request,
 ) -> Response {
-    let caller = match session(&state, &req) {
-        Ok(c) => c,
-        Err(r) => return r,
-    };
+    if let Err(r) = session(&state, &req) {
+        return r;
+    }
     let body = match read_json(req).await {
         Ok((_, b)) => b,
-        Err(r) => return caller.finish(r),
+        Err(r) => return r,
     };
     if let Some(r) = refused(save_issues(&body)) {
-        return caller.finish(r);
+        return r;
     }
-    if let Err(r) = owned(&state, &caller, &id).await {
-        return caller.finish(r);
+    if let Err(r) = owned(&state, &id).await {
+        return r;
     }
-    let user = caller.user().unwrap_or_default();
-    let email = user.get("email").and_then(Value::as_str).unwrap_or("");
     let compiled = seams_of(&state)
         .seam
-        .file_hub_job("/slot", json!({ "user": email, "ref": body["ref"] }))
+        .file_hub_job("/slot", json!({ "user": LOCAL_EMAIL, "ref": body["ref"] }))
         .await;
     let compiled = match compiled {
         Ok(c) => c,
-        Err(e) => return caller.finish(fail(StatusCode::BAD_REQUEST, &e)),
+        Err(e) => return fail(StatusCode::BAD_REQUEST, &e),
     };
     let roots: Vec<Root> =
         serde_json::from_value(compiled.get("roots").cloned().unwrap_or(json!([])))
             .unwrap_or_default();
     let body = json!({ "type": "slot-save", "slot": compiled.get("slot").cloned().unwrap_or(Value::Null) });
-    caller.finish(job(&state, &id, body, roots, Some(SAVE)).await)
+    job(&state, &id, body, roots, Some(SAVE)).await
 }

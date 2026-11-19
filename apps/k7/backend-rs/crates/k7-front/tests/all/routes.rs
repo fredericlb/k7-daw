@@ -15,7 +15,7 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     let root = std::env::temp_dir().join(format!("k7-front-routes-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let mut env: std::collections::BTreeMap<String, String> = [
-        ("SESSION_SECRET", "test-secret"),
+        ("K7_SESSION_TOKEN", crate::http_support::TOKEN),
         ("STUDIO_PREFS_DIR", root.join("prefs").to_str().unwrap()),
         ("STUDIO_AUTH_DIR", root.join("auth").to_str().unwrap()),
     ]
@@ -45,16 +45,8 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     }
 }
 
-fn cookie(sub: &str) -> String {
-    let user = serde_json::json!({ "sub": sub, "email": "a@b.c" })
-        .as_object()
-        .unwrap()
-        .clone();
-    let now = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis() as f64;
-    k7_auth::cookie_header(user, "studio.sid", "test-secret", now)
+fn cookie() -> String {
+    crate::http_support::cookie()
 }
 
 async fn send(addr: SocketAddr, raw: String) -> String {
@@ -96,7 +88,7 @@ async fn health_answers_with_the_backend_version() {
 #[tokio::test]
 async fn preferences_round_trip_into_the_backends_file() {
     let f = front("prefs", &[]).await;
-    let c = format!("Cookie: {}", cookie("abc|1"));
+    let c = format!("Cookie: {}", cookie());
     let json = "Content-Type: application/json".to_string();
     assert!(
         send(f.addr, request("GET", "/api/preferences", &[], ""))
@@ -119,7 +111,7 @@ async fn preferences_round_trip_into_the_backends_file() {
     )
     .await;
     assert!(put.ends_with(r#"{"ok":true}"#), "{put}");
-    let file = std::fs::read_to_string(f.prefs.join(k7_front_file("abc|1"))).unwrap();
+    let file = std::fs::read_to_string(f.prefs.join("dev-user-2aed2fcc28e7.json")).unwrap();
     assert_eq!(
         file,
         "{\n  \"engineId\": \"e\",\n  \"commands\": {\n    \"k\": {\n      \"order\": 2\n    }\n  },\n  \"favorites\": [\n    \"x\"\n  ]\n}\n"
@@ -146,33 +138,10 @@ async fn preferences_round_trip_into_the_backends_file() {
     assert!(wrong.starts_with("HTTP/1.1 400"), "{wrong}");
 }
 
-/// The file name a subject `abc|1` is stored under.
-fn k7_front_file(sub: &str) -> String {
-    let slug: String = sub
-        .chars()
-        .map(|c| {
-            if c.is_ascii_alphanumeric() || c == '_' || c == '-' {
-                c
-            } else {
-                '_'
-            }
-        })
-        .collect();
-    use sha2::Digest;
-    let hash = sha2::Sha256::digest(sub.as_bytes());
-    format!(
-        "{slug}-{}.json",
-        hash.iter()
-            .take(6)
-            .map(|b| format!("{b:02x}"))
-            .collect::<String>()
-    )
-}
-
 #[tokio::test]
 async fn a_cross_site_write_is_refused_and_a_preflight_answered() {
     let f = front("cors", &[]).await;
-    let c = format!("Cookie: {}", cookie("a"));
+    let c = format!("Cookie: {}", cookie());
     let evil = send(
         f.addr,
         request(
@@ -224,11 +193,10 @@ async fn a_device_answers_its_own_machine_only() {
     )
     .await;
     assert!(foreign.starts_with("HTTP/1.1 403"), "{foreign}");
-    let c = format!("Cookie: {}", cookie("someone"));
+    let c = format!("Cookie: {}", cookie());
     let own = send(f.addr, request("GET", "/api/preferences", &[c], "")).await;
     assert!(
-        own.starts_with("HTTP/1.1 200")
-            && own.to_ascii_lowercase().contains("set-cookie: studio.sid="),
+        own.starts_with("HTTP/1.1 200"),
         "the local user's session: {own}"
     );
 }

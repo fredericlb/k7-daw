@@ -39,12 +39,6 @@ pub struct Seams {
 impl Seams {
     /// The seam when the front can check sessions and holds an engine core.
     pub fn start(config: &crate::Config, settings: &Settings, seam: &str) -> Option<Arc<Seams>> {
-        if !settings.claims_sessions() {
-            eprintln!(
-                "k7-front: the engine slots need the auth folder (STUDIO_AUTH_DIR or STUDIO_MEDIATEK); they are not answered"
-            );
-            return None;
-        }
         if !settings.engine_core {
             eprintln!(
                 "k7-front: the engine slots need K7_ENGINE_CORE=front; they are not answered"

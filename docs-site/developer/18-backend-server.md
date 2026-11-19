@@ -8,16 +8,16 @@ It has **no file routes of its own**. Every file and project operation belongs t
 
 The order is load-bearing; `web.rs` applies, top to bottom, to every route the front owns:
 
-1. **Refusal to start** (`crates/k7-front/src/auth_guard.rs`): unless `STUDIO_LOCAL_USER=1` (a device) or `STUDIO_DEV_AUTH=1` (a local dev session), the process refuses to start when `SESSION_SECRET` is the public default or shorter than 32 characters.
+1. **Token**: at its first start the front draws the install's token and keeps it in its auth folder (`apps/k7/backend-rs/docs/sessions.md`).
 2. **Security headers**: `X-Content-Type-Options: nosniff`, a strict referrer policy.
 3. **Loopback only** when `STUDIO_LOCAL_USER=1`: the desktop app's and phone's front answer their own machine only, by peer address **and** `Host` header (a rebound DNS name reaching 127.0.0.1 is refused).
 4. **CORS**: credentialed calls are answered only for loopback pages on a user's own machine; a cross-site write from any other origin is refused.
 5. One shared JSON parser at 256 kB.
-6. **Session**: the session cookie `studio.sid` is read and minted (`apps/k7/backend-rs/docs/sessions.md`); `/auth/me`, `/auth/logout` and `/auth/local` are routes of the front (`apps/k7/backend-rs/docs/routes.md`).
+6. **Session**: the token cookie `k7.sid` is read (`apps/k7/backend-rs/docs/sessions.md`); `/auth/me`, which hands it over, is a route of the front (`apps/k7/backend-rs/docs/routes.md`).
 7. **The `/api` guard** (`routes/last/api.rs`): a request without a session is refused.
 8. **Preferences**: `/api/preferences` behind the session.
 9. **The SPA**: precompressed static files from the frontend's build output (`dist` under `apps/k7/frontend`) — hashed assets cached for a year as immutable, the shell `no-cache` and only framable by the same origin — then `index.html` for every path except `/api`, `/auth` and `/assets/` (a missing chunk must 404, not return HTML).
-10. The 404 page, last.
+10. The 404, last.
 
 The front's address is the desktop app's or phone's loopback port, or `K7_FRONT_LISTEN`. Requests may run 30 minutes (large uploads). On `SIGTERM`/`SIGINT` the front stops what it started and drains.
 

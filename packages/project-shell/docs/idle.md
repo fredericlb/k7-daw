@@ -121,7 +121,7 @@ Two things it does NOT do, both deliberate:
 
 ## What this does not cover
 
-**The login session does not move.** The `studio.sid` cookie is worth seven days and is not
+**The login session does not move.** The `k7.sid` token cookie lasts a year and is not
 sliding; nothing here touches it. Deliberate, and worth saying, because "disconnect" reads both
 ways: what closes is the link to the ENGINE, not the identity.
 

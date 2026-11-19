@@ -23,7 +23,7 @@ fn read_ticket(ticket: &str) -> Value {
 #[tokio::test(flavor = "multi_thread")]
 async fn the_hub_in_the_front() {
     let (front, root) = device_front().await;
-    let ann = cookie(json!({ "sub": "a", "email": "ann@x", "groups": [] }));
+    let ann = cookie();
     let session = [("cookie", ann.as_str())];
     assert_eq!(
         send(front, "GET", "/api/files-hub", &[]).await.json(),
@@ -40,13 +40,6 @@ async fn the_hub_in_the_front() {
     assert_eq!(
         payload.as_object().unwrap().keys().collect::<Vec<_>>(),
         ["u", "exp"]
-    );
-    assert_eq!(
-        k7_hub::ticket::read(b"test-secret:files", &ticket, 0.0)
-            .unwrap()
-            .user,
-        "dev@example.com",
-        "a device's session is its local user, whoever the cookie names"
     );
 
     let spoofed = [

@@ -139,14 +139,13 @@ node apps/k7/backend-rs/crates/k7-picture/page.mjs >> "$logs/chromium.log" 2>&1 
 lap "chromium"
 
 echo "=== a fresh bed ==="
-# The dev env.yaml e2e/docs/e2e.md asks for, a DEVICE's front (STUDIO_LOCAL_USER, as the desktop app sets it), its secret new at each run; the suites read it at the tree's root.
+# The dev env.yaml e2e/docs/e2e.md asks for, a DEVICE's front (STUDIO_LOCAL_USER, as the desktop app sets it), its token new at each run; the suites read it at the tree's root.
 # It holds what every bed shares: a key it names beats the environment, so each bed's folders reach its processes as variables instead.
 cat > env.yaml << EOF
 # Written by engine/scripts/ci/e2e-macos.sh for the macOS e2e bed; rewritten at every run.
 common:
-  SESSION_SECRET: "$(openssl rand -hex 32)"
+  K7_SESSION_TOKEN: "$(openssl rand -hex 32)"
 k7-front:
-  STUDIO_DEV_AUTH: "1"
   STUDIO_LOCAL_USER: "1"
   K7_INSTANCE: "local"
   STUDIO_LIBRARY_SEED: "k7-core=$tree/k7-core"

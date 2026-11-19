@@ -8,13 +8,13 @@ The k7 editor in the browser talks to three servers, and each request has exactl
 | Runs | the device itself | in the Rust front, one runtime for the local account | the engine's machine |
 | Owns | `/auth/*`, the device's preferences, AI settings and engine registry | the account's workspaces: every file op, the change set the verbs commit, compile, revision, undo, conflicts | playback, transport, meters, live params |
 | Reached | same origin, `/api/*` and `/auth/*` | through the backend's hub, at the base URL the engine probe returns; never directly | WebSocket, direct when allowed, else relayed through the origin |
-| Auth | the `studio.sid` cookie | a hub ticket in headers (`<ticket>~<engineId>`), minted from the session; the cookie is never sent | engine token |
+| Auth | the `k7.sid` cookie | a hub ticket in headers (`<ticket>~<engineId>`), minted from the token; the cookie is never sent | engine token |
 
 ## In the frontend
 
 `apps/k7/frontend/src/api.ts` is the one typed client:
 
-- auth: `/auth/me`, `/auth/local?return_to=…`, `POST /auth/logout` — spelled at the root, since k7 is the service with no prefix;
+- auth: `/auth/me` — spelled at the root, since k7 is the service with no prefix;
 - `engines` (`engineAccess` from `@studio/engine-browser/access`): the registry, probe, lease and relay, plus the account preferences (`prefs`, `patchPrefs`) at k7's own root;
 - `api.*`: the file service, built on `@studio/project-shell`'s `projectApi` and `fget`/`fsend`, whose base and headers are set once by the gate;
 - `aiOrganize`: `/api/ai/*`.

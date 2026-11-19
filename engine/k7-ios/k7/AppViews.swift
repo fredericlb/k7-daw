@@ -147,7 +147,7 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         apps = given.compactMapValues { ($0 as? String).flatMap(URL.init(string:)) }
         guard let address = apps[id]?.absoluteString else { return call.reject("no address for \(id)") }
         // On the phone's own studio a view opens as the local user, as the desktop window does.
-        let home = studio == BackendHost.origin && id == "k7" ? BackendHost.localHome : address
+        let home = studio == BackendHost.origin && id == "k7" ? BackendHost.home : address
         appBridge.setStudio(studio)
         self.studio = studio
         let view = views[id] ?? create(id)
@@ -188,7 +188,7 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         // Once in a while at most: a local sign-in that keeps failing must not reload forever.
         if Date().timeIntervalSince(localSignInAt) < Self.localSignInGap { return }
         localSignInAt = Date()
-        if let to = URL(string: BackendHost.localHome) { views["k7"]?.load(URLRequest(url: to)) }
+        if let to = URL(string: BackendHost.home) { views["k7"]?.load(URLRequest(url: to)) }
     }
 
     // Until the page has said, the shell page's own background shows through.

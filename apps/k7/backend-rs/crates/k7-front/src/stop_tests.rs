@@ -15,8 +15,6 @@ use tokio::task::JoinHandle;
 
 use crate::{AppState, Config};
 
-const SECRET: &str = "test-secret";
-
 /// A front being served, the state it built seen weakly, and the switch that stops it.
 struct Running {
     addr: SocketAddr,
@@ -26,12 +24,11 @@ struct Running {
     served: JoinHandle<std::io::Result<()>>,
 }
 
-/// A front on a folder of its own, given `env` beside the session secret and the auth folder.
+/// A front on a folder of its own, given `env` beside the auth folder.
 async fn start(name: &str, env: impl Fn(&Path) -> Vec<(&'static str, String)>) -> Running {
     let root = std::env::temp_dir().join(format!("k7-front-stop-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let mut vars: BTreeMap<String, String> = BTreeMap::new();
-    vars.insert("SESSION_SECRET".into(), SECRET.into());
     vars.insert(
         "STUDIO_AUTH_DIR".into(),
         root.join("auth").to_string_lossy().into_owned(),

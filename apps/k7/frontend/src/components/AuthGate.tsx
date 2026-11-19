@@ -1,20 +1,15 @@
-// AuthGate.tsx — the OUTERMOST gate: the machine's local user must hold a session before anything else mounts,
-// since the engine chooser and the file API are session-protected and would 401 for an anonymous tab.
-// There is no sign-in screen: an anonymous tab is sent to the backend's `/auth/local` and comes back signed in.
+// AuthGate.tsx — the OUTERMOST gate: the page must hold the backend's token before anything else mounts, since the
+// engine chooser and the file API answer it alone. There is no sign-in screen: `/auth/me` hands the token over.
 
 import { GateWait } from "@studio/project-shell/progress";
 import { Button } from "@studio/ui/button";
 import { SignInScreen } from "@studio/ui/sign-in-screen";
 import { type ReactNode, useEffect, useState } from "react";
 import { type AuthUser, api } from "../api";
-import { localApp } from "../localApp";
 import { m } from "../paraglide/messages.js";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 
-// The machine's local user, minted by its own backend only.
-const LOCAL_SIGN_IN = "/auth/local";
-
-// getMe answers null for a 401 and THROWS for anything else; off a device both are `down`.
+// getMe answers null for a 401 and THROWS for anything else; both are `down`.
 type Phase =
   | { k: "checking" }
   | { k: "down"; detail: string }
@@ -28,15 +23,13 @@ export function AuthGate({ children }: { children: ReactNode }) {
     let cancelled = false;
     api
       .getMe()
-      .then(async (user) => {
+      .then((user) => {
         if (cancelled) return;
-        if (user) return setPhase({ k: "authed", user });
-        // Nobody signed in is the machine's local user, which only its own backend can start.
-        if (await localApp()) {
-          const back = encodeURIComponent(location.pathname + location.search);
-          return location.replace(`${LOCAL_SIGN_IN}?return_to=${back}`);
-        }
-        setPhase({ k: "down", detail: "/api/local: no answer" });
+        setPhase(
+          user
+            ? { k: "authed", user }
+            : { k: "down", detail: "/auth/me: no session" },
+        );
       })
       .catch(
         (e: Error) =>
@@ -52,7 +45,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
   if (phase.k === "checking")
     return <GateWait label={m["startup.signingIn"]()} />;
 
-  // The service that mints the session is down.
+  // The backend that hands the token over is down.
   return (
     <SignInScreen
       title="K7 DAW"

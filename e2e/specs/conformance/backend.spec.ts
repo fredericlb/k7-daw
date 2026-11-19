@@ -1,4 +1,4 @@
-// backend.spec.ts — what the front answers: the session cookie, a body, a stream and an upgrade (e2e/docs/conformance.md).
+// backend.spec.ts — what the front answers: the token cookie, a body, a stream and an upgrade (e2e/docs/conformance.md).
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { expect, test } from "@playwright/test";
@@ -19,8 +19,8 @@ test("health answers without a session", async ({ request }) => {
   expect((await res.json()).ok).toBe(true);
 });
 
-test("the session cookie the suite mints is read", async ({ request }) => {
-  expect((await request.get("/auth/me")).status()).toBe(401);
+test("the install's token is read", async ({ request }) => {
+  expect((await request.get("/api/preferences")).status()).toBe(401);
   const res = await request.get("/auth/me", { headers: { cookie: cookie() } });
   expect(res.status()).toBe(200);
   expect((await res.json()).user.email).toBe(E2E_USER.email);

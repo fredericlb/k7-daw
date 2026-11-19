@@ -17,7 +17,7 @@ use tokio::sync::mpsc;
 
 use super::Local;
 use crate::AppState;
-use crate::session::{Signed, signed, with_cookies};
+use crate::session::holds;
 use crate::streams::{ChannelBody, closed};
 use crate::web::{error, read_json, read_json_within};
 
@@ -57,8 +57,8 @@ fn running(state: &AppState) -> Option<&Arc<Local>> {
 }
 
 /// `requireAuth`'s session; None answers its 401 (`unauthorized`).
-fn session(state: &AppState, req: &Request) -> Option<Signed> {
-    signed(req.headers(), &state.settings, &state.revocations)
+fn session(state: &AppState, req: &Request) -> bool {
+    holds(req.headers(), &state.settings)
 }
 
 fn unauthorized() -> Response {
@@ -76,11 +76,11 @@ pub async fn info(State(state): State<Arc<AppState>>) -> Response {
 
 /// `GET /api/local/engine`: `{snapshot, down}`.
 pub async fn get(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let Some(signed) = session(&state, &req) else {
+    if !session(&state, &req) {
         return unauthorized();
     };
     let body = local(&state).engine.state().to_json();
-    with_cookies(axum::Json(body).into_response(), &signed)
+    axum::Json(body).into_response()
 }
 
 fn frame(state: &k7_local::State) -> Bytes {
@@ -89,7 +89,7 @@ fn frame(state: &k7_local::State) -> Bytes {
 
 /// `GET /api/local/engine/events`: the state now, then each change, as Server-Sent Events.
 pub async fn events(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let Some(signed) = session(&state, &req) else {
+    if !session(&state, &req) {
         return unauthorized();
     };
     let mut changes = local(&state).engine.subscribe();
@@ -128,21 +128,21 @@ pub async fn events(State(state): State<Arc<AppState>>, req: Request) -> Respons
         CACHE_CONTROL,
         HeaderValue::from_static("no-cache, no-transform"),
     );
-    with_cookies(response, &signed)
+    response
 }
 
 /// `POST /api/local/engine/cmd`: one allowed command, handed to the supervisor.
 pub async fn cmd(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let Some(signed) = session(&state, &req) else {
+    if !session(&state, &req) {
         return unauthorized();
     };
     let body = match read_json(req).await {
         Ok((_, b)) => b,
-        Err(r) => return with_cookies(r, &signed),
+        Err(r) => return r,
     };
     let cmd = body.get("cmd").and_then(Value::as_str);
     let arg = body.get("arg");
-    let answer = match cmd {
+    match cmd {
         Some(c) if PAGE_COMMANDS.contains(&c) => match arg {
             None => {
                 local(&state).engine.send(c, None);
@@ -155,8 +155,7 @@ pub async fn cmd(State(state): State<Arc<AppState>>, req: Request) -> Response {
             Some(_) => error(StatusCode::BAD_REQUEST, "arg must be a string"),
         },
         _ => error(StatusCode::BAD_REQUEST, "command not allowed"),
-    };
-    with_cookies(answer, &signed)
+    }
 }
 
 /// A random version-4 UUID, as `randomUUID` spells one.
@@ -190,12 +189,12 @@ fn stage(body: &Value) -> std::io::Result<std::path::PathBuf> {
 
 /// `POST /api/local/engine/slots`: a compiled slot staged in a file and handed over by path, as `slot.save`.
 pub async fn slots(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let Some(signed) = session(&state, &req) else {
+    if !session(&state, &req) {
         return unauthorized();
     };
     let body = match read_json_within(req, SLOT_LIMIT).await {
         Ok((_, b)) => b,
-        Err(r) => return with_cookies(r, &signed),
+        Err(r) => return r,
     };
     let id = body.get("id").and_then(Value::as_str).map(str::to_string);
     // `typeof doc === "object"`, which null and an array pass too.
@@ -203,7 +202,7 @@ pub async fn slots(State(state): State<Arc<AppState>>, req: Request) -> Response
         body.get("doc"),
         Some(Value::Object(_) | Value::Array(_) | Value::Null)
     );
-    let answer = match id {
+    match id {
         Some(id) if body.is_object() && doc => match stage(&body) {
             Ok(path) => {
                 local(&state)
@@ -217,6 +216,5 @@ pub async fn slots(State(state): State<Arc<AppState>>, req: Request) -> Response
             ),
         },
         _ => error(StatusCode::BAD_REQUEST, "a slot is {id, …, doc}"),
-    };
-    with_cookies(answer, &signed)
+    }
 }

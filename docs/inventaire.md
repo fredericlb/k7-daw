@@ -243,11 +243,10 @@ One leftover name: `m9`, an application that does not exist, is a session id in 
 
 ## 7. Kept after the OIDC sign-in left the front
 
-The front serves `/auth/local`, `/auth/me` and `/auth/logout` and nothing of a provider. What stays, and why it is not dead:
+The front serves `/auth/me` and nothing of a provider. What stays, and why it is not dead:
 
 | kept | where | why |
 |---|---|---|
-| `auth_guard.rs` | `k7-front/src` | the refusal of a short or public session secret, which a front started past it would sign with (D2) |
 
 ## Left on the phones and the supervisor after the pairing left
 

@@ -12,7 +12,7 @@ use serde_json::{Value, json};
 
 use super::super::files_of;
 use super::super::service;
-use super::proxy::{email_of, libraries, session_of};
+use super::proxy::{libraries, session_of};
 use crate::AppState;
 use crate::web::{error, read_json_within};
 
@@ -20,22 +20,16 @@ use crate::web::{error, read_json_within};
 pub async fn hello(State(state): State<Arc<AppState>>, req: Request) -> Response {
     let hub = &files_of(&state).hub;
     // No gate: a ticket names an account, and the page asks for it to be able to ask for anything at all.
-    let Some(signed) = session_of(&state, &req) else {
+    if !session_of(&state, &req) {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
-    let user = email_of(&signed);
-    let response = if user.is_empty() {
-        error(StatusCode::UNAUTHORIZED, "no user on the session")
-    } else {
-        let ticket = k7_hub::ticket::mint(
-            &hub.ticket_key,
-            &user,
-            crate::session::now_ms(),
-            k7_hub::ticket::TICKET_TTL_MS,
-        );
-        Json(json!({ "path": "/api/files", "ticket": ticket })).into_response()
-    };
-    crate::session::with_cookies(response, &signed)
+    }
+    let ticket = k7_hub::ticket::mint(
+        &hub.ticket_key,
+        crate::session::LOCAL_EMAIL,
+        crate::session::now_ms(),
+        k7_hub::ticket::TICKET_TTL_MS,
+    );
+    Json(json!({ "path": "/api/files", "ticket": ticket })).into_response()
 }
 
 /// `/api/files-hub/internal/*`: only this hub's own account runtimes, by their secret.

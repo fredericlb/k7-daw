@@ -23,7 +23,6 @@ needs the auth folder, as every session route does (`front.md`), and stays off w
 
 | requirement | why |
 |---|---|
-| the auth folder, and `SESSION_SECRET`, in the front's settings | every engine route behind the session is answered here (the switch stays off without the folder) |
 | `STUDIO_ENGINES_DIR` in the front's settings, the folder the previous release used | the bindings file is the registry's memory across restarts, and a rollback reads the same files |
 
 ## The choices

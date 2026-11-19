@@ -11,25 +11,15 @@ use hyper::{HeaderMap, Method, StatusCode};
 use super::super::files_of;
 use super::super::service::{self, Pass};
 use crate::AppState;
-use crate::session::Signed;
 use crate::web::error;
 
 /// Who the session says is calling.
-pub(super) fn session_of(state: &AppState, req: &Request) -> Option<Signed> {
-    crate::session::signed(req.headers(), &state.settings, &state.revocations)
+pub(super) fn session_of(state: &AppState, req: &Request) -> bool {
+    crate::session::holds(req.headers(), &state.settings)
 }
 
 fn is_libraries(path: &str) -> bool {
     path == "/account/libraries" || path.starts_with("/account/libraries/")
-}
-
-/// The session's email, `emailOf(req) ?? ""`.
-pub(super) fn email_of(s: &Signed) -> String {
-    s.user
-        .get("email")
-        .and_then(|v| v.as_str())
-        .unwrap_or("")
-        .to_string()
 }
 
 /// A standalone's files wait for its libraries, and only where a write would need them: a workspace made
@@ -75,22 +65,13 @@ pub async fn files(State(state): State<Arc<AppState>>, req: Request) -> Response
     let ticket = (!presented.is_empty())
         .then(|| k7_hub::ticket::read(&hub.ticket_key, &presented, crate::session::now_ms()))
         .flatten();
-    let session = if ticket.is_none() {
-        session_of(&state, &req)
-    } else {
-        None
-    };
-    let user = match (&ticket, &session) {
-        (Some(t), _) => t.user.clone(),
-        (None, Some(s)) => email_of(s),
-        _ => String::new(),
-    };
-    if user.is_empty() {
+    if ticket.is_none() && !session_of(&state, &req) {
         return error(
             StatusCode::UNAUTHORIZED,
             "no valid files ticket, and no session",
         );
     }
+    let user = crate::session::LOCAL_EMAIL.to_string();
     let path = req.uri().path().strip_prefix("/api/files").unwrap_or("");
     let path = if path.is_empty() {
         "/".to_string()
@@ -101,16 +82,12 @@ pub async fn files(State(state): State<Arc<AppState>>, req: Request) -> Response
         Some(q) => format!("{path}?{q}"),
         None => path.clone(),
     };
-    let response = if is_libraries(&path) {
+    if is_libraries(&path) {
         libraries(&state, &target, req).await
     } else {
         let engine = header(req.headers(), "x-studio-engine-id")
             .or_else(|| ticket.and_then(|t| t.engine_id));
         forward(&state, &user, engine, &target, req).await
-    };
-    match &session {
-        Some(s) => crate::session::with_cookies(response, s),
-        None => response,
     }
 }
 

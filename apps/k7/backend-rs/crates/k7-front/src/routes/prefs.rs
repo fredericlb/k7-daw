@@ -11,7 +11,7 @@ use sha2::{Digest, Sha256};
 
 use crate::AppState;
 use crate::atomic::write_atomic;
-use crate::session::{Signed, https, signed_in, with_cookies};
+use crate::session::{LOCAL_SUB, holds};
 use crate::web::{error, read_json};
 
 /// The filename for a subject: a readable slug AND a hash.
@@ -31,68 +31,31 @@ pub fn file_for(sub: &str) -> String {
 
 /// GET: the stored document, `{}` for a subject who never saved.
 pub async fn get(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let Some(signed) = signed_in(
-        req.headers(),
-        &state.settings,
-        &state.revocations,
-        https(req.headers(), &state.settings),
-    ) else {
+    if !holds(req.headers(), &state.settings) {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
-    get_as(&state, &signed)
-}
-
-/// GET for a session already decided, the device door's among them.
-pub(crate) fn get_as(state: &AppState, signed: &Signed) -> Response {
-    let Some(sub) = signed.user.get("sub").and_then(Value::as_str) else {
-        return with_cookies(
-            error(StatusCode::UNAUTHORIZED, "no user on the session"),
-            signed,
-        );
-    };
-    let path = state.settings.prefs_dir.join(file_for(sub));
+    }
+    let path = state.settings.prefs_dir.join(file_for(LOCAL_SUB));
     let stored = std::fs::read(&path)
         .ok()
         .and_then(|b| serde_json::from_slice::<Value>(&b).ok())
         .unwrap_or_else(|| Value::Object(Map::new()));
-    with_cookies(axum::Json(stored).into_response(), signed)
+    axum::Json(stored).into_response()
 }
 
 /// PUT: the whole document, validated against the backend's schema, then written beside and renamed.
 pub async fn put(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let signed = signed_in(
-        req.headers(),
-        &state.settings,
-        &state.revocations,
-        https(req.headers(), &state.settings),
-    );
+    let signed = holds(req.headers(), &state.settings);
     // Parsed before the session is checked, as the backend's shared parser runs ahead of every guard.
     let sent = match read_json(req).await {
         Ok((_, v)) => v,
         Err(r) => return r,
     };
-    let Some(signed) = signed else {
+    if !signed {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
-    put_as(&state, &signed, &sent)
-}
-
-/// PUT for a session already decided, of a body already read.
-pub(crate) fn put_as(state: &AppState, signed: &Signed, sent: &Value) -> Response {
-    let Some(sub) = signed
-        .user
-        .get("sub")
-        .and_then(Value::as_str)
-        .map(str::to_string)
-    else {
-        return with_cookies(
-            error(StatusCode::UNAUTHORIZED, "no user on the session"),
-            signed,
-        );
-    };
-    let kept = match crate::prefs_schema::parse(sent) {
+    }
+    let kept = match crate::prefs_schema::parse(&sent) {
         Ok(k) => k,
-        Err(issues) => return with_cookies(error(StatusCode::BAD_REQUEST, &issues), signed),
+        Err(issues) => return error(StatusCode::BAD_REQUEST, &issues),
     };
     let dropped: Vec<&str> = sent
         .as_object()
@@ -108,23 +71,20 @@ pub(crate) fn put_as(state: &AppState, signed: &Signed, sent: &Value) -> Respons
             "this service does not store {} — declare it in its preferences schema",
             dropped.join(", ")
         );
-        return with_cookies(error(StatusCode::BAD_REQUEST, &message), signed);
+        return error(StatusCode::BAD_REQUEST, &message);
     }
     if write_atomic(
         &state.settings.prefs_dir,
-        &file_for(&sub),
+        &file_for(LOCAL_SUB),
         &pretty(&Value::Object(kept)),
     )
     .is_err()
     {
         let message =
             "the preference was applied but could not be stored — it will not outlive this session";
-        return with_cookies(error(StatusCode::INTERNAL_SERVER_ERROR, message), signed);
+        return error(StatusCode::INTERNAL_SERVER_ERROR, message);
     }
-    with_cookies(
-        axum::Json(serde_json::json!({ "ok": true })).into_response(),
-        signed,
-    )
+    axum::Json(serde_json::json!({ "ok": true })).into_response()
 }
 
 /// `JSON.stringify(value, null, 2)` and a newline.

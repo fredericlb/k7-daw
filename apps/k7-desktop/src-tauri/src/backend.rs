@@ -46,32 +46,18 @@ fn set(app: &AppHandle, b: Backend) {
     window::on_status(app, ready, &line);
 }
 
-/// The session secret, kept beside the backend's state so sessions outlive a restart; created once.
-fn session_secret(root: &Path) -> String {
-    let at = root.join("session-secret");
-    if let Ok(s) = std::fs::read_to_string(&at) {
-        if !s.trim().is_empty() {
-            return s.trim().to_string();
-        }
-    }
-    let s = random_hex(32);
-    let _ = std::fs::write(&at, &s);
-    s
-}
-
 pub fn random_hex(bytes: usize) -> String {
     let mut buf = vec![0u8; bytes];
     getrandom::fill(&mut buf).expect("no OS randomness");
     buf.iter().map(|b| format!("{b:02x}")).collect()
 }
 
-/// The table's environment, the folders under the state root and the session secret.
+/// The table's environment and the folders under the state root.
 fn shared_env(table: &Table, root: &Path) -> std::collections::BTreeMap<String, String> {
     let mut env = table.env.clone();
     for (k, rel) in &table.dirs {
         env.insert(k.clone(), root.join(rel).display().to_string());
     }
-    env.insert("SESSION_SECRET".into(), session_secret(root));
     env
 }
 

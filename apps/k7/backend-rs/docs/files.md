@@ -31,7 +31,7 @@ account names and environments, the engine bindings, the caches' sweep, with no 
 | `account_key` lives in `k7_hub::account`, and `hub-vectors.json` holds it | every folder of a files root names an account by the same function |
 | the hub's own calls (the engine seam) are `k7_hub::call`, one pooled hyper client | a seam's answer is JSON read whole |
 | the engine seam is called over loopback at the front's own port with `K7_FRONT_SECRET`, kept bindings re-posted under their key on a new epoch | the core answers it in this process today, but the contract is the seam's (`engine/reach.md`) |
-| the ticket's key is `${SESSION_SECRET}:files`, else 32 random bytes per process | an open page keeps its ticket through a deploy, and a ticket the previous release minted reads here |
+| the ticket's key is 32 random bytes per process | a ticket is read by the process that minted it |
 | `GET /api/files-hub` and `/api/files` read the request's own session | one identity for every route of the family |
 | `routes/auth/warm.rs` warms this hub on a signed-in `/auth/me` once the front holds the family, which does nothing on a server; a device's local user is warmed at launch | a page asks who is signed in before it lists anything, so its account's runtime is up by its first list |
 | `exts.json` is written through `k7_hub::json` (`JSON.stringify`'s spelling), a copy of `k7-mediatek`'s | `k7-mediatek` brings Wasmtime, which the front does not carry |
@@ -59,7 +59,7 @@ nothing is fetched. They answer `/account/libraries*` and
 
 | trust decision | what proves it | pinned by |
 |---|---|---|
-| a ticket is HMAC-SHA256 under `${SESSION_SECRET}:files`, compared in constant time, refused past its `exp`, with an empty or missing `u`, or malformed; the engine after `~` is unsigned and binds nothing without a claim | `k7_hub::ticket` | `tests/all/vectors.rs` (TypeScript-minted tickets, read and minted byte for byte), `ticket.rs`; `filesHub.spec.ts` |
+| a ticket is HMAC-SHA256 under the process's key, compared in constant time, refused past its `exp`, with an empty or missing `u`, or malformed; the engine after `~` is unsigned and binds nothing without a claim | `k7_hub::ticket` | `tests/all/vectors.rs` (TypeScript-minted tickets, read and minted byte for byte), `ticket.rs`; `filesHub.spec.ts` |
 | the identity a client sends is ignored (`x-studio-user`, `x-studio-hub-secret`, `x-studio-engine-token`): the account served is the ticket's or the session's | `hub/proxy.rs` `files` | `tests/files_hub.rs`; `filesHub.spec.ts` |
 | each runtime's secret is 32 random bytes, handed in its environment alone, and is its gate | `k7_hub::account::random_secret` | `tests/files_hub.rs` (a forged secret is a 401) |
 | `/api/files-hub/internal` answers only a held runtime's secret, compared in constant time, whatever else the request carries | `hub/answers.rs` `internal`, `State::account_of_secret` | `tests/files_hub.rs`; `filesHub.spec.ts` |

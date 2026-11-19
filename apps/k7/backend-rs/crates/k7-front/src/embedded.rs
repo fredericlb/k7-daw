@@ -12,14 +12,10 @@ struct Running {
 
 static RUNNING: Mutex<Option<Running>> = Mutex::new(None);
 
-/// Starts the front on a thread of its own; its port, or -3 when one runs already, -4 when the runtime or the bind fails, -5 when `auth_guard` refuses its settings.
+/// Starts the front on a thread of its own; its port, or -3 when one runs already, -4 when the runtime or the bind fails.
 pub fn start(config: crate::Config) -> Result<u16, i32> {
     // A host that chose no sink for the front's last words gets stderr (`exit.rs`).
     crate::exit::watch(None);
-    if let Some(refused) = crate::auth_guard::refusal(&config.env) {
-        eprintln!("{refused}");
-        return Err(-5);
-    }
     let config = match config.settled() {
         Ok(c) => c,
         Err(e) => {
@@ -97,23 +93,22 @@ mod tests {
             listen: "127.0.0.1:0".parse().unwrap(),
             secret: "s".into(),
             trust_hops: 0,
-            env: [("STUDIO_LOCAL_USER".to_string(), "1".to_string())].into(),
+            env: [
+                ("STUDIO_LOCAL_USER".to_string(), "1".to_string()),
+                (
+                    "STUDIO_AUTH_DIR".to_string(),
+                    std::env::temp_dir()
+                        .join(format!("k7-embedded-{}", std::process::id()))
+                        .display()
+                        .to_string(),
+                ),
+            ]
+            .into(),
         };
         let port = start(config.clone()).expect("starts");
         assert!(port > 0);
         assert_eq!(start(config), Err(-3), "a second start is refused");
         assert!(stop());
         assert!(!stop(), "nothing left to stop");
-    }
-
-    #[test]
-    fn a_host_without_sign_in_is_refused() {
-        let config = crate::Config {
-            listen: "127.0.0.1:0".parse().unwrap(),
-            secret: "s".into(),
-            trust_hops: 0,
-            env: Default::default(),
-        };
-        assert_eq!(start(config), Err(-5));
     }
 }

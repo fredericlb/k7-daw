@@ -9,8 +9,8 @@ npm run dev:desktop                   # only the desktop app and its engine, no 
 ## Where it answers
 
 **Loopback.** The session is a DEVICE, as the desktop app and the e2e beds are: `env.yaml`'s `k7-front`
-section sets `STUDIO_LOCAL_USER`, and k7 opens on **http://127.0.0.1:5223** with no login — `/auth/local`
-signs the machine's own user in, and it answers loopback peers only, so the page is visited on the
+section sets `STUDIO_LOCAL_USER`, and k7 opens on **http://127.0.0.1:5223** with no login — `/auth/me`
+hands the page its token, and it answers loopback peers only, so the page is visited on the
 workstation itself. Nothing terminates TLS and no proxy is in front: there is no edge to start, no
 `npm run caddy`, no certificate to trust.
 
@@ -37,7 +37,7 @@ it takes to make it one.
 
 ## Signing in is the device's, not a provider's
 
-`env.yaml` gives the dev session a `SESSION_SECRET` and `STUDIO_LOCAL_USER: "1"` in the `k7-front`
+`env.yaml` gives the dev session a `K7_SESSION_TOKEN` and `STUDIO_LOCAL_USER: "1"` in the `k7-front`
 section (`env.example.yaml`), the values the e2e bed writes (`engine/scripts/ci/e2e-macos.sh`). There is
 no OIDC provider in the session, no cookie domain and no admin group; a device has no admin. Neither the `Tiltfile` nor any script sets those flags.
 

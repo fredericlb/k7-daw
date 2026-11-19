@@ -11,7 +11,6 @@ import org.json.JSONObject
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
-import java.security.SecureRandom
 import java.util.zip.ZipInputStream
 
 /** One per PROCESS, like the supervisor: the front outlives a recreated activity. */
@@ -21,16 +20,8 @@ object BackendHost {
     const val ORIGIN = "http://127.0.0.1:$PORT"
     /** What every process that derives a loopback address is told — the backend, the supervisor, the pages. */
     const val PORTS_SPEC = "k7=$PORT"
-    /** Where a signed-out view lands: the local user, unless a session is already there. */
-    const val LOCAL_HOME = "$ORIGIN/auth/local?return_to=%2F"
-    // The session cookie the front names (apps/k7/backend-rs/docs/sessions.md).
-    private const val SESSION_COOKIE = "studio.sid"
-
-    /** k7's first page: `/` straight away when the WebView holds a session, else through the local sign-in; a stale one is caught by account.js. */
-    fun home(): String {
-        val cookies = android.webkit.CookieManager.getInstance().getCookie(ORIGIN)
-        return if (cookies?.split(';')?.any { it.trim().startsWith("$SESSION_COOKIE=") } == true) "$ORIGIN/" else LOCAL_HOME
-    }
+    /** k7's first page: the page asks `/auth/me` for its token itself (apps/k7/backend-rs/docs/sessions.md). */
+    const val HOME = "$ORIGIN/"
 
     private var app: Context? = null
     private var dirs: Dirs? = null
@@ -233,14 +224,13 @@ object BackendHost {
         override fun read(b: ByteArray, off: Int, len: Int): Int = super.read(b, off, len).also(::add)
     }
 
-    /** What the front is told: the table's environment, its folders, the session secret and the switches. */
+    /** What the front is told: the table's environment, its folders and the switches. */
     private fun sharedEnv(context: Context, dirs: Dirs): Map<String, String> {
         val out = mutableMapOf<String, String>()
         val env = dirs.table.getJSONObject("env")
         env.keys().forEach { out[it] = env.getString(it) }
         val folders = dirs.table.getJSONObject("dirs")
         folders.keys().forEach { out[it] = File(dirs.root, folders.getString(it)).absolutePath }
-        out["SESSION_SECRET"] = sessionSecret(dirs.root)
         // The registry, the relay and the tunnel hub in the front; the supervisor stays SupervisorHost's (docs/android.md).
         out["K7_ENGINE_CORE"] = "front"
         // The compiled modules in the app's own files (docs/android.md).
@@ -256,15 +246,6 @@ object BackendHost {
         // The user's own CAs for the front's outbound calls (a paired server, the hunt) (docs/android.md).
         TrustedCas.file(context).takeIf { it.isFile }?.let { out["K7_EXTRA_CA_CERTS"] = it.absolutePath }
         return out
-    }
-
-    /** Generated once and kept, so a session survives a restart. */
-    private fun sessionSecret(root: File): String {
-        val file = File(root, "session-secret")
-        if (file.isFile) return file.readText()
-        val secret = ByteArray(32).also { SecureRandom().nextBytes(it) }.joinToString("") { "%02x".format(it) }
-        file.writeText(secret)
-        return secret
     }
 
     /** Until the front answers its health on the studio's port; the library gate is the front's own (docs/android.md). */

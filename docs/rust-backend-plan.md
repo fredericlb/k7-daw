@@ -48,7 +48,7 @@ process of its own and already reaches the hub over a socket.
 
 | phase | content | gate |
 |---|---|---|
-| 0. foundations | the Cargo workspace (`apps/k7/backend-rs`); `k7-auth`; the front and its peer secret; `k7-embed` for Android and iOS; the conformance suite | a TS cookie read in Rust and a Rust cookie read by TS; conformance identical direct and through the front; the embed running on a phone |
+| 0. foundations | the Cargo workspace (`apps/k7/backend-rs`); the front and its peer secret; `k7-embed` for Android and iOS; the conformance suite | conformance identical direct and through the front; the embed running on a phone |
 | 1. small surfaces | health, preferences, app releases, cameras | conformance, and each implementation reading what the other wrote |
 | 2. engine trust, tested | the relay, ticket and tunnel lifecycle tests `docs/audit-moteur.md` §E lacks, written against TypeScript and kept as the gate of phase 4 | they pass, several runs in a row |
 | 3. the session and the leaves | `/auth/*` and the API tokens; the analysis, uploads, AI organize | the on-disk corpus read and written byte for byte; a token minted by either implementation accepted by the other's gate |
@@ -57,7 +57,7 @@ process of its own and already reaches the hub over a socket.
 | 6. cut-over (done) | the tray links the backend, Android and iOS load it, the backend is one binary; `apps/k7/backend`, node, Termux and `bundle.mjs` are gone | the functional suite on the web, the phone and the tray; one published version per switch before its TypeScript goes |
 
 The front is the backend in the dev session, the tray and every phone build
-(`apps/k7/backend-rs/docs/front.md`, `routes.md`). It owns the session (`/auth/local`, `/auth/logout`, `/auth/me`),
+(`apps/k7/backend-rs/docs/front.md`, `routes.md`). It owns the session (`/auth/me`),
 the preferences, the engine registry and tunnel hub, the file hub and the file service, the libraries (frozen to the
 bundled seed), the AI settings and the built page; the embed carries it on a phone
 (`apps/k7/backend-rs/docs/embed.md`).

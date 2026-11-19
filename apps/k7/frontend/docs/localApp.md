@@ -8,7 +8,7 @@ flag (`src/localApp.ts`).
 | choice | why |
 |---|---|
 | `GET /api/local`, answered by a machine's own backend only | the backend knows what it is; the answer also says whether it runs the engine and which release the desktop app ships |
-| the machine's session is ALWAYS its local user (`AuthGate` → `/auth/local`; the backend turns any other into it) | the machine works signed out, and one account folder holds its workspaces |
+| the page holds the backend's token, handed over by `GET /auth/me` (`AuthGate`) | the machine works signed out, one account folder holds its workspaces, and a page on another site gets no token (`apps/k7/backend-rs/docs/sessions.md`) |
 | the user menu's heading is the identity's name from Settings, "Local" while none is set (`src/projects/menuAccount.ts`) | the machine's own user is nobody's login, so the person names themselves once, for the commits and the menu |
 | the engine page over HTTP (`src/settings/desktopEngine.ts`) | k7's front runs the supervisor (`apps/k7/backend-rs/docs/localEngine.md`); the page reads its snapshot as events and sends allowed commands |
 | the engine list is this machine's own registry's | a project plays on the engine of the machine that holds it: a device's engine is listed at no server |

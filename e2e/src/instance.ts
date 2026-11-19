@@ -2,8 +2,7 @@
 // e2e account, the suite's own account), a small audio file to send and its sidecar fingerprint.
 // Every write goes under names a spec made up, and is removed by those names (e2e/docs/conformance.md).
 import { createHash } from "node:crypto";
-import { E2E_USER, sessionCookies } from "./session.ts";
-import type { SessionUser } from "./sessionCookie.ts";
+import { type SessionUser, sessionCookies } from "./session.ts";
 
 export const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
 
@@ -15,11 +14,10 @@ export const CONFORMANCE_USER: SessionUser = {
   groups: [],
 };
 
-/** The `cookie` header that signs `user` in, with `groups` in place of its own. */
-export function signedIn(user: SessionUser = E2E_USER, groups?: string[]) {
-  const who = groups ? { ...user, groups } : user;
+/** The `cookie` header that signs the page in: a device has one user, whoever a spec names. */
+export function signedIn(_user?: SessionUser) {
   return {
-    cookie: sessionCookies(base, who)
+    cookie: sessionCookies(base)
       .map((c) => `${c.name}=${c.value}`)
       .join("; "),
   };

@@ -8,7 +8,7 @@ laptop or a phone the three are the same machine: k7 is the desktop app or the a
                         the device (one origin)
  ┌───────────────────────────────────────────────────────────────────────┐
  │  k7 front (apps/k7/backend-rs, Rust, port 8789)                       │
- │   ├─ /auth/*        local user, mints the studio.sid session          │
+ │   ├─ /auth/me       hands the page its token (the k7.sid cookie)       │
  │   ├─ /api/files/*   file hub, the account's file service (in the Rust front)
  │   ├─ /api/engines   engine registry                                   │
  │   ├─ /api/engine    engine relay (WebSocket)                          │
@@ -38,9 +38,9 @@ laptop or a phone the three are the same machine: k7 is the desktop app or the a
 
 `apps/k7/backend-rs/crates/k7-front` is the whole entry point. In order, per request, it:
 
-1. refuses a guessable session secret at start (`auth_guard.rs`);
+1. draws the install's token at its first start (`session.rs`);
 2. sets the security headers, locks a device to its own machine, and answers CORS for loopback pages;
-3. reads the session cookie `studio.sid`, and answers `/auth/me`, `/auth/logout` and `/auth/local`
+3. reads the token cookie `k7.sid`, and answers `/auth/me`
    (`apps/k7/backend-rs/docs/routes.md`);
 4. answers the engine registry, the tunnel hub and the file hub, and the `/api` guard;
 5. serves per-account preferences at `/api/preferences`;

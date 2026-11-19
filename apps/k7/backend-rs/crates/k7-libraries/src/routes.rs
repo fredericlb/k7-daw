@@ -150,9 +150,7 @@ impl Libraries {
             Err(r) => return Ok(r),
         };
         let name = body.get("name").and_then(Value::as_str).map(str::to_string);
-        let notes = self
-            .blocking(move |s| s.ensure(name.as_deref()))
-            .await?;
+        let notes = self.blocking(move |s| s.ensure(name.as_deref())).await?;
         Ok(Reply::json(
             200,
             json!({ "notes": notes.iter().map(Note::json).collect::<Vec<_>>() }),

@@ -11,7 +11,7 @@ import { expect, request as playwright } from "@playwright/test";
 import { TunnelAgent } from "@studio/engine-tunnel/agent";
 import { type WebSocket, WebSocketServer } from "ws";
 import { base, signedIn } from "./instance.ts";
-import type { SessionUser } from "./sessionCookie.ts";
+import type { SessionUser } from "./session.ts";
 
 // biome-ignore lint/suspicious/noExplicitAny: a frame is read as the engine reads it, by its fields.
 export type Frame = Record<string, any>;

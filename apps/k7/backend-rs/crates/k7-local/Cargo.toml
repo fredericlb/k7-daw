@@ -23,6 +23,5 @@ doc = false
 # The front running this crate's engine end to end (`tests/all/front.rs`): a dev-dependency cycle Cargo allows for tests.
 [dev-dependencies]
 axum.workspace = true
-k7-auth.workspace = true
 k7-front.workspace = true
 tokio = { workspace = true, features = ["process", "time", "rt", "rt-multi-thread", "macros", "net"] }

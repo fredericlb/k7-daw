@@ -3,7 +3,6 @@
 //! owns is answered by `routes::last` (the page, else a 404), never handed to another process.
 
 mod atomic;
-pub mod auth_guard;
 mod config;
 pub mod embedded;
 pub mod exit;
@@ -47,10 +46,9 @@ use axum::response::Response;
 use axum::routing::{MethodRouter, get, post};
 use hyper::Method;
 
-/// What every handler reads: the settings, the revocations and the last routes a declined request ends in.
+/// What every handler reads: the settings and the last routes a declined request ends in.
 pub struct AppState {
     pub settings: Settings,
-    pub revocations: k7_auth::Revocations,
     pub cameras: routes::cameras::Cameras,
     /// The machine's engine, when a device's host gave it to the front (`docs/local.md`).
     pub local: Option<Arc<routes::local::Local>>,
@@ -66,17 +64,6 @@ pub struct AppState {
     pub files: Option<Arc<routes::files::Files>>,
     /// What no family answers: the built page and the 404 (`routes/last`).
     pub last: Arc<routes::last::Last>,
-}
-
-/// Whether the front answers `method` on a sign-in path; anything else there is declined.
-fn owns_auth(method: &Method, path: &str, local_user: bool) -> Option<bool> {
-    let read = matches!(*method, Method::GET | Method::HEAD | Method::OPTIONS);
-    Some(match path {
-        "/auth/me" => read,
-        "/auth/local" => local_user && read,
-        "/auth/logout" => method == Method::POST || method == Method::OPTIONS,
-        _ => return None,
-    })
 }
 
 /// A route behind the session: owned when the front can check sessions, else declined.
@@ -104,11 +91,10 @@ async fn claim(
     let local = routes::local::owns(req.method(), path).map(|owned| {
         let runs = state.local.as_ref().is_some_and(|l| l.owned());
         let device = state.settings.local_user && routes::local::is_device_path(path);
-        (owned && (runs || device), true)
+        owned && (runs || device)
     });
-    if let Some((owned, family)) = local {
-        let session = !family || routes::local::needs_session(path);
-        if !owned || session && !state.settings.claims_sessions() {
+    if let Some(owned) = local {
+        if !owned {
             return declined(State(state), peer, req).await;
         }
         return next.run(req).await;
@@ -138,17 +124,12 @@ async fn claim(
         }
         return next.run(req).await;
     }
-    let needs_session = path != "/api/health";
-    let owned_method = if let Some(owned) = owns_auth(method, path, state.settings.local_user) {
-        owned
-    } else {
-        matches!(*method, Method::GET | Method::HEAD | Method::OPTIONS)
-            || (path == "/api/preferences" && method == Method::PUT)
-            || (path == "/api/cameras/ticket" && method == Method::POST)
-            || (path == "/api/ai/settings" && method == Method::PUT)
-            || (path == "/api/ai/organize/turn" && method == Method::POST)
-    };
-    if !owned_method || needs_session && !state.settings.claims_sessions() {
+    let owned_method = matches!(*method, Method::GET | Method::HEAD | Method::OPTIONS)
+        || (path == "/api/preferences" && method == Method::PUT)
+        || (path == "/api/cameras/ticket" && method == Method::POST)
+        || (path == "/api/ai/settings" && method == Method::PUT)
+        || (path == "/api/ai/organize/turn" && method == Method::POST);
+    if !owned_method {
         return declined(State(state), peer, req).await;
     }
     next.run(req).await
@@ -159,21 +140,17 @@ type Built = (Router, Arc<AppState>);
 
 /// The routes, the last routes their fallback, with the hub's limits chosen and the state kept for `serve_with` to stop.
 fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
-    let settings = Settings::new(&config.env, config.trust_hops);
+    let mut settings = Settings::new(&config.env, config.trust_hops);
+    if settings.session_token.is_empty() {
+        settings.session_token = session::load_token(&settings.auth_dir);
+    }
     // A trusted-proxies list fixes the hop count.
     let config = &Config {
         trust_hops: settings.trust_hops,
         ..config.clone()
     };
-    let revocations = session::revocations(
-        settings
-            .auth_dir
-            .as_deref()
-            .unwrap_or(std::path::Path::new("")),
-    );
     let cameras = routes::cameras::Cameras::new(settings.camera_ice_servers.as_deref(), limits);
     let local = routes::local::Local::from_settings(&settings, port);
-    let local_user = settings.local_user;
     // The seam's file half is this front's own.
     let seam = format!("127.0.0.1:{port}");
     let engine = routes::engine::Engine::start(&settings);
@@ -183,7 +160,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
     let last = routes::last::Last::start(&settings);
     let state = Arc::new(AppState {
         settings,
-        revocations,
         cameras,
         local,
         closing: tokio::sync::watch::channel(false).0,
@@ -218,11 +194,7 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
             "/api/ai/organize/turn",
             sessioned(post(routes::ai::turn::post_turn)),
         )
-        .route(
-            "/auth/logout",
-            sessioned(post(routes::auth::account::logout)),
-        )
-        .route("/auth/me", sessioned(get(routes::auth::account::me)))
+        .route("/auth/me", sessioned(get(routes::auth::me)))
         .route("/api/local", get(routes::local::routes::info))
         .route("/api/local/engine", get(routes::local::routes::get))
         .route(
@@ -234,12 +206,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
             "/api/local/engine/slots",
             post(routes::local::routes::slots),
         );
-    // Mounted only on a device: a hosted server has no local user to sign in.
-    let owned = if local_user {
-        owned.route("/auth/local", sessioned(get(routes::auth::local::local)))
-    } else {
-        owned
-    };
     let owned = owned
         .merge(engine_guarded)
         .merge(routes::engine_reach::routes())

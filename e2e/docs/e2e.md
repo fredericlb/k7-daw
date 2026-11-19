@@ -69,11 +69,10 @@ revokes the simulator's microphone grant, which it restores.
 
 ## The web target signs in without the identity provider
 
-The instance signs its session cookie with its `SESSION_SECRET`, and that secret is in this machine's
-`env.yaml`. `src/session.ts` signs one the same way, with `sessionCookieHeader` from
-`src/sessionCookie.ts` — the helper that exists so tests do not hand-roll the encoding. So there is no
-password to store and no login page to script, and the suite cannot sign in anywhere whose secret is
-not on disk here: it is a local tool by construction.
+The instance answers one token, `K7_SESSION_TOKEN`, and that token is in this machine's `env.yaml`.
+`src/session.ts` presents it as the `k7.sid` cookie. So there is no password to store and no login page
+to script, and the suite cannot sign in anywhere whose token is not on disk here: it is a local tool by
+construction.
 
 It signs in as a dedicated account, `sub: "e2e"`. The file hub gives that account a workspace of
 its own, seeded with the `Examples` projects, so a spec that writes never touches a person's work.
@@ -173,7 +172,7 @@ absence has no event to wait on.
   `{ "registryUrls": ["https://app.priv.k7.rocks"] }`. Without it every project spec stops at
   "No engines found". `node e2e/scripts/engines.ts` prints what the e2e account sees. Against the
   dev session's own registry, that is `{"registryUrls": ["http://localhost:8789"]}`.
-- **A dev `env.yaml`** at the root, with `STUDIO_DEV_AUTH: "1"`, a `SESSION_SECRET`, a `STUDIO_FILES_ROOT` and `STUDIO_LIBRARY_SEED: "k7-core=<checkout>/k7-core"`.
+- **A dev `env.yaml`** at the root, with a `K7_SESSION_TOKEN`, a `STUDIO_FILES_ROOT` and `STUDIO_LIBRARY_SEED: "k7-core=<checkout>/k7-core"`.
   The files root sits under the engine's state (`~/.k7`) or in `$STUDIO_ENGINE_ROOTS`: the engine
   refuses every clip and preset path outside its roots.
 - **A library**: none to create, the bundled seed (`STUDIO_LIBRARY_SEED`) is the account's `k7-core`.
@@ -260,7 +259,7 @@ reference's reports.
 
 | choice | why |
 |---|---|
-| the bed starts the front as a device: `env.yaml` carries `STUDIO_LOCAL_USER` (and `K7_INSTANCE: local`), as the desktop app's `standalone.json` does, and `E2E_USER` is then the local user (`dev-user`) | the server is fading away and its account runtime is gone: the file service, the project pages and `/api/local` exist only on a device, so a server bed would skip or fail the web suite and about 22 conformance specs. A device turns every session into its one local user, so the suite signs in as that user |
+| the bed starts the front as a device: `env.yaml` carries `STUDIO_LOCAL_USER` (and `K7_INSTANCE: local`), as the desktop app's `standalone.json` does, and `E2E_USER` is then the local user (`dev-user`) | the server is fading away and its account runtime is gone: the file service, the project pages and `/api/local` exist only on a device, so a server bed would skip or fail the web suite and about 22 conformance specs. A device has one user whatever the cookie names, so the suite signs in as that user |
 | a device has one account and no admin, so the suite signs in as `E2E_USER` alone; what needs a stranger, an author or a refusal is held by the Rust tests, not staged here | its libraries are the published versions it pins |
 | on a device bed every spec holding the account's file service or served project runs in one lane (`playwright.conformance.config.ts`) | the specs' separate accounts are one account here, so two of them at once would cut each other's calls |
 | the bench (`/workspaces/bench`, New chain) is not run on a device bed | the bed's `k7-core` is a draft, not a published version a desktop app installs, and the bench's rig declines (`would-throw`) on it; a server's releases are not made on a device |

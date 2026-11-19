@@ -24,7 +24,7 @@ Dev ports: **frontend 5223, front 8789**, the dev session a device on loopback a
 | runs on | the device | the device, inside the Rust front, the local account | the engine's machine (the device's own) |
 | owns | with its Rust front: `/auth/*` for the whole origin, the preferences, the engine registry and the file hub (the device's files) | the account's workspaces — every file op | audio playback |
 | reached | same-origin (`/api`, `/auth` via the Vite proxy) | **through the origin's `/api/files`, never directly** | **WebSocket — direct when the browser may, else relayed through this origin** |
-| auth | session cookie (`studio.sid`) | a ticket the hub mints from the session | engine token echoed on `whoami` |
+| auth | the install's token, cookie `k7.sid` | a ticket the hub mints from the session | engine token echoed on `whoami` |
 
 **The front has no `store.ts`.** Every file operation lives in
 `apps/k7/backend-rs/crates/k7-file-service/src/workspaces/mod.rs`. Don't look for `tree`/`read`/`write`/`fmt`
@@ -42,10 +42,10 @@ of the project the ENGINE is holding, which `GET /engine/served` answers and whi
 question as each workspace's active-project marker. It is `AuthGate` → `ExternalIndex` and probes
 for a machine without claiming one (`frontend/docs/external.md`). It is read BEFORE `parseLaunch`, since a single segment is
 otherwise a workspace — so `external` is a reserved short name. The engine
-picker is unreachable until the local user holds a session either way.
+picker is unreachable until the page holds the token either way.
 
-**`/auth/*` is k7's**, answered by its Rust front (`apps/k7/backend-rs/docs/routes.md`): `/auth/local`, `/auth/me` and
-`/auth/logout`, one session cookie `studio.sid` signed with `SESSION_SECRET`. The front has no identity provider: the session is the device's local user.
+**`/auth/*` is k7's**, answered by its Rust front (`apps/k7/backend-rs/docs/routes.md`): `/auth/me` alone, which hands the
+page the install's token as the cookie `k7.sid` (`apps/k7/backend-rs/docs/sessions.md`). The front has no identity provider: the session is the device's local user.
 
 Spell this app's auth calls BARE (`/auth/me`), never under `BASE` — here the two coincide, for
 every other app they do not.

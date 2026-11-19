@@ -30,9 +30,8 @@ The keys you need in dev:
 |---|---|---|
 | `STUDIO_FILES_ROOT` | `k7-front` | **Required.** Where the device's workspaces live; the front answers no file hub without it. |
 | `STUDIO_MEDIATEK` | `k7-front` | The instance's data folder (the engine registry). Defaults to `~/.k7/mediatek`. |
-| `SESSION_SECRET` | `common` | Signs the session cookie. |
+| `K7_SESSION_TOKEN` | `common` | The install's token, the `k7.sid` cookie; empty, the front draws one. |
 | `STUDIO_LOCAL_USER` | `k7-front` | `1` in the dev session: it runs as a device, whose session is its local user; there is no sign-in provider to configure. |
-| `COOKIE_DOMAIN` | `common` | Leave empty for local http: setting it forces `Secure` and `SameSite=None`. |
 
 `env.example.yaml` documents the remaining optional keys (prefs folder and the like).
 

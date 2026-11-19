@@ -23,11 +23,10 @@ pub struct Config {
 }
 
 /// What the routes read of the environment a host hands the front.
-pub const ENV_KEYS: [&str; 36] = [
+pub const ENV_KEYS: [&str; 35] = [
     "K7_EXTRA_CA_CERTS",
-    "SESSION_SECRET",
+    "K7_SESSION_TOKEN",
     "STUDIO_LOCAL_USER",
-    "STUDIO_DEV_AUTH",
     "STUDIO_PREFS_DIR",
     "STUDIO_AUTH_DIR",
     "STUDIO_MEDIATEK",
@@ -90,10 +89,6 @@ impl Config {
                 .filter_map(|k| var(k).map(|v| (k.to_string(), v)))
                 .collect(),
         };
-        // A guessable session secret refuses the start before anything listens (`auth_guard`).
-        if let Some(refused) = crate::auth_guard::refusal(&config.env) {
-            return Err(refused);
-        }
         config.settled()
     }
 
@@ -139,11 +134,5 @@ mod tests {
     fn a_named_secret_is_kept() {
         let c = from(&[("STUDIO_LOCAL_USER", "1"), ("K7_FRONT_SECRET", "s")]).unwrap();
         assert_eq!(c.secret, "s");
-    }
-
-    #[test]
-    fn a_guessable_session_secret_refuses_the_start_unless_a_device() {
-        assert!(from(&[]).unwrap_err().contains("SESSION_SECRET"));
-        assert!(from(&[("STUDIO_LOCAL_USER", "1")]).is_ok());
     }
 }

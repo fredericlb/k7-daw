@@ -4,7 +4,6 @@
 use std::net::SocketAddr;
 use std::path::PathBuf;
 
-use serde_json::{Value, json};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpStream;
 
@@ -17,7 +16,7 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     let root = std::env::temp_dir().join(format!("k7-front-leaves-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let mut env: std::collections::BTreeMap<String, String> = [
-        ("SESSION_SECRET", "test-secret".to_string()),
+        ("K7_SESSION_TOKEN", crate::http_support::TOKEN.to_string()),
         ("STUDIO_PREFS_DIR", root.join("prefs").display().to_string()),
         ("STUDIO_AUTH_DIR", root.join("auth").display().to_string()),
         (
@@ -47,18 +46,8 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     }
 }
 
-fn cookie(user: Value) -> String {
-    let now = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis() as f64;
-    let header = k7_auth::cookie_header(
-        user.as_object().unwrap().clone(),
-        "studio.sid",
-        "test-secret",
-        now,
-    );
-    format!("Cookie: {header}")
+fn cookie() -> String {
+    format!("Cookie: {}", crate::http_support::cookie())
 }
 
 /// Status, headers lowercased, and the body.
@@ -98,7 +87,7 @@ fn json_type() -> String {
 #[tokio::test]
 async fn ai_settings_keep_the_key_and_show_only_its_hint() {
     let f = front("ai", &[]).await;
-    let c = cookie(json!({ "sub": "acct|1" }));
+    let c = cookie();
     assert_eq!(
         call(f.addr, "GET", "/api/ai/settings", &[], "").await.0,
         401
@@ -184,7 +173,7 @@ async fn ai_settings_keep_the_key_and_show_only_its_hint() {
 #[tokio::test]
 async fn the_removed_organize_route_ends_in_the_last_routes() {
     let f = front("ai-declined", &[]).await;
-    let c = cookie(json!({ "sub": "a" }));
+    let c = cookie();
     let (s, _, _) = call(
         f.addr,
         "POST",

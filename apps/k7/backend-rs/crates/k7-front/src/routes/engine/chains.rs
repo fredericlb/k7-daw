@@ -12,8 +12,9 @@ use k7_engine::tunnel::frames::{Kind, Root};
 use serde_json::{Value, json};
 
 use crate::AppState;
-use crate::routes::engine_reach::caller::{Caller, session_only};
-use crate::routes::engine_reach::engine_jobs::{OPEN_JOBS, holder};
+use crate::routes::engine::holder;
+use crate::routes::engine_reach::caller::session_only;
+use crate::routes::engine_reach::engine_jobs::OPEN_JOBS;
 use crate::routes::engine_reach::engines::reach;
 use crate::routes::engine_reach::job::{JOB_IDLE, JOB_TOTAL, of_type, request_job};
 use crate::web::read_json;
@@ -37,13 +38,12 @@ pub async fn chains(
     Path(id): Path<String>,
     req: Request,
 ) -> Response {
-    let caller = match session_only(&state, &req) {
-        Ok(c) => c,
-        Err(refused) => return *refused,
-    };
-    match owned(&state, &caller, &id).await {
-        Ok(()) => caller.finish(ask(&state, &id, json!({ "type": "chains" })).await),
-        Err(r) => caller.finish(r),
+    if let Err(refused) = session_only(&state, &req) {
+        return *refused;
+    }
+    match owned(&state, &id).await {
+        Ok(()) => ask(&state, &id, json!({ "type": "chains" })).await,
+        Err(r) => r,
     }
 }
 
@@ -53,29 +53,27 @@ pub async fn set(
     Path(id): Path<String>,
     req: Request,
 ) -> Response {
-    let caller = match session_only(&state, &req) {
-        Ok(c) => c,
-        Err(refused) => return *refused,
-    };
+    if let Err(refused) = session_only(&state, &req) {
+        return *refused;
+    }
     // The body is read before the gate, so a malformed one is the 400 it is rather than a 403 about ownership.
     let body = match read_json(req).await {
         Ok((_, b)) => b,
-        Err(r) => return caller.finish(r),
+        Err(r) => return r,
     };
     if let Some(e) = chains_issues(&body) {
-        return caller.finish(fail(StatusCode::BAD_REQUEST, &e));
+        return fail(StatusCode::BAD_REQUEST, &e);
     }
-    match owned(&state, &caller, &id).await {
-        Ok(()) => caller.finish(ask(&state, &id, json!({ "type": "chains", "set": body })).await),
-        Err(r) => caller.finish(r),
+    match owned(&state, &id).await {
+        Ok(()) => ask(&state, &id, json!({ "type": "chains", "set": body })).await,
+        Err(r) => r,
     }
 }
 
 /// Engine `id` as the caller sees it must be theirs: an engine's settings are its owner's to write.
 #[allow(clippy::result_large_err, reason = "the refusal is the answer itself")]
-async fn owned(state: &AppState, caller: &Caller, id: &str) -> Result<(), Response> {
-    let user = caller.user().unwrap_or_default();
-    match reach(state).view(id, &holder(&user)).await {
+async fn owned(state: &AppState, id: &str) -> Result<(), Response> {
+    match reach(state).view(id, &holder()).await {
         Err(e) => {
             eprintln!("engine chains: {e}");
             Err(fail(StatusCode::INTERNAL_SERVER_ERROR, "internal error"))

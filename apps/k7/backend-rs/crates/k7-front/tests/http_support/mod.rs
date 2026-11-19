@@ -70,16 +70,10 @@ pub async fn send_with(
     }
 }
 
-/// The `Cookie` value that signs `user` in.
-pub fn cookie(user: serde_json::Value) -> String {
-    let now = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap()
-        .as_millis() as f64;
-    k7_auth::cookie_header(
-        user.as_object().unwrap().clone(),
-        "studio.sid",
-        "test-secret",
-        now,
-    )
+/// The token a front started with `K7_SESSION_TOKEN` answers to.
+pub const TOKEN: &str = "test-token-0123456789abcdef0123456789abcdef";
+
+/// The `Cookie` value that signs a page in.
+pub fn cookie() -> String {
+    format!("k7.sid={TOKEN}")
 }

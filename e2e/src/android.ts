@@ -135,11 +135,10 @@ export const android = base.extend<{ k7: K7 }, { phone: Phone }>({
         `${ANDROID_PACKAGE}/se.frediver.k7.MainActivity`,
       );
       const api = await request.newContext({ baseURL: PHONE_ORIGIN });
-      // The local user, as the app's view signs in: the same account, through a cookie of this context's own.
+      // The token, as the app's view is handed it: `/auth/me` gives this context a cookie of its own.
       await expect
         .poll(
           async () => {
-            await api.get("/auth/local", { maxRedirects: 0 }).catch(() => null);
             return studioState(api);
           },
           {

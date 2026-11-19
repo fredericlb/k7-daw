@@ -21,8 +21,8 @@ final class BackendHost {
     static var origin: String { "http://127.0.0.1:\(port)" }
     /// What every part that derives a loopback address is told — the front, the supervisor, the pages.
     static var portsSpec: String { "k7=\(port)" }
-    /// Where a signed-out view lands: the local user, unless a session is already there.
-    static var localHome: String { "\(origin)/auth/local?return_to=%2F" }
+    /// k7's first page: the page asks `/auth/me` for its token itself (apps/k7/backend-rs/docs/sessions.md).
+    static var home: String { "\(origin)/" }
 
     /// What the shell page shows: `starting` with a step (`launching`), `ready`, or `failed` with why.
     struct Status {
@@ -176,22 +176,10 @@ final class BackendHost {
 
     private var bundle: URL { Bundle.main.resourceURL!.appendingPathComponent("backend", isDirectory: true) }
 
-    /// Generated once and kept, so a session survives a restart.
-    private func sessionSecret() -> String {
-        let file = root.appendingPathComponent("session-secret")
-        if let kept = try? String(contentsOf: file, encoding: .utf8), !kept.isEmpty { return kept }
-        var bytes = [UInt8](repeating: 0, count: 32)
-        _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
-        let secret = bytes.map { String(format: "%02x", $0) }.joined()
-        try? secret.write(to: file, atomically: true, encoding: .utf8)
-        return secret
-    }
-
-    /// The front's settings: the table's environment and folders, the session secret and every switch on `front`.
+    /// The front's settings: the table's environment and folders and every switch on `front`.
     private func environment() -> [String: String] {
         var env: [String: String] = [
             "STUDIO_PORTS": Self.portsSpec,
-            "SESSION_SECRET": sessionSecret(),
             "K7_ENGINE_CORE": "front",
             "K7_FILES": "front",
             "K7_FRONTEND_DIST": bundle.appendingPathComponent("dist").path,

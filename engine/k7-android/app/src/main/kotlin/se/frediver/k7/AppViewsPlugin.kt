@@ -201,10 +201,10 @@ class AppViewsPlugin : Plugin() {
         this.studio = studio
         val view = views.getOrPut(id) { create(id) }
         downloads.inject(id, view, Uri.parse(address))
-        // On the phone's own studio k7 opens as the local user, as the desktop window does (BackendHost.home).
+        // On the phone's own studio k7 opens as the local user, as the desktop window does (BackendHost.HOME).
         when {
             url != null -> view.loadUrl(url)
-            loaded[id] != address -> view.loadUrl(if (studio == BackendHost.ORIGIN && id == "k7") BackendHost.home() else address)
+            loaded[id] != address -> view.loadUrl(if (studio == BackendHost.ORIGIN && id == "k7") BackendHost.HOME else address)
         }
         loaded[id] = address
         views.forEach { (key, v) -> v.visibility = if (key == id) View.VISIBLE else View.GONE }
@@ -245,7 +245,7 @@ class AppViewsPlugin : Plugin() {
         // Once in a while at most: a local sign-in that keeps failing must not reload forever.
         if (now - localSignInAt < LOCAL_SIGN_IN_GAP_MS) return
         localSignInAt = now
-        views["k7"]?.loadUrl(BackendHost.LOCAL_HOME)
+        views["k7"]?.loadUrl(BackendHost.HOME)
     }
 
     private fun place() {

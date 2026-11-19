@@ -51,7 +51,7 @@ async fn front_with(
     }
     let entry = root.join("service.mjs").display().to_string();
     let env = [
-        ("SESSION_SECRET", "test-secret".to_string()),
+        ("K7_SESSION_TOKEN", crate::http_support::TOKEN.to_string()),
         ("STUDIO_AUTH_DIR", root.join("auth").display().to_string()),
         (
             "STUDIO_MEDIATEK",

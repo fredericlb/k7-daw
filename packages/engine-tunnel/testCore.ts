@@ -51,11 +51,9 @@ export async function startTestbed(
     env: {
       ...process.env,
       K7_ENGINE_TESTBED: "1",
-      // No sign-in provider here: without the dev flag the front refuses to start, as `auth_guard.rs` says.
-      STUDIO_DEV_AUTH: "1",
       K7_FRONT_SECRET: TESTBED_SECRET,
       K7_FRONT_LISTEN: "127.0.0.1:0",
-      SESSION_SECRET: TESTBED_SECRET,
+      K7_SESSION_TOKEN: TESTBED_SECRET,
       STUDIO_AUTH_DIR: mkdtempSync(join(tmpdir(), "testbed-auth-")),
       K7_ENGINE_TEST_MEMORY: "1",
       ...env,

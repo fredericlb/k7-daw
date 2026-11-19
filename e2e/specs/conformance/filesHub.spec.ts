@@ -1,12 +1,12 @@
 // filesHub.spec.ts — the file hub as a client sees it, in front of an account's file service: the hello and its signed
 // ticket, `/api/files` gated by the ticket (header or ?token=, an engine after `~`), the identity headers a client
 // cannot choose, a body streamed up and back, the service's answers passed through, and the internal seam's refusals.
-import { createHash, createHmac, randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { type APIRequestContext, expect, test } from "@playwright/test";
 import { base, signedIn } from "../../src/instance.ts";
-import { backendEnv, E2E_USER } from "../../src/session.ts";
+import { E2E_USER } from "../../src/session.ts";
 import {
   accountDir,
   FILES_USER,
@@ -18,13 +18,6 @@ import { until } from "../../src/until.ts";
 const ws = freshWorkspace();
 let ticket = "";
 const email = E2E_USER.email as string;
-
-/** A ticket signed as the hub signs them: base64url JSON `{u, exp, a?}`, a dot, its HMAC-SHA256 under `<SESSION_SECRET>:files`. */
-function signTicket(payload: object): string {
-  const key = `${backendEnv().SESSION_SECRET}:files`;
-  const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
-  return `${body}.${createHmac("sha256", key).update(body).digest("base64url")}`;
-}
 
 const withTicket = (t = ticket, extra: Record<string, string> = {}) => ({
   "x-studio-engine-token": t,
@@ -76,7 +69,7 @@ test.afterAll(async ({ request }) => {
   }
 });
 
-test("the hello turns a session into a ticket naming the account, signed, for twelve hours", async ({
+test("the hello turns a session into a ticket naming the account, for twelve hours", async ({
   request,
 }) => {
   expect((await request.get("/api/files-hub")).status()).toBe(401);
@@ -93,10 +86,9 @@ test("the hello turns a session into a ticket naming the account, signed, for tw
   expect(Math.abs(payload.exp - (Date.now() + 12 * 3600_000))).toBeLessThan(
     60_000,
   );
-  expect(hello.ticket).toBe(signTicket(payload));
 });
 
-test("/api/files takes the ticket in its header or in ?token=, and refuses a forged or expired one", async ({
+test("/api/files takes the ticket in its header or in ?token=, and refuses a forged one", async ({
   request,
 }) => {
   const none = await request.get("/api/files/workspaces");
@@ -111,19 +103,8 @@ test("/api/files takes the ticket in its header or in ?token=, and refuses a for
   expect(
     await names(request, {}, `?token=${encodeURIComponent(ticket)}`),
   ).toEqual({ status: 200, names: expect.arrayContaining([ws]) });
-  // One the spec signs with the instance's key is as good as the hub's own.
-  expect(
-    (
-      await names(
-        request,
-        withTicket(signTicket({ u: email, exp: Date.now() + 60_000 })),
-      )
-    ).names,
-  ).toContain(ws);
+  // The process's key is its own: a ticket the spec signs is refused.
   for (const bad of [
-    signTicket({ u: email, exp: Date.now() - 1000 }),
-    signTicket({ u: "", exp: Date.now() + 60_000 }),
-    signTicket({ exp: Date.now() + 60_000 }),
     `${ticket.split(".")[0]}.${randomBytes(32).toString("base64url")}`,
     ticket.split(".")[0],
     "not-a-ticket",

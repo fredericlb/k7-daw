@@ -9,7 +9,7 @@ setup("sign in as the e2e account", async ({ context, page, baseURL }) => {
   const me = await page.request.get("/auth/me");
   expect(
     me.status(),
-    "the instance refused the minted session: wrong SESSION_SECRET?",
+    "the instance refused the token: is K7_SESSION_TOKEN the front's?",
   ).toBe(200);
   expect((await me.json()).user.sub).toBe(E2E_USER.sub);
   await context.storageState({ path: AUTH_STATE });

@@ -11,7 +11,7 @@ make that host's build produce the C library beside it, for nothing.
 
 | call | |
 |---|---|
-| `int32_t k7_front_start(const char *config_json)` | starts the front on a thread of its own; the port it listens on, or a negative code: -1 not UTF-8, -2 not a valid config (a backend named without its secret, or none named without every switch `front`: `front.md`), -3 one runs already, -4 the runtime or the bind failed, -5 its settings refused by the sign-in guard (`sessions.md`) |
+| `int32_t k7_front_start(const char *config_json)` | starts the front on a thread of its own; the port it listens on, or a negative code: -1 not UTF-8, -2 not a valid config (a backend named without its secret, or none named without every switch `front`: `front.md`), -3 one runs already, -4 the runtime or the bind failed |
 | `int32_t k7_front_stop(void)` | stops it and waits for it; -1 when none runs |
 | `void k7_roam_install(list, put)` | iOS: the host's list store as two callbacks, before the start (`roam.md`); a host that never calls it has no list |
 

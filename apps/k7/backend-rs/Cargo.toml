@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/k7-auth", "crates/k7-front", "crates/k7-embed", "crates/k7-local", "crates/k7-engine", "crates/k7-js", "crates/k7-mediatek", "crates/k7-hub", "crates/k7-sync", "crates/k7-picture", "crates/k7-file-service", "crates/k7-replica", "crates/k7-capture", "crates/k7-libraries", "crates/k7-git", "crates/k7-roam"]
+members = ["crates/k7-front", "crates/k7-embed", "crates/k7-local", "crates/k7-engine", "crates/k7-js", "crates/k7-mediatek", "crates/k7-hub", "crates/k7-sync", "crates/k7-picture", "crates/k7-file-service", "crates/k7-replica", "crates/k7-capture", "crates/k7-libraries", "crates/k7-git", "crates/k7-roam"]
 
 [workspace.package]
 version = "0.1.0"
@@ -8,7 +8,6 @@ edition = "2024"
 publish = false
 
 [workspace.dependencies]
-k7-auth = { path = "crates/k7-auth" }
 k7-front = { path = "crates/k7-front" }
 k7-local = { path = "crates/k7-local" }
 k7-engine = { path = "crates/k7-engine" }
@@ -72,6 +71,7 @@ tokio-tungstenite = "0.29"
 notify = "8"
 # axum's own, named for `oneshot`: a door hands a rewritten request to the shares' routes (crates/k7-front/src/routes/shares).
 tower = { version = "0.5", default-features = false, features = ["util"] }
+tower-http = { version = "0.6", default-features = false, features = ["fs"] }
 tokio = { version = "1", features = ["rt-multi-thread", "net", "macros", "signal", "sync", "io-util"] }
 
 # File and line in a backtrace, no variables: less than half the target folder; CARGO_PROFILE_DEV_DEBUG=2 for a debugger (docs/rust-builds.md).

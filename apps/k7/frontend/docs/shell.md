@@ -2,7 +2,7 @@
 
 ## What wraps the editor (`main.tsx`)
 
-The gates, outermost first: **AuthGate** (the machine's local user must hold a session),
+The gates, outermost first: **AuthGate** (the page must hold the backend's token),
 **EngineGate** (find which registered engine to drive, without asking: the one most COMPATIBLE
 with the project — it has the plugins the project uses, `engineCompat.ts` — then the best latency
 class, then the strongest machine by performance score, among TRUSTED engines only — the one the

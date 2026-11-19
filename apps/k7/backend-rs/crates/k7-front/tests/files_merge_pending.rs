@@ -6,7 +6,6 @@ mod http_support;
 
 use files_hub_support::{device_front_with, send, send_with, settled};
 use http_support::cookie;
-use serde_json::json;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn a_workspace_with_a_merge_waiting_refuses_a_write_with_423_and_another_does_not() {
@@ -25,7 +24,7 @@ async fn a_workspace_with_a_merge_waiting_refuses_a_write_with_423_and_another_d
     })
     .await;
     settled(front).await;
-    let ann = cookie(json!({ "sub": "a", "email": "dev@example.com", "groups": [] }));
+    let ann = cookie();
     let session = [
         ("cookie", ann.as_str()),
         ("content-type", "application/json"),

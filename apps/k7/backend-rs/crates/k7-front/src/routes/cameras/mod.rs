@@ -14,12 +14,12 @@ use axum::extract::{ConnectInfo, FromRequestParts, Request, State};
 use axum::response::{IntoResponse, Response};
 use hyper::header::{CONNECTION, HeaderValue};
 use hyper::{HeaderMap, StatusCode};
-use serde_json::{Map, Value, json};
+use serde_json::{Value, json};
 
 pub use hub::{Hub, Limits};
 
 use crate::AppState;
-use crate::session::{https, signed_in, with_cookies};
+use crate::session::{LOCAL_SUB, holds};
 use crate::web::{error, read_json};
 use hub::{MAX_FRAME_BYTES, Role};
 use ticket::Tickets;
@@ -41,31 +41,16 @@ impl Cameras {
     }
 }
 
-/// `subjectOf`: the `sub`, else the email; empty is no account.
-fn account_of(user: &Map<String, Value>) -> Option<String> {
-    let pick = |k: &str| user.get(k).filter(|v| !v.is_null());
-    pick("sub")
-        .or_else(|| pick("email"))
-        .and_then(Value::as_str)
-        .filter(|a| !a.is_empty())
-        .map(str::to_string)
-}
-
-/// `answer` for the session's account, with the cookies the front started; else the 401 `requireAuth` and the route send.
+/// `answer` for the device's one account; else the 401 `requireAuth` and the route send.
 fn as_account(
     headers: &HeaderMap,
     state: &AppState,
     answer: impl FnOnce(&str) -> Value,
 ) -> Response {
-    let https = https(headers, &state.settings);
-    let Some(signed) = signed_in(headers, &state.settings, &state.revocations, https) else {
+    if !holds(headers, &state.settings) {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");
-    };
-    let response = match account_of(&signed.user) {
-        Some(a) => axum::Json(answer(&a)).into_response(),
-        None => error(StatusCode::UNAUTHORIZED, "no account"),
-    };
-    with_cookies(response, &signed)
+    }
+    axum::Json(answer(LOCAL_SUB)).into_response()
 }
 
 /// GET: the account's cameras that are on, `[{ name, since }]`.
@@ -140,28 +125,4 @@ pub async fn socket(
         .max_frame_size(MAX_FRAME_BYTES)
         .on_failed_upgrade(move |_| failed.leave(&id))
         .on_upgrade(move |socket| hub.serve(admitted, socket))
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn the_account_is_the_sub_else_the_email() {
-        let user = |v: Value| v.as_object().unwrap().clone();
-        assert_eq!(
-            account_of(&user(json!({ "sub": "s", "email": "e" }))).as_deref(),
-            Some("s")
-        );
-        assert_eq!(
-            account_of(&user(json!({ "email": "e" }))).as_deref(),
-            Some("e")
-        );
-        assert_eq!(
-            account_of(&user(json!({ "sub": null, "email": "e" }))).as_deref(),
-            Some("e")
-        );
-        assert_eq!(account_of(&user(json!({ "sub": "", "email": "e" }))), None);
-        assert_eq!(account_of(&user(json!({}))), None);
-    }
 }

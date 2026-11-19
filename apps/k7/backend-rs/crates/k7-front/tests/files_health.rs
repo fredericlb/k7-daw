@@ -16,7 +16,7 @@ async fn the_actor_answers_its_health_with_no_node() {
     std::fs::create_dir_all(&root).unwrap();
     let missing = root.join("no-such-service.mjs").display().to_string();
     let env = [
-        ("SESSION_SECRET", "test-secret".to_string()),
+        ("K7_SESSION_TOKEN", http_support::TOKEN.to_string()),
         ("STUDIO_AUTH_DIR", root.join("auth").display().to_string()),
         (
             "STUDIO_MEDIATEK",
@@ -59,7 +59,7 @@ async fn the_actor_answers_its_health_with_no_node() {
         tokio::time::sleep(std::time::Duration::from_millis(50)).await;
     }
     assert!(up, "the front never took the file hub");
-    let ann = cookie(json!({ "sub": "a", "email": "ann@x", "groups": [] }));
+    let ann = cookie();
     let hello = send(front, "GET", "/api/files-hub", &[("cookie", ann.as_str())])
         .await
         .json();

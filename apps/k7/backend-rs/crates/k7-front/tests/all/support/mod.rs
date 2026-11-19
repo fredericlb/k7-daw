@@ -15,7 +15,7 @@ pub async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     let root = std::env::temp_dir().join(format!("k7-front-auth-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     let mut env: std::collections::BTreeMap<String, String> = [
-        ("SESSION_SECRET", "test-secret"),
+        ("K7_SESSION_TOKEN", crate::http_support::TOKEN),
         ("STUDIO_AUTH_DIR", root.join("auth").to_str().unwrap()),
     ]
     .iter()

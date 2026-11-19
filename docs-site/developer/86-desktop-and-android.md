@@ -35,7 +35,7 @@ A Tauri app (Rust) with one window, on Windows, Linux and macOS. It runs k7's Ru
 | `apps/k7/backend-rs/crates/k7-front/src/routes/local/` | The routes a page reaches it through: `/api/local/engine` (the snapshot as Server-Sent Events, an allow-list of commands), and `/api/local`, the probe that tells a page it is on a machine's own backend |
 | `apps/k7/frontend/src/settings/desktopEngine.ts` | The engine settings page (`/settings/engine`) over those routes |
 
-There is no sign-in: a signed-out page becomes the local user (`/auth/local`, the front's).
+There is no sign-in: a page asks `/auth/me` for its token and is the local user.
 
 ### Running and packaging
 

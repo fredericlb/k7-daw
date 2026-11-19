@@ -1,30 +1,25 @@
-# The session cookie
+# The session token
 
-`studio.sid` is minted and verified by `k7-auth` in the cookie-session and Keygrip format, and the suite's
-helper (`e2e/src/sessionCookie.ts`) mints the same bytes. The cookie's bytes are a **contract**: the vectors in
-`apps/k7/backend-rs/fixtures/session-vectors.json` freeze it.
-
-## The format
-
-- `studio.sid` is the base64 (standard alphabet, padded) of `JSON.stringify({user, iat, exp})`,
-  plus `_expire` when a lifetime was given.
-- `studio.sid.sig` is Keygrip's default signature of the string `studio.sid=<value>`: HMAC-SHA1
-  with the secret, base64 with `+/` written `-_`, without padding. The cookie's NAME is signed too.
-- A signature proves nothing about time. A session is valid only while `exp` and `_expire` are
-  ahead, its `iat` is not in the future beyond a minute of skew, its groups are under 12 hours old,
-  and its subject's revocation epoch is not after `iat`.
+A device has one user and the front listens on its loopback port, so a session does not say who someone is.
+It says one thing: the page holds this install's token. That keeps any other website the person has open from
+calling the loopback API with the person's own browser.
 
 ## The choices
 
 | choice | why |
 |---|---|
-| frozen vectors, `apps/k7/backend-rs/fixtures/session-vectors.json` | the Rust test (`crates/k7-auth/tests/all/vectors.rs`) fails when Rust disagrees with the stored cookies: a format change is a deliberate edit of the vectors |
-| the vectors include non-ASCII, quotes, a control character, nested values and a 300-character subject | those are where a JSON serializer differs from `JSON.stringify` |
-| `serde_json` with `preserve_order` | a minted cookie must list its keys in the order `JSON.stringify` writes them, or its bytes, and so its signature, differ |
-| the payload is decoded as leniently as node's `Buffer.from(…, "base64")`: either alphabet, padding optional | a cookie node accepts must not be refused here |
-| the signature is compared in constant time | as Keygrip's `verify` |
-| the `Set-Cookie` lines are cookie-session's too (`crates/k7-auth/src/cookie_session.rs`), with no `Domain` | the front mints and clears the device's session; when and how a cookie is rewritten is what a browser keeps (`docs/routes.md`, the session) |
-| every host's start refuses a session secret shorter than 32 characters or the public development default, unless `STUDIO_DEV_AUTH=1` or `STUDIO_LOCAL_USER=1` (`crates/k7-front/src/auth_guard.rs`). The binary exits 2, `k7_front_start` answers -5 | a known secret lets anyone mint a cookie |
-| the public default secret is read only where the dev stub may run; elsewhere an unset secret is no secret, the front then claims no session route, and the recorder stays unclaimed | a front started past the guard (a test, a host that forgot it) must fail closed, never sign with a literal anyone can read here |
+| one random token per install, 32 bytes as hex, drawn at the first start and kept in `session-token` under the auth folder (`STUDIO_AUTH_DIR`, else `<mediatek>/.auth`), mode 0600 where the OS has modes | a token that outlives a restart keeps the page's cookie valid; the owner alone may read it |
+| `K7_SESSION_TOKEN` names the token instead, for a bed or a test | the suites hold the token without reading a file of the instance |
+| the page presents it as the cookie `k7.sid`: `HttpOnly`, `SameSite=Strict`, `Path=/`, never `Secure` | no script of the page reads it, a request another site starts does not carry it, and a device's page is http on loopback |
+| the token is compared in constant time, and an empty token matches nothing | a front started with no token answers no session |
+| `GET /auth/me` hands the token over when the request holds none, and answers `{ user }` either way | the page asks it first (`AuthGate`), so there is no redirect and no host-specific step: the desktop window, a browser, and the phones' views all get the cookie the same way |
+| that answer is refused with 403 when the browser says `Sec-Fetch-Site: cross-site`, and every route is behind `web::guard` first: a loopback peer, a loopback `Host`, then the Origin and cross-site refusals | a page on another site, or a rebound name, is given no cookie and reads no answer |
+| the one user is `session::local_user()`, `dev@example.com`, whatever the cookie | nothing else names an account on a device |
+| there is no sign-out and no revocation | one user on one machine has nothing to end; deleting `session-token` and restarting issues a new token |
+| the page asks the file hub's hello only after `/auth/me` answered (`appMain.tsx`) | the hello needs the cookie, which the first `/auth/me` hands over |
 
-The vectors are written once, not generated: a change to the format edits them on purpose.
+## What this does not stop
+
+Any process of the machine that can reach loopback names a loopback `Host`, so it asks `/auth/me` and gets the
+token: on Android that is any app. What protects the device is that the front listens on `127.0.0.1` alone
+(`standalone.md`), and a web page cannot be that process.

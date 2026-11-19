@@ -24,8 +24,7 @@ elsewhere is something it can ADD, never something it needs. `BackendHost.kt` is
 | choice | why |
 |---|---|
 | the desktop app's port, environment and folders, read from `apps/k7/backend-rs/standalone.json` | one table for both, whose values `apps/k7/backend-rs/docs/standalone.md` explains; the port is a `BuildConfig` constant, since the views compare origins before anything is unpacked |
-| the local user when signed out | a view opens on `/auth/local`, and falls back to it whenever `/auth/me` says nobody — what a page on the desktop app's backend does (`apps/k7/frontend/docs/localApp.md`), with the signal the views already had |
-| k7's view opens straight on `/` when the WebView holds a `studio.sid` cookie (`BackendHost.home`) | `/auth/local` is a redirect before any app code, on every cold start; a cookie whose session is gone costs one bounce, since the page then says nobody and the fallback above loads `/auth/local` |
+| k7's view opens on `/` (`BackendHost.HOME`) | the page asks `/auth/me` for its token itself, as on the desktop app's backend (`apps/k7/frontend/docs/localApp.md`); the cookie is `SameSite=Strict`, which a same-origin view sends |
 | the phone's own studio pinned FIRST in the supervisor's list, before it starts | the supervisor's saved list overrides `$STUDIO_REGISTRY_URL`, so a phone that already listed a studio would never see its own otherwise |
 | the front runs in the app's process, with no node and no child for it | the front holds the file hub and every account's file service itself (`apps/k7/backend-rs/docs/files.md`); the page, the library it seeds and its code root ride in the zip (`apps/k7/backend-rs/scripts/stageBundle.mjs`) |
 | one `backend.zip` asset, unpacked once per install | the front reads files, not assets; the APK's `lastUpdateTime` marks the copy |
