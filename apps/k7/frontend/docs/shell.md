@@ -4,7 +4,8 @@
 
 The gates, outermost first: **AuthGate** (the machine's local user must hold a session),
 **EngineGate** (find this device's own engine, without asking: the one on this machine among
-what the registry lists; no other engine is taken, and none is offered), and **ProjectGate** (rendered by EngineGate: resolve the workspace this editor was opened on into a folder, then mount the editor).
+what the registry lists, reached directly on this machine or registered by this device's own account — an
+unowned engine is never taken, and none is offered), and **ProjectGate** (rendered by EngineGate: resolve the workspace this editor was opened on into a folder, then mount the editor).
 Several tabs may open one project at once; there is no single-tab lease.
 
 **The project opens BEFORE its engine is found, and without one at all.** The files are the

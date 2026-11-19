@@ -1,6 +1,6 @@
 // EngineGate.tsx — open the project at once and find this device's engine BESIDE it. The files are
 // the hub's, reached with no engine bound; the engine is looked for meanwhile — registered,
-// MEASURED, and taken when it is the one on this machine. The editor's link waits for that, and a
+// MEASURED, and taken when it is this device's own (`localEngineOf`). The editor's link waits for that, and a
 // project with no engine stays open and silent, the bar saying so. The claim waits for the address
 // to resolve, and a lost one leaves the project open under a banner. See ../../docs/shell.md.
 
