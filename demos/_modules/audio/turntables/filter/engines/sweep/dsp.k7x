@@ -1,0 +1,17 @@
+// Filter sweep — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({ Sweep: { min: -100, max: 100, default: 0 } })
+graph([
+  mul("Sweep", 0.01).as("t"),
+  clamp(mul("t", -1), 0, 1).as("down"),
+  clamp("t", 0, 1).as("up"),
+  add("down", "up").as("depth"),
+  lerp(0.707, 6, "down").as("lowQ"),
+  lerp(0.707, 6, "up").as("highQ"),
+  glide(geolerp(30, 20000, sub(1, "down"))).as("lowHz"),
+  glide(geolerp(20, 10000, "up")).as("highHz"),
+  biquad("lowpass", "lowHz", 0.707),
+  biquad("lowpass", "lowHz", "lowQ"),
+  biquad("highpass", "highHz", 0.707),
+  biquad("highpass", "highHz", "highQ"),
+  gain(lerp(1, 0.7, "depth")),
+])

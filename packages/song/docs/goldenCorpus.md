@@ -1,6 +1,6 @@
 # The golden corpus
 
-What the compiler made of 177 projects, committed and frozen under `apps/k7/backend-rs/fixtures/golden/`.
+What the compiler made of 174 projects, committed and frozen under `apps/k7/backend-rs/fixtures/golden/`.
 The files are recorded behaviour: `doc_golden.rs` decodes every `engine` document into the Rust `ProjectDoc`, and the
 same inputs, staged by `packages/song/scripts/stageCorpus.ts`, are a smoke test
 (`golden_smoke.rs` in `k7-file-service` and `serviceGolden.spec.ts`) that compiles every project, renders it and
@@ -9,8 +9,8 @@ judges what it sounds like. The native compiler is not held to the files byte fo
 | source | projects | what they are |
 |---|---|---|
 | `demos/` | 5 | the bundled demos the file service mirrors into every account's Examples |
-| `e2e/` | 33 | every `e2e/fixtures/*.k7`, the two broken ones included: their errors are the output |
-| `k7-core/` | 134 | one project per k7-core module, with one lane per engine it offers (304 module refs in all) |
+| `e2e/` | 32 | every `e2e/fixtures/*.k7`, the two broken ones included: their errors are the output |
+| `k7-core/` | 132 | one project per k7-core module, with one lane per engine it offers (301 module refs in all) |
 | `shapes/` | 5 | each archetype (`arrangement`, `mix`, `video`, `live`, `live-video`) as "New project" writes it |
 
 k7-core itself holds no project: it is modules, chains, an assembly and their files. A module is
@@ -57,14 +57,13 @@ The recorded files carry placeholders, so they read the same on every machine:
 
 Nothing else is touched: no timestamp, no hash, no random value reaches an output.
 
-## DSP modules, Faust
+## DSP modules
 
 22 projects compile DSP modules (the k7-core effects, the demos' `crossfade`). Their graphs
 are in the documents: the recorded documents play the `jsdsp.json`
 beside each, and the song crate's `dsp_literal` test holds every `dsp.k7x` to the graph the builder
 prints from its `jsdsp.ts`. A module that cannot play would compile to a pass-through graph and an error
-diagnostic in `errors` (`graphModel.md`); none of the 22 does. Faust modules travel as source, inline in the document, and need no
-compile here.
+diagnostic in `errors` (`graphModel.md`); none of the 22 does.
 
 ## Frozen
 

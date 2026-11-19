@@ -1,2 +1,0 @@
-extends("@k7-core/audio/lowpass")
-engine("moog-ladder")

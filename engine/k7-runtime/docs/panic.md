@@ -56,17 +56,11 @@ the core through its own `init()`, which lays it out again in buffers it already
 five allocate in `init()`, and hold nothing a release does not end. `scripts/eurorack-stop.ts` measures it against a running engine:
 a note with no note-off in reach, through a stop and then a panic.
 
-The **Faust host** (`FaustPlugin`) holds an instrument's voices in libfaust's voice group, which
-only the audio thread may touch either: `midiPanic()` raises a flag and the next block calls
-`allNotesOff(false)` — every gate drops, so each voice runs its own envelope's release rather than
-being cut. Without it a Faust instrument rings on through every stop until a panic's `reset()`
-clears the instance.
-
 ## A seek while playing ends the notes AND the tails
 
 A playhead jump sends no note-off for what was sounding at the old position: Tracktion's
 `PluginNode` sets `isAllNotesOff` on the block's MIDI buffer instead, and a plugin that reads only
-the messages never sees it. `FourOscPlugin` reads it, and so does `FaustPlugin`.
+the messages never sees it. `FourOscPlugin` reads it.
 
 A flag ends notes, not a reverb. So `EngineHost::seek` and `rewind`, when the transport is
 PLAYING, call `releaseOnSeek` (`SeekRelease.cpp`): `midiPanic()` then `reset()` — a panic, on a
@@ -78,7 +72,7 @@ old position's tail over it is noise.
 - **A list**, because `reset()` means something else on a plugin with no tail. A turntable drops
   its rate and loop, a recorder is free-running, `NamPlugin` re-prepares its network on the message
   thread, and a master's limiter cleared mid-song lets a transient through. On it: Tracktion's
-  Reverb, Delay, Impulse Response and 4OSC, and our Faust, DSP graph, SFZ, eurorack, MIDI graph,
+  Reverb, Delay, Impulse Response and 4OSC, and our DSP graph, SFZ, eurorack, MIDI graph,
   arpeggiator and pattern plugins.
 - **External plugins are left out**: what a VST does with a reset is its own business.
 - **A eurorack voice is CUT, not released**: Braids, Plaits and Tides allocate in `init()`, so
@@ -103,7 +97,7 @@ place is a data race on every stop: the arpeggiator zeroing its held count while
 divides by it is an integer division by zero, which is a crash.
 
 The eurorack modules were the first to do it; `ArpeggiatorPlugin`, `MidiGraphPlugin`,
-`GraphDspPlugin`, `FaustPlugin`, `TurntablePlugin`, `QuickMasterPlugin` and `MixerPlugin` do the
+`GraphDspPlugin`, `TurntablePlugin`, `QuickMasterPlugin` and `MixerPlugin` do the
 same, each with a private `clearState()` that only the audio thread calls, and `WaveformTapPlugin`
 for its half-filled bucket. `NamPlugin` is the one
 exception, and for a reason: its reset re-prepares the network, thousands of samples of inference

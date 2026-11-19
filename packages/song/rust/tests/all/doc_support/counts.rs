@@ -163,8 +163,6 @@ fn count_plugins(plugins: &[Value], c: &mut Counts) {
     for p in plugins {
         for (key, name) in [
             ("dspGraph", "dspGraph"),
-            ("faustDsp", "faustDsp"),
-            ("faustFiles", "faustFiles"),
             ("sfzFile", "sfzFile"),
             ("surgePatch", "surgePatch"),
             ("sidechainFrom", "sidechainFrom"),

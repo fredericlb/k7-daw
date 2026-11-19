@@ -19,7 +19,7 @@ The bundle is built by `apps/k7/backend/scripts/bundle.mjs`, frontend and librar
 |---|---|
 | `apps/k7/backend-rs/crates/k7-local/src/host.rs` | Spawns the supervisor with no arguments, keeps stdin open for the host's whole life (its closing is the supervisor's quit), parses NDJSON frames, and relaunches a dead supervisor on a 1 s → 30 s backoff, reset after 20 s of uptime. Its stop sends `shutdown`, closes stdin, waits, and kills an engine that outlived the teardown only on the pidfile's proof (`pidfile.rs`). |
 | `apps/k7/backend-rs/crates/k7-local/src/protocol.rs` | The frames of `engine/k7-supervisor/schema/hostProtocol.schema.json`, partial on purpose: a field is added when a host first reads it. A snapshot has every list, since a frame may omit an empty one. |
-| `engine/scripts/stageEngine.mjs` | `stageEngine({repo, bin})`: copy the newest engine and supervisor builds (Debug last) into a staging `bin/`, with the ONNX Runtime libraries beside the supervisor and the Faust `.lib` files into `faust-libs/` (found through the engine's `CMakeCache.txt`). `$STUDIO_PREBUILT_BIN` copies an already staged `bin/` instead, which is how CI packages binaries built by another job. |
+| `engine/scripts/stageEngine.mjs` | `stageEngine({repo, bin})`: copy the newest engine and supervisor builds (Debug last) into a staging `bin/`, with the ONNX Runtime libraries beside the supervisor. `$STUDIO_PREBUILT_BIN` copies an already staged `bin/` instead, which is how CI packages binaries built by another job. |
 
 `k7-local`'s `tests/all/host.rs` drives a fake supervisor (`k7-fake-supervisor`) speaking the same NDJSON.
 
@@ -92,4 +92,4 @@ cd engine/k7-android
 ./gradlew assembleDebug
 ```
 
-`engine/k7-android/app/build.gradle.kts` wires `preBuild` to: `buildEngine` (`node scripts/build.mjs android-arm64` in `engine/k7-runtime`, with the SDK's NDK), `buildSupervisor` (`engine/scripts/supervisorBuild.mjs` with `STUDIO_SUPERVISOR_PRESET=android-arm64`), `stageEngine`, `stageFaustLibs` (into assets), `stageShell` (the tray page), `stageTermuxTools`, and `stageBackend` (`buildFrontend` then `bundle.mjs`, zipped with `standalone.json`, stored uncompressed). This compiles the whole C++ engine for Android; it is a long build.
+`engine/k7-android/app/build.gradle.kts` wires `preBuild` to: `buildEngine` (`node scripts/build.mjs android-arm64` in `engine/k7-runtime`, with the SDK's NDK), `buildSupervisor` (`engine/scripts/supervisorBuild.mjs` with `STUDIO_SUPERVISOR_PRESET=android-arm64`), `stageEngine`, `stageShell` (the tray page), `stageTermuxTools`, and `stageBackend` (`buildFrontend` then `bundle.mjs`, zipped with `standalone.json`, stored uncompressed). This compiles the whole C++ engine for Android; it is a long build.

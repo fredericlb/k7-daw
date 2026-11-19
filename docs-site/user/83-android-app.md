@@ -24,7 +24,7 @@ The phone downloads **every** sampled instrument in the background as soon as th
 | Works | Does not |
 |---|---|
 | Playing and recording projects through the phone's audio device | Hosting VST3 or LADSPA plugins: there are none on Android |
-| Built-in modules: the sampler (SFZ) instruments, Neural Amp Modeler, Faust and JavaScript DSP modules, the eurorack modules, Strudel pattern lanes, the mixer, recorder and turntable nodes | The Surge XT synthesizer, which is not built for Android |
+| Built-in modules: the sampler (SFZ) instruments, Neural Amp Modeler and JavaScript DSP modules, the eurorack modules, Strudel pattern lanes, the mixer, recorder and turntable nodes | The Surge XT synthesizer, which is not built for Android |
 | k7, full screen | Opening a plugin's own window |
 | Playing the phone's own projects | Running in the background with no page playing |
 

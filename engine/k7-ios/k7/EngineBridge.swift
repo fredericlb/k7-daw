@@ -40,7 +40,6 @@ enum EngineBridge {
         setenv("STUDIO_ENGINE_ID", id, 1)
         setenv("STUDIO_ENGINE_TOKEN", token, 1)
         setenv("STUDIO_ENGINE_ALLOWED_ORIGINS", origins, 1)
-        setenv("STUDIO_FAUST_LIBS", faustLibs, 1)
         let mic = AVAudioApplication.shared.recordPermission == .granted
         startedWithMic = mic
         // iOS asks for the microphone as soon as inputs open: without it granted, outputs only (MicAccess.swift).
@@ -90,10 +89,5 @@ enum EngineBridge {
         let dir = base.appendingPathComponent(".k7", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir
-    }
-
-    /// Faust's standard libraries, which the compiler opens by path: files of the app bundle already, so nothing is unpacked.
-    private static var faustLibs: String {
-        Bundle.main.resourceURL!.appendingPathComponent("faust-libs").path
     }
 }

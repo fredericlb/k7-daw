@@ -123,8 +123,5 @@ module that was bypassed.
 - **The graphs are here as functions**, in `../src`, each with a test. A `jsdsp.ts` in `k7-core/`
   that writes one out is compared to it by `k7core.test.ts`, so the seed cannot silently drift from
   what is argued here.
-- **The Faust compiler will walk a library**: `engine/k7-runtime/tests/Faust_test.cpp` compiles every
-  `.dsp` under `$STUDIO_MODULES`. Point it at yours before pushing one: nothing else compiles a
-  Faust module before an account's engine is handed it.
 
 A module is written in k7, against a project where the plugin it names is actually LOADED.

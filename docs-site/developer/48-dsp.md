@@ -64,14 +64,6 @@ prints from its `jsdsp.ts`; `makeVectors.mts` writes it and the song crate's `ds
 `dsp.k7x` to it byte for byte. A `jsdsp` module of an account (type `jsdsp`, a `jsdsp.ts`) is never
 built any more: its committed `jsdsp.json` plays.
 
-## Faust modules
-
-`plugin({ type: "faust", name })` with a `dsp.dsp` beside it (`FAUST_TYPE`, `FAUST_FILE`,
-`FAUST_PLUGIN` in `packages/engine-protocol/build.ts`). There is no build step on the TypeScript
-side: `readFaustSource` sends the text, and the engine's Faust processor (`studio_faust`) compiles
-it. Only the engine knows the Faust program's controls, which is why `lint:panels` skips Faust
-panels.
-
 ## Adding a block
 
 1. Implement the node in the engine's graph processor and its JSON reader (C++).

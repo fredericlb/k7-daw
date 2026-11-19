@@ -149,15 +149,7 @@ const rackSlashes = (r: Rack | undefined): void => {
 
 /** Every path value a module carries spelled with `/`; `ui.script` is text and `assets` names, so neither is touched. */
 const asSlashes = (m: Record<string, unknown>): Record<string, unknown> => {
-  for (const k of [
-    "folderAbs",
-    "jsdsp",
-    "faust",
-    "preset",
-    "model",
-    "onnx",
-    "ir",
-  ])
+  for (const k of ["folderAbs", "jsdsp", "preset", "model", "onnx", "ir"])
     if (typeof m[k] === "string") m[k] = slashes(m[k] as string);
   rackSlashes(m.rack as Rack | undefined);
   for (const a of (m.alternatives as { rack?: Rack }[] | undefined) ?? [])

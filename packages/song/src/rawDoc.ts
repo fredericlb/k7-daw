@@ -225,7 +225,6 @@ export interface LoadedModule {
   onnx?: string; // …the same, for the neural model an offline module runs (see docs/moduleAssets.md)
   ir?: string; // a cabinet IR, resolved against the account libraries' `irs/` (docs/libraryFiles.md)
   jsdsp?: string; // resolved ABSOLUTE path to the module's JS/TS DSP source, when it declares one
-  faust?: string; // …and to its Faust source, the other language a module's DSP can be written in
   assets?: Record<string, string>; // …and the name it was authored with
   // The ABSOLUTE folder this module's files live in — the ancestry fold needs the whole chain's (assetPath.ts).
   folderAbs?: string;

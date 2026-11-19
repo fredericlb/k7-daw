@@ -22,7 +22,6 @@ Unpack it anywhere. It contains one folder, `k7-runtime/`, with:
 |---|---|
 | `k7-supervisor` (`.exe` on Windows) | The program you run |
 | `k7-runtime` (`.exe` on Windows) | The engine; the supervisor finds it beside itself |
-| `faust-libs/` | Libraries the engine needs for Faust modules |
 | ONNX Runtime libraries | What stem separation runs on. Without them the machine cannot cut stems, but everything else works. |
 | `engine.json` | An example configuration |
 

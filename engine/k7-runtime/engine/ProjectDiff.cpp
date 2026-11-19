@@ -23,7 +23,7 @@ std::string keyOf(const ClipDoc& c) {
     return s.str();
 }
 
-// A long text as its length and a 64-bit FNV-1a hash: the key is rebuilt for every plugin on every apply, and a Faust program can be tens of KB.
+// A long text as its length and a 64-bit FNV-1a hash: the key is rebuilt for every plugin on every apply, and a graph description can be tens of KB.
 std::string digestOf(const std::string& text) {
     std::uint64_t h = 1469598103934665603ULL;
     for (const unsigned char c : text) {
@@ -35,12 +35,12 @@ std::string digestOf(const std::string& text) {
     return s.str();
 }
 
-// What the digest cannot promise, the pair check does: two programs sharing a key are compared in full, so a collision is a replace and never an unheard edit.
+// What the digest cannot promise, the pair check does: two descriptions sharing a key are compared in full, so a collision is a replace and never an unheard edit.
 bool sameSource(const PluginDoc& a, const PluginDoc& b) {
-    return a.faustDsp == b.faustDsp && a.faustFiles == b.faustFiles && a.dspGraph == b.dspGraph;
+    return a.dspGraph == b.dspGraph;
 }
 
-// A pair that shares a key and must STILL be re-created: its program differs, or a file it loaded is gone — nothing unloads one.
+// A pair that shares a key and must STILL be re-created: its description differs, or a file it loaded is gone — nothing unloads one.
 // Which taps leave by which pair, and which tracks those pairs feed: the RackTypes behind them are built whole (docs/tapOutputs.md).
 std::string tapRoutingSignature(const ProjectDoc& d) {
     std::string s;
@@ -72,11 +72,7 @@ std::string keyOf(const PluginDoc& p) {
     // Type and name, not just the id: one VST3 swapped for another must read as a replace. What a module LOADS is not identity — filesMoved() (docs/projectDiff.md).
     const std::string base = p.id.empty() ? std::string{} : p.id + ":";
     std::string k = "plugin:" + base + p.type + ":" + p.name;
-    // A Faust program is compiled in the plugin's CONSTRUCTOR, so its source too — digested, and checked in full by sameSource().
-    if (!p.faustDsp.empty()) k += "#" + digestOf(p.faustDsp);
-    // …and the files it plays, read in the CONSTRUCTOR too: another table is another instance (docs/faust.md).
-    for (const auto& [label, path] : p.faustFiles) k += "&" + label + "=" + digestOf(path);
-    // A jsdsp GRAPH is built there too, params and all, so editing a module must read as a replace.
+    // A jsdsp GRAPH is built in the plugin's CONSTRUCTOR, params and all, so editing a module must read as a replace; sameSource() checks it in full.
     if (!p.dspGraph.empty()) k += "~" + digestOf(p.dspGraph);
     // How a pattern picks and plays its events is fixed at construction; its SOURCE is not — an edit is PatternChanged, in place.
     if (!p.patternLabel.empty()) {

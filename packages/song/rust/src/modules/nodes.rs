@@ -4,7 +4,7 @@
 use super::assets::{Files, Places};
 use super::chain_nodes::load_chain_nodes;
 use super::decorate::{stamp_files, stamp_nodes};
-use super::types::{FAUST_FILE, FAUST_TYPE, JSDSP_FILE, JSDSP_TYPE, KNOWN_PLUGIN_TYPES};
+use super::types::{JSDSP_FILE, JSDSP_TYPE, KNOWN_PLUGIN_TYPES};
 use super::vocab::MAX_ENTRIES;
 use super::{LoadedModule, Module, ModuleKind};
 use crate::cache::Cache;
@@ -119,10 +119,8 @@ pub(crate) fn read_nodes_in(
         m.name = Some(node.clone());
         m.node = Some(node.clone());
         m.home = Some("nodes".to_owned());
-        match value.plugin.as_ref().and_then(|p| p.plugin_type.as_deref()) {
-            Some(JSDSP_TYPE) => m.jsdsp = Some(join(&folder, JSDSP_FILE)),
-            Some(FAUST_TYPE) => m.faust = Some(join(&folder, FAUST_FILE)),
-            _ => {}
+        if value.plugin.as_ref().and_then(|p| p.plugin_type.as_deref()) == Some(JSDSP_TYPE) {
+            m.jsdsp = Some(join(&folder, JSDSP_FILE));
         }
         m.folder_abs = Some(folder.clone());
         if let Some(f) = plugin_name_findings(&format!("nodes/{name}"), &value) {

@@ -15,20 +15,13 @@ const HELD_BEATS = 64;
 /** Far past the note, where the timeline is empty. */
 const SEEK_TO = 120;
 
-type Plugin = { type: string; name: string; role: string; params?: Record<string, number>; faustDsp?: string };
-
-const FAUST_SYNTH = `import("stdfaust.lib");
-process = os.sawtooth(hslider("freq", 440, 20, 4000, 1)) * hslider("gain", 0.5, 0, 1, 0.01)
-  * en.adsr(0.01, 0.1, 0.8, 0.3, button("gate")) * 0.5 <: _, _;`;
-const FAUST_ECHO = `import("stdfaust.lib");
-process = par(i, 2, ef.echo(2.0, 0.37, 0.92));`;
+type Plugin = { type: string; name: string; role: string; params?: Record<string, number> };
 
 const synth: Plugin = { type: "4osc", name: "4OSC", role: "instrument" };
 
 /** `tail`: its tail outlives a stop, so a stop is measured as the control; `early`: it decays on its own, so it is read soon after play. */
 const CASES: { name: string; plugins: Plugin[]; tail?: boolean; early?: boolean }[] = [
   { name: "4osc", plugins: [synth] },
-  { name: "faust instrument", plugins: [{ type: "studio_faust", name: "Faust", role: "instrument", faustDsp: FAUST_SYNTH }] },
   { name: "mu-tides", plugins: [{ type: "studio_tidal_modulator", name: "mu-tides", role: "instrument" }] },
   { name: "mu-plaits", plugins: [{ type: "studio_macro_oscillator_2", name: "mu-plaits", role: "instrument" }] },
   { name: "mu-rings", plugins: [{ type: "studio_resonator", name: "mu-rings", role: "instrument", params: { damping: 0.95 } }], tail: true, early: true },
@@ -38,7 +31,6 @@ const CASES: { name: string; plugins: Plugin[]; tail?: boolean; early?: boolean 
   { name: "arpeggiator → 4osc", plugins: [{ type: "studio_arpeggiator", name: "Arpeggiator", role: "midiEffect" }, synth] },
   { name: "4osc → reverb", plugins: [synth, { type: "reverb", name: "Reverb", role: "effect", params: { roomSize: 1, damping: 0 } }], tail: true },
   { name: "4osc → delay", plugins: [synth, { type: "delay", name: "Delay", role: "effect", params: { feedback: -1 } }], tail: true },
-  { name: "4osc → faust echo", plugins: [synth, { type: "studio_faust", name: "Faust", role: "effect", faustDsp: FAUST_ECHO }], tail: true },
   { name: "4osc → mu-clouds", plugins: [synth, { type: "studio_texture_synthesizer", name: "mu-clouds", role: "effect", params: { dryWet: 1, reverb: 1, feedback: 0.8 } }], tail: true },
 ];
 
@@ -59,7 +51,7 @@ async function run(name: string, plugins: Plugin[], tail: boolean, early: boolea
 
   send({ type: "project", doc: doc(plugins) });
   send({ type: "broadcast", on: true });
-  // The first apply builds the plugins — a Faust program compiles here.
+  // The first apply builds the plugins.
   await wait(3000);
 
   // A window that opens 0.4 s after the move: past a release, well inside any reverb worth the name.

@@ -87,15 +87,6 @@ fn cost(chain: &str, step: &UseStep, m: &Resolved, project: &str) -> usize {
         })
         .sum();
     let taps = a.kit.as_ref().map_or(0, |k| k.0.len()) + a.tap_outs.as_ref().map_or(0, |k| k.0.len());
-    let faust_files: usize = a
-        .params
-        .iter()
-        .flatten()
-        .map(|(k, v)| match v {
-            ParamValue::Text(t) => w(k) + w(t) + text_weight(project),
-            ParamValue::Number(_) => 0,
-        })
-        .sum();
     let plugin = a.plugin.as_ref().map_or(0, |p| opt(&p.plugin_type) + opt(&p.name));
     w(chain)
         + plugin
@@ -114,7 +105,6 @@ fn cost(chain: &str, step: &UseStep, m: &Resolved, project: &str) -> usize {
         + params
         + rack
         + taps
-        + faust_files
         + 8
 }
 
@@ -195,15 +185,6 @@ pub(super) fn step_plugin<'c>(
         }
         doc.dsp_graph = Some(g.text.to_string());
     }
-    if let Some(src) = m.faust.as_deref().filter(|s| !s.is_empty())
-        && let Some(text) = cx.texts.faust_text(src, &label, cx.notes)?
-    {
-        if !cx.budget.charge(1 + text_weight(&text)) {
-            return Ok(Built::Capped);
-        }
-        doc.faust_dsp = Some(text.to_string());
-        doc.faust_files = faust_files(cx, m)?;
-    }
     let mut seen = 0;
     let own = cx.own;
     let side = step.inputs.iter().flatten().find_map(|i| {
@@ -270,21 +251,6 @@ fn params_of(cx: &mut Cx<'_, '_>, m: &Resolved, shape: BlendShape<'_>, label: &s
     }
     own_key_order(&mut out);
     out
-}
-
-fn faust_files(cx: &mut Cx<'_, '_>, m: &Resolved) -> Result<Option<IndexMap<String, String>>, SourceError> {
-    let mut out = IndexMap::new();
-    for (slot, v) in m.authored.params.iter().flatten() {
-        let ParamValue::Text(r) = v else { continue };
-        if r.is_empty() {
-            continue;
-        }
-        if let Some(f) = cx.texts.faust_file(r)? {
-            out.insert(slot.clone(), f);
-        }
-    }
-    own_key_order(&mut out);
-    Ok((!out.is_empty()).then_some(out))
 }
 
 /// The pairs a node's routed taps leave by; a tap the node does not have is one ERROR on its file (decision 320).

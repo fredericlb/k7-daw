@@ -8,7 +8,7 @@
 Ninja keeps no lock on its build folder. Two builds in one folder at once — the watcher rebuilding
 on a save while a hand-started build runs — write `.ninja_deps` and `.ninja_log` over each other,
 and ninja then reports the dependency records of whatever it lost as missing: every later build
-recompiles all ~540 objects, JUCE, Tracktion, Faust and sfizz included, where it should have
+recompiles all ~540 objects, JUCE, Tracktion and sfizz included, where it should have
 recompiled one. Two of those at once put over two hundred compilers on the machine, enough to starve
 macOS's WindowServer past its watchdog and take the session down.
 
@@ -38,7 +38,7 @@ it, measured on macOS: 2.7 GB as clones, 0.85 GB as archives.
 |---|---|---|
 | one release archive, `URL` + `URL_HASH` | nlohmann/json, sfizz | upstream publishes one for exactly this; sfizz's carries the six submodules it compiles, minus their tests |
 | one commit's archive, `URL` + `URL_HASH` | Eigen (GitLab), Mutable's eurorack and stmlib | the pin is a commit, which a shallow clone cannot fetch |
-| several archives, `engine/patches/archive-fetch.cmake` | Tracktion with JUCE, Faust with faustlibraries | a submodule is a second archive, at the commit its parent pins; a bump of the parent moves both lines |
+| several archives, `engine/patches/archive-fetch.cmake` | Tracktion with JUCE | a submodule is a second archive, at the commit its parent pins; a bump of the parent moves both lines |
 | a sparse git fetch, history dropped after | Surge | `resources/data` is 480 MB the engine never reads, and an archive cannot leave it out; `surge-fetch.cmake` writes `VERSION_GIT_INFO`, which Surge's version script reads before asking git |
 
 Nothing that configures needs git either: sfizz runs `git submodule update` only in a tree that has a

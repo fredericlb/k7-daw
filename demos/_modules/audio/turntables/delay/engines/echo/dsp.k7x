@@ -1,0 +1,13 @@
+// Echo — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+params({
+  Time: { min: 1, max: 900, default: 250 },
+  Feedback: { min: 0, max: 0.95, default: 0.6 },
+  Mix: { min: 0, max: 1, default: 0.5 },
+})
+wires("fb")
+graph([
+  input().as("dry"),
+  delay(aadd("dry", amul("fb", "Feedback")), "Time", 1000).into("fb"),
+  output(aadd("dry", "fb")),
+  mix("Mix"),
+])

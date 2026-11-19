@@ -115,8 +115,6 @@ pub struct LoadedModule {
     pub picture: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jsdsp: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub faust: Option<String>,
     #[serde(rename = "folderAbs", skip_serializing_if = "Option::is_none")]
     pub folder_abs: Option<String>,
     /// The state file it loads: its chosen base, a node's own `.vstpreset`, or the module's.
@@ -156,7 +154,6 @@ impl LoadedModule {
             generated: None,
             picture: None,
             jsdsp: None,
-            faust: None,
             folder_abs: None,
             preset: None,
             model: None,

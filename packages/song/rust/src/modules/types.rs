@@ -28,8 +28,6 @@ pub const JSDSP_TYPE: &str = "jsdsp";
 pub const JSDSP_FILE: &str = "jsdsp.ts";
 pub const DSP_TYPE: &str = "dsp";
 pub const DSP_FILE: &str = "dsp.k7x";
-pub const FAUST_TYPE: &str = "faust";
-pub const FAUST_FILE: &str = "dsp.dsp";
 
 /// The module folder's own basenames: anything else beside `module.k7x` is a node.
 pub const MODULE_OWN_BASES: [&str; 5] = ["module", "ui", "presets", "controller", "dsp"];

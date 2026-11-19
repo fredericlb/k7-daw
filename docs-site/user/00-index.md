@@ -68,7 +68,7 @@ New to k7? Read [What k7 is](./01-what-is-k7.md), then [The home page](./03-home
 - [Panels](./46-panels.md)
 - [Assemblies](./47-assemblies.md)
 - [Plugins and the k7-core catalogue](./48-plugins-and-catalogue.md)
-- [DSP as data and Faust](./49-dsp.md)
+- [DSP as data](./49-dsp.md)
 
 ## Picture
 

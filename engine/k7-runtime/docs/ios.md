@@ -53,7 +53,7 @@ under `STUDIO_HOME`, so a `[host]` line written earlier (the test hooks') would 
 | the front a static library, `libk7_embed.a`, the engine and the supervisor frameworks | a Rust `cdylib` for iOS needs Apple's own linker, and the front has no CMake dependency graph to fold; the C++ parts are the `.so` files Android loads |
 | frameworks, not static libraries, for the engine and the supervisor | the linker folds every archive each one links into it, with no list of dependency targets to keep in step; and they are the `.so` files Android loads |
 | the CA bundle pinned the same way | the supervisor's mbedTLS needs roots as PEM, and iOS gives none; a studio behind a private CA is the user's to add, as on Android |
-| the bundle's files read where they lie, in the app bundle | an app bundle is a folder of real files, so nothing is unpacked: no `backend.zip`, no first-run percentage, no copy of Faust's libraries |
+| the bundle's files read where they lie, in the app bundle | an app bundle is a folder of real files, so nothing is unpacked: no `backend.zip`, no first-run percentage |
 | cleartext to loopback only (`NSAllowsLocalNetworking`) | the phone's own studio is plain http, as on desktop; every other host stays https |
 | iOS 17 | `AVAudioApplication`, which says the microphone's state in one call; every iPhone from 2018 on runs it |
 | one window scene (`SceneDelegate.swift`); the backend, the supervisor and the engine started by the app delegate | iOS 27 stops at launch an app that has not adopted the scene lifecycle (a `SIGTRAP` in `_UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoption`); the parts are the process's, not a window's, so a scene that reconnects gets a new window over them. `Busy.swift` keeps the app's background and foreground notifications, which UIKit posts as the one scene goes behind and back |
@@ -122,7 +122,7 @@ open engine/k7-ios/k7.xcodeproj                 # pick a team under Signing, the
 ```
 
 `stage.mjs` builds the engine's `ios-arm64` preset and the supervisor's, each as an xcframework, builds the front
-(`k7-embed`, a static library) and fetches the CA bundle as pinned. It copies Faust's libraries out of the engine's CMake cache, builds the
+(`k7-embed`, a static library) and fetches the CA bundle as pinned. It builds the
 shell page and lays it out as `cap copy` would, and stages what the front reads: the built page, `k7-core`, its code
 root (`stageCodeRoot.mjs`).
 `--only=<part,…>` restages some parts.

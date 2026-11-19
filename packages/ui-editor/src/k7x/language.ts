@@ -1,5 +1,5 @@
 // language.ts (k7x) — colouring for a workspace's .k7x files, the Strudel-looking format of packages/k7x.
-// A hand-written StreamLanguage, like the Faust mode: a key is the word before `(` or `:`, so a line is enough to tell.
+// A hand-written StreamLanguage: a key is the word before `(` or `:`, so a line is enough to tell.
 
 import {
   HighlightStyle,
@@ -52,7 +52,7 @@ export function k7xToken(stream: StringStream, state: K7xState): string | null {
     }
     return "string";
   }
-  // An unterminated string colours to the end of the LINE and no further, as in the Faust mode.
+  // An unterminated string colours to the end of the LINE and no further.
   if (
     stream.match(/^"(?:[^"\\]|\\.)*("|$)/) ||
     stream.match(/^'(?:[^'\\]|\\.)*('|$)/)

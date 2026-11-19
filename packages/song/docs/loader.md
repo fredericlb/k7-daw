@@ -100,10 +100,10 @@ module whose format no engine loads compiles to no plugin at all and would other
 silence with nothing on screen saying why. `compile/plugins.ts`'s `reachesEngine` is the one
 gate both the compile and that diagnostic read.
 
-`jsdsp` and `faust` are in NEITHER set: they name no external binary and no built-in by its
+`jsdsp` and `dsp` are in NEITHER set: they name no external binary and no built-in by its
 xmlTypeName, so they are neither validated here nor bypassed. `dspSourceFor` reads them, and
-`enginePlugin` maps each onto the built-in that hosts it — `docs/faustModules.md` has the pair
-side by side, including the four gates a new plugin type has to be added to.
+`enginePlugin` maps each onto the built-in that hosts it — `enginePlugin.md` lists the gates a
+new plugin type has to be added to.
 
 The one rule that still BLOCKS the compile: a module whose plugin uses a KNOWN format
 must name it (`plugin.name` — the xmlTypeName for `"internal"`, else the plugin's real

@@ -41,7 +41,7 @@ Where parameter names come from:
   engine's built-ins change.
 - **External plugins**: only a loaded instance knows. The engine binary answers
   `--dump-params-ext <format> <id> <state>`.
-- **jsdsp and faust**: the module's own source declares them.
+- **jsdsp**: the module's own source declares them.
 
 ## `npm run lint:panels`
 
@@ -56,8 +56,8 @@ For every module folder with a panel under the library root (default `k7-core`),
 `bind` and `pair` that is neither an `@` intrinsic nor a file parameter, resolves the module's
 plugin (its own `plugin:`, or by following `extends`, with `@engine/` refs looked up in the plugin
 scan cache), lists the plugin's real parameters, and reports the binds it lacks, with a "did you
-mean" when a name matches ignoring case and punctuation. It lists the panels it skipped (jsdsp,
-faust and rack modules, plugins not installed) and exits 1 on any missing bind.
+mean" when a name matches ignoring case and punctuation. It lists the panels it skipped (jsdsp
+and rack modules, plugins not installed) and exits 1 on any missing bind.
 
 External plugins are instantiated by the engine binary: `$K7_RUNTIME`, or the first engine binary found
 in the engine's CMake build directory, trying the presets `macos-clang`,

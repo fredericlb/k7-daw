@@ -1,7 +1,6 @@
 # confine.ts — where a path a song file names may lead
 
-A song file is text, and the text names files: a clip's `source:`, a rack tap's `clip:`, a Faust
-slot's sound, a module's `frozen:` render, a chain item's `vstpreset:`. On the server **every
+A song file is text, and the text names files: a clip's `source:`, a rack tap's `clip:`, a module's `frozen:` render, a chain item's `vstpreset:`. On the server **every
 account's file service runs as the same OS user over one data root** (`$STUDIO_FILES_ROOT`, one
 folder per account — `apps/k7/backend-rs/docs/files/hub.md`). The operating system therefore stops
 nothing: a `../../bob/workspace/…` in Alice's clip file is Bob's recording, and whatever reads,
@@ -40,8 +39,8 @@ holds every account's tokens and shares.
 ## What a refusal becomes
 
 - **The compiler**: an escaping clip source is a compile issue beside "file missing", naming the
-  clip; an escaping rack sound, Faust slot or render is simply no file — the sound is dropped, the
-  slot left unfilled, the freeze not in force. The document an engine is sent never carries such a path.
+  clip; an escaping rack sound or render is simply no file — the sound is dropped, the
+  freeze not in force. The document an engine is sent never carries such a path.
 - **A verb that deletes or copies** confines tighter than the project's roots: `node freeze`
   deletes a render only inside the project, and leaves an escaping one where it is; a lane copy
   reads a `vstpreset:` only from the project's `vstpresets/`. `picture sound` writes the extracted

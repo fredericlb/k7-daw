@@ -39,6 +39,7 @@ import {
 import { freezeUpstreamRender } from "@studio/take-render/renderToWav";
 import type { CommandHost, SidHandler } from "../commands.ts";
 import { withModuleParams } from "../moduleValues";
+import { starvedByDelete } from "./nodeDeleteGuard.ts";
 import { splitWords } from "./shared.ts";
 
 // Where a freeze render lands: one folder for the lot, at the project root — docs/verbs.md.
@@ -336,6 +337,14 @@ export const NODE_VERBS: Record<string, SidHandler> = {
     const node = splitWords(a)[0];
     if (!node) {
       h.refuse(["usage: node delete <node>"]);
+      return;
+    }
+    // Refused before any write: the CLI's disk has no rollback, and the compile would refuse the result.
+    const starved = starvedByDelete(h.songPath, node);
+    if (starved.length) {
+      h.refuse([
+        `node delete failed: ${node} is the only signal reaching ${starved.join(", ")}, whose input is mandatory — delete ${starved.length > 1 ? "those" : "it"} first, or connect another source`,
+      ]);
       return;
     }
     try {

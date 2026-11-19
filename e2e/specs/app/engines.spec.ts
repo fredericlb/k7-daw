@@ -9,7 +9,6 @@ import { watchPage } from "../../src/watch.ts";
 type PluginDoc = {
   id: string;
   type: string;
-  faustDsp?: string;
   surgePatch?: string;
   rack?: { note: number; clip: string }[];
 };
@@ -23,10 +22,6 @@ type Engine = {
 };
 
 const isType = (type: string) => (p: PluginDoc) => expect(p.type).toBe(type);
-const isFaust = (p: PluginDoc) => {
-  expect(p.type).toBe("Faust");
-  expect(p.faustDsp).toBeTruthy();
-};
 
 const ENGINES: Record<string, Engine> = {
   "eurorack.k7": {
@@ -48,10 +43,6 @@ const ENGINES: Record<string, Engine> = {
         expect(p.surgePatch).toMatch(/Pads[\\/]Bell Pad\.fxp$/);
       },
     },
-  },
-  "faust.k7": {
-    lanes: ["melody"],
-    plugins: { "melody:wavetable": isFaust, "melody:ladder": isFaust },
   },
   "sampler.k7": {
     lanes: ["melody"],
