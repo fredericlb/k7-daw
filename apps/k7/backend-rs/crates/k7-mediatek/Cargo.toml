@@ -21,7 +21,3 @@ mp4parse.workspace = true
 matroska-demuxer.workspace = true
 wasmtime.workspace = true
 
-[build-dependencies]
-# The waveform module is committed as base64 in a TypeScript file (build.rs).
-base64.workspace = true
-

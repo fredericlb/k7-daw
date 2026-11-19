@@ -21,7 +21,6 @@ pub struct Got {
     /// Which connection read it, for a test that tells a re-dial apart.
     #[allow(dead_code)]
     pub conn: u64,
-    pub at: Instant,
     pub frame: Value,
 }
 
@@ -261,7 +260,6 @@ async fn serve(tcp: tokio::net::TcpStream, s: Arc<Shared>) {
         };
         held(&s.got).push(Got {
             conn,
-            at: Instant::now(),
             frame: frame.clone(),
         });
         answer(&s, &frame, &tx);

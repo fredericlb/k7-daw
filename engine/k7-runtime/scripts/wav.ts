@@ -99,3 +99,13 @@ export function wavFile(
   h.writeUInt32LE(data.length, 40);
   return Buffer.concat([h, data]);
 }
+
+/** A wav's true peak in dBFS, the loudest sample of any channel; -100 for silence. */
+export function peakOf(file: string): number {
+  const w = readWav(file);
+  let peak = 0;
+  for (let f = 0; f < w.frames; f++)
+    for (let c = 0; c < w.channels; c++)
+      peak = Math.max(peak, Math.abs(w.at(f, c)));
+  return peak > 0 ? Math.max(-100, 20 * Math.log10(peak)) : -100;
+}

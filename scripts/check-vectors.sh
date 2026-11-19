@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# check-vectors.sh — regenerates the k7x editor's and the host's test vectors and fails when the committed ones differ, then replays the frozen file-service vectors; part of `npm run ci:local`.
-# What a reader gets wrong: the file service's vectors have no generator (frozen, replayed only); the generators run with an absolute path, the bare file name fails.
+# check-vectors.sh — regenerates the k7x editor's test vectors and fails when the committed ones differ, then replays the frozen file-service vectors; part of `npm run ci:local`.
+# What a reader gets wrong: the file service's vectors have no generator (frozen, replayed only); the generator runs with an absolute path, the bare file name fails.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root"
@@ -17,17 +17,6 @@ if [ -n "$drift" ]; then
   echo "$drift" >&2
   git checkout HEAD -- "$k7x"
   git clean -fdq -- "$k7x"
-  echo "vectors: restored; commit the regenerated files (docs/lints.md)" >&2
-  exit 1
-fi
-host=apps/k7/backend-rs/crates/k7-mediatek/tests/vectors/
-(cd packages/commands && npx tsx "$PWD/scripts/makeHostVectors.mts" > /dev/null)
-drift="$(git status --porcelain -- "$host")"
-if [ -n "$drift" ]; then
-  echo "vectors: the committed host vectors differ from what makeHostVectors.mts writes:" >&2
-  echo "$drift" >&2
-  git checkout HEAD -- "$host"
-  git clean -fdq -- "$host"
   echo "vectors: restored; commit the regenerated files (docs/lints.md)" >&2
   exit 1
 fi

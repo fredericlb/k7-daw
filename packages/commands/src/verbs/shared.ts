@@ -9,8 +9,8 @@ import {
   isMidiInModule,
   type loadGraph,
 } from "@studio/song/graph";
-import { timelineLaneTrack } from "@studio/song/nodeProject";
 import type { NestDoc, ProjectDoc, TrackDoc } from "@studio/song/project";
+import { timelineLaneTrack } from "@studio/song/timelineAudition";
 import { PLAYLISTS_DIR, playlistPathOf } from "@studio/song-schema/playlist";
 import { parsePosition } from "@studio/song-schema/timecode";
 import { timelineLaneOf } from "@studio/song-schema/timelineLane";

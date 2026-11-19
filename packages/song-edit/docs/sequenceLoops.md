@@ -5,7 +5,7 @@
 happens to the placements, which is where the arrangement is.
 
 A placement states `loop: N` — how many times the material's window is played, back to back — and
-the compiled clip's length is `window × N` (`packages/song/src/nodeProject.ts`). Double the window
+the compiled clip's length is `window × N` (the song crate's compile). Double the window
 and leave `N` alone, and every looped placement of that sequence becomes **twice as long**. Four
 bars of a one-bar pattern would become eight bars, pushing nothing but overrunning whatever was
 written after it.

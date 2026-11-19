@@ -22,9 +22,7 @@ Three benches, `npm run bench` in each of three packages:
 | `buildGraphDoc` | `file-service` | the chains view, **without** clip extents — those are the compiler, and two costs folded into one mean nothing |
 | `buildGraph` | `ui-chains` | node/edge arithmetic + dagre, **no disk**: this function takes a `WebGraph`, not a folder |
 
-The fixture is **synthetic and parameterised by size** (`packages/song/src/benchProject.ts`,
-published through the existing `./testSupport` door rather than one more subpath — see
-`docs/inventaire.md` on subpaths nobody imports). The projects committed under `demos/` hold ONE
+The fixture is **synthetic and parameterised by size** (the bench projects the tests write). The projects committed under `demos/` hold ONE
 track: a one-track fixture would measure startup and nothing else. Two sizes, 8 and 64 tracks,
 because what is read is the **curve** — a cost that doubles when the song doubles is fine, a cost
 that quadruples is the finding.

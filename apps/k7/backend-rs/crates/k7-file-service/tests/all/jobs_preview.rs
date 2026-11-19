@@ -9,7 +9,7 @@ use k7_file_service::jobs::preview::{
     resolve_preview,
 };
 use k7_file_service::libraries::Home;
-use serde_json::{Value, json};
+use serde_json::Value;
 use song::PathRule;
 use song::clips::audio_def::ClipGrid;
 use std::cell::Cell;
@@ -121,71 +121,6 @@ fn materialize(tmp: &Tmp, sc: &Value) {
     }
 }
 
-/// Does the request name a link of the scenario, itself or through the source of the clip it asks for (recorded or on disk)?
-fn names_a_link(sc: &Value, req: &Value) -> bool {
-    let links: Vec<&str> = sc["entries"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .filter(|e| e["link"].is_string())
-        .map(|e| e["p"].as_str().unwrap())
-        .filter_map(|p| p.rsplit('/').next())
-        .collect();
-    let mut text = req.to_string();
-    if let Some(id) = req["clip"].as_str() {
-        let id = id.split('@').next().unwrap_or(id);
-        for c in sc["clips"].as_array().into_iter().flatten() {
-            if c["id"].as_str() == Some(id) {
-                text.push_str(c["source"].as_str().unwrap_or(""));
-            }
-        }
-        for e in sc["entries"].as_array().unwrap() {
-            if e["p"]
-                .as_str()
-                .unwrap()
-                .ends_with(&format!("clips/{id}.k7x"))
-            {
-                text.push_str(e["t"].as_str().unwrap_or(""));
-            }
-        }
-    }
-    links.iter().any(|l| text.contains(l))
-}
-
-fn request(v: &Value, base: &str) -> PreviewReq {
-    let s = |k: &str| v[k].as_str().unwrap().replace("{base}", base);
-    match v["kind"].as_str().unwrap() {
-        "clip" => PreviewReq::Clip { clip: s("clip") },
-        "source" => PreviewReq::Source {
-            source: s("source"),
-        },
-        _ => PreviewReq::Slice {
-            source: s("source"),
-            from: v["from"].as_f64().unwrap(),
-            to: v["to"].as_f64().unwrap(),
-        },
-    }
-}
-
-fn shown(r: Result<k7_file_service::jobs::preview::Window, PreviewError>, base: &str) -> Value {
-    match r {
-        Ok(w) => {
-            json!({ "ok": { "file": w.file.replace(base, "{base}"), "start": w.start, "length": w.length } })
-        }
-        Err(e) => json!({ "error": e.message.replace(base, "{base}"), "code": e.code }),
-    }
-}
-
-fn same(a: &Value, b: &Value) -> bool {
-    match (a, b) {
-        (Value::Number(x), Value::Number(y)) => x.as_f64() == y.as_f64(),
-        (Value::Object(x), Value::Object(y)) => {
-            x.len() == y.len() && x.iter().all(|(k, v)| y.get(k).is_some_and(|w| same(v, w)))
-        }
-        _ => a == b,
-    }
-}
-
 struct World {
     home: Home,
     roots: Vec<String>,
@@ -205,74 +140,6 @@ fn world(tmp: &Tmp, sc: &Value) -> World {
         roots,
         project: sc["selected"].as_bool().unwrap().then_some(project),
         workspace: tmp.at("ws"),
-    }
-}
-
-#[test]
-fn every_audition_of_the_typescript_is_answered_alike_and_the_link_departures_are_checked_on_unix_only()
- {
-    let scenarios = section(&vectors(), "preview");
-    assert!(scenarios.len() >= 23);
-    let (mut cases, mut departed) = (0, Vec::new());
-    for sc in &scenarios {
-        let tmp = Tmp::new("jobspreview");
-        materialize(&tmp, sc);
-        let base = tmp.at("").trim_end_matches('/').to_owned();
-        let w = world(&tmp, sc);
-        let doc = recorded(sc, &base);
-        let defs = disk_defs(&w.roots, PathRule::HOST);
-        let ctx = PreviewCtx {
-            active: w.project.as_deref(),
-            workspace_root: &w.workspace,
-            home: &w.home,
-            roots: &w.roots,
-            probe: &Disk,
-            doc: &doc,
-            defs: &defs,
-            exists: &disk_exists,
-        };
-        for c in sc["cases"].as_array().unwrap() {
-            // Without links on this host, a case through one has nothing to answer with.
-            if !cfg!(unix) && names_a_link(sc, &c["req"]) {
-                continue;
-            }
-            cases += 1;
-            let got = shown(resolve_preview(&ctx, &request(&c["req"], &base)), &base);
-            if same(&got, &c["out"]) {
-                continue;
-            }
-            // The one rule of departure: the TypeScript played it, and a link it goes through leads out of the allowed roots.
-            let refused = got["error"].as_str().is_some_and(|e| {
-                e == "audio path is outside the workspace"
-                    || e == "audio path is outside the project"
-            });
-            assert!(
-                names_a_link(sc, &c["req"]) && c["out"].get("ok").is_some() && refused,
-                "{}: {} gave {got} not {}",
-                sc["name"],
-                c["req"],
-                c["out"]
-            );
-            departed.push(c["req"].to_string());
-        }
-    }
-    assert!(cases >= 2000, "{cases} cases");
-    if !cfg!(unix) {
-        return;
-    }
-    // An exact count, so a new departure is a visible change.
-    assert_eq!(departed.len(), 150);
-    // The departure is exercised: a link out of the workspace, a folder link out of it, and a library reached through a link.
-    for want in [
-        "clips/out.wav",
-        "clips/outdir/x.wav",
-        "{base}/ws/p.k7/clips/out.wav",
-        "{base}/libraries/k7-linked/samples/l.wav",
-    ] {
-        assert!(
-            departed.iter().any(|r| r.contains(want)),
-            "{want} did not depart: {departed:?}"
-        );
     }
 }
 
@@ -364,80 +231,4 @@ fn a_document_that_threw_enoent_is_a_404_and_any_other_refusal_a_400() {
         (refused.status(), refused.message.as_str()),
         (400, "no audio for 'clips/none.wav'")
     );
-}
-
-/// The song crate's native compile of each real project gives the clip table the TypeScript recorded.
-#[test]
-fn the_song_crates_native_compile_gives_the_clip_table_the_typescript_recorded() {
-    let scenarios = section(&vectors(), "preview");
-    let meta = format!(
-        "{}/../../../../../packages/song/meta",
-        env!("CARGO_MANIFEST_DIR")
-    );
-    let mut compared = 0;
-    for sc in scenarios
-        .iter()
-        .filter(|s| s["name"].as_str().unwrap().starts_with("the project "))
-    {
-        let tmp = Tmp::new("jobspreviewnative");
-        materialize(&tmp, sc);
-        let base = tmp.at("").trim_end_matches('/').to_owned();
-        let project = tmp.at(sc["active"].as_str().unwrap());
-        let roots = song::Roots {
-            project: project.clone(),
-            workspace: Some(tmp.at("ws")),
-            confine: Some(tmp.at("ws")),
-            libraries: vec![song::Library {
-                name: "k7-core".into(),
-                root: tmp.at("libraries/k7-core"),
-                editable: false,
-            }],
-            meta: Some(
-                std::fs::canonicalize(&meta)
-                    .unwrap()
-                    .to_string_lossy()
-                    .into_owned(),
-            ),
-            ..song::Roots::default()
-        };
-        let (dirs, files) = roots.mounts().unwrap();
-        let source = song::DiskSource::with_files(&dirs, &files).unwrap();
-        let req = song::doc::Request {
-            roots,
-            ..Default::default()
-        };
-        let want = song::views::answer::Want {
-            engine: true,
-            ..Default::default()
-        };
-        let views =
-            song::views::answer::answer(&source, &mut song::Cache::new(), &req, &want).unwrap();
-        let doc = views
-            .compiled
-            .unwrap()
-            .engine
-            .unwrap_or_else(|f| panic!("{}: {:?}", sc["name"], f.diagnostics));
-        let native: Vec<Value> = doc
-            .tracks
-            .iter()
-            .flat_map(|t| t.clips.iter())
-            .map(|c| {
-                json!({ "id": c.id, "type": if c.kind == song::clips::ClipKind::Audio { "audio" } else { "midi" },
-                "source": c.source.replace(&base, "{base}"), "source_from": c.source_from, "source_to": c.source_to })
-            })
-            .collect();
-        let recorded = sc["clips"].as_array().unwrap();
-        assert_eq!(native.len(), recorded.len(), "{}", sc["name"]);
-        for (n, r) in native.iter().zip(recorded) {
-            assert!(same(n, r), "{}: {n} against {r}", sc["name"]);
-        }
-        assert_eq!(
-            doc.tempo,
-            sc["grid"]["tempo"].as_f64().unwrap(),
-            "{}",
-            sc["name"]
-        );
-        compared += recorded.len();
-    }
-    assert!(compared >= 19, "{compared} clips compared");
 }

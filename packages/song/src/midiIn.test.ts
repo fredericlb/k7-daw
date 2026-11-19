@@ -10,7 +10,6 @@ import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadGraph } from "./graph";
 import { createNode } from "./loader";
-import { compileNodeProject } from "./nodeProject";
 import { setDoc, writeNode } from "./testSupport";
 import { wsData } from "./yaml/workspaceDoc";
 
@@ -44,14 +43,6 @@ describe("a MIDI device wired to a lane", () => {
     const keys = loadGraph(dir).modules.keys;
     expect(keys?.io).toBe("midi");
     expect(keys?.device).toBe("KeyStep 37");
-  });
-
-  it("hands the engine nothing: no input, no plugin, no track of its own", () => {
-    const doc = compileNodeProject(dir);
-    const melody = doc.tracks.find((t) => t.id === "melody");
-    expect(melody?.inputChannels).toEqual([]);
-    expect(melody?.plugins.some((p) => p.id.includes("keys"))).toBe(false);
-    expect(doc.tracks.some((t) => t.id.includes("keys"))).toBe(false);
   });
 
   it("is refused as a destination: notes come FROM a keyboard", () => {

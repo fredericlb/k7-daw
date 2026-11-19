@@ -150,10 +150,8 @@ export default (g: GraphBuilder) => {
 ```
 
 That module is real and shipped: `demos/crossfade-demo` is two decks meeting at it,
-and it is mirrored into every user's Examples workspace. The same graph is `@studio/dsp`'s
-`crossfade()`, emitted to `packages/dsp/graphs/crossfade.json` — a module is a folder you can
-copy, so it carries its own source rather than pointing at the library, and a test holds the two
-to the same shape.
+and it is mirrored into every user's Examples workspace. A module is a folder you can
+copy, so it carries its own `dsp.k7x` rather than pointing at the library.
 
 `input(n)` indexes the **port list above**, in order: 0 is the flow, 1 is `b`. An index and not a
 name, because the graph and the module file are two documents — the graph is generated JSON the

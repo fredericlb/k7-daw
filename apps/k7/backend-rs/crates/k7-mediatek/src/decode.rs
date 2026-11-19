@@ -1,5 +1,5 @@
-//! decode.rs — a file decoded by the engine's `--decode`, as `pump` in `packages/audio-analysis/src/decode.ts` reads
-//! it: one JSON line of facts, then every channel as interleaved f32le at the file's rate, counted as it arrives.
+//! decode.rs — a file decoded by the engine's `--decode`:
+//! one JSON line of facts, then every channel as interleaved f32le at the file's rate, counted as it arrives.
 //! What a reader gets wrong: the header's `frames` refuses a file too long before decoding, never sizes the result.
 
 use std::io::Read;

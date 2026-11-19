@@ -1,4 +1,4 @@
-// rustSources.mjs — one hash over every file the WebAssembly measure is built from, so a stale src/waveformWasm.generated.ts is caught.
+// rustSources.mjs — one hash over every file the WebAssembly measure is built from, so a stale waveform.wasm is caught.
 // A reader would get wrong what it covers: rust/src and the manifest, with line endings folded so a Windows checkout agrees.
 
 import { createHash } from "node:crypto";

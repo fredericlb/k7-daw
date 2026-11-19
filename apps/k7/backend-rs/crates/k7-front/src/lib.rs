@@ -20,15 +20,7 @@ pub mod trust;
 mod web;
 
 #[cfg(test)]
-mod engine_jobs_vectors;
-#[cfg(test)]
-mod local_vectors;
-#[cfg(test)]
 mod stop_tests;
-#[cfg(test)]
-mod turn_vectors;
-#[cfg(test)]
-mod vectors;
 
 pub use config::{Config, ENV_KEYS};
 pub use peer::client_address;

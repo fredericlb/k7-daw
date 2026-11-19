@@ -4,7 +4,21 @@
 // export renders from too), and whether it is too heavy to PREVIEW (else a small proxy).
 // See docs/videoPrep.md.
 
-import type { VideoFacts } from "./probe";
+/** A video as the plan reads it; `codec` is ffprobe's name, `pixFmt` says the bit depth and the chroma. */
+export interface VideoFacts {
+  codec: string;
+  width: number;
+  height: number;
+  pixFmt: string;
+  fps: number;
+  seconds: number;
+  /** The container, by ffprobe's format name: "mov,mp4,m4a,3gp,3g2,mj2", "matroska,webm", … */
+  container: string;
+  /** The quarter turn a player applies on display, 90/180/270; absent when there is none or nothing read it (demuxProbe.ts). */
+  rotation?: number;
+  /** Read from the boxes because there is no ffmpeg here: nothing can be made from this file on this host. */
+  noFfmpeg?: true;
+}
 
 /** The codecs every browser this app runs in decodes, 8-bit 4:2:0 only — ffprobe's names. */
 export const PLAYABLE_CODECS = ["h264", "vp8", "vp9", "av1"] as const;

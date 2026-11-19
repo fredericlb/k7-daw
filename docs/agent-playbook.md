@@ -54,7 +54,7 @@ worktree tooling), [rust-builds.md](rust-builds.md) (the builds and the checks),
 | a sub-step's critical chain may be split into two tracks on two branches (`step1x` and `step1x-io`, the I/O-free core and its I/O side behind fakes, made from it and merged back into it at each milestone's end) under a contract in `.claude/state/design-split-*.md`; the reviewer reads both | the two halves share no file until the routes join them, and the chain 1d → 1g → 1j → 1n is mostly one sub-step at a time |
 | every builder keeps `/Users/mahrave/Src/k7/.claude/state/<branch>.md` (outside git, shared by every worktree): what is done with its commits, what is left, the review findings still open, the next step; it rewrites it at each commit, and a builder taking over reads it before anything else | a restart or an interrupt stops every agent, and a builder told nothing spent its first quarter re-reading the brief, the page and the log |
 | a brief names, for each milestone, the TypeScript functions it ports and the Rust files it writes, with their paths | a builder spent most of a milestone finding its way; the reviews' file-and-line findings were fixed fastest |
-| `npm run ci:local` runs on `main` after a batch of merges, by the coordinating session; a failure is fixed at once or the merge undone (`update-ref` back); its stage gates compare `main` with the last `main` they passed on (`~/.cache/k7-stage-gates-main`), not with itself, and fail on drifted vectors | the merge gate's `check:changed` already tests every touched workspace; `ci:local` repeated it for 20 minutes per merge |
+| `npm run ci:local` runs on `main` after a batch of merges, by the coordinating session; a failure is fixed at once or the merge undone (`update-ref` back); it fails on drifted vectors | the merge gate's `check:changed` already tests every touched workspace; `ci:local` repeated it for 20 minutes per merge |
 
 ## The coordinating session
 
@@ -147,7 +147,7 @@ change is judged on numbers.
 
 | check | runs | when |
 |---|---|---|
-| `npm run ci:local` | lint, typecheck, the workspaces' tests, the stage gates (`scripts/stage-gates.sh`, skipped when nothing they read changed, the TypeScript's dumps cached), and a failure on drifted vectors | on `main` after a batch of merges, by the coordinating session |
+| `npm run ci:local` | lint, typecheck, the workspaces' tests, and a failure on drifted vectors | on `main` after a batch of merges, by the coordinating session |
 | `bash scripts/agent/mac-checks.sh` | clippy and the tests of the backend and the browser crates, the song crate's wasm build; an area the branch did not touch since `main` is skipped; a piece's slow tests run only when that piece changed (`scripts/agent/affected-tests.mjs`), the merge gate and `ci:local` running everything | before every merge touching Rust |
 | `bash scripts/agent/android-check.sh` | the Rust front built for the phone, the bundled backend, the app's Kotlin, with Gradle's configuration cache; not the C++ engine; skipped when nothing the phone's build reads changed since main (`--all` runs it) | in the merge gate |
 | `bash scripts/agent/ios-check.sh` | `k7-embed` built as a static library for `aarch64-apple-ios` and `aarch64-apple-ios-sim` in `~/.cache/k7-ios-check`, then `xcodebuild` for the simulator against the frameworks `stage.mjs --sim` staged (it stops if they are missing); not the C++ engine; skipped when nothing the app reads changed since main (`--all` runs it) | in the merge gate, not `--quick` |

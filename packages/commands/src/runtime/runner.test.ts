@@ -12,11 +12,11 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { writeDoc, writeLane } from "@studio/song/testSupport";
 import { wsWriteData } from "@studio/song/yaml/workspaceDoc";
 import { gzipSync, strToU8, zipSync } from "fflate";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { compileDisk, compileReady } from "./testing/compileDisk.ts";
 import { fakeServer } from "./testing/fakeServer.ts";
 import { fakeWorkspace } from "./testing/fakeWorkspace.ts";
 import { serveHttp } from "./testing/httpServer.ts";
@@ -48,6 +48,7 @@ let out: string;
 let http: Awaited<ReturnType<typeof serveHttp>>;
 
 beforeAll(async () => {
+  await compileReady();
   root = mkdtempSync(join(tmpdir(), "rt-http-"));
   out = mkdtempSync(join(tmpdir(), "rt-out-"));
   const dir = join(root, "song.k7");
@@ -103,7 +104,7 @@ describe("the built runtime", () => {
     const base = mkdtempSync(join(tmpdir(), "rt-cons-"));
     cpSync(demo, join(base, "song.k7"), { recursive: true });
     mkdirSync(join(base, "_modules", "transformers"), { recursive: true });
-    const track = compileNodeProject(join(base, "song.k7")).tracks.find((t) =>
+    const track = compileDisk(join(base, "song.k7")).tracks.find((t) =>
       t.clips.some((c) => c.type === "audio"),
     );
     const fake = fakeServer(new Vfs(true), base, "song.k7");

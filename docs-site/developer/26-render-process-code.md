@@ -13,8 +13,8 @@ and an output folder and resolves to a `RenderManifest` (`parseManifest` reads t
 `localRenderer(bin, timeout)` runs the engine binary as a one-shot process with `--render`;
 `renderToWav` is the common wrapper.
 
-Which renderer a verb gets is the file service's decision (`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/render.rs`; `serviceRenderer` in
-`packages/take-render/src/renderers.ts` for the CLI), tried in order:
+Which renderer a verb gets is the file service's decision (`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/render.rs`; `localRenderer` in
+`packages/take-render/src/renderer.ts` for the engine scripts), tried in order:
 
 1. the engine binary on the service's own machine, as a separate process;
 2. otherwise the engine machine the workspace is bound to, over the tunnel;
@@ -64,7 +64,7 @@ as many answers as there are passes.
 The previous render is snapshotted through the host before being overwritten, which is what makes the
 step a `process` journal entry and why undoing it asks first.
 
-`packages/audio-passes/src/peakPass.ts` measures the source's peak first when a step declares a
+The verb host measures the source's peak first when a step declares a
 `Peak` parameter (a normaliser needs it). `coldPass.ts` handles **offline** steps — a module that
 cannot run in real time, such as stem separation — which write into `stems/` beside the source
 instead of replacing it.
@@ -80,15 +80,6 @@ the others; a bounce that writes nothing undoes the copy.
 into one render with `freezeUpstreamRender` (`packages/take-render/src/renderer.ts`) and marks the
 module `frozen:`. The timeline then draws the lane's block as a render: it cannot be moved, and a
 double-click opens the authored notes under it (`openFrozenNotes` in `TimelineTab.tsx`).
-
-## Reading the arrangement as text
-
-`packages/take-render/src/timeline.ts` is a script, not an export: it prints a song's arrangement as
-text, the timeline's reader for a terminal.
-
-```bash
-npx tsx packages/take-render/src/timeline.ts <project> [track]
-```
 
 ## See also
 

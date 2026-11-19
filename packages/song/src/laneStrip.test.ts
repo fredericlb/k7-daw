@@ -13,7 +13,6 @@ import {
   mixerNameFor,
   planLaneStrip,
 } from "./laneStrip";
-import { compileNodeProject } from "./nodeProject";
 import { trackMixer } from "./project";
 import { SHARED_STRIP } from "./scaffoldLive";
 import {
@@ -115,28 +114,6 @@ describe("planLaneStrip", () => {
 });
 
 describe("addLaneStrip", () => {
-  it("writes the node and one arrow, and the lane then HAS a mixer when compiled", () => {
-    lane("pad");
-    module_("synth-pad", "4osc");
-    graph(
-      { pad: ["synth-pad"], "synth-pad": ["MIX"], MIX: ["OUT"] },
-      "// the graph\n",
-    );
-    const files = addLaneStrip(dir, "pad", loadGraph(dir));
-    // A NODE on k7's own mixer, not a project copy of it (docs/trackMixer.md, docs/metaModules.md).
-    expect(files).toEqual(["nodes/mix-pad.k7x", "graph.k7x"]);
-    expect(wsData(join(dir, "nodes/mix-pad.k7x")).extends).toBe(SHARED_STRIP);
-    // The splice, not an append: the synth now feeds the strip and the strip feeds the sum.
-    expect(graphModules()).toMatchObject({
-      "synth-pad": ["mix-pad"],
-      "mix-pad": ["MIX"],
-    });
-    // …and the file's comments survive, this being a document edit rather than a re-serialisation.
-    expect(graphText()).toContain("// the graph");
-    const t = compileNodeProject(dir).tracks.find((x) => x.id === "pad");
-    expect(trackMixer(t as never)?.name).toBe("mix-pad");
-  });
-
   it("is a no-op the second time", () => {
     lane("kit");
     graph({ MIX: ["OUT"] });

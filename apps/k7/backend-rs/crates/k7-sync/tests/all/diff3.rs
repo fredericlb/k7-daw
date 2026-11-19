@@ -1,12 +1,9 @@
-//! diff3.rs — the native text merge held to node: every `diff3Merge` answer of `fixtures/diff3-vectors.json` byte
-//! for byte with `mergeTexts`' text, then every non-k7x settle of `fixtures/settle-vectors.json` answered without
-//! node's `settleFileOp` and `applyFileOp` answered it (apps/k7/backend-rs/docs/parity.md, "The text merge").
+//! diff3.rs — every non-k7x settle of `fixtures/settle-vectors.json` answered without node's `settleFileOp` and `applyFileOp` (apps/k7/backend-rs/docs/parity.md).
 //! What a reader gets wrong: the settle check runs with a `Js` that panics, so no answer can come from a host.
 
 use std::sync::OnceLock;
 
 use k7_sync::bases::TextBases;
-use k7_sync::diff3::{Block, diff3_merge, lines, merge_texts};
 use k7_sync::json::stringify;
 use k7_sync::settle::{self, Js, JsError, Settled};
 use serde_json::{Map, Value, json};
@@ -19,57 +16,6 @@ fn fixture(name: &str) -> Value {
 
 fn sha(s: &str) -> String {
     format!("{:x}", Sha256::digest(s.as_bytes()))
-}
-
-/// `JSON.stringify` of node-diff3's answer.
-fn answer(blocks: &[Block]) -> String {
-    let v: Vec<Value> = blocks
-        .iter()
-        .map(|b| match b {
-            Block::Ok(l) => json!({ "ok": l }),
-            Block::Conflict {
-                a,
-                a_index,
-                o,
-                o_index,
-                b,
-                b_index,
-            } => json!({ "conflict": {
-                "a": a, "aIndex": a_index, "o": o, "oIndex": o_index, "b": b, "bIndex": b_index,
-            } }),
-        })
-        .collect();
-    stringify(&Value::from(v))
-}
-
-#[test]
-fn every_diff3_merge_is_node_diff3s() {
-    let file = fixture("diff3-vectors.json");
-    let texts = file["texts"].as_array().unwrap();
-    let text = |v: &Value, k: &str| texts[v[k].as_u64().unwrap() as usize].as_str().unwrap();
-    let mut wrong = Vec::new();
-    let mut n = 0;
-    for v in file["vectors"].as_array().unwrap() {
-        let (a, o, b) = (text(v, "a"), text(v, "o"), text(v, "b"));
-        let keep_false = v.get("keepFalse").is_some_and(|k| k == true);
-        let got = answer(&diff3_merge(&lines(a), &lines(o), &lines(b), !keep_false).unwrap());
-        let same = match v.get("expect").and_then(Value::as_str) {
-            Some(e) => e == got,
-            None => v["sha256"].as_str() == Some(sha(&got).as_str()),
-        };
-        let merged = merge_texts(o, a, b).unwrap().map(|t| sha(&t));
-        if !same || merged.as_deref() != v["merged"].as_str() {
-            wrong.push(format!("{}: {got:.300}", v["from"]));
-        }
-        n += 1;
-    }
-    assert!(
-        wrong.is_empty(),
-        "{} of {n}:\n{}",
-        wrong.len(),
-        wrong[..wrong.len().min(20)].join("\n")
-    );
-    assert!(n > 3000, "{n} vectors");
 }
 
 /// A `Js` that must never be asked: every op here is a text or a removal.

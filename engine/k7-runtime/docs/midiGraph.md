@@ -24,7 +24,7 @@ composition of them with the ordinary control arithmetic.
 
 `mhold` before `mstrike` is the whole circuit. Reversed, the strike runs on a set nothing filled.
 
-That pair is the note repeater's core (`packages/dsp/src/noteRepeat.ts`): hold, multiply two
+That pair is the note repeater's core (`k7-core`'s note-repeat `dsp.k7x`): hold, multiply two
 parameters into a step, strike.
 
 **The step rule**, four setters that say which strikes play and how loud — `mpattern(mode, length,
@@ -63,8 +63,8 @@ What each answers, and the choices behind it:
 
 `NoteClock` — held keys, sounding copies, step clock — is **one per graph**, like the note stream
 itself. The sample phase's wires work the same way, and for the same reason: the MIDI phase has
-exactly one buffer, every node rewrites it in place, and `packages/dsp/docs/builder.md` already
-argues that the `Midi` type carries no name because there is only ever one of it. A held set per
+exactly one buffer, every node rewrites it in place, and the `dsp.k7x` vocabulary carries no
+name for the note stream because there is only ever one of it. A held set per
 node would be a second thing to route, and nothing would route it.
 
 The practical payoff is that `mhold` and `mstrike` need no wire between them. They are two facts

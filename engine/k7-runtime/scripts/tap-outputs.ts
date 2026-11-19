@@ -7,10 +7,9 @@
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
-import { measureFilePeak } from "../../../packages/audio-analysis/src/peak.ts";
 import { findEngineBinary } from "../../../packages/engine-client/src/engineBinary.ts";
 import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
-import { wavFile } from "./wav.ts";
+import { peakOf, wavFile } from "./wav.ts";
 
 const base = {
   name: "tap-outputs",
@@ -86,7 +85,7 @@ const fed = (mute: boolean) => ({
 async function cases(bin: string, label: string, plugin: (routed: boolean) => object, routedKey: number, otherKey: number) {
   const peak = async (key: number, routed: boolean, fxMuted: boolean) => {
     const out = await renderProject({ ...base, tracks: [lane(plugin(routed), key), fed(fxMuted)] });
-    return (await measureFilePeak(out.files[0], { engineBin: bin })).peakDb;
+    return peakOf(out.files[0]);
   };
   const rows = [
     ["routed pad, its track open", await peak(routedKey, true, false), "heard"],

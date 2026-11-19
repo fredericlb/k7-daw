@@ -4,12 +4,14 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
@@ -24,9 +26,9 @@ const lane = (id: string, event: Record<string, unknown>): void =>
 const events = (id: string) =>
   wsData(join(dir, `tracks/${id}.k7x`)).events as Record<string, unknown>[];
 const clipOf = (id: string) =>
-  loadProject(dir).tracks.find((t) => t.id === id)?.clips[0];
+  compileDisk(dir).tracks.find((t) => t.id === id)?.clips[0];
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
@@ -95,6 +97,6 @@ describe("event gain", () => {
 
   it("reports a gain hand-written on a MIDI event rather than ignoring it", () => {
     lane("keys", { ref: "pat", start: "1:1", gain: 2 });
-    expect(() => loadProject(dir)).toThrow(/only an audio event has/);
+    expect(() => compileDisk(dir)).toThrow(/placed with a gain/);
   });
 });

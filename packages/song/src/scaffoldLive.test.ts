@@ -16,8 +16,7 @@ import { OUTPUT_RECORDER_ID } from "@studio/song-schema/moduleTypes";
 import { byCodePoint } from "@studio/song-schema/textOrder";
 import { describe, expect, it } from "vitest";
 import { carriesCamera, loadGraph, validate } from "./graph";
-import { compileNodeProject } from "./nodeProject";
-import { loadProject, MIXER_PLUGIN, trackMixer } from "./project";
+import { MIXER_PLUGIN, trackMixer } from "./project";
 import { writeProjectFiles } from "./scaffold";
 import {
   LIVE_CAMERA,
@@ -175,57 +174,6 @@ describe("and it PLAYS", () => {
       pickChannel(dir, [1]);
       expect(validate(loadGraph(dir))).toEqual([]);
     }));
-
-  it("MATERIALISES a track for the input, though the project authors none", () =>
-    on((dir) => {
-      // There is no lane on disk. The run carrying the input makes its own track, named after the
-      // chain — which is the input's own name here. See docs/liveProject.md.
-      const doc = compileNodeProject(dir);
-      expect(doc.tracks.map((t) => t.id)).toEqual([LIVE_INPUT]);
-      const rig = doc.tracks[0];
-      expect(rig.role).toBe("regular");
-      // Monitoring is ON, so the moment a channel is picked it is audible without arming.
-      expect(rig.monitor).toBe("on");
-      // …and no channel until one is chosen, which is the whole of "no default input".
-      expect(rig.inputChannels).toEqual([]);
-      // Nothing to play: what is heard is what is plugged in.
-      expect(rig.clips).toEqual([]);
-    }));
-
-  it("puts the FADER on that track — it is what the run runs through", () =>
-    on((dir) => {
-      expect(
-        compileNodeProject(dir).tracks[0].plugins.map((p) => p.id),
-      ).toEqual([`${LIVE_INPUT}:${LIVE_FADER}`]);
-    }));
-
-  it("records its OUTPUT with a recorder no node names, on the master run", () =>
-    on((dir) => {
-      // The graph holds none: the compile places the engine's own, last, once the project has no timeline.
-      expect(compileNodeProject(dir).masterPlugins).toEqual([]);
-      expect(
-        loadProject(dir).masterPlugins.map((p) => `${p.id}:${p.type}`),
-      ).toEqual([`${OUTPUT_RECORDER_ID}:${RECORDER_PLUGIN}`]);
-      // …and it is NOT on the track, which would capture one voice of the mix instead.
-      expect(
-        compileNodeProject(dir).tracks[0].plugins.map((p) => p.id),
-      ).toEqual([`${LIVE_INPUT}:${LIVE_FADER}`]);
-    }));
-
-  it("makes that fader the app's OWN strip, so a level on screen moves it", () =>
-    on((dir) => {
-      // `trackMixer` reads the LAST Mixer in a track's chain, and a track with none has nowhere
-      // to put a level — a fader of any other plugin is one no surface can drive.
-      const t = compileNodeProject(dir).tracks[0];
-      expect(t.plugins[0].type).toBe(MIXER_PLUGIN);
-      expect(trackMixer(t)?.id).toBe(`${LIVE_INPUT}:${LIVE_FADER}`);
-    }));
-
-  it("carries the chosen channel onto that track", () =>
-    on((dir) => {
-      pickChannel(dir, [1, 2]);
-      expect(compileNodeProject(dir).tracks[0].inputChannels).toEqual([1, 2]);
-    }));
 });
 
 // The SAME rig with a lens on it: `live-video` adds a camera and the frame it fills, and adds
@@ -282,13 +230,6 @@ describe("the live-video archetype", () => {
       expect(isVideoProject(dir)).toBe(false);
     }));
 
-  it("keeps its SOUND exactly as the audio rig has it", () =>
-    onVideo((dir) => {
-      const doc = compileNodeProject(dir);
-      expect(doc.tracks.map((t) => t.id)).toEqual([LIVE_INPUT]);
-      expect(trackMixer(doc.tracks[0])?.id).toBe(`${LIVE_INPUT}:${LIVE_FADER}`);
-    }));
-
   it("says the one thing the audio rig says, and nothing about the lens", () =>
     onVideo((dir) => {
       // A camera with no lens named is not a complaint: "" is the machine's own (docs/camera.md).
@@ -309,34 +250,10 @@ describe("born as chain files", () => {
       expect(t).not.toContain("nodes");
     }));
 
-  it("plays as the graph form does: one track for the input, its fader the app's strip", () =>
-    onShape(scaffoldLive, (dir) => {
-      const doc = compileNodeProject(dir);
-      expect(doc.tracks).toHaveLength(1);
-      // Keyed by the input's id now, but LABELLED by its chain, so the strip still reads `IN`.
-      expect(doc.tracks[0].name).toBe(LIVE_INPUT);
-      expect(doc.tracks[0].monitor).toBe("on");
-      expect(trackMixer(doc.tracks[0])?.type).toBe(MIXER_PLUGIN);
-      // The chain form records its output too, with the recorder the compile places.
-      expect(loadProject(dir).masterPlugins.map((p) => p.type)).toEqual([
-        RECORDER_PLUGIN,
-      ]);
-    }));
-
   it("says the one thing a fresh rig says: pick a channel", () =>
     onShape(scaffoldLive, (dir) => {
       expect(validate(loadGraph(dir))).toEqual([
         expect.stringMatching(/^input '.+': no channel — it feeds nothing$/),
       ]);
-    }));
-
-  it("keeps the lens of `live-video` wired to RENDER, saying nothing about it", () =>
-    onShape(scaffoldLiveVideo, (dir) => {
-      expect(hasPicture(dir)).toBe(true);
-      const g = loadGraph(dir);
-      expect(validate(g)).toHaveLength(1);
-      const lens = Object.values(g.chains).filter((c) => carriesCamera(g, c));
-      expect(lens.map((c) => c.out.map((o) => o.to))).toEqual([["RENDER"]]);
-      expect(compileNodeProject(dir).tracks).toHaveLength(1);
     }));
 });

@@ -130,8 +130,7 @@ true-peak measurement and the extraction stream what they read, hold nothing, an
 
 Every ffmpeg and ffprobe here runs with `-protocol_whitelist file,pipe`, before `-i`. A playlist or
 a crafted container can name another resource, and the decoder of an uploaded file must never be
-the thing that fetches one. The rule is the whole repo's, and its inputs are built by
-`@studio/ffmpeg` (`packages/ffmpeg/docs/ffmpeg.md`).
+the thing that fetches one. The rule is the whole repo's, and the Rust verb host builds its inputs under it.
 
 ## The version is a gate
 

@@ -36,7 +36,7 @@ whose Worker runs the verb (`Android`): the Worker's `process.platform` is a shi
 `linux`, and the page is what decodes.
 
 The file probed and copied is an upload, so both open it under `-protocol_whitelist file,pipe`
-through `@studio/ffmpeg`'s `input()` (`packages/ffmpeg/docs/ffmpeg.md`): a crafted container must
+by the Rust verb host: a crafted container must
 not make the file service fetch a URL.
 
 ## The plan is pure

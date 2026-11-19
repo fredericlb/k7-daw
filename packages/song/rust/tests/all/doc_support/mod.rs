@@ -8,8 +8,6 @@ mod counts;
 mod gate;
 mod pictures;
 mod provenance;
-mod ts_order;
-mod ts_text;
 mod walk;
 mod world;
 #[allow(unused_imports)]
@@ -22,10 +20,6 @@ pub use gate::*;
 pub use pictures::*;
 #[allow(unused_imports)]
 pub use provenance::*;
-#[allow(unused_imports)]
-pub use ts_order::*;
-#[allow(unused_imports)]
-pub use ts_text::*;
 #[allow(unused_imports)]
 pub use walk::*;
 #[allow(unused_imports)]

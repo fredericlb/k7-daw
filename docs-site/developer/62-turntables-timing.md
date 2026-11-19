@@ -8,10 +8,7 @@ A record's waveform, onsets and tempo come from the account's file service and a
 
 | Path | Role |
 |---|---|
-| `packages/audio-analysis/src/decode.ts` | Decodes through the engine binary's `--decode` when there is one, ffmpeg (`FFMPEG_BIN`) otherwise. |
-| `packages/audio-analysis/src/envelope.ts` | Builds peak/RMS, three bands (split at 200 Hz and 4 kHz), onsets and tempo. The only producer of a sidecar: a constant changed here needs a `CACHE_VERSION` bump. |
-| `packages/audio-analysis/src/sidecar.ts`, `fingerprint.ts` | The sidecar's JSON, and the content fingerprint (FNV-1a/64 over size, first and last 64 KB) checked on every read. |
-| `packages/audio-analysis/src/analyse.ts` | Decode, measure, stamp, write. |
+| `apps/k7/backend-rs/crates/k7-mediatek/src/` | The analysis: `decode.rs` (the engine's `--decode`, ffmpeg otherwise), `envelope.rs` (peak/RMS, three bands split at 200 Hz and 4 kHz, onsets and tempo), `sidecar.rs` and `fingerprint.rs` (the sidecar's JSON, and the content fingerprint, FNV-1a/64 over size, first and last 64 KB, checked on every read), `analyse.rs` (decode, measure, stamp, write). The only producer of a sidecar: a constant changed here needs a `CACHE_VERSION` bump. |
 | `packages/audio-probe/src/waveform.ts` | Onset detection and the `FileEnvelope` shape; browser-safe. |
 | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/media/envelopes.rs` | the envelope: memo, matching sidecar, else decode; concurrent asks for one file share one decode. |
 | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/record.rs` | `GET /record/envelope?path=` for a workspace audio file: 404 when the file is absent, 503 without an engine binary. |

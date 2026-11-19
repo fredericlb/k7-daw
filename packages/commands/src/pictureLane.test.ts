@@ -7,20 +7,22 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadGraph } from "@studio/song/graph";
 import { laneStripsOf, pictureLanes, stripLanes } from "@studio/song/laneStrip";
-import { loadProject } from "@studio/song/project";
 import { writeDoc, writeLane } from "@studio/song/testSupport";
 import { wsData, wsWriteText } from "@studio/song/yaml/workspaceDoc";
 import { wsExists } from "@studio/song/yaml/workspaceFile";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
 const doc = (rel: string, value: Record<string, unknown>): void =>
   writeDoc(join(dir, rel), value);
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };

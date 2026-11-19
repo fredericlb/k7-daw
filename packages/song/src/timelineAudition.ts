@@ -8,6 +8,8 @@ import { NEST_SEP } from "@studio/song-schema/timelineLane";
 import { placeWithin, timelineLaneTrack } from "./compile/timelines";
 import type { ClipDoc, ProjectDoc, TrackDoc } from "./project";
 
+export { timelineLaneTrack };
+
 /** The engine tracks timeline `id` first plays through — both halves of one lane — or [] when it is placed nowhere. */
 export function auditionHosts(doc: ProjectDoc, id: string): string[] {
   // A placement is named by the id prefix up to its own `<id>@<start>` segment, nested or not.

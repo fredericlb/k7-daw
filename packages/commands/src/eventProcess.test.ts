@@ -10,13 +10,15 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
 import { otherUsesOf, ownMaterial } from "./verbs/eventProcess";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
@@ -74,7 +76,7 @@ afterEach(() => rmSync(root, { recursive: true, force: true }));
 
 describe("event process", () => {
   it("counts the other events on a material, and gives one event its own copy", () => {
-    const p = loadProject(dir);
+    const p = compileDisk(dir);
     const [a, , c] = p.tracks[0].clips;
     expect(otherUsesOf(p, "riff", { track: "gtr", id: a.id })).toBe(1);
     expect(otherUsesOf(p, "solo", { track: "gtr", id: c.id })).toBe(0);
@@ -87,14 +89,14 @@ describe("event process", () => {
   });
 
   it("leaves the event on its material when the bounce writes nothing", async () => {
-    const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+    const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
     await runCommand("event process gtr 3:1 no-such-chain", h, "cli");
     expect(refs()).toEqual(["riff", "riff", "solo"]);
     expect(existsSync(join(dir, "clips/riff-2.k7x"))).toBe(false);
   });
 
   it("asks for all three arguments", async () => {
-    const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+    const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
     await runCommand("event process gtr 3:1", h, "cli");
     expect(h.lines.refuse.join(" ")).toMatch(/usage: event process/);
   });

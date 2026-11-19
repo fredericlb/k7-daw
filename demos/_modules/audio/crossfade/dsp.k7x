@@ -1,4 +1,4 @@
-// Crossfade — the DSP as data, read by the song crate into the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Crossfade — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 // input(0) and input(1) index the ports module.k7x declares, in order: `a` then `b`.
 params({
   Mix: { min: 0, max: 1, default: 0.5 },

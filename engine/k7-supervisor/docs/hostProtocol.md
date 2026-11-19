@@ -4,8 +4,7 @@
 between the supervisor and the app that drives it — every frame, every object closed. The C++
 writer, `src/HostProtocol.cpp`, is written by hand and held to it through fixtures:
 `HostProtocol_test.cpp` compares `stateFrame()` byte for byte with `schema/fixtures/`, and the Rust
-host reads the same frames (`apps/k7/backend-rs/crates/k7-local/src/protocol.rs`, held to
-`apps/k7/backend-rs/fixtures/local-vectors.json`). Why the writer is not generated, and why the phones
+host reads the same frames (`apps/k7/backend-rs/crates/k7-local/src/protocol.rs`). Why the writer is not generated, and why the phones
 decode no typed frame, is in `apps/k7/backend-rs/docs/supervisorHost.md`.
 
 It is NDJSON on stdio — one JSON object per line, supervisor→app on stdout, app→supervisor on

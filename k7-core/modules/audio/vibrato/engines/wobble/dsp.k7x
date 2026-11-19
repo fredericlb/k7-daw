@@ -1,4 +1,4 @@
-// Vibrato (wobble) — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Vibrato (wobble) — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({ Amount: { min: 0, max: 100, default: 0 } })
 graph([
   mul("Amount", 0.01).as("t"),

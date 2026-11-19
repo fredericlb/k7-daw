@@ -141,9 +141,7 @@ The rows 336 to 353 above carry these numbers in their tests.
 
 ## The gate
 
-The document is no longer compared against the TypeScript: its gate (`stages_doc.rs` over a dump of the TypeScript's documents) is dropped, since the TypeScript compile it
-compared against leaves the hosts. What holds the document is the golden smoke (`apps/k7/backend-rs/crates/k7-file-service/tests/all/golden_smoke.rs`, run by `scripts/stage-gates.sh` over a corpus staged by
-`scripts/stageCorpus.ts`): every project of the corpus compiles, its document decodes with no `null`, and the two broken ones name their files. `tests/doc_negative.rs` (the negative corpus) runs wherever `cargo test` does; `doc_golden.rs` and `doc_twin.rs` too.
+What holds the document is `doc_golden.rs` (every golden `engine` document decodes with no `null`) and the golden corpus's conformance spec; `tests/doc_negative.rs` (the negative corpus) runs wherever `cargo test` does, `doc_twin.rs` too.
 
 ## Hostile input
 

@@ -5,7 +5,6 @@ import { RENDER_AUDIO_LEVEL } from "@studio/song-schema/formatLevel";
 import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadGraph } from "./graph";
-import { compileNodeProject } from "./nodeProject";
 import { scaffold } from "./scaffold";
 import { wsData } from "./yaml/workspaceDoc";
 
@@ -27,24 +26,6 @@ const tree = (): string[] =>
     .sort();
 
 describe("a scaffolded project", () => {
-  it("compiles and plays, with nothing to warn about", () => {
-    scaffold(dir, "demo");
-    const doc = compileNodeProject(dir);
-    const g = loadGraph(dir);
-    expect(doc.tracks.map((t) => t.id).sort()).toEqual([
-      "kit",
-      "melody",
-      "pad",
-    ]);
-    // Two lane runs plus the empty `MIX -> OUT`: the master chain's place, declared and bare.
-    expect(Object.keys(g.chains).length).toBe(3);
-    // A warning here means the template references something it didn't write.
-    expect(g.warnings).toEqual([]);
-    // The melody plays through the 4OSC the chain routes it into.
-    const melody = doc.tracks.find((t) => t.id === "melody");
-    expect(melody?.plugins.some((p) => p.type === "4osc")).toBe(true);
-  });
-
   it("is born a CHAIN project, the main layout: chain files and lanes, no graph and no node files", () => {
     const written = scaffold(dir, "demo");
     expect(tree().filter((f) => f.endsWith(".cue"))).toEqual([]);
@@ -59,22 +40,6 @@ describe("a scaffolded project", () => {
     expect(tree().filter((f) => /\.ya?ml$/.test(f))).toEqual([]);
     // What it says it wrote is what is there.
     expect([...written].sort()).toEqual(tree().filter((f) => f.includes(".")));
-  });
-
-  it("places the melody at bar 1, which is beat 0", () => {
-    scaffold(dir, "demo");
-    expect(wsData(join(dir, "tracks", "melody.k7x")).events).toEqual([
-      { ref: "melody", start: "1:1:1" },
-    ]);
-    const melody = compileNodeProject(dir).tracks.find(
-      (t) => t.id === "melody",
-    );
-    expect(melody?.clips?.[0]?.start).toBe(0);
-  });
-
-  it("names the project what it was asked to", () => {
-    scaffold(dir, "my song");
-    expect(compileNodeProject(dir).name).toBe("my song");
   });
 });
 
@@ -139,16 +104,5 @@ describe("arrangement vs video", () => {
       },
       format: RENDER_AUDIO_LEVEL,
     });
-  });
-
-  it("still plays, with picture on top of the same worked example", () => {
-    scaffold(dir, "demo", "video");
-    const doc = compileNodeProject(dir);
-    expect(doc.tracks.map((t) => t.id).sort()).toEqual([
-      "kit",
-      "melody",
-      "pad",
-    ]);
-    expect(loadGraph(dir).warnings).toEqual([]);
   });
 });

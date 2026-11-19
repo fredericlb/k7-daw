@@ -13,7 +13,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { readClipWarp } from "@studio/song-schema/warpPoints";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { compileNodeProject } from "./nodeProject";
 import { loadAudioClipDoc } from "./project";
 import { writeDoc, writeLane } from "./testSupport";
 
@@ -48,12 +47,6 @@ describe("the unplaced clip", () => {
       [0, 0],
       [4, 1.5],
     ]);
-  });
-
-  it("agrees with the placement's compiler, marker for marker", () => {
-    // Nothing else reports the two disagreeing, so one being empty passes unnoticed.
-    const placed = compileNodeProject(dir).tracks.flatMap((t) => t.clips)[0];
-    expect(loadAudioClipDoc(dir, "bass")?.warp).toEqual(placed.warp);
   });
 
   it("declines the map when the FILE declines it", () => {

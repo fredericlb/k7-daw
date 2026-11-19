@@ -1,7 +1,6 @@
 # The compiler: packages/song
 
-`packages/song` reads a project folder and compiles it into the `ProjectDoc` the engine plays. It
-also owns everything that walks a disk around a project: the shared `_modules/` folder, the
+`packages/song` reads a project folder: the files, the module vocabulary, the lanes and the graph the pages and the verbs read. The compile into the `ProjectDoc` the engine plays is the Rust `song` crate (`packages/song/rust`), run natively by the front and as WebAssembly in the verbs' Worker. The package also owns everything that walks a disk around a project: the shared `_modules/` folder, the
 account's libraries, surfaces, assemblies, the archetype scaffolds, and the migrations between file
 layouts. It reads; changing a project is `@studio/song-edit`'s job ([song-edit](./33-song-edit.md)).
 
@@ -9,8 +8,6 @@ layouts. It reads; changing a project is `@studio/song-edit`'s job ([song-edit](
 
 | Function | File | What it does |
 |---|---|---|
-| `loadProject(path)` | `packages/song/src/project.ts` | The one entry the file service calls. A folder with `chains/`, `graph.k7x` or `modules/` goes to `compileNodeProject`; any other folder is refused; a single `.k7x` file holding `project` and `tracks` is mapped directly. Sets `recordDir` to `<project>/clips`. |
-| `compileNodeProject(dir)` | `packages/song/src/nodeProject.ts` | The compile proper, through `compileWithAutoFreezes`. |
 | `loadGraph(dir)`, `parseChains`, `checkChainInputs` | `packages/song/src/graph.ts` | The derived chain graph, its validation, and the port type checks. |
 | `loadModules`, `loadModuleRefs`, `loadChains`, `loadLanes`, `loadVideoTracks`, `loadProjectRoot`, `loadSettings`, `exportSub`, `readYamlEntities` | `packages/song/src/loader.ts` | Reading each file kind off disk, validated or not. |
 | `resolveModule`, `resolveModuleMap` | `packages/song/src/moduleResolve.ts` | Inheritance. |
@@ -41,32 +38,12 @@ New `arrangement`, `video` and `live` projects are scaffolded as chain files dir
 (`packages/song-edit/rust/src/scaffold_files.rs`). `assemblies/` and `views/` name nodes, and a
 surface with a `mapping` binds node params — which is why a `mix` set stays in the graph layout.
 
-## The compile, in order
+## The compile
 
-`compileNodeProjectIn` in `packages/song/src/nodeProject.ts`:
-
-1. Machine preferences (input labels), defaulted when unreadable.
-2. `loadProjectRoot` and `loadChains` (validated: a schema failure throws `invalid chains: …`).
-3. `loadModules` — the project's own nodes, validated — and `loadModuleRefs` — the `extends`
-   vocabulary: built-ins (`@meta/doc`, the three lane modules, `@meta/not-supported`, the io
-   modules), the engine's scanned plugins (`@engine/<slug>`), then every shared root found by
-   **location**: the workspace `_modules/` (`@workspace`), each library at its pinned version
-   (`@<name>`), and k7's own `packages/song/meta/` (`@meta`). A root's namespace comes from where it
-   is (`moduleNamespaceOf`), never from a field.
-4. Lanes are folded from the local modules (`lanesOf`), picture lanes read for their names.
-5. Chains are derived (`parseChains`), bypass and bus-only sets read, rack tap feeds paired.
-6. Clips and sequences read; a clip that fails its schema keeps its own complaint so the reference
-   error says why.
-7. Every module resolved once (`resolveModuleMap`).
-8. References checked; all failures thrown together as `unresolved reference(s): …`.
-9. Tracks, plugins, sends, automation and the master chain built; curves baked (`curves.ts`,
-   `curveConditions.ts`), comps cut into clips (`compClips.ts`), pattern lanes given their pattern
-   plugin (`enginePattern.ts`), the console placed (`console.ts`), freezes applied (`freeze.ts`).
-
-`compileWithAutoFreezes` runs that twice when the song holds VSTs: live first, because an automatic
-freeze is fingerprinted from what it replaces, then again with every rendered freeze standing in
-(`autoFreeze.ts`). Everything runs inside `withModuleStamp`, which pins one snapshot of the module
-caches for the whole compile.
+The compile is the Rust song crate's, and the one compiler: `packages/song/rust/src/doc/` builds the `ProjectDoc`,
+`views/` the pages' answers. Its pages are `packages/song/docs/rustCompiler.md` and the sub-step pages beside it. What
+the TypeScript here keeps is the read side the verbs and the pages call: the module vocabulary and its inheritance
+(below), the lanes, the derived chain graph and the timelines' lengths.
 
 ## Inheritance
 
@@ -94,7 +71,7 @@ Panels come from the `ui.k7x` beside each module, attached by ref in `applyUiLib
 A lane is a node of one of three built-in modules (`packages/song/src/trackModule.ts`), none with a
 file: `@meta/track`, `@meta/strudel-track` (generated), `@meta/group-track` (no outputs). A lane has
 no input and two outputs, `audio` and `midi`, and is not typed by its signal; `laneOf` is the one
-projection every surface reads. Strudel lanes are compiled by `packages/song/src/enginePattern.ts`
+projection every surface reads. Strudel lanes are compiled by the song crate
 into a `studio_pattern` plugin carrying the pattern's source, the lane's label, the labels its file's
 other lanes claim, whether it is the catch-all (the file's first lane by name), and the sample banks
 (`samples/`, `$DIRT_SAMPLES`, `$STRUDEL_SAMPLES`). See [song-strudel](./35-song-strudel.md).
@@ -108,8 +85,7 @@ Two kinds of failure, by design:
   text-first tool, so each names the file, the node and the reason.
 - **`Diagnostic`** records `{ file, line, col, message, severity }` (`loader.ts`) for what can be
   reported without stopping: library modules that would not read (`libraryModuleIssues`), dead
-  project fields (`deadProjectFields`), unsupported plugins (`notSupportedModules`), unreadable
-  surfaces and assemblies. The file service serves them on `GET /project-errors`, and the editor
+  unreadable surfaces and assemblies. The file service serves them on `GET /project-errors`, and the editor
   draws them inline.
 
 A missing module in a chain is not fatal: it compiles to nothing, like a bypassed step, and the graph
@@ -124,9 +100,7 @@ not reproduce it (`packages/song/src/yaml/yamlCache.ts`, `settledParse`); module
 
 ## Tests
 
-- `packages/song/src/project.golden.test.ts` compiles a fixture and snapshots the `ProjectDoc`
-  (`__snapshots__/`); an intended change to the compile updates the snapshot in the same commit.
 - `packages/song/src/testSupport.ts` holds the helpers that write a temporary project.
-- `scaffold.test.ts`, `scaffoldSet.test.ts`, `scaffoldLive.test.ts` compile each archetype straight
-  after scaffolding, with no warnings.
-- `npm run bench` runs `nodeProject.bench.ts`.
+- `scaffold.test.ts`, `scaffoldLive.test.ts` scaffold each archetype and read it back.
+- The compile's own tests are the song crate's (`packages/song/rust/tests/all/`); the verbs' tests compile a project
+  through it with `packages/commands/src/runtime/testing/compileDisk.ts`.

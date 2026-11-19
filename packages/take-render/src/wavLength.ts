@@ -1,8 +1,8 @@
-// wavLength.ts — how long a wav is, read from its header through @studio/audio-analysis's chunk walk.
+// wavLength.ts — how long a wav is, read from its header through the chunk walk of wav.ts.
 // What reads wrong: a 0 `data` size is 0 s here, not what is on disk as for a slice (docs/rendering.md).
 
 import { closeSync, fstatSync, openSync, readSync } from "node:fs";
-import { wavLayout } from "@studio/audio-analysis/wav";
+import { wavLayout } from "./wav.ts";
 
 /** As much of a header as any sane file spends before `data` — a `LIST`/`bext` block and change. */
 const HEAD_BYTES = 8192;

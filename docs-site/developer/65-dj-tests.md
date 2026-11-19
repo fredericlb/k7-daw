@@ -49,7 +49,7 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 | `packages/song/src/scaffoldLive.test.ts` | The mix and live scaffolds compile and wire what they say. |
 | `packages/song/src/turntableAssembly.test.ts`, `migrateSet*.test.ts` | The deck assembly; migrations giving old sets a new set's files. |
 | `packages/commands/src/playlist.test.ts`, `playlistStems.test.ts`, `systemOnnx.test.ts` | The verbs. |
-| `packages/k7-plugins/src/transcription/transcribe.test.ts`, `trackTranscribe.test.ts` | SRT, and `track transcribe`'s refusals and writes. |
+| `packages/k7-plugins/src/transcription/trackTranscribe.test.ts` | `track transcribe`'s refusals and writes. |
 | The tests in `packages/audio-analysis/src/` | Decode through a stand-in engine, envelope arithmetic on a synthetic click track, the sidecar. |
 
 ## Measuring against an engine: `put-on.ts`

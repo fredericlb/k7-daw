@@ -1,10 +1,9 @@
 # The golden corpus
 
 What the compiler made of 174 projects, committed and frozen under `apps/k7/backend-rs/fixtures/golden/`.
-The files are recorded behaviour: `doc_golden.rs` decodes every `engine` document into the Rust `ProjectDoc`, and the
-same inputs, staged by `packages/song/scripts/stageCorpus.ts`, are a smoke test
-(`golden_smoke.rs` in `k7-file-service` and `serviceGolden.spec.ts`) that compiles every project, renders it and
-judges what it sounds like. The native compiler is not held to the files byte for byte.
+The files are recorded behaviour: `doc_golden.rs` decodes every `engine` document into the Rust `ProjectDoc`, and
+`serviceGolden.spec.ts` compiles the same projects on a running service, renders them and
+judges what they sound like. The native compiler is not held to the files byte for byte.
 
 | source | projects | what they are |
 |---|---|---|
@@ -68,7 +67,7 @@ diagnostic in `errors` (`graphModel.md`); none of the 22 does.
 ## Frozen
 
 The files are never regenerated: the TypeScript that wrote them is gone, and a generator over deleted code cannot run.
-A change of the compiler that moves an output is judged by the smoke test and the stage gates, and an expected change
+A change of the compiler that moves an output is judged by the song crate's tests and the conformance suite, and an expected change
 is edited in the file by hand.
 
 ## What it does not cover

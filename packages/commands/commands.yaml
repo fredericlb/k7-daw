@@ -3094,7 +3094,7 @@
 # The arrangement as text is a READER too — the timeline itself draws it — so its describer
 # has a CLI entry and no palette row:
 #
-#   npx tsx packages/take-render/src/timeline.ts <project> [track]
+#   the song crate's views draw it; there is no terminal reader
 #
 
 # --- transport ---

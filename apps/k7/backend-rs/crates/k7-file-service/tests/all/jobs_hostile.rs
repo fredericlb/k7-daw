@@ -2,20 +2,12 @@
 //! A reader gets wrong that the bound is a hang backstop (15 s, 60 under musl, best of three), never a measure: sizes are the proof.
 
 use crate::support::jobs::Tmp;
-use k7_file_service::confine::{Disk, project_roots};
 use k7_file_service::jobs::FreezeEvent as Ev;
 use k7_file_service::jobs::freezer::Freezer;
 use k7_file_service::jobs::manifest::{OUTSIDE, move_into, parse_manifest};
 use k7_file_service::jobs::plugin::resolve_plugin;
-use k7_file_service::jobs::preview::{
-    ClipTable, DocClip, DocSource, PreviewCtx, PreviewError, PreviewReq, disk_defs, disk_exists,
-    resolve_preview,
-};
 use k7_file_service::jobs::separations::separation_id;
-use k7_file_service::libraries::Home;
 use serde_json::json;
-use song::PathRule;
-use song::clips::audio_def::ClipGrid;
 use song::modules::Scan;
 use std::time::{Duration, Instant};
 
@@ -46,82 +38,6 @@ fn a_ref_of_64_kib_is_one_sentence_and_one_scan_of_the_catalogue() {
             .0
             .len(),
         64 * 1024
-    );
-}
-
-struct Empty;
-
-impl DocSource for Empty {
-    fn table(&self) -> Result<&dyn ClipTable, PreviewError> {
-        struct None_;
-        impl ClipTable for None_ {
-            fn find(&self, _: &str) -> Option<DocClip<'_>> {
-                None
-            }
-            fn grid(&self) -> ClipGrid {
-                ClipGrid {
-                    tempo: 120.0,
-                    num: 4.0,
-                    den: 4.0,
-                }
-            }
-        }
-        static NONE: None_ = None_;
-        Ok(&NONE)
-    }
-}
-
-#[test]
-fn an_audition_of_64_kib_nul_and_ten_thousand_ats_is_answered_in_the_typescripts_sentences() {
-    let tmp = Tmp::new("jobshostilepreview");
-    tmp.write("ws/p.k7/project.k7x", "project({ name: \"p\", tempo: 110, sampleRate: 48000, timeSignature: \"4/4\", video: false, layers: [] })\nmarkers({})\n");
-    let home = Home {
-        studio: tmp.at("studio"),
-        libraries: tmp.at("libraries"),
-    };
-    let project = tmp.at("ws/p.k7");
-    let roots = project_roots(&home, &project, &tmp.at("m"), &tmp.at("models"));
-    let defs = disk_defs(&roots, PathRule::HOST);
-    let ctx = PreviewCtx {
-        active: Some(&project),
-        workspace_root: &tmp.at("ws"),
-        home: &home,
-        roots: &roots,
-        probe: &Disk,
-        doc: &Empty,
-        defs: &defs,
-        exists: &disk_exists,
-    };
-    let ask = |r: PreviewReq| within(|| resolve_preview(&ctx, &r).unwrap_err().message);
-    let big = "x".repeat(64 * 1024);
-    assert_eq!(
-        ask(PreviewReq::Source {
-            source: big.clone()
-        }),
-        format!("no audio for '{big}'")
-    );
-    assert_eq!(
-        ask(PreviewReq::Source {
-            source: "\0".into()
-        }),
-        "no audio for '\0'"
-    );
-    assert_eq!(
-        ask(PreviewReq::Source {
-            source: "kick.wav\0".into()
-        }),
-        "no audio for 'kick.wav\0'"
-    );
-    let ats = "@".repeat(10_000);
-    assert_eq!(
-        ask(PreviewReq::Clip { clip: ats.clone() }),
-        format!("no clip '{ats}'")
-    );
-    assert_eq!(
-        ask(PreviewReq::Source {
-            source: format!("../../{big}.wav")
-        }),
-        "audio path is outside the workspace"
     );
 }
 

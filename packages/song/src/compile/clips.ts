@@ -1,6 +1,6 @@
 // compile/clips.ts — one placement read into the ClipDoc the engine plays: its window, loops,
 // fades and takes. What a reader gets wrong: `start`/`loop` are 1-based positions, the rest
-// 0-based durations. Part of nodeProject.ts's compile — docs/nodeProject.md.
+// 0-based durations. Kept for the timeline pictures' read side; the engine's clips are the song crate's.
 
 import { resolve } from "node:path";
 import { placementId } from "@studio/song-schema/placementId";

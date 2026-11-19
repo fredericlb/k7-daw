@@ -3,7 +3,6 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { compileNodeProject } from "./nodeProject";
 import { writeDoc, writeLane } from "./testSupport";
 import { videoSoundClips } from "./videoSound";
 
@@ -193,51 +192,5 @@ describe("a shot's sound, where the picture shows it", () => {
     ).toEqual([
       { name: "a", start: 0, length: 8, from: 0, to: 4, fadeIn: 2, fadeOut: 1 },
     ]);
-  });
-});
-
-describe("compiled into the engine's document", () => {
-  let dir: string;
-  beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), "td-vsound-"));
-    cpSync(SONG, dir, { recursive: true });
-    writeDoc(join(dir, "clips", "a.k7x"), clips.a);
-    writeDoc(join(dir, "clips", "b.k7x"), clips.b);
-    for (const f of ["a.mp4", "a.wav", "b.mp4", "b.wav"])
-      writeFileSync(join(dir, "clips", f), "");
-    writeLane(dir, "main", "picture-track", {
-      events: [
-        { ref: "a", start: 0, length: 5 },
-        { ref: "b", start: 4, length: 5, fadeIn: 1 },
-      ],
-    });
-  });
-  afterEach(() => rmSync(dir, { recursive: true, force: true }));
-  const lane = (body: Record<string, unknown>) =>
-    writeDoc(join(dir, "nodes", "dialog.k7x"), {
-      extends: "@meta/track",
-      ...body,
-    });
-
-  it("gives the lane the shots' sound files, the dissolve marked as a crossfade", () => {
-    lane({ video_source: "main" });
-    const t = compileNodeProject(dir).tracks.find((x) => x.id === "dialog");
-    expect(t?.clips.map((c) => [c.source, c.crossfade])).toEqual([
-      [join(dir, "clips", "a.wav"), { out: true }],
-      [join(dir, "clips", "b.wav"), { in: true }],
-    ]);
-  });
-
-  it("refuses a picture lane that is not there, and events beside the link", () => {
-    lane({ video_source: "nope" });
-    expect(() => compileNodeProject(dir)).toThrow(/video_source names 'nope'/);
-    lane({ video_source: "main", events: [{ ref: "a", start: "1:1" }] });
-    expect(() => compileNodeProject(dir)).toThrow(/and events: both/);
-  });
-
-  it("refuses a sound file that is gone, as a missing audio clip is refused", () => {
-    rmSync(join(dir, "clips", "b.wav"));
-    lane({ video_source: "main" });
-    expect(() => compileNodeProject(dir)).toThrow(/sounds clips\/b\.wav/);
   });
 });

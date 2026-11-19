@@ -2,7 +2,6 @@
 // wrong silently: a clip's existing `sound:` extracted over, a lane made beside the half (two
 // sounds), and a removed sound clip that takes its shot's picture with it.
 
-import { execFileSync } from "node:child_process";
 import {
   cpSync,
   existsSync,
@@ -15,14 +14,15 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "@studio/k7x/document";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { writeDoc, writeLane } from "@studio/song/testSupport";
 import { wsRead } from "@studio/song/yaml/workspaceFile";
 import { beatsToPosition } from "@studio/song-schema/timecode";
 import { listVideoPlacements } from "@studio/song-schema/yaml/videoTrackFile";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
-import { nodeMediaMembers } from "./nodeMedia.ts";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
+
+beforeAll(compileReady);
 
 const here = dirname(fileURLToPath(import.meta.url));
 const SONG = join(here, "..", "..", "..", "demos", "node-demo.k7");
@@ -33,22 +33,12 @@ const refusals: string[] = [];
 const host = () =>
   ({
     songPath: song,
-    project: () => compileNodeProject(song),
+    project: () => compileDisk(song),
     baseModules: [],
     log: (l: string[]) => logs.push(...l),
     refuse: (l: string[]) => refusals.push(...l),
     reload: () => {},
-    ...nodeMediaMembers(),
   }) as never;
-
-const hasFfmpeg = (() => {
-  try {
-    execFileSync("ffmpeg", ["-version"], { stdio: "ignore" });
-    return true;
-  } catch {
-    return false;
-  }
-})();
 
 beforeEach(() => {
   logs.length = 0;
@@ -74,9 +64,7 @@ describe("picture sound", () => {
     expect(refusals).toEqual([]);
     expect(existsSync(join(song, "nodes", "main-sound.k7x"))).toBe(false);
     expect(logs.join("\n")).toMatch(/main#audio plays main's sound/);
-    const t = compileNodeProject(song).tracks.find(
-      (x) => x.id === "main#audio",
-    );
+    const t = compileDisk(song).tracks.find((x) => x.id === "main#audio");
     expect(t?.clips.map((c) => c.source)).toEqual([
       join(song, "clips", "shot-take.wav"),
     ]);
@@ -109,11 +97,10 @@ describe("picture sound", () => {
     writeFileSync(join(song, "clips", "shot.wav"), "");
     await runCommand("picture sound main", host(), "cli");
     const heard = () =>
-      compileNodeProject(song)
+      compileDisk(song)
         .tracks.find((x) => x.id === "main#audio")
         ?.clips.map((c) => c.start);
-    const { tempo, timeSigNumerator, timeSigDenominator } =
-      compileNodeProject(song);
+    const { tempo, timeSigNumerator, timeSigDenominator } = compileDisk(song);
     const second = beatsToPosition(
       (4 * tempo) / 60,
       timeSigNumerator,
@@ -147,7 +134,7 @@ describe("picture sound", () => {
     writeFileSync(join(song, "clips", "shot.wav"), "");
     const before = readFileSync(join(song, "graph.k7x"), "utf8");
     const sound = () =>
-      compileNodeProject(song).tracks.find((x) => x.id === "main#audio");
+      compileDisk(song).tracks.find((x) => x.id === "main#audio");
     const h = { ...(host() as object), applyProject: async () => {} } as never;
     await runCommand("track mute main#audio", h, "cli");
     expect(refusals).toEqual([]);
@@ -164,9 +151,9 @@ describe("picture sound", () => {
     writeDoc(join(song, "clips", "shot.k7x"), { source: "clips/shot.webm" });
     await runCommand("picture sound main", host(), "cli");
     expect(logs).toContain("nothing on main has a sound");
-    expect(
-      compileNodeProject(song).tracks.some((t) => t.id === "main#audio"),
-    ).toBe(false);
+    expect(compileDisk(song).tracks.some((t) => t.id === "main#audio")).toBe(
+      false,
+    );
   });
 
   it("still makes a sounding lane in a chain project, which spells no port", async () => {
@@ -190,34 +177,4 @@ describe("picture sound", () => {
     await runCommand("picture sound nope", host(), "cli");
     expect(refusals.join("\n")).toMatch(/no picture lane 'nope'/);
   });
-
-  it.skipIf(!hasFfmpeg)(
-    "extracts a video's sound beside it and names it on the clip",
-    async () => {
-      execFileSync("ffmpeg", [
-        "-v",
-        "error",
-        "-f",
-        "lavfi",
-        "-i",
-        "color=c=black:s=64x64:d=0.5",
-        "-f",
-        "lavfi",
-        "-i",
-        "sine=frequency=440:duration=0.5",
-        "-shortest",
-        join(song, "clips", "shot.mp4"),
-      ]);
-      writeDoc(join(song, "clips", "shot.k7x"), { source: "clips/shot.mp4" });
-      await runCommand("picture sound main", host(), "cli");
-      expect(refusals).toEqual([]);
-      expect(existsSync(join(song, "clips", "shot.sound.wav"))).toBe(true);
-      expect(
-        parse(readFileSync(join(song, "clips", "shot.k7x"), "utf8")).sound,
-      ).toBe("clips/shot.sound.wav");
-      expect(
-        compileNodeProject(song).tracks.some((t) => t.id === "main#audio"),
-      ).toBe(true);
-    },
-  );
 });

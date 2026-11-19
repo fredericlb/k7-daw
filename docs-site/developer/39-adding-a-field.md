@@ -24,13 +24,12 @@ Take, as an example, a new optional number on a lane's event.
 5. **Inheritance.** For a module field, decide how it merges: by default the child's value replaces
    the parent's. A map that should merge per key needs a case in `mergeAuthored`
    (`packages/song/src/moduleResolve.ts`); a field a node must never inherit goes in `OWN_ONLY`.
-6. **Compile.** Read the field in the compiler — for events and modules, in
-   `packages/song/src/nodeProject.ts` — and, if the engine needs it, add it to the wire type in
+6. **Compile.** Read the field in the song crate's compile (`packages/song/rust/src/`) and, if the engine needs it, add it to the wire type in
    `packages/engine-protocol/project.ts`. The engine mirrors those types in C++ and diffs documents, so
    a new wire field must always be sent (with its default) and must be handled on the engine side
    (see the engine section).
 7. **Cross-file checks.** If the field names another file or node, check it with the other reference
-   checks in `nodeProject.ts` and throw with a message naming the lane and the target. If it names a
+   checks of the song crate (`packages/song/rust/src/lanes/references.rs`) and report with a message naming the lane and the target. If it names a
    path, pass it through `confineTo`/`projectRoots` (`packages/song/src/confine.ts`): every file
    service runs as the same OS user, so a `../` is another account's file.
 8. **Writer.** If k7 changes the field, write a text transform in the kind's `*File.ts`
@@ -38,9 +37,8 @@ Take, as an example, a new optional number on a lane's event.
    returns to its default, and expose it as a verb in `packages/commands`. Never re-serialise a whole
    document: comments and other values must stay byte for byte, or the history falls back to whole-text
    operations.
-9. **Tests.** A schema case beside the schema; a writer test that compares text; a compile change shows
-   in the golden snapshot `packages/song/src/project.golden.test.ts` — update the snapshot in the same
-   commit. If a demo uses the field, `packages/k7x/src/corpus.test.ts` checks that edits to it replay.
+9. **Tests.** A schema case beside the schema; a writer test that compares text; a compile change is a case in the song crate's tests
+   (`packages/song/rust/tests/all/`). If a demo uses the field, `packages/k7x/src/corpus.test.ts` checks that edits to it replay.
 10. **Docs.** Add the field to the user guide's song file reference with its type, default and an
     example.
 

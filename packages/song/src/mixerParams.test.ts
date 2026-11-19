@@ -14,7 +14,6 @@ import {
   builtinPluginForRef,
 } from "@studio/song-schema/builtinParams";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { projectHints } from "./hints";
 import { MIXER_PARAMS, MIXER_PLUGIN } from "./project";
 import { writeDoc, writeNode } from "./testSupport";
 
@@ -40,21 +39,6 @@ afterEach(() => rmSync(ws, { recursive: true, force: true }));
 const MIXER = "@workspace/audio/mixer";
 
 describe("a built-in's params are known without a project having authored one", () => {
-  it("lists every mixer param on a strip nobody has touched", () => {
-    // No node file at all: the plugin is the only thing that can say what it has.
-    const h = projectHints(dir);
-    expect(h.paramsByBase[MIXER]).toEqual([...MIXER_PARAMS].sort());
-  });
-
-  it("carries the RANGES, which no learned name ever has", () => {
-    // A widget bound without a range is drawn 0..1, so a -60..+6 dB fader writes the wrong number.
-    const meta = projectHints(dir).paramMetaByBase[MIXER];
-    expect(meta.Volume).toEqual({ min: -60, max: 6, def: 0 });
-    expect(meta.Pan).toEqual({ min: -1, max: 1, def: 0 });
-    for (const band of ["Low", "Mid", "High"])
-      expect(meta[band]).toEqual({ min: -18, max: 18, def: 0 });
-  });
-
   it("keeps the C++ plugin and this table naming the same five params", () => {
     // A rename in MixerPlugin.cpp breaks every binding silently, and nothing else in the build sees it.
     expect(
@@ -228,16 +212,5 @@ describe("the generated built-in table", () => {
         expect(p.max, `${type}/${p.name}`).toBeGreaterThanOrEqual(p.min);
       }
     }
-  });
-});
-
-describe("a node counts as much as an extender", () => {
-  it("picks up a param authored only on one strip", () => {
-    // A node IS an extender, and leaving nodes out hid every param of every strip in a real song.
-    writeNode(dir, "vox", {
-      extends: MIXER,
-      params: { Drive: 3 },
-    });
-    expect(projectHints(dir).paramsByBase[MIXER]).toContain("Drive");
   });
 });

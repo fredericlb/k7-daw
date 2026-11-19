@@ -31,13 +31,6 @@ export function copyOldPictureFixture(rel: string, to: string): void {
     if (!f.endsWith(".k7x")) cpSync(join(clips, f), join(to, "clips", f));
 }
 
-/** The BENCH fixture, re-exported here rather than published as a subpath nobody outside imports. */
-export {
-  BENCH_SIZES,
-  type BenchSize,
-  benchProjectFiles,
-  writeBenchProject,
-} from "./benchProject";
 // The app's own writer: a second implementation would be the thing under test.
 export {
   deleteFileValue as deleteDoc,

@@ -21,7 +21,7 @@
     "typecheck": "node scripts/workspaces.mjs typecheck",
     "check:changed": "node scripts/agent/check-changed.mjs",
     "rebuild:generated": "npx tsx packages/song-schema/scripts/genModuleTypes.mts && npm run build:wasm -w @studio/k7-wasm && npm run build:wasm -w @studio/audio-analysis",
-    "ci:local": "bash scripts/agent/throttle.sh concurrently --group --names lint,bytes,docs,locks,rustfmt,typecheck,test,stages,vectors \"npm run lint\" \"npm run lint:bytes\" \"npm run lint:docs\" \"npm run lint:locks\" \"npm run lint:rustfmt\" \"npm run typecheck -- --jobs 2\" \"npm run test -- --jobs 3\" \"bash scripts/stage-gates.sh\" \"bash scripts/check-vectors.sh\"",
+    "ci:local": "bash scripts/agent/throttle.sh concurrently --group --names lint,bytes,docs,locks,rustfmt,typecheck,test,vectors \"npm run lint\" \"npm run lint:bytes\" \"npm run lint:docs\" \"npm run lint:locks\" \"npm run lint:rustfmt\" \"npm run typecheck -- --jobs 2\" \"npm run test -- --jobs 3\" \"bash scripts/check-vectors.sh\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "biome check .",

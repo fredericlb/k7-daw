@@ -15,11 +15,14 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { librariesFixture } from "@studio/song/testSupport";
 import { wsData, wsWriteData } from "@studio/song/yaml/workspaceDoc";
 import { wavSeconds } from "@studio/take-render/wavLength";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  compileDisk,
+  compileReady,
+} from "../../commands/src/runtime/testing/compileDisk.ts";
 import {
   bounceDoc,
   chainNames,
@@ -30,6 +33,8 @@ import {
   resolveChain,
   resolveTargets,
 } from "./processChain";
+
+beforeAll(compileReady);
 
 let ws: string;
 let dir: string;
@@ -151,7 +156,7 @@ afterEach(() => {
 describe("resolving a chain of the project", () => {
   it("takes the compiled plugins, in order, and drops the strip", () => {
     // The mixer is a LEVEL and stays live on the track, so baking it in would apply it twice.
-    const project = loadProject(dir);
+    const project = compileDisk(dir);
     // The strip IS in the chain the engine plays, without which the assertion below is vacuous.
     expect(project.tracks[0].plugins.map((p) => p.type)).toEqual([
       "Chorus",
@@ -173,19 +178,19 @@ describe("resolving a chain of the project", () => {
   it("refuses a chain that is only a strip", () => {
     // Nothing is left once the mixer is dropped, so the bounce would copy the source under a lie.
     put(dir, "graph.k7x", { modules: { gtr: ["strip"], strip: ["OUT"] } });
-    expect(() => resolveChain(dir, loadProject(dir), "gtr")).toThrow(
+    expect(() => resolveChain(dir, compileDisk(dir), "gtr")).toThrow(
       /no treatment to apply/,
     );
   });
 
   it("says what it knows when the name answers to nothing", () => {
-    expect(() => resolveChain(dir, loadProject(dir), "nope")).toThrow(
+    expect(() => resolveChain(dir, compileDisk(dir), "nope")).toThrow(
       /no chain 'nope'/,
     );
   });
 
   it("offers the project's chains and the médiathèque's under its own token", () => {
-    expect(chainNames(dir, loadProject(dir))).toEqual([
+    expect(chainNames(dir, compileDisk(dir))).toEqual([
       "gtr",
       "@k7-core/live/vocal-strip",
     ]);
@@ -194,7 +199,7 @@ describe("resolving a chain of the project", () => {
 
 describe("resolving a chain of the médiathèque", () => {
   it("resolves each step through what it extends", () => {
-    const c = resolveChain(dir, loadProject(dir), "@k7-core/live/vocal-strip");
+    const c = resolveChain(dir, compileDisk(dir), "@k7-core/live/vocal-strip");
     // The step's own params win, and a step overriding nothing still arrives with the module's.
     expect(c.plugins.map((p) => p.type)).toEqual(["4Band EQ", "4Band EQ"]);
     expect(c.plugins[0].params).toEqual({ Low: -12 });
@@ -206,7 +211,7 @@ describe("resolving a chain of the médiathèque", () => {
 
   it("is found by its bare name too", () => {
     expect(
-      resolveChain(dir, loadProject(dir), "@k7-core/vocal-strip").plugins,
+      resolveChain(dir, compileDisk(dir), "@k7-core/vocal-strip").plugins,
     ).toHaveLength(2);
   });
 
@@ -217,7 +222,7 @@ describe("resolving a chain of the médiathèque", () => {
       force: true,
     });
     expect(() =>
-      resolveChain(dir, loadProject(dir), "@k7-core/live/vocal-strip"),
+      resolveChain(dir, compileDisk(dir), "@k7-core/live/vocal-strip"),
     ).toThrow(/cannot load: hp .*not in this machine's cache/);
   });
 });
@@ -233,7 +238,7 @@ describe("a library chain kept as one file", () => {
         { to: [{ chain: "@out" }] },
       ],
     });
-    const c = resolveChain(dir, loadProject(dir), "@k7-core/live/vocal-file");
+    const c = resolveChain(dir, compileDisk(dir), "@k7-core/live/vocal-file");
     expect(c.plugins.map((p) => [p.id, p.params])).toEqual([
       ["process:s1", { Low: -12 }],
       ["process:s3", { Low: 1 }],
@@ -254,7 +259,7 @@ describe("a library chain kept as one file", () => {
       ["@k7-core/stems", null],
     ]);
     expect(
-      resolveChain(dir, loadProject(dir), "@k7-core/stems").cold.map(
+      resolveChain(dir, compileDisk(dir), "@k7-core/stems").cold.map(
         (s) => s.step,
       ),
     ).toEqual(["@k7-core/audio/stemsplit"]);
@@ -262,7 +267,7 @@ describe("a library chain kept as one file", () => {
 
   it("names what a file that is not a template's shape gets wrong", () => {
     put(library, "chains/bad.k7x", { start: true, steps: [] });
-    expect(() => resolveChain(dir, loadProject(dir), "@k7-core/bad")).toThrow(
+    expect(() => resolveChain(dir, compileDisk(dir), "@k7-core/bad")).toThrow(
       /no `start`/,
     );
   });
@@ -298,7 +303,7 @@ describe("a chain that separates", () => {
 
   it("resolves the offline step as COLD, with its model, and no plugin", () => {
     stemChain();
-    const c = resolveChain(dir, loadProject(dir), "@k7-core/tools/stems");
+    const c = resolveChain(dir, compileDisk(dir), "@k7-core/tools/stems");
     expect(c.plugins).toEqual([]);
     expect(c.cold.map((s) => s.step)).toEqual(["split"]);
     expect(c.cold[0].model).toMatch(/htdemucs\.onnx$/);
@@ -308,21 +313,21 @@ describe("a chain that separates", () => {
     // Flattened for a render a chain has no ports, so a step after a separator cannot name one.
     stemChain({ withEq: true });
     expect(() =>
-      resolveChain(dir, loadProject(dir), "@k7-core/tools/stems"),
+      resolveChain(dir, compileDisk(dir), "@k7-core/tools/stems"),
     ).toThrow(/both separates \(split\) and processes/);
   });
 
   it("tells a missing MODEL from a module authored without one", () => {
     stemChain({ model: false });
     expect(() =>
-      resolveChain(dir, loadProject(dir), "@k7-core/tools/stems"),
+      resolveChain(dir, compileDisk(dir), "@k7-core/tools/stems"),
     ).toThrow(/not on this machine.*~\/\.k7\/models/s);
     put(library, "modules/audio/stemsplit/module.k7x", {
       cold: true,
       plugin: STEMSPLIT.plugin,
     });
     expect(() =>
-      resolveChain(dir, loadProject(dir), "@k7-core/tools/stems"),
+      resolveChain(dir, compileDisk(dir), "@k7-core/tools/stems"),
     ).toThrow(/names no model/);
   });
 
@@ -331,7 +336,7 @@ describe("a chain that separates", () => {
     const seen: { step: string; source: string; outDir: string }[] = [];
     const r = await processWithChain(
       dir,
-      loadProject(dir),
+      compileDisk(dir),
       "riff",
       "@k7-core/tools/stems",
       "clip",
@@ -437,7 +442,7 @@ describe("a chain that separates", () => {
     stemChain();
     const r = await processWithChain(
       dir,
-      loadProject(dir),
+      compileDisk(dir),
       "riff",
       "@k7-core/tools/stems",
       "clip",
@@ -449,43 +454,43 @@ describe("a chain that separates", () => {
 
 describe("what a target names", () => {
   it("`track process`: every audio file the track's clips play, deduplicated", () => {
-    const t = resolveTargets(dir, loadProject(dir), "gtr", "track");
+    const t = resolveTargets(dir, compileDisk(dir), "gtr", "track");
     expect(t.sources).toHaveLength(1);
     expect(t.sources[0].replace(/\\/g, "/")).toContain("clips/riff.wav");
     expect(t.track).toBe("gtr");
   });
 
   it("`clip process`: a clip by its id — the file it plays", () => {
-    const t = resolveTargets(dir, loadProject(dir), "riff", "clip");
+    const t = resolveTargets(dir, compileDisk(dir), "riff", "clip");
     expect(t.sources[0].replace(/\\/g, "/")).toContain("clips/riff.wav");
     expect(t.track).toBeUndefined();
   });
 
   it("`clip process`: anything else is a project-relative path", () => {
-    const t = resolveTargets(dir, loadProject(dir), "clips/riff.wav", "clip");
+    const t = resolveTargets(dir, compileDisk(dir), "clips/riff.wav", "clip");
     expect(t.sources[0].replace(/\\/g, "/")).toContain("clips/riff.wav");
   });
 
   // The whole reason there are two commands: each takes what its noun promises.
   it("each refuses the other's argument, by name", () => {
-    expect(() => resolveTargets(dir, loadProject(dir), "gtr", "clip")).toThrow(
+    expect(() => resolveTargets(dir, compileDisk(dir), "gtr", "clip")).toThrow(
       /is a track, so run `track process`/,
     );
     expect(() =>
-      resolveTargets(dir, loadProject(dir), "riff", "track"),
+      resolveTargets(dir, compileDisk(dir), "riff", "track"),
     ).toThrow(/it is a clip, so run `clip process`/);
   });
 
   it("lists the tracks when the name is neither", () => {
     expect(() =>
-      resolveTargets(dir, loadProject(dir), "nope", "track"),
+      resolveTargets(dir, compileDisk(dir), "nope", "track"),
     ).toThrow(/no track 'nope' \(tracks: gtr\)/);
   });
 
   it("refuses a track with nothing to process", () => {
     put(dir, "nodes/empty.k7x", { extends: "@meta/track" });
     expect(() =>
-      resolveTargets(dir, loadProject(dir), "empty", "track"),
+      resolveTargets(dir, compileDisk(dir), "empty", "track"),
     ).toThrow(/no audio clips/);
   });
 });
@@ -531,7 +536,7 @@ describe("the repoint — the `in place` half", () => {
     expect(readFileSync(file, "utf8")).toContain("// hand-written");
 
     // …and the placement is untouched, so the treated material plays exactly where it sat.
-    const t = loadProject(dir).tracks.find((x) => x.id === "gtr")!;
+    const t = compileDisk(dir).tracks.find((x) => x.id === "gtr")!;
     expect(t.clips[0].start).toBe(0);
     expect(t.clips[0].source.replace(/\\/g, "/")).toContain(
       "clips/riff_warm.wav",
@@ -638,7 +643,7 @@ describe("the stretch map follows the render", () => {
 // The property every one of the above rests on: the RAW file, unwarped, at position zero.
 describe("what the bounce document holds", () => {
   it("is the source alone — no warp, no window, no offset", () => {
-    const project = loadProject(dir);
+    const project = compileDisk(dir);
     const doc = bounceDoc(
       project,
       join(dir, "clips", "riff.wav"),
@@ -678,7 +683,7 @@ describe("a chain that measures, over the host's members", () => {
       run: () =>
         processWithChain(
           dir,
-          loadProject(dir),
+          compileDisk(dir),
           "riff",
           "gtr",
           "clip",
@@ -719,7 +724,7 @@ describe("a chain that measures, over the host's members", () => {
     const moved = async (seconds: (f: string) => number | null) => {
       return processWithChain(
         dir,
-        loadProject(dir),
+        compileDisk(dir),
         "riff",
         "gtr",
         "clip",

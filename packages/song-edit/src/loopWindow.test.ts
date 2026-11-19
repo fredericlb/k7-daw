@@ -2,11 +2,16 @@ import { cpSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { writeDoc } from "@studio/song/testSupport";
 import { PlacementSchema } from "@studio/song-schema/yaml/placementSchema";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  compileDisk,
+  compileReady,
+} from "../../commands/src/runtime/testing/compileDisk.ts";
 import { materialWindow } from "./materialWindow";
+
+beforeAll(compileReady);
 
 // The model these exercise: the MATERIAL owns its window, the PLACEMENT its `start` and `loop`.
 
@@ -28,7 +33,7 @@ const place = (p: Record<string, unknown>) =>
     events: [{ ref: "melody", start: "1:1:1", ...p }],
   });
 const melody = () =>
-  compileNodeProject(dir)
+  compileDisk(dir)
     .tracks.flatMap((t) => t.clips)
     .find((c) => c.name === "melody")!;
 
@@ -141,12 +146,11 @@ describe("`loop` counts passes of that window", () => {
     });
     let msg = "";
     try {
-      compileNodeProject(dir);
+      compileDisk(dir);
     } catch (e) {
       msg = (e as Error).message;
     }
-    expect(msg).toContain("loop: 2");
-    expect(msg).toContain("says 'to'");
+    expect(msg).toContain("placed with a loop but no end");
   });
 });
 

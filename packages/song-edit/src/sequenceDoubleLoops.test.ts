@@ -3,12 +3,17 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "@studio/k7x/document";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsEdit } from "@studio/song/yaml/workspaceDoc";
 import { doubleSequence } from "@studio/song-schema/yaml/sequenceFile";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  compileDisk,
+  compileReady,
+} from "../../commands/src/runtime/testing/compileDisk.ts";
 import { halveLoopsOf } from "./sequenceLoops";
+
+beforeAll(compileReady);
 
 // ×2 on a LOOPED clip: the window doubles and the passes halve, so what plays keeps its length — docs/sequenceLoops.md.
 
@@ -30,7 +35,7 @@ const place = (p: Record<string, unknown>) =>
     events: [{ ref: "melody", start: "1:1:1", ...p }],
   });
 const melody = () =>
-  compileNodeProject(dir)
+  compileDisk(dir)
     .tracks.flatMap((t) => t.clips)
     .find((c) => c.name === "melody");
 

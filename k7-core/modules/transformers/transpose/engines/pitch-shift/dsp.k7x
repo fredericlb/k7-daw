@@ -1,3 +1,3 @@
-// Transpose (pitch shift) — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Transpose (pitch shift) — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({ Semitones: { min: -24, max: 24, default: 0 } })
 graph([transpose("Semitones")])

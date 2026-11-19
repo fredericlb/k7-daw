@@ -58,7 +58,7 @@ engine/                 library — the audio host (JUCE/Tracktion state lives h
   Recording.cpp             arming, takes, transport record listener
   Recorder.cpp              the RECORDER node: free-running capture, its takes, and the state it
                             reports — transport-independent, unlike the file above (docs/recorder.md)
-  Decode.cpp                --decode: a file's frames on stdout, for @studio/audio-analysis to measure
+  Decode.cpp                --decode: a file's frames on stdout, for the Rust front's analysis to measure
   Warnings.{h,cpp}          the warning channel the UI shows
   MultiEditTest.cpp         N-sessions-on-one-device measurement (docs/multiEdit.md)
 
@@ -182,9 +182,6 @@ scripts/               Node harnesses that drive a running engine, not build ste
                          three bands really sum back flat. The only coverage that plugin has —
                          it needs a live te::Edit, which the four C++ suites build none of
                          (docs/quickMaster.md)
-  send-one.ts            compile a project folder and push it at a running engine, once. The
-                         smallest repro of "the file service sent a document", for when the
-                         browser is not the thing under test
   listen-headless.mjs    a headless listener
   measure-broadcast.mjs  the numbers behind docs/broadcast.md
   render-once.ts         one offline render

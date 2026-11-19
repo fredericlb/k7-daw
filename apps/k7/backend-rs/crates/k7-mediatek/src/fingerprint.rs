@@ -1,5 +1,4 @@
-//! fingerprint.rs — the content fingerprint a `{file}.cache` sidecar is stamped with, as
-//! `packages/audio-analysis/src/fingerprint.ts` takes it: FNV-1a/64 over the size, then the first and last 64 KB.
+//! fingerprint.rs — the content fingerprint a `{file}.cache` sidecar is stamped with: FNV-1a/64 over the size, then the first and last 64 KB.
 //! What a reader gets wrong: it reads content, not times, so a sidecar that travels with its file stays fresh.
 
 use std::fs::File;

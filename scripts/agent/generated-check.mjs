@@ -27,7 +27,19 @@ async function wasm(file, pkg, withTypes, sources = "SOURCES") {
 
 await wasm("k7Wasm.generated.ts", "k7-wasm", true);
 await wasm("k7WasmSong.generated.ts", "k7-wasm", false, "SONG_SOURCES");
-await wasm("waveformWasm.generated.ts", "audio-analysis", false);
+{
+  const mod = await import(
+    pathToFileURL(
+      join(root, "packages", "audio-analysis", "scripts", "rustSources.mjs"),
+    )
+  );
+  const stamp = readFileSync(
+    join(root, "packages", "audio-analysis", "waveform.wasm.sources"),
+    "utf8",
+  ).trim();
+  if (stamp !== mod.rustSourceHash())
+    stale.push("packages/audio-analysis/waveform.wasm");
+}
 {
   const script = "packages/song-schema/scripts/genModuleTypes.mts";
   const r = spawnSync("npx", ["tsx", script, "--check"], {

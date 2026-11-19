@@ -17,7 +17,6 @@
     "cmake",
     "ctest",
     "ffmpeg",
-    "ffprobe",
     "tilt",
     "where.exe"
   ],
@@ -29,9 +28,8 @@
       "entry": [
         "scripts/*.mjs",
         "scripts/**/*.mjs",
-        "demos/**/jsdsp.ts",
         "demos/_modules/**/widgets.js",
-        "k7-core/modules/**/{jsdsp.ts,widgets.js}",
+        "k7-core/modules/**/widgets.js",
         "apps/k7/backend-rs/scripts/*.mjs",
         "engine/k7-android/app/src/main/assets/*.js"
       ]
@@ -49,7 +47,7 @@
       "entry": [
         "specs/*.setup.ts",
         "scripts/*.ts",
-        "fixtures/_modules/**/{jsdsp.ts,widgets.js}"
+        "fixtures/_modules/**/widgets.js"
       ],
       "ignoreUnresolved": ["./gradlew"]
     },
@@ -57,19 +55,16 @@
       "ignoreDependencies": ["@capacitor/android"]
     },
     "packages/song": {
-      "entry": ["src/benchProject.ts", "scripts/*.ts"]
+      "entry": ["scripts/*.ts"]
     },
     "packages/audio-probe": {
       "entry": ["scripts/*.ts"]
-    },
-    "packages/take-render": {
-      "entry": ["src/timeline.ts"]
     },
     "packages/k7-plugins": {
       "entry": ["scripts/turntables/*.ts"]
     },
     "packages/audio-analysis": {
-      "entry": ["bench/*.ts", "scripts/*.mjs"]
+      "entry": ["scripts/*.mjs"]
     },
     "packages/k7x": {
       "entry": ["bench/*.{ts,mjs}", "scripts/*.mjs"]

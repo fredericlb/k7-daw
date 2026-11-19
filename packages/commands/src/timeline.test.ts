@@ -5,26 +5,28 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
 const doc = (rel: string, value: Record<string, unknown>): void =>
   writeDoc(join(dir, rel), value);
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
 const timeline = (id: string) => wsData(join(dir, `timelines/${id}.k7x`));
 const laneEvents = () =>
   wsData(join(dir, "tracks/gtr.k7x")).events as Record<string, unknown>[];
-const clips = () => loadProject(dir).tracks.find((t) => t.id === "gtr")?.clips;
+const clips = () => compileDisk(dir).tracks.find((t) => t.id === "gtr")?.clips;
 
 beforeEach(() => {
   root = mkdtempSync(join(tmpdir(), "timeline-"));
@@ -103,7 +105,7 @@ describe("timeline verbs", () => {
   it("changes what every placement plays with `timeline length`", async () => {
     await placed();
     await run("timeline length verse 4:0");
-    expect(loadProject(dir).timelines?.[0].length).toBe(16);
+    expect(compileDisk(dir).timelines?.[0].length).toBe(16);
   });
 
   it("refuses a timeline placed inside itself", async () => {
@@ -131,7 +133,7 @@ describe("timeline verbs", () => {
     const host = (line: string) => {
       const h = testHost({
         songPath: dir,
-        project: () => loadProject(dir),
+        project: () => compileDisk(dir),
         timelinePlay: (id) => {
           asked.push(id);
           return true;
@@ -212,7 +214,7 @@ describe("timeline verbs", () => {
         .ref,
     ).toBe("verse-a");
     expect(
-      loadProject(dir)
+      compileDisk(dir)
         .timelines?.map((t) => t.id)
         .sort(),
     ).toEqual(["chorus", "verse-a"]);

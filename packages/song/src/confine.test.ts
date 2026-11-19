@@ -13,7 +13,6 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { confineTo, confineToProject, projectRoots } from "./confine";
 import { resolveRackAudio } from "./loader";
-import { compileNodeProject } from "./nodeProject";
 import { loadAudioClipDoc } from "./project";
 import { writeDoc } from "./testSupport";
 
@@ -125,22 +124,9 @@ describe("projectRoots", () => {
 });
 
 describe("the compiler", () => {
-  it("names an escaping clip source as a compile issue rather than playing it", () => {
-    writeDoc(join(project, "clips", "kick.k7x"), { source: other });
-    expect(() => compileNodeProject(project)).toThrow(/outside the project/);
-    writeDoc(join(project, "clips", "kick.k7x"), {
-      source: "../../../../bob/workspace/main/secret.wav",
-    });
-    expect(() => compileNodeProject(project)).toThrow(/outside the project/);
-  });
-
   it("gives the unplaced clip doc no file for an escaping source", () => {
     writeDoc(join(project, "clips", "kick.k7x"), { source: other });
     expect(loadAudioClipDoc(project, "kick")?.source).toBe("");
-  });
-
-  it("still compiles a project whose clips stay inside", () => {
-    expect(() => compileNodeProject(project)).not.toThrow();
   });
 
   it("drops a rack sound that escapes and keeps a library one", () => {

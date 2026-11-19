@@ -1,4 +1,4 @@
-// Note repeat — the DSP as data, the graph jsdsp.ts builds (docs/dsp-literal-plan.md).
+// Note repeat — the DSP as data, read by the song crate (docs/dsp-literal-plan.md).
 params({
   Count: { min: 1, max: 8, default: 1 },
   Division: { min: 0.125, max: 4, default: 0.5 },

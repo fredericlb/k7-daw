@@ -1,8 +1,0 @@
-[
-{"type":"list-plugin-params","format":"VST3","id":"u1"},
-{"type":"list-plugin-params","format":"AU","id":"au-1"},
-{"type":"show-native-plugin-ui-of","format":"VST3","id":"u1"},
-{"type":"show-native-plugin-ui-of","format":"VST3","id":"u2"},
-{"type":"list-plugin-params","format":"VST3","id":"u2"},
-{"type":"snapshot-plugin-base","format":"AU","id":"au-1","path":"<DIR>/home/workspace/songs/p.k7/nodes/base/warm.vstpreset"}
-]

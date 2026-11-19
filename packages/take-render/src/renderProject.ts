@@ -1,12 +1,12 @@
-// renderProject.ts — bounce a ProjectDoc to audio through serviceRenderer: this machine's engine binary
-// in its one-shot `--render` mode, or an engine's machine asked over a jobs path when there is none.
+// renderProject.ts — bounce a ProjectDoc to audio through this machine's engine binary in its one-shot `--render` mode.
 // No audio device is ever opened. See docs/rendering.md.
 
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { findEngineBinary } from "@studio/engine-client/engineBinary";
 import type { ProjectDoc } from "@studio/song/project";
-import { serviceRenderer } from "./renderers.ts";
+import { localRenderer } from "./renderer.ts";
 
 /** The bound on a WEDGED bounce; a three-minute song renders in seconds. */
 const RENDER_TIMEOUT_MS = 5 * 60_000;
@@ -22,7 +22,8 @@ export class RenderError extends Error {}
 
 /** Render `doc` and return what was written — see docs/rendering.md. */
 export async function renderProject(doc: unknown): Promise<RenderResult> {
-  const render = serviceRenderer();
+  const bin = findEngineBinary();
+  const render = bin ? localRenderer(bin) : undefined;
   // Named out loud, or "render failed" reads as a broken document rather than a missing engine.
   if (!render) throw new RenderError("no engine to render with");
 

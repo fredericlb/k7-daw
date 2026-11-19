@@ -1,7 +1,6 @@
-//! analyse.rs — one file measured into its `{file}.cache`, as `analyseFile` in `packages/audio-analysis/src/analyse.ts`
-//! does on k7's backend: the waveform module decodes, sums to mono, measures and correlates, in Wasmtime; ffmpeg reads
+//! analyse.rs — one file measured into its `{file}.cache`: the waveform module decodes, sums to mono, measures and correlates, in Wasmtime; ffmpeg reads
 //! what the module cannot open; the onsets, the tempo's pick and the sidecar's text are `envelope.rs` and `sidecar.rs`.
-//! What a reader gets wrong: every sample's arithmetic is the module's, so node and Rust write the same bytes.
+//! What a reader gets wrong: every sample's arithmetic is the module's, so every host writes the same bytes.
 
 use std::fs::File;
 use std::path::Path;

@@ -7,7 +7,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { AudioClipSchema } from "@studio/song-schema/yaml/entitySchemas";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { compileNodeProject } from "./nodeProject";
 import type { ClipDoc } from "./project";
 import { writeDoc, writeLane, writeModule } from "./testSupport";
 
@@ -35,41 +34,11 @@ function project(name: string, warp: Record<string, unknown>): string {
 }
 
 const MAP = { algorithm: "slice", markers: [[0, 0] as const, [4, 2] as const] };
-const clipsOf = (p: string): ClipDoc[] =>
-  compileNodeProject(p).tracks.flatMap((t) => t.clips);
 
 beforeAll(() => {
   dir = mkdtempSync(join(tmpdir(), "warpoff-"));
 });
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
-
-describe("a clip's warp", () => {
-  it("reaches every placement when nothing declines it", () => {
-    const clips = clipsOf(project("on", MAP));
-    expect(clips).toHaveLength(2);
-    for (const c of clips) {
-      expect(c.warp?.algorithm).toBe("slice");
-      expect(c.warp?.markers).toHaveLength(2);
-      expect(c.warpOff).toBeUndefined();
-    }
-  });
-
-  it("reaches none of them with `disable: true`, and says so", () => {
-    // No map is the ENGINE's answer; `warpOff` beside it is the surface's crossed-out icon.
-    const clips = clipsOf(project("off", { ...MAP, disable: true }));
-    expect(clips).toHaveLength(2);
-    for (const c of clips) {
-      expect(c.warp).toBeUndefined();
-      expect(c.warpOff).toBe(true);
-    }
-  });
-
-  it("is unaffected by `disable: false`, which is what an absent one means", () => {
-    const clips = clipsOf(project("explicit-on", { ...MAP, disable: false }));
-    expect(clips[0]?.warp?.algorithm).toBe("slice");
-    expect(clips[0]?.warpOff).toBeUndefined();
-  });
-});
 
 describe("the schema", () => {
   const clip = (warp: Record<string, unknown>) =>

@@ -126,7 +126,7 @@ Automation does not go through that fallback: a curve needs a real `AutomatableP
 state param can be set and read but never automated. The dump says which: such a param carries
 `"automatable": false`, the generated table `automatable: false`, and that flag is what the app
 reads — `node automate` refuses a binding to one by name, and a curve already bound to one is a
-project warning (`packages/song/src/deadAutomations.ts`) rather than a line in the engine's log.
+project warning (the song crate's dead-automation finding) rather than a line in the engine's log.
 The library's phaser and chorus default to `classic` engines rebuilt as graphs for exactly this
 reason: the plugins' every knob is state, so nothing on them could ever be automated.
 

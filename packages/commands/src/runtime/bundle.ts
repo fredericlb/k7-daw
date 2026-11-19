@@ -47,7 +47,7 @@ const parentOf = (p: string): string =>
   p.slice(0, Math.max(p.lastIndexOf("/"), 1));
 
 /** The listing of every folder a set of file paths implies, below `root`: library folders have no listing of their own. */
-function listsOf(root: string, rels: string[]): Record<string, Entry[]> {
+export function listsOf(root: string, rels: string[]): Record<string, Entry[]> {
   const lists = new Map<string, Map<string, "file" | "dir">>();
   const add = (dir: string, name: string, kind: "file" | "dir"): void => {
     const m = lists.get(dir) ?? new Map<string, "file" | "dir">();

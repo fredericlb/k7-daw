@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "@studio/web-protocol": "*",
-    "@studio/audio-analysis": "*",
     "@studio/audio-passes": "*",
     "@studio/audio-probe": "*",
     "@studio/engine-client": "*",

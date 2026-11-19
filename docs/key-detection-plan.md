@@ -28,7 +28,7 @@ semitone, so the pass gains a chromagram by importing it rather than by taking a
 /** v2 added `transients` + `sensitivity`, v3 `bpm`, v4 the three bands. */
 ```
 
-`readSidecar` requires `MIN_CACHE_VERSION = 4` (`packages/audio-analysis/src/sidecar.ts`). Going to v5 **invalidates every existing
+`readSidecar` requires `MIN_CACHE_VERSION = 4` (`apps/k7/backend-rs/crates/k7-mediatek/src/sidecar.rs`). Going to v5 **invalidates every existing
 sidecar**: every song is re-analysed on first opening. Pre-warming absorbs that — it walks the
 playlist by itself as soon as the surface has its list — so the invalidation is paid in the
 background rather than on the first record put on.

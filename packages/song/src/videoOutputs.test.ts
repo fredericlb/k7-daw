@@ -17,7 +17,6 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { readChainProject } from "./chainProject";
 import { deriveChains } from "./chainsGraph";
 import { loadGraph, validate } from "./graph";
-import { compileNodeProject } from "./nodeProject";
 import { scaffold } from "./scaffold";
 import { createSurfaceFile } from "./surfaces";
 import { writeDoc, writeLane, writeModule } from "./testSupport";
@@ -88,24 +87,6 @@ describe("the run itself", () => {
     expect(
       validate(loadGraph(dir)).filter((w) => w.includes("VIDEO_OUT")),
     ).toEqual([]);
-  });
-
-  it("compiles to NOTHING, and changes no audio document", () => {
-    // Nothing bakes VideoPluginDoc yet, so the run has no owner and its steps drop.
-    const dir = join(root, "compiled.k7");
-    mkdirSync(dir, { recursive: true });
-    writeDoc(join(dir, "project.k7x"), { project: { name: "t", tempo: 120 } });
-    writeModule(dir, "audio", "amp", {
-      plugin: { type: "internal", name: "Chorus" },
-    });
-    writeLane(dir, "gtr");
-    const base = { gtr: ["amp"], amp: ["MIX"], MIX: ["OUT"] };
-    writeDoc(join(dir, "graph.k7x"), { modules: base });
-    const without = compileNodeProject(dir);
-    writeDoc(join(dir, "graph.k7x"), {
-      modules: { ...base, RENDER: ["VIDEO_OUT"] },
-    });
-    expect(compileNodeProject(dir)).toEqual(without);
   });
 });
 
