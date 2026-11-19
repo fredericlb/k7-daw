@@ -96,7 +96,7 @@ async fn declines_a_library_project() {
     .unwrap();
     assert!(revision::answer(&c).await.is_none());
     std::fs::remove_file(dir.join("home/workspace/.active-projects/songs")).unwrap();
-    assert!(counted(&super::stats::global().declined) >= before + 1);
+    assert!(counted(&super::stats::global().declined) > before);
     std::fs::remove_dir_all(dir).unwrap();
 }
 
