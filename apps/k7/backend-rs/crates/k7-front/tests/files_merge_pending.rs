@@ -11,9 +11,7 @@ use http_support::cookie;
 async fn a_workspace_with_a_merge_waiting_refuses_a_write_with_423_and_another_does_not() {
     // The workspaces and the pending merge are on the disk before the account starts.
     let (front, root) = device_front_with(|root| {
-        let home = root
-            .join("files")
-            .join(k7_hub::account::account_key("dev@example.com"));
+        let home = root.join("files").join(k7_hub::account::LOCAL_ACCOUNT_KEY);
         for w in ["shared", "mine"] {
             std::fs::create_dir_all(home.join("workspace").join(w)).unwrap();
             std::fs::write(home.join("workspace").join(w).join("notes.md"), "old").unwrap();
@@ -29,9 +27,7 @@ async fn a_workspace_with_a_merge_waiting_refuses_a_write_with_423_and_another_d
         ("cookie", ann.as_str()),
         ("content-type", "application/json"),
     ];
-    let home = root
-        .join("files")
-        .join(k7_hub::account::account_key("dev@example.com"));
+    let home = root.join("files").join(k7_hub::account::LOCAL_ACCOUNT_KEY);
     assert_eq!(
         send(front, "GET", "/api/files/health", &session)
             .await

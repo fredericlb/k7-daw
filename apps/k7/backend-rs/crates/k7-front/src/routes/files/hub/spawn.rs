@@ -70,8 +70,8 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
     let mediatek_root = resolve(&settings.mediatek_dir);
 
     let root = data_root.clone();
-    let mut files = Names::new(Arc::new(move |user: &str| {
-        let slug = k7_hub::account::account_key(user);
+    let mut files = Names::new(Arc::new(move |_: &str| {
+        let slug = k7_hub::account::LOCAL_ACCOUNT_KEY.to_string();
         (slug.clone(), root.join(slug))
     }));
     let (r, m) = (data_root.clone(), mediatek_root.clone());

@@ -6,7 +6,7 @@ use std::sync::Arc;
 
 use k7_file_service::songs::{SongSessions, Songs};
 use k7_hub::account::{Account as HubAccount, Names};
-use k7_hub::env::{STDIN_STOP_ENV, service_env};
+use k7_hub::env::service_env;
 
 /// The heap the accounts' song sessions are sized for, in bytes: an embedded host's, whose whole app must fit (docs/service.md).
 pub fn sessions_heap() -> usize {
@@ -52,7 +52,6 @@ pub async fn identity(
     let (slug, home) = names.name_of(user);
     std::fs::create_dir_all(&home).map_err(|e| format!("cannot create {}: {e}", home.display()))?;
     let mut env = base.clone();
-    env.insert(STDIN_STOP_ENV.into(), "1".into());
     env.insert("STUDIO_HOME".into(), home.display().to_string());
     env.insert("STUDIO_HUB_SECRET".into(), secret.to_string());
     env.extend(names.overlay(&slug, user).await);

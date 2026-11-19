@@ -1,26 +1,4 @@
 {
-  "accountKeys": [
-    {
-      "email": "e2e@st0.app",
-      "key": "e2e_st0_app-4d47282391"
-    },
-    {
-      "email": "a.b@x.io",
-      "key": "a_b_x_io-653cd77989"
-    },
-    {
-      "email": "a_b@x.io",
-      "key": "a_b_x_io-2d79defecc"
-    },
-    {
-      "email": "Frédéric 🎛@ex.com",
-      "key": "Fr_d_ric____ex_com-4c84ad490b"
-    },
-    {
-      "email": "quote\"back\\slash@x",
-      "key": "quote_back_slash_x-44c885967e"
-    }
-  ],
   "tickets": [
     {
       "key": "dev-secret:files",

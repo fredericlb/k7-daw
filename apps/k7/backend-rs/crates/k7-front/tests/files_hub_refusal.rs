@@ -20,9 +20,7 @@ async fn a_refusal_on_the_headers_alone_reaches_the_caller() {
             .status,
         200
     );
-    let home = root
-        .join("files")
-        .join(k7_hub::account::account_key("dev@example.com"));
+    let home = root.join("files").join(k7_hub::account::LOCAL_ACCOUNT_KEY);
     std::fs::create_dir_all(home.join("workspace/w")).unwrap();
     let head = format!(
         "POST /api/files/upload?dir=.&name=big.bin HTTP/1.1\r\nHost: {front}\r\ncookie: {ann}\r\nx-studio-workspace: w\r\ncontent-type: application/octet-stream\r\ncontent-length: 1073741824\r\n\r\n"

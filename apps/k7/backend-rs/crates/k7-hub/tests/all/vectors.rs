@@ -1,5 +1,4 @@
-//! vectors.rs — the hub held to `fixtures/hub-vectors.json`, the reference, as committed: account keys,
-//! tickets minted byte for byte and read alike, the allow-list and the sync target.
+//! vectors.rs — the hub held to `fixtures/hub-vectors.json`, the reference, as committed: tickets minted byte for byte and read alike, the allow-list and the sync target.
 
 use std::collections::BTreeMap;
 
@@ -15,17 +14,6 @@ fn vectors() -> Value {
 
 fn s(v: &Value) -> &str {
     v.as_str().unwrap()
-}
-
-#[test]
-fn account_keys() {
-    for c in vectors()["accountKeys"].as_array().unwrap() {
-        assert_eq!(
-            k7_hub::account::account_key(s(&c["email"])),
-            s(&c["key"]),
-            "{c}"
-        );
-    }
 }
 
 #[test]

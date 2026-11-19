@@ -7,8 +7,6 @@ use std::path::PathBuf;
 use std::pin::Pin;
 use std::sync::Arc;
 
-use crate::env::STDIN_STOP_ENV;
-
 /// Where a hub's lines go.
 pub type Log = Arc<dyn Fn(&str) + Send + Sync>;
 
@@ -22,20 +20,8 @@ pub fn now_ms() -> u64 {
         .map_or(0, |d| d.as_millis() as u64)
 }
 
-/// `slugify(email)` then the first 10 hex of its SHA-256: `ann_x_org-1a2b3c4d5e`; the slug replaces each UTF-16 unit.
-pub fn account_key(email: &str) -> String {
-    use sha2::{Digest, Sha256};
-    let slug: String = email
-        .encode_utf16()
-        .map(|u| match char::from_u32(u32::from(u)) {
-            Some(c) if c.is_ascii_alphanumeric() => c,
-            _ => '_',
-        })
-        .collect();
-    let hash = Sha256::digest(email.as_bytes());
-    let hex: String = hash.iter().take(5).map(|b| format!("{b:02x}")).collect();
-    format!("{slug}-{hex}")
-}
+/// The folder of the device's one account under the files root: the key `dev@example.com` has always had, kept so no device's files move.
+pub const LOCAL_ACCOUNT_KEY: &str = "dev_example_com-eb2b6c0d06";
 
 /// An account's slug and home from its user.
 pub type NameOf = Arc<dyn Fn(&str) -> (String, PathBuf) + Send + Sync>;
@@ -92,7 +78,6 @@ impl Names {
         std::fs::create_dir_all(&home)
             .map_err(|e| format!("cannot create {}: {e}", home.display()))?;
         let mut env = self.base_env.clone();
-        env.insert(STDIN_STOP_ENV.into(), "1".into());
         env.insert("STUDIO_HOME".into(), home.display().to_string());
         env.insert("STUDIO_HUB_SECRET".into(), secret.to_string());
         env.extend(self.overlay(&slug, user).await);
@@ -108,12 +93,20 @@ impl Names {
 
 #[cfg(test)]
 mod key_tests {
-    use super::account_key;
+    use super::LOCAL_ACCOUNT_KEY;
 
+    /// The key as every release has derived it: the email's non-alphanumerics as `_`, then the first 10 hex of its SHA-256.
     #[test]
-    fn slugs_by_utf16_unit() {
-        assert!(account_key("ann@x.org").starts_with("ann_x_org-"));
-        assert_eq!(account_key("ann@x.org").len(), "ann_x_org-".len() + 10);
-        assert!(account_key("é🎵").starts_with("___-"));
+    fn the_accounts_folder_is_the_one_every_device_holds() {
+        use sha2::{Digest, Sha256};
+        let email = "dev@example.com";
+        let slug: String = email
+            .chars()
+            .map(|c| if c.is_ascii_alphanumeric() { c } else { '_' })
+            .collect();
+        let hash = Sha256::digest(email.as_bytes());
+        let hex: String = hash.iter().take(5).map(|b| format!("{b:02x}")).collect();
+        assert_eq!(LOCAL_ACCOUNT_KEY, format!("{slug}-{hex}"));
+        assert_eq!(LOCAL_ACCOUNT_KEY, "dev_example_com-eb2b6c0d06");
     }
 }

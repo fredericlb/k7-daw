@@ -9,7 +9,7 @@ use http_support::cookie;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn a_workspace_with_a_pending_merge_refuses_a_write_with_423_and_another_does_not() {
-    let account = k7_hub::account::account_key("dev@example.com");
+    let account = k7_hub::account::LOCAL_ACCOUNT_KEY;
     let (front, root) = device_front_with(|root| {
         let home = root.join("files").join(&account);
         for w in ["waiting", "mine"] {
@@ -27,9 +27,7 @@ async fn a_workspace_with_a_pending_merge_refuses_a_write_with_423_and_another_d
         ("cookie", ann.as_str()),
         ("content-type", "application/json"),
     ];
-    let home = root
-        .join("files")
-        .join(k7_hub::account::account_key("dev@example.com"));
+    let home = root.join("files").join(k7_hub::account::LOCAL_ACCOUNT_KEY);
     assert_eq!(
         send(front, "GET", "/api/files/health", &session)
             .await

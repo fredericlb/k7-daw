@@ -4,9 +4,6 @@
 
 use std::collections::BTreeMap;
 
-/// Read by the file service: the end of its stdin is its stop, the only graceful one Windows has.
-pub const STDIN_STOP_ENV: &str = "ELECTRON_SHELL_STDIN_STOP";
-
 /// What the OS and the programs a file service runs need.
 pub const SYSTEM: &[&str] = &[
     "PATH",
