@@ -229,4 +229,4 @@ sits. A library's name is the one the ORIGIN's list gave it, which is its folder
 **Why the default library is spelled `@k7-core`.** It names a library, not the app `apps/k7` its
 spelling suggests. It stays on purpose — a level is
 written into user files, and moving it would cost every repository a rewrite for a name nobody
-types. `packages/song/scripts/migrateNamespace.ts` is what such a rewrite takes.
+types.

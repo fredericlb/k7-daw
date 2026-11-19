@@ -10,7 +10,6 @@
 | A text crosses in `k7_fs_buf`, never in the call's input buffer | `k7_call` borrows its input for the whole call |
 | Bytes are `{"$":"bytes","b64":…}`; ids come from `k7_new_id` (`setIdSource` pins them) | JSON carries no bytes, and the crate reads no random source |
 | A trap fails the call and the next call runs on a new instance | `panic = "abort"` leaves thread-locals borrowed |
-| A preference call over a legacy `preferences.yaml` with no k7x beside it is answered by the native side first (the native file service answers it, without waiting on a held lock); the module and the Worker never upgrade | the upgrade holds a lock and keeps a backup of user data, and the browser has no such file |
 | A loop over a selection is one `edit.batch` (`stubBatch`): events remove, track delete, a lane's rename and its sound | the first throw ends the batch, as it ended the loop; a loop that tolerates a throw per item (assembly delete) stays single calls |
 | The host's write is a temp beside the file, then a rename, keeping the file's mode and following a link | a reader sees the old file or the new one, and a read-only folder refuses |
 

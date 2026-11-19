@@ -30,7 +30,7 @@ Every piece answers on every host (`service/default_pieces.txt`, one file for th
 | # | decision | why |
 |---|---|---|
 | 1030 | `is_library_name`, `version_of_dir` and the reserved names are held to `moduleTypes.ts` and `libraryVersions.ts` by a test that reads their text | one rule in two languages, kept honest |
-| 1031 | `workspace_pins` walks from the workspace up to the root of the disk for the nearest `_library-pins.k7x`; a read or parse failure is no pins and ends the walk; `_library-pins.yaml` found first is `Declined(LegacyPins)`; a text with a lone surrogate is `Declined(LossyText)`; a file past 16 MiB is declined. A value is `"draft"` or an integer of at least 1, read from the tree's scalars (one past `u32` is clamped, naming a folder that does not exist either way) | a native read never writes, and the TypeScript's walk leaves the workspace too |
+| 1031 | `workspace_pins` walks from the workspace up to the root of the disk for the nearest `_library-pins.k7x`; a read or parse failure is no pins and ends the walk; a text with a lone surrogate is `Declined(LossyText)`; a file past 16 MiB is declined. A value is `"draft"` or an integer of at least 1, read from the tree's scalars (one past `u32` is clamped, naming a folder that does not exist either way) | a native read never writes, and the TypeScript's walk leaves the workspace too |
 | 1032 DEPARTS | `name in pins` reads own keys only. The TypeScript's plain object answers `true` for a library named `constructor`, and joins the source of a function to the library's path | a prototype's key is no pin |
 | 1033 | `library_root` in the TypeScript's order: `account` is `<studio>/library`; standing inside a version of this library, that version; a pin, through the version folder; an admin's overlay; version 1. A library's folder holds versions when one `readdir` finds a version folder in it | `libraryRoot` and `libraryVersionRoot` |
 | 1034 | Overlays are derived at each request from `admin` and the disk, never held. A library added since can differ from the TypeScript's memory until its flag flips; that difference is logged and read by hand | no second memory |
@@ -41,7 +41,7 @@ Every piece answers on every host (`service/default_pieces.txt`, one file for th
 | # | decision | why |
 |---|---|---|
 | 1040 | `Space::active`: a root that is a project is itself; else the marker `<parent>/.active-projects/<name>`, trimmed as JavaScript trims, resolved, inside the root and a project; else none. Read only when asked: a path outside `_libraries/` asks nothing | one reader of the marker, and `/file` stays one `lstat` chain |
-| 1041 | A failed marker read with `<root>/.studio-active` present is `Declined(LegacyMarker)`; a marker naming `_libraries/...` is `Declined(LibraryActive)` | a library's project is held in memory, which the disk cannot say |
+| 1041 | A marker naming `_libraries/...` is `Declined(LibraryActive)` | a library's project is held in memory, which the disk cannot say |
 | 1042 | `read_text` in the TypeScript's order: the gate; a binary name answers `{binary: true, content: ""}` before any stat, a missing `.wav` included; `stat` follows links; absent is not found, a folder is refused; the text whole, invalid UTF-8 lossy and a BOM kept. `path` in the answer is the caller's spelling | the specs pin `{path, binary, content}` |
 | 1043 | `is_binary` takes the shim's `extname`: the last dot not at the start of the name, lower-cased, against the table | `.wav` is no extension, `a.WAV` is |
 | 1044 | Failures as `entryFailure` words them: not found is a 404 `no such file or folder: <rel>`; a folder a 400 `'<rel>' is a folder, not a file`; a gate a 400 with its sentence; an I/O code `ENOENT` after a good stat a 404 `no such file or folder`, any other a 400 `the file could not be changed (<CODE>)`. `ENOTDIR` is that last case: the shim's `throwIfNoEntry` covers `ENOENT` alone. Windows names a path below a file `ERROR_PATH_NOT_FOUND`, which both sides read as `ENOENT`: a 404 there | what `serviceFiles` reads, and the referee is the shim |
@@ -176,7 +176,6 @@ The engine link (`engine`) has its own page: `file-engine.md`.
 | risk | answer |
 |---|---|
 | a tree past a limit | `Declined`, and the capacity table shows how far away that is |
-| a legacy marker or pins file | declined and left where it is; nothing is lost |
 | the later pieces (entries, revision, journal) | they stand on `Space`, `safe_path` and the decline; nothing here writes |
 
 The undo journal, the last of these pieces, is `file-journal.md`: one journal in the TypeScript's folder and format, read and written by both.

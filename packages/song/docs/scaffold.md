@@ -7,20 +7,17 @@ workspace root, `createProjectIn`). Lives in `@studio/song` because the bundled 
 ## Born as chain files
 
 Chain files are the main layout ([chainFiles.md](chainFiles.md)), so `scaffold` and both `live`
-scaffolds write their file map as a GRAPH and then CONVERT the folder with the migration
-(`asChainProject`, which runs `migrateToChainFiles`). One converter rather than a second set of
-chain-file templates: a new project and a migrated one cannot differ, because they are made by the
-same code.
+scaffolds write chain files directly, from fixed texts in the Rust crate (`scaffold_files.rs`,
+`scaffold_live.rs`) with the lane and node ids marked `<idN>`. The ids are minted in a fixed order
+that the goldens hold: a scaffold that reorders them changes every project it makes.
 
-What the conversion costs is the comments of the files it generates. A chain file is written from
-data, so the notes the graph and the node files carried are not in it; every file that is MOVED
-rather than generated — `project.k7x`, a lane's `tracks/` file (a picture lane's included), `surfaces/` —
-keeps its own.
+A chain file is written from data, so it carries no comments: a note belongs in the lane's own
+`tracks/` file, in `project.k7x` or in a `surfaces/` file.
 
 Two shapes stay graphs:
 
 - **`mix`**, whose desk is drawn by `assemblies/` and driven through a surface's `mapping:`, both
-  of which name nodes by the name the migration takes away — refused by the migration, so not made.
+  of which name nodes by a name a chain project does not keep.
 - **the bench** (`@banc`), a `live` rig that `benchChain.ts` splices a library chain into between
   nodes it names (`IN`, `fader`): it asks `scaffoldLive` for `"graph"`.
 

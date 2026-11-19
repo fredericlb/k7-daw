@@ -611,7 +611,7 @@ graph doc carries no plugin type), the graph says what each looks like and what 
 **Every audio lane has a strip**, and `track new` writes it with the lane
 ([packages/song/docs/trackMixer.md](../../../../packages/song/docs/trackMixer.md)): a module of
 plugin type `Mixer` (`trackMixer`, `MIXER_PLUGIN`) last in the lane's run.
-`scripts/migrateTrackMixer.ts` gives one to a lane that has not got one.
+`track new` writes it with the lane.
 
 A song can still have **none** — one whose lanes all run into buses, or one with no `graph.k7x` at
 all. So the button stays **disabled** at zero and says why in its tooltip, and `ui panel mix` opened
@@ -1631,10 +1631,6 @@ NAME stays the CLI's in every language, because a name is an identifier and a se
 - **No borrowing between languages.** A command named only in French shows the catalogue's English
   sentence in English. Falling back to the other language would put French words in an English menu,
   which is the thing this split exists to stop.
-- **A bare string in the document stands for all locales** and is not rewritten on load. It is expanded
-  across them on the first per-language edit — `setCommandLabel` takes `locales` for exactly that, since
-  without it renaming in French would drop the name English had been showing, invisibly until you
-  switched.
 - **`labelIn` answers as AUTHORED, and the trim lives at the two places a name is drawn** (`labelOf`, the
   context menu's row). Trimming in the reader breaks the space bar: the field is a controlled input, so a
   trailing space vanishes as it is typed and a name of more than one word cannot be entered at all.

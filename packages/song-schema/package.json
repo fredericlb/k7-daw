@@ -15,7 +15,6 @@
     "./docExt": "./src/docExt.ts",
     "./instanceName": "./src/instanceName.ts",
     "./libraryVersions": "./src/libraryVersions.ts",
-    "./libraryVersionsLegacy": "./src/libraryVersionsLegacy.ts",
     "./moduleFiles": "./src/moduleFiles.ts",
     "./moduleTypes": "./src/moduleTypes.ts",
     "./placementId": "./src/placementId.ts",

@@ -63,29 +63,6 @@ fn a_preferences_file_is_read_and_a_text_that_is_not_a_mapping_is_the_empty_rig(
 }
 
 #[test]
-fn an_empty_file_or_an_absent_one_beside_a_yaml_is_the_typescripts_to_upgrade() {
-    let s = Scratch::new("rig-legacy");
-    s.file("studio/preferences.yaml", "audioDevice: x\n");
-    assert_eq!(rig(&s.home()), Err(Declined::LegacyPreferences));
-    s.file("studio/preferences.k7x", "");
-    assert_eq!(rig(&s.home()), Err(Declined::LegacyPreferences));
-    // A k7x that reads wins over a YAML, which is never read again.
-    s.file("studio/preferences.k7x", "cueOutput([1, 2])\n");
-    assert_eq!(
-        rig(&s.home()).unwrap()["cueOutput"],
-        serde_json::json!([1, 2])
-    );
-    // Nothing was written: the YAML stays and no backup or lock appeared.
-    let mut names: Vec<String> = std::fs::read_dir(s.path("studio"))
-        .unwrap()
-        .flatten()
-        .map(|e| e.file_name().to_string_lossy().into_owned())
-        .collect();
-    names.sort();
-    assert_eq!(names, ["preferences.k7x", "preferences.yaml"]);
-}
-
-#[test]
 fn an_empty_file_alone_a_folder_and_a_link_to_nothing_are_the_empty_rig() {
     let s = Scratch::new("rig-states");
     assert_eq!(prefs(&s, "").unwrap(), empty_rig());
@@ -96,8 +73,7 @@ fn an_empty_file_alone_a_folder_and_a_link_to_nothing_are_the_empty_rig() {
     #[cfg(unix)]
     {
         std::os::unix::fs::symlink(s.path("nowhere"), s.path("studio/preferences.k7x")).unwrap();
-        // A link to nothing is the empty rig even with a YAML beside it: it is not consulted.
-        s.file("studio/preferences.yaml", "audioDevice: x\n");
+        // A link to nothing is the empty rig.
         assert_eq!(rig(&s.home()).unwrap(), empty_rig());
     }
 }

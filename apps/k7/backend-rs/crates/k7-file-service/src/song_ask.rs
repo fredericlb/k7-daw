@@ -61,7 +61,7 @@ pub(crate) fn workspace_dir_of(home: &Home, project: &str) -> String {
     join(&[&workspaces, rel.split(['\\', '/']).next().unwrap_or("")])
 }
 
-/// `songRoots(project)`; a `Declined` where the roots depend on a file only a migration reads (a legacy pins file).
+/// `songRoots(project)`; a `Declined` where the roots depend on a file no native reader takes.
 pub fn song_roots(input: &Input<'_>, probe: &dyn Probe) -> Result<Roots, Declined> {
     let home = input.home;
     let code = resolve_all(&[input.code_root]);

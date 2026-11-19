@@ -197,20 +197,6 @@ fn the_open_project_is_the_markers_resolved_path() {
 }
 
 #[test]
-fn a_legacy_marker_declines_the_listing_and_is_left_where_it_is() {
-    let a = Acct::new("ws-list-legacy");
-    a.project("w", "one.k7", "project({})\n");
-    let legacy = a.s.file("studio/workspace/w/.studio-active", "one.k7\n");
-    assert_eq!(
-        rows(&a.home(), None, &limits()).err(),
-        Some(Declined::LegacyMarker)
-    );
-    assert!(std::fs::metadata(legacy).is_ok());
-    a.marker("w", "one.k7");
-    assert!(project(&all(&a, None), "w", "one.k7").active);
-}
-
-#[test]
 fn edited_at_is_the_newest_mtime_two_levels_down_rounded() {
     let a = Acct::new("ws-list-edited");
     let p = a.project("w", "p.k7", "project({})\n");

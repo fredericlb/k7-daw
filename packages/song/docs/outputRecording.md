@@ -22,9 +22,6 @@ post-master-chain — what `OUT` receives.
   something placed in its graph: a node could be put anywhere and capture one voice, be deleted
   and leave the rig with nothing to record with, and its card's buttons drew a second, smaller
   record control beside the bar's. The graph shows the sound's path, and nothing on it records.
-- **A project's recorder node is taken out when it opens** (`packages/song-edit/src/recorderNodes.ts`):
-  the node is deleted as `node delete` deletes it, its run spliced shut, so `MIX → rec → OUT` reads
-  `MIX → OUT` and sounds the same.
 - **One id for every project's recorder**, so the button waits for the engine to run THIS
   project's document, as play does: the last project's recorder state is still in the store a
   moment after a switch, and a press then would be refused as "no recorder node".

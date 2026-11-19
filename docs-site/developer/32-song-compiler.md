@@ -9,7 +9,7 @@ layouts. It reads; changing a project is `@studio/song-edit`'s job ([song-edit](
 
 | Function | File | What it does |
 |---|---|---|
-| `loadProject(path)` | `packages/song/src/project.ts` | The one entry the file service calls. A folder with `chains/`, `graph.k7x` or `modules/` goes to `compileNodeProject`; an older flat folder (`project` + `tracks/` with clip id lists) goes through `assembleFolder` in `packages/song/src/folder.ts` and `mapDoc`; a single `.k7x` file holding `project` and `tracks` is mapped directly. Sets `recordDir` to `<project>/clips`. |
+| `loadProject(path)` | `packages/song/src/project.ts` | The one entry the file service calls. A folder with `chains/`, `graph.k7x` or `modules/` goes to `compileNodeProject`; any other folder is refused; a single `.k7x` file holding `project` and `tracks` is mapped directly. Sets `recordDir` to `<project>/clips`. |
 | `compileNodeProject(dir)` | `packages/song/src/nodeProject.ts` | The compile proper, through `compileWithAutoFreezes`. |
 | `loadGraph(dir)`, `parseChains`, `checkChainInputs` | `packages/song/src/graph.ts` | The derived chain graph, its validation, and the port type checks. |
 | `loadModules`, `loadModuleRefs`, `loadChains`, `loadLanes`, `loadVideoTracks`, `loadProjectRoot`, `loadSettings`, `exportSub`, `readYamlEntities` | `packages/song/src/loader.ts` | Reading each file kind off disk, validated or not. |
@@ -37,11 +37,9 @@ its `id`. Link levels, which segments cannot carry, travel apart (`loadLinkLevel
 Writes go the other way: a graph edit is a transform over segments, written back as chain files by
 `writeChainProject`; the two directions must round-trip.
 
-New `arrangement`, `video` and `live` projects are scaffolded as a graph and then converted by
-`migrateToChainFiles` (`packages/song/src/chainsMigrateFiles.ts`), so a new project and a migrated
-one cannot differ. `migrationBlocker` refuses what the migration cannot carry: `assemblies/` and
-`views/` name nodes, and a surface with a `mapping` binds node params — which is why a `mix` set
-stays in the graph layout.
+New `arrangement`, `video` and `live` projects are scaffolded as chain files directly
+(`packages/song-edit/rust/src/scaffold_files.rs`). `assemblies/` and `views/` name nodes, and a
+surface with a `mapping` binds node params — which is why a `mix` set stays in the graph layout.
 
 ## The compile, in order
 

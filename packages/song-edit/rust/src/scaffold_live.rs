@@ -1,11 +1,10 @@
 // scaffold_live.rs — the two `live` archetypes' files: a rig you play THROUGH, an input, a fader and the way out, with no lane.
-// A reader would get wrong that the files are the GRAPH layout the bench splices into by node name; a new project then converts them to chains.
+// A reader would get wrong that `live_project_files` is the GRAPH layout the bench splices into by node name; a new project is written as chain files.
 
-use crate::confine::Env;
 use crate::error::Res;
 use crate::fs::Fs;
 use crate::ids::NewId;
-use crate::scaffold::{as_chain_project, quote, write_project_files};
+use crate::scaffold::{files_under, quote, with_ids, write_project_files};
 
 /// The input and the fader it runs into, spelled once since the graph names both.
 pub const LIVE_INPUT: &str = "IN";
@@ -161,20 +160,84 @@ pub fn live_video_project_files(name: &str) -> Vec<(String, String)> {
     out
 }
 
-/// Write a new `live` project: its files, then converted to chain files; answers the files it holds.
+/// The chain files of a `live` project: the input and the fader in one run, then the master run; ids 1 to 3 are minted, the first kept by no file.
+const LIVE_CHAINS: &[(&str, &str)] = &[
+    (
+        "chains/IN.k7x",
+        r####"start(true)
+steps([
+  id("<id2>").io("in").monitor("on").gain(0),
+  id("<id3>").extends("@meta/audio/mixer").params({ Volume: 0 }),
+  to([chain("MIX")]),
+])
+"####,
+    ),
+    (
+        "chains/master.k7x",
+        r####"start("MIX")
+steps([to([chain("OUT")])])
+"####,
+    ),
+];
+
+/// The chain files of a `live-video` project: the lens, its picture's run, the rig's own; ids 1 to 5 are minted, the first two kept by no file.
+const LIVE_VIDEO_CHAINS: &[(&str, &str)] = &[
+    (
+        "chains/CAM.k7x",
+        r####"start(true)
+steps([id("<id5>").io("camera"), to([chain("RENDER")])])
+"####,
+    ),
+    (
+        "chains/IN.k7x",
+        r####"start(true)
+steps([
+  id("<id3>").io("in").monitor("on").gain(0),
+  id("<id4>").extends("@meta/audio/mixer").params({ Volume: 0 }),
+  to([chain("MIX")]),
+])
+"####,
+    ),
+    (
+        "chains/master.k7x",
+        r####"start("MIX")
+steps([to([chain("OUT")])])
+"####,
+    ),
+    (
+        "chains/picture.k7x",
+        r####"start("RENDER")
+steps([to([chain("VIDEO_OUT")])])
+"####,
+    ),
+];
+
+/// What the graph layout holds beside the chain files a new project is made of: the node and graph files are left out.
+fn kept(files: Vec<(String, String)>) -> Vec<(String, String)> {
+    files
+        .into_iter()
+        .filter(|(k, _)| k != "graph.k7x" && !k.starts_with("nodes/"))
+        .collect()
+}
+
+/// Write a new `live` project as chain files; answers the files it holds.
 ///
 /// # Errors
-/// A file that does not read, or what the conversion fails with.
-pub fn scaffold_live(fs: &mut dyn Fs, env: &Env, dir: &str, name: &str, new_id: NewId) -> Res<Vec<String>> {
-    write_project_files(fs, dir, &live_project_files(name))?;
-    as_chain_project(fs, env, dir, new_id)
+/// A file that does not read, or the file system's.
+pub fn scaffold_live(fs: &mut dyn Fs, dir: &str, name: &str, new_id: NewId) -> Res<Vec<String>> {
+    let mut files = kept(live_project_files(name));
+    files.extend(with_ids(LIVE_CHAINS, 3, new_id));
+    write_project_files(fs, dir, &files)?;
+    Ok(files_under(fs, dir))
 }
 
 /// Write a new `live-video` project: the same rig, plus a lens and the frame it draws into.
 ///
 /// # Errors
-/// A file that does not read, or what the conversion fails with.
-pub fn scaffold_live_video(fs: &mut dyn Fs, env: &Env, dir: &str, name: &str, new_id: NewId) -> Res<Vec<String>> {
-    write_project_files(fs, dir, &live_video_project_files(name))?;
-    as_chain_project(fs, env, dir, new_id)
+/// A file that does not read, or the file system's.
+pub fn scaffold_live_video(fs: &mut dyn Fs, dir: &str, name: &str, new_id: NewId) -> Res<Vec<String>> {
+    let mut files = kept(live_video_project_files(name));
+    files.extend(with_ids(LIVE_VIDEO_CHAINS, 5, new_id));
+    write_project_files(fs, dir, &files)?;
+    Ok(files_under(fs, dir))
 }

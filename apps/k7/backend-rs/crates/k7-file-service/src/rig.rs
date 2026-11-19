@@ -12,7 +12,6 @@ use crate::read::{ReadError, open_regular};
 use crate::space::Declined;
 
 const PREFS_FILE: &str = "preferences.k7x";
-const LEGACY_FILE: &str = "preferences.yaml";
 /// The most a preferences file is read at; a larger one is declined rather than held.
 const MAX_BYTES: u64 = 64 << 20;
 
@@ -322,11 +321,6 @@ fn state_of(path: &str) -> Result<State, Declined> {
     Ok(State::Text(String::from_utf8_lossy(&bytes).into_owned()))
 }
 
-/// Whether `preferences.yaml` is a file that reads: only a migration upgrades it, and it writes.
-fn legacy_present(path: &str) -> bool {
-    std::fs::metadata(path).is_ok_and(|m| !m.is_dir()) && open_regular(path).is_ok()
-}
-
 /// The rig `songRig()` answers (1511): `preferences.k7x` read as `find` reads it, and never written.
 pub fn rig(home: &Home) -> Result<Value, Declined> {
     let file = join(&[&home.studio, PREFS_FILE]);
@@ -337,9 +331,6 @@ pub fn rig(home: &Home) -> Result<Value, Declined> {
             return Ok(empty_rig());
         }
         State::Absent | State::Text(_) => {}
-    }
-    if legacy_present(&join(&[&home.studio, LEGACY_FILE])) {
-        return Err(Declined::LegacyPreferences);
     }
     Ok(empty_rig())
 }
@@ -402,13 +393,10 @@ pub fn engine_prefs(home: &Home) -> Result<Value, Declined> {
         }
         State::Absent | State::Text(_) => {}
     }
-    if legacy_present(&join(&[&home.studio, LEGACY_FILE])) {
-        return Err(Declined::LegacyPreferences);
-    }
     Ok(none())
 }
 
-/// The two chain settings `loadPreferences` hands (1p-D12): a string trimmed, empty or not a string is none; a legacy-only file declines.
+/// The two chain settings `loadPreferences` hands (1p-D12): a string trimmed, empty or not a string is none.
 pub fn chain_settings(home: &Home) -> Result<(Option<String>, Option<String>), Declined> {
     let file = join(&[&home.studio, PREFS_FILE]);
     let text = match state_of(&file)? {
@@ -417,12 +405,7 @@ pub fn chain_settings(home: &Home) -> Result<(Option<String>, Option<String>), D
         State::Absent if std::fs::symlink_metadata(&file).is_ok_and(|m| m.is_symlink()) => {
             return Ok((None, None));
         }
-        State::Absent | State::Text(_) => {
-            if legacy_present(&join(&[&home.studio, LEGACY_FILE])) {
-                return Err(Declined::LegacyPreferences);
-            }
-            return Ok((None, None));
-        }
+        State::Absent | State::Text(_) => return Ok((None, None)),
     };
     let bump = k7x::Bump::new();
     let Ok(parsed) = k7x::parse_tree_lossless(&text, &bump) else {

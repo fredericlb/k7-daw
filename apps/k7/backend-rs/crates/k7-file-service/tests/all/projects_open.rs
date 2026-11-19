@@ -91,14 +91,7 @@ fn the_default_reads_a_marker_outside_the_root_that_the_active_reader_confines()
 }
 
 #[test]
-fn a_legacy_marker_or_a_walk_past_its_limit_declines_the_default() {
-    let (a, root) = songs("po-declined");
-    let h = a.home();
-    a.s.file("studio/workspace/songs/.studio-active", "a.k7\n");
-    assert_eq!(
-        default_project(&Space::open(&h, &root), &Limits::default()),
-        Err(Declined::LegacyMarker)
-    );
+fn a_walk_past_its_limit_declines_the_default() {
     let b = Acct::new("po-many");
     let broot = b.ws("songs");
     for n in 0..40 {

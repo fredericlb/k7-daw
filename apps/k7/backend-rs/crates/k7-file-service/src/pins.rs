@@ -1,8 +1,8 @@
 //! pins.rs — `ensureLibraryPins` for a workspace pinned afresh: its `_library-pins.k7x`, written once with the newest
-//! version of each library this machine holds. What a reader gets wrong: a legacy YAML file is refused, never upgraded.
+//! version of each library this machine holds.
 
 use crate::atomic::write_atomic;
-use crate::libraries::{Home, LEGACY_PINS_FILE, PINS_FILE};
+use crate::libraries::{Home, PINS_FILE};
 use crate::listings::families::library_names;
 use crate::listings::versions::newest_here;
 use crate::paths::join;
@@ -45,9 +45,6 @@ fn ensure(home: &Home, root: &str, how: Pinning) -> Result<bool, Declined> {
     let file = join(&[root, PINS_FILE]);
     if std::fs::metadata(&file).is_ok() {
         return Ok(false);
-    }
-    if std::fs::metadata(join(&[root, LEGACY_PINS_FILE])).is_ok() {
-        return Err(Declined::LegacyPins);
     }
     let mut text = String::new();
     for name in library_names(home) {

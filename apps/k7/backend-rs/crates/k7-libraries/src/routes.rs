@@ -67,12 +67,9 @@ impl Libraries {
         self.first
             .get_or_init(|| async {
                 let store = self.store.clone();
-                let notes = tokio::task::spawn_blocking(move || {
-                    store.rename_legacy_default();
-                    store.ensure(None, false)
-                })
-                .await
-                .unwrap_or_default();
+                let notes = tokio::task::spawn_blocking(move || store.ensure(None, false))
+                    .await
+                    .unwrap_or_default();
                 self.settled.store(true, Ordering::Release);
                 notes
             })

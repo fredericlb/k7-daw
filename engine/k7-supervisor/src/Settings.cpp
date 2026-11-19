@@ -65,18 +65,11 @@ Settings settingsFrom(const nlohmann::json& raw)
     Settings s;
     if (!raw.is_object()) return s;
     s.registryUrls = uniqueStrings(raw.value("registryUrls", nlohmann::json()));
-    if (s.registryUrls.empty())
-        if (auto one = str(raw, "registryUrl"); !one.empty()) s.registryUrls = {one};
     if (auto it = raw.find("port"); it != raw.end() && it->is_number_integer()) {
         const auto p = it->get<long long>();
         if (p > 0 && p < 65536) s.port = static_cast<int>(p);
     }
     s.audioPriority = uniqueStrings(raw.value("audioPriority", nlohmann::json()));
-    if (s.audioPriority.empty())
-        for (const char* key : {"audioDevice", "audioFallback"})
-            if (auto v = str(raw, key);
-                !v.empty() && std::find(s.audioPriority.begin(), s.audioPriority.end(), v) == s.audioPriority.end())
-                s.audioPriority.push_back(v);
     s.onnxProviders = normaliseProviders(raw.value("onnxProviders", nlohmann::json()));
     // An array, even an empty one, is a choice; anything else is "never chosen", which a boot settles.
     if (auto it = raw.find("instruments"); it != raw.end() && it->is_array()) s.instruments = uniqueStrings(*it);

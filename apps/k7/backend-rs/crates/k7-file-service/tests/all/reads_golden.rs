@@ -141,7 +141,7 @@ pub fn tree_of(s: &Scratch) -> std::collections::BTreeMap<String, String> {
 fn the_preferences_replay_the_typescript_files_included() {
     use k7_file_service::preferences::{update, view};
     let all = cases("preferences");
-    assert!(all.len() >= 40);
+    assert!(all.len() >= 11);
     for c in &all {
         let label = c["name"].as_str().unwrap();
         let (s, home) = mounted(c, "pref");

@@ -1,6 +1,6 @@
-//! manifest.rs — a version's `library.k7x`: read from k7x (or a flat legacy `library.yaml`), written as k7x.
+//! manifest.rs — a version's `library.k7x`: read from k7x, written as k7x.
 //! `libraryVersions.ts`' `parseLibraryManifest` and `stringifyLibraryManifest`, byte for byte on what it writes.
-//! What a reader gets wrong: a legacy manifest is read as flat `key: value` lines only (docs/libraries.md, "Departures").
+//! What a reader gets wrong: a manifest that does not read is none, never a partial one.
 
 use k7x::edit::{StringifyOptions, Value, js_trim, parse, stringify};
 use serde_json::{Map, Value as Json, json};
@@ -89,43 +89,6 @@ fn from_value(v: &Value) -> Option<Manifest> {
 /// A `library.k7x`'s data, or None when the text is not one.
 pub fn parse_manifest(text: &str) -> Option<Manifest> {
     from_value(&parse(text).ok()?)
-}
-
-/// A `library.yaml` of flat scalars (what the hub's own installs wrote); anything nested, folded or anchored reads as none.
-pub fn parse_legacy_manifest(text: &str) -> Option<Manifest> {
-    let mut o = Map::new();
-    for line in text.lines() {
-        let t = line.trim_end();
-        if t.trim().is_empty() || t.trim_start().starts_with('#') || t == "---" {
-            continue;
-        }
-        if t.starts_with(char::is_whitespace) {
-            return None;
-        }
-        let (k, v) = t.split_once(':')?;
-        let v = v.trim();
-        if matches!(
-            v.chars().next(),
-            Some('|' | '>' | '&' | '*' | '[' | '{' | '!')
-        ) {
-            return None;
-        }
-        let value = scalar(v)?;
-        o.insert(k.trim().to_string(), value);
-    }
-    Manifest::from_json(&Json::Object(o))
-}
-
-/// One flat scalar: a quoted string without escapes, a whole number, else the bare text.
-fn scalar(v: &str) -> Option<Json> {
-    if let Some(q @ ('"' | '\'')) = v.chars().next() {
-        let inner = v.strip_prefix(q)?.strip_suffix(q)?;
-        return (!inner.contains([q, '\\'])).then(|| json!(inner));
-    }
-    if !v.is_empty() && v.bytes().all(|b| b.is_ascii_digit()) {
-        return v.parse::<f64>().ok().map(|n| json!(n));
-    }
-    Some(json!(v))
 }
 
 /// The text of a `library.k7x`.

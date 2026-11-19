@@ -1,7 +1,13 @@
 // serviceOpen.spec.ts — what serviceProjects leaves open about a project's open, rename and delete (2082): the open's whole
 // body, the default a bare address picks over a bad marker, the marker's bytes after each move, a rename's clean name,
 // a library's project refused, and `/project` before and after. It pins both implementations of the route.
-import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import { markerFile, Service, wsDir } from "../../src/service.ts";
@@ -180,21 +186,21 @@ test("a rename of the folder above the open project carries the marker, and a de
   expect(await active()).toBeNull();
 });
 
-const RECORDER = `start(true)
-steps([
-  id("11111111-1111-4111-8111-111111111111").extends("@meta/audio/recorder"),
-  to([chain("MIX")]),
-])
-`;
-
-test("an open repairs an old project once: a recorder node goes, and a second open of the open project leaves what came after", async () => {
+test("an open stamps the format level a lane in seconds needs, once", async () => {
   expect((await create("old.k7")).status).toBe(200);
-  const rec = join(wsDir(ws), "old.k7", "chains", "rec.k7x");
-  writeFileSync(rec, RECORDER);
+  const lane = join(wsDir(ws), "old.k7", "tracks", "secs.k7x");
+  mkdirSync(join(wsDir(ws), "old.k7", "tracks"), { recursive: true });
+  writeFileSync(
+    lane,
+    'extends("@meta/track")\nevents([ref("kick").start(2.5)])\n',
+  );
+  const root = join(wsDir(ws), "old.k7", "project.k7x");
+  expect(readFileSync(root, "utf8")).not.toContain("format");
   expect((await svc.open(ws, "old.k7")).status).toBe(200);
-  expect(existsSync(rec), "the recorder node stays after the open").toBe(false);
-  // The project is open now: the repairs run on an open that moves the memory, and this one does not.
-  writeFileSync(rec, RECORDER);
+  const stamped = readFileSync(root, "utf8");
+  expect(stamped, "the format stamp is written at the open").toContain(
+    "format",
+  );
   expect((await svc.open(ws, "old.k7")).status).toBe(200);
-  expect(existsSync(rec), "the second open ran the repairs again").toBe(true);
+  expect(readFileSync(root, "utf8")).toBe(stamped);
 });

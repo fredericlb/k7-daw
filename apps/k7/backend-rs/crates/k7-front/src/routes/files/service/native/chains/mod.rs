@@ -248,8 +248,6 @@ pub(super) fn compute(ctx: &Ctx, what: &What) -> Result<Done, &'static str> {
             cold_chains_view(&chains, &settings().map_err(|d| d.as_str())?).map(ok)
         }
         What::Set { which, chain_ref } => (|| -> Result<Done, k7_file_service::space::Declined> {
-            // A legacy YAML is upgraded first, so the settings below read the k7x.
-            let _ = k7_file_service::preferences::find(&ctx.home, false);
             let view = cold_chains_view(&chains, &settings()?)?;
             let refuse = |error: String| Done {
                 status: 400,

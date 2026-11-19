@@ -125,15 +125,6 @@ describe("the file's name and its round trip (1100)", () => {
   });
 });
 
-describe("a preferences.yaml left behind (1101)", () => {
-  it("is the Rust server's to upgrade: here it is a problem, never read as the defaults or saved over", () => {
-    writeFileSync(yaml(), YAML_FULL, "utf8");
-    expect(m.preferencesProblem()).toMatch(/preferences\.yaml/);
-    expect(() => m.setEditorVim(false)).toThrow(/preferences\.yaml/);
-    expect(files()).toEqual(["preferences.yaml"]);
-  });
-});
-
 describe("a malformed or unwritable k7x", () => {
   it("reads as the defaults, stays as it is, and is not replaced by the YAML beside it", () => {
     const bad = "editor: {{{ nope";

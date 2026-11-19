@@ -20,13 +20,6 @@ void oneBadKeyLosesNothingElse()
     CHECK(s.registryUrls.empty());
 }
 
-void olderSpellingsAreMigratedInTheReader()
-{
-    const Settings s = settingsFrom(json::parse(R"({"registryUrl":"https://app.k7.rocks","audioDevice":"A","audioFallback":"B"})"));
-    CHECK(s.registryUrls == std::vector<std::string>{"https://app.k7.rocks"});
-    CHECK((s.audioPriority == std::vector<std::string>{"A", "B"}));
-}
-
 void providersAreLowercasedAndDeduplicated()
 {
     const Settings s = settingsFrom(json::parse(R"({"onnxProviders":[" DML ","cpu","dml",""]})"));
@@ -164,7 +157,6 @@ void theChainsAreThisMachinesOwn()
 void runSettingsTests()
 {
     RUN(oneBadKeyLosesNothingElse);
-    RUN(olderSpellingsAreMigratedInTheReader);
     RUN(providersAreLowercasedAndDeduplicated);
     RUN(aRoundTripIsExact);
     RUN(aFixedPortIsNeverSaved);

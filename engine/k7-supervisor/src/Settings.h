@@ -1,6 +1,6 @@
 // Settings.h — the supervisor's persisted settings, `<state>/engine-host.json`: small and
 // hand-editable on purpose, so each field is validated on its own and one bad key never loses the
-// others. Older spellings are migrated in the READER (`registryUrl`, `audioDevice` + `audioFallback`).
+// others.
 // See docs/supervisor.md.
 
 #pragma once

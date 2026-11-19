@@ -54,7 +54,6 @@ fn step(root: &Root, store: &Arc<Store>, s: &Value) -> Value {
                 .collect(),
         ),
         "view" => store.view(&[]),
-        "renameLegacy" => json!(store.rename_legacy_default()),
         "write" => {
             std::fs::write(
                 root.0.join(str_of(s, "path")),
@@ -202,5 +201,5 @@ async fn every_scenario_of_the_typescript_replays() {
         assert_eq!(root.dump(), want_tree, "{name}: the tree left behind");
         ran += 1;
     }
-    assert!(ran >= 16, "{ran} scenarios");
+    assert!(ran >= 12, "{ran} scenarios");
 }

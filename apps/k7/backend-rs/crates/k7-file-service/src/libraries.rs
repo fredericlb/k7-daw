@@ -9,8 +9,6 @@ use crate::space::Declined;
 
 /// The file a workspace keeps its pins in, at its root.
 pub const PINS_FILE: &str = "_library-pins.k7x";
-/// The pins' YAML spelling, which is declined.
-pub const LEGACY_PINS_FILE: &str = "_library-pins.yaml";
 /// The most a pins file is read at; a larger one is declined rather than held.
 const MAX_PINS_BYTES: u64 = 16 << 20;
 /// The account's own library, `@account/...`.
@@ -154,9 +152,6 @@ pub fn workspace_pins(from: &str) -> Result<HashMap<String, Version>, Declined> 
                 return Err(Declined::TooLarge);
             }
             return pins_of(&String::from_utf8_lossy(&bytes));
-        }
-        if std::fs::metadata(join(&[&dir, LEGACY_PINS_FILE])).is_ok() {
-            return Err(Declined::LegacyPins);
         }
         let up = dirname(&dir);
         if up == dir {

@@ -22,7 +22,6 @@ workspace's folder, called by the front's routes (`crates/k7-front/src/routes/fi
 | a native read takes no lock; native writes of one workspace take its write lock, in order | the files are written atomically (a temp, then a rename), so a read never sees half a file |
 | a native route runs on the front's runtime (`spawn_blocking` for the file calls) | blocking file calls must not hold the async workers |
 | the active project is read from its marker (`.active-projects/<workspace>`) | one reader per piece, never a second memory |
-| a native read never writes: a legacy file (`.studio-active`, `_library-pins.yaml`) is left where it is | a read that writes is a write without the lock |
 | a piece that cannot answer declines with a sentence (`declines.md`) | a decline costs one call where a guess would be a wrong answer |
 
 ## The inventory
@@ -49,6 +48,5 @@ Every piece answers on every host. Each has its own page for the choices.
 
 | difference | why |
 |---|---|
-| a native read leaves a legacy marker or pins file where it is, and declines a request whose library roots it would need | it never writes; the sentence names the file (`declines.md`) |
 | the compile's answers are the `song` crate's | `packages/song/docs/rustCompiler.md`, "Where it answers differently" |
 | the revision token is spelled differently | no client reads it but for equality |

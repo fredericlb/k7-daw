@@ -50,11 +50,6 @@ states none of its own, and the two together are refused, since they would be tw
 for one material. A picture lane a `video_source:` lane sounds plays no `#audio` half, so nothing is
 heard twice.
 
-A node project's open folds such a lane into its picture lane (`src/pictureSoundMigrate.ts`): its
-chain leaves `main#audio`, its mute, solo and highlight become the half's, its row goes, and the
-project is written at format level 4. A picture lane two lanes sound is left as it is and named:
-merging two strips is a choice, not a migration.
-
 ## The ENGINE plays it, not the `<video>`
 
 The picture's `<video>` elements are muted and stay muted (`packages/ui-eyes/docs/realtime.md`).

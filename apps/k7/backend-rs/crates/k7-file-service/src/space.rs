@@ -13,8 +13,6 @@ use crate::paths::{basename, dirname, is_within, join, resolve, resolve_all};
 const LIBRARIES_DIR: &str = "_libraries";
 /// Where each workspace's open-project marker lives, beside the workspaces.
 const MARKERS_DIR: &str = ".active-projects";
-/// The marker a workspace once kept inside itself, which only a migration upgrades.
-const LEGACY_MARKER: &str = ".studio-active";
 /// The longest `rel` a native read takes: the gate climbs one `lstat` per segment (1024).
 pub const MAX_REL: usize = 16 * 1024;
 
@@ -22,10 +20,6 @@ pub const MAX_REL: usize = 16 * 1024;
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Declined {
     Busy,
-    LegacyManifest,
-    LegacyMarker,
-    LegacyPins,
-    LegacyPreferences,
     LibraryActive,
     LongPath,
     LossyText,
@@ -40,12 +34,8 @@ pub enum Declined {
 
 impl Declined {
     /// Every reason, for a test that holds each to a refusal (4-7).
-    pub const ALL: [Declined; 15] = [
+    pub const ALL: [Declined; 11] = [
         Declined::Busy,
-        Declined::LegacyManifest,
-        Declined::LegacyMarker,
-        Declined::LegacyPins,
-        Declined::LegacyPreferences,
         Declined::LibraryActive,
         Declined::LongPath,
         Declined::LossyText,
@@ -61,10 +51,6 @@ impl Declined {
     pub fn as_str(self) -> &'static str {
         match self {
             Declined::Busy => "busy",
-            Declined::LegacyManifest => "legacy-manifest",
-            Declined::LegacyMarker => "legacy-marker",
-            Declined::LegacyPins => "legacy-pins",
-            Declined::LegacyPreferences => "legacy-preferences",
             Declined::LibraryActive => "library-active",
             Declined::LongPath => "long-path",
             Declined::LossyText => "lossy-text",
@@ -143,9 +129,6 @@ impl<'h> Space<'h> {
         let rel = match std::fs::read(&marker) {
             Ok(bytes) => js_trim(&String::from_utf8_lossy(&bytes)).to_string(),
             Err(_) => {
-                if std::fs::symlink_metadata(join(&[&self.root, LEGACY_MARKER])).is_ok() {
-                    return Err(Declined::LegacyMarker);
-                }
                 return Ok(None);
             }
         };

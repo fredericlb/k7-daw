@@ -1,7 +1,6 @@
 // libraryVersions.ts — a library as a series of FROZEN versions: the level k7 runs, what a version's
 // `library.k7x` says, and the pins a workspace keeps in `_library-pins.k7x`. No `node:fs`, so
 // the file service and the browser read them by the same rules. Rationale: docs/library-versions-plan.md.
-// A `.yaml` one left on disk is read by libraryVersionsLegacy.ts, once, by whoever owns that file's I/O.
 
 import { parse } from "@studio/k7x/document";
 import { stringify } from "@studio/k7x/print";
@@ -57,7 +56,7 @@ function dataOf(text: string): Record<string, unknown> | null {
 }
 
 /** A manifest from data already read, whatever the file's format; null when it is not one. */
-export function libraryManifestData(doc: unknown): LibraryManifest | null {
+function libraryManifestData(doc: unknown): LibraryManifest | null {
   if (!doc || typeof doc !== "object" || Array.isArray(doc)) return null;
   const d = doc as Record<string, unknown>;
   const version = int(d.version);
@@ -90,7 +89,7 @@ export const isRunnable = (
 export type LibraryPins = Record<string, LibraryVersion>;
 
 /** Pins from data already read, whatever the file's format; an entry that is no version is dropped, so it reads as unpinned. */
-export function libraryPinsData(doc: unknown): LibraryPins {
+function libraryPinsData(doc: unknown): LibraryPins {
   if (!doc || typeof doc !== "object" || Array.isArray(doc)) return {};
   const out: LibraryPins = {};
   for (const [name, v] of Object.entries(doc as Record<string, unknown>)) {

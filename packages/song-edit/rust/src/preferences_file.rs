@@ -7,8 +7,8 @@ use crate::fs::Fs;
 use crate::js_text::js_trim;
 use crate::paths::{dirname, join};
 use crate::preferences::{
-    AudioDevicePref, ChannelDir, ChannelLabel, CueOutput, LEGACY_PREFERENCES_FILE, PREFERENCES_FILE, Preferences,
-    parse_strict, stringify_preferences,
+    AudioDevicePref, ChannelDir, ChannelLabel, CueOutput, PREFERENCES_FILE, Preferences, parse_strict,
+    stringify_preferences,
 };
 use song::SourceError;
 
@@ -42,39 +42,25 @@ fn read_text(fs: &dyn Fs, path: &str) -> Read {
     }
 }
 
-/// Reads the file as it is: its text, or the defaults when absent. The upgrade of an old `preferences.yaml` is not in this crate.
+/// Reads the file as it is: its text, or the defaults when absent.
 #[must_use]
 pub fn find(fs: &dyn Fs, env: &Env) -> Found {
     let path = join(&[&env.studio_home, PREFERENCES_FILE]);
-    let legacy = join(&[&env.studio_home, LEGACY_PREFERENCES_FILE]);
-    let blank = match read_text(fs, &path) {
-        Read::Error(e) => return unreadable(&path, &format!("cannot be read ({e})")),
-        Read::Text(t) if !t.is_empty() => {
-            return parse_strict(&t).map_or_else(
-                || unreadable(&path, "does not read"),
-                |p| Found {
-                    prefs: p,
-                    problem: None,
-                },
-            );
-        }
-        Read::Text(_) => true,
-        Read::Absent => false,
-    };
-    if !blank && fs.present(&path) && !fs.exists(&path) {
-        return unreadable(&path, "is a link to nothing");
-    }
-    match read_text(fs, &legacy) {
-        Read::Error(e) => unreadable(&legacy, &format!("cannot be read ({e})")),
-        Read::Absent if blank => unreadable(&path, "is empty"),
+    match read_text(fs, &path) {
+        Read::Error(e) => unreadable(&path, &format!("cannot be read ({e})")),
+        Read::Text(t) if t.is_empty() => unreadable(&path, "is empty"),
+        Read::Text(t) => parse_strict(&t).map_or_else(
+            || unreadable(&path, "does not read"),
+            |p| Found {
+                prefs: p,
+                problem: None,
+            },
+        ),
+        Read::Absent if fs.present(&path) && !fs.exists(&path) => unreadable(&path, "is a link to nothing"),
         Read::Absent => Found {
             prefs: Preferences::default(),
             problem: None,
         },
-        Read::Text(_) => unreadable(
-            &legacy,
-            "has to be upgraded to preferences.k7x, which this crate does not do",
-        ),
     }
 }
 

@@ -16,7 +16,6 @@ k7-js = { path = "crates/k7-js" }
 k7-mediatek = { path = "crates/k7-mediatek" }
 k7-hub = { path = "crates/k7-hub" }
 k7-sync = { path = "crates/k7-sync" }
-saphyr-parser = "0.3"
 k7-picture = { path = "crates/k7-picture" }
 k7-file-service = { path = "crates/k7-file-service" }
 k7-replica = { path = "crates/k7-replica" }

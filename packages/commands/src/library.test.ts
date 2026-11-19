@@ -2,13 +2,7 @@
 // newer k7 is refused by name, a version this machine lacks is refused by name, and the forks
 // whose base changed are named — the fork itself never touched.
 
-import {
-  existsSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { writeDoc } from "@studio/song/testSupport";
@@ -83,13 +77,10 @@ describe("library upgrade", () => {
     expect(readFileSync(fork, "utf8")).toBe(forkText);
   });
 
-  it("upgrades a legacy YAML pins file once, and moves the pin in the .k7x one", async () => {
-    rmSync(join(ws, "_library-pins.k7x"));
-    writeFileSync(join(ws, "_library-pins.yaml"), "k7-core: 1\n");
+  it("moves the pin in the .k7x file", async () => {
     await runCommand("library upgrade k7-core", host(), "cli");
     expect(refusals).toEqual([]);
     expect(pins()).toEqual({ "k7-core": 2 });
-    expect(existsSync(join(ws, "_library-pins.yaml"))).toBe(false);
   });
 
   it("refuses a version that needs a newer k7, and leaves the pin alone", async () => {

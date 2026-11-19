@@ -68,22 +68,3 @@ describe("a dsp module", () => {
     );
   });
 });
-
-describe("a legacy jsdsp module", () => {
-  it("plays its committed jsdsp.json and is never rebuilt, whatever the source says", () => {
-    asModule("jsdsp", {
-      "jsdsp.ts": "export default (g) => { g.nope(); };\n",
-      "jsdsp.json": GRAPH,
-    });
-    expect(lead()?.dspGraph).toBe(GRAPH);
-    expect(jsDspBuildIssues(dir)).toEqual([]);
-  });
-
-  it("is reported when it has no jsdsp.json", () => {
-    asModule("jsdsp", { "jsdsp.ts": "export default {};\n" });
-    expect(lead()?.dspGraph).toBe(PASS_THROUGH_GRAPH);
-    expect(jsDspBuildIssues(dir)[0]?.message).toContain(
-      "its jsdsp.json is missing",
-    );
-  });
-});

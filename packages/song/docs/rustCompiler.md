@@ -69,7 +69,7 @@ Every input the TypeScript compile takes, read off its code (`src/compile/inputs
 |---|---|---|
 | the project's files: `project.k7x`, `settings.k7x`, `graph.k7x`, `chains/`, `modules/`, `nodes/`, `tracks/`, `clips/`, `sequences/`, `timelines/`, `curves/`, `surfaces/`, `assemblies/`, `mix.k7x`, the layout and link levels, `.strudel` patterns, `vstpresets/` | `node:fs`, through `yamlCache` and `parseStore` | through the Source, under the `project` root |
 | the workspace's `_modules/` beside the project | `moduleLibraryDirs` | through the Source, under the `workspace` root |
-| the libraries: which ones, at which version, and which an admin overlays | `librariesHome`, `workspacePins`, `setLibraryOverlays`, `libraryRoot` (pins, manifests, the legacy YAML ones upgraded) | `Roots::libraries`, a list of `{name, root, editable}` the HOST resolves; the crate never reads a pin or a manifest |
+| the libraries: which ones, at which version, and which an admin overlays | `librariesHome`, `workspacePins`, `setLibraryOverlays`, `libraryRoot` (pins and manifests) | `Roots::libraries`, a list of `{name, root, editable}` the HOST resolves; the crate never reads a pin or a manifest |
 | each library's families (`modules`, `chains`, `assemblies`, `console`, `samples`, `irs`, `wavetables`, `models`) | `libraryFamilyRoots` | through the Source, under each library's root |
 | the account's own library, `@account` | `accountLibraryHome` | the first entry of `Roots::libraries` |
 | k7's own modules, `@meta` | `META_MODULES_ROOT` (`packages/song/meta`, by `import.meta.url`) | `Roots::meta`, a path the host gives (the code root on a phone) |
@@ -185,7 +185,6 @@ The crate's `compare.rs` judges two compiles of one project; the departures are 
 |---|---|
 | a folder with no `graph.k7x`, `modules/` or `chains/` (the flat `tracks/` layout) and a single-file `.k7x` song are not projects: "not a k7 project" | the plan drops the legacy syntaxes; `folder.ts` and `readSongFile` exist for them alone |
 | `project.k7x`'s `type` and `project_type` are unknown fields; a v1 wall-clock marker key is not told from a timecode (2a decisions 5 and 6) | the same |
-| the legacy YAML pins and manifests are not read | the host resolves the roots; the TypeScript host keeps upgrading those files while it exists |
 | messages are rewritten, and a file reports its first finding, located | serde's decoding (above) |
 | every automatic freeze's fingerprint changes once, so every render is made again | the fingerprint is a hash of the native JSON |
 | a stale `jsdsp.json` says so | the compile builds nothing |

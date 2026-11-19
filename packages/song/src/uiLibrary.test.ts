@@ -1,10 +1,4 @@
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parse } from "@studio/k7x/document";
@@ -13,15 +7,12 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadModuleRefs, loadModules } from "./loader";
 import { resolvedUI } from "./moduleResolve";
 import {
-  setDoc,
   writeDoc,
   writeLibraries,
   writeLibrary,
   writeNode,
 } from "./testSupport";
 import { loadUiLibrary, uiFileText, uiPathFor, writeUiFile } from "./uiLibrary";
-import { migrateModuleUis } from "./uiMigrate";
-import { wsData, wsText } from "./yaml/workspaceDoc";
 
 // A panel is the `ui.k7x` in the module's own FOLDER, which is the key: no `ref` can disagree with it.
 
@@ -258,79 +249,6 @@ describe("a panel's widgets.js", () => {
       widgets: { screen: { ...LCD.widgets.screen, bind: "Mix" } },
     };
     expect(UISchema.safeParse(bound).success).toBe(false);
-  });
-});
-
-describe("migrating the panels that are still inline", () => {
-  const INLINE = `// A reverb.
-plugin({ name: "Reverb", type: "vst3" })
-ui({
-  cols: 2,
-  rows: 1,
-  widgets: { mix: { type: "knob", col: 0, row: 0, bind: "Mix", label: "Mix" } },
-})
-params({ Mix: 0.4 }) // kept
-`;
-  const writeInline = (): void => {
-    mkdirSync(reverbDir(), { recursive: true });
-    writeFileSync(join(reverbDir(), "module.k7x"), INLINE);
-  };
-
-  it("moves a shared module's panel into the shared module's folder", () => {
-    const shared = join(
-      root,
-      "_modules",
-      "audio",
-      "delay",
-      "tape-delay",
-      "module.k7x",
-    );
-    setDoc(shared, ["ui"], { cols: 1, rows: 1, widgets: {} });
-    const r = migrateModuleUis(dir);
-    expect(r.moved).toEqual([
-      "@workspace/audio/delay/tape-delay → _modules/audio/delay/tape-delay/ui.k7x",
-    ]);
-    expect(wsData(shared).ui).toBeUndefined();
-  });
-
-  it("keeps the rest of the module file, comments included", () => {
-    writeInline();
-    expect(migrateModuleUis(dir).moved).toHaveLength(1);
-    const text = wsText(join(reverbDir(), "module.k7x"));
-    expect(text).toContain("// A reverb.");
-    expect(text).toContain("// kept");
-    expect(wsData(join(reverbDir(), "module.k7x"))).toEqual({
-      ...REVERB,
-      params: { Mix: 0.4 },
-    });
-    expect(wsData(join(reverbDir(), "ui.k7x"))).toEqual(PANEL);
-  });
-
-  it("is safe to run twice", () => {
-    writeInline();
-    migrateModuleUis(dir);
-    const panel = join(reverbDir(), "ui.k7x");
-    const before = wsText(panel);
-    const again = migrateModuleUis(dir);
-    expect(again.moved).toEqual([]);
-    expect(again.errors).toEqual([]);
-    expect(wsText(panel)).toBe(before);
-  });
-
-  it("reports a ui it cannot move rather than dropping it", () => {
-    writeSharedModule({ ...REVERB, ui: { cols: 2 } });
-    const r = migrateModuleUis(dir);
-    expect(r.moved).toEqual([]);
-    expect(r.errors.join()).toMatch(/not a panel this can move/);
-    // Still in the file, so nothing was lost.
-    expect(wsData(join(reverbDir(), "module.k7x")).ui).toEqual({ cols: 2 });
-  });
-
-  it("writes nothing when there is nothing inline", () => {
-    writeSharedModule(REVERB);
-    const r = migrateModuleUis(dir);
-    expect(r.moved).toEqual([]);
-    expect(existsSync(join(reverbDir(), "ui.k7x"))).toBe(false);
   });
 });
 
