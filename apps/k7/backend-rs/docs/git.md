@@ -8,7 +8,7 @@ commits as are in `docs/project-sync-plan.md`; this page holds the choices the c
 | choice | why |
 |---|---|
 | `git2` with default features off | its `https` and `ssh` features bring OpenSSL and `libssh2`, which the backend refuses as it refuses aws-lc; k7 has its own transports |
-| `Repo::open(workdir, gitdir)` takes the two folders apart | a git folder may live away from the files, and an open turns a `.git` link to `.git.nosync` back into a real `.git` folder (`gitlink.rs`) |
+| `Repo::open(workdir, gitdir)` takes the two folders apart | a git folder may live away from the files |
 | a git folder elsewhere gets `core.worktree` and no `.git` file | libgit2 links a foreign git folder with a `.git` file; the folder is synced and shared, and the link would be wrong on another device, so `init` removes it |
 | libgit2 never filters: no autocrlf, no attributes, no LFS | a `.k7x` and an audio file reach git byte for byte; `core.autocrlf` is set false in the repository whatever the person's global config says |
 | the index is built from the diff against `HEAD`, never by `add_all` | the same diff gives `status` and the commit one answer, and a `Cleaner` can turn a file into a pointer before it is stored |

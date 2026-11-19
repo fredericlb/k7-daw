@@ -1,6 +1,6 @@
 [package]
 name = "k7-roam"
-description = "What roams between a person's devices besides git: the list of workspaces, and the one-time move out of the iCloud container (docs/roam.md)."
+description = "What roams between a person's devices besides git: the list of workspaces (docs/roam.md)."
 version.workspace = true
 edition.workspace = true
 publish.workspace = true
