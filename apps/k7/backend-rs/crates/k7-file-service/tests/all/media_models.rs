@@ -7,7 +7,6 @@ use k7_file_service::media::KEEP;
 use k7_file_service::media::models::{Fetch, FetchEvent, Job, Models, uuid_v4};
 use k7_file_service::media::names::model_cache_path;
 
-
 fn models() -> Models {
     let mut n = 0u8;
     Models::new(Box::new(move || {

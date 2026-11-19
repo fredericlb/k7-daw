@@ -245,4 +245,3 @@ fn writes_the_sidecar_node_writes() {
     same("song.yaml", &analysed(&waveform, &text), want("song.yaml"));
     let _ = std::fs::remove_dir_all(&dir);
 }
-

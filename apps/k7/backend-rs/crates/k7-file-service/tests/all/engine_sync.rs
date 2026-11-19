@@ -1,14 +1,8 @@
 //! The copy to the engine's machine (2223) against the TypeScript's traces: documents asked, jobs answered on a turned
 //! clock, what is sent and what the poll shows. `settled` is only set by a job that answered.
 
-
 use k7_file_service::engine::sync::{Copies, Ctx, FileKey, Reply, SyncEffect, within};
 use serde_json::json;
-
-
-
-
-
 
 fn one_file(_: &str) -> Option<FileKey> {
     Some(FileKey {

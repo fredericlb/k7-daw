@@ -18,7 +18,6 @@ fn sha(s: &str) -> String {
     format!("{:x}", Sha256::digest(s.as_bytes()))
 }
 
-
 /// A `Js` that must never be asked: every op here is a text or a removal.
 struct NoJs;
 

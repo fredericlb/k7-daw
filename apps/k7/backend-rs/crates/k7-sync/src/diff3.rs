@@ -311,8 +311,6 @@ fn diff3_merge_within<'t>(
 mod tests {
     use super::*;
 
-
-
     #[test]
     fn merges_lines_apart_and_refuses_one_line_changed_twice() {
         let base = "# Todo\n\n- bass\n- drums\n- vocals\n- mix\n";

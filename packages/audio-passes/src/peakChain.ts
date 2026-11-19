@@ -4,7 +4,7 @@
 import type { PluginDoc } from "@studio/song/project";
 
 /** The param a MEASURING cold module receives its number in — one name, spelled once. */
-export const PEAK_PARAM = "Peak";
+const PEAK_PARAM = "Peak";
 
 /** Does anything in this chain want a peak measured? Asked of the COMPILED plugins, docs/peakPass.md. */
 export function needsPeak(plugins: readonly PluginDoc[]): boolean {

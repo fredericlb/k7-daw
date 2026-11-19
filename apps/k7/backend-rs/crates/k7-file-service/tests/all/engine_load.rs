@@ -1,13 +1,11 @@
 //! The load machine (2220) against the TypeScript's traces: each scenario of `vectors/engine.json`'s `load` is replayed on a
 //! turned clock, through a small front that does what `sendDoc` and `warmDeps` do, and must say the same frames at the same times.
 
-
 use k7_file_service::engine::load::Load;
 use k7_file_service::engine::{Effect, Event, Phase};
 use serde_json::json;
 
 use crate::support::engine::{Clock, rows, vectors};
-
 
 #[test]
 fn record_is_put_back_after_the_dry_run() {

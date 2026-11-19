@@ -41,7 +41,6 @@ fn a_ref_of_64_kib_is_one_sentence_and_one_scan_of_the_catalogue() {
     );
 }
 
-
 #[test]
 fn ids_manifests_and_moves_of_hostile_size_end_fast() {
     let outputs: Vec<String> = (0..1000).map(|i| format!("o{i}")).collect();

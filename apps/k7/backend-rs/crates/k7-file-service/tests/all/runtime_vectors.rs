@@ -69,4 +69,3 @@ fn replay_since(section: &str, whole: bool) {
 fn a_big_ring_answers_its_count_and_ends() {
     replay_since("since_big", false);
 }
-

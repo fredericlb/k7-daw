@@ -4,10 +4,7 @@
 use std::collections::BTreeMap;
 use std::sync::Arc;
 
-use k7_file_service::bench::{
-    BenchError, Libs, bench_dir, copy_frozen_chain,
-    save_bench_chain,
-};
+use k7_file_service::bench::{BenchError, Libs, bench_dir, copy_frozen_chain, save_bench_chain};
 use k7_file_service::libraries::Home;
 use serde_json::Value;
 use song::session::Session;
@@ -41,8 +38,6 @@ fn files_under(dir: &std::path::Path, base: &std::path::Path, out: &mut BTreeMap
         }
     }
 }
-
-
 
 #[test]
 fn the_bench_folder_is_where_the_account_keeps_it() {

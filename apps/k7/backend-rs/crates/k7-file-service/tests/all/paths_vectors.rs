@@ -3,7 +3,6 @@
 
 use k7_file_service::paths::*;
 
-
 #[test]
 fn a_windows_root_is_ordinary_data_on_any_host() {
     assert_eq!(resolve("C:\\Users\\x", "..\\y"), "C:/Users/y");

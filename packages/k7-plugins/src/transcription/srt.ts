@@ -42,26 +42,3 @@ export function parseSrt(text: string): TranscriptSegment[] {
   }
   return out;
 }
-
-const srtTime = (t: number): string => {
-  const ms = Math.max(0, Math.round(t * 1000));
-  const two = (n: number) => String(n).padStart(2, "0");
-  return (
-    `${two(Math.floor(ms / 3600000))}:` +
-    `${two(Math.floor((ms % 3600000) / 60000))}:` +
-    `${two(Math.floor((ms % 60000) / 1000))},` +
-    `${String(ms % 1000).padStart(3, "0")}`
-  );
-};
-
-/** The content a transcript lane carries — valid SRT, so the text is one copy away from a subtitle file. */
-export function srtOf(segments: TranscriptSegment[]): string {
-  // Each block ends with its own newline, joined by one more: the blank line SRT puts between cues,
-  // and a single trailing newline at the end of the file.
-  return segments
-    .map(
-      (s, i) =>
-        `${i + 1}\n${srtTime(s.start)} --> ${srtTime(s.end)}\n${s.text}\n`,
-    )
-    .join("\n");
-}

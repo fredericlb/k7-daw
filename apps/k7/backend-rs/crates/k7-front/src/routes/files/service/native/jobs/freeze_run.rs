@@ -301,7 +301,6 @@ fn freezes_text(docs: &Docs, project: &str, rev: Option<String>) -> Result<Arc<s
     docs::view_text_with(docs, true, &p, View::Engine).map_err(str::to_owned)
 }
 
-
 fn parse_freezes(text: &str) -> Result<Vec<AutoFreeze>, String> {
     let whole: Value = serde_json::from_str(text).map_err(|e| e.to_string())?;
     let list = whole.get("freezes").cloned().unwrap_or_else(|| json!([]));

@@ -17,7 +17,6 @@ fn scan_of(plugins: &[Value]) -> Scan {
     Scan::read(&source, Some(&tmp.at("exts.json"))).unwrap()
 }
 
-
 #[test]
 fn a_ref_wins_over_a_format_and_an_id_and_a_hit_without_an_id_is_none() {
     let scan = scan_of(&[

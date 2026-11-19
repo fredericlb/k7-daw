@@ -1,11 +1,7 @@
 //! 1l's names (2444, 2451, 2460) and the route's clamps (2427) replayed from the TypeScript's own answers.
 
-use k7_file_service::media::names::{
-    Take, models_root, prefetch_signature,
-    take_name,
-};
 use k7_file_service::media::clamp_buckets;
-
+use k7_file_service::media::names::{Take, models_root, prefetch_signature, take_name};
 
 #[test]
 fn a_model_root_is_the_environment_or_the_homes_models_folder() {
@@ -37,8 +33,6 @@ fn the_prefetch_signature_is_the_address_and_the_sorted_files() {
     );
     assert_eq!(prefetch_signature("http://j", &[]), "http://j\n");
 }
-
-
 
 #[test]
 fn a_fractional_bucket_count_is_cut_after_the_clamp() {

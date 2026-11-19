@@ -6,7 +6,6 @@
   "description": "The offline passes a chain runs over audio: processing a chain to a file, measuring a peak, and the cold pass a module declares. The RUNNING is handed in by the host (see docs/processChain.md) — the 166 MB separation model lives in the backend, which depends on this, so importing it back would be a cycle. Consumed as source.",
   "exports": {
     "./processChain": "./src/processChain.ts",
-    "./peakPass": "./src/peakPass.ts",
     "./resolveChain": "./src/resolveChain.ts",
     "./coldPass": "./src/coldPass.ts"
   },

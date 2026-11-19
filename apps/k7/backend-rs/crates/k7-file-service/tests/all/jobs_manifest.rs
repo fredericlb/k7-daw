@@ -21,9 +21,6 @@ fn the_javascript_trim_and_line_rules_hold() {
     );
 }
 
-
-
-
 #[test]
 fn a_file_outside_the_staging_or_through_a_link_out_of_it_is_refused_and_nothing_is_copied() {
     let tmp = Tmp::new("jobsmovelink");

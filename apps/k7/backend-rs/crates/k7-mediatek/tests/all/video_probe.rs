@@ -1,10 +1,7 @@
 //! The probe's pure half replayed over what the TypeScript answered (`makeHostVectors.mts`): ffprobe's arguments and its JSON as facts.
 
-
 use k7_mediatek::video_probe::{facts_of, rotation_of};
 use serde_json::json;
-
-
 
 #[test]
 fn text_that_is_no_json_is_an_error_and_a_side_data_rotation_beats_the_tag() {

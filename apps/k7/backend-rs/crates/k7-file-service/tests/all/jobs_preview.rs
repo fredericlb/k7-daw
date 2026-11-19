@@ -121,10 +121,6 @@ fn materialize(tmp: &Tmp, sc: &Value) {
     }
 }
 
-
-
-
-
 struct World {
     home: Home,
     roots: Vec<String>,
@@ -236,4 +232,3 @@ fn a_document_that_threw_enoent_is_a_404_and_any_other_refusal_a_400() {
         (400, "no audio for 'clips/none.wav'")
     );
 }
-

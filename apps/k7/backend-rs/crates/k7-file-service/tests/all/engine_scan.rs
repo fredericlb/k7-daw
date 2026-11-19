@@ -1,12 +1,7 @@
 //! The scan wait (2222) against the TypeScript's traces: a link's frames and a turned clock in, the holds, the resends and
 //! the poll's view out. The 60 s stall and the 10 minute bound are driven on the clock, not waited for.
 
-
-
 use crate::support::engine::{rows, vectors};
-
-
-
 
 #[test]
 fn the_ten_minute_bound_is_a_count_not_a_wait() {

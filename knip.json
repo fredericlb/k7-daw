@@ -17,7 +17,6 @@
     "cmake",
     "ctest",
     "ffmpeg",
-    "ffprobe",
     "tilt",
     "where.exe"
   ],
@@ -61,14 +60,11 @@
     "packages/audio-probe": {
       "entry": ["scripts/*.ts"]
     },
-    "packages/take-render": {
-      "entry": ["src/timeline.ts"]
-    },
     "packages/k7-plugins": {
       "entry": ["scripts/turntables/*.ts"]
     },
     "packages/audio-analysis": {
-      "entry": ["bench/*.ts", "scripts/*.mjs"]
+      "entry": ["scripts/*.mjs"]
     },
     "packages/k7x": {
       "entry": ["bench/*.{ts,mjs}", "scripts/*.mjs"]

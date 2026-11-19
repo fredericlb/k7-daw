@@ -84,4 +84,3 @@ fn the_machines_record_is_taken_with_this_sides_id_and_a_finished_job_is_kept_fi
     r.start(t0 + KEEP, "y", "/y", true);
     assert!(r.job("x").is_some());
 }
-

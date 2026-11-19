@@ -1,18 +1,11 @@
 //! A library module moved or renamed, replayed from the TypeScript's goldens (`workspaceEntries.ts` through a real Workspace):
 //! the plan, the folder's rename, the repoint, then the whole tree of files compared with the one the TypeScript left.
 
-
 use k7_file_service::edits::module_make::clone_module;
 use k7_file_service::libraries::Home;
 use k7_file_service::space::Space;
 
 use crate::support::Scratch;
-
-
-
-
-
-
 
 // A clone reads the workspace alone: a link to another library's file, or to `..`, is refused and nothing lands.
 #[cfg(unix)]
@@ -50,5 +43,3 @@ fn a_clone_refuses_links() {
         assert_eq!(before, after, "{label}: a clone landed");
     }
 }
-
-

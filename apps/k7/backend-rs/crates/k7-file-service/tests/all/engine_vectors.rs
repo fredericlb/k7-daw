@@ -1,9 +1,7 @@
 //! The engine link's pure rules against `vectors/engine.json`: the session names, `servedProject`, the backoff, and what
 //! the send does to a document over the golden corpus (the paths it names, a take's hole, the groups' mix).
 
-use k7_file_service::engine::{
-    served_project, session_for, session_of,
-};
+use k7_file_service::engine::{served_project, session_for, session_of};
 use serde_json::{Value, json};
 
 use crate::support::engine::vectors;
@@ -32,5 +30,3 @@ fn the_served_project_is_named_by_address() {
         assert_eq!(got, c["out"], "{c}");
     }
 }
-
-
