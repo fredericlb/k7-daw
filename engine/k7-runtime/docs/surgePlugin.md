@@ -4,8 +4,7 @@
 Surge's own synthesizer compiled into the engine. It is the engine's one full synthesizer — three
 oscillators per scene over a dozen algorithms, two filters from forty models, waveshapers, twelve
 modulators and a routing matrix, two effect chains. Every other built-in instrument is a single
-voice (the eurorack modules, `eurorack.md`), a small subtractive (4OSC), a program written here
-(`faust.md`) or samples (`sfzPlugin.md`).
+voice (the eurorack modules, `eurorack.md`), a small subtractive (4OSC) or samples (`sfzPlugin.md`).
 
 ## Why Surge
 

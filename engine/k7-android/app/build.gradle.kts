@@ -152,29 +152,6 @@ val stageEngine by tasks.registering(Copy::class) {
     into(layout.buildDirectory.dir("engine-jni/arm64-v8a"))
 }
 
-// Faust's standard libraries, which `import("stdfaust.lib")` resolves at RUNTIME: from wherever the
-// engine's CMake fetched them — its cache names the folder — into the APK's assets. The app unpacks them.
-val faustLibsOut = layout.buildDirectory.dir("engine-assets/faust-libs")
-
-// The folder is found when the task RUNS: the cache naming it is written by buildEngine, and a Copy's
-// source is resolved while Gradle plans the build, before a fresh checkout has any cache to read.
-val stageFaustLibs by tasks.registering {
-    dependsOn(buildEngine)
-    outputs.dir(faustLibsOut)
-    doLast {
-        val cache = engineDir.resolve("build/android-arm64/CMakeCache.txt").readLines()
-        val dir = cache.firstOrNull { it.startsWith("STUDIO_FAUST_LIBS:") }?.substringAfter("=")
-        val folder = dir?.let(::File)
-        require(folder != null && folder.resolve("stdfaust.lib").isFile) {
-            "no Faust libraries at '$dir' — the faustlibraries submodule was not fetched with the engine"
-        }
-        val out = faustLibsOut.get().asFile
-        out.deleteRecursively()
-        out.mkdirs()
-        folder.listFiles { f -> f.name.endsWith(".lib") }.orEmpty().forEach { it.copyTo(out.resolve(it.name)) }
-    }
-}
-
 android.sourceSets["main"].assets.srcDir(layout.buildDirectory.dir("engine-assets"))
 
 // The page (web/: the engine tray, shown while no studio is connected), built by its workspace and staged the way `cap copy` would
@@ -260,7 +237,7 @@ android.sourceSets["main"].assets.srcDir(backendAssets)
 // The zip is already compressed: aapt must not deflate it again, and the app streams it out as it is.
 android.androidResources.noCompress += "zip"
 
-tasks.named("preBuild") { dependsOn(stageEngine, stageFaustLibs, stageShell, stageTermuxTools, stageBackend) }
+tasks.named("preBuild") { dependsOn(stageEngine, stageShell, stageTermuxTools, stageBackend) }
 
 // The Rust front as libk7_embed.so, cargo linking with this SDK's NDK at the app's minSdk (apps/k7/backend-rs/docs/embed.md).
 val frontDir = repoDir.resolve("apps/k7/backend-rs")

@@ -76,9 +76,6 @@ private:
         if (p.contains("presetSave")) p["presetSave"] = "";
         for (const char* f : kFileFields) file(p, f);
         sfz(p);
-        if (p.contains("faustFiles") && p["faustFiles"].is_object())
-            for (auto& [label, v] : p["faustFiles"].items())
-                if (v.is_string()) v = copied(v.get<std::string>());
         if (p.contains("rack") && p["rack"].is_array())
             for (auto& r : p["rack"]) file(r, "clip");
         if (p.contains("patternBanks") && p["patternBanks"].is_array() && !p["patternBanks"].empty())

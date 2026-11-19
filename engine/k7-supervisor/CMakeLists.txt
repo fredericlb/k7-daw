@@ -1,6 +1,6 @@
 # k7-supervisor — the engine machine's supervisor, a native program driven by the tray over NDJSON
 # on stdio. Its own project rather than a target of k7-runtime's: building it must never mean
-# building Tracktion, JUCE and Faust. See docs/supervisor.md.
+# building Tracktion and JUCE. See docs/supervisor.md.
 
 cmake_minimum_required(VERSION 3.24)
 

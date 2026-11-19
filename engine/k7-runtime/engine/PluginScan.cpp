@@ -8,7 +8,6 @@
 
 #include "EngineTypes.h"    // Tracktion/JUCE + the te/tt/fs aliases
 #include "ArpeggiatorPlugin.h"
-#include "FaustPlugin.h"
 #include "GraphDspPlugin.h"
 #include "MasterGainPlugin.h"
 #include "MixerPlugin.h"
@@ -260,8 +259,6 @@ std::vector<PluginInfo> builtInPlugins() {
 #endif
         // DSP described as DATA rather than compiled in (DspGraph.h): its parameters come from the description, so two graphs look different.
         e("DSP Graph", studio::GraphDspPlugin::xmlTypeName, "audioEffect", "filter"),
-        // The same idea with the compiler on THIS side: the module carries Faust source, and what this build does with it is docs/faust.md.
-        e("Faust", studio::FaustPlugin::xmlTypeName, "audioEffect", "utility"),
         // The same idea over the note stream; `midiEffect` is what files the module under transformers/ and puts it BEFORE the instrument.
         e("MIDI Graph", studio::MidiGraphPlugin::xmlTypeName, "midiEffect", "utility"),
         // A chord held down and played one note at a time — a note SOURCE, which no graph node can be (docs/arpeggiator.md).
@@ -307,7 +304,6 @@ void registerBuiltInPlugins(te::Engine& engine) {
     pm.createBuiltInType<studio::SurgePlugin>();
 #endif
     pm.createBuiltInType<studio::GraphDspPlugin>();
-    pm.createBuiltInType<studio::FaustPlugin>();
     pm.createBuiltInType<studio::MidiGraphPlugin>();
     pm.createBuiltInType<studio::ArpeggiatorPlugin>();
     pm.createBuiltInType<studio::MixerPlugin>();

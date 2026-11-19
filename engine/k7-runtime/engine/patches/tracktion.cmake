@@ -1,4 +1,4 @@
-# tracktion.cmake — the fixes Tracktion needs (its SamplerPlugin, its file-check queue, its NaN-only sanitising), applied at fetch time like faust.cmake.
+# tracktion.cmake — the fixes Tracktion needs (its SamplerPlugin, its file-check queue, its NaN-only sanitising), applied at fetch time.
 # The one thing a reader would get wrong: its update DOES try to reuse decoded audio, but only after decoding every sound anyway.
 
 include("${CMAKE_CURRENT_LIST_DIR}/../eurorack/patches/studio_replace.cmake")

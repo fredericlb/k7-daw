@@ -94,7 +94,7 @@ runtime stage fails the build when a library the binaries link is missing, so th
 at build time and not when the engine first starts.
 
 The compile is one `RUN`, with the two build folders and ccache as cache mounts: staging reads the
-Faust libraries out of the engine's build folder, which exists only inside that step. The step copies
+binaries out of the engines' build folders, which exist only inside that step. The step copies
 only `engine/k7-runtime`, `engine/k7-supervisor` and the staging script, so a push that touches none
 of them finds the compile in the registry cache (`cache:k7-runtime`, as `docs/images.md` describes
 for k7). A cold build is long. Both images carry the same stamp, which is why the

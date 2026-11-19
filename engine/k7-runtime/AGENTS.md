@@ -88,8 +88,6 @@ engine/                 library — the audio host (JUCE/Tracktion state lives h
                             no graph can be, since it INVENTS notes rather than editing them
   Arpeggiator.h             …and its clock and walk: JUCE-free and header-only, so tests/ has it in
                             the FAST binary, like TurntableLoop.h (docs/arpeggiator.md)
-  FaustPlugin.{h,cpp}       the same seam for a module written in Faust: it COMPILES the source
-                            with the Faust interpreter and runs it (docs/faust.md)
   PatternPlugin.{h,cpp}     a strudel lane, played HERE: its source evaluated in QuickJS, its notes and
                             its sample one-shots locked to the transport (docs/patternPlugin.md)
   PatternSchedule.h         …and the notes between its worker and the audio thread, by epoch. JUCE-free
@@ -110,7 +108,6 @@ engine/                 library — the audio host (JUCE/Tracktion state lives h
                               so a firmware header never shares a TU with JUCE. `studio_eurorack`
     patches/eurorack.cmake    the upstream bug fixed at fetch time (Clouds' silent stretch mode)
     patches/stmlib.cmake      …and stmlib's: utils/dsp.h's GCC-only __attribute__, which MSVC rejects
-  patches/faust.cmake       Faust's poly-dsp.h prints on the audio thread at every voice steal; silenced at fetch time
   patches/tracktion.cmake   Tracktion's SamplerPlugin re-decoded every rack sound on any edit, twice, once under the audio lock;
                             and an output pair per sound, for a tap routed apart (docs/tapOutputs.md);
                             and crill's __wfe(), which GCC on arm64 lacks (the Pi image, docs/pi-engine.md at the root)
@@ -118,7 +115,7 @@ engine/                 library — the audio host (JUCE/Tracktion state lives h
                             and the gain per key a kit's pad is set louder with (docs/sfzPlugin.md), and the
                             output per key a routed pad leaves by (docs/tapOutputs.md)
   patches/surge-fetch.cmake Surge XT at one commit, sparse and with only the submodules its core builds from
-  patches/archive-fetch.cmake a source assembled from pinned archives, its submodules' included — Tracktion with JUCE, Faust with its libraries
+  patches/archive-fetch.cmake a source assembled from pinned archives, its submodules' included — Tracktion with JUCE
   patches/surge.cmake       …and the four fixes being a subproject needs
     <Name>Plugin.{h,cpp}      named mu-<module>: MacroOscillator2 = mu-plaits, MacroOscillator =
                               mu-braids, Resonator = mu-rings, ModalSynthesizer = mu-elements,
@@ -243,7 +240,6 @@ before touching the audio callback, `applyFull`, or the build flags),
 `builtinParams.md`, `namPlugin.md`,
 `quickMaster.md` (why that one is compiled rather than a `jsdsp` graph, the allpass the three-way
 split needs, and what its ceiling really guarantees),
-`faust.md` (the interpreter factory, the polyphonic seam, and the one question left open),
 `sfzPlugin.md` (why sfizz, the C++17 island it is built as, and loading an instrument off the audio thread),
 `surgePlugin.md` (why Surge, which commit and which half of it, the fetch, the macros, and what it costs),
 `patternPlugin.md` (why the engine plays pattern lanes, why QuickJS, how a file's events are shared

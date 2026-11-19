@@ -609,18 +609,18 @@ void diff_track_reorder_forces_rebuild() {
     CHECK(diff(a, a).empty());
 }
 
-// A Faust program is part of its plugin's identity, digested in the key: an edit is a replace, the same text is nothing.
-void diff_faust_source_edit_is_replace() {
+// A DSP graph description is part of its plugin's identity, digested in the key: an edit is a replace, the same text is nothing.
+void diff_dsp_graph_edit_is_replace() {
     ProjectDoc a;
     {
         auto t = mkTrack("t1", "Synth");
-        auto p = mkPlugin("t1:f", "faust", "Faust");
-        p.faustDsp = "process = os.osc(440);";
+        auto p = mkPlugin("t1:f", "studio_dsp_graph", "DSP Graph");
+        p.dspGraph = "{\"nodes\":[1]}";
         t.plugins.push_back(p);
         a.tracks.push_back(t);
     }
     ProjectDoc b = a;
-    b.tracks[0].plugins[0].faustDsp = "process = os.osc(441);";
+    b.tracks[0].plugins[0].dspGraph = "{\"nodes\":[2]}";
 
     const auto d = diff(a, b);
     CHECK(hasKind(d, ChangeKind::PluginRemoved));
@@ -901,7 +901,7 @@ int main() {
     RUN(diff_track_inserted_mid_song_forces_rebuild);
     RUN(diff_track_added_as_sidechain_source_rewires);
     RUN(diff_track_reorder_forces_rebuild);
-    RUN(diff_faust_source_edit_is_replace);
+    RUN(diff_dsp_graph_edit_is_replace);
     RUN(diff_send_added_forces_rebuild);
     RUN(diff_send_level_is_in_place);
     RUN(diff_tap_routing_forces_rebuild);

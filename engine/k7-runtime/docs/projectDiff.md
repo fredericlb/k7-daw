@@ -15,12 +15,11 @@ produces an empty diff — the file says one thing and the engine plays another.
 type *or* a different name — one VST3 swapped for another, both `"vst3"` — reads as a replace
 rather than "the same plugin whose params drifted".
 
-**A Faust module's source, and a jsdsp module's GRAPH.** Both are built in the constructor — the
-program compiled, the nodes made and the PARAMS DECLARED from the graph. An edited module that
-reached the engine as "the same plugin" would keep running the old program under the old parameter
-names, and every value sent to a name the new one introduced would land nowhere, with nothing
-reporting a fault. The key carries each as a DIGEST — length and 64-bit FNV-1a — because it is
-rebuilt for every plugin on every apply, and a program can be tens of KB; `mustReplace` compares the
+**A jsdsp module's GRAPH.** It is built in the constructor — the nodes made and the PARAMS DECLARED
+from it. An edited module that reached the engine as "the same plugin" would keep running the old
+graph under the old parameter names, and every value sent to a name the new one introduced would land nowhere, with nothing
+reporting a fault. The key carries it as a DIGEST — length and 64-bit FNV-1a — because it is
+rebuilt for every plugin on every apply, and a graph can be tens of KB; `mustReplace` compares the
 full text of any pair whose keys match, so a collision is a replace and never an unheard edit.
 
 **A pattern lane's shape.** How a pattern picks and plays its events is fixed at construction (its

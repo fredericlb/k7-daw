@@ -274,7 +274,7 @@ void GraphDspPlugin::applyToBuffer(const te::PluginRenderContext& ctx)
     graph_->process(*ctx.destBuffer, ctx.bufferStartSample, ctx.bufferNumSamples,
                     scratch_.data(), (int)scratch_.size());
 
-    // A feedback loop with no saturator can run its state to Inf, which never decays: silenced here and the graph cleared next block, as Faust's is.
+    // A feedback loop with no saturator can run its state to Inf, which never decays: silenced here and the graph cleared next block.
     bool poisoned = false;
     for (int c = 0; c < ctx.destBuffer->getNumChannels(); ++c) {
         float* v = ctx.destBuffer->getWritePointer(c, ctx.bufferStartSample);

@@ -103,10 +103,8 @@ clears its state at the top of its next block — `docs/panic.md` has the rule a
 NAM. Clearing in place is not a glitch but a crash: the arpeggiator divides by its held count, and
 a stop zeroing it mid-block is an integer division by zero.
 
-**Nothing prints on the audio thread, including code we fetch.** Faust's `poly-dsp.h` writes to
-stderr on every voice steal, unconditionally; `engine/patches/faust.cmake` removes it at fetch time
-(`docs/faust.md`). A print there takes the `FILE` lock and a `write(2)`, and on an adopted engine's
-undrained pipe it blocks the callback for good.
+**Nothing prints on the audio thread, including code we fetch.** A print there takes the `FILE`
+lock and a `write(2)`, and on an adopted engine's undrained pipe it blocks the callback for good.
 
 **Locks.** `InputTuner` and `NamPlugin` both use `try_lock` and drop a block rather than wait —
 correct. No filter takes one: `juce::IIRFilter` is `IIRFilterBase<SpinLock>`, locking on every
@@ -280,7 +278,7 @@ A preset, a NAM model and cabinet, a platter's record and a second input are loa
 instance (`PluginReloaded`), not re-created, so a tail, a needle or a chain position survives the
 edit. Measured: a record swapped under a playing deck triples the level on cue, and a NAM model
 swapped under a playing amp keeps sounding, neither stopping the transport. Only what a constructor
-builds — a Faust program, a jsdsp graph, a pattern's shape — or a file DROPPED is a replace
+builds — a jsdsp graph, a pattern's shape — or a file DROPPED is a replace
 (`docs/projectDiff.md`).
 
 ## A rack edit decodes what changed, and nothing under the audio lock
@@ -403,8 +401,8 @@ The same pass is what gives a recorder added in place its ring.
 lapped while it reads, and the frames that fell behind are zeroed and counted, which is the one
 thing `damaged` promises (`docs/recorder.md`).
 
-A take is written by a thread of its own, `RecorderWriter`, so an apply that instantiates plugins or
-compiles Faust neither damages it nor waits on its disk; the ring holds ~21.8 s at 48 kHz against a
+A take is written by a thread of its own, `RecorderWriter`, so an apply that instantiates plugins
+neither damages it nor waits on its disk; the ring holds ~21.8 s at 48 kHz against a
 disk that stalls (`docs/recorder.md`).
 
 ## What the audio thread reads, and what it never lets through
@@ -418,7 +416,7 @@ disk that stalls (`docs/recorder.md`).
   reserve away and takes Tracktion's capacity in return.
 - **A NaN stops at `QuickMasterPlugin`, when a project places it**: it zeroes non-finite input
   before its biquads, which would otherwise latch it, and before the limiter, whose `jmax` and
-  `jlimit` both let it through. A Faust program's NaN is zeroed at its output and the instance
+  `jlimit` both let it through. A jsdsp graph's NaN is zeroed at its output and the instance
   cleared on the next block.
 - **±Inf stops at every plugin's output, like NaN.** Tracktion sanitises each plugin's output, but
   for NaN only, so an Inf from a gain, a feedback loop or an external plugin flowed on and turned
@@ -433,10 +431,10 @@ disk that stalls (`docs/recorder.md`).
 
 ## Cost on the message thread
 
-- **A plugin's identity carries a Faust program or a jsdsp graph as a digest** — length and 64-bit
+- **A plugin's identity carries a jsdsp graph as a digest** — length and 64-bit
   FNV-1a — rather than verbatim, since the key is rebuilt for every plugin on every apply, the
   `tracks` path included. A pair sharing a key is compared in full, so a collision is a replace and
-  never an unheard edit (`diff_faust_source_edit_is_replace`).
+  never an unheard edit (`diff_dsp_graph_edit_is_replace`).
 - **A `PluginParamChanged` carries the plugin's id**, not a copy of its whole `PluginDoc` — a drag
   sends one change per parameter.
 - **The editor autosave's completeness check reuses one probe instance per plugin** instead of
@@ -459,10 +457,9 @@ disk that stalls (`docs/recorder.md`).
 - **A plugin hung inside `processBlock` ends the process instead of the message thread**: the device
   watchdog no longer reopens over a callback that is still inside, which would block on the lock it
   holds; past ten seconds the engine exits for the supervisor to restart it (`docs/audioDevice.md`).
-- **A plugin whose own state goes non-finite recovers by itself**: Faust and a jsdsp graph clear
-  their state on the next block, an amp model is reloaded off the audio thread (`docs/namPlugin.md`).
-- **No file header sizes an allocation unchecked**: a cabinet IR past ten seconds, a Faust soundfile
-  past ten minutes or eight channels, a record past six hours, are each refused before a buffer or a
+- **A plugin whose own state goes non-finite recovers by itself**: a jsdsp graph clears
+  its state on the next block, an amp model is reloaded off the audio thread (`docs/namPlugin.md`).
+- **No file header sizes an allocation unchecked**: a cabinet IR past ten seconds, a record past six hours, are each refused before a buffer or a
   cache file is sized from them.
 - **`--decode` refuses a header it cannot trust** — no channel or more than 32, a rate past
   768 kHz, longer than twelve hours — before a byte of audio is written.
@@ -487,7 +484,7 @@ disk that stalls (`docs/recorder.md`).
   after JUCE, either is a crash.
 - **The pattern worker is waited for, never killed**: a thread killed inside its lock leaves it
   locked for good, and its work is bounded — a 250 ms script deadline, capped sample decodes.
-- **The mixer and the platter ramp their gain** across a block rather than stepping it, and Faust and
+- **The mixer and the platter ramp their gain** across a block rather than stepping it, and
   the eurorack modules size their buffers for the largest block a device delivers, rather than
   dropping a bigger one whole.
 - **A graph's biquad and delay take a finite value or a fallback**: `jlimit` lets a NaN through, and a
@@ -520,8 +517,6 @@ cannot be written. Every format renders as it did, within the 16-bit rounding th
 
 Open from the stability audit of 2026-10-11, each verified in the code and none yet fixed:
 
-- **A Faust compile that never returns** hangs the message thread: libfaust's timeout does nothing in
-  a library build. A crash while loading is answered (`docs/crashes.md`); a hang is not.
 - **Parameter lists and orphan windows load plugin binaries in the engine**, one thread per request
   and no cap, including a plugin whose scan failed, from a path the client names.
 - **JUCE's own fallback when an interface is unplugged goes unobserved**: armed tracks record
