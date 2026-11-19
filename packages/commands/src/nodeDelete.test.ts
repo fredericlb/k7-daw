@@ -120,5 +120,4 @@ describe("node delete", () => {
     expect(logs.join(" ")).toMatch(/no node 'nope'/);
     expect(chains()).toBe(before);
   });
-
 });
