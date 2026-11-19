@@ -1,0 +1,6 @@
+// The set list of the turntables demo: two short beats, a house loop at 124 BPM and a breakbeat at 128.
+title("Turntables demo")
+items([
+  "turntables-demo.k7/records/house-124.mp3",
+  "turntables-demo.k7/records/breaks-128.mp3",
+])
