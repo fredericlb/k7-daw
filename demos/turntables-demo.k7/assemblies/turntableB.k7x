@@ -1,0 +1,26 @@
+// turntableB — deck B's nodes, drawn as one appliance.
+//
+// This file changes NOTHING about the sound: it says which of the graph's nodes are one
+// box and nothing else. Its plugs and its knobs come from the template it names, which
+// lives in the account's library — see packages/song/docs/assemblies.md.
+uses("@k7-core/turntable")
+members({
+  deck: "deckB",
+  platter: "platterB",
+  tempo: "tempoB",
+  trim: "trimB",
+  eq: "eqB",
+  filter: "filterB",
+  level: "levelB",
+  echo: "echoB",
+  fade: "fadeB",
+  cue: "cueB",
+  stemDrums: "stemDrumsB",
+  platterDrums: "platterDrumsB",
+  stemBass: "stemBassB",
+  platterBass: "platterBassB",
+  stemOther: "stemOtherB",
+  platterOther: "platterOtherB",
+  stemVocals: "stemVocalsB",
+  platterVocals: "platterVocalsB",
+})

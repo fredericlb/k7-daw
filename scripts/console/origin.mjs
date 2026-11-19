@@ -1,5 +1,5 @@
 // origin.mjs — which pages may open the console's WebSocket: its own origin, loopback on its port, and STUDIO_CONSOLE_ORIGINS.
-// It stops another site open in a LAN browser from driving the shells; it is no guard against a LAN peer, who sends any Origin. See docs/remote.md.
+// It stops another site open in a LAN browser from driving the shells; it is no guard against a LAN peer, who sends any Origin.
 
 export const CONSOLE_ORIGIN = "https://console.priv.frediver.se";
 

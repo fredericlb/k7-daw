@@ -17,7 +17,7 @@ release of the tray is shown beside it, as on the settings page (`GET /api/local
 
 k7 is GPLv3, and the engine links JUCE, which is AGPLv3. The AGPL asks that whoever uses the
 program over a network — the server's own engine, played from a browser — be offered its
-complete source. The link to `https://github.com/fredericlb/k7` on this page is that offer, so
+complete source. The link to `https://github.com/fredericlb/k7-daw` on this page is that offer, so
 it is drawn on every instance, the hosted one first.
 
 ## The notices are BUILT, not checked in

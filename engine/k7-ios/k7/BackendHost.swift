@@ -174,50 +174,6 @@ final class BackendHost {
         return roots
     }
 
-    static let container = "iCloud.se.frediver.k7.daw"
-    private let resolved = NSLock()
-    private var resolvedOnce = false
-    private var legacy: URL?
-
-    /// The container's `Documents/` when it still holds workspaces for the front to move out, else nil; asked once, off the main thread.
-    /// The container is read for that move alone: workspaces live on the device and travel by git (apps/k7/backend-rs/docs/roam.md).
-    private func legacyDocuments() -> URL? {
-        resolved.lock()
-        defer { resolved.unlock() }
-        if resolvedOnce { return legacy }
-        resolvedOnce = true
-        // The simulator's and a signed-out device's answer is nil.
-        guard let url = FileManager.default.url(forUbiquityContainerIdentifier: Self.container) else { return nil }
-        let dir = url.appendingPathComponent("Documents", isDirectory: true)
-        let held = (try? FileManager.default.contentsOfDirectory(atPath: dir.path)) ?? []
-        guard !held.isEmpty else { return nil }
-        requestDownloads(in: dir)
-        log.info("iCloud container holds \(held.count) item(s): the front moves the workspaces out of \(dir.path, privacy: .public)")
-        legacy = dir
-        return dir
-    }
-
-    /// Asks iCloud for every file this device has evicted, so a later start finds the workspaces whole; a move never waits for it.
-    private func requestDownloads(in dir: URL) {
-        let fm = FileManager.default
-        let keys: [URLResourceKey] = [.ubiquitousItemDownloadingStatusKey]
-        guard let walk = fm.enumerator(at: dir, includingPropertiesForKeys: keys) else { return }
-        var asked = 0
-        for case let url as URL in walk {
-            var target = url
-            let name = url.lastPathComponent
-            if name.hasPrefix("."), name.hasSuffix(".icloud") {
-                target = url.deletingLastPathComponent().appendingPathComponent(String(name.dropFirst().dropLast(7)))
-            } else if let status = (try? url.resourceValues(forKeys: Set(keys)))?.ubiquitousItemDownloadingStatus, status != .current {
-                target = url
-            } else {
-                continue
-            }
-            if (try? fm.startDownloadingUbiquitousItem(at: target)) != nil { asked += 1 }
-        }
-        if asked > 0 { log.info("asked iCloud to download \(asked) evicted file(s) of the container") }
-    }
-
     private var bundle: URL { Bundle.main.resourceURL!.appendingPathComponent("backend", isDirectory: true) }
 
     /// Generated once and kept, so a session survives a restart.
@@ -248,8 +204,6 @@ final class BackendHost {
         for (key, value) in Self.table["dirs"] as? [String: String] ?? [:] {
             env[key] = root.appendingPathComponent(value).path
         }
-        // What an earlier version left in the iCloud container, which the front moves into the account's own folder.
-        if let documents = legacyDocuments() { env["K7_ICLOUD_LEGACY"] = documents.path }
         // The hub copies the library from the bundle the first time it has no folder for it.
         if let library = Self.table["library"] as? String {
             env["STUDIO_LIBRARY_SEED"] = "k7-core=" + bundle.appendingPathComponent(library).path

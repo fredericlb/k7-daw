@@ -150,10 +150,10 @@ Numbered from 900; a row marked DEPARTS differs from the spec's row or from the 
 
 | # | decision | why |
 |---|---|---|
-| 917 | OneDev: one push to `ci/linux/<branch>` runs `rust checks` (Linux) and `rust checks windows` (the `ci/**` trigger); no `ci/e2e/` push, the by-hand bed is that job's script, on the Mac | one push, the jobs watched, the branch deleted after |
-| 918 | Decision 761's Windows figure is read from `rust checks windows`' `disk_cost` output. A first pass under 5 % of a compile on Windows closes it with no memo; above, the memo is built in a follow-up. The phone's figure is in the Risks (about 19 ms per 2,000 folders) | the Risk row |
+| 917 | A branch is checked on the Mac (`gate.sh`, `bed.sh`); no CI job runs a branch | the checks are the developer's, and Windows is set aside |
+| 918 | Decision 761's Windows figure is read from a Windows run's `disk_cost` output. A first pass under 5 % of a compile on Windows closes it with no memo; above, the memo is built in a follow-up. The phone's figure is in the Risks (about 19 ms per 2,000 folders) | the Risk row |
 | 919 | No phone bed for 2m: 914 means no phone runs the native compile yet, and the figure of 918's phone half is in hand | a switch inert on the phone has nothing to measure there |
-| 920 | The merge: `main` into the branch (generated files by `npm run rebuild:generated`), `npm run ci:local` and the Rust checks, the `ci/` push of 917, then a `--no-ff` merge in a detached worktree of `main` | the way every step merged |
+| 920 | The merge: `main` into the branch (generated files by `npm run rebuild:generated`), `npm run ci:local` and the Rust checks, then a `--no-ff` merge in a detached worktree of `main` | the way every step merged |
 
 ### The builder's own (941 on)
 

@@ -24,9 +24,9 @@ Every script in the root `package.json`, grouped by purpose. Run them from the r
 
 | Script | Runs | Blocking? |
 |---|---|---|
-| `lint` | `biome check .` | Yes (GitHub `k7` `lint` job, OneDev). |
+| `lint` | `biome check .` | Yes (GitHub `k7` `lint` job). |
 | `lint:fix` | `biome check --write .` | Applies Biome's safe fixes and formatting. |
-| `lint:bytes` | `node scripts/check-source-bytes.mjs` | Yes (GitHub `k7` `lint` job, OneDev). |
+| `lint:bytes` | `node scripts/check-source-bytes.mjs` | Yes (GitHub `k7` `lint` job). |
 | `lint:docs` | `node scripts/check-doc-links.mjs` | No: run it before pushing. |
 | `lint:comments` | `node scripts/check-comments.mjs` | No: reports a backlog. |
 | `lint:version` | `node scripts/check-version.mjs` | Yes (GitHub `k7` `lint` job). Every private workspace carries the root `package.json`'s version; `--set X.Y.Z` writes every copy, `--tag vX.Y.Z` also checks a release tag. |
@@ -47,9 +47,7 @@ Each is described in [Lints and conventions](./06-lints-and-conventions.md).
 
 | Script | Runs | Purpose |
 |---|---|---|
-| `vscode` | `node scripts/vscode.mjs` | VS Code in the browser on port 8798. |
 | `console` | `node scripts/console/server.mjs` (after installing its own dependencies) | Shared terminal tabs on port 8797. |
-| `remote:install`, `remote:uninstall`, `remote:status` | `node scripts/remote.mjs …` | Windows logon tasks that keep `vscode` and `console` running. |
 
 ## Workspace scripts worth knowing
 

@@ -50,7 +50,7 @@ what it shares is made its own:
 | a server's `/api/files` answering 410, the libraries and the hello kept, the cut resolved in the libraries' context and making no account | `files_hub.rs`; the door's files prefixes in `routes/files/mod.rs`'s `is_door_path` test (Rust) |
 | `/api/ready`: loopback by Host, its volumes and the hub's starts | `ready.spec.ts` |
 
-| family (phase 6.5, `docs/rust-phase6-plan.md`) | spec |
+| family (phase 6.5) | spec |
 |---|---|
 | the built page, its fallback and Express's 404, the root domain's page, the `/api` guard's bearer, the seam's TypeScript half; byte for byte against `CONFORMANCE_UPSTREAM` | `lastRoutes.spec.ts` |
 

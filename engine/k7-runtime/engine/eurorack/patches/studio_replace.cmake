@@ -3,7 +3,7 @@
 #
 # And it is a no-op when the edit is already there. The patch step runs AGAIN on a source it has
 # already patched whenever its command changes, and the command names this script by an absolute
-# path — which, on CI, holds the build's own number (onedev-build-16-276-1). Every CI run re-patches
+# path — which, on CI, holds the build's own number. Every CI run re-patches
 # the kept sources, so `to` must be recognisable: never a bare token that the file holds anyway.
 # The edit is looked for FIRST: a `to` that still holds its `from` would otherwise be applied once per run.
 

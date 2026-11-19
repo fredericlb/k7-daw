@@ -37,5 +37,4 @@ eval "$(node engine/scripts/sccache.mjs agent --export)"
 (cd apps/k7/backend-rs && cargo test --locked --target-dir "${K7_VECTORS_TARGET:-$HOME/.cache/k7-vectors}" -p k7-file-service --test all -- vectors rig::)
 # The frozen vectors replayed through the WebAssembly module, over a Vfs and a temp folder.
 npm run --silent test:edit-replay -w @studio/k7-wasm -- ${K7_EDIT_TARGET:+--target-dir "$K7_EDIT_TARGET"}
-bash scripts/agent/proof.sh put vectors
 echo "vectors: committed vectors match the generator"

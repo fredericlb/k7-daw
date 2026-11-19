@@ -1,0 +1,108 @@
+// Each deck through its own trim, EQ, filter, LEVEL, echo and fade, and the two meeting
+// at `MIX`. That order is a channel strip's, and every step of it is explained below.
+//
+// The fade is what a crossfader is here, and it is TWO modules rather than one because
+// a module's second port is wired as a sidechain, and a sidechain reads a track only
+// while that track also reaches an audible output. A deck feeding nothing but a
+// crossfade would therefore be heard BESIDE it, raw, with nothing able to take it back:
+// not a mute, not a disconnect, not a routing — all four were measured, see
+// engine/k7-runtime/docs/sidechain.md. One input each, and the blend at the mixer.
+//
+// Each fade's `Level` IS its lane's gain, so its panel reads true on its own: 0 silent, 1
+// full. The desk drives the two in MIRROR — one control, deck A inverted — which is said
+// in `surfaces/desk.k7x` rather than by either module knowing about the other.
+//
+// The names here are NODES, from nodes/ — not modules. The modules themselves
+// live in the médiathèque and are not copied in.
+//
+// The EQ and the filter sit AFTER the tempo and BEFORE the fade, which is where a
+// mixing desk puts them: a channel strip is shaped on its way to the fader, so cutting a
+// deck's bass is a property of that deck and not of the blend.
+//
+// Filter LAST of the three. It is the effect a hand throws — the one you want on top of
+// whatever the EQ has already done, rather than equalised afterwards.
+//
+// THE TRIM IS FIRST, and it is first because a deck is FIVE lanes: putting it on the
+// deck's own lane would leave it doing nothing at all on a separated record, whose four
+// stems play instead of the disc. Being the chain's head it trims all five together,
+// which is what an input gain is for — two records cut ten years apart do not arrive at
+// the same level, and nothing here normalises loudness.
+//
+// THE LEVEL IS THE CHANNEL FADER, and it is a different control from the crossfade below
+// it: most of a transition is made at the channel, the crossfader being for hard cuts.
+// In DECIBELS, unlike the fade — a level is read in dB, a crossfade position is not.
+//
+// THE ECHO IS AFTER THE LEVEL, which is the whole of what makes an echo-out possible:
+// cut the channel and the delay line keeps ringing, because what you cut was its INPUT
+// and not its output. Before the fader it would be cut with everything else.
+//
+// …and the headphone tap stays on `filter`, ahead of both — that is what pre-fade listen
+// means. Neither the channel fader nor the crossfader may take a deck out of your ears.
+//
+// Nothing about two is fixed. A third deck is a third lane, a third tempo and a second
+// meeting point; the desk reads whatever is here. See packages/song/docs/ports.md.
+//
+// EACH DECK IS FIVE LANES: the record, and one per separated stem. Only one side plays —
+// a separated song leaves the record's lane empty and the four parts SUM back to it; an
+// unseparated one is the other way round. How loud each part plays is its PLATTER's own
+// gain: 0 drops the instrument, 1 is as it was cut, 2 doubles it.
+// See packages/song-schema/docs/stems.md.
+//
+// Five feeders is what makes `trim*` a MEETING POINT, and a meeting point breaks a run:
+// the trim, the EQ, the filter and the fade become a chain of their own — a bus — and
+// each of the five lanes reaches it as a send. The parts must sum BEFORE the EQ, because
+// a deck's strip equalises what it sends to the fader and not each instrument apart.
+//
+// Both fades land on `MIX`, the mixer's sum, and `MIX -> OUT` is the run out to the
+// interface — the MASTER CHAIN. A module named on that line processes the whole blend,
+// which on a set is where a limiter belongs. `OUT` carries the output level as
+// its `Volume`.
+
+modules({
+  deckA: ["platterA"],
+  platterA: ["tempoA"],
+  tempoA: ["trimA"],
+  stemDrumsA: ["platterDrumsA"],
+  platterDrumsA: ["trimA"],
+  stemBassA: ["platterBassA"],
+  platterBassA: ["trimA"],
+  stemOtherA: ["platterOtherA"],
+  platterOtherA: ["trimA"],
+  stemVocalsA: ["platterVocalsA"],
+  platterVocalsA: ["trimA"],
+  trimA: ["eqA"],
+  eqA: ["filterA"],
+  filterA: ["levelA", "cueA"],
+  cueA: ["CUE"],
+  levelA: ["echoA"],
+  echoA: ["fadeA"],
+  fadeA: ["MIX"],
+  deckB: ["platterB"],
+  platterB: ["tempoB"],
+  tempoB: ["trimB"],
+  stemDrumsB: ["platterDrumsB"],
+  platterDrumsB: ["trimB"],
+  stemBassB: ["platterBassB"],
+  platterBassB: ["trimB"],
+  stemOtherB: ["platterOtherB"],
+  platterOtherB: ["trimB"],
+  stemVocalsB: ["platterVocalsB"],
+  platterVocalsB: ["trimB"],
+  trimB: ["eqB"],
+  eqB: ["filterB"],
+  filterB: ["levelB", "cueB"],
+  cueB: ["CUE"],
+  levelB: ["echoB"],
+  echoB: ["fadeB"],
+  fadeB: ["MIX"],
+  MIX: ["OUT"],
+})
+
+// Heard through the bus ONLY — see scaffoldSet.ts for why this is not optional.
+bypassed(["deckA", "stemDrumsA", "stemBassA", "stemOtherA", "stemVocalsA", "deckB", "stemDrumsB", "stemBassB", "stemOtherB", "stemVocalsB"])
+
+// The strips, for the SAME reason and NOT the same word: each one now feeds two buses (the
+// fade and the cue), so its own dry path would reach the master unfaded. `bypassed` cannot say
+// this — it would ALSO turn the EQ off, the chain being named after its first module. See
+// packages/song/docs/busOnly.md.
+bus_only(["trimA", "trimB"])

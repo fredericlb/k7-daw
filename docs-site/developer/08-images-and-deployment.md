@@ -1,21 +1,18 @@
 # Images, deployment and versioning
 
-The server side of k7 ships as two Docker images built from this repository, run by
-`docker/docker-compose.yml` behind an external Traefik. k7 itself runs on devices, so the k7 image only
+The server side of k7 ships as one Docker image built from this repository, run by
+`docker/docker-compose.yml` behind an external Traefik. k7 itself runs on devices, so the image only
 serves `k7.rocks` (the root site, the downloads page and the update feeds) and `docs.k7.rocks` (this
-documentation); its `OIDC_*` and `AUTH_ADMIN_GROUPS` variables feed the Express sign-in code kept for a
-later rework (`docs/inventaire.md`).
+documentation).
 
 | Image | Dockerfile | Registry name |
 |---|---|---|
-| k7 web app: the backend and the built frontend in one Node process | `apps/k7/docker/Dockerfile` | `dev.frediver.se/frediverse/k7/k7-webapp` |
-| Server engine: `k7-runtime` and `k7-supervisor` | `engine/docker/Dockerfile` | `dev.frediver.se/frediverse/k7/k7-runtime` |
+| k7 web app: the backend and the built frontend | `apps/k7/docker/Dockerfile` | `dev.frediver.se/frediverse/k7/k7-webapp` |
 
-Both build with the repository root as context:
+It builds with the repository root as context:
 
 ```bash
 docker build -f apps/k7/docker/Dockerfile --build-arg APP_VERSION=dev .
-docker build -f engine/docker/Dockerfile .
 ```
 
 `.dockerignore` keeps `node_modules`, `dist`, `.git`, `.claude`, `env.yaml`, logs, Storybook output
@@ -50,49 +47,20 @@ Runtime settings:
 The image starts from a plain Node image and has no nginx: the backend serves
 the SPA itself.
 
-## The server engine image
-
-`engine/docker/Dockerfile`:
-
-- **`build`** (`node:24-bookworm`): installs the C++ toolchain, Ninja, ccache and the JUCE Linux
-  dependencies; copies only `engine/k7-runtime`, `engine/k7-supervisor` and
-  `engine/scripts/stageEngine.mjs`; builds both with the `release-gcc` preset (engine tests off,
-  supervisor target only) in one `RUN` with cache mounts for both build folders and ccache; stages the
-  binaries into `/opt/k7` with `stageEngine`. `BUILD_JOBS` sets the parallelism (default: cores minus two).
-- **`runtime`** (`debian:bookworm-slim`): `tini`, PulseAudio and ALSA's pulse plugin, a few shared
-  libraries. The build fails if `ldd` reports a missing library. Runs as an unprivileged `k7` user
-  (PulseAudio refuses root outside system mode), with `STUDIO_HOME=/engine-home` as a volume and
-  `STUDIO_AUDIO_TO_BROWSER=1`.
-
-`engine/docker/entrypoint.sh` starts PulseAudio with a 48 kHz stereo null sink named `k7` and then
-the supervisor as the command-line engine, with its config in the home volume. `engine/docker/asound.conf`
-routes ALSA to PulseAudio.
-
 ## The compose file
 
-`docker/docker-compose.yml` runs three services on an external `traefik` network. Copy
-`docker/.env.example` to `docker/.env`, fill it in, and run `docker compose up -d`.
-
-| Service | Image | Notes |
-|---|---|---|
-| `k7` | `k7-webapp:${APP_VERSION}` (required) | Routed by Traefik for `Host(K7_DOMAIN)`, `Host(DOCS_DOMAIN)`, `Host(LEGACY_DOMAIN)`, `Host(PL8_DOMAIN)` and `Host(K7_ALIAS_DOMAIN)` (defaults `app.k7.rocks`, `docs.k7.rocks`, and the former hosts `st0.app`, `play.st0.app`, `k7.st0.app`) on port 8789, TLS through `TRAEFIK_CERTRESOLVER`. Volumes `data`, `library`, `workspaces`. |
-| `engine` | `k7-runtime:${APP_VERSION}` (required) | No published port and no Traefik route. Registers at `http://k7:8789` over the compose network (`STUDIO_REGISTRY_URL`), named `ENGINE_NAME`, with every sampled instrument (`STUDIO_INSTRUMENTS=all`). Volume `engine-home`. |
-
-Environment, through a YAML anchor: `SESSION_SECRET` (required: compose refuses to start without
-it), `COOKIE_DOMAIN`, `TRUSTED_ORIGINS` and the `OIDC_*` variables. They sign and verify the
-`studio.sid` cookie, which k7 mints.
-
-Further `k7` variables:
+`docker/docker-compose.yml` runs two services on an external `traefik` network: `k7` and `autoheal`,
+which restarts `k7` when its healthcheck says unhealthy. Copy `docker/.env.example` to `docker/.env`,
+fill it in, and run `docker compose up -d`; later deploys go through `docker/deploy.sh <APP_VERSION>`.
 
 | Variable | Purpose |
 |---|---|
-| `API_TOKEN_SECRET` | Signs the bearer tokens; unset derives one from `SESSION_SECRET`. |
-| `AUTH_ADMIN_GROUPS` | OIDC groups that edit the shared libraries. |
-| `RENDER_KEY` → `STUDIO_RENDER_KEY` | Shared with the `engine` service: an engine presenting it on the tunnel becomes k7's render machine, since the web image has no engine binary. Unset, k7 renders only on an account's own engine. |
-| `STUDIO_MEDIATEK=/library`, `STUDIO_FILES_ROOT=/workspaces` | Fixed paths onto the volumes. |
+| `SESSION_SECRET` | Required: compose refuses to start without it. At least 32 characters. |
+| `OIDC_ISSUER`, `OIDC_CLIENT_ID` | Required, though nobody signs in on this host: the front refuses to start without them. |
+| `APP_RELEASE_TOKEN` | The bearer a developer publishes the apps' builds with; empty refuses every upload. |
+| `DOCS_DOMAIN`, `SITE_DOMAIN`, `TRAEFIK_CERTRESOLVER` | The two Traefik routers: the documentation host, and the root domain with `www.`. |
 
-`COOKIE_DOMAIN` is for production only: setting it forces `Secure` and `SameSite=None` cookies,
-which browsers drop over plain http.
+The `data` volume holds the published builds and the prefs.
 
 ## The version and the stamp
 
@@ -103,7 +71,7 @@ copies and `node scripts/check-version.mjs --set X.Y.Z` writes them all. See `do
 The image's stamp is computed as `YY.MMDDHHmm` in the Europe/Paris time
 zone, for example `26.10161432`. It is:
 
-- passed as `--build-arg APP_VERSION=<stamp>` to the web image, which sets `VITE_APP_VERSION` for the
+- passed as `--build-arg APP_VERSION=<stamp>` to the image, which sets `VITE_APP_VERSION` for the
   frontend build and `APP_VERSION` in the runtime stage. `apps/k7/frontend/src/version.ts` exports
   `VERSION` as `<version> (<stamp>)` (`"dev"` for the stamp when unset), and the home sidebar shows
   it as the tooltip of the `k7` wordmark (`apps/k7/frontend/src/projects/HomeSidebar.tsx`);
@@ -114,8 +82,7 @@ Images are first pushed under the commit hash only. The stamp and `:latest` are 
 `k7.yml` has passed for that commit (and the publish fails if it never ran), so nothing deployable
 points at an untested commit. A `vX.Y.Z` tag must equal the root version; its run adds the stamp
 and `:X.Y.Z` and leaves `:latest` to `main`. A deploy sets `APP_VERSION` in `docker/.env` to a
-version, a stamp or a commit hash — compose refuses to start without it — and it applies to both
-the web and the engine image.
+version, a stamp or a commit hash — compose refuses to start without it — and it applies to the image.
 
 The backend serves the frontend shell with `Cache-Control: no-cache` and the hashed files under
 `assets/` as `public, max-age=31536000, immutable`, so a new deployment is picked up on the next page

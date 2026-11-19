@@ -1,0 +1,12 @@
+// Le plateau de la platine A — le disque lui-même.
+//
+// C'est la SOURCE de cette lane : elle ne prend pas d'entrée et fabrique son son toute seule.
+// Avant, elle n'était déclarée nulle part — le pupitre injectait ce plugin dans le document au
+// moment de l'envoi, donc la vue chaînes ne montrait rien avant le tempo.
+//
+// LE DISQUE N'EST PAS ICI, et c'est délibéré. Il est choisi en direct, il change dix fois par
+// soirée, et l'écrire dans le projet reviendrait à commiter ce qu'on jouait ce soir-là. Le
+// pupitre le pose sur le champ `deckFile` du document, en même temps que la vitesse.
+//
+// `Rate: 0` est donc l'état au repos : un plateau qu'on ouvre est à l'arrêt.
+extends("@meta/audio/turntable")

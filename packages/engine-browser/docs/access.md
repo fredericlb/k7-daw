@@ -105,8 +105,8 @@ offers none, and the probes a page makes for an engine it DRIVES — `wsUrlFor`,
 race it (`probeEngines`' `claim`). Offering it earlier buys nothing and costs a 403 per engine per
 look, which is console noise in the way of the errors worth reading.
 
-Two more are dropped instead of raced, because neither can answer. k7's own `engine` service lists
-its container's addresses and no browser reaches one (`docs/server-engine.md`), so a `server` engine
+Two more are dropped instead of raced, because neither can answer. A `server` engine lists
+its container's addresses and no browser reaches one, so it
 is offered the relay alone. And a loopback address that refused is left alone for two minutes: the
 page's own machine is the one thing it can learn without asking the server, and the same question 15
 seconds later has the same answer. It is offered again once that window closes — the price being that

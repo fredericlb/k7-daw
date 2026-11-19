@@ -88,7 +88,7 @@
   "commandBar.recent": "Run lately",
   "commandBar.starter": "A place to start",
   "engine.instrumentMissing": "This module needs the sampled instrument “{instrument}”, which is not on the engine's machine. Download it where the engine runs: the Downloads section of this machine's engine page, opened from the k7 tray, or of Settings on the phone; or list it under “instruments” in the command-line engine's config file.",
-  "startup.loading": "Loading k7…",
+  "startup.loading": "Loading K7 DAW…",
   "startup.signingIn": "Checking your sign-in…",
   "startup.files": "Reaching your files…",
   "startup.opening": "Opening the project…",

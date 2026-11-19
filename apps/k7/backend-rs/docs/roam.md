@@ -1,7 +1,6 @@
-# The list of workspaces and the iCloud container
+# The list of workspaces
 
-What roams between a person's Apple devices besides git: the list of the workspaces they added, and, once, the move of the
-workspaces an earlier version left in the iCloud container. The decisions of what travels how are
+What roams between a person's Apple devices besides git: the list of the workspaces they added. The decisions of what travels how are
 `docs/project-sync-plan.md`; the Apple side is `engine/k7-runtime/docs/ios.md`. The crate is `k7-roam`, the route is
 `routes/files/service/native/git_roam.rs`.
 
@@ -21,15 +20,8 @@ workspaces an earlier version left in the iCloud container. The decisions of wha
 | the sweep runs on every read of the route, after a connect and a clone, and after any write of the workspaces' routes, on a blocking thread | libgit2 reads each workspace's remote; the answer to the page never waits for the writes after an act |
 | Examples is never listed | every device has its own copy of the demos |
 | the route answers `{available, entries, here}`: the live entries, and the ids this device holds | the page decides what is offered (a remote, not here); the host stays free of screens |
-| the container is moved out at an account's start, before Examples is stocked, from `K7_ICLOUD_LEGACY` (the container's `Documents/`, set by Swift only when it holds anything) | the account's folder is known there, and Examples then lands in the folder the demos are mirrored into |
-| a workspace moves by `rename`; when that fails it is copied into a scratch folder beside the target, and compared (the same entries, the same sizes, links as links), and a git repository must read every object, then it is renamed into place and the original deleted | a rename across volumes fails; a half-copied workspace must never take the name of a whole one |
-| a name already in the folder, a file that is a placeholder (`.<name>.icloud`) or dataless, and a failed copy or check each leave the container's folder alone and say so in the log | the person's data is deleted only after its copy is proved, and never replaces another |
-| a container copy that cannot be fully removed after a good move is reported as left over, and the next start finds the name taken and touches neither | two copies are the worst case, and neither is damaged |
-| the capture's markers (`.active-projects/<name>`) move one by one, only where the device has none of that name | a marker is the device's own record of which project is active |
-| a `.git` that is a link to `.git.nosync` is made a real folder again, on any open and in the move (`k7-git`'s `gitlink.rs`) | a workspace converted by an earlier version must open as an ordinary repository |
 
 ## Tests
 
-`k7-roam`'s unit tests cover the encoding, the id, the tombstone rules, the sweep and the callbacks; `tests/container.rs` the
-move, with a seam that fails a rename, a file's copy or a removal; `k7-git`'s `tests/gitlink.rs` the link; the route's test is
+`k7-roam`'s unit tests cover the encoding, the id, the tombstone rules, the sweep and the callbacks; the route's test is
 `tests_roam.rs` in `k7-front`.

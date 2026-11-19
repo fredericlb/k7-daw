@@ -1,7 +1,7 @@
 {
   "name": "studio-console",
   "private": true,
-  "description": "The shared terminals at console.priv.frediver.se — Windows only, outside the workspace (docs/remote.md).",
+  "description": "The shared terminals at console.priv.frediver.se — Windows only, outside the workspace.",
   "type": "module",
   "dependencies": {
     "@xterm/addon-fit": "^0.10.0",

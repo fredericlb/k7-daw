@@ -8,7 +8,7 @@ The decisions of how a workspace travels between devices and people. One mechani
 | iCloud Keychain | the device's SSH key, so one public key on the host serves every Apple device | Apple, automatically |
 | iCloud key-value store | the list of workspaces the person added: a name and a git remote each, never a file | Apple, automatically |
 
-Android, Windows and Linux have git only. The work order is `project-sync-brief.md` (rows 3600 to 3719).
+Android, Windows and Linux have git only.
 
 ## What a repository is
 

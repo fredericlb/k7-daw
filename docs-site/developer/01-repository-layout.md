@@ -1,6 +1,6 @@
 # Repository layout
 
-The `studio` repository holds k7 and everything it is built from: the web app, its backend, the
+The `k7-daw` repository (K7 DAW) holds k7 and everything it is built from: the web app, its backend, the
 shared TypeScript packages, the C++ engine and its supervisor, the tray and the phone shells, and
 the module library k7 ships with. It is one npm workspace tree driven from the root
 `package.json`.
@@ -31,7 +31,6 @@ Root files worth knowing:
 | `knip.json` | Dead-code detection configuration. |
 | `vitest.config.ts` | The root Vitest config, used when Vitest is run from the root. |
 | `env.example.yaml` | Template for `env.yaml`, the per-machine service configuration (never committed). |
-| `.onedev-buildspec.yml` | The OneDev CI pipeline (see [CI](./07-ci.md)). |
 | `.gitattributes` | Forces LF line endings everywhere (`* text=auto eol=lf`) and marks audio, image and binary files as binary. |
 | `.npmrc` | `legacy-peer-deps=true`. |
 
@@ -134,7 +133,7 @@ Each area has its own section in this guide; the package's own `package.json` de
 | `engine/k7-supervisor` | CMake, its own presets | The `k7-supervisor` executable and its unit-test binary |
 | `engine/k7-android` | Gradle (`./gradlew assembleDebug`) | The Android APK, which builds its own arm64 engine and supervisor |
 | `engine/scripts` | Node | `build-engine.mjs` (build and stage the command-line engine into `dist/k7-runtime/`), `package-release.mjs` (archive it, or rename the tray's installers), `devEngine.mjs` and `supervisorBuild.mjs` (used by the dev session) |
-| `engine/docker` | Docker | The server engine's image (`Dockerfile`, `entrypoint.sh`, `asound.conf`) |
+| `engine/docker` | Docker | The Raspberry Pi engine's image (`Dockerfile.pi`) |
 
 The engine section of this guide covers the C++ code itself.
 

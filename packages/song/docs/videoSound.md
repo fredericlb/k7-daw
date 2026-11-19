@@ -73,8 +73,7 @@ A shot's sound goes through the engine like every other sound in the song, for t
 
 The engine reads clips through Tracktion's format manager. It opens a video container only
 through the platform's decoder: CoreAudio on macOS, Media Foundation on Windows. On Linux and
-Android it opens none. The server's own engine is a Linux container (`docs/server-engine.md`) and
-the phone is Android, so a clip pointing the engine at an `.mp4` would play on a desktop and be
+Android it opens none, so a clip pointing the engine at an `.mp4` would play on a desktop and be
 silent on both of those, without an error that says why.
 
 So the sound is decoded ONCE, into a float WAV beside the video, and that is what the engine is

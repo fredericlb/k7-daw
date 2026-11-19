@@ -1,6 +1,6 @@
 {
   "appId": "se.frediver.k7.daw",
-  "appName": "k7",
+  "appName": "K7 DAW",
   "webDir": "dist",
   "backgroundColor": "#07031F",
   "server": { "androidScheme": "https" },
