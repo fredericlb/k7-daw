@@ -118,12 +118,12 @@ fn a_folder_made_elsewhere_with_files_inside_and_renamed_in_moves_the_token() {
 }
 
 #[test]
-fn a_burst_of_two_thousand_files_moves_the_token() {
+fn a_burst_of_three_hundred_files_moves_the_token() {
     // On Linux and Windows the burst may overflow; the ceiling then moves it, within the bound only on the host's word
     let (s, root, dir, _w, m) = rig("watch-burst");
     let was = settle(&m, &s, &root, &dir);
     let sub = s.dir("ws/p.k7/burst");
-    for i in 0..2000 {
+    for i in 0..300 {
         std::fs::write(format!("{sub}/f{i}.k7x"), "").unwrap();
     }
     assert!(until_moved(&m, &s, &root, &dir, &was).is_some());

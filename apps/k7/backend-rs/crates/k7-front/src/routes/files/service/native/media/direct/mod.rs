@@ -29,10 +29,16 @@ pub fn module(cache: Option<&Path>) -> Result<Arc<Waveform>, String> {
             Shared::new(
                 cache
                     .or(CACHE.get().map(|p| p.as_path()))
-                    .map(Path::to_path_buf),
+                    .map(Path::to_path_buf)
+                    .or_else(test_cache),
             )
         })
         .get()
+}
+
+/// The compiled module the tests of every process share, keyed by the module's hash; production names its own folder.
+fn test_cache() -> Option<PathBuf> {
+    cfg!(test).then(|| std::env::temp_dir().join("k7-stream-cache"))
 }
 
 /// A failure the TypeScript rethrows as its own class (`WasmOpenError`, the deadlines), by `name`.

@@ -1,13 +1,14 @@
 # nextest's settings for the backend workspace (docs/rust-builds.md).
-# What a reader gets wrong: the hostile tests make folders of up to 20,000 files; run together they took five cores and woke
-# the Mac's file-event and security agents until the load passed 60, so they run one at a time, as their time bounds assume.
+# What a reader gets wrong: the group is the tests that fill folders (file-service's hostile, journal, revision and
+# watching files, capture_hostile), not every test named hostile; run together they woke the Mac's file-event and
+# security agents until the load passed 60, so they run one at a time, as their time bounds assume.
 
 # The group stays at 1 until the 2-at-a-time trial is measured over three runs (docs/rust-builds.md).
 [test-groups]
 file-churn = { max-threads = 1 }
 
 [[profile.default.overrides]]
-filter = 'test(/hostile|thousand/)'
+filter = '(package(k7-file-service) & test(/(^| )(hostile|listings_hostile|entries_hostile|journal_hostile|journal_records|workspaces_hostile|revision|watching)::/)) | (package(k7-capture) & test(/capture_hostile::/))'
 test-group = 'file-churn'
 
 # The tests that failed only under load and passed alone: a pass on retry shows as flaky, not as a rerun of the whole gate.

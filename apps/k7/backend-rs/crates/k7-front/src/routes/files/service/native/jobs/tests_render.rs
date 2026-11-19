@@ -205,7 +205,7 @@ async fn a_child_that_never_exits_is_killed_at_the_bound_and_no_process_is_left(
     let dir = folder("hang");
     let bin = engine(&dir, r#"echo $$ > "$4/pid"; exec sleep 600"#);
     let out = dir.join("out");
-    let r = renderer(bin).with_timeout(Duration::from_secs(5));
+    let r = renderer(bin).with_timeout(Duration::from_secs(2));
     let task = {
         let out = out.clone();
         tokio::spawn(async move { r.render("{}", &out, &RenderOpts::default()).await })
@@ -442,7 +442,7 @@ const WITH_HELPER: &str = r#"sleep 600 & echo $! > "$4/helper"; echo $$ > "$4/pi
 async fn a_render_killed_at_the_bound_takes_the_helpers_of_its_plugins_with_it() {
     let dir = folder("group-bound");
     let out = dir.join("out");
-    let r = renderer(engine(&dir, WITH_HELPER)).with_timeout(Duration::from_secs(5));
+    let r = renderer(engine(&dir, WITH_HELPER)).with_timeout(Duration::from_secs(2));
     let task = {
         let out = out.clone();
         tokio::spawn(async move { r.render("{}", &out, &RenderOpts::default()).await })
