@@ -101,10 +101,9 @@ walk per audio block. A claim found missing is asked again on the next frame.
 | engine → browser | `whoami`, `plugins`, `error` | everything |
 
 Either way a `whoami` reaches the browser without its `token` unless the ticket's account may use the
-engine — its owner, an account it is shared with, anyone for the server's own
-([ownership.md](ownership.md)). `/engines` mints no ticket for any other engine, so this strip is the
-second lock; it is asked for every text frame (a binary one never carries the token), so a share
-withdrawn mid-socket takes effect at once.
+engine — an engine of this device ([ownership.md](ownership.md)). `/engines` mints no ticket for any other engine, so this strip is the
+second lock; it is asked for every text frame (a binary one never carries the token), so an engine
+that stops being local takes effect at once.
 
 Anything else the browser sends is **held**, in order, rather than dropped: a page opens its driving
 socket and claims the engine at the same moment, and the claim may land a few hundred milliseconds

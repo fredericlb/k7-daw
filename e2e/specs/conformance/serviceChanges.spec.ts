@@ -231,7 +231,7 @@ test("a chain of a library is gated like any write there, and a name that is no 
     },
     ws,
   );
-  // The conformance account is not an admin: a published library is refused before its folder is looked at.
+  // A library is never written from here: it is refused before its folder is looked at.
   const other = await svc.get("/verb-bundle?at=other.k7", ws);
   expect(other.status).toBe(409);
 });

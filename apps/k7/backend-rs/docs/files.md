@@ -41,7 +41,7 @@ account names and environments, the engine bindings, the caches' sweep, with no 
 ### The libraries
 
 The store of `libraries.json` and the library folders, over the seed the app bundles. No relay carries a library and
-nothing is fetched. They answer `/account/libraries*` (the admin flag is the ticket's or the session's) and
+nothing is fetched. They answer `/account/libraries*` and
 `/libraries/sync`. Their choices are [libraries.md](libraries.md).
 
 | choice | why |
@@ -62,11 +62,11 @@ nothing is fetched. They answer `/account/libraries*` (the admin flag is the tic
 | trust decision | what proves it | pinned by |
 |---|---|---|
 | a ticket is HMAC-SHA256 under `${SESSION_SECRET}:files`, compared in constant time, refused past its `exp`, with an empty or missing `u`, or malformed; the engine after `~` is unsigned and binds nothing without a claim | `k7_hub::ticket` | `tests/all/vectors.rs` (TypeScript-minted tickets, read and minted byte for byte), `ticket.rs`; `filesHub.spec.ts` |
-| the identity a client sends is ignored (`x-studio-user`, `x-studio-hub-secret`, `x-studio-engine-token`, `x-studio-admin`): the account served is the ticket's or the session's, the admin flag only the ticket's or the admin groups' | `hub/proxy.rs` `files` | `tests/files_hub.rs`; `filesHub.spec.ts` |
+| the identity a client sends is ignored (`x-studio-user`, `x-studio-hub-secret`, `x-studio-engine-token`): the account served is the ticket's or the session's | `hub/proxy.rs` `files` | `tests/files_hub.rs`; `filesHub.spec.ts` |
 | each runtime's secret is 32 random bytes, handed in its environment alone, and is its gate | `k7_hub::account::random_secret` | `tests/files_hub.rs` (a forged secret is a 401) |
 | `/api/files-hub/internal` answers only a held runtime's secret, compared in constant time, whatever else the request carries | `hub/answers.rs` `internal`, `State::account_of_secret` | `tests/files_hub.rs`; `filesHub.spec.ts` |
 | a server answers 410 to every `/api/files` path but the libraries', and its cut makes no account folder | `hub/proxy.rs` `files`, `hub/answers.rs` `cold_run`, `Services::cut` | `tests/files_hub.rs`; `serverFiles.spec.ts` |
-| the libraries have their own secret; their admin flag comes from the ticket or the session alone | `hub/proxy.rs` | `tests/files_hub.rs` |
+| the libraries have their own secret | `hub/proxy.rs` | `tests/files_hub.rs` |
 | an account's environment is the allow-list: no session, token, OIDC, render or front secret reaches it, whatever its name | `k7_hub::env` | `tests/all/vectors.rs` (`hub-vectors.json`) |
 | only a claim binds an engine: the registry is asked `holds` for the account before any path is bound | `k7_hub::binding` | `filesHub.spec.ts` (an unclaimed engine leaves the files reachable) |
 | the shares' bearer the front mints is ephemeral, held in this process, accepted only with `exp: 0` and its id held for its subject | `hub.rs` `verify_service_token` | read in the code |

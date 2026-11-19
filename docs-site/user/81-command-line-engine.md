@@ -77,7 +77,6 @@ The config file is a JSON object. Every key is optional. A key with a wrong type
 | `onnxProviders` | array of strings | empty (CPU) | What stem separation runs on, in order of preference: `cpu`, `dml` (DirectML, Windows), `cuda`, `coreml`. Names are lowercased and duplicates dropped. Empty means the CPU. |
 | `machineName` | string | the computer's host name | The name engine pickers show for this machine. |
 | `extraCaCerts` | string (file path) | none | A PEM file of extra certificate authorities to trust. Use it when your studio's HTTPS certificate is signed by your own CA. The supervisor already trusts the operating system's certificates. |
-| `renderKey` | string | none | A key shared with the k7 server. An engine that presents it becomes that server's render machine. Only the server's own engine needs this; see [The server's engine and machine jobs](./86-server-engine-and-jobs.md). |
 
 If `instruments` is not in the file at all, the supervisor keeps whatever instruments are already on the machine and downloads nothing new.
 
@@ -116,7 +115,6 @@ The supervisor also reads these. A key in the config file wins over the matching
 | `STUDIO_MACHINE_NAME` | Same as `machineName`. |
 | `STUDIO_EXTRA_CA_CERTS` | Same as `extraCaCerts`. |
 | `STUDIO_INSTRUMENTS` | `all` keeps every instrument. |
-| `STUDIO_RENDER_KEY` | Same as `renderKey`. |
 | `STUDIO_ONNX_PROVIDERS` | A provider list (comma or space separated) that overrides `onnxProviders` for separations. |
 | `STUDIO_ENGINE` | The path of an engine binary to run instead of the one beside the supervisor. |
 | `STUDIO_PORTS` | `k7=<port>`: the port of a studio running on this same machine, when it is not 8789. |

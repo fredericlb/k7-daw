@@ -268,8 +268,7 @@ test("the bench opens one live rig and nothing else", async () => {
   expect([library.status, library.body]).toEqual([
     409,
     {
-      error:
-        "'@k7-core' is a library, not a chain — an admin edits it from any project",
+      error: "'@k7-core' is a library, not a chain",
     },
   ]);
   const bench = await svc.post("/workspaces/bench", { project: "live.k7" });

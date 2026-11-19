@@ -35,8 +35,7 @@ JavaScript runtime exists per account. A route no piece answers is refused with 
 ## Authentication
 
 The front authenticates the user and stamps the account; there is no second process to trust.
-`x-studio-user` (the email), `x-studio-workspace` (resolved to a workspace, 404 if unknown) and
-`x-studio-admin` carry the request's identity; their names are in
+`x-studio-user` (the email), `x-studio-workspace` (resolved to a workspace, 404 if unknown) carry the request's identity; their names are in
 `packages/web-protocol/engineAccess.ts`. An account's workspaces are held to the one recorded owner
 (`service/owner.rs`).
 

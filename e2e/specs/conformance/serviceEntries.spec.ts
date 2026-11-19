@@ -107,7 +107,7 @@ test("_modules is edited in place: its folder is never renamed, moved or recycle
     );
 });
 
-test("the libraries are listed by the admins: their folder and each library's root are never moved from a workspace", async () => {
+test("the libraries are listed: their folder and each library's root are never moved from a workspace", async () => {
   for (const path of ["_libraries", "_libraries/k7-core"]) {
     for (const [verb, call] of [
       ["rename", () => svc.post("/rename", { path, name: "z" }, ws)],
@@ -118,7 +118,7 @@ test("the libraries are listed by the admins: their folder and each library's ro
       expect([path, verb, r.status]).toEqual([path, verb, 400]);
       expect(r.body.error).toMatch(
         new RegExp(
-          `^can't ${verb} '[^']*': the libraries are listed by the admins, not moved from a workspace$`,
+          `^can't ${verb} '[^']*': the libraries are listed, not moved from a workspace$`,
         ),
       );
     }

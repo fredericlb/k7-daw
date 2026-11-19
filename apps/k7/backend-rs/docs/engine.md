@@ -2,8 +2,8 @@
 
 The registry, the relay and its gate, and the tunnel hub — the server's engine core — answered by the
 front (`crates/k7-engine`, routed by `crates/k7-front/src/routes/engine/`). What it decides is in
-`engine/`: who has which project (`engine/claim.md`), a heartbeat read (`engine/heartbeat.md`), whose
-engine it is (`engine/ownership.md`), the relay (`engine/proxy.md`), one registry per origin
+`engine/`: who has which project (`engine/claim.md`), a heartbeat read (`engine/heartbeat.md`), which
+engines the device's account may use (`engine/ownership.md`), the relay (`engine/proxy.md`), one registry per origin
 (`engine/shared.md`) and an engine's credentials (`engine/token.md`); the tunnel's pages are
 `packages/engine-tunnel/docs/`. This page is how the front holds it.
 
@@ -24,8 +24,7 @@ needs the auth folder, as every session route does (`front.md`), and stays off w
 | requirement | why |
 |---|---|
 | the auth folder, and `SESSION_SECRET`, in the front's settings | every engine route behind the session is answered here (the switch stays off without the folder) |
-| `STUDIO_ENGINES_DIR` in the front's settings, the folder the previous release used | the bindings and owners files are the registry's memory across restarts, and a rollback reads the same files |
-| `STUDIO_RENDER_KEY` and `STUDIO_REGISTRY_REQUIRE_DEVICE` in the front's settings | the hub checks the render machine's key and the heartbeat its bearer here |
+| `STUDIO_ENGINES_DIR` in the front's settings, the folder the previous release used | the bindings file is the registry's memory across restarts, and a rollback reads the same files |
 
 ## The choices
 
@@ -34,9 +33,9 @@ needs the auth folder, as every session route does (`front.md`), and stays off w
 | a crate of its own, `k7-engine`, with no HTTP framework in it | the trust decisions are tested alone, by their own unit tests and vectors; the front only reads requests and writes answers |
 | `tokio-tungstenite` over upgrades the front accepts itself, not axum's `ws` | one message type for the sockets the hub and the relay accept and the one the relay dials to an engine; the frame cap is `MAX_FRAME_BYTES` (16 MiB) on all of them |
 | every socket has a reader task and a writer task, the writer's queue counted in bytes | backpressure reads a peer's unsent bytes (`bufferedAmount`); a tunnel counts each channel's apart, so a stalled reader's channel closes alone (`packages/engine-tunnel/docs/backpressure.md`) |
-| the registry's state behind one lock, never held across an await | the claims, the bindings and the owners change together; nothing in them waits on a socket |
-| `indexmap` for every map whose order shows (a crate serde_json already brought) | the listing's order and the bytes of `engine-bindings.json` and `engine-owners.json` are insertion order, as the previous release reads and writes them |
-| committed vectors, `fixtures/engine-vectors.json` | the heartbeat's cleanings and their wording, share lists, roles, a job's respelling and the droppable frames, as a client reads them; `tests/vectors.rs` fails when the core disagrees, and the file changes on purpose only |
+| the registry's state behind one lock, never held across an await | the claims and the bindings change together; nothing in them waits on a socket |
+| `indexmap` for every map whose order shows (a crate serde_json already brought) | the listing's order and the bytes of `engine-bindings.json` are insertion order, as the previous release reads and writes them |
+| committed vectors, `fixtures/engine-vectors.json` | the heartbeat's cleanings and their wording, a job's respelling and the droppable frames, as a client reads them; `tests/vectors.rs` fails when the core disagrees, and the file changes on purpose only |
 
 ## The testbed
 
@@ -71,13 +70,12 @@ against the testbed (above).
 | trust decision | what proves it | pinned by |
 |---|---|---|
 | the heartbeat is open, so what it may grow is bounded: an id is 1–128 of `[A-Za-z0-9._-]`, a token at most 256, 1000 engines, 30 new ids per address and minute | `read_heartbeat`, `State::admit` | `heartbeat.test.ts`, `trust.test.ts` (caps); `tests/vectors.rs` |
-| a heartbeat proves the server's own engine by the render key (constant time) and with `STUDIO_REGISTRY_REQUIRE_DEVICE=1` nothing else lists | `routes/engine/registry.rs` | `heartbeatGate.test.ts`, `ownership.test.ts`; `tests/all/engine.rs` |
 | an id is bound to its first tunnel secret, kept as sha256 in a 0600 file in a 0700 folder and set aside when unreadable; another secret, or none, never lists, tunnels or deregisters it | `registry/bindings.rs`, `state_file.rs` | `trust.test.ts`; a real supervisor run (below) |
-| a tunnel opens only for a listed id, its token and its bound secret, checked before the incumbent is touched; below the protocol minimum a 426; a wrong render key a 403 | `Hub::check_tunnel` | `trust.test.ts`, `hubLifecycle.test.ts`, `protocol.test.ts`, `renderKey.test.ts`, with both agents |
+| a tunnel opens only for a listed id, its token and its bound secret, checked before the incumbent is touched; below the protocol minimum a 426 | `Hub::check_tunnel` | `trust.test.ts`, `hubLifecycle.test.ts`, `protocol.test.ts`, with both agents |
 | the relay dials only where the heartbeat came FROM, through the engine's tunnel first | `hosts_for`, `relay::dial` | `registry/tests.rs`, `relaySocket.test.ts` |
 | a ticket is HMAC-SHA256 under a per-process secret, names one engine and one account, lives a minute; the account it names is the one that drives | `registry/ticket.rs` | `ticket.test.ts`; `ticket.rs` unit tests |
-| before a claim only the probe crosses the relay; the rest waits 10 s, 256 frames or 8 MiB, then 4403; the claim is asked on every browser frame and reused 250 ms for the engine's; the token leaves a `whoami` for an account that may not use the engine | `relay/gate` | `relayGate.test.ts`; `gate/tests.rs` |
-| who may claim is ownership's; the claim rules arbitrate the rest; a moved owner or a withdrawn share evicts at once | `registry/claims.rs`, `owners.rs` | `registry.test.ts`, `ownership.test.ts` |
+| before a claim only the probe crosses the relay; the rest waits 10 s, 256 frames or 8 MiB, then 4403; the claim is asked on every browser frame and reused 250 ms for the engine's; the token leaves a `whoami` for an engine the account may not use | `relay/gate` | `relayGate.test.ts`; `gate/tests.rs` |
+| which engine may be claimed is ownership's (it runs on this machine); the claim rules arbitrate the rest | `registry/claims.rs`, `Registry::may_use` | `registry.test.ts`, `registry/tests.rs` |
 | a bound loopback path's key is 24 random bytes, refused off loopback (the socket's peer at the front) and once unbound; a key named by its caller comes through the gated seam alone, 32 characters at least | `Hub::check_local`, `routes/engine/internal.rs` | `hubLifecycle.test.ts`, `seamCore.test.ts`; `tests/all/engine.rs` |
 | the seam answers loopback peers holding `K7_FRONT_SECRET`, compared in constant time | `routes/engine/internal.rs` | `seamCore.test.ts`; `tests/all/engine.rs` |
 | a file crosses only when its path is plain, under a root, every segment below it a safe name (no device name, no `:`, no trailing dot on Windows), and its REAL path inside the root or its library clone | `tunnel/files` | `hubConfinement.test.ts`, the cases of `PathMap_test.cpp` and `segments.test.ts`; `files/tests.rs` |

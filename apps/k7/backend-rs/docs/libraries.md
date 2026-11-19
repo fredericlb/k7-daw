@@ -29,7 +29,6 @@ front answers them itself
 | choice | why |
 |---|---|
 | the service answers only a request carrying its secret, compared in constant time; a service made with no secret answers nobody | the gate is the hub's, and a request that is not the hub's is 401 `not from this service's file hub` |
-| the admin stamp is the front's: the client's own `x-studio-admin` is never read, only what the front's hub decided is handed in | a forged stamp must not change the list |
 | a body is read whole up to 8 MiB (413 `body over 8388608 bytes`), then parsed as `jsonBody` parses it (`{}` when empty or not JSON) | the routes' refusals keep their sentences |
 | the hub's readiness (`settled`) is the store's first `ensure` | a standalone's files wait for it |
 
@@ -49,11 +48,8 @@ front answers them itself
 | the origin has one list of libraries, each a folder with a name, and `@<name>/<type>/<module>` resolves against them from every workspace; no workspace holds a copy | one clone per library, the same for every project |
 | an open asks the hub to bring the libraries to their latest and waits only when one is not cloned yet; a sync that fails is logged and the project still opens | every unresolved `@k7-core/...` ref reports itself missing and the graph draws a `?`; the Libraries page shows the failure on the library's row |
 | nothing is created before the origin has a library: a workspace and the bench are refused with one sentence, and `Examples` is exempt | a workspace made without a library is a folder whose chains point at nothing, and the refusal belongs before the folder exists |
-| a write into a library is refused unless the account is an admin, and an admin writes the draft only, the published version being refused to everybody with a message saying to edit the draft | a library is every account's, so a write is everybody's at once; the rule covers the file tree, the builder's Save and a chain edited from the Libraries tab alike |
-| the admin stamp decides on every request, not at an open | a first write before any open must not be refused to an admin, and an account whose groups changed must not need a restart |
-| a request of another role on the same account that lands inside an admin call's awaits is a known limit | overlays per request would close it and are the native side's, which resolves a library's folder per request |
-| a write reaches the draft only, and a workspace sees it once it pins `draft` or the draft is published and the workspace pins that | a published version never changes |
-| a library's own folder and `_libraries` cannot be renamed, moved or deleted from a workspace; below `_libraries/` only a library's name or `account` resolves | which libraries the origin has is its admins' business, and a path there would let any account write a library |
+| a write into a library is refused to every account, with one sentence | a library is shipped with the app and changes with an update; the rule covers the file tree, the builder's Save and a chain edited from the Libraries tab alike |
+| a library's own folder and `_libraries` cannot be renamed, moved or deleted from a workspace; below `_libraries/` only a library's name or `account` resolves | which libraries the device has is the app's business, and a path there would let an account write a library |
 | a deletion inside a library moves into that library's own `_recycle_bin/` | a library may sit on another disk than the workspace and a move cannot cross disks |
 | the account's own library is its account's to write and never refused, local to each device and kept out of every list of workspaces | it travels nowhere: it is no room and no origin's library |
 | frozen chains are written into the account's own library as ordinary chains | every chain reader already walks the account's library first |

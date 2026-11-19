@@ -24,7 +24,7 @@ state none of their names keeps apart are in a **lane**, a project of one worker
 | lane | files | the state they share |
 |---|---|---|
 | `service` | the file service's specs but `serviceEngine` | one file service process per account, and the account's served project: two specs at once cut each other's calls (a 502 `file service: client error`) and read each other's open project. It is the longest lane, so it starts first |
-| `engines` | `engines`, `engineJobs`, `serviceEngine`, `localEngine` | the engine registry and the session's engine binding: an engine one registers or claims is listed to the others, and `engineJobs` reads the slots of whichever engine has an owner |
+| `engines` | `engines`, `engineJobs`, `serviceEngine`, `localEngine` | the engine registry and the session's engine binding: an engine one registers or claims is listed to the others |
 
 Everything else writes only under names and accounts of its own, so it needs no lane.
 
@@ -57,7 +57,7 @@ what it shares is made its own:
 | the account's workspaces: Examples and its demos on disk, a make and its library pins, the listings, a copy between two, no sync route, the bench, a removal with its capture folder and marker | `serviceWorkspaces.spec.ts` |
 | a project's life: each archetype against `scaffolds.json`, its names, an open and its marker, the default, its plugin needs, a rename, a delete into the recycle bin | `serviceProjects.spec.ts` |
 | one file: read, write, a stale base, the paths refused, a dot folder, folders, renames, moves, the recycle bin, uploads and `/media` | `serviceFiles.spec.ts` |
-| what an entry refuses and a library module's rename: the active project, `_modules`, the libraries, an account that is no admin, a case-only rename, a YAML name, refs repointed, a library entry recycled into the library's own bin | `serviceEntries.spec.ts` |
+| what an entry refuses and a library module's rename: the active project, `_modules`, the libraries, a case-only rename, a YAML name, refs repointed | `serviceEntries.spec.ts` |
 | the undo journal: `journal.json` byte for byte, undo and redo on disk, `join` and `skip`, a graph pick's two lines as one step, a journal read back from disk, a process step's blobs | `serviceHistory.spec.ts` |
 | sound: a waveform and its sidecar, the prewarm, an audition, resources, a mixdown, plugins, the engine routes, the logs | `serviceMedia.spec.ts` |
 | the media verbs: a picture lane prepared, its cut written and read back, its sound extracted, whisper's transcript, a playlist's stems refused, the picture rendered on the server | `serviceMediaVerbs.spec.ts` |
@@ -76,7 +76,7 @@ what it shares is made its own:
 | what proxies break gets a spec of its own: a body round-trip, the first frame of an event stream before its end, an upgrade refused with 404 | buffering, a dropped body and a swallowed upgrade are the faults a front introduces and a page only shows as a hang |
 | writes are no-ops: the preferences and the AI settings are read and written back as they were, and a secret is only added where the instance had none, then removed | it runs against a live dev session, on the e2e account; a secret cannot be read back, so one the instance holds is never replaced |
 | the auth specs mint and revoke the e2e account's tokens, and never log it out everywhere | a logout everywhere revokes a subject's every session, which must never be the e2e account's on a live session |
-| the engine job routes are checked for their refusals; one slot read signs in as the registered engine's owner | a cut, a slot saved or a song sent changes the engine's machine; a read changes nothing |
+| the engine job routes are checked for their refusals only | a cut, a slot saved or a song sent changes the engine's machine |
 | a spec's capture goes under a day of the 1990s, checked absent first, and removed by that day | no person recorded on that day, so a removal by day takes nobody's capture |
 | an absolute path is refused as `/etc/passwd` everywhere and as `C:/Windows/win.ini` only when the server is Windows, which the file service's root says by its drive (`serverOnWindows` in `src/service.ts`) | on Linux a drive letter is a plain name inside the folder, a 404; the runner's own platform says nothing about the server's |
 | the specs remove a capture's cached copy (`cache/capture-<hash>`) they caused | no route removes it, and a later capture filed at the same path would read a stale copy |

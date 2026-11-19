@@ -19,12 +19,11 @@ ws.send(json{{"type", "whoami"}, {"id", engineId}, {"token", engineToken}, …}.
 ```
 
 The relay forwards a `whoami` for any account holding a ticket, before it holds a claim
-(`proxy.md`), but strips the token from it for an account that may not use the engine — every
-account, while the engine has no owner ([ownership.md](ownership.md)). The browser keeps the token:
+(`proxy.md`), but strips the token from it for an engine the account may not use — one that does not run
+on this device ([ownership.md](ownership.md)). The browser keeps the token:
 it is what `select` takes to claim that engine (`packages/engine-browser/src/probe.ts`). So the
-token is held by the owner, the accounts it is shared with, every account for the server's own
-engine, and whoever reached the engine directly. It is an unguessable identifier, not an
-authentication, and it makes nobody an owner ([ownership.md](ownership.md)).
+token is held by the account for an engine of this device, and by whoever reached the engine
+directly. It is an unguessable identifier, not an authentication ([ownership.md](ownership.md)).
 
 ## The tunnel secret is the machine's proof
 

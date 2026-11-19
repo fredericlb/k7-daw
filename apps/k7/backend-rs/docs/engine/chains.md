@@ -11,7 +11,7 @@ GET  /api/engines/:id/chains           →   { chains: { stems?, instrumental? }
 PUT  /api/engines/:id/chains           { stems?, instrumental? }  →  the chains as they then stand
 ```
 
-**The write is the owner's**, as everything else about an engine is (`ownership.md`): another account gets
+**The write is the device's own engine's**, as everything else about an engine is (`ownership.md`): another engine gets
 a 403, and an engine the registry does not hold is a 404. Naming neither key is a no-op that answers with
 what the machine already holds, so a card saving one field cannot blank the other, and `""` is how a chain
 is unsaid — the key then leaves the file rather than standing there empty.

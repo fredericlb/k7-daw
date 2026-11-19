@@ -248,7 +248,6 @@ The front serves `/auth/local`, `/auth/me` and `/auth/logout` and nothing of a p
 
 | kept | where | why |
 |---|---|---|
-| `session::is_admin`, `Settings::admin_groups` and `dev_admin` | `k7-front/src/session.rs`, `settings.rs` | the engine registry's ownership and the file hub's admin answers still ask it (D3, D2) |
 | `auth_guard.rs` and the `OIDC_ISSUER`, `OIDC_CLIENT_ID` keys of `ENV_KEYS` | `k7-front/src` | the refusal mirrors Express's `authGuard.ts`, whose `setupAuth` still runs for `/auth/me` (D2) |
 | `setupAuth`, `devAdmin.ts`, `cors.ts`'s `COOKIE_DOMAIN` and `TRUSTED_ORIGINS` | `apps/k7/backend/src` | Express's remaining session code (D2) |
 
@@ -260,13 +259,14 @@ The front serves `/auth/local`, `/auth/me` and `/auth/logout` and nothing of a p
 
 ## 8. Deferred reworks, and the code that waits for them
 
-k7 runs on a device that holds one local account, and three pieces still carry the shape of a
-multi-account server. Each is kept whole, tested, and listed here so `lint:dead` debt is explained.
+k7 runs on a device that holds one local account. The admin stamp, the engine ownership records, the
+share lists, the render key and `STUDIO_REGISTRY_REQUIRE_DEVICE` are gone. What still carries the shape of
+a multi-account server is kept whole, tested, and listed here so `lint:dead` debt is explained.
 
 | name | what stays | what removes it |
 |---|---|---|
-| **D2** the admin and the accounts | the file service's admin draft overlay (`k7-file-service/src/libraries.rs` and the files naming `admin`), the multi-account file hub (`k7-hub` accounts), Express's `@studio/oidc` `setupAuth` and its session code (section 7) | a slice that makes the hub single-account and drops the admin gate; libraries are frozen to the seed meanwhile |
-| **D3** engine ownership | the registry's per-account ownership and claim (`routes/engine/ownership.rs`, `registry.rs`, `apps/k7/backend-rs/docs/engine/ownership.md`, `claim.md`), the `server` engine mark of section 3 | a slice across `k7-engine` and the conformance engine specs: on a device the one account owns everything already |
+| **D2** the accounts | the multi-account file hub (`k7-hub` accounts: a slug and a home per user, the cache sweep over every account), Express's `@studio/oidc` `setupAuth` and its session code (section 7), the libraries' `draft` folders (`k7-libraries`' `ensure(.., draft)`, the `draft` version of a pin, `song-edit`'s `overlays`) | a slice that makes the hub single-account and drops the library draft model |
+| **D3** engine claims | the claim's `holder` strings and the displacement rules between holders (`routes/engine/registry.rs`, `k7-engine/src/registry/claims.rs`, `apps/k7/backend-rs/docs/engine/claim.md`), the `unowned` listing of an engine off this machine | the engine registry's rework with the remote engines, which is tier 4's |
 | the app's **second-device rework** | `/external` (`ExternalIndex`, `apps/k7/frontend/docs/external.md`), the camera mode behind `CAMERA_MODE_LISTED`, the engine tunnel hub, `chooseStudio` and the shell's `studio` event, `weburi.add`/`pair`/`remove` in the supervisor, `engine.example.json`'s `registryUrls`, the registry URL in `Url.cpp`, `STUDIO_REGISTRY_URL`, `k7-local`'s settings | the rework that makes a second device and a remote camera features of the app; the CLI engine and the Pi image ship unchanged until then |
 
 `k7-sync`'s `relay/` module may be dead, since only the capture's history uses the crate: a

@@ -97,11 +97,10 @@ test("the hello turns a session into a ticket naming the account, signed, for tw
     headers: signedIn(FILES_USER),
   });
   const hello = await res.json();
-  expect(Object.keys(hello)).toEqual(["path", "ticket", "admin"]);
-  expect(hello).toMatchObject({ path: "/api/files", admin: false });
+  expect(Object.keys(hello)).toEqual(["path", "ticket"]);
+  expect(hello).toMatchObject({ path: "/api/files" });
   const [body] = hello.ticket.split(".");
   const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf8"));
-  // A device is no admin, so its ticket carries no admin flag either.
   expect(Object.keys(payload)).toEqual(["u", "exp"]);
   expect(payload.u).toBe(email);
   expect(Math.abs(payload.exp - (Date.now() + 12 * 3600_000))).toBeLessThan(
@@ -164,14 +163,13 @@ test("an engine named after `~` and not claimed leaves the files reachable", asy
   ).toContain(ws);
 });
 
-test("the identity a client sends is replaced by the ticket's: user, hub secret and admin flag", async ({
+test("the identity a client sends is replaced by the ticket's: user and hub secret", async ({
   request,
 }) => {
   // Each of these, passed on, would make the account's service refuse: another owner, a secret not its own.
   const spoofed = withTicket(ticket, {
     "x-studio-user": "e2e@st0.app",
     "x-studio-hub-secret": "forged",
-    "x-studio-admin": "1",
     authorization: "Bearer forged",
   });
   expect((await names(request, spoofed)).names).toContain(ws);

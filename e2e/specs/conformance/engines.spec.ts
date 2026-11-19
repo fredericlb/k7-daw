@@ -1,6 +1,6 @@
 // engines.spec.ts — the engine registry as an engine and a browser see it: the open hello, heartbeat and
-// deregister, the session's list, select, release and WebRTC offer, the ownership routes, the relay's upgrade
-// and the internal seam's gate. An engine of its own per run, with no secret and no owner, so nothing stays.
+// deregister, the session's list, select, release and WebRTC offer, the relay's upgrade
+// and the internal seam's gate. An engine of its own per run, with no secret, so nothing stays.
 
 import { randomBytes } from "node:crypto";
 import { request as httpRequest } from "node:http";

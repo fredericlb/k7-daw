@@ -17,7 +17,7 @@ workspaces somewhere nobody chose. Under it:
 ```text
 $STUDIO_FILES_ROOT/
   libraries.json                  the account libraries' list
-  libraries/<name>/1/ 2/ … draft/ published versions (each with library.k7x) and the admin draft
+  libraries/<name>/1/ 2/ … published versions (each with library.k7x)
   <account-slug>/                 the account's STUDIO_HOME
     workspace/                    its workspaces
     .history/  .renders/  models/ undo journals, automatic renders, downloaded models
@@ -50,9 +50,9 @@ runtime. A ticket may carry `~<engineId>` to bind that engine to the account fir
 
 | Route | Auth | Purpose |
 |---|---|---|
-| `GET /api/files-hub` | session | Mint a ticket: `{ path, ticket, admin }`. |
+| `GET /api/files-hub` | session | Mint a ticket: `{ path, ticket }`. |
 | `/api/files/*` | ticket or session | The account's file service. |
-| `GET`/`PUT /api/files/account/libraries`, `POST …/<name>/publish` | admin for writes | The account libraries list; publish a draft as a new version. |
+| `GET /api/files/account/libraries` | ticket or session | The libraries list. |
 | `/api/files-hub/internal/*` | the account's secret | Called by an account's runtime: `libraries/sync`. |
 
 ## Libraries
@@ -60,7 +60,7 @@ runtime. A ticket may carry `~<engineId>` to bind that engine to the account fir
 `crates/k7-libraries` (`apps/k7/backend-rs/docs/libraries.md`):
 
 - A library is a folder of **versions**: `1/`, `2/`… frozen, each with a `library.k7x`
-  (`{ name, version, requires, notes? }`), and an admin's `draft/`. A version is never rewritten.
+  (`{ name, version, requires, notes? }`). A version is never rewritten.
 - A listed library missing on disk is installed from its seed (`$STUDIO_LIBRARY_SEED`: a folder of
   library folders, or `name=folder,…`), copied to a dot-named sibling then renamed into place, under
   the version its `library.k7x` declares; with no seed it starts empty. A seed declaring a version

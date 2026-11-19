@@ -36,21 +36,11 @@ One strict schema would refuse a machine on every beat for a figure its first he
 carry (performance is measured after the engine starts): the entry lapses, and a play answers
 "unknown engine or bad token" with nothing in either log to say why.
 
-## The render machine, and no device
+## A heartbeat proves nothing
 
-The heartbeat is the one way onto every account's picker, and a user who picks an engine sends it
-their project and file roots. Left open, it lets anyone who can reach the origin list a machine
-of their own. So a heartbeat may PROVE who sent it one way only:
-
-- **the render key** (`x-studio-render-key`): the server's own engine, which no account pairs.
-
-A device's engine plays the projects of its own machine and lists itself at its own backend; the bearer a heartbeat
-carries proves nothing, as no bearer at all.
-
-`STUDIO_REGISTRY_REQUIRE_DEVICE=1` refuses a heartbeat that bears no render key, with a `401`. Unset, it is taken
-and the machine is logged as unproven, once a minute: a machine's own backend lists its own engine that way. The
-machine is taken as an unproven one. No heartbeat makes an owner
-(`ownership.md`).
+The heartbeat is open: a device's engine lists itself at its own backend, and a machine on the network may
+list itself too. Neither proves anything, and a listed engine is not usable for that: only one whose heartbeats
+come from loopback is the device's to use (`ownership.md`).
 
 ## What is logged here
 
@@ -73,5 +63,5 @@ machine is taken as an unproven one. No heartbeat makes an owner
 accepted in 15 s, and its `.studio.log` says why. `403 bad token` when there is one and the token
 the browser got from the engine's `whoami` is not the one it registered with. Two answers and not
 one 403, because a single one sends the reader to the token when the cause is the heartbeat. A
-third and a fourth, `403 not-yours` and `403 unowned`, are ownership's and not the heartbeat's: the
-engine is another account's, or no heartbeat has proved whose it is ([ownership.md](ownership.md)).
+third, `403 unowned`, is ownership's and not the heartbeat's: the engine does not run on this device
+([ownership.md](ownership.md)).

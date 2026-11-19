@@ -7,7 +7,7 @@ A workspace lives on the device that edits it and travels between devices throug
 |---|---|---|
 | `/api/files/*` | answered by the user's account runtime in the front | **410**, with one sentence naming the tray and the phone apps |
 | `/api/files/account/libraries*` | the origin's libraries | the same |
-| `/api/files-hub` (the hello) | a ticket for the local user | a ticket, which the libraries' admin calls carry |
+| `/api/files-hub` (the hello) | a ticket for the local user | a ticket |
 | an account runtime | one, for the local user | **none**, whoever signs in |
 
 The 410 is answered before the ticket or the session is read: a server has nothing to hide behind it.
@@ -30,14 +30,13 @@ of the exact email, since a slug alone folds `a.b@` and `a_b@` into one folder.
 ## A server's cut resolves in the libraries' context
 
 The médiathèque's stem cut and an engine's slots ask the hub for a chain (`POST /api/internal/files/cold-run`). On a device that is the
-account's runtime, with its chain setting and, for an admin, the libraries' drafts. On a server it is `Services::cut`, a
+account's runtime, with its chain setting. On a server it is `Services::cut`, a
 context of the libraries alone (`$STUDIO_FILES_ROOT/_cut`, no prefs, published versions only), and the roots the
 engine's machine is shown are the médiathèque (writable, for the stems), the libraries and the model's own folder.
 
 | choice | why |
 |---|---|
 | the account's `stemsChain` and `instrumentalChain` do not apply on a server; a cut names its chain, else the engine's | an account's own chains are local to each device and never synced |
-| no admin draft overlay on a cut | a draft reaches no cut until it is published |
 | the account's workspace and models are no root of a cut | a server holds no account runtime to resolve a project against |
 | the engine slots' compile (`/api/internal/files/slot`) takes the same context on a server: a chain of the libraries, shared with the machine as `libs` and the médiathèque, both read-only | a slot of an account's own chain is a device's |
 
@@ -45,7 +44,7 @@ engine's machine is shown are the médiathèque (writable, for the stems), the l
 
 An account's environment is `k7_hub::env`'s allow-list taken from the process and the host's own settings,
 then the account's values on top (`k7_hub::account::Names`). The front's environment holds the origin's
-secrets — the session and token signing keys, the OIDC client secret, the render key — and an account's
+secrets — the session and token signing keys, the OIDC client secret — and an account's
 runtime needs none of them. The hazard runs
 one way: a variable a program starts reading and nobody adds to the list is silently unset there.
 
@@ -68,12 +67,8 @@ not invalidate an open page. The browser sends it in the header the files gate r
 call a cookie across origins; `/api/files` itself has no session guard, the ticket being its gate, with
 the session as a fallback for a same-origin caller. Twelve hours, and the browser asks again after six.
 
-**Whether the caller is an admin rides the same way.** The front checks the session's OIDC `groups`
-against `AUTH_ADMIN_GROUPS`, and an empty list admits nobody. The hello answers `admin`, the ticket
-signs it, and the front takes the flag from the ticket or the session alone. It guards what reaches every
-account at once: the libraries list and every write into a library (`../libraries.md`), which follow the
-stamp request by request, so a new session's ticket makes an account an admin with no restart. A ticket
-outlives a group change by up to twelve hours, the same as it outlives the session.
+No caller is an admin: the hello answers the ticket and the path alone, and nothing in a ticket or a
+header grants more than the account's own files (`../libraries.md` says what a library write is).
 
 ## A refusal on the headers alone reaches the caller
 

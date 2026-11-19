@@ -91,7 +91,7 @@ U+001F (`kUnitSep`) joins multi-part arguments because no device name contains i
 | `onnxProviders` | Separation providers, lowercased |
 | `instruments` | Absent until a first boot settles it to whatever is already installed; an array is a choice |
 
-`configEnvironment()` maps the config-only keys `machineName`, `extraCaCerts`, `renderKey` and `instruments: ["all"]` to `STUDIO_MACHINE_NAME`, `STUDIO_EXTRA_CA_CERTS`, `STUDIO_RENDER_KEY` and `STUDIO_INSTRUMENTS=all` before anything reads them. The user-facing reference is in the user guide's command-line engine page.
+`configEnvironment()` maps the config-only keys `machineName`, `extraCaCerts` and `instruments: ["all"]` to `STUDIO_MACHINE_NAME`, `STUDIO_EXTRA_CA_CERTS` and `STUDIO_INSTRUMENTS=all` before anything reads them. The user-facing reference is in the user guide's command-line engine page.
 
 ## The state folder
 
@@ -133,7 +133,7 @@ U+001F (`kUnitSep`) joins multi-part arguments because no device name contains i
 
 ## Tunnels, jobs and WebRTC
 
-`syncTunnels()` keeps exactly one `TunnelAgent` per resolved registry. Each agent dials `<registry>/api/engine-tunnel?id=<id>` with the engine token and the tunnel secret in headers (and `STUDIO_RENDER_KEY` when set), redials with backoff, opens a real socket to the local engine for each `engine` channel, and answers `jobs` channels itself. Its cache folder is `remote/<cacheKey>`.
+`syncTunnels()` keeps exactly one `TunnelAgent` per resolved registry. Each agent dials `<registry>/api/engine-tunnel?id=<id>` with the engine token and the tunnel secret in headers, redials with backoff, opens a real socket to the local engine for each `engine` channel, and answers `jobs` channels itself. Its cache folder is `remote/<cacheKey>`.
 
 Jobs registered by `machineJobs()` in `engine/k7-supervisor/src/MachineJobs.cpp`:
 

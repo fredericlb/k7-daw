@@ -50,9 +50,8 @@ proves itself with its tunnel secret and holds no session; every one a BROWSER c
 first. One list draws that line, so it is one place to read rather than a rule every mount must keep: a
 guard put over the whole of `/api` would leave the heartbeat protected only by whoever answered first.
 
-The engines' secret bindings and owners outlive a restart in `STUDIO_ENGINES_DIR`, else
-`<instance data folder>/.engines` (`token.md`, `ownership.md`); an admin (`AUTH_ADMIN_GROUPS`) may reset an
-engine's owner.
+The engines' secret bindings outlive a restart in `STUDIO_ENGINES_DIR`, else
+`<instance data folder>/.engines` (`token.md`).
 
 ## What `assigned` means, and why it is nearly obsolete
 

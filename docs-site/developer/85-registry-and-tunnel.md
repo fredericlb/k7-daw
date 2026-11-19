@@ -24,7 +24,7 @@ The HTTP routes are `k7-front`'s `routes/engine/registry.rs` and `ownership.rs`;
 | `GET /registry/hello` | open | `{service: "k7-registry"}`; the supervisor asks before sending its token anywhere |
 | `POST /registry/heartbeat` | open | Upsert an engine. Only `id` (letters, digits, `.`, `_`, `-`; ≤128), `token` and `port` are required; other fields are cleaned and the cleaning logged rather than the beat refused. Refusals: 403 bound to another secret, 409 token mismatch, 503 registry full, 429 too many new ids from this address. |
 | `POST /registry/deregister` | open, but `{id, token, tunnelSecret}` must match | Remove an engine now |
-| `GET /engines` | session | The list, tokens stripped, each with a fresh relay ticket for the caller, `rtc: true` when a tunnel is up and `server: true` for the render machine. Claims are named only to their own account; others read as `assigned`. |
+| `GET /engines` | session | The list, tokens stripped, each with a fresh relay ticket for the caller, and `rtc: true` when a tunnel is up. Claims are named only to their own account; others read as `assigned`. |
 | `POST /engine/:id/rtc` | session | Forward a browser's SDP offer through the engine's tunnel; 503 when it cannot |
 | `POST /engine/select` | session | Claim an engine for a project, or renew (`{id, token, project, secret?}`). 404 when the heartbeat lapsed, 403 bad token, 409 `{heldBy, lost, tookFor}` when the claim moved on. The holder comes from the session, never the body. |
 | `POST /engine/release` | session | Drop a claim (`{id, secret}`); always 200, since it arrives by `sendBeacon` |
@@ -73,14 +73,14 @@ One WebSocket per supervisor and server. JSON control messages are text frames; 
 | `stat-reply`, `get-error`, `put-reply` | `stat {req, ch, paths}`, `get {req, ch, path}` | |
 | `rtc-offer {req, sdp}` | `rtc-answer {req, sdp?, error?}` | |
 
-The agent authenticates with headers, never the query (so no access log keeps them): `x-studio-engine-token`, `x-studio-tunnel-secret`, and optionally `x-studio-render-key`. The hub asks the registry; a refused newcomer leaves a live tunnel in place, and a verified reconnect replaces the old socket. A wrong render key is refused rather than ignored, so a misconfigured render machine says so in its log.
+The agent authenticates with headers, never the query (so no access log keeps them): `x-studio-engine-token`, `x-studio-tunnel-secret`. The hub asks the registry; a refused newcomer leaves a live tunnel in place, and a verified reconnect replaces the old socket.
 
 ### Channels
 
 A channel is `engine` (piped to the local engine socket) or `jobs` (answered by the agent). Server code gets one of two ways:
 
 - `Hub::open` / `Hub::open_ready` for the front's own routes;
-- a loopback path `/api/engine-tunnel/local/<key>` (`Hub::bind_local`), which a caller asks for through the internal seam's `POST /bindings` and dials as an ordinary `ws://` URL, the random key being its only credential; bound with no engine id, it resolves to whichever tunnel currently holds the render key, per connection, so it survives the render machine restarting.
+- a loopback path `/api/engine-tunnel/local/<key>` (`Hub::bind_local`), which a caller asks for through the internal seam's `POST /bindings` and dials as an ordinary `ws://` URL, the random key being its only credential.
 
 ### Path rewriting
 
