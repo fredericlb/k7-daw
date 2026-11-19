@@ -137,6 +137,12 @@ document.addEventListener("click", (e) => {
 // The gate's Quit and its way out of a project-less address come through here too.
 setAddressNavigator((url, replace) => void go(url, replace));
 
+// The desktop app's tray and menu ask for a page of this one: it asks about unsaved work, which a load would not.
+window.addEventListener("k7-desktop-go", (e) => {
+  const to = (e as CustomEvent<unknown>).detail;
+  if (typeof to === "string") void go(to);
+});
+
 /** Inside a router: a move it made on its own that crossed scopes is announced like any other. */
 export function useScopeWatch(): void {
   const { pathname } = useLocation();

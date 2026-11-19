@@ -60,15 +60,18 @@ pub fn create(app: &AppHandle, visible: bool) -> tauri::Result<WebviewWindow> {
     Ok(window)
 }
 
+/// The page's own move to `path`: appNav asks about unsaved work before it leaves, which a navigation would not.
+fn go_script(path: &str) -> String {
+    let json = serde_json::to_string(path).unwrap_or_default();
+    format!("window.dispatchEvent(new CustomEvent('k7-desktop-go', {{ detail: {json} }}))")
+}
+
 /// Bring the window up, on `path` of the page when one is given.
 pub fn show(app: &AppHandle, path: Option<&str>) {
     if let Some(path) = path {
         if LOADED.load(Ordering::SeqCst) {
-            if let (Some(win), Ok(url)) = (
-                app.get_webview_window(LABEL),
-                backend::url(app, path).parse(),
-            ) {
-                let _ = win.navigate(url);
+            if let Some(win) = app.get_webview_window(LABEL) {
+                let _ = win.eval(go_script(path));
             }
         } else {
             *PENDING.lock().unwrap() = Some(path.to_string());
@@ -154,6 +157,13 @@ mod tests {
         assert_eq!(step(false, true, false), Step::MarkStale);
         assert_eq!(step(true, true, true), Step::Reload);
         assert_eq!(step(true, true, false), Step::Nothing);
+    }
+
+    #[test]
+    fn a_move_in_the_loaded_page_goes_through_the_pages_own_event_with_the_path_escaped() {
+        let s = go_script("/settings/engine\"</script>");
+        assert!(s.contains("k7-desktop-go"));
+        assert!(s.contains("\\\"</script>"));
     }
 
     #[test]

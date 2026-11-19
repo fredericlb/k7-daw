@@ -48,7 +48,7 @@ windows = { version = "0.61", features = [
 
 # The Linux webview's settings (src/webview_linux.rs): the version Tauri's own wry links, so there is one copy.
 [target.'cfg(target_os = "linux")'.dependencies]
-webkit2gtk = "=2.0.2"
+webkit2gtk = { version = "=2.0.2", features = ["v2_38"] }
 
 # File and line in a backtrace, no variables: less than half the target folder; CARGO_PROFILE_DEV_DEBUG=2 for a debugger (docs/rust-builds.md).
 [profile.dev]

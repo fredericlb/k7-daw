@@ -41,8 +41,7 @@ fn is_page(url: &Url, port: u16) -> bool {
         && url.port_or_known_default() == Some(port)
 }
 
-/// What the page may ask the webview for: the camera, the microphone and MIDI on k7's origin, nothing like a screen
-/// or a position, and the platform's way for the rest.
+/// What the page may ask the webview for, on k7's origin only (docs/desktop.md).
 pub fn permit(kind: PermissionKind, on_page: bool) -> PermissionResponse {
     if !on_page {
         return PermissionResponse::Deny;

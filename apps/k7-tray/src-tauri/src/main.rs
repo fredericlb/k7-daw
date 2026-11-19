@@ -69,6 +69,8 @@ fn main() {
             // The front runs in this process, whose stderr nobody reads: its panics and its stop go to the merged log.
             k7_front::exit::watch(Some(|l| logbus::line("front", l)));
 
+            // The login entry is settled first: the menu's check reads what is on disk after the migration.
+            autostart::settle(&handle);
             let autostart_on = handle.autolaunch().is_enabled().unwrap_or(false);
             let mb = tray::build_menu(&handle, autostart_on, updates::auto_enabled(&handle))?;
             let icon = TrayIconBuilder::with_id("main")
@@ -102,8 +104,6 @@ fn main() {
             appmenu::install(&handle)?;
             // A login starts hidden; any other launch shows the splash at once.
             window::create(&handle, !autostart::launched_at_login())?;
-            autostart::retire_old(&handle);
-            autostart::reregister(&handle);
             backend::spawn(&handle);
             loops::start(&handle);
             updates::start(&handle);
@@ -130,7 +130,8 @@ fn main() {
         .expect("error building K7 DAW")
         .run(|app, event| {
             match event {
-                RunEvent::ExitRequested { .. } => cleanup(app),
+                // Cmd-Q and a logout end in Exit alone, which no ExitRequested precedes.
+                RunEvent::ExitRequested { .. } | RunEvent::Exit => cleanup(app),
                 // The Dock icon of a hidden window brings it back.
                 #[cfg(target_os = "macos")]
                 RunEvent::Reopen { .. } => window::show(app, None),
@@ -147,10 +148,32 @@ fn window_state<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
         .build()
 }
 
+/// Whether this is the first call: the stop must run once, whichever event reaches it first.
+fn first(flag: &std::sync::atomic::AtomicBool) -> bool {
+    !flag.swap(true, std::sync::atomic::Ordering::SeqCst)
+}
+
+static CLEANED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
 /// On quit: the backend stops its supervisor, which deregisters and stops the engine; the backstop catches what a
 /// hung one left behind.
 fn cleanup(app: &tauri::AppHandle) {
+    if !first(&CLEANED) {
+        return;
+    }
     logbus::line("host", "quitting");
     backend::stop(app);
     pidkill::backstop();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn the_stop_runs_once_whatever_event_comes_first() {
+        let flag = std::sync::atomic::AtomicBool::new(false);
+        assert!(first(&flag));
+        assert!(!first(&flag));
+    }
 }
