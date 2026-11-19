@@ -59,9 +59,10 @@ test.describe("a machine's own backend", () => {
     test.skip(!internalSecret, "CONFORMANCE_INTERNAL_SECRET not given");
     const headers = { "x-k7-internal": internalSecret ?? "" };
     const local = await request.get("/api/internal/engine/local", { headers });
-    expect([200, 404]).toContain(local.status());
+    // A front that runs no local engine answers nothing here: the path is unclaimed, and asks a session.
+    if (local.status() !== 200)
+      return expect([401, 404]).toContain(local.status());
     expect(local.headers()["cache-control"]).toBe("no-store");
-    if (local.status() === 404) return;
     expect(typeof (await local.json()).answered).toBe("boolean");
     const bad = await request.post("/api/internal/engine/local/commands", {
       headers,
