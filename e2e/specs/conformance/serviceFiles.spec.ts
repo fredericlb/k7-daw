@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { request as httpRequest } from "node:http";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
-import { base } from "../../src/instance.ts";
+import { base, signedIn } from "../../src/instance.ts";
 import {
   filesUnder,
   onDisk,
@@ -356,8 +356,9 @@ test("/media takes its identity in the query, answers the bytes, and refuses wha
   ]);
   const noTicket = await svc.request.get(
     media({ user: ok.user, workspace: ws, path: "notes/a.txt" }),
+    { headers: signedIn() },
   );
-  // A device answers every request as its one local user, ticket or not.
+  // The token cookie is the ticket's fallback, as for any same-origin caller.
   expect(noTicket.status()).toBe(200);
   for (const [q, status, error] of [
     [{ token: svc.ticket }, 400, "user, workspace and path required"],
