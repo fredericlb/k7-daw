@@ -266,11 +266,6 @@ content ([sharedModules.md](sharedModules.md)).
 a listed one with no folder. It shows one amber line at the top, with a link to the Libraries page.
 A healthy list costs the page nothing.
 
-**One line announces that sharing projects by link ends** (`SharesEndNotice.tsx`). The closing date is
-the single constant `SHARES_END` in `sharesEnd.ts`, read by both languages, so announcing the real date
-is a one-line edit. Dismissing it is remembered per browser in `localStorage`; a browser that refuses
-storage shows it each visit.
-
 ### The debt is said at creation, not discovered at opening
 
 The card checks the DECLARATION of the library, never its contents, so a `mix` scaffolded on a
@@ -692,8 +687,8 @@ is the difference worth noting. A workspace made here empties the window immedia
 
 ## What to check in a browser
 
-The suites here run in node and mount nothing: `projectName`,
-the end-of-shares notice (`sharesEnd`) and the bar's verbs (`homeCommands.test.ts`) are covered, the screen is not.
+The suites here run in node and mount nothing: `projectName`
+and the bar's verbs (`homeCommands.test.ts`) are covered, the screen is not.
 
 - open `/` while logged out → the login screen, then the home page;
 - **with no engine machine**: the project list is replaced by the sentence that says why, the add

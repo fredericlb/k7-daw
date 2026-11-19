@@ -1,0 +1,17 @@
+// Deck A's LEVEL — the channel fader, in decibels.
+//
+// Not the crossfader, and this is the distinction the desk was missing: most of a
+// transition is made at the channel, the crossfader being the thing you use for a hard cut.
+// A desk whose only level control is the crossfade can blend two records and nothing else.
+//
+// In DECIBELS, unlike the `fade` it feeds: a LEVEL is read in dB, and a surface sending
+// 0.5 for "half" would look right and be six decibels wrong. The floor is -60 and reads as
+// silence — a fader has a bottom, and -Infinity is not a position on one.
+//
+// It sits AFTER the cue tap, which is what pre-fade listen means: pulling this fader down
+// must not take the deck out of your headphones.
+extends("@k7-core/audio/zz_utility/gain")
+params({
+  // 0 dB = unity. A channel fader rests OPEN; it is the crossfader that decides what is heard.
+  Gain: 0,
+})

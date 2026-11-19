@@ -66,7 +66,7 @@ fn main() {
             let mb = tray::build_menu(&handle, autostart_on, updates::auto_enabled(&handle))?;
             let icon = TrayIconBuilder::with_id("main")
                 .icon(trayicon::render(trayicon::IconState::Loading(0)))
-                .tooltip("k7")
+                .tooltip("K7 DAW")
                 .menu(&mb.menu)
                 .show_menu_on_left_click(true)
                 .on_menu_event(|app, event| tray::on_menu(app, event.id.as_ref()))

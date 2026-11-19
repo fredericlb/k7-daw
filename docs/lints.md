@@ -66,7 +66,9 @@ resolves. (Spelling a whole example path here would make this sentence a broken 
 legitimately name although this checkout has not got them: a page inside `engine/k7-runtime` writes
 `engine/EditBuilder.cpp` relative to its own app — a path under one of `engine/`'s real folders is
 still checked — and a path under `dist/` or a Rust `target/` names a build output a checkout has only once built.
-A growing list there is the check going soft.
+A growing list there is the check going soft. Beyond it, a missing path that git IGNORES passes too: an
+ignore rule is where the repo already says a folder is built rather than written, so a second list of
+build folders here would only drift from it.
 
 `TOMBSTONES` is the other one, and it is empty: a path listed there is exempted because the
 sentence around it is about a file deliberately absent from the tree, and it is spelled out by hand

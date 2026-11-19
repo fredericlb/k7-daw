@@ -1,6 +1,6 @@
 # Repository layout
 
-The `studio` repository holds k7 and everything it is built from: the web app, its backend, the
+The `k7-daw` repository (K7 DAW) holds k7 and everything it is built from: the web app, its backend, the
 shared TypeScript packages, the C++ engine and its supervisor, the tray and the phone shells, and
 the module library k7 ships with. It is one npm workspace tree driven from the root
 `package.json`.

@@ -53,7 +53,7 @@ a debt that predates the rule and shrinks as files are touched. New code has no 
 
 # This repo
 
-`studio` holds the music/stage apps. **Read `docs/architecture.md` before working in an area you
+`k7-daw` (the K7 DAW project) holds the music/stage apps. **Read `docs/architecture.md` before working in an area you
 don't know, or touching packaging and deployment**: it is the full map of every app and package,
 the production image, and the repo-wide pages in `docs/`. The short map:
 

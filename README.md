@@ -1,4 +1,4 @@
-# studio
+# K7 DAW (k7-daw)
 
 The music and stage apps of the frediverse.
 
@@ -9,7 +9,7 @@ The music and stage apps of the frediverse.
 | `engine/k7-supervisor` | the engine machine's supervisor: starts and watches the engine, holds its tunnel | — |
 | `apps/k7-tray` | k7 on Windows and Linux (Tauri, in the system tray; a Mac runs the iOS app): runs k7's backend, which runs the supervisor and its engine; k7 opens in the browser | — |
 
-`packages/` is studio's shared tier, all `@studio/*` and consumed as raw
+`packages/` is k7-daw's shared tier, all `@studio/*` and consumed as raw
 TypeScript source: the song compiler, the command layer, the engine client and
 supervisor, the view engines, the waveform component. The engine and its supervisor
 serve every audio app, not just k7 — hence their own directories. The UI kit (`@studio/ui`),
@@ -18,8 +18,8 @@ i18n, http, oidc and the build tooling (`env`, `vite-config`, `tsconfig`) are in
 ## Getting started
 
 ```bash
-git clone <url> studio
-cd studio
+git clone git@github.com:fredericlb/k7-daw.git
+cd k7-daw
 npm ci
 cp env.example.yaml env.yaml   # then fill in the secrets
 npm run dev                    # every app, plus the engine
@@ -31,7 +31,7 @@ documentation answers at **https://docs.priv.k7.rocks**; in production k7 runs o
 (`docs/images.md`).
 Nothing here terminates TLS. See [docs/dev.md](docs/dev.md).
 
-`npm run dev` runs the whole studio as one Tilt session — every app's frontend and
+`npm run dev` runs the whole repository as one Tilt session — every app's frontend and
 backend, plus a task that builds the C++ engine and runs it,
 and rebuilds+restarts it on save. One app on its own is still `npm run dev` inside its
 directory. See [docs/dev.md](docs/dev.md).
@@ -60,6 +60,6 @@ See [docs/images.md](docs/images.md) — the images CI builds and what each hold
 
 ## License
 
-studio is licensed under the GNU General Public License, version 3 — see [LICENSE](LICENSE).
+K7 DAW is licensed under the GNU General Public License, version 3 — see [LICENSE](LICENSE).
 The notices of the third-party code the engine compiles are in
 [engine/k7-runtime/LICENSE](engine/k7-runtime/LICENSE).
