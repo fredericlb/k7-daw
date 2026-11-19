@@ -28,8 +28,6 @@ export interface ProbeTarget {
   proxyTicket?: string;
   /** Its supervisor holds a tunnel, so a WebRTC candidate is offered too — packages/engine-tunnel/docs/rtc.md. */
   rtc?: boolean;
-  /** The server's own engine, its tunnel authenticated by the render key — packages/engine-tunnel/docs/jobs.md. */
-  server?: boolean;
 }
 
 export interface RankedEngine<E extends ProbeTarget = ProbeTarget> {
@@ -215,12 +213,9 @@ export function candidatesFor(
   opts: ProbeOptions = {},
 ): Candidate[] {
   const { loopback, lanIps, port } = e.addresses;
-  /** What this page may dial in the clear — an HTTPS page counts a LAN attempt as mixed content — and nothing at all for k7's own engine, whose addresses are its container's (docs/access.md). */
-  const dialable = e.server
-    ? []
-    : location.protocol === "https:"
-      ? [loopback]
-      : [loopback, ...lanIps];
+  /** What this page may dial in the clear — an HTTPS page counts a LAN attempt as mixed content. */
+  const dialable =
+    location.protocol === "https:" ? [loopback] : [loopback, ...lanIps];
   const direct = dialable
     .map((host): Candidate => ({ url: `ws://${host}:${port}`, direct: true }))
     .filter((c) => !loopbackResting(c.url));

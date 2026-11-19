@@ -47,31 +47,6 @@ runs. It comes in two shapes:
 
 In both, the paths answered are under a writable root, so naming them is what uploads them.
 
-## The server's render machine
-
-A hosted k7 keeps no engine binary, so it needs a machine that renders when nobody's engine is
-bound: an engine container of its own. That machine is told
-apart by a **render key**, a secret the deployment gives both sides (`STUDIO_RENDER_KEY`). The
-supervisor sends it in a header beside its token when it dials the tunnel, and the hub
-(`apps/k7/backend-rs/crates/k7-engine/src/tunnel/hub.rs`) marks that tunnel as the render machine. A
-binding with no engine id (`POST /bindings` with `engineId: null`, `../../engine-registry/docs/internalSeam.md`)
-is a jobs path that resolves to whichever tunnel holds the key when a client CONNECTS, so the path each
-file service is given at start outlives the machine's restarts.
-
-The engine's token cannot play this part. It proves an engine is the one that registered under its
-id, and `whoami` hands it to every socket that drives the engine (`apps/k7/backend-rs/docs/engine/token.md`).
-Anyone who once played on the server's engine could then announce themselves as it and receive
-every account's renders. The render key is never sent to a browser. A tunnel that offers a WRONG
-key is refused outright rather than treated as an ordinary engine, so a misconfigured render
-machine says so in its log instead of silently rendering nothing.
-
-The registry's engine list marks that machine `server` (`Hub::is_renderer`) for as long as its
-last tunnel presented the key, up or down: a drop must not leave it unowned, which no account may
-select (`apps/k7/backend-rs/docs/engine/ownership.md`). It is the one
-engine reached only through the server that a browser may take without a click: the render key is
-a proof no stranger's heartbeat can make (`packages/engine-browser/docs/access.md`, "Who is taken
-unasked").
-
 `prefetch` and `send-up` are how the machine KEEPS an undo's audio (`apps/k7/backend-rs/docs/files/history.md`):
 `prefetch` names files the channel brings down before it answers, with how many are there; `send-up`
 names one the server no longer has, and the machine answers `{ type: "sent", file }` naming its own

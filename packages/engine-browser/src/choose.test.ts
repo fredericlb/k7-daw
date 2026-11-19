@@ -259,15 +259,6 @@ describe("who is taken unasked", () => {
     );
   });
 
-  it("takes the server's own engine, flagged by the registry", () => {
-    const own = relayed(rated("render", 9, "Q1"));
-    const server = {
-      ...own,
-      engine: { ...own.engine, server: true },
-    } as RankedEngine<PublicEngine>;
-    expect(bestEngine([server])?.engine.id).toBe("render");
-  });
-
   // A lookalike may advertise any address: only one of its own private addresses, dialled directly, counts.
   it("does not count a public address as direct", () => {
     const pub = rated("pub", 2, "Q1");

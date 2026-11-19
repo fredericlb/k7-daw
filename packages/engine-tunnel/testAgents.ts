@@ -61,7 +61,6 @@ function native(bin: string): AgentKind {
               opts.token,
               String(opts.enginePort),
               opts.cacheDir,
-              ...(opts.renderKey ? [opts.renderKey] : []),
             ],
             { stdio: ["pipe", "ignore", "inherit"] },
           );

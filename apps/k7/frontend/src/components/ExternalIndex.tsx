@@ -55,8 +55,6 @@ export function ExternalIndex() {
               fileBase: chosen.fileBase,
               token: fileTokenOf(chosen) ?? "",
               userEmail,
-              // This menu edits nothing of the admins'.
-              admin: false,
             }
           : null,
       );

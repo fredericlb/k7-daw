@@ -1,7 +1,6 @@
 // EnginesSettings.tsx — the settings screen's Engines card: the engines registered with this
-// origin that this ACCOUNT may use — its own, those shared with it, the server's — and the unowned
-// ones this browser might enrol. An engine is connected from its own machine, never from here; its
-// owner shares it or gives it up here. See ../../docs/settings.md.
+// device, those its account may use and those it may not. An engine is connected from its own
+// machine, never from here. See ../../docs/settings.md.
 
 import type { RankedEngine } from "@studio/engine-browser/probe";
 import { Badge } from "@studio/ui/badge";
@@ -15,10 +14,8 @@ import {
 } from "@studio/web-protocol/performance";
 import { formatLatency } from "@studio/web-protocol/quality";
 import { useCallback, useEffect, useState } from "react";
-import { EngineShareEditor } from "./EngineShareEditor";
 import { type EngineLabels, useEngineLabels } from "./engineLabels";
 import { engines } from "./engineRegistry";
-import { accessLabel } from "./engineShares";
 
 interface Looked {
   ranked: RankedEngine<PublicEngine>[];
@@ -35,16 +32,14 @@ function heldLine(e: PublicEngine, l: EngineLabels): string | null {
 function EngineRow({
   r,
   remembered,
-  onChanged,
 }: {
   r: RankedEngine<PublicEngine>;
   remembered: boolean;
-  onChanged: () => void;
 }) {
   const l = useEngineLabels();
   const e = r.engine;
   const held = heldLine(e, l);
-  const access = accessLabel(e, l);
+  const access = e.access === "unowned" ? l.unowned : l.yours;
   return (
     <li className="flex items-start gap-3 rounded-md border px-3 py-2">
       <Server className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
@@ -54,7 +49,7 @@ function EngineRow({
           <span className="font-mono text-xs text-muted-foreground">
             {e.id.slice(0, 8)}
           </span>
-          {access && (
+          {e.access && (
             <Badge
               variant={e.access === "unowned" ? "amber" : "default"}
               title={e.access === "unowned" ? l.unownedHint : undefined}
@@ -62,7 +57,6 @@ function EngineRow({
               {access}
             </Badge>
           )}
-          {e.server && e.access === "owner" && <Badge>{l.server}</Badge>}
           {remembered && <Badge>{l.chosen}</Badge>}
         </div>
         <div className="text-xs text-muted-foreground">
@@ -80,10 +74,6 @@ function EngineRow({
           {e.sameSourceIp && ` · ${l.sameNetwork}`}
           {held && ` · ${held}`}
         </div>
-        {/* The server's engine is every account's to use: its admins own it with nothing to share or give up. */}
-        {e.access === "owner" && !e.server && (
-          <EngineShareEditor id={e.id} onGivenUp={onChanged} />
-        )}
       </div>
     </li>
   );
@@ -146,7 +136,6 @@ export function EnginesSettings() {
               key={r.engine.id}
               r={r}
               remembered={r.engine.id === looked.rememberedId}
-              onChanged={() => void look()}
             />
           ))}
         </ul>

@@ -45,12 +45,11 @@ describeCore("a render made on an engine's machine", () => {
     workspace = join(home, "workspace");
     mkdirSync(workspace, { recursive: true });
     process.env.STUDIO_HOME = home;
-    hub = await startHub({ renderKey: "k" });
+    hub = await startHub();
     agent = new TunnelAgent({
       registryUrl: hub.agentUrl,
       id: "server",
       token: "t",
-      renderKey: "k",
       enginePort: 1,
       cacheDir: mkdtempSync(join(tmpdir(), "rr-cache-")),
       log: () => {},
@@ -71,7 +70,7 @@ describeCore("a render made on an engine's machine", () => {
       },
     });
     agent.start();
-    await until(async () => (await hub.renderer()) === "server");
+    await until(() => hub.has("server"));
     const roots = [
       { remote: workspace, name: "ws", writable: true },
       {
@@ -80,7 +79,7 @@ describeCore("a render made on an engine's machine", () => {
         writable: true,
       },
     ];
-    jobsUrl = `ws://127.0.0.1:${hub.port}${await hub.bindRenderer(roots)}`;
+    jobsUrl = `ws://127.0.0.1:${hub.port}${await hub.bindLocal("server", roots, "jobs")}`;
   });
 
   afterEach(async () => {

@@ -17,8 +17,6 @@ export const ENGINE_TOKEN_HEADER = "x-studio-engine-token";
 export const ENGINE_ID_HEADER = "x-studio-engine-id";
 /** The file hub's secret, the ONLY gate of a server-hosted file service — apps/k7/backend-rs/docs/files/hub.md. */
 export const HUB_SECRET_HEADER = "x-studio-hub-secret";
-/** "1" when the file hub found the caller in the origin's admin groups; a client's own is dropped. */
-export const ADMIN_HEADER = "x-studio-admin";
 /** Where a server that HOSTS workspaces says so; a 404 means it does not. */
 export const FILE_HUB_HELLO = "/api/files-hub";
 
@@ -26,8 +24,6 @@ export const FILE_HUB_HELLO = "/api/files-hub";
 export interface FileHubHello {
   path: string;
   ticket: string;
-  /** Whether the caller may edit what the origin's admins own — the libraries list. */
-  admin: boolean;
 }
 
 // ── The engine assignment ────────────────────────────────────────────────────
@@ -139,16 +135,12 @@ export interface PublicEngine {
   proxyTicket?: string;
   /** Its supervisor holds a tunnel, so a WebRTC offer can reach it — packages/engine-tunnel/docs/rtc.md. */
   rtc?: boolean;
-  /** The server's own engine: its tunnel presented the render key — packages/engine-tunnel/docs/jobs.md. */
-  server?: boolean;
   /** The chains THIS MACHINE separates with, by `want` (`stems`, `instrumental`) — its own settings, from its
       `engine-host.json`; a cut of a library song with no chain named uses them (engine/k7-supervisor/docs/stemSplit.md). */
   chains?: { stems?: string; instrumental?: string };
-  /** What the asking account is to it — apps/k7/backend-rs/docs/engine/ownership.md; absent from an older registry. */
+  /** Whether this device's account may use it — apps/k7/backend-rs/docs/engine/ownership.md; absent from an older registry. */
   access?: EngineAccessRole;
-  /** For `shared`: the account that shared it. */
-  ownedBy?: string;
 }
 
-/** `owner` enrolled it, `shared` was given it, `server` is the deployment's own, `unowned` waits for its first direct open. */
-export type EngineAccessRole = "owner" | "shared" | "server" | "unowned";
+/** `owner` runs on this device and is the account's to use; `unowned` is listed but not usable. */
+export type EngineAccessRole = "owner" | "unowned";

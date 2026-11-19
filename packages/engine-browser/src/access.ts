@@ -53,8 +53,6 @@ export interface EngineAccess<
 export interface HostedFiles {
   fileBase: string;
   fileToken: string;
-  /** The hub found the caller in the origin's admin groups — the ticket says so too. */
-  admin: boolean;
 }
 
 /** Where an app keeps its preferences, when that is not where the registry is — k7, whose registry is pl8's. */
@@ -173,7 +171,6 @@ export function engineAccess<
         ? {
             fileBase: `${base}${hub.path}`,
             fileToken: hub.ticket,
-            admin: hub.admin === true,
           }
         : null;
     },

@@ -98,25 +98,6 @@ describe("candidatesFor and the WebRTC offer", () => {
   });
 });
 
-// k7's own engine is a container: what it lists are the container's addresses, which no browser reaches.
-describe("candidatesFor for the server's own engine", () => {
-  beforeEach(() => {
-    vi.stubGlobal("location", {
-      protocol: "https:",
-      href: "https://app.k7.test/media",
-    });
-  });
-
-  afterEach(() => vi.unstubAllGlobals());
-
-  it("offers no direct address at all, only the relay", () => {
-    const server = { ...target, server: true, rtc: true };
-    const urls = candidatesFor(server, "", { claim: true }).map((c) => c.url);
-    expect(urls.some((u) => u.startsWith("ws://"))).toBe(false);
-    expect(urls.some((u) => u.startsWith("wss://"))).toBe(true);
-  });
-});
-
 // The page's own machine is the one thing it can learn without the server: nothing answered there last time.
 describe("a loopback that just refused", () => {
   /** Enough of a socket for `probeOne`: it refuses on the first microtask, and never opens. */

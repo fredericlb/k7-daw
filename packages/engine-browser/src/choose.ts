@@ -19,15 +19,14 @@ export interface Choice<E extends ProbeTarget> {
   ambiguous: boolean;
 }
 
-/** Whether this engine may be taken with nobody clicking: the account's own pick, one reached directly, or the server's own. */
+/** Whether this engine may be taken with nobody clicking: the account's own pick, or one reached directly. */
 export function mayAutoPick<E extends ProbeTarget>(
   r: RankedEngine<E>,
   remembered: string | undefined,
 ): boolean {
   return (
     (remembered !== undefined && r.engine.id === remembered) ||
-    reachedDirectly(r) ||
-    r.engine.server === true
+    reachedDirectly(r)
   );
 }
 

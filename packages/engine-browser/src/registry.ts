@@ -109,14 +109,13 @@ export function registryClient<E, P extends EnginePrefs = EnginePrefs>(
           body.tookFor ?? null,
         );
       }
-      // 403 `not-yours` or `unowned`: nobody shared it with this account — an answer like 409, never retried (`apps/k7/backend-rs/docs/engine/claim.md`).
+      // 403 `unowned`: the engine does not run on this device — an answer like 409, never retried (`apps/k7/backend-rs/docs/engine/claim.md`).
       if (res.status === 403) {
         const body = (await res
           .clone()
           .json()
           .catch(() => ({}))) as { error?: string };
-        if (body.error === "not-yours" || body.error === "unowned")
-          throw new ClaimLost("", "refused");
+        if (body.error === "unowned") throw new ClaimLost("", "refused");
       }
       return json<ClaimGrant>(res, "select");
     },

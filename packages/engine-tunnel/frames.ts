@@ -12,7 +12,6 @@ export const TUNNEL_TOKEN_HEADER = "x-studio-engine-token";
 export const TUNNEL_SECRET_HEADER = "x-studio-tunnel-secret";
 
 /** The server's render machine proves itself with this header: a key the deployment shares, never the engine's token — docs/jobs.md. */
-export const TUNNEL_RENDER_KEY_HEADER = "x-studio-render-key";
 /** File chunks are cut to this, so one large take never holds the socket for long. */
 export const CHUNK_BYTES = 256 * 1024;
 

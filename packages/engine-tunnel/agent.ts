@@ -18,7 +18,6 @@ import {
   type HubMessage,
   TUNNEL_PATH,
   TUNNEL_PROTOCOL_HEADER,
-  TUNNEL_RENDER_KEY_HEADER,
   TUNNEL_SECRET_HEADER,
   TUNNEL_TOKEN_HEADER,
   type TunnelRoot,
@@ -34,8 +33,6 @@ export interface TunnelAgentOptions {
   token: string;
   /** The machine's tunnel secret, which binds `id` to it at the registry; absent, the tunnel is a legacy one. */
   tunnelSecret?: string;
-  /** The server's render key: sent when set, so this machine renders for that server — docs/jobs.md. */
-  renderKey?: string;
   enginePort: number;
   /** Where this server's files are kept on this machine — one folder per server. */
   cacheDir: string;
@@ -134,9 +131,6 @@ export class TunnelAgent {
         [TUNNEL_PROTOCOL_HEADER]: String(this.opts.protocol ?? ENGINE_PROTOCOL),
         ...(this.opts.tunnelSecret
           ? { [TUNNEL_SECRET_HEADER]: this.opts.tunnelSecret }
-          : {}),
-        ...(this.opts.renderKey
-          ? { [TUNNEL_RENDER_KEY_HEADER]: this.opts.renderKey }
           : {}),
       },
     });

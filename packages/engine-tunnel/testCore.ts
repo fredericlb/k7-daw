@@ -58,7 +58,6 @@ export async function startTestbed(
       SESSION_SECRET: TESTBED_SECRET,
       STUDIO_AUTH_DIR: mkdtempSync(join(tmpdir(), "testbed-auth-")),
       K7_ENGINE_TEST_MEMORY: "1",
-      AUTH_ADMIN_GROUPS: "admins",
       ...env,
     },
     stdio: ["ignore", "pipe", "pipe"],
@@ -153,8 +152,6 @@ export interface HubTarget {
   agentUrl: string;
   lines: string[];
   has(id: string): Promise<boolean>;
-  renderer(): Promise<string | null>;
-  rendersEnabled(): Promise<boolean>;
   openReady(
     id: string,
     roots?: TunnelRoot[],
@@ -167,7 +164,6 @@ export interface HubTarget {
     kind?: ChannelKind,
     opts?: { synced?: boolean },
   ): Promise<string>;
-  bindRenderer(roots: TunnelRoot[], kind?: ChannelKind): Promise<string>;
   unbindLocal(path: string): Promise<void>;
   signal(id: string, sdp: string): Promise<string>;
   /** Drops every tunnel's socket as a network would, no close frame. */
@@ -188,7 +184,6 @@ export interface UploadLimits {
 export interface HubOptions {
   /** Who may hold a tunnel: anyone, or one id with its token (and secret when given). */
   verify?: "all" | { id: string; token: string; secret?: string };
-  renderKey?: string;
   minProtocol?: number;
   /** What one tunnel may upload. */
   uploads?: Partial<UploadLimits>;
@@ -241,7 +236,6 @@ async function rustHub(opts: HubOptions): Promise<HubTarget> {
   const lan = lanAddress();
   const bed = await startTestbed({
     K7_FRONT_LISTEN: "0.0.0.0:0",
-    ...(opts.renderKey ? { STUDIO_RENDER_KEY: opts.renderKey } : {}),
     ...(opts.minProtocol
       ? { K7_ENGINE_TEST_MIN_PROTOCOL: String(opts.minProtocol) }
       : {}),
@@ -267,8 +261,6 @@ async function rustHub(opts: HubOptions): Promise<HubTarget> {
     agentUrl: relay.url,
     lines: bed.lines,
     has: (id) => bed.hook<boolean>("hubHas", { id }),
-    renderer: () => bed.hook<string | null>("hubRenderer"),
-    rendersEnabled: () => bed.hook<boolean>("hubRendersEnabled"),
     async openReady(id, roots = [], _timeoutMs = 5000, kind = "engine") {
       // A one-shot binding, as the seam's callers open a channel.
       const path = await bed.hook<string>("hubBind", {
@@ -287,8 +279,6 @@ async function rustHub(opts: HubOptions): Promise<HubTarget> {
         kind,
         synced: !!o.synced,
       }),
-    bindRenderer: (roots, kind = "jobs") =>
-      bed.hook<string>("hubBind", { engineId: null, roots, kind }),
     unbindLocal: async (path) => void (await bed.hook("hubUnbind", { path })),
     async signal(id, sdp) {
       const r = await bed.hook<{ sdp?: string; error?: string }>("hubSignal", {

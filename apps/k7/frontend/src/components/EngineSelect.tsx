@@ -191,17 +191,11 @@ export function EngineSelect({
   );
 }
 
-/** What this account is to the engine, said as the settings card says it — engine-registry docs/ownership.md. */
+/** Whether this account may use the engine, said as the settings card says it — apps/k7/backend-rs/docs/engine/ownership.md. */
 function accessText(e: RankedEngine["engine"]): string | null {
   switch (e.access) {
     case "owner":
       return m["media.engines.yours"]();
-    case "shared":
-      return m["media.engines.sharedBy"]({
-        owner: e.ownedBy || m["media.engines.someone"](),
-      });
-    case "server":
-      return m["media.engines.server"]();
     case "unowned":
       return m["media.engines.unowned"]();
     default:

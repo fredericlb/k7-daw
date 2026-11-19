@@ -33,7 +33,7 @@ somebody changes engine from a neighbouring header.
 ## Who is taken unasked
 
 Registration is open — a machine registers with no account (`apps/k7/backend-rs/docs/engine/heartbeat.md`).
-The list holds only the engines this account owns, was shared or may use as the server's, plus the
+The list holds the engines this account may use (those of this device) and the
 UNOWNED ones (`apps/k7/backend-rs/docs/engine/ownership.md`) — and an unowned engine is anybody's
 machine until somebody opens it directly, with any performance score it likes to claim. Taking one without a click would bind the account's workspaces to a stranger's
 tunnel. So `chooseEngine` and `bestEngine` only ever take an engine that passes `mayAutoPick`
@@ -45,9 +45,7 @@ tunnel. So `chooseEngine` and `bestEngine` only ever take an engine that passes 
    one of the engine's own loopback or private addresses, dialled from this browser, and its
    `whoami` answered there with the id and a token. That engine is on the user's machine or the
    user's network. A public address, the relay or WebRTC do not count, since what answers there
-   is whatever the stranger registered;
-3. the **server's own** engine, which the registry marks `server` because its tunnel presented the
-   deployment's render key (`packages/engine-tunnel/docs/jobs.md`) — a secret no stranger holds.
+   is whatever the stranger registered.
 
 The bench's rule in k7 (`accountEngine`) is not an exception: it takes the engine the account
 already holds a claim on, and a claim is named by the session, never by the engine.
@@ -105,9 +103,7 @@ offers none, and the probes a page makes for an engine it DRIVES — `wsUrlFor`,
 race it (`probeEngines`' `claim`). Offering it earlier buys nothing and costs a 403 per engine per
 look, which is console noise in the way of the errors worth reading.
 
-Two more are dropped instead of raced, because neither can answer. A `server` engine lists
-its container's addresses and no browser reaches one, so it
-is offered the relay alone. And a loopback address that refused is left alone for two minutes: the
+One more is dropped instead of raced, because it cannot answer: a loopback address that refused is left alone for two minutes: the
 page's own machine is the one thing it can learn without asking the server, and the same question 15
 seconds later has the same answer. It is offered again once that window closes — the price being that
 a tray started meanwhile is found within the two minutes rather than immediately.

@@ -89,8 +89,6 @@ export interface AccountFiles {
   token: string;
   /** Who is asking — read off `/auth/me` rather than off a configured workspace, this page having none. */
   userEmail: string;
-  /** Whether the caller may edit the origin's libraries — the hub's word, which the file service enforces. */
-  admin: boolean;
 }
 
 /** One call to the account's file service: its headers, the workspace a row names, and a body when there is one. */
