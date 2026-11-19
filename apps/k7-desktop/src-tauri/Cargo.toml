@@ -1,0 +1,59 @@
+[package]
+name = "k7-desktop"
+version = "0.1.0"
+edition = "2021"
+description = "K7 DAW, the desktop app: a window on k7's local backend, which runs the engine"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+serde_json = "1"
+
+# Short on purpose: the app starts one process, hosts one window. What k7 does happens in the backend and the
+# supervisor; a crate added here for logic is logic in the wrong place (docs/app.md).
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-single-instance = "2"
+tauri-plugin-dialog = "2"
+# The window's size, position and maximized state, between launches (not its visibility: a login starts it hidden).
+tauri-plugin-window-state = "2"
+# standalone.json, read as JSON.
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Local wall-clock for the merged log's `HH:MM:SS [tag]` prefix, the web Logs panel's contract.
+chrono = { version = "0.4", features = ["clock"] }
+# The home directory `~/.k7` hangs off.
+dirs = "5"
+# The random hex of the front's secret and the session secret.
+getrandom = "0.3"
+# The unix SIGTERM/SIGINT handler, on the runtime Tauri already brings.
+tokio = { version = "1", features = ["macros", "signal"] }
+# k7's Rust front, run in this process on the page's port, in front of node (apps/k7/backend-rs/docs/embed.md).
+k7-front = { path = "../../k7/backend-rs/crates/k7-front" }
+# The pidfile proof the quit's backstop kills by, shared with the Rust supervisor host (apps/k7/backend-rs/docs/local.md).
+k7-local = { path = "../../k7/backend-rs/crates/k7-local" }
+
+# Windows Job Object (kill-on-close): the backend and everything it starts die with the app, however it ends.
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.61", features = [
+  "Win32_Foundation",
+  "Win32_Security",
+  "Win32_System_JobObjects",
+  "Win32_System_Threading",
+] }
+
+# The Linux webview's settings (src/webview_linux.rs): the version Tauri's own wry links, so there is one copy.
+[target.'cfg(target_os = "linux")'.dependencies]
+webkit2gtk = { version = "=2.0.2", features = ["v2_38"] }
+
+# File and line in a backtrace, no variables: less than half the target folder; CARGO_PROFILE_DEV_DEBUG=2 for a debugger (docs/rust-builds.md).
+[profile.dev]
+debug = "line-tables-only"
+
+# The linked front's Wasmtime crawls at opt-level 0 (apps/k7/backend-rs/docs/front.md).
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.release]
+opt-level = "s"
+lto = "thin"
+strip = true

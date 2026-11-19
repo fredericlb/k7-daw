@@ -18,11 +18,8 @@ val standalone = groovy.json.JsonSlurper().parse(rootDir.resolve("../../apps/k7/
 // The e2e build's backend port: the shipped app holds standalone.json's on the same loopback, and e2e/src/android.ts dials this one.
 val E2E_PORT = 18799
 
-// The root package.json's version, the one every artefact ships under (docs/versioning.md); a snapshot adds its stamp.
-val rootVersion = (groovy.json.JsonSlurper().parse(rootDir.resolve("../../package.json")) as Map<*, *>)["version"] as String
-val releaseStamp = System.getenv("STUDIO_RELEASE_STAMP").orEmpty()
-// versionFor and isStamp of engine/scripts/releaseStamp.mjs, which a change to either rule changes too.
-val appVersionName = if (releaseStamp.matches(Regex("snapshot-[0-9a-f]+"))) "$rootVersion-$releaseStamp" else rootVersion
+// The root package.json's version, the one every artefact ships under (docs/versioning.md).
+val appVersionName = (groovy.json.JsonSlurper().parse(rootDir.resolve("../../package.json")) as Map<*, *>)["version"] as String
 
 fun git(vararg args: String): String =
     providers.exec { commandLine("git", *args); workingDir = rootDir }.standardOutput.asText.get().trim()

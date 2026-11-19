@@ -10,7 +10,7 @@ process.env.E2E_BASE_URL = PHONE_ORIGIN;
 
 export default defineConfig({
   testDir: "./specs",
-  testMatch: /app\/.*\.spec\.ts/,
+  testMatch: /specs[\\/]app[\\/].*\.spec\.ts/,
   outputDir: "./test-results/android",
   globalSetup: "./src/androidBuild.ts",
   fullyParallel: false,

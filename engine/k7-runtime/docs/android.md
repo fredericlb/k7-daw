@@ -1,9 +1,9 @@
 # The engine on Android
 
 The same engine and the same supervisor, built for arm64 Android by their `android-arm64` presets
-and run by the app in `engine/k7-android`, which drives the supervisor as k7's backend does under the tray. The supervisor lists the
+and run by the app in `engine/k7-android`, which drives the supervisor as k7's backend does under the desktop app. The supervisor lists the
 phone at the studios it is connected to, exactly as on a computer, and the engine serves the same
-WebSocket protocol on port 8765, bound to every interface.
+WebSocket protocol on port 8765, bound to loopback unless the LAN is open.
 
 **It lives as long as `MainActivity`**, and leaving it deregisters the engine, stops it and ends the
 process. That teardown runs on a thread of its own, never the UI thread, since its stops wait for
@@ -16,22 +16,22 @@ and its three page scripts — account, top colour, media session — which acce
 
 ## Standalone: the phone runs its own studio
 
-Like the tray on a computer (`apps/k7-tray/docs/tray.md`), the phone needs no server: it runs
+Like the desktop app on a computer (`apps/k7-desktop/docs/app.md`), the phone needs no server: it runs
 **k7's front itself**, and the engine. A studio
-elsewhere is something it can ADD, never something it needs. `BackendHost.kt` is the tray's
+elsewhere is something it can ADD, never something it needs. `BackendHost.kt` is the desktop app's
 `backend.rs` on a phone.
 
 | choice | why |
 |---|---|
-| the tray's port, environment and folders, read from `apps/k7/backend-rs/standalone.json` | one table for both, whose values `apps/k7/backend-rs/docs/standalone.md` explains; the port is a `BuildConfig` constant, since the views compare origins before anything is unpacked |
-| the local user when signed out | a view opens on `/auth/local`, and falls back to it whenever `/auth/me` says nobody — what a page on the tray's backend does (`apps/k7/frontend/docs/localApp.md`), with the signal the views already had |
+| the desktop app's port, environment and folders, read from `apps/k7/backend-rs/standalone.json` | one table for both, whose values `apps/k7/backend-rs/docs/standalone.md` explains; the port is a `BuildConfig` constant, since the views compare origins before anything is unpacked |
+| the local user when signed out | a view opens on `/auth/local`, and falls back to it whenever `/auth/me` says nobody — what a page on the desktop app's backend does (`apps/k7/frontend/docs/localApp.md`), with the signal the views already had |
 | k7's view opens straight on `/` when the WebView holds a `studio.sid` cookie (`BackendHost.home`) | `/auth/local` is a redirect before any app code, on every cold start; a cookie whose session is gone costs one bounce, since the page then says nobody and the fallback above loads `/auth/local` |
 | the phone's own studio pinned FIRST in the supervisor's list, before it starts | the supervisor's saved list overrides `$STUDIO_REGISTRY_URL`, so a phone that already listed a studio would never see its own otherwise |
 | the front runs in the app's process, with no node and no child for it | the front holds the file hub and every account's file service itself (`apps/k7/backend-rs/docs/files.md`); the page, the library it seeds and its code root ride in the zip (`apps/k7/backend-rs/scripts/stageBundle.mjs`) |
 | one `backend.zip` asset, unpacked once per install | the front reads files, not assets; the APK's `lastUpdateTime` marks the copy |
 | the Rust front's code root rides in `backend.zip` as `code/` (`apps/k7/backend-rs/scripts/stageCodeRoot.mjs`, some 700 KB), named to the front as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video there (`apps/k7/backend-rs/docs/service.md`); a folder of its own, beside the page and the library |
 | an update writes only the files whose CRC or size changed, and deletes those the new bundle lacks | the bundle is some 20 MB unpacked, and an update rewriting all of it holds the start back; `.entries` keeps each file's CRC and size, the ones Gradle's `Zip` writes in every local header. An entry without them is always written, and the `.installed` marker is removed first and written last, so an unpack cut short is redone |
-| cleartext allowed for `127.0.0.1` only (`engine/k7-android/app/src/main/res/xml/network_security_config.xml`) | the local studio is plain http, as under the tray, and every other host stays https |
+| cleartext allowed for `127.0.0.1` only (`engine/k7-android/app/src/main/res/xml/network_security_config.xml`) | the local studio is plain http, as under the desktop app, and every other host stays https |
 | the views wait for the backend before loading it | a first run spends a few seconds unpacking, and a load that fails then would put the error screen up for nothing |
 | the front answers `/api/health` at once, and holds the paths that create workspaces until the bundled library is installed | the start screen hands over on that answer, and a workspace created before the library exists has none; the front owns the wait (`apps/k7/backend-rs/docs/standalone.md`, "Ready means the library is there"), so `BackendHost` and the iPhone's need no probe of their own |
 | the shell page shows the start — "Starting k7…", with the unpack's percentage — and a failed one says why, with a Retry (`web/src/Backend.tsx`) | the phone's own studio is the one a first launch opens, so a start that never ends must not be a blank screen; the percentage is the bytes of `backend.zip` read, which is stored uncompressed in the APK, so its length is known before the unpack |
@@ -47,9 +47,9 @@ the app's process on `STANDALONE_PORT`, the one every view loads.
 | the readiness wait asks the studio's port for `/api/health` | the front is the only server there is |
 | the engine core in the front (`K7_ENGINE_CORE=front`, `apps/k7/backend-rs/docs/engine.md`), the machine's engine not (`K7_LOCAL_ENGINE` unset) | the registry, the relay and the tunnel hub are the same Rust on every host; the supervisor is `SupervisorHost.kt`'s, which no front runs here, so there is no local engine for the front to take |
 | a front that cannot start fails the start, with its reason | without it no view loads anything, and a start screen waiting forever says nothing |
-| the compiled modules in `front-cache` beside the front's state (`K7_FRONT_CACHE`) | the same Rust as the tray's; the app's process runs from no folder the front could search up from, and a compiled module is machine code, so its folder is the app's own; a cold one costs the first scan some 20 s |
+| the compiled modules in `front-cache` beside the front's state (`K7_FRONT_CACHE`) | the same Rust as the desktop app's; the app's process runs from no folder the front could search up from, and a compiled module is machine code, so its folder is the app's own; a cold one costs the first scan some 20 s |
 | `BackendHost.kt` sets no file-service variable: the front runs all fifteen native pieces answering, within the embedded 192 MB heap; `engine`, `media` and `runtime` degrade as the front does with no engine bound, and none is proved on a device yet (5-13) | the pieces are the only file service there is |
-| the file hub in the front (`K7_FILES=front`, `apps/k7/backend-rs/docs/files.md`): every account's file service and the libraries' are the front's own | one hub, the same Rust as the tray's |
+| the file hub in the front (`K7_FILES=front`, `apps/k7/backend-rs/docs/files.md`): every account's file service and the libraries' are the front's own | one hub, the same Rust as the desktop app's |
 | the front given the table's environment, its folders, the session secret, the page's folder (`K7_FRONTEND_DIST`) and the switches | it answers every route and reads the settings those routes read |
 
 **A start that fails is given up on, and the user's retry redoes it.** A front that cannot start — a full disk,
@@ -120,7 +120,7 @@ Two ways from the page to the native half:
   `web/src/native.ts`: **`K7Runtime`** (`EnginePlugin.kt`), `SupervisorHost`'s snapshots and
   commands; **`AppViews`** (`AppViewsPlugin.kt`), one native WebView per app over the page. Each is
   created the first time it is shown and only hidden after that, so an app keeps its state while
-  another is on screen. With k7 the only app, that is what keeps it alive under the tray page.
+  another is on screen. With k7 the only app, that is what keeps it alive under the desktop app page.
 - **The studio app** gets `window.k7Android` (`StudioBridge.kt`), an androidx.webkit
   WebMessageListener. Every app posts its top colour on it; **only k7, checked by origin on
   every message, may call the engine** (`apps/k7/frontend/src/settings/androidEngine.ts`). The
@@ -128,7 +128,7 @@ Two ways from the page to the native half:
   exists, and a listener's origin rules are fixed when it is added; the check is per message
   instead. k7's origin is whichever studio is open, possibly a remote one, so a script on it is
   not trusted with the supervisor: `command` takes the eight the engine page sends on a computer (`engine.start|stop|restart`,
-  `audio.priority`, `lan.open`, `plugins.rescan`, `instruments.download|remove`, as the tray's front allows,
+  `audio.priority`, `lan.open`, `plugins.rescan`, `instruments.download|remove`, as the desktop app's front allows,
   `apps/k7/backend-rs/docs/localEngine.md`) and anything else is refused —
   `shutdown`, `session.drop`, `registry.deregister`, `weburi.*` and pairing included, which the panel never sends.
   `chooseStudio` takes `https` origins, or this phone's own loopback one; an origin no listed studio
@@ -386,7 +386,7 @@ The supervisor needs no Java — no JUCE, no audio — and is built to be a chil
 stdio, so it stays exactly that. The app packages it as `libk7supervisor.so`: only files named like
 a library reach the native library directory, the one place Android lets an app execute its own
 binary, and `useLegacyPackaging` has the installer extract them as real files. `SupervisorHost.kt`
-is then what `k7-local`'s host (`apps/k7/backend-rs/docs/supervisorHost.md`) is to the tray's front — it starts the program, reads its frames, sends its commands,
+is then what `k7-local`'s host (`apps/k7/backend-rs/docs/supervisorHost.md`) is to the desktop app's front — it starts the program, reads its frames, sends its commands,
 and closes stdin to quit it.
 
 Only the ENGINE changes hands. On a computer the supervisor spawns it and kills its process tree; here

@@ -10,8 +10,8 @@ of the origin keeps the things you visit on purpose and rarely. The word is rese
 
 The page reads `src/version.ts` and nothing else. That module is the frontend's one version
 source, whatever the build feeds it (`../../../../docs/versioning.md`); a second reading of a
-`package.json` here would be a second answer the day the two differ. Under the tray the
-release of the tray is shown beside it, as on the settings page (`GET /api/local`, `localApp.md`).
+`package.json` here would be a second answer the day the two differ. Under the desktop app the
+release of the desktop app is shown beside it, as on the settings page (`GET /api/local`, `localApp.md`).
 
 ## Why the source link is there
 
@@ -29,7 +29,7 @@ nobody can name — the app ships nothing it cannot account for — while the de
 A manifest that names no licence is read by hand and written into `npmOverrides`, with why.
 
 The npm half is the `dependencies` closure (optional and peer dependencies included, dev
-dependencies not) of every app that ships: the frontend, k7's backend (which the tray ships, with the frontend inside it), the
+dependencies not) of every app that ships: the frontend, k7's backend (which the desktop app ships, with the frontend inside it), the
 Android shell, and `packages/song-strudel`, which is bundled into the engine. It is walked on
 disk rather than read from the lockfile because the licence TEXT is a file in the package, and
 because a platform's binaries are then the ones that platform actually installed. Workspace

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Without it macOS never asks, and the engine this app launches records silence (docs/app.md). -->
+  <key>NSMicrophoneUsageDescription</key>
+  <string>K7 DAW records the audio inputs of this machine onto the tracks you arm.</string>
+  <!-- The camera lanes and the video recording of a project ask the webview for the camera. -->
+  <key>NSCameraUsageDescription</key>
+  <string>K7 DAW shows and records the camera for the video lanes of your projects.</string>
+</dict>
+</plist>

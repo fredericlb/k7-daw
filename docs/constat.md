@@ -1,6 +1,6 @@
 # Overall findings — the audio axis
 
-Scope: `apps/k7`, `engine/k7-runtime`, `engine/k7-supervisor`, `apps/k7-tray` and the packages they drive.
+Scope: `apps/k7`, `engine/k7-runtime`, `engine/k7-supervisor`, `apps/k7-desktop` and the packages they drive.
 
 This page is **self-contained** — it carries its evidence rather than pointing at it — which means
 it goes stale. The remedy is not to believe it but to replay it: the last section gives the exact

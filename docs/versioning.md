@@ -1,13 +1,12 @@
 # Versioning
 
-What a build is called, and how that name reaches the screen. Two names answer two questions:
-**which release is this?** — the VERSION, `0.1.0`, one for the whole repository — and **which
-build of it?** — the STAMP, `snapshot-9f2c1ab` or the tag itself for a tray, engine or phone build.
+What a build is called, and how that name reaches the screen: the VERSION, `0.1.0`, one for the whole
+repository, and every build reads it from the root `package.json`.
 
 ## One version, in the root package.json
 
 The root `package.json`'s `version` is the release version of everything this repository ships:
-the tray, the command-line engine, the APK, the iPhone app. A `vX.Y.Z` tag is a release of exactly that version, and `scripts/check-version.mjs --tag`
+the desktop app, the command-line engine, the APK, the iPhone app. A `vX.Y.Z` tag is a release of exactly that version, and `scripts/check-version.mjs --tag`
 refuses any other tag. So a release is two steps: `node scripts/check-version.mjs --set X.Y.Z`
 in a commit on `main`, then the tag on that commit.
 
@@ -20,14 +19,14 @@ in a commit on `main`, then the tag on that commit.
 
 Each artefact derives its name from it:
 
-| artefact | release | snapshot |
-|---|---|---|
-| `/api/health` | `version` (the backend's package.json copy) and `build` (`$APP_VERSION`, `dev` when unset) | same |
-| the SPA's tooltip | `0.1.0 (dev)`, the stamp being `$VITE_APP_VERSION` when a build sets it | same |
-| engine and supervisor `build` | `v0.1.0` | `0.1.0-snapshot-9f2c1ab`; `0.1.0-dev` locally |
-| tray bundle version | `0.1.0` | `0.1.0-snapshot-9f2c1ab`, a semver prerelease |
-| Android `versionName` / iOS `MARKETING_VERSION` | `0.1.0` | `0.1.0-snapshot-9f2c1ab` / `0.1.0` |
-| Android `versionCode` / iOS build number | the commit count | the commit count |
+| artefact | name |
+|---|---|
+| `/api/health` | `version` and `build`, both the front's package version |
+| the SPA's tooltip | `0.1.0` |
+| engine and supervisor `build` | `0.1.0` |
+| the desktop app's bundle version, its release files `k7-daw_0.1.0_<os>-<arch>` | `0.1.0` |
+| Android `versionName` / iOS `MARKETING_VERSION` | `0.1.0` |
+| Android `versionCode` / iOS build number | the commit count |
 
 **The phone's build number is the commit count** (`git rev-list --count HEAD`). Android refuses an
 update whose `versionCode` is lower than the installed one, so the number must grow with every
@@ -37,21 +36,13 @@ differ between the workflow that built a snapshot and the one that built its rel
 a full history: the jobs that build a phone app check out with `fetch-depth: 0` and no blobs, and
 Gradle refuses a shallow clone rather than count one commit.
 
-## The stamp in the page
-
-`apps/k7/frontend/src/version.ts` reads `import.meta.env.VITE_APP_VERSION ?? "dev"`, and the front's
-`/api/health` reads `$APP_VERSION` the same way. `??` and not `||`: an explicitly empty
-`VITE_APP_VERSION=` renders as an empty string rather than `dev`, which is a real if harmless edge. The
-variable keeps the `VITE_` prefix, which is Vite's default `envPrefix`: a name without it is not inlined, and the build
-ships `dev` with no warning. Both layers exist so the stamp can never render `undefined`.
-
 ## Where it shows
 
 | app | SPA | render site |
 |---|---|---|
 | k7 | `k7-frontend` | `apps/k7/frontend/src/projects/HomeSidebar.tsx` — tooltip on the sidebar's title, on every home page |
 
-`VERSION` is read at module scope so it constant-folds into the bundle. In k7's home sidebar the version and the stamp are a
+`VERSION` is read at module scope so it constant-folds into the bundle. In k7's home sidebar the version is a
 tooltip on the app's name and never visible text: nobody needs it in the moment, and it is one hover
 away for whoever asks which build this is.
 

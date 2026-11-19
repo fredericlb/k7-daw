@@ -1,6 +1,6 @@
 # Rust builds — the compiler cache, the debug info and the test runner
 
-The two Cargo workspaces, `apps/k7/backend-rs` and the tray's `apps/k7-tray/src-tauri`, are the
+The two Cargo workspaces, `apps/k7/backend-rs` and the desktop app's `apps/k7-desktop/src-tauri`, are the
 slowest builds after the engine's C++: Wasmtime, Cranelift, QuickJS and SQLite compile from source,
 and every new worktree or target folder compiles them again. Three choices make that
 cheaper. The linker is the platform's own: it is not one of them.
@@ -9,8 +9,8 @@ cheaper. The linker is the platform's own: it is not one of them.
 
 `engine/scripts/sccache.mjs` finds sccache (the `PATH`, WinGet's package folder, Homebrew's and
 cargo's bins) and returns `RUSTC_WRAPPER` with the cache's settings. Every cargo build a script of
-ours starts goes through it: the dev session's `k7-front` and tray (`dev-front.mjs`,
-`dev-tray.mjs`), Android's `buildFront`, the Rust checks and the macOS gate's engine testbed.
+ours starts goes through it: the dev session's `k7-front` and desktop app (`dev-front.mjs`,
+`dev-desktop.mjs`), Android's `buildFront`, the Rust checks and the macOS gate's engine testbed.
 
 | choice | why |
 |---|---|

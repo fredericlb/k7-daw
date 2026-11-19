@@ -61,7 +61,7 @@ export const SETTINGS_ROUTE = `/${SETTINGS_PAGE}`;
 /** …and the ABOUT page: k7's version, its licence, its source and the third-party notices. */
 export const ABOUT_ROUTE = `/${ABOUT_PAGE}`;
 
-/** …and the ENGINE page beside the settings: this machine's on the tray, the engines this account may use everywhere. */
+/** …and the ENGINE page beside the settings: this machine's on the desktop app, the engines this account may use everywhere. */
 export const ENGINE_SETTINGS_ROUTE = `/${SETTINGS_PAGE}/engine`;
 
 /** …and the TASKS page, the same way. */

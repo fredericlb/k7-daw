@@ -1,8 +1,8 @@
 # The machine's engine, run by its own backend
 
-Under the tray (`apps/k7-tray`), k7's front runs on the person's computer and runs that computer's
+Under the desktop app (`apps/k7-desktop`), k7's front runs on the person's computer and runs that computer's
 supervisor, and so its engine (`crates/k7-local`, routed by `crates/k7-front/src/routes/local/`). It is
-off everywhere else: the tray turns it on (`K7_LOCAL_ENGINE=front`, the supervisor named by
+off everywhere else: the desktop app turns it on (`K7_LOCAL_ENGINE=front`, the supervisor named by
 `K7_SUPERVISOR_BIN`); a server never runs one, and a phone's app hosts its own (`supervisorHost.md`).
 How the front keeps these promises is `local.md`.
 
@@ -18,9 +18,9 @@ How the front keeps these promises is `local.md`.
 | every other loopback registry dropped when pinning | the supervisor reaches any loopback registry at k7's one port, which `STUDIO_PORTS` makes this front's (`engine/k7-supervisor/src/Url.cpp`): another loopback entry is this front spelt otherwise, and two hold two tunnels that displace each other. A second k7 on the machine (the dev session's) is listed by its public name |
 | the engine opens the machine's own folders by path (`STUDIO_ENGINE_ROOTS`) | a project here is a folder on this disk; nothing is copied through the tunnel |
 | the supervisor stopped before the rest | it deregisters from this front, which must still be up to hear it |
-| `/api/local/tray` under a bearer the tray hands over (`K7_TRAY_TOKEN`) | the tray has no session; the status line it draws is worded here (`crates/k7-local/src/tray_status.rs`), so it is tested; a device running no engine answers the no-engine line |
+| `/api/local/tray` under a bearer the host hands over (`K7_TRAY_TOKEN`), no answer without one | a host with no session that draws the engine's status line has the wording tested here (`crates/k7-local/src/tray_status.rs`); the desktop app sets no bearer and does not ask; a device running no engine answers the no-engine line |
 | this registry lists this machine's engine alone | the account's other machines play their own projects; none of them heartbeats here or at a server |
 | `/api/local` answered on every device, Android included, with `engine: false` where the front runs no engine | its answering at all is how a page knows it is on a machine's own backend (`apps/k7/frontend/docs/localApp.md`), and `engine` whether that backend drives the machine's engine |
 
-Under the tray the front is linked into the tray's process, so the tray's quit is the front's stop,
+Under the desktop app the front is linked into the desktop app's process, so the desktop app's quit is the front's stop,
 which stops the supervisor first (`local.md`).

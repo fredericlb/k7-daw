@@ -206,7 +206,7 @@ and never runs a program the host happens to have. `e2e/specs/app/noPrograms.spe
 
 ## Git on a phone
 
-libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7/backend-rs/docs/git.md`), device and simulator slices alike; the Mac's "Designed for iPad" app runs the device slice. The secrets are in iOS's protected keychain. The checklist, on a phone with a repository host and a second machine:
+libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7/backend-rs/docs/git.md`), device and simulator slices alike. The secrets are in iOS's protected keychain. The checklist, on a phone with a repository host and a second machine:
 
 | check | do | look for |
 |---|---|---|
@@ -272,28 +272,3 @@ identifier `$(TeamIdentifierPrefix)se.frediver.k7.daw`, which the provisioning p
 | the callbacks pass only keys `ws.<id>`, and capture nothing | a C function pointer cannot capture, and nothing else of the store is the list's |
 | the change notification is logged, and the page reads the store through the front every 20 s | iCloud applies a change to the store itself; a read is always current, and no event has to cross to Rust |
 | a signed-out device or an unsigned build lists nothing from other devices and keeps its own list | the app works the same with no iCloud, and CI runs unsigned |
-
-## k7 on a Mac: the iPad app
-
-k7 on a Mac is K7 DAW, the desktop app (`apps/k7-tray/docs/macos.md`). This app also runs there, as a "Designed for iPad"
-app on Apple silicon (Intel Macs are not served), and stays buildable; the desktop app has none of the limits below (one
-`iOS Audio` device, the sandbox, no plugins, a development profile). `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES` in both app configs does it; Mac Catalyst stays off.
-Everything the phone does works: the backend, the page, the engine, sound, the microphone, import and the window.
-
-| choice | why |
-|---|---|
-| one audio device, `iOS Audio`, following the Mac's system output | the engine opens the AVAudioSession route, which on a Mac is the system's chosen output, not a device list |
-| no AU or VST host plugins expected | the iPad sandbox keeps plugins outside the container out of reach |
-| folders reached through the document picker | the app's data lives in the Mac container of its bundle id, and the sandbox hides the rest of the disk |
-| the engine opens `iOS Audio` with no input until a track is armed (`STUDIO_ENGINE_INPUTS=arm`) | an input makes the session PlayAndRecord, and on a Mac that category makes macOS rebuild the device again and again; Playback is stable. Arming reopens the device with its input once (`openDeferredInputs`) and it stays open until the engine restarts |
-| JUCE's route-change handler never waits on the device lock on a Mac, and restarts at most once a second | the notification arrives on the UI thread while the restart holds the lock for a second; each restart makes macOS post another change, so the app froze. An 'unknown' change right after a restart is its echo and is dropped (`RestartCoalescer.h`, patch in `engine/patches/tracktion.cmake`) |
-| the Mac's device reports 44100 and 48000 as its only rates | JUCE otherwise probes about 150 rates on every restart, each a call to the audio daemon; iPhone and iPad keep the probe |
-| the engine's watchdog leaves a device JUCE restarted in the last 3 s alone | the stall it sees then is JUCE's own restart, and reopening fights it |
-| route changes are logged from a utility queue, one line a second with the count skipped | the log asks the audio daemon, and a Mac posts hundreds of changes a second |
-| on a Mac the web views carry no keyboard bar, neither accessory nor shortcut bar (`KeyboardBar.swift`); a phone or an iPad keeps it | a Mac shows no keyboard, yet UIKit still draws its bar as a grey band over the page's bottom while the window has focus; on a phone the bar's Done is how the keyboard goes away |
-| signed with a development profile that lists the Mac, or distributed through TestFlight or the App Store | macOS refuses an unsigned or ad-hoc build |
-| a local run goes through a `Wrapper/` bundle | macOS runs the product only from `k7.app/Wrapper/k7.app` plus a `WrappedBundle` symlink; `open` on the raw product says "incorrect executable format" |
-
-The build is `xcodebuild -destination 'platform=macOS,arch=arm64,variant=Designed for iPad' -allowProvisioningUpdates`,
-which registers the Mac in the development profile. The device slices of the engine, the supervisor and `k7-embed` are
-staged; the simulator slices do not link.

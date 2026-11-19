@@ -36,7 +36,7 @@ sit beside `apps/k7` rather than inside it. What lives
 here is the web editor: `frontend` and
 `backend`.
 
-It runs on the device — the tray, the phone, a Mac as the iPad app — each with its own
+It runs on the device — the desktop app or the phone — each with its own
 backend, files and engine, and there is no hosted instance to sign in to.
 
 The JS packages are **members of the monorepo's npm workspaces**, consumed as raw
@@ -50,7 +50,7 @@ engine/k7-runtime/               the C++ project (k7-runtime)             — na
   server/    app k7-runtime          (WebSocket audio server, Serve.cpp)
 engine/k7-supervisor/           the supervisor (C++): identity, registry, engine, tunnel, machine jobs
 engine/scripts/                  the native build: engine + supervisor, staged and packaged
-apps/k7-tray/                   the tray (Tauri; runs k7's backend, which drives k7-supervisor)
+apps/k7-desktop/                   the desktop app (Tauri; runs k7's backend, which drives k7-supervisor)
 apps/k7/                the web editor — frontend / backend
 packages/                  k7-daw's shared tier (consumed as raw TS source):
   song/                    @studio/song            — song model + compiler + Strudel patterns

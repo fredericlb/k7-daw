@@ -1,6 +1,6 @@
 # The home page
 
-The home page is the root address of k7 on your device with no project in it, for example `http://127.0.0.1:18789/` on the tray.
+The home page is the root address of k7 on your device with no project in it, for example `http://127.0.0.1:18789/` on the desktop app.
 It lists your workspaces and the projects in them. Every project is opened from here, and the back
 arrow at the top left of the editor brings you back here.
 
@@ -47,7 +47,7 @@ The round button at the foot of the sidebar opens the user menu:
 - **Settings**, which opens `/settings` (language, chains, AI key, identity and paired devices,
   described in [Settings](./16-settings.md));
 - **Engine**, which opens `/settings/engine`: the engines your account may use, and on a computer
-  running the [tray](./82-desktop-app.md) the settings of this computer's engine, or in the phone app
+  running the [desktop app](./82-desktop-app.md) the settings of this computer's engine, or in the phone app
   the phone's engine;
 - the logout entry.
 

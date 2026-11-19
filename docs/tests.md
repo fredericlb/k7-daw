@@ -93,8 +93,8 @@ A genuine failure still fails: ctest exits 8 on a failing test and the script fo
 Two MSBuild runs in the same `build/<preset>` collide, and the failure looks like a compile error
 in Tracktion rather than like contention — which is exactly how it reads when it happens.
 Hit twice while writing this page: once by running `test` and `test:all` at the same time, and it
-is the same hazard `npm run dev` carries, because the tray task watches and rebuilds the engine
-in that very directory (`dev-tray.mjs`, and see [dev.md](dev.md)). If the C++ tests fail with a
+is the same hazard `npm run dev` carries, because the desktop app task watches and rebuilds the engine
+in that very directory (`dev-desktop.mjs`, and see [dev.md](dev.md)). If the C++ tests fail with a
 compiler error you cannot explain, check whether something else is building before reading the
 error.
 
@@ -136,11 +136,8 @@ walks into code that is not a vitest suite:
   apps whose `App.test.js` get collected as ours;
 - `.claude/worktrees/**` — every branch ever worked on is checked out here. A bare root run once
   reported 667 failures that belonged to other branches;
-- `scripts/console/**` — the console is outside the workspace and has no vitest: its tests are
-  `node:test` files, which vitest collects and reports as a failed suite with no tests. They run
-  with `npm run test:console` (`node --test`, no install needed).
-- `engine/scripts/**/*.test.mjs` — `node:test` files too, which k7-tray's `test` runs: the build
-  scripts are no workspace, and the tray is what they release.
+- `engine/scripts/**/*.test.mjs` — `node:test` files too, which k7-desktop's `test` runs: the build
+  scripts are no workspace, and the desktop app is what they release.
 
 All four are excluded alongside `defaultExclude`, never instead of it: dropping `**/node_modules/**`
 would be a worse problem than any of them.

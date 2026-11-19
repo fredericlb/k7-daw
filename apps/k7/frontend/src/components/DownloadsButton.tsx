@@ -40,7 +40,7 @@ const KIND_ICON: Record<DownloadKind, LucideIcon> = {
 
 const MB = 1e6;
 
-/** The supervisor's instrument downloads, mirrored into the list; the hook opens nothing off the tray. */
+/** The supervisor's instrument downloads, mirrored into the list; the hook opens nothing off the desktop app. */
 function InstrumentDownloads() {
   const engine = useDesktopEngine();
   const snapshot = engine?.snapshot;

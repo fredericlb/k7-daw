@@ -26,13 +26,12 @@ The release version is the root `package.json`'s `version` (for example `0.1.0`)
 private workspace's `package.json`; `npm run lint:version` (`scripts/check-version.mjs`) checks the
 copies and `node scripts/check-version.mjs --set X.Y.Z` writes them all. See `docs/versioning.md`.
 
-A build may carry a stamp: `VITE_APP_VERSION` for the frontend build and `APP_VERSION` for the front.
-`apps/k7/frontend/src/version.ts` exports `VERSION` as `<version> (<stamp>)` (`"dev"` for the stamp when unset),
+Every build takes its version from the root `package.json`. `apps/k7/frontend/src/version.ts` exports `VERSION`,
 and the home sidebar shows it as the tooltip of the `k7` wordmark (`apps/k7/frontend/src/projects/HomeSidebar.tsx`);
-`/api/health` answers `{ ok, version, build }`.
+`/api/health` answers `{ ok, version, build }`, both the front's.
 
 The front serves the frontend shell with `Cache-Control: no-cache` and the hashed files under
 `assets/` as `public, max-age=31536000, immutable`, so a new build is picked up on the next page
 load. A request for a hashed asset that no longer exists returns 404 rather than the shell.
 
-Engine, tray and phone releases use a different stamp: see [Releases and publishing](./09-releases-and-publishing.md).
+Engine, desktop and phone release files are named for the same version: see [Releases and publishing](./09-releases-and-publishing.md).

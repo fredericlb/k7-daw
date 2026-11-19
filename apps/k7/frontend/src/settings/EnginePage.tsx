@@ -1,6 +1,6 @@
-// EnginePage.tsx — `/settings/engine`, the user menu's Engine. On the tray, this machine's engine under five tabs:
+// EnginePage.tsx — `/settings/engine`, the user menu's Engine. On the desktop app, this machine's engine under five tabs:
 // Engine (whether it runs, which audio interface it takes first, whether its network may use it unpaired), Instruments, Chains (what it separates with), Plugins, and the engines this account may use.
-// What the command-line engine reads from its config file; the tray hands its user no such file. Anywhere else,
+// What the command-line engine reads from its config file; the desktop app hands its user no such file. Anywhere else,
 // those engines alone, and the phone's own first. See ../../docs/settings.md.
 
 import { ArrowDown, ArrowUp } from "@studio/ui/icons";

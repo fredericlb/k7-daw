@@ -38,8 +38,8 @@ at the account's settings is therefore a link to `/settings`.
 
 ## Tabs, and the one in the address
 
-`/settings` and the tray's engine page group their sections under tabs (`settings/SettingsTabs.tsx`):
-`/settings` under General and Devices; `/settings/engine`, on the tray, under Engine,
+`/settings` and the desktop app's engine page group their sections under tabs (`settings/SettingsTabs.tsx`):
+`/settings` under General and Devices; `/settings/engine`, on the desktop app, under Engine,
 Instruments, Chains, Plugins and Engines. Every section in one column runs past what one screen shows, and
 the sections fall into groups nobody needs at once.
 
@@ -206,7 +206,7 @@ tab. It stays under the `settings/` prefix, so it takes no workspace name
 (`packages/web-protocol/docs/addresses.md`).
 
 **Engine**, `/settings/engine` (`settings/EnginePage.tsx`), is the same entry everywhere, and what it
-holds follows the machine. Served by the tray's backend — `GET /api/local` says this backend runs the
+holds follows the machine. Served by the desktop app's backend — `GET /api/local` says this backend runs the
 engine (`localApp.md`) — it is this machine's engine: its state, its audio interface ranking, its
 plugins and its instruments, reached through k7's front, which runs the supervisor
 (`apps/k7/backend-rs/docs/localEngine.md`), since the supervisor opens no socket, with the engines this

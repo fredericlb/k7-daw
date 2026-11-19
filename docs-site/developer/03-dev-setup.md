@@ -7,7 +7,7 @@
 | Node.js 24 (`engines` in `package.json`; CI uses the same version, `.nvmrc`) | Everything TypeScript. The backend relies on `node:sqlite`, which needs no flag on it. |
 | npm 10 | The workspace manager (`devEngines` in `package.json`). |
 | [Tilt](https://docs.tilt.dev/install.html) | Runs the dev session. `npm run dev` exits with a pointer to the install page if `tilt` is missing. |
-| CMake, Ninja and a C++ toolchain (AppleClang on macOS, MSVC on Windows) | Only for the `k7-tray` resource, which builds and runs the engine (and Rust, for the tray itself and the supervisor's audio decoder). |
+| CMake, Ninja and a C++ toolchain (AppleClang on macOS, MSVC on Windows) | Only for the `k7-desktop` resource, which builds and runs the engine (and Rust, for the desktop app itself and the supervisor's audio decoder). |
 | `ffmpeg` on `PATH` | Optional: video and some audio processing in the backend. |
 
 ## First checkout
@@ -48,7 +48,7 @@ instruments, project copies) lives in `~/.k7`, or in `$STUDIO_HOME` when set
    every dev port; the message points at the running session's Tilt UI;
 2. runs `tilt up --port 10350`, passing any extra arguments through;
 3. on `SIGINT`/`SIGTERM` or Tilt's exit, kills Tilt and then stops any engine still running
-   (`stopAll()` from `engine/scripts/devEngine.mjs`), since Tilt may end the tray resource too abruptly
+   (`stopAll()` from `engine/scripts/devEngine.mjs`), since Tilt may end the desktop app resource too abruptly
    for it to stop its own engine.
 
 The Tilt UI is at `http://localhost:10350`. Each dev server is its own resource that you can
@@ -78,7 +78,7 @@ its top-level folder (`apps` or `engine`). The resource is named after the packa
 | Resource | Workspace | Runs |
 |---|---|---|
 | `k7-frontend` | `apps/k7/frontend` | `vite` |
-| `k7-tray` | `apps/k7-tray` | `scripts/dev-tray.mjs` |
+| `k7-desktop` | `apps/k7-desktop` | `scripts/dev-desktop.mjs` |
 | `studio-k7-android-shell` | `engine/k7-android/web` | `vite` for the Android app's page |
 
 ### Ports and hosts
@@ -91,45 +91,45 @@ its top-level folder (`apps` or `engine`). The resource is named after the packa
 The frontend dev server answers the loopback page (`http://127.0.0.1:5223`) and points HMR at its own port. `$STUDIO_WEB_PORT` moves that port.
 `STUDIO_POLL=1` switches the file watcher to polling for trees where native file events do not arrive.
 
-### The `k7-tray` resource
+### The `k7-desktop` resource
 
-`scripts/dev-tray.mjs` (also runnable alone as `npm run dev:tray`) builds the engine, the supervisor,
-k7's backend bundle and the tray, runs the tray on those builds, then rebuilds and restarts on save:
+`scripts/dev-desktop.mjs` (also runnable alone as `npm run dev:desktop`) builds the engine, the supervisor,
+k7's backend bundle and the desktop app, runs the desktop app on those builds, then rebuilds and restarts on save:
 
-- At start it stops every tray, supervisor and engine on the machine, an installed tray included (it
+- At start it stops every desktop app, supervisor and engine on the machine, an installed desktop app included (it
   holds port 18789, and its single-instance guard would swallow the dev one). It builds k7's frontend
-  and the backend bundle into the tray workspace's gitignored `.dev` folder every time, then the engine, the supervisor and the
-  tray if a binary is missing or older than its newest watched source. A failed bundle ends the task.
-- The tray runs from `apps/k7-tray/src-tauri/target/debug`, pointed at the bundle
+  and the backend bundle into the desktop app workspace's gitignored `.dev` folder every time, then the engine, the supervisor and the
+  desktop app if a binary is missing or older than its newest watched source. A failed bundle ends the task.
+- The desktop app runs from `apps/k7-desktop/src-tauri/target/debug`, pointed at the bundle
   (`K7_BACKEND_BUNDLE`) and the supervisor build (`STUDIO_ENGINE_HOST_CMD`). k7 answers at
-  `http://127.0.0.1:18789`; the tray's front runs the supervisor on `~/.k7`. The machine's engine
-  is the tray's: a loopback address such as `http://localhost:8789` would be the tray's own backend to
+  `http://127.0.0.1:18789`; the desktop app's front runs the supervisor on `~/.k7`. The machine's engine
+  is the desktop app's: a loopback address such as `http://localhost:8789` would be the desktop app's own backend to
   the supervisor, and is dropped.
 - It watches `engine/k7-runtime/engine`, `engine/k7-runtime/server` (C++ sources), the
-  `CMakeLists.txt`/`CMakePresets.json` of both projects, `engine/k7-supervisor/src`, and the tray's
+  `CMakeLists.txt`/`CMakePresets.json` of both projects, `engine/k7-supervisor/src`, and the desktop app's
   `src-tauri/src`, `Cargo.toml` and `tauri.conf.json`. Tests are not watched, nor is the bundle's
   source: frontend and backend work belongs to their own resources, and Tilt's restart rebuilds the
   bundle.
 - A save is debounced by 500 ms. A cycle stops the tree (a running image cannot be relinked on
-  Windows), rebuilds the engine, then the supervisor, then the tray, and starts the tray again. A save
-  during a build queues another cycle. A failed build leaves the tray stopped and retries on the next
+  Windows), rebuilds the engine, then the supervisor, then the desktop app, and starts the desktop app again. A save
+  during a build queues another cycle. A failed build leaves the desktop app stopped and retries on the next
   save.
 - After an engine build it checks that the binary is newer than its sources, and fails loudly if a
   build reported success without replacing the image.
 - The engine build is `npm run build:mac` or `npm run build:win` in the `k7-runtime` workspace, the
-  tray's `cargo build`. On Linux there is no engine build script, so it leaves the existing build
+  desktop app's `cargo build`. On Linux there is no engine build script, so it leaves the existing build
   alone, and recursive file watching is unavailable, so there is no auto-rebuild.
 
 The engine build scripts take a lock on the build folder and cap the number of compilers
 (`engine/k7-runtime/scripts/buildLock.mjs`). `npm run test --workspace k7-runtime` takes the same
 lock, so it waits for the watcher rather than corrupting the build folder. Never start another
-`cmake --build` of the same tree by hand while `k7-tray` is running.
+`cmake --build` of the same tree by hand while `k7-desktop` is running.
 
 ### Other dev entry points
 
 | Command | What it starts |
 |---|---|
-| `npm run stage --workspace k7-tray`, then `npm run tauri dev --workspace k7-tray` | The tray from source (`tauri dev`), on the staged backend bundle and engine. |
+| `npm run stage --workspace k7-desktop`, then `npm run tauri dev --workspace k7-desktop` | The desktop app from source (`tauri dev`), on the staged backend bundle and engine. |
 | `npm run storybook` | Storybook on port 6006, with stories from `packages/*/src` and `apps/*/frontend/src`. |
 
 ## Windows
@@ -140,7 +140,7 @@ The scripts run on native Windows (Node, MSVC, Git Bash). What they do different
   `VAR=1 tool`. Set a variable through a script that spawns the tool with `env`, with no shell involved
   (`apps/k7/backend-rs/scripts/dev-front.mjs`).
 - **`npm` is a `.cmd` shim**, so scripts that spawn it pass `shell: true` on `win32`.
-- **A running executable cannot be relinked**, which is why `dev-tray.mjs` stops the tree before
+- **A running executable cannot be relinked**, which is why `dev-desktop.mjs` stops the tree before
   every rebuild and why a build that "succeeds" without updating the binary is reported as an error.
 - **Line endings**: `.gitattributes` forces LF on checkout so that Biome's formatter does not report
   every file of a `core.autocrlf=true` checkout.
@@ -150,4 +150,3 @@ One script exists for a Windows dev box reached remotely; it is not part of the 
 
 | Command | What it does |
 |---|---|
-| `npm run console` | `scripts/console/server.mjs`: shared terminal tabs on port 8797 (PowerShell in ConPTYs owned by the service, so they outlive the browser tab; at most 12 tabs). Installs its own dependencies first. |

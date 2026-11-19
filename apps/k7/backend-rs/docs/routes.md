@@ -72,8 +72,8 @@ routes after it. There is no provider: a machine has one account, and a cookie i
 | the cookie is host-only: no `Domain`, no trusted sibling origin | a session shared across subdomains served a hosted instance; a device's page is one loopback origin |
 | a return target is a path on this origin, anything else is `/` | `/auth/local` is reachable from a link, and a redirect off the machine would hand it a session cookie's page |
 | a signed-in `/auth/me` warms the account's hub in the background (`src/routes/auth/warm.rs`) | the files are warm by the time the page asks (`files.md`) |
-| the outgoing HTTPS client is `src/https.rs`: `hyper-rustls`, `rustls` on `ring`, and `webpki-roots` | `ring` is already in the tray's build, where `aws-lc-rs` compiles C with CMake and NASM on Windows and for every phone target |
-| TLS trusts Mozilla's roots (`webpki-roots`) and the host's `K7_EXTRA_CA_CERTS` (`front.md`), not the OS store | it is one list on the tray and the phones, and needs no JNI start on Android |
+| the outgoing HTTPS client is `src/https.rs`: `hyper-rustls`, `rustls` on `ring`, and `webpki-roots` | `ring` is already in the desktop app's build, where `aws-lc-rs` compiles C with CMake and NASM on Windows and for every phone target |
+| TLS trusts Mozilla's roots (`webpki-roots`) and the host's `K7_EXTRA_CA_CERTS` (`front.md`), not the OS store | it is one list on the desktop app and the phones, and needs no JNI start on Android |
 | frozen vectors, `fixtures/auth-vectors.json` | `k7-auth`'s `tests/all/auth_vectors.rs` fails when Rust mints or opens other bytes than the stored tokens |
 
 The vectors are fixtures, written once: a format change edits them on purpose, never by a generator.
@@ -84,8 +84,8 @@ Hazards the front has, as the TypeScript backend had them, kept for now:
 
 | hazard | why it is accepted for now |
 |---|---|
-| on a device, `/auth/local` gives a full session to any process of the machine that can reach loopback and names a loopback `Host`: on Android any app | the device has one person, and the tray and the phones open their page this way; the fix is a per-install secret the app's page carries, which every host would have to hand its page first |
-| loopback origins are credentialed CORS origins (`web.rs`): any page a browser on the machine opens can drive the tray | the tray's own page is a loopback origin; the fix is the same per-install secret |
+| on a device, `/auth/local` gives a full session to any process of the machine that can reach loopback and names a loopback `Host`: on Android any app | the device has one person, and the desktop app and the phones open their page this way; the fix is a per-install secret the app's page carries, which every host would have to hand its page first |
+| loopback origins are credentialed CORS origins (`web.rs`): any page a browser on the machine opens can drive the desktop app | the desktop app's own page is a loopback origin; the fix is the same per-install secret |
 
 ## Where the front answers differently, on purpose
 
@@ -101,7 +101,7 @@ Hazards the front has, as the TypeScript backend had them, kept for now:
 | a token label cut inside an emoji loses the whole emoji | as a device name |
 
 | the wording of a 400 for invalid JSON, or for a path segment that is not valid percent-encoding | a client shows `error` as it is; none parses it |
-| a camera socket's upgrade passes the owned chain, so a device's loopback lock applies to it | the tray and the phones listen on loopback, so only a page naming another host is refused |
+| a camera socket's upgrade passes the owned chain, so a device's loopback lock applies to it | the desktop app and the phones listen on loopback, so only a page naming another host is refused |
 | a device name capped in the middle of an emoji loses the whole emoji | JavaScript's `slice` keeps half of it, which no page can show |
 | a frame past 64 KiB, or a malformed one, ends the socket without a 1009 close frame | the camera and the viewer reconnect on any close; the code changes nothing they do |
 | a stopping front sends 1001 to every camera socket, but does not wait for the close handshake | the process is ending; the devices reconnect either way |

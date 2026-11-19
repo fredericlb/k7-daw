@@ -1,5 +1,5 @@
-// devEngine.mjs — what the dev session stops before it relinks: every tray, supervisor and engine running on the
-// machine, the dev tray's and an installed one's alike. Steps THROW rather than exit, so the long-lived watcher survives
+// devEngine.mjs — what the dev session stops before it relinks: every desktop app, supervisor and engine running on the
+// machine, the dev desktop app's and an installed one's alike. Steps THROW rather than exit, so the long-lived watcher survives
 // a failed stop. See docs/buildEngine.md.
 
 import { spawnSync } from "node:child_process";
@@ -55,9 +55,9 @@ async function stopNamed(name) {
     );
 }
 
-/** Every tray, supervisor and engine on the machine: a survivor holds the binary a relink replaces. */
+/** Every desktop app, supervisor and engine on the machine: a survivor holds the binary a relink replaces. */
 export async function stopAll() {
-  await stopNamed("k7-tray"); // its job object takes its backend along; on Unix its pipes do
+  await stopNamed("k7-desktop"); // its job object takes its backend along; on Unix its pipes do
   await stopNamed("k7-supervisor"); // then any left: it deregisters while its engine still answers
   await stopNamed("k7-runtime");
 }

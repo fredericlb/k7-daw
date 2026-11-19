@@ -10,7 +10,7 @@ process.env.E2E_BASE_URL = IOS_ORIGIN;
 
 export default defineConfig({
   testDir: "./specs",
-  testMatch: /app\/.*\.spec\.ts/,
+  testMatch: /specs[\\/]app[\\/].*\.spec\.ts/,
   outputDir: "./test-results/ios",
   fullyParallel: false,
   // One worker: one simulator, one engine, one app.

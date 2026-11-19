@@ -13,7 +13,7 @@ below is drawn the same way.
 | PWA, maskable | `public/icon-*-maskable.png` | #07031F to the edges, the cassette inside the 80% circle a mask keeps |
 | browser tab | `public/favicon.ico` (16, 32, 48) | the cassette alone, as large as it fits |
 | iPhone home screen (web) | `public/apple-touch-icon.png` | #07031F to the edges: iOS rounds it |
-| the tray's installer and app bundle | `apps/k7-tray/src-tauri/icons/`; its menu-bar glyph is drawn in code (`apps/k7-tray/docs/trayIcon.md`) | the cassette alone, on transparency |
+| the desktop app's installer and app bundle | `apps/k7-desktop/src-tauri/icons/` | the cassette alone, on transparency |
 | Android | `engine/k7-android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png` | the cassette alone, inside the 72dp circle; `ic_launcher.xml` paints the #07031F (`res/values/colors.xml`) |
 | iOS | `engine/k7-ios/k7/Assets.xcassets/AppIcon.appiconset/icon-1024.png` | #07031F to the edges: iOS masks it |
 | a plugin's window, opened by the engine | `engine/k7-runtime/engine/resources/studio_icon.png` | the cassette alone, on transparency (`public/icon-desktop.png`'s drawing) |

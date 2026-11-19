@@ -26,7 +26,6 @@ final class MainViewController: CAPBridgeViewController {
         view.backgroundColor = UIColor(red: 7 / 255, green: 3 / 255, blue: 31 / 255, alpha: 1)
         webView?.isOpaque = false
         webView?.backgroundColor = .clear
-        if let webView { KeyboardBar.hide(in: webView) }
     }
 
     override func capacitorDidLoad() {

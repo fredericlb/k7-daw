@@ -36,9 +36,9 @@ const TARGETS = [
     shape: "tile",
     width: 0.78,
   },
-  // The tray: the cassette alone on transparency, which `tauri icon` turns into its .ico (apps/k7-tray/docs/tray.md).
+  // The desktop app: the cassette alone on transparency, which `tauri icon` turns into its .ico (apps/k7-desktop/docs/app.md).
   {
-    out: "apps/k7-tray/src-tauri/icons/icon.png",
+    out: "apps/k7-desktop/src-tauri/icons/icon.png",
     size: 1024,
     shape: "none",
     width: 0.92,

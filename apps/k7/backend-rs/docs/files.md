@@ -10,7 +10,7 @@ and the hub starts no node process: every account's file service is the front's 
 
 | choice | why |
 |---|---|
-| `K7_FILES=front` in the front's settings (`ENV_KEYS`), followed only with the auth folder known and `K7_ENGINE_CORE=front`; every host sets it (the tray's `backend.rs`, Android's `BackendHost.kt`, the image's `start.sh`, `dev-front.mjs`) | the registry the front holds needs the hub's runtimes; without the switch no process answers the family |
+| `K7_FILES=front` in the front's settings (`ENV_KEYS`), followed only with the auth folder known and `K7_ENGINE_CORE=front`; every host sets it (the desktop app's `backend.rs`, Android's `BackendHost.kt`, the image's `start.sh`, `dev-front.mjs`) | the registry the front holds needs the hub's runtimes; without the switch no process answers the family |
 | the front is the only process that runs a hub, and declines the family's paths without the switch | one owner of the runtimes |
 | the front asks `GET /api/internal/files/hub` every second until the backend answers, and takes the family only on `runs: false`; a backend that answers 404 is a previous release's, which runs a hub of its own | the previous release is the rollback (`docs/rust-phase6-plan.md`, decision 3): pairing it with this front still leaves one hub, the backend's |
 | the family's paths move together on every host: `/api/files`, `/api/files-hub`, `/api/ready` and the seam's file half (`routes/files/mod.rs`) | they share the hub's memory: the runtimes by secret |

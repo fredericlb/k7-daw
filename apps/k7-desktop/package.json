@@ -1,0 +1,19 @@
+{
+  "name": "k7-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "K7 DAW, the desktop app, on Tauri: a window on k7's backend, started on 127.0.0.1 (which runs the machine's supervisor and engine). See docs/app.md and docs/desktop.md.",
+  "author": "F <fred@parapluie.org>",
+  "homepage": "https://k7.rocks",
+  "type": "module",
+  "scripts": {
+    "stage": "node scripts/stage.mjs",
+    "dev": "node ../../scripts/dev-desktop.mjs",
+    "desktop:build": "tauri build",
+    "tauri": "tauri",
+    "test": "node --test \"scripts/*.test.mjs\" \"../../engine/scripts/*.test.mjs\" \"../k7/backend-rs/scripts/*.test.mjs\""
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

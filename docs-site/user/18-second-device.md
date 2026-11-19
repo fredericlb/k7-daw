@@ -15,7 +15,7 @@ A project declares its special views — its *surfaces* — in its `surfaces/` f
 
 ### Copy the link
 
-In k7 opened from the [tray](./82-desktop-app.md), at `127.0.0.1`, the address answers only the computer itself, so a phone could not open it. Driving the computer's engine from a phone is not offered for now.
+In k7 opened from the [K7 DAW](./82-desktop-app.md), at `127.0.0.1`, the address answers only the computer itself, so a phone could not open it. Driving the computer's engine from a phone is not offered for now.
 
 
 `ui external <surface>` copies the surface's link to the clipboard and shows it on the status line. A surface's address is the project's address followed by `/@external/<surface>`, for example:

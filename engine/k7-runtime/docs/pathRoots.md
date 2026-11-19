@@ -22,7 +22,7 @@ which is what the tunnel uploads back.
 
 `$STUDIO_ENGINE_ROOTS` is a path list (`;` on Windows, `:` elsewhere) for a machine whose documents
 name local files elsewhere — a project driven straight from a checkout. It is read once, at start. k7's front
-under the tray sets it to its own workspaces and data folder, whose files its engine is sent by their own paths
+under the desktop app sets it to its own workspaces and data folder, whose files its engine is sent by their own paths
 (`apps/k7/backend-rs/docs/localEngine.md`), and so do the phone apps (`android.md`, `ios.md`).
 
 The temp directory is READ-only, and only because the harnesses in `scripts/` write their test

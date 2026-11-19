@@ -1,4 +1,4 @@
-// WireVersion.cpp — the one source the release stamp is compiled into, so a new stamp recompiles one file.
+// WireVersion.cpp — the one source the version is compiled into, so a new version recompiles one file.
 
 #include "WireVersion.h"
 

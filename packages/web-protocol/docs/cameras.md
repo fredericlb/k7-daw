@@ -59,7 +59,7 @@ viewer, `apps/k7/frontend/src/camera/offer.ts` for the host — and an `sdp` on 
 
 A camera is visible to the account that started it, on the server it started on, and to nobody
 else: the hub pairs a viewer only with a camera of the same account. There is no sharing and no
-cross-server listing. On the tray the page's origin is this computer's backend, so it lists the
+cross-server listing. On the desktop app the page's origin is this computer's backend, so it lists the
 cameras started against **this computer**, not the hosted server's.
 
 ## Latency: aligned to the slowest, and taken out of a take

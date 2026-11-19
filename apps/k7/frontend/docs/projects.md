@@ -34,7 +34,7 @@ workspace it was written for.
 ## The address follows
 
 This screen is **the front door itself**. k7 answers at the origin root
-(the device's own address, `127.0.0.1` on the tray).
+(the device's own address, `127.0.0.1` on the desktop app).
 If the first thing you want at a front door is your own work, then the page listing that work IS
 the front door, and putting it behind a prefix you have to know how to type would rank it second.
 
@@ -175,7 +175,7 @@ that scan before it goes to the engine (`apps/k7/backend-rs/docs/file-engine.md`
 says it is running — "Scanning plugins… N / M", a thin bar above the command bar
 (`projects/PluginScanBar.tsx`) — so that a project opened just then does not seem slow for no
 reason. Which engine: the one the policy would play the account's projects on, else the one the
-account remembers, else the only one that answered; under the tray that is the machine's own. With
+account remembers, else the only one that answered; under the desktop app that is the machine's own. With
 none, or one that reports no scan, there is no bar. It is asked after the list, beside it, and
 never in front of it, for the reason above: the list needs no engine. The page listens on a
 socket that claims nothing (`packages/engine-browser/docs/access.md`), since it plays nothing.

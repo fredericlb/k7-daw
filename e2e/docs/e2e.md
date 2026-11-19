@@ -43,7 +43,7 @@ the studio, the engine and the supervisor are the app's own, the screen is not. 
 | choice | why |
 |---|---|
 | the booted simulator on the newest iOS runtime, unless `E2E_IOS_DEVICE` names one (the Mac keeps `k7 iPhone (iOS 27)`, an iPhone 17 on iOS 27.2) | a new iOS enforces at launch what an older one only warns of: iOS 27 stops an app without the scene lifecycle, which iOS 26.5 starts |
-| the app relaunched on port 18799 through `K7_STUDIO_PORT` | the tray holds 18789 on the same loopback, and the port is read once, at launch |
+| the app relaunched on port 18799 through `K7_STUDIO_PORT` | the desktop app holds 18789 on the same loopback, and the port is read once, at launch |
 | the app's engine on port 18765, written to its `engine-host.json` before every launch, and the app terminated when the suite ends | the simulator shares the Mac's loopback and the app binds 8765, the user's own engine's port; no `SIMCTL_CHILD_*` variable moves it, the file does |
 | WebKit with the iPhone's size and agent, but not as a mobile browser | mobile WebKit has no mouse wheel, which the specs zoom with |
 | `open` waits for the page to settle | WebKit reports a fetch a reload cut short as a page error, which Chromium does not |
@@ -211,8 +211,8 @@ suite's length, since they run side by side; a cold tree first compiles the engi
 | choice | why |
 |---|---|
 | a session of its own, not the Windows one | a suite no longer waits for another agent's run, a Tilt restart or a merge rebuilding the session it drives |
-| the front and Vite started as `npm run dev` starts them (`dev-front.mjs`), on ports 28789 and 25223, all on `127.0.0.1` | the same session as Windows', so a difference is the platform's; the Mac may run a dev session or a tray of its own on the usual ports, and its application firewall drops a LAN connection to an unsigned binary |
-| the command-line engine (`k7-supervisor --config`), listed at the bed's front over loopback, on 28765 | an engine heartbeating from loopback is every local account's (`apps/k7/backend-rs/docs/engine/ownership.md`); a tray would hold 18789 and `~/.k7`, the Mac's own |
+| the front and Vite started as `npm run dev` starts them (`dev-front.mjs`), on ports 28789 and 25223, all on `127.0.0.1` | the same session as Windows', so a difference is the platform's; the Mac may run a dev session or a desktop app of its own on the usual ports, and its application firewall drops a LAN connection to an unsigned binary |
+| the command-line engine (`k7-supervisor --config`), listed at the bed's front over loopback, on 28765 | an engine heartbeating from loopback is every local account's (`apps/k7/backend-rs/docs/engine/ownership.md`); a desktop app would hold 18789 and `~/.k7`, the Mac's own |
 | `HOME` under `~/k7-trees/e2e-macos-bed`, wiped at every run, an env.yaml with a new secret, no instrument downloaded | nothing of the Mac's own `~/.k7` or `~/.studio` is read or written, and the bed is paired with no server: the specs that publish or sync stay away from production |
 | the release front built into `~/.cache/k7-macbed-<tree name>` (`--target-dir`, handed to `dev-front.mjs` as `K7_FRONT_TARGET_DIR`) | a `target` inside the worktree makes `gate.sh` refuse the tree, and two worktrees must not share one build folder |
 | `STUDIO_HOME` given to the engine, `STUDIO_PORTS=k7=28789` to every process | macOS gives the engine the account's home whatever `HOME` says, and the supervisor reads any loopback registry as k7's port, 8789 unless that names another. Tracktion's `~/Library/Studio/Settings.xml` (the audio device) stays the Mac's, shared with any other engine there |
@@ -260,10 +260,10 @@ reference's reports.
 
 | choice | why |
 |---|---|
-| the bed starts the front as a device: `env.yaml` carries `STUDIO_LOCAL_USER` (and `K7_INSTANCE: local`), as the tray's `standalone.json` does, and `E2E_USER` is then the local user (`dev-user`) | the server is fading away and its account runtime is gone: the file service, the project pages and `/api/local` exist only on a device, so a server bed would skip or fail the web suite and about 22 conformance specs. A device turns every session into its one local user, so the suite signs in as that user |
+| the bed starts the front as a device: `env.yaml` carries `STUDIO_LOCAL_USER` (and `K7_INSTANCE: local`), as the desktop app's `standalone.json` does, and `E2E_USER` is then the local user (`dev-user`) | the server is fading away and its account runtime is gone: the file service, the project pages and `/api/local` exist only on a device, so a server bed would skip or fail the web suite and about 22 conformance specs. A device turns every session into its one local user, so the suite signs in as that user |
 | a device has one account and no admin, so the suite signs in as `E2E_USER` alone; what needs a stranger, an author or a refusal is held by the Rust tests, not staged here | its libraries are the published versions it pins |
 | on a device bed every spec holding the account's file service or served project runs in one lane (`playwright.conformance.config.ts`) | the specs' separate accounts are one account here, so two of them at once would cut each other's calls |
-| the bench (`/workspaces/bench`, New chain) is not run on a device bed | the bed's `k7-core` is a draft, not a published version a tray installs, and the bench's rig declines (`would-throw`) on it; a server's releases are not made on a device |
+| the bench (`/workspaces/bench`, New chain) is not run on a device bed | the bed's `k7-core` is a draft, not a published version a desktop app installs, and the bench's rig declines (`would-throw`) on it; a server's releases are not made on a device |
 | `bed.sh` and `gate.sh` take no mode | there is one bed; a second mode would prove less of what ships |
 | what only a server does (the door's refusals, the export routes, the session as a server serves it) is held by the front's Rust tests (`files_hub.rs`, `files_export.rs`, `tokens.rs`, `auth.rs`), not by a spec | a spec cannot meet a server on a device bed, and a Rust test starts either front on its own folder |
 

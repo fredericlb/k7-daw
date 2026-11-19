@@ -10,7 +10,7 @@ are in [supervisorPolicy.md](supervisorPolicy.md).
 
 | | run by | settings | stdout | stops when |
 |---|---|---|---|---|
-| **under an app** | k7's front under the tray (`apps/k7/backend-rs/docs/localEngine.md`, through `k7-local`) or the phone (`engine/k7-android`) | `<state>/engine-host.json`, changed by the app's commands and saved | the app's protocol ([hostProtocol.md](hostProtocol.md)) | stdin closes — the app went away |
+| **under an app** | k7's front under the desktop app (`apps/k7/backend-rs/docs/localEngine.md`, through `k7-local`) or the phone (`engine/k7-android`) | `<state>/engine-host.json`, changed by the app's commands and saved | the app's protocol ([hostProtocol.md](hostProtocol.md)) | stdin closes — the app went away |
 | **the command-line engine** | `k7-supervisor --config <file>`, a terminal, a service, the server's container | the file, read once and never written | nothing | SIGINT or SIGTERM |
 | **inside the iOS app** | `k7_supervisor_run` on a thread of `engine/k7-ios`, a framework since no iOS app may run a program (`src/Embedded.cpp`) | as under an app | the same protocol, on a pipe of its own: the app's stdout is shared | the command pipe closes |
 

@@ -46,7 +46,7 @@ against the remote. The routes are `apps/k7/backend-rs/docs/files/git.md`, the r
 |---|---|
 | Connect to git | the workspace's menu, "Connect to git…" |
 | Clone from git | the home page's header, beside "New workspace" |
-| On your other devices | the home page, under the header, only where the host has a list (iOS and the Mac's iPad app) |
+| On your other devices | the home page, under the header, only where the host has a list (iOS) |
 | the bar | above the project bar in the editor, and above a workspace's tree on the home page |
 | Commit and the merge screen | dialogs opened from the bar |
 | Commits | the History panel's second list, shown when the workspace is under git |

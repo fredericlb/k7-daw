@@ -1,6 +1,6 @@
 # Engine architecture
 
-This section covers everything that links a k7 page to sound: the C++ engine, its supervisor, the wire between them and the browsers, the registry that lists engines, the tunnel that reaches them, and the three hosts that ship them (the tray, the phone, the server image). This page is the map; the following pages go into each part.
+This section covers everything that links a k7 page to sound: the C++ engine, its supervisor, the wire between them and the browsers, the registry that lists engines, the tunnel that reaches them, and the three hosts that ship them (the desktop app, the phone, the server image). This page is the map; the following pages go into each part.
 
 | Page | Covers |
 |---|---|
@@ -9,7 +9,7 @@ This section covers everything that links a k7 page to sound: the C++ engine, it
 | [83 — The engine protocol](./83-engine-protocol.md) | `packages/engine-protocol` and the C++ handlers: every message, the state frame, the ProjectDoc, sessions, the audio stream |
 | [84 — Engine clients](./84-engine-clients.md) | `packages/engine-client` (Node) and `packages/engine-browser` (browser): access, probe, choice, lease, store, pairing, WebRTC |
 | [85 — Registry and tunnel](./85-registry-and-tunnel.md) | `k7-engine` (the Rust registry, relay and hub) and `packages/engine-tunnel`: heartbeats, claims, the relay, the hub and agent, jobs |
-| [86 — The tray and the phone apps](./86-desktop-and-android.md) | `k7-local`, `apps/k7-tray`, `engine/k7-android` |
+| [86 — The desktop app and the phone apps](./86-desktop-and-android.md) | `k7-local`, `apps/k7-desktop`, `engine/k7-android` |
 | [87 — Building and shipping engines](./87-engine-build-and-shipping.md) | `engine/scripts`, CMake presets, release archives |
 
 ## The processes
@@ -80,8 +80,8 @@ The account's files live on the server. When a project opens on an engine, the f
 | `apps/k7/backend-rs/crates/k7-engine/` | The registry, the relay, the tunnel hub (routed by `k7-front`'s `routes/engine/`) |
 | `packages/engine-registry/` | The internal seam's paths and client, through which TypeScript reaches the registry and the hub |
 | `packages/engine-tunnel/` | The tunnel's wire, the TypeScript reference agent, jobs client, WebRTC answerer |
-| `apps/k7/backend-rs/crates/k7-local/` | Running the supervisor as a child of k7's Rust front under the tray |
-| `apps/k7-tray/` | The tray (Tauri), k7 on a computer |
+| `apps/k7/backend-rs/crates/k7-local/` | Running the supervisor as a child of k7's Rust front under the desktop app |
+| `apps/k7-desktop/` | The desktop app (Tauri), k7 on a computer |
 
 ## Two implementations, one wire
 

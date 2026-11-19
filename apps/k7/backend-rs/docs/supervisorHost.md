@@ -1,14 +1,14 @@
 # The supervisor host
 
-`engine/k7-supervisor` as the child of the front: `crates/k7-local`, which the front runs on the tray
+`engine/k7-supervisor` as the child of the front: `crates/k7-local`, which the front runs on the desktop app
 to host the machine's supervisor and so its engine (`localEngine.md`, `local.md`). The Android and iOS
 apps drive the same supervisor the same way, from Kotlin and Swift (`SupervisorHost.kt`,
 `SupervisorHost.swift`, `engine/k7-runtime/docs/android.md`, `engine/k7-runtime/docs/ios.md`): the
 choices below are the three hosts', and a change to one is made to all three.
 
 The binaries every package carries are staged by `engine/scripts/stageEngine.mjs`, which copies the
-newest engine and supervisor builds into an app's staging `bin/`: the tray's
-(`apps/k7-tray/scripts/stage.mjs`) and the command-line engine's (`engine/scripts/build-engine.mjs`).
+newest engine and supervisor builds into an app's staging `bin/`: the desktop app's
+(`apps/k7-desktop/scripts/stage.mjs`) and the command-line engine's (`engine/scripts/build-engine.mjs`).
 
 ## Not a server
 
@@ -29,7 +29,7 @@ directly and keeps it running (`crates/k7-local/src/host.rs`). The choices:
   reads the start time and executable the supervisor wrote there and kills only when the OS reports
   the same for an executable named `k7-runtime`, the verdict `PidFile.cpp` gives. A bare pid, or a
   process the OS will not describe, is left running (`engine/k7-supervisor/docs/supervisorPolicy.md`).
-  The tray's quit links the same proof for its own backstop (`apps/k7-tray/src-tauri/src/pidkill.rs`).
+  The desktop app's quit links the same proof for its own backstop (`apps/k7-desktop/src-tauri/src/pidkill.rs`).
 - **A write to a dead supervisor is said, never an error.** The supervisor may die between a page's
   command and its delivery; the command is lost with it, and the relaunch is what answers.
 - **On Windows the supervisor makes the kill-on-close job itself, told `STUDIO_HOST_PID`.** The

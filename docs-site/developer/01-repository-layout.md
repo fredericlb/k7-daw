@@ -1,7 +1,7 @@
 # Repository layout
 
 The `k7-daw` repository (K7 DAW) holds k7 and everything it is built from: the web app, its backend, the
-shared TypeScript packages, the C++ engine and its supervisor, the tray and the phone shells, and
+shared TypeScript packages, the C++ engine and its supervisor, the desktop app and the phone shells, and
 the module library k7 ships with. It is one npm workspace tree driven from the root
 `package.json`.
 
@@ -9,7 +9,7 @@ the module library k7 ships with. It is one npm workspace tree driven from the r
 
 | Folder | What lives there |
 |---|---|
-| `apps/` | The applications: `apps/k7` (the web app: `frontend/`, and `backend-rs/`, the Rust front that is its backend) and `apps/k7-tray` (K7 DAW: k7 on a computer, a Tauri app with a window and a tray icon that runs k7's front and shows k7). |
+| `apps/` | The applications: `apps/k7` (the web app: `frontend/`, and `backend-rs/`, the Rust front that is its backend) and `apps/k7-desktop` (K7 DAW: k7 on a computer, a Tauri app with one window that runs k7's front and shows k7). |
 | `packages/` | The shared `@studio/*` packages, consumed as raw TypeScript source. |
 | `engine/` | The native side: `k7-runtime` (the C++ audio engine), `k7-supervisor` (the C++ program that runs and watches it), `k7-android` (the phone app, Gradle), `scripts` (the Node scripts that build and package the native binaries). |
 | `k7-core/` | The default module library, as plain files: modules, chains, assemblies, presets, impulse responses, amp models, samples, wavetables. |
@@ -44,7 +44,7 @@ The root `package.json` declares these workspace globs:
   "apps/k7",
   "apps/k7/frontend",
   "apps/k7/backend",
-  "apps/k7-tray",
+  "apps/k7-desktop",
   "engine/k7-runtime",
   "engine/k7-android/web",
   "e2e"
@@ -55,7 +55,7 @@ The root `package.json` declares these workspace globs:
 |---|---|---|
 | `apps/k7` | `k7` | An aggregator: its `dev` script runs the frontend. |
 | `apps/k7/frontend` | `k7-frontend` | React + Vite single-page app. |
-| `apps/k7-tray` | `k7-tray` | The tray; its code is Rust under `src-tauri/`, and the workspace exists for its npm scripts (`stage`, `dev`, `build`). |
+| `apps/k7-desktop` | `k7-desktop` | The desktop app; its code is Rust under `src-tauri/`, and the workspace exists for its npm scripts (`stage`, `dev`, `build`). |
 | `engine/k7-runtime` | `k7-runtime` | Not JavaScript: the workspace exists for its npm scripts (`dev`, `build:win`, `build:mac`, `build:android`, `test`, `test:all` and the `gen:*` generators). It declares no `build` script, so `npm run build` never compiles C++. |
 | `engine/k7-android/web` | `@studio/k7-android-shell` | The Capacitor page of the Android app. |
 | `packages/*` | `@studio/*` | The shared tier, below. |
@@ -128,7 +128,7 @@ Each area has its own section in this guide; the package's own `package.json` de
 | `engine/k7-runtime` | CMake (`CMakePresets.json`: `macos-clang`, `windows-msvc`, `windows-msvc-ninja`, `dev-gcc`, `release-gcc`, `android-arm64` and others) | The `k7-runtime` executable (or `libk7runtime.so` on Android) |
 | `engine/k7-supervisor` | CMake, its own presets | The `k7-supervisor` executable and its unit-test binary |
 | `engine/k7-android` | Gradle (`./gradlew assembleDebug`) | The Android APK, which builds its own arm64 engine and supervisor |
-| `engine/scripts` | Node | `build-engine.mjs` (build and stage the command-line engine into `dist/k7-runtime/`), `package-release.mjs` (archive it, or rename the tray's installers), `devEngine.mjs` and `supervisorBuild.mjs` (used by the dev session) |
+| `engine/scripts` | Node | `build-engine.mjs` (build and stage the command-line engine into `dist/k7-runtime/`), `package-release.mjs` (archive it, or rename the desktop app's installers), `devEngine.mjs` and `supervisorBuild.mjs` (used by the dev session) |
 
 The engine section of this guide covers the C++ code itself.
 
@@ -155,7 +155,7 @@ It is consumed in three ways:
 
 - **The server** copies a library listed by an origin but missing on disk from
   `$STUDIO_LIBRARY_SEED` (`apps/k7/backend-rs/crates/k7-libraries`), which can name `k7-core`.
-- **The tray and phone bundles** carry a copy: `apps/k7/backend-rs/scripts/stageBundle.mjs` writes one
+- **The desktop app and phone bundles** carry a copy: `apps/k7/backend-rs/scripts/stageBundle.mjs` writes one
   into the bundle, which the front seeds from (`STUDIO_LIBRARY_SEED`).
 - **Lints** read it: `npm run lint:layouts` and `npm run lint:panels` check its module panels.
 

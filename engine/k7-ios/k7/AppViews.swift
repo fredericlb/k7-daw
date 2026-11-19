@@ -220,7 +220,6 @@ public class AppViewsPlugin: CAPPlugin, CAPBridgedPlugin, WKNavigationDelegate, 
         view.isOpaque = false
         view.backgroundColor = .clear
         view.isInspectable = Self.inspectable
-        KeyboardBar.hide(in: view)
         view.translatesAutoresizingMaskIntoConstraints = false
         frame.addSubview(view)
         NSLayoutConstraint.activate([

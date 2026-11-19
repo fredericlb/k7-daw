@@ -23,6 +23,6 @@ A file service is a node process per account, and its cold start — parsing the
 readying its workspaces — is what the first list of projects would otherwise wait for. So it is
 started EARLIER, at a moment that already says a list is coming:
 
-- **On a phone or the tray, the boot.** The machine has one person, the local user, whose service
+- **On a phone or the desktop app, the boot.** The machine has one person, the local user, whose service
   starts once the front listens — and is never stopped for being idle: a screen left off for ten minutes would otherwise pay a cold start on the next open.
 

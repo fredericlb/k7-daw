@@ -4,7 +4,7 @@ An engine is useful once your browser can reach it. This page explains how, on t
 
 ## The engine of the device
 
-The tray and the phone app list their engine at the k7 they run, and nowhere else: the engine is the device's own, and no server holds a list of engines. The command-line engine still sends a heartbeat to the registries named by `registryUrls` in its config file ([The command-line engine](./81-command-line-engine.md)); it ships as it was, with that key kept for a later rework.
+The desktop app and the phone app list their engine at the k7 they run, and nowhere else: the engine is the device's own, and no server holds a list of engines. The command-line engine still sends a heartbeat to the registries named by `registryUrls` in its config file ([The command-line engine](./81-command-line-engine.md)); it ships as it was, with that key kept for a later rework.
 
 ## How the browser reaches the engine
 
@@ -31,7 +31,7 @@ On the device:
 2. Click **Pair this device**.
 3. The device shows a six-digit code: *Approve on the machine running the engine — check it shows this code*.
 
-On the engine's machine, a card appears: *<device> wants to pair. From <address>. Approve only if that device shows this code*, with **Approve** and **Deny**. The card appears in k7 when a page is open on that machine, in the Android app's tray, and in **Settings → Paired devices**.
+On the engine's machine, a card appears: *<device> wants to pair. From <address>. Approve only if that device shows this code*, with **Approve** and **Deny**. The card appears in k7 when a page is open on that machine, in the Android app's desktop app, and in **Settings → Paired devices**.
 
 Check that the codes match before approving: anyone on the network can ask, under any name. The device then shows the engine as usable and k7 continues. If you deny, the device says *The machine refused this device*. If nobody answers within two minutes, the request expires (*Nobody answered within two minutes: the request expired*). At most eight requests can wait at once.
 
@@ -46,5 +46,5 @@ The device remembers its approval in the browser. A private window forgets it wh
 If your git host's HTTPS certificate is signed by your own certificate authority, k7 must trust that authority, or a connect, a push and a pull fail.
 
 - Command-line engine: point `extraCaCerts` at a PEM file of the authority ([config keys](./81-command-line-engine.md#every-key)).
-- The tray: k7 trusts the operating system's certificate store, so install the authority there.
+- The desktop app: k7 trusts the operating system's certificate store, so install the authority there.
 - Android app: **Settings → Private CA → Trust a certificate…** ([The Android app](./83-android-app.md#private-ca)).

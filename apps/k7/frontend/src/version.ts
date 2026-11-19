@@ -1,6 +1,4 @@
-// Build stamp baked in by the build; "dev" anywhere it wasn't set — ../../../../docs/versioning.md.
+// The release version, this package.json's copy of the root's — ../../../../docs/versioning.md.
 import { version } from "../package.json";
 
-const STAMP = import.meta.env.VITE_APP_VERSION ?? "dev";
-// The release version, this package.json's copy of the root's, then the image's stamp.
-export const VERSION = `${version} (${STAMP})`;
+export const VERSION = version;

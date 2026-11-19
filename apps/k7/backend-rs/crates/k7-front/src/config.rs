@@ -23,7 +23,7 @@ pub struct Config {
 }
 
 /// What the routes read of the environment a host hands the front.
-pub const ENV_KEYS: [&str; 38] = [
+pub const ENV_KEYS: [&str; 37] = [
     "K7_EXTRA_CA_CERTS",
     "SESSION_SECRET",
     "STUDIO_LOCAL_USER",
@@ -31,7 +31,6 @@ pub const ENV_KEYS: [&str; 38] = [
     "STUDIO_PREFS_DIR",
     "STUDIO_AUTH_DIR",
     "STUDIO_MEDIATEK",
-    "APP_VERSION",
     "K7_CAMERA_ICE_SERVERS",
     "STUDIO_HOME",
     "K7_LOCAL_ENGINE",

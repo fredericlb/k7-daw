@@ -1,7 +1,7 @@
 # The front inside a host
 
 The hosts that cannot, or should not, run another program run the front inside their own process,
-on a thread of its own with a small tokio runtime (`k7_front::embedded`). The tray, being Rust, links
+on a thread of its own with a small tokio runtime (`k7_front::embedded`). The desktop app, being Rust, links
 `k7-front` and calls it directly. The phones go through `k7-embed`, a C library over the same calls:
 Android loads it as a `cdylib`, iOS links it as a `staticlib`. Its ABI is the supervisor's on iOS
 (`Embedded.cpp`): C calls, text in.
@@ -19,7 +19,7 @@ make that host's build produce the C library beside it, for nothing.
 
 | choice | why |
 |---|---|
-| on Android the front's panics and its stop are written to logcat under `k7-front` (`src/logcat.rs`); a host that links the front gives `exit::watch` its own sink, as the tray does | the app's stderr is not kept, and the front runs in the app's process (`front.md`, "Every end leaves a line") |
+| on Android the front's panics and its stop are written to logcat under `k7-front` (`src/logcat.rs`); a host that links the front gives `exit::watch` its own sink, as the desktop app does | the app's stderr is not kept, and the front runs in the app's process (`front.md`, "Every end leaves a line") |
 | on Android the process's stdout and stderr are pipes whose lines go to logcat under `k7-front`, stdout at INFO and stderr at WARN, from the front's first start | the app's stdout and stderr are not kept, and every crate of the front prints its lines there (`files |`, `sync |`, `[registry]`): the lines are the binary's, one entry each, no more |
 | the engine's start takes stderr for its own pipe (`k7-runtime`, `engine/k7-runtime/docs/android.md`), the front's stderr lines with it; a stdout or stderr that is already a pipe when the front starts is left to its reader | stderr is the process's, and the engine runs in the same one; `adb logcat -s k7-front k7-runtime` reads both |
 | a panic is written to logcat directly, then again by the default hook through stderr | the direct line is written before the process can end; the pipe's thread may not get to its copy |

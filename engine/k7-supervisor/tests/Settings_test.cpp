@@ -41,15 +41,15 @@ void aRoundTripIsExact()
     CHECK(!out.instruments.has_value());
 }
 
-// The LAN is open unless the musician closed it; a closed one survives a save, and a non-boolean is ignored.
-void theLanIsOpenUntilClosed()
+// The LAN is closed unless the musician opened it; an open one survives a save, and a non-boolean is ignored.
+void theLanIsClosedUntilOpened()
 {
-    CHECK(settingsFrom(json::parse("{}")).lanOpen);
-    CHECK(settingsFrom(json::parse(R"({"lanOpen":"no"})")).lanOpen);
-    CHECK(!settingsFrom(json::parse(R"({"lanOpen":false})")).lanOpen);
+    CHECK(!settingsFrom(json::parse("{}")).lanOpen);
+    CHECK(!settingsFrom(json::parse(R"({"lanOpen":"no"})")).lanOpen);
+    CHECK(settingsFrom(json::parse(R"({"lanOpen":true})")).lanOpen);
     Settings in;
-    in.lanOpen = false;
-    CHECK(!settingsFrom(k7::settingsJson(in)).lanOpen);
+    in.lanOpen = true;
+    CHECK(settingsFrom(k7::settingsJson(in)).lanOpen);
 }
 
 // A studio held a token for is listed the first time only: one removed later stays removed.
@@ -162,7 +162,7 @@ void runSettingsTests()
     RUN(aFixedPortIsNeverSaved);
     RUN(aPortOutOfRangeIsTheDefault);
     RUN(theInstrumentsKeptTellAbsentFromEmpty);
-    RUN(theLanIsOpenUntilClosed);
+    RUN(theLanIsClosedUntilOpened);
     RUN(theStudiosPairedAreListedOnce);
     RUN(aConfigFileSetsWhatTheEnvironmentOtherwiseCarries);
     RUN(deviceTokensAreKeptByStudio);

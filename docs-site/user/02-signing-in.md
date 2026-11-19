@@ -1,6 +1,6 @@
 # The local user
 
-k7 has no sign-in. It runs on your own device, the [tray](./82-desktop-app.md) on a computer or the
+k7 has no sign-in. It runs on your own device, the [K7 DAW](./82-desktop-app.md) on a computer or the
 phone app, and everything it keeps belongs to the one local user of that device: the workspaces, the
 settings, the keys. Nobody is asked for a password, and nothing is sent to a server unless you
 connect a workspace to a git host yourself.

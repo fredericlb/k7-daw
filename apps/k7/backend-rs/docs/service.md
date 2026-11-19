@@ -11,7 +11,7 @@ answers is refused with a sentence (`declines.md`), and nothing falls back to an
 | an account is made on its first request (`services.rs`) and holds its song sessions and environment (`accounts.rs`), its log, its code root, the runtime state (the Logs ring, the background registry, the machine's asks), the members, the native capture, the admin stamp, the media and the engine link, in one `Held` | one owner per account for what the routes share; no thread and no runtime per account, so an idle account costs memory only |
 | an account lives until the front stops | an idle one let go would make the next open pay a cold start |
 | the account's environment is the one its service would be started with (`Instances::environment`), with a secret of its own that the relay, the libraries' calls and the shares' internal routes take as a running service's (`hub::State::account_of_secret`) | the relay knows an account by its secret |
-| the song sessions' heap budget is an embedded host's, 192 MB, a quarter of it for the sessions; no environment variable sets it | a phone and the tray share memory with the person's other programs |
+| the song sessions' heap budget is an embedded host's, 192 MB, a quarter of it for the sessions; no environment variable sets it | a phone and the desktop app share memory with the person's other programs |
 | a route the table does not name is answered thus: the owner (`owner.json`), the workspace header, then Express's 404 page (`Cannot <METHOD> <path>`, `routes/last/express.rs`); `GET /health` is its ungated `{ ok: true }` | every route a client sends is in the table |
 | a request naming an engine binds the ACCOUNT (`k7_hub::binding::Bindings`), the engine link reading the binding from there | the binding is made in the request's path |
 | `findEngineBinary` and the translator's one process are answered by the front (`machine.rs`) | an import asks both |
@@ -68,7 +68,7 @@ The media the file service reaches is `src/media/`: the waveform module runs in 
 | host | where it is | how the front hears it |
 |---|---|---|
 | a checkout (dev, a test bed) | the checkout itself | found above the front's working directory or executable |
-| the tray | `resources/code`, staged by `apps/k7-tray/scripts/stage.mjs` | `K7_CODE_ROOT` in the front's `Config.env` (`backend.rs`) |
+| the desktop app | `resources/code`, staged by `apps/k7-desktop/scripts/stage.mjs` | `K7_CODE_ROOT` in the front's `Config.env` (`backend.rs`) |
 | Android | `code/` in `backend.zip`, staged by the `stageCodeRoot` task | `K7_CODE_ROOT` from `BackendHost.kt` |
 
 | choice | why |

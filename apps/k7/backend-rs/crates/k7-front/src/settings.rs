@@ -103,7 +103,7 @@ impl Settings {
                 .or_else(|| get("STUDIO_MEDIATEK").map(|m| PathBuf::from(m).join(".auth")))
                 // `.auth` in the media's folder, where the session's revocations and the accounts' keys live.
                 .or_else(|| Some(mediatek.join(".auth"))),
-            build: get("APP_VERSION").unwrap_or_else(|| "dev".into()),
+            build: env!("K7_VERSION").into(),
             trust_hops,
             camera_ice_servers: get("K7_CAMERA_ICE_SERVERS"),
             raw_session_secret: env.get("SESSION_SECRET").cloned().unwrap_or_default(),

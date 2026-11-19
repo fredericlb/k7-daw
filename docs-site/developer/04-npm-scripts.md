@@ -7,7 +7,7 @@ Every script in the root `package.json`, grouped by purpose. Run them from the r
 | Script | Runs | Purpose |
 |---|---|---|
 | `dev` | `node scripts/dev.mjs` | The dev session under Tilt. Extra arguments go to `tilt up` (`npm run dev -- k7-front`). See [Dev setup](./03-dev-setup.md). |
-| `dev:tray` | `node scripts/dev-tray.mjs` | The engine, supervisor and tray build-run-watch loop on its own, outside Tilt. |
+| `dev:desktop` | `node scripts/dev-desktop.mjs` | The engine, supervisor and desktop app build-run-watch loop on its own, outside Tilt. |
 | `storybook` | `storybook dev -p 6006` | Storybook for components under `packages/*/src` and `apps/*/frontend/src`. |
 | `build-storybook` | `storybook build` | Static Storybook into `storybook-static/`. |
 
@@ -46,7 +46,6 @@ Each is described in [Lints and conventions](./06-lints-and-conventions.md).
 
 | Script | Runs | Purpose |
 |---|---|---|
-| `console` | `node scripts/console/server.mjs` (after installing its own dependencies) | Shared terminal tabs on port 8797. |
 
 ## Workspace scripts worth knowing
 
@@ -58,6 +57,6 @@ These are run with `--workspace <name>`:
 | `k7-runtime` | `test`, `test:all` | Builds and runs the C++ `studio_*` test targets; `test:all` adds the slow Tracktion-linked ones. |
 | `k7-runtime` | `gen:builtin-params` | Regenerates `packages/song-schema/src/builtinParams.generated.json` from a real engine, one plugin per line. |
 | `k7-runtime` | `gen:strudel-bundle`, `gen:surge-panel` | Regenerate committed generated files (the pattern-lane bundle the engine embeds; the Surge XT module's panel in `k7-core`). |
-| `k7-tray` | `stage` | Stages the frontend, the page and library bundle and the engine binaries into `apps/k7-tray/src-tauri/resources/`. |
-| `k7-tray` | `dev`, `build` | `tauri dev`; `tauri build`, the installers. |
+| `k7-desktop` | `stage` | Stages the frontend, the page and library bundle and the engine binaries into `apps/k7-desktop/src-tauri/resources/`. |
+| `k7-desktop` | `dev`, `build` | `tauri dev`; `tauri build`, the installers. |
 | `@studio/song` | `bench` | Vitest benchmarks of the compile. |

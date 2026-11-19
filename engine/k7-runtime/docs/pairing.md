@@ -1,6 +1,7 @@
 # Pairing — who may drive the engine over the LAN
 
-The engine listens on every interface (the supervisor sets `STUDIO_ENGINE_HOST=0.0.0.0`), because a
+The engine listens on loopback; only the musician's **LAN open** switch makes the supervisor set
+`STUDIO_ENGINE_HOST=0.0.0.0`, because a
 phone or a second laptop on the same network driving the transport from the stage is a real use, and
 it must work at a venue with no internet. Without pairing, that same port let anyone on the room's
 Wi-Fi drive a project, read the engine's token, and ask it to load a binary from a path of their
@@ -12,8 +13,8 @@ device keeps a key it shows on every connection — or while the musician leaves
 ## The open LAN
 
 A home or a rehearsal room is the network the engine is mostly on, and pairing every phone there is a
-chore the room does not need. So the supervisor's `lanOpen` (`engine-host.json`, on by default, the
-**Available on the local network** switch of the engine's settings page) lets a peer on a **private**
+chore the room does not need. So the supervisor's `lanOpen` (`engine-host.json`, off by default, the
+**Available on the local network** switch of the engine's settings page) makes the engine listen on every interface instead of loopback alone, from its next start, and lets a peer on a **private**
 address drive unpaired: 10/8, 172.16/12, 192.168/16, 169.254/16, `fc00::/7`, `fe80::/10`
 (`isPrivateAddress`, `Pairing.cpp`). A public address — a port someone forwarded on a router — still
 pairs, open or not; and the verbs that manage pairing stay the machine's own either way.
@@ -50,11 +51,11 @@ and never trusted — every message it sends before the close is dropped.
 Allowed:
 
 - **no `Origin` header** — a native client: the supervisor, a Node process such as k7's backend
-  under the tray. A browser always sends one, so a page cannot pass for one of these;
+  under the desktop app. A browser always sends one, so a page cannot pass for one of these;
 - a `ws://` or `wss://` origin, which a browser never sends: it is IXWebSocket's default for a native
   client, the supervisor's included;
 - loopback pages, any port or none, on `http` or `https`: `127.0.0.1`, `localhost`, `[::1]` — a
-  page on the tray's backend, a dev server, the phone app's shell page (`https://localhost`) and its studio
+  page on the desktop app's backend, a dev server, the phone app's shell page (`https://localhost`) and its studio
   views (`http://127.0.0.1:<port>`);
 - `https://k7.rocks` and `https://<sub>.k7.rocks` — the app, its dev instance, the docs — on the default port only;
 - every origin listed in `STUDIO_ENGINE_ALLOWED_ORIGINS`, comma-separated and matched exactly

@@ -52,6 +52,11 @@ std::string allowedOrigins(const std::vector<std::string>& registryUrls)
 }
 
 namespace {
+// Loopback unless the musician opened the LAN (`lanOpen`): the engine has no auth beyond its pairing.
+std::string bindHost(bool lan)
+{
+    return lan ? "0.0.0.0" : "127.0.0.1";
+}
 
 #ifndef K7_ENGINE_IN_APP
 /** The engine THIS supervisor spawned, and whether its reaper has seen it exit. */
@@ -291,7 +296,7 @@ int appPid()
 }  // namespace
 
 // The app may serve its engine ONCE per process (JUCE binds to that thread), so a held port is skipped before asking, never found by a failed bind.
-StartResult start(const EngineIdentity& identity, int first, bool fixed, const std::string& origins, int safeModeCrashes)
+StartResult start(const EngineIdentity& identity, int first, bool fixed, const std::string& origins, int safeModeCrashes, bool lan)
 {
     std::error_code ec;
     fs::create_directories(paths::studioDir(), ec);
@@ -311,7 +316,7 @@ StartResult start(const EngineIdentity& identity, int first, bool fixed, const s
     }
     if (port == 0) return {StartKind::Error, 0, "no free port from :" + std::to_string(first)};
     protocol::emit({{"t", "engine"}, {"action", "start"}, {"id", identity.id}, {"token", identity.token},
-                    {"port", port}, {"host", "0.0.0.0"}, {"origins", origins}, {"safeMode", safeModeCrashes}});
+                    {"port", port}, {"host", bindHost(lan)}, {"origins", origins}, {"safeMode", safeModeCrashes}});
     const auto until = std::chrono::steady_clock::now() + kAppStartBound;
     while (!isServing(port)) {
         if (std::chrono::steady_clock::now() > until)
@@ -335,7 +340,7 @@ void stop()
 }
 #else
 namespace {
-StartResult spawnOn(const EngineIdentity& identity, int port, const std::string& origins, int safeModeCrashes)
+StartResult spawnOn(const EngineIdentity& identity, int port, const std::string& origins, int safeModeCrashes, bool lan)
 {
     const auto bin = findBinary();
     if (!bin) return {StartKind::Missing};
@@ -345,8 +350,7 @@ StartResult spawnOn(const EngineIdentity& identity, int port, const std::string&
     process::SpawnOptions opts;
     opts.program = *bin;
     opts.args = {std::to_string(port)};
-    // Reachable on the LAN for a browser on another machine; loopback works as well.
-    opts.env = {{"STUDIO_ENGINE_HOST", "0.0.0.0"},
+    opts.env = {{"STUDIO_ENGINE_HOST", bindHost(lan)},
                 {"STUDIO_ENGINE_ID", identity.id},
                 {"STUDIO_ENGINE_TOKEN", identity.token},
                 {"STUDIO_ENGINE_ALLOWED_ORIGINS", origins},
@@ -374,7 +378,7 @@ StartResult spawnOn(const EngineIdentity& identity, int port, const std::string&
 }
 }  // namespace
 
-StartResult start(const EngineIdentity& identity, int firstPort, bool portFixed, const std::string& origins, int safeModeCrashes)
+StartResult start(const EngineIdentity& identity, int firstPort, bool portFixed, const std::string& origins, int safeModeCrashes, bool lan)
 {
     if (running()) {
         auto rec = pidfile::read();
@@ -422,7 +426,7 @@ StartResult start(const EngineIdentity& identity, int firstPort, bool portFixed,
                     return {StartKind::Adopted, pid, "", port};
                 }
             }
-        if (bindable(port)) return spawnOn(identity, port, origins, safeModeCrashes);
+        if (bindable(port)) return spawnOn(identity, port, origins, safeModeCrashes, lan);
         // Something else on the port is no engine of ours: never recorded, so never killed.
         const auto holder = holderOf(port);
         if (portFixed)

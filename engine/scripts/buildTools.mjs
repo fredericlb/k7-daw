@@ -1,5 +1,5 @@
 // buildTools.mjs — what the build scripts share: where output goes, spawning with the Windows shell quirk,
-// and Windows' own tar. Shared so build-engine.mjs, package-release.mjs and the tray's stage.mjs cannot drift.
+// and Windows' own tar. Shared so build-engine.mjs, package-release.mjs and the desktop app's stage.mjs cannot drift.
 
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";

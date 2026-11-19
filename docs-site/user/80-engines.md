@@ -19,11 +19,11 @@ You never start the engine by hand. You start the supervisor, and it starts the 
 | A desktop, laptop or small server, with no window | The **command-line engine**: `k7-supervisor --config engine.json` | [The command-line engine](./81-command-line-engine.md) |
 | An Android phone | The **k7 Android app** | [The Android app](./83-android-app.md) |
 
-One machine runs one supervisor. If you start a second one, it stops with `an engine supervisor is already running (pid …) — quit it first`. The tray and the command-line engine run the same supervisor in the same `~/.k7` folder, so a computer runs one or the other.
+One machine runs one supervisor. If you start a second one, it stops with `an engine supervisor is already running (pid …) — quit it first`. The desktop app and the command-line engine run the same supervisor in the same `~/.k7` folder, so a computer runs one or the other.
 
 ## The device's engine
 
-The engine of a device is the one k7 on that device runs, and k7 lists it. With the tray this happens automatically for the k7 on your computer, and on the phone for the phone's own k7. The command-line engine can still be listed at registries named by the `registryUrls` key. [Reaching an engine](./85-connecting-machines.md) explains how the browser reaches the engine.
+The engine of a device is the one k7 on that device runs, and k7 lists it. With the desktop app this happens automatically for the k7 on your computer, and on the phone for the phone's own k7. The command-line engine can still be listed at registries named by the `registryUrls` key. [Reaching an engine](./85-connecting-machines.md) explains how the browser reaches the engine.
 
 ## How k7 picks an engine for a project
 
@@ -41,7 +41,7 @@ Among the trusted engines that answered and that nobody else is using, k7 picks 
 3. **The engine on this machine.** An engine reached through `127.0.0.1` is the one whose speakers are in front of you.
 4. **The latency band**, then the machine's performance score, then the latency in milliseconds.
 
-When no trusted engine is usable, k7 shows the **Select an engine** screen, even if only one engine answered. Picking an engine there makes it the one you chose, so it is trusted from then on. It lists every engine with its latency, its performance score and an **in use** badge when it is busy. Only your own projects are named; another person's use reads as *in use* and nothing more. Click **Use** to pick one, or **Refresh** to measure again. While the screen is open, k7 measures again every 15 seconds. If the list is empty, the screen says: *No engine found. k7 needs an audio engine to play your project: start the k7 tray on this computer (or k7-supervisor), then Refresh.*
+When no trusted engine is usable, k7 shows the **Select an engine** screen, even if only one engine answered. Picking an engine there makes it the one you chose, so it is trusted from then on. It lists every engine with its latency, its performance score and an **in use** badge when it is busy. Only your own projects are named; another person's use reads as *in use* and nothing more. Click **Use** to pick one, or **Refresh** to measure again. While the screen is open, k7 measures again every 15 seconds. If the list is empty, the screen says: *No engine found. k7 needs an audio engine to play your project: start the k7 desktop app on this computer (or k7-supervisor), then Refresh.*
 
 ### Latency bands
 
@@ -78,7 +78,7 @@ The newcomer always wins. A tab that goes to sleep releases its engine, so an id
 
 ## Sampled instruments
 
-Some modules use large sampled instruments, such as a grand piano or a drum kit. These are not part of the engine download. The supervisor fetches them on request and keeps them in the engine's state folder. If a project names an instrument that is not on the engine's machine, k7 says so: *This module needs the sampled instrument "…", which is not on the engine's machine.* Download it from the tray's engine page (**Engine Settings…** in the tray menu), or list it under `instruments` in the command-line engine's config file. The instruments available are:
+Some modules use large sampled instruments, such as a grand piano or a drum kit. These are not part of the engine download. The supervisor fetches them on request and keeps them in the engine's state folder. If a project names an instrument that is not on the engine's machine, k7 says so: *This module needs the sampled instrument "…", which is not on the engine's machine.* Download it from the desktop app's engine page (**Engine Settings…** in the desktop app menu), or list it under `instruments` in the command-line engine's config file. The instruments available are:
 
 | Name | Label | Download size |
 |---|---|---|
