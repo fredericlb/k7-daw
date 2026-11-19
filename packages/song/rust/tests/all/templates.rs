@@ -1,7 +1,7 @@
 // templates.rs — the templates against the chains vectors the TypeScript wrote, and the hostile templates (1p-D2, 1p-D9, 1p-D28).
 // A reader would get wrong that a vector's `error` row asks for a refusal, not for the TypeScript's sentence: the host declines.
 
-use crate::support::{self, Tmp};
+use crate::support;
 use song::session::Session;
 use song::templates::{ChainAt, Layout, MAX_CHAIN_BYTES, Refused, Template, facts_of, read_template};
 use song::{Library, PathRule, Roots, Source};
