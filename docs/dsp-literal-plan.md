@@ -87,7 +87,7 @@ literals, a descending `geolerp`.
 | lost | the answer |
 |---|---|
 | a `for` loop | `repeat` for stages in series, the only loop shape the modules hold; anything else is written out, as the EQ's five bands are (15 params and 5 lines) |
-| a helper (`wah()` called twice) | the module is the unit of reuse: a module extends another, or is copied. DSP that wants functions and loops is Faust's (`plugin.type: faust`), which the engine already compiles |
+| a helper (`wah()` called twice) | the module is the unit of reuse: a module extends another, or is copied. DSP that wants functions and loops is a native plugin (VST3 or AU) the engine hosts |
 | a computed value | none is needed today; a constant is written as its value, and arithmetic on a signal is a node |
 | tsc's Scalar and Audio types | the decoder checks rates, names and arity, and names the file, the line and the key path: `graph[1].output[0].amul[0]: "dyr" names nothing` |
 | completion in a TypeScript editor | the editor's own completion, from the vocabulary above, once the file has a kind |
@@ -145,5 +145,5 @@ a scratch crate that exports the decoder, against the same crate exporting the k
 | 1904 | the accounts' `jsdsp.ts` modules: converted from their `jsdsp.json` at the cut-over, or left playing a frozen graph | converted: byte-identical by construction; the `jsdsp.ts` stays beside it, unread (approved by the user, 2026-11-10) |
 | 1905 | `jsdsp.json` once the compiler reads `dsp.k7x` | committed while the TypeScript compiler reads it, held equal by a test, then deleted: a decode costs microseconds, a cache costs a staleness rule (approved by the user, 2026-11-10) |
 | 1906 | the limits: 64 copies per `repeat`, 1,024 nodes, 64 nested calls | these: the largest module has 19 nodes and nests 6 deep (approved by the user, 2026-11-10) |
-| 1907 | DSP that needs loops, functions or computation | Faust, which the engine already compiles; no expression is ever added to k7x (approved by the user, 2026-11-10) |
+| 1907 | DSP that needs loops, functions or computation | a native plugin (VST3 or AU) the engine hosts; no expression is ever added to k7x (approved by the user, 2026-11-10) |
 | 1908 | the browser decodes `dsp.k7x` for a live preview | later, when the preview exists: the decoder is already in its crate (approved by the user, 2026-11-10) |
