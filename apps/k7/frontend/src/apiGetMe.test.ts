@@ -1,26 +1,38 @@
 // apiGetMe.test.ts — /auth/me is asked once for a start's several askers, and again after nobody or a failure.
 
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
-// A module of its own per case: the answer is cached for a minute inside it.
-const load = async () => (await import("./api")).api;
+const { api } = await import("./api");
 
 const answer = (status: number, user?: object) =>
   new Response(JSON.stringify({ user }), { status });
 
-beforeEach(() => {
-  vi.resetModules();
+beforeAll(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
 });
 
+afterAll(() => {
+  vi.useRealTimers();
+});
+
+// Each case ends two minutes later than it began, past the minute a signed-in answer is kept.
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.setSystemTime(Date.now() + 120_000);
 });
 
 describe("api.getMe", () => {
   it("shares a signed-in answer between askers", async () => {
     const fetch = vi.fn(async () => answer(200, { sub: "a" }));
     vi.stubGlobal("fetch", fetch);
-    const api = await load();
     const [a, b] = await Promise.all([api.getMe(), api.getMe()]);
     expect(await api.getMe()).toEqual({ sub: "a" });
     expect(a).toBe(b);
@@ -34,7 +46,6 @@ describe("api.getMe", () => {
       .mockResolvedValueOnce(answer(502))
       .mockResolvedValueOnce(answer(200, { sub: "b" }));
     vi.stubGlobal("fetch", fetch);
-    const api = await load();
     expect(await api.getMe()).toBeNull();
     await expect(api.getMe()).rejects.toThrow("auth/me 502");
     expect(await api.getMe()).toEqual({ sub: "b" });
