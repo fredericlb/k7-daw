@@ -8,16 +8,15 @@ once, browser-safe, and nowhere else. See `apps/k7/frontend/docs/projects.md` an
 
 ## Where each service answers
 
-`services.ts` states where every service is, derived from ONE origin, k7's. k7 itself runs on devices, at their own loopback address, so no host serves the app: the `app.` rows are the names the code derives:
+`services.ts` states where every service is, derived from ONE origin, k7's. k7 itself runs on devices, at their own loopback address, so no host serves the app:
 
-| service | where | dev | production |
-|---|---|---|---|
-| k7 | the origin itself | `app.priv.k7.rocks` | `app.k7.rocks` |
-| pl8 | k7's backend routes (the tokens), served BY k7 — k7's origin | `app.priv.k7.rocks` | `app.k7.rocks` |
+| service | where |
+|---|---|
+| k7 | the origin itself |
+| pl8 | k7's backend routes, served BY k7 — k7's origin |
 
-`serviceUrl(origin, service)` answers from any studio URL — k7's or a sibling's, whose label it
-strips first — so a page never spells a host, and a deployment on a domain of its own needs nothing
-configured. On a bare loopback host (`localhost`, a dev run) services are told apart by PORT instead.
+`serviceUrl(origin, service)` answers the origin of any URL it is given, so a page never spells a host.
+On a bare loopback host (`localhost`, a dev run) services are told apart by PORT instead.
 
 An app outside this repository reads this table through the published package
 (`docs/publishing.md`).
@@ -25,29 +24,6 @@ An app outside this repository reads this table through the published package
 What you land on is your own WORK: the editor's home page, at k7's origin, lists the workspaces,
 the projects and the libraries. The
 workspaces, the libraries and the deploy key are the file service's.
-
-### k7 is `app.`
-
-k7's origin carries the `app.` label. A `docs.<domain>` host reads as it in `serviceUrl` (the documentation lives at `k7.rocks/docs`
-now, a static site: `docs/site.md` at the root), so an address that still names one lands on the app's origin.
-
-### The former hosts — `st0.app`, `play.` and `k7.` — are permanent
-
-`st0.app` is k7's former origin, `play.st0.app` a former host, and `k7.st0.app`
-another former host of k7. All three are still routed to k7's container, because things
-outside this repo's reach name them and cannot be rewritten:
-
-- every installed supervisor has `https://play.st0.app` saved as its registry URL;
-- every link sent and every PWA installed from `k7.` names it.
-
-`serviceUrl` reads each of them as the current origin: the `play.` and `k7.` labels are stripped
-(`ALIAS_LABELS`), and what is left is looked up in `LEGACY_HOSTS`, which names each former host's
-successor — so a supervisor's saved registry heartbeats `app.k7.rocks` directly, and so does the
-supervisor's `Url.cpp`, its twin. Dropping one of them is a breakage of those links, not a cleanup.
-
-A label is stripped only when a real domain is left behind it: `k7.rocks` is a domain, not the
-`k7.` alias of `rocks`. The labels stay pattern-based otherwise, so a deployment on a domain of
-its own gets the same aliases with nothing configured.
 
 ### The ports are the other half of the same table
 

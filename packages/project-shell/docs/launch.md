@@ -129,10 +129,7 @@ only rule either adds is a reader — `isBenchProject`, `localTarget` — and bo
 Two failures get a screen of their own rather than a diagnosis, because in both the machine
 answered and nothing is broken: an **address naming no workspace**, and a **project that is not in
 the workspace** (400/404 from `POST /open`, whose sentence IS the explanation). Their only useful
-action is to go and pick again, so that is the one button. Running the reachability probe on them
-gives the worst screen in the app — "this page isn't allowed to reach the engine", a CORS story,
-with the real message in a code block underneath — because the probe reaches a service that is
-plainly up and therefore always reports `blocked`.
+action is to go and pick again, so that is the one button, and the file service's "did not answer" screen would be the wrong one.
 
 Arriving with **no** project in the address is not a failure to redirect away from — for k7 it
 IS the home page, `main.tsx` branching on `parseLaunch` before any gate is mounted (see

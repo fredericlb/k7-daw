@@ -338,24 +338,3 @@ export function mediaUrl(path: string): string {
 
 /** How long the gate waits on a question that answers at once when anything is there: `/auth/me` and the probe below. */
 export const PROBE_MS = 5000;
-
-/** Why a call failed, when fetch() won't say — the no-cors probe, see docs/fileApi.md. */
-export type FileServiceFault = "blocked" | "unreachable";
-
-export async function diagnoseFileService(
-  base?: string | null,
-): Promise<FileServiceFault> {
-  const target = base ?? fileCfg?.base;
-  if (!target) return "unreachable";
-  try {
-    // Bounded: the error screen waits on this answer, and a half-open path would keep it a spinner.
-    await fetch(`${target}/health`, {
-      mode: "no-cors",
-      cache: "no-store",
-      signal: AbortSignal.timeout(PROBE_MS),
-    });
-    return "blocked";
-  } catch {
-    return "unreachable";
-  }
-}

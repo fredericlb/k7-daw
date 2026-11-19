@@ -2,7 +2,7 @@
 // its tunnel (`apps/k7/backend-rs/docs/engine/chains.md`). Only its owner may write: the server answers 403 for
 // anyone else, and an engine holding no tunnel answers 503 rather than a copy of an answer it cannot vouch for.
 
-import { PL8_API } from "../api";
+import { API_ROOT } from "../api";
 
 /** The two a machine answers by `want`; absent is "this machine names none". */
 export interface EngineChains {
@@ -29,7 +29,7 @@ async function ask(
   json?: EngineChains,
 ): Promise<EngineChains> {
   const r = await fetch(
-    `${PL8_API}/engines/${encodeURIComponent(engineId)}/chains`,
+    `${API_ROOT}/engines/${encodeURIComponent(engineId)}/chains`,
     {
       method,
       credentials: "include",

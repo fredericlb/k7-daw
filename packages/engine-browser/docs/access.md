@@ -6,7 +6,7 @@ The pieces exist separately: `registry.ts` (the routes), `probe.ts` (measuring),
 ## The registry's address is given once, to the constructor
 
 `base` is where the registry answers — k7's backend, the one registry (`apps/k7/backend-rs/docs/engine/shared.md`):
-`serviceUrl(…, "pl8")`, which is k7's origin; k7 names the backend holding its preferences through `prefsBase`. It decides both the registry's routes
+`serviceUrl(…)`, which is k7's origin, where its preferences are too. It decides both the registry's routes
 and what the probe composes.
 Passed separately to two functions it is two places for one fact, and nothing would force an app
 to keep them in step. The one that drifts most quietly is the probe's, and it is what decides
@@ -14,7 +14,7 @@ whether the **relay** is offered: a service can then list its engines correctly 
 them remotely, with no type noticing.
 
 ```ts
-export const engines = engineAccess<PublicEngine, K7Prefs>(PL8, json, { prefsBase: BASE, hostedFiles: true });
+export const engines = engineAccess<PublicEngine, K7Prefs>(ORIGIN, json, { hostedFiles: true });
 ```
 
 ## `find()` is the sequence, not the pieces

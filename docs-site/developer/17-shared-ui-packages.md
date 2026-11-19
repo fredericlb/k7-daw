@@ -1,24 +1,6 @@
-# Shared UI packages: user menu and mini player
+# Shared UI package: the mini player
 
-Two small packages exist because more than one screen of the studio draws the same thing. Both are raw TypeScript consumed as source, take React as a peer, and take every string as a prop.
-
-## `@studio/ui-user-menu`
-
-`packages/ui-user-menu/src/UserMenu.tsx` is the user menu: the identity's name, a Settings row, extra host rows, one link per **other** studio app of the origin, and the logout row of the user menu. It wraps the generic user menu of `@studio/ui` and adds the studio's table of apps (`APPS`, k7 first).
-
-| Prop | Meaning |
-|---|---|
-| `self` | The app drawing it; its own row is left out. |
-| `email` | The heading, null while unknown. |
-| `onLogout` | The host's sign-out: each app reaches `/auth` from its own origin. |
-| `onSettings`, `settingsLabel` | The Settings row and its translated name. |
-| `items` | More host rows (the engine page on a machine's own backend, for instance). |
-| `origin` | Where sibling apps resolve from when it is not this tab's origin — k7 on a machine's own backend passes the server it syncs with. |
-| `unavailable` | Shown instead of the app rows when there is nowhere to go. |
-
-Links are built with `serviceUrl(origin, id)` from `packages/web-protocol/services.ts`, the one table of where each studio service answers. k7 mounts the menu in its home sidebar (`apps/k7/frontend/src/projects/HomeSidebar.tsx`).
-
-To add an app to the menu, add its service to `services.ts` and a row to `APPS`.
+One small package exists because more than one screen of the studio draws the same thing. It is raw TypeScript consumed as source, take React as a peer, and take every string as a prop.
 
 ## `@studio/ui-mini-player`
 

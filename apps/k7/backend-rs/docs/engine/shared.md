@@ -2,8 +2,7 @@
 
 An engine heartbeats to **one** registry per studio family, answered by k7's front
 (`crates/k7-engine/src/registry/`, routed by `crates/k7-front/src/routes/engine/`) on k7's origin — `engineRegistryUrl` in
-`packages/web-protocol/services.ts`. `play.st0.app` is a former host read as that origin, so a supervisor
-that saved `https://play.st0.app` reaches the same registry (`packages/web-protocol/docs/addresses.md`).
+`packages/web-protocol/services.ts`.
 The editor and the other apps that drive an engine list their engines from it.
 
 ## The problem it solves

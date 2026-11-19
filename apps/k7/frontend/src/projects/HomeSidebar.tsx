@@ -17,7 +17,7 @@ import {
   Snowflake,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
-import { UserMenu } from "@studio/ui-user-menu";
+import { UserMenu } from "@studio/ui/user-menu";
 import { type RefObject, useLayoutEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import k7Logo from "../../icon/k7.svg";
@@ -167,10 +167,9 @@ export function HomeSidebar({
     },
   ].map((e) => ({ ...e, active: here(e.route) }));
   // The account and the settings — in the header at the title's far right, and on the
-  // rail, which has no title, below (packages/ui-user-menu/docs/userMenu.md).
+  // rail, which has no title, below (docs/userMenu.md).
   const userMenu = (
     <UserMenu
-      self="k7"
       email={email}
       onSettings={() => navigate(SETTINGS_ROUTE)}
       settingsLabel={m["home.settings"]()}

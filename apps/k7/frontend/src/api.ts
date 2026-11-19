@@ -2,7 +2,7 @@
 //   • the hosted backend (same-origin at the ROOT, cookie): the local user's session at
 //     /auth/* — k7 is the service with no prefix — and this app's own preferences.
 //   • the engine-side file service (cross-origin, header-auth): all file/workspace ops.
-//   • pl8's routes (this origin now, cookie): the ONE engine registry, and the songs a playlist names.
+//   • the front's routes (this origin, cookie): the ONE engine registry, and the songs a playlist names.
 // The file service base + the identity/workspace/engine-token headers are set by
 // configureFileApi once an engine is chosen and the workspace is resolved (see ProjectGate).
 
@@ -31,8 +31,8 @@ import type { ModuleStore } from "@studio/ui-module-builder/store";
 import { MAX_UPLOAD_BYTES, type ModelDownloadJob } from "@studio/web-protocol";
 import type { PlaylistInfo } from "@studio/web-protocol/playlists";
 import type { ProjectResource } from "@studio/web-protocol/resources";
+import { serviceUrl } from "@studio/web-protocol/services";
 import type { CommandPrefs } from "./commandPrefs";
-import { pl8Url } from "./projects/api";
 import type {
   PreviewReq,
   PublicEngine,
@@ -43,8 +43,8 @@ import type {
 // The app is mounted at the ORIGIN ROOT, so BASE is the empty string — kept as a derived constant, this app's mount being the one that can still change.
 export const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-/** Where pl8's routes answer — this origin now. It holds the media library AND the one engine registry. */
-const PL8 = pl8Url();
+/** Where the front's routes answer: this origin. It holds the preferences AND the one engine registry. */
+const ORIGIN = serviceUrl(globalThis.location?.origin ?? "", "k7");
 
 // ── The hosted backend (same-origin): auth + preferences ────────────────────────
 
@@ -54,9 +54,8 @@ const PL8 = pl8Url();
 export interface K7Prefs extends EnginePrefs {
   commands?: CommandPrefs;
 }
-/** The registry, the probe and the relay are pl8's — k7 holds no registry of its own — while the preferences, the remembered engine among them, stay k7's. */
-export const engines = engineAccess<PublicEngine, K7Prefs>(PL8, json, {
-  prefsBase: BASE,
+/** The registry, the probe and the relay, and the preferences with the remembered engine among them: one origin. */
+export const engines = engineAccess<PublicEngine, K7Prefs>(ORIGIN, json, {
   // A workspace the server hosts is opened there, whichever engine plays it — apps/k7/backend-rs/docs/files/hub.md.
   hostedFiles: true,
 });
@@ -127,10 +126,6 @@ export const api = {
       if (!u) forget();
     }, forget);
     return asked.p;
-  },
-  logout: () => {
-    me = null;
-    return fetch("/auth/logout", { method: "POST" }).then(() => undefined);
   },
 
   // --- Engine registry (hosted backend, same-origin) ---
@@ -311,8 +306,8 @@ export const api = {
     fget<NodePresets>(`/presets?node=${encodeURIComponent(node)}`),
 };
 
-/** pl8's API root, for the callers beside this file that name a route of its own (the engines' chains and slots). */
-export const PL8_API = `${PL8}/api`;
+/** The API root, for the callers beside this file that name a route of its own (the engines' chains and slots). */
+export const API_ROOT = `${ORIGIN}/api`;
 
 /** What an empty DSP source is pre-filled with, per language — a stub that LOADS, since an empty file fails later and less obviously. */
 function dspStub(ref: string, file: string): string {

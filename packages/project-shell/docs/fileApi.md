@@ -119,32 +119,20 @@ back refuses the write. The gate decides what is a write; the shell only asks. I
 A verb the Worker runs on its own (a project import) writes through routes of its own and never meets
 `fsend`, so such a caller asks `refusedWrite` itself before it starts.
 
-### Blocked or unreachable
+### The file service did not answer
 
-A refused CORS preflight and a dead server are the SAME rejection in JS: an opaque
-`TypeError: NetworkError`, with no status and no body, because letting a page read that difference
-is precisely what CORS exists to prevent. The difference is the whole of the next action — "allow
-this origin on the engine's machine" versus "start the engine".
-
-`mode: "no-cors"` is the way through. It sends a simple GET with no preflight and no ACAO check,
-yielding an opaque response nothing can read but whose ARRIVAL proves something answered.
-
-| probe | conclusion |
-|---|---|
-| resolves | the service is up and refused our origin → `blocked` |
-| rejects | nothing is listening at that address → `unreachable` |
+The files are the page's own origin, served by the device's front, so a failed call has one screen:
+the file service did not answer, with the error as its detail. The gate does not probe the address to
+tell a refused origin from a dead service: a page on another origin is not a case.
 
 Both `fget` and `fsend` carry the HTTP `status` onto the thrown `Error`, for the callers that have
-to tell "nothing there" from "it went wrong" — the gate's `missing` screen is the main one. A
-status also means the service answered, so the gate runs the origin probe above only when there is
-none: a 401 or a 503 is not a refused origin, and saying so sends the reader to the wrong fix.
+to tell "nothing there" from "it went wrong" — the gate's `missing` screen is the main one.
 
 **Nothing the gate waits on is unbounded**: a backend or a hub that hangs, or a path left
-half-open by a sleep, would otherwise keep the gate on its spinner until a reload. `/auth/me` and
-the probe get `PROBE_MS` (5 s: both answer at once when anything is there, and a probe that hangs
-is `unreachable`); `/open` gets `OPEN_MS` (three minutes, since it brings the libraries up to
-date). A call dropped for its budget throws `NoAnswer`, and the gate runs no probe on it: the far
-side may be there, only slow, and Retry is the action either way.
+half-open by a sleep, would otherwise keep the gate on its spinner until a reload. `/auth/me`
+gets `PROBE_MS` (5 s: it answers at once when anything is there); `/open` gets `OPEN_MS` (three minutes, since it brings the libraries up to
+date). A call dropped for its budget throws `NoAnswer`: the far
+side may be there, only slow, and Retry is the action.
 
 **A hub ticket lives twelve hours, and a session can outlive it.** With `renewTicket` configured —
 k7 passes its access's `freshTicket` when the files are hosted — a 401 asks for a new ticket once,

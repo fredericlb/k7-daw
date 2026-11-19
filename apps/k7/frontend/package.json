@@ -41,7 +41,6 @@
     "@studio/ui-mini-player": "*",
     "@studio/ui-module-builder": "*",
     "@studio/ui-timeline": "*",
-    "@studio/ui-user-menu": "*",
     "@studio/ui-waveform": "*",
     "@studio/web-protocol": "*",
     "@tanstack/react-query": "5.103.3",

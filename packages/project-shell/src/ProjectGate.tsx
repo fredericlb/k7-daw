@@ -172,10 +172,8 @@ export function ProjectGate({
       return (
         <ErrorScreen
           strings={strings}
-          fault={phase.fault}
           message={phase.message}
           lines={phase.lines}
-          fileBase={engine.fileBase}
           onRetry={retry}
           onBack={quit}
         />

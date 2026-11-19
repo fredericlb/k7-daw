@@ -16,17 +16,6 @@ void registryIsTheFamilyRootWhicheverServiceWasNamed()
 {
     CHECK(engineRegistryUrl("https://app.k7.rocks") == "https://app.k7.rocks");
     CHECK(engineRegistryUrl("https://app.k7.rocks/band/winter.k7") == "https://app.k7.rocks");
-    CHECK(engineRegistryUrl("https://docs.k7.rocks") == "https://app.k7.rocks");
-}
-
-// A supervisor saved one of these before the move; each must still heartbeat the current origin.
-void formerHostsAreTheCurrentOrigin()
-{
-    CHECK(engineRegistryUrl("https://st0.app") == "https://app.k7.rocks");
-    CHECK(engineRegistryUrl("https://play.st0.app") == "https://app.k7.rocks");
-    CHECK(engineRegistryUrl("https://k7.st0.app") == "https://app.k7.rocks");
-    CHECK(serviceUrl("https://play.priv.st0.app/songs/a", "pl8") == "https://app.priv.k7.rocks");
-    CHECK(serviceUrl("https://k7.rocks", "k7") == "https://k7.rocks");
 }
 
 void registryOnLoopbackIsK7sPort()
@@ -35,14 +24,12 @@ void registryOnLoopbackIsK7sPort()
     CHECK(engineRegistryUrl("http://127.0.0.1:5223") == "http://127.0.0.1:8789");
 }
 
-void pl8AndK7ResolveToK7sOrigin()
+void everyServiceResolvesToTheOriginItIsGiven()
 {
     CHECK(serviceUrl("https://app.k7.rocks", "pl8") == "https://app.k7.rocks");
-    CHECK(serviceUrl("https://app.priv.k7.rocks/songs/a", "pl8") == "https://app.priv.k7.rocks");
-    CHECK(serviceUrl("https://app.k7.rocks", "k7") == "https://app.k7.rocks");
-    CHECK(serviceUrl("https://docs.priv.k7.rocks", "k7") == "https://app.priv.k7.rocks");
-    CHECK(serviceUrl("https://k7.st0.app/session/1", "k7") == "https://app.k7.rocks");
+    CHECK(serviceUrl("https://studio.example:8443/songs/a", "k7") == "https://studio.example:8443");
     CHECK(serviceUrl("http://localhost:5223", "k7") == "http://localhost:5223");
+    CHECK(serviceUrl("not a url", "k7").empty());
 }
 
 void setPorts(const char* spec)
@@ -71,9 +58,9 @@ void registryOfNonUrlIsEmpty()
     CHECK(engineRegistryUrl("ftp://app.k7.rocks").empty());
 }
 
-void familyIsK7sOrigin()
+void familyIsTheOriginOrBareLoopback()
 {
-    CHECK(studioFamily("https://play.st0.app/library") == "https://app.k7.rocks");
+    CHECK(studioFamily("https://studio.example:8443/library") == "https://studio.example:8443");
     CHECK(studioFamily("https://app.k7.rocks") == "https://app.k7.rocks");
     CHECK(studioFamily("http://localhost:8080") == "http://localhost");
     CHECK(studioFamily("http://localhost:8789") == "http://localhost");
@@ -142,12 +129,11 @@ void engineOriginsAreTheStudios()
 void runUrlTests()
 {
     RUN(registryIsTheFamilyRootWhicheverServiceWasNamed);
-    RUN(formerHostsAreTheCurrentOrigin);
     RUN(registryOnLoopbackIsK7sPort);
-    RUN(pl8AndK7ResolveToK7sOrigin);
+    RUN(everyServiceResolvesToTheOriginItIsGiven);
     RUN(registryOnLoopbackFollowsMovedPorts);
     RUN(registryOfNonUrlIsEmpty);
-    RUN(familyIsK7sOrigin);
+    RUN(familyIsTheOriginOrBareLoopback);
     RUN(userOriginIsStrict);
     RUN(plaintextOnlyToLoopbackOrTheAllowlist);
     RUN(cacheKeyIsTheHost);

@@ -8,11 +8,9 @@ import {
   Loader2,
   Moon,
   ServerCrash,
-  ShieldAlert,
   UserRoundX,
 } from "@studio/ui/icons";
 import type { ReactNode } from "react";
-import type { FileServiceFault } from "./fileApi.ts";
 import type { ProjectGateStrings } from "./gateTypes.ts";
 
 /** What a workspace with no project says when the app draws no wizard: nothing is wrong, it is empty. */
@@ -208,46 +206,24 @@ export function IdleScreen({
   );
 }
 
-/** A fault, said by what the probe found: a refused origin and a dead service have opposite fixes. */
+/** The file service did not answer: one screen, the error as its detail. */
 export function ErrorScreen({
   strings,
-  fault,
   message,
   lines,
-  fileBase,
   onRetry,
   onBack,
 }: {
   strings: ProjectGateStrings;
-  fault?: FileServiceFault;
   message: string;
   lines?: string[];
-  fileBase: string | null | undefined;
   onRetry: () => void;
   onBack: () => void;
 }) {
-  const blocked = fault === "blocked";
   return (
-    <GateCard
-      icon={
-        blocked ? (
-          <ShieldAlert className="h-10 w-10 text-amber-500" />
-        ) : (
-          <ServerCrash className="h-10 w-10 text-amber-500" />
-        )
-      }
-    >
-      <h1 className="text-lg font-semibold">
-        {blocked ? strings.blockedTitle : strings.unreachableTitle}
-      </h1>
-      <p className="text-sm text-muted-foreground">
-        {blocked
-          ? strings.blockedBody(window.location.origin)
-          : fault === "unreachable"
-            ? strings.unreachableBody(fileBase ?? "?")
-            : // The probe didn't run (the service answered): the message says it.
-              strings.bothBody}
-      </p>
+    <GateCard icon={<ServerCrash className="h-10 w-10 text-amber-500" />}>
+      <h1 className="text-lg font-semibold">{strings.unreachableTitle}</h1>
+      <p className="text-sm text-muted-foreground">{strings.bothBody}</p>
       <Detail
         label={strings.details ?? "Details"}
         text={lines?.length ? lines.join("\n") : message}

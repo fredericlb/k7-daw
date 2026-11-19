@@ -114,7 +114,7 @@ Four packages are published by version for consumers outside this repository: `w
 | Engine connection | `engine-protocol`, `engine-client`, `engine-browser`, `engine-registry`, `engine-tunnel` |
 | Disk | `user-prefs` (the file service and the hub are Rust crates under `apps/k7/backend-rs/crates/`) |
 | Media and recording | `ui-mini-player`, `recorder`, `http-client` (the media core is the Rust crate `k7-mediatek`) |
-| App shell and views | `project-shell`, `ui-chains`, `ui-chains-react`, `ui-editor`, `ui-eyes`, `ui-timeline`, `ui-waveform`, `ui-module-builder`, `ui-user-menu` |
+| App shell and views | `project-shell`, `ui-chains`, `ui-chains-react`, `ui-editor`, `ui-eyes`, `ui-timeline`, `ui-waveform`, `ui-module-builder` |
 | Shared types | `web-protocol`, `graph-model` |
 | Plugin contract | `k7-sdk`, `k7-plugins` |
 

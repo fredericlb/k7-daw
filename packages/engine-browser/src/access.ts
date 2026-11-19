@@ -55,9 +55,8 @@ export interface HostedFiles {
   fileToken: string;
 }
 
-/** Where an app keeps its preferences, when that is not where the registry is — k7, whose registry is pl8's. */
+/** What an app chooses about its engine access. */
 export interface EngineAccessOptions {
-  prefsBase?: string;
   /** Reach the SERVER's files when it hosts them, rather than the engine machine's — see docs/access.md. */
   hostedFiles?: boolean;
 }
@@ -97,7 +96,7 @@ function hubHelloAt(base: string): {
   };
 }
 
-/** Everything one app's browser needs, bound to the registry's origin (and the app's own, for its preferences) ONCE — see docs/access.md. */
+/** Everything one app's browser needs, bound to the registry's origin ONCE — see docs/access.md. */
 export function engineAccess<
   E extends ProbeTarget,
   P extends EnginePrefs = EnginePrefs,
@@ -106,8 +105,7 @@ export function engineAccess<
   json: ReadJson,
   opts: EngineAccessOptions = {},
 ): EngineAccess<E, P> {
-  const prefsBase = opts.prefsBase ?? base;
-  const reg = registryClient<E, P>(base, json, prefsBase);
+  const reg = registryClient<E, P>(base, json);
   const nearHub = hubHelloAt(base);
   /** A listing measured before any claim: `claim` is what a caller DRIVING the engine passes, and it adds WebRTC. */
   const probe = async (

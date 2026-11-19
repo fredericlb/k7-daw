@@ -70,24 +70,6 @@ bool forbiddenHostChar(char c)
     return bad.find(c) != std::string::npos || static_cast<unsigned char>(c) < 0x20 || c == 0x7f;
 }
 
-/** k7's own hostname: an alias label stripped, `docs.` read as `app.`, a former host as its successor — services.ts's twin. */
-std::string k7Hostname(const std::string& hostname)
-{
-    std::string host = hostname;
-    for (const char* label : {"play.", "k7."}) {
-        const std::string prefix(label);
-        // Stripped only off a real domain: `k7.rocks` is a domain, not an alias of `rocks`.
-        if (host.rfind(prefix, 0) == 0 && host.find('.', prefix.size()) != std::string::npos) {
-            host = host.substr(prefix.size());
-            break;
-        }
-    }
-    if (host.rfind("docs.", 0) == 0) host = "app." + host.substr(5);
-    if (host == "st0.app") return "app.k7.rocks";
-    if (host == "priv.st0.app") return "app.priv.k7.rocks";
-    return host;
-}
-
 }  // namespace
 
 std::string Url::host() const { return port.empty() ? hostname : hostname + ":" + port; }
@@ -185,10 +167,8 @@ bool isLoopbackHost(const std::string& h)
 std::string serviceUrl(const std::string& origin, const std::string& /*service*/)
 {
     const auto u = parse(origin);
-    if (!u) return "";
-    const std::string base = k7Hostname(u->hostname);
-    // pl8 is served by k7's own process, so every service shares k7's address.
-    return base == u->hostname ? u->origin() : u->scheme + "://" + base;
+    // Every service shares the address it is given: k7's own process serves them all.
+    return u ? u->origin() : "";
 }
 
 std::string studioFamily(const std::string& raw)

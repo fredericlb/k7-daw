@@ -30,7 +30,7 @@ edit path in [The edit path](./21-edit-path.md).
 - [Keys, the palette and the right-click menu](./14-keys-palette-menus.md)
 - [Translation (paraglide)](./15-i18n.md)
 - [ui-editor: the text editor stack and autosave](./16-ui-editor.md)
-- [Shared UI packages: user menu and mini player](./17-shared-ui-packages.md)
+- [Shared UI package: the mini player](./17-shared-ui-packages.md)
 - [The k7 backend server](./18-backend-server.md)
 - [Frontend and backend boundary](./19-frontend-backend-boundary.md)
 

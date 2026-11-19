@@ -2,13 +2,12 @@
 // about its engine, and the wording an app hands it. ProjectGate.tsx re-exports the public two.
 
 import type { EngineLoadStrings } from "./EngineLoadScreen.tsx";
-import type { FileServiceFault } from "./fileApi.ts";
 
 export type GatePhase =
   | { k: "resolving" }
   // A wait with no measure: the bench's catalogue being fetched.
   | { k: "cloning"; workspace: string; phase: string }
-  | { k: "error"; message: string; fault?: FileServiceFault; lines?: string[] }
+  | { k: "error"; message: string; lines?: string[] }
   // The machine answered and has no such folder — its own screen, see docs/launch.md.
   | { k: "missing"; hint?: string; detail?: string }
   // The account has no library repository, so nothing resolves and nothing retries — docs/launch.md.
@@ -38,9 +37,6 @@ export interface ProjectGateStrings {
   cloning: (workspace: string) => string;
   back: string;
   unreachableTitle: string;
-  unreachableBody: (base: string) => string;
-  blockedTitle: string;
-  blockedBody: (origin: string) => string;
   bothBody: string;
   retry: string;
   /** The project named is not in the workspace — a wording apart, because nothing is broken. */

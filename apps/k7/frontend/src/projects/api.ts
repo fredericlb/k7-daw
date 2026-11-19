@@ -31,14 +31,6 @@ import {
   SETTINGS_PAGE,
   TASKS_PAGE,
 } from "@studio/web-protocol/projects";
-import { serviceUrl } from "@studio/web-protocol/services";
-
-/** Where pl8's routes answer, DERIVED from the services table rather than declared — this origin now (`globalThis.location`, for node tests). */
-const PL8_URL = serviceUrl(globalThis.location?.origin ?? "", "k7");
-
-/** …and on another server, the desktop's configured one; none names this origin. */
-export const pl8Url = (server?: string | null): string =>
-  server ? serviceUrl(server, "k7") : PL8_URL;
 
 /** The one field an address is chosen from — narrower than `AccountWorkspace` on purpose, the surfaces listing carrying it flattened. */
 type Addressable = Pick<AccountWorkspace, "name">;

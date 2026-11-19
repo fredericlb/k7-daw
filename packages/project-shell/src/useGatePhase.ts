@@ -9,12 +9,7 @@ import {
   type ProjectApp,
 } from "@studio/web-protocol/projects";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  configureFileApi,
-  diagnoseFileService,
-  NoAnswer,
-  PROBE_MS,
-} from "./fileApi.ts";
+import { configureFileApi, NoAnswer, PROBE_MS } from "./fileApi.ts";
 import { fileRoutes } from "./files.ts";
 import type { GateEngine, GatePhase, ProjectGateStrings } from "./gateTypes.ts";
 import {
@@ -258,15 +253,7 @@ export function useGatePhase({
         });
       } catch (e) {
         if (cancelled) return;
-        // "NetworkError…" covers a refused origin and a dead service, whose fixes are opposite; an HTTP status is neither — the service answered.
-        const answered = typeof (e as { status?: unknown }).status === "number";
-        // …and a call past its budget is neither either: the far side may well be there, only slow.
-        const fault =
-          answered || e instanceof NoAnswer
-            ? undefined
-            : await diagnoseFileService(engineRef.current.fileBase);
-        if (!cancelled)
-          setPhase({ k: "error", message: (e as Error).message, fault });
+        if (!cancelled) setPhase({ k: "error", message: (e as Error).message });
       }
     })();
     return () => {

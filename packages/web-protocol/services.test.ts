@@ -1,65 +1,25 @@
-// Every service resolves on k7's origin — `docs.` read as `app.`, the `play.` and `k7.` aliases
-// stripped, a former host read as its successor; on a loopback host that
-// origin is the page's own, port and all.
+// Every service resolves on the origin it is given: the host and port of a page are k7's own.
 
 import { afterEach, describe, expect, it } from "vitest";
 import { parsePorts, servicePorts, serviceUrl } from "./services.ts";
 
 describe("serviceUrl", () => {
-  it("echoes k7 back on whatever origin it's given, dev or prod", () => {
+  it("echoes the origin it is given, path dropped", () => {
     expect(serviceUrl("https://app.k7.rocks/x", "k7")).toBe(
       "https://app.k7.rocks",
     );
-    expect(serviceUrl("https://app.priv.k7.rocks/x", "k7")).toBe(
-      "https://app.priv.k7.rocks",
+    expect(serviceUrl("https://studio.example:8443/a?b#c", "k7")).toBe(
+      "https://studio.example:8443",
     );
-  });
-
-  it("reads the docs host as the app beside it", () => {
-    expect(serviceUrl("https://docs.k7.rocks/x", "k7")).toBe(
-      "https://app.k7.rocks",
-    );
-    expect(serviceUrl("https://docs.priv.k7.rocks", "k7")).toBe(
-      "https://app.priv.k7.rocks",
-    );
-  });
-
-  it("reads a former host, alias or not, as the current origin", () => {
-    expect(serviceUrl("https://st0.app/x", "k7")).toBe("https://app.k7.rocks");
-    expect(serviceUrl("https://play.st0.app/songs/a", "k7")).toBe(
-      "https://app.k7.rocks",
-    );
-    expect(serviceUrl("https://k7.st0.app/session/1", "k7")).toBe(
-      "https://app.k7.rocks",
-    );
-    expect(serviceUrl("https://k7.priv.st0.app", "k7")).toBe(
-      "https://app.priv.k7.rocks",
-    );
-    expect(serviceUrl("https://play.priv.st0.app", "k7")).toBe(
-      "https://app.priv.k7.rocks",
-    );
-  });
-
-  it("strips an alias label on a domain of its own, which needs no configuring", () => {
-    expect(serviceUrl("https://play.studio.example/x", "k7")).toBe(
-      "https://studio.example",
-    );
-  });
-
-  it("never strips a label down to a bare TLD", () => {
-    expect(serviceUrl("https://k7.rocks", "k7")).toBe("https://k7.rocks");
   });
 
   it("returns '' for a string that is not a URL, never a throw", () => {
     expect(serviceUrl("not a url", "k7")).toBe("");
   });
 
-  it("keeps a loopback page's own origin, port and all, for every service", () => {
+  it("keeps a loopback page's own origin, port and all", () => {
     expect(serviceUrl("http://127.0.0.1:8789", "k7")).toBe(
       "http://127.0.0.1:8789",
-    );
-    expect(serviceUrl("http://localhost:5223", "k7")).toBe(
-      "http://localhost:5223",
     );
     expect(serviceUrl("http://localhost:5223", "k7")).toBe(
       "http://localhost:5223",

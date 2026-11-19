@@ -106,7 +106,7 @@ sweep that moved them settled:
   screen just falls back to printing the key.
 
 **A shared package under `packages/` has no catalogue and stays ENGLISH.** `ui-chains`,
-`ui-chains-react`, `ui-module-builder`, `project-shell` and `ui-user-menu` draw
+`ui-chains-react`, `ui-module-builder` and `project-shell` draw
 inside this app and inside others, each with its own message set; a French string in one of them
 is a French string in every host. What crosses that line is a `noun`-shaped hint the host hands
 in, not a sentence — or, for `ui-chains-react`, a whole `labels` object: its controls carry
@@ -178,7 +178,7 @@ section the one place the feature can be found, and its row says so.
 
 `git/IdentitySection.tsx`, in General. With no account to say who the person is, the device's identity
 is what they typed here: the author of every git commit and the user menu's heading
-(`packages/ui-user-menu/docs/userMenu.md`). It is stored once, in the backend's identity file
+(`userMenu.md`). It is stored once, in the backend's identity file
 (`apps/k7/backend-rs/docs/files/git.md`), and `git/identity.ts` mirrors it for every reader, so
 the commit dialog, which asks for it the first time a commit has none, and this section stay in sync.
 

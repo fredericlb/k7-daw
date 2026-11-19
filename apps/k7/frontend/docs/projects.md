@@ -43,7 +43,7 @@ sidebar**, never in the editor's header. Inside a project the project bar's unfo
 sidebar as a drawer (`HomeDrawer`), so everything this page links to is one click away from any
 project without the project bar carrying it. The router's basename is the project there, so the drawer's
 entries are full addresses resolved against `projectsUrl` — drawn in place, no page load
-(`shell.md`) — and none is lit. It is `@studio/ui-user-menu` (`packages/ui-user-menu/docs/userMenu.md`).
+(`shell.md`) — and none is lit. It is `@studio/ui/user-menu` (`userMenu.md`).
 
 **One left sidebar for this page and the ones that hang off it**, `/tasks`, `/libraries`,
 `/settings` (`HomeSidebar.tsx`), and no header: the page's whole

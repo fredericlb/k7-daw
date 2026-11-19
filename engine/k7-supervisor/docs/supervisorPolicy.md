@@ -87,13 +87,11 @@ remove, never per heartbeat.
 
 Every URL, whichever tier it came from, is read as its family's **one registry, k7's backend's**
 (`url::engineRegistryUrl` in `Url.cpp`, the twin of `engineRegistryUrl` in
-`packages/web-protocol/services.ts` — `Url_test.cpp` replays that file's cases): `https://app.k7.rocks`,
-`https://docs.k7.rocks` and the former hosts `https://st0.app` and `https://play.st0.app` all mean
-`https://app.k7.rocks`, and any loopback URL means
+`packages/web-protocol/services.ts` — `Url_test.cpp` replays that file's cases): `https://app.k7.rocks`
+means itself, and any loopback URL means
 `http://localhost:8789` — or k7's port in `$STUDIO_PORTS` when a host moved it, as the tray
 does (`packages/web-protocol/docs/addresses.md`). The registry is mounted by k7's backend
-(`apps/k7/backend-rs/docs/engine/shared.md`), so a supervisor that saved `https://play.st0.app` still
-heartbeats the right place. The answer is a **list**, one per studio this engine is connected to, deduped.
+(`apps/k7/backend-rs/docs/engine/shared.md`). The answer is a **list**, one per studio this engine is connected to, deduped.
 
 **Plain http reaches loopback and nothing else.** A heartbeat carries the engine's token and the
 tunnel secret, and the tunnel's handshake carries them again, so a registry on `http://` past

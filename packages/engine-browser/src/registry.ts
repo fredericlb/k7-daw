@@ -68,11 +68,10 @@ export interface RegistryClient<E, P extends EnginePrefs = EnginePrefs> {
 /** Read a JSON body, or throw with `what` in the message; passed in because each app already has one wired to its own reporting. */
 export type ReadJson = <T>(res: Response, what: string) => Promise<T>;
 
-/** The five routes against the registry at `base`; the preferences against `prefsBase`, the app's OWN service, which defaults to the same — the remembered engine is that app's choice, kept where its other preferences are. */
+/** The five routes against the registry at `base`, and the preferences beside them — the remembered engine is the app's choice, kept where its other preferences are. */
 export function registryClient<E, P extends EnginePrefs = EnginePrefs>(
   base: string,
   json: ReadJson,
-  prefsBase: string = base,
 ): RegistryClient<E, P> {
   return {
     list: async () =>
@@ -131,7 +130,7 @@ export function registryClient<E, P extends EnginePrefs = EnginePrefs>(
 
     prefs: async () =>
       json<P>(
-        await fetch(`${prefsBase}/api/preferences`, {
+        await fetch(`${base}/api/preferences`, {
           credentials: "include",
           signal: AbortSignal.timeout(ENGINE_CONNECT_DEADLINE_MS),
         }),
@@ -140,7 +139,7 @@ export function registryClient<E, P extends EnginePrefs = EnginePrefs>(
 
     savePrefs: async (p) =>
       json<{ ok: true }>(
-        await fetch(`${prefsBase}/api/preferences`, {
+        await fetch(`${base}/api/preferences`, {
           method: "PUT",
           credentials: "include",
           headers: { "content-type": "application/json" },

@@ -2,7 +2,7 @@
 // tunnel to: the chain compiled there, sent to the machine as a job. This machine's own slots go through its own
 // backend instead (desktopEngine.ts). See ../../docs/slots.md.
 
-import { engines, PL8_API } from "../api";
+import { API_ROOT, engines } from "../api";
 import type { PublicEngine } from "../types";
 
 /** One slot as a machine's supervisor lists it. */
@@ -29,7 +29,7 @@ export async function ownedEngines(exceptId?: string): Promise<PublicEngine[]> {
 
 /** Where `e`'s slot routes answer from this page: the origin holding its tunnel. */
 const base = (e: PublicEngine): string =>
-  `${PL8_API}/engine-slots/${encodeURIComponent(e.id)}`;
+  `${API_ROOT}/engine-slots/${encodeURIComponent(e.id)}`;
 
 async function call(
   e: PublicEngine,
