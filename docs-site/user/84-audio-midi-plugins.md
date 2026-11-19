@@ -82,4 +82,4 @@ When the engine dies while loading a plugin or a model file, it notes which file
 
 ### Engines with different plugins
 
-A project made on one machine may use plugins another machine does not have. k7 prefers engines that have every plugin the project uses, and the header's warning triangle tells you which ones are missing on the current engine. See [Engines](./80-engines.md#how-k7-picks-an-engine-for-a-project).
+A project made on one machine may use plugins another machine does not have. k7 prefers engines that have every plugin the project uses, and the header's warning triangle tells you which ones are missing on the current engine. See [Engines](./80-engines.md#how-k7-finds-the-engine-for-a-project).
