@@ -167,7 +167,7 @@ waveforms, video; an app that needs no more uses it as it stands.
 
 - **`openBench`**: `@banc` in the address routes here. It can be slow the first time — a library
   that is not yet on disk — which is why it has a progress screen rather than being asked for silently
-  (`apps/k7/backend/docs/banc.md`). It is handed the project part of the address verbatim, because the
+  (`apps/k7/backend-rs/docs/banc.md`). It is handed the project part of the address verbatim, because the
   MACHINE is what builds the bench and therefore what decides which address it answers; the
   libraries are the machine's already.
 - **`open`** takes the project and nothing else: the server keeps the origin's libraries and

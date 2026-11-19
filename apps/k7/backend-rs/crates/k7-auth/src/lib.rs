@@ -1,6 +1,5 @@
-//! k7-auth — what makes a studio session or token, as the TypeScript services write it: the session cookie
-//! (`packages/oidc/session.ts`), the files shared with the backend, and the API tokens.
-//! These formats are wire contracts with the TypeScript services: `apps/k7/backend-rs/docs/sessions.md`.
+//! k7-auth — what makes a studio session or token: the session cookie, the shared JSON files, and the API tokens.
+//! These formats are frozen by vectors written once (`apps/k7/backend-rs/fixtures`, `apps/k7/backend-rs/docs/sessions.md`).
 
 pub mod api_token;
 mod cookie_session;

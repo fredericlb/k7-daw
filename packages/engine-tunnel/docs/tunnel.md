@@ -191,8 +191,7 @@ moment after the reply, never for good, so the test overruns an upload only once
 - **A local path is 403** for a key never bound or since unbound, and for a peer that is not
   loopback — the address the front vouched for counts, not the socket's — even with the tunnel up.
 
-The secret's trust on first use is `packages/engine-registry/trust.test.ts`'s, the protocol's 426 is
-`protocol.test.ts`'s.
+The secret's trust on first use and the protocol's 426 are `k7-engine`'s tests'.
 
 `hubConfinement.test.ts` attacks the hub's files with a bare agent: what no agent would send (dot
 segments, foreign separators, a prefix of a root, links out, device names) and uploads that stop,

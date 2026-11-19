@@ -68,7 +68,7 @@ machine that already has the library gets a seed declaring a version it lacks as
 when that number is taken by another version, the seed goes in as the next free
 number, its own kept as the manifest's `seed`, and is never written over anything. Nothing is fetched from an origin. The tray
 sets the seed to its bundled `k7-core` (`apps/k7-tray/src-tauri/src/backend.rs`); the bundle script
-`apps/k7/backend/scripts/bundle.mjs` packs the repository's `k7-core/` (`libraryArchive.mjs`).
+`apps/k7/backend-rs/scripts/stageBundle.mjs` packs the repository's `k7-core/` (`libraryArchive.mjs`).
 
 `k7-core/` in this repository is that seed, and its `library.k7x` is its version: a change to its
 content raises it. A module and the engine code it relies on change in one commit.

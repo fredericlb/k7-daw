@@ -1,6 +1,5 @@
-//! prefs_schema.rs — the backend's preferences schema (`prefsSchema` in `apps/k7/backend/src/server.ts`) as
-//! zod applies it: known keys kept in the schema's order, unknown nested keys stripped, a wrong type an issue.
-//! A field added there must be added here, which `apps/k7/backend-rs/docs/routes.md` lists as the cost.
+//! prefs_schema.rs — the preferences schema as zod applied it: known keys kept in the schema's order, unknown
+//! nested keys stripped, a wrong type an issue. A stored document must still pass it on its next save.
 
 use serde_json::{Map, Value};
 

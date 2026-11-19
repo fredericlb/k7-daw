@@ -34,7 +34,7 @@ pub struct Settings {
     pub camera_ice_servers: Option<String>,
     /// `$AUTH_ADMIN_GROUPS`, comma-separated; empty admits nobody.
     pub admin_groups: Vec<String>,
-    /// The dev stub on purpose, whose `dev-user` then holds every admin group (`apps/k7/backend/src/devAdmin.ts`).
+    /// The dev stub on purpose, whose `dev-user` then holds every admin group (`auth_guard.rs`).
     pub dev_admin: bool,
     /// `SESSION_SECRET` as written, `""` when unset: what the file hub's ticket key derives from.
     pub raw_session_secret: String,

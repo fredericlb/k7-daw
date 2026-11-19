@@ -1,7 +1,5 @@
-//! web.rs — what every route the front OWNS goes through, in the TypeScript backend's order: the security
-//! headers, the local backend's loopback lock, then CORS and the cross-site write refusal
-//! (`apps/k7/backend/src/hardening.ts`, `loopback.ts`, `media/cors.ts`). Proxied requests skip all of it:
-//! the backend applies its own, and twice would duplicate `Vary` and the CORS headers.
+//! web.rs — what every route the front OWNS goes through, in order: the security headers, a device's loopback
+//! lock, then CORS and the cross-site write refusal. Declined requests meet it once, ahead of the last routes.
 
 use std::net::{IpAddr, SocketAddr};
 use std::sync::Arc;
@@ -20,10 +18,10 @@ use crate::settings::Settings;
 /// What a page may send: the studio headers, never the hub secret (`media/cors.ts`).
 const ALLOWED_HEADERS: &str = "Content-Type, Authorization, x-studio-user, x-studio-workspace, x-studio-engine-token, x-studio-engine-id";
 
-/// The shared JSON parser's default limit (`apps/k7/backend/src/bodyLimits.ts`).
+/// The default JSON body limit.
 const JSON_LIMIT: usize = 256 * 1024;
 
-/// The body as the backend's shared parser reads it, ahead of every guard: JSON when typed so, `{}` otherwise.
+/// The body as the shared parser reads it, ahead of every guard: JSON when typed so, `{}` otherwise.
 #[allow(clippy::result_large_err, reason = "the refusal is the answer itself")]
 pub async fn read_json(req: Request) -> Result<(HeaderMap, Value), Response> {
     read_json_within(req, JSON_LIMIT).await
@@ -42,7 +40,7 @@ where
     }
 }
 
-/// `read_json` under a route's own limit (`ROUTE_JSON_LIMITS` in `apps/k7/backend/src/bodyLimits.ts`).
+/// `read_json` under a route's own limit.
 #[allow(clippy::result_large_err, reason = "the refusal is the answer itself")]
 pub async fn read_json_within(req: Request, limit: usize) -> Result<(HeaderMap, Value), Response> {
     let (parts, body) = req.into_parts();

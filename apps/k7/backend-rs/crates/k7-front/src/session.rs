@@ -125,7 +125,7 @@ pub fn signed(
 /// The stub email of a device's one account and of the dev sign-in: nobody's real address.
 pub const LOCAL_EMAIL: &str = "dev@example.com";
 
-/// A device's one account, as `apps/k7/backend/src/localUser.ts` names it.
+/// A device's one account.
 pub fn local_user() -> Map<String, Value> {
     json!({ "sub": "dev-user", "name": "Local user", "email": LOCAL_EMAIL, "groups": [], "local": true })
         .as_object()

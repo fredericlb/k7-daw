@@ -1,5 +1,5 @@
 //! k7-engine-testbed — the front as k7-front runs it, the engine core ON and the testbed's hooks mounted under
-//! `/__engine-test`, for the TypeScript suites to drive (`packages/engine-tunnel/testCore.ts`, `packages/engine-registry/testCore.ts`). Never shipped:
+//! `/__engine-test`, for the TypeScript suites to drive (`packages/engine-tunnel/testCore.ts`). Never shipped:
 //! it exists only in a build with the `test-hooks` feature, and refuses to start without `K7_ENGINE_TESTBED=1`.
 
 #[tokio::main]

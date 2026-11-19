@@ -27,7 +27,7 @@ release first. An installed app follows its own channel and never crosses to the
 | on the snapshot channel, any other build is newer | snapshot versions sort by commit hash, not by date; the channel only ever holds `main`'s latest build, so "another commit" is "later" |
 | the rules written once, in `engine/scripts/releaseStamp.mjs` | the shell steps call it; the tray (Rust) and the phone (Gradle, Kotlin) build without Node, so their copies stay and point at it, and its test pins what all of them answer |
 | `current` and `previous` kept per channel, nothing else | an app that read its feed just before a publish still finds its file; older builds are on GitHub |
-| on the root domain, `/app_downloads` is the one address besides the coming-soon page | the image's other host, `app.k7.rocks`, answers the same path and is where CI publishes; no host serves the app itself, which runs on devices, and `k7.rocks` is a front page ([apps/k7/backend/docs/site.md](../apps/k7/backend/docs/site.md)) |
+| on the root domain, `/app_downloads` is the one address besides the coming-soon page | the image's other host, `app.k7.rocks`, answers the same path and is where CI publishes; no host serves the app itself, which runs on devices, and `k7.rocks` is a front page ([apps/k7/backend-rs/docs/site.md](../apps/k7/backend-rs/docs/site.md)) |
 
 ## Publishing
 

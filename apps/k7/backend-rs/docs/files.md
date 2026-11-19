@@ -11,7 +11,7 @@ and the hub starts no node process: every account's file service is the front's 
 | choice | why |
 |---|---|
 | `K7_FILES=front` in the front's settings (`ENV_KEYS`), followed only with the auth folder known and `K7_ENGINE_CORE=front`; every host sets it (the tray's `backend.rs`, Android's `BackendHost.kt`, the image's `start.sh`, `dev-front.mjs`) | the registry the front holds needs the hub's runtimes; without the switch no process answers the family |
-| the backend reads no switch and runs no hub: it answers `GET /api/internal/files/hub` with `runs: false` always (`apps/k7/backend/src/media/internalFiles.ts`), and holds none of the family's paths | one owner of the runtimes |
+| the front is the only process that runs a hub, and declines the family's paths without the switch | one owner of the runtimes |
 | the front asks `GET /api/internal/files/hub` every second until the backend answers, and takes the family only on `runs: false`; a backend that answers 404 is a previous release's, which runs a hub of its own | the previous release is the rollback (`docs/rust-phase6-plan.md`, decision 3): pairing it with this front still leaves one hub, the backend's |
 | the family's paths move together on every host: `/api/files`, `/api/files-hub`, `/api/ready` and the seam's file half (`routes/files/mod.rs`) | they share the hub's memory: the runtimes by secret |
 | the seam's file half is asked of the front's own port once the switch is on (`files::seam_addr`), by the registry and the recorder alike | whichever process holds the hub answers, and a test bed sees the same calls a host makes |
@@ -31,7 +31,7 @@ account names and environments, the engine bindings, the caches' sweep, with no 
 | without a code root every account's files and the libraries answer a 503 naming it, never a start of something else | the files are the front's or nothing |
 | `account_key` lives in `k7_hub::account`, and `hub-vectors.json` holds it | every folder of a files root names an account by the same function |
 | the hub's own calls (the engine seam) are `k7_hub::call`, one pooled hyper client | a seam's answer is JSON read whole |
-| the engine seam is called over loopback at the front's own port with `K7_FRONT_SECRET`, kept bindings re-posted under their key on a new epoch | the core answers it in this process today, but the contract is the seam's (`packages/engine-registry/docs/internalSeam.md`) |
+| the engine seam is called over loopback at the front's own port with `K7_FRONT_SECRET`, kept bindings re-posted under their key on a new epoch | the core answers it in this process today, but the contract is the seam's (`engine/reach.md`) |
 | the ticket's key is `${SESSION_SECRET}:files`, else 32 random bytes per process | an open page keeps its ticket through a deploy, and a ticket the previous release minted reads here |
 | the shares' bearer each runtime is handed (`MEDIATEK_TOKEN`) is minted by the front: an ephemeral token (@studio/oidc's format, `api_token_secret`, held in memory, listed nowhere), which `routes/engine_reach/caller.rs` accepts before it asks the backend | only the process that verifies a bearer can hold an ephemeral one; `MEDIATEK_URL` is the front's port |
 | `GET /api/files-hub` and `/api/files` read the request's own session | one identity for every route of the family |
@@ -153,7 +153,7 @@ the SDK's constants); a real Claude answer.
 
 | choice | why |
 |---|---|
-| loopback by peer AND by the Host it names, refused with the words of the backend's loopback guard (`apps/k7/backend/src/loopback.ts`) | a proxy on the same machine would otherwise expose it |
+| loopback by peer AND by the Host it names, refused with the loopback guard's words (`src/web.rs`) | a proxy on the same machine would otherwise expose it |
 | the volumes are the raw `STUDIO_FILES_ROOT`, `STUDIO_MEDIATEK` (the instance's data folder), `STUDIO_PREFS_DIR`, unset ones skipped, each probed with a file it removes, 3 s each | each is a volume a write must reach; the hub's figures keep node's shape and never make a host unready |
 
 ## The history rooms
@@ -187,7 +187,7 @@ A room's folder name keeps the names Windows reserves (`CON`, `NUL`, `COM1`…) 
 | what | how | seen |
 |---|---|---|
 | the 85 specs of 5a against the previous release's TypeScript hub | `p5a-bed-up.sh plain`, specs at the backend and at the front | 85/85 at both: the specs hold either hub to one contract |
-| the 85 specs with `K7_FILES=front` | `p5a-bed-up.sh front`, specs at the front with `CONFORMANCE_FRONT=1`, on a fresh and on a reused files root | 85/85, five runs in a row |
+| the 85 specs with `K7_FILES=front` | `p5a-bed-up.sh front`, specs at the front, on a fresh and on a reused files root | 85/85, five runs in a row |
 
 ## The security review, by subject
 

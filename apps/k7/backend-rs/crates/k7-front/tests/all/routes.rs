@@ -146,7 +146,7 @@ async fn preferences_round_trip_into_the_backends_file() {
     assert!(wrong.starts_with("HTTP/1.1 400"), "{wrong}");
 }
 
-/// The file name `fileFor` in packages/user-prefs/store.ts gives `abc|1`.
+/// The file name a subject `abc|1` is stored under.
 fn k7_front_file(sub: &str) -> String {
     let slug: String = sub
         .chars()

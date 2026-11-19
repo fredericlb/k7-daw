@@ -9,7 +9,7 @@ the module library k7 ships with. It is one npm workspace tree driven from the r
 
 | Folder | What lives there |
 |---|---|
-| `apps/` | The applications: `apps/k7` (the web app: `frontend/` and `backend/`) and `apps/k7-tray` (the tray: k7 on a computer, a windowless Tauri app that runs k7's backend and opens k7 in the browser). |
+| `apps/` | The applications: `apps/k7` (the web app: `frontend/`, and `backend-rs/`, the Rust front that is its backend) and `apps/k7-tray` (the tray: k7 on a computer, a windowless Tauri app that runs k7's front and opens k7 in the browser). |
 | `packages/` | The shared `@studio/*` packages, consumed as raw TypeScript source. |
 | `engine/` | The native side: `k7-runtime` (the C++ audio engine), `k7-supervisor` (the C++ program that runs and watches it), `k7-android` (the phone app, Gradle), `scripts` (the Node scripts that build and package the native binaries) and `docker` (the server engine's image). |
 | `k7-core/` | The default module library, as plain files: modules, chains, assemblies, presets, impulse responses, amp models, samples, wavetables. |
@@ -53,9 +53,8 @@ The root `package.json` declares these workspace globs:
 
 | Workspace | Package name | Notes |
 |---|---|---|
-| `apps/k7` | `k7` | An aggregator: its `dev` script runs the frontend and backend together with `concurrently`. |
+| `apps/k7` | `k7` | An aggregator: its `dev` script runs the frontend. |
 | `apps/k7/frontend` | `k7-frontend` | React + Vite single-page app. |
-| `apps/k7/backend` | `k7-backend` | Express server, run with `tsx` straight from `src/server.ts`. |
 | `apps/k7-tray` | `k7-tray` | The tray; its code is Rust under `src-tauri/`, and the workspace exists for its npm scripts (`stage`, `dev`, `build`). |
 | `engine/k7-runtime` | `k7-runtime` | Not JavaScript: the workspace exists for its npm scripts (`dev`, `build:win`, `build:mac`, `build:android`, `test`, `test:all` and the `gen:*` generators). It declares no `build` script, so `npm run build` never compiles C++. |
 | `engine/k7-android/web` | `@studio/k7-android-shell` | The Capacitor page of the Android app. |
@@ -93,11 +92,8 @@ Consequences of that choice:
   the app; `apps/k7/frontend/vite.config.ts` excludes `@studio/ui-chains`, `@studio/ui-chains-react`,
   `@studio/ui-editor` and `@studio/ui-timeline` from dependency pre-bundling because esbuild's scanner
   rejects the `.ts` extension in their export maps.
-- **The Node backend runs under `tsx`.** `apps/k7/backend/src/server.ts` is started with `tsx`, which
-  imports the TypeScript directly; the file service is Rust, in the front.
-- **The production image ships the source.** `apps/k7/docker/Dockerfile` copies the whole repository
-  into the runtime stage, because the `@studio/*` entries in `node_modules` are symlinks to source
-  folders (see [Images and deployment](./08-images-and-deployment.md)).
+- **The backend is Rust.** `apps/k7/backend-rs` is a cargo workspace, no npm workspace; the file service is in the front.
+- **The production image ships the front and the built page** (see [Images and deployment](./08-images-and-deployment.md)).
 - **A package's `build` script is a typecheck.** Most packages declare `"build": "tsc --noEmit"`;
   the exception is `@studio/dsp`, whose `build` runs `tsx src/emit.ts`.
 
@@ -145,8 +141,6 @@ assembled with.
 | Package | Used for |
 |---|---|
 | `@studio/ui` | The design-system components and the one icon set (`@studio/ui/icons`). |
-| `@studio/oidc` | `setupAuth()`, the OIDC login and the `studio.sid` session the backend mints. |
-| `@studio/http` | Express helpers (precompressed static files, proxy awareness, route validation). |
 | `@studio/i18n` | The Paraglide wrapper the frontend compiles its catalogues with. |
 | `@studio/env` | `loadServiceEnv()`, which reads a service's section of `env.yaml`. |
 | `@studio/vite-config` | `defineAppConfig()`, the shared Vite config (ports, proxy, PWA, Tailwind). |
@@ -162,8 +156,8 @@ It is consumed in three ways:
 
 - **The server** copies a library listed by an origin but missing on disk from
   `$STUDIO_LIBRARY_SEED` (`apps/k7/backend-rs/crates/k7-libraries`), which can name `k7-core`.
-- **The tray and phone bundles** carry a copy: `apps/k7/backend/scripts/bundle.mjs` writes one
-  into the bundle, which the backend seeds from (`STUDIO_LIBRARY_SEED`).
+- **The tray and phone bundles** carry a copy: `apps/k7/backend-rs/scripts/stageBundle.mjs` writes one
+  into the bundle, which the front seeds from (`STUDIO_LIBRARY_SEED`).
 - **Lints** read it: `npm run lint:layouts` and `npm run lint:panels` check its module panels.
 
 `biome.json` excludes `k7-core` from linting. The Windows CI jobs set `core.longpaths`, but keep

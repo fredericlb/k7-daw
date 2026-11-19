@@ -1,5 +1,5 @@
-//! internal.rs — the local engine's half of the internal seam (`packages/engine-registry/docs/internalSeam.md`):
-//! `GET /api/internal/engine/local`, which tells whether the supervisor the front runs has answered. Gated as `internalGate` is: a loopback peer AND the front's secret.
+//! internal.rs — the local engine's half of the internal seam (`apps/k7/backend-rs/docs/local.md`):
+//! `GET /api/internal/engine/local`, which tells whether the supervisor the front runs has answered. Gated as the engine half is: a loopback peer AND the front's secret.
 
 use std::net::SocketAddr;
 use std::sync::Arc;

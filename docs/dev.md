@@ -8,7 +8,7 @@ npm run dev:tray                   # only the tray and its engine, no Tilt
 
 ## Where it answers
 
-**Loopback.** The session is a DEVICE, as the tray and the e2e beds are: `env.yaml`'s `k7-backend`
+**Loopback.** The session is a DEVICE, as the tray and the e2e beds are: `env.yaml`'s `k7-front`
 section sets `STUDIO_LOCAL_USER`, and k7 opens on **http://127.0.0.1:5223** with no login — `/auth/local`
 signs the machine's own user in, and it answers loopback peers only, so the page is visited on the
 workstation itself. Nothing terminates TLS and no proxy is in front: there is no edge to start, no
@@ -38,7 +38,7 @@ it takes to make it one.
 
 ## Signing in is the device's, not a provider's
 
-`env.yaml` gives the dev session a `SESSION_SECRET` and `STUDIO_LOCAL_USER: "1"` in the `k7-backend`
+`env.yaml` gives the dev session a `SESSION_SECRET` and `STUDIO_LOCAL_USER: "1"` in the `k7-front`
 section (`env.example.yaml`), the values the e2e bed writes (`engine/scripts/ci/e2e-macos.sh`). There is
 no OIDC provider in the session, no cookie domain and no admin group; a device has no admin. Neither the `Tiltfile` nor any script sets those flags.
 
@@ -59,23 +59,21 @@ The root `build` and `test` scripts stay outside this list — Tilt only owns th
 
 **`k7-front` is the one row the `Tiltfile` names itself**: the Rust front
 (`apps/k7/backend-rs/docs/front.md`) is a cargo build, not a package's `dev` script. It listens on
-**8789**, where Vite proxies `/api`, `/auth` and the sockets, and `k7-backend`'s TypeScript moves behind
-it on **8790**, loopback only.
+**8789**, where Vite proxies `/api`, `/auth` and the sockets.
 
 | choice | why |
 |---|---|
-| `apps/k7/backend/scripts/dev-front.mjs` hands the front env.yaml's `k7-backend` section | the front reads the values that backend reads — the session secret above all — and env.yaml is the only place they are in dev |
-| a fixed secret, `k7-dev-front`, written in that script and in `k7-backend`'s dev script | a dev session is one machine's loopback; a random one would need both processes started by one parent |
+| `apps/k7/backend-rs/scripts/dev-front.mjs` hands the front env.yaml's `k7-front` section | the session secret above all, and env.yaml is the only place the dev session's settings are |
+| a fixed secret, `k7-dev-front`, written in that script | the conformance specs behind the internal seam send it; a dev session is one machine's loopback |
 | every host (the dev session, the tray, the phone, the image) runs all fifteen native pieces answering: the list is the front's own default (`default_pieces.txt` beside `service/switch.rs`), and no variable switches one off; a host that still sets a removed one gets one log line | one behaviour on every host |
 | `K7_FRONT_TRUST_HOPS=1` | Vite is the hop before the front, and its `X-Forwarded-Host`/`-Proto` name the page's origin |
 | `cargo run --release` | the conformance suite and the pages run against it all day; the first build takes a minute, an edit a few seconds |
 | rustc through sccache when the machine has it, in that script and in the tray task's cargo builds | a new worktree's first build reuses the dependencies another one compiled; the settings, and how to turn it off, are in [rust-builds.md](rust-builds.md) |
-| `K7_ENGINE_CORE=front` in that script, and in no `k7-backend` setting | the engine registry, the relay and the tunnel hub (`apps/k7/backend-rs/docs/engine.md`) exist in Rust alone; the backend reaches the engines over the seam at `K7_FRONT_PORT` |
-| the front's own settings in that script, and in no `k7-backend` setting | the front reads env.yaml's `STUDIO_MEDIATEK` (the instance's data folder) and keeps its compiled modules in `~/.k7/front-cache` |
-| `K7_FILES=front` in that script, and in no `k7-backend` setting | the file hub, `/api/ready` and AI organize exist in Rust alone (`apps/k7/backend-rs/docs/files.md`); the backend answers the front's handshake that it runs none; the file services and the module libraries' service are the front's own, no node child |
-| `K7_LAST_ROUTES=front` in that script, unless the environment sets it (empty turns it off) | node's last routes are the front's (`apps/k7/backend-rs/docs/last.md`): the seam, the `/api` guard, the preferences, the built page from `apps/k7/frontend/dist` as node found it; Vite on 5223 still serves the page in a browser, so no `K7_DEV_FRONTEND`. `k7-backend` keeps running behind the front, asked nothing |
+| `K7_ENGINE_CORE=front` in that script | the engine registry, the relay and the tunnel hub (`apps/k7/backend-rs/docs/engine.md`) exist in Rust alone |
+| the front's own settings in that script | the front reads env.yaml's `STUDIO_MEDIATEK` (the instance's data folder) and keeps its compiled modules in `~/.k7/front-cache` |
+| `K7_FILES=front` in that script | the file hub, `/api/ready` and AI organize exist in Rust alone (`apps/k7/backend-rs/docs/files.md`); the file services and the module libraries' service are the front's own, no node child |
+| the page from `apps/k7/frontend/dist` (`apps/k7/backend-rs/docs/last.md`) | Vite on 5223 still serves the page in a browser, so no `K7_DEV_FRONTEND` |
 | restarting `k7-front` alone is enough for a Rust edit | the file service is the front's own |
-| restarting `k7-backend` alone is enough for a TypeScript edit | the front holds no state of the backend's; a request during the restart is a 502, as the page saw a refused connection before |
 
 The front's file hub makes an account's runtime on its first request (`apps/k7/backend-rs/docs/files/hub.md`).
 
@@ -103,15 +101,15 @@ subpath's file needs none of this: it is the exports MAP being new that the cach
 ## The tray task — `scripts/dev-tray.mjs`
 
 It is `apps/k7-tray`'s `dev` script, which is what makes it the `k7-tray` resource beside the servers.
-It builds the engine, the supervisor, k7's backend bundle and the tray, then
-runs the tray on those builds: k7 answers at `http://127.0.0.1:18789`, the tray's backend runs the
+It builds the engine, the supervisor, the page and library bundle and the tray, then
+runs the tray on those builds: k7 answers at `http://127.0.0.1:18789`, the tray's front runs the
 supervisor on `~/.k7`, and the supervisor runs the engine. The machine's engine during a session is
 therefore the tray's, as it is on a musician's machine (`apps/k7-tray/docs/tray.md`).
 
 The tray is pointed at the repo's builds through the overrides its `paths.rs` reads first —
-`K7_BACKEND_BUNDLE` for the bundle in the tray workspace's gitignored `.dev` folder, `STUDIO_ENGINE_HOST_CMD` for the
+`K7_BACKEND_BUNDLE` for the bundle (the library it seeds) in the tray workspace's gitignored `.dev` folder, `STUDIO_ENGINE_HOST_CMD` for the
 supervisor build — so nothing is staged. The dev session on `http://127.0.0.1:5223` is a device like the tray, and
-the machine's engine is the tray's: under the tray, the machine's loopback k7 is the tray's backend, which the
+the machine's engine is the tray's: under the tray, the machine's loopback k7 is the tray's front, which the
 supervisor reaches every loopback registry at, so the tray's front drops any other loopback entry
 when it pins its own (`apps/k7/backend-rs/docs/localEngine.md`).
 
@@ -122,27 +120,17 @@ when it pins its own (`apps/k7/backend-rs/docs/localEngine.md`).
 | `let go of engine … its claim moved on` read as a suite at work | the web and conformance suites claim engines under their own accounts, and a newcomer displaces the holder (`apps/k7/backend-rs/docs/engine/claim.md`): the displaced account's binding lets go |
 
 **The page on 18789 is `k7-frontend`'s Vite, with HMR.** The task hands the tray
-`K7_DEV_FRONTEND=http://localhost:5223`, and the tray's backend then streams every request it would have
-answered from `frontend/dist` to that Vite instead (`apps/k7/backend/src/devFrontend.ts`); `/api` and
+`K7_DEV_FRONTEND=http://localhost:5223`, and the tray's front then streams every request it would have
+answered from `frontend/dist` to that Vite instead (`apps/k7/backend-rs/crates/k7-front/src/routes/last/dev_frontend.rs`); `/api` and
 `/auth` stay its own. So the local PWA is developed on its real origin — its service worker, its cookie,
 its storage, the tray's own "Open k7" — rather than on a stand-in port. HMR's websocket goes to Vite's own port,
 `ws://127.0.0.1:5223`, which is why k7's `vite.config.ts` names it in `server.ws`: left
 to the page, a page on 18789 would look for Vite on 18789. With `k7-frontend` down, 18789 answers
 a 502 naming it. `K7_DEV_FRONTEND=` (empty) before `npm run dev` brings back the built page.
 
-**Its backend runs from source and restarts on save.** The bundle's `bin/backend.mjs` is replaced by an
-import of `scripts/devTrayBackend.mjs`, which runs `apps/k7/backend/src/server.ts` under `tsx watch` — a
-save in any file it imports, `packages/` included, restarts it. A restart ENDS THE ENGINE: the backend holds the
-supervisor's job (`engine/k7-supervisor/docs/hostProtocol.md`), which is what keeps a killed tray from
-leaving a ghost engine, so the engine is down a few seconds and the project reloads — the cost a manual
-`tilt trigger k7-tray` already had, paid on every save instead of when chosen. A save in `@studio/song`
-or `@studio/commands` for the page bounces it too. `K7_DEV_BACKEND=bundle` before `npm run dev` runs the
-bundled backend, for a session spent listening. The tray's stdin stays the SHIM's: `tsx watch` reads its
-own stdin, for the key that reruns its child, and a backend reading the same pipe for `K7_STDIN_STOP`
-never got past its start on Windows. So `tsx watch` gets none, the backend no stop-on-end, and when the
-tray closes the shim's stdin the shim ends the whole tree — `taskkill /T` on Windows, where a killed
-backend takes its supervisor and engine with it through the job it holds; a SIGTERM first elsewhere. A
-backend left behind would hold 18789 for the next tray.
+**Its front is linked into the tray**, so a change to the front's crates reaches the tray at its next start (the table below): the tray's own
+binary holds the front, and a restart ends the engine with it, since the front holds the supervisor's job
+(`engine/k7-supervisor/docs/hostProtocol.md`), which is what keeps a killed tray from leaving a ghost engine.
 
 The engine is C++, so it has no watch mode that means anything: there is nothing to hot-reload, only
 a binary to relink and a process to restart — and the tray has to be stopped for that relink, since
@@ -156,9 +144,9 @@ its tree holds the engine running. That is what the task does — watch the sour
 
 | choice | why |
 |---|---|
-| the backend bundle built at every start of the task, with no frontend in it | the page is Vite's and the backend tsx's (above); what is left in the bundle is the `k7-core` seed and the files the tray reads, and `K7_DEV_BACKEND=bundle` runs it whole |
+| the bundle built at every start of the task, with no frontend in it | the page is Vite's (above); what is left in the bundle is the `k7-core` seed |
 | every tray stopped first, an installed one included | it holds port 18789 and `~/.k7`, and its single-instance guard would turn the dev tray's launch into a no-op |
-| a failed bundle ends the task | a tray without a backend would only say so on its status line; a red resource says it where the session is watched |
+| a failed bundle ends the task | a tray without its library would only say so on its status line; a red resource says it where the session is watched |
 | an edit under `apps/k7/backend-rs` does not rebuild the tray mid-session, only at its start | the front's crates are in the tray's binary (`Cargo.toml` path deps), so they decide whether it is stale when the task starts — but watching them would stop and restart the tray, and the engine with it, on every front save. A route added to the front 404s on 18789 until `k7-tray` is restarted |
 
 A failed build of any target leaves the tray down, and says so — `✖ … the tray is stopped, fix and

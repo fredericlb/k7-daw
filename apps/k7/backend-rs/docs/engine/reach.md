@@ -22,12 +22,12 @@ except playback on it.
 
 | choice | why |
 |---|---|
-| with the engine core in the front (`K7_ENGINE_CORE=front`) the slot routes ask `k7-engine` in-process: the registry's view, a channel through the hub | the core is in this process; a loopback hop through its own seam would be a socket and a copy per frame for nothing |
-| without it, the backend's seam (`packages/engine-registry/docs/internalSeam.md`): the views, a one-shot binding dialled then dropped | the hub is the backend's then, and the seam is how the TypeScript itself reaches it; the routes work either way, so a host may turn the two switches on in any order |
-| both are one `Reach`, and a channel is one `Link` whichever process holds the hub | each route is written once |
+| the slot routes ask `k7-engine` in-process (`K7_ENGINE_CORE=front`): the registry's view, a channel through the hub | the core is in this process; a loopback hop through its own seam would be a socket and a copy per frame for nothing |
+| the slot routes are claimed only with the core (`Seams::start`) | without it nothing holds an engine to reach |
+| one `Reach`, and a channel is one `Link` | each route is written once |
 | an in-process channel holds what is sent before the engine answers (256 frames, 8 MiB), respells a jobs channel's text to the tunnel's spelling, and closes on a peer past the backpressure bound | what the hub's loopback pipe does for a seam client (`k7_engine::tunnel::local`); without it the hub drops a frame sent while the channel connects |
 | `requestJob` ported (`job.rs`): an id per request, replies matched by it, the total and idle timeouts, the vectors' sentences | the machine's agent speaks this protocol whoever asks; the wording reaches the page |
-| `/slot` asked of the seam's file half, five minutes allowed | the file hub is the backend's; a slot is compiled by the account's file service, which takes its time |
+| `/slot` asked of the seam's file half, five minutes allowed | the file hub is the front's; a slot is compiled by the account's file service, which takes its time |
 | who asks (`caller.rs`) is a bearer the backend verifies over the seam's file half, else the session; a bearer that does not verify is refused, never downgraded to the cookie | `bearerOrSession` is the backend's guard for the routes a service may call |
 
 ## The slots

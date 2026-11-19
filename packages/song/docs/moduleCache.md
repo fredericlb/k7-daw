@@ -234,16 +234,13 @@ the answer: perfectly safe, and it recovers only 12 ms of the 46.
 
 The memo above dies with the process, and on a phone the process dies often: every app launch, every
 stop for idleness. Parsing the module vocabulary again is ~1.5 s on a PC, several times that on a
-phone, and ~3.4x more again without a JIT — iOS. So in a packaged app (`STUDIO_PARSE_CACHE=1`, set by
-`apps/k7/backend/standalone.json`) a parse is also kept ON DISK, in two layers:
+phone, and ~3.4x more again without a JIT — iOS. So in a bundled `.mjs` entry run with `STUDIO_PARSE_CACHE=1` a parse is also kept ON DISK, in two layers:
 
 - **The account's** — `<account home>/.parse-cache.json`, written a little after each new parse,
   beside the workspace and never in it (it is this machine's; the sync must not carry it). It carries
   the running bundle's stamp and is dropped whole by any other bundle: a parse is only as good as the
   parser that made it. A source run — a developer editing a parser — never uses it.
-- **The bundle's** — `parse-cache.json` beside `bin/`, made at bundle time by
-  `scripts/parseCacheSeed.ts`, bundled with the same parsers, over the `k7-core` the bundle carries. It
-  is what a FIRST launch after an install or an update finds, when the account's store is gone.
+- **The bundle's** — a `parse-cache.json` beside `bin/`, read when one is there. No build writes it now: it is what a FIRST launch would find, when the account's store is gone.
 
 Both are keyed by CONTENT, not by path and mtime: the parser, whether the file is k7x, the short
 form its path writes (`sugarKind`, all the path `sugarFor` reads), and the file's bytes. A library

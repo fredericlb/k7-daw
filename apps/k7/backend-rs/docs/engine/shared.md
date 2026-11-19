@@ -20,7 +20,7 @@ connected to that studio" one fact.
 
 The case against a central registry is that one backend would become a request-time dependency of
 another. That coupling does not arise here: no BACKEND asks another. Every page that calls it is
-k7's own and calls it same-origin, the relay included; a credentialed call from any other origin is refused (`apps/k7/backend/docs/cors.md`).
+k7's own and calls it same-origin, the relay included; a credentialed call from any other origin is refused (`routes.md`, the chain).
 
 ## Saying what it is
 

@@ -9,7 +9,7 @@ start, and where you come back to on leaving a song.
 **k7's pages draw; the file service and the server's stores hold.** The workspaces are the
 account's file service's; the libraries are bundled with the app, one list
 and one folder each. Both answer on this origin, from k7's own backend. No store keeps a register of workspaces —
-[apps/k7/backend/docs/projects.md](../../backend/docs/projects.md) says why.
+[apps/k7/backend-rs/docs/projects.md](../../backend/docs/projects.md) says why.
 
 **The SOURCE of the list is the file service.** What lists the projects is the account's file
 service on the server, over its workspaces (`apps/k7/backend-rs/docs/files/hub.md`). A separate index
@@ -326,7 +326,7 @@ rather than by a highlight that never appeared.
 
 A chain is something you HEAR: what it does cannot be read in its file, and its parameters only
 exist inside a project with the plugin loaded. The bench is that project — a live rig written again
-on every open and saved nowhere ([apps/k7/backend/docs/banc.md](../../backend/docs/banc.md)).
+on every open and saved nowhere ([apps/k7/backend-rs/docs/banc.md](../../backend/docs/banc.md)).
 
 **This page has no bench card.** The bench is reached from the Frozen chains page
 (`frozenChains.md`), where it builds and edits the account's chains. `/@banc/<chain>/live.k7` seeds the rig with a copy of a library

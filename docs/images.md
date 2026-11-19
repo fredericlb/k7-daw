@@ -15,23 +15,21 @@ answers no sign-in, no account's files, no share and no application page.
 
 | choice | why |
 |---|---|
-| the front, the Express backend and the compose file stay as they are | the publishing of builds and feeds works unchanged (`APP_RELEASE_TOKEN`), and the image is the one place the hosts are served from |
-| the compose file still sets `OIDC_ISSUER` and `OIDC_CLIENT_ID` | the front refuses to start without them (`auth_guard.rs`), though no one signs in here |
+| the front and the compose file stay as they are | the publishing of builds and feeds works unchanged (`APP_RELEASE_TOKEN`), and the image is the one place the hosts are served from |
+| the compose file sets `SESSION_SECRET` and no sign-in variable | the front refuses to start without a strong secret (`auth_guard.rs`), and no one signs in here |
 
 ## One Node version: 24
 
-The image's stages, GitHub's checks (through `.nvmrc`) and the bundles' esbuild target all
-name Node 24, the active LTS: a test run on one version and a server on another is a bug found in
-production. Its `node:sqlite`, the shares' comments store, needs no `--experimental-sqlite`, and
-it has an alpine image. A move to the next LTS changes every `node:24-*` image tag, `.nvmrc`, the
-root `engines` and `bundle.mjs`'s `target` in the same commit.
+The image's build stages and GitHub's checks (through `.nvmrc`) name Node 24, the active LTS: a test run on
+one version and a build on another is a bug found late. The runtime stage holds no node. A move to the next
+LTS changes every `node:24-*` image tag, `.nvmrc` and the root `engines` in the same commit.
 
 ## An install depends on the manifests, never on the sources
 
 The stage that runs `npm ci` sees the lockfile, `.npmrc` and every `package.json`, and nothing
 else: the `manifests` stage cuts the build context down to those files. BuildKit keys a
 `COPY` on file content, not on timestamps. So a push that touches no manifest finds every install
-layer in the cache, and only the frontend build and the final `COPY . .` run.
+layer in the cache, and only the frontend build and the front's build run.
 
 The hazard this avoids: with `COPY . .` before `npm ci`, any edit to any file invalidates
 the install, and every deploy pays for 1,200 packages and their native builds.
@@ -40,59 +38,35 @@ the install, and every deploy pays for 1,200 packages and their native builds.
 
 `manifests`, `toolchain` and `deps` are the first three stages, and `deps` installs the WHOLE
 workspace rather than the frontend's closure: one install layer serves the frontend build and
-stays valid whatever the frontend imports next.
-
-The production install (`backend-deps`) is separate, because the runtime image ships only its
-backend's closure. It still sees only the manifests, so it is cached across deploys like the others.
-
-## The server runs a bundle, not source under tsx
-
-The `frontend-build` stage also bundles the backend
-(`apps/k7/backend/scripts/bundle.mjs server-dist --in-tree`), and the image runs
-`node /app/server-dist/backend.mjs`. Under tsx, the process transpiled the whole package
-graph on start and kept an esbuild child beside it: that cost was paid at every deploy.
-
-`--in-tree` writes only the two entries, into a folder of the checkout, so each source's
-`import.meta` points at the files the image already copies (`frontend/dist`, `song/meta`,
-`commands.yaml`). The checkout stays in the image for that reason. Its target is node 24, like the desktop and phone
-bundles.
-
-`NODE_COMPILE_CACHE` points node's compile cache at `/home/node/.cache`, as the tray and the phone
-do (`apps/k7-tray/docs/tray.md`): the bytecode of the bundle is compiled by the first start and read by every later one.
-The folder is in the container's own layer, not on a volume: the cache is keyed by each file's
-contents and node's version, so a new image could not use the old one's, and a volume would only
-pile them up. A `dsp` child starts with an empty environment and so without it.
+stays valid whatever the frontend imports next. The runtime stage installs no npm package.
 
 ## tini is PID 1, in the image
 
 The front answers every account's files, and it starts ffmpeg for a video or an
 mp3 and chromium for a picture. A front that dies before its children — killed past its stop
-grace — leaves them re-parented to PID 1. Node never reaps a child it did
-not spawn, so with node as PID 1 each one becomes a zombie, and one still running burns CPU for
+grace — leaves them re-parented to PID 1. A PID 1 that never reaps a child it did
+not spawn leaves each one a zombie, and one still running burns CPU for
 nobody. So the image's `ENTRYPOINT` is `tini`, which reaps every orphan and forwards the stop
-signal; the `CMD` is `start.sh`, which passes that signal to node and to the front (below). It is in the
+signal; the `CMD` is `start.sh`, which `exec`s the front. It is in the
 image and not `init: true` in the compose file because the image runs elsewhere too — a bare
 `docker run`, another orchestrator — and an init that only one deployment supplies is one the
 others lack. tini only reaps: killing what a dead front left running is not its job.
 
-## Two processes: the Rust front, and node behind it
+## One process: the Rust front
 
-The image runs k7's Rust front (`apps/k7/backend-rs/docs/front.md`) on 8789, the port Traefik reaches, and node's backend behind it on `127.0.0.1:8790`. `apps/k7/docker/start.sh` starts both under tini.
+The image runs k7's Rust front (`apps/k7/backend-rs/docs/front.md`) on 8789, the port Traefik reaches. `apps/k7/docker/start.sh` starts it under tini.
 
 | choice | why |
 |---|---|
-| one container, not a sidecar | the two share a secret and a loopback; a second container would put the backend on a network every other service can reach, and a deployment could run one without the other |
-| either process ending ends the container | the restart policy then brings both back together, as it brought node back alone; a front left alone would answer 502 until the healthcheck noticed |
-| the one that ended is said, with its code or the signal that killed it (`start.sh: k7-front exited …`) | the front says its own panics and stops (`apps/k7/backend-rs/docs/front.md`), but a kill leaves only the status its parent reads |
-| the stop is trapped and passed to both, then waited for | the front stops the programs it started (stdin closed, then SIGTERM, SIGKILL past 6 s); a shell that exited at once would end the container under them |
-| the secret drawn at each start, unless `K7_FRONT_SECRET` is set | only these two processes need it, and a restart has no session to keep |
-| `K7_ENGINE_CORE=front` and `K7_FILES=front`, whatever the deployment sets | the registry, the relay, the tunnel hub (`apps/k7/backend-rs/docs/engine.md`) and the file hub (`apps/k7/backend-rs/docs/files.md`) exist in Rust alone; their settings (`STUDIO_MEDIATEK`) reach the front from the container's environment, and the way back is the previous image |
+| the runtime stage is plain alpine, with a `node` user of uid 1000 | no node runs here; the volumes of a previous image are owned by that uid |
+| the front ending ends the container | the restart policy brings it back; the front says its own panics and stops (`apps/k7/backend-rs/docs/front.md`) |
+| the secret of the front's seams is drawn at each start | only the front holds it, and a restart has no session to keep |
+| `K7_ENGINE_CORE=front` and `K7_FILES=front`, whatever the deployment sets | the registry, the relay, the tunnel hub (`apps/k7/backend-rs/docs/engine.md`) and the file hub (`apps/k7/backend-rs/docs/files.md`) exist in Rust alone; their settings (`STUDIO_MEDIATEK`) reach the front from the container's environment |
 | the front runs all fifteen native pieces answering; the image holds no engine, so `engine` and `runtime` degrade to the no-engine answers | one release runs every piece, and no variable switches one off |
-| every account's file routes are the front's own (`apps/k7/backend-rs/docs/service.md`), the libraries too (`apps/k7/backend-rs/docs/libraries.md`); no node process starts | the image runs no JavaScript for an account |
-| `K7_LAST_ROUTES=front` and `K7_FRONTEND_DIST=/app/apps/k7/frontend/dist`, whatever the deployment sets | node's last routes are the front's (`apps/k7/backend-rs/docs/last.md`), the page served from the image's built frontend; node keeps running behind the front until the image starts the front alone. The rollback is the previous image |
-| the bundle is `backend.mjs` alone, and the image runs `backend.mjs` and `k7-front` alone: no node file service, no libraries' service, an image of some 2.21 GB | the relay's rooms, the blobs and the history are files under `STUDIO_FILES_ROOT`, the front their one writer |
+| every account's file routes are the front's own (`apps/k7/backend-rs/docs/service.md`), the libraries too (`apps/k7/backend-rs/docs/libraries.md`) | the image runs no JavaScript |
+| `K7_FRONTEND_DIST=/app/apps/k7/frontend/dist` | the last routes serve the page from the image's built frontend (`apps/k7/backend-rs/docs/last.md`) |
 | the front's compiled modules are in `/home/node/.cache/k7-front` (`K7_FRONT_CACHE`) | a compiled module is machine code, so its folder is the container user's own and on no volume |
-| the front's code root is its own folder, `/usr/local/share/k7/code` (`K7_CODE_ROOT`), staged by `apps/k7/backend-rs/scripts/stageCodeRoot.mjs` in the frontend build, some 700 KB | the front's file service reads `@meta`, `commands.yaml`, the demos and the sample video there; the checkout copied into `/app` goes when node does (phase 6.6), this folder does not |
+| the front's code root is its own folder, `/usr/local/share/k7/code` (`K7_CODE_ROOT`), staged by `apps/k7/backend-rs/scripts/stageCodeRoot.mjs` in the frontend build, some 700 KB | the front's file service reads `@meta`, `commands.yaml`, the demos and the sample video there |
 | `K7_FRONT_TRUST_HOPS=1` | Traefik is the one proxy before the front. A container sharing Traefik's network can still name any non-loopback client address, which moves only the rate limits and the same-network listing: ownership and "this machine" read the socket (`apps/k7/backend-rs/docs/front.md`). A deployment that knows Traefik's address sets `K7_FRONT_TRUSTED_PROXIES` to it |
 | a static musl binary from `rust:alpine`, built from `apps/k7/backend-rs` alone with `--locked` | the runtime is alpine, and a change anywhere else in the repo rebuilds nothing of it |
 
@@ -119,10 +93,10 @@ output, not rustc's.
 environment names takes a one-byte write: a full or read-only disk is a fault that persists until
 somebody acts. The report keeps the shape the healthcheck and the conformance suite read, and
 no account's runtime is out of process, so no start can be stuck (`apps/k7/backend-rs/docs/files/hub.md`).
-`/api/health` stays as the liveness probe: no session, no disk, only that the event loop answers.
+`/api/health` stays as the liveness probe: no session, no disk, only that the front answers.
 
-`docker/docker-compose.yml` caps k7 with a `mem_limit`. Inside it the front, the backend and the
-programs the front starts share one budget, and an OOM kill there takes the whole container
+`docker/docker-compose.yml` caps k7 with a `mem_limit`. Inside it the front and the
+programs it starts share one budget, and an OOM kill there takes the whole container
 down. Every service's json-file log is rotated (`LOG_MAX_SIZE`, `LOG_MAX_FILE`).
 
 ## `--mount=type=cache` keeps the npm cache when a manifest does change
@@ -189,13 +163,13 @@ Or simply `./deploy.sh <that version>`, which checks and reverts the same way.
 
 **Between deploys**, `autoheal` (`willfarrell/autoheal`, pinned) restarts a container labelled
 `autoheal=true` once its healthcheck says unhealthy: Docker's own `restart:` acts on an exit only, so a
-backend wedged but alive stays wedged. Only k7 carries the label; it
+front wedged but alive stays wedged. Only k7 carries the label; it
 reaches the Docker socket, which is root on the host, and has no network.
 
 ## The process runs as `node`, and its volumes must be `node`'s
 
 The runtime stage ends on `USER node`: the code under `/app` stays root's, so a flaw in a route
-cannot rewrite the server it runs in. What the process writes is its three volumes — `/data`,
+cannot rewrite the front it runs in. What the process writes is its three volumes — `/data`,
 `/library`, `/workspaces` — which the image creates owned by `node` before
 declaring them, so a FRESH volume inherits that owner. A volume that already holds files owned by
 root keeps them: it needs a one-time `chown -R 1000:1000` of its contents (for instance

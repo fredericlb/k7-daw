@@ -1,6 +1,6 @@
 // registry.ts — a browser's client for the engine registry: which engines exist, taking and
 // releasing the lease on one, and the account's remembered choice. There is ONE registry, pl8's
-// (@studio/engine-registry): pl8 and k7 reach it on their own origin. The five
+// (the front's registry): pl8 and k7 reach it on their own origin. The five
 // routes are spelled once here rather than per app: a copy per app drifts, and it drifts in the
 // return types first.
 
@@ -11,7 +11,7 @@ export interface EnginePrefs {
   engineId?: string;
 }
 
-// `P` is a service's OWN preference shape, a parameter rather than a fixed one because the schema belongs to the host (packages/user-prefs/docs/store.md).
+// `P` is a service's OWN preference shape, a parameter rather than a fixed one because the schema belongs to the host.
 
 /** What `select` answers: the secret to renew with, and whom this claim displaced if anyone. */
 export interface ClaimGrant {
@@ -109,7 +109,7 @@ export function registryClient<E, P extends EnginePrefs = EnginePrefs>(
           body.tookFor ?? null,
         );
       }
-      // 403 `not-yours` or `unowned`: nobody shared it with this account — an answer like 409, never retried (engine-registry docs/ownership.md).
+      // 403 `not-yours` or `unowned`: nobody shared it with this account — an answer like 409, never retried (`apps/k7/backend-rs/docs/engine/claim.md`).
       if (res.status === 403) {
         const body = (await res
           .clone()

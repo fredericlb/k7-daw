@@ -23,7 +23,6 @@ needs the auth folder, as every session route does (`front.md`), and stays off w
 
 | requirement | why |
 |---|---|
-| `K7_FRONT_SECRET` and `K7_FRONT_PORT` given to the backend | the TypeScript that needs an engine reaches the registry and the hub through the seam at the front's port (`packages/engine-registry/docs/internalSeam.md`); without them it calls itself and finds none |
 | the auth folder, and `SESSION_SECRET`, in the front's settings | every engine route behind the session is answered here (the switch stays off without the folder) |
 | `STUDIO_ENGINES_DIR` in the front's settings, the folder the previous release used | the bindings and owners files are the registry's memory across restarts, and a rollback reads the same files |
 | `STUDIO_RENDER_KEY` and `STUDIO_REGISTRY_REQUIRE_DEVICE` in the front's settings | the hub checks the render machine's key and the heartbeat its bearer here |
@@ -41,9 +40,8 @@ needs the auth folder, as every session route does (`front.md`), and stays off w
 
 ## The testbed
 
-The suites of `packages/engine-registry` and `packages/engine-tunnel` — the registry's, the relay's, the
-hub's, the two-agent suite — run against the core when `ENGINE_CORE_BIN` names `k7-engine-testbed`
-(`packages/engine-tunnel/testCore.ts`, `packages/engine-registry/testCore.ts`): one process per test, its
+The suites of `packages/engine-tunnel` — the relay's, the hub's, the two-agent suite — run against the core
+when `ENGINE_CORE_BIN` names `k7-engine-testbed` (`packages/engine-tunnel/testCore.ts`): one process per test, its
 routes and sockets the front's own. Without it they skip; `ENGINE_CORE_REQUIRED=1`, as CI sets it, makes
 them fail instead.
 

@@ -17,73 +17,60 @@ and its three page scripts — account, top colour, media session — which acce
 ## Standalone: the phone runs its own studio
 
 Like the tray on a computer (`apps/k7-tray/docs/tray.md`), the phone needs no server: it runs
-**k7's backend itself**, with its Rust front, and the engine. A studio
+**k7's front itself**, and the engine. A studio
 elsewhere is something it can ADD, never something it needs. `BackendHost.kt` is the tray's
 `backend.rs` on a phone.
 
 | choice | why |
 |---|---|
-| the tray's port, environment and folders, read from `apps/k7/backend/standalone.json` | one table for both, whose values `apps/k7/backend/docs/standalone.md` explains; the port is a `BuildConfig` constant, since the views compare origins before anything is unpacked |
+| the tray's port, environment and folders, read from `apps/k7/backend-rs/standalone.json` | one table for both, whose values `apps/k7/backend-rs/docs/standalone.md` explains; the port is a `BuildConfig` constant, since the views compare origins before anything is unpacked |
 | the local user when signed out | a view opens on `/auth/local`, and falls back to it whenever `/auth/me` says nobody — what a page on the tray's backend does (`apps/k7/frontend/docs/localApp.md`), with the signal the views already had |
 | k7's view opens straight on `/` when the WebView holds a `studio.sid` cookie (`BackendHost.home`) | `/auth/local` is a redirect before any app code, on every cold start; a cookie whose session is gone costs one bounce, since the page then says nobody and the fallback above loads `/auth/local` |
 | the phone's own studio pinned FIRST in the supervisor's list, before it starts | the supervisor's saved list overrides `$STUDIO_REGISTRY_URL`, so a phone that already listed a studio would never see its own otherwise |
-| Termux's arm64 node, as `lib*.so` (`engine/k7-android/scripts/termux-tools.mjs`) | no other build of node runs as an Android app; the native library directory is the only place an app may execute a file, and only `lib*.so` names reach it. Library names and the Termux prefix are patched in place, same length, so nothing is relinked. Each `.deb` is the one pinned, by file and SHA-256, in `engine/k7-android/scripts/termux-packages.json`, and a download that does not match fails the build: Termux's index is unsigned as the script reads it, so it is never trusted at build time. The versions shipped are recorded in `termux-versions.json` |
-| the pinned debs fetched from the project's own `termux-debs` prerelease on GitHub first, Termux's pool after it (`engine/k7-android/scripts/termux-debs.mjs`) | Termux's pool keeps current versions only, so a pin 404s there with the package's next upgrade, and no Termux host keeps old ones on purpose — the mirrors that still have one are only behind. A source is just a place to look: the SHA-256 decides, so the order costs no trust. The release is a PRERELEASE created with `--latest=false`, since `releases/latest` must stay the project's newest version, and its tag matches no workflow's `v*.*.*`. |
-| bumping a pin: `node engine/k7-android/scripts/termux-tools.mjs --pin`, commit, then `node engine/k7-android/scripts/mirror-termux-debs.mjs` with `gh` signed in | the mirror is filled by hand, while the pool still has those versions; it only adds the debs it lacks and never replaces one, so an old pin keeps building. `--dry-run` fetches and verifies without touching the release |
-| the backend BUNDLED (`apps/k7/backend/scripts/bundle.mjs`), the one the tray runs | tsx needs esbuild's native binary, which Termux's node cannot load (`apps/k7/backend/docs/standalone.md`) |
-| one `backend.zip` asset, unpacked once per install | node reads files, not assets; the APK's `lastUpdateTime` marks the copy, as for Faust's libraries |
-| the Rust front's code root rides in `backend.zip` as `code/` (`apps/k7/backend-rs/scripts/stageCodeRoot.mjs`, some 700 KB), named to the front as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video there (`apps/k7/backend-rs/docs/service.md`); a folder of its own outlives node's bundle |
-| an update writes only the files whose CRC or size changed, and deletes those the new bundle lacks | the bundle is 68 MB unpacked, and an update rewriting all of it holds node's start back; `.entries` keeps each file's CRC and size, the ones Gradle's `Zip` writes in every local header. An entry without them is always written, and the `.installed` marker is removed first and written last, so an unpack cut short is redone |
-| node's compile cache on (`NODE_COMPILE_CACHE`, in the app's cache folder), for the backend | its bundled JavaScript is parsed at every launch otherwise, which a phone's CPU pays on the start screen; the cache is keyed by each file's contents and node's version, so an update never runs stale bytecode, and Android clearing the folder only costs one slower launch |
+| the front runs in the app's process, with no node and no child for it | the front holds the file hub and every account's file service itself (`apps/k7/backend-rs/docs/files.md`); the page, the library it seeds and its code root ride in the zip (`apps/k7/backend-rs/scripts/stageBundle.mjs`) |
+| one `backend.zip` asset, unpacked once per install | the front reads files, not assets; the APK's `lastUpdateTime` marks the copy, as for Faust's libraries |
+| the Rust front's code root rides in `backend.zip` as `code/` (`apps/k7/backend-rs/scripts/stageCodeRoot.mjs`, some 700 KB), named to the front as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video there (`apps/k7/backend-rs/docs/service.md`); a folder of its own, beside the page and the library |
+| an update writes only the files whose CRC or size changed, and deletes those the new bundle lacks | the bundle is some 20 MB unpacked, and an update rewriting all of it holds the start back; `.entries` keeps each file's CRC and size, the ones Gradle's `Zip` writes in every local header. An entry without them is always written, and the `.installed` marker is removed first and written last, so an unpack cut short is redone |
 | cleartext allowed for `127.0.0.1` only (`engine/k7-android/app/src/main/res/xml/network_security_config.xml`) | the local studio is plain http, as under the tray, and every other host stays https |
 | the views wait for the backend before loading it | a first run spends a few seconds unpacking, and a load that fails then would put the error screen up for nothing |
-| the backend listens, and so answers `/api/health`, only once the bundled library is installed | the start screen hands over on that answer, and a workspace created before the library exists has none; the backend owns the wait (`apps/k7/backend/docs/standalone.md`, "Ready means the library is there"), so `BackendHost` and the iPhone's need no probe of their own |
+| the front answers `/api/health` at once, and holds the paths that create workspaces until the bundled library is installed | the start screen hands over on that answer, and a workspace created before the library exists has none; the front owns the wait (`apps/k7/backend-rs/docs/standalone.md`, "Ready means the library is there"), so `BackendHost` and the iPhone's need no probe of their own |
 | the shell page shows the start — "Starting k7…", with the unpack's percentage — and a failed one says why, with a Retry (`web/src/Backend.tsx`) | the phone's own studio is the one a first launch opens, so a start that never ends must not be a blank screen; the percentage is the bytes of `backend.zip` read, which is stored uncompressed in the APK, so its length is known before the unpack |
 | the zip streamed straight out of the APK's assets, never copied to disk first | the extracted tree is the only copy the phone keeps, so there is nothing to delete after it |
-| native libraries extracted at install (`useLegacyPackaging`), and no R8 | node and the supervisor are EXECUTED, which needs real files; R8 would need keep rules for Capacitor's reflective bridge and the JNI entry points that nobody has written, and a release that breaks at run time costs more than the megabytes |
+| native libraries extracted at install (`useLegacyPackaging`), and no R8 | the supervisor is EXECUTED, which needs real files; R8 would need keep rules for Capacitor's reflective bridge and the JNI entry points that nobody has written, and a release that breaks at run time costs more than the megabytes |
 
 **The studio's port is the Rust front's** (`RustFront.kt`, `apps/k7/backend-rs/docs/embed.md`): it runs in
-the app's process on `STANDALONE_PORT`, the one every view loads, and node listens behind it on a loopback
-port drawn once per process, given the same secret.
+the app's process on `STANDALONE_PORT`, the one every view loads.
 
 | choice | why |
 |---|---|
-| the front started before node, once per process | node's relaunches keep the same front and the same port behind it |
-| the readiness wait asks node's own port for its health | the front answers its own routes before node listens and before its library is in place; the registry is the front's alone |
-| the engine core in the front (`K7_ENGINE_CORE=front`, `apps/k7/backend-rs/docs/engine.md`), the machine's engine not (`K7_LOCAL_ENGINE` unset) | the registry, the relay and the tunnel hub are the same Rust on every host; the supervisor is `SupervisorHost.kt`'s, which no backend runs here, so there is no local engine for the front to take |
-| the health probe asks node's own port | the front answers `/api/health` itself, so through it a wedged node would never miss |
-| a front that cannot start fails the backend's start, with its reason | without it no view loads anything, and a start screen waiting forever says nothing |
-| the compiled modules in `front-cache` beside the backend's state (`K7_FRONT_CACHE`) | the same Rust as the tray's; the app's process runs from no folder the front could search up from, and a compiled module is machine code, so its folder is the app's own; a cold one costs the first scan some 20 s |
+| the front started once per process | a Retry after a failed start redoes only what failed |
+| the readiness wait asks the studio's port for `/api/health` | the front is the only server there is |
+| the engine core in the front (`K7_ENGINE_CORE=front`, `apps/k7/backend-rs/docs/engine.md`), the machine's engine not (`K7_LOCAL_ENGINE` unset) | the registry, the relay and the tunnel hub are the same Rust on every host; the supervisor is `SupervisorHost.kt`'s, which no front runs here, so there is no local engine for the front to take |
+| a front that cannot start fails the start, with its reason | without it no view loads anything, and a start screen waiting forever says nothing |
+| the compiled modules in `front-cache` beside the front's state (`K7_FRONT_CACHE`) | the same Rust as the tray's; the app's process runs from no folder the front could search up from, and a compiled module is machine code, so its folder is the app's own; a cold one costs the first scan some 20 s |
 | `BackendHost.kt` sets no file-service variable: the front runs all fifteen native pieces answering, within the embedded 192 MB heap; `engine`, `media` and `runtime` degrade as the front does with no engine bound, and none is proved on a device yet (5-13) | the pieces are the only file service there is |
-| the file hub in the front (`K7_FILES=front`, `apps/k7/backend-rs/docs/files.md`): every account's file service and the libraries' are the front's own, so no node child runs beside `backend.mjs` | one hub, the same Rust as the tray's; node's own environment (its libraries, tools, home, temporary folder, certificates and compile cache) is the backend's alone |
-| the front given the table's environment, its folders, the session secret and the switches, as node is | it answers some routes itself and reads the settings those routes read |
+| the file hub in the front (`K7_FILES=front`, `apps/k7/backend-rs/docs/files.md`): every account's file service and the libraries' are the front's own | one hub, the same Rust as the tray's |
+| the front given the table's environment, its folders, the session secret, the page's folder (`K7_FRONTEND_DIST`) and the switches | it answers every route and reads the settings those routes read |
 
-**A crashed backend is relaunched on a doubling delay, 2 s up to 60 s, and given up on after six
-exits in a row that each came within a minute of their launch.** A backend that dies at boot — a
-corrupt SQLite file, a full disk — dies again on every launch, and relaunching it forever only
-drains the battery. Given up on, it tells the views waiting for it, and the shell page shows "k7
-could not start" with the reason and a Retry. There is one retry, `BackendHost.retry()`: the shell
-page's Retry calls it, and so does a view asking for the backend after it was given up on; it
-starts again with the count reset, reusing a backend still running and an unpack already done. A
-run longer than a minute is no boot failure, so it resets the count too. Every step — the unpack
-and its percentage, the launch and each relaunch, ready, given up on — is reported to the shell
-page as one status (`AppViews.backend()` and its `backend` event), which is what it draws.
+**A start that fails is given up on, and the user's retry redoes it.** A front that cannot start — a full disk,
+a missing library — fails the same way on every launch. Given up on, it tells the views waiting for it, and the
+shell page shows "k7 could not start" with the reason and a Retry. There is one retry, `BackendHost.retry()`: the
+shell page's Retry calls it, and so does a view asking for the front after it was given up on; it starts
+again, reusing an unpack already done. Every step — the unpack and its percentage, the launch, ready, given up
+on — is reported to the shell page as one status (`AppViews.backend()` and its `backend` event), which is what it draws.
 
 | choice | why |
 |---|---|
-| the backend prints `$STUDIO_READY_LINE` on stdout once it listens, and the wait wakes on it, then asks the health once | polling every 200 ms adds up to that much to every start; a bundle that never prints the line is still found, by a poll once a second |
-| a start that gets no answer within 60 s is killed, then given up on | a Retry must launch a new backend, not wait again on the same wedged one |
-| `/api/health` asked every 20 s once up; three misses in a row kill it, and the relaunch above brings it back | a backend hung after ready answers nothing and never exits, so nothing else would notice it. A frozen app freezes its children with it, so a phone asleep is no miss |
-| an exit by SIGKILL (code 137) counted apart from crashes, given up on after twenty in a row instead of six | Android 12+ kills an app's children for CPU use behind, or past 32 across the system (the phantom process killer); that is the system, not a backend failing at boot. Developer options' "Disable child process restrictions" (Android 14+), or `adb shell device_config put activity_manager max_phantom_processes 2147483647`, turns it off on a test device. Not measured on a device yet |
-| the output readers of node and the supervisor (`ProcessLines.kt`) end on any `IOException`, with one log line | a stop, a probe's kill or a Retry closes the child's pipe under a blocked read, and Android throws that as `InterruptedIOException`; uncaught on its thread, it kills the whole app |
+| a start that gets no answer within 60 s is given up on | a Retry must start again, not wait on the same wedged one |
+| the output readers of the supervisor (`ProcessLines.kt`) end on any `IOException`, with one log line | a stop or a kill closes the child's pipe under a blocked read, and Android throws that as `InterruptedIOException`; uncaught on its thread, it kills the whole app |
 | once a child has exited, its readers get 2 s to drain, then their stream is closed | a grandchild that inherited the pipe keeps it open past the exit, and the reader would then outlive its process |
-| a kill that must kill — the probe's, a start given up on, a stop past its timeout — is a SIGKILL found through `/proc` (`ChildKill.kt`) | Android's `destroyForcibly` sends SIGTERM, which a wedged or stopped node never acts on, so the process would never exit and never be relaunched; its `Process` has no `pid()` |
+| a kill that must kill — a stop past its timeout — is a SIGKILL found through `/proc` (`ChildKill.kt`) | Android's `destroyForcibly` sends SIGTERM, which a wedged or stopped child never acts on; its `Process` has no `pid()` |
 
-**The engine may open the backend's workspaces and data folder.** Its state is `filesDir/.k7`, and
-the backend's is `filesDir/standalone`, whose files it sends the engine by their own paths, not as
+**The engine may open the front's workspaces and data folder.** Its state is `filesDir/.k7`, and
+the front's is `filesDir/standalone`, whose files it sends the engine by their own paths, not as
 copies. The engine refuses any file outside its roots (`pathRoots.md`), so `EngineBridge.start` sets
 `$STUDIO_ENGINE_ROOTS` to those two folders, named at build time from
-`apps/k7/backend/standalone.json` (`BackendHost.engineRoots`). Without them a project plays with
+`apps/k7/backend-rs/standalone.json` (`BackendHost.engineRoots`). Without them a project plays with
 every clip, sample, patch and model dropped.
 
 ## The app is also where the studio is used: k7, full screen
@@ -530,8 +517,7 @@ The APK builds on Windows too, for a phone on the desk without a round trip thro
 newer one), and Gradle run from a Visual Studio developer prompt (`vcvars64`) — JUCE builds its
 `juceaide` for the HOST while cross-compiling, and under Ninja that needs `cl.exe` on the path. A
 local build is signed with the debug key, so it installs as the `e2e` type beside the shipped app,
-not over it: `gradlew :app:assembleE2e`. The scripts it runs keep to `/` in what they write, and
-copy a Termux package's symlinks, which Windows' tar cannot create.
+not over it: `gradlew :app:assembleE2e`. The scripts it runs keep to `/` in what they write.
 
 ## Release builds
 
@@ -612,17 +598,6 @@ through `adb forward`:
 | an HTTPS studio whose certificate a private CA signed | refused; after importing that CA (DER) 146 roots, the engine adopted, connected and heartbeating; after forgetting it 145 and refused again — one engine start throughout |
 | importing a file that is not a certificate | refused with a message; nothing stored, nothing restarted |
 | `--probe https://app.priv.k7.rocks` with Android's CAs only | an k7 registry: nothing to import for a publicly certified studio |
-
-The standalone backend, on the same emulator, run as an app (`run-as`) from the bundle and the
-tools the scripts produce:
-
-| | measured |
-|---|---|
-| backend answering, from launch | 270–300 ms |
-| local sign-in, `/auth/me`, the frontend's index | the local user, `local: true`; 200 |
-| first `/workspaces`, which starts the account's file service | 450 ms |
-| resident memory | backend 81 MB, file service 100 MB (measured when node ran one) |
-| APK payload | `backend.zip` 50 MB (68 MB unpacked) |
 
 The realtime ratio is the emulator's audio device consuming 12 % less than wall-clock time at a
 nominal 48 kHz: steady from 8 s to 25 s, with nothing dropped, so the engine keeps up with the

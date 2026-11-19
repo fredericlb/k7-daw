@@ -4,7 +4,7 @@ The k7 editor in the browser talks to three servers, and each request has exactl
 
 | | k7 backend | account file service | engine |
 |---|---|---|---|
-| Code | `apps/k7/backend` | `apps/k7/backend-rs/crates/k7-file-service`, held by the Rust front | `engine/k7-runtime` |
+| Code | `apps/k7/backend-rs` (`k7-front`) | `apps/k7/backend-rs/crates/k7-file-service`, held by the Rust front | `engine/k7-runtime` |
 | Runs | the device itself | in the Rust front, one runtime for the local account | the engine's machine |
 | Owns | `/auth/*`, the device's preferences, AI settings and engine registry | the account's workspaces: every file op, the change set the verbs commit, compile, revision, undo, conflicts | playback, transport, meters, live params |
 | Reached | same origin, `/api/*` and `/auth/*` | through the backend's hub, at the base URL the engine probe returns; never directly | WebSocket, direct when allowed, else relayed through the origin |
@@ -51,5 +51,5 @@ The hub mints the file service's ticket from the session; it ages (twelve hours)
 
 - A new **verb** on project files: `packages/commands`, never a new route ([Adding a command](./13-adding-a-command.md)).
 - A new **file-shaped** read the views need: a route in the Rust file service (`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/`), a function in `@studio/project-shell` if an app outside this repository needs it too, else in `apps/k7/frontend/src/api.ts`.
-- A new **account-level** setting: k7's backend (`prefsSchema` in `server.ts`) and `K7Prefs` in `api.ts`, together.
+- A new **account-level** setting: k7's front (`prefs_schema.rs`) and `K7Prefs` in `api.ts`, together.
 - Anything about **live audio**: the engine protocol (Engines section).

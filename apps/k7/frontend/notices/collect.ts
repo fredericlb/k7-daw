@@ -10,9 +10,8 @@ import type { NoticeEntry, Notices, Where } from "./types.ts";
 /** The shipped apps, as workspace folders whose `dependencies` reach a user, and where each ships. */
 const NPM_ROOTS: { dir: string; where: Where }[] = [
   { dir: "apps/k7/frontend", where: "web" },
-  { dir: "apps/k7/backend", where: "server" },
-  // The tray ships the backend bundle, the frontend inside it, to a computer (apps/k7-tray/scripts/stage.mjs).
-  { dir: "apps/k7/backend", where: "desktop" },
+  // The server image ships the built page, and the tray ships it to a computer (apps/k7-tray/scripts/stage.mjs).
+  { dir: "apps/k7/frontend", where: "server" },
   { dir: "apps/k7/frontend", where: "desktop" },
   { dir: "engine/k7-android/web", where: "android" },
   // Bundled into the engine binary as strudel.bundle.js (engine/k7-runtime/docs/patternPlugin.md).
@@ -27,7 +26,7 @@ const INCOMPATIBLE =
 interface Component {
   name: string;
   version?: string | null;
-  /** `termux:<pkg>` or `package:<dir>#<dep>`: the version is read there, never copied by hand. */
+  /** `package:<dir>#<dep>`: the version is read there, never copied by hand. */
   versionFrom?: string;
   license: string;
   url: string;
@@ -39,9 +38,8 @@ interface Component {
   /** What vendor.ts copies into `text` from an engine build's `_deps` or the tree. */
   vendor?: string[];
   note?: string;
-  /** The FetchContent names, termux packages, apk and apt packages it accounts for: the test's anti-rot keys. */
+  /** The FetchContent names, apk and apt packages it accounts for: the test's anti-rot keys. */
   fetchContent?: string[];
-  termux?: string[];
   apk?: string[];
   apt?: string[];
   /** The file its pinned version is written in: the test checks the version is still there. */
@@ -198,15 +196,9 @@ function walkNpm(root: string, roots = NPM_ROOTS) {
   return found;
 }
 
-/** `termux:<pkg>` reads engine/k7-android's pin; `package:<dir>#<dep>` a manifest's own range. */
+/** `package:<dir>#<dep>` reads a manifest's own range. */
 function resolveVersion(root: string, from: string): string | null {
   const [kind, ref = ""] = from.split(/:(.*)/s);
-  if (kind === "termux") {
-    const pins = readJson<Record<string, { version: string }>>(
-      join(root, "engine/k7-android/scripts/termux-packages.json"),
-    );
-    return pins[ref]?.version ?? null;
-  }
   if (kind === "package") {
     const [dir = "", dep = ""] = ref.split("#");
     const pkg = readJson<

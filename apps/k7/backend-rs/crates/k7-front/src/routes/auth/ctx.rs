@@ -1,7 +1,7 @@
-//! ctx.rs — a request's session as `setupAuth` leaves it to its routes: the cookie read by cookie-session's
+//! ctx.rs — a request's session as the routes read it: the cookie read by cookie-session's
 //! rules, a user whose stamps fail dropped before any route reads it, and on a device any other account turned
-//! into the local user. What a reader gets wrong: `/auth/{logout,me}` sit BEFORE that device
-//! rewrite in `apps/k7/backend/src/server.ts`; `/auth/local` and the token routes sit after it.
+//! into the local user. What a reader gets wrong: `/auth/{logout,me}` read the session BEFORE that device
+//! rewrite; `/auth/local` and the token routes sit after it.
 
 use std::time::{SystemTime, UNIX_EPOCH};
 

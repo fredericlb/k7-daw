@@ -15,25 +15,25 @@
 ```bash
 npm install
 cp env.example.yaml env.yaml     # then fill it in
-npm run tokens                   # optional: gives the backend its own API_TOKEN_SECRET
+npm run tokens                   # optional: gives the front its own API_TOKEN_SECRET
 ```
 
 `env.yaml` is the per-machine configuration and is gitignored (`env.yaml*`, so backups are ignored
 too). It has a `common` section applied to every service and one section per service named after
-the service's **package name**; `k7-backend` is the one that matters here. The backend reads it with
-`loadServiceEnv("k7-backend")` from `@studio/env`, which finds the nearest `env.yaml` walking up
-from the working directory and layers `common` then the service section into `process.env`. Under a
+the service's name; `k7-front` is the one that matters here. The dev front script reads it with
+`loadServiceEnv("k7-front")` from `@studio/env`, which finds the nearest `env.yaml` walking up
+from the working directory and layers `common` then the service section into the front's environment. Under a
 test runner it does not go looking for the file, so tests never pick up a developer's secrets.
 
 The keys you need in dev:
 
 | Key | Section | Notes |
 |---|---|---|
-| `STUDIO_FILES_ROOT` | `k7-backend` | **Required.** Where the device's workspaces live; the backend exits without it. |
-| `STUDIO_MEDIATEK` | `k7-backend` | The instance's data folder (the bearer tokens, the engine registry). Defaults to `~/.k7/mediatek`. |
+| `STUDIO_FILES_ROOT` | `k7-front` | **Required.** Where the device's workspaces live; the front answers no file hub without it. |
+| `STUDIO_MEDIATEK` | `k7-front` | The instance's data folder (the bearer tokens, the engine registry). Defaults to `~/.k7/mediatek`. |
 | `SESSION_SECRET` | `common` | Signs the session cookie. |
-| `STUDIO_LOCAL_USER` | `k7-backend` | `1` in the dev session: it runs as a device, whose session is its local user; there is no sign-in provider to configure. |
-| `API_TOKEN_SECRET` | `k7-backend` | Written by `npm run tokens`; falls back to a value derived from `SESSION_SECRET`. |
+| `STUDIO_LOCAL_USER` | `k7-front` | `1` in the dev session: it runs as a device, whose session is its local user; there is no sign-in provider to configure. |
+| `API_TOKEN_SECRET` | `k7-front` | Written by `npm run tokens`; falls back to a value derived from `SESSION_SECRET`. |
 | `COOKIE_DOMAIN` | `common` | Leave empty for local http: setting it forces `Secure` and `SameSite=None`. |
 
 `env.example.yaml` documents the remaining optional keys (prefs folder and the like).
@@ -58,8 +58,8 @@ restart, read logs from, or trigger on its own:
 
 ```bash
 npm run dev                          # every resource
-npm run dev -- k7-frontend k7-backend   # only these resources
-tilt trigger k7-backend              # restart one from another terminal
+npm run dev -- k7-frontend k7-front   # only these resources
+tilt trigger k7-front                # restart one from another terminal
 tilt logs native                     # read one resource's output
 tilt get uiresources                 # status of every resource
 ```
@@ -80,7 +80,6 @@ its top-level folder (`apps` or `engine`). The resource is named after the packa
 | Resource | Workspace | Runs |
 |---|---|---|
 | `k7-frontend` | `apps/k7/frontend` | `vite` |
-| `k7-backend` | `apps/k7/backend` | `tsx watch src/server.ts` on 8790, behind `k7-front` |
 | `k7-tray` | `apps/k7-tray` | `scripts/dev-tray.mjs` |
 | `studio-k7-android-shell` | `engine/k7-android/web` | `vite` for the Android app's page |
 
@@ -141,8 +140,8 @@ lock, so it waits for the watcher rather than corrupting the build folder. Never
 The scripts run on native Windows (Node, MSVC, Git Bash). What they do differently there:
 
 - **No POSIX env prefixes in npm scripts.** npm hands scripts to `cmd.exe`, which cannot read
-  `VAR=1 tool`. The backend's scripts go through `apps/k7/backend/scripts/with-env.mjs`, which sets
-  the variables and spawns the tool's declared `bin` with `node`, with no shell involved.
+  `VAR=1 tool`. Set a variable through a script that spawns the tool with `env`, with no shell involved
+  (`apps/k7/backend-rs/scripts/dev-front.mjs`).
 - **`npm` is a `.cmd` shim**, so scripts that spawn it pass `shell: true` on `win32`.
 - **A running executable cannot be relinked**, which is why `dev-tray.mjs` stops the tree before
   every rebuild and why a build that "succeeds" without updating the binary is reported as an error.

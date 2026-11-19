@@ -213,9 +213,7 @@ Written here so it stops being mistaken for laziness.
 
 ### Left on purpose
 
-`AuthUser` is declared twice: `@studio/http`'s, which k7's backend widens with `groups`
-(`apps/k7/backend/src/types/express.d.ts`), and k7's frontend's own in `api.ts`, the only one
-carrying `email?: string | null`.
+`AuthUser` is declared in k7's frontend's `api.ts`, carrying `email?: string | null`.
 
 ## 5. Config
 

@@ -1,7 +1,6 @@
-//! json_file.rs — a JSON file the TypeScript backend writes too, handled as `packages/oidc/jsonFile.ts`
-//! handles it: a read costs one stat and parses again only when the file changed, a write is a temporary file
-//! renamed over it. What a reader gets wrong: there is no lock, so two writers in one instant lose one write
-//! (`packages/oidc/docs/apiTokens.md` says why that window is accepted).
+//! json_file.rs — a JSON file the front shares with its own threads: a read costs one stat and parses again only
+//! when the file changed, a write is a temporary file renamed over it. What a reader gets wrong: there is no lock,
+//! so two writers in one instant lose one write, a window accepted for the preferences and the token store.
 
 use std::io::Write;
 use std::path::{Path, PathBuf};

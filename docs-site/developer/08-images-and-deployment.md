@@ -29,22 +29,17 @@ The stages:
 | `toolchain` | `node:24-alpine` | Adds `python3`, `make`, `g++` (for `ssh2`'s optional native crypto binding) and the manifests. |
 | `deps` | `toolchain` | `npm ci` of the whole workspace, with an npm cache mount. |
 | `frontend-build` | `deps` | Copies the sources, sets `VITE_APP_VERSION` from the `APP_VERSION` build argument, runs `vite build` for `k7-frontend`. No typecheck here: CI typechecks separately. |
-| `backend-deps` | `toolchain` | `npm ci --workspace k7-backend --omit=dev`: the backend's production dependency closure only. |
-| `runtime` | `node:24-alpine` | Adds `ffmpeg`; copies the backend's `node_modules`, **the whole repository**, and the built frontend into `apps/k7/frontend/dist`. |
-
-The whole repository is copied because the `@studio/*` entries in
-`node_modules` are symlinks to workspace source folders, consumed as TypeScript: a package left out
-is a crash on first import.
+| `runtime` | `alpine` | Adds `ffmpeg`, `tini` and chromium; copies the Rust front, the front's code root and the built frontend into `apps/k7/frontend/dist`. |
 
 Runtime settings:
 
 | Setting | Value |
 |---|---|
-| Command | `tsx src/server.ts` in `apps/k7/backend` |
+| Command | `k7-front`, through `apps/k7/docker/start.sh` |
 | `PORT` | `8789` (exposed) |
 | Volumes | `/data` (`STUDIO_PREFS_DIR=/data/prefs`), `/library` (`STUDIO_MEDIATEK`), `/workspaces` |
 
-The image starts from a plain Node image and has no nginx: the backend serves
+The runtime stage starts from a plain alpine image, runs no node and has no nginx: the front serves
 the SPA itself.
 
 ## The compose file

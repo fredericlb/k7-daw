@@ -57,10 +57,8 @@ Environment variables the build reads:
 ## The tray
 
 `npm run stage --workspace k7-tray` (`apps/k7-tray/scripts/stage.mjs`) fills
-`apps/k7-tray/src-tauri/resources/`: k7's backend bundled as plain JavaScript by
-`apps/k7/backend/scripts/bundle.mjs` (the same bundle the phone runs, including the frontend, the
-demos and the `k7-core` library), the engine binaries via `stageEngine`, and a pinned, checksummed
-Node 24. `npm run build --workspace k7-tray` then runs `tauri build`: an NSIS installer on Windows,
+`apps/k7-tray/src-tauri/resources/`: the page and the `k7-core` library bundled by
+`apps/k7/backend-rs/scripts/stageBundle.mjs` (the same bundle the phone runs), the front's code root, and the engine binaries via `stageEngine`. `npm run build --workspace k7-tray` then runs `tauri build`: an NSIS installer on Windows,
 a `dmg` and the updater's `.app.tar.gz` on macOS, an AppImage and a `.deb` on Linux.
 
 `stageEngine` takes the binaries from `$STUDIO_PREBUILT_BIN` when it is set, instead of from the

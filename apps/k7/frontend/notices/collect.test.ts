@@ -216,14 +216,6 @@ describe("this repository's notices", () => {
     expect(fetched.filter((n) => !listed.has(n))).toEqual([]);
   });
 
-  it("accounts for every Termux package the phone carries", () => {
-    const pins = Object.keys(
-      JSON.parse(read("engine/k7-android/scripts/termux-packages.json")),
-    );
-    const listed = new Set(file.components.flatMap((c) => c.termux ?? []));
-    expect(pins.filter((p) => !listed.has(p))).toEqual([]);
-  });
-
   it("accounts for every OS package the two runtime images install", () => {
     const runtime = (f: string) => read(f).split(/ AS runtime/)[1] ?? "";
     const apk = [

@@ -1,4 +1,4 @@
-//! api.rs — the library's `/api` guard, `bearerOrSession(requireAuth)` in `apps/k7/backend/src/media/mount.ts`, and the
+//! api.rs — the library's `/api` guard, a library bearer or the session, and the
 //! routes still behind it: a bearer that does not verify is refused even beside a valid cookie, no bearer needs the
 //! session. What a reader gets wrong: a bearer that verifies signs nobody in, since the preferences' own `requireAuth`
 //! reads the session again; the AI routes have no copy behind the guard, so a bearer there meets the 404.
