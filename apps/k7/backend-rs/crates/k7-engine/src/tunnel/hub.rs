@@ -223,11 +223,7 @@ impl Hub {
             self.opts.uploads,
             self.clock.clone(),
         );
-        let old = {
-            let mut s = self.lock();
-            let old = s.tunnels.insert(id.clone(), t.clone());
-            old
-        };
+        let old = self.lock().tunnels.insert(id.clone(), t.clone());
         // One tunnel per engine: a reconnect, verified above, replaces the socket it outlived.
         if let Some(old) = old {
             old.peer.terminate();

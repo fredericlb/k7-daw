@@ -395,9 +395,9 @@ fn modules(
 /// The copy judged, in the TypeScript's order, with nothing written: both ends' names and presence, the source's
 /// guards, the destination's, the name, then every entry, playlist and module it would write.
 pub fn plan_copy(home: &Home, ask: &CopyAsk<'_>, limits: &Limits) -> Result<CopyPlan, WsError> {
-    let (_, src_root) = end(&home, ask.from)?;
-    let (dest_name, dest_root) = end(&home, ask.to)?;
-    let src_space = Space::open(&home, &src_root);
+    let (_, src_root) = end(home, ask.from)?;
+    let (dest_name, dest_root) = end(home, ask.to)?;
+    let src_space = Space::open(home, &src_root);
     let src = src_space.safe_path(ask.path, &Disk)?;
     if is_recycled(&src_space, &src) {
         return Err(WsError::Refused(format!(
@@ -411,7 +411,7 @@ pub fn plan_copy(home: &Home, ask: &CopyAsk<'_>, limits: &Limits) -> Result<Copy
             ask.path
         )));
     }
-    let dest_space = Space::open(&home, &dest_root);
+    let dest_space = Space::open(home, &dest_root);
     if is_project_dir(&dest_root) {
         return Err(WsError::Refused(format!(
             "{dest_name} is itself a project — copy into a workspace that holds several"
