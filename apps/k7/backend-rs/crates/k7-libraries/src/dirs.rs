@@ -5,7 +5,6 @@
 use std::fs;
 use std::path::Path;
 
-
 use crate::manifest::{Manifest, parse_manifest, stringify_manifest};
 
 /// A manifest in its k7x spelling.

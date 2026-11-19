@@ -103,7 +103,11 @@ async fn module_libraries_are_answered_natively_and_a_decline_is_refused() {
     let v: Value = serde_json::from_str(&body).unwrap();
     assert!(v["libraries"].is_array(), "{body}");
     // A library as the open project declines, and the decline is the answer: no other side is asked (4-7).
-    std::fs::write(dir.join("home/workspace/.active-projects/songs"), "_libraries/x/p.k7").unwrap();
+    std::fs::write(
+        dir.join("home/workspace/.active-projects/songs"),
+        "_libraries/x/p.k7",
+    )
+    .unwrap();
     let c = ctx(&dir, Tag::ModuleLibraries, "", &lines);
     let (status, body) = text(super::refuse::scoped(listings::answer(c)).await).await;
     assert_eq!(status, 409, "{body}");

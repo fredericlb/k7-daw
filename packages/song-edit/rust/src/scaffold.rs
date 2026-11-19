@@ -72,10 +72,9 @@ pub(crate) fn with_ids(files: &[(&str, &str)], count: usize, new_id: NewId) -> V
     files
         .iter()
         .map(|(k, t)| {
-            let text = ids
-                .iter()
-                .enumerate()
-                .fold((*t).to_owned(), |text, (i, id)| text.replace(&format!("<id{}>", i + 1), id));
+            let text = ids.iter().enumerate().fold((*t).to_owned(), |text, (i, id)| {
+                text.replace(&format!("<id{}>", i + 1), id)
+            });
             ((*k).to_owned(), text)
         })
         .collect()

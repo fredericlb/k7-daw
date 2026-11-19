@@ -47,16 +47,18 @@ pub fn repair_open(
     ];
     reads.extend(env.overlays.iter().map(|(_, root)| root.clone()));
     let mut out = Repaired::default();
-    let staged = StagedFs::reading(&[project], &reads).map_err(|e| e.to_string()).and_then(|mut fs| {
-        let notes = repair_picture_strips(&mut fs, &env, project, rel, &mut *new_id)?;
-        let landed = fs
-            .planned()
-            .and_then(|set| commit(&Real, &set, &mut |_| {}).map_err(|e| e.what))?;
-        fs.drop_emptied_dirs();
-        out.touched |= !landed.touched.is_empty();
-        out.structural |= landed.structural;
-        Ok(notes)
-    });
+    let staged = StagedFs::reading(&[project], &reads)
+        .map_err(|e| e.to_string())
+        .and_then(|mut fs| {
+            let notes = repair_picture_strips(&mut fs, &env, project, rel, &mut *new_id)?;
+            let landed = fs
+                .planned()
+                .and_then(|set| commit(&Real, &set, &mut |_| {}).map_err(|e| e.what))?;
+            fs.drop_emptied_dirs();
+            out.touched |= !landed.touched.is_empty();
+            out.structural |= landed.structural;
+            Ok(notes)
+        });
     // A repair that fails is silent: the project is left as it was.
     out.notes.extend(staged.unwrap_or_default());
     if stamp_format_at_open(project) {

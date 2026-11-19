@@ -7,8 +7,8 @@ use crate::fs::Fs;
 use crate::js_text::js_trim;
 use crate::paths::{dirname, join};
 use crate::preferences::{
-    AudioDevicePref, ChannelDir, ChannelLabel, CueOutput, PREFERENCES_FILE, Preferences,
-    parse_strict, stringify_preferences,
+    AudioDevicePref, ChannelDir, ChannelLabel, CueOutput, PREFERENCES_FILE, Preferences, parse_strict,
+    stringify_preferences,
 };
 use song::SourceError;
 

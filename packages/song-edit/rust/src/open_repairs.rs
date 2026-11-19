@@ -22,7 +22,13 @@ fn has_viewport(fs: &dyn Fs, dir: &str) -> Result<bool, String> {
 }
 
 /// The strips of the picture lanes of a project with a viewport, after its video run; what is written is in `fs`, whole or, on an Err the caller drops, not at all.
-pub fn repair_picture_strips(fs: &mut dyn Fs, env: &Env, dir: &str, rel: &str, new_id: NewId) -> Result<Vec<Note>, String> {
+pub fn repair_picture_strips(
+    fs: &mut dyn Fs,
+    env: &Env,
+    dir: &str,
+    rel: &str,
+    new_id: NewId,
+) -> Result<Vec<Note>, String> {
     if !has_viewport(fs, dir)? {
         return Ok(vec![]);
     }

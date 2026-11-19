@@ -83,7 +83,7 @@ fn a_source_with_no_graph_is_missing_and_plays_the_pass_through() {
     let t = Tmp::new("js-missing");
     t.mkdir("m");
     assert_eq!(state(&t), (GraphState::Missing, PASS_THROUGH_GRAPH.to_owned()));
-    }
+}
 
 fn literal(t: &Tmp) -> (GraphState, String) {
     let g = jsdsp_graph(&world(t), &t.at("m/dsp.k7x")).expect("a source");

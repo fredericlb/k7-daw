@@ -4,8 +4,7 @@
 use super::args::{at, catalogue_of, done, fnum, opt_json, s, val_lax};
 use super::{Ctx, Out};
 use crate::{
-    Fs, MemFs, base_preset, chain_create, chain_stack, module_fork, scaffold, timeline_from_range,
-    timeline_rename,
+    Fs, MemFs, base_preset, chain_create, chain_stack, module_fork, scaffold, timeline_from_range, timeline_rename,
 };
 use serde_json::{Value as Json, json};
 
@@ -19,14 +18,7 @@ pub const NAMES: &[(&str, &[&str])] = &[
     ("song/chainStack", &["stackChainNode"]),
     ("song-edit/timelineFromRange", &["timelineFromRange"]),
     ("song-edit/trackMix", &["timelineFromRange"]),
-    (
-        "song/scaffold",
-        &[
-            "writeProjectFiles",
-            "scaffoldSynth",
-            "scaffold",
-        ],
-    ),
+    ("song/scaffold", &["writeProjectFiles", "scaffoldSynth", "scaffold"]),
     (
         "song/moduleFork",
         &[
