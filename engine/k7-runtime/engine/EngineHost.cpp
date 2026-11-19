@@ -90,8 +90,6 @@ void EngineHost::openAudioDevice() {
 #if JUCE_IOS || JUCE_ANDROID
     // Inputs without the microphone granted fail the whole device, output too, so the app says whether it may yet (docs/ios.md, docs/android.md).
     if (const char* allowed = std::getenv("STUDIO_ENGINE_INPUTS"); allowed && std::string(allowed) == "0") inputs = 0;
-    // "arm": the microphone is granted but the device opens without it until a track is armed (docs/ios.md).
-    else if (allowed && std::string(allowed) == "arm") { inputs = 0; impl_->inputsOnArm = true; }
 #endif
     // A test bed asks for silence on the speakers alone; the stage runs last, after every meter and tap.
     if (auto silent = silentOutputIfAsked()) {

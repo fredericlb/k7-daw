@@ -292,10 +292,3 @@ add_test(NAME studio_ampmodel_tests COMMAND studio_ampmodel_tests)
 add_executable(studio_slotfootswitch_tests SlotFootswitch_test.cpp)
 target_include_directories(studio_slotfootswitch_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
 add_test(NAME studio_slotfootswitch_tests COMMAND studio_slotfootswitch_tests)
-
-# --- Restart coalescer tests --------------------------------------------------
-# Fast for the same reason: RestartCoalescer.h is header-only and JUCE-free, so WHEN a route change may restart the iOS device on a Mac is tested without JUCE (../docs/ios.md).
-add_executable(studio_restartcoalescer_tests RestartCoalescer_test.cpp)
-target_include_directories(studio_restartcoalescer_tests PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../engine)
-add_test(NAME studio_restartcoalescer_tests COMMAND studio_restartcoalescer_tests)

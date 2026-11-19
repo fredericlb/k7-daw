@@ -122,25 +122,3 @@ studio_replace("${ssd}"
 studio_replace("${ssd}"
     "    if (juce::Desktop::getInstance().isHeadless())\n        return;\n"
     "    if (studioScreenIsTheApps || juce::Desktop::getInstance().isHeadless())   // studio\n        return;\n")
-
-# A Mac running the iPad app answers every route change with a restart of the device, and each restart makes macOS change the route again:
-# the handler leaves the notification thread unblocked, one restart per window, the rate list is fixed (docs/ios.md).
-set(native "modules/juce/modules/juce_audio_devices/native")
-file(READ "${CMAKE_CURRENT_LIST_DIR}/../RestartCoalescer.h" coalescerText)
-file(WRITE "${native}/studio_RestartCoalescer.h" "${coalescerText}")
-set(ios "${native}/juce_Audio_ios.cpp")
-studio_replace("${ios}"
-    "namespace juce {\n\n#ifndef JUCE_IOS_AUDIO_LOGGING"
-    "#include \"studio_RestartCoalescer.h\"\n#include <atomic>\n#include <chrono>\n#include <functional>\n\nnamespace juce {\n\n// studio: the Mac running the iPad app, and the clock of its restart rule\nstatic bool studioIsMac() { static const bool mac = [NSProcessInfo processInfo].isiOSAppOnMac; return mac; }\nstatic std::int64_t studioNowMs() { return std::chrono::duration_cast<std::chrono::milliseconds> (std::chrono::steady_clock::now().time_since_epoch()).count(); }\n// studio: when JUCE last restarted a device on a Mac (0 never), which the engine's watchdog reads\nstd::atomic<std::int64_t> studioIosRestartMs { 0 };\n\n#ifndef JUCE_IOS_AUDIO_LOGGING")
-studio_replace("${ios}"
-    "    void updateAvailableSampleRates()\n    {\n"
-    "    void updateAvailableSampleRates()\n    {\n        // studio: the Mac's HAL answers to ~150 probes per restart with route changes; it runs at these two\n        if (studioIsMac())\n        {\n            availableSampleRates = Array<double> { 44100.0, 48000.0 };\n            return;\n        }\n\n")
-studio_replace("${ios}"
-    "    void handleRouteChange (AVAudioSessionRouteChangeReason reason)\n    {\n        const ScopedLock myScopedLock (callbackLock);\n"
-    "    void handleRouteChange (AVAudioSessionRouteChangeReason reason)\n    {\n        // studio: on a Mac the UI thread only notes the change; the message thread decides, so this never waits on callbackLock\n        if (studioIsMac())\n        {\n            if (reason == AVAudioSessionRouteChangeReasonCategoryChange || reason == AVAudioSessionRouteChangeReasonRouteConfigurationChange)\n                return;\n            int none = 0;\n            if (reason == AVAudioSessionRouteChangeReasonUnknown) studioRouteKind.compare_exchange_strong (none, 1);\n            else studioRouteKind.store (2);\n            triggerAsyncUpdate();\n            return;\n        }\n\n        const ScopedLock myScopedLock (callbackLock);\n")
-studio_replace("${ios}"
-    "    void handleAsyncUpdate() override\n    {\n        restart();\n    }\n"
-    "    void handleAsyncUpdate() override\n    {\n        if (! studioIsMac())\n        {\n            restart();\n            return;\n        }\n\n        // studio: one restart per window; an 'unknown' change just after one is its echo and is dropped (RestartCoalescer.h)\n        const ScopedLock sl (callbackLock);\n        const int kind = studioRouteKind.exchange (0);\n        const auto now = studioNowMs();\n        const auto verdict = studioCoalescer.request (now, kind == 1);\n\n        if (verdict == studio::RestartCoalescer::Verdict::drop)\n            return;\n\n        if (verdict == studio::RestartCoalescer::Verdict::later)\n        {\n            studioTimer.startTimer (static_cast<int> (studioCoalescer.waitMs (now)) + 1);\n            return;\n        }\n\n        if (kind != 0)\n            hardwareInfoNeedsUpdating = true;\n\n        restart();\n        studioCoalescer.restarted (studioNowMs());\n        studioIosRestartMs.store (studioNowMs());\n    }\n\n    // studio: a deferred restart's slot has come; the request is served unless a restart already did\n    void studioWake()\n    {\n        const ScopedLock sl (callbackLock);\n        if (! studioCoalescer.pending())\n            return;\n        studioRouteKind.store (2);\n        triggerAsyncUpdate();\n    }\n")
-studio_replace("${ios}"
-    "    CriticalSection callbackLock;\n"
-    "    CriticalSection callbackLock;\n\n    // studio: the Mac's restart rule; touched under callbackLock\n    studio::RestartCoalescer studioCoalescer;\n    std::atomic<int> studioRouteKind { 0 };   // 0 none, 1 only 'unknown', 2 another reason\n    struct StudioTimer final : public Timer\n    {\n        explicit StudioTimer (std::function<void()> f) : fn (std::move (f)) {}\n        ~StudioTimer() override { stopTimer(); }\n        void timerCallback() override { stopTimer(); fn(); }\n        std::function<void()> fn;\n    };\n    StudioTimer studioTimer { [this] { studioWake(); } };\n")

@@ -50,7 +50,7 @@ endif()
 # A patch command carries its script's checksum, so a kept source tree re-runs a patch edited since (docs/build.md).
 function(studio_patch_command out script)
     file(SHA256 "${script}" sum)
-    # A file the script copies into the source (tracktion.cmake's RestartCoalescer.h) is part of its checksum.
+    # A file the script copies into the source is part of its checksum.
     foreach(_extra ${ARGN})
         file(SHA256 "${_extra}" _extraSum)
         set(sum "${sum}-${_extraSum}")
@@ -64,8 +64,7 @@ endfunction()
 foreach(_patch sfizz surge ixwebsocket)
     studio_patch_command(STUDIO_PATCH_${_patch} "${CMAKE_CURRENT_SOURCE_DIR}/engine/patches/${_patch}.cmake")
 endforeach()
-studio_patch_command(STUDIO_PATCH_tracktion "${CMAKE_CURRENT_SOURCE_DIR}/engine/patches/tracktion.cmake"
-    "${CMAKE_CURRENT_SOURCE_DIR}/engine/RestartCoalescer.h")
+studio_patch_command(STUDIO_PATCH_tracktion "${CMAKE_CURRENT_SOURCE_DIR}/engine/patches/tracktion.cmake")
 foreach(_patch eurorack stmlib)
     studio_patch_command(STUDIO_PATCH_${_patch} "${CMAKE_CURRENT_SOURCE_DIR}/engine/eurorack/patches/${_patch}.cmake")
 endforeach()

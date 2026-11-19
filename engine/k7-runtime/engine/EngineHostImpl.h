@@ -210,8 +210,6 @@ struct EngineHost::Impl {
     // The open device's underrun count at the last check, -1 = no baseline yet; and whether the buffer cap was already reported (checkXRuns).
     int xruns = -1;
     bool xrunsAtCap = false;
-    // A Mac running the iPad app opens no input until a track is armed (docs/ios.md).
-    bool inputsOnArm = false;
     // The buffer the cap was reached at: a device reopened at another size is probed again.
     int xrunsCapFrames = 0;
 
