@@ -859,6 +859,11 @@ it would silently split the master bus rather than extend it.
 this adds is that the files GO, which is why it is a different verb and not a flag. The module it
 uses is untouched.
 
+A node NOTHING feeds — a lane, a set's deck — has nothing to rejoin, so each node it fed loses a
+source. When that leaves one with fewer sources than its module's mandatory ports (a deck's platter,
+`@meta/audio/turntable`), the verb refuses before it writes anything and names it
+(`verbs/nodeDeleteGuard.ts`): the compile would refuse the result, and the CLI's disk has no rollback.
+
 No verb DELETES a module: a module's files are the file tree's to remove, and other projects read
 the same module.
 

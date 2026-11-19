@@ -89,6 +89,7 @@ export {
   isStretch,
   type Module,
   type ModuleUI,
+  normalizeInputs,
   type Out,
   type OutputDef,
   type Placement,
