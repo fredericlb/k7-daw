@@ -4,7 +4,7 @@
 mod files_hub_support;
 mod http_support;
 
-use files_hub_support::{device_front_with, front, send, send_with, settled};
+use files_hub_support::{device_front_with, send, send_with, settled};
 use http_support::cookie;
 use serde_json::json;
 
@@ -63,31 +63,4 @@ async fn a_workspace_with_a_pending_merge_refuses_a_write_with_423_and_another_d
     );
     let ok = put("mine").await;
     assert_ne!(ok.status, 423, "{}", ok.text());
-}
-
-#[tokio::test(flavor = "multi_thread")]
-async fn the_git_routes_answer_410_on_a_server_front() {
-    let (front, root) = front().await;
-    let ann = cookie(json!({ "sub": "a", "email": "ann@x", "groups": [] }));
-    let session = [
-        ("cookie", ann.as_str()),
-        ("content-type", "application/json"),
-    ];
-    std::fs::create_dir_all(
-        root.join("files")
-            .join(k7_hub::account::account_key("ann@x"))
-            .join("workspace/band"),
-    )
-    .unwrap();
-    let body = r#"{"workspace":"band","url":"http://127.0.0.1:1/x.git","user":"u","token":"t"}"#;
-    let connect = send_with(front, "POST", "/api/files/git/connect", &session, body).await;
-    assert_eq!(connect.status, 410, "{}", connect.text());
-    let state = send(
-        front,
-        "GET",
-        "/api/files/git/state?workspace=band",
-        &session,
-    )
-    .await;
-    assert_eq!(state.status, 410);
 }

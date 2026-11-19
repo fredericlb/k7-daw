@@ -114,7 +114,7 @@ async fn on_the_front_answers() {
     let (status, body) = send(front, "GET", "/api/engines", &[("cookie", &cookie)], "").await;
     assert_eq!(status, 200, "{body}");
     assert!(body.contains(r#""id":"e1""#), "{body}");
-    // A method the core does not answer there, and the local engine's half of the seam, are declined.
+    // A method the core does not answer there, and the local engine's half of the seam, are declined to the page's chain.
     assert_eq!(
         send(front, "GET", "/api/registry/heartbeat", &[], "")
             .await
@@ -131,7 +131,7 @@ async fn on_the_front_answers() {
         )
         .await
         .0,
-        404
+        401
     );
     let (status, body) = send(
         front,

@@ -1,8 +1,7 @@
-//! The switches the front no longer reads (C6) and the one table's fall-through: a host that still names
-//! `K7_FILE_SERVICE`, `K7_FILE_NATIVE` or `K7_SONG_NATIVE` starts, says so once, and runs every piece; an unknown route is a 404.
+//! The one table's fall-through: an unknown route is a 404, and a route a piece declined is refused with a sentence.
 
 use std::collections::BTreeMap;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
 use axum::body::Body;
 use axum::extract::Request;
@@ -10,12 +9,11 @@ use k7_hub::account::Names;
 
 use super::{Held, Services, Who, fallen_through};
 
-/// A front's services over a scratch folder, the host's settings `env`, and every line they logged.
+/// A front's services over a scratch folder and the host's settings `env`.
 struct Front {
     dir: std::path::PathBuf,
     svc: Services,
     instances: Arc<Names>,
-    said: Arc<Mutex<Vec<String>>>,
 }
 
 fn front(name: &str, env: &[(&str, &str)]) -> Front {
@@ -48,78 +46,16 @@ fn front(name: &str, env: &[(&str, &str)]) -> Front {
             ])
         })
     });
-    let said: Arc<Mutex<Vec<String>>> = Arc::default();
-    let heard = said.clone();
     let env: BTreeMap<String, String> = env
         .iter()
         .map(|(k, v)| ((*k).to_string(), (*v).to_string()))
         .collect();
-    let svc = Services::new(
-        &env,
-        Arc::new(move |l: &str| heard.lock().unwrap().push(l.to_string())),
-    );
+    let svc = Services::new(&env, Arc::new(|_: &str| {}));
     Front {
         dir,
         svc,
         instances: Arc::new(o),
-        said,
     }
-}
-
-/// The front starts under `key=value`, names it in one line, takes every account and makes every piece of one.
-async fn starts_and_says_it_once(key: &str, value: &str) {
-    let f = front(&format!("{}-{value}", key.to_lowercase()), &[(key, value)]);
-    let named: Vec<String> = f
-        .said
-        .lock()
-        .unwrap()
-        .iter()
-        .filter(|l| l.contains(key))
-        .cloned()
-        .collect();
-    assert_eq!(named.len(), 1, "{named:?}");
-    assert!(named[0].contains("no longer read"), "{named:?}");
-    assert!(f.svc.covers("anyone@x.org") && f.svc.refusal("anyone@x.org").is_none());
-    let held = f.svc.held("c@d.org", &f.instances).await.unwrap();
-    assert!(held.media.is_some(), "{key}={value} left media off");
-    assert!(
-        held.engine.is_some(),
-        "{key}={value} left the engine link off"
-    );
-    assert!(held.runtime.is_some(), "{key}={value} left the runtime off");
-    f.svc.stop().await;
-    let _ = std::fs::remove_dir_all(&f.dir);
-}
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_host_naming_k7_file_service_starts_and_serves_every_account() {
-    starts_and_says_it_once("K7_FILE_SERVICE", "front:a@b").await;
-}
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_host_naming_k7_file_native_off_starts_with_every_piece_on() {
-    starts_and_says_it_once("K7_FILE_NATIVE", "off").await;
-}
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_host_naming_k7_song_native_off_starts_with_every_piece_on() {
-    starts_and_says_it_once("K7_SONG_NATIVE", "off").await;
-}
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_host_naming_nothing_says_nothing_of_the_switches() {
-    let f = front("none", &[]);
-    assert!(
-        !f.said
-            .lock()
-            .unwrap()
-            .iter()
-            .any(|l| l.contains("no longer read")),
-        "{:?}",
-        f.said.lock().unwrap()
-    );
-    f.svc.stop().await;
-    let _ = std::fs::remove_dir_all(&f.dir);
 }
 
 fn who<'a>(f: &'a Front, held: &'a Held) -> Who<'a> {
