@@ -26,7 +26,7 @@ pub struct Config {
 }
 
 /// What the ported routes read of the TypeScript backend's environment, under the same names.
-pub const ENV_KEYS: [&str; 57] = [
+pub const ENV_KEYS: [&str; 56] = [
     "K7_FRONT_TRUSTED_PROXIES",
     "K7_EXTRA_CA_CERTS",
     "SESSION_SECRET",
