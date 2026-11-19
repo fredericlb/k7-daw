@@ -169,7 +169,7 @@ travel to that machine before the run, the stems back before the reply — so ev
 the server's paths.
 
 With no engine bound the job fails at once and says so, rather than cutting on the server: a
-server image carries neither the GPU nor, on Alpine, a build of the runtime.
+server carries neither the GPU nor, on Alpine, a build of the runtime.
 
 ## A thread of its own, and a run that can be told to stop
 

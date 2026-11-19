@@ -106,8 +106,6 @@ const SPLASH_TARGETS = [
 ];
 // The Android launch screen draws the art at the one width; the layer-list is what says so, so it is written here.
 const SPLASH_LAYER = "engine/k7-android/app/src/main/res/drawable/splash.xml";
-// The pages that fetch nothing carry the drawing inline (k7.rocks), minus the namespaces HTML does not need.
-const SPLASH_INLINE = "apps/k7/frontend/icon/k7-splash.inline.json";
 
 /** The Android launch screen's layer-list: the art centred at the one width, its height the drawing's own ratio. */
 function splashLayer() {
@@ -134,13 +132,6 @@ async function renderSplash(browser, width) {
   const png = await tab.locator("svg").screenshot({ omitBackground: true });
   await tab.close();
   return png;
-}
-
-function inlineSplash() {
-  return splashSvg
-    .replace(/\s+xmlns(:\w+)?="[^"]*"/g, "")
-    .replace(/>\s+</g, "><")
-    .trim();
 }
 
 function page(size, shape, width) {
@@ -203,11 +194,6 @@ try {
     writeFileSync(join(repo, out), await renderSplash(browser, width));
     console.log(out);
   }
-  writeFileSync(
-    join(repo, SPLASH_INLINE),
-    `${JSON.stringify({ svg: inlineSplash() }, null, 2)}\n`,
-  );
-  console.log(SPLASH_INLINE);
   writeFileSync(join(repo, SPLASH_LAYER), splashLayer());
   console.log(SPLASH_LAYER);
 } finally {

@@ -82,7 +82,7 @@ debug = "line-tables-only"
 [profile.dev.package."*"]
 opt-level = 2
 
-# Thin LTO over 16 units: a cold build at fat LTO and one unit takes more than twice as long (docs/images.md).
+# Thin LTO over 16 units: a cold build at fat LTO and one unit takes more than twice as long.
 [profile.release]
 lto = "thin"
 strip = true

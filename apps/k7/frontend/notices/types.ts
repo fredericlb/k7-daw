@@ -1,8 +1,8 @@
 // types.ts — the shape of the third-party notices the About page draws (../docs/about.md).
 // A licence TEXT is stored once and named by key: thousands of MIT files differ only by a copyright line.
 
-/** Where a component ships: the browser app, k7's server image, the engine binaries, the tray on a computer, the phone. */
-export type Where = "web" | "server" | "engine" | "desktop" | "android";
+/** Where a component ships: the browser app, the engine binaries, the tray on a computer, the phone. */
+export type Where = "web" | "engine" | "desktop" | "android";
 
 export interface NoticeEntry {
   name: string;

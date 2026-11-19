@@ -1,16 +1,11 @@
-// main.tsx — one branch, taken before anything heavy is imported: the documentation host and the editor share this
-// origin and almost nothing else, and a static import of the editor would make the docs load the whole of k7.
+// main.tsx — the editor's entry: the documentation site has its own (docs.html), so nothing here is shared with it.
 
-import { isDocsHost } from "@studio/web-protocol/services";
 import { reloadForChunk, reloadOnChunkError } from "./chunkReload";
 
 reloadOnChunkError();
 
-// Dynamic on both arms, since a static import is hoisted; a failure past the one reload is said in the page itself.
-const boot = isDocsHost(window.location.hostname)
-  ? import("./docs/mountSite")
-  : import("./appMain");
-boot.catch((e: unknown) => {
+// Dynamic, so a failure past the one reload is said in the page itself.
+import("./appMain").catch((e: unknown) => {
   if (reloadForChunk()) return;
   const root = document.getElementById("root");
   if (root)

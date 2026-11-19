@@ -1,7 +1,6 @@
 //! routes — the families ported to Rust, each answering exactly what its TypeScript route answered.
 
 pub mod ai;
-pub mod app_releases;
 pub mod auth;
 pub mod cameras;
 pub mod engine;
@@ -12,5 +11,3 @@ mod http_file;
 pub mod last;
 pub mod local;
 pub mod prefs;
-mod release_page;
-mod release_store;

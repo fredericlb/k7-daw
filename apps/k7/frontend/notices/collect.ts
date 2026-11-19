@@ -10,8 +10,6 @@ import type { NoticeEntry, Notices, Where } from "./types.ts";
 /** The shipped apps, as workspace folders whose `dependencies` reach a user, and where each ships. */
 const NPM_ROOTS: { dir: string; where: Where }[] = [
   { dir: "apps/k7/frontend", where: "web" },
-  // The server image ships the built page, and the tray ships it to a computer (apps/k7-tray/scripts/stage.mjs).
-  { dir: "apps/k7/frontend", where: "server" },
   { dir: "apps/k7/frontend", where: "desktop" },
   { dir: "engine/k7-android/web", where: "android" },
   // Bundled into the engine binary as strudel.bundle.js (engine/k7-runtime/docs/patternPlugin.md).
@@ -38,10 +36,8 @@ interface Component {
   /** What vendor.ts copies into `text` from an engine build's `_deps` or the tree. */
   vendor?: string[];
   note?: string;
-  /** The FetchContent names, apk and apt packages it accounts for: the test's anti-rot keys. */
+  /** The FetchContent names it accounts for: the test's anti-rot keys. */
   fetchContent?: string[];
-  apk?: string[];
-  apt?: string[];
   /** The file its pinned version is written in: the test checks the version is still there. */
   source?: string;
 }

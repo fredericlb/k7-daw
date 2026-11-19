@@ -3,18 +3,16 @@ import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import { studioParaglide } from "@studio/i18n/vite";
 import { defineAppConfig } from "@studio/vite-config";
 import type { ConfigEnv } from "vite";
-import { DOCS_DEV_HOST } from "../../../scripts/dev-hosts.mjs";
 import { scaled } from "../../../scripts/vitestScale.ts";
 import { noticesPlugin } from "./notices/vitePlugin.ts";
 import { entryPreloadPlugin } from "./preload/vitePlugin.ts";
 import { verbsWorkerPlugin } from "./verbs/vitePlugin.ts";
 
-/** The paths on this origin that are NOT k7's shell: the worker's scope is `/`, so only this list keeps a navigation to `/api` or `/app_downloads` off it. */
-const OTHER_APPS = /^\/(api|auth|app_downloads)(\/|$)/;
+/** The paths on this origin that are NOT k7's shell: the worker's scope is `/`, so only this list keeps a navigation to `/api` off it. */
+const OTHER_APPS = /^\/(api|auth)(\/|$)/;
 
-/** Heavy build files few sessions open, left out of the precache (packages/vite-config/docs/pwa.md): the docs site (its own host), the About page's notices, the Cyrillic subsets. */
+/** Heavy build files few sessions open, left out of the precache (packages/vite-config/docs/pwa.md): the About page's notices, the Cyrillic subsets. */
 const RARELY_USED = [
-  "assets/mountSite-*.js",
   "assets/_virtual_k7-notices-*.js",
   "assets/*-cyrillic*",
   // The verbs' Worker, 3.3 MB gzipped: fetched on first use and kept by the HTTP cache, its names being hashes.
@@ -48,8 +46,8 @@ export default ({ command }: ConfigEnv) => {
     // Dedicated port, and it has to stay unique: `strictPort` makes a clash a hard failure, and this was 5203, which frediprofile owns.
     port,
     backendPort,
-    // `/auth` (the local user's session), and the apps' downloads, beside `/api`.
-    proxyPaths: ["/auth", "/app_downloads"],
+    // `/auth` (the local user's session), beside `/api`.
+    proxyPaths: ["/auth"],
     // The engine relay, live sync's relay and the remote cameras' signalling: only a declared wsPath gets `ws: true` (apps/k7/backend-rs/docs/engine/proxy.md).
     wsPaths: ["/api/engine", "/api/sync", "/api/cameras"],
     // No `base`: k7 is the front door, so its assets and routes sit at `/`. Polling only when asked for (`$STUDIO_POLL`), for a tree native file events cannot see.
@@ -79,9 +77,7 @@ export default ({ command }: ConfigEnv) => {
         // The verbs' Worker, built from packages/commands' own bundle — docs/verbs.md.
         verbsWorkerPlugin(),
       ],
-      // The docs host still reaches this server — see scripts/dev-hosts.mjs.
       server: {
-        allowedHosts: [DOCS_DEV_HOST],
         // HMR by Vite's own port, so a page this Vite serves through another origin — the dev tray's 18789 — reaches it too (docs/dev.md).
         ws: { host: "127.0.0.1", protocol: "ws", clientPort: port },
       },

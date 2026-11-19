@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  /** Build stamp "YY.MMDDHHmm", set by the Dockerfile. Unset outside the image. */
+  /** Build stamp "YY.MMDDHHmm", set by the build. Unset in a dev run. */
   readonly VITE_APP_VERSION?: string;
 }
 

@@ -22,7 +22,6 @@
     "where.exe"
   ],
   "ignore": [
-    "scripts/dev-hosts.d.mts",
     "packages/*/scripts/rustSources.d.mts"
   ],
   "workspaces": {

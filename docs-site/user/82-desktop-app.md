@@ -8,7 +8,7 @@ For what the engine and supervisor are, see [Engines](./80-engines.md).
 
 ## Install
 
-Download the file for your computer from `https://k7.rocks/app_downloads`:
+Download the file for your computer from the [release page](https://github.com/fredericlb/k7-daw/releases) of k7 on GitHub:
 
 | Platform | File |
 |---|---|
@@ -34,14 +34,12 @@ Click the icon to open its menu:
 | **Engine Settings…** | Opens the engine's settings page in the window (see [The engine page](#the-engine-page)). |
 | **Restart K7 DAW** | Stops k7 and the engine and starts them again. |
 | **Launch at Login** | Starts K7 DAW, hidden in the tray, when you log in to your computer. |
-| **Check for Updates…** | Looks for a newer version now. |
-| **Check for Updates Automatically** | Lets K7 DAW look for a newer version by itself. |
 | **Show Logs** | Opens the log of k7 and its engine. |
 | **Quit K7 DAW** | Stops the engine and k7, then quits. |
 
 The icon itself shows the same state at a glance: running, stopped, starting (it turns), or a problem.
 
-On a Mac, the menu bar of K7 DAW also holds Engine Settings…, Check for Updates…, Reload, Show Logs and the usual Edit, Window and Help menus.
+On a Mac, the menu bar of K7 DAW also holds Engine Settings…, Reload, Show Logs and the usual Edit, Window and Help menus.
 
 ## The window
 
@@ -101,12 +99,7 @@ How many plugins the engine found on this computer, and the list with each plugi
 
 ## Updates
 
-K7 DAW looks for a newer version on `k7.rocks` a few seconds after it starts and every six hours, when **Check for Updates Automatically** is on, and whenever you choose **Check for Updates…**. It tells you about a new version once.
-
-- On Windows, on a Mac and with the AppImage, click **Install and Restart**: K7 DAW stops k7 and the engine, installs the update and starts again.
-- With the `.deb`, K7 DAW tells you a new version is out and **Download** opens the download page; install it as you installed the first one.
-
-A build from a release follows releases; a snapshot build follows the latest snapshot.
+K7 DAW does not update itself. When a newer version is out, download its file from the release page and install it the way you installed the first one: it replaces the old one, and your workspaces stay where they are.
 
 ## Ports, and running beside other k7 pieces
 

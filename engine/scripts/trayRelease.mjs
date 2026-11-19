@@ -1,49 +1,20 @@
-// trayRelease.mjs — K7 DAW's release files from what `tauri build` left in apps/k7-tray/src-tauri/target, named for
-// a stamp like every other file of a release, plus one fragment of the updater's latest.json per platform, which
-// tray-manifest.mjs merges in the publish job. The feed stays at `tray/<channel>/latest.json`: installed apps poll it.
-// See docs/app-downloads.md.
+// trayRelease.mjs — K7 DAW's installers from what `tauri build` left in apps/k7-tray/src-tauri/target, copied into
+// the release folder under a name made of the stamp, like every other file of a release (docs/release.md).
 
-import {
-  copyFileSync,
-  existsSync,
-  readdirSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
+import { copyFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { channelOf, DOWNLOADS } from "./releaseStamp.mjs";
 
-/** Tauri's bundle folders, what each installer becomes, and the updater platform it serves, if any. */
+/** Tauri's bundle folders, and what each installer becomes. */
 const KINDS = [
-  {
-    dir: "nsis",
-    match: /-setup\.exe$/,
-    ext: ".exe",
-    updater: "windows-x86_64",
-  },
-  {
-    dir: "appimage",
-    match: /\.AppImage$/,
-    ext: ".AppImage",
-    updater: "linux-x86_64",
-  },
+  { dir: "nsis", match: /-setup\.exe$/, ext: ".exe" },
+  { dir: "appimage", match: /\.AppImage$/, ext: ".AppImage" },
   { dir: "deb", match: /\.deb$/, ext: ".deb" },
-  // The macOS download is the .dmg; the updater takes the .app.tar.gz, which only the feed names.
   { dir: "dmg", match: /\.dmg$/, ext: ".dmg" },
-  {
-    dir: "macos",
-    match: /\.app\.tar\.gz$/,
-    ext: ".app.tar.gz",
-    updater: "darwin-aarch64",
-  },
 ];
 
-/** Copy the installers into `release`, renamed; returns the updater fragment, or null when the build was not signed. */
+/** Copy the installers into `release`, renamed for the stamp. */
 export function packageTray({ bundle, release, stamp, platform, arch }) {
   const name = (ext) => `k7-daw_${stamp}_${platform}-${arch}${ext}`;
-  // An unstamped build's fragment is never published, so its URLs name `snapshot` rather than no channel.
-  const channel = channelOf(stamp) ?? "snapshot";
-  const fragment = {};
   let found = 0;
   for (const k of KINDS) {
     const dir = join(bundle, k.dir);
@@ -52,28 +23,10 @@ export function packageTray({ bundle, release, stamp, platform, arch }) {
       copyFileSync(join(dir, f), join(release, name(k.ext)));
       console.log(`✔ ${join(release, name(k.ext))}`);
       found++;
-      const sig = join(dir, `${f}.sig`);
-      if (!k.updater || !existsSync(sig)) continue;
-      fragment[k.updater] = {
-        signature: readFileSync(sig, "utf8").trim(),
-        url: `${DOWNLOADS}/tray/${channel}/${name(k.ext)}`,
-      };
     }
   }
   if (!found)
     throw new Error(
       `no installer under ${bundle} — run \`npm run tray:build --workspace k7-tray\` first`,
     );
-  if (!Object.keys(fragment).length) {
-    // A stamped build is a published one: without its signatures the installed apps would never hear of it.
-    if (channelOf(stamp))
-      throw new Error(
-        `${stamp} has no updater signatures: build it with K7_UPDATER_PUBKEY and TAURI_SIGNING_PRIVATE_KEY set`,
-      );
-    return null;
-  }
-  const at = join(release, `k7-daw-updater_${platform}-${arch}.json`);
-  writeFileSync(at, `${JSON.stringify(fragment, null, 2)}\n`);
-  console.log(`✔ ${at}`);
-  return fragment;
 }

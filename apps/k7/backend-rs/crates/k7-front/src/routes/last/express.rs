@@ -1,18 +1,13 @@
-//! express.rs — the answers Express 4 writes itself, to the byte: finalhandler's 404 page, `res.redirect`'s
-//! negotiated body, `encodeurl`, `escape-html`, the `etag` of a body sent whole, and `fresh`'s conditional GET.
+//! express.rs — the answers Express 4 writes itself, to the byte: finalhandler's 404 page, `encodeurl`, `escape-html`, and `fresh`'s conditional GET.
 //! What a reader gets wrong: the 404 names the path only, never its query, encoded and then escaped.
 
 use axum::body::Body;
-use axum::extract::Request;
 use axum::response::Response;
-use base64::Engine;
-use base64::engine::general_purpose::STANDARD;
 use hyper::header::{
     CACHE_CONTROL, CONTENT_LENGTH, CONTENT_TYPE, HeaderValue, IF_MODIFIED_SINCE, IF_NONE_MATCH,
-    LOCATION, VARY,
+    VARY,
 };
 use hyper::{HeaderMap, Method, StatusCode};
-use sha1::{Digest, Sha1};
 
 /// `escape-html`: the five characters HTML gives a meaning.
 pub fn escape_html(s: &str) -> String {
@@ -86,113 +81,6 @@ pub fn not_found(method: &Method, path: &str, vary: bool) -> Response {
     builder.body(body).unwrap_or_default()
 }
 
-/// One `Accept` entry: its type, subtype and weight, in the order the client wrote it.
-struct Accepted {
-    kind: String,
-    sub: String,
-    q: f64,
-}
-
-fn accepted(header: &str) -> Vec<Accepted> {
-    header
-        .split(',')
-        .filter_map(|part| {
-            let mut params = part.split(';');
-            let (kind, sub) = params.next()?.trim().split_once('/')?;
-            let q = params
-                .filter_map(|p| p.trim().strip_prefix("q="))
-                .next()
-                .map_or(Some(1.0), |q| q.trim().parse::<f64>().ok())?;
-            Some(Accepted {
-                kind: kind.trim().to_ascii_lowercase(),
-                sub: sub.trim().to_ascii_lowercase(),
-                q,
-            })
-        })
-        .collect()
-}
-
-/// `req.accepts(["text", "html"])` as negotiator ranks them: weight, then how exactly the entry matched, then order.
-fn negotiate(headers: &HeaderMap) -> Option<&'static str> {
-    let Some(header) = headers
-        .get(hyper::header::ACCEPT)
-        .and_then(|v| v.to_str().ok())
-    else {
-        return Some("text/plain");
-    };
-    let entries = accepted(header);
-    let rank = |kind: &str, sub: &str| {
-        entries
-            .iter()
-            .enumerate()
-            .filter_map(|(o, e)| {
-                let s = match (e.kind == kind, e.sub == sub) {
-                    (true, true) => 6,
-                    (true, false) if e.sub == "*" => 4,
-                    (false, _) if e.kind == "*" && e.sub == "*" => 0,
-                    _ => return None,
-                };
-                Some((s, e.q, o))
-            })
-            .max_by(|a, b| a.0.cmp(&b.0).then(a.1.total_cmp(&b.1)).then(a.2.cmp(&b.2)))
-    };
-    let mut best: Option<(&'static str, f64, i32, usize, usize)> = None;
-    for (i, (t, kind, sub)) in [
-        ("text/plain", "text", "plain"),
-        ("text/html", "text", "html"),
-    ]
-    .into_iter()
-    .enumerate()
-    {
-        let Some((s, q, o)) = rank(kind, sub).filter(|r| r.1 > 0.0) else {
-            continue;
-        };
-        let better = best
-            .is_none_or(|(_, bq, bs, bo, _)| q > bq || q == bq && (s > bs || s == bs && o < bo));
-        if better {
-            best = Some((t, q, s, o, i));
-        }
-    }
-    best.map(|b| b.0)
-}
-
-/// `res.redirect(status, url)`: the address encoded, and a body in the type the client takes.
-pub fn redirect(req: &Request, status: StatusCode, url: &str) -> Response {
-    let address = encode_url(url);
-    let message = status.canonical_reason().unwrap_or("");
-    let mut builder = Response::builder()
-        .status(status)
-        .header(
-            LOCATION,
-            HeaderValue::from_str(&address).unwrap_or(HeaderValue::from_static("/")),
-        )
-        .header(VARY, "Accept");
-    let body = match negotiate(req.headers()) {
-        Some("text/html") => {
-            builder = builder.header(CONTENT_TYPE, "text/html; charset=utf-8");
-            format!("<p>{message}. Redirecting to {}</p>", escape_html(&address))
-        }
-        Some(_) => {
-            builder = builder.header(CONTENT_TYPE, "text/plain; charset=utf-8");
-            format!("{message}. Redirecting to {address}")
-        }
-        None => String::new(),
-    };
-    builder = builder.header(CONTENT_LENGTH, body.len());
-    let body = if req.method() == Method::HEAD {
-        Body::empty()
-    } else {
-        Body::from(body)
-    };
-    builder.body(body).unwrap_or_default()
-}
-
-/// The `etag` package's weak tag of a body sent whole: its length and a SHA-1, in base64 cut to 27 characters.
-pub fn body_etag(body: &[u8]) -> String {
-    let hash = STANDARD.encode(Sha1::digest(body));
-    format!("W/\"{:x}-{}\"", body.len(), &hash[..27])
-}
-
 /// `If-None-Match` and `If-Modified-Since` read as the `fresh` package reads them; a `no-cache` request is never fresh.
 pub fn fresh(headers: &HeaderMap, etag: Option<&str>, last_modified: Option<&str>) -> bool {
     let get = |n| {
@@ -245,14 +133,6 @@ pub fn tokens(list: &str) -> impl Iterator<Item = &str> {
 mod tests {
     use super::*;
 
-    fn req(accept: Option<&str>) -> Request {
-        let mut b = Request::builder().uri("/x");
-        if let Some(a) = accept {
-            b = b.header(hyper::header::ACCEPT, a);
-        }
-        b.body(Body::empty()).unwrap()
-    }
-
     #[test]
     fn urls_are_encoded_as_encodeurl_encodes_them() {
         assert_eq!(encode_url("/a b"), "/a%20b");
@@ -266,29 +146,6 @@ mod tests {
         assert_eq!(
             not_found_page(&Method::GET, "/a<b"),
             "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /a%3Cb</pre>\n</body>\n</html>\n"
-        );
-    }
-
-    #[test]
-    fn a_redirect_speaks_the_type_asked() {
-        assert_eq!(negotiate(req(None).headers()), Some("text/plain"));
-        assert_eq!(negotiate(req(Some("*/*")).headers()), Some("text/plain"));
-        assert_eq!(
-            negotiate(req(Some("text/html,application/xhtml+xml,*/*;q=0.8")).headers()),
-            Some("text/html")
-        );
-        assert_eq!(negotiate(req(Some("application/json")).headers()), None);
-        assert_eq!(
-            negotiate(req(Some("text/*;q=0.5, text/html")).headers()),
-            Some("text/html")
-        );
-    }
-
-    #[test]
-    fn a_body_tag_is_the_etag_packages() {
-        assert_eq!(
-            body_etag(b"{\"error\":\"unauthenticated\"}"),
-            "W/\"1b-RCkDNv1wa3UitMAdSM+QgID7d6A\""
         );
     }
 }

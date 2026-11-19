@@ -9,7 +9,7 @@ commands in this page, when one is needed. Four **npm packages** are published b
 |---|---|---|
 | `k7-runtime_<stamp>_<platform>-<arch>.tar.gz` (`.zip` on Windows) | `engine/scripts/build-engine.mjs` + `engine/scripts/package-release.mjs --kind engine` | `windows-x64`, `macos-arm64`, `linux-x64` |
 | `k7-android_<stamp>_arm64.apk` | `./gradlew assembleRelease` in `engine/k7-android` | Android arm64 |
-| `k7-daw_<stamp>_<platform>-<arch>.<exe/AppImage/deb/dmg>` (K7 DAW), and the updater's `latest.json` | `npm run build --workspace k7-tray` + `package-release.mjs --kind tray` | `windows-x64`, `linux-x64`, `macos-arm64` |
+| `k7-daw_<stamp>_<platform>-<arch>.<exe/AppImage/deb/dmg>` (K7 DAW) | `npm run build --workspace k7-tray` + `package-release.mjs --kind tray` | `windows-x64`, `linux-x64`, `macos-arm64` |
 | the Mac and iPhone app | Xcode, after `engine/k7-ios/scripts/stage.mjs` | macOS (Designed for iPad), iOS |
 
 ### The stamp
@@ -25,9 +25,8 @@ node scripts/check-version.mjs --set 1.2.0
 ```
 
 The APK is signed with the release key, since Android refuses to update an app signed by a different
-key. Every K7 DAW update is signed with the updater key (`TAURI_SIGNING_PRIVATE_KEY`, its public half in
-`K7_UPDATER_PUBKEY`), and a build without it ships with no updater rather than one that trusts anything.
-Uploading to `k7.rocks/app_downloads` is described in `docs/app-downloads.md`.
+key. The files of a desktop build are attached by hand to a release of the GitHub repository, which is where the site's
+front page sends people; the phone apps go through the stores.
 
 ## The command-line engine
 
@@ -60,13 +59,11 @@ Environment variables the build reads:
 `apps/k7-tray/src-tauri/resources/`: the page and the `k7-core` library bundled by
 `apps/k7/backend-rs/scripts/stageBundle.mjs` (the same bundle the phone runs), the front's code root, and the engine binaries via `stageEngine`; on a Mac, `stage` also signs every binary of the resources (`apps/k7-tray/docs/macos.md`).
 `npm run build --workspace k7-tray` then runs `tauri build`: an NSIS installer on Windows,
-a `dmg` and the updater's `.app.tar.gz` on macOS, an AppImage and a `.deb` on Linux; a build without the updater
-key writes no update archives, and `package-release.mjs --kind tray` refuses a stamped build without them (`K7_UPDATER_PUBKEY` with `TAURI_SIGNING_PRIVATE_KEY` makes `tray:build` sign).
+a `dmg` on macOS, an AppImage and a `.deb` on Linux.
 
 `stageEngine` takes the binaries from `$STUDIO_PREBUILT_BIN` when it is set, instead of from the
 local build folders, to package the tray around an engine archive without compiling anything. `package-release.mjs --kind tray` copies each installer
-to `dist/release/` under its release name and writes that platform's fragment of the updater's
-`latest.json`, which `engine/scripts/tray-manifest.mjs` merges.
+to `dist/release/` under its release name.
 
 [K7 DAW and the phone apps](./86-desktop-and-android.md) covers the apps themselves.
 

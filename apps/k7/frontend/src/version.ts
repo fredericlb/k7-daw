@@ -1,4 +1,4 @@
-// Build stamp baked in by the Dockerfile; "dev" anywhere it wasn't set — ../../../../docs/versioning.md.
+// Build stamp baked in by the build; "dev" anywhere it wasn't set — ../../../../docs/versioning.md.
 import { version } from "../package.json";
 
 const STAMP = import.meta.env.VITE_APP_VERSION ?? "dev";

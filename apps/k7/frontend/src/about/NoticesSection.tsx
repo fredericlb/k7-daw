@@ -14,7 +14,6 @@ import { countByWhere, filterNotices, WHERES } from "./noticeFilter";
 
 const WHERE_LABELS: Record<Where, () => string> = {
   web: () => m["about.where.web"](),
-  server: () => m["about.where.server"](),
   engine: () => m["about.where.engine"](),
   desktop: () => m["about.where.desktop"](),
   android: () => m["about.where.android"](),

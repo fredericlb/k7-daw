@@ -99,10 +99,8 @@ heartbeats the right place. The answer is a **list**, one per studio this engine
 tunnel secret, and the tunnel's handshake carries them again, so a registry on `http://` past
 loopback would hand both to anyone on the path. `url::plaintextRefusal` is asked where they leave:
 `resolve` drops such a registry with a log line, `probe` refuses to add one, every POST checks
-again, and the tunnel agent does not dial it. A network where plain http is the deliberate choice —
-the compose network the server's own engine reaches k7 on, `http://k7:8789` — names the host in
-`$STUDIO_INSECURE_REGISTRIES` (comma-separated hostnames or `host:port`s), and
-`docker/docker-compose.yml` sets it to `k7` for that container alone.
+again, and the tunnel agent does not dial it. A network where plain http is the deliberate choice names the host in
+`$STUDIO_INSECURE_REGISTRIES` (comma-separated hostnames or `host:port`s).
 
 The heartbeat is **all-or-nothing**: an app shows one light, so "ok" has to mean every studio
 can offer this engine. A registry that is down is simply absent from that studio's picker, which

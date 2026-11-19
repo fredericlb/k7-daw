@@ -3,7 +3,7 @@
 
 import { Marked, type Tokens } from "marked";
 import { useMemo } from "react";
-import { resolveLink } from "./pages";
+import { hrefOf, resolveLink } from "./pages";
 
 /** GitHub's heading anchor, which is what the pages' `#…` links were written against. */
 export function slugify(html: string): string {
@@ -37,7 +37,10 @@ function render(file: string, body: string): string {
   marked.walkTokens(tokens, (t) => {
     if (t.type !== "link") return;
     const route = resolveLink(file, (t as Tokens.Link).href);
-    if (route) (t as Tokens.Link).href = route;
+    if (route) {
+      const [path, hash] = route.split("#");
+      (t as Tokens.Link).href = hrefOf(path) + (hash ? `#${hash}` : "");
+    }
   });
   return marked.parser(tokens);
 }

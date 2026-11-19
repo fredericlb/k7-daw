@@ -1,7 +1,7 @@
-// BootGuard.kt — a build that crashes in its first seconds must still reach the update that fixes it. Each start of
+// BootGuard.kt — a build that crashes in its first seconds must still reach the person. Each start of
 // the engine counts one more quick start, on disk at once; a run that lives HEALTHY_MS, or a quit, sets the count back
 // to zero. After MAX_QUICK_STARTS in a row the engine, where a native crash most likely comes from, is left off for
-// that run, and the person is offered the update or the engine anyway. See docs/android.md.
+// that run, and the person is offered the engine anyway. See docs/android.md.
 
 package se.frediver.k7
 
@@ -48,16 +48,15 @@ object BootGuard {
         prefs(context).edit().putInt(KEY, 0).commit()
     }
 
-    /** The run without its engine, said: the update, which may fix it, or the engine anyway. */
+    /** The run without its engine, said, with the engine on offer anyway. */
     fun offer(activity: MainActivity) {
         // Once per process: an activity made again does not ask twice.
         if (offered) return
         offered = true
         AlertDialog.Builder(activity)
             .setTitle("k7")
-            .setMessage("k7 stopped right after starting $MAX_QUICK_STARTS times in a row, so its engine is off this time. An update may fix it.")
-            .setPositiveButton("Check for updates") { _, _ -> Updates.checkNow(activity) }
-            .setNeutralButton("Start the engine") { _, _ ->
+            .setMessage("k7 stopped right after starting $MAX_QUICK_STARTS times in a row, so its engine is off this time.")
+            .setPositiveButton("Start the engine") { _, _ ->
                 starting(activity)
                 SupervisorHost.start(activity)
             }

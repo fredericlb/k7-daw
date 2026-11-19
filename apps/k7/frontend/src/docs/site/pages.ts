@@ -1,4 +1,4 @@
-// pages.ts — the docs host's pages: docs-site/ at the repo root, bundled at build time and addressed by path.
+// pages.ts — the documentation's pages: docs-site/ at the repo root, bundled at build time and addressed by path.
 // A page's route is its file without `.md` (`user/05-projects.md` → `/user/05-projects`), and an index is
 // its folder (`user/00-index.md` → `/user`). Pages keep linking each other with relative `.md` links, so
 // they read the same on GitHub; `resolveLink` is what turns those into routes (../../../docs/docsSite.md).
@@ -55,8 +55,24 @@ export const SITE_PAGES: SitePage[] = Object.entries(FILES)
 const BY_FILE = new Map(SITE_PAGES.map((p) => [p.file, p]));
 const BY_ROUTE = new Map(SITE_PAGES.map((p) => [p.route, p]));
 
+/** Where the site is served under, without its trailing slash: "" at the root, "/docs" on k7.rocks. */
+export const BASE = import.meta.env.BASE_URL.replace(/\/+$/, "");
+
+/** A route as an address: under the site's base. */
+export const hrefOf = (route: string): string =>
+  route === "/" ? `${BASE}/` : `${BASE}${route}`;
+
+/** An address's path as a route: the base taken off. */
+export function routeOfPath(pathname: string): string {
+  const path = pathname.startsWith(BASE)
+    ? pathname.slice(BASE.length)
+    : pathname;
+  return path === "" ? "/" : path;
+}
+
 export function findPage(pathname: string): SitePage | undefined {
-  const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  const route = routeOfPath(pathname);
+  const path = route.length > 1 ? route.replace(/\/+$/, "") : route;
   return BY_ROUTE.get(decodeURI(path));
 }
 

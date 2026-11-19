@@ -1,6 +1,5 @@
 fn main() {
-    // The release stamp (`vX.Y.Z` or `snapshot-<commit>`) names this build and picks its update channel; a
-    // build nobody stamped is `dev`, which never asks for updates (docs/tray.md).
+    // The release stamp (`vX.Y.Z` or `snapshot-<commit>`) names this build; a build nobody stamped is `dev`.
     println!("cargo:rerun-if-env-changed=STUDIO_RELEASE_STAMP");
     let given = std::env::var("STUDIO_RELEASE_STAMP").unwrap_or_default();
     let stamp = if is_stamp(&given) {
@@ -9,12 +8,6 @@ fn main() {
         "dev".to_string()
     };
     println!("cargo:rustc-env=K7_RELEASE={stamp}");
-    // The updater's public key, from CI: without it the build has no updater, rather than one that trusts nothing.
-    println!("cargo:rerun-if-env-changed=K7_UPDATER_PUBKEY");
-    println!(
-        "cargo:rustc-env=K7_UPDATER_PUBKEY={}",
-        std::env::var("K7_UPDATER_PUBKEY").unwrap_or_default()
-    );
     // Where the trayicon dump test writes its previews (test-only; see its comment).
     println!(
         "cargo:rustc-env=STUDIO_ICON_DUMP_DIR={}",

@@ -273,28 +273,14 @@ The engine opens its inputs once, with its device, and a stopped engine cannot b
 process (below). So a grant that comes after the engine started reaches it at the **next start**: the app says so,
 and offers Restart k7 when nothing is busy (below, "Restarting k7").
 
-## Updates come from k7.rocks, and the person installs them
+## Updates come from the store
 
-A sideloaded app has no store to update it, so `Updates.kt` asks `k7.rocks/app_downloads/<channel>.json` at
-every start, before the engine starts, and every 6 hours while the process lives, and fetches a newer build's APK
-([docs/app-downloads.md](../../../docs/app-downloads.md) at the root). The channel and the stamp
-compared are `BuildConfig.RELEASE_STAMP`, which only a CI release build carries; a checkout's build
-and the e2e one check nothing.
+The app does not update itself: the store that installed it does, and nothing in the app asks a server for a newer build.
 
 | choice | why |
 |---|---|
-| downloaded on an unmetered network only, unless the person asked | the APK is hundreds of megabytes; on mobile data an automatic check waits for the next one on Wi-Fi |
-| Check for updates in the home page's account menu, beside Settings | k7's page calls `checkUpdates` (StudioBridge): a check now, on any network, answered by toasts and the install dialog |
-| offered, never installed on its own | an install ends the process, the engine and the backend with it; the person taps Install, in the notification or the dialog the app shows when it is in front and idle |
-| refused while `Busy` says the app is at work | a take or a set must not end because a tap landed on the wrong notification |
-| an APK that is not this package at a higher `versionCode` is dropped | Android would refuse it anyway; the person is never offered an install that cannot happen |
-| `PackageInstaller` with `USER_ACTION_NOT_REQUIRED` | the first update still asks, and for "install unknown apps": the browser installed k7. From then on k7 is its own installer of record, and Android 12+ lets its updates through without a prompt |
-| the notification opens `MainActivity`, never a receiver | Android 12+ refuses an activity started from a notification's broadcast, and the system's confirmation is one |
-| the first check before the engine starts, at once | a build whose engine crashes in its first seconds would otherwise never ask |
-| three quick starts in a row — none lived 30 s nor ended in a quit — leave the engine off the next run, which offers Check for updates or Start the engine (`BootGuard.kt`) | a native crash at boot kills the process before any check finishes; the engine is where one most likely comes from, and the backend and the page still run without it. The count is written before the engine starts, so the crash cannot lose it, and the run without the engine sets it back to zero, so the one after tries again |
-
-Android checks the update's signature against the installed app's: an APK not signed with the
-release key never installs, whoever uploaded it.
+| no update check, no `PackageInstaller`, no install permission | the store replaces the app with a signed build; an app that could replace itself would be a second way to ship code, with a second set of guards |
+| three quick starts in a row — none lived 30 s nor ended in a quit — leave the engine off the next run, which offers Start the engine (`BootGuard.kt`) | a native crash at boot kills the process before the person can act; the engine is where one most likely comes from, and the backend and the page still run without it. The count is written before the engine starts, so the crash cannot lose it, and the run without the engine sets it back to zero, so the one after tries again |
 
 ## Restarting k7, and opening it again during a quit
 
@@ -561,8 +547,6 @@ libgit2 and zlib are compiled into `libk7_embed.so` by the NDK's clang (`buildFr
   the notification on Android 12 and 13+, and a headset's buttons are each still to check.
 - **The app views have not been driven on a phone yet.** The routing rules, the home page's account
   control, the status-bar colour and k7's engine section above are the design; each needs checking.
-- **Updates have not been driven on a phone yet**: the first install's "unknown apps" prompt, the silent
-  path on Android 12+ once k7 is its own installer, and Busy's refusal each need a phone and two published builds.
 - **Downloads, Back and the start screen are compiled, not driven.** The in-page fetch of a revoked
   blob, a file of hundreds of megabytes through the chunks, Back closing a Radix sheet, the
   landscape insets and a failed start's Retry each need a phone.

@@ -43,7 +43,7 @@ refusing an address it cannot read.
 Hence `pwaDenylist`, which only the root app passes. In studio that is k7, which serves the origin's root and lists the paths that are not its shell:
 
 ```ts
-pwaDenylist: [/^\/(api|auth|app_downloads)(\/|$)/],
+pwaDenylist: [/^\/(api|auth)(\/|$)/],
 ```
 
 This is the table a browser enforces — **check it first** if a path beside the app ever serves its shell.

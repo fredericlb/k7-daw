@@ -14,7 +14,6 @@ import {
   LibraryBig,
   ListChecks,
   type LucideIcon,
-  RefreshCw,
   Snowflake,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
@@ -23,7 +22,6 @@ import { type RefObject, useLayoutEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import k7Logo from "../../icon/k7.svg";
 import { go } from "../appNav";
-import { canCheckForUpdates, checkForUpdates } from "../appUpdates";
 import { DownloadsButton } from "../components/DownloadsButton";
 import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
@@ -177,7 +175,7 @@ export function HomeSidebar({
       onSettings={() => navigate(SETTINGS_ROUTE)}
       settingsLabel={m["home.settings"]()}
       label={m["home.account"]()}
-      // Beside Settings: the engines, the server's admin page to its admins, updates in an app that updates itself, About (../../docs/settings.md).
+      // Beside Settings: the engines, the server's admin page to its admins, About (../../docs/settings.md).
       items={[
         {
           id: "engine",
@@ -185,16 +183,6 @@ export function HomeSidebar({
           icon: AudioLines,
           onSelect: () => navigate(ENGINE_SETTINGS_ROUTE),
         },
-        ...(canCheckForUpdates()
-          ? [
-              {
-                id: "updates",
-                label: m["home.checkUpdates"](),
-                icon: RefreshCw,
-                onSelect: checkForUpdates,
-              },
-            ]
-          : []),
         {
           id: "about",
           label: m["home.about"](),

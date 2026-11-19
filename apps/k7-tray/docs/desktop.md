@@ -32,7 +32,7 @@ folders: it is a second app on purpose, for a test of its own.
 
 ## The menu bar
 
-macOS has one (`src/appmenu.rs`): K7 DAW (About, Engine Settings, Updates, Hide, Quit), Edit, View (Reload,
+macOS has one (`src/appmenu.rs`): K7 DAW (About, Engine Settings, Hide, Quit), Edit, View (Reload,
 Full Screen), Window, Help. Windows and Linux have none: the tray menu and the page carry everything.
 
 | choice | why |
@@ -61,5 +61,4 @@ removed and the new one enabled in its place.
 ## Names
 
 The product is **K7 DAW**; the binary and the Cargo package stay `k7-tray` and the bundle identifier stays
-`org.parapluie.studio.engine-tray` (`docs/tray.md`). Release files are `k7-daw_<stamp>_<os>-<arch>.<ext>`; the
-update feed stays `app_downloads/tray/<channel>/latest.json`, which installed apps poll.
+`org.parapluie.studio.engine-tray` (`docs/tray.md`). Release files are `k7-daw_<stamp>_<os>-<arch>.<ext>`.

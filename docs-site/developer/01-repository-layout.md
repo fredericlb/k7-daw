@@ -11,9 +11,9 @@ the module library k7 ships with. It is one npm workspace tree driven from the r
 |---|---|
 | `apps/` | The applications: `apps/k7` (the web app: `frontend/`, and `backend-rs/`, the Rust front that is its backend) and `apps/k7-tray` (K7 DAW: k7 on a computer, a Tauri app with a window and a tray icon that runs k7's front and shows k7). |
 | `packages/` | The shared `@studio/*` packages, consumed as raw TypeScript source. |
-| `engine/` | The native side: `k7-runtime` (the C++ audio engine), `k7-supervisor` (the C++ program that runs and watches it), `k7-android` (the phone app, Gradle), `scripts` (the Node scripts that build and package the native binaries) and `docker` (the server engine's image). |
+| `engine/` | The native side: `k7-runtime` (the C++ audio engine), `k7-supervisor` (the C++ program that runs and watches it), `k7-android` (the phone app, Gradle), `scripts` (the Node scripts that build and package the native binaries). |
 | `k7-core/` | The default module library, as plain files: modules, chains, assemblies, presets, impulse responses, amp models, samples, wavetables. |
-| `docker/` | The production compose file and its `.env.example`. |
+| `site/` | The front page of `k7.rocks`, a static HTML file (`scripts/buildSite.mjs` builds it with the documentation). |
 | `scripts/` | Root scripts behind the npm scripts: the dev session, the workspace runner, the custom lints, the remote-machine helpers. |
 | `demos/` | Small `.k7` demo projects and a `_modules` folder used by them. |
 | `.github/` | GitHub Actions workflows and the shared `node` composite action. |
@@ -25,7 +25,7 @@ Root files worth knowing:
 | File | Role |
 |---|---|
 | `package.json` | The workspace list, every root script, the shared dev dependencies, `engines.node >= 22.12.0`. |
-| `.nvmrc` | The Node major CI, the image and the bundles share (`24`, `docs/images.md`). |
+| `.nvmrc` | The Node major CI and the bundles share (`24`). |
 | `Tiltfile` | The dev session (see [Dev setup](./03-dev-setup.md)). |
 | `biome.json` | Lint and format configuration. |
 | `knip.json` | Dead-code detection configuration. |
@@ -93,7 +93,7 @@ Consequences of that choice:
   `@studio/ui-editor` and `@studio/ui-timeline` from dependency pre-bundling because esbuild's scanner
   rejects the `.ts` extension in their export maps.
 - **The backend is Rust.** `apps/k7/backend-rs` is a cargo workspace, no npm workspace; the file service is in the front.
-- **The production image ships the front and the built page** (see [Images and deployment](./08-images-and-deployment.md)).
+- **`k7.rocks` is a static site** built from `site/` and `docs-site/` (see [Versioning and the static site](./08-versioning-and-site.md)).
 - **A package's `build` script is a typecheck.** Most packages declare `"build": "tsc --noEmit"`;
   the exception is `@studio/dsp`, whose `build` runs `tsx src/emit.ts`.
 
@@ -129,7 +129,6 @@ Each area has its own section in this guide; the package's own `package.json` de
 | `engine/k7-supervisor` | CMake, its own presets | The `k7-supervisor` executable and its unit-test binary |
 | `engine/k7-android` | Gradle (`./gradlew assembleDebug`) | The Android APK, which builds its own arm64 engine and supervisor |
 | `engine/scripts` | Node | `build-engine.mjs` (build and stage the command-line engine into `dist/k7-runtime/`), `package-release.mjs` (archive it, or rename the tray's installers), `devEngine.mjs` and `supervisorBuild.mjs` (used by the dev session) |
-| `engine/docker` | Docker | The Raspberry Pi engine's image (`Dockerfile.pi`) |
 
 The engine section of this guide covers the C++ code itself.
 

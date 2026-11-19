@@ -72,7 +72,6 @@ export function engineCall<T = Record<string, never>>(
     | "importCa"
     | "forgetCas"
     | "chooseStudio"
-    | "checkUpdates"
     | "immersive"
     | "setImmersive"
     | "quit",

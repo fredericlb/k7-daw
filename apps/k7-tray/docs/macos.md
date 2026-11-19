@@ -10,7 +10,7 @@ device, a sandbox, no plugins, and a signing profile of its own.
 | the same bundle identifier as the other desktop builds | the dev session's data already lives under it, and a Developer ID signature does not care about the prefix |
 | a regular app (Dock icon, app menu, Cmd-Q) with the status item beside it | `docs/desktop.md` |
 | no data moved from the iPad app's container | different bundle ids, different containers; workspaces move with git |
-| targets `app` and `dmg`; the updater serves `darwin-aarch64` from the `.app.tar.gz` | the DMG is the download, the archive is what the updater replaces the app with |
+| targets `app` and `dmg` | the DMG is the download |
 
 ## Signing
 
@@ -37,11 +37,11 @@ The identity is `$APPLE_SIGNING_IDENTITY`, else `-`: an ad-hoc signature, which 
 The DMG then runs on the Mac that built it; any other Mac's Gatekeeper refuses it. An ad-hoc build is a new identity
 at every build, so the microphone and camera grants are asked again after each rebuild.
 
-A local build needs no updater key, and writes no update archives; stage and `tray:build` take the same identity, or notarization refuses the mix:
+Stage and `tray:build` take the same identity, or notarization refuses the mix:
 
 ```
 npm run stage --workspace k7-tray
-npm run tray:build --workspace k7-tray   # no updater key: no update archives
+npm run tray:build --workspace k7-tray
 ```
 
 A DMG's window layout is set through Finder with AppleScript, which times out on a busy or headless Mac; `CI=true`

@@ -32,7 +32,6 @@ A Tauri app (Rust) with one window and an icon in the system tray, on Windows, L
 | `apps/k7-tray/src-tauri/src/backend.rs` | The one spawn, its environment (standalone.json's, plus `K7_SUPERVISOR_BIN`, the tray's bearer `K7_TRAY_TOKEN`, the release stamp), readiness, the backoff, the stop (closing stdin, `K7_STDIN_STOP`) |
 | `apps/k7-tray/src-tauri/src/window.rs`, `handlers.rs`, `appmenu.rs` | The window (splash, navigation, hide on close), what the webview may do (links, downloads, permissions) and the macOS menu bar (`apps/k7-tray/docs/desktop.md`) |
 | `apps/k7-tray/src-tauri/src/loops.rs`, `tray.rs` | The status line, read from `/api/local/tray` under the bearer and drawn as worded (`apps/k7/backend-rs/crates/k7-local/src/tray_status.rs`) |
-| `apps/k7-tray/src-tauri/src/updates.rs` | tauri-plugin-updater on the tray's channel feed (`docs/app-downloads.md`) |
 | `apps/k7-tray/src-tauri/src/job.rs`, `pidkill.rs` | The safety nets: a Windows job object, so a force-killed tray takes its tree with it, and a backstop for an engine a hung supervisor left |
 | `apps/k7/backend-rs/crates/k7-front/src/routes/local/` | The routes a page reaches it through: `/api/local/engine` (the snapshot as Server-Sent Events, an allow-list of commands), `/api/local/tray`, and `/api/local`, the probe that tells a page it is on a machine's own backend |
 | `apps/k7/frontend/src/settings/desktopEngine.ts` | The engine settings page (`/settings/engine`) over those routes |

@@ -18,7 +18,7 @@ edit path in [The edit path](./21-edit-path.md).
 - [Tests](./05-tests.md)
 - [Lints and conventions](./06-lints-and-conventions.md)
 - [CI](./07-ci.md)
-- [Images, deployment and versioning](./08-images-and-deployment.md)
+- [Versioning and the static site](./08-versioning-and-site.md)
 - [Releases and publishing](./09-releases-and-publishing.md)
 
 ## Frontend shell, commands and backend

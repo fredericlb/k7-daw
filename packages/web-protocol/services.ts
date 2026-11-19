@@ -1,5 +1,4 @@
-// services.ts — where k7 answers: its origin, `app.<domain>`, and `docs.<domain>` is the same app
-// showing its documentation alone. `st0.app` and its `play.` / `k7.` aliases are FORMER hosts that
+// services.ts — where k7 answers: its origin, `app.<domain>`; a `docs.<domain>` host reads as it too. `st0.app` and its `play.` / `k7.` aliases are FORMER hosts that
 // saved URLs still reach, each read as the current origin. Browser-safe: no node imports, because
 // the SPAs, the file service and the supervisor all have to agree about this — docs/addresses.md.
 
@@ -8,7 +7,7 @@ export type StudioService = "k7";
 /** The alias hosts k7 also answers on — former addresses, kept for saved URLs. */
 const ALIAS_LABELS = ["play", "k7"];
 
-/** k7's label in front of its domain, and the documentation's beside it. */
+/** k7's label in front of its domain, and the label of a documentation host that read as it. */
 const APP_LABEL = "app";
 const DOCS_LABEL = "docs";
 
@@ -37,10 +36,6 @@ function k7Hostname(hostname: string): string {
     host = `${APP_LABEL}.${host.slice(DOCS_LABEL.length + 1)}`;
   return LEGACY_HOSTS[host] ?? host;
 }
-
-/** Whether `hostname` is the documentation's host — the app showing its docs and nothing else. */
-export const isDocsHost = (hostname: string): boolean =>
-  hostname.startsWith(`${DOCS_LABEL}.`);
 
 /** Each backend's port — what a SERVER calls, since node does not trust the dev CA; see docs/addresses.md. */
 export const SERVICE_PORTS: Record<StudioService, number> = {

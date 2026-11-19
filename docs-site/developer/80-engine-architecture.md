@@ -10,7 +10,7 @@ This section covers everything that links a k7 page to sound: the C++ engine, it
 | [84 — Engine clients](./84-engine-clients.md) | `packages/engine-client` (Node) and `packages/engine-browser` (browser): access, probe, choice, lease, store, pairing, WebRTC |
 | [85 — Registry and tunnel](./85-registry-and-tunnel.md) | `k7-engine` (the Rust registry, relay and hub) and `packages/engine-tunnel`: heartbeats, claims, the relay, the hub and agent, jobs |
 | [86 — The tray and the phone apps](./86-desktop-and-android.md) | `k7-local`, `apps/k7-tray`, `engine/k7-android` |
-| [87 — Building and shipping engines](./87-engine-build-and-shipping.md) | `engine/scripts`, CMake presets, release archives, `engine/docker` |
+| [87 — Building and shipping engines](./87-engine-build-and-shipping.md) | `engine/scripts`, CMake presets, release archives |
 
 ## The processes
 
@@ -74,7 +74,6 @@ The account's files live on the server. When a project opens on an engine, the f
 | `engine/k7-supervisor/` | The supervisor (C++20, IXWebSocket + mbedTLS, libdatachannel, ONNX Runtime, miniz) |
 | `engine/k7-android/` | The Android app (Kotlin, Capacitor) |
 | `engine/scripts/` | Build and packaging scripts for the engine and supervisor |
-| `engine/docker/` | The Raspberry Pi engine's image |
 | `packages/engine-protocol/` | Wire types, ProjectDoc types, sessions, the binary audio frame |
 | `packages/engine-client/` | The Node client and `~/.k7` path helpers |
 | `packages/engine-browser/` | The browser client, React stores, access/probe/choose/lease, pairing, WebRTC socket, audio stream player |

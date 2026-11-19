@@ -17,10 +17,9 @@ workstation itself. Nothing terminates TLS and no proxy is in front: there is no
 | host | goes to | |
 |---|---|---|
 | `127.0.0.1:5223` | k7's dev server | the device's page, the one the session is developed on |
-| `docs.priv.k7.rocks` | k7's dev server | the documentation alone, as `docs.k7.rocks` is hosted; a name for a reverse proxy to forward, `scripts/dev-hosts.mjs` (`DOCS_DEV_HOST`) |
 
-A dev server answers **403** to a Host it was not told about, so that file is what lets the docs
-host through. `/api`, `/auth` and the sockets go from Vite to the front on 8789 internally
+The documentation site is its own Vite entry: `npx vite --config vite.docs.config.ts` in `apps/k7/frontend` serves it at
+`http://127.0.0.1:5224/docs/` (`apps/k7/frontend/docs/docsSite.md`). `/api`, `/auth` and the sockets go from Vite to the front on 8789 internally
 (`packages/vite-config/src/index.ts`'s `defineAppConfig` — `backendPort`, `proxyPaths`, `wsPaths`).
 
 The **Tilt UI** is local only: `http://localhost:10350` on the workstation.

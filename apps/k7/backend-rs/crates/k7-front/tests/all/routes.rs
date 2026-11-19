@@ -213,16 +213,6 @@ async fn what_the_front_cannot_answer_ends_in_the_last_routes() {
         post.starts_with("HTTP/1.1 401"),
         "a method the front does not own meets the `/api` guard: {post}"
     );
-    let site = send(
-        f.addr,
-        request("GET", "/api/preferences", &["Host: k7.rocks".into()], "")
-            .replace("Host: 127.0.0.1\r\n", ""),
-    )
-    .await;
-    assert!(
-        site.starts_with("HTTP/1.1 302"),
-        "the root domain's host is sent to the home: {site}"
-    );
 }
 
 #[tokio::test]

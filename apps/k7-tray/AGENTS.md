@@ -38,7 +38,6 @@ K7 DAW (Tauri: window + tray)   ← the process the user kills; creates the Job 
   what the webview may do, the Mac's menu bar, WebKitGTK's settings, the login item.
 - **`paths.rs`** — the bundle, the supervisor: the staged resources, else the checkout's builds. A miss
   is said on the status line, never a silent empty tray.
-- **`updates.rs`** — tauri-plugin-updater on the tray's channel feed (`docs/tray.md`).
 - **`job.rs`**, **`pidkill.rs`**, **`logbus.rs`**, **`trayicon.rs`** — the safety nets, the merged log, the icon.
 
 ## Build / run
@@ -52,7 +51,7 @@ would run.
 - `npm run dev` (Tilt) or `npm run dev:tray` (alone) — builds the engine, the supervisor, the page and library bundle and
   the tray, runs the tray on them, and rebuilds and restarts on save. `cargo build` in `src-tauri` alone is enough
   to run `target/debug/k7-tray.exe` on staged resources.
-- `npm run tray:build --workspace k7-tray` — the installers (signed for the updater only with `K7_UPDATER_PUBKEY` and `TAURI_SIGNING_PRIVATE_KEY` both set, `docs/tray.md`); `node engine/scripts/package-release.mjs --kind tray`
+- `npm run tray:build --workspace k7-tray` — the installers; `node engine/scripts/package-release.mjs --kind tray`
   renames them for a release.
 
 ## Verify

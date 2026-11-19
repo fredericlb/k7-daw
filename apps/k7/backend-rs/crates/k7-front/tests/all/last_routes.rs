@@ -1,4 +1,4 @@
-//! The last routes: the built page and its fallback, the 404 page, the site page, the bearer
+//! The last routes: the built page and its fallback, the 404 page, the bearer
 //! guard and the seam's `verify-token`.
 //! What a reader gets wrong: the hub's services cannot start here, which none of these routes needs.
 
@@ -206,13 +206,6 @@ async fn the_last_routes_answer() {
         (401, r#"{"error":"invalid token"}"#)
     );
 
-    let site = send(front, "GET", "/", &[("host", "k7.rocks")], "").await;
-    assert!(site.status == 200 && site.text().contains("<h1>Coming soon</h1>"));
-    let away = send(front, "GET", "/x", &[("host", "www.k7.rocks")], "").await;
-    assert_eq!(
-        (away.status, away.header("location"), away.text().as_str()),
-        (302, Some("/"), "Found. Redirecting to /")
-    );
     let gate = [("x-k7-internal", "s"), ("content-type", "application/json")];
     let body = serde_json::json!({ "token": "x.y" }).to_string();
     let verified = send(

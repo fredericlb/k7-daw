@@ -16,7 +16,6 @@ tauri-plugin-single-instance = "2"
 tauri-plugin-autostart = "2"
 # The login entry the windowless tray registered under its old name, found and removed (src/autostart.rs); the plugin's own crate.
 auto-launch = "0.6"
-tauri-plugin-updater = "2"
 tauri-plugin-dialog = "2"
 # The window's size, position and maximized state, between launches (not its visibility: a login starts it hidden).
 tauri-plugin-window-state = "2"
@@ -29,7 +28,6 @@ chrono = { version = "0.4", features = ["clock"] }
 dirs = "5"
 # The bearer the backend checks on the tray's status route.
 getrandom = "0.3"
-semver = "1"
 # The unix SIGTERM/SIGINT handler, on the runtime Tauri already brings.
 tokio = { version = "1", features = ["macros", "signal"] }
 # k7's Rust front, run in this process on the page's port, in front of node (apps/k7/backend-rs/docs/embed.md).

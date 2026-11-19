@@ -19,7 +19,7 @@ const entry = (
 const ENTRIES = [
   entry("react", "MIT", ["web", "android"]),
   entry("JUCE", "AGPL-3.0-only", ["engine"]),
-  entry("express", "MIT", ["server"]),
+  entry("express", "MIT", ["desktop"]),
 ];
 
 describe("the About page's notices filter", () => {
@@ -42,9 +42,8 @@ describe("the About page's notices filter", () => {
   it("counts a component once per place it ships", () => {
     expect(countByWhere(ENTRIES)).toEqual({
       web: 1,
-      server: 1,
       engine: 1,
-      desktop: 0,
+      desktop: 1,
       android: 1,
     });
   });

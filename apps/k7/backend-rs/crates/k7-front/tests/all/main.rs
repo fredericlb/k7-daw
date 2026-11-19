@@ -7,7 +7,6 @@ mod http_support;
 mod support;
 
 mod ai_turn;
-mod app_releases;
 mod auth;
 mod cameras;
 mod engine;
