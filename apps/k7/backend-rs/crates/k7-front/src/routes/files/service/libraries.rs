@@ -152,110 +152,15 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn a_client_cannot_stamp_itself_an_admin() {
-        let n = native("stamp");
-        n.svc.first_ensure().await;
-        let put = Body::from(r#"{"libraries":[{"name":"k7-core"}]}"#);
-        let forged = [("x-studio-admin", "1"), ("x-studio-hub-secret", "front")];
-        let (status, text) = ask(&n, "PUT", "/account/libraries", false, &forged, put).await;
-        assert_eq!(
-            (status, text.as_str()),
-            (
-                403,
-                r#"{"error":"only the origin's admins may change the libraries"}"#
-            )
-        );
-        let (status, text) = ask(
-            &n,
-            "POST",
-            "/account/libraries/k7-core/publish",
-            false,
-            &forged,
-            Body::empty(),
-        )
-        .await;
-        assert_eq!(
-            (status, text.as_str()),
-            (
-                403,
-                r#"{"error":"only the origin's admins may publish a library"}"#
-            )
-        );
-        let (status, _) = ask(
-            &n,
-            "PUT",
-            "/account/libraries",
-            true,
-            &[],
-            Body::from(r#"{"libraries":[{"name":"k7-core"}]}"#),
-        )
-        .await;
-        assert_eq!(status, 200);
-    }
-
-    #[tokio::test]
     async fn every_refusal_keeps_its_sentence() {
         let n = native("refusals");
         n.svc.first_ensure().await;
         let big = Body::from(vec![b' '; body::JSON_LIMIT + 1]);
-        let (status, text) = ask(&n, "PUT", "/account/libraries", true, &[], big).await;
+        let (status, text) = ask(&n, "POST", "/libraries/sync", true, &[], big).await;
         assert_eq!(
             (status, text.as_str()),
             (413, r#"{"error":"body over 8388608 bytes"}"#)
         );
-        let (_, text) = ask(
-            &n,
-            "PUT",
-            "/account/libraries",
-            true,
-            &[],
-            Body::from("junk"),
-        )
-        .await;
-        assert_eq!(text, r#"{"error":"expected { libraries: [{ name }] }"}"#);
-        let (_, text) = ask(
-            &n,
-            "PUT",
-            "/account/libraries",
-            true,
-            &[],
-            Body::from(r#"{"libraries":[{"name":"Bad"}]}"#),
-        )
-        .await;
-        assert!(
-            text.starts_with(r#"{"error":"'Bad' cannot name a library"#),
-            "{text}"
-        );
-        let (_, text) = ask(
-            &n,
-            "PUT",
-            "/account/libraries",
-            true,
-            &[],
-            Body::from(r#"{"libraries":[{"name":"a"},{"name":"a"}]}"#),
-        )
-        .await;
-        assert_eq!(text, r#"{"error":"two libraries are called 'a'"}"#);
-        let (_, text) = ask(
-            &n,
-            "POST",
-            "/account/libraries/drums/publish",
-            true,
-            &[],
-            Body::empty(),
-        )
-        .await;
-        assert_eq!(text, r#"{"error":"'drums' has no draft to publish"}"#);
-        let (_, text) = ask(
-            &n,
-            "POST",
-            "/account/libraries/%2e%2e/publish",
-            true,
-            &[],
-            Body::empty(),
-        )
-        .await;
-        assert_eq!(text, r#"{"error":"'..' names no library"}"#);
         let (_, text) = ask(&n, "GET", "/nowhere", false, &[], Body::empty()).await;
         assert_eq!(text, r#"{"error":"no GET /nowhere"}"#);
     }

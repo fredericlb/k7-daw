@@ -14,7 +14,7 @@ use crate::settle::Js;
 
 /// A room's state read from its folder: the saved state, then every entry appended since replayed; it WRITES the folder
 /// where the log needs closing (a torn line, a legacy layout).
-pub fn load(js: &dyn Js, dir: &Path) -> Result<Room, LogError> {
+fn load(js: &dyn Js, dir: &Path) -> Result<Room, LogError> {
     let file = dir.join("room.json");
     let state = if file.exists() {
         let mut s = log::parse_state(&fsx::read_text(&file)?)?;

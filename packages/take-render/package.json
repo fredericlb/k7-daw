@@ -5,10 +5,6 @@
   "type": "module",
   "description": "Audio files a song PRODUCES: filing a recorded take onto its lane, rendering a mixdown or a stem, and reading back how long a wav is. The half of @studio/commands that writes audio rather than editing a document. Consumed as source.",
   "exports": {
-    "./recordTake": "./src/recordTake.ts",
-    "./boundJobsUrl": "./src/boundJobsUrl.ts",
-    "./renderers": "./src/renderers.ts",
-    "./renderProject": "./src/renderProject.ts",
     "./renderer": "./src/renderer.ts",
     "./renderToWav": "./src/renderToWav.ts",
     "./renderTypes": "./src/renderTypes.ts",

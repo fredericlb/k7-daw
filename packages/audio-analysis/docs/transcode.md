@@ -4,8 +4,8 @@
 WebM, FLAC or 16-bit WAV — a stream copy of a FLAC, a render's stems, a transcription's input. It is the same WebAssembly module as the
 decoder ([analysis.md](analysis.md)), built with the crate's `encode` feature, and services run it
 on the pool's workers (`transcodeOffThread`), each job with a deadline its caller sets. The Rust front runs
-the same module in Wasmtime for the stream copies (`apps/k7/backend-rs/crates/k7-mediatek/src/stream_copy.rs`), so a
-regenerated module must still write the committed `apps/k7/backend-rs/fixtures/stream-vectors.json` byte for byte.
+the same module in Wasmtime (`apps/k7/backend-rs/crates/k7-mediatek/src/transcode.rs`), so a
+regenerated module must still write the committed `apps/k7/backend-rs/fixtures/transcode-vectors.json` byte for byte.
 
 ## One queue, in front of the workers
 

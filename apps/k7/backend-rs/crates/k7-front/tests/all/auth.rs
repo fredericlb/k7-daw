@@ -52,11 +52,11 @@ async fn a_session_that_is_not_the_local_users_is_rewritten_on_a_device() {
         "/auth/me sits before the rewrite: {}",
         me.body
     );
-    let list = send(f.addr, "GET", "/api/token", &[("Cookie", &other)], "").await;
-    assert_eq!(list.status, 200);
+    let prefs = send(f.addr, "GET", "/api/preferences", &[("Cookie", &other)], "").await;
+    assert_eq!(prefs.status, 200);
     assert!(
-        list.headers.iter().any(|(k, _)| k == "set-cookie"),
-        "the token routes sit after it"
+        prefs.headers.iter().any(|(k, _)| k == "set-cookie"),
+        "the session routes sit after it"
     );
 }
 

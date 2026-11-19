@@ -30,7 +30,7 @@ fn libraries_root(home: &Path) -> Value {
     json!({ "remote": dir.display().to_string(), "name": "libs", "writable": false, "perChild": true })
 }
 
-/// What an engine's machine may see of an account: its workspaces, caches, libraries, models and the médiathèque.
+/// What an engine's machine may see of an account: its workspaces, caches, libraries, models and the media.
 pub fn roots_for(home: &Path, slug: &str, mediatek: Option<&Path>) -> Vec<Value> {
     let mut roots = vec![
         root(&home.join("workspace"), &format!("ws-{slug}"), true),
@@ -45,7 +45,7 @@ pub fn roots_for(home: &Path, slug: &str, mediatek: Option<&Path>) -> Vec<Value>
     roots
 }
 
-/// What a médiathèque CUT shares: the library writable, for the stems, and the model's homes read-only.
+/// What a media CUT shares: the library writable, for the stems, and the model's homes read-only.
 /// The model's own folder is shared too when no root holds it (`$STUDIO_MODELS` moves it off `models/`).
 pub fn cut_roots(home: &Path, slug: &str, mediatek: &Path, model: &str) -> Vec<Value> {
     let mut roots = vec![
@@ -83,7 +83,7 @@ pub fn library_cut_roots(data_root: &Path, mediatek: &Path, model: &str) -> Vec<
     roots
 }
 
-/// What a server's slot shares with the machine: the libraries and the médiathèque, both read-only.
+/// What a server's slot shares with the machine: the libraries and the media, both read-only.
 pub fn library_slot_roots(data_root: &Path, mediatek: &Path) -> Vec<Value> {
     let libs = data_root.join("libraries");
     vec![

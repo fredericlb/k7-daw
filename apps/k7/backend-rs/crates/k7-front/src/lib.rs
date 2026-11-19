@@ -45,7 +45,7 @@ use axum::Router;
 use axum::extract::{ConnectInfo, Request, State};
 use axum::middleware::{Next, from_fn_with_state};
 use axum::response::Response;
-use axum::routing::{MethodRouter, delete, get, post};
+use axum::routing::{MethodRouter, get, post};
 use hyper::Method;
 
 /// What every handler reads: the backend's settings, the revocations, and the proxy a declined request goes to.
@@ -55,8 +55,6 @@ pub struct AppState {
     pub proxy: Arc<proxy::Proxy>,
     pub app_releases: routes::app_releases::Stores,
     pub cameras: routes::cameras::Cameras,
-    /// `library-tokens.json`, shared with the backend.
-    pub tokens: k7_auth::api_token::TokenFile,
     /// The machine's engine, when a device's host gave it to the front (`docs/local.md`).
     pub local: Option<Arc<routes::local::Local>>,
     /// Set once the front stops, which ends the answers that stream for ever.
@@ -73,18 +71,13 @@ pub struct AppState {
     pub last: Option<Arc<routes::last::Last>>,
 }
 
-/// Whether the front answers `method` on a sign-in or token path; anything else there is the backend's.
+/// Whether the front answers `method` on a sign-in path; anything else there is the backend's.
 fn owns_auth(method: &Method, path: &str, local_user: bool) -> Option<bool> {
     let read = matches!(*method, Method::GET | Method::HEAD | Method::OPTIONS);
-    let one_token = path
-        .strip_prefix("/api/token/")
-        .is_some_and(|id| !id.is_empty() && !id.contains('/'));
     Some(match path {
         "/auth/me" => read,
         "/auth/local" => local_user && read,
         "/auth/logout" => method == Method::POST || method == Method::OPTIONS,
-        "/api/token" => read || method == Method::POST,
-        _ if one_token => method == Method::DELETE || method == Method::OPTIONS,
         _ => return None,
     })
 }
@@ -161,11 +154,8 @@ async fn claim(
     let releases = routes::app_releases::is_family_path(path);
     let uploads = path.starts_with("/api/app-releases/");
     let needs_session = path != "/api/health" && !releases;
-    // Behind the library's `/api` guard a bearer is checked against tokens only the backend holds.
-    let guarded = path == "/api/preferences"
-        || path.starts_with("/api/ai/")
-        || path == "/api/token"
-        || path.starts_with("/api/token/");
+    // Behind the backend's `/api` guard a bearer is checked by the backend, not here.
+    let guarded = path == "/api/preferences" || path.starts_with("/api/ai/");
     let bearer = req
         .headers()
         .get(hyper::header::AUTHORIZATION)
@@ -214,8 +204,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
     let app_releases = routes::app_releases::Stores::new(&settings.app_releases_dir);
     let cameras = routes::cameras::Cameras::new(settings.camera_ice_servers.as_deref(), limits);
     let local = routes::local::Local::from_settings(&settings, port);
-    let auth_dir = settings.auth_dir.clone().unwrap_or_default();
-    let tokens = routes::tokens::token_file(&auth_dir);
     let local_user = settings.local_user;
     // The seam's file half is asked of this front once it holds the hub, of the backend before.
     let seam = routes::files::seam_addr(config, &settings, port);
@@ -230,7 +218,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
         proxy: proxy::Proxy::new(config),
         app_releases,
         cameras,
-        tokens,
         local,
         closing: tokio::sync::watch::channel(false).0,
         engine,
@@ -267,11 +254,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
             sessioned(post(routes::auth::account::logout)),
         )
         .route("/auth/me", sessioned(get(routes::auth::account::me)))
-        .route(
-            "/api/token",
-            sessioned(get(routes::tokens::list).post(routes::tokens::create)),
-        )
-        .route("/api/token/{id}", sessioned(delete(routes::tokens::revoke)))
         .route("/api/local", get(routes::local::routes::info))
         .route("/api/local/tray", get(routes::local::routes::tray))
         .route("/api/local/engine", get(routes::local::routes::get))

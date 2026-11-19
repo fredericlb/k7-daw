@@ -36,13 +36,11 @@ describe("the Worker's server-only modules", () => {
         "../ffmpeg/src/ffmpeg.ts": {},
         "../audio-passes/src/resolveChain.ts": {},
         "../take-render/src/render.ts": {},
-        "../stem-separation/src/separate.ts": {},
         "src/runtime/shims/childProcess.ts": {},
       },
     };
     expect(serverInputs(metafile)).toEqual([
       "../ffmpeg/src/ffmpeg.ts",
-      "../stem-separation/src/separate.ts",
       "../take-render/src/render.ts",
       "src/runtime/shims/childProcess.ts",
     ]);

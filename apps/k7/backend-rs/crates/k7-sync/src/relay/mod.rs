@@ -4,8 +4,6 @@
 
 mod rooms;
 
-pub use rooms::load as load_room;
-
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};

@@ -6,7 +6,7 @@ import { engines, PL8_API } from "../api";
 import type { PublicEngine } from "../types";
 
 /** One slot as a machine's supervisor lists it. */
-export interface SlotRow {
+interface SlotRow {
   id: string;
   name: string;
   chain: string;

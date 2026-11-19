@@ -1,17 +1,11 @@
 // instance.ts — what the conformance specs share about the instance under test: its address, who signs in (the
-// e2e account, an admin, the suite's own account), a small audio file to send and its sidecar fingerprint.
+// e2e account, the suite's own account), a small audio file to send and its sidecar fingerprint.
 // Every write goes under names a spec made up, and is removed by those names (e2e/docs/conformance.md).
 import { createHash } from "node:crypto";
 import type { SessionUser } from "@studio/oidc";
-import { backendEnv, E2E_USER, sessionCookies } from "./session.ts";
+import { E2E_USER, sessionCookies } from "./session.ts";
 
 export const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
-
-/** The first of env.yaml's admin groups: a removal is an admin's, and every cleanup is one. */
-export const adminGroup = (backendEnv().AUTH_ADMIN_GROUPS ?? "")
-  .split(",")
-  .map((g) => g.trim())
-  .find(Boolean);
 
 /** An account of the suite's own, so its shares and its hunts are nobody's but the suite's. */
 export const CONFORMANCE_USER: SessionUser = {

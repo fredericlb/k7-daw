@@ -13,7 +13,6 @@ reads what the other wrote (`CONFORMANCE_UPSTREAM`).
 | `GET`, `PUT /api/ai/settings`, `GET /api/ai/organize`, `POST /api/ai/organize/turn` | phase 3 | any request with a bearer, which the backend's `/api` guard answers and no route behind it; the same as the preferences |
 | `POST /auth/logout`, `GET /auth/me` | phase 3 | the same as the preferences |
 | `GET /auth/local` on a device | phase 3 | off a device, where the backend does not mount it either; the same as the preferences |
-| `POST`, `GET /api/token`, `DELETE /api/token/<id>` | phase 3 | any request with a bearer; the same as the preferences |
 | `GET /api/local`, `GET /api/local/tray` | phase 4a; on every device since 6.1 (`local.md`) | off a device, where the backend answers 404 |
 | `GET /api/local/engine[/events]`, `POST /api/local/engine/{cmd,slots}`, `GET /api/internal/engine/local` | phase 4a, behind `K7_LOCAL_ENGINE=front` (`local.md`) | all of it unless a device's host turned the switch on |
 | `GET /api/registry/hello`, `POST …/heartbeat`, `POST …/deregister`, `GET /api/engines`, `GET /api/engines/owners`, `GET`, `PUT /api/engines/<id>/shares`, `DELETE …/owner`, `POST /api/engine/{select,release}`, `POST /api/engine/<id>/rtc`, `WS /api/engine/<id>/ws`, `WS /api/engine-tunnel[/local/<key>]`, `GET /api/internal/engine/engines[/<id>]`, `GET …/hub`, `POST`, `DELETE …/bindings` | phase 4a, behind `K7_ENGINE_CORE=front` (`engine.md`) | all of it unless the switch is on; every other method there, a request to a socket's path that is no upgrade, the root domain's hosts, the seam's local half |
@@ -22,7 +21,7 @@ The front also answers `/api/engine-slots`, on every host (`engine/slots.md`). A
 answers goes on to the backend, which holds none of it.
 
 With `K7_LAST_ROUTES=front` (`last.md`) the front answers what it would otherwise send the backend: the seam's
-`verify-token`, a bearer on `/api/preferences`, `/api/ai/*` and `/api/token*`, the root
+`verify-token`, a bearer on `/api/preferences`, `/api/ai/*`, the root
 domain's hosts, the built page and its fallback, and
 Express's 404 and the `/api` guard's 401 for any other path. Nothing goes to the backend then.
 
@@ -74,7 +73,7 @@ Each reads its state from disk on every request, from files the previous release
 
 | choice | why |
 |---|---|
-| a request to `/api/preferences`, `/api/ai/*` or `/api/token*` with a bearer goes to the backend | the backend's `/api` guard checks a bearer against tokens the backend holds, and refuses a bad one even beside a valid cookie; behind it the backend has the preferences only, so a bearer on `/api/ai/*` hears the guard or a 404 |
+| a request to `/api/preferences` or `/api/ai/*` with a bearer goes to the backend | the backend's `/api` guard checks a bearer against tokens the backend holds, and refuses a bad one even beside a valid cookie; behind it the backend has the preferences only, so a bearer on `/api/ai/*` hears the guard or a 404 |
 | zod's messages are written out by hand for the three bodies these routes check | the browser shows `error` as it is; the vectors hold every message |
 | shared vectors, `fixtures/leaf-vectors.json`, written by the TypeScript these routes replaced and kept as committed: the AI settings' patch and key hint | the AI patch and key hint; the file is the reference, and `src/vectors.rs` fails when Rust disagrees |
 
@@ -94,7 +93,6 @@ routes after it. There is no provider: a machine has one account, and a cookie i
 | a signed-in `/auth/me` is asked of the backend again in the background, its answer dropped (`src/routes/auth/warm.rs`) | the front warms its own hub on it (`files.md`); a previous release's backend, the rollback, starts the account's file service on the same question, and repeating it costs one loopback request |
 | the outgoing HTTPS client is `src/https.rs`: `hyper-rustls`, `rustls` on `ring`, and `webpki-roots` | `ring` is already in the tray's build, where `aws-lc-rs` compiles C with CMake and NASM on Windows and for every phone target |
 | TLS trusts Mozilla's roots (`webpki-roots`) and the host's `K7_EXTRA_CA_CERTS` (`front.md`), not the OS store | it is one list on the tray and the phones, and needs no JNI start on Android |
-| the tokens are minted and revoked in the backend's `library-tokens.json`, in @studio/oidc's format and key: read again when it changed, every write a re-read, one change and the expired dropped, then a rename (`k7-auth`'s `api_token.rs`) | the backend checks every token, so the file is the list both processes share (`packages/oidc/docs/apiTokens.md`); the front checks none, so `lastUsed` stays the backend's to write |
 | shared vectors, `fixtures/auth-vectors.json`, written by @studio/oidc's `createApiTokens` (`makeAuthVectors.ts`) | `apps/k7/backend/src/authVectors.test.ts` fails when @studio/oidc changes, `k7-auth`'s `tests/all/auth_vectors.rs` when Rust mints or opens other bytes |
 
 Regenerate those vectors only on purpose: `npx tsx apps/k7/backend-rs/fixtures/makeAuthVectors.ts`.

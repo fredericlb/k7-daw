@@ -15,7 +15,7 @@ const LABEL = {
 } as const satisfies Record<Choice, string>;
 
 /** Where a conflict is, as a person reads it. */
-export function whereOf(c: Conflict): string {
+function whereOf(c: Conflict): string {
   if (c.kind === "k7x" && c.keyPath) return c.keyPath;
   if (c.line !== undefined) return m["git.atLine"]({ line: c.line });
   return c.path;

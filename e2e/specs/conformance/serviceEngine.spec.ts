@@ -2,20 +2,13 @@
 // the project after a silent dry run, a write and a verb sent again with no dry run, a verb's transport, a take turned
 // into a clip, a node frozen through the engine binary, and the project let go on delete. The engine is the suite's
 // own stand-in behind the reference tunnel agent (`src/standInEngine.ts`), claimed by an account of its own.
-import {
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import type { SessionUser } from "@studio/oidc";
-import { base, clickWav } from "../../src/instance.ts";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";
-import { acct, deviceBed } from "../../src/session.ts";
+import { E2E_USER } from "../../src/session.ts";
 import { type Frame, StandInEngine } from "../../src/standInEngine.ts";
 import {
   accountDir,
@@ -37,7 +30,7 @@ const wsDir = (name: string): string =>
   join(accountDir(ENGINE_USER), "workspace", name);
 const project = "clip-lane.k7";
 /** The engine session of the account's projects: `k7:` and its email with every other character a `_`. */
-const session = `k7:${(acct(ENGINE_USER).email ?? "").replace(/[^a-zA-Z0-9]/g, "_")}`;
+const session = `k7:${(E2E_USER.email ?? "").replace(/[^a-zA-Z0-9]/g, "_")}`;
 let svc: Service;
 let engine: StandInEngine;
 test.describe.configure({ mode: "serial", timeout: 120_000 });
@@ -194,47 +187,6 @@ test("a verb's documents and its transport reach the engine in the verb's order"
   );
   expect(roll).toBeGreaterThan(doc);
   await verb("transport stop");
-});
-
-test("a take the engine recorded becomes a clip on its lane, and the poll says which", async () => {
-  test.skip(
-    deviceBed(),
-    "the bed's real engine takes the recording, not the stand-in",
-  );
-  // The engine writes the take where the document says takes go, on its machine; the tunnel brings it back.
-  const recordDir = frames("project").at(-1)?.doc.recordDir as string;
-  expect(recordDir).toBeTruthy();
-  mkdirSync(recordDir, { recursive: true });
-  const file = join(recordDir, "take-conformance.wav");
-  writeFileSync(file, clickWav(1));
-  engine.say(session, {
-    type: "recorded",
-    track: "drums",
-    file,
-    start: 4,
-    length: 1,
-  });
-  const polled = await poll((b) => !!b.lastTake);
-  expect(polled.lastTake.track).toBe("drums");
-  expect(typeof polled.lastTake.clip).toBe("string");
-  // The take is filed under the clip's own name, and the project sent again carries it on that lane.
-  const clip = polled.lastTake.clip as string;
-  await expect
-    .poll(
-      () =>
-        frames("project")
-          .at(-1)
-          ?.doc.tracks.find((t: Frame) => t.id === "drums")
-          ?.clips.some((c: Frame) => c.name === clip),
-      { timeout: 15_000 },
-    )
-    .toBe(true);
-  if (filesRoot)
-    expect(
-      readdirSync(join(wsDir(ws), project, "clips")).some((f) =>
-        f.startsWith(clip),
-      ),
-    ).toBe(true);
 });
 
 test("a node frozen is rendered by the engine binary, the transport stopped first", async () => {

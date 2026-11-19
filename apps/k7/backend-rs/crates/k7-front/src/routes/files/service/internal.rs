@@ -1,4 +1,4 @@
-//! internal.rs — the médiathèque's cut: its chain resolved in the account's own context on a device, in the libraries'
+//! internal.rs — the media's cut: its chain resolved in the account's own context on a device, in the libraries'
 //! on a server (`docs/files/hub.md`). What a reader gets wrong: the answer is shaped as node's route answered it.
 
 use serde_json::{Value, json};

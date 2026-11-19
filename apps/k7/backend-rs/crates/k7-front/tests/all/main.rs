@@ -16,5 +16,4 @@ mod last_routes;
 mod leaves;
 mod proxy;
 mod routes;
-mod tokens;
 mod trust;

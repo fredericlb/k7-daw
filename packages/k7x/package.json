@@ -8,7 +8,6 @@
     "./ast": "./src/ast.ts",
     "./parse": "./src/parse.ts",
     "./print": "./src/print.ts",
-    "./native": "./src/native.ts",
     "./document": "./src/edit.ts",
     "./sugared": "./src/sugared.ts"
   },

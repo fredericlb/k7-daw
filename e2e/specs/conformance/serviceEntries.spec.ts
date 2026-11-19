@@ -1,31 +1,22 @@
 // serviceEntries.spec.ts — what serviceFiles does not pin of the routes that change a workspace's entries: what a
-// rename, a move and a delete refuse (the active project, the root, _modules, the libraries), a library module
-// renamed with its refs repointed, a library entry recycled into the library's own bin, a case-only rename, a YAML name.
+// rename, a move and a delete refuse (the active project, the root, _modules, the libraries), a case-only rename, a YAML name.
 // Run with the native entries on and off: every answer is the same, and the disk is read back under the files root.
-import { existsSync, readdirSync, rmSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
-import { adminGroup } from "../../src/instance.ts";
-import { onDisk, SERVICE_USER, Service, wsDir } from "../../src/service.ts";
-import { deviceBed } from "../../src/session.ts";
+import { onDisk, Service, wsDir } from "../../src/service.ts";
 import { filesRoot, freshWorkspace } from "../../src/sync.ts";
 
 const ws = freshWorkspace();
-// The admin works in a workspace of its own: one made by an admin pins each library's draft, the only version written.
-const wsAdmin = `${ws}-a`;
-const tag = ws.slice(-6);
+const _tag = ws.slice(-6);
 let svc: Service;
-let admin: Service | null = null;
 
 test.describe.configure({ mode: "serial", timeout: 120_000 });
 
 test.beforeAll(async () => {
   test.setTimeout(180_000);
   svc = await Service.connect();
-  if (adminGroup)
-    admin = await Service.connect({ ...SERVICE_USER, groups: [adminGroup] });
   await svc.create(ws);
-  await admin?.create(wsAdmin);
   const put = (path: string, content: string) =>
     svc.put("/file", { path, content }, ws);
   for (const [path, content] of [
@@ -41,29 +32,7 @@ test.afterAll(async () => {
   if (!svc) return;
   test.setTimeout(180_000);
   await svc.remove(ws);
-  if (admin) await svc.remove(wsAdmin);
   await svc.dispose();
-  await admin?.dispose();
-  // The library's bin keeps what the admin recycled: the shared draft is left as the run found it.
-  const draft = draftOf("k7-core");
-  if (draft) {
-    rmSync(join(draft, "_recycle_bin", "hall"), {
-      recursive: true,
-      force: true,
-    });
-    rmSync(join(draft, "_recycle_bin", `ent${tag}b`), {
-      recursive: true,
-      force: true,
-    });
-    rmSync(join(draft, "_recycle_bin", `ent${tag}m`), {
-      recursive: true,
-      force: true,
-    });
-    rmSync(join(draft, "modules", "audio", `ent${tag}b`), {
-      recursive: true,
-      force: true,
-    });
-  }
 });
 
 const refused = (
@@ -156,54 +125,6 @@ test("the libraries are listed by the admins: their folder and each library's ro
   }
 });
 
-test("an account that is not the library's admin changes nothing in it: rename, move in, delete, upload", async () => {
-  test.skip(
-    deviceBed(),
-    "a device's one account is no admin and has no stranger: tests_changes.rs holds the refusal",
-  );
-  const chains = (await svc.get("/library-chains", ws)).body.chains as {
-    path: string;
-  }[];
-  expect(chains.length).toBeGreaterThan(0);
-  const entry = chains[0].path;
-  const admins = (verb: string) =>
-    new RegExp(
-      `^can't ${verb} '[^']*': only the origin's admins edit a library`,
-    );
-  refused(
-    await svc.post("/rename", { path: entry, name: "z.k7x" }, ws),
-    400,
-    admins("rename"),
-  );
-  refused(
-    await svc.post("/entry/delete", { path: entry }, ws),
-    400,
-    admins("delete"),
-  );
-  refused(
-    await svc.post(
-      "/move",
-      { path: "plain.txt", toDir: "_libraries/k7-core" },
-      ws,
-    ),
-    400,
-    admins("move into"),
-  );
-  refused(
-    await svc.post("/folder", { dir: "_libraries/k7-core", name: "x" }, ws),
-    400,
-    admins("create a folder in"),
-  );
-  refused(
-    await svc.upload(ws, "_libraries/k7-core", "x.bin", Buffer.from("x")),
-    400,
-    admins("add a file to"),
-  );
-  expect(
-    (await svc.get(`/file?path=${encodeURIComponent(entry)}`, ws)).status,
-  ).toBe(200);
-});
-
 test("a rename that changes the case alone is what the server's disk says, and a YAML name is refused", async () => {
   expect(
     (await svc.put("/file", { path: "Case.txt", content: "c\n" }, ws)).status,
@@ -229,165 +150,4 @@ test("a rename that changes the case alone is what the server's disk says, and a
     expect(existsSync(join(wsDir(ws), "up.yaml"))).toBe(false);
     expect(onDisk(ws, "plain.txt")).toBe("plain\n");
   }
-});
-
-/** The library's draft folder on disk, where an admin's edits land. */
-function draftOf(name: string): string | null {
-  if (!filesRoot) return null;
-  const home = join(filesRoot, "libraries", name);
-  return existsSync(join(home, "draft")) ? join(home, "draft") : home;
-}
-
-test("an admin renames a library module and its folder, and every ref in the songs follows", async () => {
-  test.skip(!admin, "env.yaml names no AUTH_ADMIN_GROUPS");
-  const adm = admin as Service;
-  const cat = `ent${tag}`;
-  const lib = "_libraries/k7-core/modules/audio";
-  for (const [path, content] of [
-    [`${lib}/${cat}/verb/module.k7x`, 'extends("@engine/reverb")\n'],
-    [
-      `${lib}/${cat}/verb/engines/plate/module.k7x`,
-      'extends("@engine/reverb")\n',
-    ],
-    [
-      "proj.k7/nodes/e.k7x",
-      `extends("@k7-core/audio/${cat}/verb")\n// @k7-core/audio/${cat}x/verb\n`,
-    ],
-  ]) {
-    const w = await adm.put("/file", { path, content }, wsAdmin);
-    expect([path, w.status, w.body]).toEqual([path, 200, { ok: true }]);
-  }
-  const engine = await adm.post(
-    "/rename",
-    { path: `${lib}/${cat}/verb/engines/plate`, name: "room" },
-    wsAdmin,
-  );
-  refused(engine, 400, /^an engine is picked by its name/);
-
-  const module = await adm.post(
-    "/rename",
-    { path: `${lib}/${cat}/verb`, name: "hall" },
-    wsAdmin,
-  );
-  expect([module.status, module.body]).toEqual([
-    200,
-    { path: `${lib}/${cat}/hall`, repointed: ["proj.k7/nodes/e.k7x"] },
-  ]);
-  expect(await adm.text(wsAdmin, "proj.k7/nodes/e.k7x")).toBe(
-    `extends("@k7-core/audio/${cat}/hall")\n// @k7-core/audio/${cat}x/verb\n`,
-  );
-
-  const folder = await adm.post(
-    "/rename",
-    { path: `${lib}/${cat}`, name: `${cat}b` },
-    wsAdmin,
-  );
-  expect([folder.status, folder.body]).toEqual([
-    200,
-    { path: `${lib}/${cat}b`, repointed: ["proj.k7/nodes/e.k7x"] },
-  ]);
-  expect(await adm.text(wsAdmin, "proj.k7/nodes/e.k7x")).toBe(
-    `extends("@k7-core/audio/${cat}b/hall")\n// @k7-core/audio/${cat}x/verb\n`,
-  );
-  const draft = draftOf("k7-core");
-  if (draft)
-    expect(
-      existsSync(
-        join(draft, "modules", "audio", `${cat}b`, "hall", "module.k7x"),
-      ),
-    ).toBe(true);
-});
-
-test("an admin moves a library module into a category of its library, its refs follow, and another library is refused", async () => {
-  test.skip(!admin, "env.yaml names no AUTH_ADMIN_GROUPS");
-  const adm = admin as Service;
-  const cat = `ent${tag}m`;
-  const cat2 = `ent${tag}f`;
-  const lib = "_libraries/k7-core/modules/audio";
-  try {
-    for (const [path, content] of [
-      [`${lib}/${cat}/verb/module.k7x`, 'extends("@engine/reverb")\n'],
-      [`${lib}/${cat2}/old/module.k7x`, 'extends("@engine/reverb")\n'],
-      ["proj.k7/nodes/m.k7x", `extends("@k7-core/audio/${cat}/verb")\n`],
-    ]) {
-      const w = await adm.put("/file", { path, content }, wsAdmin);
-      expect([path, w.status, w.body]).toEqual([path, 200, { ok: true }]);
-    }
-    const moved = await adm.post(
-      "/library/move",
-      { path: `${lib}/${cat}/verb`, toDir: `${lib}/${cat2}` },
-      wsAdmin,
-    );
-    expect([moved.status, moved.body]).toEqual([
-      200,
-      {
-        path: `${lib}/${cat2}/verb`,
-        from: `@k7-core/audio/${cat}/verb`,
-        to: `@k7-core/audio/${cat2}/verb`,
-        repointed: ["proj.k7/nodes/m.k7x"],
-      },
-    ]);
-    expect(await adm.text(wsAdmin, "proj.k7/nodes/m.k7x")).toBe(
-      `extends("@k7-core/audio/${cat2}/verb")\n`,
-    );
-    const other = await adm.post(
-      "/library/move",
-      {
-        path: `${lib}/${cat2}/verb`,
-        toDir: "_libraries/account/modules/audio",
-      },
-      wsAdmin,
-    );
-    refused(
-      other,
-      400,
-      "a module stays in its library — this one is k7-core's",
-    );
-    const draft = draftOf("k7-core");
-    if (draft)
-      expect(
-        existsSync(join(draft, "modules", "audio", cat2, "verb", "module.k7x")),
-      ).toBe(true);
-  } finally {
-    // The folders go even when a check above failed.
-    await adm.post("/entry/delete", { path: `${lib}/${cat}` }, wsAdmin);
-    await adm.post("/entry/delete", { path: `${lib}/${cat2}` }, wsAdmin);
-  }
-});
-
-test("an admin's delete lands in the library's own bin, and an upload into the library lands whole", async () => {
-  test.skip(!admin, "env.yaml names no AUTH_ADMIN_GROUPS");
-  const adm = admin as Service;
-  const cat = `ent${tag}b`;
-  const lib = "_libraries/k7-core/modules/audio";
-  const gone = await adm.post(
-    "/entry/delete",
-    { path: `${lib}/${cat}/hall` },
-    wsAdmin,
-  );
-  expect([gone.status, gone.body]).toEqual([
-    200,
-    { recycled: "_libraries/k7-core/_recycle_bin/hall" },
-  ]);
-  const up = await adm.upload(
-    wsAdmin,
-    `${lib}/${cat}`,
-    "ir.bin",
-    Buffer.from("ir"),
-  );
-  expect([up.status, up.body]).toEqual([200, { path: `${lib}/${cat}/ir.bin` }]);
-  const draft = draftOf("k7-core");
-  if (draft) {
-    expect(existsSync(join(draft, "_recycle_bin", "hall", "module.k7x"))).toBe(
-      true,
-    );
-    expect(existsSync(join(wsDir(wsAdmin), "_recycle_bin"))).toBe(false);
-    expect(
-      readdirSync(join(draft, "modules", "audio", cat)).filter(
-        (f) => f !== "ir.bin",
-      ),
-    ).toEqual([]);
-  }
-  // The suite's own edits leave the shared library as it was.
-  await adm.post("/entry/delete", { path: `${lib}/${cat}` }, wsAdmin);
 });

@@ -32,7 +32,7 @@ export async function saveIdentity(
 }
 
 /** Asks the account's file service for the stored identity; null when nothing answers. */
-export async function readIdentity(): Promise<Identity | null> {
+async function readIdentity(): Promise<Identity | null> {
   const files = await findAccountFiles(false);
   if (!files) return null;
   const id = await git.identity(accountTransport(files));

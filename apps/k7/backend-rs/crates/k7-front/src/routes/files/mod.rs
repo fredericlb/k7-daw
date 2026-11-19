@@ -5,7 +5,6 @@
 
 pub mod hub;
 pub mod ready;
-pub mod rooms_out;
 pub mod service;
 
 use std::sync::Arc;

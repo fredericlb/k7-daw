@@ -7,7 +7,7 @@ import { expect, test } from "@playwright/test";
 import type { SessionUser } from "@studio/oidc";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";
-import { acct } from "../../src/session.ts";
+import { E2E_USER } from "../../src/session.ts";
 import { type Frame, StandInEngine } from "../../src/standInEngine.ts";
 import { accountDir, filesRoot, freshWorkspace } from "../../src/sync.ts";
 import { until } from "../../src/until.ts";
@@ -21,7 +21,7 @@ const LINK_USER: SessionUser = {
 };
 const ws = freshWorkspace();
 const project = "clip-lane.k7";
-const session = `k7:${(acct(LINK_USER).email ?? "").replace(/[^a-zA-Z0-9]/g, "_")}`;
+const session = `k7:${(E2E_USER.email ?? "").replace(/[^a-zA-Z0-9]/g, "_")}`;
 let svc: Service;
 let engine: StandInEngine;
 

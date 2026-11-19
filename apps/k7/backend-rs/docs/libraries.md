@@ -75,6 +75,6 @@ front answers them itself
 | gate | result |
 |---|---|
 | `crates/k7-libraries/tests/vectors/libraries.json` replayed (`tests/all/goldens.rs`): the store's cases and the routes; each answer and the tree left behind compared whole | frozen: the goldens are edited as data, never regenerated |
-| `tests/all/hostile.rs`: names with `..`, a forged or missing stamp or secret, a seed with a link, a dot-file | each case seen red under its mutation |
+| `tests/all/hostile.rs`: a forged or missing secret, a body over the limit, a seed with a link | each case seen red under its mutation |
 | `tests/all/seeds.rs`: the seed is added once, the husks are swept and a version holding a file is kept | over fixture folders |
-| `crates/k7-front/src/routes/files/service/libraries.rs`: a client cannot stamp itself an admin, every refusal keeps its sentence | unit tests |
+| `crates/k7-front/src/routes/files/service/libraries.rs`: the secret gate, every refusal keeps its sentence | unit tests |

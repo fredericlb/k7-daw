@@ -1,7 +1,7 @@
 // stems.ts — the four sources a separation produces, and what they are called. One definition,
 // because three packages have to agree on it and nothing in the data says which is which: the
 // model's output tensor is `[1, 4, 2, N]` and the ORDER is the whole of the knowledge.
-// See packages/stem-separation/docs/stemSplit.md and docs/stems.md.
+// See engine/k7-supervisor/docs/stemSplit.md and docs/stems.md.
 
 /** The four sources, IN THE ORDER the model returns them — the order IS the knowledge (docs/stems.md). */
 export const STEMS = ["drums", "bass", "other", "vocals"] as const;

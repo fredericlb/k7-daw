@@ -4,7 +4,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { join } from "node:path";
 import type { SessionUser } from "@studio/oidc";
-import { deviceBed, E2E_USER } from "./session.ts";
+import { E2E_USER } from "./session.ts";
 
 /** The file hub's account: its file service and the workspaces the spec makes in it are the suite's alone. */
 export const FILES_USER: SessionUser = {
@@ -28,11 +28,11 @@ export function accountKey(email: string): string {
 }
 
 /** The account's folder under the files root; only called by a test that skips without it. */
-export const accountDir = (user: SessionUser): string =>
+export const accountDir = (_user: SessionUser): string =>
   join(
     filesRoot as string,
     // A device has one account, whoever the spec signs in as.
-    accountKey((deviceBed() ? E2E_USER : user).email as string),
+    accountKey(E2E_USER.email as string),
   );
 
 /** The hash a whole-text op names the text it replaces by: two 32-bit FNV-like lanes folded to 53 bits, as hex. */

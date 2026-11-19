@@ -14,7 +14,6 @@ import {
   sha,
   wsDir,
 } from "../../src/service.ts";
-import { deviceBed } from "../../src/session.ts";
 import { filesRoot, freshWorkspace, NO_FILES_ROOT } from "../../src/sync.ts";
 
 const ws = freshWorkspace();
@@ -190,8 +189,7 @@ test("opening a project names it active, remembers it beside the workspaces, and
   const running = poll.processes.filter(
     (p: { endedAt?: number }) => p.endedAt === undefined,
   );
-  // A device's account keeps the last take of every spec before this one.
-  expect([deviceBed() ? null : poll.lastTake, running]).toEqual([null, []]);
+  expect(running).toEqual([]);
   expect((await svc.get("/engine/served")).body).toEqual({
     project: { workspace: ws, path: "mix.k7" },
   });
@@ -235,34 +233,6 @@ test("a bare address opens the project last open, and a workspace with none open
   } finally {
     await svc.remove(empty);
   }
-});
-
-test("the plugins a project needs are answered without opening it", async () => {
-  test.skip(deviceBed(), "a device's engine names its own plugins");
-  const mix = await svc.get("/project-plugins?project=mix.k7", ws);
-  expect([mix.status, mix.body]).toEqual([
-    200,
-    {
-      plugins: [
-        { format: "internal", name: "Equaliser" },
-        { format: "internal", name: "studio_turntable" },
-      ],
-    },
-  ]);
-  const none = await svc.get("/project-plugins", ws);
-  expect([none.status, none.body]).toEqual([
-    400,
-    { error: "project is required" },
-  ]);
-  const gone = await svc.get("/project-plugins?project=zz.k7", ws);
-  expect([gone.status, gone.body]).toEqual([
-    404,
-    { error: "not a project: zz.k7" },
-  ]);
-  const compat = await svc.get("/project-compat?project=mix.k7", ws);
-  expect(compat.status).toBe(200);
-  expect(Object.keys(compat.body)).toEqual(["compat"]);
-  expect((await svc.get("/project-compat", ws)).status).toBe(400);
 });
 
 test("a rename keeps the suffix, never clobbers, and the open project's marker follows it", async () => {

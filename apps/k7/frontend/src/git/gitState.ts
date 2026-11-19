@@ -4,7 +4,7 @@
 import type { GitState } from "./gitTypes";
 
 /** Why a button is dimmed, said as a key of the strings. */
-export type Blocked = "pullFirst" | "commitFirst" | null;
+type Blocked = "pullFirst" | "commitFirst" | null;
 
 /** What the bar offers; every flag is one button, so a test reads the rules off it. */
 export interface BarView {

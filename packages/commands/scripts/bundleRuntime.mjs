@@ -32,7 +32,6 @@ const SERVER_ONLY = [
   "k7-plugins/src/transcription/transcribe.ts",
   "ffmpeg/src/",
   "take-render/src/render.ts",
-  "stem-separation/",
   "engine-tunnel/",
   "audio-analysis/src/decode",
 ];

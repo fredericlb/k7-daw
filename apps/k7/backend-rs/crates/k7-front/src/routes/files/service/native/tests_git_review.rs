@@ -294,7 +294,7 @@ async fn the_demo_workspace_is_never_connected_to_git() {
 
 #[test]
 fn a_server_front_is_refused_and_a_device_front_without_a_mediatheque_is_not() {
-    // A device front is told by its own flag, whatever the médiathèque holds.
+    // A device front is told by its own flag, whatever the media holds.
     assert!(super::git::server_refusal(true).is_none());
     let refused = super::git::server_refusal(false).unwrap();
     assert_eq!(refused.status().as_u16(), 403);
