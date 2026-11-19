@@ -1,7 +1,7 @@
 # The machine's engine, run by the front
 
-On a device's own backend, the front answers the routes a page uses to know its machine — `/api/local`,
-`/api/local/tray` — whatever runs the machine's engine. Where the host asks it to run that engine too (the desktop app), the `k7-local` crate hosts
+On a device's own backend, the front answers the route a page uses to know its machine — `/api/local` —
+whatever runs the machine's engine. Where the host asks it to run that engine too (the desktop app), the `k7-local` crate hosts
 `engine/k7-supervisor` over stdio and the front also answers `/api/local/engine*`. What these routes promise a
 page is `localEngine.md`; this page is how the
 front keeps those promises.
@@ -10,7 +10,7 @@ front keeps those promises.
 
 | choice | why |
 |---|---|
-| `/api/local`, `/api/local/tray` the front's on every device (`STUDIO_LOCAL_USER=1`, an auth folder known), whatever `K7_LOCAL_ENGINE` says | they are a device's routes whoever hosts its engine: on Android the app hosts the supervisor, and its page still probes its host; `/api/local` answers `engine: false` there, and the desktop app's line says no engine |
+| `/api/local` the front's on every device (`STUDIO_LOCAL_USER=1`, an auth folder known), whatever `K7_LOCAL_ENGINE` says | they are a device's routes whoever hosts its engine: on Android the app hosts the supervisor, and its page still probes its host; `/api/local` answers `engine: false` there, |
 | `K7_LOCAL_ENGINE=front` runs the supervisor, off by default | the desktop app turns it on, with the engine core (`apps/k7-desktop/docs/app.md`); the phones host their own supervisor (`supervisorHost.md`) |
 | running it needs `STUDIO_LOCAL_USER=1`, `K7_SUPERVISOR_BIN` and a known auth folder | the family exists on a device only, the engine routes sit behind the session, and a front that cannot check sessions owns none; without them the machine runs no engine, and the front's log says why |
 | a 6 s grace after `shutdown` | a supervisor on Windows takes about 4.1 s to deregister, stop its engine and exit; a shorter grace kills it at the end of its own clean stop. With the engine's proof after it, a stop takes 8 s at worst, which the desktop app's 15 s holds |

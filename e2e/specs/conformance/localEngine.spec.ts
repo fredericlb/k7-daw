@@ -1,11 +1,10 @@
-// localEngine.spec.ts — a machine's own backend as its pages and its tray see it: /api/local, the engine's snapshot and
-// event stream, the commands a page may send, the tray's status, the remote forward, and the
+// localEngine.spec.ts — a machine's own backend as its pages see it: /api/local, the engine's snapshot and
+// event stream, the commands a page may send, the remote forward, and the
 // internal seam's local half. Skipped against a backend that is no machine's own (apps/k7/backend-rs/docs/local.md).
 import { type APIRequestContext, expect, test } from "@playwright/test";
 import { sessionCookies } from "../../src/session.ts";
 
 const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
-const trayToken = process.env.CONFORMANCE_TRAY_TOKEN;
 const internalSecret = process.env.CONFORMANCE_INTERNAL_SECRET;
 
 const cookie = () =>
@@ -31,24 +30,6 @@ test.describe("a machine's own backend", () => {
   test("names itself and its release", async ({ request }) => {
     const info = await localInfo(request);
     expect(typeof info?.version).toBe("string");
-  });
-
-  test("the tray's status answers its bearer only", async ({ request }) => {
-    const none = await request.get("/api/local/tray");
-    expect(none.status()).toBe(401);
-    expect(await none.json()).toEqual({ error: "unauthorized" });
-    const wrong = await request.get("/api/local/tray", {
-      headers: { authorization: "Bearer not-the-tray" },
-    });
-    expect(wrong.status()).toBe(401);
-    test.skip(!trayToken, "CONFORMANCE_TRAY_TOKEN not given");
-    const res = await request.get("/api/local/tray", {
-      headers: { authorization: `Bearer ${trayToken}` },
-    });
-    expect(res.status()).toBe(200);
-    const body = await res.json();
-    expect(Object.keys(body)).toEqual(["icon", "line", "downloads"]);
-    expect(["stopped", "loading", "running", "error"]).toContain(body.icon);
   });
 
   test("the internal seam's local half needs this machine and its secret", async ({

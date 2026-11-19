@@ -1,6 +1,6 @@
 //! routes.rs — the machine's engine for k7's own pages (`/api/local/engine`: the snapshot, pushed, and the commands a
-//! page may send), for the tray (`/api/local/tray`, under its bearer) and for a page probing its host (`/api/local`).
-//! A device that runs no engine here (Android: the app hosts the supervisor) still answers the probe and the tray.
+//! page may send) and for a page probing its host (`/api/local`).
+//! A device that runs no engine here (Android: the app hosts the supervisor) still answers the probe.
 
 use std::io::Write;
 use std::sync::Arc;
@@ -11,10 +11,8 @@ use axum::extract::{Request, State};
 use axum::response::{IntoResponse, Response};
 use hyper::StatusCode;
 use hyper::body::Bytes;
-use hyper::header::{AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, HeaderValue};
+use hyper::header::{CACHE_CONTROL, CONTENT_TYPE, HeaderValue};
 use serde_json::{Value, json};
-use sha2::{Digest, Sha256};
-use subtle::ConstantTimeEq;
 use tokio::sync::mpsc;
 
 use super::Local;
@@ -46,10 +44,6 @@ const SLOT_LIMIT: usize = 16 * 1024 * 1024;
 /// A comment line now and then keeps proxies and the browser from dropping a quiet stream.
 const HEARTBEAT: Duration = Duration::from_secs(25);
 
-pub fn digest(s: &str) -> [u8; 32] {
-    Sha256::digest(s.as_bytes()).into()
-}
-
 fn local(state: &AppState) -> &Arc<Local> {
     state
         .local
@@ -78,42 +72,6 @@ pub async fn info(State(state): State<Arc<AppState>>) -> Response {
         None => json!({ "engine": false, "version": state.settings.release }),
     };
     axum::Json(body).into_response()
-}
-
-/// `GET /api/local/tray`: the tray's status line, for the bearer it handed over; no bearer configured, no answer.
-pub async fn tray(State(state): State<Arc<AppState>>, req: Request) -> Response {
-    let want = state.settings.tray_token.as_deref().map(digest);
-    let sent = req
-        .headers()
-        .get(AUTHORIZATION)
-        .and_then(|v| v.to_str().ok())
-        .and_then(|v| {
-            let (scheme, rest) = v.split_at_checked(6)?;
-            let token = rest.trim_start_matches(crate::js::is_js_space);
-            (scheme.eq_ignore_ascii_case("bearer") && token.len() < rest.len() && !token.is_empty())
-                .then_some(token)
-        });
-    let allowed = match (want, sent) {
-        (Some(want), Some(got)) => bool::from(digest(got).ct_eq(&want)),
-        _ => false,
-    };
-    if !allowed {
-        return error(StatusCode::UNAUTHORIZED, "unauthorized");
-    }
-    let Some(l) = running(&state) else {
-        return axum::Json(json!({
-            "icon": "error",
-            "line": "⚠ no engine on this machine",
-            "downloads": null,
-        }))
-        .into_response();
-    };
-    let s = l.engine.state();
-    axum::Json(k7_local::tray_status::tray_status(
-        s.snapshot.as_ref(),
-        s.down.as_deref(),
-    ))
-    .into_response()
 }
 
 /// `GET /api/local/engine`: `{snapshot, down}`.

@@ -224,7 +224,6 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
         )
         .route("/auth/me", sessioned(get(routes::auth::account::me)))
         .route("/api/local", get(routes::local::routes::info))
-        .route("/api/local/tray", get(routes::local::routes::tray))
         .route("/api/local/engine", get(routes::local::routes::get))
         .route(
             "/api/local/engine/events",

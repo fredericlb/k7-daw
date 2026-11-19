@@ -34,8 +34,6 @@ pub struct Settings {
     pub supervisor_home: PathBuf,
     /// The folders the engine opens by path: the files root and the media, as given.
     pub engine_roots: Vec<PathBuf>,
-    /// The bearer the tray handed over at spawn, `K7_TRAY_TOKEN`.
-    pub tray_token: Option<String>,
     /// `K7_RELEASE`, else the backend's package version: what `/api/local` names.
     pub release: String,
     /// Every setting the front was given, which the supervisor gets over this process's environment.
@@ -143,7 +141,6 @@ impl Settings {
                 .iter()
                 .filter_map(|k| raw(k).map(PathBuf::from))
                 .collect(),
-            tray_token: raw("K7_TRAY_TOKEN"),
             release: raw("K7_RELEASE").unwrap_or_else(|| env!("K7_VERSION").into()),
             supervisor_env: env.iter().map(|(k, v)| (k.clone(), v.clone())).collect(),
         }

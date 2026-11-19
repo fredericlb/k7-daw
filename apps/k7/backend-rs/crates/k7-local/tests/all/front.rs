@@ -38,7 +38,6 @@ async fn front_with(name: &str, engine: bool) -> Front {
         ("K7_SUPERVISOR_BIN", FAKE),
         ("K7_SUPERVISOR_HOME", home.to_str().unwrap()),
         ("STUDIO_AUTH_DIR", home.join("auth").to_str().unwrap()),
-        ("K7_TRAY_TOKEN", "tray-secret"),
         ("K7_RELEASE", "v9"),
     ]
     .iter()
@@ -238,20 +237,6 @@ async fn the_front_runs_the_engine_its_routes_and_its_stop() {
     .await;
     assert_eq!(slot.json(), json!({ "ok": true, "id": "warm" }));
 
-    assert_eq!(
-        send(f.addr, "GET", "/api/local/tray", &[], "").await.status,
-        401
-    );
-    let tray = send(
-        f.addr,
-        "GET",
-        "/api/local/tray",
-        &[("authorization", "Bearer tray-secret")],
-        "",
-    )
-    .await;
-    assert_eq!(tray.json()["line"], "● Engine running · :8765");
-
     let seam = "/api/internal/engine/local";
     assert_eq!(send(f.addr, "GET", seam, &[], "").await.status, 401);
     assert_eq!(
@@ -271,26 +256,10 @@ async fn the_front_runs_the_engine_its_routes_and_its_stop() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn a_device_whose_app_hosts_the_engine_keeps_its_probe_and_its_tray() {
+async fn a_device_whose_app_hosts_the_engine_keeps_its_probe() {
     let f = front_with("no-engine", false).await;
     let info = send(f.addr, "GET", "/api/local", &[], "").await;
     assert_eq!(info.json(), json!({ "engine": false, "version": "v9" }));
-    let tray = send(
-        f.addr,
-        "GET",
-        "/api/local/tray",
-        &[("authorization", "Bearer tray-secret")],
-        "",
-    )
-    .await;
-    assert_eq!(
-        tray.json(),
-        json!({ "icon": "error", "line": "⚠ no engine on this machine", "downloads": null })
-    );
-    assert_eq!(
-        send(f.addr, "GET", "/api/local/tray", &[], "").await.status,
-        401
-    );
     assert!(!log_of(&f.home).contains("starting supervisor"));
     let _ = f.stop.send(());
     f.served.await.unwrap().unwrap();

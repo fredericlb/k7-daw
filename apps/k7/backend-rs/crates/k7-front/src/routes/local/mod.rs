@@ -1,7 +1,7 @@
 //! local — the machine's own engine, run by the front when a device's host turns it on (`K7_LOCAL_ENGINE=front`):
 //! `/api/local/engine*` answered here, the supervisor started once the front listens and its registry answers, and
 //! stopped before the front stops. Choices: `apps/k7/backend-rs/docs/local.md`.
-//! What a reader gets wrong: `/api/local` and `/api/local/tray` are a device's whether or not it runs the engine.
+//! What a reader gets wrong: `/api/local` is a device's whether or not it runs the engine.
 
 pub mod internal;
 pub mod routes;
@@ -108,7 +108,7 @@ async fn wait_ok(http: &Client<HttpConnector, Empty<Bytes>>, url: &str) {
 pub fn owns(method: &Method, path: &str) -> Option<bool> {
     let read = matches!(*method, Method::GET | Method::HEAD | Method::OPTIONS);
     Some(match path {
-        "/api/local" | "/api/local/tray" | "/api/local/engine" | "/api/local/engine/events" => read,
+        "/api/local" | "/api/local/engine" | "/api/local/engine/events" => read,
         "/api/local/engine/cmd" | "/api/local/engine/slots" => {
             *method == Method::POST || *method == Method::OPTIONS
         }
@@ -118,7 +118,7 @@ pub fn owns(method: &Method, path: &str) -> Option<bool> {
 
 /// Whether `path` is a device's own whatever runs its engine: the probe and the tray's status line.
 pub fn is_device_path(path: &str) -> bool {
-    path == "/api/local" || path == "/api/local/tray"
+    path == "/api/local"
 }
 
 /// Whether the family's `path` sits behind the session.

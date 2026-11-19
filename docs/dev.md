@@ -213,27 +213,3 @@ its binary is the one leak worth being sure about. Stopping the desktop app is e
 job object takes the rest along; the supervisor and the engine are stopped by name anyway, for the
 cases where it is not. Every step **throws** rather than calling `process.exit`, so a watcher meant
 to outlive a bad build survives one.
-
-## Shelling out on Windows — from a FILE, never through PowerShell
-
-PowerShell is the wrong tool for anything touching this repo's text, and it fails silently:
-
-- **It corrupts UTF-8.** `Get-Content -Raw` reads as ANSI, so a read-modify-write round trip turns
-  `é` into `Ã©` and `—` into `â€"`. The file still parses and the diff still looks plausible, so
-  nobody notices — in a source file or in a commit message.
-- **Accented arguments do not survive the call**, even in single quotes:
-  `bash -lc 'echo "é à ç"'` prints nothing of them — the text is lost between PowerShell and the exe.
-- `--%` does not help: it swallows the rest of the line, epilogue included.
-- Its parser rejects `&&`, `??`, `?.` and bare `|` in places bash accepts them.
-
-So: **write the script with the file tool, then run `bash script.sh`.** The file tool writes UTF-8
-without a BOM, and nothing accented ever passes through PowerShell's argument encoding.
-
-```bash
-# .tmp-work.sh — written as a file, then: bash .tmp-work.sh
-set -euo pipefail
-grep -rn 'médiathèque' packages/song/src | head
-```
-
-PowerShell is for short ASCII commands where none of the above bites — `git status`,
-`npm run test`. **Never for text substitution in a tracked file**: that is the edit tool's job.

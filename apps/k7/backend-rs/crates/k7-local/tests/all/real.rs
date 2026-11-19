@@ -88,7 +88,6 @@ async fn a_real_supervisor_is_run_snapshotted_commanded_and_stopped() {
         ("STUDIO_ENGINE", var("K7_REAL_ENGINE")),
         ("STUDIO_AUTH_DIR", var("K7_REAL_AUTH_DIR")),
         ("STUDIO_FILES_ROOT", var("K7_REAL_FILES_ROOT")),
-        ("K7_TRAY_TOKEN", var("K7_REAL_TRAY_TOKEN")),
         (
             "STUDIO_PORTS",
             format!("k7={}", listen.rsplit(':').next().unwrap()),

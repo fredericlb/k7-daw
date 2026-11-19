@@ -39,16 +39,6 @@ fn commands_are_the_same_lines() {
 }
 
 #[test]
-fn the_tray_is_told_the_same_words() {
-    let v = vectors();
-    for c in cases(&v, "tray") {
-        let snapshot = c["snapshot"].as_object();
-        let out = k7_local::tray_status::tray_status(snapshot, c["down"].as_str());
-        assert_eq!(out, c["out"], "{c}");
-    }
-}
-
-#[test]
 fn the_registry_is_pinned_the_same_way() {
     let v = vectors();
     for c in cases(&v, "pins") {
