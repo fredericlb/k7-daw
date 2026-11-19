@@ -16,7 +16,7 @@ each for its own reason:
 | `jsdsp.ts`, `.glsl` | code, in the language its compiler reads |
 | `.json` | amp-model weights and generated `jsdsp.json` — written by tools, not by hand |
 | `.md` | prose |
-| the media library's store (`song.yaml`, its playlists, `mediatek.yaml`) | not a workspace: a volume of its own, read by `@studio/mediatek` (`packages/song-schema/src/mediaYaml.ts`) |
+| the media library's store (`song.yaml`, its playlists, `mediatek.yaml`) | not a workspace: a volume of its own |
 | `env.yaml`, `commands.yaml`, `latest.yml`, a machine's `preferences.yaml` | the repository's and the machine's configuration, read by name, never edited as a workspace file |
 
 ## Measured scope

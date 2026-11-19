@@ -27,7 +27,6 @@
     "./projectTags": "./src/projectTags.ts",
     "./projectShapes": "./src/projectShapes.ts",
     "./seqWindow": "./src/seqWindow.ts",
-    "./songRef": "./src/songRef.ts",
     "./fileStamp": "./src/fileStamp.ts",
     "./stems": "./src/stems.ts",
     "./takes": "./src/takes.ts",
@@ -78,7 +77,6 @@
     "node": ">=18"
   },
   "dependencies": {
-    "yaml": "^2.5.0",
     "zod": "^4.4.3",
     "@studio/graph-model": "*",
     "@studio/engine-protocol": "*",

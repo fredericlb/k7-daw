@@ -2,7 +2,6 @@
 // songs the médiathèque holds, each optionally naming one of that song's variants. Reading one
 // from its data or its k7x text, and adding, dropping or reordering a line as a k7x edit. No
 // `node:fs`, so the file service and the browser go by the same rules. See docs/playlists.md.
-// The médiathèque's own store keeps its playlists in YAML: that front end is mediaYaml.ts.
 
 import type { K7Scope } from "@studio/k7x/document";
 import { parse } from "@studio/k7x/document";

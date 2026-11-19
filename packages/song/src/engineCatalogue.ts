@@ -6,7 +6,7 @@
 //
 // A leaf: nothing here imports beyond song-schema and the atomic write, so loader.ts can use it without a cycle.
 
-import { readFileSync, statSync } from "node:fs";
+import { readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { BUILTIN_PLUGINS } from "@studio/song-schema/builtinParams";
 import {
@@ -21,7 +21,6 @@ import {
   slugifyPluginName,
 } from "@studio/song-schema/moduleTypes";
 import { byCodePoint } from "@studio/song-schema/textOrder";
-import { writeFileAtomic } from "./atomicWrite";
 import type { LoadedModule } from "./rawDoc";
 import { studioHome } from "./studioHome";
 import { wsExists, wsRead } from "./yaml/workspaceFile";
@@ -101,7 +100,7 @@ export function writeScanCopy(
   }
   // Left alone when it says the same: its mtime is in every project's revision token.
   if (was === text) return false;
-  writeFileAtomic(file, text, { durable: false });
+  writeFileSync(file, text);
   return true;
 }
 

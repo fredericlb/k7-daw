@@ -76,8 +76,7 @@
       "entry": ["bench/*.{ts,mjs}", "scripts/*.mjs"]
     },
     "packages/k7-wasm": {
-      "entry": ["scripts/*.mjs"],
-      "ignore": ["src/parity/*.old.ts"]
+      "entry": ["scripts/*.mjs"]
     },
     "packages/ui-chains-react": {}
   }

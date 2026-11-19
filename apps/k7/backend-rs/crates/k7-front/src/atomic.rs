@@ -1,6 +1,5 @@
-//! atomic.rs — a file replaced whole or not at all, as `packages/song/src/atomicWrite.ts` does it: a hidden temp
-//! beside it under the same name pattern (so watchers skip it), synced, then renamed over. On Windows a rename
-//! refused because the other backend is reading the file is retried, as there.
+//! atomic.rs — a file replaced whole or not at all: a hidden temp beside it under a name pattern watchers skip,
+//! synced, then renamed over. On Windows a rename refused because another reader holds the file is retried.
 
 use std::io::Write;
 use std::path::Path;

@@ -113,7 +113,7 @@ How a build stays fast and where a branch is checked — `docs/rust-builds.md`, 
 as `JAVA_HOME`, the SDK with NDK `29.0.14206865` as `ANDROID_HOME`; Gradle refuses a newer JDK). It never compiles
 the C++ engine: that is `./gradlew :app:assembleE2e` from `engine/k7-android`, as `engine/k7-runtime/docs/android.md` says.
 A new test must hold on Windows too: no file symlink without Developer Mode (`EPERM`), no POSIX mode (a file reads
-`0o666`) — guard those with `process.platform === "win32"`, as `atomicWrite.test.ts` does.
+`0o666`) — guard those with `process.platform === "win32"`, as `packages/engine-tunnel/hubConfinement.test.ts` does.
 
 ## iOS
 

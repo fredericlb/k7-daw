@@ -2,7 +2,7 @@
 // media library and the workspaces. The engine, the file service, the supervisor and the
 // desktop app all address it by name. `$STUDIO_HOME` moves it — tests
 // use it to get a directory of their own.
-// It sits in song rather than engine-client for the reason mediatekRoot.ts gives: engine-client
+// It sits in song rather than engine-client for the reason modelCache.ts gives: engine-client
 // imports song and never the reverse. A leaf — node builtins only.
 
 import { homedir } from "node:os";

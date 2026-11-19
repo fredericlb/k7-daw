@@ -1,11 +1,10 @@
 // workspaceDoc.ts — a workspace's .k7x file read and written as k7x: its text, its data, or a document edited by key path.
 // A reader would get wrong what an edit sees in a file with short forms: their EXPANDED data, put back by sugar's rule (docs/k7xFiles.md).
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { K7Document } from "@studio/k7x/document";
 import { type StringifyOptions, stringify } from "@studio/k7x/print";
 import { applySugared, sugarFor } from "@studio/song-schema/yaml/sugar";
-import { writeFileAtomic } from "../atomicWrite";
 import { stub } from "../editStub";
 import { isK7xPath } from "./workspaceFile";
 
@@ -17,10 +16,10 @@ function k7xOnly(path: string): string {
   return path;
 }
 
-/** Writes `text` atomically unless the file already holds it; says whether it wrote. */
+/** Writes `text` unless the file already holds it; says whether it wrote. */
 function writeIfChanged(path: string, text: string): boolean {
   if (existsSync(path) && readFileSync(path, "utf8") === text) return false;
-  writeFileAtomic(path, text);
+  writeFileSync(path, text);
   return true;
 }
 
@@ -58,7 +57,7 @@ export function wsEdit(
   }
   const after = doc.toString();
   if (after === before) return false;
-  writeFileAtomic(path, after);
+  writeFileSync(path, after);
   return true;
 }
 

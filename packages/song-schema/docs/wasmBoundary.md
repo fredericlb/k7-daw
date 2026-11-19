@@ -92,15 +92,3 @@ the resolved curve.
 | a non-positive frequency is drawn as a frequency of 1 | where the TypeScript drew infinity; the sweep below leaves it out |
 | the compiler keeps its curve sampling in TypeScript (`packages/song/src/curveSample.ts`) | it samples point by point, which a call per sample would make slower |
 | the curve vocabulary (`LFO_SHAPES`, `CURVE_CUTS`, `ADSR_DEFAULT_LEVEL`) is plain TS in `packages/song-schema/src/curveVocab.ts` | ts-rs emits types, not values; the parity test holds each listed value accepted by the Rust |
-
-## The parity check
-
-The port is a working port: the answers are held to the old TypeScript to a tolerance, not to the
-bit. The old song-schema `curveMath.ts` and `timecode.ts` stay reachable as frozen copies in
-`packages/k7-wasm/src/parity/curveMath.old.ts` and `timecode.old.ts`, never edited, deleted with the test once the compiler's port replaces it.
-
-| choice | why |
-|---|---|
-| a seeded random sweep (`packages/k7-wasm/src/parity/curve.parity.test.ts`) over every curve kind, shape, polarity, cut, a range of time signatures and of timecodes (deep chains and ticks included), next to the hand-picked edge cases | the hand cases cover what someone thought of; a sweep finds the boundary sample no one did |
-| x and y agree to `1e-9`, spans to `1e-12` relative, lengths, bar flags and timecode strings exactly, an invalid timecode fails in both with the same message | the arithmetic is the same; only `sin` and the last bit may differ |
-| the sweep's seed is fixed and printed on failure | a failure reproduces |

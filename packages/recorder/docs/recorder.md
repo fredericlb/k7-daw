@@ -33,9 +33,3 @@ home page's engine, the roll's hover — and re-render only the few leaves that 
   `dateTime` says when something was made, `time` and `timeSeconds` are a timeline's clocks. A
   screen that rolls its own options prints the same thing one way on one page and another way on
   the next.
-
-## The click is shared
-
-`useMetronome` (`@studio/recorder/metronome`) is a click on the Web Audio clock, not `setInterval`:
-each wake-up queues the next window, so a busy main thread delays the scheduling and never the
-click.

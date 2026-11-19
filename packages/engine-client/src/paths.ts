@@ -5,7 +5,6 @@
 // See docs/paths.md.
 
 import { join } from "node:path";
-import { mediatekRoot } from "@studio/song/mediatekRoot";
 import { studioHome } from "@studio/song/studioHome";
 
 /** The state dir — `<library>/k7`, or `$STUDIO_HOME` when set. */
@@ -26,9 +25,4 @@ export function webEndpointsDir(): string {
 /** `<state>/workspace` — the workspaces the file service owns, one level, no user beneath it. */
 export function rootDir(): string {
   return join(studioDir(), "workspace");
-}
-
-/** `<state>/mediatek` — the media library, overridable via `$STUDIO_MEDIATEK`; `@studio/song` owns the spelling. */
-export function mediatekDir(): string {
-  return mediatekRoot();
 }

@@ -1,7 +1,6 @@
 // A developer running these tests has a real `$STUDIO_HOME`, where the account's libraries are
-// cloned, and a real médiathèque: both are pinned at folders that do not exist, as @studio/song's
-// are. A test that wants a library points `$STUDIO_HOME` at its own temp folder (@studio/song's
-// testSupport `librariesFixture`).
+// cloned: it is pinned at a folder that does not exist, as @studio/song's is. A test that wants a
+// library points `$STUDIO_HOME` at its own temp folder (@studio/song's testSupport `librariesFixture`).
 
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -11,7 +10,6 @@ export default defineConfig({
   // A package config REPLACES the root one, so the disk timeout is repeated here — docs/tests.md.
   test: {
     env: {
-      STUDIO_MEDIATEK: join(tmpdir(), "studio-cmd-no-mediatek"),
       STUDIO_HOME: join(tmpdir(), "studio-cmd-no-home"),
     },
     // The runtime's own tests and the verb tests under the shims run in vitest.vfs.config.ts.

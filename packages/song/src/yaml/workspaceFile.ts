@@ -8,10 +8,10 @@ import {
   readFileSync,
   renameSync,
   rmSync,
+  writeFileSync,
 } from "node:fs";
 import { parse as parseK7x } from "@studio/k7x/document";
 import { sugarFor } from "@studio/song-schema/yaml/sugar";
-import { writeFileAtomic } from "../atomicWrite";
 
 export const K7X_EXT = ".k7x";
 const K7X_NAME = /\.k7x$/i;
@@ -33,9 +33,9 @@ export const wsExists = (path: string): boolean => existsSync(path);
 /** A file's text as it is on disk — k7x text for a workspace document; throws like readFileSync when absent. */
 export const wsRead = (path: string): string => readFileSync(path, "utf8");
 
-/** Writes a file whole or not at all — k7x text for a workspace document, written as given. */
+/** Writes a file — k7x text for a workspace document, written as given. */
 export function wsWrite(path: string, content: string | Uint8Array): void {
-  writeFileAtomic(path, content);
+  writeFileSync(path, content);
 }
 
 export function wsRemove(path: string): void {

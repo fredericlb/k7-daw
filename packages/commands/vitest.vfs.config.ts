@@ -54,7 +54,6 @@ export default defineConfig({
     testTimeout: 30_000,
     hookTimeout: 30_000,
     env: {
-      STUDIO_MEDIATEK: "/tmp/studio-cmd-no-mediatek",
       STUDIO_HOME: "/tmp/studio-cmd-no-home",
     },
   },

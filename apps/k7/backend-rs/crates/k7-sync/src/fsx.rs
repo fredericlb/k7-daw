@@ -1,6 +1,6 @@
-//! fsx.rs — the file calls the room's log makes, as node makes them: `writeFileAtomic` (a hidden temp beside the
+//! fsx.rs — the file calls the room's log makes, as node makes them: an atomic write (a hidden temp beside the
 //! file, synced, renamed over, the rename retried on Windows), an append, a read that never fails on bad UTF-8.
-//! What a reader gets wrong: the temp's name follows `atomicWrite.ts`, so every watcher already skips it.
+//! What a reader gets wrong: the temp's name is a hidden `.<name>.<pid>.<hex>.tmp`, so every watcher already skips it.
 
 use std::io::Write;
 use std::path::{Path, PathBuf};

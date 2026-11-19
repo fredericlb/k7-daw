@@ -7,7 +7,6 @@
   "exports": {
     "./loader": "./src/loader.ts",
     "./injectedRoots": "./src/injectedRoots.ts",
-    "./atomicWrite": "./src/atomicWrite.ts",
     "./confine": "./src/confine.ts",
     "./deadAutomations": "./src/deadAutomations.ts",
     "./nodeOnRef": "./src/nodeOnRef.ts",
@@ -45,7 +44,6 @@
     "./yaml/workspaceDoc": "./src/yaml/workspaceDoc.ts",
     "./folder": "./src/folder.ts",
     "./engineCatalogue": "./src/engineCatalogue.ts",
-    "./mediatekRoot": "./src/mediatekRoot.ts",
     "./studioHome": "./src/studioHome.ts",
     "./modelCache": "./src/modelCache.ts",
     "./ampModel": "./src/ampModel.ts",

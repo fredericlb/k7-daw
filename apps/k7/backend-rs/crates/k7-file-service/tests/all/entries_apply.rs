@@ -314,14 +314,7 @@ fn no_answer_carries_a_verbatim_prefix() {
 }
 
 #[test]
-fn the_temp_matches_the_typescript_s_shape() {
-    let ts = std::fs::read_to_string(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../../../../..",
-        "/packages/song/src/atomicWrite.ts"
-    ))
-    .unwrap();
-    assert!(ts.contains(r"const TEMP_NAME = /^\..+\.\d+\.[0-9a-f]{8}\.tmp$/;"));
+fn the_temp_is_a_hidden_name_watchers_skip() {
     let t = temp_for("/ws/dir/take.bin", 4242, 0xab);
     assert_eq!(t, "/ws/dir/.take.bin.4242.000000ab.tmp");
     let name = t.rsplit('/').next().unwrap();
