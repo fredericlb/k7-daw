@@ -1,9 +1,7 @@
-// BarEngine.tsx — the engine selector in a bar's engine slot, the project's and the home pages': an
-// icon button whose dot is the engine's state, opening the engines with their rating, then where
-// this browser hears them. The list and the pick are the host's (`EngineChoice`); the words are
-// engineWords.tsx's. See ../../docs/shell.md, "There is ONE engine selector".
+// BarEngine.tsx — the engine slot of a bar, the project's and the home pages': an icon button whose
+// dot is the engine's state, opening what it says, the engine's settings, and where this device
+// hears it. The engine is this device's own; the words are engineWords.tsx's. See ../../docs/shell.md.
 
-import { Badge } from "@studio/ui/badge";
 import { Button } from "@studio/ui/button";
 import {
   DropdownMenu,
@@ -13,28 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import {
-  Check,
-  Circle,
-  CircleDot,
-  List,
-  Loader2,
-  RefreshCw,
-} from "@studio/ui/icons";
+import { Circle, CircleDot, Settings } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
-import { formatPerformance } from "@studio/web-protocol/performance";
-import { formatLatency } from "@studio/web-protocol/quality";
-import type { EngineChoice } from "../engineChoice";
+import { go } from "../appNav";
 import { setListenHere, useListenHere } from "../listenHere";
 import { m } from "../paraglide/messages.js";
-import type { RankedEngine } from "../types";
-import { QUALITY_VARIANT, selectableRow } from "./EngineSelect";
-import {
-  type EngineSelectorProps,
-  EngineWarning,
-  engineName,
-  engineWords,
-} from "./engineWords";
+import { ENGINE_SETTINGS_ROUTE } from "../projects/api";
+import { type EngineSelectorProps, engineWords } from "./engineWords";
 
 /** The dot on the button: the link is up, down, there is no engine, or one is still looked for. */
 export type EngineStatus = "up" | "down" | "none" | "searching";
@@ -49,16 +32,16 @@ const DOT: Record<EngineStatus, string> = {
 export function BarEngine({
   current,
   searching,
-  compat,
   audioToBrowser = false,
   stats,
   status,
-  choice,
+  onOpen,
   toolSize,
   align = "end",
 }: EngineSelectorProps & {
   status: EngineStatus;
-  choice: EngineChoice;
+  /** The menu was opened: an engine that was not there yet is looked for again. */
+  onOpen?: () => void;
   /** The bar's button size, so the icon matches the pages' buttons beside it. */
   toolSize: "icon" | "icon-xs";
   /** The menu's edge against the button's: the end at a bar's right end, the start in a sidebar. */
@@ -67,10 +50,9 @@ export function BarEngine({
   const listenHere = useListenHere();
   // An engine with no speakers is heard here whatever the radio says.
   const here = listenHere || audioToBrowser;
-  const { label, hint, incompatible, icon } = engineWords({
+  const { label, hint, icon } = engineWords({
     current,
     searching,
-    compat,
     audioToBrowser: here,
   });
   const statusText =
@@ -81,9 +63,8 @@ export function BarEngine({
         : label;
   return (
     <DropdownMenu
-      // Measured when opened: the list behind it may be minutes old.
       onOpenChange={(open) => {
-        if (open) choice.refresh();
+        if (open) onOpen?.();
       }}
     >
       <DropdownMenuTrigger asChild>
@@ -91,7 +72,7 @@ export function BarEngine({
           variant="ghost"
           size={toolSize}
           className="relative shrink-0"
-          title={`${label} — ${statusText}${incompatible ? ` — ${incompatible}` : ""}`}
+          title={`${label} — ${statusText}`}
           aria-label={m["engineSwitch.section"]()}
         >
           {icon}
@@ -100,7 +81,7 @@ export function BarEngine({
             aria-hidden="true"
             className={cn(
               "absolute right-0.5 bottom-0.5 h-2 w-2 rounded-full ring-2 ring-card",
-              incompatible && status === "up" ? "bg-amber-500" : DOT[status],
+              DOT[status],
             )}
           />
         </Button>
@@ -116,47 +97,12 @@ export function BarEngine({
             <span className="min-w-0 flex-1 truncate font-medium text-sm">
               {label}
             </span>
-            {incompatible && <EngineWarning text={incompatible} />}
           </div>
           {stats && <div className="flex items-center gap-1">{stats}</div>}
         </div>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel className="flex items-center justify-between">
-          {m["engineSwitch.engines"]()}
-          <button
-            type="button"
-            onClick={choice.refresh}
-            disabled={choice.loading}
-            title={m["common.refresh"]()}
-            aria-label={m["common.refresh"]()}
-            className="rounded p-0.5 hover:bg-accent hover:text-foreground"
-          >
-            <RefreshCw
-              className={cn("h-3.5 w-3.5", choice.loading && "animate-spin")}
-            />
-          </button>
-        </DropdownMenuLabel>
-        {choice.ranked.length === 0 ? (
-          <div className="flex items-center gap-2 px-2 py-1.5 text-muted-foreground text-xs">
-            {choice.loading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-            {choice.loading ? m["engines.searching"]() : m["engines.none"]()}
-          </div>
-        ) : (
-          <div className="max-h-[45vh] overflow-y-auto">
-            {choice.ranked.map((r) => (
-              <EngineRow
-                key={r.engine.id}
-                r={r}
-                current={r.engine.id === current?.engine.id}
-                onPick={() => choice.pick(r)}
-              />
-            ))}
-          </div>
-        )}
-        <DropdownMenuItem onSelect={choice.openList}>
-          <List className="h-4 w-4 text-muted-foreground" />
-          {m["engineSwitch.allEngines"]()}
+        <DropdownMenuItem onSelect={() => void go(ENGINE_SETTINGS_ROUTE)}>
+          <Settings className="h-4 w-4 text-muted-foreground" />
+          {m["engineSwitch.settings"]()}
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -186,61 +132,6 @@ export function BarEngine({
         )}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-}
-
-/** One engine: its name, its rating, and why it cannot be picked when it cannot. */
-function EngineRow({
-  r,
-  current,
-  onPick,
-}: {
-  r: RankedEngine;
-  current: boolean;
-  onPick: () => void;
-}) {
-  const why = r.needsPairing
-    ? m["engineSwitch.pairing"]()
-    : r.engine.assigned
-      ? m["engines.inUse"]()
-      : r.engine.outdated
-        ? m["engines.outdated"]()
-        : !r.wsUrl
-          ? m["engines.noRoute"]()
-          : null;
-  return (
-    <DropdownMenuItem
-      disabled={!current && !selectableRow(r)}
-      onSelect={onPick}
-      aria-current={current || undefined}
-    >
-      <Check
-        className={cn(
-          "h-4 w-4 shrink-0",
-          current ? "opacity-100" : "opacity-0",
-        )}
-      />
-      <span className="min-w-0 flex-1 truncate">{engineName(r)}</span>
-      {r.latency ? (
-        <Badge
-          variant={QUALITY_VARIANT[r.latency.quality]}
-          title={m["engines.latencyBreakdown"]({
-            network: Math.round(r.latency.networkMs),
-            audio: Math.round(r.latency.audioMs),
-          })}
-        >
-          {formatLatency(r.latency)}
-        </Badge>
-      ) : (
-        <Badge variant="amber">{m["engines.unreachable"]()}</Badge>
-      )}
-      {r.engine.performance && (
-        <Badge variant="default">
-          {formatPerformance(r.engine.performance)}
-        </Badge>
-      )}
-      {why && r.latency && <Badge variant="amber">{why}</Badge>}
-    </DropdownMenuItem>
   );
 }
 

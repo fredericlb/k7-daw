@@ -1,6 +1,5 @@
-// PluginScanBar.tsx — the home page's bottom bar while the account's engine scans its plugins: the
-// one the policy would play on, else the one remembered, else the only one reachable. Nothing is
-// claimed — the socket only listens. Gone when the scan ends or no engine reports one. See
+// PluginScanBar.tsx — the home page's bottom bar while this device's engine scans its plugins.
+// Nothing is claimed — the socket only listens. Gone when the scan ends or no engine reports one. See
 // ../../docs/projects.md.
 
 import { watchPluginScan } from "@studio/engine-browser/scan-watch";
@@ -8,21 +7,7 @@ import type { PluginScanStatus } from "@studio/engine-protocol/decode";
 import { useEffect, useState } from "react";
 import { engines } from "../api";
 import { scanStep } from "../components/StartupBar";
-import type { RankedEngine } from "../types";
-
-/** The engine whose scan this page follows: chosen, remembered, or the only one that answered. */
-function scannedEngine(
-  ranked: RankedEngine[],
-  chosen: RankedEngine | null,
-  rememberedId: string | undefined,
-): RankedEngine | null {
-  if (chosen?.wsUrl) return chosen;
-  const reachable = ranked.filter((r) => r.wsUrl);
-  return (
-    reachable.find((r) => r.engine.id === rememberedId) ??
-    (reachable.length === 1 ? reachable[0] : null)
-  );
-}
+import { localEngineOf } from "../localEngine";
 
 export function PluginScanBar() {
   const [scan, setScan] = useState<PluginScanStatus | null>(null);
@@ -31,8 +16,8 @@ export function PluginScanBar() {
     let live = true;
     void engines
       .find()
-      .then(({ ranked, chosen, rememberedId }) => {
-        const r = scannedEngine(ranked, chosen, rememberedId);
+      .then(({ ranked }) => {
+        const r = localEngineOf(ranked);
         if (live && r) stop = watchPluginScan(engines.linkUrl(r), setScan);
       })
       .catch(() => {});

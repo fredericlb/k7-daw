@@ -47,9 +47,6 @@ tunnel. So `chooseEngine` and `bestEngine` only ever take an engine that passes 
    user's network. A public address, the relay or WebRTC do not count, since what answers there
    is whatever the stranger registered.
 
-The bench's rule in k7 (`accountEngine`) is not an exception: it takes the engine the account
-already holds a claim on, and a claim is named by the session, never by the engine.
-
 A first open from an HTTPS page on a machine with no local engine therefore lands on the picker
 until the user clicks one, which remembers it. The server repeats the check on its side: `select`
 refuses an engine that is another account's (`ClaimLost`, reason `refused`, which the lease does not
@@ -79,7 +76,7 @@ Where to wire it differs, and the difference is a choice:
 
 | surface | when |
 |---|---|
-| k7 `EngineGate` | **only while `picking`** — re-measuring after the choice takes the screen backwards under someone working |
+| k7 `EngineGate` | never: the bar's menu looks again for an engine only when it has none |
 
 The probe's timeout is **3 s**. Candidates are measured in parallel, so an absent engine costs
 one timeout rather than one per address; and on any machine but the engine's the only workable
@@ -147,35 +144,7 @@ Its URL is asked on every dial, since a relayed one carries a ticket that ages.
 - **The file service**: `fileBase` goes from the probe into `@studio/project-shell/fileApi`, and
   **travels with the address that answered**. A relayed socket beside a direct `http://` rebuilds
   the mixed-content wall on the other half (`apps/k7/backend-rs/docs/engine/proxy.md`).
-- **The picker's policy**: k7 asks only when no TRUSTED engine is usable (see
-  "Who is taken unasked" above): every open takes `bestEngine` (`choose.ts`) afresh among those,
-  and does not store what it took as the preference. The order, each step only among the equals
-  of the one before:
-  1. **compatibility** with the project (`compat.ts`): the share of the plugins the project
-     needs its engine to host — internal and VST alike — that the engine's catalogue has,
-     `available / required × 100`, floored so only a full house reads 100. An engine whose
-     catalogue did not arrive in time ranks below any score;
-  2. the engine this account last **chose** — saved only by the header's engine menu, an explicit
-     pick, which a faster machine elsewhere does not overrule;
-  3. the engine on **this machine**, the one that answered over loopback (`onThisMachine`): its
-     sound comes out where you sit, and a stronger machine elsewhere on the LAN would otherwise
-     take the tab and play out of speakers in another room;
-  4. the **latency class** (Q1, Q2, Q3);
-  5. the **performance** score.
-
-  The latency in ms only breaks a tie left after all of them. A remembered engine that is gone
-  or busy is no candidate, so the choice falls to this machine's.
-
-  The formula is `@studio/web-protocol/compat`, and it is applied on one of two roads, by where
-  the project's files live (`apps/k7/frontend/src/engineCompat.ts`):
-  - **on the server** (hosted files): the server lists the needs, `/project-plugins`, with no
-    engine bound; each catalogue comes from the engine itself, `list-plugins` on a socket of its
-    own — a probe query, answered without a session — and the browser scores;
-  - **on the engine's machine**: that machine's file service scores the project against its own
-    engine's scan, `/project-compat`, and each candidate answers for itself.
-
-  When nothing could be told (no `@local` project in the address, no engine answered)
-  compatibility is left out and the order starts at 2.
-
-  The header's engine menu (k7's `EngineSwitch`) is an explicit choice, and it saves the
-  preference — step 2 above.
+- **`bestEngine`** (`choose.ts`) ranks the trusted candidates by compatibility with the project
+  (`compat.ts`), then the engine the account last chose, then the one on THIS machine
+  (`onThisMachine`), then the latency class and the performance score. k7 does not use it: its
+  gate takes the engine on this machine and offers no choice (`apps/k7/frontend/docs/shell.md`).
