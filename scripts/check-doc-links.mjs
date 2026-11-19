@@ -6,7 +6,7 @@
 //
 // It reads what git tracks AND what it merely knows about, and only paths that look like OUR tree.
 
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, normalize } from "node:path";
 
@@ -84,6 +84,18 @@ for (const file of files) {
     }
   }
 }
+
+// A path git ignores is a build output a checkout has only once built (../docs/lints.md).
+const ignored = new Set(
+  dead.length
+    ? spawnSync("git", ["check-ignore", "--no-index", "--stdin"], {
+        input: dead.map((d) => d.ref).join("\n"),
+        encoding: "utf8",
+      }).stdout.split("\n")
+    : [],
+);
+for (let i = dead.length - 1; i >= 0; i--)
+  if (ignored.has(dead[i].ref)) dead.splice(i, 1);
 
 if (dead.length) {
   console.error(`${dead.length} reference(s) name a file that is not here:\n`);
