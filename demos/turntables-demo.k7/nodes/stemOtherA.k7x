@@ -1,0 +1,10 @@
+// Deck A's other — the lane that plays one of the separated files.
+//
+// A lane with no arrangement, exactly like the deck beside it: the material arrives when a
+// song is put on, and it is `stems/other.wav` in that song's own folder. A song
+// that has never been separated leaves this lane empty, and the deck's own lane plays instead
+// — which is why a deck still plays a record nobody prepared.
+//
+// Muted in graph.k7x, like every source lane here: it is heard through the bus only, where
+// it is summed with the three beside it — an unmuted lane would reach the master twice.
+extends("@meta/track")

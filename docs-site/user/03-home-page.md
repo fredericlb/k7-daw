@@ -89,9 +89,9 @@ the line under the message links to the settings.
 ### The Examples workspace
 
 The device has a workspace named **Examples**, stocked with demo projects that ship with k7
-(`crossfade-demo`, `node-demo`, `rack-demo`, `synth-demo`, `video-demo`). They are put back as
-shipped every time k7 starts: an edit to a demo is overwritten, and a deleted demo comes
-back. To experiment with one, copy it into a workspace of your own first (see
+(`crossfade-demo`, `node-demo`, `rack-demo`, `synth-demo`, `turntables-demo`, `video-demo`).
+They are put back as shipped every time k7 starts: an edit to a demo is overwritten, and a
+deleted demo comes back. To experiment with one, copy it into a workspace of your own first (see
 [Projects](./05-projects.md#copying-a-project)). Projects you add to Examples yourself are left alone.
 
 ## Browsing a workspace's files
