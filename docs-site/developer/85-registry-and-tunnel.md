@@ -1,6 +1,6 @@
 # Registry and tunnel
 
-The registry, which knows which engines exist and who holds them, and the tunnel hub, which reaches them, are k7's Rust front: the crate `apps/k7/backend-rs/crates/k7-engine`, routed by `apps/k7/backend-rs/crates/k7-front/src/routes/engine/`, once for the whole origin (`apps/k7/backend-rs/docs/engine.md`). What stays TypeScript is the client side: `@studio/engine-registry` holds the internal seam's paths and client (`packages/engine-registry/docs/internalSeam.md`), and `@studio/engine-tunnel` the tunnel's wire, its reference agent and the jobs client.
+The registry, which knows which engines exist and who holds them, and the tunnel hub, which reaches them, are k7's Rust front: the crate `apps/k7/backend-rs/crates/k7-engine`, routed by `apps/k7/backend-rs/crates/k7-front/src/routes/engine/`, once for the whole origin (`apps/k7/backend-rs/docs/engine.md`). What stays TypeScript is the client side: `@studio/engine-tunnel` the tunnel's wire, its reference agent and the jobs client.
 
 ## The registry
 

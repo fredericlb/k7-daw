@@ -1,32 +1,10 @@
-//! The engine core's switch: OFF, every engine path goes to the backend; ON, the front answers them.
+//! The engine core's switch: OFF, every engine path is declined; ON, the front answers them.
 
 use std::net::SocketAddr;
 
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::TcpListener;
 
-/// A backend that answers 418 to everything.
-async fn backend() -> SocketAddr {
-    let l = TcpListener::bind("127.0.0.1:0").await.unwrap();
-    let addr = l.local_addr().unwrap();
-    tokio::spawn(async move {
-        loop {
-            let Ok((mut s, _)) = l.accept().await else {
-                return;
-            };
-            tokio::spawn(async move {
-                let mut buf = vec![0u8; 8192];
-                let _ = s.read(&mut buf).await;
-                let reply =
-                    "HTTP/1.1 418 I'm a teapot\r\nContent-Length: 2\r\nConnection: close\r\n\r\nts";
-                let _ = s.write_all(reply.as_bytes()).await;
-            });
-        }
-    });
-    addr
-}
-
-async fn front(engine_core: bool, upstream: SocketAddr) -> SocketAddr {
+async fn front(engine_core: bool) -> SocketAddr {
     static RUN: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
     let run = RUN.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
     let root = std::env::temp_dir().join(format!(
@@ -53,7 +31,6 @@ async fn front(engine_core: bool, upstream: SocketAddr) -> SocketAddr {
     }
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: upstream.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,
@@ -93,8 +70,8 @@ async fn send(
 const BEAT: &str = r#"{"id":"e1","token":"tok","hostname":"h","addresses":{"port":8765}}"#;
 
 #[tokio::test]
-async fn off_every_engine_path_is_the_backends() {
-    let front = front(false, backend().await).await;
+async fn off_every_engine_path_is_declined() {
+    let front = front(false).await;
     let json = [("content-type", "application/json")];
     for (method, path) in [
         ("GET", "/api/registry/hello"),
@@ -103,17 +80,14 @@ async fn off_every_engine_path_is_the_backends() {
         ("POST", "/api/engine/select"),
         ("GET", "/api/internal/engine/hub"),
     ] {
-        assert_eq!(
-            send(front, method, path, &json, BEAT).await,
-            (418, "ts".into()),
-            "{method} {path}"
-        );
+        let (status, _) = send(front, method, path, &json, BEAT).await;
+        assert!(matches!(status, 401 | 404), "{method} {path}: {status}");
     }
 }
 
 #[tokio::test]
 async fn on_the_front_answers() {
-    let front = front(true, backend().await).await;
+    let front = front(true).await;
     let json = ("content-type", "application/json");
     assert_eq!(
         send(front, "GET", "/api/registry/hello", &[], "").await,
@@ -140,12 +114,12 @@ async fn on_the_front_answers() {
     let (status, body) = send(front, "GET", "/api/engines", &[("cookie", &cookie)], "").await;
     assert_eq!(status, 200, "{body}");
     assert!(body.contains(r#""id":"e1""#), "{body}");
-    // A method the core does not answer there, and the local engine's half of the seam, stay the backend's.
+    // A method the core does not answer there, and the local engine's half of the seam, are declined.
     assert_eq!(
         send(front, "GET", "/api/registry/heartbeat", &[], "")
             .await
             .0,
-        418
+        401
     );
     assert_eq!(
         send(
@@ -157,7 +131,7 @@ async fn on_the_front_answers() {
         )
         .await
         .0,
-        418
+        404
     );
     let (status, body) = send(
         front,

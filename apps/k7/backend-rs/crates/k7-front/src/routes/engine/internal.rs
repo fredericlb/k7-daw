@@ -1,6 +1,6 @@
-//! internal.rs — the engine half of the internal seam (`packages/engine-registry/docs/internalSeam.md`), for
-//! the TypeScript that calls it through `seamClient.ts`: views of the registry, the hub's render machine, and
-//! loopback bindings. Gated by a loopback peer AND the shared secret; outside the backend's web chain.
+//! internal.rs — the engine half of the internal seam (`apps/k7/backend-rs/docs/engine/reach.md`), which the
+//! hub's own services call over loopback: views of the registry, the render machine, and loopback bindings.
+//! Gated by a loopback peer AND the shared secret; outside the web chain.
 
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -42,7 +42,7 @@ pub fn owns(method: &Method, path: &str) -> bool {
 }
 
 pub fn routes() -> Router<Arc<AppState>> {
-    let p = |m: axum::routing::MethodRouter<Arc<AppState>>| m.fallback(crate::proxied);
+    let p = |m: axum::routing::MethodRouter<Arc<AppState>>| m.fallback(crate::declined);
     Router::new()
         .route(&format!("{BASE}/engines"), p(get(engines)))
         .route(&format!("{BASE}/engines/{{id}}"), p(get(engine)))

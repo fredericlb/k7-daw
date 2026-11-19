@@ -1,7 +1,7 @@
-//! internal.rs — the seam's TypeScript half (`apps/k7/backend/src/media/internalFiles.ts` behind `internalGate`):
-//! a library bearer's subject, and the backend's word that it runs no media and no recorder.
+//! internal.rs — the seam's file half the hub does not take: a library bearer's subject, behind the seam's gate
+//! (a loopback peer AND the front's secret).
 //! What a reader gets wrong: `verify-token` checks the front's own bearers too, the ones its hub mints for the file
-//! services, since no other process holds them (`packages/engine-registry/docs/internalSeam.md`).
+//! services, since no other process holds them (`apps/k7/backend-rs/docs/engine/reach.md`).
 
 use std::net::SocketAddr;
 
@@ -80,7 +80,7 @@ async fn gated(state: &AppState, peer: SocketAddr, req: Request) -> Response {
     response
 }
 
-/// What `internalFilesRouter` answers once the front holds the hub, and the seam's 404 for the rest.
+/// What the seam's file half answers, and its 404 for the rest.
 async fn files_half(state: &AppState, req: Request) -> Response {
     let rest = req
         .uri()

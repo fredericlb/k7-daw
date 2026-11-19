@@ -1,11 +1,10 @@
 //! account.rs — `/auth/logout` and `/auth/me`: the session the cookie holds, and the end of it.
 //! What a reader gets wrong: a logout everywhere is written where the backend reads it, so both processes drop the session.
 
-use std::net::SocketAddr;
 use std::sync::Arc;
 
 use axum::Json;
-use axum::extract::{ConnectInfo, Request, State};
+use axum::extract::{Request, State};
 use axum::response::{IntoResponse, Response};
 use hyper::StatusCode;
 use hyper::header::{CACHE_CONTROL, HeaderValue};
@@ -40,11 +39,7 @@ pub async fn logout(State(state): State<Arc<AppState>>, req: Request) -> Respons
     ctx.finish(Json(json!({ "ok": true })).into_response(), &state)
 }
 
-pub async fn me(
-    State(state): State<Arc<AppState>>,
-    peer: ConnectInfo<SocketAddr>,
-    req: Request,
-) -> Response {
+pub async fn me(State(state): State<Arc<AppState>>, req: Request) -> Response {
     let ctx = Ctx::open(req.headers(), &state);
     let user = ctx.user(&state);
     let mut response = match &user {
@@ -60,7 +55,7 @@ pub async fn me(
         .and_then(|u| u.get("email"))
         .filter(|e| crate::js::truthy(e))
     {
-        super::warm::files(&state, peer, &req, email.as_str().unwrap_or(""));
+        super::warm::files(&state, email.as_str().unwrap_or(""));
     }
     response
 }

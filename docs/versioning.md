@@ -46,9 +46,9 @@ follows `main`; the release's own tag, `:X.Y.Z`, is the one a deploy names.
 
 ## One image built here, and why k7 does not share phare's shape
 
-`apps/k7/docker/Dockerfile` builds k7's image — the editor: one process, no nginx — the backend serves its own built frontend directly
-(`express.static` + an SPA fallback, in `apps/k7/backend/src/server.ts`). It starts from a plain Node image, since there's no second
-process (nginx) to supervise alongside the backend. Traefik reaches it directly by hostname
+`apps/k7/docker/Dockerfile` builds k7's image — the editor: one process, no nginx — the front serves its own built frontend directly
+(`apps/k7/backend-rs/docs/last.md`). It starts from a plain alpine image, since there's no second
+process (nginx) to supervise alongside the front. Traefik reaches it directly by hostname
 (`docker/docker-compose.yml`) — at the root domain and on the `play.` and `k7.` aliases, which k7
 keeps answering
 (`packages/web-protocol/docs/addresses.md`).

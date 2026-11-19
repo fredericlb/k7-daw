@@ -18,11 +18,11 @@ for t in tasks:
         allow_parallel=True,
     )
 
-# The Rust front on 8789, before k7-backend's TypeScript on 8790: a cargo build, not a package's `dev` (docs/dev.md).
+# The Rust front on 8789: a cargo build, not a package's `dev` (docs/dev.md).
 local_resource(
     "k7-front",
     serve_cmd="node scripts/dev-front.mjs",
-    serve_dir="apps/k7/backend",
+    serve_dir="apps/k7/backend-rs",
     labels=["apps"],
     allow_parallel=True,
 )

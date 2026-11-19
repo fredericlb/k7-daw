@@ -1,43 +1,12 @@
-//! `/api/ready`, answered by the front under `K7_FILES=front` once the backend says it runs no hub: the cases of
+//! `/api/ready`, answered by the front under `K7_FILES=front` once the hub is launched: the cases of
 //! the conformance spec `ready`, against a front on a files root of its own.
 
 use std::net::SocketAddr;
 
 use serde_json::Value;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::TcpListener;
 
 const SECRET: &str = "test-secret";
-
-/// A backend that runs no hub and echoes every other request.
-async fn backend() -> SocketAddr {
-    let l = TcpListener::bind("127.0.0.1:0").await.unwrap();
-    let addr = l.local_addr().unwrap();
-    tokio::spawn(async move {
-        while let Ok((mut s, _)) = l.accept().await {
-            tokio::spawn(async move {
-                let mut buf = [0u8; 8192];
-                let n = s.read(&mut buf).await.unwrap_or(0);
-                let text = String::from_utf8_lossy(&buf[..n]).to_string();
-                let line = text.lines().next().unwrap_or("").to_string();
-                let b = if line.starts_with("GET /api/internal/files/hub ") {
-                    r#"{"runs":false}"#.to_string()
-                } else {
-                    format!(
-                        "ts {}",
-                        line.split(' ').take(2).collect::<Vec<_>>().join(" ")
-                    )
-                };
-                let reply = format!(
-                    "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{b}",
-                    b.len()
-                );
-                let _ = s.write_all(reply.as_bytes()).await;
-            });
-        }
-    });
-    addr
-}
 
 struct Front {
     addr: SocketAddr,
@@ -66,7 +35,6 @@ async fn front(extra: &[(&str, &str)]) -> Front {
     }
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: backend().await.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,

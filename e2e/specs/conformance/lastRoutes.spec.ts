@@ -1,13 +1,11 @@
-// lastRoutes.spec.ts — the backend's last routes as a client sees them: the built page and its fallback, Express's 404,
-// the site page, the `/api` guard's bearer, the device door's refusals and the seam's
-// TypeScript half. With CONFORMANCE_UPSTREAM, each answer is compared byte for byte with the backend's (e2e/docs/conformance.md).
+// lastRoutes.spec.ts — the last routes as a client sees them: the built page and its fallback, the 404 page,
+// the site page, the `/api` guard's bearer, the device door's refusals and the seam's bearer check (e2e/docs/conformance.md).
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { expect, test } from "@playwright/test";
 import { sessionCookies } from "../../src/session.ts";
 
 const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
-const upstream = process.env.CONFORMANCE_UPSTREAM;
 const internalSecret = process.env.CONFORMANCE_INTERNAL_SECRET;
 
 /** The Cookie header a signed-in e2e account sends. */
@@ -30,10 +28,9 @@ function raw(
     method?: string;
     headers?: Record<string, string>;
     body?: string;
-    at?: string;
   } = {},
 ): Promise<Answer> {
-  const url = new URL(path, opts.at ?? base);
+  const url = new URL(path, base);
   const send = url.protocol === "https:" ? httpsRequest : httpRequest;
   return new Promise((resolve, reject) => {
     const req = send(
@@ -211,72 +208,4 @@ test("the seam's TypeScript half: a bearer's subject and what the backend runs",
   expect(JSON.parse(none.body.toString())).toEqual({
     error: "no such internal route",
   });
-});
-
-test("each answer is the backend's, byte for byte", async () => {
-  test.skip(
-    !upstream,
-    "CONFORMANCE_UPSTREAM names the backend to compare with",
-  );
-  const asset = await anAsset().catch(() => "/assets/none.js");
-  const cases: [string, Record<string, string>, string?][] = [
-    ["/", {}],
-    ["/", { "accept-encoding": "gzip, deflate, br" }],
-    ["/index.html", { "accept-encoding": "br" }],
-    ["/index.html", { "accept-encoding": "gzip" }],
-    ["/conformance/page?x=1", {}],
-    ["/favicon.ico", {}],
-    [asset, { "accept-encoding": "br" }],
-    [asset, {}],
-    [asset, { range: "bytes=10-19" }],
-    [asset, { range: "bytes=0-1,4-5" }],
-    ["/", { range: "bytes=999999-" }],
-    ["/assets/conformance-missing.js", {}],
-    ["/assets", {}],
-    ["/font", {}],
-    ["/.conformance", {}],
-    ["/auth/conformance-nope", {}],
-    ["/api/conformance-nope", {}],
-    ["/api/conformance-nope", { cookie: cookie() }],
-    ["/api/conformance-nope", { authorization: "Bearer forged" }],
-    ["/", { host: "k7.rocks" }],
-    ["/x?y=1", { host: "k7.rocks", accept: "text/html" }],
-    ["/x", { host: "www.k7.rocks", accept: "application/json" }],
-    ["/favicon.ico", { host: "k7.rocks" }],
-    ["/api/internal/files/hub", {}],
-  ];
-  const compared = [
-    "content-type",
-    "content-length",
-    "content-encoding",
-    "content-range",
-    "cache-control",
-    "etag",
-    "last-modified",
-    "location",
-    "vary",
-    "accept-ranges",
-    "content-security-policy",
-    "x-frame-options",
-    "x-content-type-options",
-    "referrer-policy",
-  ];
-  for (const [path, headers, method] of cases) {
-    const what = `${method ?? "GET"} ${path} ${JSON.stringify(headers)}`;
-    const [mine, theirs] = await Promise.all([
-      raw(path, { headers, method }),
-      raw(path, { headers, method, at: upstream }),
-    ]);
-    expect(mine.status, what).toBe(theirs.status);
-    expect(mine.body.equals(theirs.body), what).toBe(true);
-    for (const h of compared) {
-      // Express tags every JSON answer; the front tags none (apps/k7/backend-rs/docs/routes.md).
-      if (
-        h === "etag" &&
-        theirs.headers["content-type"]?.startsWith("application/json")
-      )
-        continue;
-      expect(mine.headers[h], `${what}: ${h}`).toBe(theirs.headers[h]);
-    }
-  }
 });

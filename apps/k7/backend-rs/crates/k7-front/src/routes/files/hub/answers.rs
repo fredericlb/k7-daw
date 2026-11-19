@@ -88,11 +88,6 @@ fn refused(message: &str) -> Response {
     error(StatusCode::UNPROCESSABLE_ENTITY, message)
 }
 
-/// `GET /api/internal/files/hub`: this front runs the hub.
-pub async fn runs() -> Response {
-    Json(json!({ "runs": true })).into_response()
-}
-
 /// What a cut shares with the machine: an account's folders on a device, the libraries' alone on a server.
 enum Roots {
     Account(std::path::PathBuf, String),

@@ -147,7 +147,7 @@ cat > env.yaml << EOF
 # Written by engine/scripts/ci/e2e-macos.sh for the macOS e2e bed; rewritten at every run.
 common:
   SESSION_SECRET: "$(openssl rand -hex 32)"
-k7-backend:
+k7-front:
   STUDIO_DEV_AUTH: "1"
   STUDIO_LOCAL_USER: "1"
   K7_INSTANCE: "local"
@@ -201,8 +201,7 @@ bring_up() {
 { "registryUrls": ["http://127.0.0.1:$front"], "port": $engine, "instruments": [], "machineName": "e2e-macos$([ "$n" = 1 ] || echo "-$n")" }
 EOF
   set -m
-  start front apps/k7/backend env K7_GIT_ALLOW_FILE=1 K7_FRONT_LISTEN="127.0.0.1:$front" K7_FRONT_UPSTREAM="127.0.0.1:$backend" node scripts/dev-front.mjs
-  start backend apps/k7/backend node scripts/with-env.mjs PORT=$backend STUDIO_LISTEN_HOST=127.0.0.1 K7_FRONT_PORT=$front K7_FRONT_SECRET=k7-dev-front tsx src/server.ts
+  start front apps/k7/backend-rs env K7_GIT_ALLOW_FILE=1 K7_FRONT_LISTEN="127.0.0.1:$front" node scripts/dev-front.mjs
   if [ "$serves" = web ]; then
     start frontend apps/k7/frontend env STUDIO_WEB_PORT=$web STUDIO_BACKEND_URL="http://127.0.0.1:$front" npx vite --host 127.0.0.1 --strictPort
   fi
@@ -214,7 +213,6 @@ for n in "${slots[@]}"; do bring_up "$n"; done
 for n in "${slots[@]}"; do
   bed_of "$n"
   wait_for front "http://127.0.0.1:$front/auth/me" 300
-  wait_for backend "http://127.0.0.1:$backend/auth/me" 120
   relay_up
   [ "$(suite_of "$n")" != web ] || wait_for frontend "http://127.0.0.1:$web/" 120
 done
@@ -273,7 +271,7 @@ web_suite() {
 }
 conformance_suite() {
   bed_of "${slots[${#slots[@]} - 1]}"
-  E2E_BASE_URL="http://127.0.0.1:$front" CONFORMANCE_FRONT=1 CONFORMANCE_INTERNAL_SECRET=k7-dev-front \
+  E2E_BASE_URL="http://127.0.0.1:$front" CONFORMANCE_INTERNAL_SECRET=k7-dev-front \
     CONFORMANCE_FILES_ROOT="$files" \
     CONFORMANCE_SONG_NATIVE=on CONFORMANCE_ENGINE_BIN="$tree/dist/k7-runtime/k7-runtime" \
     run_suite conformance playwright.conformance.config.ts

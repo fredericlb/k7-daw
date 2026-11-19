@@ -267,16 +267,6 @@
       "text": "sonivox.txt"
     },
     {
-      "name": "Node.js",
-      "version": "24",
-      "source": "apps/k7/docker/Dockerfile",
-      "license": "MIT",
-      "url": "https://nodejs.org",
-      "where": ["desktop", "server"],
-      "note": "The node:24-alpine image k7's server runs on, and the node the tray bundles to run k7's backend.",
-      "text": "nodejs.txt"
-    },
-    {
       "name": "Alpine Linux base system",
       "version": null,
       "license": "MIT AND GPL-2.0-only",
@@ -365,85 +355,6 @@
         "libcurl4"
       ],
       "shipped": "Each package's copyright file is in that image, under /usr/share/doc/<package>/copyright."
-    },
-    {
-      "name": "Node.js (Termux build)",
-      "versionFrom": "termux:nodejs",
-      "license": "MIT",
-      "url": "https://github.com/termux/termux-packages",
-      "where": ["android"],
-      "termux": ["nodejs"],
-      "text": "nodejs.txt"
-    },
-    {
-      "name": "LLVM libc++ (Termux build)",
-      "versionFrom": "termux:libc++",
-      "license": "Apache-2.0 WITH LLVM-exception",
-      "url": "https://libcxx.llvm.org",
-      "where": ["android"],
-      "termux": ["libc++"],
-      "text": "llvm-exception.txt"
-    },
-    {
-      "name": "OpenSSL (Termux build)",
-      "versionFrom": "termux:openssl",
-      "license": "Apache-2.0",
-      "url": "https://www.openssl.org",
-      "where": ["android"],
-      "termux": ["openssl"]
-    },
-    {
-      "name": "c-ares (Termux build)",
-      "versionFrom": "termux:c-ares",
-      "license": "MIT",
-      "url": "https://c-ares.org",
-      "where": ["android"],
-      "termux": ["c-ares"],
-      "text": "c-ares.txt"
-    },
-    {
-      "name": "ICU (Termux build)",
-      "versionFrom": "termux:libicu",
-      "license": "Unicode-3.0",
-      "url": "https://icu.unicode.org",
-      "where": ["android"],
-      "termux": ["libicu"],
-      "text": "icu.txt"
-    },
-    {
-      "name": "SQLite (Termux build)",
-      "versionFrom": "termux:libsqlite",
-      "license": "blessing",
-      "url": "https://sqlite.org",
-      "where": ["android"],
-      "termux": ["libsqlite"],
-      "text": "sqlite.txt"
-    },
-    {
-      "name": "zlib (Termux build)",
-      "versionFrom": "termux:zlib",
-      "license": "Zlib",
-      "url": "https://zlib.net",
-      "where": ["android"],
-      "termux": ["zlib"],
-      "text": "zlib.txt"
-    },
-    {
-      "name": "libffi (Termux build)",
-      "versionFrom": "termux:libffi",
-      "license": "MIT",
-      "url": "https://sourceware.org/libffi/",
-      "where": ["android"],
-      "termux": ["libffi"],
-      "text": "libffi.txt"
-    },
-    {
-      "name": "CA certificates (Termux build)",
-      "versionFrom": "termux:ca-certificates",
-      "license": "MPL-2.0",
-      "url": "https://curl.se/docs/caextract.html",
-      "where": ["android"],
-      "termux": ["ca-certificates"]
     },
     {
       "name": "AndroidX libraries",

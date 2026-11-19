@@ -1,4 +1,4 @@
-//! The front running the local engine against `k7-fake-supervisor` and a fake backend: the `/api/local*` family,
+//! The front running the local engine against `k7-fake-supervisor`: the `/api/local*` family,
 //! the internal seam's local half and the stop order, started with `STUDIO_LOCAL_USER=1` and no sign-in provider.
 //! Also a device whose engine the app hosts (Android): the probe and the tray's line stay the front's.
 
@@ -6,27 +6,13 @@ use std::net::SocketAddr;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
-use axum::Router;
-use axum::routing::get;
 use serde_json::{Value, json};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 
 const FAKE: &str = env!("CARGO_BIN_EXE_k7-fake-supervisor");
 const SECRET: &str = "front-secret";
 const SESSION: &str = "session-secret";
-
-/// The TypeScript backend as the front sees it.
-async fn backend() -> SocketAddr {
-    let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
-    let addr = listener.local_addr().unwrap();
-    let app = Router::new().route(
-        "/api/registry/hello",
-        get(|| async { axum::Json(json!({ "service": "k7-registry" })) }),
-    );
-    tokio::spawn(async move { axum::serve(listener, app).await.unwrap() });
-    addr
-}
 
 struct Front {
     addr: SocketAddr,
@@ -35,18 +21,19 @@ struct Front {
     served: tokio::task::JoinHandle<std::io::Result<()>>,
 }
 
-async fn front(name: &str, upstream: SocketAddr) -> Front {
-    front_with(name, upstream, true).await
+async fn front(name: &str) -> Front {
+    front_with(name, true).await
 }
 
 /// A device's front; `engine` false is a device whose app hosts the supervisor, the switch off.
-async fn front_with(name: &str, upstream: SocketAddr, engine: bool) -> Front {
+async fn front_with(name: &str, engine: bool) -> Front {
     let home = std::env::temp_dir().join(format!("k7-local-front-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&home);
     std::fs::create_dir_all(&home).unwrap();
     let env = [
         ("SESSION_SECRET", SESSION),
         ("STUDIO_LOCAL_USER", "1"),
+        ("K7_ENGINE_CORE", "front"),
         ("K7_LOCAL_ENGINE", if engine { "front" } else { "" }),
         ("K7_SUPERVISOR_BIN", FAKE),
         ("K7_SUPERVISOR_HOME", home.to_str().unwrap()),
@@ -59,7 +46,6 @@ async fn front_with(name: &str, upstream: SocketAddr, engine: bool) -> Front {
     .collect();
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: upstream.to_string(),
         secret: SECRET.into(),
         trust_hops: 0,
         env,
@@ -195,8 +181,7 @@ async fn first_frames(addr: SocketAddr, cookie: &str) -> String {
 
 #[tokio::test(flavor = "multi_thread")]
 async fn the_front_runs_the_engine_its_routes_and_its_stop() {
-    let up = backend().await;
-    let f = front("runs", up).await;
+    let f = front("runs").await;
     let c = cookie();
     let auth = [("cookie", c.as_str())];
 
@@ -287,8 +272,7 @@ async fn the_front_runs_the_engine_its_routes_and_its_stop() {
 
 #[tokio::test(flavor = "multi_thread")]
 async fn a_device_whose_app_hosts_the_engine_keeps_its_probe_and_its_tray() {
-    let up = backend().await;
-    let f = front_with("no-engine", up, false).await;
+    let f = front_with("no-engine", false).await;
     let info = send(f.addr, "GET", "/api/local", &[], "").await;
     assert_eq!(info.json(), json!({ "engine": false, "version": "v9" }));
     let tray = send(

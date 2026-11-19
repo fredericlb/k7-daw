@@ -11,11 +11,7 @@ async fn main() {
             std::process::exit(2);
         }
     };
-    let behind = match config.upstream.as_str() {
-        "" => "no backend behind it".to_string(),
-        u => format!("the TypeScript backend at http://{u}"),
-    };
-    let ready = move |addr| println!("k7-front on http://{addr}, {behind}");
+    let ready = move |addr| println!("k7-front on http://{addr}");
     if let Err(e) = k7_front::serve(config, shutdown(), ready).await {
         eprintln!("k7-front: {e}");
         std::process::exit(1);

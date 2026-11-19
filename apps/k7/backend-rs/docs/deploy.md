@@ -23,8 +23,7 @@ There is **no database**: what the front keeps is files, one per person.
 The front answers on k7's own host, `/api/*` for the routes.
 `play.st0.app` is routed to the same container and is **permanent**: every installed
 supervisor has `https://play.st0.app` saved as its registry, and every installed supervisor names it. On
-that host `/api/*` and `/auth/*` answer as on k7's, and any other path is a 301 to the home
-at k7's origin, `app.k7.rocks` (`apps/k7/backend/src/server.ts`).
+that host `/api/*` answers as on k7's, and a page is the page of any other host.
 `packages/web-protocol/docs/addresses.md` is the page for the address side.
 
 ## 3. It moves large files, so nothing in front may buffer or cut it
@@ -54,6 +53,4 @@ The image build itself: CI is where it runs.
 The assumption most likely to be wrong IS checkable here: the server boots with nothing but
 `STUDIO_MEDIATEK`, `STUDIO_FILES_ROOT` and `PORT`, on two empty directories.
 
-And on the deployed side: `SESSION_SECRET` and the `OIDC_*` triple must be set, or the service
-comes up in **dev auth mode with a stub 'Dev User'** — it says so on stderr, and on a public
-origin that line is the difference between a library and a free-for-all.
+And on the deployed side: `SESSION_SECRET` must be set (32 characters at least), or the front refuses to start.

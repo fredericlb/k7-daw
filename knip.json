@@ -34,9 +34,7 @@
         "demos/**/jsdsp.ts",
         "demos/_modules/**/widgets.js",
         "k7-core/modules/**/{jsdsp.ts,widgets.js}",
-        "engine/k7-android/scripts/termux-tools.mjs",
-        "engine/k7-android/scripts/mirror-termux-debs.mjs",
-        "engine/k7-ios/k7/backend-boot.mjs",
+        "apps/k7/backend-rs/scripts/*.mjs",
         "engine/k7-android/app/src/main/assets/*.js"
       ]
     },
@@ -45,9 +43,6 @@
     },
     "apps/k7/frontend": {
       "entry": ["src/docs/examples.ts", "notices/vendor.ts", "scripts/icons.mjs"]
-    },
-    "apps/k7/backend": {
-      "entry": ["scripts/bundle.mjs", "scripts/dev-front.mjs"]
     },
     "apps/k7-tray": {
       "entry": ["scripts/*.mjs"]

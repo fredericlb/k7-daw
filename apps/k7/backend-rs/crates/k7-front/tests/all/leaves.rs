@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 use serde_json::{Value, json};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 
 struct Front {
     addr: SocketAddr,
@@ -16,11 +16,6 @@ struct Front {
 async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     let root = std::env::temp_dir().join(format!("k7-front-leaves-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
-    let gone = TcpListener::bind("127.0.0.1:0")
-        .await
-        .unwrap()
-        .local_addr()
-        .unwrap();
     let mut env: std::collections::BTreeMap<String, String> = [
         ("SESSION_SECRET", "test-secret".to_string()),
         ("STUDIO_PREFS_DIR", root.join("prefs").display().to_string()),
@@ -39,7 +34,6 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     }
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: gone.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,
@@ -189,8 +183,8 @@ async fn ai_settings_keep_the_key_and_show_only_its_hint() {
 }
 
 #[tokio::test]
-async fn the_removed_organize_route_and_a_bearer_are_the_backends() {
-    let f = front("ai-proxied", &[]).await;
+async fn the_removed_organize_route_and_a_bearer_end_in_the_last_routes() {
+    let f = front("ai-declined", &[]).await;
     let c = cookie(json!({ "sub": "a" }));
     let (s, _, _) = call(
         f.addr,
@@ -201,10 +195,13 @@ async fn the_removed_organize_route_and_a_bearer_are_the_backends() {
     )
     .await;
     assert_eq!(
-        s, 502,
-        "the whole-conversation route is no longer the front's: it is handed on"
+        s, 404,
+        "the whole-conversation route is no longer the front's"
     );
     let bearer = "Authorization: Bearer some-library-token".to_string();
     let (s, _, _) = call(f.addr, "GET", "/api/ai/settings", &[c, bearer], "").await;
-    assert_eq!(s, 502, "a bearer is checked by the backend's /api guard");
+    assert_eq!(
+        s, 401,
+        "a bearer is the `/api` guard's: the session alone is not enough"
+    );
 }

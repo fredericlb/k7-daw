@@ -7,7 +7,7 @@ use std::time::Duration;
 use futures_util::{SinkExt, StreamExt};
 use serde_json::{Value, json};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 use tokio_tungstenite::tungstenite::{Error as WsError, Message};
 
 type Ws = tokio_tungstenite::WebSocketStream<tokio_tungstenite::MaybeTlsStream<TcpStream>>;
@@ -16,11 +16,6 @@ const PING: Duration = Duration::from_millis(300);
 
 async fn front(name: &str) -> SocketAddr {
     let root = std::env::temp_dir().join(format!("k7-front-cameras-{name}-{}", std::process::id()));
-    let gone = TcpListener::bind("127.0.0.1:0")
-        .await
-        .unwrap()
-        .local_addr()
-        .unwrap();
     let env = [
         ("SESSION_SECRET", "test-secret".to_string()),
         (
@@ -34,7 +29,6 @@ async fn front(name: &str) -> SocketAddr {
     .collect();
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: gone.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,
@@ -327,10 +321,10 @@ async fn a_frame_past_the_cap_drops_its_socket() {
 }
 
 #[tokio::test]
-async fn a_request_to_the_socket_that_is_no_upgrade_goes_to_the_backend() {
+async fn a_request_to_the_socket_that_is_no_upgrade_is_declined() {
     let addr = front("plain").await;
     assert_eq!(
         http(addr, "GET", "/api/cameras/ws", Some("ana")).await.0,
-        502
+        404
     );
 }

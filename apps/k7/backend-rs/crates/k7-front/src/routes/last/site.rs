@@ -1,6 +1,6 @@
-//! site.rs — what the root domain shows, `apps/k7/backend/src/sitePage.ts`: the splash and "Coming soon" at `/`, every
+//! site.rs — what the root domain shows, (`apps/k7/backend-rs/docs/site.md`): the splash and "Coming soon" at `/`, every
 //! other address sent there; the download page and the tab's icon pass. The drawing is the frontend's own file.
-//! What a reader gets wrong: the page is sent as Express sends a string, with its ETag and its 304.
+//! What a reader gets wrong: the page is sent with its body ETag and its 304.
 
 use std::sync::OnceLock;
 

@@ -6,7 +6,7 @@ Every script in the root `package.json`, grouped by purpose. Run them from the r
 
 | Script | Runs | Purpose |
 |---|---|---|
-| `dev` | `node scripts/dev.mjs` | The dev session under Tilt. Extra arguments go to `tilt up` (`npm run dev -- k7-backend`). See [Dev setup](./03-dev-setup.md). |
+| `dev` | `node scripts/dev.mjs` | The dev session under Tilt. Extra arguments go to `tilt up` (`npm run dev -- k7-front`). See [Dev setup](./03-dev-setup.md). |
 | `dev:tray` | `node scripts/dev-tray.mjs` | The engine, supervisor and tray build-run-watch loop on its own, outside Tilt. |
 | `storybook` | `storybook dev -p 6006` | Storybook for components under `packages/*/src` and `apps/*/frontend/src`. |
 | `build-storybook` | `storybook build` | Static Storybook into `storybook-static/`. |
@@ -40,7 +40,7 @@ Each is described in [Lints and conventions](./06-lints-and-conventions.md).
 
 | Script | Runs | Purpose |
 |---|---|---|
-| `tokens` | `node scripts/tokens.mjs` | Writes a random `API_TOKEN_SECRET` into the `k7-backend` section of `env.yaml`, preserving the file's comments. `--dry-run` prints without writing; `--env <file>` targets another file. Fails if `env.yaml` does not exist. |
+| `tokens` | `node scripts/tokens.mjs` | Writes a random `API_TOKEN_SECRET` into the `k7-front` section of `env.yaml`, preserving the file's comments. `--dry-run` prints without writing; `--env <file>` targets another file. Fails if `env.yaml` does not exist. |
 | `clean` | `rm -rf …/node_modules` | Deletes every `node_modules` folder in the tree (root, packages, apps). |
 
 ## Remote dev box (Windows)
@@ -59,7 +59,6 @@ These are run with `--workspace <name>`:
 | `k7-runtime` | `test`, `test:all` | Builds and runs the C++ `studio_*` test targets; `test:all` adds the slow Tracktion-linked ones. |
 | `k7-runtime` | `gen:builtin-params` | Regenerates `packages/song-schema/src/builtinParams.generated.json` from a real engine, one plugin per line. |
 | `k7-runtime` | `gen:strudel-bundle`, `gen:surge-panel` | Regenerate committed generated files (the pattern-lane bundle the engine embeds; the Surge XT module's panel in `k7-core`). |
-| `k7-tray` | `stage` | Stages the frontend and the backend bundle, the engine binaries and a pinned node into `apps/k7-tray/src-tauri/resources/`. |
+| `k7-tray` | `stage` | Stages the frontend, the page and library bundle and the engine binaries into `apps/k7-tray/src-tauri/resources/`. |
 | `k7-tray` | `dev`, `build` | `tauri dev`; `tauri build`, the installers. |
-| `k7-backend` | `start` | The backend without file watching. |
 | `@studio/song` | `bench` | Vitest benchmarks of the compile. |

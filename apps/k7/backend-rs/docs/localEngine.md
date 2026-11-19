@@ -9,7 +9,7 @@ How the front keeps these promises is `local.md`.
 | choice | why |
 |---|---|
 | the front hosts the supervisor, over stdio | the supervisor listens on no port, so no page in the browser can reach it (`engine/k7-supervisor/docs/hostProtocol.md`); k7's pages reach it through the front's routes |
-| `/api/local/engine` behind the session, on a device's own backend only | such a backend answers loopback only and refuses cross-site writes (`apps/k7/backend/docs/standalone.md`); the session is what any other route of it takes |
+| `/api/local/engine` behind the session, on a device's own backend only | such a backend answers loopback only and refuses cross-site writes (`standalone.md`); the session is what any other route of it takes |
 | an allow-list of commands | a page starts, stops and restarts the engine, ranks the audio interfaces, rescans plugins, fetches or drops instruments, lists a registry or drops it, and enables, disables or removes a slot; `shutdown`, the pairing verbs and plugin windows are not the page's |
 | a slot saved through `POST /api/local/engine/slots`, staged in a file the supervisor takes (`slot.save`) | a compiled chain is too big for a one-line command, and on this machine the supervisor reads the same disk (`engine/k7-supervisor/docs/slots.md`) |
 | removing a server on the engine page unlists the engine from that registry alone | the account keeps syncing with it; removing the server in the settings lets go of the sync |

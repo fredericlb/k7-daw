@@ -4,7 +4,7 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 
 struct Front {
     addr: SocketAddr,
@@ -14,11 +14,6 @@ struct Front {
 async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     let root = std::env::temp_dir().join(format!("k7-front-routes-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
-    let gone = TcpListener::bind("127.0.0.1:0")
-        .await
-        .unwrap()
-        .local_addr()
-        .unwrap();
     let mut env: std::collections::BTreeMap<String, String> = [
         ("SESSION_SECRET", "test-secret"),
         ("STUDIO_PREFS_DIR", root.join("prefs").to_str().unwrap()),
@@ -36,7 +31,6 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     }
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: gone.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,
@@ -152,7 +146,7 @@ async fn preferences_round_trip_into_the_backends_file() {
     assert!(wrong.starts_with("HTTP/1.1 400"), "{wrong}");
 }
 
-/// The file name `fileFor` in packages/user-prefs/store.ts gives `abc|1`.
+/// The file name a subject `abc|1` is stored under.
 fn k7_front_file(sub: &str) -> String {
     let slug: String = sub
         .chars()
@@ -212,22 +206,12 @@ async fn a_cross_site_write_is_refused_and_a_preflight_answered() {
 }
 
 #[tokio::test]
-async fn what_the_front_cannot_answer_goes_to_the_backend() {
-    let no_auth_dir = front("handed", &[("STUDIO_AUTH_DIR", "")]).await;
-    let out = send(
-        no_auth_dir.addr,
-        request("GET", "/api/preferences", &[], ""),
-    )
-    .await;
-    assert!(
-        out.starts_with("HTTP/1.1 502"),
-        "unknown revocations: {out}"
-    );
+async fn what_the_front_cannot_answer_ends_in_the_last_routes() {
     let f = front("methods", &[]).await;
     let post = send(f.addr, request("POST", "/api/preferences", &[], "")).await;
     assert!(
-        post.starts_with("HTTP/1.1 502"),
-        "a method the front does not own: {post}"
+        post.starts_with("HTTP/1.1 401"),
+        "a method the front does not own meets the `/api` guard: {post}"
     );
     let site = send(
         f.addr,
@@ -236,8 +220,8 @@ async fn what_the_front_cannot_answer_goes_to_the_backend() {
     )
     .await;
     assert!(
-        site.starts_with("HTTP/1.1 502"),
-        "the root domain's host: {site}"
+        site.starts_with("HTTP/1.1 302"),
+        "the root domain's host is sent to the home: {site}"
     );
 }
 

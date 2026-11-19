@@ -1,15 +1,15 @@
-# The tray and the phone apps
+# K7 DAW and the phone apps
 
-The tray (on a computer) and the Android app are the same idea on two platforms: k7's backend, the supervisor and the engine on the user's own device. Both start the **same backend bundle** with the **same settings table**, `apps/k7/backend/standalone.json`:
+K7 DAW (on a computer) and the Android app are the same idea on two platforms: k7's backend, the supervisor and the engine on the user's own device. Both start the **same backend bundle** with the **same settings table**, `apps/k7/backend-rs/standalone.json`:
 
 | Key | Value | Meaning |
 |---|---|---|
 | `port` | 18789 | The backend's port on every device (not the dev session's 8789, so both can run). Fixed, because a page's storage and its installed app are both keyed on the origin, port included |
-| `env` | `STUDIO_LOCAL_USER=1`, `STUDIO_LISTEN_HOST=127.0.0.1`, … | The backend's environment; it listens on loopback only |
+| `env` | `STUDIO_LOCAL_USER=1` | The front's environment; a device answers its own machine only |
 | `dirs` | `STUDIO_FILES_ROOT=workspaces`, `STUDIO_MEDIATEK=mediatek`, `STUDIO_PREFS_DIR=prefs/k7`, `STUDIO_HOME=server-home` | Folders relative to the app's state directory |
 | `library` | `k7-core` | The library seeded on first use from the bundled copy (`STUDIO_LIBRARY_SEED`) |
 
-The bundle is built by `apps/k7/backend/scripts/bundle.mjs`, frontend and library included. The page it serves is k7's only page; what a device adds is asked of the backend (`GET /api/local`, `apps/k7/frontend/docs/localApp.md`).
+The bundle is built by `apps/k7/backend-rs/scripts/stageBundle.mjs`, the page and library included. The page it serves is k7's only page; what a device adds is asked of the backend (`GET /api/local`, `apps/k7/frontend/docs/localApp.md`).
 
 ## The supervisor host (`k7-local`)
 
@@ -23,13 +23,14 @@ The bundle is built by `apps/k7/backend/scripts/bundle.mjs`, frontend and librar
 
 `k7-local`'s `tests/all/host.rs` drives a fake supervisor (`k7-fake-supervisor`) speaking the same NDJSON.
 
-## The tray (`apps/k7-tray`, Tauri)
+## K7 DAW (`apps/k7-tray`, Tauri)
 
-A windowless Tauri app (Rust, no webview) in the system tray (Windows, Linux; a Mac runs the iOS app). It runs k7's Rust front in its own process on `http://127.0.0.1:18789`, starts one process, a bundled and pinned Node 24 running k7's backend bundle behind it, and opens that address in the person's own browser, where k7 installs as an app. The front runs the supervisor over stdio on `~/.k7` and the supervisor's own port (8765): the tray's engine is the machine's engine, the one the command-line engine would be. Everything is on the machine, so it works offline. The choices and their reasons are in `apps/k7-tray/docs/tray.md`; the front's side in `apps/k7/backend-rs/docs/localEngine.md`.
+A Tauri app (Rust) with one window and an icon in the system tray, on Windows, Linux and macOS (the Mac's other way is the iOS app). It runs k7's Rust front in its own process on `http://127.0.0.1:18789`, starts nothing else, and shows that address in its window, on the system's webview (`apps/k7-tray/docs/desktop.md`, `webviews.md`); the tray's "Open in Browser" opens it in the person's browser. The front runs the supervisor over stdio on `~/.k7` and the supervisor's own port (8765): the tray's engine is the machine's engine, the one the command-line engine would be. Everything is on the machine, so it works offline. The choices and their reasons are in `apps/k7-tray/docs/tray.md`; the front's side in `apps/k7/backend-rs/docs/localEngine.md`.
 
 | Where | What |
 |---|---|
 | `apps/k7-tray/src-tauri/src/backend.rs` | The one spawn, its environment (standalone.json's, plus `K7_SUPERVISOR_BIN`, the tray's bearer `K7_TRAY_TOKEN`, the release stamp), readiness, the backoff, the stop (closing stdin, `K7_STDIN_STOP`) |
+| `apps/k7-tray/src-tauri/src/window.rs`, `handlers.rs`, `appmenu.rs` | The window (splash, navigation, hide on close), what the webview may do (links, downloads, permissions) and the macOS menu bar (`apps/k7-tray/docs/desktop.md`) |
 | `apps/k7-tray/src-tauri/src/loops.rs`, `tray.rs` | The status line, read from `/api/local/tray` under the bearer and drawn as worded (`apps/k7/backend-rs/crates/k7-local/src/tray_status.rs`) |
 | `apps/k7-tray/src-tauri/src/updates.rs` | tauri-plugin-updater on the tray's channel feed (`docs/app-downloads.md`) |
 | `apps/k7-tray/src-tauri/src/job.rs`, `pidkill.rs` | The safety nets: a Windows job object, so a force-killed tray takes its tree with it, and a backstop for an engine a hung supervisor left |
@@ -60,7 +61,6 @@ Android only lets an app execute files from its native library directory, so bot
 |---|---|---|
 | `libk7runtime.so` | `engine/k7-runtime`, preset `android-arm64`: a **shared library** with `engine/k7-runtime/server/android/EngineJni.cpp` and no `main()` | Loaded in the app's process. `EngineBridge.kt` sets the environment, initialises JUCE, and calls `nativeServe(port)` on a thread that prepared a `Looper`, which becomes JUCE's message thread. Once per process: a stopped engine needs a new process. |
 | `libk7supervisor.so` | `engine/k7-supervisor`, preset `android-arm64`, an executable renamed | Spawned by `SupervisorHost.kt` with `STUDIO_HOME`, `STUDIO_MACHINE_NAME` (the device name), `STUDIO_INSTRUMENTS=all`, `STUDIO_PORTS` and `STUDIO_EXTRA_CA_CERTS`. Its `engine` frames start and stop the in-process engine. |
-| Termux's `node` and its libraries | `engine/k7-android/scripts/termux-tools.mjs`, every `.deb` pinned by SHA-256 in `engine/k7-android/scripts/termux-packages.json` | Runs k7's backend bundle (`BackendHost.kt`), patched in place for its new prefix |
 
 The engine's Android build has no VST3/LADSPA hosting and no Surge XT, and grows its buffer on underruns (up to 40 ms).
 
@@ -71,7 +71,7 @@ The engine's Android build has no VST3/LADSPA hosting and no Surge XT, and grows
 | File | Role |
 |---|---|
 | `MainActivity.kt` | A Capacitor `BridgeActivity`: registers the two plugins, keeps the screen on, starts the backend, asks for `RECORD_AUDIO` then starts the supervisor. Finishing the activity stops supervisor, engine and backend and exits the process. |
-| `BackendHost.kt` | Unpacks `backend.zip` and the Termux tools, then runs k7's backend on `127.0.0.1:18789` |
+| `BackendHost.kt` | Unpacks `backend.zip`, then starts k7's front (`RustFront.kt`) on `127.0.0.1:18789` |
 | `SupervisorHost.kt` | The NDJSON channel (what `k7-local` is to the tray's front); pins the local backend first in `registryUrls` |
 | `EngineBridge.kt`, `EngineOps.kt` | The in-process engine; LAN address, CA import and forget (which restart the supervisor, which then adopts the running engine) |
 | `EnginePlugin.kt` | Capacitor plugin `K7Runtime` for the tray page: `state` and `engineExit` events, commands, quit |
@@ -91,4 +91,4 @@ cd engine/k7-android
 ./gradlew assembleDebug
 ```
 
-`engine/k7-android/app/build.gradle.kts` wires `preBuild` to: `buildEngine` (`node scripts/build.mjs android-arm64` in `engine/k7-runtime`, with the SDK's NDK), `buildSupervisor` (`engine/scripts/supervisorBuild.mjs` with `STUDIO_SUPERVISOR_PRESET=android-arm64`), `stageEngine`, `stageShell` (the tray page), `stageTermuxTools`, and `stageBackend` (`buildFrontend` then `bundle.mjs`, zipped with `standalone.json`, stored uncompressed). This compiles the whole C++ engine for Android; it is a long build.
+`engine/k7-android/app/build.gradle.kts` wires `preBuild` to: `buildEngine` (`node scripts/build.mjs android-arm64` in `engine/k7-runtime`, with the SDK's NDK), `buildSupervisor` (`engine/scripts/supervisorBuild.mjs` with `STUDIO_SUPERVISOR_PRESET=android-arm64`), `stageEngine`, `stageShell` (the tray page), and `stageBackend` (`buildFrontend` then `stageBundle.mjs`, zipped with `standalone.json`, stored uncompressed). This compiles the whole C++ engine for Android; it is a long build.

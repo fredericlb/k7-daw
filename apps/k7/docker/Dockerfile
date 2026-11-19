@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 #
-# k7 — the web editor, ONE process: the backend serves its own built
-# frontend, no nginx, and this image starts from a plain Node image.
+# k7 — the front, ONE process: the Rust front serves its own built frontend, no nginx, and no node runs in
+# this image: node builds the page and the files the front reads, in the stages before the last.
 #
 # The first three stages see only the manifests, so the installs are cached across every push that
 # leaves them alone — docs/images.md. Node is 24, the one version production and CI share (same page).
@@ -32,16 +32,10 @@ ARG APP_VERSION=dev
 ENV VITE_APP_VERSION=$APP_VERSION
 # vite alone: the lint job typechecks every workspace (docs/images.md).
 RUN npm exec --workspace k7-frontend -- vite build
-# The backend and the file service as plain JS, reading the checkout around them: no tsx at run time (docs/images.md).
-RUN node apps/k7/backend/scripts/bundle.mjs server-dist --in-tree
 # The page `picture render` runs in chromium, built here since nothing builds it at run time (backend-rs/docs/service.md).
 RUN node apps/k7/backend-rs/crates/k7-picture/page.mjs /app/render-page/renderPage.js
 # What the Rust front's actor reads at its code root, a folder of its own (apps/k7/backend-rs/docs/service.md).
 RUN node apps/k7/backend-rs/scripts/stageCodeRoot.mjs /code-root
-
-# ---- backend prod deps: k7-backend's closure only, no devDependencies -------
-FROM toolchain AS backend-deps
-RUN --mount=type=cache,target=/root/.npm npm ci --workspace k7-backend --omit=dev --no-audit --no-fund
 
 # ---- k7's Rust front: a static musl binary, from apps/k7/backend-rs and the waveform module it embeds ----------
 FROM rust:1.97.1-alpine AS front-build
@@ -69,14 +63,16 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry,sharing=locked \
  && cp target/release/k7-front /k7-front
 
 # ---- final image --------------------------------------------------------------
-FROM node:24-alpine AS runtime
+FROM alpine:3.22 AS runtime
 # ffmpeg for video and an mp3 mixdown — audio is decoded and encoded in WebAssembly.
 RUN apk add --no-cache ffmpeg
-# tini as PID 1: it reaps whatever a dead file service left re-parented to it, and forwards the stop (docs/images.md).
+# tini as PID 1: it reaps whatever a dead child left re-parented to it, and forwards the stop (docs/images.md).
 RUN apk add --no-cache tini
 # chromium and its fonts: `picture render`, the picture drawn headless (packages/file-service/docs/serverRender.md).
 # Alpine's chromium has no SwiftShader: Mesa's lavapipe is the Vulkan its WebGL2 draws on (crates/k7-picture).
 RUN apk add --no-cache chromium font-noto ttf-freefont mesa-vulkan-swrast vulkan-loader
+# The one account the front runs as: a fresh volume copies its owner (docs/images.md).
+RUN addgroup -g 1000 -S node && adduser -u 1000 -S -G node -h /home/node node
 ENV STUDIO_CHROMIUM=/usr/bin/chromium-browser
 # Before the VOLUME lines, which freeze them: a fresh volume copies this owner (docs/images.md).
 RUN mkdir -p /data /library /workspaces \
@@ -86,23 +82,16 @@ COPY --from=front-build /k7-front /usr/local/bin/k7-front
 COPY --chmod=755 apps/k7/docker/start.sh /usr/local/bin/k7-start
 COPY --from=frontend-build /code-root /usr/local/share/k7/code
 ENV K7_CODE_ROOT=/usr/local/share/k7/code
-# Express hides its stack traces.
-ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=backend-deps /app ./
-# The whole repo: @studio/* are symlinks to raw TypeScript source, so a missing package is a crash on import.
-COPY . .
-# The built SPA — apps/k7/backend/src/server.ts serves this directly.
+# The built page the front serves (apps/k7/backend-rs/docs/last.md).
 COPY --from=frontend-build /app/apps/k7/frontend/dist ./apps/k7/frontend/dist
-COPY --from=frontend-build /app/server-dist ./server-dist
+ENV K7_FRONTEND_DIST=/app/apps/k7/frontend/dist
 COPY --from=frontend-build /app/render-page ./render-page
 ENV K7_RENDER_PAGE=/app/render-page/renderPage.js
-# node's compile cache, in `node`'s own home: the backend skips compiling its bundle again (docs/images.md).
-ENV NODE_COMPILE_CACHE=/home/node/.cache/node-compile-cache
 # The front's compiled modules, in `node`'s home, never a volume (docs/images.md).
 ENV K7_FRONT_CACHE=/home/node/.cache/k7-front
 
-# k7's per-person preferences (packages/user-prefs/docs/store.md).
+# k7's per-person preferences.
 ENV STUDIO_PREFS_DIR=/data/prefs
 # The apps' builds served at /app_downloads, the current and previous one per channel (docs/app-downloads.md).
 ENV STUDIO_APP_RELEASES_DIR=/data/app-releases
@@ -113,18 +102,17 @@ VOLUME ["/library"]
 # The accounts' workspaces, one folder each, when the deployment sets $STUDIO_FILES_ROOT to it.
 VOLUME ["/workspaces"]
 
-# The front's port; node listens behind it on 127.0.0.1:8790 (start.sh), and Traefik is the one hop before it.
+# The front's port; Traefik is the one hop before it.
 EXPOSE 8789
 ENV K7_FRONT_TRUST_HOPS=1
 # The stamp /api/health reports beside the version, last so a new one rebuilds no layer above (docs/versioning.md).
 ARG APP_VERSION=dev
 ENV APP_VERSION=$APP_VERSION
-WORKDIR /app/apps/k7/backend
 # Not root: the code under /app is root's and read-only to it; only the volumes above are its own.
 USER node
 # Readiness, not liveness: the volumes take a write (docs/images.md).
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
   CMD wget -qO- http://127.0.0.1:8789/api/ready || exit 1
-# The bundle under plain node, behind the front; start.sh closes the volumes again and runs both (docs/images.md).
+# start.sh closes the volumes again and runs the front (docs/images.md).
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/usr/local/bin/k7-start"]

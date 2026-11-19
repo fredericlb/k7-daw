@@ -9,74 +9,13 @@ use std::sync::Weak;
 use std::time::Duration;
 
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 use tokio::sync::oneshot;
 use tokio::task::JoinHandle;
 
 use crate::{AppState, Config};
 
 const SECRET: &str = "test-secret";
-
-/// One request read off a socket: its method and path, and its body.
-async fn read_request(s: &mut TcpStream) -> Option<(String, String)> {
-    let mut buf = Vec::new();
-    let mut chunk = [0u8; 4096];
-    loop {
-        let n = s.read(&mut chunk).await.ok()?;
-        if n == 0 {
-            return None;
-        }
-        buf.extend_from_slice(&chunk[..n]);
-        let text = String::from_utf8_lossy(&buf).to_string();
-        let Some((head, body)) = text.split_once("\r\n\r\n") else {
-            continue;
-        };
-        let len = head
-            .lines()
-            .find_map(|l| {
-                l.to_ascii_lowercase()
-                    .strip_prefix("content-length: ")
-                    .map(|v| v.trim().parse().unwrap_or(0))
-            })
-            .unwrap_or(0);
-        if body.len() >= len {
-            let line = head
-                .lines()
-                .next()
-                .unwrap_or("")
-                .split(' ')
-                .take(2)
-                .collect::<Vec<_>>()
-                .join(" ");
-            return Some((line, body.to_string()));
-        }
-    }
-}
-
-/// A backend that runs none of the families and echoes every other request.
-async fn backend() -> SocketAddr {
-    let l = TcpListener::bind("127.0.0.1:0").await.unwrap();
-    let addr = l.local_addr().unwrap();
-    tokio::spawn(async move {
-        while let Ok((mut s, _)) = l.accept().await {
-            tokio::spawn(async move {
-                let Some((line, _)) = read_request(&mut s).await else {
-                    return;
-                };
-                let b = match line.as_str() {
-                    "GET /api/internal/files/hub" => r#"{"runs":false}"#.to_string(),
-                    other => format!("ts {other}"),
-                };
-                let reply = format!(
-                    "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{b}",
-                    b.len()
-                );
-                let _ = s.write_all(reply.as_bytes()).await;
-            });
-        }
-    });
-    addr
-}
 
 /// A front being served, the state it built seen weakly, and the switch that stops it.
 struct Running {
@@ -102,7 +41,6 @@ async fn start(name: &str, env: impl Fn(&Path) -> Vec<(&'static str, String)>) -
     }
     let config = Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: backend().await.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env: vars,

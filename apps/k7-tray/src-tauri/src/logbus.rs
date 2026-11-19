@@ -3,7 +3,7 @@
 // `[host]` lines, which are what remain when the supervisor itself broke. See docs/tray.md.
 
 use std::fs::OpenOptions;
-use std::io::{BufRead, BufReader, Read, Write};
+use std::io::Write;
 use std::sync::{Mutex, OnceLock};
 
 use crate::paths::{merged_log_path, studio_dir};
@@ -41,20 +41,4 @@ pub fn line(tag: &str, text: &str) {
             let _ = writeln!(f, "{ts} [{tag}] {text}");
         }
     }
-}
-
-/// Drain the supervisor's stderr into the merged log on a detached thread, living until the pipe closes.
-/// Not optional: a piped child nobody reads blocks once the pipe buffer fills.
-pub fn pump<R: Read + Send + 'static>(reader: R, tag: &'static str) {
-    std::thread::spawn(move || {
-        let mut buf = BufReader::new(reader);
-        let mut s = String::new();
-        loop {
-            s.clear();
-            match buf.read_line(&mut s) {
-                Ok(0) | Err(_) => break, // EOF or a broken pipe — the process is gone
-                Ok(_) => line(tag, s.trim_end_matches(['\r', '\n'])),
-            }
-        }
-    });
 }

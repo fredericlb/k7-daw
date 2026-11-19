@@ -13,14 +13,15 @@
   },
   "dependencies": {
     "@studio/env": "*",
-    "@studio/oidc": "*",
     "@studio/engine-tunnel": "*",
     "@studio/song-schema": "*",
     "fflate": "^0.8.2",
+    "keygrip": "^1.1.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
+    "@types/keygrip": "^1.0.6",
     "@types/node": "^22.10.0",
     "@types/ws": "^8.5.12",
     "typescript": "^7.0.2"

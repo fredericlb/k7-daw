@@ -71,7 +71,7 @@ revokes the simulator's microphone grant, which it restores.
 
 The instance signs its session cookie with its `SESSION_SECRET`, and that secret is in this machine's
 `env.yaml`. `src/session.ts` signs one the same way, with `sessionCookieHeader` from
-`@studio/oidc` — the helper that exists so tests do not hand-roll the encoding. So there is no
+`src/sessionCookie.ts` — the helper that exists so tests do not hand-roll the encoding. So there is no
 password to store and no login page to script, and the suite cannot sign in anywhere whose secret is
 not on disk here: it is a local tool by construction.
 
@@ -89,7 +89,7 @@ workspaces. So the run builds `e2e`, a build type of its own in `engine/k7-andro
 | what differs | why |
 |---|---|
 | the id `se.frediver.k7.daw.e2e` | installed beside the shipped app, with its own data, and removed without touching it |
-| the backend on port 18799, not standalone.json's | every app of a phone shares one loopback, and the shipped app may be running. The engine needs no such care: its port is the first of a range |
+| the front on port 18799, not standalone.json's | every app of a phone shares one loopback, and the shipped app may be running. The engine needs no such care: its port is the first of a range |
 | the label "k7 e2e" | the two launcher icons are told apart |
 | `E2E_BASE_URL` is the phone's origin, and a device target's verb runner refuses a relative base without one; `android-check.sh` asserts the config sets it | the verb runner is node's and takes a whole URL, and the web default sends every verb to the private instance, which answers 502 |
 
@@ -212,7 +212,7 @@ suite's length, since they run side by side; a cold tree first compiles the engi
 | choice | why |
 |---|---|
 | a session of its own, not the Windows one | a suite no longer waits for another agent's run, a Tilt restart or a merge rebuilding the session it drives |
-| the front, the backend and Vite started as `npm run dev` starts them (`dev-front.mjs`, the backend's `with-env.mjs`), on ports 28789, 28790 and 25223, all on `127.0.0.1` | the same session as Windows', so a difference is the platform's; the Mac may run a dev session or a tray of its own on the usual ports, and its application firewall drops a LAN connection to an unsigned binary |
+| the front and Vite started as `npm run dev` starts them (`dev-front.mjs`), on ports 28789 and 25223, all on `127.0.0.1` | the same session as Windows', so a difference is the platform's; the Mac may run a dev session or a tray of its own on the usual ports, and its application firewall drops a LAN connection to an unsigned binary |
 | the command-line engine (`k7-supervisor --config`), listed at the bed's front over loopback, on 28765 | an engine heartbeating from loopback is every local account's (`apps/k7/backend-rs/docs/engine/ownership.md`); a tray would hold 18789 and `~/.k7`, the Mac's own |
 | `HOME` under `~/k7-trees/e2e-macos-bed`, wiped at every run, an env.yaml with a new secret, no instrument downloaded | nothing of the Mac's own `~/.k7` or `~/.studio` is read or written, and the bed is paired with no server: the specs that publish or sync stay away from production |
 | the release front built into `~/.cache/k7-macbed-<tree name>` (`--target-dir`, handed to `dev-front.mjs` as `K7_FRONT_TARGET_DIR`) | a `target` inside the worktree makes `gate.sh` refuse the tree, and two worktrees must not share one build folder |
@@ -256,13 +256,13 @@ reference's reports.
 | the counters are judged by the bed script itself, 32 s after the suites, while the front is up | each counter line is logged at a 30 s tick: a front stopped before it loses the last line, and a run read short |
 | a filtered bed (`E2E_FILTER`) prints the floors it missed and fails on none; a panic fails it all the same | a floor is the whole suite's count: a filtered run touches only what its specs do |
 | the engine's poll floor is a quarter of a poll per second of the web suite (`POLLS_PER_SECOND`), one in a conformance-only run; `loads` and `dry` stay counts | the browser polls every two seconds while a project is served, so polls follow the run's wall clock: whole runs read 0.79 to 1.6 a second, and a fixed count fails a fast Mac or a loaded one that polls fine; the fault it catches is a poll that no longer reaches the link, which reads near zero |
-| every bed sets `CONFORMANCE_INTERNAL_SECRET` to the backend's `K7_FRONT_SECRET` (`k7-dev-front`) | the specs behind the internal seam skip without it, and a skip reads as green |
+| every bed sets `CONFORMANCE_INTERNAL_SECRET` to the front's `K7_FRONT_SECRET` (`k7-dev-front`) | the specs behind the internal seam skip without it, and a skip reads as green |
 
 ## The beds are devices
 
 | choice | why |
 |---|---|
-| the bed starts the front as a device: `env.yaml` carries `STUDIO_LOCAL_USER` and `K7_INSTANCE: local`, as the tray's `standalone.json` does, and `E2E_USER` is then the local user (`dev-user`) | the server is fading away and its account runtime is gone: the file service, the project pages and `/api/local` exist only on a device, so a server bed would skip or fail the web suite and about 22 conformance specs. A device turns every session into its one local user, so the suite signs in as that user |
+| the bed starts the front as a device: `env.yaml` carries `STUDIO_LOCAL_USER` (and `K7_INSTANCE: local`), as the tray's `standalone.json` does, and `E2E_USER` is then the local user (`dev-user`) | the server is fading away and its account runtime is gone: the file service, the project pages and `/api/local` exist only on a device, so a server bed would skip or fail the web suite and about 22 conformance specs. A device turns every session into its one local user, so the suite signs in as that user |
 | a device has one account and no admin, so the suite signs in as `E2E_USER` alone; what needs a stranger, an author or a refusal is held by the Rust tests, not staged here | `env.yaml` names no `AUTH_ADMIN_GROUPS`, as the tray starts it, so its libraries are the published versions it pins |
 | on a device bed every spec holding the account's file service or served project runs in one lane (`playwright.conformance.config.ts`) | the specs' separate accounts are one account here, so two of them at once would cut each other's calls |
 | the bench (`/workspaces/bench`, New chain) is not run on a device bed | the bed's `k7-core` is a draft, not a published version a tray installs, and the bench's rig declines (`would-throw`) on it; a server's releases are not made on a device |

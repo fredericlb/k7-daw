@@ -147,8 +147,7 @@ first, with the holder read from the session by `claimHolder` — the same name 
 
 - the file hub binds an account's workspaces to an engine only while the account holds a claim on
   it (`k7_hub::binding`), and lets go once the claim moves on;
-- a route of the TypeScript backend asks through the internal seam's `holds`
-  (`packages/engine-registry/docs/internalSeam.md`), since the registry is the front's;
+- a route of the file hub asks through the internal seam's `holds` (`engine/reach.md`);
 - a job the account asks of an engine (`/api/engine-slots`) answers **403** for an engine the
   caller holds no claim on, since it reaches that machine;
 - the relay forwards a browser's driving frames only while the ticket's account holds a claim, the

@@ -1,6 +1,6 @@
 // BackendHost.swift — k7's backend on the phone: the Rust front (apps/k7/backend-rs) linked into the app as
 // k7-embed, answering the studio's own port by itself, with no node behind it. Port, environment and folders are
-// the desktop's, from apps/k7/backend/standalone.json. One front per PROCESS, like the supervisor and the engine:
+// the desktop's, from apps/k7/backend-rs/standalone.json. One front per PROCESS, like the supervisor and the engine:
 // it is started once, and a start that failed is the one thing a retry redoes. See engine/k7-runtime/docs/ios.md.
 
 import Foundation
@@ -194,7 +194,6 @@ final class BackendHost {
             "SESSION_SECRET": sessionSecret(),
             "K7_ENGINE_CORE": "front",
             "K7_FILES": "front",
-            "K7_LAST_ROUTES": "front",
             "K7_FRONTEND_DIST": bundle.appendingPathComponent("dist").path,
             "K7_CODE_ROOT": bundle.appendingPathComponent("code").path,
             "K7_FRONT_CACHE": root.appendingPathComponent("front-cache").path,

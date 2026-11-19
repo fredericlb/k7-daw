@@ -12,8 +12,8 @@ plugins {
 // npm is a .cmd on Windows, which an Exec task does not resolve from the bare name.
 val npm = if (System.getProperty("os.name").startsWith("Windows")) "npm.cmd" else "npm"
 
-// The table the desktop app starts its backend with too (apps/k7/backend/docs/standalone.md): its port is a constant here.
-val standalone = groovy.json.JsonSlurper().parse(rootDir.resolve("../../apps/k7/backend/standalone.json")) as Map<*, *>
+// The table the desktop app starts its backend with too (apps/k7/backend-rs/docs/standalone.md): its port is a constant here.
+val standalone = groovy.json.JsonSlurper().parse(rootDir.resolve("../../apps/k7/backend-rs/standalone.json")) as Map<*, *>
 
 // The e2e build's backend port: the shipped app holds standalone.json's on the same loopback, and e2e/src/android.ts dials this one.
 val E2E_PORT = 18799
@@ -177,30 +177,9 @@ val stageShell by tasks.registering(Sync::class) {
 
 android.sourceSets["main"].assets.srcDir(shellOut)
 
-// The standalone half (BackendHost.kt): Termux's node as lib*.so files beside the engine,
-// and k7's backend bundled for that node, with the files it reads, as one zip the app unpacks.
-val termuxCache = layout.buildDirectory.dir("termux-cache")
-val termuxJni = layout.buildDirectory.dir("termux-jni")
-val termuxAssets = layout.buildDirectory.dir("termux-assets")
-
-val stageTermuxTools by tasks.registering(Exec::class) {
-    inputs.files(rootDir.resolve("scripts/termux-tools.mjs"), rootDir.resolve("scripts/termux-packages.json"))
-    outputs.dirs(termuxJni, termuxAssets)
-    environment("ANDROID_NDK_HOME", android.ndkDirectory.absolutePath)
-    commandLine(
-        "node", rootDir.resolve("scripts/termux-tools.mjs").absolutePath,
-        termuxJni.get().dir("arm64-v8a").asFile.absolutePath,
-        termuxAssets.get().dir("termux").asFile.absolutePath,
-        termuxCache.get().asFile.absolutePath,
-    )
-}
-
-android.sourceSets["main"].jniLibs.srcDir(termuxJni)
-android.sourceSets["main"].assets.srcDir(termuxAssets)
-
 val repoDir = rootDir.resolve("../..")
 
-// The frontend the backend serves, as the desktop app's staging builds it.
+// The frontend the front serves, as the desktop app's staging builds it.
 val buildFrontend by tasks.registering(Exec::class) {
     workingDir = repoDir
     commandLine(npm, "exec", "--workspace", "k7-frontend", "--", "vite", "build")
@@ -211,7 +190,7 @@ val backendTree = layout.buildDirectory.dir("backend-tree")
 val bundleBackend by tasks.registering(Exec::class) {
     dependsOn(buildFrontend)
     workingDir = repoDir
-    commandLine("node", repoDir.resolve("apps/k7/backend/scripts/bundle.mjs").absolutePath, backendTree.get().asFile.absolutePath)
+    commandLine("node", repoDir.resolve("apps/k7/backend-rs/scripts/stageBundle.mjs").absolutePath, backendTree.get().asFile.absolutePath)
 }
 
 // The files the Rust front's actor reads at its code root, unpacked as `code/` and named K7_CODE_ROOT (docs/android.md).
@@ -228,7 +207,7 @@ val stageBackend by tasks.registering(Zip::class) {
     dependsOn(bundleBackend, stageCodeRoot)
     from(backendTree)
     from(codeRootTree) { into("code") }
-    from(repoDir.resolve("apps/k7/backend/standalone.json"))
+    from(repoDir.resolve("apps/k7/backend-rs/standalone.json"))
     archiveFileName.set("backend.zip")
     destinationDirectory.set(backendAssets)
 }
@@ -237,7 +216,7 @@ android.sourceSets["main"].assets.srcDir(backendAssets)
 // The zip is already compressed: aapt must not deflate it again, and the app streams it out as it is.
 android.androidResources.noCompress += "zip"
 
-tasks.named("preBuild") { dependsOn(stageEngine, stageShell, stageTermuxTools, stageBackend) }
+tasks.named("preBuild") { dependsOn(stageEngine, stageShell, stageBackend) }
 
 // The Rust front as libk7_embed.so, cargo linking with this SDK's NDK at the app's minSdk (apps/k7/backend-rs/docs/embed.md).
 val frontDir = repoDir.resolve("apps/k7/backend-rs")

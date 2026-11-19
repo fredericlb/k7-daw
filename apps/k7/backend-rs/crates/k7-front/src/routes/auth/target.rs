@@ -1,5 +1,5 @@
 //! target.rs — where `/auth/local` may send the browser and who may ask: the request's public origin, a return
-//! target resolved as the browser resolves it (`packages/oidc/returnTarget.ts`), and the same-origin check.
+//! target resolved as the browser resolves it, and the same-origin check.
 
 use hyper::HeaderMap;
 

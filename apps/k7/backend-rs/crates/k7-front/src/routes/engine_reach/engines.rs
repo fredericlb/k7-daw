@@ -1,26 +1,19 @@
 //! engines.rs — how the engine jobs reach an engine: the registry's view of it and a
-//! channel through the hub, from `k7-engine` in-process when the front holds the engine core, over the internal
-//! seam's engine half at the backend otherwise (`apps/k7/backend-rs/docs/engine/reach.md`).
+//! channel through the hub, from `k7-engine` in-process (`apps/k7/backend-rs/docs/engine/reach.md`).
 //! What a reader gets wrong: an in-process channel drops what is sent before the engine answers, so a `Link` holds it.
 
 use std::sync::Arc;
 use std::time::Duration;
 
-use hyper::Method;
 use k7_engine::frame::Frame;
 use k7_engine::tunnel::backpressure::{Admit, HeldFrames, admit};
 use k7_engine::tunnel::channel::{Channel, ChannelEvent};
 use k7_engine::tunnel::frames::{Kind, Root};
 use k7_engine::tunnel::spelling::{SEP, tunnel_spelling};
-use k7_engine::ws::{self, Event};
-use serde_json::{Value, json};
+use serde_json::Value;
 use tokio::sync::mpsc;
 
-use super::seam::Seam;
 use crate::AppState;
-
-/// How long a question to the backend's engine seam may take.
-const ASK: Duration = Duration::from_secs(10);
 
 /// One engine as an account sees it (`EngineView`).
 #[derive(Clone, Debug, PartialEq)]
@@ -92,48 +85,18 @@ impl Link {
     }
 }
 
-/// Where the engines are reached: the core this front holds, or the backend's seam.
-pub enum Reach<'a> {
-    Core(&'a Arc<k7_engine::Core>),
-    Seam(&'a Seam),
-}
+/// Where the engines are reached: the core this front holds.
+pub struct Reach<'a>(pub &'a Arc<k7_engine::Core>);
 
-/// The reach of a request's front: the core when it holds one, the backend's seam otherwise.
+/// The reach of a request's front; a request is claimed only once the front holds an engine core.
 pub fn reach(state: &AppState) -> Reach<'_> {
-    match &state.engine {
-        Some(e) => Reach::Core(&e.core),
-        None => Reach::Seam(&crate::routes::engine_reach::seams_of(state).engine_seam),
-    }
-}
-
-fn enc(s: &str) -> String {
-    url::form_urlencoded::byte_serialize(s.as_bytes())
-        .collect::<String>()
-        .replace('+', "%20")
-}
-
-fn view_of(v: &Value) -> Option<View> {
-    let flag = |k: &str| v.get(k).and_then(Value::as_bool).unwrap_or(false);
-    let chains = v.get("chains").and_then(Value::as_object).map(|c| {
-        let one = |k: &str| c.get(k).and_then(Value::as_str).map(str::to_string);
-        k7_engine::registry::heartbeat::Chains {
-            stems: one("stems"),
-            instrumental: one("instrumental"),
-        }
-    });
-    Some(View {
-        id: v.get("id")?.as_str()?.to_string(),
-        role: v
-            .get("role")
-            .and_then(Value::as_str)
-            .unwrap_or("none")
-            .to_string(),
-        holds: flag("holds"),
-        tunnel: flag("tunnel"),
-        renderer: flag("renderer"),
-        score: v.get("score").and_then(Value::as_f64),
-        chains,
-    })
+    Reach(
+        &state
+            .engine
+            .as_ref()
+            .expect("claimed only with the engine core")
+            .core,
+    )
 }
 
 fn core_view(core: &k7_engine::Core, id: &str, score: Option<f64>, holder: &str) -> View {
@@ -152,28 +115,15 @@ fn core_view(core: &k7_engine::Core, id: &str, score: Option<f64>, holder: &str)
 impl Reach<'_> {
     /// Engine `id` as `holder` sees it, None when no live engine has that id.
     pub async fn view(&self, id: &str, holder: &str) -> Result<Option<View>, String> {
-        match self {
-            Reach::Core(core) => Ok(core.registry.get(id).map(|e| {
-                let score = e
-                    .performance
-                    .as_ref()
-                    .and_then(|p| p.get("score"))
-                    .and_then(Value::as_f64);
-                core_view(core, &e.id, score, holder)
-            })),
-            Reach::Seam(seam) => {
-                let path = format!(
-                    "/api/internal/engine/engines/{}?holder={}",
-                    enc(id),
-                    enc(holder)
-                );
-                match seam.ask_at(Method::GET, &path, None, ASK).await {
-                    Ok((404, _)) => Ok(None),
-                    Ok((200, v)) => Ok(view_of(&v)),
-                    _ => Err("the engine seam did not answer for an engine".into()),
-                }
-            }
-        }
+        let core = self.0;
+        Ok(core.registry.get(id).map(|e| {
+            let score = e
+                .performance
+                .as_ref()
+                .and_then(|p| p.get("score"))
+                .and_then(Value::as_f64);
+            core_view(core, &e.id, score, holder)
+        }))
     }
 
     /// A channel to engine `id` (None: the render machine) sharing `roots`; None when it holds no tunnel here.
@@ -182,71 +132,19 @@ impl Reach<'_> {
         id: Option<&str>,
         roots: Vec<Root>,
         kind: Kind,
-        timeout: Duration,
+        _timeout: Duration,
     ) -> Result<Option<Link>, String> {
-        match self {
-            Reach::Core(core) => {
-                let Some(id) = id.map(str::to_string).or_else(|| core.hub.renderer()) else {
-                    return Ok(None);
-                };
-                let Some(ch) = core.hub.open(&id, roots.clone(), kind, false) else {
-                    return Ok(None);
-                };
-                let (link, out, events) = Link::pair();
-                tokio::spawn(pump_channel(ch, roots, kind == Kind::Jobs, out, events));
-                Ok(Some(link))
-            }
-            Reach::Seam(seam) => open_at_seam(seam, id, roots, kind, timeout).await,
-        }
+        let core = self.0;
+        let Some(id) = id.map(str::to_string).or_else(|| core.hub.renderer()) else {
+            return Ok(None);
+        };
+        let Some(ch) = core.hub.open(&id, roots.clone(), kind, false) else {
+            return Ok(None);
+        };
+        let (link, out, events) = Link::pair();
+        tokio::spawn(pump_channel(ch, roots, kind == Kind::Jobs, out, events));
+        Ok(Some(link))
     }
-}
-
-/// `EngineSeam.open`: a one-shot binding, its upgrade, then the binding dropped; the hub reads it at the upgrade only.
-async fn open_at_seam(
-    seam: &Seam,
-    id: Option<&str>,
-    roots: Vec<Root>,
-    kind: Kind,
-    timeout: Duration,
-) -> Result<Option<Link>, String> {
-    let body = json!({ "engineId": id, "roots": roots, "kind": kind.as_str() });
-    let path = match seam
-        .ask_at(
-            Method::POST,
-            "/api/internal/engine/bindings",
-            Some(body),
-            ASK,
-        )
-        .await
-    {
-        Ok((201, v)) => v
-            .get("path")
-            .and_then(Value::as_str)
-            .unwrap_or("")
-            .to_string(),
-        _ => return Err("the engine seam refused a binding".into()),
-    };
-    let url = format!("ws://{}{path}", seam.upstream());
-    let dialled = tokio::time::timeout(
-        timeout,
-        tokio_tungstenite::connect_async_with_config(url.as_str(), Some(ws::config()), true),
-    )
-    .await;
-    let key = path.rsplit('/').next().unwrap_or("").to_string();
-    let _ = seam
-        .ask_at(
-            Method::DELETE,
-            &format!("/api/internal/engine/bindings/{key}"),
-            None,
-            ASK,
-        )
-        .await;
-    let Ok(Ok((socket, _))) = dialled else {
-        return Ok(None);
-    };
-    let (link, out, events) = Link::pair();
-    tokio::spawn(pump_socket(socket, out, events));
-    Ok(Some(link))
 }
 
 /// An in-process channel, held until the engine answers and respelt for a jobs channel, as the hub's loopback pipe does.
@@ -300,38 +198,6 @@ async fn pump_channel(
                     let _ = events.send(LinkEvent::Frame(f));
                 }
                 Some(ChannelEvent::Close) | None => {
-                    let _ = events.send(LinkEvent::Closed);
-                    return;
-                }
-            },
-        }
-    }
-}
-
-/// A socket to a bound loopback path at the backend.
-async fn pump_socket<S>(
-    socket: tokio_tungstenite::WebSocketStream<S>,
-    mut out: mpsc::UnboundedReceiver<Out>,
-    events: mpsc::UnboundedSender<LinkEvent>,
-) where
-    S: tokio::io::AsyncRead + tokio::io::AsyncWrite + Unpin + Send + 'static,
-{
-    let (peer, mut from) = ws::spawn(socket);
-    loop {
-        tokio::select! {
-            o = out.recv() => match o {
-                Some(Out::Frame(f)) => peer.send(&f),
-                Some(Out::Close) | None => {
-                    peer.shut();
-                    return;
-                }
-            },
-            e = from.recv() => match e {
-                Some(Event::Frame(f)) => {
-                    let _ = events.send(LinkEvent::Frame(f));
-                }
-                Some(Event::Pong) => {}
-                Some(Event::Closed(_)) | None => {
                     let _ = events.send(LinkEvent::Closed);
                     return;
                 }

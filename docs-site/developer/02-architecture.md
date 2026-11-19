@@ -7,7 +7,7 @@ laptop or a phone the three are the same machine: k7 is the tray or the app, and
 ```text
                         the device (one origin)
  ┌───────────────────────────────────────────────────────────────────────┐
- │  k7 backend (apps/k7/backend, Express, port 8789)                     │
+ │  k7 front (apps/k7/backend-rs, Rust, port 8789)                       │
  │   ├─ /auth/*        local user, mints the studio.sid session          │
  │   ├─ /api/files/*   file hub, the account's file service (in the Rust front)
  │   ├─ /api/engines   engine registry                                   │
@@ -29,27 +29,25 @@ laptop or a phone the three are the same machine: k7 is the tray or the app, and
 | Process | Code | Runs where | Job |
 |---|---|---|---|
 | k7 frontend | `apps/k7/frontend` | Browser | The editor and the home page. A React SPA built by Vite. |
-| k7 backend | `apps/k7/backend` | Device | One Express process behind k7's Rust front: the session it reads, preferences, the bearer tokens and the static SPA. The engine registry and relay, the tunnel hub and the file hub are the front's (`apps/k7/backend-rs/docs/`). |
+| k7 front | `apps/k7/backend-rs` | Device | One Rust process: the session, preferences, the bearer tokens and the static SPA, the engine registry and relay, the tunnel hub and the file hub (`apps/k7/backend-rs/docs/`). |
 | file service | `apps/k7/backend-rs/crates/k7-file-service` | Device (in the Rust front) | One runtime for the local account, made on demand by the front's file hub. Every file operation on the device's workspaces, the project compile, and the commands that drive an engine. |
 | k7-supervisor | `engine/k7-supervisor` | Engine machine | Starts and watches the engine, lists it at the registry, holds the tunnel back to the backend, runs jobs the backend asks of the machine. |
 | k7-runtime | `engine/k7-runtime` | Engine machine | The C++ audio engine. Receives a compiled project document over WebSocket, plays it, reports transport and meter state. It never reads song files. |
 
-### The k7 backend
+### The k7 front
 
-`apps/k7/backend/src/server.ts` is the whole entry point. In order, it:
+`apps/k7/backend-rs/crates/k7-front` is the whole entry point. In order, per request, it:
 
-1. layers its `env.yaml` section (`k7-backend`) into `process.env` with `loadServiceEnv`;
-2. answers CORS preflights for every origin;
-3. calls `setupAuth()` from `@studio/oidc` with cookie name `studio.sid`, for `/auth/me` only (code kept for a later rework, `docs/inventaire.md`): the
-   logout is the Rust front's (`apps/k7/backend-rs/docs/routes.md`);
-4. mounts the bearer tokens and the internal seam's file half (`apps/k7/backend/src/media/mount.ts`);
-   the engine registry, the tunnel hub and the file hub are the Rust front's;
-5. mounts per-account preferences at `/api/preferences`;
-6. redirects pages on the `play.` and `k7.` host aliases to k7's home (`/`);
-7. serves `apps/k7/frontend/dist` with hashed assets cached for a year and the shell never cached.
+1. refuses a guessable session secret at start (`auth_guard.rs`);
+2. sets the security headers, locks a device to its own machine, and answers CORS for loopback pages;
+3. reads the session cookie `studio.sid`, and answers `/auth/me`, `/auth/logout` and `/auth/local`
+   (`apps/k7/backend-rs/docs/routes.md`);
+4. answers the engine registry, the tunnel hub and the file hub, and the `/api` guard with the internal seam's `verify-token`;
+5. serves per-account preferences at `/api/preferences`;
+6. serves `apps/k7/frontend/dist` with hashed assets cached for a year and the shell never cached.
 
 The front answers the file hub only with `STUDIO_FILES_ROOT` set (`apps/k7/backend-rs/crates/k7-front/src/routes/files/mod.rs`),
-because that folder is the only place workspaces live. On `SIGTERM` the backend lets in-flight requests finish within four seconds.
+because that folder is the only place workspaces live. On `SIGTERM` the front lets in-flight requests finish.
 
 ### File services: one runtime per account
 
@@ -87,7 +85,7 @@ Where engine machines run:
 | Form | Code |
 |---|---|
 | Command-line engine (`k7-supervisor --config <file>`) | `engine/k7-supervisor`, staged by `engine/scripts/build-engine.mjs` |
-| The tray | `apps/k7-tray`: a windowless Tauri app that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`), the file services, and the person opens k7 in their browser |
+| K7 DAW | `apps/k7-tray`: a Tauri app with a window and a tray icon that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`) and the file services, and the window (or the browser) shows k7 |
 | Android app | `engine/k7-android`: the engine as a library, the supervisor as a program, and k7's backend bundled |
 | Raspberry Pi engine | `engine/docker/Dockerfile.pi`: a container with the command-line engine, playing through the Pi's sound card |
 

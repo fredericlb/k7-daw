@@ -86,5 +86,5 @@ async fn ready(
 
 /// Its routes behind the chain.
 pub fn routes() -> Routes {
-    axum::Router::new().route("/api/ready", get(ready).fallback(crate::proxied))
+    axum::Router::new().route("/api/ready", get(ready).fallback(crate::declined))
 }

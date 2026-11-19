@@ -3,8 +3,6 @@
 **/.env
 **/.turbo
 **/tsconfig.tsbuildinfo
-apps/k7/backend/data
-apps/k7/backend/.env.example
 apps/k7/frontend/.storybook
 storybook-static
 .git

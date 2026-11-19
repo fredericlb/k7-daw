@@ -1,4 +1,4 @@
-//! What the file hub's tests share: a backend that runs no hub, and a front with `K7_FILES=front` over a folder of
+//! What the file hub's tests share: a front with `K7_FILES=front` over a folder of
 //! its own whose host still names a node program, which a test then proves was never run (`node_never_ran`).
 //! What a reader gets wrong: the program is a marker, not a service; no account's files are ever node's.
 
@@ -7,40 +7,7 @@
 use std::net::SocketAddr;
 use std::path::PathBuf;
 
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::TcpListener;
-
 use crate::http_support::{self, Reply};
-
-/// A backend that runs no hub, mints the services' media bearer, and echoes anything else.
-pub async fn backend() -> SocketAddr {
-    let l = TcpListener::bind("127.0.0.1:0").await.unwrap();
-    let addr = l.local_addr().unwrap();
-    tokio::spawn(async move {
-        while let Ok((mut s, _)) = l.accept().await {
-            tokio::spawn(async move {
-                let mut buf = vec![0u8; 65536];
-                let n = s.read(&mut buf).await.unwrap_or(0);
-                let text = String::from_utf8_lossy(&buf[..n]).to_string();
-                let line = text.lines().next().unwrap_or("").to_string();
-                let body = match line.split(' ').take(2).collect::<Vec<_>>()[..] {
-                    ["GET", "/api/internal/files/hub"] => r#"{"runs":false}"#.to_string(),
-                    ["POST", "/api/internal/files/service-token"] => {
-                        r#"{"token":"tok-svc"}"#.to_string()
-                    }
-                    [m, p] => format!(r#"{{"ts":"{m} {p}"}}"#),
-                    _ => String::new(),
-                };
-                let reply = format!(
-                    "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
-                    body.len()
-                );
-                let _ = s.write_all(reply.as_bytes()).await;
-            });
-        }
-    });
-    addr
-}
 
 /// What a host that still names node's file service would start: a script that leaves a marker where it runs.
 const MARKER: &str = "no-node-ran";
@@ -106,7 +73,6 @@ async fn front_with(
     .collect();
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: backend().await.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,

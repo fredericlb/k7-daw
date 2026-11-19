@@ -6,6 +6,6 @@
   "license": "GPL-3.0-only",
   "author": "",
   "scripts": {
-    "dev": "concurrently -n frontend,backend -c auto \"npm run dev --workspace=k7-frontend\" \"npm run dev --workspace=k7-backend\""
+    "dev": "npm run dev --workspace=k7-frontend"
   }
 }

@@ -1,5 +1,5 @@
 //! engine — the registry's routes, the relay, the tunnel hub's upgrades and the internal seam, answered by
-//! `k7-engine` when the engine core is ON (`K7_ENGINE_CORE=front`), proxied to the backend, which answers 404, when
+//! `k7-engine` when the engine core is ON (`K7_ENGINE_CORE=front`), declined to the backend, which answers 404, when
 //! OFF. Which paths move together and why: `apps/k7/backend-rs/docs/engine.md`.
 
 mod chains;
@@ -139,7 +139,7 @@ pub fn with_hooks(router: Router, state: &Arc<AppState>) -> Router {
 
 /// The core's routes: the guarded ones, and those outside the backend's chain (upgrades, the seam).
 pub fn routes() -> (Routes, (Routes, Routes)) {
-    let p = |m: MethodRouter<Arc<AppState>>| m.fallback(crate::proxied);
+    let p = |m: MethodRouter<Arc<AppState>>| m.fallback(crate::declined);
     let guarded = Router::new()
         .route("/api/registry/hello", p(get(registry::hello)))
         .route("/api/registry/heartbeat", p(post(registry::heartbeat)))

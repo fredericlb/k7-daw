@@ -135,8 +135,8 @@ pub async fn relay(
     peer: ConnectInfo<SocketAddr>,
     req: Request,
 ) -> Response {
-    if !crate::proxy::is_upgrade(req.headers()) {
-        return crate::proxied(State(state), peer, req).await;
+    if !crate::hop::is_upgrade(req.headers()) {
+        return crate::declined(State(state), peer, req).await;
     }
     let raw = req
         .uri()
@@ -169,8 +169,8 @@ pub async fn tunnel(
     peer: ConnectInfo<SocketAddr>,
     req: Request,
 ) -> Response {
-    if !crate::proxy::is_upgrade(req.headers()) {
-        return crate::proxied(State(state), peer, req).await;
+    if !crate::hop::is_upgrade(req.headers()) {
+        return crate::declined(State(state), peer, req).await;
     }
     let hub = engine_of(&state).core.hub.clone();
     let header = |n: &str| {
@@ -207,8 +207,8 @@ pub async fn local(
     ConnectInfo(peer): ConnectInfo<SocketAddr>,
     req: Request,
 ) -> Response {
-    if !crate::proxy::is_upgrade(req.headers()) {
-        return crate::proxied(State(state), ConnectInfo(peer), req).await;
+    if !crate::hop::is_upgrade(req.headers()) {
+        return crate::declined(State(state), ConnectInfo(peer), req).await;
     }
     // Not one of the served upgrade paths: refused as `upgradeGuard.ts` refuses it.
     let Some(key) = local_key(req.uri().path()).map(str::to_string) else {

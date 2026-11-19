@@ -1,4 +1,4 @@
-//! seam.rs — the hub's side of the engine seam (`packages/engine-registry/seamClient.ts`): the registry's view of an
+//! seam.rs — the hub's side of the engine seam (`apps/k7/backend-rs/docs/engine/reach.md`): the registry's view of an
 //! engine, the tunnel hub's state, and loopback bindings, each an HTTP call to `/api/internal/engine` at the front.
 //! What a reader gets wrong: a KEPT binding is re-posted under its own key when the tunnel hub's epoch moves on.
 

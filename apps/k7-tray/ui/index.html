@@ -1,4 +1,26 @@
 <!doctype html>
-<!-- Never rendered: the tray opens no window, but Tauri refuses to build without a frontendDist holding an entry
-     point. k7 itself is the backend's page, opened in the browser from the menu. -->
-<html lang="en"><head><title>k7 tray</title></head><body></body></html>
+<!-- The splash of K7 DAW's window: shown until the backend answers, then the window navigates to it (src/window.rs). -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>K7 DAW</title>
+    <style>
+      :root { color-scheme: dark light; --bg: #15161a; --fg: #e8e8ec; --dim: #8a8b94; }
+      @media (prefers-color-scheme: light) { :root { --bg: #f4f4f6; --fg: #1b1c20; --dim: #6a6b74; } }
+      html, body { height: 100%; margin: 0; background: var(--bg); color: var(--fg); }
+      body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+        font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; cursor: default; user-select: none; }
+      h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: 0.02em; }
+      #line { color: var(--dim); min-height: 1.4em; text-align: center; padding: 0 24px; }
+    </style>
+  </head>
+  <body>
+    <h1>K7 DAW</h1>
+    <div id="line">Starting K7 DAW…</div>
+    <script>
+      // The host writes its status here (src/window.rs) until it navigates away.
+      window.__k7Status = (text) => { document.getElementById("line").textContent = text; };
+    </script>
+  </body>
+</html>

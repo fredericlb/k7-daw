@@ -13,7 +13,7 @@ page's row draws beyond the name — its surface types, whether it is the active
 changed — all optional, since an older service sends none of them and the row then draws less
 rather than guessing (`apps/k7/backend-rs/docs/file-workspaces.md`). Nothing else does: a second answer from
 another service would be a copy of what the folders already say, and a worse one. No service keeps
-a register of workspaces either (`apps/k7/backend/docs/projects.md`). A workspace is
+a register of workspaces either (`apps/k7/backend-rs/docs/projects.md`). A workspace is
 addressed by its folder name, under `@local` (`packages/web-protocol/docs/addresses.md`). See
 `apps/k7/frontend/docs/projects.md`.
 

@@ -66,6 +66,6 @@ what the graph draws on the next read.
 - **Creating a chain.** Adding a NODE to a folder chain works and is tested
   (`chainNodeNew.test.ts`). Making a new chain from nothing has no verb yet.
 - **The engine.** A chain edited here is not heard. It is heard by being named in a project that
-  is open — this song, or the bench's live rig when no song names it (`apps/k7/backend/docs/banc.md`):
+  is open — this song, or the bench's live rig when no song names it (`apps/k7/backend-rs/docs/banc.md`):
   the library is mounted in both, so a plugin actually loads. This screen edits the topology in
   place; something playing is what auditions it.

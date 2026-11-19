@@ -1,7 +1,7 @@
 # Plan: k7's backend in Rust
 
 The goal is ONE backend, in Rust, on every device: the tray, Android and iOS (the server image only serves downloads and documentation).
-Node then leaves every device (no Termux node, no NodeMobile, no bundled `backend.mjs`), and the
+No node runs on any device or in the image (no Termux node, no NodeMobile, no bundled `backend.mjs`): the
 tray and the phones run the backend inside their own process. The frontend stays TypeScript.
 The TypeScript the backend runs in QuickJS (the compiler, the verbs, the file service's logic) is
 replaced later by Rust and WASM: `docs/rust-wasm-port-plan.md`, a feature request.
@@ -54,26 +54,21 @@ process of its own and already reaches the hub over a socket.
 | 3. the session and the leaves | `/auth/*` and the API tokens; the analysis, uploads, AI organize | the on-disk corpus read and written byte for byte; a token minted by either implementation accepted by the other's gate |
 | 4. the engine core, in one move | the registry, the relay and its gate, the tunnel hub; the file hub with its libraries, blob store and history log; the local engine and supervisor-host; the routes that hold them in memory — stems, engine slots, engine-local | phase 2's tests and `engine-tunnel`'s two-agent suite against both hubs; a TypeScript replica syncs against a Rust relay and the reverse; a security review |
 | 5. file service and compiler | file-service, the compiler, jsdsp, renders, `.dawproject` import, picture; `/api/ready`; the file hub, left by phase 4 — the survey, order and decisions are `docs/rust-phase5-plan.md` | golden ProjectDocs over `k7-core`, the demos and the e2e fixtures |
-| 6. cut-over | the tray links the backend, Android and iOS load it, the image's backend is one binary; node, Termux, NodeMobile and `bundle.mjs` deleted | the functional suite on the web, the phone and the tray; one published version per switch before its TypeScript goes |
+| 6. cut-over (done) | the tray links the backend, Android and iOS load it, the image's backend is one binary; `apps/k7/backend`, node, Termux and `bundle.mjs` are gone | the functional suite on the web, the phone and the tray; one published version per switch before its TypeScript goes |
 
-The front holds the backend's address in the dev session, the tray, the server image and every phone build,
-with node behind it for what is not ported: the preferences, `/auth/me` and the bearer's check
-(`apps/k7/backend-rs/docs/front.md`, `routes.md`). It owns the session (`/auth/local`, `/auth/logout`),
-the engine registry and tunnel hub, the file hub and the file service, the libraries (frozen to the
-bundled seed), the AI settings and the app releases; the embed carries it on a phone
-(`apps/k7/backend-rs/docs/embed.md`). Open: the functional suite through the front, and the node that
-stays on the tray and the phones until phase 6. iOS gates no step and comes back on the embed at the end.
+The front is the backend in the dev session, the tray, the server image and every phone build
+(`apps/k7/backend-rs/docs/front.md`, `routes.md`). It owns the session (`/auth/local`, `/auth/logout`, `/auth/me`),
+the preferences, the engine registry and tunnel hub, the file hub and the file service, the libraries (frozen to the
+bundled seed), the AI settings, the app releases and the built page; the embed carries it on a phone
+(`apps/k7/backend-rs/docs/embed.md`).
 
 ## What it costs
 
-- **Devices gain last.** Node stays on the tray, Android and iOS until phase 6 is done, so the
-  Termux and NodeMobile pipelines are maintained alongside the Rust build for the whole migration.
 - **What the frontend needs stays TypeScript, so it is written twice**: the `song-schema` readers,
   the k7x reader and editor, the mediatek types and helpers, lyrics, panel-rules, web-protocol's
   helpers, and engine-protocol, which gets a THIRD spelling beside TypeScript and C++. Shared
   vectors bound the drift; nothing removes it.
-- **`@studio/oidc` and `@studio/http` stay TypeScript.** The session cookie is a contract across
-  languages, and a fix in either must be mirrored by hand.
+- **The session cookie is a contract**, frozen by vectors (`apps/k7/backend-rs/fixtures`) and minted for the suite by `e2e/src/sessionCookie.ts`.
 - **Feature work pays twice during the migration**: a backend change is written in TypeScript and
   ported later, or it waits.
 - **The trust code is the riskiest to rewrite**: the relay gate, tickets, path containment, the

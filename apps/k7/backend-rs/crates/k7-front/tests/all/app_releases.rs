@@ -5,7 +5,7 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
+use tokio::net::TcpStream;
 
 const TOKEN: &str = "ci-secret";
 
@@ -18,11 +18,6 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     let root =
         std::env::temp_dir().join(format!("k7-front-releases-{name}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
-    let gone = TcpListener::bind("127.0.0.1:0")
-        .await
-        .unwrap()
-        .local_addr()
-        .unwrap();
     let mut env: std::collections::BTreeMap<String, String> = [
         ("STUDIO_APP_RELEASES_DIR", root.to_str().unwrap()),
         ("APP_RELEASE_TOKEN", TOKEN),
@@ -40,7 +35,6 @@ async fn front(name: &str, extra: &[(&str, &str)]) -> Front {
     }
     let config = k7_front::Config {
         listen: "127.0.0.1:0".parse().unwrap(),
-        upstream: gone.to_string(),
         secret: "s".into(),
         trust_hops: 0,
         env,
@@ -374,7 +368,7 @@ async fn a_channel_keeps_its_previous_build_and_the_tray_its_own() {
     );
     let page = send(f.addr, "GET", "/app_downloads", &[], b"").await.text();
     assert!(
-        page.contains("<h2>Tray — Release 1.0.0</h2>")
+        page.contains("<h2>K7 DAW — Release 1.0.0</h2>")
             && page.contains("<h2>Latest build of main</h2>")
     );
 }
@@ -411,17 +405,22 @@ async fn an_upload_past_the_ceiling_is_refused_and_leaves_nothing() {
 }
 
 #[tokio::test]
-async fn the_family_answers_the_root_domain_and_is_the_backends_on_a_device() {
+async fn the_family_answers_the_root_domain_and_is_not_mounted_on_a_device() {
     let f = front("hosts", &[]).await;
     let site = send(f.addr, "GET", "/app_downloads", &["Host: k7.rocks"], b"").await;
     assert_eq!(site.status(), 200, "{}", site.head);
     let other = send(f.addr, "GET", "/api/app-releases/v0.1.0/a.exe", &[], b"").await;
     assert_eq!(
         other.status(),
-        502,
-        "a read of the upload path is the backend's"
+        401,
+        "a read of the upload path meets the `/api` guard"
     );
     let device = front("device", &[("STUDIO_LOCAL_USER", "1")]).await;
     let out = send(device.addr, "GET", "/app_downloads", &[], b"").await;
-    assert_eq!(out.status(), 502, "not mounted on a device: {}", out.head);
+    assert_eq!(
+        out.status(),
+        200,
+        "the page, not the family, on a device: {}",
+        out.head
+    );
 }

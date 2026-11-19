@@ -1,12 +1,10 @@
 # The backend conformance suite
 
-`specs/conformance/` is k7's backend contract, black box and without a browser: the same specs run
-against the TypeScript backend and against the Rust front in front of it
-(`apps/k7/backend-rs/docs/front.md`), and a route family moves to Rust only when both pass.
+`specs/conformance/` is k7's backend contract, black box and without a browser: the specs run
+against the Rust front (`apps/k7/backend-rs/docs/front.md`).
 
 ```
 E2E_BASE_URL=http://127.0.0.1:8789 npm run e2e:conformance --workspace=@studio/e2e
-E2E_BASE_URL=http://127.0.0.1:8799 CONFORMANCE_FRONT=1 npm run e2e:conformance --workspace=@studio/e2e
 CONFORMANCE_FILES_ROOT=C:/Users/me/.k7/dev-files …
 ```
 
@@ -52,7 +50,7 @@ what it shares is made its own:
 
 | family (phase 6.5) | spec |
 |---|---|
-| the built page, its fallback and Express's 404, the root domain's page, the `/api` guard's bearer, the seam's TypeScript half; byte for byte against `CONFORMANCE_UPSTREAM` | `lastRoutes.spec.ts` |
+| the built page, its fallback and the 404 page, the root domain's page, the `/api` guard's bearer, the seam's bearer check | `lastRoutes.spec.ts` |
 
 | family (phase 5d, the file service, `docs/rust-phase5-plan.md`) | spec |
 |---|---|
@@ -98,12 +96,8 @@ what it shares is made its own:
 | the engine spec counts the node file services `/api/ready` reports before and after, and finds none more | a binding held on a node process would start one for every request naming an engine; the count is the one thing a client can read of the processes behind the hub |
 | what needs a real engine's plugins, a second backend is not covered: auto-freeze (a VST and its scan), a process step kept on an engine, the prefetch, `.dawproject` and `.als` imports, the 1000-step ring, a conflict set aside and settled through the service | they need a VST scan, a second machine or a second replica writing the same value |
 | what needs a second machine is not covered: the hub's 503 while a service starts or is held off after a crash | a server refuses the one, and the others need a file service that fails or a second backend |
-| a bug of the TypeScript backend is a `test.fail` with a one-line comment saying what it does | the port is held to the fixed behaviour, and the day TypeScript is fixed the spec says so |
 | every bed runs the front as a device (`STUDIO_LOCAL_USER`), so the specs that edit a workspace (`service*`, `files*`, `workspace-ui`) run; a server's own behaviour (the 410) is held by Rust tests, not here | a server edits no workspace and is fading away; a device's account is the only runtime (`e2e.md`, "The beds are devices") |
-| `CONFORMANCE_FRONT=1` turns on the specs only the front answers | the TypeScript backend skips them instead of failing |
-| the last routes' spec compares a list of answers with the backend's, status, body and the caching and framing headers, when given `CONFORMANCE_UPSTREAM`; a JSON answer's `ETag` is left out | a browser's cache and a service worker keep what those headers and bodies say, so a host switching must answer the same bytes; the front tags no JSON (`apps/k7/backend-rs/docs/routes.md`) |
-| `auth.spec.ts` (the session and the tokens; only `/auth/me` is read through both), `cameras.spec.ts`, `settings.spec.ts`, the engines' (`engines.spec.ts`), the local engine's (`localEngine.spec.ts`) and the file hub's (`files*`, `sync*`, `ready`, `service*`) run against the front only | the backend has no copy of those routes left to compare with: their reference is the front and the committed vectors |
-| a spec writes, reads back and puts back through the same implementation, and goes to `CONFORMANCE_UPSTREAM` only for what the backend still serves (`/auth/me`, the preferences, the last routes) | a write through the front put back through a route the backend no longer has fails, and leaves the write on the e2e account for the next suite to read |
+| `auth.spec.ts` (the session and the tokens), `cameras.spec.ts`, `settings.spec.ts`, the engines' (`engines.spec.ts`), the local engine's (`localEngine.spec.ts`) and the file hub's (`files*`, `sync*`, `ready`, `service*`) run against the front only | the backend has no copy of those routes left to compare with: their reference is the front and the committed vectors |
 | the local engine's specs run against a machine's own backend only (`/api/local` answering), and send no command that changes the engine; the tray's status and the internal seam take `CONFORMANCE_TRAY_TOKEN` and `CONFORMANCE_INTERNAL_SECRET` | a throwaway local-user backend is the test bed (`apps/k7/backend-rs/docs/local.md`); against the person's tray, a rescan or a slot would be theirs |
 | on a phone, the forwarded ports are NOT 18789 (`adb forward tcp:28789 tcp:18789`) | 18789 on a computer running the tray is that tray's own backend: a forward onto it fails, and the specs then test the computer |
 | on a phone, the release upload's refusal fails | a device (`STUDIO_LOCAL_USER`) turns every session into its local user and answers no app release. Compare a run with the previous one, not with a pass |

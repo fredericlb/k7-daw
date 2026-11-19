@@ -134,7 +134,7 @@ class MainActivity : BridgeActivity() {
 
         const val SUPERVISOR_STOP_MS = 4000L
         private const val ENGINE_STOP_MS = 3000L
-        // Longer than the backend's own 8 s stop, so its file services are not killed mid-teardown (apps/k7/backend/src/server.ts).
+        // Longer than the backend's own 8 s stop, so its file services are not killed mid-teardown.
         private const val BACKEND_STOP_MS = 10_000L
     }
 }

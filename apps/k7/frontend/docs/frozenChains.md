@@ -10,7 +10,7 @@ a file.
 ## Built and edited on the bench
 
 **New chain** opens the bare bench, and **Edit** opens the bench on the chain
-(`apps/k7/backend/docs/banc.md`). The bench is a project with an engine, so a chain is edited
+(`apps/k7/backend-rs/docs/banc.md`). The bench is a project with an engine, so a chain is edited
 with the graph every project has: the modules' real panels and parameters, bypass, presets, the
 plugin's own window, and the sound. The project bar's Save button runs `chain save`, which writes
 the run between the input and the fader back as the chain. A page of its own with a form for steps

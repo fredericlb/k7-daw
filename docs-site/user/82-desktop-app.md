@@ -1,6 +1,6 @@
-# k7 on your computer: the tray
+# K7 DAW: k7 on your computer
 
-The **k7 tray** puts all of k7 on your own computer: the editor, k7's own backend, the supervisor and the engine. It has no window of its own. It sits as a small icon in the system tray (Windows, Linux), and you use k7 in your usual web browser, at an address only your computer answers.
+**K7 DAW** puts all of k7 on your own computer: the editor, k7's own backend, the supervisor and the engine. k7 opens in a window of its own, and a small icon in the system tray (the menu bar on a Mac) shows what the engine is doing. It runs on Windows, Linux and Macs with Apple silicon (macOS 13 or later).
 
 Install it when you want to make music on your own machine without depending on a network connection.
 
@@ -12,14 +12,15 @@ Download the file for your computer from `https://k7.rocks/app_downloads`:
 
 | Platform | File |
 |---|---|
-| Windows | `k7-tray_<version>_windows-<arch>.exe` (an installer) |
-| Linux | `k7-tray_<version>_linux-<arch>.AppImage`, or `.deb` for Debian and Ubuntu |
+| Windows | `k7-daw_<version>_windows-<arch>.exe` (an installer) |
+| macOS | `k7-daw_<version>_macos-arm64.dmg` |
+| Linux | `k7-daw_<version>_linux-<arch>.AppImage`, or `.deb` for Debian and Ubuntu |
 
-The tray is not signed; on Windows, SmartScreen warns on first launch. Confirm that you want to open it.
+On Windows, SmartScreen may warn on first launch: confirm that you want to open it. The Windows installer replaces an older **k7-tray** install, which it removes. On a Mac, open the `.dmg` and drag K7 DAW to Applications.
 
-**On a Mac there is no tray.** k7 on a Mac with Apple silicon is the iOS app, run as an iPad app: install it from the iOS build you are given, and k7 opens in its own window, with its own engine, audio and microphone access.
+The first time you record, your system asks for permission to use the microphone, and the first time you use a camera lane, the camera. On Linux, the `.deb` pulls in GStreamer, which the window needs for audio and video.
 
-Only one copy of the tray runs at a time. Launching it again opens k7 in your browser.
+Only one copy of K7 DAW runs at a time. Launching it again brings its window forward. Closing the window does not quit: the engine keeps running in the tray, and **Open K7 DAW** (or the Dock icon on a Mac) brings the window back.
 
 ## The tray menu
 
@@ -27,28 +28,32 @@ Click the icon to open its menu:
 
 | Entry | What it does |
 |---|---|
-| The status line | What k7 is doing: *Starting k7…*, *Starting the engine…*, *● Engine running · :8765*, *○ Engine stopped*, or a line starting with ⚠ that says what went wrong. While an instrument downloads, a second line shows its progress. |
-| **Open k7** | Opens k7 in your browser. |
-| **Engine Settings…** | Opens the engine's settings page in your browser (see [The engine page](#the-engine-page)). |
-| **Launch at Login** | Starts the tray when you log in to your computer. |
+| The status line | What k7 is doing: *Starting K7 DAW…*, *Starting the engine…*, *● Engine running · :8765*, *○ Engine stopped*, or a line starting with ⚠ that says what went wrong. While an instrument downloads, a second line shows its progress. |
+| **Open K7 DAW** | Brings the window forward. |
+| **Open in Browser** | Opens k7 in your web browser instead (see [Web MIDI](#midi-keyboards)). |
+| **Engine Settings…** | Opens the engine's settings page in the window (see [The engine page](#the-engine-page)). |
+| **Restart K7 DAW** | Stops k7 and the engine and starts them again. |
+| **Launch at Login** | Starts K7 DAW, hidden in the tray, when you log in to your computer. |
 | **Check for Updates…** | Looks for a newer version now. |
-| **Check for Updates Automatically** | Lets the tray look for a newer version by itself. |
+| **Check for Updates Automatically** | Lets K7 DAW look for a newer version by itself. |
 | **Show Logs** | Opens the log of k7 and its engine. |
-| **Quit k7 Tray** | Stops the engine and k7, then quits. |
+| **Quit K7 DAW** | Stops the engine and k7, then quits. |
 
 The icon itself shows the same state at a glance: running, stopped, starting (it turns), or a problem.
 
-## Opening k7 in your browser
+On a Mac, the menu bar of K7 DAW also holds Engine Settings…, Check for Updates…, Reload, Show Logs and the usual Edit, Window and Help menus.
 
-**Open k7** opens `http://127.0.0.1:18789` in your browser. That address is your own computer: nothing you do there goes through the internet. You can bookmark it.
+## The window
 
-You land on k7's home page as the computer's **local user**: you can create workspaces and projects at once, with no account. Your first workspace starts empty.
+The window is k7, the same page you would get in a browser at `http://127.0.0.1:18789`; that address is your own computer, and nothing you do there goes through the internet. You land on k7's home page as the computer's **local user**: you can create workspaces and projects at once, with no account. Your first workspace starts empty.
 
-The library of modules and chains, `@k7-core`, is copied onto your computer the first time it is needed, from the copy bundled with the tray. From then on it is yours to edit like any library.
+The library of modules and chains, `@k7-core`, is copied onto your computer the first time it is needed, from the copy bundled with K7 DAW. From then on it is yours to edit like any library.
 
-### Installing k7 as an app
+Links to other sites (the docs, k7.rocks, a git host) open in your browser. Exporting a file saves it in your **Downloads** folder and tells you where, with a **Show in Folder** button.
 
-Your browser can install k7 as an app, with its own icon and its own window: in Chrome or Edge, use the install button in the address bar, or the browser menu's **Install k7**. The installed app opens the same address, so it needs the tray to be running.
+### MIDI keyboards
+
+Recording from a MIDI keyboard needs Web MIDI, which the window has on Windows and not on macOS or Linux. There, choose **Open in Browser** (Chrome or Edge) to record MIDI; the same projects and engine are behind it.
 
 ### Working offline
 
@@ -60,7 +65,7 @@ There is no account: connect a workspace to a git repository and pull it on the 
 
 ## The engine page
 
-**Engine Settings…** in the tray menu, or **Engine** in the user menu at the bottom of the home page's sidebar, opens `/settings/engine`, the page that controls this computer's engine. Its last tab, **Engines**, lists the engines this device may use. Opened anywhere other than the tray's address, the page lists only those engines.
+**Engine Settings…** in the tray menu, or **Engine** in the user menu at the bottom of the home page's sidebar, opens `/settings/engine`, the page that controls this computer's engine. Its last tab, **Engines**, lists the engines this device may use. Opened anywhere other than K7 DAW's address, the page lists only those engines.
 
 ### This machine's engine
 
@@ -96,36 +101,36 @@ How many plugins the engine found on this computer, and the list with each plugi
 
 ## Updates
 
-The tray looks for a newer version on `k7.rocks` a few seconds after it starts and every six hours, when **Check for Updates Automatically** is on, and whenever you choose **Check for Updates…**. It tells you about a new version once.
+K7 DAW looks for a newer version on `k7.rocks` a few seconds after it starts and every six hours, when **Check for Updates Automatically** is on, and whenever you choose **Check for Updates…**. It tells you about a new version once.
 
-- On Windows and with the AppImage, click **Install and Restart**: the tray stops k7 and the engine, installs the update and starts again.
-- With the `.deb`, the tray tells you a new version is out and **Download** opens the download page; install it as you installed the first one.
+- On Windows, on a Mac and with the AppImage, click **Install and Restart**: K7 DAW stops k7 and the engine, installs the update and starts again.
+- With the `.deb`, K7 DAW tells you a new version is out and **Download** opens the download page; install it as you installed the first one.
 
-A tray built from a release follows releases; a snapshot build follows the latest snapshot.
+A build from a release follows releases; a snapshot build follows the latest snapshot.
 
 ## Ports, and running beside other k7 pieces
 
 | Port | Used by |
 |---|---|
-| 18789 | k7 in your browser, on this computer only |
+| 18789 | k7 in its window and in your browser, on this computer only |
 | 8765 | The engine, which other devices on your network can reach once you approve them |
 
-The tray's engine is the computer's engine: the same one, in the same `~/.k7` folder and on the same port, as the [command-line engine](./81-command-line-engine.md). Run one or the other on a computer, not both. A k7 development session uses port 8789 and does not get in the way.
+K7 DAW's engine is the computer's engine: the same one, in the same `~/.k7` folder and on the same port, as the [command-line engine](./81-command-line-engine.md). Run one or the other on a computer, not both. A k7 development session uses port 8789 and does not get in the way.
 
 A phone or tablet on the same network can drive the engine once you approve it. See [Reaching an engine](./85-connecting-machines.md).
 
-## Where the tray keeps your files
+## Where K7 DAW keeps your files
 
-Your workspaces and preferences go into the operating system's folder for the tray's data (`org.parapluie.studio.engine-tray`, for example `%APPDATA%` on Windows):
+Your workspaces and preferences go into the operating system's folder for K7 DAW's data (`org.parapluie.studio.engine-tray`, for example `%APPDATA%` on Windows):
 
 | Inside that folder | What it holds |
 |---|---|
 | `workspaces/` | Your workspaces and projects |
-| `mediatek/` | The data folder of the tray's backend |
+| `mediatek/` | The data folder of K7 DAW's backend |
 | `prefs/` | Your preferences |
 
 The engine's state is in `~/.k7`: its identity, settings (`engine-host.json`), plugin scan, paired devices, downloaded instruments, and the log, `.studio.log`, which **Show Logs** opens.
 
 ## Quitting
 
-**Quit k7 Tray** stops the engine first, then k7, then the tray. The k7 page in your browser stops answering until you start the tray again.
+**Quit K7 DAW** stops the engine first, then k7, then the app. A k7 page open in your browser stops answering until you start K7 DAW again.

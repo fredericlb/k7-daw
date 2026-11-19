@@ -136,7 +136,7 @@ export function isBench(repo: string): boolean {
 
 const K7 = PROJECT_SUFFIXES.k7;
 
-/** The bench's ONE project — a live rig thrown away and rebuilt on every open, apps/k7/backend/docs/banc.md. */
+/** The bench's ONE project — a live rig thrown away and rebuilt on every open, apps/k7/backend-rs/docs/banc.md. */
 export const BENCH_PROJECT = `live${K7}`;
 
 /** The library chain a `@banc` address seeds the rig with (`<ref>/live.k7`), `null` for the bare rig, `undefined` for no bench — docs/addresses.md. */

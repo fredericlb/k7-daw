@@ -1,6 +1,6 @@
 //! A REAL `k7-supervisor` run by the front, in front of a real TypeScript backend: ignored unless asked for, since it
 //! needs the built supervisor and engine and a TypeScript backend behind the front (`docs/local.md`).
-//! Run: `K7_REAL_SUPERVISOR=… K7_REAL_HOME=… K7_REAL_UPSTREAM=… cargo test -p k7-local --test all -- --ignored real::`.
+//! Run: `K7_REAL_SUPERVISOR=… K7_REAL_HOME=… cargo test -p k7-local --test all -- --ignored real::`.
 
 use std::path::PathBuf;
 use std::time::{Duration, Instant};
@@ -99,7 +99,6 @@ async fn a_real_supervisor_is_run_snapshotted_commanded_and_stopped() {
     .collect();
     let config = k7_front::Config {
         listen: listen.parse().unwrap(),
-        upstream: var("K7_REAL_UPSTREAM"),
         secret: var("K7_REAL_FRONT_SECRET"),
         trust_hops: 0,
         env,

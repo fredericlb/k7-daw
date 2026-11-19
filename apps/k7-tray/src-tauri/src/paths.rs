@@ -1,4 +1,4 @@
-// paths.rs — where the tray finds what it starts (node, k7's backend bundle, the supervisor) and where state lives.
+// paths.rs — where the tray finds what it starts (k7's bundle of page and library, the supervisor) and where state lives.
 // Packaged, everything is in the bundle's resources (scripts/stage.mjs); in a checkout, the staged copy under
 // src-tauri/resources, or the repo's own builds. `~/.k7` mirrors studioHome.ts BY HAND. See docs/tray.md.
 
@@ -15,7 +15,6 @@ const fn exe(name: &'static str, windows: &'static str) -> &'static str {
 }
 const SUPERVISOR: &str = exe("k7-supervisor", "k7-supervisor.exe");
 const ENGINE: &str = exe("k7-runtime", "k7-runtime.exe");
-const NODE: &str = exe("node", "node.exe");
 
 /// `<state>` — the machine's engine home, the command-line engine's too: `$STUDIO_HOME`, else `~/.k7`.
 pub fn studio_dir() -> PathBuf {
@@ -62,14 +61,6 @@ pub fn scratch_port() -> Option<u16> {
     std::env::var("K7_TRAY_PORT").ok()?.parse().ok()
 }
 
-/// Where node keeps the bytecode it compiled of the bundle: the OS's per-app cache, which it may clear.
-pub fn node_compile_cache(app: &AppHandle) -> Option<PathBuf> {
-    app.path()
-        .app_cache_dir()
-        .ok()
-        .map(|d| d.join("node-compile-cache"))
-}
-
 /// The staged resources: the bundle's when packaged, `src-tauri/resources` in a checkout.
 fn resources(app: &AppHandle) -> PathBuf {
     if let Ok(dir) = app.path().resource_dir() {
@@ -80,12 +71,12 @@ fn resources(app: &AppHandle) -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("resources")
 }
 
-/// k7's backend bundle (apps/k7/backend/scripts/bundle.mjs): `$K7_BACKEND_BUNDLE`, else the staged one.
+/// What the front reads beside itself (apps/k7/backend-rs/scripts/stageBundle.mjs): `$K7_BACKEND_BUNDLE`, else the staged one.
 pub fn backend_bundle(app: &AppHandle) -> Option<PathBuf> {
     let dir = std::env::var("K7_BACKEND_BUNDLE")
         .map(PathBuf::from)
         .unwrap_or_else(|_| resources(app).join("backend"));
-    dir.join("bin").join("backend.mjs").is_file().then_some(dir)
+    dir.join("k7-core").is_dir().then_some(dir)
 }
 
 /// The Rust front's code root (scripts/stage.mjs's `code`): the staged one; in a checkout the front finds the checkout.
@@ -96,24 +87,13 @@ pub fn code_root(app: &AppHandle) -> Option<PathBuf> {
         .then_some(dir)
 }
 
-/// The node the bundle runs on: the staged one, else `$K7_NODE`, else whatever `node` the PATH has.
-pub fn node(app: &AppHandle) -> PathBuf {
-    let staged = resources(app).join("node").join(NODE);
-    if staged.is_file() {
-        return staged;
-    }
-    std::env::var("K7_NODE")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from(NODE))
-}
-
-/// The backend's table of ports, environment and folders, shared with the phone (apps/k7/backend/standalone.json).
+/// The backend's table of ports, environment and folders, shared with the phone (apps/k7/backend-rs/standalone.json).
 pub fn standalone_json(app: &AppHandle) -> Option<PathBuf> {
     let staged = resources(app).join("standalone.json");
     if staged.is_file() {
         return Some(staged);
     }
-    let repo = repo_root()?.join("apps/k7/backend/standalone.json");
+    let repo = repo_root()?.join("apps/k7/backend-rs/standalone.json");
     repo.is_file().then_some(repo)
 }
 

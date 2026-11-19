@@ -1,10 +1,8 @@
 # The routes the front owns
 
-A route moves to Rust when the conformance suite (`e2e/docs/conformance.md`) passes against the
-TypeScript backend and through the front, and, for a route that writes, when each implementation
-reads what the other wrote (`CONFORMANCE_UPSTREAM`).
+A route is the front's once the conformance suite (`e2e/docs/conformance.md`) passes against it.
 
-| route | owned since | what still goes to the backend |
+| route | owned since | what it declines |
 |---|---|---|
 | `GET /api/health` | phase 1 | nothing |
 | `GET`, `PUT /api/preferences` | phase 1 | the root domain's hosts; any front that cannot find the session revocations |
@@ -18,17 +16,13 @@ reads what the other wrote (`CONFORMANCE_UPSTREAM`).
 | `GET /api/registry/hello`, `POST …/heartbeat`, `POST …/deregister`, `GET /api/engines`, `GET /api/engines/owners`, `GET`, `PUT /api/engines/<id>/shares`, `DELETE …/owner`, `POST /api/engine/{select,release}`, `POST /api/engine/<id>/rtc`, `WS /api/engine/<id>/ws`, `WS /api/engine-tunnel[/local/<key>]`, `GET /api/internal/engine/engines[/<id>]`, `GET …/hub`, `POST`, `DELETE …/bindings` | phase 4a, behind `K7_ENGINE_CORE=front` (`engine.md`) | all of it unless the switch is on; every other method there, a request to a socket's path that is no upgrade, the root domain's hosts, the seam's local half |
 
 The front also answers `/api/engine-slots`, on every host (`engine/slots.md`). A path of that family no route
-answers goes on to the backend, which holds none of it.
+answers is declined.
 
-With `K7_LAST_ROUTES=front` (`last.md`) the front answers what it would otherwise send the backend: the seam's
-`verify-token`, a bearer on `/api/preferences`, `/api/ai/*`, the root
-domain's hosts, the built page and its fallback, and
-Express's 404 and the `/api` guard's 401 for any other path. Nothing goes to the backend then.
+What a route declines (a method it does not own, a root-domain host, a session route without known revocations) ends in the last routes (`last.md`): the seam's
+`verify-token`, a bearer on `/api/preferences`, `/api/ai/*`, the root domain's hosts, the built page and its fallback, and
+the 404 and the `/api` guard's 401 for any other path.
 
-The backend keeps no copy of the app releases, the cameras, the session but `/auth/me`, the
-bearer tokens' routes: what the front sends
-it on those paths gets its 404. Nobody signs in against an identity
-provider: `/auth/login`, `/auth/callback` and `/auth/handoff/*` are on no side, and answer what a missing route does.
+Nobody signs in against an identity provider: `/auth/login`, `/auth/callback` and `/auth/handoff/*` are no route, and answer what a missing route does.
 
 ## What every owned route goes through
 
@@ -37,11 +31,11 @@ loopback lock, CORS and the cross-site write refusal. `src/session.rs` is `requi
 
 | choice | why |
 |---|---|
-| a request the front would answer differently goes to the backend BEFORE that chain (`claim` in `src/lib.rs`): a method it does not own, a root-domain host, a session route without known revocations | the backend applies the chain itself, and running it twice would send `Vary` and the CORS headers twice, which a browser refuses |
-| the revocations file is read again whenever its inode, modification time or size changes, and a revocation re-reads it and keeps each subject's later epoch (`k7-auth`'s `revocations.rs`, as @studio/oidc's `session.ts`) | a logout everywhere is written by either process; a front that cached the file would keep honouring a revoked session, and a whole-file write from a stale copy would undo the other's revocation |
+| a request the front would answer differently is declined BEFORE that chain (`claim` in `src/lib.rs`): a method it does not own, a root-domain host, a session route without known revocations | the last routes apply the chain once, and running it twice would send `Vary` and the CORS headers twice, which a browser refuses |
+| the revocations file is read again whenever its inode, modification time or size changes, and a revocation re-reads it and keeps each subject's later epoch (`k7-auth`'s `revocations.rs`) | a logout everywhere is written by any process that shares the folder; a front that cached the file would keep honouring a revoked session, and a whole-file write from a stale copy would undo the other's revocation |
 | no auth folder known (neither `STUDIO_AUTH_DIR` nor `STUDIO_MEDIATEK`) means no session route is owned | a front that cannot see revocations must not decide who is signed in |
-| on a device, any valid session that is not the local user's is answered as the local user, with a new local session cookie | as `server.ts` rewrites it, so a page signed in at a server sees the same account either way |
-| the preferences schema is copied (`src/prefs_schema.rs`): zod's key order, nested strangers stripped, an unknown top-level key refused | the backend's other routes read the same file, so its bytes must be the backend's; a field added to `prefsSchema` in `apps/k7/backend/src/server.ts` must be added there too, until the TypeScript copy is deleted |
+| on a device, any valid session that is not the local user's is answered as the local user, with a new local session cookie | a device has one account, whatever session a page carries |
+| the preferences schema is copied (`src/prefs_schema.rs`): zod's key order, nested strangers stripped, an unknown top-level key refused | a stored document must still pass the gate on its next save; a field added to the schema is added there (`src/prefs_schema.rs`) |
 
 ## The apps' downloads
 
@@ -90,12 +84,12 @@ routes after it. There is no provider: a machine has one account, and a cookie i
 | the cookie is host-only: no `Domain`, no trusted sibling origin | a session shared across subdomains served a hosted instance; a device's page is one loopback origin |
 | the front keeps `AUTH_ADMIN_GROUPS` and `session::is_admin` | the engine registry's ownership and the file hub's admin answers still ask it; the engine ownership model and the hub's accounts are the next simplification, not this one |
 | a return target is a path on this origin, anything else is `/` | `/auth/local` is reachable from a link, and a redirect off the machine would hand it a session cookie's page |
-| a signed-in `/auth/me` is asked of the backend again in the background, its answer dropped (`src/routes/auth/warm.rs`) | the front warms its own hub on it (`files.md`); a previous release's backend, the rollback, starts the account's file service on the same question, and repeating it costs one loopback request |
+| a signed-in `/auth/me` warms the account's hub in the background (`src/routes/auth/warm.rs`) | the files are warm by the time the page asks (`files.md`) |
 | the outgoing HTTPS client is `src/https.rs`: `hyper-rustls`, `rustls` on `ring`, and `webpki-roots` | `ring` is already in the tray's build, where `aws-lc-rs` compiles C with CMake and NASM on Windows and for every phone target |
 | TLS trusts Mozilla's roots (`webpki-roots`) and the host's `K7_EXTRA_CA_CERTS` (`front.md`), not the OS store | it is one list on the tray and the phones, and needs no JNI start on Android |
-| shared vectors, `fixtures/auth-vectors.json`, written by @studio/oidc's `createApiTokens` (`makeAuthVectors.ts`) | `apps/k7/backend/src/authVectors.test.ts` fails when @studio/oidc changes, `k7-auth`'s `tests/all/auth_vectors.rs` when Rust mints or opens other bytes |
+| frozen vectors, `fixtures/auth-vectors.json` | `k7-auth`'s `tests/all/auth_vectors.rs` fails when Rust mints or opens other bytes than the stored tokens |
 
-Regenerate those vectors only on purpose: `npx tsx apps/k7/backend-rs/fixtures/makeAuthVectors.ts`.
+The vectors are fixtures, written once: a format change edits them on purpose, never by a generator.
 
 ## Known and accepted
 

@@ -1,6 +1,6 @@
 //! dev_frontend.rs — in the dev tray, the page comes from a running Vite instead of `frontend/dist`: each request the
 //! built page would answer is streamed there and back, so 127.0.0.1:18789 gets HMR on its own origin
-//! (`apps/k7/backend/src/devFrontend.ts`). What a reader gets wrong: only `K7_DEV_FRONTEND` turns it on.
+//! (`docs/dev.md`). What a reader gets wrong: only `K7_DEV_FRONTEND` turns it on.
 
 use std::time::Duration;
 
@@ -42,14 +42,14 @@ impl DevFrontend {
         let Ok(uri) = format!("{}{path}", self.base.trim_end_matches('/')).parse::<Uri>() else {
             return (StatusCode::BAD_REQUEST, "bad request target").into_response();
         };
-        crate::proxy::strip_hop_by_hop(&mut parts.headers, false);
+        crate::hop::strip_hop_by_hop(&mut parts.headers, false);
         parts.headers.insert(HOST, self.host.clone());
         parts.uri = uri;
         parts.version = hyper::Version::HTTP_11;
         let asked = self.client.request(Request::from_parts(parts, body));
         match tokio::time::timeout(ANSWER_WITHIN, asked).await {
             Ok(Ok(mut r)) => {
-                crate::proxy::strip_hop_by_hop(r.headers_mut(), false);
+                crate::hop::strip_hop_by_hop(r.headers_mut(), false);
                 r.map(Body::new)
             }
             Ok(Err(e)) => self.missing(&e.to_string()),

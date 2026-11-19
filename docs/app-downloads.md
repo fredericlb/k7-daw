@@ -27,7 +27,7 @@ release first. An installed app follows its own channel and never crosses to the
 | on the snapshot channel, any other build is newer | snapshot versions sort by commit hash, not by date; the channel only ever holds `main`'s latest build, so "another commit" is "later" |
 | the rules written once, in `engine/scripts/releaseStamp.mjs` | the shell steps call it; the tray (Rust) and the phone (Gradle, Kotlin) build without Node, so their copies stay and point at it, and its test pins what all of them answer |
 | `current` and `previous` kept per channel, nothing else | an app that read its feed just before a publish still finds its file; older builds are on GitHub |
-| on the root domain, `/app_downloads` is the one address besides the coming-soon page | the image's other host, `app.k7.rocks`, answers the same path and is where CI publishes; no host serves the app itself, which runs on devices, and `k7.rocks` is a front page ([apps/k7/backend/docs/site.md](../apps/k7/backend/docs/site.md)) |
+| on the root domain, `/app_downloads` is the one address besides the coming-soon page | the image's other host, `app.k7.rocks`, answers the same path and is where CI publishes; no host serves the app itself, which runs on devices, and `k7.rocks` is a front page ([apps/k7/backend-rs/docs/site.md](../apps/k7/backend-rs/docs/site.md)) |
 
 ## Publishing
 
@@ -52,9 +52,9 @@ must name the very file the server holds. The builds live under `STUDIO_APP_RELE
 channels in `tray/` beside them. The routes are the Rust front's (`apps/k7/backend-rs/docs/routes.md`), on the server's image only:
 the front of the tray or a phone does not answer them.
 
-## The tray
+## K7 DAW
 
-The tray reads `app_downloads/tray/<channel>/latest.json` with tauri-plugin-updater
+K7 DAW (the desktop app, `apps/k7-tray`) reads `app_downloads/tray/<channel>/latest.json` with tauri-plugin-updater
 ([apps/k7-tray/docs/tray.md](../apps/k7-tray/docs/tray.md)).
 
 | choice | why |
@@ -62,7 +62,8 @@ The tray reads `app_downloads/tray/<channel>/latest.json` with tauri-plugin-upda
 | every update signed, the private key held by whoever builds the tray (`TAURI_SIGNING_PRIVATE_KEY`) | the upload token alone would let whoever holds it ship code every tray runs; the public key is built into the tray from `K7_UPDATER_PUBKEY` |
 | a build without the public key has no updater | rather than one that trusts anything |
 | the channel from the release stamp, `dev` asks nothing | a developer's build is not on any feed |
-| Windows and the AppImage update themselves; a `.deb` is told | the updater installs those two; a `.deb` belongs to apt, so Download opens the page |
+| Windows, the AppImage and the macOS app update themselves; a `.deb` is told | the updater installs those; a `.deb` belongs to apt, so Download opens the page |
+| the feed keeps its `tray/` path; files are `k7-daw_<stamp>_<os>-<arch>.<ext>`, the macOS updater's archive an `.app.tar.gz` beside the `.dmg` | installed apps poll that URL for good, and `latest.json` carries the file URLs |
 
 ## The Android app
 

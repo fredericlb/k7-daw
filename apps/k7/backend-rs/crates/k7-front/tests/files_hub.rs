@@ -113,23 +113,6 @@ async fn the_hub_in_the_front() {
         )
     );
 
-    assert_eq!(
-        send(
-            front,
-            "GET",
-            "/api/internal/files/hub",
-            &[("x-k7-internal", "s")]
-        )
-        .await
-        .json(),
-        json!({ "runs": true })
-    );
-    assert_eq!(
-        send(front, "GET", "/api/internal/files/hub", &[])
-            .await
-            .status,
-        401
-    );
     let cold = send(
         front,
         "POST",

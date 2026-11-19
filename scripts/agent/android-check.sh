@@ -9,7 +9,7 @@ export JAVA_HOME="${JAVA_HOME:-$(/usr/libexec/java_home -v 21)}"
 [ -d "$ANDROID_HOME/ndk" ] || { echo "no Android SDK with an NDK at $ANDROID_HOME" >&2; exit 2; }
 cd "$root"
 # What the phone's build reads: a branch touching none of it since main has nothing to check here.
-reads=(apps/k7/backend-rs apps/k7/backend packages k7-core engine/k7-android e2e package-lock.json scripts/agent/android-check.sh)
+reads=(apps/k7/backend-rs packages k7-core engine/k7-android e2e package-lock.json scripts/agent/android-check.sh)
 if [ "${1:-}" != "--all" ] && git diff --quiet "$(git merge-base HEAD main)" -- "${reads[@]}" && [ -z "$(git ls-files --others --exclude-standard -- "${reads[@]}")" ]; then
   echo "android-check: nothing the phone's build reads changed since main, skipped (--all runs it)"
   exit 0
@@ -23,5 +23,5 @@ fi
 cd "$root/engine/k7-android"
 # The configuration cache skips Gradle's configuring phase when the build scripts did not change.
 ./gradlew --no-daemon --configuration-cache :app:buildFront :app:stageBackend :app:compileE2eKotlin \
-  -x buildEngine -x buildSupervisor -x stageEngine -x stageTermuxTools
+  -x buildEngine -x buildSupervisor -x stageEngine
 echo "android-check: passed"

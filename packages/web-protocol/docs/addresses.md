@@ -47,10 +47,7 @@ outside this repo's reach name them and cannot be rewritten:
 `serviceUrl` reads each of them as the current origin: the `play.` and `k7.` labels are stripped
 (`ALIAS_LABELS`), and what is left is looked up in `LEGACY_HOSTS`, which names each former host's
 successor — so a supervisor's saved registry heartbeats `app.k7.rocks` directly, and so does the
-supervisor's `Url.cpp`, its twin. On those hosts k7's backend answers `/api/*` and `/auth/*`
-as on its own, and sends every other path to k7's origin with a 301
-(`isLegacyHost`, `apps/k7/backend/src/server.ts`). Dropping
-one of them is a breakage of those links, not a cleanup.
+supervisor's `Url.cpp`, its twin. Dropping one of them is a breakage of those links, not a cleanup.
 
 A label is stripped only when a real domain is left behind it: `k7.rocks` is a domain, not the
 `k7.` alias of `rocks`. The labels stay pattern-based otherwise, so a deployment on a domain of
@@ -64,7 +61,7 @@ does not trust, so `https://app.priv.k7.rocks` fails with `UNABLE_TO_GET_ISSUER_
 a backend while working perfectly in the browser beside it.
 
 On a loopback host the same table is what a PAGE uses too, and a host may move it:
-`STUDIO_PORTS=k7=18789` (the tray publishing the port `apps/k7/backend/standalone.json` fixes) in the environment for node — and for the supervisor, whose
+`STUDIO_PORTS=k7=18789` (the tray publishing the port `apps/k7/backend-rs/standalone.json` fixes) in the environment of the front and the supervisor, whose
 `Url.cpp` reads the same variable — or `globalThis.__STUDIO_PORTS__` for a page, set before its
 scripts run (`servicePorts`). `pl8` and `k7` have no port of their own: they are k7's. The tray's port is apart from the dev session's, so the two run side by side
 (`apps/k7-tray/docs/tray.md`). Unset, the table is `SERVICE_PORTS`.
@@ -141,7 +138,7 @@ IS a project has nothing after its name and the project is `"."`.
 
 The price, stated where it is paid: this address names a machine's folder, so it is **not
 portable** — a link pasted to somebody names a folder in yours. What it buys is that no service has
-to answer before a project opens (`apps/k7/backend/docs/projects.md`).
+to answer before a project opens (`apps/k7/backend-rs/docs/projects.md`).
 
 ### `@banc` — the bench
 

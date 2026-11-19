@@ -1,5 +1,5 @@
-//! internal.rs — the local engine's half of the internal seam (`packages/engine-registry/docs/internalSeam.md`):
-//! `GET /api/internal/engine/local`, which tells whether the supervisor the front runs has answered. Gated as `internalGate` is: a loopback peer AND the front's secret.
+//! internal.rs — the local engine's half of the internal seam (`apps/k7/backend-rs/docs/local.md`):
+//! `GET /api/internal/engine/local`, which tells whether the supervisor the front runs has answered. Gated as the engine half is: a loopback peer AND the front's secret.
 
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -32,7 +32,7 @@ fn refused(state: &AppState, peer: SocketAddr, req: &Request) -> Option<Response
         .headers()
         .get("x-k7-internal")
         .map(HeaderValue::as_bytes);
-    let secret = state.proxy.secret().as_bytes();
+    let secret = state.front_secret.as_bytes();
     let same = given.is_some_and(|g| !secret.is_empty() && bool::from(g.ct_eq(secret)));
     (!same).then(|| {
         error(
@@ -60,7 +60,7 @@ pub async fn local(
     req: Request,
 ) -> Response {
     let Some(local) = owned(&state).cloned() else {
-        return crate::proxied(State(state), peer, req).await;
+        return crate::declined(State(state), peer, req).await;
     };
     if let Some(r) = refused(&state, peer.0, &req) {
         return r;

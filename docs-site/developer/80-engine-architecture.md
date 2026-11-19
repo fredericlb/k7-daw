@@ -15,7 +15,7 @@ This section covers everything that links a k7 page to sound: the C++ engine, it
 ## The processes
 
 ```text
- browser (k7 page)                       k7 server (apps/k7/backend)
+ browser (k7 page)                       k7 front (apps/k7/backend-rs)
  ├─ @studio/engine-browser  ── HTTPS ──► ├─ engine registry  (/api/registry/*, /api/engines, /api/engine/*)
  │      │                                ├─ engine relay     (/api/engine/<id>/ws)
  │      │                                ├─ tunnel hub       (/api/engine-tunnel)

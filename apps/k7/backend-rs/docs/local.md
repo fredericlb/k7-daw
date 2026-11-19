@@ -43,8 +43,8 @@ the 1 s→30 s backoff reset after 20 s, `shutdown` then the pipe closed,
 ## The internal seam's local half
 
 `GET /api/internal/engine/local`
-(`packages/engine-registry/docs/internalSeam.md`), answered here while the front runs the engine and
-proxied otherwise, to the backend's 404. Its gate is the seam's: the SOCKET's peer on loopback, then
+(`engine/reach.md`), answered here while the front runs the engine and
+declined otherwise, to the 404. Its gate is the seam's: the SOCKET's peer on loopback, then
 `x-k7-internal` equal to the front's secret, compared in constant time. It sits outside the owned chain:
 a server-to-server call has no `Origin`, and the seam's gate is stricter than the chain's.
 

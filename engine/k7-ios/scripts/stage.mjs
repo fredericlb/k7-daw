@@ -179,7 +179,7 @@ if (wanted("backend")) {
     `const m = await import(${JSON.stringify(join(rust, "libraryArchive.mjs"))}); await m.bundleLibrary(${JSON.stringify(repo)}, ${JSON.stringify(join(out, "k7-core"))});`,
   ]);
   cpSync(
-    join(repo, "apps/k7/backend/standalone.json"),
+    join(repo, "apps/k7/backend-rs/standalone.json"),
     join(out, "standalone.json"),
   );
 }

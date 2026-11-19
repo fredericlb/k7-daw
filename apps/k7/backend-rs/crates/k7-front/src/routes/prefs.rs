@@ -1,6 +1,5 @@
-//! prefs.rs — `/api/preferences`, as `@studio/user-prefs` and the backend's schema answer it: one JSON
-//! file per subject, written whole, refused when it would be stored short. The file's bytes are what the
-//! backend writes, since its other routes read the same file (`packages/user-prefs/docs/store.md`).
+//! prefs.rs — `/api/preferences`: one JSON file per subject, written whole, refused when it would be stored
+//! short (a key the schema drops would lose the person's data).
 
 use std::sync::Arc;
 
@@ -15,7 +14,7 @@ use crate::atomic::write_atomic;
 use crate::session::{Signed, https, signed_in, with_cookies};
 use crate::web::{error, read_json};
 
-/// The filename for a subject: a readable slug AND a hash, as `fileFor` in `packages/user-prefs/store.ts`.
+/// The filename for a subject: a readable slug AND a hash.
 pub fn file_for(sub: &str) -> String {
     let slug: String = sub
         .encode_utf16()

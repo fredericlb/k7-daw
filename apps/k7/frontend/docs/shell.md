@@ -1612,7 +1612,7 @@ feature its persistence. A zod object strips what it does not declare, so a laye
 `backend/src/server.ts`'s `prefsSchema` says nothing about is accepted, answered `{ok:true}` and dropped:
 renaming works, saving says it worked, a reload shows the catalogue's own names again, and the disk holds
 `{"engineId": "…"}` alone. Widening `K7Prefs` is half of adding a preference. The router refuses a write
-it would have to shorten (`droppedKeys`, `packages/user-prefs/docs/store.md`), so an omission is a 400
+it would have to shorten (`droppedKeys`, `apps/k7/backend-rs/crates/k7-front/src/routes/prefs.rs`), so an omission is a 400
 naming the field rather than a feature that quietly does not last the session.
 
 ### A name is a SENTENCE, so there is one field per language

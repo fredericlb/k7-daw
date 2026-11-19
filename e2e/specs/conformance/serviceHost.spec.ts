@@ -9,12 +9,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { expect, test } from "@playwright/test";
-import type { SessionUser } from "@studio/oidc";
 // @ts-expect-error the build script is plain JavaScript
 import { bundleRuntime } from "../../../packages/commands/scripts/bundleRuntime.mjs";
 import { base } from "../../src/instance.ts";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";
+import type { SessionUser } from "../../src/sessionCookie.ts";
 import { StandInEngine } from "../../src/standInEngine.ts";
 import { freshWorkspace } from "../../src/sync.ts";
 import { until } from "../../src/until.ts";

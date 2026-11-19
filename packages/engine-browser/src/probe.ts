@@ -302,7 +302,7 @@ async function rank<E extends ProbeTarget>(
     wsUrl: best.c.url,
     // The files are the server's hub's, set by `engineAccess` when it hosts them — never the engine machine's.
     fileBase: null,
-    // No token until paired, nor through a relay that withheld it (engine-registry docs/ownership.md): every chooser filters on it.
+    // No token until paired, nor through a relay that withheld it (`apps/k7/backend-rs/docs/engine/claim.md`): every chooser filters on it.
     token: best.reply.needsPairing ? null : best.reply.token || null,
     needsPairing: best.reply.needsPairing,
   };

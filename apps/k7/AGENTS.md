@@ -6,28 +6,28 @@ is your studio.
 **This directory is the web editor, and only that.** The engine (`engine/k7-runtime`), its
 supervisor (`engine/k7-supervisor`) and the brain packages (`packages/*`, all `@studio/*`) sit beside it
 rather than inside it, because they serve every audio app in the repo — the repo-root
-`AGENTS.md` holds the map of the whole audio side. Two workspaces live here:
+`AGENTS.md` holds the map of the whole audio side. One workspace and the Rust backend live here:
 
 | Package | Role |
 |---|---|
 | `frontend` (`k7-frontend`) | React + Vite + Tailwind v4 + `@studio/ui`. The visual editor: k7x code editor (CodeMirror), timeline, chains graph. |
-| `backend` (`k7-backend`) | Express behind k7's Rust front (`backend-rs`, which answers the session, the engine registry and the file service of the device's local account, `backend-rs/docs/`) — **the account's preferences**, and the bearer the front asks it to verify (`src/media/mount.ts`). It has no file routes of its own: every file operation is the Rust front's. |
+| `backend-rs` | k7's backend in Rust, the front: the session, the account's preferences, the engine registry, the file service of the device's local account and the built page (`backend-rs/docs/`). It is no npm workspace. |
 
-Dev ports: **frontend 5223, backend 8789**, the dev session a device on loopback at
+Dev ports: **frontend 5223, front 8789**, the dev session a device on loopback at
 `http://127.0.0.1:5223` — and at `https://docs.priv.k7.rocks`, the documentation alone, as the
 server's image answers `docs.k7.rocks` (`frontend/docs/docsSite.md`,
 `packages/web-protocol/docs/addresses.md`).
 
 ## The browser talks to THREE servers
 
-| | `backend` | the file service (`backend-rs`'s `k7-file-service`) | `engine/k7-runtime` |
+| | the front | the file service (`backend-rs`'s `k7-file-service`) | `engine/k7-runtime` |
 |---|---|---|---|
 | runs on | the device | the device, inside the Rust front, the local account | the engine's machine (the device's own) |
 | owns | with its Rust front: `/auth/*` for the whole origin, the preferences, the engine registry and the file hub (the device's files) | the account's workspaces — every file op | audio playback |
 | reached | same-origin (`/api`, `/auth` via the Vite proxy) | **through the origin's `/api/files`, never directly** | **WebSocket — direct when the browser may, else relayed through this origin** |
 | auth | session cookie (`studio.sid`) | a ticket the hub mints from the session | engine token echoed on `whoami` |
 
-**The backend has no file routes and no `store.ts`.** Every file operation lives in
+**The front has no `store.ts`.** Every file operation lives in
 `apps/k7/backend-rs/crates/k7-file-service/src/workspaces/mod.rs`. Don't look for `tree`/`read`/`write`/`fmt`
 here.
 
@@ -254,34 +254,20 @@ interpolate conditions into command names (`f` → `{focus_pane}`).
   and zoom are a stack; the innermost entry describes the view. Unlike chains, this one
   stays k7-only.
 
-## The backend in detail
+## The front in detail
 
-**`server.ts` is the one process**: the session it reads, the preferences,
-the alias redirect, the built SPA, and `mountMedia` (`src/media/mount.ts`), which mounts
-the bearer and the internal seam's file half (`packages/engine-registry/docs/internalSeam.md`):
-the registry, the file hub and AI organize are
-the Rust front's (`backend-rs/docs/`). `server.ts` owns SIGTERM and SIGINT: the stop drains the requests
-in flight.
-- The Vite dev server proxies BOTH `/api` and `/auth` to this backend (`proxyPaths`), which is
+**The front is the one process**: the session it reads, the preferences, the built SPA, the file hub, the
+registry and AI organize (`backend-rs/docs/`). It owns SIGTERM and SIGINT: the stop drains the requests in flight.
+- The Vite dev server proxies BOTH `/api` and `/auth` to the front (`proxyPaths`), which is
   what makes the dev server usable when visited directly on its port. No other dev server in this
   repository proxies `/auth`; an app developed elsewhere that shares the origin points its own
   proxy back at this port.
 - Auth and engine assignment are separate concerns: the assignment ("in use" badge) is
   a per-engine lease **across users**, not per-workspace across tabs.
 
-Two traps in `server.ts` that read as ordinary lines:
-
-**`OIDC_SCOPES` must keep `groups`.** The Express backend's `setupAuth` is code kept under D2 (`docs/inventaire.md`), and its admin gate reads group
-membership (`AUTH_ADMIN_GROUPS`). `@studio/oidc` defaults to
-`openid profile email`, which puts an **empty** groups array in every session and 403s every admin
-surface with nothing to explain it. So an empty or unset `OIDC_SCOPES` does not mean the package's
-default here: `server.ts` falls back on `openid profile email groups`, which is what a deployment
-whose `.env` leaves the variable blank gets. A value that is set replaces it whole, and must name
-`groups` itself.
-
-**The prefs zod schema is the GATE, not a description.** A zod object strips what it does not
-declare, so a field the frontend saves and `prefsSchema` does not name would be accepted, answered
-`{ok:true}`, and dropped. `preferencesRouter` refuses such a write out loud (`droppedKeys`), but
+**The prefs schema is the GATE, not a description.** A zod-style object strips what it does not
+declare, so a field the frontend saves and the front's schema (`crates/k7-front/src/prefs_schema.rs`) does not name would be
+accepted, answered `{ok:true}`, and dropped. The route refuses such a write out loud, but
 the rule to remember is that widening `K7Prefs` in the browser is only half of adding a
 preference.
 `engineId` and not an address, for the same kind of reason: an engine's IP moves between networks
@@ -304,7 +290,7 @@ nothing to publish or import: a workspace is a folder on the device, moved betwe
 ## the HOME page is where a workspace is chosen
 
 **This app does not own workspaces**, and never will: the device's file service
-holds every working copy, and nothing keeps a register of them elsewhere (`apps/k7/backend/docs/projects.md`). What
+holds every working copy, and nothing keeps a register of them elsewhere (`apps/k7/backend-rs/docs/projects.md`). What
 this app owns is the SCREEN above a project, at `/` with nothing after it — the workspaces, the
 projects inside them and the libraries. `frontend/docs/projects.md` is the
 page that says why.
@@ -363,14 +349,12 @@ the service.
 
 ## Verify
 
-`npm run build` is `vite build && tsc --noEmit` for the frontend; the backend has only
-`tsc --noEmit`, run directly. `npm run test` runs vitest over ~12 suites, but they cover
+`npm run build` is `vite build && tsc --noEmit` for the frontend; the front is checked by `cargo` (`docs/rust-builds.md`). `npm run test` runs vitest over ~12 suites, but they cover
 **pure logic only** — routing, path handling, module insertion, drag payloads, the shipped
 docs. **Nothing mounts a component.** For any visual or interaction change, run the app and
 exercise it in the browser; a green test run says nothing about the shell.
 
-`npm run dev` from here starts the frontend, the backend, the file service and the
-supervisor together.
+`npm run dev` from here starts the frontend; the dev session's Tilt (`docs/dev.md`) starts the front and the engine beside it.
 
 Two silent failure modes live in this directory, both worth knowing before you move a
 file:

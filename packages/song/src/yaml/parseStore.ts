@@ -1,7 +1,6 @@
 // parseStore.ts — yamlCache's parses kept ON DISK and keyed by CONTENT, so a file service that starts again
-// does not re-parse the module vocabulary, and a first launch finds the bundled library already parsed
-// (`parse-cache.json` beside the bundle, made by scripts/parseCacheSeed.ts). Two layers: the account's,
-// written, and the bundle's, read-only. Off outside a bundle: a parse is only as good as its parser.
+// does not re-parse the module vocabulary. Two layers: the account's, written, and a bundle's `parse-cache.json`
+// beside it, read-only when one is there. Off outside a bundled `.mjs` entry: a parse is only as good as its parser.
 // See docs/moduleCache.md.
 
 import { createHash } from "node:crypto";

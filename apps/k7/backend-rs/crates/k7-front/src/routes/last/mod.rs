@@ -1,8 +1,7 @@
-//! last — the TypeScript backend's last routes, answered by the front under `K7_LAST_ROUTES=front`: the seam's
-//! TypeScript half, the site page, the library's `/api` guard, the built page
-//! with its fallback, and Express's 404, each as `apps/k7/backend/src/server.ts` answers.
-//! What a reader gets wrong: under the switch this stands where the proxy stood, so every request no family takes
-//! ends here and node is asked nothing (`apps/k7/backend-rs/docs/last.md`).
+//! last — what no family answers: the seam's TypeScript-era half (the bearer's `verify-token`), the site page, the
+//! library's `/api` guard, the built page with its fallback, and the 404 page.
+//! What a reader gets wrong: every request no family takes ends here, so nothing is ever handed to another
+//! process (`apps/k7/backend-rs/docs/last.md`).
 
 mod api;
 mod dev_frontend;
@@ -23,8 +22,8 @@ use hyper::header::{CONNECTION, HeaderValue, SET_COOKIE};
 use hyper::{HeaderMap, StatusCode};
 use tower::ServiceExt;
 
+use crate::AppState;
 use crate::settings::Settings;
-use crate::{AppState, Config};
 
 /// What the last routes keep between requests: where the built page is, and the dev tray's Vite.
 pub struct Last {
@@ -33,32 +32,22 @@ pub struct Last {
 }
 
 impl Last {
-    /// The routes' state when the switch is on and the file hub is here; None leaves declined requests to the proxy.
-    pub fn start(config: &Config, settings: &Settings, files: bool) -> Option<Arc<Last>> {
-        let asked = config.env.get("K7_LAST_ROUTES").map(|v| v.trim()) == Some("front");
-        if !settings.last_routes || !files {
-            if asked {
-                eprintln!(
-                    "k7-front: K7_LAST_ROUTES=front needs K7_FILES=front: the backend keeps its last routes"
-                );
-            }
-            return None;
-        }
-        eprintln!("k7-front: the backend's last routes are answered here (K7_LAST_ROUTES=front)");
-        Some(Arc::new(Last {
+    /// The routes' state: where the built page is, and the dev tray's Vite when one is named.
+    pub fn start(settings: &Settings) -> Arc<Last> {
+        Arc::new(Last {
             frontend: frontend::Frontend::find(settings),
             dev: settings
                 .dev_frontend
                 .as_deref()
                 .and_then(dev_frontend::DevFrontend::new),
-        }))
+        })
     }
 }
 
-/// A request the front declined, answered as the backend would have answered it.
+/// A request no family took, answered here.
 pub async fn answer(state: Arc<AppState>, peer: ConnectInfo<SocketAddr>, req: Request) -> Response {
-    // The backend's upgrade guard: nothing it still serves takes a socket, so every upgrade is refused at once.
-    if crate::proxy::is_upgrade(req.headers()) {
+    // Nothing here takes a socket, so every upgrade is refused at once.
+    if crate::hop::is_upgrade(req.headers()) {
         let mut r = StatusCode::NOT_FOUND.into_response();
         r.headers_mut()
             .insert(CONNECTION, HeaderValue::from_static("close"));
@@ -98,7 +87,7 @@ async fn after_chain(State(state): State<Arc<AppState>>, req: Request) -> Respon
     response
 }
 
-/// The backend's order after the chain: the site page, the `/api` guard, then the page.
+/// The order after the chain: the site page, the `/api` guard, then the page.
 async fn route(state: &Arc<AppState>, req: Request) -> Response {
     let hostname = hostname(req.headers(), &state.settings);
     let path = req.uri().path().to_string();
@@ -119,9 +108,7 @@ async fn route(state: &Arc<AppState>, req: Request) -> Response {
 /// What every route passed on meets last: the page, then Express's 404.
 async fn tail(state: &Arc<AppState>, req: Request) -> Response {
     let path = req.uri().path().to_string();
-    let Some(last) = state.last.as_ref() else {
-        return express::not_found(req.method(), req.uri().path(), false);
-    };
+    let last = &state.last;
     if let Some(dev) = &last.dev {
         if under(&path, "/api") || under(&path, "/auth") {
             return express::not_found(req.method(), req.uri().path(), false);

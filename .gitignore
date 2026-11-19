@@ -53,8 +53,5 @@ tilt.local.yaml
 .design-sync/
 .ds-sync/
 ds-bundle/
-# The server image's bundle (apps/k7/backend/scripts/bundle.mjs --in-tree).
-server-dist/
-
 # Cargo builds outside the tree (--target-dir); one left inside is never tracked (docs/rust-builds.md).
 target/
