@@ -3,8 +3,6 @@ import { expect, test } from "@playwright/test";
 import { E2E_USER, sessionCookies } from "../../src/session.ts";
 
 const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
-// A slots read that takes a bearer: a verified one reaches the engine check (404, no such engine), a refused one is a 401.
-const _bearerRead = "/api/engines/nobody/chains";
 
 const e2eCookie = (): string =>
   sessionCookies(base)

@@ -1,6 +1,5 @@
 //! engine_jobs.rs — the session routes that hand an engine's machine a job: its slots, set by its owner
 //! (`apps/k7/backend-rs/docs/engine/slots.md`).
-//! What a reader gets wrong: the `/api` guard checks a bearer first, then the session.
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -14,7 +13,7 @@ use k7_engine::js::{invalid_type, number_issues, string_issues};
 use k7_engine::tunnel::frames::{Kind, Root};
 use serde_json::{Map, Value, json};
 
-use super::caller::{Caller, bearer_or_session, session_only};
+use super::caller::{Caller, session_only};
 use super::engines::reach;
 use super::job::{JOB_IDLE, JOB_TOTAL, of_type, request_job};
 use super::{Routes, answer, fail, seams_of};
@@ -66,20 +65,10 @@ pub fn holder(user: &Map<String, Value>) -> String {
         .to_string()
 }
 
-/// The `/api` guard's `bearerOrSession`, then `requireAuth`: a bearer that verifies still needs a session here.
+/// `requireAuth`: the session alone.
 #[allow(clippy::result_large_err, reason = "the refusal is the answer itself")]
-fn session<'a>(
-    state: &'a AppState,
-    req: &Request,
-) -> impl Future<Output = Result<Caller, Response>> + Send + 'a {
-    let asked = bearer_or_session(state, req);
-    let cookie = session_only(state, req).map_err(|r| *r);
-    async move {
-        match asked.await.map_err(|r| *r)? {
-            Caller::Bearer(_) => cookie,
-            c => Ok(c),
-        }
-    }
+fn session(state: &AppState, req: &Request) -> Result<Caller, Response> {
+    session_only(state, req).map_err(|r| *r)
 }
 
 /// zod's issues for a body that must be an object, `check` listing the rest; None when it passes.
@@ -176,7 +165,7 @@ async fn job(
 
 /// The caller, then `owned`, then the job `body`; the answer carries the session's cookies.
 async fn owner_job(state: Arc<AppState>, req: Request, id: String, body: Value) -> Response {
-    let caller = match session(&state, &req).await {
+    let caller = match session(&state, &req) {
         Ok(c) => c,
         Err(r) => return r,
     };
@@ -236,7 +225,7 @@ async fn footswitch(
     Path((id, slot)): Path<(String, String)>,
     req: Request,
 ) -> Response {
-    let caller = match session(&state, &req).await {
+    let caller = match session(&state, &req) {
         Ok(c) => c,
         Err(r) => return r,
     };
@@ -260,7 +249,7 @@ async fn save(
     Path(id): Path<String>,
     req: Request,
 ) -> Response {
-    let caller = match session(&state, &req).await {
+    let caller = match session(&state, &req) {
         Ok(c) => c,
         Err(r) => return r,
     };

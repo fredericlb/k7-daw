@@ -28,8 +28,6 @@ pub struct Settings {
     pub raw_session_secret: String,
     /// The instance's data folder, `$STUDIO_MEDIATEK` or `<STUDIO_HOME or ~/.k7>/mediatek`.
     pub mediatek_dir: PathBuf,
-    /// The library tokens' key, as `mediaTokens` derives it: `API_TOKEN_SECRET`, else `${SESSION_SECRET}:pl8`.
-    pub api_token_secret: String,
     /// `K7_LOCAL_ENGINE=front`: on a device, the front runs the supervisor and the backend does not (`docs/local.md`).
     pub local_engine_front: bool,
     /// `K7_SUPERVISOR_BIN`, which a device's host names; None runs no local engine.
@@ -142,14 +140,6 @@ impl Settings {
                     seen
                 }),
             upload_limits: k7_engine::tunnel::uploads::UploadLimits::from_settings(&|k| raw(k)),
-            api_token_secret: raw("API_TOKEN_SECRET").unwrap_or_else(|| {
-                match raw("SESSION_SECRET") {
-                    Some(s) => format!("{s}:pl8"),
-                    // node's own key under the stub; anywhere else no key anyone could guess.
-                    None if dev_stub => ":pl8".into(),
-                    None => crate::routes::cameras::ticket::random_hex(32),
-                }
-            }),
             local_engine_front: get("K7_LOCAL_ENGINE").as_deref() == Some("front"),
             supervisor_bin: raw("K7_SUPERVISOR_BIN").map(PathBuf::from),
             supervisor_home: raw("K7_SUPERVISOR_HOME")

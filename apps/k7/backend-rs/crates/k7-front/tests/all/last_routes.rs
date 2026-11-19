@@ -1,5 +1,4 @@
-//! The last routes: the built page and its fallback, the 404 page, the bearer
-//! guard and the seam's `verify-token`.
+//! The last routes: the built page and its fallback, the 404 page and the `/api` guard.
 //! What a reader gets wrong: the hub's services cannot start here, which none of these routes needs.
 
 use std::net::SocketAddr;
@@ -193,43 +192,5 @@ async fn the_last_routes_answer() {
     );
     let signed = send(front, "GET", "/api/conformance", &[("cookie", &ann)], "").await;
     assert_eq!(signed.status, 404);
-    let forged = send(
-        front,
-        "GET",
-        "/api/preferences",
-        &[("cookie", &ann), ("authorization", "Bearer x.y")],
-        "",
-    )
-    .await;
-    assert_eq!(
-        (forged.status, forged.text().as_str()),
-        (401, r#"{"error":"invalid token"}"#)
-    );
-
-    let gate = [("x-k7-internal", "s"), ("content-type", "application/json")];
-    let body = serde_json::json!({ "token": "x.y" }).to_string();
-    let verified = send(
-        front,
-        "POST",
-        "/api/internal/files/verify-token",
-        &gate,
-        &body,
-    )
-    .await;
-    assert_eq!(
-        (verified.status, verified.text().as_str()),
-        (200, r#"{"sub":null}"#)
-    );
-    assert_eq!(verified.header("cache-control"), Some("no-store"));
-    let refused = send(
-        front,
-        "POST",
-        "/api/internal/files/verify-token",
-        &[("x-k7-internal", "no")],
-        "",
-    )
-    .await;
-    assert_eq!(refused.status, 401);
-
     let _ = std::fs::remove_dir_all(&root);
 }

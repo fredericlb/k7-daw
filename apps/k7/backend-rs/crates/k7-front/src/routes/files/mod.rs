@@ -21,9 +21,6 @@ pub type Routes = Router<Arc<AppState>>;
 /// The hub's own prefixes: every path under them is the family's (`docs/files.md`, "The switch").
 const PREFIXES: [&str; 3] = ["/api/files", "/api/files-hub", "/api/ready"];
 
-/// The seam's file half the front does not take through the hub: its bearers and the services' bearer.
-const SEAM_KEPT: [&str; 1] = ["/api/internal/files/verify-token"];
-
 fn under(path: &str, prefix: &str) -> bool {
     path.strip_prefix(prefix)
         .is_some_and(|rest| rest.is_empty() || rest.starts_with('/'))
@@ -34,10 +31,7 @@ pub fn is_files_path(path: &str) -> bool {
     if PREFIXES.iter().any(|p| under(path, p)) {
         return true;
     }
-    if under(path, "/api/internal/files") {
-        return !SEAM_KEPT.contains(&path);
-    }
-    false
+    under(path, "/api/internal/files")
 }
 
 /// The file hub in the front, and what its routes need beside it.
@@ -155,12 +149,7 @@ mod tests {
         ] {
             assert!(is_files_path(p), "{p}");
         }
-        for p in [
-            "/api/filesx",
-            "/api/internal/files/verify-token",
-            "/api/sync",
-            "/api/readyz",
-        ] {
+        for p in ["/api/filesx", "/api/sync", "/api/readyz"] {
             assert!(!is_files_path(p), "{p}");
         }
     }

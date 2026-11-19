@@ -86,10 +86,10 @@ fn sessioned(route: MethodRouter<Arc<AppState>>) -> MethodRouter<Arc<AppState>> 
 
 pub(crate) async fn declined(
     State(state): State<Arc<AppState>>,
-    peer: ConnectInfo<SocketAddr>,
+    _peer: ConnectInfo<SocketAddr>,
     req: Request,
 ) -> Response {
-    routes::last::answer(state, peer, req).await
+    routes::last::answer(state, req).await
 }
 
 /// Ahead of the guard: a method, a host or a session the front cannot answer here ends in the last routes.
@@ -139,13 +139,6 @@ async fn claim(
         return next.run(req).await;
     }
     let needs_session = path != "/api/health";
-    // A library bearer on a session route is the `/api` guard's, which `routes::last` answers.
-    let guarded = path == "/api/preferences" || path.starts_with("/api/ai/");
-    let bearer = req
-        .headers()
-        .get(hyper::header::AUTHORIZATION)
-        .and_then(|v| v.to_str().ok())
-        .is_some_and(|v| v.len() >= 6 && v[..6].eq_ignore_ascii_case("bearer"));
     let owned_method = if let Some(owned) = owns_auth(method, path, state.settings.local_user) {
         owned
     } else {
@@ -155,7 +148,7 @@ async fn claim(
             || (path == "/api/ai/settings" && method == Method::PUT)
             || (path == "/api/ai/organize/turn" && method == Method::POST)
     };
-    if !owned_method || guarded && bearer || needs_session && !state.settings.claims_sessions() {
+    if !owned_method || needs_session && !state.settings.claims_sessions() {
         return declined(State(state), peer, req).await;
     }
     next.run(req).await

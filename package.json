@@ -16,7 +16,6 @@
     "dev": "node scripts/dev.mjs",
     "dev:tray": "node scripts/dev-tray.mjs",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules apps/*/*/node_modules apps/*/*/*/node_modules",
-    "tokens": "node scripts/tokens.mjs",
     "build": "npm run build --workspaces --if-present",
     "test": "node scripts/workspaces.mjs test",
     "test:console": "node --test \"scripts/console/*.test.mjs\"",

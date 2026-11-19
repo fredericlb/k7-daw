@@ -1,5 +1,5 @@
-//! last — what no family answers: the seam's TypeScript-era half (the bearer's `verify-token`), the site page, the
-//! library's `/api` guard, the built page with its fallback, and the 404 page.
+//! last — what no family answers: the site page, the `/api` guard, the built page with its fallback, and the
+//! 404 page.
 //! What a reader gets wrong: every request no family takes ends here, so nothing is ever handed to another
 //! process (`apps/k7/backend-rs/docs/last.md`).
 
@@ -7,14 +7,12 @@ mod api;
 mod dev_frontend;
 pub(crate) mod express;
 mod frontend;
-mod internal;
 mod send;
 
-use std::net::SocketAddr;
 use std::sync::Arc;
 
 use axum::Router;
-use axum::extract::{ConnectInfo, Request, State};
+use axum::extract::{Request, State};
 use axum::middleware::from_fn_with_state;
 use axum::response::{IntoResponse, Response};
 use hyper::StatusCode;
@@ -44,18 +42,13 @@ impl Last {
 }
 
 /// A request no family took, answered here.
-pub async fn answer(state: Arc<AppState>, peer: ConnectInfo<SocketAddr>, req: Request) -> Response {
+pub async fn answer(state: Arc<AppState>, req: Request) -> Response {
     // Nothing here takes a socket, so every upgrade is refused at once.
     if crate::hop::is_upgrade(req.headers()) {
         let mut r = StatusCode::NOT_FOUND.into_response();
         r.headers_mut()
             .insert(CONNECTION, HeaderValue::from_static("close"));
         return r;
-    }
-    let path = req.uri().path();
-    // The seam sits ahead of the loopback lock and CORS, behind a gate of its own.
-    if path == internal::INTERNAL || path.starts_with("/api/internal/") {
-        return internal::answer(&state, peer.0, req).await;
     }
     // A router built per request, so nothing the state keeps holds the state.
     let chain = Router::new()

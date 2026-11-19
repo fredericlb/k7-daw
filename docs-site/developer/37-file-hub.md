@@ -37,7 +37,7 @@ keeps an account's state apart and lets an idle one cost memory only.
 - **Environment:** an allow-list of the front's (`crates/k7-hub/src/env.rs`) overlaid by the host's
   settings, plus the account's own `STUDIO_HOME=<root>/<slug>`, `STUDIO_LIBRARIES_HOME=<root>/libraries`,
   `STUDIO_RENDER_JOBS_URL`
-  when renders are on, and the shares' `STUDIO_MEDIATEK` (the instance's data folder), `MEDIATEK_URL`, `MEDIATEK_TOKEN`.
+  when renders are on, and the shares' `STUDIO_MEDIATEK` (the instance's data folder).
   The front's secrets are not on the list.
 - **Crash:** nothing to restart; a runtime is memory in the front.
 

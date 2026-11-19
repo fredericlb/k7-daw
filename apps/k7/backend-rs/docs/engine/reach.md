@@ -28,13 +28,12 @@ except playback on it.
 | an in-process channel holds what is sent before the engine answers (256 frames, 8 MiB), respells a jobs channel's text to the tunnel's spelling, and closes on a peer past the backpressure bound | what the hub's loopback pipe does for a seam client (`k7_engine::tunnel::local`); without it the hub drops a frame sent while the channel connects |
 | `requestJob` ported (`job.rs`): an id per request, replies matched by it, the total and idle timeouts, the vectors' sentences | the machine's agent speaks this protocol whoever asks; the wording reaches the page |
 | `/slot` asked of the seam's file half, five minutes allowed | the file hub is the front's; a slot is compiled by the account's file service, which takes its time |
-| who asks (`caller.rs`) is a bearer the backend verifies over the seam's file half, else the session; a bearer that does not verify is refused, never downgraded to the cookie | `bearerOrSession` is the backend's guard for the routes a service may call |
 
 ## The slots
 
 | choice | why |
 |---|---|
-| the slots behind the `/api` guard's bearer check, then the session | `requireAuth` follows `bearerOrSession` there: a bearer that verifies still needs a session |
+| the slots behind the session alone (`caller.rs`) | `requireAuth` is the backend's guard there |
 | zod's messages reproduced for every body (`k7_engine::js`'s issues), the guard first, then the body, then the owner | `validate` sits after the guard and before the route |
 
 ## Proofs

@@ -182,7 +182,7 @@ async fn ai_settings_keep_the_key_and_show_only_its_hint() {
 }
 
 #[tokio::test]
-async fn the_removed_organize_route_and_a_bearer_end_in_the_last_routes() {
+async fn the_removed_organize_route_ends_in_the_last_routes() {
     let f = front("ai-declined", &[]).await;
     let c = cookie(json!({ "sub": "a" }));
     let (s, _, _) = call(
@@ -196,11 +196,5 @@ async fn the_removed_organize_route_and_a_bearer_end_in_the_last_routes() {
     assert_eq!(
         s, 404,
         "the whole-conversation route is no longer the front's"
-    );
-    let bearer = "Authorization: Bearer some-library-token".to_string();
-    let (s, _, _) = call(f.addr, "GET", "/api/ai/settings", &[c, bearer], "").await;
-    assert_eq!(
-        s, 401,
-        "a bearer is the `/api` guard's: the session alone is not enough"
     );
 }

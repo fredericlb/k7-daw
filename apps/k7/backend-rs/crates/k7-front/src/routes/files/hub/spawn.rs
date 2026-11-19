@@ -1,18 +1,16 @@
 //! spawn.rs — what the hub is built from and launched with: the accounts' and the libraries' environments (the
-//! account's own values, the sync target, the media's bearer), the libraries' runtime, a server's cut
+//! account's own values, the sync target), the libraries' runtime, a server's cut
 //! context and the caches' sweep. Choices: `docs/files.md`.
 
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 use std::path::{Component, Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, OnceLock, Weak};
 use std::time::Duration;
 
-use base64::Engine;
-use base64::engine::general_purpose::URL_SAFE_NO_PAD;
 use k7_hub::Log;
 use k7_hub::account::Names;
-use serde_json::{Value, json};
+use serde_json::Value;
 
 use super::{CUT, LIBRARIES, State};
 use crate::AppState;
@@ -48,28 +46,6 @@ fn setting(env: &BTreeMap<String, String>, key: &str) -> Option<String> {
         .filter(|v| !v.is_empty())
 }
 
-/// The service bearer for `user`, minted here: the front verifies it itself (`routes/engine_reach/caller.rs`).
-fn service_token(
-    user: &str,
-    api_secret: &str,
-    held: &Mutex<HashMap<String, String>>,
-) -> Option<String> {
-    let mut raw = [0u8; 16];
-    getrandom::fill(&mut raw).ok()?;
-    let jti = URL_SAFE_NO_PAD.encode(raw);
-    let now = k7_hub::account::now_ms();
-    let body = json!({ "v": 2, "jti": jti, "sub": user, "iat": now, "exp": 0 });
-    let payload = URL_SAFE_NO_PAD.encode(body.to_string());
-    let token = format!(
-        "{payload}.{}",
-        k7_auth::api_token::sign(api_secret, &payload)
-    );
-    held.lock()
-        .unwrap_or_else(|p| p.into_inner())
-        .insert(jti, user.to_string());
-    Some(token)
-}
-
 /// The hub's state from the front's settings; nothing runs until `launch`.
 pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> State {
     let env = &config.env;
@@ -89,7 +65,6 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
     let app: Arc<OnceLock<Weak<AppState>>> = Arc::new(OnceLock::new());
     let machine = settings.local_user;
     let library_secret = random_hex(24);
-    let service_tokens: Arc<Mutex<HashMap<String, String>>> = Arc::default();
     let seam = k7_hub::seam::Seam::new(&format!("127.0.0.1:{port}"), &config.secret, log.clone());
     // Spelled as node's `path.resolve` spells it: the engine's roots and the services' paths are compared as text.
     let mediatek_root = resolve(&settings.mediatek_dir);
@@ -99,12 +74,11 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
         let slug = k7_hub::account::account_key(user);
         (slug.clone(), root.join(slug))
     }));
-    let (r, t) = (data_root.clone(), service_tokens.clone());
-    let (m, api) = (mediatek_root.clone(), settings.api_token_secret.clone());
+    let (r, m) = (data_root.clone(), mediatek_root.clone());
     // Every account is the front's where it has a code root, and it captures.
     let beside = super::super::service::code_root(env).is_some();
-    files.env = Arc::new(move |slug, user| {
-        let (r, t, m, api) = (r.clone(), t.clone(), m.clone(), api.clone());
+    files.env = Arc::new(move |_, _| {
+        let (r, m) = (r.clone(), m.clone());
         Box::pin(async move {
             let mut env = BTreeMap::new();
             env.insert(
@@ -120,13 +94,6 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
                 env.insert(super::super::service::FRONT_CAPTURE.into(), "1".into());
             }
             env.insert("STUDIO_MEDIATEK".into(), m.display().to_string());
-            env.insert("MEDIATEK_URL".into(), format!("http://127.0.0.1:{port}"));
-            match service_token(&user, &api, &t) {
-                Some(token) => {
-                    env.insert("MEDIATEK_TOKEN".into(), token);
-                }
-                None => println!("files | [{slug}] no service bearer: none could be minted"),
-            }
             env
         })
     });
@@ -175,7 +142,6 @@ pub(super) fn state(config: &crate::Config, settings: &Settings, port: u16) -> S
         seam,
         log,
         app,
-        service_tokens,
         settled: Arc::new(AtomicBool::new(!machine)),
         started: OnceLock::new(),
         tasks: Mutex::new(Vec::new()),

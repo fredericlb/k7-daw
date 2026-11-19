@@ -29,7 +29,7 @@ laptop or a phone the three are the same machine: k7 is the tray or the app, and
 | Process | Code | Runs where | Job |
 |---|---|---|---|
 | k7 frontend | `apps/k7/frontend` | Browser | The editor and the home page. A React SPA built by Vite. |
-| k7 front | `apps/k7/backend-rs` | Device | One Rust process: the session, preferences, the bearer tokens and the static SPA, the engine registry and relay, the tunnel hub and the file hub (`apps/k7/backend-rs/docs/`). |
+| k7 front | `apps/k7/backend-rs` | Device | One Rust process: the session, preferences and the static SPA, the engine registry and relay, the tunnel hub and the file hub (`apps/k7/backend-rs/docs/`). |
 | file service | `apps/k7/backend-rs/crates/k7-file-service` | Device (in the Rust front) | One runtime for the local account, made on demand by the front's file hub. Every file operation on the device's workspaces, the project compile, and the commands that drive an engine. |
 | k7-supervisor | `engine/k7-supervisor` | Engine machine | Starts and watches the engine, lists it at the registry, holds the tunnel back to the backend, runs jobs the backend asks of the machine. |
 | k7-runtime | `engine/k7-runtime` | Engine machine | The C++ audio engine. Receives a compiled project document over WebSocket, plays it, reports transport and meter state. It never reads song files. |
@@ -42,7 +42,7 @@ laptop or a phone the three are the same machine: k7 is the tray or the app, and
 2. sets the security headers, locks a device to its own machine, and answers CORS for loopback pages;
 3. reads the session cookie `studio.sid`, and answers `/auth/me`, `/auth/logout` and `/auth/local`
    (`apps/k7/backend-rs/docs/routes.md`);
-4. answers the engine registry, the tunnel hub and the file hub, and the `/api` guard with the internal seam's `verify-token`;
+4. answers the engine registry, the tunnel hub and the file hub, and the `/api` guard;
 5. serves per-account preferences at `/api/preferences`;
 6. serves `apps/k7/frontend/dist` with hashed assets cached for a year and the shell never cached.
 

@@ -1,12 +1,11 @@
 // lastRoutes.spec.ts — the last routes as a client sees them: the built page and its fallback, the 404 page,
-// the `/api` guard's bearer, the device door's refusals and the seam's bearer check (e2e/docs/conformance.md).
+// the device door's refusals (e2e/docs/conformance.md).
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { expect, test } from "@playwright/test";
 import { sessionCookies } from "../../src/session.ts";
 
 const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
-const internalSecret = process.env.CONFORMANCE_INTERNAL_SECRET;
 
 /** The Cookie header a signed-in e2e account sends. */
 function cookie(): string {
@@ -162,50 +161,4 @@ test("a missing asset, /api and /auth are Express's 404, never the shell", async
   const folder = await raw("/assets?x=1");
   expect(folder.status).toBe(301);
   expect(folder.headers.location).toBe("/assets/?x=1");
-});
-
-test("a bearer that does not verify is refused even beside a valid session", async () => {
-  for (const path of ["/api/preferences", "/api/ai/settings"]) {
-    const res = await raw(path, {
-      headers: { cookie: cookie(), authorization: "Bearer conformance.forged" },
-    });
-    expect(res.status, path).toBe(401);
-    expect(JSON.parse(res.body.toString()), path).toEqual({
-      error: "invalid token",
-    });
-  }
-});
-
-test("the seam's TypeScript half: a bearer's subject and what the backend runs", async () => {
-  const refused = await raw("/api/internal/files/verify-token", {
-    method: "POST",
-  });
-  expect(refused.status).toBe(401);
-  test.skip(!internalSecret, "CONFORMANCE_INTERNAL_SECRET not given");
-  const gate = { "x-k7-internal": internalSecret ?? "" };
-  const json = { ...gate, "content-type": "application/json" };
-  const forged = await raw("/api/internal/files/verify-token", {
-    method: "POST",
-    headers: json,
-    body: JSON.stringify({ token: "conformance.forged" }),
-  });
-  expect(forged.status).toBe(200);
-  expect(forged.headers["cache-control"]).toBe("no-store");
-  expect(JSON.parse(forged.body.toString())).toEqual({ sub: null });
-  const empty = await raw("/api/internal/files/verify-token", {
-    method: "POST",
-    headers: json,
-    body: "{}",
-  });
-  expect(empty.status).toBe(400);
-  expect(JSON.parse(empty.body.toString())).toEqual({
-    error: "a token is required",
-  });
-  const none = await raw("/api/internal/files/conformance-nope", {
-    headers: gate,
-  });
-  expect(none.status).toBe(404);
-  expect(JSON.parse(none.body.toString())).toEqual({
-    error: "no such internal route",
-  });
 });

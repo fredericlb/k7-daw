@@ -12,7 +12,7 @@ use k7_engine::tunnel::frames::{Kind, Root};
 use serde_json::{Value, json};
 
 use crate::AppState;
-use crate::routes::engine_reach::caller::{Caller, bearer_or_session};
+use crate::routes::engine_reach::caller::{Caller, session_only};
 use crate::routes::engine_reach::engine_jobs::{OPEN_JOBS, holder};
 use crate::routes::engine_reach::engines::reach;
 use crate::routes::engine_reach::job::{JOB_IDLE, JOB_TOTAL, of_type, request_job};
@@ -37,7 +37,7 @@ pub async fn chains(
     Path(id): Path<String>,
     req: Request,
 ) -> Response {
-    let caller = match bearer_or_session(&state, &req).await {
+    let caller = match session_only(&state, &req) {
         Ok(c) => c,
         Err(refused) => return *refused,
     };
@@ -53,7 +53,7 @@ pub async fn set(
     Path(id): Path<String>,
     req: Request,
 ) -> Response {
-    let caller = match bearer_or_session(&state, &req).await {
+    let caller = match session_only(&state, &req) {
         Ok(c) => c,
         Err(refused) => return *refused,
     };

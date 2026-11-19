@@ -24,8 +24,7 @@ helper (`e2e/src/sessionCookie.ts`) mints the same bytes. The cookie's bytes are
 | the payload is decoded as leniently as node's `Buffer.from(…, "base64")`: either alphabet, padding optional | a cookie node accepts must not be refused here |
 | the signature is compared in constant time | as Keygrip's `verify` |
 | the `Set-Cookie` lines are cookie-session's too (`crates/k7-auth/src/cookie_session.rs`), with no `Domain` | the front mints and clears the device's session; when and how a cookie is rewritten is what a browser keeps (`docs/routes.md`, the session) |
-| the API tokens have vectors of their own, `fixtures/auth-vectors.json` | the same contract as the cookie's, for the other thing signed with `SESSION_SECRET` |
 | every host's start refuses a session secret shorter than 32 characters or the public development default, unless `STUDIO_DEV_AUTH=1` or `STUDIO_LOCAL_USER=1` (`crates/k7-front/src/auth_guard.rs`). The binary exits 2, `k7_front_start` answers -5 | a known secret lets anyone mint a cookie |
-| the public default secret is read only where the dev stub may run; elsewhere an unset secret is no secret, the front then claims no session route, and the key derived from it (the API tokens') is random per process and the recorder stays unclaimed | a front started past the guard (a test, a host that forgot it) must fail closed, never sign with a literal anyone can read here |
+| the public default secret is read only where the dev stub may run; elsewhere an unset secret is no secret, the front then claims no session route, and the recorder stays unclaimed | a front started past the guard (a test, a host that forgot it) must fail closed, never sign with a literal anyone can read here |
 
 The vectors are written once, not generated: a change to the format edits them on purpose.

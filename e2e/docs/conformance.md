@@ -50,7 +50,7 @@ what it shares is made its own:
 
 | family (phase 6.5) | spec |
 |---|---|
-| the built page, its fallback and the 404 page, the `/api` guard's bearer, the seam's bearer check | `lastRoutes.spec.ts` |
+| the built page, its fallback and the 404 page | `lastRoutes.spec.ts` |
 
 | family (phase 5d, the file service, `docs/rust-phase5-plan.md`) | spec |
 |---|---|

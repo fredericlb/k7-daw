@@ -40,7 +40,6 @@ Each is described in [Lints and conventions](./06-lints-and-conventions.md).
 
 | Script | Runs | Purpose |
 |---|---|---|
-| `tokens` | `node scripts/tokens.mjs` | Writes a random `API_TOKEN_SECRET` into the `k7-front` section of `env.yaml`, preserving the file's comments. `--dry-run` prints without writing; `--env <file>` targets another file. Fails if `env.yaml` does not exist. |
 | `clean` | `rm -rf …/node_modules` | Deletes every `node_modules` folder in the tree (root, packages, apps). |
 
 ## Remote dev box (Windows)

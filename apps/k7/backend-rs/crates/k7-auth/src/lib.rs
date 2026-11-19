@@ -1,7 +1,6 @@
-//! k7-auth — what makes a studio session or token: the session cookie, the shared JSON files, and the API tokens.
+//! k7-auth — what makes a studio session: the session cookie and the shared JSON files.
 //! These formats are frozen by vectors written once (`apps/k7/backend-rs/fixtures`, `apps/k7/backend-rs/docs/sessions.md`).
 
-pub mod api_token;
 mod cookie_session;
 mod json_file;
 mod keygrip;

@@ -15,7 +15,6 @@
 ```bash
 npm install
 cp env.example.yaml env.yaml     # then fill it in
-npm run tokens                   # optional: gives the front its own API_TOKEN_SECRET
 ```
 
 `env.yaml` is the per-machine configuration and is gitignored (`env.yaml*`, so backups are ignored
@@ -30,10 +29,9 @@ The keys you need in dev:
 | Key | Section | Notes |
 |---|---|---|
 | `STUDIO_FILES_ROOT` | `k7-front` | **Required.** Where the device's workspaces live; the front answers no file hub without it. |
-| `STUDIO_MEDIATEK` | `k7-front` | The instance's data folder (the bearer tokens, the engine registry). Defaults to `~/.k7/mediatek`. |
+| `STUDIO_MEDIATEK` | `k7-front` | The instance's data folder (the engine registry). Defaults to `~/.k7/mediatek`. |
 | `SESSION_SECRET` | `common` | Signs the session cookie. |
 | `STUDIO_LOCAL_USER` | `k7-front` | `1` in the dev session: it runs as a device, whose session is its local user; there is no sign-in provider to configure. |
-| `API_TOKEN_SECRET` | `k7-front` | Written by `npm run tokens`; falls back to a value derived from `SESSION_SECRET`. |
 | `COOKIE_DOMAIN` | `common` | Leave empty for local http: setting it forces `Secure` and `SameSite=None`. |
 
 `env.example.yaml` documents the remaining optional keys (prefs folder and the like).

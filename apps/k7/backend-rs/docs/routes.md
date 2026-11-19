@@ -7,7 +7,7 @@ A route is the front's once the conformance suite (`e2e/docs/conformance.md`) pa
 | `GET /api/health` | phase 1 | nothing |
 | `GET`, `PUT /api/preferences` | phase 1 | any front that cannot find the session revocations |
 | `GET /api/cameras`, `POST /api/cameras/ticket`, `WS /api/cameras/ws` | phase 1 | the same as the preferences, for all three at once; a request to the socket's path that is no upgrade |
-| `GET`, `PUT /api/ai/settings`, `GET /api/ai/organize`, `POST /api/ai/organize/turn` | phase 3 | any request with a bearer, which the backend's `/api` guard answers and no route behind it; the same as the preferences |
+| `GET`, `PUT /api/ai/settings`, `GET /api/ai/organize`, `POST /api/ai/organize/turn` | phase 3 | the same as the preferences |
 | `POST /auth/logout`, `GET /auth/me` | phase 3 | the same as the preferences |
 | `GET /auth/local` on a device | phase 3 | off a device, where the backend does not mount it either; the same as the preferences |
 | `GET /api/local`, `GET /api/local/tray` | phase 4a; on every device since 6.1 (`local.md`) | off a device, where the backend answers 404 |
@@ -18,7 +18,7 @@ The front also answers `/api/engine-slots`, on every host (`engine/slots.md`). A
 answers is declined.
 
 What a route declines (a method it does not own, a session route without known revocations) ends in the last routes (`last.md`): the seam's
-`verify-token`, a bearer on `/api/preferences`, `/api/ai/*`, the built page and its fallback, and
+the built page and its fallback, and
 the 404 and the `/api` guard's 401 for any other path.
 
 Nobody signs in against an identity provider: `/auth/login`, `/auth/callback` and `/auth/handoff/*` are no route, and answer what a missing route does.
@@ -56,14 +56,13 @@ Each reads its state from disk on every request, from files the previous release
 
 | choice | why |
 |---|---|
-| a request to `/api/preferences` or `/api/ai/*` with a bearer goes to the backend | the backend's `/api` guard checks a bearer against tokens the backend holds, and refuses a bad one even beside a valid cookie; behind it the backend has the preferences only, so a bearer on `/api/ai/*` hears the guard or a 404 |
 | zod's messages are written out by hand for the three bodies these routes check | the browser shows `error` as it is; the vectors hold every message |
 | shared vectors, `fixtures/leaf-vectors.json`, written by the TypeScript these routes replaced and kept as committed: the AI settings' patch and key hint | the AI patch and key hint; the file is the reference, and `src/vectors.rs` fails when Rust disagrees |
 
 ## The session
 
 `src/routes/auth/` holds the device's session: `/auth/me`, `/auth/logout` and `/auth/local`, which signs the
-machine's own user in. `src/routes/tokens.rs` mints the bearer tokens. `/auth/{logout,me}` come before a device's
+machine's own user in. `/auth/{logout,me}` come before a device's
 rewrite to its local user, so `/auth/me` there names the account the cookie holds, and `/auth/local` and the token
 routes after it. There is no provider: a machine has one account, and a cookie is only ever minted for it.
 

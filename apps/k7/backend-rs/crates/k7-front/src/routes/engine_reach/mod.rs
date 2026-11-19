@@ -32,7 +32,7 @@ pub fn is_slots_path(path: &str) -> bool {
 
 /// The seam the slot routes ask, held once the front can check sessions and holds an engine core.
 pub struct Seams {
-    /// The seam's file half, asked for a bearer's subject and the account's file service's jobs.
+    /// The seam's file half, asked for the account's file service's jobs.
     pub(crate) seam: seam::Seam,
 }
 
@@ -54,11 +54,6 @@ impl Seams {
         Some(Arc::new(Seams {
             seam: seam::Seam::new(seam, &config.secret),
         }))
-    }
-
-    /// Any bearer revoked here may be one the cache still holds.
-    pub fn forget_bearers(&self) {
-        self.seam.forget_bearers();
     }
 }
 

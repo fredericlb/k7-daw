@@ -33,7 +33,6 @@ account names and environments, the engine bindings, the caches' sweep, with no 
 | the hub's own calls (the engine seam) are `k7_hub::call`, one pooled hyper client | a seam's answer is JSON read whole |
 | the engine seam is called over loopback at the front's own port with `K7_FRONT_SECRET`, kept bindings re-posted under their key on a new epoch | the core answers it in this process today, but the contract is the seam's (`engine/reach.md`) |
 | the ticket's key is `${SESSION_SECRET}:files`, else 32 random bytes per process | an open page keeps its ticket through a deploy, and a ticket the previous release minted reads here |
-| the shares' bearer each runtime is handed (`MEDIATEK_TOKEN`) is minted by the front: an ephemeral token (@studio/oidc's format, `api_token_secret`, held in memory, listed nowhere), which `routes/engine_reach/caller.rs` accepts before it asks the backend | only the process that verifies a bearer can hold an ephemeral one; `MEDIATEK_URL` is the front's port |
 | `GET /api/files-hub` and `/api/files` read the request's own session | one identity for every route of the family |
 | `routes/auth/warm.rs` warms this hub on a signed-in `/auth/me` once the front holds the family, which does nothing on a server; a device's local user is warmed at launch | a page asks who is signed in before it lists anything, so its account's runtime is up by its first list |
 | `exts.json` is written through `k7_hub::json` (`JSON.stringify`'s spelling), a copy of `k7-mediatek`'s | `k7-mediatek` brings Wasmtime, which the front does not carry |
@@ -69,7 +68,6 @@ nothing is fetched. They answer `/account/libraries*` and
 | the libraries have their own secret | `hub/proxy.rs` | `tests/files_hub.rs` |
 | an account's environment is the allow-list: no session, token, OIDC, render or front secret reaches it, whatever its name | `k7_hub::env` | `tests/all/vectors.rs` (`hub-vectors.json`) |
 | only a claim binds an engine: the registry is asked `holds` for the account before any path is bound | `k7_hub::binding` | `filesHub.spec.ts` (an unclaimed engine leaves the files reachable) |
-| the shares' bearer the front mints is ephemeral, held in this process, accepted only with `exp: 0` and its id held for its subject | `hub.rs` `verify_service_token` | read in the code |
 | the seam's `cold-run`, `slot` and `hub` sit behind the seam's own gate (loopback and `K7_FRONT_SECRET`) | `routes/engine/internal.rs` `gate` | `tests/files_hub.rs` |
 
 `fixtures/hub-vectors.json` holds account keys, tickets minted and read, the allow-list and the sync target as the
@@ -141,7 +139,6 @@ the SDK's constants); a real Claude answer.
 | the account's key leaves only to `ANTHROPIC_BASE_URL` (the API's own host otherwise), over TLS with the front's roots, and never to the page | the vectors read `x-api-key` at the fake; the page's body names a model and a key and neither is used | `turn_vectors.rs`, `ai_turn.rs` |
 | a body is parsed under 2 MB before the session is read, the session checked before the key, the key before the shape | the order of `post_turn` | `ai_turn.rs` |
 | a turn is bounded: five messages, a 200 KB prompt, 64,000 output tokens, 8 MiB of stream | the shape check and the stream cut | `turn.rs`' tests, `turn_vectors.rs` |
-| a request with a bearer goes to the backend, which answers no `/api/ai` route | `claim`'s bearer rule for `/api/ai/*` | `routes.md` |
 
 ## Answers chosen on purpose
 
@@ -207,4 +204,4 @@ A room's folder name keeps the names Windows reserves (`CON`, `NUL`, `COM1`…) 
 
 ## What stays TypeScript
 
-The backend process holds no hub: no service, no libraries, no readiness and no AI route. What it still runs is `verify-token` on the seam, for the bearers. Node starts no child for the hub: every account's files and the libraries are the front's own (`service.md`).
+The backend process holds no hub: no service, no libraries, no readiness and no AI route. Node starts no child for the hub: every account's files and the libraries are the front's own (`service.md`).

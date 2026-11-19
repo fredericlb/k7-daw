@@ -6,7 +6,6 @@ mod answers;
 mod proxy;
 mod spawn;
 
-use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, OnceLock, Weak};
@@ -63,8 +62,6 @@ pub struct State {
     log: Log,
     /// The front, for the callbacks that reach its state; set at launch.
     app: Arc<OnceLock<Weak<AppState>>>,
-    /// The media bearers minted here, by id, for as long as this process lives.
-    service_tokens: Arc<Mutex<HashMap<String, String>>>,
     /// Set once a standalone's libraries settled, or waited long enough.
     settled: Arc<AtomicBool>,
     started: OnceLock<Instant>,
@@ -137,16 +134,6 @@ impl State {
         if let Err(e) = f.service.held(user, &self.names).await {
             (self.log)(&format!("warming {user}'s runtime: {e}"));
         }
-    }
-
-    /// The subject of a media bearer this hub minted for a service, or None.
-    pub fn verify_service_token(&self, secret: &str, token: &str) -> Option<String> {
-        let c = k7_auth::api_token::claims(secret, token)?;
-        let held = self
-            .service_tokens
-            .lock()
-            .unwrap_or_else(|p| p.into_inner());
-        (c.exp == 0.0 && held.get(&c.jti) == Some(&c.sub)).then_some(c.sub)
     }
 
     /// Whether a standalone's files answer yet: once its libraries settled, or after LIBRARY_WAIT.
