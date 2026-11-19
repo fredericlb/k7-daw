@@ -9,7 +9,7 @@ export interface Page {
   onChange: (cb: () => void) => () => void;
 }
 
-export const documentPage: Page = {
+const documentPage: Page = {
   visible: () => document.visibilityState === "visible",
   onChange: (cb) => {
     document.addEventListener("visibilitychange", cb);

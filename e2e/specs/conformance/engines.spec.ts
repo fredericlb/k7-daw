@@ -6,7 +6,7 @@ import { randomBytes } from "node:crypto";
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { expect, test } from "@playwright/test";
-import { deviceBed, sessionCookies } from "../../src/session.ts";
+import { sessionCookies } from "../../src/session.ts";
 
 const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
 
@@ -178,35 +178,6 @@ test("tells a lapsed engine from a wrong token, and claims, renews and lets go",
   expect(await refused.json()).toEqual({
     error: "claim this engine before opening a direct link",
   });
-});
-
-test("tells a stranger nothing about who owns what", async ({ request }) => {
-  test.skip(
-    deviceBed(),
-    "a device has one account, nobody is a stranger: the engine ownership tests hold it",
-  );
-  const h = signedIn();
-  for (const [method, path] of [
-    ["GET", `/api/engines/${id}/shares`],
-    ["PUT", `/api/engines/${id}/shares`],
-    ["DELETE", `/api/engines/${id}/owner`],
-  ] as const) {
-    const res = await request.fetch(path, {
-      method,
-      headers: h,
-      data: method === "PUT" ? { emails: [] } : undefined,
-    });
-    expect([method, res.status(), await res.json()]).toEqual([
-      method,
-      404,
-      { error: "not-yours" },
-    ]);
-  }
-  const owners = await request.get("/api/engines/owners", { headers: h });
-  expect([owners.status(), await owners.json()]).toEqual([
-    403,
-    { error: "not-yours" },
-  ]);
 });
 
 test("relays only for a ticket of its own engine, and unlists on the engine's word", async ({

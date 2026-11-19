@@ -21,7 +21,7 @@ The config file has the settings' schema (`registryUrls`, `port`, `audioPriority
 `instruments`, `deviceTokens`, `lanOpen` — whether a device on this network drives the engine unpaired,
 `engine/k7-runtime/docs/pairing.md`), **`stems` and `instrumental`** — the chain THIS machine separates
 with, by what the cut wants, since which module and model it runs is that machine's CPU, GPU and
-downloaded models, not an account's (`packages/stem-separation/docs/stemSplit.md`); its owner names them
+downloaded models, not an account's (`engine/k7-supervisor/docs/stemSplit.md`); its owner names them
 from the studio's Engines card as well as by hand, through the `chains` job
 (`apps/k7/backend-rs/docs/engine/chains.md`), plus a single
 `deviceToken` for every studio the file names, and the three keys that otherwise come from the environment — `machineName`,
@@ -337,7 +337,7 @@ so it is linked into `k7supervisor.framework` (CocoaPods archive, hash-pinned in
 Windows takes the DirectML package, whose last release is 1.24; macOS arm64 and Linux take 1.30,
 and macOS 1.30 needs macOS 14. A platform ONNX Runtime ships no binary for builds without
 separation. CoreML is offered and cannot compile HT-Demucs; the job falls back to the CPU and says
-why (stem-separation's [stemSplit.md](../../../packages/stem-separation/docs/stemSplit.md) is the
+why ([stemSplit.md](stemSplit.md) is the
 page on providers and on the model).
 
 ## A crash says why

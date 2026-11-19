@@ -1,7 +1,7 @@
 // OnnxSession.h — one HT-Demucs session on ONNX Runtime, on the first execution provider that
 // builds, and which one won is said. `dml` is pointed at the discrete GPU, never an integrated one,
 // since ORT takes an adapter INDEX and says nothing of what it picked. A run can be terminated from
-// another thread: that is how a job's hour ends a provider that hangs. See stem-separation/docs/stemSplit.md.
+// another thread: that is how a job's hour ends a provider that hangs. See docs/stemSplit.md.
 
 #pragma once
 

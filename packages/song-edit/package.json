@@ -23,8 +23,7 @@
     "./timelineFromRange": "./src/timelineFromRange.ts",
     "./timelineRename": "./src/timelineRename.ts",
     "./onsets": "./src/onsets.ts",
-    "./presets": "./src/presets.ts",
-    "./recorderNodes": "./src/recorderNodes.ts"
+    "./presets": "./src/presets.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

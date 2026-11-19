@@ -1,4 +1,4 @@
-// SeparationAudio_test.cpp — the cases of stem-separation's separateAudio.test.ts: the windows cover
+// SeparationAudio_test.cpp — the cases of the former separateAudio test: the windows cover
 // the file and end on its end, overlap-add gives back what it was fed, and the WAV is 24-bit PCM that
 // clamps rather than wraps.
 

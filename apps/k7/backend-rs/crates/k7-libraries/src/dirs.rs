@@ -19,8 +19,6 @@ pub const DRAFT: &str = "draft";
 const RECYCLE_DIR: &str = "_recycle_bin";
 /// The version a library written before versions is.
 pub const UNPINNED_VERSION: u64 = 1;
-/// What this k7 can run: a version whose `requires` is above it is refused.
-pub const LIBRARY_LEVEL: u64 = 2;
 
 /// A folder name as a published version: a positive integer without leading zeros, six digits at most.
 pub fn version_of_dir(name: &str) -> Option<u64> {
@@ -36,17 +34,6 @@ pub fn publishable(src: &Path) -> bool {
     !src.to_string_lossy()
         .split(['/', '\\'])
         .any(|s| s == ".git" || s == RECYCLE_DIR)
-}
-
-/// What a draft hands to a version: `publishable`, and nothing dot-named below the draft (a `.env` must not go public).
-pub fn publishable_from(draft: &Path) -> impl Fn(&Path) -> bool + '_ {
-    move |src| {
-        publishable(src)
-            && src.strip_prefix(draft).is_ok_and(|rel| {
-                !rel.components()
-                    .any(|c| c.as_os_str().to_string_lossy().starts_with('.'))
-            })
-    }
 }
 
 /// The published version numbers under a library's folder, ascending.

@@ -15,8 +15,6 @@ getrandom.workspace = true
 k7-js.workspace = true
 # The compiled modules' cache files are named by the wasm's hash.
 sha2.workspace = true
-# The envelope's validator, a weak hash of its version (src/envelope_memo.rs).
-sha1.workspace = true
 serde_json.workspace = true
 # The video probe without ffprobe (src/video_read.rs): ISO family (MPL-2.0), Matroska and WebM (MIT).
 mp4parse.workspace = true

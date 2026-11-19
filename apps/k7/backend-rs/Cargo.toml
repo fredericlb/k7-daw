@@ -31,7 +31,6 @@ keyring = { version = "4", default-features = false }
 # The iOS keychain: the protected-data store is the one iOS has.
 apple-native-keyring-store = { version = "1", default-features = false, features = ["protected"] }
 keyring-core = "1"
-aes-gcm = "0.10"
 axum = { version = "0.8", default-features = false, features = ["http1", "http2", "json", "tokio"] }
 base64 = "0.22"
 # Local wall-clock time: the merged log's `HH:MM:SS` and macOS's process start times (docs/local.md).
@@ -53,7 +52,6 @@ hyper-rustls = { version = "0.27", default-features = false, features = ["http1"
 rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
 # The git transports over SSH: ring, never aws-lc's C build (docs/git.md).
 russh = { version = "0.65", default-features = false, features = ["ring", "rsa"] }
-scrypt = { version = "0.11", default-features = false }
 serde = { version = "1", features = ["derive"] }
 # preserve_order: a minted session must serialize its keys in the order JSON.stringify does; float_roundtrip:
 # a number parsed as JSON.parse parses it, which a sidecar read back and answered again needs (docs/mediatek.md).

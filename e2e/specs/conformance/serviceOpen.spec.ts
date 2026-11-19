@@ -5,7 +5,6 @@ import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import { markerFile, Service, wsDir } from "../../src/service.ts";
-import { deviceBed } from "../../src/session.ts";
 import { filesRoot, freshWorkspace, NO_FILES_ROOT } from "../../src/sync.ts";
 
 const ws = freshWorkspace();
@@ -179,28 +178,6 @@ test("a rename of the folder above the open project carries the marker, and a de
   ]);
   expect(marker()).toBe("");
   expect(await active()).toBeNull();
-});
-
-test("a project of a library is refused on rename and on delete, for an account that is not the library's admin", async () => {
-  test.skip(
-    deviceBed(),
-    "a device's one account is no admin and has no stranger: tests_changes.rs holds the refusal",
-  );
-  const path = "_libraries/k7-core/zz.k7";
-  const rename = await svc.post("/project/rename", { path, name: "yy.k7" }, ws);
-  expect([rename.status, rename.body.error]).toEqual([
-    400,
-    expect.stringMatching(
-      /^can't rename '_libraries\/k7-core\/zz\.k7': only the origin's admins edit a library/,
-    ),
-  ]);
-  const del = await svc.post("/project/delete", { path }, ws);
-  expect([del.status, del.body.error]).toEqual([
-    400,
-    expect.stringMatching(
-      /^can't delete '_libraries\/k7-core\/zz\.k7': only the origin's admins edit a library/,
-    ),
-  ]);
 });
 
 const RECORDER = `start(true)

@@ -98,7 +98,7 @@ So a set is prepared the night before, with `playlist stems <playlist>` — the 
 `StemsBar` runs the same command — which cuts record by record into `stems/` beside each file and
 skips the ones already cut. Which module separates and which model it wants is one answer for the
 machine, written once by `system stems` into `<state>/preferences.k7x`; see
-[stem-separation/docs/stemSplit.md](../../../stem-separation/docs/stemSplit.md).
+[engine/k7-supervisor/docs/stemSplit.md](../../../../engine/k7-supervisor/docs/stemSplit.md).
 
 A surface may still carry a `stems:` line: the parser accepts it and **ignores** it, so a file
 written for an earlier desk keeps reading. The scaffold does not offer it.
@@ -127,4 +127,4 @@ written for an earlier desk keeps reading. The scaffold does not offer it.
   decodes everything else into a proxy before playing, which would be paid at the precise moment
   a record is put on — five decodes, the mix and its four stems. The full reasoning and the size
   table are in
-  [stem-separation/docs/stemSplit.md](../../../stem-separation/docs/stemSplit.md).
+  [engine/k7-supervisor/docs/stemSplit.md](../../../../engine/k7-supervisor/docs/stemSplit.md).

@@ -8,9 +8,7 @@
   "exports": {
     ".": "./index.ts",
     "./seam": "./seam.ts",
-    "./seam-client": "./seamClient.ts",
-    "./owners": "./owners.ts",
-    "./test-core": "./testCore.ts"
+    "./seam-client": "./seamClient.ts"
   },
   "scripts": {
     "test": "vitest run",

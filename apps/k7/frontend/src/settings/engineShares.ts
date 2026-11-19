@@ -62,7 +62,6 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
     10_000,
     (s) => new Error(`no answer from the server after ${s} s`),
   );
-  // The HttpError's status: a 403 from the admins' route is a card to hide, not an error to show.
   return readJson<T>(res, "engines");
 }
 
@@ -78,17 +77,4 @@ export const engineShares = {
     call<{ ok: true }>(`${encodeURIComponent(id)}/owner`, {
       method: "DELETE",
     }),
-};
-
-/** One owned engine as an admin reads it: the record, its machine's name, whether it beats now. */
-export interface EngineOwnerRecord extends EngineShares {
-  id: string;
-  hostname: string | null;
-  online: boolean;
-}
-
-/** The admins' two calls; anyone else is answered 403 on the list. */
-export const engineOwners = {
-  list: () => call<EngineOwnerRecord[]>("owners"),
-  reset: (id: string) => engineShares.giveUp(id),
 };

@@ -5,8 +5,8 @@ import { createHash, createHmac, randomBytes } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { type APIRequestContext, expect, test } from "@playwright/test";
-import { adminGroup, base, signedIn } from "../../src/instance.ts";
-import { acct, backendEnv, deviceBed } from "../../src/session.ts";
+import { base, signedIn } from "../../src/instance.ts";
+import { backendEnv, E2E_USER } from "../../src/session.ts";
 import {
   accountDir,
   FILES_USER,
@@ -17,7 +17,7 @@ import { until } from "../../src/until.ts";
 
 const ws = freshWorkspace();
 let ticket = "";
-const email = acct(FILES_USER).email as string;
+const email = E2E_USER.email as string;
 
 /** A ticket signed as the hub signs them: base64url JSON `{u, exp, a?}`, a dot, its HMAC-SHA256 under `<SESSION_SECRET>:files`. */
 function signTicket(payload: object): string {
@@ -110,22 +110,6 @@ test("the hello turns a session into a ticket naming the account, signed, for tw
   expect(hello.ticket).toBe(signTicket(payload));
 });
 
-test("an admin's hello says so, and its ticket carries it", async ({
-  request,
-}) => {
-  test.skip(!adminGroup, "env.yaml names no AUTH_ADMIN_GROUPS");
-  const hello = await (
-    await request.get("/api/files-hub", {
-      headers: signedIn(FILES_USER, [adminGroup as string]),
-    })
-  ).json();
-  expect(hello.admin).toBe(true);
-  const payload = JSON.parse(
-    Buffer.from(hello.ticket.split(".")[0], "base64url").toString("utf8"),
-  );
-  expect(payload).toEqual({ u: email, exp: payload.exp, a: 1 });
-});
-
 test("/api/files takes the ticket in its header or in ?token=, and refuses a forged or expired one", async ({
   request,
 }) => {
@@ -191,16 +175,6 @@ test("the identity a client sends is replaced by the ticket's: user, hub secret 
     authorization: "Bearer forged",
   });
   expect((await names(request, spoofed)).names).toContain(ws);
-  const put = await request.put("/api/files/account/libraries", {
-    data: { libraries: [] },
-    headers: spoofed,
-  });
-  // A device's one account is no admin, so the libraries' refusal is a server's.
-  if (deviceBed()) return;
-  expect([put.status(), await put.json()]).toEqual([
-    403,
-    { error: "only the origin's admins may change the libraries" },
-  ]);
 });
 
 test("a body streams up through the hub and back, whole and by range", async ({

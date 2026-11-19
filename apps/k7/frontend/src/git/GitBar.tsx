@@ -21,7 +21,7 @@ import { MergeDialog } from "./MergeDialog";
 import { type GitAct, type GitHandle, useGitState } from "./useGitState";
 
 /** The sentence of a pull's outcome, none for the ones that need no word. */
-export const pulledSentence = (p: PullState | null): string | null =>
+const pulledSentence = (p: PullState | null): string | null =>
   p === "up-to-date"
     ? m["git.pulledNothing"]()
     : p === "empty-remote"

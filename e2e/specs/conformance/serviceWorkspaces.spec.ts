@@ -1,13 +1,7 @@
 // serviceWorkspaces.spec.ts — the account's workspaces as the file service answers them: Examples stocked with the
 // build's demos, a workspace made with its library pins, the three listings, a project copied between two, the absence
 // of any sync route, the bench, and a removal that takes the folder, its capture log and its marker.
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import {
@@ -18,7 +12,6 @@ import {
   serviceDir,
   wsDir,
 } from "../../src/service.ts";
-import { deviceBed } from "../../src/session.ts";
 import { filesRoot, freshWorkspace, NO_FILES_ROOT } from "../../src/sync.ts";
 
 const ws = freshWorkspace();
@@ -76,34 +69,6 @@ test("Examples is listed, in code-point order with the rest, holding this build'
     isSingleProject: false,
     projectCount: demos.length,
   });
-});
-
-test("Examples on disk: every demo file byte for byte, and the stamp of each mirror", async () => {
-  test.skip(
-    deviceBed(),
-    "the web suite opens the demos in a device's one account",
-  );
-  test.skip(!filesRoot, NO_FILES_ROOT);
-  // A waveform sidecar is the service's own cache, rewritten once a demo is opened.
-  for (const demo of readdirSync(DEMOS))
-    for (const rel of statSync(join(DEMOS, demo)).isDirectory()
-      ? filesUnder(join(DEMOS, demo)).map((f) => `${demo}/${f}`)
-      : [demo])
-      if (!rel.endsWith(".cache"))
-        expect(
-          Buffer.compare(
-            readFileSync(join(wsDir("Examples"), rel)),
-            readFileSync(join(DEMOS, rel)),
-          ),
-          rel,
-        ).toBe(0);
-  const stamps = JSON.parse(onDisk("Examples", ".studio-demos.json"));
-  const projects = readdirSync(DEMOS).filter((n) => n.endsWith(".k7"));
-  expect(Object.keys(stamps).sort()).toEqual(expect.arrayContaining(projects));
-  for (const p of projects) {
-    expect(Object.keys(stamps[p])).toEqual(["src", "dest"]);
-    expect(stamps[p].src).toMatch(/^[0-9a-f]{40}$/);
-  }
 });
 
 test("Examples takes no project of its own", async () => {

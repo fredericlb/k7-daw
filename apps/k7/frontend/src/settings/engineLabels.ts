@@ -45,7 +45,7 @@ export interface EngineLabels {
 }
 
 /** The cards' sentences, read from the catalogue now. */
-export function engineLabels(): EngineLabels {
+function engineLabels(): EngineLabels {
   return {
     title: m["media.engines.title"](),
     hint: m["media.engines.hint"](),

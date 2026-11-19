@@ -49,7 +49,7 @@ Playlist and reference panels are right panels (`rightPanel` in `apps/k7/fronten
 
 ## Pre-fetching to the engine's machine
 
-`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/media/prefetch.rs`: every 60 s (first after 5 s), for every live workspace's active project, `playlistRecords` (`packages/song/src/mediatekRefs.ts`) reads the `turntables` surface's `playlist`, parses it, and keeps the lines naming an audio file. Each record and the files of its `stems/` folder are listed and sent as one `prefetch` job (`@studio/engine-tunnel/jobs-client`) to the bound machine's jobs URL. The machine side copies what is missing or changed. The signature of `(jobsUrl, files)` is remembered after a success so an unchanged list is not re-sent; errors are logged once per distinct message.
+`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/media/prefetch.rs`: every 60 s (first after 5 s), for every live workspace's active project, `playlistRecords` (`packages/song/rust/src/send_refs.rs`) reads the `turntables` surface's `playlist`, parses it, and keeps the lines naming an audio file. Each record and the files of its `stems/` folder are listed and sent as one `prefetch` job (`@studio/engine-tunnel/jobs-client`) to the bound machine's jobs URL. The machine side copies what is missing or changed. The signature of `(jobsUrl, files)` is remembered after a success so an unchanged list is not re-sent; errors are logged once per distinct message.
 
 A line that names no workspace audio file is not pre-fetched.
 

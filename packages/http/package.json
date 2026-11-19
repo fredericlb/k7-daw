@@ -9,15 +9,11 @@
     "./origin": "./origin.ts",
     "./precompressed": "./precompressed.ts",
     "./proxied": "./proxied.ts",
-    "./route": "./route.ts",
-    "./upload": "./upload.ts"
+    "./route": "./route.ts"
   },
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "multer": "^2.0.2"
   },
   "peerDependencies": {
     "express": "^4.19.2",
@@ -25,7 +21,6 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/multer": "^2.0.0",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"
   }

@@ -1,6 +1,6 @@
-//! http_file.rs — a file over HTTP as `streamFile` in `packages/http/stream.ts` serves it: Range, a
+//! http_file.rs — a file over HTTP: Range, a
 //! weak `W/"size-mtime"` validator, If-None-Match, If-Modified-Since and If-Range, and a body read as it is sent.
-//! The thing a reader would get wrong: a malformed Range is not refused, it reads as `bytes=0-` (as there),
+//! The thing a reader would get wrong: a malformed Range is not refused, it reads as `bytes=0-`,
 //! and only an unsatisfiable one is a 416 (`packages/http/docs/stream.md`).
 
 use std::path::Path;

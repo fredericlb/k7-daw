@@ -12,9 +12,9 @@ what k7 chooses on top.
 | file | holds |
 |---|---|
 | `session-revocations.json` | each account's "not before" epoch, written by `POST /auth/logout?everywhere=1` |
-| `library-tokens.json` | the bearer tokens, minted and revoked by the Rust front (`apps/k7/backend-rs/crates/k7-front/src/routes/tokens.rs`) |
+| `library-tokens.json` | the bearer tokens the backend still checks; nothing mints them any more |
 
-The Rust front writes both, and this backend writes a token's `lastUsed` when it checks a bearer;
+The Rust front writes the revocations, and this backend writes a token's `lastUsed` when it checks a bearer;
 each re-reads the file before it writes (`apps/k7/backend-rs/docs/routes.md`, the sign-in).
 
 ## Lifetimes

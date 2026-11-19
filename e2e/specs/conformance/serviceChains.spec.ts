@@ -6,8 +6,8 @@
 import { request as httpRequest } from "node:http";
 import { request as httpsRequest } from "node:https";
 import { expect, test } from "@playwright/test";
-import { SERVICE_USER, Service } from "../../src/service.ts";
-import { acct } from "../../src/session.ts";
+import { Service } from "../../src/service.ts";
+import { E2E_USER } from "../../src/session.ts";
 import { freshWorkspace } from "../../src/sync.ts";
 
 const base = process.env.E2E_BASE_URL ?? "http://127.0.0.1:8789";
@@ -271,7 +271,7 @@ function internal(
 
 test("the hub's cut refuses with the sentences a person can act on", async () => {
   test.skip(!internalSecret, "CONFORMANCE_INTERNAL_SECRET not given");
-  const user = acct(SERVICE_USER).email;
+  const user = E2E_USER.email;
   const asked = async (want: string, chain: string) =>
     await internal({ user, want, chain });
   const bad = await asked("both", "@account/conf-cold");

@@ -20,7 +20,6 @@ A separation runs an ONNX model on an **engine's machine**, inside the native su
 
 | Path | Role |
 |---|---|
-| `packages/stem-separation/src/separateJobs.ts` | The seam: `SeparationRunner` (`start`, `job`), `setSeparationRunner`, `startSeparate`, `separateJob`, and `separationId`, a hash of (user, source, model, outputs) so a retry joins the job already running. |
 | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/separate.rs` | The account's separation runner: sends the job over the bound machine's jobs channel. Finished jobs are kept 5 minutes for a last poll. |
 | `packages/commands/src/runtime/members/jobs.ts` | `runColdStep` for verbs (`clip process`, `playlist stems`) polls the job until done; the separation chains come from the bundle's preferences. |
 | `apps/k7/backend-rs/crates/k7-file-service/src/chains/cold_run.rs` | Resolve which model and outputs a chain runs. |

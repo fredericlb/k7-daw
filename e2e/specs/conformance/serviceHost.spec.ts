@@ -15,7 +15,6 @@ import { bundleRuntime } from "../../../packages/commands/scripts/bundleRuntime.
 import { base } from "../../src/instance.ts";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";
-import { deviceBed } from "../../src/session.ts";
 import { StandInEngine } from "../../src/standInEngine.ts";
 import { freshWorkspace } from "../../src/sync.ts";
 import { until } from "../../src/until.ts";
@@ -162,37 +161,6 @@ test("a staged output is adopted only from a job that ended with its value", asy
     );
   expect((await adopt("0123456789abcdef0123456789abcdef")).status).toBe(400);
   expect((await adopt("../../etc")).status).toBe(400);
-});
-
-test("a job's id is its account's alone, and a forgotten one is a 404", async () => {
-  test.skip(
-    deviceBed(),
-    "a device has one account: its jobs are nobody else's to hide",
-  );
-  const started = await host("render", {
-    at: project,
-    doc: await browserDoc(),
-  });
-  const job = started.body.job as string;
-  const other = await Service.connect({
-    sub: "conformance-service",
-    name: "Conformance Service",
-    email: "conformance-service@st0.app",
-    groups: [],
-  });
-  const theirs = freshWorkspace();
-  try {
-    await other.create(theirs);
-    const q = `/verb-host/job?id=${job}`;
-    expect((await other.get(q, theirs)).status).toBe(404);
-  } finally {
-    await other.remove(theirs);
-    await other.dispose();
-  }
-  expect(
-    (await svc.get(`/verb-host/job?id=${"0".repeat(32)}`, ws)).status,
-  ).toBe(404);
-  await ended(job);
 });
 
 test("a render of another project is a 409 that says which is open", async () => {
