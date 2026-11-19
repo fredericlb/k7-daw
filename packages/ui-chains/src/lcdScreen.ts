@@ -25,7 +25,7 @@ export interface LcdFrame {
   color: { ink: string; dim: string; glow: string; bg: string };
   /** `performance.now()` at this draw. */
   now: number;
-  /** The FILE a slot of the module names (a Faust table), decoded mono; null until loaded, or with no host to load it. */
+  /** The FILE a slot of the module names, decoded mono; null until loaded, or with no host to load it. */
   sound: (slot: string) => Float32Array | null;
 }
 

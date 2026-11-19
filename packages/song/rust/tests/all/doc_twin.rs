@@ -126,8 +126,8 @@ fn clip() -> Value {
 }
 
 fn plugin() -> Value {
-    json!({"id": "a:b", "type": "Faust", "name": "b", "path": "p", "irFile": "i", "namFile": "n", "surgePatch": "s", "sfzFile": "z",
-        "deckFile": "d", "dspGraph": "{}", "faustDsp": "x", "faustFiles": {"s": "/f"}, "patternSource": "s", "patternLabel": "l",
+    json!({"id": "a:b", "type": "Sampler", "name": "b", "path": "p", "irFile": "i", "namFile": "n", "surgePatch": "s", "sfzFile": "z",
+        "deckFile": "d", "dspGraph": "{}", "patternSource": "s", "patternLabel": "l",
         "patternCatchAll": true, "patternClaimed": ["a"], "patternPlays": "both", "patternOnly": true, "patternBanks": ["b"],
         "sidechainFrom": "t", "presetSave": "", "role": "audioFX", "enabled": true, "params": {"x": 1.5},
         "rack": [{"symbol": "BD", "note": 36, "clip": "/k.wav", "start": 0, "length": 0}], "tapOuts": [{"note": 36, "pair": 1}]})
@@ -184,7 +184,7 @@ fn the_parser_sees_every_interface_with_its_fields() {
     for (name, n) in [
         ("ProjectDoc", 15),
         ("TrackDoc", 21),
-        ("PluginDoc", 26),
+        ("PluginDoc", 24),
         ("ClipDoc", 22),
         ("EventDoc", 11),
     ] {

@@ -218,7 +218,7 @@ fn a_hundred_thousand_occurrences_of_one_path_are_one_stat() {
     t.write("proj/a.vstpreset", "x");
     let path = t.at("proj/a.vstpreset");
     let mut d = doc(vec![track("gtr", &["amp"])]);
-    d.tracks[0].plugins[0].faust_files = Some((0..100_000).map(|i| (format!("f{i}"), path.clone())).collect());
+    d.tracks[0].plugins[0].pattern_banks = Some((0..100_000).map(|_| path.clone()).collect());
     let disk = world(&t);
     let src = Counting::new(&disk);
     let mut cache = Cache::new();
@@ -242,11 +242,7 @@ fn a_hundred_thousand_occurrences_of_one_path_are_one_stat() {
 fn a_hundred_thousand_distinct_absent_paths_are_a_stat_each_within_the_budget() {
     // freeze_fingerprint hostile row; decision 344, 348: a stat costs 4, so 100,000 of them are far under 3,000,000
     let mut d = doc(vec![track("gtr", &["amp"])]);
-    d.tracks[0].plugins[0].faust_files = Some(
-        (0..100_000)
-            .map(|i| (format!("f{i}"), format!("/p/n{i}.wav")))
-            .collect(),
-    );
+    d.tracks[0].plugins[0].pattern_banks = Some((0..100_000).map(|i| format!("/p/n{i}.wav")).collect());
     let src = Nothing::new();
     let mut budget = Budget::new(BUDGET);
     let mut cache = Cache::new();
@@ -265,11 +261,7 @@ fn a_budget_spent_by_the_stats_answers_none() {
     let t = Tmp::new("fp-spent");
     let mut d = doc(vec![track("gtr", &["amp"])]);
     let base = t.at("proj");
-    d.tracks[0].plugins[0].faust_files = Some(
-        (0..2_000)
-            .map(|i| (format!("f{i}"), format!("{base}/n{i}.wav")))
-            .collect(),
-    );
+    d.tracks[0].plugins[0].pattern_banks = Some((0..2_000).map(|i| format!("{base}/n{i}.wav")).collect());
     let mut cache = Cache::new();
     let out = freeze_fingerprint(
         &world(&t),
@@ -285,10 +277,10 @@ fn a_budget_spent_by_the_stats_answers_none() {
 
 #[test]
 fn a_string_of_five_mebibytes_starting_with_a_slash_is_never_a_path() {
-    // freeze_fingerprint hostile row; decision 344: the text of a Faust module starting `// …` looks absolute
-    let t = Tmp::new("fp-faust");
+    // freeze_fingerprint hostile row; decision 344: an inline source starting with a slash looks absolute
+    let t = Tmp::new("fp-source");
     let mut d = doc(vec![track("gtr", &["amp"])]);
-    d.tracks[0].plugins[0].faust_dsp = Some(format!("/{}", "x".repeat(5 * 1024 * 1024)));
+    d.tracks[0].plugins[0].pattern_source = Some(format!("/{}", "x".repeat(5 * 1024 * 1024)));
     let disk = world(&t);
     let src = Counting::new(&disk);
     let mut cache = Cache::new();
@@ -338,7 +330,7 @@ fn a_backslash_and_a_nul_in_a_path_are_left_as_written() {
 
 fn many(n: usize) -> ProjectDoc {
     let mut d = doc(vec![track("gtr", &["amp"])]);
-    d.tracks[0].plugins[0].faust_files = Some((0..n).map(|i| (format!("f{i}"), format!("/s/{i}.bin"))).collect());
+    d.tracks[0].plugins[0].pattern_banks = Some((0..n).map(|i| format!("/s/{i}.bin")).collect());
     d
 }
 
@@ -367,11 +359,7 @@ fn a_tiny_real_file_is_charged_as_a_stat_and_a_read() {
     for i in 0..300 {
         t.write(&format!("proj/f{i}.bin"), "0123456789");
     }
-    d.tracks[0].plugins[0].faust_files = Some(
-        (0..300)
-            .map(|i| (format!("f{i}"), format!("{base}/f{i}.bin")))
-            .collect(),
-    );
+    d.tracks[0].plugins[0].pattern_banks = Some((0..300).map(|i| format!("{base}/f{i}.bin")).collect());
     let mut budget = Budget::new(BUDGET);
     let mut cache = Cache::new();
     freeze_fingerprint(&world(&t), &mut cache, &d, &base, &mut budget, song::PathRule::HOST)
@@ -390,11 +378,7 @@ fn a_hundred_thousand_tiny_real_files_measured() {
         t.write(&format!("proj/f{i}.bin"), "0123456789");
     }
     let mut d = doc(vec![track("gtr", &["amp"])]);
-    d.tracks[0].plugins[0].faust_files = Some(
-        (0..100_000)
-            .map(|i| (format!("f{i}"), format!("{base}/f{i}.bin")))
-            .collect(),
-    );
+    d.tracks[0].plugins[0].pattern_banks = Some((0..100_000).map(|i| format!("{base}/f{i}.bin")).collect());
     let mut budget = Budget::new(BUDGET);
     let mut cache = Cache::new();
     let started = std::time::Instant::now();
@@ -545,7 +529,7 @@ fn seventy_binary_digests_do_not_fill_the_cache_and_are_not_read_again() {
         std::fs::create_dir_all(t.0.join("proj")).expect("dir");
         std::fs::write(t.0.join(format!("proj/b{i}.bin")), vec![0xff_u8; 1024 * 1024]).expect("write");
     }
-    d.tracks[0].plugins[0].faust_files = Some((0..70).map(|i| (format!("f{i}"), format!("{base}/b{i}.bin"))).collect());
+    d.tracks[0].plugins[0].pattern_banks = Some((0..70).map(|i| format!("{base}/b{i}.bin")).collect());
     t.age();
     let disk = world(&t);
     let src = Counting::new(&disk);

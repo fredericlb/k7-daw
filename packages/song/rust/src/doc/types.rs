@@ -54,10 +54,6 @@ pub struct PluginDoc {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub dsp_graph: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub faust_dsp: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub faust_files: Option<IndexMap<String, String>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pattern_source: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pattern_label: Option<String>,
@@ -185,8 +181,6 @@ impl PluginDoc {
             sfz_file: None,
             deck_file: None,
             dsp_graph: None,
-            faust_dsp: None,
-            faust_files: None,
             pattern_source: None,
             pattern_label: None,
             pattern_catch_all: None,
@@ -226,7 +220,6 @@ impl PluginDoc {
             &self.sfz_file,
             &self.deck_file,
             &self.dsp_graph,
-            &self.faust_dsp,
             &self.pattern_source,
             &self.pattern_label,
             &self.sidechain_from,
@@ -234,12 +227,6 @@ impl PluginDoc {
         .into_iter()
         .map(opt)
         .sum::<usize>();
-        let faust = self
-            .faust_files
-            .iter()
-            .flatten()
-            .map(|(k, v)| 1 + text_weight(k) + text_weight(v))
-            .sum::<usize>();
         let params = self.params.keys().map(|k| 1 + text_weight(k)).sum::<usize>();
         let rack = self
             .rack
@@ -248,7 +235,7 @@ impl PluginDoc {
             .map(|r| 1 + text_weight(&r.symbol) + text_weight(&r.clip))
             .sum::<usize>();
         let taps = self.tap_outs.as_ref().map_or(0, Vec::len);
-        1 + strings + files + faust + params + rack + taps + list(&self.pattern_claimed) + list(&self.pattern_banks)
+        1 + strings + files + params + rack + taps + list(&self.pattern_claimed) + list(&self.pattern_banks)
     }
 }
 

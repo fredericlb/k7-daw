@@ -163,7 +163,7 @@ fn a_system_with_a_half_missing_is_one_fault_naming_it() {
     );
 }
 
-// 279: a jsdsp half is the graph host named by the id; a faust one the Faust host; an external format keeps its name.
+// 279: a jsdsp half is the graph host named by the id; an external format keeps its name.
 #[test]
 fn engine_plugin_maps_the_authored_form_onto_the_wire_form() {
     let p = |t: &str, n: Option<&str>| Plugin {
@@ -178,10 +178,6 @@ fn engine_plugin_maps_the_authored_form_onto_the_wire_form() {
     assert_eq!(
         engine_plugin(Some(&p("jsdsp", None)), "id", Some("midi")),
         ("MIDI Graph".into(), "id".into())
-    );
-    assert_eq!(
-        engine_plugin(Some(&p("faust", None)), "id", None),
-        ("Faust".into(), "id".into())
     );
     assert_eq!(
         engine_plugin(Some(&p("internal", Some("Chorus"))), "id", None),

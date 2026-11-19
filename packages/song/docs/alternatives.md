@@ -59,17 +59,17 @@ place — a Wurlitzer played by a VST on set 1 and a Plaits voice on set 2.
 // nodes/wurli.k7x
 extends("@k7-core/instruments/wurli-v2") // set 1: the VST, and its knobs
 params({ Tremolo: 0.9 })
-alternative("faust")
+alternative("rhodes")
 alternatives([
-  name("faust")
-    .extends("@workspace/instruments/faust-wurli")
-    .params({ Bark: 0.8 }), // the Faust module's knobs, over its own
+  name("rhodes")
+    .extends("@workspace/instruments/rhodes")
+    .params({ Bark: 0.8 }), // the Rhodes module's knobs, over its own
 ])
 ```
 
 `resolveModule` folds the SET's ancestry instead of the node's (`swappedModule`), and set 1's
 fields do not come along: the VST's `params`, its `plugin`, its panel all describe a module that is
-not playing, and merged under the Faust one they would be knobs it has not got, or a `plugin:` that
+not playing, and merged under the Rhodes one they would be knobs it has not got, or a `plugin:` that
 outranks the very `extends` the set named. What the node keeps is its identity — its name, its file,
 its folder, and the list of sets — so it is the same node in the graph, in the chains and in every
 verb, and switching back is the ordinary switch.

@@ -4,7 +4,7 @@
 use super::assets::{Files, Places};
 use super::nodes::plugin_name_findings;
 use super::preset::base_preset_in;
-use super::types::{FAUST_FILE, FAUST_TYPE, JSDSP_FILE, JSDSP_TYPE};
+use super::types::{JSDSP_FILE, JSDSP_TYPE};
 use super::{LoadedModule, Module, ModuleKind};
 use crate::cache::Cache;
 use crate::files::{Finding, Severity};
@@ -108,10 +108,8 @@ pub fn load_chain_nodes(
         } else if module.extends.is_none() {
             m.kind = Some(ModuleKind::Plugin);
         }
-        match module.plugin.as_ref().and_then(|p| p.plugin_type.as_deref()) {
-            Some(JSDSP_TYPE) => m.jsdsp = Some(join(&dir, JSDSP_FILE)),
-            Some(FAUST_TYPE) => m.faust = Some(join(&dir, FAUST_FILE)),
-            _ => {}
+        if module.plugin.as_ref().and_then(|p| p.plugin_type.as_deref()) == Some(JSDSP_TYPE) {
+            m.jsdsp = Some(join(&dir, JSDSP_FILE));
         }
         m.authored = module;
         m.name = Some(n.name.clone());

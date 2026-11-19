@@ -22,7 +22,7 @@ export function assetsForParam(
   param: string,
   family?: string,
 ): string[] {
-  // A Faust slot's name is the program's own, so only the family the panel names can say what it takes.
+  // A panel naming a family says what its picker takes, whatever the bound param is called.
   if (family && isLibraryFileFamily(family)) {
     const exts = LIBRARY_FILE_FAMILIES[family];
     return files.filter((f) => exts.some((e) => f.toLowerCase().endsWith(e)));
@@ -54,7 +54,7 @@ export type SharedFileFamily =
 export const LIBRARY_FILE_FAMILIES = {
   samples: LIBRARY_AUDIO_EXTS,
   irs: LIBRARY_AUDIO_EXTS,
-  // Single-cycle frames end to end, what a Faust wavetable instrument's `soundfile` reads (packages/song/docs/faustFiles.md).
+  // Single-cycle frames end to end.
   wavetables: LIBRARY_AUDIO_EXTS,
   models: [".nam", ".json"],
 } as const;

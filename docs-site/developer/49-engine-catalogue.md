@@ -45,7 +45,6 @@ file at a fixed path, written by the engine and read by everyone, is the cheapes
 | `plugin.type` | Engine plugin |
 |---|---|
 | `dsp` (and the older `jsdsp`) | DSP Graph, or MIDI Graph when the module emits MIDI, with the compiled graph inline |
-| `faust` | Faust, with the `dsp.dsp` text |
 | `internal` | The built-in processor named by `plugin.name` |
 | an external format | The scanned plugin, addressed by its identifier |
 | `offline` (`OFFLINE_TYPE`) | No engine plugin: a cold pass (`packages/audio-passes/src/coldPass.ts`) produces its outputs onto disk first |
@@ -55,7 +54,7 @@ file at a fixed path, written by the engine and read by everyone, is the cheapes
 The built-in processors are: Tracktion's (4OSC, Sampler, Volume & Pan, VCA, Level Meter,
 Equaliser, Reverb, Compressor, Chorus, Delay, Phaser, Pitch Shifter, Low-Pass Filter, MIDI
 Modifier, MIDI Patch Bay, Patch Bay, Aux Send, Aux Return, Text, Freeze Point, Insert, Impulse
-Response); k7's own (Neural Amp Modeler, SFZ Player, Surge XT on desktop, DSP Graph, Faust, MIDI
+Response); k7's own (Neural Amp Modeler, SFZ Player, Surge XT on desktop, DSP Graph, MIDI
 Graph, Arpeggiator, Mixer, Recorder, Quick Master); the Eurorack ports; and the AirWindows
 collection. Some processors are registered without being listed in the scan, because no module
 names them directly: the waveform and broadcast taps, the turntable platter, the pattern player,

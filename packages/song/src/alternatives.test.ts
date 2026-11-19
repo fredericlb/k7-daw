@@ -290,8 +290,8 @@ describe("a set that names ANOTHER module", () => {
       plugin: { type: "vst3", name: "Wurli V2" },
       params: { Tremolo: 0.3 },
     });
-    lib("instruments/faust-wurli", {
-      plugin: { type: "internal", name: "Faust" },
+    lib("instruments/alt-wurli", {
+      plugin: { type: "internal", name: "Alt" },
       params: { Bark: 0.5 },
     });
     lib("audio/strip", {
@@ -306,7 +306,7 @@ describe("a set that names ANOTHER module", () => {
     return p;
   };
   const LANE = { extends: "@meta/track", events: [] };
-  const FAUST = "@workspace/instruments/faust-wurli";
+  const ALT = "@workspace/instruments/alt-wurli";
   const resolved = (p: string) =>
     resolveModuleMap(loadModules(p), loadModuleRefs(p));
 
@@ -316,14 +316,12 @@ describe("a set that names ANOTHER module", () => {
       wurli: {
         extends: "@workspace/instruments/vst-wurli",
         params: { Tremolo: 0.9 },
-        alternative: "faust",
-        alternatives: [
-          { name: "faust", extends: FAUST, params: { Bark: 0.8 } },
-        ],
+        alternative: "alt",
+        alternatives: [{ name: "alt", extends: ALT, params: { Bark: 0.8 } }],
       },
     });
     const w = resolved(p).wurli;
-    expect(w.plugin).toEqual({ type: "internal", name: "Faust" });
+    expect(w.plugin).toEqual({ type: "internal", name: "Alt" });
     // The set's own params over the NEW module's — the VST's Tremolo belongs to set "1" and stays there.
     expect(w.params).toEqual({ Bark: 0.8 });
     // …and it is still THIS node, with the sets it can be switched between.
@@ -336,7 +334,7 @@ describe("a set that names ANOTHER module", () => {
       keys: LANE,
       wurli: {
         extends: "@workspace/instruments/vst-wurli",
-        alternatives: [{ name: "faust", extends: FAUST }],
+        alternatives: [{ name: "alt", extends: ALT }],
       },
     });
     expect(resolved(p).wurli.plugin).toEqual({
@@ -350,13 +348,13 @@ describe("a set that names ANOTHER module", () => {
       keys: LANE,
       wurli: {
         extends: "@workspace/instruments/vst-wurli",
-        alternative: "faust",
-        alternatives: [{ name: "faust", extends: FAUST }],
+        alternative: "alt",
+        alternatives: [{ name: "alt", extends: ALT }],
       },
     });
     expect(loadGraph(p).modules.wurli.plugin).toEqual({
       type: "internal",
-      name: "Faust",
+      name: "Alt",
     });
   });
 
@@ -365,7 +363,7 @@ describe("a set that names ANOTHER module", () => {
       keys: {
         ...LANE,
         alternative: "other",
-        alternatives: [{ name: "other", extends: FAUST }],
+        alternatives: [{ name: "other", extends: ALT }],
       },
       wurli: { extends: "@workspace/instruments/vst-wurli" },
     });
@@ -378,9 +376,7 @@ describe("a set that names ANOTHER module", () => {
       wurli: {
         extends: "@workspace/audio/strip",
         alternative: "other",
-        alternatives: [
-          { name: "other", extends: FAUST, params: { Volume: -6 } },
-        ],
+        alternatives: [{ name: "other", extends: ALT, params: { Volume: -6 } }],
       },
     });
     const w = resolved(p).wurli;

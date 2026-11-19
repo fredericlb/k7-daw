@@ -1,4 +1,4 @@
-// doc_compile.rs — the whole compile (decisions 303 to 308, 350 to 354): what stops it, what does not, the jsdsp and Faust plugins, the spend.
+// doc_compile.rs — the whole compile (decisions 303 to 308, 350 to 354): what stops it, what does not, the jsdsp plugins, the spend.
 // A reader would get wrong that a Failure carries the stopping findings only: every finding the compile made is in `Compiled::diagnostics`.
 
 use crate::doc_support;
@@ -71,30 +71,6 @@ fn an_orphan_graph_plays_without_a_word() {
         Some(GRAPH_OK)
     );
     assert!(c.diagnostics.is_empty());
-}
-
-// 317, faustFiles.test.ts, faustModule.test.ts: the Faust text rides on the plugin; a missing file is no `faustDsp`.
-#[test]
-fn a_faust_module_carries_its_source_and_a_missing_one_none() {
-    let nodes = [
-        ("nodes/gtr.k7x", "extends(\"@meta/track\")\n"),
-        (
-            "nodes/f.k7x",
-            "plugin({ type: \"faust\", name: \"f\" })\nparams({ Table: \"w.wav\", gain: 1 })\n",
-        ),
-        ("graph.k7x", "modules({ gtr: [\"f\"], f: [\"MIX\"] })\n"),
-        ("w.wav", "x"),
-    ];
-    let mut with = nodes.to_vec();
-    with.push(("nodes/dsp.dsp", "process = _;\n"));
-    let d = doc_of(&with);
-    let p = &d.tracks[0].plugins[0];
-    assert_eq!(p.faust_dsp.as_deref(), Some("process = _;\n"));
-    let files = p.faust_files.as_ref().expect("files");
-    assert_eq!(files.len(), 1);
-    assert!(files["Table"].ends_with("/proj/w.wav"));
-    let d = doc_of(&nodes);
-    assert!(d.tracks[0].plugins[0].faust_dsp.is_none() && d.tracks[0].plugins[0].faust_files.is_none());
 }
 
 // 304, throw-or-finding: a project that stops for two reasons says both.

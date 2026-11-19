@@ -74,7 +74,7 @@ Other packages with a config of their own: `audio-passes`, `song-edit`, `song-vi
 1. Picks the preset from the platform (`windows-msvc`, `macos-clang`, otherwise `dev-gcc`), or
    `$STUDIO_MOTEUR_PRESET`.
 2. If `build/<preset>` has never been configured, prints `SKIPPED` and the configure command, and
-   exits 0. It never configures on its own, because that downloads Tracktion, JUCE and Faust.
+   exits 0. It never configures on its own, because that downloads Tracktion and JUCE.
 3. Asks CTest for the registered tests matching `^studio_`, excluding the `slow` label unless
    `--all` is passed (`npm run test:all --workspace k7-runtime`). Adding a target to
    `engine/k7-runtime/tests/CMakeLists.txt` is enough for it to be picked up.

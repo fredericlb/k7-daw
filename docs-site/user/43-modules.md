@@ -37,8 +37,7 @@ input is refused. They are not offered by the module picker; use them in a proce
 | `module.k7x` | What the module is: its plugin or the module it extends, its default parameter values, its engines. |
 | `ui.k7x` | Its panel: the controls drawn on its card. See [Panels](./46-panels.md). |
 | `widgets.js` | Drawing code for the panel's LCD screens. |
-| `dsp.k7x` | Its DSP, written as data, for a `dsp` module. See [DSP as data and Faust](./49-dsp.md). |
-| `dsp.dsp` | Its DSP in Faust, for a `faust` module. |
+| `dsp.k7x` | Its DSP, written as data, for a `dsp` module. See [DSP as data](./49-dsp.md). |
 | `engines/<name>/` | One sub-module per engine, each with its own `module` and `ui` files. |
 | `base/` | Named starting states of the plugin (a synth's patches). |
 | `assets/` | Files the module loads, such as models or impulse responses. |
@@ -70,7 +69,7 @@ The main fields:
 
 | Field | Meaning |
 |---|---|
-| `plugin` | What runs: `{ type, name }`. Types are `builtin` and `internal` (processors inside the engine), `dsp` and `faust` (DSP described in the folder), `offline` (a cold pass run outside the audio thread), or an external plugin format such as `vst3`. |
+| `plugin` | What runs: `{ type, name }`. Types are `builtin` and `internal` (processors inside the engine), `dsp` (DSP described in the folder), `offline` (a cold pass run outside the audio thread), or an external plugin format such as `vst3`. |
 | `extends` | Another module this one inherits from. Values, panels and engines merge, the child winning. |
 | `params` | Default values, by the plugin's exact parameter name. |
 | `engine` / `engines` | The default engine, and per-engine parameter values. |

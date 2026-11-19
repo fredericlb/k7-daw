@@ -20,7 +20,7 @@ const FORMATS = new Set(["vst3", "vst", "au", "clap", "lv2"]);
 const pluginName = (name: string, type: string): string =>
   FORMATS.has(type.toLowerCase()) && name ? name : type;
 
-// Each wording the engine uses (engine/k7-runtime/server/DocJson.cpp, engine/EditBuilder.cpp, engine/FaustPlugin.cpp).
+// Each wording the engine uses (engine/k7-runtime/server/DocJson.cpp, engine/EditBuilder.cpp).
 const RULES: [RegExp, (g: string[]) => MissingItem][] = [
   [
     /^(.+?) '(.+)' is outside the folders this engine reads/,
@@ -33,10 +33,6 @@ const RULES: [RegExp, (g: string[]) => MissingItem][] = [
   [
     /^rack sound '.*' -> '(.+)' is missing or unreadable/,
     (g) => ({ what: "rack sample", name: baseName(g[1]), why: "not-found" }),
-  ],
-  [
-    /^faust: no such sound file for '.*': (.+)$/,
-    (g) => ({ what: "sound file", name: baseName(g[1]), why: "not-found" }),
   ],
   [
     /^plugin '(.*)' \((.+)\) is not in the cache/,

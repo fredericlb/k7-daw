@@ -1,6 +1,5 @@
-// graphChoices.ts — what a graph node's fields may be SET to: its assets, a Faust module's slots,
-// a library file's choices, its bases and shaders, a rack's or kit's sounds, and what its bound params
-// play at unset. Read by graphDoc.ts while it builds each node. See apps/k7/backend-rs/docs/file-docs.md.
+// graphChoices.ts — what a graph node's fields may be SET to: its assets, a library file's
+// choices, its bases and shaders, a rack's or kit's sounds, and what its bound params play at unset. Read by graphDoc.ts while it builds each node. See apps/k7/backend-rs/docs/file-docs.md.
 
 import type { WebRackSound, WebWidget } from "@studio/graph-model";
 import { type PanelLike, panelWidgets } from "@studio/graph-model/panel";
@@ -11,7 +10,6 @@ import {
   type AssetLookup,
   moduleAssetChoices,
 } from "@studio/song/moduleAssetChoices";
-import { FAUST_TYPE } from "@studio/song/project";
 import { builtinParamsFor } from "@studio/song-schema/builtinParams";
 import {
   isLibraryFileFamily,
@@ -56,23 +54,6 @@ export function assetChoicesFor(
   }
 }
 
-/** A module's chosen files: its asset params, plus a FAUST module's sound slots — every string param it has. */
-export function withFaustSlots(
-  module:
-    | { assets?: Record<string, string>; plugin?: unknown; params?: unknown }
-    | undefined,
-): Record<string, string> | undefined {
-  // Read off the PLUGIN's type, which the graph's module always carries — its source path it may not.
-  const type = (module?.plugin as { type?: unknown } | undefined)?.type;
-  if (String(type ?? "").toLowerCase() !== FAUST_TYPE) return module?.assets;
-  const slots = Object.entries(
-    (module?.params ?? {}) as Record<string, unknown>,
-  ).filter((e): e is [string, string] => typeof e[1] === "string");
-  return slots.length
-    ? { ...module?.assets, ...Object.fromEntries(slots) }
-    : module?.assets;
-}
-
 /** …plus the libraries' shared files, for a panel that picks one — every step carrying them would bloat each graph. */
 export function withLibraryChoices(
   own: string[] | undefined,
@@ -87,7 +68,7 @@ export function withLibraryChoices(
   const families = [
     ...new Set([
       ...also,
-      // A picker that NAMES its family, as a Faust module's sound slot does: its bind is the slot, not a known param.
+      // A picker that NAMES its family: its bind need not be a known param.
       ...widgets.flatMap((w) => {
         const lib = (w as { library?: unknown }).library;
         return typeof lib === "string" && isLibraryFileFamily(lib) ? [lib] : [];

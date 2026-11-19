@@ -151,7 +151,7 @@ fn the_staged_corpus_compiles_natively_and_the_two_broken_name_their_files() {
         refused.len()
     );
     assert!(
-        decoded.len() >= 175 && refused.len() == 2,
+        decoded.len() >= 172 && refused.len() == 2,
         "{} decoded, {} refused",
         decoded.len(),
         refused.len()

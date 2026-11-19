@@ -113,7 +113,7 @@ in the corpus or a unit test, so the gate's allow list stays empty. Each is name
 | `stage` | not empty; none for an offline module or the strip |
 | `modelDownload`, `ampModel` | a missing model with a url; a model whose file answers |
 | `inputs`, `outputs` | past one; `mandatory` only when `false` |
-| `assets` | the module's, plus a Faust module's text params |
+| `assets` | the module's |
 | `assetChoices`, `bases`, `shaders` | not empty; `shaders` only for the `shaders` category |
 | `events`, `notSupported`, `unknownPlugin`, `strip`, `rack`, `rackKit`, `defaults`, `pluginId`, `monitor`, `channel`, `camera`, `device`, `tap`, `automations` | as `graphDoc.ts` sets them |
 

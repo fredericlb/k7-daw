@@ -108,7 +108,7 @@ export interface ModuleLibrary {
   /** A library's shared SOUNDS, beside its modules — what a tap and a cabinet pick, and where a drop lands (@studio/song's libraryFiles.md). */
   samples?: FileNode[];
   irs?: FileNode[];
-  /** …its WAVETABLES, what a Faust instrument's table slot picks (@studio/song's faustFiles.md). */
+  /** …its WAVETABLES, single-cycle frames a panel's picker offers. */
   wavetables?: FileNode[];
   /** …and its shared amp MODELS, what an amp's `model` may pick besides its own assets. */
   models?: FileNode[];

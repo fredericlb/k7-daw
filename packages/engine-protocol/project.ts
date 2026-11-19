@@ -135,10 +135,6 @@ export interface PluginDoc {
   deckFile?: string;
   // A DSP-graph module's description, INLINE as JSON because the engine parses no files and the plugin's constructor needs it.
   dspGraph?: string;
-  // A Faust module's source, INLINE for the same reason — except the ENGINE compiles it, so the `.dsp` text itself travels.
-  faustDsp?: string;
-  // The files a Faust program's `soundfile(...)` slots play, by slot label, absolute — packages/song/docs/faustFiles.md.
-  faustFiles?: Record<string, string>;
   // A PATTERN lane's Strudel source, played by the engine's PatternPlugin; an edit is applied in place.
   patternSource?: string;
   // …the label its events are picked by — the lane's name, matched like a `.label()` slug…

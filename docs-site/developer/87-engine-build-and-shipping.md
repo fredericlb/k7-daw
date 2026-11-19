@@ -1,6 +1,6 @@
 # Building and shipping engines
 
-The engine and the supervisor are two CMake projects. Everything that builds them goes through a few Node scripts, so a developer, CI, the Android Gradle build and the server image all build the same way. **A cold engine build fetches and compiles Tracktion, JUCE, Faust, sfizz, Surge XT, QuickJS and NAM: expect tens of minutes and several GB.** On the Windows dev machine, never build by hand; Tilt's `native` resource owns it.
+The engine and the supervisor are two CMake projects. Everything that builds them goes through a few Node scripts, so a developer, CI, the Android Gradle build and the server image all build the same way. **A cold engine build fetches and compiles Tracktion, JUCE, sfizz, Surge XT, QuickJS and NAM: expect tens of minutes and several GB.** On the Windows dev machine, never build by hand; Tilt's `native` resource owns it.
 
 ## CMake presets
 
@@ -37,7 +37,7 @@ Platform dependencies fetched at configure time: the Steinberg ASIO SDK on Windo
 
 ## The command-line engine archive
 
-`build-engine.mjs` then `package-release.mjs --kind engine` produce the archive users download. Its `k7-runtime/` folder holds `k7-supervisor`, `k7-runtime`, the ONNX Runtime libraries, `faust-libs/`, and `engine.json`. The supervisor finds the engine beside itself, the engine finds `faust-libs/` beside itself, and the supervisor finds ONNX Runtime beside itself.
+`build-engine.mjs` then `package-release.mjs --kind engine` produce the archive users download. Its `k7-runtime/` folder holds `k7-supervisor`, `k7-runtime`, the ONNX Runtime libraries, and `engine.json`. The supervisor finds the engine beside itself, and the supervisor finds ONNX Runtime beside itself.
 
 ## CI
 

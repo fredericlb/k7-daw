@@ -199,7 +199,7 @@ for (const [ref, folder] of [...folders].sort(([a], [b]) =>
     findings.push({
       panel: ref,
       plugin: label,
-      skipped: "no plugin resolved (jsdsp, faust, rack, or not scanned here)",
+      skipped: "no plugin resolved (jsdsp, rack, or not scanned here)",
     });
     continue;
   }

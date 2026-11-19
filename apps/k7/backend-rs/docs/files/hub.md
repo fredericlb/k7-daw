@@ -130,7 +130,7 @@ anything else, so a tab left open cannot push its project into an engine someone
 Each account's copy on the engine's machine stays in its own folder, `ws-<accountKey>`, and is
 simply there again when that account comes back. The libraries travel beside it, read-only, as
 one root, `libs`: the libraries' folders, the same for every account. A module's files the engine
-loads — a Faust source, an amp's model, its samples — live in one, and no workspace holds a copy
+loads — an amp's model, its samples — live in one, and no workspace holds a copy
 (`../libraries.md`).
 
 ## What stays on the engine's machine

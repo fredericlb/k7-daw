@@ -13,7 +13,6 @@
 | `./k7x/previewGutter` | `src/k7x/previewGutter.ts`, `src/k7x/previewTriggers.ts` | The ▶ audition gutter on lines naming something playable. |
 | `./k7x/bufferEdit`, `./buffer-sync` | `src/k7x/bufferEdit.ts`, `src/bufferSync.ts` | A k7x writer run on an open buffer, dispatched as CodeMirror changes so undo and the cursor survive. |
 | `./yaml/completions` | `packages/ui-editor/src/yaml/completions.ts` | The YAML completion source, for the YAML files the editor's side panes open. |
-| `./faust/language` | `src/faust/language.ts` | Faust highlighting. |
 | `./tracker/notes`, `./tracker/plugin` | `src/tracker/` | The tracker and roll note grids. |
 | `./lint` | `packages/ui-editor/src/lint.ts` | Draws located findings (line, col, message, severity) as underlines and gutter marks; `refreshLint` re-lints when new findings arrive for an unchanged document. |
 | `./autosave` | `packages/ui-editor/src/autosave.ts` | `useAutosave` and the held-buffer store. |

@@ -149,7 +149,6 @@ pub fn merge_loaded(parent: &LoadedModule, child: &LoadedModule) -> LoadedModule
         engine_refs,
         engine_of,
         jsdsp,
-        faust,
         folder_abs,
         preset,
         model,

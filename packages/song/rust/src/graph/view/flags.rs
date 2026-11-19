@@ -3,7 +3,7 @@
 
 use crate::graph::GraphModule;
 use crate::modules::files::is_external_format;
-use crate::modules::types::{DSP_TYPE, FAUST_TYPE, JSDSP_TYPE, hosts_plugin};
+use crate::modules::types::{DSP_TYPE, JSDSP_TYPE, hosts_plugin};
 use crate::modules::{ModuleKind, Scan, Tab, Widget, builtin_plugin};
 use crate::resolve::{MIXER_PLUGIN, ResolvedUi, resolved_type};
 use indexmap::IndexMap;
@@ -43,12 +43,7 @@ pub fn flags_of(m: &GraphModule<'_>, scan: &Scan) -> PluginFlags {
     let rack = resolved_type(Some(m.m)) == crate::resolve::InstrumentType::Rack;
     let stub = slot && !rack && plugin.is_none();
     let external = is_external_format(&fmt);
-    let known = fmt == "internal"
-        || fmt == JSDSP_TYPE
-        || fmt == DSP_TYPE
-        || fmt == FAUST_TYPE
-        || fmt == OFFLINE_TYPE
-        || external;
+    let known = fmt == "internal" || fmt == JSDSP_TYPE || fmt == DSP_TYPE || fmt == OFFLINE_TYPE || external;
     let not_supported = slot && fmt == "not_supported";
     let name = plugin.and_then(|p| p.name.as_deref()).unwrap_or("");
     let unscanned = slot && external && !scan.is_plugin_scanned(&fmt, name);
