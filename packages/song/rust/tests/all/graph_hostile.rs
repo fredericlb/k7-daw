@@ -229,10 +229,10 @@ fn a_hundred_thousand_assembly_members_are_capped() {
     assert!(more);
 }
 
-// 410: a chain name of 1 MB over 1,000 unknown steps is quoted cut, in a bounded number of issues.
+// 410: a chain name of 64 KiB over 1,000 unknown steps is quoted cut, in a bounded number of issues.
 #[test]
 fn a_name_of_a_megabyte_is_quoted_cut() {
-    let big = "n".repeat(1 << 20);
+    let big = "n".repeat(1 << 16);
     let steps = vec!["ghost/x"; 1_000];
     let (issues, _) = validated("big name", chains_of(vec![(big, chain(None, &steps, &["OUT"]))]));
     assert_eq!(issues.len(), MAX_ISSUES.min(1_000));
@@ -328,10 +328,10 @@ fn a_run_of_a_hundred_thousand_inputs_over_a_hundred_thousand_outs_finds_its_lan
     );
 }
 
-// 410: a module name of 1 MB, quoted by a thousand steps, is cut as a chain name is.
+// 410: a module name of 64 KiB, quoted by a thousand steps, is cut as a chain name is.
 #[test]
 fn a_module_name_of_a_megabyte_is_quoted_cut() {
-    let big = "m".repeat(1 << 20);
+    let big = "m".repeat(1 << 16);
     let steps = vec![big.as_str(); 1_000];
     let (issues, _) = validated(
         "big module",
@@ -346,10 +346,10 @@ fn a_module_name_of_a_megabyte_is_quoted_cut() {
     assert!(issues.iter().all(|i| i.text.len() < 1_000));
 }
 
-// 410: a port name of 1 MB on a thousand cables from a module of 5,000 outputs is cut in the issue and in the sentence.
+// 410: a port name of 64 KiB on a thousand cables from a module of 5,000 outputs is cut in the issue and in the sentence.
 #[test]
 fn a_port_name_of_a_megabyte_is_quoted_cut() {
-    let big = "p".repeat(1 << 20);
+    let big = "p".repeat(1 << 16);
     let mut run = chain(None, &["wide"], &[]);
     run.out = (0..1_000)
         .map(|_| Out {

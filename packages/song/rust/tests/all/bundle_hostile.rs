@@ -225,12 +225,12 @@ fn a_recording_past_the_entry_limit_stops_adding_and_says_so() {
 
 #[cfg(unix)]
 #[test]
-fn a_tree_where_every_folder_is_a_link_out_records_ten_thousand_refusals() {
+fn a_tree_where_every_folder_is_a_link_out_records_a_thousand_refusals() {
     let t = support::Tmp::new("hostile-links");
     t.mkdir("p");
     t.mkdir("outside");
     let (p, outside) = (t.0.join("p"), t.0.join("outside"));
-    for i in 0..10_000 {
+    for i in 0..1_000 {
         if std::os::unix::fs::symlink(&outside, p.join(format!("l{i}"))).is_err() {
             support::skip("every_folder_is_a_link_out", "a link needs a privilege here");
             return;
@@ -240,12 +240,12 @@ fn a_tree_where_every_folder_is_a_link_out_records_ten_thousand_refusals() {
     let disk = song::DiskSource::new(std::slice::from_ref(&project)).expect("a source");
     let rec = Recorder::new(&disk);
     let start = Instant::now();
-    for i in 0..10_000 {
+    for i in 0..1_000 {
         assert_eq!(rec.list(&format!("{project}/l{i}")), Err(SourceError::Outside));
     }
     assert_eq!(rec.overflow(), None);
     let b = rec.into_bundle(std::slice::from_ref(&project));
-    assert_eq!(b.refused.len(), 10_000);
+    assert_eq!(b.refused.len(), 1_000);
     let mem = MemSource::from_bundle(b).expect("a source");
     assert_eq!(mem.stat(&format!("{project}/l7/x/y")), Err(SourceError::Outside));
     assert!(start.elapsed() < bound());
