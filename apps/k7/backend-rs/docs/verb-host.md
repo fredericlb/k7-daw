@@ -29,7 +29,6 @@ frame) and the Worker's `packages/commands/src/runtime/members/`. The routes bel
 | the gate answers the canonical path it checked, never the lexical one; a path the disk cannot resolve (a dangling link, no access) is a 403, and a path not made yet is judged by its nearest folder | a link swapped between the check and the open must not redirect the read |
 | `/changes` adopts only the output of a job of the same account that ended with its value | a running or stopped job's file is half written |
 | a job holds its place in the account's bound until its driver returns, not until its record ends; a driver's hold ends the job if it never answered, and a job that did not end with its value leaves no folder | a page that goes quiet cannot out-run its drivers, and a failed render leaves no hundreds of megabytes |
-| an account with a job running is not reaped | the poll never touches the engine link, so the idle clock alone would drop its engine link mid-render |
 | a job starts a sweep of `.job-out` folders a day old | an account that never lands another adopt would keep every unused render |
 | the Worker sends the runtime's own project name as `at`, whatever the verb put there | a verb's `songPath` is the virtual folder, which no `at` check could match |
 | a runtime's `open`, `run`, `complete` and `refresh` take turns | one Vfs and one models root serve a runtime, and overlapping runs would roll each other back |

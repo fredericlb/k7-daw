@@ -4,9 +4,8 @@
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
-use std::time::Duration;
 
 use k7_hub::Log;
 use k7_hub::account::{Account, Names, random_secret};
@@ -50,8 +49,6 @@ pub struct Held {
     pub media: Option<Arc<native::media::Media>>,
     /// The account's engine link (2210): it lives and dies with the account.
     pub engine: Option<Arc<native::engine::routes::Engine>>,
-    /// When a request last took the account, in ms: the reap lets an idle one go.
-    used: AtomicU64,
 }
 
 impl Held {
@@ -91,8 +88,6 @@ pub struct Services {
     pub(super) log: Log,
     /// Set once the stop began: no account is made after it (2671).
     stopping: AtomicBool,
-    /// The stops the reap spawned, which the process' stop awaits (2670).
-    reaped: Mutex<Vec<tokio::task::JoinHandle<()>>>,
     /// The cut's context on a server, made by its first cut.
     cut: tokio::sync::OnceCell<Arc<Cut>>,
 }
@@ -123,7 +118,6 @@ impl Services {
             joined: Mutex::default(),
             log,
             stopping: AtomicBool::new(false),
-            reaped: Mutex::new(Vec::new()),
             cut: tokio::sync::OnceCell::new(),
         }
     }
@@ -186,14 +180,8 @@ impl Services {
         self.map().get(user).cloned()
     }
 
-    /// The account, marked used now, and made with the environment and a secret of its own if it is not held.
+    /// The account, made with the environment and a secret of its own if it is not held.
     pub async fn held(&self, user: &str, names: &Arc<Names>) -> Result<Arc<Held>, String> {
-        let h = self.made(user, names).await?;
-        h.used.store(k7_hub::account::now_ms(), Ordering::Relaxed);
-        Ok(h)
-    }
-
-    async fn made(&self, user: &str, names: &Arc<Names>) -> Result<Arc<Held>, String> {
         if let Some(h) = self.get(user) {
             return Ok(h);
         }
@@ -284,7 +272,6 @@ impl Services {
             native_capture,
             media,
             engine,
-            used: AtomicU64::new(k7_hub::account::now_ms()),
         });
         // The flag is read again under the map's lock, which `stop` takes after setting it (2671).
         let mut map = self.map();
@@ -325,84 +312,12 @@ impl Services {
             .map(|h| h.account.clone())
     }
 
-    /// The account `slug` dropped, so the next need makes it again with a changed environment; its user.
-    pub fn drop_slug(&self, slug: &str) -> Option<String> {
-        let mut map = self.map();
-        let user = map
-            .iter()
-            .find(|(_, h)| h.account.slug == slug)
-            .map(|(u, _)| u.clone())?;
-        // Stopped at once, not when the last request holding it ends: two captures of one home would be two replicas.
-        if let Some(h) = map.remove(&user) {
-            if let Some(m) = &h.media {
-                m.prefetch.stop();
-            }
-            if let Some(e) = &h.engine {
-                e.link.close();
-            }
-            native::capture_start::stop(&h.account.env);
-        }
-        native::workspaces_memo::forget(slug);
-        self.joined
-            .lock()
-            .unwrap_or_else(|p| p.into_inner())
-            .retain(|(s, _)| s != slug);
-        Some(user)
-    }
-
-    /// The accounts unused for `idle` and with no request or work in flight let go, but those `keep` names.
-    pub fn reap(&self, idle: Duration, keep: impl Fn(&str) -> bool) {
-        let now = k7_hub::account::now_ms();
-        let idle = u64::try_from(idle.as_millis()).unwrap_or(u64::MAX);
-        let mut map = self.map();
-        let mut gone = Vec::new();
-        map.retain(|_, h| {
-            // A request in flight holds a second handle on the account.
-            let stays = keep(&h.account.slug)
-                || Arc::strong_count(h) > 1
-                || native::shares::registry::busy(&native::shares::registry::key(&h.account.env))
-                || k7_file_service::verb_host::jobs::Table::global().running(&h.account.slug) > 0
-                || h.media.as_ref().is_some_and(|m| m.busy())
-                || h.runtime.as_ref().is_some_and(|r| r.holds())
-                || now.saturating_sub(h.used.load(Ordering::Relaxed)) < idle;
-            if let Some(m) = &h.media {
-                m.reap();
-            }
-            if !stays {
-                native::workspaces_memo::forget(&h.account.slug);
-                gone.push(h.clone());
-                native::shares::registry::reaped(&native::shares::registry::key(&h.account.env));
-            }
-            stays
-        });
-        // The same stop as the process' (2672): each member by its own, no bound in all.
-        let mut reaped = self.reaped.lock().unwrap_or_else(|p| p.into_inner());
-        reaped.retain(|t| !t.is_finished());
-        if let Ok(rt) = tokio::runtime::Handle::try_current() {
-            for h in gone {
-                reaped.push(rt.spawn(async move { drop(h.stop(None, None).await) }));
-            }
-        }
-        drop(reaped);
-        let slugs: HashSet<String> = map.values().map(|h| h.account.slug.clone()).collect();
-        self.joined
-            .lock()
-            .unwrap_or_else(|p| p.into_inner())
-            .retain(|(slug, _)| slugs.contains(slug));
-    }
-
     /// Every account stopped at once and awaited, bounded in all; what had not stopped is named in one line (2670).
     pub async fn stop(&self) {
         self.stopping.store(true, Ordering::Release);
         let helds: Vec<Arc<Held>> = self.map().drain().map(|(_, h)| h).collect();
-        let reaped = std::mem::take(&mut *self.reaped.lock().unwrap_or_else(|p| p.into_inner()));
-        let (held, gone) = tokio::join!(
-            native::runtime::stop::stop_all(helds, native::runtime::STOP),
-            native::runtime::stop::await_reaped(reaped, native::runtime::STOP)
-        );
-        let lines: Vec<String> = [held, gone].into_iter().flatten().collect();
-        if !lines.is_empty() {
-            (self.log)(&lines.join("; "));
+        if let Some(line) = native::runtime::stop::stop_all(helds, native::runtime::STOP).await {
+            (self.log)(&line);
         }
     }
 }
@@ -427,7 +342,6 @@ impl Held {
             native_capture,
             media: None,
             engine,
-            used: AtomicU64::new(0),
         }
     }
 }
@@ -435,6 +349,7 @@ impl Held {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::time::Duration;
 
     #[test]
     fn an_account_is_captured_only_where_the_hub_says_so() {
@@ -485,103 +400,6 @@ mod tests {
         assert!(!waiting.is_finished());
         drop(held_a);
         assert!(waiting.await.unwrap().is_ok());
-        svc.stop().await;
-        let _ = std::fs::remove_dir_all(dir);
-    }
-
-    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-    async fn the_reap_keeps_an_account_whose_download_runs_and_drops_an_idle_one() {
-        use native::media::testkit::{Reply, serve};
-        let dir = std::env::temp_dir().join(format!("k7-accounts-reap-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&dir);
-        let demos = dir.join("demos/synth.k7");
-        std::fs::create_dir_all(&demos).unwrap();
-        std::fs::write(demos.join("project.k7x"), "project({})\n").unwrap();
-        let data = dir.join("data");
-        let mut o = k7_hub::account::Names::new(Arc::new(move |u: &str| {
-            let slug = u.replace('@', "-");
-            (slug.clone(), data.join(slug))
-        }));
-        let demos = dir.join("demos").display().to_string();
-        o.env = Arc::new(move |_, _| {
-            let demos = demos.clone();
-            Box::pin(async move { BTreeMap::from([("STUDIO_DEMOS".to_string(), demos)]) })
-        });
-        let instances = Arc::new(o);
-        let env = BTreeMap::new();
-        let svc = Services::new(&env, Arc::new(|_: &str| {}));
-        let (url, _) = serve(|_| Reply::Hang).await;
-        let a = svc.held("a@x.org", &instances).await.unwrap();
-        svc.held("b@x.org", &instances).await.unwrap();
-        a.media
-            .as_ref()
-            .expect("media is on")
-            .downloads
-            .start("m.onnx", &format!("{url}/m.onnx"));
-        svc.reap(Duration::ZERO, |_| false);
-        assert!(
-            svc.get("a@x.org").is_some(),
-            "a running download was reaped"
-        );
-        assert!(svc.get("b@x.org").is_none(), "an idle account stayed");
-        svc.stop().await;
-        let _ = std::fs::remove_dir_all(dir);
-    }
-
-    #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-    async fn a_picture_render_in_flight_keeps_its_account_from_the_reap() {
-        let dir = std::env::temp_dir().join(format!("k7-accounts-reap-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&dir);
-        let data = dir.join("data");
-        let o = k7_hub::account::Names::new(Arc::new(move |u: &str| {
-            let slug = u.replace('@', "-");
-            (slug.clone(), data.join(slug))
-        }));
-        let instances = Arc::new(o);
-        let env = BTreeMap::new();
-        let svc = Arc::new(Services::new(&env, Arc::new(|_: &str| {})));
-        let a = instances.environment("r@x.org", "s").await.unwrap();
-        svc.held("r@x.org", &instances).await.unwrap();
-        let shares = native::shares::registry::of(
-            &native::shares::registry::key(&a.env),
-            &(Arc::new(|_: &str| {}) as k7_hub::Log),
-        );
-        let slot = shares.begin_picture().unwrap();
-        svc.reap(Duration::ZERO, |_| false);
-        assert_eq!(svc.map().len(), 1, "a picture render keeps its account");
-        drop(slot);
-        svc.reap(Duration::ZERO, |_| false);
-        assert_eq!(svc.map().len(), 0, "a finished one lets it go");
-        svc.stop().await;
-        let _ = std::fs::remove_dir_all(dir);
-    }
-
-    #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-    async fn a_host_job_in_flight_keeps_its_account_from_the_reap() {
-        use k7_file_service::verb_host::jobs::Table;
-        let dir = std::env::temp_dir().join(format!("k7-accounts-reap-job-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&dir);
-        let data = dir.join("data");
-        let o = k7_hub::account::Names::new(Arc::new(move |u: &str| {
-            let slug = u.replace('@', "-");
-            (slug.clone(), data.join(slug))
-        }));
-        let instances = Arc::new(o);
-        let env = BTreeMap::new();
-        let svc = Services::new(&env, Arc::new(|_: &str| {}));
-        let slug = svc
-            .held("j@x.org", &instances)
-            .await
-            .unwrap()
-            .account
-            .slug
-            .clone();
-        let (id, _) = Table::global().start(&slug, false, Duration::ZERO).unwrap();
-        svc.reap(Duration::ZERO, |_| false);
-        assert_eq!(svc.map().len(), 1, "a running host job keeps its account");
-        Table::global().release(&id, Duration::ZERO);
-        svc.reap(Duration::ZERO, |_| false);
-        assert_eq!(svc.map().len(), 0, "a finished one lets it go");
         svc.stop().await;
         let _ = std::fs::remove_dir_all(dir);
     }

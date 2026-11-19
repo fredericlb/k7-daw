@@ -84,27 +84,3 @@ async fn a_removal_ends_the_capture_in_the_registrys_account() {
     Captures::global().stop_account(&home).await;
     std::fs::remove_dir_all(dir).unwrap();
 }
-
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_stop_of_a_dropped_account_never_stops_the_one_that_replaced_it() {
-    let dir = crate::routes::files::service::native::tests::tmp_root()
-        .join(format!("k7-front-restart-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&dir);
-    let home = crate::routes::files::service::native::tests::slashed(&dir.join("home"));
-    std::fs::create_dir_all(format!("{home}/workspace")).unwrap();
-    let env = std::collections::BTreeMap::from([("STUDIO_HOME".to_string(), home.clone())]);
-    let rt = tokio::runtime::Handle::current();
-    let start = || Captures::global().start_account(Arc::new(|_| {}), host(&home), &rt);
-    for _ in 0..20 {
-        start().await;
-        super::capture_start::stop(&env);
-        let second = start().await;
-        tokio::time::sleep(std::time::Duration::from_millis(15)).await;
-        let now = Captures::global()
-            .account(&home)
-            .expect("the new account is registered");
-        assert!(Arc::ptr_eq(&now, &second));
-    }
-    Captures::global().stop_account(&home).await;
-    let _ = std::fs::remove_dir_all(&dir);
-}

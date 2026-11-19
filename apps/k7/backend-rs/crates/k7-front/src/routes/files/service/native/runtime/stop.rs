@@ -115,14 +115,3 @@ pub async fn stop_all(helds: Vec<Arc<Held>>, total: Duration) -> Option<String> 
         .collect();
     leaving_line(&named)
 }
-
-/// The reaped accounts' stops still running, awaited up to `total`; the line naming how many had not finished.
-pub async fn await_reaped(
-    mut reaped: Vec<tokio::task::JoinHandle<()>>,
-    total: Duration,
-) -> Option<String> {
-    let all = futures_util::future::join_all(reaped.iter_mut());
-    let _ = tokio::time::timeout(total, all).await;
-    let left = reaped.iter().filter(|h| !h.is_finished()).count();
-    (left > 0).then(|| format!("stop: {left} reaped account(s) had not finished stopping"))
-}

@@ -114,7 +114,7 @@ A model reads a socket as opened on a later turn than its dial, so the first pol
 
 | row | where it is held | what a failing bug looks like |
 |---|---|---|
-| 2210, 2211 | `services.rs`: `Held` holds the account's `Engine` (link, bridge, host); `Services::bind` tells the link; the reap and `drop_slug` close it without `drop-session` | `tests_real`: an open reaches the engine through the bridge |
+| 2210, 2211 | `services.rs`: `Held` holds the account's `Engine` (link, bridge, host); `Services::bind` tells the link; the stop closes it | `tests_real`: an open reaches the engine through the bridge |
 | 2226, 2227 | `routes.rs`: the poll (1g's info, then `lastTake`, `engineSync`, `engineLoad`, `engineScan`, `processes`), `/engine/project`, `/engine/unload`, `/engine/sync/retry`, `/engine/served`; the poll's prewarm is one job of the session's queue at a time, never awaited, and begins the load under the lock so the poll that starts it answers `copying`; the machines' Resend, Restore, Recompile and Opened are jobs of the same queue, and a compile holds `deciding` from before it starts | `engineLink.spec.ts` at the bed |
 | 2216, 2230 | `real.rs`: the host compiles with the account's `SongSessions` on a thread with the compiler's stack, reading the revision token from `Revisions` and the thawed list from the account's jobs; a compile that fails is a failure the link reports | `tests_real` |
 | 2215 | `rig::engine_prefs` reads the device and the input pairs of `preferences.k7x` at each socket open, on the blocking pool | `tests_review`: a redial replays the preferences as they stand |

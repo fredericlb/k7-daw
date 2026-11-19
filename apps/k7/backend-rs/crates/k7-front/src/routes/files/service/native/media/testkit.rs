@@ -1,15 +1,13 @@
 //! testkit.rs — what the media pieces' tests share: a scratch folder, a WAV, a shell script standing in for the engine, a
-//! raw HTTP server on `127.0.0.1:0`, and a clock a test turns. What a reader gets wrong: every path here is the test's own.
+//! raw HTTP server on `127.0.0.1:0`. What a reader gets wrong: every path here is the test's own.
 
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpListener;
 
-use super::Clock;
 use super::envelopes::{Envelopes, MEMO_BYTES, Settings};
 
 /// An empty folder of this test's own, under the temp dir.
@@ -85,17 +83,6 @@ pub fn starts(log: &Path) -> usize {
         .lines()
         .filter(|l| *l == "s")
         .count()
-}
-
-/// A clock a test moves forward.
-pub fn turned() -> (Clock, Arc<AtomicU64>) {
-    let base = Instant::now();
-    let by = Arc::new(AtomicU64::new(0));
-    let b = by.clone();
-    (
-        Arc::new(move || base + Duration::from_secs(b.load(Ordering::Relaxed))),
-        by,
-    )
 }
 
 pub fn settings(engine: Option<PathBuf>, env: &[(&str, &str)]) -> Settings {

@@ -51,12 +51,6 @@ impl Prewarms {
         f(m.entry(ws.to_string()).or_default())
     }
 
-    /// Whether any workspace's prewarm is still warming.
-    pub fn warming(&self) -> bool {
-        let m = self.map.lock().unwrap_or_else(|p| p.into_inner());
-        m.values().any(|w| w.status.warming)
-    }
-
     pub fn status(&self, ws: &str) -> Status {
         self.with(ws, |w| w.status)
     }

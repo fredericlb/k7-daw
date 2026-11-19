@@ -24,7 +24,5 @@ readying its workspaces — is what the first list of projects would otherwise w
 started EARLIER, at a moment that already says a list is coming:
 
 - **On a phone or the tray, the boot.** The machine has one person, the local user, whose service
-  starts once the front listens — and is never stopped for being idle (no `idle` in
-  `apps/k7/backend-rs/crates/k7-front/src/routes/files/hub/spawn.rs`): reaping only frees memory for another account, and there is none, while
-  a screen left off for ten minutes would otherwise pay a cold start on the next open.
+  starts once the front listens — and is never stopped for being idle: a screen left off for ten minutes would otherwise pay a cold start on the next open.
 

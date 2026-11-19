@@ -71,7 +71,7 @@ traits to the account's own parts. The piece needs `docs` and `engine-jobs` answ
 
 | choice | why |
 |---|---|
-| each account's `Shares` lives in a registry keyed by its state folder (`registry.rs`), kept while a picture render is in flight and dropped at the account's reap | the account's `Held` is rebuilt at a reap, the registry is not |
+| each account's `Shares` lives in a registry keyed by its state folder (`registry.rs`), kept for the life of the process | a picture render in flight outlives a rebuilt `Held`, the registry does not |
 | the counts of the `[files] native shares:` line (`exports`, `pictures`, `declines`, `panics`) are one set for the whole front, with one reporter, started once beside the counts | the bed's judge reads the last such line, so a count per account would show one account's work; a reap must not reset them, and a change just before the last reap is still logged |
 | the mixdown and the compile go through `Jobs::ask`, `Jobs::query` and `docs::prepare_with`, never a driver or a session of their own | one render path and one compiler answer |
 

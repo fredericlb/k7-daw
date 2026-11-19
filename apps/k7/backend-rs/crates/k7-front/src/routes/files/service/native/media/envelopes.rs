@@ -129,18 +129,6 @@ impl State {
             self.drop_entry(&oldest);
         }
     }
-
-    fn sweep(&mut self, now: Instant, idle: Duration) {
-        let gone: Vec<String> = self
-            .memo
-            .iter()
-            .filter(|(_, e)| now.saturating_duration_since(e.used) >= idle)
-            .map(|(k, _)| k.clone())
-            .collect();
-        for k in gone {
-            self.drop_entry(&k);
-        }
-    }
 }
 
 /// One account's envelopes.
@@ -405,12 +393,6 @@ impl Envelopes {
     /// A host short of memory (`forgetEnvelopes`): the envelopes go, the freshness verdicts too.
     pub fn shed(&self) {
         self.invalidate(None);
-    }
-
-    /// The memo's idle entries let go, at the reap.
-    pub fn reap(&self) {
-        let now = (self.inner.s.clock)();
-        self.state().sweep(now, self.inner.s.idle);
     }
 
     /// How many envelopes and bytes the memo holds, for a bound in a test.

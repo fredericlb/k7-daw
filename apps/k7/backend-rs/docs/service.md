@@ -9,7 +9,7 @@ answers is refused with a sentence (`declines.md`), and nothing falls back to an
 | choice | why |
 |---|---|
 | an account is made on its first request (`services.rs`) and holds its song sessions and environment (`accounts.rs`), its log, its code root, the runtime state (the Logs ring, the background registry, the machine's asks), the members, the native capture, the admin stamp, the media and the engine link, in one `Held` | one owner per account for what the routes share; no thread and no runtime per account, so an idle account costs memory only |
-| the reap lets an account go once it is unused for the idle time and nothing holds it; a request in flight holds a second `Arc`, so it is never reaped under a call | a second `Held` of one account would be two captures and two relay links |
+| an account lives until the front stops | an idle one let go would make the next open pay a cold start |
 | the account's environment is the one its service would be started with (`Instances::environment`), with a secret of its own that the relay, the libraries' calls and the shares' internal routes take as a running service's (`hub::State::account_of_secret`) | the relay knows an account by its secret |
 | the song sessions' heap budget is the server's (384 MB, the budget's source) or an embedded host's (192 MB), chosen by `set_embedded()`, which `embedded.rs` calls; no environment variable sets it | a phone and the tray share memory with the person's other programs; a server is given the most per account |
 | `K7_FILE_SERVICE`, `K7_FILE_NATIVE`, `K7_SONG_NATIVE`, `K7_ACTOR_HEAP_MB`, `K7_ACTOR_HEAP_LOG` and `K7_RUNTIME_IDLE_MS` are not read; the front says one log line naming any a host still sets, and starts (`switch.rs`, `REMOVED`) | a host's old environment must not stop the front, and must not be silently believed |
@@ -27,7 +27,7 @@ answers is refused with a sentence (`declines.md`), and nothing falls back to an
 | `Watch::silence(folder)` makes the process's watcher skip every root under a folder | a test reaches `Revisions::global` from the front's own routes, so the account's switch never arrives; a folder is the narrowest scope, and a silenced root's token is walked at every ask |
 | an upload runs inside the capture window and a client that hangs up closes it (`window.rs`) | the bytes and the rename are one batch of the capture |
 | the engine `Bridge` (`native/engine/host.rs`) is the link's `Tells` only: files takes, says lines | the engine link's logic is native; the bridge only carries what it says |
-| the account's binding is kept under its key by the hub, whatever serves the account, and let go by the reaper once nothing has served the account for its idle time | an account made again comes back to the same URL; the engine's copy of the account stays where it was |
+| the account's binding is kept under its key by the hub, whatever serves the account | an account made again comes back to the same URL; the engine's copy of the account stays where it was |
 | a socket dialled with headers (the relay's) has its frames held while a verb writes; the engine's and the jobs' never are | a verb runs for minutes, and a take, a state frame or a render's reply must not wait for it |
 | an undo's missing audio blob is fetched with the bound machine's `send-up` job (`native/journal_undo.rs`) | the blob lives on the machine that recorded it |
 | TLS for outbound calls is `k7-front/src/trust.rs`; multipart bodies (`form.rs`) and the media's direct half live in the front | one trust store for every outbound call of the front |

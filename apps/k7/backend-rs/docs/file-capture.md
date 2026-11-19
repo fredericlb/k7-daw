@@ -74,7 +74,7 @@ and its log folder). The host (the front's `Bundle`) tells it what to attach; it
 | `Captures` gates a home's start and stop one after the other, and a stop names the account it means to stop | a stop spawned before a restart stopped the account that replaced it |
 | the host's attach and detach tells run in the order they were told, one task | a detach that ran first left a removed folder captured |
 | `Bundle` carries `lock()` and `folders_changed()` (APPROVED by the user, 2026-11-11) | the rename runs under the account's lock, and the home page's listing hears of it |
-| the account's captures stop with its `Held` (dropped, reaped or stopped), each ledger saved | a capture that outlives its account is memory held for an idle account |
+| the account's captures stop with its `Held` (dropped or stopped), each ledger saved | a capture that outlives its account is memory held for an idle account |
 | the native writes (the upload, `PUT /file`) open and close the capture's window on the registry directly; a window is released where it was opened | the window must be the capture's that emits the batch, and no write waits on another thread's turn |
 | the capture reaches the front through its `Bundle` (`native/capture_bundle.rs`): the listings memo, the module watch, the engine link and the account's write lock; `letGoUnder` lets go of the module watches and the served project | the capture owns no `Workspace`; the front does |
 | the captures belong to the process: an attach of a root already captured returns it | a `Held` made again attaches nothing twice |

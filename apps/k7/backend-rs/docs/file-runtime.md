@@ -31,7 +31,7 @@ registry and the machine asks. This page holds the choices and what forced them.
 | 2622 | `/logs`' numbers are `runtime::logs`: JavaScript's `Number` over a query string, the tail clamped to 1..2000 and used as its integer part, the answer's keys `offset`, `lines`, `service` | `runtime_logs` |
 | 2630, 2631, 2614 | the registry is `runtime::background::Jobs` over `runtime::list::Table`: one job per tag, listed at once, kept 8 s after its end, held by a 10 minute lease that any message renews, a drop under jobs ending each `failed: the file service restarted` | `runtime_background` |
 | 2633 | DEPARTS. A progress told after a job's end is dropped; node wrote it onto the ended entry, which then listed a bar beside `done` | `runtime_background` |
-| 2670, 2671, 2672 | the front's stop is `Services::stop`, awaited: it refuses to make an account, stops every held account in parallel under one 5 s bound, each member bounded at 1.5 s, in registration order (`Held::members`), and says one line naming the accounts and members left; the reap runs the same `Held::stop` with no bound | `runtime_stop` |
+| 2670, 2671, 2672 | the front's stop is `Services::stop`, awaited: it refuses to make an account, stops every held account in parallel under one 5 s bound, each member bounded at 1.5 s, in registration order (`Held::members`), and says one line naming the accounts and members left | `runtime_stop` |
 | 2680 | the front logs `[files] native runtime: background=<n> logs=<n>` every 30 s while it moves; `scripts/agent/bedCounters.mjs` judges it with a floor `logs>=1` | `bedCounters.test.mjs` |
 
 ## Why the stop waits

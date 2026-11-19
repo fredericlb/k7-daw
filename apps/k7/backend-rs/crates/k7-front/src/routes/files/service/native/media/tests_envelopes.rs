@@ -14,7 +14,7 @@ use super::envelopes::Stale;
 use super::flights;
 #[cfg(unix)]
 use super::testkit::{engine, overlap, starts};
-use super::testkit::{envelopes, scratch, settings, turned, wav};
+use super::testkit::{envelopes, scratch, settings, wav};
 
 fn clip(dir: &Path, name: &str) -> PathBuf {
     let p = dir.join(name);
@@ -355,11 +355,9 @@ async fn the_gate_runs_two_decodes_at_once_and_one_for_a_local_user() {
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn the_memo_is_bounded_in_bytes_and_let_go_when_unused() {
+async fn the_memo_is_bounded_in_bytes() {
     let d = scratch("memo");
-    let (clock, by) = turned();
     let mut s = settings(None, &[]);
-    s.clock = clock;
     let (probe, _) = envelopes(settings(None, &[]));
     let one = clip(&d, "w0.wav");
     let weight = probe.ensure(&one, None).await.unwrap().peak.len() * 8 * 2;
@@ -372,9 +370,6 @@ async fn the_memo_is_bounded_in_bytes_and_let_go_when_unused() {
     let (n, bytes) = e.held();
     assert!((1..4).contains(&n), "{n} held under the bound");
     assert!(bytes <= weight * 5 / 2 + weight, "{bytes} bytes");
-    by.store(11 * 60, Ordering::Relaxed);
-    e.reap();
-    assert_eq!(e.held(), (0, 0), "let go after ten idle minutes");
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]

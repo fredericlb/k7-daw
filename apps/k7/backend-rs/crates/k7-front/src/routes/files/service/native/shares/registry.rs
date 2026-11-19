@@ -1,5 +1,5 @@
-//! registry.rs — each account's `Shares`, by its state folder, kept while a picture render runs and dropped at its reap (2540, 2555).
-//! What a reader gets wrong: the account may be reaped and made again meanwhile; the `Shares` is what a second POST finds.
+//! registry.rs — each account's `Shares`, by its state folder, kept for the life of the process (2540, 2555).
+//! What a reader gets wrong: the `Shares` outlives the account's runtime; it is what a second POST finds.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex, OnceLock, PoisonError};
@@ -19,11 +19,6 @@ fn all() -> &'static Mutex<HashMap<String, Arc<Shares>>> {
 
 fn table() -> std::sync::MutexGuard<'static, HashMap<String, Arc<Shares>>> {
     all().lock().unwrap_or_else(PoisonError::into_inner)
-}
-
-/// The account's key: its state folder, which the hook and the asks both know.
-pub fn key(env: &std::collections::BTreeMap<String, String>) -> String {
-    k7_file_service::libraries::Home::of(env).studio
 }
 
 /// The account's shares, made on its first need; the front's one count report is started with the first.
@@ -52,20 +47,6 @@ pub fn counts() -> Arc<super::Counts> {
     COUNTS.get_or_init(Arc::default).clone()
 }
 
-/// Whether the account has work in flight, which keeps it from being reaped.
-pub fn busy(key: &str) -> bool {
-    table().get(key).is_some_and(|s| s.busy())
-}
-
-/// The account was let go: its memory is dropped unless a picture render still runs (2540).
-pub fn reaped(key: &str) {
-    let mut t = table();
-    if t.get(key).is_some_and(|s| s.busy()) {
-        return;
-    }
-    t.remove(key);
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -76,7 +57,7 @@ mod tests {
     }
 
     #[test]
-    fn the_counts_are_the_fronts_whatever_the_accounts_and_a_reap() {
+    fn the_counts_are_the_fronts_whatever_the_accounts() {
         // Other tests add to the same counts, so each figure is a floor.
         let exports = || counts().exports.load(Ordering::Relaxed);
         let (a, b) = ("counts-test-a", "counts-test-b");
@@ -91,24 +72,5 @@ mod tests {
             .fetch_add(1, Ordering::Relaxed);
         assert!(exports() >= before + 2);
         assert!(counts().line().contains("exports="));
-        reaped(a);
-        of(a, &quiet())
-            .counts
-            .exports
-            .fetch_add(1, Ordering::Relaxed);
-        assert!(exports() >= before + 3);
-        reaped(a);
-        reaped(b);
-    }
-
-    #[test]
-    fn a_picture_render_in_flight_keeps_the_account_too() {
-        let key = "registry-busy-test";
-        let shares = of(key, &quiet());
-        let slot = shares.begin_picture().unwrap();
-        assert!(busy(key));
-        drop(slot);
-        assert!(!busy(key));
-        reaped(key);
     }
 }

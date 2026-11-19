@@ -70,13 +70,6 @@ pub fn dropped(account: &str) {
     });
 }
 
-/// The account is gone: its entry goes with it.
-pub fn forget(account: &str) {
-    slots(|t| {
-        t.remove(account);
-    });
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -110,7 +103,5 @@ mod tests {
         old.at = Instant::now() - WINDOW - Duration::from_millis(1);
         keep(a, old);
         assert!(fresh(a, 1.0).is_none());
-        forget(a);
-        assert!(acts(a) == 0);
     }
 }

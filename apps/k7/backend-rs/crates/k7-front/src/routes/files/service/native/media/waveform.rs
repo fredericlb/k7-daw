@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::Ordering;
 use std::sync::{Arc, Mutex};
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 use crate::routes::files::service::native::callbacks::BoxFuture;
 use k7_file_service::media::answer::{Window, answer_sig, build_waveform, waveform_answer, wf_sig};
@@ -102,7 +102,6 @@ pub struct Waveforms {
     clock: Clock,
     counts: Arc<Counts>,
     limit: usize,
-    idle: Duration,
 }
 
 /// `ENOENT` is a 404 and the rest a 400, as the route's `catch` says.
@@ -130,20 +129,13 @@ fn cut_of(e: &Envelope) -> Cut<'_> {
 }
 
 impl Waveforms {
-    pub fn new(
-        envelopes: Envelopes,
-        clock: Clock,
-        counts: Arc<Counts>,
-        limit: usize,
-        idle: Duration,
-    ) -> Waveforms {
+    pub fn new(envelopes: Envelopes, clock: Clock, counts: Arc<Counts>, limit: usize) -> Waveforms {
         Waveforms {
             envelopes,
             state: Arc::default(),
             clock,
             counts,
             limit,
-            idle,
         }
     }
 
@@ -156,23 +148,6 @@ impl Waveforms {
         let mut st = self.state();
         st.map.clear();
         st.bytes = 0;
-    }
-
-    /// The idle entries let go, at the reap.
-    pub fn reap(&self) {
-        let now = (self.clock)();
-        let mut st = self.state();
-        let gone: Vec<String> = st
-            .map
-            .iter()
-            .filter(|(_, m)| now.saturating_duration_since(m.used) > self.idle)
-            .map(|(k, _)| k.clone())
-            .collect();
-        for k in gone {
-            if let Some(m) = st.map.remove(&k) {
-                st.bytes -= m.text.len();
-            }
-        }
     }
 
     /// How many answers and bytes the memo holds, for a bound in a test.

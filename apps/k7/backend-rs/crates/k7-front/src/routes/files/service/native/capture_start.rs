@@ -42,19 +42,7 @@ pub async fn start(
     Captures::global().start_account(say, host, &rt).await;
 }
 
-/// Stops an account's captures, each ledger saved; where no runtime is at hand the stop is not waited for.
-pub fn stop(env: &BTreeMap<String, String>) {
-    let studio = Home::of(env).studio;
-    // The account named now, not when the task runs: a start made meanwhile is never the one stopped.
-    let Some(acct) = Captures::global().account(&studio) else {
-        return;
-    };
-    if let Ok(rt) = tokio::runtime::Handle::try_current() {
-        rt.spawn(async move { Captures::global().stop_this(&studio, &acct).await });
-    }
-}
-
-/// `stop`, waited: the account's captures have ended and each ledger is saved when this returns.
+/// Stops an account's captures: they have ended and each ledger is saved when this returns.
 pub async fn stop_waited(env: &BTreeMap<String, String>) {
     let studio = Home::of(env).studio;
     if let Some(acct) = Captures::global().account(&studio) {

@@ -146,7 +146,6 @@ impl Media {
                 config.clock.clone(),
                 counts.clone(),
                 waveform::MEMO_BYTES,
-                KEEP_IDLE,
             ),
             prewarms: prewarm::Prewarms::default(),
             lites: Arc::default(),
@@ -214,20 +213,9 @@ impl Media {
         });
     }
 
-    /// Whether a prewarm, a download or a decode is running: the account is not reaped while it is (2470).
-    pub fn busy(&self) -> bool {
-        self.prewarms.warming() || self.downloads.running() > 0 || self.envelopes.flying()
-    }
-
     /// The memos let go: a host short of memory (`media.shed`).
     pub fn shed(&self) {
         self.envelopes.shed();
         self.waves.shed();
-    }
-
-    /// The idle memos let go, at the reap.
-    pub fn reap(&self) {
-        self.envelopes.reap();
-        self.waves.reap();
     }
 }

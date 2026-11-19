@@ -260,43 +260,6 @@ async fn an_account_made_while_the_stop_runs_is_refused_and_nothing_of_it_stays_
     let _ = std::fs::remove_dir_all(dir);
 }
 
-/// F4: an account the reap let go a moment before the quit is still stopped, and awaited, by the process' stop.
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn the_process_stop_awaits_the_stops_the_reap_spawned() {
-    let Rig {
-        dir,
-        svc,
-        instances,
-        log,
-    } = rig("stop-reaped");
-    let a = svc.held("a@x.org", &instances).await.unwrap();
-    let saved = Arc::new(AtomicBool::new(false));
-    let seen = saved.clone();
-    a.members.add(
-        "captures",
-        Box::new(move || {
-            Box::pin(async move {
-                tokio::time::sleep(Duration::from_millis(400)).await;
-                seen.store(true, Ordering::SeqCst);
-            })
-        }),
-    );
-    drop(a);
-    let before = Arc::strong_count(&log);
-    svc.reap(Duration::ZERO, |_| false);
-    assert!(svc.get("a@x.org").is_none());
-    svc.stop().await;
-    assert!(
-        saved.load(Ordering::SeqCst),
-        "the stop did not wait for the reaped account"
-    );
-    assert!(
-        Arc::strong_count(&log) < before,
-        "the account was not let go"
-    );
-    let _ = std::fs::remove_dir_all(dir);
-}
-
 /// The stop recheck ends the captures the account's start began, and saves their ledger.
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn an_account_refused_by_the_stop_leaves_no_native_capture_running() {
@@ -348,44 +311,5 @@ async fn the_accounts_stop_awaits_its_captures_ledgers() {
         k7_capture::Captures::global().account(&studio).is_none(),
         "the stop returned before the captures ended"
     );
-    let _ = std::fs::remove_dir_all(dir);
-}
-
-/// A background job's lease holds the reap: an idle account with a running job stays, and goes when it ends.
-#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn a_running_background_job_holds_the_reap() {
-    let rig = rig_native(
-        "reap-job",
-        "reads,entries,revision,journal,listings,workspaces,projects,capture,engine,engine-jobs,media,shares,docs,runtime",
-    );
-    let Rig {
-        dir,
-        svc,
-        instances,
-        ..
-    } = &rig;
-    let h = svc.held("a@x.org", instances).await.unwrap();
-    let rt = h.runtime.clone().expect("runtime answers in this rig");
-    assert!(rt.bg_start("ffmpeg /m/a b.mp4"));
-    drop(h);
-    svc.reap(Duration::ZERO, |_| false);
-    assert!(
-        svc.get("a@x.org").is_some(),
-        "a running job did not hold the account"
-    );
-    rt.dropped();
-    // A call of the account's own may be in flight for a moment: the reap is tried until it lets go.
-    for _ in 0..60 {
-        svc.reap(Duration::ZERO, |_| false);
-        if svc.get("a@x.org").is_none() {
-            break;
-        }
-        tokio::time::sleep(Duration::from_millis(50)).await;
-    }
-    assert!(
-        svc.get("a@x.org").is_none(),
-        "the account stayed after its job ended"
-    );
-    svc.stop().await;
     let _ = std::fs::remove_dir_all(dir);
 }

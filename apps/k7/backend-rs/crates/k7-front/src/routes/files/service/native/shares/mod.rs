@@ -138,11 +138,6 @@ impl Shares {
         })
     }
 
-    /// Whether a picture render is in flight: the account is kept while it is.
-    pub fn busy(&self) -> bool {
-        *self.picture.lock().unwrap_or_else(|p| p.into_inner())
-    }
-
     /// Whether the account's picture render is in flight.
     pub fn picturing(&self) -> bool {
         *self.picture.lock().unwrap_or_else(|p| p.into_inner())
