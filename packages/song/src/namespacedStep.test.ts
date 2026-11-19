@@ -5,8 +5,6 @@ import { fileURLToPath } from "node:url";
 import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadGraph } from "./graph";
-import { projectHints } from "./hints";
-import { compileNodeProject } from "./nodeProject";
 import {
   insertChainStepAfter,
   replaceChainStep,
@@ -44,22 +42,6 @@ describe("a chain step naming an inherited module by ref", () => {
     const g = loadGraph(dir);
     expect(g.warnings.filter((w) => w.includes(REF))).toEqual([]);
     expect(g.modules[REF]).toMatchObject({ plugin: { name: "delay" } });
-  });
-
-  it("compiles into the track, like a local module would", () => {
-    const melody = compileNodeProject(dir).tracks.find(
-      (t) => t.id === "melody",
-    );
-    expect(melody?.plugins.some((p) => p.id.endsWith(`:${REF}`))).toBe(true);
-  });
-
-  it("is offered as a completion, alongside the project's own modules", () => {
-    const h = projectHints(dir);
-    expect(h.modules).toContain(REF);
-    expect(h.modules).toContain("lead"); // the local names are still there
-    // io is offered too, and so is an inherited NODE — which is the point for io/IN.
-    expect(h.modules).toContain("@workspace/io/desk");
-    expect(h.ioSinks).toContain("@workspace/io/desk");
   });
 
   // The sink is a different lookup, so a ref reaching it needs its own proof.

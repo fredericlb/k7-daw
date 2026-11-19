@@ -7,10 +7,15 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadGraph, validate } from "@studio/song/graph";
-import { loadProject } from "@studio/song/project";
 import { writeDoc, writeLane } from "@studio/song/testSupport";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  compileDisk,
+  compileReady,
+} from "../../commands/src/runtime/testing/compileDisk.ts";
 import { loadVideoProject } from "./videoProject";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
@@ -88,7 +93,7 @@ describe("a run of shaders nothing feeds, landing on a lane", () => {
         RENDER: ["VIDEO_OUT"],
       },
     });
-    const doc = loadProject(dir);
+    const doc = compileDisk(dir);
     expect(doc.tracks.map((t) => t.id)).not.toContain("main");
   });
 

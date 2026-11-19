@@ -4,12 +4,14 @@
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 type Doc = Record<string, unknown>;
 type Event = {
@@ -24,7 +26,7 @@ const put = (rel: string, value: Doc): void => writeDoc(join(dir, rel), value);
 const read = (rel: string): Doc => wsData(join(dir, rel)) as Doc;
 const event = () => (read("tracks/keys.k7x").events as Event[])[0];
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
@@ -68,7 +70,7 @@ describe("event take midi", () => {
     expect(seq.notes).toEqual([{ t: 0.5, d: 0.5, k: 64 }]);
 
     // The compile plays the event's own riff (beats 4..12), the take over 6..8, then the riff again.
-    const clips = loadProject(dir).tracks[0].clips;
+    const clips = compileDisk(dir).tracks[0].clips;
     expect(clips.map((c) => [c.name, c.start, c.length])).toEqual([
       ["riff", 4, 2],
       [take, 6, 2],
@@ -103,7 +105,7 @@ describe("event take arm", () => {
     const got: unknown[] = [];
     const h = testHost({
       songPath: dir,
-      project: () => loadProject(dir),
+      project: () => compileDisk(dir),
       takeArm: (arm) => {
         got.push(arm);
         return true;

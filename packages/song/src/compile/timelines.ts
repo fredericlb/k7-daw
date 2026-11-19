@@ -1,30 +1,11 @@
-// compile/timelines.ts — a TIMELINE placed as one event, expanded into the events it holds: each
-// shifted to where the timeline plays, cut at its fixed end, and tagged with the event the surfaces
-// draw. What a reader gets wrong: the expansion happens BEFORE an event is routed to a half, so a
-// timeline mixing clips and sequences feeds both of its lane's outputs. See docs/timelines.md.
+// compile/timelines.ts — what a timeline placed as one event adds up to: its fixed length, and where its clips play.
+// What a reader gets wrong: the expansion happens in the song crate; this is the part the page's views still call.
 
-import { placementId } from "@studio/song-schema/placementId";
-import {
-  FIXED_FIELDS,
-  NEST_SEP,
-  timelineLaneId,
-} from "@studio/song-schema/timelineLane";
 import type { TimelineFile } from "@studio/song-schema/yaml/timelineSchema";
-import type {
-  ClipDoc,
-  EventDoc,
-  NestDoc,
-  TimelineDoc,
-  TimelineLaneDoc,
-  TrackDoc,
-} from "../project";
+import type { ClipDoc, NestDoc, TimelineLaneDoc, TrackDoc } from "../project";
 import type { RawPlacement } from "../rawDoc";
 
 export type RawTimeline = TimelineFile;
-
-/** The fields `p` carries that a timeline event may not. */
-export const fixedFieldsOf = (p: RawPlacement): string[] =>
-  FIXED_FIELDS.filter((k) => p[k] !== undefined);
 
 /** Where an expanded event plays: what the timeline events around it add up to. */
 export interface Within {
@@ -34,12 +15,6 @@ export interface Within {
   disabled: boolean;
   prefix: string; // its clips' id prefix, one `<ref>@<start>>` per timeline it sits in
   nest: NestDoc; // the outermost timeline event, the one its lane draws
-}
-
-/** An event of a lane once its timelines are expanded: as written, and where it plays. */
-export interface Leaf {
-  p: RawPlacement;
-  within?: Within;
 }
 
 export interface TimelineCtx {
@@ -90,57 +65,6 @@ export function timelineLength(
   return len;
 }
 
-/** `events` with every timeline event replaced by the events it holds, recursively. */
-export function expandEvents(
-  events: readonly RawPlacement[],
-  ctx: TimelineCtx,
-  within?: Within,
-  seen: readonly string[] = [],
-): Leaf[] {
-  const out: Leaf[] = [];
-  for (const p of events) {
-    const ref = String(p?.ref ?? "");
-    const t = ctx.timelines[ref];
-    if (!t) {
-      out.push(within ? { p, within } : { p });
-      continue;
-    }
-    if (seen.includes(ref)) continue; // a cycle, reported by checkReferences
-    const at = ctx.pos(p.start);
-    const start = (within?.offset ?? 0) + at;
-    const length = timelineLength(ref, ctx);
-    const gain = Number(p.gain ?? 0) || 0;
-    const event: EventDoc = {
-      ...(gain ? { gain } : {}),
-      ...(p.disabled ? { disabled: true } : {}),
-    };
-    const inner: Within = {
-      offset: start,
-      end: Math.min(start + length, within?.end ?? Number.POSITIVE_INFINITY),
-      gain: (within?.gain ?? 0) + gain,
-      disabled: !!within?.disabled || !!p.disabled,
-      prefix: `${within?.prefix ?? ""}${placementId(ref, at)}${NEST_SEP}`,
-      nest: within?.nest ?? {
-        of: placementId(ref, start),
-        ref,
-        start,
-        length,
-        ...(Object.keys(event).length ? { event } : {}),
-      },
-    };
-    for (const lane of t.lanes)
-      out.push(
-        ...expandEvents(
-          lane.events ?? [],
-          ctx,
-          lane.disabled ? { ...inner, disabled: true } : inner,
-          [...seen, ref],
-        ),
-      );
-  }
-  return out;
-}
-
 /** An expanded event's clips moved to where its timeline plays, and cut at its end. */
 export function placeWithin(clips: ClipDoc[], w: Within): ClipDoc[] {
   return clips.flatMap((c): ClipDoc[] => {
@@ -166,26 +90,6 @@ export function placeWithin(clips: ClipDoc[], w: Within): ClipDoc[] {
       },
     ];
   });
-}
-
-/** Every timeline of the project, compiled for the view that edits it: its lanes, its events at its own positions. */
-export function timelineDocs(
-  ctx: TimelineCtx,
-  place: (leaf: Leaf) => ClipDoc[],
-): TimelineDoc[] {
-  return Object.entries(ctx.timelines).map(([id, t]) => ({
-    id,
-    length: timelineLength(id, ctx),
-    lanes: t.lanes.map((lane) => ({
-      id: timelineLaneId(id, lane.lane),
-      name: lane.lane,
-      color: lane.color ?? "",
-      disabled: !!lane.disabled,
-      clips: expandEvents(lane.events ?? [], ctx, undefined, [id]).flatMap(
-        place,
-      ),
-    })),
-  }));
 }
 
 /** A timeline's lane as a track, for whoever reads tracks — a verb finding a lane, the view drawing one. */

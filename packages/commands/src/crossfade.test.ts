@@ -4,12 +4,14 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
@@ -22,7 +24,7 @@ const doc = (rel: string, value: unknown): void =>
 const events = () =>
   wsData(join(dir, "tracks/gtr.k7x")).events as Record<string, unknown>[];
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
@@ -79,7 +81,7 @@ describe("event crossfade", () => {
     expect(b.from).toBe(1.5);
     expect(a.fadeOut).toBe("0:1");
     expect(b.fadeIn).toBe("0:1");
-    const clips = loadProject(dir).tracks[0].clips;
+    const clips = compileDisk(dir).tracks[0].clips;
     expect(clips[0].crossfade).toEqual({ out: true });
     expect(clips[1].crossfade).toEqual({ in: true });
   });
@@ -104,7 +106,7 @@ describe("event crossfade", () => {
     const asked: string[] = [];
     const h = testHost({
       songPath: dir,
-      project: () => loadProject(dir),
+      project: () => compileDisk(dir),
       seconds: (f) => {
         asked.push(f);
         return 10;
@@ -124,7 +126,7 @@ describe("event crossfade", () => {
     });
     const none = testHost({
       songPath: dir,
-      project: () => loadProject(dir),
+      project: () => compileDisk(dir),
       seconds: () => 0,
     });
     await runCommand("event crossfade gtr 1:1 3:1 0:1", none, "cli");

@@ -11,15 +11,19 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parse } from "@studio/k7x/document";
 import { loadGraph } from "@studio/song/graph";
-import { notSupportedModules } from "@studio/song/loader";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { trackMixer } from "@studio/song/project";
 import { projectSurfaces } from "@studio/song/surfaces";
 import { librariesFixture } from "@studio/song/testSupport";
 import { NOT_SUPPORTED_REF } from "@studio/song-schema/moduleTypes";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  compileDisk,
+  compileReady,
+} from "../../commands/src/runtime/testing/compileDisk.ts";
 import { emitFolder } from "./emit";
 import type { PluginOut, Song, TrackOut } from "./model";
+
+beforeAll(compileReady);
 
 // One plugin on several tracks writes ONE module and a node per use — see docs/import.md.
 
@@ -139,7 +143,7 @@ describe("import: every lane ends on a fader", () => {
 
   it("is the strip the app looks for, in the compiled document", () => {
     emitFolder(dir, song([track("vox", [fx("Reverb")])]), {});
-    const doc = compileNodeProject(dir);
+    const doc = compileDisk(dir);
     const lane = doc.tracks.find((t) => t.id === "vox");
     // Through `trackMixer`: what the gutter fader, the card and the Mixer view all write to.
     expect(lane && trackMixer(lane)?.type).toBe("Mixer");
@@ -413,7 +417,7 @@ describe("what comes out is the arrangement that went in", () => {
   it("places each clip at the beat it came from", () => {
     // Only the START is the arrangement's business; the extent lives in the clip file as a window.
     emitFolder(dir, song([clipTrack()]), { "a.wav": new Uint8Array([82]) });
-    const doc = compileNodeProject(dir);
+    const doc = compileDisk(dir);
     const vox = doc.tracks.find((t) => t.id === "vox");
     expect(vox?.clips?.[0]).toMatchObject({
       start: 4,
@@ -495,19 +499,6 @@ describe("what comes out is the arrangement that went in", () => {
       expect(node.params).toEqual({ Mix: 0.5 });
     });
 
-    it("is diagnosed at the NODE's file, by the name the plugin really had", () => {
-      emitFolder(
-        dir,
-        song([track("Vox", [fx("Kontakt 7")])]),
-        {},
-        scan("Pro-Q 3"),
-      );
-      const [d] = notSupportedModules(dir);
-      expect(d?.file).toBe("nodes/kontakt_7.k7x");
-      expect(d?.severity).toBe("warning");
-      expect(d?.message).toContain('"Kontakt 7"');
-    });
-
     it("still opens: the graph resolves the placeholder and the compile routes through it", () => {
       emitFolder(
         dir,
@@ -520,9 +511,7 @@ describe("what comes out is the arrangement that went in", () => {
       expect(g.chains.vox.use.map((s) => s.module)).toContain("kontakt_7");
       expect(g.modules.kontakt_7?.kind).toBe("plugin");
       // …and it contributes no plugin — a bypass, which is what "not supported" means.
-      const plugins = compileNodeProject(dir).tracks.flatMap(
-        (t) => t.plugins ?? [],
-      );
+      const plugins = compileDisk(dir).tracks.flatMap((t) => t.plugins ?? []);
       expect(plugins.some((p) => p.id.endsWith(":kontakt_7"))).toBe(false);
     });
 
@@ -542,7 +531,7 @@ describe("what comes out is the arrangement that went in", () => {
 
   it("writes the project header the loader reads back", () => {
     emitFolder(dir, song([clipTrack()]), { "a.wav": new Uint8Array([82]) });
-    const doc = compileNodeProject(dir);
+    const doc = compileDisk(dir);
     expect(doc.tempo).toBe(120);
     expect(doc.name).toBe("t");
   });

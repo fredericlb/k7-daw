@@ -11,10 +11,12 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { compileNodeProject } from "@studio/song/nodeProject";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 const SONG = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -51,7 +53,7 @@ describe("node freeze", () => {
   it("renders through the host's render, into the file the module is then frozen to", async () => {
     const h = testHost({
       songPath: song,
-      project: () => compileNodeProject(song),
+      project: () => compileDisk(song),
       render: fakeRender as never,
     });
     await runCommand("node freeze drums", h, "cli");
@@ -66,7 +68,7 @@ describe("node freeze", () => {
   it("says there is no engine when the host has no render", async () => {
     const h = testHost({
       songPath: song,
-      project: () => compileNodeProject(song),
+      project: () => compileDisk(song),
       render: undefined,
     });
     await runCommand("node freeze drums", h, "cli");
@@ -78,13 +80,13 @@ describe("selection consolidate", () => {
   const sound = (seconds: (f: string) => number | null) =>
     testHost({
       songPath: song,
-      project: () => compileNodeProject(song),
+      project: () => compileDisk(song),
       render: fakeRender as never,
       seconds,
     });
 
   it("reports the length the host's seconds states for the render", async () => {
-    const track = compileNodeProject(song).tracks.find((t) =>
+    const track = compileDisk(song).tracks.find((t) =>
       t.clips.some((c) => c.type === "audio"),
     );
     expect(track).toBeDefined();
@@ -97,12 +99,12 @@ describe("selection consolidate", () => {
   });
 
   it("refuses with no engine, naming what consolidating audio means", async () => {
-    const track = compileNodeProject(song).tracks.find((t) =>
+    const track = compileDisk(song).tracks.find((t) =>
       t.clips.some((c) => c.type === "audio"),
     );
     const h = testHost({
       songPath: song,
-      project: () => compileNodeProject(song),
+      project: () => compileDisk(song),
       render: undefined,
     });
     await runCommand(`selection consolidate ${track?.id} 1:1 9:1`, h, "cli");

@@ -10,7 +10,6 @@ import { emptyDoc, pluginDoc, trackDoc } from "@studio/engine-protocol/build";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { consoleSystems, withConsole } from "./console";
 import { baseModuleRefs, loadModuleRefs } from "./loader";
-import { compileNodeProject } from "./nodeProject";
 import { writeDoc, writeLibraries, writeLibrary } from "./testSupport";
 
 const SYS = "@k7-core/console/console-6";
@@ -106,14 +105,5 @@ describe("placing the halves", () => {
     expect(() =>
       withConsole(doc(), "@k7-core/console/broken", loadModuleRefs(dir)),
     ).toThrow(/project\.console '@k7-core\/console\/broken': no buss module/);
-  });
-
-  it("is read off project.k7x by the compile itself", () => {
-    writeDoc(join(dir, "project.k7x"), {
-      project: { name: "s", console: SYS },
-    });
-    expect(compileNodeProject(dir).masterPlugins[0]?.id).toBe(
-      "@console:master",
-    );
   });
 });

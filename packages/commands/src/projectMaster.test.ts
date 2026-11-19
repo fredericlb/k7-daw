@@ -6,12 +6,14 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData, wsText } from "@studio/song/yaml/workspaceDoc";
 import { MASTER_MAX_DB } from "@studio/song-schema/yaml/projectSchema";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
+
+beforeAll(compileReady);
 
 let dir: string;
 const logs: string[] = [];
@@ -48,7 +50,7 @@ describe("project master", () => {
     await runCommand("project master -4.5", host(), "cli");
     expect(master()).toBe(-4.5);
     // The half that matters: the engine reads the DOC, not the file.
-    expect(loadProject(dir).masterVolume).toBe(-4.5);
+    expect(compileDisk(dir).masterVolume).toBe(-4.5);
   });
 
   it("REMOVES the line at unity rather than writing a zero", async () => {
@@ -57,11 +59,11 @@ describe("project master", () => {
     await runCommand("project master 0", host(), "cli");
     expect(projectText()).not.toContain("masterVolume");
     // …and unity is still what the doc reports, which is the point of the default.
-    expect(loadProject(dir).masterVolume).toBe(0);
+    expect(compileDisk(dir).masterVolume).toBe(0);
   });
 
   it("a doc that predates the field reads as unity", async () => {
-    expect(loadProject(dir).masterVolume).toBe(0);
+    expect(compileDisk(dir).masterVolume).toBe(0);
   });
 
   it("REFUSES above the fader's top instead of clamping to it", async () => {
@@ -87,7 +89,7 @@ describe("project master", () => {
 
   it("takes the top of the fader itself — the bound is inclusive", async () => {
     await runCommand(`project master ${MASTER_MAX_DB}`, host(), "cli");
-    expect(loadProject(dir).masterVolume).toBe(MASTER_MAX_DB);
+    expect(compileDisk(dir).masterVolume).toBe(MASTER_MAX_DB);
   });
 
   // PATCHED, not reloaded: the header fader releases onto this and a rebuild would stop the song.
@@ -102,7 +104,7 @@ describe('node param "OUT" Volume', () => {
   it("writes the same level `project master` does", async () => {
     await runCommand('node param "OUT" Volume -4.5', host(), "cli");
     expect(master()).toBe(-4.5);
-    expect(loadProject(dir).masterVolume).toBe(-4.5);
+    expect(compileDisk(dir).masterVolume).toBe(-4.5);
     expect(applied.map((p) => p.masterVolume)).toEqual([-4.5]);
   });
 

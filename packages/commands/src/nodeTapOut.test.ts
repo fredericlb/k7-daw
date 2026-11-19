@@ -4,12 +4,14 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
@@ -22,7 +24,7 @@ const drums = () =>
     }
   ).steps.find((s) => s.id === "drums");
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
@@ -69,7 +71,7 @@ describe("node tap out", () => {
     expect(h.lines.refuse).toEqual([]);
     expect(drums()?.tap_outs).toEqual({ Snare: "snare-fx" });
     expect(
-      loadProject(dir).tracks.find((t) => t.id === "snare-verb")?.inputFrom
+      compileDisk(dir).tracks.find((t) => t.id === "snare-verb")?.inputFrom
         ?.pair,
     ).toBe(1);
   });

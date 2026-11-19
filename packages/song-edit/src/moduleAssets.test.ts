@@ -18,10 +18,15 @@ import {
   loadModules,
 } from "@studio/song/loader";
 import { resolveModuleMap } from "@studio/song/moduleResolve";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { insertChainStepAfter, writeDoc } from "@studio/song/testSupport";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  compileDisk,
+  compileReady,
+} from "../../commands/src/runtime/testing/compileDisk.ts";
 import { setModuleAsset } from "./projectEdit";
+
+beforeAll(compileReady);
 
 const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
 const SONG = join(here, "..", "..", "..", "demos", "synth-demo.k7");
@@ -109,9 +114,7 @@ describe("a file-valued param", () => {
     );
     insertChainStepAfter(proj, "lead", { module: "@workspace/audio/amp" });
 
-    const melody = compileNodeProject(proj).tracks.find(
-      (t) => t.id === "melody",
-    );
+    const melody = compileDisk(proj).tracks.find((t) => t.id === "melody");
     const plugin = melody?.plugins.find((p) =>
       p.id.endsWith(":@workspace/audio/amp"),
     );

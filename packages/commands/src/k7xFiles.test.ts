@@ -13,10 +13,12 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { isDocFile, stripDocExt } from "@studio/song-schema/docExt";
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
+
+beforeAll(compileReady);
 
 const DEMOS = join(import.meta.dirname, "..", "..", "..", "demos");
 const roots: string[] = [];
@@ -42,7 +44,7 @@ function copyDemos(): string {
 const compiled = (root: string, name: string): string => {
   try {
     // JSON doubles a Windows path's backslashes, so the root is matched as JSON spells it.
-    return JSON.stringify(loadProject(join(root, name))).replaceAll(
+    return JSON.stringify(compileDisk(join(root, name))).replaceAll(
       JSON.stringify(root).slice(1, -1),
       "<root>",
     );
@@ -59,7 +61,7 @@ async function run(
   const logs: string[] = [];
   const host = {
     songPath: join(root, name),
-    project: () => loadProject(join(root, name)),
+    project: () => compileDisk(join(root, name)),
     baseModules: [],
     log: (l: string[]) => logs.push(...l),
     refuse: (l: string[]) => logs.push(...l.map((x) => `refused: ${x}`)),

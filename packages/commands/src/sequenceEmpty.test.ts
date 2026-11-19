@@ -4,11 +4,13 @@ import { cpSync, existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { writeEmptySequences } from "./verbs/sequenceEmpty";
+
+beforeAll(compileReady);
 
 let dir: string;
 
@@ -70,7 +72,7 @@ describe("a project holding an empty sequence", () => {
         recursive: true,
       });
       const [made] = writeEmptySequences(song, ["melody"], 64, 72, 4, 4);
-      const melody = loadProject(song).tracks.find((t) => t.id === "melody");
+      const melody = compileDisk(song).tracks.find((t) => t.id === "melody");
       const clip = melody?.clips.find(
         (c) => c.name === made?.id || c.id.startsWith(made?.id ?? "?"),
       );

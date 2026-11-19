@@ -16,7 +16,6 @@ import {
   isColdModule,
   loadGraph,
 } from "./graph";
-import { projectHints } from "./hints";
 import { baseModuleRefs, loadModuleRefs, loadModules } from "./loader";
 import { resolveModuleMap } from "./moduleResolve";
 import { writeDoc, writeLibraries, writeNode } from "./testSupport";
@@ -167,13 +166,5 @@ describe("the cold/ folder", () => {
     const m = loadModuleRefs(song)["@k7-core/cold/normalize"];
     expect(m?.category).toBe("cold");
     expect(m?.inputs.map((p) => p.type)).toEqual(["audio"]);
-  });
-
-  it("never suggests one: not in the picker, not in the chain completions", () => {
-    const offered = baseModuleRefs(loadModuleRefs(song));
-    expect(offered.filter((r) => r.startsWith("@k7-core/"))).toEqual([
-      "@k7-core/audio/utility/gain",
-    ]);
-    expect(projectHints(song).modules).not.toContain("@k7-core/cold/normalize");
   });
 });

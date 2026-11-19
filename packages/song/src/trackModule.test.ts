@@ -14,7 +14,6 @@ import {
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadGraph } from "./graph";
 import { loadLanes, loadModuleRefs } from "./loader";
-import { compileNodeProject } from "./nodeProject";
 import { writeDoc, writeModule, writeNode } from "./testSupport";
 import { isTrack, trackModules } from "./trackModule";
 
@@ -99,51 +98,6 @@ describe("the three built-in track modules", () => {
 });
 
 describe("a lane, read off what it extends", () => {
-  it("says nothing about what it carries — the EVENTS do", () => {
-    // One lane holding a clip and a sequence: a lane is not typed by what it carries.
-    const p = project([["gtr", "@meta/track", BOTH]], {
-      modules: { gtr: ["OUT"] },
-    });
-    riff(p);
-    line(p);
-    expect(loadLanes(p).gtr.type).toBe("single");
-    const doc = compileNodeProject(p);
-    const gtr = doc.tracks.find((t) => t.id === "gtr");
-    // Wired bare, so one engine track carries both: contentType's third value, finally reachable.
-    expect(gtr?.contentType).toBe("audio notes");
-    expect(gtr?.clips.map((c) => c.type)).toEqual(["audio", "midi"]);
-  });
-
-  it("splits into two engine tracks when both outputs are wired", () => {
-    // One plugin chain per engine track, so two wired outputs are two tracks there and one lane here.
-    const p = project([["gtr", "@meta/track", BOTH]], {
-      modules: { "gtr#audio": ["OUT"], "gtr#midi": ["OUT"] },
-    });
-    riff(p);
-    line(p);
-    const doc = compileNodeProject(p);
-    const ids = doc.tracks.map((t) => t.id);
-    expect(ids).toContain("gtr#audio");
-    expect(ids).toContain("gtr#midi");
-    const audio = doc.tracks.find((t) => t.id === "gtr#audio");
-    const midi = doc.tracks.find((t) => t.id === "gtr#midi");
-    expect(audio?.contentType).toBe("audio");
-    expect(midi?.contentType).toBe("notes");
-    // Each half carries the material its port fits, and nothing else.
-    expect(audio?.clips.map((c) => c.name)).toEqual(["riff"]);
-    expect(midi?.clips.map((c) => c.name)).toEqual(["line"]);
-  });
-
-  it("refuses an event whose output is not wired, and says which key to add", () => {
-    // Dropping the clip silently is what must be refused: the graph looks right and it is not heard.
-    const p = project(
-      [["gtr", "@meta/track", { events: [{ ref: "riff", start: "1:1:1" }] }]],
-      { modules: { "gtr#midi": ["OUT"] } },
-    );
-    riff(p);
-    expect(() => compileNodeProject(p)).toThrow(/gtr#audio/);
-  });
-
   it("says where its clips come from — there is no `type` either", () => {
     const p = project([
       ["gtr", "@meta/track"],
@@ -163,34 +117,6 @@ describe("a lane, read off what it extends", () => {
     expect(g.chains.gtr.from).toBe("gtr");
     expect(g.chains.gtr.use).toEqual([]);
     expect(g.warnings).toEqual([]);
-  });
-
-  it("carries its clips through to the compiled doc", () => {
-    const p = project([
-      ["gtr", "@meta/track", { events: [{ ref: "riff", start: "2:1:1" }] }],
-    ]);
-    riff(p);
-    const doc = compileNodeProject(p);
-    const gtr = doc.tracks.find((t) => t.id === "gtr");
-    expect(gtr?.contentType).toBe("audio");
-    expect(gtr?.clips.map((c) => c.name)).toEqual(["riff"]);
-  });
-});
-
-describe("a lane's mute is its module's bypass", () => {
-  it("comes off `bypassed`, not off the lane's file", () => {
-    const p = project(
-      [
-        ["gtr", "@meta/track"],
-        ["bass", "@meta/track"],
-      ],
-      { modules: { gtr: ["OUT"], bass: ["OUT"] }, bypassed: ["bass"] },
-    );
-    const doc = compileNodeProject(p);
-    expect(doc.tracks.find((t) => t.id === "bass")?.mute).toBe(true);
-    expect(doc.tracks.find((t) => t.id === "gtr")?.mute).toBe(false);
-    // Nothing writes solo: the surface derives it by bypassing the others.
-    expect(doc.tracks.every((t) => !t.solo)).toBe(true);
   });
 });
 

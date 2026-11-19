@@ -12,14 +12,19 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "@studio/k7x/document";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import {
   beatsToPosition,
   parseDuration,
   parsePosition,
 } from "@studio/song-schema/timecode";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import {
+  compileDisk,
+  compileReady,
+} from "../../commands/src/runtime/testing/compileDisk.ts";
 import { setTrackPlacementFade } from "./trackMix";
+
+beforeAll(compileReady);
 
 const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
 const SONG = join(here, "..", "..", "..", "demos", "node-demo.k7");
@@ -123,7 +128,7 @@ describe("a fade through the compiler", () => {
     dirs.push(dir);
     cpSync(SONG, dir, { recursive: true });
     const kick = () =>
-      compileNodeProject(dir)
+      compileDisk(dir)
         .tracks.flatMap((t) => t.clips)
         .find((c) => c.name === "kick");
 

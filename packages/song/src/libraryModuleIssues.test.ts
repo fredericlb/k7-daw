@@ -10,7 +10,6 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { libraryModuleIssues, loadModuleRefs } from "./loader";
-import { compileNodeProject } from "./nodeProject";
 import { writeDoc, writeNode } from "./testSupport";
 
 const DEMOS = join(
@@ -77,28 +76,5 @@ describe("a library module that will not read", () => {
     expect(
       libraryModuleIssues(dir).every((i) => i.severity === "warning"),
     ).toBe(true);
-  });
-});
-
-describe("…and when a module DOES name it", () => {
-  it("says the ref failed to load, rather than that it is unknown", () => {
-    // "unknown module" sends you looking for a file that is there with wrong CONTENT.
-    const song = join(ws, "demo");
-    cpSync(SONG, song, { recursive: true });
-    // The Examples workspace's own shared library, beside every demo project.
-    cpSync(join(DEMOS, "_modules"), join(ws, "_modules"), { recursive: true });
-    sharedModule("audio/broken", BAD);
-    writeNode(song, "lead", { extends: "@workspace/audio/broken" });
-
-    let message = "";
-    try {
-      compileNodeProject(song);
-    } catch (e) {
-      message = (e as Error).message;
-    }
-    expect(message).toContain("@workspace/audio/broken");
-    expect(message).toContain("did not load");
-    expect(message).toContain("jsdsp"); // the file's own words, carried all the way up
-    expect(message).not.toContain("unknown module");
   });
 });

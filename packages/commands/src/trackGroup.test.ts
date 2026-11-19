@@ -4,12 +4,14 @@
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
@@ -17,7 +19,7 @@ const doc = (rel: string, value: Record<string, unknown>): void =>
   writeDoc(join(dir, rel), value);
 const dataOf = (rel: string) => wsData(join(dir, rel));
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => compileNodeProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
@@ -43,7 +45,7 @@ it("writes a group lane over the tracks, and its chain, named group-N when unnam
     tracks: ["kick", "snare"],
   });
   expect(existsSync(join(dir, "chains/group-1.k7x"))).toBe(true);
-  const p = compileNodeProject(dir);
+  const p = compileDisk(dir);
   expect(p.groups.map((g) => g.id)).toEqual(["group-1"]);
   expect(
     p.tracks

@@ -14,16 +14,21 @@ import { loadCurves } from "@studio/song/curves";
 import { isFolderProject } from "@studio/song/folder";
 import { loadGraph } from "@studio/song/graph";
 import { exportSub, loadModules } from "@studio/song/loader";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { isProjectFolder } from "@studio/song/yaml/moduleIO";
 import { ClipSchema } from "@studio/song-schema/yaml/entitySchemas";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  compileDisk,
+  compileReady,
+} from "../../commands/src/runtime/testing/compileDisk.ts";
 import {
   insertChainStep,
   setModuleAsset,
   setModuleBypass,
   setModuleParam,
 } from "./projectEdit";
+
+beforeAll(compileReady);
 
 // A project end to end — the loader, the compiler, the writers, over a shipped demo song.
 
@@ -156,7 +161,7 @@ describe("a song is still a song", () => {
   });
 
   it("compiles to a project with its tracks, plugins and clips", () => {
-    const doc = compileNodeProject(dir);
+    const doc = compileDisk(dir);
     expect(doc.tracks.map((t) => t.id).sort()).toEqual([
       "kit",
       "melody",

@@ -34,7 +34,6 @@ mod entries_plan;
 mod entries_plan_disks;
 mod entries_plan_libs;
 mod entries_vectors;
-mod golden_smoke;
 mod hostile;
 mod jobs_freezer;
 mod jobs_freezer_traces;

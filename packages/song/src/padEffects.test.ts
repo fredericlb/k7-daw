@@ -12,7 +12,6 @@ import { K7Document } from "@studio/k7x/document";
 import { NoteSchema } from "@studio/song-schema/yaml/entitySchemas";
 import { setNoteEffect } from "@studio/song-schema/yaml/sequenceFile";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { compileNodeProject } from "./nodeProject";
 import type { ClipDoc } from "./project";
 import { writeDoc, writeLane, writeModule } from "./testSupport";
 
@@ -30,9 +29,6 @@ function project(name: string, note: Record<string, unknown>): string {
   writeDoc(join(p, "graph.k7x"), { modules: { drums: ["OUT"] } });
   return p;
 }
-
-const noteOf = (p: string): ClipDoc["notes"][number] =>
-  compileNodeProject(p).tracks.flatMap((t) => t.clips)[0].notes[0];
 
 beforeAll(() => {
   dir = mkdtempSync(join(tmpdir(), "padfx-"));
@@ -54,30 +50,6 @@ describe("the file's vocabulary", () => {
     expect(parse({ repeat: 1 })).toBe(false);
     expect(parse({ skip: 0 })).toBe(false);
     expect(parse({ repeat: 2.5 })).toBe(false);
-  });
-});
-
-describe("compiling a pad's effects", () => {
-  // Carried, never resolved: expanding `skip` hands the sequencer four copies to draw.
-  it("puts them on the note UNEXPANDED", () => {
-    const n = noteOf(project("both", { repeat: 4, skip: 2 }));
-    expect(n.repeat).toBe(4);
-    expect(n.skip).toBe(2);
-    expect(n.duration).toBe(0.25); // untouched: the ratchet divides this, and the engine does it
-  });
-
-  it("says nothing on a pad with no effect", () => {
-    const n = noteOf(project("bare", {}));
-    expect(n.repeat).toBeUndefined();
-    expect(n.skip).toBeUndefined();
-  });
-
-  // One note in, one note out: four cells would light for a pad somebody pressed once.
-  it("still compiles to ONE note per pad", () => {
-    const clip = compileNodeProject(
-      project("count", { repeat: 4 }),
-    ).tracks.flatMap((t) => t.clips)[0];
-    expect(clip.notes).toHaveLength(1);
   });
 });
 

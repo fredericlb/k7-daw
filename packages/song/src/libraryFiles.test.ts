@@ -8,7 +8,6 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { libraryFile, libraryFiles } from "./libraryFiles";
 import { loadModuleRefs, loadModules } from "./loader";
 import { resolveModule } from "./moduleResolve";
-import { loadProject } from "./project";
 import { librariesFixture, writeDoc, writeNode } from "./testSupport";
 
 let root: string;
@@ -89,14 +88,6 @@ describe("a module's `ir` param", () => {
     expect(amp.ir).toBe(join(lib, "irs", "fender deluxe", "big.wav"));
     expect(amp.assets?.ir).toBe("@k7-core/fender deluxe/big.wav");
   });
-
-  it("reaches the engine's document as the plugin's irFile", () => {
-    const doc = loadProject(song());
-    const plugin = doc.tracks
-      .flatMap((t) => t.plugins)
-      .find((pl) => pl.id.endsWith(":amp"));
-    expect(plugin?.irFile).toBe(join(lib, "irs", "fender deluxe", "big.wav"));
-  });
 });
 
 describe("a module's `model` param, from a library's models/", () => {
@@ -108,10 +99,6 @@ describe("a module's `model` param, from a library's models/", () => {
       params: { model },
     });
   };
-  const engineFile = (p: string) =>
-    loadProject(p)
-      .tracks.flatMap((t) => t.plugins)
-      .find((pl) => pl.id.endsWith(":amp"))?.namFile;
 
   beforeEach(() => {
     touch(join(lib, "models", "proteus", "ts9.json"));
@@ -125,71 +112,13 @@ describe("a module's `model` param, from a library's models/", () => {
       "@k7-core/proteus/ts9.json",
     ]);
   });
-
-  it("reaches the engine as the library's file when the ref says @<library>/", () => {
-    expect(engineFile(song("@k7-core/proteus/ts9.json"))).toBe(
-      join(lib, "models", "proteus", "ts9.json"),
-    );
-  });
-
-  it("still reaches the module's own assets when it does not", () => {
-    expect(engineFile(song("own.nam"))).toBe(
-      join(root, "_modules", "audio", "amp", "assets", "own.nam"),
-    );
-  });
 });
-
-const rackOf = (p: string) =>
-  loadProject(p)
-    .tracks.flatMap((t) => t.plugins)
-    .find((pl) => pl.rack?.length)?.rack;
 
 const kit = (sample: string, more: Record<string, unknown> = {}) => ({
   extends: "@workspace/instruments/drums",
   type: "rack",
   rack: { symbols: { BD: { note: 36, sample } } },
   ...more,
-});
-
-describe("a rack tap's `sample`", () => {
-  it("reaches the engine as the sound's file, the kit written on the NODE", () => {
-    writeShared("instruments/drums", { type: "rack" });
-    const p = project("kit.k7", "beat", "kit", kit("@k7-core/kicks/808.wav"));
-    expect(rackOf(p)).toEqual([
-      expect.objectContaining({
-        symbol: "BD",
-        note: 36,
-        clip: join(lib, "samples", "kicks", "808.wav"),
-      }),
-    ]);
-  });
-});
-
-describe("a tap's sample inside an ALTERNATIVE", () => {
-  it("still reaches the engine when that set is the one selected", () => {
-    touch(join(root, "demo.k7", "samples", "kick.wav"));
-    touch(join(root, "demo.k7", "samples", "snare.wav"));
-    writeShared("instruments/drums", { type: "rack" });
-    const p = project(
-      "demo.k7",
-      "beat",
-      "kit",
-      kit("@project/kick.wav", {
-        alternatives: [
-          {
-            rack: {
-              symbols: { BD: { note: 36, sample: "@project/snare.wav" } },
-            },
-          },
-        ],
-        alternative: "2",
-      }),
-    );
-    expect(rackOf(p)?.[0]).toMatchObject({
-      symbol: "BD",
-      clip: join(p, "samples", "snare.wav"),
-    });
-  });
 });
 
 describe("a PROJECT's own samples, as @project/…", () => {
@@ -205,15 +134,5 @@ describe("a PROJECT's own samples, as @project/…", () => {
     );
     // With no project to be read for, `@project/` names nothing rather than guessing one.
     expect(libraryFile("samples", "@project/kick.wav")).toBeUndefined();
-  });
-
-  it("reaches the engine from a tap on a node", () => {
-    touch(join(root, "demo.k7", "samples", "kick.wav"));
-    writeShared("instruments/drums", { type: "rack" });
-    const p = project("demo.k7", "beat", "kit", kit("@project/kick.wav"));
-    expect(rackOf(p)?.[0]).toMatchObject({
-      symbol: "BD",
-      clip: join(p, "samples", "kick.wav"),
-    });
   });
 });

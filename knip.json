@@ -57,7 +57,7 @@
       "ignoreDependencies": ["@capacitor/android"]
     },
     "packages/song": {
-      "entry": ["src/benchProject.ts", "scripts/*.ts"]
+      "entry": ["scripts/*.ts"]
     },
     "packages/audio-probe": {
       "entry": ["scripts/*.ts"]

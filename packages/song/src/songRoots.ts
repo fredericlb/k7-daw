@@ -8,7 +8,6 @@ import {
   AUTO_RENDERS_HOME_DIR,
 } from "@studio/song-schema/moduleTypes";
 import { libraryReadRoots, workspaceDirOf } from "./confine";
-import { sampleBanks } from "./enginePattern";
 import { modelsRoot } from "./modelCache";
 import { loadPreferences, type Preferences } from "./preferences";
 import {
@@ -20,6 +19,14 @@ import {
   SHARED_MODULES_PATH,
 } from "./sharedFolders";
 import { studioHome } from "./studioHome";
+
+/** Where a sound name is looked for as a sample, in order: the project's own, then the libraries the machine names. */
+function sampleBanks(dir: string): string[] {
+  const banks = [join(dir, "samples")];
+  if (process.env.DIRT_SAMPLES) banks.push(process.env.DIRT_SAMPLES);
+  if (process.env.STRUDEL_SAMPLES) banks.push(process.env.STRUDEL_SAMPLES);
+  return banks;
+}
 
 /** The folders of a library repository the compile reads, each possibly a link out of the library (decision 737). */
 const FAMILIES = [

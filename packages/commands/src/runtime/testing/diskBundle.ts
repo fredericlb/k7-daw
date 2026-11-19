@@ -84,7 +84,8 @@ function wavLengths(into: Walk): Record<string, number> {
 }
 
 function fileOf(path: string, len: number): BundleFile {
-  if (BINARY.test(path)) return { len, binary: true };
+  // An empty file is UTF-8 to the compile, never a binary.
+  if (BINARY.test(path) && len > 0) return { len, binary: true };
   return { text: readFileSync(path, "utf8") };
 }
 

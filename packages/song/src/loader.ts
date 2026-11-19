@@ -20,14 +20,7 @@ import {
 import { MODULE_ASSETS_DIR, MODULE_SOURCES_DIR } from "./assetPath";
 import { withModuleStamp } from "./moduleCache";
 
-export {
-  type Diagnostic,
-  deadProjectFields,
-  jsDspBuildIssues,
-  libraryModuleIssues,
-  notSupportedModules,
-  unknownPluginModules,
-} from "./diagnostics";
+export { type Diagnostic, libraryModuleIssues } from "./diagnostics";
 export {
   checkProjectFormat,
   exportSub,

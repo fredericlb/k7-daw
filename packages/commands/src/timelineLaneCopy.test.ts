@@ -4,19 +4,21 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
 const doc = (rel: string, value: Record<string, unknown>): void =>
   writeDoc(join(dir, rel), value);
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
@@ -79,7 +81,7 @@ describe("timeline lane copy", () => {
   it("copies a timeline's lane into the main one as a new lane", async () => {
     const h = await run("timeline lane copy verse>drums main");
     expect(h.lines.refuse).toEqual([]);
-    const t = loadProject(dir).tracks.find((x) => x.id === "drums");
+    const t = compileDisk(dir).tracks.find((x) => x.id === "drums");
     expect(t?.clips.map((c) => [c.start, !!c.disabled])).toEqual([
       [0, false],
       [2, true],

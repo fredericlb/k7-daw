@@ -6,7 +6,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { readChainProject, readLayout, toSegments } from "./chainProject";
-import { compileNodeProject } from "./nodeProject";
 import { tapPairs } from "./tapOuts";
 import { writeDoc } from "./testSupport";
 
@@ -72,17 +71,6 @@ describe("a tap routed to a subchain", () => {
     expect(g.modules?.["snare-verb"]).toEqual(["MIX"]);
   });
 
-  it("leaves by a pair of its own, and the subchain's track is fed by that pair", () => {
-    putKit({ tap_outs: { Snare: "snare-fx" } });
-    const doc = compileNodeProject(dir);
-    const lane = doc.tracks.find((t) => t.id === "kit");
-    const drums = lane?.plugins.find((p) => p.type === "sampler");
-    expect(drums?.tapOuts).toEqual([{ note: 38, pair: 1 }]);
-    const fx = doc.tracks.find((t) => t.id === "snare-verb");
-    expect(fx?.inputFrom).toEqual({ plugin: drums?.id, pair: 1 });
-    expect(fx?.plugins.map((p) => p.id)).toEqual(["snare-verb:snare-verb"]);
-  });
-
   it("numbers the pairs by tap name, so a rebuild lands every tap where it was", () => {
     const pairs = tapPairs([
       { node: "drums", tap: "Snare", to: "a" },
@@ -92,44 +80,5 @@ describe("a tap routed to a subchain", () => {
       ["Hat", 1],
       ["Snare", 2],
     ]);
-  });
-
-  it("is refused when it names no subchain of the node's file, rather than going nowhere", () => {
-    putKit({ tap_outs: { Snare: "nowhere" } });
-    expect(() => compileNodeProject(dir)).toThrow(
-      /not a subchain of its chain file/,
-    );
-  });
-
-  it("is refused when the node has no tap of that name", () => {
-    putKit({ tap_outs: { Clap: "snare-fx" } });
-    expect(() => compileNodeProject(dir)).toThrow(/no tap of that name/);
-  });
-
-  it("routes an SFZ kit's pad by the note its kit names", () => {
-    putKit({}, "snare-fx", {
-      id: "drums",
-      plugin: { type: "internal", name: "SFZ Player" },
-      params: { sfz: "@instruments/naked-drums/kit.sfz" },
-      kit: { Kick: 36, Snare: 38 },
-      tap_outs: { Snare: "snare-fx" },
-    });
-    const doc = compileNodeProject(dir);
-    const drums = doc.tracks.find((t) => t.id === "kit")?.plugins[0];
-    expect(drums?.sfzFile).toBe("@instruments/naked-drums/kit.sfz");
-    expect(drums?.tapOuts).toEqual([{ note: 38, pair: 1 }]);
-    expect(doc.tracks.find((t) => t.id === "snare-verb")?.inputFrom).toEqual({
-      plugin: drums?.id,
-      pair: 1,
-    });
-  });
-
-  it("leaves a rack without routes exactly as it was", () => {
-    putKit({});
-    const doc = compileNodeProject(dir);
-    expect(
-      doc.tracks.find((t) => t.id === "kit")?.plugins[0]?.tapOuts,
-    ).toBeUndefined();
-    expect(doc.tracks.some((t) => t.inputFrom)).toBe(false);
   });
 });

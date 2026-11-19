@@ -4,12 +4,14 @@
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
@@ -25,7 +27,7 @@ const file = () =>
     subchains?: Sub[];
   };
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
@@ -76,7 +78,7 @@ describe("node tap chain", () => {
     });
     expect(file().subchains?.[0]?.id).toBe("snare-fx");
     expect(ids()).toEqual(["@workspace/audio/chorus"]);
-    expect(loadProject(dir).tracks.some((t) => t.inputFrom?.pair === 1)).toBe(
+    expect(compileDisk(dir).tracks.some((t) => t.inputFrom?.pair === 1)).toBe(
       true,
     );
   });
@@ -104,7 +106,7 @@ describe("node tap chain", () => {
     expect(
       file().steps.find((s) => s.id === "drums")?.tap_outs,
     ).toBeUndefined();
-    expect(loadProject(dir).tracks.some((t) => t.inputFrom)).toBe(false);
+    expect(compileDisk(dir).tracks.some((t) => t.inputFrom)).toBe(false);
   });
 
   it("refuses a module the project cannot see, writing nothing", async () => {

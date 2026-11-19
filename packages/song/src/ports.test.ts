@@ -21,7 +21,6 @@ import {
 import { deriveChains } from "./chainsGraph";
 import { loadGraph } from "./graph";
 import { loadModuleRefs, loadModules } from "./loader";
-import { compileNodeProject } from "./nodeProject";
 import { writeDoc, writeLane, writeNode } from "./testSupport";
 
 let dir: string;
@@ -191,28 +190,6 @@ describe("what validate says", () => {
     ).toEqual([]);
   });
 
-  it("carries the side input to the engine as the TRACK feeding it", () => {
-    // The engine routes from a LANE: unresolved, the module arrived as a one-input effect.
-    wire(BOTH);
-    const doc = compileNodeProject(dir);
-    const p = doc.tracks
-      .flatMap((t) => t.plugins)
-      .find((x) => x.id.endsWith(":crossfade"));
-    expect(p?.sidechainFrom).toBe("b");
-    // …and it rides on the plugin of the track the FLOW comes from, not on the side input's own lane.
-    expect(doc.tracks.find((t) => t.id === "a")?.plugins).toHaveLength(1);
-    expect(doc.tracks.find((t) => t.id === "b")?.plugins).toEqual([]);
-  });
-
-  it("leaves an unwired port off the wire entirely", () => {
-    // `mandatory: false`: the engine must tell one quiet side from a source it failed to resolve.
-    wire({ a: ["crossfade"], crossfade: ["OUT"] });
-    const p = compileNodeProject(dir)
-      .tracks.flatMap((t) => t.plugins)
-      .find((x) => x.id.endsWith(":crossfade"));
-    expect(p?.sidechainFrom).toBeUndefined();
-  });
-
   it("refuses more sources than the module has ports", () => {
     // Arity THROWS rather than warns: the compiler cannot lay out a port that is not there.
     lane("c");
@@ -241,25 +218,5 @@ describe("the crossfade-demo song", () => {
 
   it("opens clean", () => {
     expect(loadGraph(SONG).warnings).toEqual([]);
-  });
-
-  it("compiles both decks into one module", () => {
-    const doc = compileNodeProject(SONG);
-    const deckA = doc.tracks.find((t) => t.id === "deckA");
-    const deckB = doc.tracks.find((t) => t.id === "deckB");
-    // deckA FLOWS in and carries the module; deckB arrives on the port and runs nothing.
-    expect(deckA?.plugins.map((p) => p.type)).toEqual(["DSP Graph"]);
-    expect(deckA?.plugins[0].sidechainFrom).toBe("deckB");
-    expect(deckB?.plugins).toEqual([]);
-    // `out` is a parallel path, so an unmuted deck B reaches the master raw even at Mix 0.
-    expect(deckB?.mute).toBe(true);
-    // The graph the engine is handed reads two ports — the module's `inputs:` and its DSP agree.
-    const nodes = JSON.parse(deckA?.plugins[0].dspGraph ?? "{}").nodes as {
-      type: string;
-      port?: number;
-    }[];
-    expect(
-      nodes.filter((n) => n.type === "ain").map((n) => n.port ?? 0),
-    ).toEqual([0, 1]);
   });
 });

@@ -11,9 +11,7 @@ import {
 } from "@studio/song/loader";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadGraph } from "./graph";
-import { projectHints } from "./hints";
 import { resolveModuleMap } from "./moduleResolve";
-import { compileNodeProject } from "./nodeProject";
 import { writeDoc, writeNode } from "./testSupport";
 import { wsData } from "./yaml/workspaceDoc";
 
@@ -108,73 +106,6 @@ describe("module nodes", () => {
     const synth = refs["@workspace/instruments/synth"];
     expect(synth.params).toBeUndefined();
     expect((synth.automations as unknown[]).length).toBe(2);
-  });
-
-  it("keeps nodes out of the `extends` vocabulary, which names MODULES", () => {
-    // No engine catalogue: the machine's scanned plugins would drown a vocabulary of two.
-    const refs = loadModuleRefs(dir, {});
-    // Offering a USE as an `extends` target would make a second use inherit its overrides.
-    expect(Object.keys(refs)).not.toContain("lead");
-    expect(refs["@workspace/instruments/synth"].node).toBeUndefined();
-    expect(
-      refs["@workspace/instruments/synth"].params?.["Filter Freq"],
-    ).toBeUndefined();
-    const base = projectHints(dir).baseModules;
-    expect(base).toEqual(
-      expect.arrayContaining([
-        "@workspace/instruments/fourosc",
-        "@workspace/instruments/synth",
-      ]),
-    );
-    expect(base).not.toContain("lead");
-  });
-
-  it("compiles two nodes of one module into two independent plugins", () => {
-    // The demo's chains name "lead" and "synth-pad" — one module, two voices.
-    const doc = compileNodeProject(dir);
-    const lead = doc.tracks
-      .find((t) => t.id === "melody")
-      // "melody", not "lead": a chain is called after its track, there being no `as:` alias.
-      ?.plugins.find((p) => p.id === "melody:lead");
-    const pad = doc.tracks
-      .find((t) => t.id === "pad")
-      ?.plugins.find((p) => p.id === "pad:synth-pad");
-    expect(lead).toBeTruthy();
-    expect(pad).toBeTruthy();
-    // The plugin is inherited through instruments/synth -> instruments/fourosc by both.
-    expect(lead?.type).toBe("4osc");
-    expect(pad?.type).toBe("4osc");
-    expect(lead?.params?.["Filter Freq"]).toBe(90);
-    expect(pad?.params?.["Filter Freq"]).toBe(40);
-    // Each saves its opaque state beside ITS OWN FILE, so a UI edit leaves the other alone.
-    expect(lead?.presetSave.replace(/\\/g, "/")).toMatch(
-      /nodes\/lead\.vstpreset$/,
-    );
-    expect(pad?.presetSave.replace(/\\/g, "/")).toMatch(
-      /nodes\/synth-pad\.vstpreset$/,
-    );
-  });
-
-  it("offers nodes to the editor, each linked to its own file", () => {
-    const h = projectHints(dir);
-    expect(h.modules).toContain("lead"); // the use of the shared module
-    expect(h.paths["module:lead"]).toBe("nodes/lead.k7x");
-  });
-
-  it("scaffolds a new node into nodes/, naming what it uses", () => {
-    const rel = createNode(dir, "instruments", "synth", "solo");
-    expect(rel).toBe("nodes/solo.k7x");
-    // The relationship is written down exactly once, and this is it.
-    expect(wsData(join(dir, rel)).extends).toBe("@workspace/instruments/synth");
-    const solo = loadModules(dir).solo;
-    expect(solo.node).toBe("solo");
-    expect(projectHints(dir).modules).toContain("solo");
-    // …and it resolves through that ref to the plugin two levels up.
-    const resolved = resolveModuleMap(
-      loadModules(dir),
-      loadModuleRefs(dir, {}),
-    );
-    expect(resolved.solo.plugin).toMatchObject({ name: "4osc" });
   });
 
   it("names a node by itself when nobody said — and proposes only free names", () => {

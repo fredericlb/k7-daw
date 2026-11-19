@@ -5,13 +5,15 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { MIXER_PLUGIN } from "@studio/engine-protocol/build";
-import { loadProject } from "@studio/song/project";
 import { writeDoc } from "@studio/song/testSupport";
 import { wsData } from "@studio/song/yaml/workspaceDoc";
 import { OUTPUT_VOLUME_PARAM } from "@studio/song-schema/moduleTypes";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 let root: string;
 let dir: string;
@@ -19,12 +21,12 @@ const doc = (rel: string, value: Record<string, unknown>): void =>
   writeDoc(join(dir, rel), value);
 const highlighted = () => wsData(join(dir, "project.k7x")).highlighted;
 const run = async (line: string) => {
-  const h = testHost({ songPath: dir, project: () => loadProject(dir) });
+  const h = testHost({ songPath: dir, project: () => compileDisk(dir) });
   await runCommand(line, h, "cli");
   return h;
 };
 const strip = () =>
-  loadProject(dir).tracks[0].plugins.find((p) => p.type === MIXER_PLUGIN);
+  compileDisk(dir).tracks[0].plugins.find((p) => p.type === MIXER_PLUGIN);
 
 beforeEach(() => {
   root = mkdtempSync(join(tmpdir(), "track-highlight-"));
@@ -51,12 +53,12 @@ describe("track highlight", () => {
     expect(highlighted()).toEqual(["gtr"]);
     expect(strip()?.params[OUTPUT_VOLUME_PARAM]).toBe(10);
     expect(strip()?.params.Volume).toBe(-3);
-    expect(loadProject(dir).tracks[0].highlight).toBe(true);
+    expect(compileDisk(dir).tracks[0].highlight).toBe(true);
 
     await run("track highlight gtr");
     expect(highlighted()).toBeUndefined();
     expect(strip()?.params[OUTPUT_VOLUME_PARAM] ?? 0).toBe(0);
-    expect(loadProject(dir).tracks[0].highlight).toBeUndefined();
+    expect(compileDisk(dir).tracks[0].highlight).toBeUndefined();
   });
 
   it("refuses a lane that is not there", async () => {

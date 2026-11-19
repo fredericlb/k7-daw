@@ -12,11 +12,13 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { compileNodeProject } from "@studio/song/nodeProject";
 import { setDoc, writeDoc, writeLane } from "@studio/song/testSupport";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
+import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 import { testHost } from "./testHost";
+
+beforeAll(compileReady);
 
 const here = dirname(fileURLToPath(import.meta.url));
 const SONG = join(here, "..", "..", "..", "demos", "node-demo.k7");
@@ -65,7 +67,7 @@ describe("picture sound", () => {
     writeDoc(join(song, "clips", "shot.k7x"), { source: "/etc/passwd.mp4" });
     const h = testHost({
       songPath: song,
-      project: () => compileNodeProject(song),
+      project: () => compileDisk(song),
     });
     await runCommand("picture sound main", h, "cli");
     expect(h.lines.log.join("\n")).toMatch(/outside the project/);

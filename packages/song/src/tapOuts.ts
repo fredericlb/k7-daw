@@ -35,19 +35,3 @@ export function tapPairs(feeds: TapFeed[]): Map<string, RoutedTap[]> {
   }
   return byNode;
 }
-
-/** The `{ note, pair }` list a plugin carries, or a refusal naming the tap the instrument does not have. */
-export function tapOutsFor(
-  node: string,
-  routed: RoutedTap[],
-  noteOf: (tap: string) => number | undefined,
-): { note: number; pair: number }[] {
-  return routed.map((t) => {
-    const note = noteOf(t.tap);
-    if (note === undefined || !Number.isFinite(note))
-      throw new Error(
-        `node '${node}': tap '${t.tap}' is routed to a subchain, but the node has no tap of that name`,
-      );
-    return { note, pair: t.pair };
-  });
-}
