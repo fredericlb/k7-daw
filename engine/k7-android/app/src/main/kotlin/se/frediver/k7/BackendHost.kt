@@ -258,20 +258,6 @@ object BackendHost {
         return out
     }
 
-    /** What a node process needs to run here, the backend: its libraries, tools, home and certificates. */
-    private fun processEnv(context: Context, dirs: Dirs): Map<String, String> {
-        val out = mutableMapOf<String, String>()
-        out["LD_LIBRARY_PATH"] = context.applicationInfo.nativeLibraryDir
-        out["PATH"] = "${dirs.tools.absolutePath}/bin:/system/bin"
-        out["HOME"] = File(dirs.root, "home").absolutePath
-        out["TMPDIR"] = context.cacheDir.absolutePath
-        // node's bytecode of the bundle, kept between launches: only the first after an update parses it (docs/android.md).
-        out["NODE_COMPILE_CACHE"] = File(context.cacheDir, "node-compile-cache").absolutePath
-        out["SSL_CERT_FILE"] = dirs.cacert.absolutePath
-        TrustedCas.file(context).takeIf { it.isFile }?.let { out["NODE_EXTRA_CA_CERTS"] = it.absolutePath }
-        return out
-    }
-
     /** Generated once and kept, so a session survives a restart. */
     private fun sessionSecret(root: File): String {
         val file = File(root, "session-secret")
