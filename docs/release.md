@@ -1,7 +1,7 @@
 # CI: what runs, and what releases nothing
 
-No CI job builds or publishes a release. An artefact — the Mac app, the iPhone app, the APK, the
-tray, an image — is built locally by a developer when one is needed. CI only checks the code, on
+No CI job builds or publishes a release. An artefact — the Mac app, the iPhone app, the APK, K7 DAW (the
+desktop app), an image — is built locally by a developer when one is needed. CI only checks the code, on
 GitHub, and a branch is checked on the Mac first (`docs/agent-playbook.md`): `npm run ci:local`
 runs the repo's lints and every workspace's tests, and `scripts/agent/mac-checks.sh` covers what
 a developer's machine may lack (the Cargo locks need cargo, the engine core's suites need a testbed).

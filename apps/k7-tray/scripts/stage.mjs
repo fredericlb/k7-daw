@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { run } from "../../../engine/scripts/buildTools.mjs";
 import { stageEngine } from "../../../engine/scripts/stageEngine.mjs";
 import { stageCodeRoot } from "../../k7/backend-rs/scripts/stageCodeRoot.mjs";
+import { signStaged } from "./macSign.mjs";
 
 const app = join(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = join(app, "..", "..");
@@ -39,5 +40,10 @@ console.log(`· the front's code root, ${(code / 1024).toFixed(0)} KB`);
 
 console.log("· engine and supervisor");
 stageEngine({ repo, bin: join(out, "bin") });
+
+// Notarization refuses any unsigned Mach-O inside the bundle, and Tauri signs only the main binary (docs/macos.md).
+if (process.platform === "darwin") {
+  console.log(`· signed ${signStaged(out)} binaries`);
+}
 
 console.log(`staged in ${out}`);

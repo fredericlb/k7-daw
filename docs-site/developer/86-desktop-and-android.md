@@ -1,6 +1,6 @@
-# The tray and the phone apps
+# K7 DAW and the phone apps
 
-The tray (on a computer) and the Android app are the same idea on two platforms: k7's backend, the supervisor and the engine on the user's own device. Both start the **same backend bundle** with the **same settings table**, `apps/k7/backend-rs/standalone.json`:
+K7 DAW (on a computer) and the Android app are the same idea on two platforms: k7's backend, the supervisor and the engine on the user's own device. Both start the **same backend bundle** with the **same settings table**, `apps/k7/backend-rs/standalone.json`:
 
 | Key | Value | Meaning |
 |---|---|---|
@@ -23,13 +23,14 @@ The bundle is built by `apps/k7/backend-rs/scripts/stageBundle.mjs`, the page an
 
 `k7-local`'s `tests/all/host.rs` drives a fake supervisor (`k7-fake-supervisor`) speaking the same NDJSON.
 
-## The tray (`apps/k7-tray`, Tauri)
+## K7 DAW (`apps/k7-tray`, Tauri)
 
-A windowless Tauri app (Rust, no webview) in the system tray (Windows, Linux; a Mac runs the iOS app). It runs k7's Rust front in its own process on `http://127.0.0.1:18789`, starts nothing else, and opens that address in the person's own browser, where k7 installs as an app. The front runs the supervisor over stdio on `~/.k7` and the supervisor's own port (8765): the tray's engine is the machine's engine, the one the command-line engine would be. Everything is on the machine, so it works offline. The choices and their reasons are in `apps/k7-tray/docs/tray.md`; the front's side in `apps/k7/backend-rs/docs/localEngine.md`.
+A Tauri app (Rust) with one window and an icon in the system tray, on Windows, Linux and macOS (the Mac's other way is the iOS app). It runs k7's Rust front in its own process on `http://127.0.0.1:18789`, starts nothing else, and shows that address in its window, on the system's webview (`apps/k7-tray/docs/desktop.md`, `webviews.md`); the tray's "Open in Browser" opens it in the person's browser. The front runs the supervisor over stdio on `~/.k7` and the supervisor's own port (8765): the tray's engine is the machine's engine, the one the command-line engine would be. Everything is on the machine, so it works offline. The choices and their reasons are in `apps/k7-tray/docs/tray.md`; the front's side in `apps/k7/backend-rs/docs/localEngine.md`.
 
 | Where | What |
 |---|---|
 | `apps/k7-tray/src-tauri/src/backend.rs` | The one spawn, its environment (standalone.json's, plus `K7_SUPERVISOR_BIN`, the tray's bearer `K7_TRAY_TOKEN`, the release stamp), readiness, the backoff, the stop (closing stdin, `K7_STDIN_STOP`) |
+| `apps/k7-tray/src-tauri/src/window.rs`, `handlers.rs`, `appmenu.rs` | The window (splash, navigation, hide on close), what the webview may do (links, downloads, permissions) and the macOS menu bar (`apps/k7-tray/docs/desktop.md`) |
 | `apps/k7-tray/src-tauri/src/loops.rs`, `tray.rs` | The status line, read from `/api/local/tray` under the bearer and drawn as worded (`apps/k7/backend-rs/crates/k7-local/src/tray_status.rs`) |
 | `apps/k7-tray/src-tauri/src/updates.rs` | tauri-plugin-updater on the tray's channel feed (`docs/app-downloads.md`) |
 | `apps/k7-tray/src-tauri/src/job.rs`, `pidkill.rs` | The safety nets: a Windows job object, so a force-killed tray takes its tree with it, and a backstop for an engine a hung supervisor left |

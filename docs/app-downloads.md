@@ -52,9 +52,9 @@ must name the very file the server holds. The builds live under `STUDIO_APP_RELE
 channels in `tray/` beside them. The routes are the Rust front's (`apps/k7/backend-rs/docs/routes.md`), on the server's image only:
 the front of the tray or a phone does not answer them.
 
-## The tray
+## K7 DAW
 
-The tray reads `app_downloads/tray/<channel>/latest.json` with tauri-plugin-updater
+K7 DAW (the desktop app, `apps/k7-tray`) reads `app_downloads/tray/<channel>/latest.json` with tauri-plugin-updater
 ([apps/k7-tray/docs/tray.md](../apps/k7-tray/docs/tray.md)).
 
 | choice | why |
@@ -62,7 +62,8 @@ The tray reads `app_downloads/tray/<channel>/latest.json` with tauri-plugin-upda
 | every update signed, the private key held by whoever builds the tray (`TAURI_SIGNING_PRIVATE_KEY`) | the upload token alone would let whoever holds it ship code every tray runs; the public key is built into the tray from `K7_UPDATER_PUBKEY` |
 | a build without the public key has no updater | rather than one that trusts anything |
 | the channel from the release stamp, `dev` asks nothing | a developer's build is not on any feed |
-| Windows and the AppImage update themselves; a `.deb` is told | the updater installs those two; a `.deb` belongs to apt, so Download opens the page |
+| Windows, the AppImage and the macOS app update themselves; a `.deb` is told | the updater installs those; a `.deb` belongs to apt, so Download opens the page |
+| the feed keeps its `tray/` path; files are `k7-daw_<stamp>_<os>-<arch>.<ext>`, the macOS updater's archive an `.app.tar.gz` beside the `.dmg` | installed apps poll that URL for good, and `latest.json` carries the file URLs |
 
 ## The Android app
 

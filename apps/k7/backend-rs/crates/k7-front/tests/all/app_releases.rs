@@ -368,7 +368,7 @@ async fn a_channel_keeps_its_previous_build_and_the_tray_its_own() {
     );
     let page = send(f.addr, "GET", "/app_downloads", &[], b"").await.text();
     assert!(
-        page.contains("<h2>Tray — Release 1.0.0</h2>")
+        page.contains("<h2>K7 DAW — Release 1.0.0</h2>")
             && page.contains("<h2>Latest build of main</h2>")
     );
 }

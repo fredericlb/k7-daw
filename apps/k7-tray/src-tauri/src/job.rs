@@ -79,15 +79,13 @@ mod imp {
     pub fn release() {}
 }
 
-#[cfg(windows)]
-use imp::BREAKAWAY;
 pub use imp::{init, release};
 
 /// Spawn what must outlive the tray (the browser, an editor) out of its job; inside it when the tray's own parent forbids leaving.
 #[cfg(windows)]
 pub fn spawn_outside(c: &mut std::process::Command) -> std::io::Result<std::process::Child> {
     use std::os::windows::process::CommandExt;
-    c.creation_flags(0x0800_0000 | BREAKAWAY);
+    c.creation_flags(0x0800_0000 | imp::BREAKAWAY);
     match c.spawn() {
         Ok(child) => Ok(child),
         Err(_) => c.creation_flags(0x0800_0000).spawn(),
