@@ -19,12 +19,12 @@ report a debt. Each guards a property the ordinary tooling has no opinion about.
 `lint:bytes` is the shortest and the least obvious: ripgrep skips a file containing a NUL byte
 whole, so such a file stops existing for every sweep anyone runs afterwards.
 
-## `lint:locks` — the tray's lock behind the backend's manifests
+## `lint:locks` — the desktop app's lock behind the backend's manifests
 
-The tray (`apps/k7-tray/src-tauri`) links the backend's crates by path, so it is a second Rust
+The desktop app (`apps/k7-desktop/src-tauri`) links the backend's crates by path, so it is a second Rust
 workspace with its own `Cargo.lock` over the same dependencies. A crate added to
 `apps/k7/backend-rs` updates that workspace's lock, which every build there writes, and leaves the
-tray's behind: the tray's next build resolves the new crate afresh, so a release ships versions no lock
+desktop app's behind: the desktop app's next build resolves the new crate afresh, so a release ships versions no lock
 chose, and the Windows checkout is left with a `Cargo.lock` nobody committed. `cargo metadata --locked`
 resolves without compiling, so it needs neither tauri's system libraries nor a build: `check:changed` runs
 `lint:locks` when a branch touches a `Cargo.toml` or `Cargo.lock` of one of these workspaces or of the browser's crates below. Where cargo is
@@ -136,8 +136,6 @@ exact path, on the exact platform.
 
 Two settings go with it:
 
-- `javascript.globals` declares `Terminal` and `FitAddon`, which `scripts/console/index.html`
-  gets from xterm's `<script>` tags and biome cannot see.
 - `!**/.tmp-*` is excluded from `files.includes`. Scratch scripts at the repo root are not
   source, and linting them put 86 errors in front of the five that are real.
 

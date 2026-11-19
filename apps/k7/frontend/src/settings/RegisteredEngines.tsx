@@ -1,6 +1,6 @@
 // RegisteredEngines.tsx — the engines this account may use at this origin, as the engine page lists them: the phone's
 // own engine first inside the Android app, the hint that a computer's engine is set on that computer elsewhere,
-// then the registry's card. On the tray it is a tab beside this machine's engine. See ../../docs/settings.md.
+// then the registry's card. On the desktop app it is a tab beside this machine's engine. See ../../docs/settings.md.
 
 import { m } from "../paraglide/messages.js";
 import { AndroidEngineSection } from "./AndroidEngineSection";

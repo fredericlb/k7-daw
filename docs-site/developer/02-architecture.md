@@ -2,7 +2,7 @@
 
 k7 runs as five kinds of process on one device: a **backend**, which serves the page and holds the
 device's files, a **browser** that draws it, and an **engine machine**, which makes the sound. On a
-laptop or a phone the three are the same machine: k7 is the tray or the app, and there is no server.
+laptop or a phone the three are the same machine: k7 is the desktop app or the app, and there is no server.
 
 ```text
                         the device (one origin)
@@ -85,7 +85,7 @@ Where engine machines run:
 | Form | Code |
 |---|---|
 | Command-line engine (`k7-supervisor --config <file>`) | `engine/k7-supervisor`, staged by `engine/scripts/build-engine.mjs` |
-| K7 DAW | `apps/k7-tray`: a Tauri app with a window and a tray icon that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`) and the file services, and the window (or the browser) shows k7 |
+| K7 DAW | `apps/k7-desktop`: a Tauri app with one window that runs k7's backend on `127.0.0.1:18789`; its Rust front runs the supervisor (`k7-local`) and the file services, and the window (or the browser) shows k7 |
 | Android app | `engine/k7-android`: the engine as a library, the supervisor as a program, and k7's backend bundled |
 
 ## Data flow for one edit
@@ -103,5 +103,5 @@ details of these steps.
 
 ## What runs in production
 
-k7 runs on devices: the tray and the phone apps carry the backend, bundled, and run it locally (see
+k7 runs on devices: the desktop app and the phone apps carry the backend, bundled, and run it locally (see
 [Releases and publishing](./09-releases-and-publishing.md)). `k7.rocks` is a static site (see [Versioning and the static site](./08-versioning-and-site.md)).

@@ -1,12 +1,12 @@
-// localApp.ts — is this page served by a machine's own backend (the tray's, or a phone app's) rather than a server?
+// localApp.ts — is this page served by a machine's own backend (the desktop app's, or a phone app's) rather than a server?
 // The backend says so itself (`GET /api/local`, answered only there), asked once per page. See ../docs/localApp.md.
 
 import { useEffect, useState } from "react";
 
 export interface LocalApp {
-  /** Whether this backend runs the machine's engine (the tray's does; the phone's engine is its app's). */
+  /** Whether this backend runs the machine's engine (the desktop app's does; the phone's engine is its app's). */
   engine: boolean;
-  /** The release the tray ships under, or the backend's version. */
+  /** The release the desktop app ships under, or the backend's version. */
   version: string;
 }
 

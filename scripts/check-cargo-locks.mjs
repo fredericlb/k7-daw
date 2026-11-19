@@ -11,7 +11,7 @@ import { DENY, denied } from "./cargoLockDeny.mjs";
 
 const LOCKED = [
   "apps/k7/backend-rs",
-  "apps/k7-tray/src-tauri",
+  "apps/k7-desktop/src-tauri",
   "packages/song-schema/rust",
   "packages/k7-wasm/rust",
   "packages/song/rust",

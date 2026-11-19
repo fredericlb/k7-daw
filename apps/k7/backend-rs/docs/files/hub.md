@@ -3,9 +3,9 @@
 A workspace lives on the device that edits it and travels between devices through git
 (`git.md`). A **server** edits none. So the front has two modes, told by `STUDIO_LOCAL_USER`:
 
-| | a device (the tray, a phone) | a server |
+| | a device (the desktop app, a phone) | a server |
 |---|---|---|
-| `/api/files/*` | answered by the user's account runtime in the front | **410**, with one sentence naming the tray and the phone apps |
+| `/api/files/*` | answered by the user's account runtime in the front | **410**, with one sentence naming the desktop app and the phone apps |
 | `/api/files/account/libraries*` | the origin's libraries | the same |
 | `/api/files-hub` (the hello) | a ticket for the local user | a ticket |
 | an account runtime | one, for the local user | **none**, whoever signs in |

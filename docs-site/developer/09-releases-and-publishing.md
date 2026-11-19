@@ -7,16 +7,14 @@ commands in this page, when one is needed. Four **npm packages** are published b
 
 | File | Built from | Platforms |
 |---|---|---|
-| `k7-runtime_<stamp>_<platform>-<arch>.tar.gz` (`.zip` on Windows) | `engine/scripts/build-engine.mjs` + `engine/scripts/package-release.mjs --kind engine` | `windows-x64`, `macos-arm64`, `linux-x64` |
-| `k7-android_<stamp>_arm64.apk` | `./gradlew assembleRelease` in `engine/k7-android` | Android arm64 |
-| `k7-daw_<stamp>_<platform>-<arch>.<exe/AppImage/deb/dmg>` (K7 DAW) | `npm run build --workspace k7-tray` + `package-release.mjs --kind tray` | `windows-x64`, `linux-x64`, `macos-arm64` |
-| the Mac and iPhone app | Xcode, after `engine/k7-ios/scripts/stage.mjs` | macOS (Designed for iPad), iOS |
+| `k7-runtime_<version>_<platform>-<arch>.tar.gz` (`.zip` on Windows) | `engine/scripts/build-engine.mjs` + `engine/scripts/package-release.mjs --kind engine` | `windows-x64`, `macos-arm64`, `linux-x64` |
+| `k7-android_<version>_arm64.apk` | `./gradlew assembleRelease` in `engine/k7-android` | Android arm64 |
+| `k7-daw_<version>_<platform>-<arch>.<exe/AppImage/deb/dmg>` (K7 DAW) | `npm run build --workspace k7-desktop` + `package-release.mjs --kind desktop` | `windows-x64`, `linux-x64`, `macos-arm64` |
+| the iPhone and iPad app | Xcode, after `engine/k7-ios/scripts/stage.mjs` | iOS |
 
-### The stamp
+### The version
 
-Release files are named by a stamp, not by a package version: `dev` for a local build, unless
-`--stamp` or `$STUDIO_RELEASE_STAMP` is given (a `vX.Y.Z` tag's name for a release).
-`package-release.mjs` replaces any character outside `A-Za-z0-9._-` in the stamp with `-`.
+Release files are named for the root `package.json`'s version, which every build reads.
 
 The version is the root `package.json`'s, copied into every private workspace:
 
@@ -53,16 +51,16 @@ Environment variables the build reads:
 | `STUDIO_COMPILER_LAUNCHER` | Compiler launcher read by the presets (`sccache` or `ccache`). |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | Compiler parallelism; the build scripts default to cores minus two. |
 
-## K7 DAW (`apps/k7-tray`)
+## K7 DAW (`apps/k7-desktop`)
 
-`npm run stage --workspace k7-tray` (`apps/k7-tray/scripts/stage.mjs`) fills
-`apps/k7-tray/src-tauri/resources/`: the page and the `k7-core` library bundled by
-`apps/k7/backend-rs/scripts/stageBundle.mjs` (the same bundle the phone runs), the front's code root, and the engine binaries via `stageEngine`; on a Mac, `stage` also signs every binary of the resources (`apps/k7-tray/docs/macos.md`).
-`npm run build --workspace k7-tray` then runs `tauri build`: an NSIS installer on Windows,
+`npm run stage --workspace k7-desktop` (`apps/k7-desktop/scripts/stage.mjs`) fills
+`apps/k7-desktop/src-tauri/resources/`: the page and the `k7-core` library bundled by
+`apps/k7/backend-rs/scripts/stageBundle.mjs` (the same bundle the phone runs), the front's code root, and the engine binaries via `stageEngine`; on a Mac, `stage` also signs every binary of the resources (`apps/k7-desktop/docs/macos.md`).
+`npm run build --workspace k7-desktop` then runs `tauri build`: an NSIS installer on Windows,
 a `dmg` on macOS, an AppImage and a `.deb` on Linux.
 
 `stageEngine` takes the binaries from `$STUDIO_PREBUILT_BIN` when it is set, instead of from the
-local build folders, to package the tray around an engine archive without compiling anything. `package-release.mjs --kind tray` copies each installer
+local build folders, to package the desktop app around an engine archive without compiling anything. `package-release.mjs --kind desktop` copies each installer
 to `dist/release/` under its release name.
 
 [K7 DAW and the phone apps](./86-desktop-and-android.md) covers the apps themselves.

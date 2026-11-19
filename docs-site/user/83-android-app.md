@@ -1,6 +1,6 @@
 # The Android app
 
-The k7 Android app turns a phone into a k7 machine. Like the [tray](./82-desktop-app.md) on a computer, it is standalone: it runs its own small k7 backend, the supervisor and the engine, so the phone opens its own k7 and needs no network.
+The k7 Android app turns a phone into a k7 machine. Like the [K7 DAW](./82-desktop-app.md) on a computer, it is standalone: it runs its own small k7 backend, the supervisor and the engine, so the phone opens its own k7 and needs no network.
 
 For what the engine and supervisor are, see [Engines](./80-engines.md).
 
@@ -57,9 +57,9 @@ Only for a git host whose HTTPS certificate is signed by a certificate authority
 
 The phones, tablets and computers allowed to drive this phone's engine over the local network, and the requests waiting for your answer. See [Reaching an engine](./85-connecting-machines.md#pairing-a-device-on-the-local-network).
 
-## The tray
+## The desktop app
 
-When k7 does not load, the app shows its **tray** instead of k7: the same engine status, the pairing requests with **Approve** and **Deny**, the Private CA section and a **Quit** button. If k7 failed to load, the tray says why and offers **Retry**.
+When k7 does not load, the app shows its **tray** instead of k7: the same engine status, the pairing requests with **Approve** and **Deny**, the Private CA section and a **Quit** button. If k7 failed to load, the desktop app says why and offers **Retry**.
 
 ## The name other people see
 

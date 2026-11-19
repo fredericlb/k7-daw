@@ -17,7 +17,7 @@ const jobs = Number(opt("--jobs") ?? 2);
 const dry = args.includes("--dry");
 const LINTED = /\.(?:[cm]?[jt]sx?|jsonc?)$/;
 const CARGO =
-  /^(?:apps\/(?:k7\/backend-rs|k7-tray\/src-tauri)|packages\/(?:song-schema|k7-wasm|song)\/rust)\/(?:.*\/)?Cargo\.(?:toml|lock)$/;
+  /^(?:apps\/(?:k7\/backend-rs|k7-desktop\/src-tauri)|packages\/(?:song-schema|k7-wasm|song)\/rust)\/(?:.*\/)?Cargo\.(?:toml|lock)$/;
 
 function sh(cmd, argv) {
   const r = spawnSync(cmd, argv, { encoding: "utf8", maxBuffer: 64 << 20 });

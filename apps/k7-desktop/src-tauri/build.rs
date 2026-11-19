@@ -1,36 +1,13 @@
+// build.rs — K7_RELEASE, the version every build names itself by: the root package.json's, the one source of it.
 fn main() {
-    // The release stamp (`vX.Y.Z` or `snapshot-<commit>`) names this build; a build nobody stamped is `dev`.
-    println!("cargo:rerun-if-env-changed=STUDIO_RELEASE_STAMP");
-    let given = std::env::var("STUDIO_RELEASE_STAMP").unwrap_or_default();
-    let stamp = if is_stamp(&given) {
-        given
-    } else {
-        "dev".to_string()
-    };
-    println!("cargo:rustc-env=K7_RELEASE={stamp}");
-    // Where the trayicon dump test writes its previews (test-only; see its comment).
-    println!(
-        "cargo:rustc-env=STUDIO_ICON_DUMP_DIR={}",
-        std::env::var("STUDIO_ICON_DUMP_DIR").unwrap_or_else(|_| std::env::temp_dir()
-            .join("studio-icons")
-            .to_string_lossy()
-            .into_owned())
-    );
+    let root = std::path::Path::new("../../../package.json");
+    println!("cargo:rerun-if-changed={}", root.display());
+    let text = std::fs::read_to_string(root).expect("the root package.json");
+    let json: serde_json::Value =
+        serde_json::from_str(&text).expect("the root package.json is JSON");
+    let version = json["version"]
+        .as_str()
+        .expect("a version in the root package.json");
+    println!("cargo:rustc-env=K7_RELEASE={version}");
     tauri_build::build();
-}
-
-/// The two shapes CI makes, and nothing else: `vX.Y.Z`, or `snapshot-` and 7 to 40 hex digits (isStamp, engine/scripts/releaseStamp.mjs).
-fn is_stamp(s: &str) -> bool {
-    if let Some(v) = s.strip_prefix('v') {
-        let parts: Vec<&str> = v.split('.').collect();
-        return parts.len() == 3
-            && parts
-                .iter()
-                .all(|p| !p.is_empty() && p.bytes().all(|b| b.is_ascii_digit()));
-    }
-    s.strip_prefix("snapshot-").is_some_and(|h| {
-        (7..=40).contains(&h.len())
-            && h.bytes()
-                .all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
-    })
 }

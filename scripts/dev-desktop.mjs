@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// dev-tray.mjs — the native half of the dev session: builds the C++ engine, the native supervisor, the front's bundle
-// (the page and the library) and the tray, runs the tray on the repo's own builds, then watches the engine, the supervisor and the tray's Rust
+// dev-desktop.mjs — the native half of the dev session: builds the C++ engine, the native supervisor, the front's bundle
+// (the page and the library) and the desktop app, runs the desktop app on the repo's own builds, then watches the engine, the supervisor and the desktop app's Rust
 // and rebuilds+restarts on save. One process owns every watch because every rebuild needs the SAME tree stopped
 // first — a running image cannot be relinked on Windows. See docs/dev.md.
 
@@ -19,23 +19,23 @@ import {
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
 const engineDir = join(repo, "engine", "k7-runtime");
 const supervisorDir = join(repo, "engine", "k7-supervisor");
-const trayDir = join(repo, "apps", "k7-tray");
-const tauriDir = join(trayDir, "src-tauri");
-// The Rust front, which the tray links: its crates are in the tray's binary (apps/k7/backend-rs/docs/front.md).
+const desktopDir = join(repo, "apps", "k7-desktop");
+const tauriDir = join(desktopDir, "src-tauri");
+// The Rust front, which the desktop app links: its crates are in the desktop app's binary (apps/k7/backend-rs/docs/front.md).
 const frontDir = join(repo, "apps", "k7", "backend-rs");
-// The bundle the dev tray reads (the library it seeds), rebuilt at every start of the task; gitignored.
-const bundleDir = join(trayDir, ".dev", "backend");
+// The bundle the dev desktop app reads (the library it seeds), rebuilt at every start of the task; gitignored.
+const bundleDir = join(desktopDir, ".dev", "backend");
 
-// The page the tray's front serves: k7-frontend's Vite, for HMR on 18789 — set it empty for the built one (docs/dev.md).
+// The page the desktop app's front serves: k7-frontend's Vite, for HMR on 18789 — set it empty for the built one (docs/dev.md).
 const devFrontend = process.env.K7_DEV_FRONTEND ?? "http://localhost:5223";
 
 // Long enough that a formatter's write burst is one rebuild, short enough to feel like a save.
 const DEBOUNCE_MS = 500;
 
-const log = (msg) => console.log(`tray | ${msg}`);
+const log = (msg) => console.log(`desktop app | ${msg}`);
 const shell = process.platform === "win32"; // npm and cargo are .cmd shims or PATH lookups there
 
-// Every rustc of the session through sccache when the machine has it, the tray's and the supervisor's crate (docs/rust-builds.md).
+// Every rustc of the session through sccache when the machine has it, the desktop app's and the supervisor's crate (docs/rust-builds.md).
 Object.assign(process.env, sccacheEnv("dev", { log }));
 
 function run(cmd, args, cwd, what) {
@@ -71,8 +71,8 @@ const TARGETS = {
     ],
     build: () => buildSupervisor(repo),
   },
-  // The tray itself: a cargo build, incremental, seconds once the dependencies are compiled.
-  "k7-tray": {
+  // The desktop app itself: a cargo build, incremental, seconds once the dependencies are compiled.
+  "k7-desktop": {
     dirs: [
       {
         path: join(tauriDir, "src"),
@@ -85,7 +85,7 @@ const TARGETS = {
         match: (b) => b === "Cargo.toml" || b === "tauri.conf.json",
       },
     ],
-    // The front the tray links (Cargo.toml, `path = ../../k7/backend-rs/crates/…`): its own task builds it too.
+    // The front the desktop app links (Cargo.toml, `path = ../../k7/backend-rs/crates/…`): its own task builds it too.
     linked: [
       {
         path: join(frontDir, "crates"),
@@ -99,15 +99,15 @@ const TARGETS = {
       },
     ],
     build: () => {
-      // tauri.conf.json names resources/, which only stage.mjs fills: the dev tray reads the repo's builds instead.
+      // tauri.conf.json names resources/, which only stage.mjs fills: the dev desktop app reads the repo's builds instead.
       mkdirSync(join(tauriDir, "resources"), { recursive: true });
-      run("cargo", ["build"], tauriDir, "the tray build");
+      run("cargo", ["build"], tauriDir, "the desktop app build");
     },
   },
 };
 
 // Rebuild order: the slow one first, so a broken engine never costs the cheaper rebuilds (../docs/dev.md).
-const ORDER = ["k7-runtime", "k7-supervisor", "k7-tray"];
+const ORDER = ["k7-runtime", "k7-supervisor", "k7-desktop"];
 
 /** Delegated to the engine's own build:* scripts, so this holds no CMake knowledge. */
 function buildEngine() {
@@ -133,7 +133,7 @@ function buildEngine() {
     );
 }
 
-/** The bundle, with k7's frontend built inside unless the page comes from Vite (apps/k7-tray/scripts/stage.mjs). */
+/** The bundle, with k7's frontend built inside unless the page comes from Vite (apps/k7-desktop/scripts/stage.mjs). */
 function buildBundle() {
   if (!devFrontend)
     run(
@@ -182,13 +182,13 @@ function engineBinary() {
   return found[0]?.path ?? null;
 }
 
-/** The dev tray, as cargo builds it. */
-const trayBinary = () =>
+/** The dev desktop app, as cargo builds it. */
+const desktopBinary = () =>
   join(
     tauriDir,
     "target",
     "debug",
-    process.platform === "win32" ? "k7-tray.exe" : "k7-tray",
+    process.platform === "win32" ? "k7-desktop.exe" : "k7-desktop",
   );
 
 /** The newest mtime under a target's own roots and the ones it links — a binary older than its code is stale. */
@@ -219,15 +219,15 @@ function newestSource(target) {
 const stale = (bin, target) =>
   !bin || !existsSync(bin) || statSync(bin).mtimeMs < newestSource(target);
 
-// ── the tray, run on the repo's own builds ────────────────────────────────────
+// ── the desktop app, run on the repo's own builds ─────────────────────────────────
 
-let tray = null;
+let desktopProc = null;
 
-/** The tray as our child: the bundle and the supervisor named by the overrides its paths.rs reads first. */
-function launchTray() {
+/** The desktop app as our child: the bundle and the supervisor named by the overrides its paths.rs reads first. */
+function launchDesktop() {
   const supervisor = findSupervisor(repo);
   if (!supervisor) throw new Error("no supervisor build to run");
-  tray = spawn(trayBinary(), [], {
+  desktopProc = spawn(desktopBinary(), [], {
     cwd: tauriDir,
     stdio: "inherit",
     env: {
@@ -237,21 +237,21 @@ function launchTray() {
       K7_DEV_FRONTEND: devFrontend,
     },
   });
-  tray.on("exit", (code) => {
-    if (tray && !stopping)
-      log(`the tray exited (code ${code}) — save to restart it`);
-    tray = null;
+  desktopProc.on("exit", (code) => {
+    if (desktopProc && !stopping)
+      log(`the desktop app exited (code ${code}) — save to restart it`);
+    desktopProc = null;
   });
   log(
-    `tray up (pid ${tray.pid}) — k7 at http://127.0.0.1:18789${devFrontend ? `, its page from ${devFrontend}` : ""}, the merged log in ~/.k7/.studio.log`,
+    `desktop app up (pid ${desktopProc.pid}) — k7 at http://127.0.0.1:18789${devFrontend ? `, its page from ${devFrontend}` : ""}, the merged log in ~/.k7/.studio.log`,
   );
 }
 
-/** Ours, then every tray, supervisor and engine on the machine: a survivor holds a binary a relink replaces. */
+/** Ours, then every desktop app, supervisor and engine on the machine: a survivor holds a binary a relink replaces. */
 async function stopEverything() {
-  if (tray) {
-    const t = tray;
-    tray = null;
+  if (desktopProc) {
+    const t = desktopProc;
+    desktopProc = null;
     t.kill();
   }
   await stopAll();
@@ -292,11 +292,13 @@ async function cycle() {
       TARGETS[name].build();
     }
     current = null;
-    launchTray();
+    launchDesktop();
   } catch (err) {
     if (current) dirty.add(current); // failed — retried on the next save, never in a loop
-    console.error(`\ntray | ✖ ${err.message}`);
-    console.error("tray | the tray is stopped — fix and save again.");
+    console.error(`\ndesktop | ✖ ${err.message}`);
+    console.error(
+      "desktop app | the desktop app is stopped — fix and save again.",
+    );
   } finally {
     busy = false;
   }
@@ -309,17 +311,17 @@ async function shutdown() {
   if (stopping) return;
   stopping = true;
   clearTimeout(timer);
-  log("stopping the tray and its engine…");
+  log("stopping the desktop app and its engine…");
   try {
     await stopEverything();
   } catch (err) {
-    console.error(`tray | ✖ ${err.message}`);
+    console.error(`desktop app | ✖ ${err.message}`);
   }
   process.exit(0);
 }
 for (const sig of ["SIGINT", "SIGTERM"]) process.on(sig, () => void shutdown());
 
-await stopAll(); // whatever a previous session or an installed tray left behind
+await stopAll(); // whatever a previous session or an installed desktop app left behind
 
 if (stale(engineBinary(), "k7-runtime")) {
   log("the engine is missing or older than its sources — building it");
@@ -329,17 +331,19 @@ if (stale(findSupervisor(repo), "k7-supervisor")) {
   log("the supervisor is missing or older than its sources — building it");
   dirty.add("k7-supervisor");
 }
-if (stale(trayBinary(), "k7-tray")) {
-  log("the tray is missing or older than its sources — building it");
-  dirty.add("k7-tray");
+if (stale(desktopBinary(), "k7-desktop")) {
+  log("the desktop app is missing or older than its sources — building it");
+  dirty.add("k7-desktop");
 }
 
 // The bundle is k7 itself, whose sources are the whole workspace: built at every start, not watched (../docs/dev.md).
 try {
   buildBundle();
 } catch (err) {
-  // Red in Tilt until restarted: a tray with no backend would only say so on its status line.
-  console.error(`\ntray | ✖ ${err.message} — restart the task once it builds.`);
+  // Red in Tilt until restarted: a desktop app with no backend would only say so on its splash.
+  console.error(
+    `\ndesktop | ✖ ${err.message} — restart the task once it builds.`,
+  );
   process.exit(1);
 }
 await cycle();
@@ -359,6 +363,6 @@ for (const [target, { dirs }] of Object.entries(TARGETS))
   }
 
 log(
-  "watching the engine, the supervisor and the tray — save to rebuild and restart",
+  "watching the engine, the supervisor and the desktop app — save to rebuild and restart",
 );
 setInterval(() => {}, 1 << 30); // the watchers are unref'd, so hold the process open ourselves

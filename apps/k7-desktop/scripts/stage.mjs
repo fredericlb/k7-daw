@@ -34,7 +34,7 @@ copyFileSync(
   join(out, "standalone.json"),
 );
 
-// The files the Rust front's actor reads at its code root, which the tray names to it as K7_CODE_ROOT (docs/tray.md).
+// The files the Rust front's actor reads at its code root, which the desktop app names to it as K7_CODE_ROOT (docs/app.md).
 const code = stageCodeRoot(join(out, "code"));
 console.log(`· the front's code root, ${(code / 1024).toFixed(0)} KB`);
 

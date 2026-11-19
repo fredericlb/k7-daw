@@ -57,10 +57,10 @@ does not trust, so `https://app.priv.k7.rocks` fails with `UNABLE_TO_GET_ISSUER_
 a backend while working perfectly in the browser beside it.
 
 On a loopback host the same table is what a PAGE uses too, and a host may move it:
-`STUDIO_PORTS=k7=18789` (the tray publishing the port `apps/k7/backend-rs/standalone.json` fixes) in the environment of the front and the supervisor, whose
+`STUDIO_PORTS=k7=18789` (the desktop app publishing the port `apps/k7/backend-rs/standalone.json` fixes) in the environment of the front and the supervisor, whose
 `Url.cpp` reads the same variable — or `globalThis.__STUDIO_PORTS__` for a page, set before its
-scripts run (`servicePorts`). `pl8` and `k7` have no port of their own: they are k7's. The tray's port is apart from the dev session's, so the two run side by side
-(`apps/k7-tray/docs/tray.md`). Unset, the table is `SERVICE_PORTS`.
+scripts run (`servicePorts`). `pl8` and `k7` have no port of their own: they are k7's. The desktop app's port is apart from the dev session's, so the two run side by side
+(`apps/k7-desktop/docs/app.md`). Unset, the table is `SERVICE_PORTS`.
 
 ## One suffix, and every shape inside it
 

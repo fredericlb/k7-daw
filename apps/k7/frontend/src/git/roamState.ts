@@ -11,7 +11,7 @@ export interface RoamEntry {
   addedAt: number;
 }
 
-/** `available` is false on a host with no list store (anything but iOS and the Mac's iPad app); `here` holds this device's ids. */
+/** `available` is false on a host with no list store (anything but iOS); `here` holds this device's ids. */
 export interface RoamAnswer {
   available: boolean;
   entries: RoamEntry[];

@@ -2,13 +2,13 @@
 
 ```bash
 npm run dev                        # every app + the engine, under Tilt
-npm run dev -- k7-tray k7-frontend # only the named Tilt resources
-npm run dev:tray                   # only the tray and its engine, no Tilt
+npm run dev -- k7-desktop k7-frontend # only the named Tilt resources
+npm run dev:desktop                   # only the desktop app and its engine, no Tilt
 ```
 
 ## Where it answers
 
-**Loopback.** The session is a DEVICE, as the tray and the e2e beds are: `env.yaml`'s `k7-front`
+**Loopback.** The session is a DEVICE, as the desktop app and the e2e beds are: `env.yaml`'s `k7-front`
 section sets `STUDIO_LOCAL_USER`, and k7 opens on **http://127.0.0.1:5223** with no login — `/auth/local`
 signs the machine's own user in, and it answers loopback peers only, so the page is visited on the
 workstation itself. Nothing terminates TLS and no proxy is in front: there is no edge to start, no
@@ -64,10 +64,10 @@ The root `build` and `test` scripts stay outside this list — Tilt only owns th
 |---|---|
 | `apps/k7/backend-rs/scripts/dev-front.mjs` hands the front env.yaml's `k7-front` section | the session secret above all, and env.yaml is the only place the dev session's settings are |
 | a fixed secret, `k7-dev-front`, written in that script | the conformance specs behind the internal seam send it; a dev session is one machine's loopback |
-| every host (the dev session, the tray, the phone, the image) runs all fifteen native pieces answering: the list is the front's own default (`default_pieces.txt` beside `service/switch.rs`), and no variable switches one off; a host that still sets a removed one gets one log line | one behaviour on every host |
+| every host (the dev session, the desktop app, the phone, the image) runs all fifteen native pieces answering: the list is the front's own default (`default_pieces.txt` beside `service/switch.rs`), and no variable switches one off; a host that still sets a removed one gets one log line | one behaviour on every host |
 | `K7_FRONT_TRUST_HOPS=1` | Vite is the hop before the front, and its `X-Forwarded-Host`/`-Proto` name the page's origin |
 | `cargo run --release` | the conformance suite and the pages run against it all day; the first build takes a minute, an edit a few seconds |
-| rustc through sccache when the machine has it, in that script and in the tray task's cargo builds | a new worktree's first build reuses the dependencies another one compiled; the settings, and how to turn it off, are in [rust-builds.md](rust-builds.md) |
+| rustc through sccache when the machine has it, in that script and in the desktop app task's cargo builds | a new worktree's first build reuses the dependencies another one compiled; the settings, and how to turn it off, are in [rust-builds.md](rust-builds.md) |
 | `K7_ENGINE_CORE=front` in that script | the engine registry, the relay and the tunnel hub (`apps/k7/backend-rs/docs/engine.md`) exist in Rust alone |
 | the front's own settings in that script | the front reads env.yaml's `STUDIO_MEDIATEK` (the instance's data folder) and keeps its compiled modules in `~/.k7/front-cache` |
 | `K7_FILES=front` in that script | the file hub, `/api/ready` and AI organize exist in Rust alone (`apps/k7/backend-rs/docs/files.md`); the file services and the module libraries' service are the front's own, no node child |
@@ -75,12 +75,6 @@ The root `build` and `test` scripts stay outside this list — Tilt only owns th
 | restarting `k7-front` alone is enough for a Rust edit | the file service is the front's own |
 
 The front's file hub makes an account's runtime on its first request (`apps/k7/backend-rs/docs/files/hub.md`).
-
-## The shared terminals — `npm run console`
-
-`scripts/console/server.mjs` serves terminal tabs (PowerShell in ConPTYs owned by the service, so they outlive the
-browser tab) at `console.priv.frediver.se`, on a Windows dev box reached remotely; it installs its own dependencies first.
-It is no resource of the dev session, which a tab would otherwise die with.
 
 ## A NEW `exports` subpath needs the dev server restarted
 
@@ -97,60 +91,60 @@ symlink. It is neither — the symlink points at the workspace and the field is 
 does not fix it and neither does an HMR round; `tilt trigger <resource>` does. Editing an existing
 subpath's file needs none of this: it is the exports MAP being new that the cache is holding.
 
-## The tray task — `scripts/dev-tray.mjs`
+## The desktop app task — `scripts/dev-desktop.mjs`
 
-It is `apps/k7-tray`'s `dev` script, which is what makes it the `k7-tray` resource beside the servers.
-It builds the engine, the supervisor, the page and library bundle and the tray, then
-runs the tray on those builds: k7 answers at `http://127.0.0.1:18789`, the tray's front runs the
+It is `apps/k7-desktop`'s `dev` script, which is what makes it the `k7-desktop` resource beside the servers.
+It builds the engine, the supervisor, the page and library bundle and the desktop app, then
+runs the desktop app on those builds: k7 answers at `http://127.0.0.1:18789`, the desktop app's front runs the
 supervisor on `~/.k7`, and the supervisor runs the engine. The machine's engine during a session is
-therefore the tray's, as it is on a musician's machine (`apps/k7-tray/docs/tray.md`).
+therefore the desktop app's, as it is on a musician's machine (`apps/k7-desktop/docs/app.md`).
 
-The tray is pointed at the repo's builds through the overrides its `paths.rs` reads first —
-`K7_BACKEND_BUNDLE` for the bundle (the library it seeds) in the tray workspace's gitignored `.dev` folder, `STUDIO_ENGINE_HOST_CMD` for the
-supervisor build — so nothing is staged. The dev session on `http://127.0.0.1:5223` is a device like the tray, and
-the machine's engine is the tray's: under the tray, the machine's loopback k7 is the tray's front, which the
-supervisor reaches every loopback registry at, so the tray's front drops any other loopback entry
+The desktop app is pointed at the repo's builds through the overrides its `paths.rs` reads first —
+`K7_BACKEND_BUNDLE` for the bundle (the library it seeds) in the desktop app workspace's gitignored `.dev` folder, `STUDIO_ENGINE_HOST_CMD` for the
+supervisor build — so nothing is staged. The dev session on `http://127.0.0.1:5223` is a device like the desktop app, and
+the machine's engine is the desktop app's: under the desktop app, the machine's loopback k7 is the desktop app's front, which the
+supervisor reaches every loopback registry at, so the desktop app's front drops any other loopback entry
 when it pins its own (`apps/k7/backend-rs/docs/localEngine.md`).
 
 | choice | why |
 |---|---|
-| the engine registers at the tray's front on 18789, not at the dev session's front on 8789 | the supervisor rewrites a loopback address to k7's one port (`engine/k7-supervisor/src/Url.cpp`) and the tray drops any other loopback entry when it pins its own (`apps/k7/backend-rs/crates/k7-local/src/settings.rs`); a dev-only exception would be a second rule in both |
+| the engine registers at the desktop app's front on 18789, not at the dev session's front on 8789 | the supervisor rewrites a loopback address to k7's one port (`engine/k7-supervisor/src/Url.cpp`) and the desktop app drops any other loopback entry when it pins its own (`apps/k7/backend-rs/crates/k7-local/src/settings.rs`); a dev-only exception would be a second rule in both |
 | no device token handed to the engine by the dev setup | a `weburi.pair` writes a credential into the machine's real `engine-host.json`, a person's choice and not a script's |
 | `let go of engine … its claim moved on` read as a suite at work | the web and conformance suites claim engines under their own accounts, and a newcomer displaces the holder (`apps/k7/backend-rs/docs/engine/claim.md`): the displaced account's binding lets go |
 
-**The page on 18789 is `k7-frontend`'s Vite, with HMR.** The task hands the tray
-`K7_DEV_FRONTEND=http://localhost:5223`, and the tray's front then streams every request it would have
+**The page on 18789 is `k7-frontend`'s Vite, with HMR.** The task hands the desktop app
+`K7_DEV_FRONTEND=http://localhost:5223`, and the desktop app's front then streams every request it would have
 answered from `frontend/dist` to that Vite instead (`apps/k7/backend-rs/crates/k7-front/src/routes/last/dev_frontend.rs`); `/api` and
 `/auth` stay its own. So the local PWA is developed on its real origin — its service worker, its cookie,
-its storage, the tray's own "Open in Browser" — rather than on a stand-in port. HMR's websocket goes to Vite's own port,
+its storage, the desktop app's own "Open in Browser" — rather than on a stand-in port. HMR's websocket goes to Vite's own port,
 `ws://127.0.0.1:5223`, which is why k7's `vite.config.ts` names it in `server.ws`: left
 to the page, a page on 18789 would look for Vite on 18789. With `k7-frontend` down, 18789 answers
 a 502 naming it. `K7_DEV_FRONTEND=` (empty) before `npm run dev` brings back the built page.
 
-**Its front is linked into the tray**, so a change to the front's crates reaches the tray at its next start (the table below): the tray's own
+**Its front is linked into the desktop app**, so a change to the front's crates reaches the desktop app at its next start (the table below): the desktop app's own
 binary holds the front, and a restart ends the engine with it, since the front holds the supervisor's job
-(`engine/k7-supervisor/docs/hostProtocol.md`), which is what keeps a killed tray from leaving a ghost engine.
+(`engine/k7-supervisor/docs/hostProtocol.md`), which is what keeps a killed desktop app from leaving a ghost engine.
 
 The engine is C++, so it has no watch mode that means anything: there is nothing to hot-reload, only
-a binary to relink and a process to restart — and the tray has to be stopped for that relink, since
+a binary to relink and a process to restart — and the desktop app has to be stopped for that relink, since
 its tree holds the engine running. That is what the task does — watch the sources, rebuild, restart.
 
 | target | watched | rebuilt with |
 |---|---|---|
 | `k7-runtime` | `engine/`, `server/`, `CMakeLists.txt`, `CMakePresets.json` | `npm run build:win` / `build:mac --workspace k7-runtime` |
 | `k7-supervisor` | `src/`, `CMakeLists.txt`, `CMakePresets.json` | `supervisorBuild.mjs` |
-| `k7-tray` | `src-tauri/src/`, `Cargo.toml`, `tauri.conf.json` — and, at the task's START, the front's crates it links: `backend-rs/crates/**`, its `Cargo.toml` and `Cargo.lock` | `cargo build` in `apps/k7-tray/src-tauri`, line tables only for debug info: `CARGO_PROFILE_DEV_DEBUG=2` before `npm run dev` for a debugger ([rust-builds.md](rust-builds.md)) |
+| `k7-desktop` | `src-tauri/src/`, `Cargo.toml`, `tauri.conf.json` — and, at the task's START, the front's crates it links: `backend-rs/crates/**`, its `Cargo.toml` and `Cargo.lock` | `cargo build` in `apps/k7-desktop/src-tauri`, line tables only for debug info: `CARGO_PROFILE_DEV_DEBUG=2` before `npm run dev` for a debugger ([rust-builds.md](rust-builds.md)) |
 
 | choice | why |
 |---|---|
 | the bundle built at every start of the task, with no frontend in it | the page is Vite's (above); what is left in the bundle is the `k7-core` seed |
-| every tray stopped first, an installed one included | it holds port 18789 and `~/.k7`, and its single-instance guard would turn the dev tray's launch into a no-op |
-| a failed bundle ends the task | a tray without its library would only say so on its status line; a red resource says it where the session is watched |
-| an edit under `apps/k7/backend-rs` does not rebuild the tray mid-session, only at its start | the front's crates are in the tray's binary (`Cargo.toml` path deps), so they decide whether it is stale when the task starts — but watching them would stop and restart the tray, and the engine with it, on every front save. A route added to the front 404s on 18789 until `k7-tray` is restarted |
+| every desktop app stopped first, an installed one included | it holds port 18789 and `~/.k7`, and its single-instance guard would turn the dev desktop app's launch into a no-op |
+| a failed bundle ends the task | a desktop app without its library would only say so on its splash; a red resource says it where the session is watched |
+| an edit under `apps/k7/backend-rs` does not rebuild the desktop app mid-session, only at its start | the front's crates are in the desktop app's binary (`Cargo.toml` path deps), so they decide whether it is stale when the task starts — but watching them would stop and restart the desktop app, and the engine with it, on every front save. A route added to the front 404s on 18789 until `k7-desktop` is restarted |
 
-A failed build of any target leaves the tray down, and says so — `✖ … the tray is stopped, fix and
-save again`. The cycle stops the tray, the supervisor and the engine BEFORE building, since a running
-image cannot be relinked, and starts the tray again only once every dirty target has built. The
+A failed build of any target leaves the desktop app down, and says so — `✖ … the desktop app is stopped, fix and
+save again`. The cycle stops the desktop app, the supervisor and the engine BEFORE building, since a running
+image cannot be relinked, and starts the desktop app again only once every dirty target has built. The
 target that failed stays dirty, so the next save retries it instead of looping on it.
 
 `engine/k7-runtime/tests/` is deliberately not watched: it links a binary of its own, and
@@ -169,7 +163,7 @@ a relink against a live binary fails with a confusing linker error, and the engi
 does the same while the supervisor has `k7-runtime.exe` running. The order is
 therefore stop → build → start.
 
-And the processes that must be stopped are *the same* for every target: the tray holds the backend,
+And the processes that must be stopped are *the same* for every target: the desktop app holds the backend,
 which holds the supervisor, which holds the engine, so stopping one part leaves a binary held. Several
 independent watchers would race to stop and restart one tree. So there is one, and a cycle that
 needs several rebuilds does one stop, every build, one start.
@@ -185,12 +179,12 @@ set **before** its build, not after, so a save landing mid-build is not swallowe
 just queues another cycle. A save landing during a build re-arms the timer, which keeps
 retrying until the cycle in flight frees the tree.
 
-A failed build puts its target back in the dirty set and stops there, leaving the tray
+A failed build puts its target back in the dirty set and stops there, leaving the desktop app
 down. It is **not** retried on a timer: a broken build retried every 500 ms is a fan, not
 a signal. Save again and it tries again.
 
 At startup the task rebuilds a target only if there is no binary, or if its sources are newer than
-the binary, then starts the tray whatever was rebuilt. A session should not pay a cmake run to be
+the binary, then starts the desktop app whatever was rebuilt. A session should not pay a cmake run to be
 told there is nothing to do, and should not silently run the engine you had before a `git pull`.
 
 ### A build that succeeds without replacing the image
@@ -202,7 +196,7 @@ therefore checks the binary's mtime afterwards.
 The test is deliberately *"is the binary at least as new as its sources"* and **not** *"did it
 change"*. A watcher event can fire with nothing actually edited — Windows reports odd names for
 changes under the build tree — and a no-op build is then the correct outcome. Demanding a change
-turns that harmless case into a hard failure that leaves the tray stopped, which is worse than the
+turns that harmless case into a hard failure that leaves the desktop app stopped, which is worse than the
 bug being guarded.
 
 The watch roots filter by BASE name, because a recursive `fs.watch` reports a path relative to the
@@ -212,43 +206,15 @@ building the slow one first means a broken engine never costs the cheaper rebuil
 
 ### On exit
 
-`dev-tray.mjs` stops every tray, supervisor and engine on `SIGINT`/`SIGTERM` and again at startup
+`dev-desktop.mjs` stops every desktop app, supervisor and engine on `SIGINT`/`SIGTERM` and again at startup
 (`stopAll` in `engine/scripts/devEngine.mjs`), and `dev.mjs` repeats it after Tilt is gone — a
 resource may be ended too abruptly for its own handler to run, and an engine left holding its port and
-its binary is the one leak worth being sure about. Stopping the tray is enough on Windows, where its
+its binary is the one leak worth being sure about. Stopping the desktop app is enough on Windows, where its
 job object takes the rest along; the supervisor and the engine are stopped by name anyway, for the
 cases where it is not. Every step **throws** rather than calling `process.exit`, so a watcher meant
 to outlive a bad build survives one.
 
-## Two checkouts on the Windows machine — what RUNS stays on NTFS
-
-The Windows checkout is where everything that runs lives: Tilt, every dev server, the MSVC build
-and the binaries all run from NTFS, natively. Nothing that runs crosses into WSL, because what
-crosses breaks: MSBuild tracks a dependency lowercased, so over the case-sensitive 9p share no
-build is ever up to date, and a server reading NTFS from the distro pays 9p on every `readdir`
-(a workspace listing goes from about 1 ms to several seconds, and the service starves).
-
-The agent's EDITING clone is `~/Src/k7` in the WSL distro, on ext4, with its own Linux
-`node_modules`. It exists for one measured reason: process creation and small-file I/O. In Git Bash
-on NTFS, 50 process spawns take 2.8 s, `lint:comments` 3.7 s and one package's vitest 8 s; on
-ext4 the same take 47 ms, 0.2 s and 2.5 s. An agent spends its time in exactly those calls.
-
-The two trees meet through git and nothing else, with no mirror:
-
-| | WSL clone `~/Src/k7` | Windows checkout |
-|---|---|---|
-| edit, git, biome, vitest, tsc, the lints | yes | yes |
-| Tilt, dev servers, engine, MSVC | **never** | yes |
-| remote | `win` = `/mnt/c/Users/<you>/Src/k7` | — |
-
-The agent branches from `win/main`, commits, and runs `git push win <branch>`: the branch lands in the
-Windows checkout, which is where it is merged and where Tilt runs it. `tilt.exe` answers from
-the distro through interop, so `tilt.exe get uiresources` reads the session without crossing.
-
 ## Shelling out on Windows — from a FILE, never through PowerShell
-
-On the Windows side, editing (claude, nvim…) happens in the `console.priv.frediver.se` tabs,
-Git Bash by default (`npm run console`).
 
 PowerShell is the wrong tool for anything touching this repo's text, and it fails silently:
 

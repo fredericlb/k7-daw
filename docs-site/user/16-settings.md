@@ -7,7 +7,7 @@ k7 has three places for settings, depending on what they belong to:
 | **Settings panel** in the editor | the cog at the right of the footer, or `ui settings` | Editor, I/O, project and account |
 | **Commands page** | the ⌘ button at the top of the settings panel, or `ui settings commands` | Your names, icons, keys and menus for commands |
 | **Settings page** on the home page | `/settings`, from the user menu | What a browser may change on this device: language, separation chains, AI key, identity, paired devices |
-| **Engine page** on the home page | `/settings/engine`, from the user menu | The engine of this device: on the tray, this computer's engine; in the phone app, the phone's |
+| **Engine page** on the home page | `/settings/engine`, from the user menu | The engine of this device: on the desktop app, this computer's engine; in the phone app, the phone's |
 
 Where each setting is **kept** matters:
 
@@ -59,7 +59,7 @@ The page edits a draft: **Save** writes it to your account; leaving with unsaved
 
 ## The home page's Settings page
 
-Reached from the user menu at the foot of the home page's sidebar. It holds what a browser can change on this device, under two tabs: General and Devices. The engine, the audio interface and the machine's own settings are set on that machine, on the tray's engine page or in the command-line engine's config file; the phone's engine is on the Engine page.
+Reached from the user menu at the foot of the home page's sidebar. It holds what a browser can change on this device, under two tabs: General and Devices. The engine, the audio interface and the machine's own settings are set on that machine, on the desktop app's engine page or in the command-line engine's config file; the phone's engine is on the Engine page.
 
 ### Language
 
@@ -83,4 +83,4 @@ The name and email that sign every git commit made from this device, and head th
 
 ## The Engine page
 
-**Engine** in the user menu opens `/settings/engine`: the engines this device may use, each measured from this browser. On a computer running the tray it opens on this computer's engine, with that list as its last tab (see [k7 on your computer](./82-desktop-app.md#the-engine-page)); in the phone app it opens on the phone's engine.
+**Engine** in the user menu opens `/settings/engine`: the engines this device may use, each measured from this browser. On a computer running the desktop app it opens on this computer's engine, with that list as its last tab (see [k7 on your computer](./82-desktop-app.md#the-engine-page)); in the phone app it opens on the phone's engine.

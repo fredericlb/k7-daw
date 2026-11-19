@@ -1,12 +1,12 @@
 # k7's front on the user's own machine
 
-Three apps run the front on the user's device rather than on a server: the tray on a computer
-(`apps/k7-tray/docs/tray.md`), the phone (`engine/k7-runtime/docs/android.md`) and the iPhone
+Three apps run the front on the user's device rather than on a server: the desktop app on a computer
+(`apps/k7-desktop/docs/app.md`), the phone (`engine/k7-runtime/docs/android.md`) and the iPhone
 (`engine/k7-runtime/docs/ios.md`). All three start it from the **same table**, so they cannot drift apart.
 
 ## The table: `standalone.json`
 
-The port, the environment and the state folders, read by the tray (`apps/k7-tray/src-tauri/src/backend.rs`), by
+The port, the environment and the state folders, read by the desktop app (`apps/k7-desktop/src-tauri/src/backend.rs`), by
 `BackendHost.kt` (the phone's, through a `BuildConfig` constant for the port and the copy inside its
 `backend.zip` for the rest) and by `BackendHost.swift`. What each host adds is only what is its own: the state
 root, the session secret it keeps there, `$STUDIO_ENGINE` where an engine binary exists, and the page's folder.
@@ -63,4 +63,4 @@ video sample) is `scripts/stageCodeRoot.mjs`'s, staged beside it.
 | choice | why |
 |---|---|
 | a folder, not a JavaScript bundle | the front is Rust: it needs files to read, no runtime to run them |
-| `--no-frontend`, and `K7_DEV_FRONTEND` at run time | the dev tray's page is `k7-frontend`'s Vite, streamed by the front for HMR on 18789 (`routes/last/dev_frontend.rs`, `docs/dev.md`); a release always carries the built one, since nothing sets the variable there |
+| `--no-frontend`, and `K7_DEV_FRONTEND` at run time | the dev desktop app's page is `k7-frontend`'s Vite, streamed by the front for HMR on 18789 (`routes/last/dev_frontend.rs`, `docs/dev.md`); a release always carries the built one, since nothing sets the variable there |

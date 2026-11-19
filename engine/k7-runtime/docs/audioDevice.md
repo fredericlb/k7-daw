@@ -59,7 +59,7 @@ A ranked interface (`audioPriority`, below) still moves the engine afterwards.
 | where | who writes it | who applies it | when |
 |---|---|---|---|
 | `<state>/preferences.k7x` (`audioDevice`) | whoever edits the file — no route writes it | `engineLink.wireEngine`, on the socket's `open` | the first socket any session opens, and every reconnect after — so every engine restart, before anything plays |
-| `<state>/engine-host.json` (`audioPriority`) | the command-line engine's config file, or k7's engine page under the tray | the supervisor's `AudioPolicy.cpp` | continuously — it also RE-selects the device when it is replugged |
+| `<state>/engine-host.json` (`audioPriority`) | the command-line engine's config file, or k7's engine page under the desktop app | the supervisor's `AudioPolicy.cpp` | continuously — it also RE-selects the device when it is replugged |
 | `%APPDATA%/Studio/Settings.xml` | Tracktion, by itself | nobody | never — inert on purpose, see AGENTS.md |
 
 `set-audio-device` switches the RUNNING engine and is forgotten the moment it exits — in dev

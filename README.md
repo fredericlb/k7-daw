@@ -7,7 +7,7 @@ The music and stage apps of the frediverse.
 | `apps/k7` | text-first DAW — the web editor; the origin's front door | `127.0.0.1:5223` |
 | `engine/k7-runtime` | the native C++ audio engine (JUCE/Tracktion) | — |
 | `engine/k7-supervisor` | the engine machine's supervisor: starts and watches the engine, holds its tunnel | — |
-| `apps/k7-tray` | K7 DAW, the desktop app for Windows, Linux and macOS (Tauri: a window and a tray icon): runs k7's backend, which runs the supervisor and its engine, and shows k7 in its window | — |
+| `apps/k7-desktop` | K7 DAW, the desktop app for Windows, Linux and macOS (Tauri, one window): runs k7's backend, which runs the supervisor and its engine, and shows k7 in its window | — |
 
 `packages/` is k7-daw's shared tier, all `@studio/*` and consumed as raw
 TypeScript source: the song compiler, the command layer, the engine client and
@@ -26,7 +26,7 @@ npm run dev                    # every app, plus the engine
 ```
 
 In dev the studio is a device on loopback, **http://127.0.0.1:5223** — k7 at the root, no login; in
-production k7 runs on the devices (tray, phone, Mac). `k7.rocks` is a static site, built from this repository
+production k7 runs on the devices (desktop app, phone, Mac). `k7.rocks` is a static site, built from this repository
 and served by GitHub Pages: a front page, and the documentation at `k7.rocks/docs` (`docs/site.md`).
 Nothing here terminates TLS. See [docs/dev.md](docs/dev.md).
 
@@ -39,7 +39,7 @@ directory. See [docs/dev.md](docs/dev.md).
 
 `engine/k7-runtime` is a CMake/JUCE/Tracktion C++ project, `engine/k7-supervisor` a C++ program
 beside it — run from the command line as `k7-supervisor --config engine.json`, or carried by
-the tray, `apps/k7-tray`, through k7's backend. The moteur
+the desktop app, `apps/k7-desktop`, through k7's backend. The moteur
 deliberately declares no `build` script at all, so `npm run build --workspaces --if-present` can
 never try to compile C++. They have their own commands:
 

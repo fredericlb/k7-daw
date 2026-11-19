@@ -1,7 +1,7 @@
-// backend.rs — what the tray starts: k7's Rust front, in this process, on 127.0.0.1 at the table's port. It
+// backend.rs — what the app starts: k7's Rust front, in this process, on 127.0.0.1 at the table's port. It
 // answers the page and every route and runs the machine's supervisor and so its engine. The front is kept
 // running by this thread: ready once its health answers, said Down when it stops answering. The front's one
-// environment is standalone.json's and the host's. See docs/tray.md.
+// environment is standalone.json's and the host's. See docs/app.md.
 
 use std::path::Path;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
@@ -10,8 +10,8 @@ use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 use tauri::{AppHandle, Manager};
 
-use crate::state::{Backend, SharedState};
-use crate::{http, logbus, paths, tray};
+use crate::state::{self, Backend, SharedState};
+use crate::{http, logbus, paths, window};
 
 /// The thread keeping the front running, and the flags a stop and a restart pass between threads.
 #[derive(Default)]
@@ -34,14 +34,16 @@ struct Table {
 
 /// Health checks missed in a row before the front is said Down.
 const MISSES: u32 = 3;
-/// How long the port may stay taken: a previous tray's front may still be stopping.
+/// How long the port may stay taken: a previous run's front may still be stopping.
 const PORT_WAIT: Duration = Duration::from_secs(30);
-/// How long a started front has to answer before the tray says it does not.
+/// How long a started front has to answer before the app says it does not.
 const READY_WAIT: Duration = Duration::from_secs(90);
 
 fn set(app: &AppHandle, b: Backend) {
+    let ready = b == Backend::Ready;
+    let line = state::line(&b);
     app.state::<SharedState>().lock().unwrap().backend = b;
-    tray::refresh(app);
+    window::on_status(app, ready, &line);
 }
 
 /// The session secret, kept beside the backend's state so sessions outlive a restart; created once.
@@ -74,7 +76,7 @@ fn shared_env(table: &Table, root: &Path) -> std::collections::BTreeMap<String, 
 }
 
 /// What the front is told beyond the table: the switches, what its supervisor and file hub read.
-fn host_env(app: &AppHandle, table: &Table, token: &str) -> Result<Env, String> {
+fn host_env(app: &AppHandle, table: &Table) -> Result<Env, String> {
     let bundle =
         paths::backend_bundle(app).ok_or("k7's page and library are missing from this install")?;
     let supervisor =
@@ -85,12 +87,12 @@ fn host_env(app: &AppHandle, table: &Table, token: &str) -> Result<Env, String> 
     let mut set = |k: &str, v: String| env.insert(k.to_string(), v);
     set("K7_ENGINE_CORE", "front".into());
     set("K7_LOCAL_ENGINE", "front".into());
-    // The compiled modules in the tray's own data folder (docs/tray.md).
+    // The compiled modules in the app's own data folder (docs/app.md).
     set(
         "K7_FRONT_CACHE",
         root.join("front-cache").display().to_string(),
     );
-    // The file hub too: every account's file service is the front's own (docs/tray.md).
+    // The file hub too: every account's file service is the front's own (docs/app.md).
     set("K7_FILES", "front".into());
     set("STUDIO_PORTS", format!("k7={}", table.port));
     set("K7_SUPERVISOR_BIN", supervisor.display().to_string());
@@ -98,8 +100,6 @@ fn host_env(app: &AppHandle, table: &Table, token: &str) -> Result<Env, String> 
         "K7_SUPERVISOR_HOME",
         paths::studio_dir().display().to_string(),
     );
-    set("K7_TRAY_TOKEN", token.to_string());
-    set("K7_RELEASE", env!("K7_RELEASE").to_string());
     let seed = bundle.join("k7-core");
     if seed.is_dir() {
         set("STUDIO_LIBRARY_SEED", format!("k7-core={}", seed.display()));
@@ -111,7 +111,7 @@ fn host_env(app: &AppHandle, table: &Table, token: &str) -> Result<Env, String> 
     if let Some(code) = paths::code_root(app) {
         set("K7_CODE_ROOT", code.display().to_string());
     }
-    // The page from the bundle's dist, or the dev tray's Vite (docs/tray.md).
+    // The page from the bundle's dist, or the dev session's Vite (docs/app.md).
     let dist = bundle.join("apps/k7/frontend/dist");
     if dist.join("index.html").is_file() {
         set("K7_FRONTEND_DIST", dist.display().to_string());
@@ -127,9 +127,9 @@ fn host_env(app: &AppHandle, table: &Table, token: &str) -> Result<Env, String> 
 type Env = std::collections::BTreeMap<String, String>;
 
 /// The front on the table's port; stopped first if one runs.
-fn start_front(app: &AppHandle, port: u16, token: &str) -> Result<(), String> {
+fn start_front(app: &AppHandle, port: u16) -> Result<(), String> {
     let table = read_table(app).ok_or("standalone.json is missing from this install")?;
-    let env = host_env(app, &table, token)?;
+    let env = host_env(app, &table)?;
     k7_front::embedded::stop();
     let config = k7_front::Config {
         listen: std::net::SocketAddr::from(([127, 0, 0, 1], port)),
@@ -155,14 +155,14 @@ fn read_table(app: &AppHandle) -> Option<Table> {
     serde_json::from_str(&std::fs::read_to_string(file).ok()?).ok()
 }
 
-/// Start the backend and keep it running until the tray stops it.
+/// Start the backend and keep it running until the app stops it.
 pub fn spawn(app: &AppHandle) {
     let handle = app.clone();
     let runner = std::thread::spawn(move || run_forever(handle));
     *app.state::<Process>().runner.lock().unwrap() = Some(runner);
 }
 
-/// The menu's Restart: stop the backend as Quit does, then start it again — the way out of every Down.
+/// The app menu's Restart: stop the backend as Quit does, then start it again — the way out of every Down.
 pub fn restart(app: &AppHandle) {
     if app
         .state::<Process>()
@@ -218,9 +218,8 @@ fn wait_for_port(app: &AppHandle, port: u16) -> bool {
 }
 
 fn run_forever(app: AppHandle) {
-    let token = app.state::<SharedState>().lock().unwrap().token.clone();
     let port = app.state::<SharedState>().lock().unwrap().port;
-    // An answer already there is another k7 on our port, or a previous tray's front still stopping.
+    // An answer already there is another k7 on our port, or a previous run's front still stopping.
     if !wait_for_port(&app, port) {
         if app.state::<Process>().stopping.load(Ordering::SeqCst) {
             return;
@@ -232,7 +231,7 @@ fn run_forever(app: AppHandle) {
         );
     }
     set(&app, Backend::Starting);
-    if let Err(why) = start_front(&app, port, &token) {
+    if let Err(why) = start_front(&app, port) {
         logbus::line("host", &why);
         return set(&app, Backend::Down(why));
     }

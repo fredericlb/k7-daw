@@ -1,10 +1,12 @@
-// window.rs — K7 DAW's one window: it opens on the bundled splash, navigates to the backend's page once the backend
-// answers, and hides rather than closes (the engine keeps serving other devices; Quit is deliberate). The page gets
-// no IPC and no capability: it is the same bundle every host serves. See docs/desktop.md.
+// window.rs — K7 DAW's one window: it opens on the bundled splash and navigates to the backend's page once the backend
+// answers. Closing it hides it on a Mac (the Dock brings it back) and quits elsewhere. The page gets no IPC and no
+// capability: it is the same bundle every host serves. See docs/desktop.md.
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Mutex;
-use tauri::{AppHandle, Manager, WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent};
+#[cfg(target_os = "macos")]
+use tauri::WindowEvent;
+use tauri::{AppHandle, Manager, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
 
 use crate::{backend, handlers};
 
@@ -27,13 +29,12 @@ fn marker() -> String {
     )
 }
 
-pub fn create(app: &AppHandle, visible: bool) -> tauri::Result<WebviewWindow> {
+pub fn create(app: &AppHandle) -> tauri::Result<WebviewWindow> {
     let builder = WebviewWindowBuilder::new(app, LABEL, WebviewUrl::App("index.html".into()))
         .title("K7 DAW")
         .inner_size(1440.0, 900.0)
         .min_inner_size(960.0, 600.0)
         .center()
-        .visible(visible)
         .initialization_script(marker())
         // HTML5 drops (the file tree, the timeline) need the page to see them, not Tauri's native handler.
         .disable_drag_drop_handler()
@@ -50,13 +51,17 @@ pub fn create(app: &AppHandle, visible: bool) -> tauri::Result<WebviewWindow> {
     let window = handlers::install(builder, app).build()?;
     #[cfg(target_os = "linux")]
     crate::webview_linux::configure(&window);
-    let w = window.clone();
-    window.on_window_event(move |event| {
-        if let WindowEvent::CloseRequested { api, .. } = event {
-            api.prevent_close();
-            let _ = w.hide();
-        }
-    });
+    // Elsewhere the close goes through and the last window ends the app, through its cleanup.
+    #[cfg(target_os = "macos")]
+    {
+        let w = window.clone();
+        window.on_window_event(move |event| {
+            if let WindowEvent::CloseRequested { api, .. } = event {
+                api.prevent_close();
+                let _ = w.hide();
+            }
+        });
+    }
     Ok(window)
 }
 
@@ -77,9 +82,7 @@ pub fn show(app: &AppHandle, path: Option<&str>) {
             *PENDING.lock().unwrap() = Some(path.to_string());
         }
     }
-    let win = app
-        .get_webview_window(LABEL)
-        .or_else(|| create(app, true).ok());
+    let win = app.get_webview_window(LABEL).or_else(|| create(app).ok());
     if let Some(win) = win {
         let _ = win.unminimize();
         let _ = win.show();
@@ -108,7 +111,7 @@ fn step(ready: bool, loaded: bool, stale: bool) -> Step {
     }
 }
 
-/// The backend's standing, from the tray's refresh.
+/// The backend's standing, from the backend's state.
 pub fn on_status(app: &AppHandle, ready: bool, line: &str) {
     let Some(win) = app.get_webview_window(LABEL) else {
         return;

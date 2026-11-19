@@ -1,6 +1,6 @@
-// paths.rs — where the tray finds what it starts (k7's bundle of page and library, the supervisor) and where state lives.
+// paths.rs — where the app finds what it starts (k7's bundle of page and library, the supervisor) and where state lives.
 // Packaged, everything is in the bundle's resources (scripts/stage.mjs); in a checkout, the staged copy under
-// src-tauri/resources, or the repo's own builds. `~/.k7` mirrors studioHome.ts BY HAND. See docs/tray.md.
+// src-tauri/resources, or the repo's own builds. `~/.k7` mirrors studioHome.ts BY HAND. See docs/app.md.
 
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
@@ -29,7 +29,7 @@ pub fn engine_pid_path() -> PathBuf {
     studio_dir().join("engine.pid")
 }
 
-/// The merged log: the supervisor's and the engine's lines, the backend's under `[backend]`, the tray's under `[host]`.
+/// The merged log: the supervisor's and the engine's lines, the backend's under `[backend]`, the app's under `[host]`.
 pub fn merged_log_path() -> PathBuf {
     studio_dir().join(".studio.log")
 }
@@ -44,21 +44,21 @@ pub fn backend_root(app: &AppHandle) -> PathBuf {
         .unwrap_or_else(|_| studio_dir().join("local-backend"))
 }
 
-/// A scratch run's own folder (`K7_TRAY_SCRATCH`, debug builds only): its data, and no single-instance lock.
+/// A scratch run's own folder (`K7_DESKTOP_SCRATCH`, debug builds only): its data, and no single-instance lock.
 pub fn scratch() -> Option<PathBuf> {
     if !cfg!(debug_assertions) {
         return None;
     }
-    std::env::var("K7_TRAY_SCRATCH")
+    std::env::var("K7_DESKTOP_SCRATCH")
         .ok()
         .filter(|s| !s.is_empty())
         .map(PathBuf::from)
 }
 
-/// A scratch run's port (`K7_TRAY_PORT`), never the table's 18789 that the person's tray holds.
+/// A scratch run's port (`K7_DESKTOP_PORT`), never the table's 18789 that the person's app holds.
 pub fn scratch_port() -> Option<u16> {
     scratch()?;
-    std::env::var("K7_TRAY_PORT").ok()?.parse().ok()
+    std::env::var("K7_DESKTOP_PORT").ok()?.parse().ok()
 }
 
 /// The staged resources: the bundle's when packaged, `src-tauri/resources` in a checkout.

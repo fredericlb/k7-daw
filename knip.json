@@ -26,7 +26,6 @@
   ],
   "workspaces": {
     ".": {
-      "ignoreDependencies": ["node-pty", "@xterm/xterm", "@xterm/addon-fit"],
       "entry": [
         "scripts/*.mjs",
         "scripts/**/*.mjs",
@@ -43,7 +42,7 @@
     "apps/k7/frontend": {
       "entry": ["src/docs/examples.ts", "notices/vendor.ts", "scripts/icons.mjs"]
     },
-    "apps/k7-tray": {
+    "apps/k7-desktop": {
       "entry": ["scripts/*.mjs"]
     },
     "e2e": {

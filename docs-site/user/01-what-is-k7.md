@@ -44,7 +44,7 @@ The chains graph and the text editor are always there.
 open a project until at least one library exists. See [The home page](./03-home-page.md#libraries).
 
 **Engine.** The program that makes the sound. It runs on a machine with an audio interface: your
-computer with the k7 tray, the command-line engine, or a phone. The
+computer with K7 DAW, the command-line engine, or a phone. The
 browser never plays a project's audio itself. When you open a project, k7 picks an engine and sends
 the project to it. One engine plays one project at a time, and one project plays on one engine at a
 time. The engines section of this guide explains how to set one up.

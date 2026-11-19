@@ -9,7 +9,7 @@ What roams between a person's Apple devices besides git: the list of the workspa
 | choice | why |
 |---|---|
 | the store is a trait (`ListStore`: pairs, put, available) with `NoStore` as the default and `Fake` for tests | Android, Windows and Linux have no list; the route answers `available: false` and the page shows nothing |
-| the host's store is two C function pointers (`k7_roam_install`), not a Capacitor plugin | the page reaches the list through the front's own route, so no second path (page to Swift) exists, and the Mac's iPad app and the phone share one mechanism |
+| the host's store is two C function pointers (`k7_roam_install`), not a Capacitor plugin | the page reaches the list through the front's own route, so no second path (page to Swift) exists for every iOS device |
 | the callbacks list the pairs through an `emit` function the Rust side gives them | no string crosses the boundary owned by the other side, so nothing is freed twice |
 | one key per workspace, `ws.<id>`, the value a JSON text | the store is last-writer-wins per key; two devices that each add a workspace never overwrite each other |
 | an id is a hash of the normalized remote (`git@h:o/r.git`, `ssh://git@h/o/r` and a trailing slash are one) | two devices that cloned one repository share a key; any spelling of the address gives the same one |

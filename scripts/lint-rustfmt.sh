@@ -4,7 +4,7 @@
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 status=0
-for dir in apps/k7/backend-rs engine/k7-supervisor/rust apps/k7-tray/src-tauri packages/song/rust packages/song-schema/rust packages/k7-wasm/rust packages/k7x/rust; do
+for dir in apps/k7/backend-rs engine/k7-supervisor/rust apps/k7-desktop/src-tauri packages/song/rust packages/song-schema/rust packages/k7-wasm/rust packages/k7x/rust; do
   (cd "$dir" && cargo fmt --all --check > /dev/null) || { echo "lint:rustfmt: $dir is not formatted: run cargo fmt --all there"; status=1; }
 done
 [ "$status" = 0 ] && echo "lint:rustfmt: every workspace formatted"

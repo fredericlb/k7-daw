@@ -18,7 +18,7 @@ no family takes ends in the last routes (`last.md`), never in another process. T
 | "this machine" — a registry engine's `loopback_seen`, so its use by the account and the relay dialling `127.0.0.1` — is a loopback client address, which only a loopback socket gives (above); a hint naming loopback is never dialled on its own | an engine on this machine is every signed-in account's; that must not be one header away. The socket alone would not do either: behind the dev session's Vite every socket is loopback, a LAN engine's included |
 | `K7_FRONT_TRUSTED_PROXIES` (CIDRs) believes `X-Forwarded-*` only from a socket in the set, and walks `X-Forwarded-For` past the set's members; a peer outside it has every forwarded header dropped | a hop count cannot tell Traefik from a neighbour on its network; a set can. Unset, the hop arithmetic stands, since the deployment's proxy address is not known to the image |
 | the front draws its own seams' secret per process when none is given (`Config::settled`) | the internal seam and the engine slots need a secret no client knows |
-| a debug build optimizes its dependencies (`opt-level = 2` for every non-workspace package), the tray's workspace too | the front runs the song compiler and the WASM modules in Wasmtime: at opt-level 0 a conformance run takes two to three times longer; the workspace's own crates stay unoptimized, so an edit still rebuilds in seconds |
+| a debug build optimizes its dependencies (`opt-level = 2` for every non-workspace package), the desktop app's workspace too | the front runs the song compiler and the WASM modules in Wasmtime: at opt-level 0 a conformance run takes two to three times longer; the workspace's own crates stay unoptimized, so an edit still rebuilds in seconds |
 | what the state keeps never holds the state: a door's routes are kept without it and given it per request, a middleware or hook kept there holds it weakly | a router given the state, or a closure holding it, kept inside that state keeps it alive for good: the families' services, sockets and child processes outlive a stopped front, and a test binary never exits; `src/stop_tests.rs` stops a front after each door answered and checks the state is let go |
 
 ## The roots it trusts
@@ -46,7 +46,7 @@ way it ends is said, by the front where it still can, by whoever started it wher
 
 | choice | why |
 |---|---|
-| the lines go where the host keeps the front's: stderr for the binary, the merged log under `[front]` for the tray, logcat under `k7-front` for Android, with every other line the front prints (`k7-embed`'s `logcat.rs`) | the tray and the phone run the front in their own process, whose stderr nobody reads |
+| the lines go where the host keeps the front's: stderr for the binary, the merged log under `[front]` for the desktop app, logcat under `k7-front` for Android, with every other line the front prints (`k7-embed`'s `logcat.rs`) | the desktop app and the phone run the front in their own process, whose stderr nobody reads |
 | SIGABRT only on Unix, no SIGSEGV handler | Wasmtime owns SIGSEGV and SIGBUS for its traps; a launcher reads the signal from the exit status |
 | on Windows a last-chance filter, not a vectored handler | Wasmtime's traps and Rust's stack-overflow check are first-chance handlers, and must see their faults first |
 | a signal handler writes a fixed text with `write`/`WriteFile` | nothing may allocate inside `abort()` or a crash |
@@ -63,7 +63,7 @@ way it ends is said, by the front where it still can, by whoever started it wher
 | `K7_ENGINE_CORE` | unset | `front` answers the engine registry, the relay, the tunnel hub and the seam's engine half here (`engine.md`) |
 | `K7_LOCAL_ENGINE` | unset | `front` on a device runs the machine's supervisor here (`local.md`) |
 | `K7_FRONTEND_DIST` | `apps/k7/frontend/dist` above the front | the built page the last routes serve |
-| `K7_DEV_FRONTEND` | unset | a running Vite the last routes stream the page from, as the dev tray asks |
+| `K7_DEV_FRONTEND` | unset | a running Vite the last routes stream the page from, as the dev desktop app asks |
 | `K7_EXTRA_CA_CERTS` | unset, else `NODE_EXTRA_CA_CERTS` | a PEM file of certificate authorities every outbound TLS call trusts beside Mozilla's roots, read once at start |
 | `K7_FRONT_TRUST_HOPS` | `0` | proxies before the front whose `X-Forwarded-*` is believed: `1` behind Traefik or the dev Caddy |
 | `K7_FRONT_TRUSTED_PROXIES` | unset | the proxies' addresses or CIDRs, comma- or space-separated; set, only they are believed and the hop count is 1; an entry that is not one stops the front |
@@ -78,6 +78,6 @@ object for those settings: an embedded front cannot be handed an environment of 
 | host | the front |
 |---|---|
 | the dev session | the Tiltfile's `k7-front`, on 127.0.0.1:8789, one trusted hop (Vite) — `docs/dev.md` |
-| the tray | linked into the tray, on 18789 — `apps/k7-tray/docs/tray.md` |
+| the desktop app | linked into the desktop app, on 18789 — `apps/k7-desktop/docs/app.md` |
 | Android | `libk7_embed.so` in the app's process, on the studio's port — `engine/k7-runtime/docs/android.md` |
 | iOS | `k7-embed` linked into the app — `engine/k7-runtime/docs/ios.md` |

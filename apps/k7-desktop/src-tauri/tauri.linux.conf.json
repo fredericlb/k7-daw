@@ -6,10 +6,7 @@
       "deb": {
         "section": "sound",
         "depends": ["gstreamer1.0-plugins-base", "gstreamer1.0-plugins-good"],
-        "recommends": ["gstreamer1.0-plugins-bad", "gstreamer1.0-libav"],
-        "conflicts": ["k7-tray"],
-        "replaces": ["k7-tray"],
-        "provides": ["k7-tray"]
+        "recommends": ["gstreamer1.0-plugins-bad", "gstreamer1.0-libav"]
       }
     }
   }

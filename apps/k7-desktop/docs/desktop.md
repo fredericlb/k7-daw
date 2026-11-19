@@ -1,7 +1,7 @@
 # The window
 
 K7 DAW is k7 in a window of its own, on Windows, Linux and macOS. The window shows the page k7's backend
-serves on `127.0.0.1`; the tray icon and the backend are the ones `docs/tray.md` describes.
+serves on `127.0.0.1`; the backend is the one `docs/app.md` describes.
 
 ## One window, the page's own
 
@@ -10,13 +10,13 @@ serves on `127.0.0.1`; the tray icon and the backend are the ones `docs/tray.md`
 | one window, label `main`, made at startup on the bundled splash (`ui/index.html`), navigated to the backend's page once it answers | the page's origin must be `http://127.0.0.1:<port>` (storage, secure context); a remote URL loaded before the backend listens shows an error page, and the splash can say what the backend is doing |
 | the host writes its status line into the splash with `eval`, and reloads the page after a gap in the backend | no IPC is needed for either |
 | no capabilities file, no IPC for the page; the host marks the window with `window.k7Desktop = { release }` from an init script | the page is the same bundle every host serves (`apps/k7/frontend/docs/localApp.md`); a loopback page with native powers would hand any injected script the machine. The phones mark their views the same way |
-| closing the window hides it; Quit (tray, Cmd-Q, the app menu) is the only way out | the engine also serves other devices and k7.rocks through the tunnel, so quitting is deliberate |
-| the window comes up on a normal launch, "Open K7 DAW", a second launch, and a Dock click on a Mac; a login item starts it hidden (`--autostart`) | a login should not pop a window |
+| closing the window hides it on a Mac, where Quit (Cmd-Q, the app menu) is the only way out, and quits the app elsewhere | a Mac app outlives its windows and the Dock icon brings it back; Windows and Linux have no such entry, so a hidden window would be unreachable |
+| the window comes up on every launch, a second launch, and a Dock click on a Mac | one app, one window |
 | the window's size, position and maximized state are remembered (tauri-plugin-window-state), its visibility is not; 1440x900 by default, 960x600 at least | visibility belongs to the launch above |
 | HTML5 drag and drop reaches the page (`disable_drag_drop_handler`) | the file tree and the timeline take file drops; Tauri's native handler would swallow them |
 | devtools only in debug builds | a release user gets no inspector |
 
-A scratch run (`K7_TRAY_SCRATCH`) keeps the window state, the login item and the web storage out of the person's
+A scratch run (`K7_DESKTOP_SCRATCH`) keeps the window state and the web storage out of the person's
 folders: it is a second app on purpose, for a test of its own.
 
 ## What the webview may do
@@ -30,16 +30,20 @@ folders: it is a second app on purpose, for a test of its own.
 | a download goes to the Downloads folder, never over a file ("name (2).ext"), then a dialog says where, with Show in Folder | `<a download>` on blobs and same-origin files is how k7 exports; every webview routes it to the host, which has to say where it went |
 | the camera, the microphone and MIDI are allowed for k7's origin; the screen, the position and notifications are denied; the rest follows the platform | k7 uses the camera and Web MIDI, and records audio through the engine; macOS still asks once (`macos.md`) |
 
-## The menu bar
+## The menu
 
-macOS has one (`src/appmenu.rs`): K7 DAW (About, Engine Settings, Hide, Quit), Edit, View (Reload,
-Full Screen), Window, Help. Windows and Linux have none: the tray menu and the page carry everything.
+One menu per OS (`src/appmenu.rs`): the Mac's menu bar holds K7 DAW (About, Engine Settings, Open in Browser,
+Restart, Hide, Quit), Edit, View (Reload, Full Screen), Window and Help (the docs, Show Logs); Windows and Linux
+carry the same entries in the window's menu, under File (Engine Settings, Open in Browser, Restart, Quit), Edit, View
+and Help.
 
 | choice | why |
 |---|---|
+| Open in Browser, Engine Settings, Restart and Show Logs are menu entries and nothing else | the page has no native power (`docs/app.md`), so the menu is where the host's own actions live |
+| Open in Browser opens the same address in the browser | the way to Web MIDI where the window has none (`webviews.md`) |
+| Restart stops the front as Quit does and starts it again | every state the app can end in has a way out short of quitting it |
 | the Edit menu holds the predefined Undo, Redo, Cut, Copy, Paste and Select All | WKWebView gets Cmd-C, V, X, A and Z only through those key equivalents; a key the page handles itself and cancels (k7's Cmd-Z) still reaches the page first |
-| Close (Cmd-W) hides the window | the same rule as the close button |
-| the Dock icon stays, with the status item | a windowed app without a Dock entry, an app menu and Cmd-Tab is not a Mac app |
+| Close (Cmd-W) hides the window, on a Mac only | the same rule as the close button |
 
 A webview calls the navigation handler for subframes too: a cross-origin iframe would be sent to the browser, so a page
 that embeds one needs the handler taught first (today's only frame is `srcdoc`, `about:`). The page keeps Tauri's own
@@ -47,18 +51,7 @@ injected internals, but there is no capability and no command handler, so every 
 
 After a gap in the backend the window reloads the page: what the backend never received is lost with it either way.
 
-## The tray menu
-
-"Open K7 DAW" brings the window up; "Open in Browser" opens the same address in the browser, which is also the way
-to Web MIDI where the window has none (`webviews.md`); "Engine Settings…" opens `/settings/engine` in the window.
-
-## Launch at login
-
-The login item is called `K7 DAW` and carries `--autostart`. An entry written before the window existed carries no
-argument, so it is registered again once at the first start; the entry under the tray's old name `k7-tray` is
-removed and the new one enabled in its place.
-
 ## Names
 
-The product is **K7 DAW**; the binary and the Cargo package stay `k7-tray` and the bundle identifier stays
-`org.parapluie.studio.engine-tray` (`docs/tray.md`). Release files are `k7-daw_<stamp>_<os>-<arch>.<ext>`.
+The product is **K7 DAW**; the binary and the Cargo package are `k7-desktop` and the bundle identifier is
+`org.parapluie.studio.engine-tray` (`docs/app.md`). Release files are `k7-daw_<version>_<os>-<arch>.<ext>`.

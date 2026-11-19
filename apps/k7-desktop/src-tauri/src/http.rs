@@ -1,5 +1,5 @@
-// http.rs — one GET to the backend on loopback, which is all the HTTP the tray ever speaks: its readiness and its
-// status line. Plain HTTP/1.1 over a TcpStream rather than a client crate; the backend answers with a length.
+// http.rs — one GET to the backend on loopback, which is all the HTTP the app ever speaks: its readiness.
+// Plain HTTP/1.1 over a TcpStream rather than a client crate; the backend answers with a length.
 
 use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpStream};

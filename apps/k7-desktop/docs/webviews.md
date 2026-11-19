@@ -18,7 +18,7 @@ uses what is below, so what a webview lacks is a limit of K7 DAW and not of k7.
 
 | choice | why |
 |---|---|
-| Web MIDI is reached through "Open in Browser" on a Mac and on Linux; the status line says so | the webview has none; a native MIDI bridge is its own design |
+| Web MIDI is reached through the menu's "Open in Browser" on a Mac and on Linux | the webview has none; a native MIDI bridge is its own design |
 | the app asks its own question before leaving a project with unsaved work (`askConfirm`), never `window.confirm` | WKWebView's `confirm()` returns false without showing anything |
 | the window runs no service worker, and drops one it holds | an installed precache would serve the previous release's page after an update |
 | Linux: media stream, WebRTC and media source are switched on (`src/webview_linux.rs`) | WebKitGTK ships them off, so `getUserMedia` does not exist |

@@ -17,7 +17,7 @@ what each form means, for when you type or share one yourself.
 | `/external` | The menu of surfaces a second device can drive. |
 | `/libraries`, `/tasks`, `/settings`, `/settings/engine` | Pages of the home (see [The home page](./03-home-page.md)). |
 
-Examples, on the tray's own address (`http://127.0.0.1:18789`):
+Examples, on the desktop app's own address (`http://127.0.0.1:18789`):
 
 ```text
 http://127.0.0.1:18789/@local/band/winter.k7

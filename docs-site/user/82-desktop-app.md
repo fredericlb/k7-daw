@@ -1,6 +1,6 @@
 # K7 DAW: k7 on your computer
 
-**K7 DAW** puts all of k7 on your own computer: the editor, k7's own backend, the supervisor and the engine. k7 opens in a window of its own, and a small icon in the system tray (the menu bar on a Mac) shows what the engine is doing. It runs on Windows, Linux and Macs with Apple silicon (macOS 13 or later).
+**K7 DAW** puts all of k7 on your own computer: the editor, k7's own backend, the supervisor and the engine. k7 opens in a window of its own. It runs on Windows, Linux and Macs with Apple silicon (macOS 13 or later).
 
 Install it when you want to make music on your own machine without depending on a network connection.
 
@@ -16,30 +16,25 @@ Download the file for your computer from the [release page](https://github.com/f
 | macOS | `k7-daw_<version>_macos-arm64.dmg` |
 | Linux | `k7-daw_<version>_linux-<arch>.AppImage`, or `.deb` for Debian and Ubuntu |
 
-On Windows, SmartScreen may warn on first launch: confirm that you want to open it. The Windows installer replaces an older **k7-tray** install, which it removes. On a Mac, open the `.dmg` and drag K7 DAW to Applications.
+On Windows, SmartScreen may warn on first launch: confirm that you want to open it. On a Mac, open the `.dmg` and drag K7 DAW to Applications.
 
 The first time you record, your system asks for permission to use the microphone, and the first time you use a camera lane, the camera. On Linux, the `.deb` pulls in GStreamer, which the window needs for audio and video.
 
-Only one copy of K7 DAW runs at a time. Launching it again brings its window forward. Closing the window does not quit: the engine keeps running in the tray, and **Open K7 DAW** (or the Dock icon on a Mac) brings the window back.
+Only one copy of K7 DAW runs at a time. Launching it again brings its window forward. On a Mac, closing the window does not quit: the engine keeps running, and the Dock icon brings the window back. On Windows and Linux, closing the window quits.
 
-## The tray menu
+## The menu
 
-Click the icon to open its menu:
+On a Mac the entries are in the menu bar; on Windows and Linux they are in the window's menu.
 
 | Entry | What it does |
 |---|---|
-| The status line | What k7 is doing: *Starting K7 DAW…*, *Starting the engine…*, *● Engine running · :8765*, *○ Engine stopped*, or a line starting with ⚠ that says what went wrong. While an instrument downloads, a second line shows its progress. |
-| **Open K7 DAW** | Brings the window forward. |
 | **Open in Browser** | Opens k7 in your web browser instead (see [Web MIDI](#midi-keyboards)). |
 | **Engine Settings…** | Opens the engine's settings page in the window (see [The engine page](#the-engine-page)). |
 | **Restart K7 DAW** | Stops k7 and the engine and starts them again. |
-| **Launch at Login** | Starts K7 DAW, hidden in the tray, when you log in to your computer. |
 | **Show Logs** | Opens the log of k7 and its engine. |
 | **Quit K7 DAW** | Stops the engine and k7, then quits. |
 
-The icon itself shows the same state at a glance: running, stopped, starting (it turns), or a problem.
-
-On a Mac, the menu bar of K7 DAW also holds Engine Settings…, Reload, Show Logs and the usual Edit, Window and Help menus.
+While k7 starts, the window shows *Starting K7 DAW…*; if something goes wrong it says what, with a line starting with ⚠, and **Restart K7 DAW** is the way out.
 
 ## The window
 
@@ -63,7 +58,7 @@ There is no account: connect a workspace to a git repository and pull it on the 
 
 ## The engine page
 
-**Engine Settings…** in the tray menu, or **Engine** in the user menu at the bottom of the home page's sidebar, opens `/settings/engine`, the page that controls this computer's engine. Its last tab, **Engines**, lists the engines this device may use. Opened anywhere other than K7 DAW's address, the page lists only those engines.
+**Engine Settings…** in the menu, or **Engine** in the user menu at the bottom of the home page's sidebar, opens `/settings/engine`, the page that controls this computer's engine. Its last tab, **Engines**, lists the engines this device may use. Opened anywhere other than K7 DAW's address, the page lists only those engines.
 
 ### This machine's engine
 

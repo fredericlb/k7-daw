@@ -66,8 +66,8 @@ library with no folder is copied from `$STUDIO_LIBRARY_SEED` (`name=dir,...` or 
 under the version its `library.k7x` declares (version 1 when it has none), or created empty. A
 machine that already has the library gets a seed declaring a version it lacks as one more version;
 when that number is taken by another version, the seed goes in as the next free
-number, its own kept as the manifest's `seed`, and is never written over anything. Nothing is fetched from an origin. The tray
-sets the seed to its bundled `k7-core` (`apps/k7-tray/src-tauri/src/backend.rs`); the bundle script
+number, its own kept as the manifest's `seed`, and is never written over anything. Nothing is fetched from an origin. The desktop app
+sets the seed to its bundled `k7-core` (`apps/k7-desktop/src-tauri/src/backend.rs`); the bundle script
 `apps/k7/backend-rs/scripts/stageBundle.mjs` packs the repository's `k7-core/` (`libraryArchive.mjs`).
 
 `k7-core/` in this repository is that seed, and its `library.k7x` is its version: a change to its

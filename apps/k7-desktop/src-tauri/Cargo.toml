@@ -1,32 +1,29 @@
 [package]
-name = "k7-tray"
+name = "k7-desktop"
 version = "0.1.0"
 edition = "2021"
-description = "K7 DAW, the desktop app: a window and a tray icon on k7's local backend, which runs the engine"
+description = "K7 DAW, the desktop app: a window on k7's local backend, which runs the engine"
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
+serde_json = "1"
 
-# Short on purpose: the app starts one process, draws one line and one window. What k7 does happens in the backend and the
-# supervisor; a crate added here for logic is logic in the wrong place (docs/tray.md).
+# Short on purpose: the app starts one process, hosts one window. What k7 does happens in the backend and the
+# supervisor; a crate added here for logic is logic in the wrong place (docs/app.md).
 [dependencies]
-# tray-icon: TrayIconBuilder; image-png: the cassette the tray icon is drawn from.
-tauri = { version = "2", features = ["tray-icon", "image-png"] }
+tauri = { version = "2", features = [] }
 tauri-plugin-single-instance = "2"
-tauri-plugin-autostart = "2"
-# The login entry the windowless tray registered under its old name, found and removed (src/autostart.rs); the plugin's own crate.
-auto-launch = "0.6"
 tauri-plugin-dialog = "2"
 # The window's size, position and maximized state, between launches (not its visibility: a login starts it hidden).
 tauri-plugin-window-state = "2"
-# The backend's status answer and standalone.json, both JSON.
+# standalone.json, read as JSON.
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 # Local wall-clock for the merged log's `HH:MM:SS [tag]` prefix, the web Logs panel's contract.
 chrono = { version = "0.4", features = ["clock"] }
 # The home directory `~/.k7` hangs off.
 dirs = "5"
-# The bearer the backend checks on the tray's status route.
+# The random hex of the front's secret and the session secret.
 getrandom = "0.3"
 # The unix SIGTERM/SIGINT handler, on the runtime Tauri already brings.
 tokio = { version = "1", features = ["macros", "signal"] }
@@ -35,7 +32,7 @@ k7-front = { path = "../../k7/backend-rs/crates/k7-front" }
 # The pidfile proof the quit's backstop kills by, shared with the Rust supervisor host (apps/k7/backend-rs/docs/local.md).
 k7-local = { path = "../../k7/backend-rs/crates/k7-local" }
 
-# Windows Job Object (kill-on-close): the backend and everything it starts die with the tray, however it ends.
+# Windows Job Object (kill-on-close): the backend and everything it starts die with the app, however it ends.
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.61", features = [
   "Win32_Foundation",
@@ -60,7 +57,3 @@ opt-level = 2
 opt-level = "s"
 lto = "thin"
 strip = true
-
-[dev-dependencies]
-# Only for the icon-dump test in trayicon.rs (PNG encoding); not linked into the app.
-image = { version = "0.25", default-features = false, features = ["png"] }

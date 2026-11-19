@@ -2,8 +2,7 @@
   "bundle": {
     "targets": ["nsis"],
     "windows": {
-      "webviewInstallMode": { "type": "embedBootstrapper" },
-      "nsis": { "installerHooks": "windows/hooks.nsh" }
+      "webviewInstallMode": { "type": "embedBootstrapper" }
     }
   }
 }

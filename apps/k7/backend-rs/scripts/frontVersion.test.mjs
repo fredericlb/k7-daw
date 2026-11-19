@@ -1,5 +1,5 @@
 // frontVersion.test.mjs — the front's version is the app's, which is the repository's.
-// Run by the tray's workspace, which stages from this folder (apps/k7-tray/package.json).
+// Run by the desktop app's workspace, which stages from this folder (apps/k7-desktop/package.json).
 
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";

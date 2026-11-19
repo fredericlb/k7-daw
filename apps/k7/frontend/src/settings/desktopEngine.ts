@@ -1,4 +1,4 @@
-// desktopEngine.ts — this machine's engine, when the page is served by the tray's backend, which runs its supervisor:
+// desktopEngine.ts — this machine's engine, when the page is served by the desktop app's backend, which runs its supervisor:
 // the supervisor's latest picture, pushed over /api/local/engine/events, and the few commands a page may send.
 // A server or a phone's backend runs none, and the probe says so. See ../../docs/localApp.md.
 

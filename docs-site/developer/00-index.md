@@ -100,5 +100,5 @@ edit path in [The edit path](./21-edit-path.md).
 - [The engine protocol](./83-engine-protocol.md)
 - [Engine clients](./84-engine-clients.md)
 - [Registry and tunnel](./85-registry-and-tunnel.md)
-- [The tray and the phone apps](./86-desktop-and-android.md)
+- [The desktop app and the phone apps](./86-desktop-and-android.md)
 - [Building and shipping engines](./87-engine-build-and-shipping.md)

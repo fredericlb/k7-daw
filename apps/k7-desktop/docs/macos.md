@@ -1,15 +1,12 @@
 # K7 DAW on a Mac
 
-K7 DAW is the Mac's k7: Apple silicon, macOS 13 or later. The iOS app, run as Designed for iPad, is still
-buildable (`engine/k7-runtime/docs/ios.md`) and is not what a Mac user is pointed to: it has one "iOS Audio"
-device, a sandbox, no plugins, and a signing profile of its own.
+K7 DAW is the Mac's k7: Apple silicon, macOS 13 or later.
 
 | choice | why |
 |---|---|
 | Apple silicon only, macOS 13 as the floor | AudioWorklet, WKDownload and the media-capture delegate are there; an Intel Mac was never served |
 | the same bundle identifier as the other desktop builds | the dev session's data already lives under it, and a Developer ID signature does not care about the prefix |
-| a regular app (Dock icon, app menu, Cmd-Q) with the status item beside it | `docs/desktop.md` |
-| no data moved from the iPad app's container | different bundle ids, different containers; workspaces move with git |
+| a regular app (Dock icon, app menu, Cmd-Q) | `docs/desktop.md` |
 | targets `app` and `dmg` | the DMG is the download |
 
 ## Signing
@@ -37,11 +34,11 @@ The identity is `$APPLE_SIGNING_IDENTITY`, else `-`: an ad-hoc signature, which 
 The DMG then runs on the Mac that built it; any other Mac's Gatekeeper refuses it. An ad-hoc build is a new identity
 at every build, so the microphone and camera grants are asked again after each rebuild.
 
-Stage and `tray:build` take the same identity, or notarization refuses the mix:
+Stage and `desktop:build` take the same identity, or notarization refuses the mix:
 
 ```
-npm run stage --workspace k7-tray
-npm run tray:build --workspace k7-tray
+npm run stage --workspace k7-desktop
+npm run desktop:build --workspace k7-desktop
 ```
 
 A DMG's window layout is set through Finder with AppleScript, which times out on a busy or headless Mac; `CI=true`

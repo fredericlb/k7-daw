@@ -8,8 +8,8 @@ use tauri::webview::{DownloadEvent, NewWindowResponse, PermissionKind, Permissio
 use tauri::{AppHandle, Manager, Url, WebviewWindowBuilder, Wry};
 use tauri_plugin_dialog::{DialogExt, MessageDialogButtons};
 
+use crate::open;
 use crate::state::SharedState;
-use crate::tray;
 
 type Builder<'a> = WebviewWindowBuilder<'a, Wry, AppHandle>;
 
@@ -105,14 +105,14 @@ pub fn install<'a>(builder: Builder<'a>, app: &AppHandle) -> Builder<'a> {
         .on_navigation(move |url| match route(url, port_of(&nav)) {
             Route::Stay => true,
             Route::Browser => {
-                tray::open_path(url.as_str());
+                open::open_path(url.as_str());
                 false
             }
             Route::Drop => false,
         })
         .on_new_window(move |url, _| {
             if route(&url, port_of(&new)) != Route::Drop {
-                tray::open_path(url.as_str());
+                open::open_path(url.as_str());
             }
             NewWindowResponse::Deny
         })
@@ -170,7 +170,7 @@ fn announce(app: &AppHandle, saved: Option<PathBuf>, success: bool) {
             ))
             .show(move |reveal| {
                 if reveal {
-                    tray::reveal(&path);
+                    open::reveal(&path);
                 }
             }),
         _ => dialog.show(|_| {}),

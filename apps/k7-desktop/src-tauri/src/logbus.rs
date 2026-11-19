@@ -1,6 +1,6 @@
-// logbus.rs — the tray's end of the merged log. The supervisor writes it; the tray truncates
+// logbus.rs — the app's end of the merged log. The supervisor writes it; the app truncates
 // it ONCE per session (it is the only process that knows a session began) and adds the
-// `[host]` lines, which are what remain when the supervisor itself broke. See docs/tray.md.
+// `[host]` lines, which are what remain when the supervisor itself broke. See docs/app.md.
 
 use std::fs::OpenOptions;
 use std::io::Write;

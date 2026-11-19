@@ -77,7 +77,6 @@
     }
   },
   "javascript": {
-    "globals": ["Terminal", "FitAddon"],
     "formatter": {
       "quoteStyle": "double"
     }
