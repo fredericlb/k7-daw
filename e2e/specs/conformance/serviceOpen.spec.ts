@@ -1,7 +1,13 @@
 // serviceOpen.spec.ts — what serviceProjects leaves open about a project's open, rename and delete (2082): the open's whole
 // body, the default a bare address picks over a bad marker, the marker's bytes after each move, a rename's clean name,
 // a library's project refused, and `/project` before and after. It pins both implementations of the route.
-import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import { markerFile, Service, wsDir } from "../../src/service.ts";
@@ -183,6 +189,7 @@ test("a rename of the folder above the open project carries the marker, and a de
 test("an open stamps the format level a lane in seconds needs, once", async () => {
   expect((await create("old.k7")).status).toBe(200);
   const lane = join(wsDir(ws), "old.k7", "tracks", "secs.k7x");
+  mkdirSync(join(wsDir(ws), "old.k7", "tracks"), { recursive: true });
   writeFileSync(
     lane,
     'extends("@meta/track")\nevents([ref("kick").start(2.5)])\n',
