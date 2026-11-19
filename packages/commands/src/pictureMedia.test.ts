@@ -145,10 +145,9 @@ describe.skipIf(!hasFfmpeg)(
       vi.stubEnv("FFMPEG_BIN", join(song, "no-ffmpeg"));
       vi.stubEnv("FFPROBE_BIN", join(song, "no-ffprobe"));
     };
-    const platform = process.platform;
     afterEach(() => {
       vi.unstubAllEnvs();
-      Object.defineProperty(process, "platform", { value: platform });
+      vi.unstubAllGlobals();
     });
 
     it("says which clip needs a copy it cannot make, and what it is", async () => {
@@ -176,9 +175,28 @@ describe.skipIf(!hasFfmpeg)(
         "-pix_fmt",
         "yuv420p",
       ]);
-      Object.defineProperty(process, "platform", { value: "android" });
+      vi.stubGlobal("navigator", {
+        userAgent:
+          "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/120",
+      });
       await runCommand("picture prepare main", host(), "cli");
       expect(logs).toEqual(["pro: ready as it is"]);
+    });
+
+    it("does not play HEVC as it is on a desktop browser", async () => {
+      shot("phone.mp4", "160x120", [
+        "-c:v",
+        "libx265",
+        "-tag:v",
+        "hvc1",
+        "-pix_fmt",
+        "yuv420p",
+      ]);
+      vi.stubGlobal("navigator", {
+        userAgent: "Mozilla/5.0 (X11; Linux x86_64) Chrome/120",
+      });
+      await runCommand("picture prepare main", host(), "cli");
+      expect(logs[0]).toMatch(/hevc/i);
     });
   },
 );
