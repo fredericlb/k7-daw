@@ -68,7 +68,11 @@ function ProcessRow({ p, now }: { p: ShownProcess; now: number }) {
 }
 
 export function ProcessesSection() {
-  const all = useSyncExternalStore(subscribeProcesses, processesSnapshot);
+  const all = useSyncExternalStore(
+    subscribeProcesses,
+    processesSnapshot,
+    processesSnapshot,
+  );
   const running = runningCount(all);
   // A second's tick while something runs, so the elapsed times move.
   const [now, setNow] = useState(() => Date.now());
