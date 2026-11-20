@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import { Toggle } from "radix-ui";
 import type * as React from "react";
 import { cn } from "./lib/utils";
 
@@ -63,12 +64,20 @@ export function Chip({
       "border-transparent bg-primary text-primary-foreground shadow-(--k7-highlight)",
     className,
   );
-  if (onClick || variant === "filter")
+  if (variant === "filter")
+    return (
+      <Toggle.Root
+        className={cls}
+        pressed={!!selected}
+        onClick={onClick}
+        {...(props as React.ComponentProps<typeof Toggle.Root>)}
+      />
+    );
+  if (onClick)
     return (
       <button
         type="button"
         className={cls}
-        aria-pressed={variant === "filter" ? !!selected : undefined}
         onClick={onClick}
         {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
       />
