@@ -48,7 +48,6 @@ export const TOOLBAR_PANELS = [
   "resources",
   "playlists",
   "mixer",
-  "events",
   "logs",
   "tasks",
   "export",

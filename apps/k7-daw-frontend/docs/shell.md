@@ -639,8 +639,8 @@ is the whole point of that tab not being a dialog over the thing it meters.
 
 ## The right panels: one at a time
 
-The header's toolbar holds seven buttons — Resources, Playlists, Mixer, Events, Logs, Tasks & history,
-Export — and Settings sits with the app buttons. Each toggles a panel floating over the right of the
+The header's toolbar holds six buttons — Resources, Playlists, Mixer, Logs, Tasks & history,
+Export (no Events button: the dock opens on the event a person opens, so a button would only repeat that) — and Settings sits with the app buttons. Each toggles a panel floating over the right of the
 panes (a full-screen sheet on a phone); pressing the open one closes it. **One panel at a time**:
 `rightPanel` (the store) and the `?panel=` route state are two doors onto the same slot, and App keeps
 them exclusive.
@@ -1097,7 +1097,7 @@ grid, a take review — each is asked for, and a request the user cannot see is 
 into the slot (`onOpenClip`, `sequence edit`, `ui review`, a lane header's double-click, a take
 starting to roll) goes through `openEvent`, which shows the dock on Events (on Chain for a lane's modules). The page is left as it
 was: the clip opens under the timeline it was clicked on. Switching the dock to the Mixer keeps the event, so
-the Events button brings it back; the keys and the mode badges act only on an event that is on
+opening it again brings it back where it was; the keys and the mode badges act only on an event that is on
 screen (`shownSlot`).
 
 ## The command bar
