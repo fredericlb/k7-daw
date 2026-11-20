@@ -2167,6 +2167,8 @@ function TimelineTabView({
   const rowH = expanded ? ROW_H + EXPAND_EXTRA : ROW_H;
   // A phone's gutter puts M/S/A on a line under the name, which only a tall row has room for (docs/timeline.md).
   const msaLine = isMobile && expanded;
+  // The name on one line and M/S/A on the next, everywhere but a collapsed phone row (docs/timeline.md).
+  const twoLine = !isMobile || msaLine;
   const contentH =
     ROW_H +
     visRows.reduce(
@@ -2685,7 +2687,9 @@ function TimelineTabView({
                         "flex shrink-0 cursor-pointer select-none border-r border-border bg-muted/40",
                         msaLine
                           ? "flex-col justify-center gap-2 px-1"
-                          : "items-center gap-1 px-2",
+                          : twoLine
+                            ? "flex-col justify-center gap-px px-2"
+                            : "items-center gap-1 px-2",
                         GUTTER_STICKY,
                         onReorder && GRAB_ROW,
                         inSel && "bg-primary/20",
@@ -2695,7 +2699,7 @@ function TimelineTabView({
                       <span
                         className={cn(
                           "flex min-w-0 items-center gap-1",
-                          msaLine ? "flex-none" : "flex-1",
+                          twoLine ? "flex-none" : "flex-1",
                         )}
                       >
                         {vt.color && (
@@ -2725,7 +2729,11 @@ function TimelineTabView({
                         <div
                           className={cn(
                             "flex items-center",
-                            msaLine ? "w-full gap-0.5" : "shrink-0 gap-1",
+                            msaLine
+                              ? "w-full gap-0.5"
+                              : twoLine
+                                ? "shrink-0 gap-0.5"
+                                : "shrink-0 gap-1",
                           )}
                         >
                           {onVideoToggle &&
@@ -3092,7 +3100,9 @@ function TimelineTabView({
                       "flex shrink-0 cursor-pointer select-none overflow-hidden border-r border-border",
                       msaLine
                         ? "flex-col justify-center gap-2 px-1"
-                        : "items-center gap-1 px-2",
+                        : twoLine
+                          ? "flex-col justify-center gap-px px-2"
+                          : "items-center gap-1 px-2",
                       GUTTER_STICKY,
                       onReorder && !t.generated && GRAB_ROW,
                       // On the row: a faint tint. Label selected: the full caret mark.
@@ -3116,7 +3126,7 @@ function TimelineTabView({
                         .join(" — ")}
                       className={cn(
                         "relative flex min-w-0 items-center gap-1 truncate",
-                        msaLine ? "flex-none" : "flex-1",
+                        twoLine ? "flex-none" : "flex-1",
                         row.grouped && "pl-3",
                         // Armed red, soloed yellow. A ternary, not two classes: both can be true, and armed is about to write to disk.
                         armed ? "text-arm" : eff.solo && "text-solo",
@@ -3162,7 +3172,11 @@ function TimelineTabView({
                         <div
                           className={cn(
                             "relative flex items-center",
-                            msaLine ? "w-full gap-0.5" : "shrink-0 gap-1",
+                            msaLine
+                              ? "w-full gap-0.5"
+                              : twoLine
+                                ? "shrink-0 gap-0.5"
+                                : "shrink-0 gap-1",
                           )}
                         >
                           {msa.map(([control, on]) => (

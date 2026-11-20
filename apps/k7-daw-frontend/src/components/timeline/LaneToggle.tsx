@@ -1,6 +1,6 @@
 // LaneToggle.tsx — one of a lane gutter's M/S/A buttons, the kit's TrackToggle with the gutter's rules.
-// On touch it fills its share of a second line and grows an invisible 44 px-tall hit box; its
-// visual size is not its target size. See docs/timeline.md, "M/S/A in the gutter".
+// It sits on the gutter's second line: small off touch, and on touch it fills its share of the line
+// with an invisible 44 px-tall hit box. See docs/timeline.md, "M/S/A in the gutter".
 
 import { cn } from "@studio/ui/lib/utils";
 import { TrackToggle, type TrackToggleKind } from "@studio/ui/track-toggle";
@@ -45,7 +45,10 @@ export function LaneToggle({
         blurOnClick(e);
       }}
       className={cn(
-        "relative size-7",
+        // Off touch it sits on the gutter's second line, so it is drawn to fit a 28 px row under the name.
+        touch
+          ? "relative size-7"
+          : "relative !h-3.5 !w-5 !rounded-[3px] !text-[9px] !leading-none",
         touch &&
           "min-w-0 flex-1 after:absolute after:inset-x-0 after:-inset-y-2 after:content-['']",
         pulse && "animate-pulse",

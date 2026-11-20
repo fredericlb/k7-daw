@@ -1159,7 +1159,11 @@ caret test and the zoom maths.
 mixer strip uses: mute amber, solo lavender, arm the record red. Arm is the one that writes to disk,
 so it keeps its own colour and sits last.
 
-**On a phone with Expand on they take a line of their own under the name**, sharing the column's
+**They sit on a line of their own under the name**, so a long name keeps the gutter's whole width.
+Off touch they are drawn small (20 × 14) so the two lines fit the 28 px row; a pointer needs no
+bigger target, and a taller row would cost every lane its height.
+
+**On a phone with Expand on they share that line's width**, sharing the column's
 width, each with an invisible box reaching 44 px tall. Three 44 px squares do not fit a 96 px
 column, so the boxes touch edge to edge: no dead strip between two of them.
 
