@@ -34,6 +34,9 @@ export interface ToggleSlice {
   /** The rack builder popin, opened by `module create rack`. */
   rackBuilder: boolean;
   setRackBuilder: Setter<boolean>;
+  /** What the Graph pane hands the bar while it is on screen: the camera's fit; null otherwise (docs/shell.md). */
+  graphView: { fit: () => void } | null;
+  setGraphView: Setter<{ fit: () => void } | null>;
   /** The bar's Lane views and tool: the timeline reads them from here (step 5 wires it; until then the shell mirrors what the timeline reports). */
   rulerSeconds: boolean;
   setRulerSeconds: Setter<boolean>;
@@ -74,6 +77,8 @@ export function toggleSlice(
     setTrackCurves: setterOf(set, "trackCurves"),
     stackView: false,
     setStackView: setterOf(set, "stackView"),
+    graphView: null,
+    setGraphView: setterOf(set, "graphView"),
     rackBuilder: false,
     setRackBuilder: setterOf(set, "rackBuilder"),
     rulerSeconds: false,

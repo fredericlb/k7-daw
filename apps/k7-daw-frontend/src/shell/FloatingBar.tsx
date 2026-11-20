@@ -1,5 +1,5 @@
 // FloatingBar.tsx — the bar floating over the panes: the command bar button, the tool, the transport capsule
-// (buttons, clock, song overview, tempo, metronome, master volume) and the Lane views. On a phone the clock,
+// (buttons, clock, song overview, tempo, metronome, master volume) and, at its right end, the current pane's views. On a phone the clock,
 // overview, tempo and volume move to a strip above the capsule. It holds no state of its own: App hands it all.
 import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
@@ -12,10 +12,13 @@ import {
   Check,
   ChevronUp,
   Clock,
+  Columns3,
   Eraser,
   Image,
   type LucideIcon,
+  Maximize,
   MousePointer2,
+  Network,
   Rows3,
   Scissors,
   Spline,
@@ -69,6 +72,14 @@ export interface BarLaneViews {
   onPicture: () => void;
 }
 
+export interface BarGraphViews {
+  onFit: () => void;
+  /** Absent where the host offers no auto layout. */
+  onOrganize?: () => void;
+  onStack?: () => void;
+  stacked: boolean;
+}
+
 export function FloatingBar({
   layout,
   onCommandBar,
@@ -81,6 +92,7 @@ export function FloatingBar({
   meter,
   metronome,
   lanes,
+  graph,
   hidden,
   runCommand,
   rootRef,
@@ -100,7 +112,10 @@ export function FloatingBar({
   map: ComponentProps<typeof Minimap> | null;
   meter: ReactNode;
   metronome: ComponentProps<typeof MetronomeButton> | null;
+  /** The arrangement's capsule; null on any other pane. */
   lanes: BarLaneViews | null;
+  /** The Graph pane's capsule; null on any other pane (docs/shell.md, "The capsule follows the pane"). */
+  graph: BarGraphViews | null;
   /** The bar steps aside (an editor popin over everything). */
   hidden?: boolean;
   runCommand: (line: string) => Promise<void>;
@@ -230,6 +245,41 @@ export function FloatingBar({
     </div>
   ) : null;
 
+  const graphViews = graph ? (
+    <div
+      role="group"
+      aria-label={m["shell.graphViews"]()}
+      className="float pointer-events-auto flex h-14 shrink-0 items-center gap-0.5 rounded-full p-1.5"
+    >
+      <CapsuleButton
+        aria-label={m["graph.zoomFit"]()}
+        title={m["graph.zoomFit"]()}
+        onClick={graph.onFit}
+      >
+        <Maximize />
+      </CapsuleButton>
+      {graph.onOrganize && (
+        <CapsuleButton
+          aria-label={m["graph.autoLayout"]()}
+          title={m["graph.autoLayout"]()}
+          onClick={graph.onOrganize}
+        >
+          <Network />
+        </CapsuleButton>
+      )}
+      {graph.onStack && (
+        <CapsuleButton
+          pressed={graph.stacked}
+          aria-label={m["graph.stack"]()}
+          title={m["graph.stack"]()}
+          onClick={graph.onStack}
+        >
+          <Columns3 />
+        </CapsuleButton>
+      )}
+    </div>
+  ) : null;
+
   return (
     <div
       ref={rootRef}
@@ -253,7 +303,7 @@ export function FloatingBar({
         {capsule}
       </div>
       <span className="flex-1" />
-      {!phone && laneViews}
+      {!phone && (laneViews ?? graphViews)}
       {phone && commandButton}
     </div>
   );
