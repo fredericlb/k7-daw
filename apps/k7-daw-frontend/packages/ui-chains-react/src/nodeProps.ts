@@ -49,6 +49,8 @@ export interface NodeProps {
   onZoomTo?: (n: GraphNode) => void;
   /** What the engine reported about THIS node's plugin, if anything. */
   warning?: string;
+  /** Click on the warning badge: the host opens its problems list. */
+  onWarning?: () => void;
   onDragStart: (n: GraphNode, w: WebWidget, e: React.PointerEvent) => void;
   onTapWidget: (n: GraphNode, w: WebWidget) => void;
   onPickWidget: (n: GraphNode, w: WebWidget, value: number) => void;

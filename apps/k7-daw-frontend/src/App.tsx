@@ -192,6 +192,7 @@ import { pageVerbs } from "./verbs/pageHost";
 import "./plugins";
 import { cfg } from "@studio/project-shell/fileApi";
 import { Backdrop } from "@studio/ui/backdrop";
+import { placeSubject, placeWarnings, warningSentence } from "./engineWarnings";
 import { type FloatState, loadFloat, saveFloat } from "./floatingRect";
 import { installGates, lockSentence } from "./git/gitLock";
 import { lockedBy as mergeLockedBy } from "./git/gitState";
@@ -758,6 +759,8 @@ export default function App({
 
   // The Logs panel's buffer + the process-log tail (polled only while it's open).
 
+  // Whether an engine subject names something in the open project: the answer is set once the document is read, below.
+  const inProjectRef = useRef<(subject: string) => boolean>(() => false);
   // The engine connection: client lifecycle, live state wiring, stable senders.
   const {
     engineRef,
@@ -784,6 +787,7 @@ export default function App({
     pluginParamsStore,
     setStatus,
     pushLog,
+    inProjectRef,
   );
 
   const transport = engineTransport;
@@ -1190,12 +1194,27 @@ export default function App({
     pushLog,
     setStatus,
   );
+  // Every module warning as a sentence: the card's badge reads it, and the ones naming this project's tracks and modules are counted.
   const nodeWarnings = useMemo(
-    () => ({ ...engineWarnings, ...instrumentWarnings }),
+    () => ({
+      ...Object.fromEntries(
+        Object.entries(engineWarnings).map(([subject, message]) => [
+          subject,
+          warningSentence({ subject, message }),
+        ]),
+      ),
+      ...instrumentWarnings,
+    }),
     [engineWarnings, instrumentWarnings],
+  );
+  const placed = useMemo(
+    () => placeWarnings(nodeWarnings, projectDoc),
+    [nodeWarnings, projectDoc],
   );
   // What one-shot commands are doing to the lanes, shown at once until the document agrees (pendingEdits.ts).
   const docRef = useLatest(projectDoc);
+  inProjectRef.current = (subject) =>
+    placeSubject(subject, docRef.current) !== null;
   // A MIDI take that made a new clip, and the lane's clips before it: the one not among them opens once the document shows it.
   const landedMidiRef = useRef<{ track: string; before: Set<string> } | null>(
     null,
@@ -2148,6 +2167,11 @@ export default function App({
 
   // A shader's knob, written to its node a few times a drag (hooks/useShaderParam.ts).
   const onShaderParam = useShaderParam(quietCommand, refreshVideoDoc);
+  // The Logs panel on its problems: the header chip, a track's warning icon and a module's badge all open it.
+  const openProblems = useCallback(() => {
+    setLogsFilter("problems");
+    setPanel("logs");
+  }, [setLogsFilter, setPanel]);
   // What every module card is drawn with, whichever host holds it — the chains page, the bottom panel, a lane's or a tap's cards.
   const cardProps = useMemo(
     () => ({
@@ -2164,6 +2188,7 @@ export default function App({
       onTapEdit: editTap,
       onWatchWaveform: watchWaveform,
       engineWarnings: nodeWarnings,
+      onProblems: openProblems,
       pluginParamsStore,
       setPluginParam,
       moduleParams: offlineParams,
@@ -2185,6 +2210,7 @@ export default function App({
       editTap,
       watchWaveform,
       nodeWarnings,
+      openProblems,
       pluginParamsStore,
       setPluginParam,
       offlineParams,
@@ -2783,11 +2809,8 @@ export default function App({
       backHref={projectsUrl(window.location.href)}
       statusStore={statusStore}
       engine={engine ? (connected ? "up" : "down") : "none"}
-      problems={projectErrors}
-      onProblems={() => {
-        setLogsFilter("problems");
-        setPanel("logs");
-      }}
+      problems={projectErrors + placed.count}
+      onProblems={openProblems}
       onProcesses={() => setRightPanel("tasks")}
       extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
       git={
@@ -3459,6 +3482,8 @@ export default function App({
                               trackControls={trackControls}
                               onTrackToggle={onTrackToggle}
                               laneNodes={laneNodes}
+                              trackWarnings={placed.byTrack}
+                              onProblems={openProblems}
                               // The lane's ⋮ menu, from the gutter badge — the SAME one the chains pane opens on a lane's node.
                               onNodeMenu={openNodeMenu}
                             />

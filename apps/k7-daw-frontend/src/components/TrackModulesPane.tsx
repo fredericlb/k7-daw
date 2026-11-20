@@ -87,6 +87,7 @@ export function TrackModulesPane({
   onTrackSet,
   onEdgeInsert,
   engineWarnings,
+  onProblems,
   showCurves = false,
   onToggleCurves,
   onTrackInput,
@@ -159,6 +160,7 @@ export function TrackModulesPane({
     nameFor: (module: string) => string,
   ) => void;
   engineWarnings?: Record<string, string>;
+  onProblems?: () => void;
   /** Whether the row draws each card's curve cards, spaced in before it — `ui curves`. */
   showCurves?: boolean;
   /** The top-right button's: the shell's `ui curves`, so the button and the command are one. */
@@ -389,6 +391,7 @@ export function TrackModulesPane({
     onTrackToggle,
     onTrackSet,
     engineWarnings,
+    onProblems,
     pluginParamsStore,
     setPluginParam,
     moduleParams,

@@ -61,6 +61,7 @@
   "engine.warn.clipMissing": "Le fichier audio « {file} » n'a pas pu être ouvert ; ce clip reste muet.",
   "engine.warn.recordFolder": "L'enregistrement est coupé : le dossier d'enregistrement est hors des dossiers où le moteur peut écrire.",
   "engine.warn.pluginFailed": "Le module « {name} » n'a pas pu être chargé ; sa piste joue sans lui.",
+  "engine.warn.automationParam": "L'automation de « {param} » est ignorée : ce module n'a pas ce paramètre.",
   "engine.warn.hung": "Le moteur audio est bloqué dans un plugin. Relancez l'application.",
   "engine.warn.internal": "Le moteur a rencontré une erreur interne. Le panneau Logs en donne le détail.",
   "engine.warn.unknown": "Le moteur signale un problème : {text}",

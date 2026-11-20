@@ -24,16 +24,33 @@ import { FOOT_KNOB_PX, FOOT_KNOBS } from "./widgetTarget";
 export function nodeTags({
   n,
   warning,
+  onWarning,
   l,
 }: {
   n: GraphNode;
   warning?: string;
+  onWarning?: () => void;
   l: ChainsLabels;
 }) {
   return (
     <>
       {/* What the engine said went wrong with THIS plugin, on hover: often the only word on a module doing nothing. */}
-      {warning && (
+      {warning && onWarning && (
+        <button
+          type="button"
+          className="dgx-wbtn"
+          title={warning}
+          aria-label={l.engineWarning(warning)}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            onWarning();
+          }}
+        >
+          !
+        </button>
+      )}
+      {warning && !onWarning && (
         <span
           className="dgx-wbtn"
           title={warning}

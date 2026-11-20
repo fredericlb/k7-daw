@@ -1,8 +1,10 @@
-// engineWarnings.ts — an engine warning as a person reads it: a toast in plain words, said once per
-// project for the page's life, the engine's own text kept for the log. The engine sends prose and
-// no code, so the known kinds are recognised by the stable start of their text (DocJson.cpp,
-// EditBuilder.cpp, EngineHost.cpp); a text this does not know still toasts, generically, with the
-// raw words after it. See ../docs/shell.md, "Engine warnings are toasts".
+// engineWarnings.ts — an engine warning as a person reads it, in plain words, the engine's own text
+// kept for the log. One that names a track or a module of the open project is marked IN PLACE (a
+// warning icon on that header or card, counted next to the title); every other is a toast, said once
+// per project for the page's life. The engine sends prose and no code, so the known kinds are
+// recognised by the stable start of their text (DocJson.cpp, EditBuilder.cpp, EngineHost.cpp); an
+// unknown text still shows, generically, with the raw words after it. See ../docs/shell.md,
+// "Engine warnings".
 
 import type { EngineWarning } from "@studio/engine-browser";
 import { showToast } from "@studio/project-shell/toast";
@@ -18,6 +20,7 @@ export type WarningKind =
   | { kind: "clipMissing"; file: string }
   | { kind: "recordFolder" }
   | { kind: "pluginFailed"; name: string }
+  | { kind: "automationParam"; param: string }
   | { kind: "hung" }
   | { kind: "internal" }
   | { kind: "unknown" };
@@ -38,6 +41,8 @@ export function warningKind(message: string): WarningKind {
   if (g) return { kind: "unreadable", file: fileName(g[1]) };
   g = /^could not create plugin '(.+?)'/.exec(message);
   if (g) return { kind: "pluginFailed", name: g[1] };
+  g = /^automation param not found: (.+)$/.exec(message);
+  if (g) return { kind: "automationParam", param: g[1] };
   if (message.startsWith("the audio engine is hung")) return { kind: "hung" };
   if (/^(background work|an engine job|the state tick) failed/.test(message))
     return { kind: "internal" };
@@ -64,6 +69,8 @@ export function warningSentence(w: EngineWarning): string {
       return m["engine.warn.recordFolder"]();
     case "pluginFailed":
       return m["engine.warn.pluginFailed"]({ name: k.name });
+    case "automationParam":
+      return m["engine.warn.automationParam"]({ param: k.param });
     case "hung":
       return m["engine.warn.hung"]();
     case "internal":
@@ -96,4 +103,52 @@ export function toastEngineWarning(scope: string, w: EngineWarning): boolean {
   if (!firstTime(scope, w)) return false;
   showToast({ message: warningSentence(w), variant: "warning" });
   return true;
+}
+
+/** What a subject names in the open project: a module (and the track holding it), or a track. */
+export interface Placement {
+  track: string;
+  module?: string;
+}
+
+/** The part of the project document a subject is resolved against. */
+export interface PlaceableDoc {
+  tracks: { id: string; plugins: { id: string }[] }[];
+}
+
+/** Resolve an engine subject (a PluginDoc id, or a track id) against the project; null when it names nothing there. */
+export function placeSubject(
+  subject: string,
+  doc: PlaceableDoc | null | undefined,
+): Placement | null {
+  if (!subject || !doc) return null;
+  for (const t of doc.tracks) {
+    if (t.plugins.some((p) => p.id === subject))
+      return { track: t.id, module: subject };
+    if (t.id === subject) return { track: t.id };
+  }
+  return null;
+}
+
+/** The in-place warnings of a project: per module, per track, and how many there are. */
+export interface PlacedWarnings {
+  byModule: Record<string, string>;
+  byTrack: Record<string, string[]>;
+  count: number;
+}
+
+/** Sort `{ subject → sentence }` into the ones that name something in the project; the rest are not placed. */
+export function placeWarnings(
+  sentences: Record<string, string>,
+  doc: PlaceableDoc | null | undefined,
+): PlacedWarnings {
+  const out: PlacedWarnings = { byModule: {}, byTrack: {}, count: 0 };
+  for (const [subject, sentence] of Object.entries(sentences)) {
+    const at = placeSubject(subject, doc);
+    if (!at) continue;
+    out.count++;
+    if (at.module) out.byModule[at.module] = sentence;
+    (out.byTrack[at.track] ??= []).push(sentence);
+  }
+  return out;
 }
