@@ -8,7 +8,7 @@ import { Button } from "./button";
 import { X } from "./icons";
 import { cn } from "./lib/utils";
 
-interface PanelProps {
+export interface PanelProps {
   title: string;
   /** What the panel is, under the title: an editor's "audio · bar 2 · 0:00.50 → 0:01.75". */
   subtitle?: React.ReactNode;
@@ -24,12 +24,14 @@ interface PanelProps {
   onEscapeKeyDown?: (e: KeyboardEvent) => void;
 }
 
-const settle = (host?: (e: KeyboardEvent) => void) => (e: KeyboardEvent) => {
-  host?.(e);
-  if (!e.defaultPrevented) e.stopPropagation();
-};
+export const settle =
+  (host?: (e: KeyboardEvent) => void) => (e: KeyboardEvent) => {
+    host?.(e);
+    if (!e.defaultPrevented) e.stopPropagation();
+  };
 
-function Heading({
+/** The header row both frames draw, and the editor dock's too. */
+export function PanelHeading({
   title,
   subtitle,
   icon,
@@ -100,11 +102,11 @@ export function SidePanel({
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={settle(onEscapeKeyDown)}
         className={cn(
-          "panel absolute right-(--k7-panel-right) bottom-(--k7-panel-bottom) top-[calc(var(--k7-header-h)+var(--k7-panel-gap-top))] z-(--k7-z-panel) flex w-(--k7-panel-w) max-w-[calc(100%-24px)] flex-col gap-2.5 rounded-(--k7-r-panel) p-(--k7-panel-padding) outline-none animate-[k7-panel-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
+          "panel absolute right-(--k7-panel-right) bottom-(--k7-panel-bottom-open,var(--k7-panel-bottom)) top-[calc(var(--k7-header-h)+var(--k7-panel-gap-top))] z-(--k7-z-panel) flex w-(--k7-panel-w) max-w-[calc(100%-24px)] flex-col gap-2.5 rounded-(--k7-r-panel) p-(--k7-panel-padding) outline-none animate-[k7-panel-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
           className,
         )}
       >
-        <Heading {...head} />
+        <PanelHeading {...head} />
         <div className="min-h-0 flex-1 overflow-y-auto pr-2">{children}</div>
       </Dialog.Content>
     </Dialog.Root>
@@ -139,7 +141,7 @@ export function Sheet({
           aria-hidden
           className="mx-auto mb-1 h-[5px] w-9 shrink-0 rounded-full bg-(--k7-grabber)"
         />
-        <Heading {...head} sheet />
+        <PanelHeading {...head} sheet />
         {transport}
         <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
       </Dialog.Content>

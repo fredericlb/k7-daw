@@ -119,6 +119,7 @@ import type { ClipGridHandle } from "./gridCaret";
 import { firstTimeFor, givesChannel, hasAudibleInput } from "./headphonesHint";
 import { useCameras } from "./hooks/useCameras";
 import { useCommandKeys } from "./hooks/useCommandKeys";
+import { useEditorDock } from "./hooks/useEditorDock";
 import { useEngineLink } from "./hooks/useEngineLink";
 import { useInputDevices } from "./hooks/useInputDevices";
 import { useInstrumentStatus } from "./hooks/useInstrumentStatus";
@@ -224,6 +225,7 @@ import {
   ProjectHeader,
 } from "./shell/ProjectHeader";
 import {
+  DockFrame,
   PANEL_DEFS,
   PanelFrame,
   type PanelId,
@@ -370,7 +372,21 @@ export default function App({
   const layoutKind = useShellLayout();
   // The timeline, because it is what the default view opens on — see ringPanes.
   const [focusPane, setFocusPane] = useState<Pane>("timeline");
-  const [panel, setPanel] = useState<Panel | null>(null);
+  // The dock (the Events panel) coexists with one other panel; `panel` is the one the URL carries (docs/shell.md).
+  const dock = useEditorDock(layoutKind);
+  const [sidePanel, setSidePanel] = useState<Exclude<Panel, "event"> | null>(
+    null,
+  );
+  const panel: Panel | null = sidePanel ?? (dock.open ? "event" : null);
+  const setDockOpen = dock.setOpen;
+  const setPanel = useCallback(
+    (next: Panel | null) => {
+      if (next === "event") return setDockOpen(true);
+      if (next === null) setDockOpen(false);
+      setSidePanel(next);
+    },
+    [setDockOpen],
+  );
   // The CHAINS BUILDER: a library chain being edited by its ref, `""` for the list, null closed — docs/chainsBuilder.md.
   const [openBuilder, setOpenBuilder] = useState<string | null>(null);
   /** The NODE of that chain to land on — its file name, or null for the chain itself. Not in the URL. */
@@ -967,10 +983,7 @@ export default function App({
   const chainsOffScreen = full !== "chains";
   /** Is ANY view of the graph on screen? Only then does a command bring a graph back (docs/shell.md, "A graph only when one is on screen"). */
   const graphOnScreen =
-    !chainsOffScreen ||
-    panel === "graph" ||
-    panel === "mix" ||
-    (panel === "event" && graphSlot?.kind === "trackModules");
+    !chainsOffScreen || sidePanel === "graph" || sidePanel === "mix";
   const graphOnScreenRef = useLatest(graphOnScreen);
 
   const timelineVisible = visible("timeline");
@@ -1077,26 +1090,45 @@ export default function App({
   }, [full, focusPane]);
 
   const togglePanel = useCallback(
-    (p: Panel) => setPanel((cur) => (cur === p ? null : p)),
-    [],
+    (p: Panel) =>
+      p === "event"
+        ? setDockOpen((cur) => !cur)
+        : setSidePanel((cur) => (cur === p ? null : p)),
+    [setDockOpen],
   );
   /** Put something in the slot and show it: the `event` panel is the one place the slot is drawn. */
-  const openEvent = useCallback((slot: NonNullable<typeof graphSlot>) => {
-    setGraphSlot(slot);
-    // A lane's signal path is the chain panel's; every other occupant is the Events panel's.
-    setPanel(slot.kind === "trackModules" ? "graph" : "event");
-  }, []);
+  const openEvent = useCallback(
+    (slot: NonNullable<typeof graphSlot>) => {
+      setGraphSlot(slot);
+      // A lane's signal path is the chain panel's; every other occupant is the Events panel's.
+      if (slot.kind === "trackModules") setSidePanel("graph");
+      else setDockOpen(true);
+    },
+    [setDockOpen],
+  );
   /** The occupant's ✕ and Escape: the event is let go, and the panel that drew it goes with it. */
   const closeEvent = useCallback(() => {
     setGraphSlot(null);
-    setPanel((cur) => (cur === "event" || cur === "graph" ? null : cur));
-  }, []);
+    setDockOpen(false);
+    setSidePanel((cur) => (cur === "graph" ? null : cur));
+  }, [setDockOpen]);
+  /** The dock's own Close: the dock goes and so does its occupant, but a lane's chain open beside it stays. */
+  const closeDock = useCallback(() => {
+    setDockOpen(false);
+    setGraphSlot((s) => (s?.kind === "trackModules" ? s : null));
+  }, [setDockOpen]);
+  // The dock's occupant survives a lane's chain taking the slot beside it, and comes back when the chain goes.
+  const dockOccupant = useRef<GraphSlot | null>(null);
+  if (graphSlot?.kind !== "trackModules") dockOccupant.current = graphSlot;
+  const dockSlot =
+    graphSlot?.kind === "trackModules" ? dockOccupant.current : graphSlot;
   /** The slot as it is on SCREEN — what the keys and the footer's badges may act on, a hidden panel's clip being nobody's target. */
   const shownSlot =
-    panel === "event" ||
-    (panel === "graph" && graphSlot?.kind === "trackModules")
+    sidePanel === "graph" && graphSlot?.kind === "trackModules"
       ? graphSlot
-      : null;
+      : dock.open
+        ? dockSlot
+        : null;
 
   // The initial fetch: the project header, the workspace (opening its active project), and the command catalogue.
   useEffect(() => {
@@ -1608,6 +1640,9 @@ export default function App({
     fullscreen,
     setPanel,
     togglePanel,
+    dockExpanded: dock.expanded,
+    toggleDockExpanded: () => dock.open && dock.setExpanded((cur) => !cur),
+    collapseDock: () => dock.setExpanded(false),
     shownSlot,
     openEvent,
     closeEvent,
@@ -2599,19 +2634,19 @@ export default function App({
   }, [formatTooNew]);
 
   // The one panel on screen, and the buttons that stand for it (shell/panels.tsx).
-  const shownId = shownPanel(panel, rightPanel);
+  const shownId = shownPanel(sidePanel, rightPanel);
   const pressedButton = shownId ? PANEL_DEFS[shownId].button : null;
   const closeAnyPanel = useCallback(() => {
-    setPanel(null);
+    setSidePanel(null);
     setRightPanel(null);
   }, [setRightPanel]);
-  // One panel at a time, whichever of the two states opened it.
+  // One RIGHT panel at a time, whichever of the two states opened it; the dock is not one of them.
   useEffect(() => {
-    if (rightPanel) setPanel(null);
+    if (rightPanel) setSidePanel(null);
   }, [rightPanel]);
   useEffect(() => {
-    if (panel) setRightPanel(null);
-  }, [panel, setRightPanel]);
+    if (sidePanel) setRightPanel(null);
+  }, [sidePanel, setRightPanel]);
   const PANEL_LINE: Partial<Record<PanelId, string>> = {
     resources: "ui resources",
     playlists: "ui playlists",
@@ -2625,13 +2660,15 @@ export default function App({
   const mixerDead =
     mixerStrips.length === 0 && !masteringSurface && pressedButton !== "mixer";
   const pressPanel = (id: PanelId) => {
+    // The Events button is the dock's: it toggles the dock and leaves a right panel alone.
+    if (id === "events") return void runCommand("ui panel event");
     if (pressedButton === id) return closeAnyPanel();
     const line = PANEL_LINE[id];
     if (line) void runCommand(line);
   };
   const headerPanels: HeaderPanel[] = TOOLBAR_PANELS.map((id) => ({
     id,
-    pressed: pressedButton === id,
+    pressed: id === "events" ? dock.open : pressedButton === id,
     disabled: (id === "mixer" && mixerDead) || (id === "export" && share.busy),
     title: id === "mixer" && mixerDead ? m["footer.mixNone"]() : undefined,
     onPress: () => pressPanel(id),
@@ -2812,30 +2849,30 @@ export default function App({
   // The Events panel: the empty state, the clip, the live take and the take just filed (the editors inside are the clip view's).
   const eventsBody = (
     <div className="flex h-full min-h-0 min-w-0 flex-col">
-      {(!graphSlot || graphSlot.kind === "trackModules") && (
+      {(!dockSlot || dockSlot.kind === "trackModules") && (
         <p className="flex h-full items-center justify-center px-4 text-center text-muted-foreground text-xs">
           {m["panel.eventEmpty"]()}
         </p>
       )}
-      {graphSlot?.kind === "grid" && (
+      {dockSlot?.kind === "grid" && (
         <PaneBoundary
           name="sequence grid"
           resetKey={reloadKey}
           onError={paneError}
         >
           <SeqGridPane
-            path={graphSlot.path}
+            path={dockSlot.path}
             onChanged={bumpReload}
             setStatus={setStatus}
             reloadKey={reloadKey}
           />
         </PaneBoundary>
       )}
-      {graphSlot?.kind === "clip" && (
+      {dockSlot?.kind === "clip" && (
         <PaneBoundary name="clip view" resetKey={reloadKey} onError={paneError}>
           <ClipView
-            target={graphSlot.target}
-            onClose={closeEvent}
+            target={dockSlot.target}
+            onClose={closeDock}
             // The takes mode's record button and files; a locked shell records nothing, so it offers no takes.
             takesHost={locked ? undefined : takes.host}
             // The caret's three verbs and the loop it sets, pointed at whichever grid this pane is drawing.
@@ -2850,7 +2887,7 @@ export default function App({
           />
         </PaneBoundary>
       )}
-      {graphSlot?.kind === "midiTake" && liveTake && (
+      {dockSlot?.kind === "midiTake" && liveTake && (
         <MidiTakeRoll
           take={liveTake}
           trackName={recInfo.names[liveTake.lane] ?? liveTake.lane}
@@ -2861,7 +2898,7 @@ export default function App({
           onStop={() => void runCommand("transport stop")}
         />
       )}
-      {graphSlot?.kind === "recording" && (
+      {dockSlot?.kind === "recording" && (
         <PaneBoundary
           name="audio clip"
           resetKey={reloadKey}
@@ -2887,7 +2924,7 @@ export default function App({
             onClose={() => {
               setReviewOn(null);
               if (reviewTake) setReviewedTake(reviewTake.clip);
-              closeEvent();
+              closeDock();
             }}
             // The event goes and the file stays: one Ctrl+Z brings the take back.
             onDiscard={
@@ -2898,7 +2935,7 @@ export default function App({
                     );
                     setReviewOn(null);
                     setReviewedTake(reviewTake.clip);
-                    closeEvent();
+                    closeDock();
                   }
                 : undefined
             }
@@ -3088,7 +3125,7 @@ export default function App({
           </PaneBoundary>
         );
       case "events":
-        return eventsBody;
+        return null;
       case "chain":
         return chainBody;
       case "logs":
@@ -3102,10 +3139,44 @@ export default function App({
         );
     }
   };
+  // A right panel ends above the dock, and the toasts sit above it too (spec: bottom-editors.md).
+  const dockUp = dock.open && !isMobile;
+  const shellVars: Record<string, string> | null =
+    !isMobile && (shownId || dockUp)
+      ? {
+          ...(shownId
+            ? { "--toast-right": "var(--k7-toast-right-panel-open)" }
+            : {}),
+          ...(dockUp
+            ? {
+                "--toast-bottom": dock.expanded
+                  ? "96px"
+                  : `calc(var(--k7-panel-bottom) + ${dock.height}px + var(--k7-dock-gap))`,
+                ...(dock.expanded
+                  ? {}
+                  : {
+                      "--k7-panel-bottom-open": `calc(var(--k7-panel-bottom) + ${dock.height}px + var(--k7-dock-gap))`,
+                    }),
+              }
+            : {}),
+        }
+      : null;
   const panelHost = shownId ? (
     <PanelFrame id={shownId} phone={isMobile} onClose={closeAnyPanel}>
       {panelBody(shownId)}
     </PanelFrame>
+  ) : null;
+  const dockHost = dock.open ? (
+    <DockFrame
+      layout={layoutKind}
+      height={dock.height}
+      onHeightChange={dock.setHeight}
+      expanded={dock.expanded}
+      onExpandedChange={dock.setExpanded}
+      onClose={closeDock}
+    >
+      {eventsBody}
+    </DockFrame>
   ) : null;
 
   return (
@@ -3118,13 +3189,7 @@ export default function App({
           <div
             data-layout={layoutKind}
             // The toasts clear the panel while one is open (project-shell toast.tsx reads --toast-right).
-            style={
-              shownId && !isMobile
-                ? ({
-                    "--toast-right": "var(--k7-toast-right-panel-open)",
-                  } as React.CSSProperties)
-                : undefined
-            }
+            style={shellVars ? (shellVars as React.CSSProperties) : undefined}
             className="relative flex h-full flex-col overflow-hidden bg-background text-foreground"
           >
             <Backdrop />
@@ -3443,6 +3508,7 @@ export default function App({
             {bar}
 
             {panelHost}
+            {dockHost}
 
             {/* The command bar: a modal card over a scrim (docs/commandBar.md). */}
             <FloatingCommandBar

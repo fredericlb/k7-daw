@@ -3,7 +3,6 @@ import { PANEL_DEFS, shownPanel, TOOLBAR_PANELS } from "./panels";
 
 describe("shownPanel", () => {
   it("names the right panel that holds each legacy ?panel= value", () => {
-    expect(shownPanel("event", null)).toBe("events");
     expect(shownPanel("mix", null)).toBe("mixer");
     expect(shownPanel("graph", null)).toBe("chain");
     expect(shownPanel("logs", null)).toBe("logs");

@@ -99,8 +99,25 @@ export const VIEW_COMMANDS: LocalCommand[] = [
     name: "ui close",
     readable: { en: "Close the open panel", fr: "Fermer le panneau ouvert" },
     run: (ctx) => {
+      // An expanded editor dock goes back to its normal height before anything closes.
+      if (ctx.dockExpanded) {
+        ctx.collapseDock();
+        return true;
+      }
       ctx.setPanel(null);
       ctx.setRightPanel(null);
+      return true;
+    },
+  },
+  {
+    // `ui editor` is the source pane's, so the dock's toggle has its own name.
+    name: "ui expand",
+    readable: {
+      en: "Expand the editor dock, or bring it back to its height",
+      fr: "Agrandir le dock d'éditeur, ou le ramener à sa hauteur",
+    },
+    run: (ctx) => {
+      ctx.toggleDockExpanded();
       return true;
     },
   },

@@ -78,7 +78,11 @@ export interface LocalCtx {
   activePane: Pane;
   setFull: (p: Pane | null) => void;
   fullscreen: (p: Pane) => void;
-  setPanel: Dispatch<SetStateAction<Panel | null>>;
+  setPanel: (p: Panel | null) => void;
+  /** The editor dock: whether it is expanded, and the toggle `ui expand` runs (a closed dock has nothing to expand). */
+  dockExpanded: boolean;
+  toggleDockExpanded: () => void;
+  collapseDock: () => void;
   togglePanel: (p: Panel) => void;
   shownSlot: GraphSlot | null;
   openEvent: (slot: GraphSlot) => void;

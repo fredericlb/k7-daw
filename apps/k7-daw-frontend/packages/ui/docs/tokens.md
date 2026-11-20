@@ -40,6 +40,7 @@ Each has its own `exports` subpath and a story that shows every state `component
 | `capsule` | `Capsule`, `CapsuleButton` (pressed state), `CapsuleDivider` |
 | `row-group` | `RowGroup`, `Row`, `RowButton`: icon, label, detail, trailing, disclosure, selected, tall |
 | `side-panel` | `SidePanel` (400 px, floats over the panes) and `Sheet` (phone, with a transport slot) |
+| `editor-dock` | `EditorDock` (the bottom editor dock of Pad and Desk, resizable) and `EditorSheet` (phone), each with the Expand toggle |
 | `tab-bar` | `TabBar`, `TabBarItem` (a link with `href`, else a button), `TabBarRound` |
 | `spinner`, `progress` | the running glyph and the 6 px determinate bar |
 | `chip` | `Chip` with `variant` anchor (orphan), version (newest), filter, status (`tone`) |

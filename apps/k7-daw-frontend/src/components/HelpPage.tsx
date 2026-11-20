@@ -22,6 +22,10 @@ const VIEW_COMMANDS: { command: string; help: string }[] = [
     help: "back to the home page — the timeline, or the first pane a project without one declares",
   },
   { command: "ui editor", help: "fullscreen the editor pane" },
+  {
+    command: "ui expand",
+    help: "expand the editor dock to the top of the lanes, or bring it back",
+  },
   { command: "ui timeline", help: "fullscreen the timeline pane" },
   { command: "ui chains", help: "fullscreen the chains (routing) pane" },
   {

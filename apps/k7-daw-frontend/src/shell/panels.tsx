@@ -1,6 +1,8 @@
 // panels.tsx — the registry of the shell's panels: an id, a glyph and a title each, and the frame they open in.
 // The frame is the kit's SidePanel (Pad, Desk) or Sheet (Phone); what goes inside is each panel's own component.
 // `references` and `history` are segments of Resources and Tasks: they have no button, only the shared one.
+
+import { EditorDock, EditorSheet } from "@studio/ui/editor-dock";
 import {
   FolderOpen,
   ListChecks,
@@ -19,6 +21,7 @@ import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
 import type { Panel } from "../routes";
 import type { RightPanelId } from "../ui/commands/context";
+import type { ShellLayout } from "../useIsMobile";
 
 export type PanelId =
   | "resources"
@@ -109,9 +112,8 @@ export const PANEL_DEFS: Record<PanelId, PanelDef> = {
   },
 };
 
-/** The legacy bottom panel (`?panel=`) as the right panel that now holds it. */
-const OF_LEGACY: Record<Panel, PanelId> = {
-  event: "events",
+/** The legacy bottom panel (`?panel=`) as the right panel that now holds it; `event` is the dock, not a right panel. */
+const OF_LEGACY: Record<Exclude<Panel, "event">, PanelId> = {
   graph: "chain",
   mix: "mixer",
   logs: "logs",
@@ -119,7 +121,7 @@ const OF_LEGACY: Record<Panel, PanelId> = {
 
 /** The one panel on screen: the URL-borne one wins, there being never both (App keeps them exclusive). */
 export function shownPanel(
-  legacy: Panel | null,
+  legacy: Exclude<Panel, "event"> | null,
   right: RightPanelId | null,
 ): PanelId | null {
   if (legacy) return OF_LEGACY[legacy];
@@ -163,5 +165,58 @@ export function PanelFrame({
     >
       {children}
     </Frame>
+  );
+}
+
+/** The editor dock, which is the Events panel: a bottom dock on Pad and Desk, a partial sheet on a phone. */
+export function DockFrame({
+  layout,
+  height,
+  onHeightChange,
+  expanded,
+  onExpandedChange,
+  onClose,
+  subtitle,
+  actions,
+  children,
+}: {
+  layout: ShellLayout;
+  height: number;
+  onHeightChange: (h: number) => void;
+  expanded: boolean;
+  onExpandedChange: (expanded: boolean) => void;
+  onClose: () => void;
+  subtitle?: ReactNode;
+  actions?: ReactNode;
+  children: ReactNode;
+}) {
+  const def = PANEL_DEFS.events;
+  // The ladder's Escape leaves the expanded state first, as the dock's own Escape does.
+  usePopin(true, () => (expanded ? onExpandedChange(false) : onClose()));
+  const common = {
+    title: def.title(),
+    icon: <def.icon aria-hidden />,
+    subtitle,
+    actions,
+    expanded,
+    onExpandedChange,
+    expandLabel: m["shell.dock.expand"](),
+    onClose,
+    closeLabel: m["shell.dock.close"](),
+    onEscapeKeyDown: (e: KeyboardEvent) => {
+      const t = e.target as Element | null;
+      if (!t?.closest?.("[data-slot=panel-frame]")) e.preventDefault();
+    },
+    children,
+  };
+  return layout === "phone" ? (
+    <EditorSheet {...common} />
+  ) : (
+    <EditorDock
+      {...common}
+      height={height}
+      onHeightChange={onHeightChange}
+      resizeLabel={m["shell.dock.resize"]()}
+    />
   );
 }

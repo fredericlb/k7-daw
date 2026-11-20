@@ -282,3 +282,11 @@ When a Mac bed starts with the 1-minute load average above `K7_BED_RETRY_LOAD` (
 
 The app has almost no `data-testid`. Specs select by role and accessible name, which is what a
 person reads too: a spec that cannot find a control by its name has found an accessibility gap.
+
+## The editor dock
+
+The clip editor, Takes, the piano roll and the live take are in the editor dock, which is the Events
+panel: `complementary` named "Events" on Pad and Desk, a `dialog` of the same name on a phone, so
+`panelBody(page, "Events")` finds it as it finds a right panel. Its buttons are "Expand editor"
+(a toggle: read `aria-pressed`), "Close editor" and, on Pad and Desk, "Resize the editor: drag up or down".
+The Events toolbar button stays pressed while the dock is open, and a right panel may be open beside it.

@@ -266,7 +266,27 @@ bottom margin for the bar instead.
 | git capsule | `shell/HeaderGit.tsx` | Commit & Push with its count, a menu (Pull, Commits); while a merge waits, one "Resolve N conflicts" button and a banner |
 | bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the Lane views |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
+| editor dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the Events panel, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone) |
 | phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |
+
+**The editors are horizontal, at the bottom; only the per-track chain is vertical.** The clip editor,
+Takes, the piano roll and the live take live in the **editor dock** (the Events panel), a dock along
+the bottom of Pad and Desk and a partial-height sheet on a phone. The chain editor stays a right panel
+because a signal path reads left to right in a tall column. The kit's
+[editor dock](../packages/ui/docs/editor-dock.md) page has the dock's own rules; these are the shell's:
+
+- **The dock is not a `panel` value.** It coexists with a right panel or the chain, so its open state
+  is its own (`useEditorDock`) and `panel`, the one the URL carries, is derived: the right-hand one
+  wins, else `event` while the dock is open. `?panel=event` opens the dock.
+- **The Events button is the dock's and stays pressed while it is open**, whatever else is pressed.
+  Opening a clip, a note, a take or the roll opens the dock; a lane's chain opens the right panel
+  and the dock keeps its occupant, which comes back when the chain goes.
+- **A right panel opened beside the dock ends 12 px above it** (`--k7-panel-bottom-open`), and the
+  toasts sit above the dock (`--toast-bottom`): the dock never covers what it must not.
+- **Expand is `ui expand`** (`ui editor` is the source pane's, key `1`). Escape leaves the expanded
+  state before it closes the dock, through the popin ladder and through `ui close` alike.
+- **The dock's height is the person's, for the session**, not stored: the old bottom panel did not keep
+  it either, and a height stored across sessions would meet another screen.
 
 Three layouts, said on the root as `data-layout`: `phone` (the folded shell), `pad` (a touch screen
 that is not folded) and `desk`. Pad and Desk draw the same chrome; the attribute is for the suites.
