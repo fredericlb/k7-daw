@@ -224,7 +224,7 @@ a write or a publish anyway ([apps/k7-daw-backend/docs/files/hub.md](../../k7-da
 Under the libraries, **each workspace's pins** (`LibraryPins.tsx`): the versions it pins, the newest this k7 runs, and
 an **Upgrade** when the pin is behind. Upgrade rewrites `_library-pins.k7x` and nothing else — the home has no
 engine session to run the editor's `library upgrade` verb — so the forks whose base changed are listed by the verb,
-not here, and the songs recompile when next opened (`apps/k7-daw-frontend/../../docs/library-versions-plan.md`).
+not here, and the songs recompile when next opened (`docs/library-versions-plan.md`).
 
 Without a library k7 refuses to open anything — not on principle, but because no `@k7-core/…`
 reference would resolve, and a song opened with all its shared modules missing reads as a broken
