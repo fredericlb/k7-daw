@@ -15,6 +15,7 @@
   a change replaced, no migration narrative. Where a past failure is what justifies a decision,
   state the hazard in the present tense and drop the story.
 - **Whenever you edit a js/ts file, make sure it passes biome's lint**
+- **`apps/k7/frontend/docs/INTERACTIONS.md` is generated from the interactions Sheet**: change the Sheet, never the md — `apps/k7/frontend/docs/interactionsSheet.md`.
 
 These rules hold in every language here — TypeScript and C++. The code keeps the **why** short;
 the zone's `docs/` directory is where the justification belongs:

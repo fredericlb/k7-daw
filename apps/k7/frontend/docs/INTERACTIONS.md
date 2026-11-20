@@ -1,3 +1,4 @@
+<!-- Generated from the Sheet https://claude.ai/artifact/GWymnBJpibPCE4b32ZR1gz by scripts/interactions/build.mjs: do not edit by hand. -->
 # K7 DAW interactions
 
 This inventory was read from main's source code on 2026-11-20. Nothing in it was tested on a device.
