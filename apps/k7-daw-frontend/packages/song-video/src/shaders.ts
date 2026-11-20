@@ -101,7 +101,7 @@ export function readShader(
   refs: Readonly<Record<string, ShaderOwner>>,
   name: string,
 ): ShaderSource | null {
-  // Refused before any path is built, since `../../../../../packages/` is how a module's containment is climbed out of.
+  // Refused before any path is built, since `../../` is how a module's containment is climbed out of.
   if (!/^[A-Za-z0-9_-]+$/.test(name)) return null;
   for (const folder of ownerFolders(dir, module, refs)) {
     const abs = join(folder, SHADERS_DIR, name);
