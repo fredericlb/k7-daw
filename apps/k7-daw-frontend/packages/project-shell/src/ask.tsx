@@ -9,6 +9,13 @@ import { useEffect, useRef, useState } from "react";
 const cx = (...parts: (string | false | undefined)[]): string =>
   parts.filter(Boolean).join(" ");
 
+// The dialog's buttons are 44 px pills: glass for the secondary, accent for the primary, error-red for the one that does not come back.
+const PILL =
+  "type-label inline-flex h-11 cursor-pointer items-center justify-center rounded-full px-[18px] outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40";
+const SECONDARY = `${PILL} glass text-foreground hover:brightness-125`;
+const PRIMARY = `${PILL} bg-primary text-primary-foreground shadow-(--k7-highlight) hover:bg-primary-hover`;
+const DANGER = `${PILL} bg-error text-ink hover:brightness-95`;
+
 interface Common {
   title: string;
   /** The consequence, in the words the person needs — newlines survive, unlike in a native box. */
@@ -184,7 +191,7 @@ function AskDialog({
       role="dialog"
       aria-modal="true"
       aria-label={pending.title}
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      className="fixed inset-0 z-(--k7-z-dialog) flex items-center justify-center p-4"
       onKeyDown={(e) => {
         // The tool's key is the dialog's, not the field's nor the app's (Space would be the transport).
         if (tool?.key && e.key === tool.key) {
@@ -200,15 +207,13 @@ function AskDialog({
       <button
         type="button"
         aria-label={pending.cancelLabel ?? ENGLISH.cancel}
-        className="absolute inset-0 bg-black/50"
+        className="scrim absolute inset-0 animate-[k7-fade-in_var(--k7-dur-fade)_ease-out]"
         onClick={cancel}
       />
-      <div className="relative flex max-h-full w-[min(28rem,92vw)] flex-col gap-3 overflow-y-auto rounded-lg border border-border bg-card p-4 shadow-xl">
-        <h2 className="text-sm font-semibold text-foreground">
-          {pending.title}
-        </h2>
+      <div className="panel-dialog relative flex max-h-full w-[min(var(--k7-dialog-w),92vw)] flex-col gap-3.5 overflow-y-auto rounded-(--k7-r-dialog) p-[22px] animate-[k7-dialog-in_var(--k7-dur-dialog)_var(--k7-ease-spring)]">
+        <h2 className="type-sheet-title text-foreground">{pending.title}</h2>
         {pending.body ? (
-          <p className="whitespace-pre-line text-sm text-muted-foreground">
+          <p className="whitespace-pre-line text-sm leading-[19px] text-fg-2">
             {pending.body}
           </p>
         ) : null}
@@ -219,30 +224,26 @@ function AskDialog({
               value={value}
               placeholder={text.placeholder}
               onChange={(e) => setValue(e.target.value)}
-              className="h-8 rounded border border-border bg-background px-2 text-sm text-foreground outline-none focus:border-primary"
+              className="type-body h-11 rounded-[14px] border border-(--k7-input-line) bg-(--k7-input-fill) px-3.5 text-foreground outline-none focus:border-(--k7-focus-line) focus:bg-(--k7-input-fill-focus) focus:shadow-(--k7-focus-ring)"
             />
             {invalid ? (
-              <span className="text-xs text-destructive">{invalid}</span>
+              <span className="type-status text-error">{invalid}</span>
             ) : null}
           </div>
         ) : null}
-        <div className="flex justify-end gap-2">
+        <div className="flex items-center justify-end gap-2">
           {tool ? (
             <button
               type="button"
               // Focus stays in the field, so Enter after tapping still answers rather than pressing the tool again.
               onMouseDown={(e) => e.preventDefault()}
               onClick={pressTool}
-              className="mr-auto rounded border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted active:bg-accent"
+              className={cx(SECONDARY, "mr-auto")}
             >
               {tool.label}
             </button>
           ) : null}
-          <button
-            type="button"
-            onClick={cancel}
-            className="rounded border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted"
-          >
+          <button type="button" onClick={cancel} className={SECONDARY}>
             {pending.cancelLabel ?? ENGLISH.cancel}
           </button>
           {text?.actions?.map((a) => (
@@ -251,7 +252,7 @@ function AskDialog({
               type="button"
               disabled={!!invalid}
               onClick={() => onDone(answer(a.key))}
-              className="rounded border border-border px-3 py-1.5 text-sm text-foreground hover:bg-muted disabled:opacity-50"
+              className={SECONDARY}
             >
               {a.label}
             </button>
@@ -263,12 +264,9 @@ function AskDialog({
                 key={c.key}
                 type="button"
                 onClick={() => onDone(c.key)}
-                className={cx(
-                  "rounded px-3 py-1.5 text-sm",
-                  i === choice.choices.length - 1
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : "border border-border text-foreground hover:bg-muted",
-                )}
+                className={
+                  i === choice.choices.length - 1 ? PRIMARY : SECONDARY
+                }
               >
                 {c.label}
               </button>
@@ -278,12 +276,9 @@ function AskDialog({
               type="button"
               disabled={!!invalid}
               onClick={accept}
-              className={cx(
-                "rounded px-3 py-1.5 text-sm disabled:opacity-50",
-                pending.kind === "confirm" && pending.danger
-                  ? "bg-destructive text-white hover:bg-destructive/90"
-                  : "bg-primary text-primary-foreground hover:bg-primary/90",
-              )}
+              className={
+                pending.kind === "confirm" && pending.danger ? DANGER : PRIMARY
+              }
             >
               {pending.confirmLabel ?? ENGLISH.confirm}
             </button>
