@@ -3452,7 +3452,6 @@ export default function App({
                         >
                           <SeqGridPane
                             path={graphSlot.path}
-                            view={graphSlot.view}
                             onChanged={bumpReload}
                             setStatus={setStatus}
                             reloadKey={reloadKey}

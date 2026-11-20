@@ -80,7 +80,6 @@ export const MENU_ENTITIES = [
   "shot",
   // A picture lane's gutter, the song's or a timeline's.
   "picture",
-  "pad",
   "note",
   // A rack's PAD on a node's card: one sound of the kit.
   "tap",

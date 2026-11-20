@@ -1,7 +1,7 @@
 // A PAD's two effects — `repeat` and `skip` — from the file up to the compiled document.
 //
 // What is NOT here: what they SOUND like. Both are realised by the engine (EditBuilder's
-// insertMidiClip), deliberately, so the sequencer keeps drawing one pattern rather than its
+// insertMidiClip), deliberately, so the roll keeps drawing one pattern rather than its
 // expansion — see docs/padEffects.md. The proof that they play is a render, in the engine's
 // scripts/pad-effects.ts.
 

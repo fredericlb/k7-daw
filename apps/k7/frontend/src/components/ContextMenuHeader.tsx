@@ -66,7 +66,6 @@ const NOUNS: Record<MenuEntity, () => string> = {
   warp: () => m["menuNoun.warp"](),
   shot: () => m["menuNoun.shot"](),
   picture: () => m["menuNoun.picture"](),
-  pad: () => m["menuNoun.pad"](),
   note: () => m["menuNoun.note"](),
   tap: () => m["menuNoun.tap"](),
   rack: () => m["menuNoun.rack"](),

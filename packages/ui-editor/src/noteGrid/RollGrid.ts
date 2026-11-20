@@ -1,7 +1,7 @@
 // RollGrid.ts — the PIANO-ROLL view of a sequence's notes: time left-to-right, one lane per
 // semitone, positioned in PERCENTAGES so it stretches with the pane rather than scrolling a
 // fixed grid. Click an empty cell to add a note, a note to remove it.
-// See docs/noteGrids.md; TrackerGrid.ts is the other view.
+// See docs/noteGrids.md.
 
 import type { Note, RackInfo } from "./notes";
 

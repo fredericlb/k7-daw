@@ -66,15 +66,6 @@ export type MenuCtx =
   | { kind: "picture-shot"; lane: string; at: string; name: string }
   /** A picture LANE's gutter: the song's, or a timeline's as `<timeline>><lane>`. */
   | { kind: "picture-lane"; lane: string }
-  /** A PAD in the step sequencer — sequence, key and start beat, plus what it ALREADY carries, so a row is offered only when it does something. */
-  | {
-      kind: "pad";
-      sequence: string;
-      note: number;
-      start: number;
-      repeat?: number;
-      skip?: number;
-    }
   /** A rack's PAD on a node's card: the node whose kit it is, and the sound — what every `node tap …` verb takes. */
   | { kind: "tap"; id: string; symbol: string }
   /** A NOTE on the roll: key and start as every `sequence note …` verb takes them, `at` the caret a split would cut at, `region` the rectangle the four plural verbs need — a clip's `sel` again. */
@@ -87,9 +78,6 @@ export type MenuCtx =
       at?: number;
       region?: { lo: number; hi: number; from: number; to: number };
     };
-
-/** The values a pad's effects are offered at — a closed set, so the menu is a choice; the schema still takes any whole number from 2 up. */
-const PAD_EFFECT_VALUES = [2, 4] as const;
 
 // A canonical entry: `verb` the command, `arg` its entity, `needsMore` a trailing space when a value is owed; `help` and `name` override the catalogue.
 interface Entry {
@@ -179,9 +167,7 @@ const CLICKED_HEAD: Record<MenuCtx["kind"], string> = {
   "picture-shot": "picture",
   // …and on the lane: 'mute', 'solo', and the copy, which keeps its whole name.
   "picture-lane": "picture",
-  // 'sequence note': a pad's rows are named for the value they set, and the head is what every one of them shares.
-  pad: "sequence note",
-  // The same head, for the same reason: on the roll the rows read 'remove' and 'split'.
+  // 'sequence note': on the roll the rows read 'remove' and 'split'.
   note: "sequence note",
   // Every row is named by hand, so there is nothing to drop.
   tap: "",
@@ -207,7 +193,6 @@ export const CTX_ENTITY: Record<MenuCtx["kind"], MenuEntity | undefined> = {
   "warp-point": "warp",
   "picture-shot": "shot",
   "picture-lane": "picture",
-  pad: "pad",
   note: "note",
   tap: "tap",
 };
@@ -615,38 +600,6 @@ export function contextMenu(
           help: "open the lane's own file, its node",
         },
       ]);
-    }
-    case "pad": {
-      /** A pad's effects, written out for the reason a take's two verbs are — one row per VALUE, each named, since two rows share a verb. */
-      const where = `${ctx.sequence} ${ctx.note} ${ctx.start}`;
-      const rows: Entry[] = [];
-      for (const n of PAD_EFFECT_VALUES)
-        if (ctx.repeat !== n)
-          rows.push({
-            verb: "sequence note repeat",
-            arg: `${where} ${n}`,
-            name: `repeat ×${n}`,
-          });
-      if (ctx.repeat)
-        rows.push({
-          verb: "sequence note repeat",
-          arg: `${where} off`,
-          name: "repeat off",
-        });
-      for (const n of PAD_EFFECT_VALUES)
-        if (ctx.skip !== n)
-          rows.push({
-            verb: "sequence note skip",
-            arg: `${where} ${n}`,
-            name: `skip 1/${n}`,
-          });
-      if (ctx.skip)
-        rows.push({
-          verb: "sequence note skip",
-          arg: `${where} off`,
-          name: "skip off",
-        });
-      return offer(rows);
     }
     case "note": {
       /** The roll's own two, both already addressed by the click — nothing here owes an argument to the bar. */

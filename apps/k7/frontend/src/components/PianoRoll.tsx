@@ -11,7 +11,6 @@ import { Piano } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
-  type ReactNode,
   type RefObject,
   useCallback,
   useEffect,
@@ -75,7 +74,7 @@ import { SeqDoubleButton } from "./SeqDoubleButton";
 import { type PanelTakes, TakesView } from "./TakesView";
 
 /** How loud a click on a row's NAME auditions it — half, a check of which sound this is rather than a performance. */
-export const AUDITION_VEL = 0.5;
+const AUDITION_VEL = 0.5;
 
 const PX_PER_BEAT = 24; // fallback beat width for the first, unmeasured frame only
 const GUTTER = 44; // note-name column, px
@@ -95,7 +94,6 @@ export interface RollHandle {
 export function PianoRoll({
   project,
   clip,
-  modes,
   caretRef,
   active = false,
   setStatus,
@@ -121,8 +119,6 @@ export function PianoRoll({
 }: {
   project: WebProject;
   clip: WebClip;
-  /** The clip pane's view switch, drawn at the end of the header; absent for a host with no other view of these notes. */
-  modes?: ReactNode;
   /** Where the shell reaches the caret: `v`, `t` and Shift+L are commands, so they arrive from the bar (see ClipView's ClipViewHandle). */
   caretRef?: RefObject<ClipGridHandle | null>;
   /** Whether this pane owns the keys — the arrows must not move two carets at once; a preview passes nothing and gets none. */
@@ -658,7 +654,6 @@ export function PianoRoll({
             seqId={seqId}
             command={onCreateNote ? onCommand : undefined}
           />
-          {modes}
         </span>
       </div>
 

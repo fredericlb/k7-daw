@@ -50,7 +50,6 @@ export function menuTarget(
         return ctx.name || ctx.at;
       case "picture-lane":
         return lane(ctx.lane);
-      case "pad":
       case "note":
         return `${noteName(ctx.note)} · ${clip(ctx.sequence)}`;
       case "tap":

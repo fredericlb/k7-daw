@@ -187,7 +187,6 @@ export const MENU_ENTITIES = [
   "warp",
   "shot",
   "picture",
-  "pad",
   "note",
   "tap",
   "rack",

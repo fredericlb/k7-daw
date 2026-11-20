@@ -1,8 +1,6 @@
 // rollPending.ts — the piano roll's optimistic paint. A `sequence note` command costs ~400 ms on
 // the service (it recompiles the project), so the gesture paints at once and the ghost is held
-// until the DOCUMENT agrees. The step sequencer learnt this first; its ghosts are indexed by CELL
-// and by precision, which is not the roll's shape — here the key is the ADDRESS every note verb
-// takes, `${key}@${start}`. See docs/clipEditors.md.
+// until the DOCUMENT agrees. A ghost's key is the ADDRESS every note verb takes, `${key}@${start}`. See docs/clipEditors.md.
 
 import { roundBeat } from "@studio/song-schema/timecode";
 

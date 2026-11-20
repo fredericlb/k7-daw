@@ -1,5 +1,5 @@
-// plugin.ts — mounts a sequence's `notes` list as an interactive grid (piano roll
-// or tracker) in a plain filling pane, handing back the whole next file content on an edit.
+// plugin.ts — mounts a sequence's `notes` list as an interactive piano roll
+// in a plain filling pane, handing back the whole next file content on an edit.
 // No CodeMirror here despite the name: the subpath is what its hosts import. See docs/noteGrids.md.
 
 import {
@@ -9,7 +9,6 @@ import {
 } from "@studio/song-schema/seqWindow";
 import { type Note, type RackInfo, readSequence, writeNotes } from "./notes";
 import { renderRollGrid } from "./RollGrid";
-import { makeTrackerCtx, renderTrackerGrid } from "./TrackerGrid";
 
 function buildRackInfo(rack: RackHint | undefined): RackInfo | null {
   const entries = rack?.symbols;
@@ -46,14 +45,13 @@ export interface RackHint {
   symbols: { symbol: string; note: number; from?: number; to?: number }[];
 }
 
-// The same grids in a plain FILLING container, re-rendered from OUTSIDE so an edit and a reformat share one path.
+// The roll in a plain FILLING container, re-rendered from OUTSIDE so an edit and a reformat share one path.
 
 export interface SeqGridController {
   update(content: string): void; // re-render for new content (a grid edit or a save reformat)
   destroy(): void;
 }
 export interface SeqGridOptions {
-  view: "roll" | "tracker";
   content: string;
   racks?: Record<string, RackHint>;
   onChange: (nextContent: string) => void; // the WHOLE next file content, notes rewritten
@@ -63,7 +61,6 @@ export function mountSeqGrid(
   container: HTMLElement,
   opts: SeqGridOptions,
 ): SeqGridController {
-  const ctx = opts.view === "tracker" ? makeTrackerCtx() : null;
   let content = opts.content;
 
   const render = () => {
@@ -79,10 +76,7 @@ export function mountSeqGrid(
       if (text !== null) opts.onChange(text);
     };
     const win = docWindow(content, notes);
-    const grid =
-      opts.view === "tracker"
-        ? renderTrackerGrid(notes, ctx!, onGridChange, rack, win)
-        : renderRollGrid(notes, onGridChange, rack, win);
+    const grid = renderRollGrid(notes, onGridChange, rack, win);
     grid.style.height = "100%";
     container.replaceChildren(grid);
   };

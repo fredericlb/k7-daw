@@ -64,7 +64,7 @@ export function parseMidiNote(s: string): number | null {
   return k >= 0 && k <= 127 ? k : null;
 }
 
-// A beat value for a note struct, 6 decimals max, mirroring the tracker so drags don't churn the file.
+// A beat value for a note struct, 6 decimals max, mirroring the roll's writer so drags don't churn the file.
 export const fmtBeat = (v: number) => String(roundBeat(v));
 
 // `sequence new [name]` — four empty bars to write into. Place it on a lane with `event new`.

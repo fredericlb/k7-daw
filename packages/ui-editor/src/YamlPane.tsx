@@ -1,6 +1,6 @@
 // YamlPane.tsx — one file as text, for the screens beside k7's editor: a module's files, a chain,
 // a playlist. k7x, YAML (the médiathèque's files) or JavaScript, chosen by extension.
-// Deliberately smaller than k7's EditorPane: no sequence tracker, no waveform, no video readers.
+// Deliberately smaller than k7's EditorPane: no sequence grid, no waveform, no video readers.
 
 import { autocompletion } from "@codemirror/autocomplete";
 import { javascript } from "@codemirror/lang-javascript";

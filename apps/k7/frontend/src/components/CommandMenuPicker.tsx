@@ -31,7 +31,6 @@ const ENTITY_LABEL: Record<MenuEntity, () => string> = {
   warp: () => m["menuEntity.warp"](),
   shot: () => m["menuEntity.shot"](),
   picture: () => m["menuEntity.picture"](),
-  pad: () => m["menuEntity.pad"](),
   note: () => m["menuEntity.note"](),
   tap: () => m["menuEntity.tap"](),
   rack: () => m["menuEntity.rack"](),

@@ -1,27 +1,23 @@
 // SeqGridFile.tsx — one sequence FILE behind a note grid: reads it, writes every edit in order.
-// The half of `SeqGridPane` that is not its frame, held apart so the clip pane can mount the
-// same tracker without a second copy of "read, hand to the grid, write back". `SeqGrid` itself
-// stays controlled and file-blind. See docs/noteGrids.md.
+// The half of `SeqGridPane` that is not its frame, held apart so the frame can change without a
+// second copy of "read, hand to the grid, write back". `SeqGrid` itself stays controlled and file-blind. See docs/noteGrids.md.
 
 import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import type { SetStatus } from "../hooks/useLogs";
 import { useQuietWrites, useRevision } from "../hooks/useRevision";
 import { m } from "../paraglide/messages.js";
-import type { SeqView } from "../sequenceEdit";
 import type { Hints } from "../types";
 import { SeqGrid } from "./SeqGrid";
 
 export function SeqGridFile({
   path,
-  view,
   racks,
   onChanged,
   setStatus,
   reloadKey = 0,
 }: {
   path: string;
-  view: SeqView;
   /** The rack vocabulary the grid relabels notes with — the host fetches it with its own hints. */
   racks: Hints["racks"];
   // A write landed: the polls need to pick the notes up (the timeline draws them too).
@@ -104,12 +100,6 @@ export function SeqGridFile({
   if (content === null)
     return <div className="p-4 text-muted-foreground text-sm">loading…</div>;
   return (
-    <SeqGrid
-      view={view}
-      content={content}
-      racks={racks}
-      resetKey={path}
-      onChange={write}
-    />
+    <SeqGrid content={content} racks={racks} resetKey={path} onChange={write} />
   );
 }

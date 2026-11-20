@@ -4,7 +4,7 @@
 // MIDI its notes; both are fetched here, since a take is not in the compiled project until comped.
 
 import { seqWindowFromText, windowSpan } from "@studio/song-schema/seqWindow";
-import { readSequence } from "@studio/ui-editor/tracker/notes";
+import { readSequence } from "@studio/ui-editor/note-grid/notes";
 import { memo, useEffect, useId, useMemo, useState } from "react";
 import { api } from "../api";
 import { envelopePath, type TakeRow as Row } from "../takes";

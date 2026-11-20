@@ -1,39 +1,7 @@
-// Reading the two grid commands, and what a bare name in one of them resolves to.
+// What a bare name in `sequence edit roll` resolves to.
 
 import { describe, expect, it } from "vitest";
-import { parseSeqEdit, resolveSequence } from "./sequenceEdit";
-
-describe("parseSeqEdit", () => {
-  it("reads both grids", () => {
-    expect(parseSeqEdit("sequence edit roll intro")).toEqual({
-      view: "roll",
-      name: "intro",
-    });
-    expect(parseSeqEdit("sequence edit tracker intro")).toEqual({
-      view: "tracker",
-      name: "intro",
-    });
-  });
-
-  it("answers with an empty name while the bar is still collecting one", () => {
-    // The bar sends the head with a trailing space while filling the argument: this must MATCH with nothing in it, so the caller prints a usage line.
-    expect(parseSeqEdit("sequence edit roll ")).toEqual({
-      view: "roll",
-      name: "",
-    });
-  });
-
-  it("keeps a name with spaces whole", () => {
-    expect(parseSeqEdit("sequence edit roll ge rythm")?.name).toBe("ge rythm");
-  });
-
-  it("is not fooled by the neighbouring sequence commands", () => {
-    expect(parseSeqEdit("sequence list")).toBeNull();
-    expect(parseSeqEdit("sequence note new intro C4 1 2")).toBeNull();
-    expect(parseSeqEdit("sequence edit intro")).toBeNull();
-    expect(parseSeqEdit("sequence edit rolling intro")).toBeNull();
-  });
-});
+import { resolveSequence } from "./sequenceEdit";
 
 const FILES = [
   "sequences/intro.k7x",
