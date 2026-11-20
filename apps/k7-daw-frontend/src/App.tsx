@@ -1518,10 +1518,10 @@ export default function App({
 
   /** The footer's two graph toggles, each as ONE callback the button and the command share. */
   const toggleMixer = useCallback(() => {
-    if (panel !== "mix" && mixerStrips.length === 0)
+    if (panel !== "mix" && mixerStrips.length === 0 && !masteringSurface)
       return setStatus(m["status.noStrip"]());
     togglePanel("mix");
-  }, [panel, mixerStrips.length, togglePanel]);
+  }, [panel, mixerStrips.length, masteringSurface, togglePanel]);
 
   /** …and the stack view, which takes the graph's whole pane. */
   const toggleStack = useCallback(() => {
@@ -2621,7 +2621,9 @@ export default function App({
     tasks: "ui tasks",
     export: "ui share",
   };
-  const mixerDead = mixerStrips.length === 0 && pressedButton !== "mixer";
+  // A mastering surface keeps the Mixer reachable: its Master section is the only way in.
+  const mixerDead =
+    mixerStrips.length === 0 && !masteringSurface && pressedButton !== "mixer";
   const pressPanel = (id: PanelId) => {
     if (pressedButton === id) return closeAnyPanel();
     const line = PANEL_LINE[id];
