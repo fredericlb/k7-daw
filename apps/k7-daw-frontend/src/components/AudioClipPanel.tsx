@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { Check, Loader2, Square, Trash2 } from "@studio/ui/icons";
+import { Check, Loader2, Play, Square, Trash2 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
 import { wheelFactor } from "@studio/ui-timeline/panZoom";
@@ -544,11 +544,29 @@ export function AudioClipPanel({
                     laneName(track),
                   )}
               </span>
+              {/* Plays the file's from/to window at its own tempo, through the same request the source strip's play button sends. */}
+              {clip && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  title={m["wave.listenHint"]()}
+                  onClick={() =>
+                    void api.preview({ kind: "clip", clip }).catch(() => {})
+                  }
+                >
+                  <Play className="mr-1 h-3 w-3" /> {m["clip.listen"]()}
+                </Button>
+              )}
               {/* A clip nothing places has no lane to name, and works the same: waveform, onsets and level belong to the FILE. */}
               {track ? (
                 <span>{m["clip.onTrack"]({ track })}</span>
               ) : (
                 <span>{m["clip.offTrack"]()}</span>
+              )}
+              {clip && (
+                <span className="truncate font-mono" title={clip}>
+                  {clip}
+                </span>
               )}
               {editingOnsets && (
                 <span className="text-faint">{m["clip.onsetHint"]()}</span>

@@ -622,6 +622,7 @@
   "clip.stopTake": "Arrêter la prise (Échap)",
   "clip.onTrack": "sur {track}",
   "clip.offTrack": "hors piste",
+  "clip.listen": "Écouter",
   "clip.onsetHint": "cliquer ajoute un onset · glisser un repère le déplace · cliquer l'enlève",
   "clip.warpHint": "double-clic pose un point d'étirement · glisser sa poignée bleue dit sur quel temps il tombe · clic droit dessus pour l'enlever · les traits gris sont les onsets, en repère",
   "clip.bars": "mes.",

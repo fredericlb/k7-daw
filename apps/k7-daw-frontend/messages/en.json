@@ -622,6 +622,7 @@
   "clip.stopTake": "Stop the take (Esc)",
   "clip.onTrack": "on {track}",
   "clip.offTrack": "off any track",
+  "clip.listen": "Listen",
   "clip.onsetHint": "click adds an onset · drag a mark to move it · click it to remove it",
   "clip.warpHint": "double-click drops a stretch point · drag its blue handle to say which beat it falls on · right-click it to remove it · the grey lines are the onsets, for reference",
   "clip.bars": "bars",
