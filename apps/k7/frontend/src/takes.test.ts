@@ -14,6 +14,7 @@ import {
   snapSpan,
   TAKE_COLORS,
   takeColor,
+  takeNumber,
   takesEventOf,
 } from "./takes";
 import type { WebProject } from "./types";
@@ -172,5 +173,16 @@ describe("envelopePath — a take row's envelope", () => {
 
   it("draws nothing for no samples", () => {
     expect(envelopePath([], 4, 0)).toBe("");
+  });
+});
+
+describe("takeNumber", () => {
+  it("counts takes from 1, past the event's own row", () => {
+    const rows = [
+      { ref: "own", start: 0, own: true },
+      { ref: "a", start: 0, own: false },
+      { ref: "b", start: 4, own: false },
+    ];
+    expect([1, 2].map((i) => takeNumber(rows, i))).toEqual([1, 2]);
   });
 });

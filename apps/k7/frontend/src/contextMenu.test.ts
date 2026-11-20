@@ -170,51 +170,6 @@ const labels = (items: { label: string }[]) => items.map((i) => i.label);
 const says = (items: { label: string; description: string }[], label: string) =>
   items.find((i) => i.label === label)?.description;
 
-/** A PAD's two effects, written out rather than derived: every `sequence note` verb has that shape, so the catalogue would offer the wrong rows. */
-describe("a pad", () => {
-  const pad = (has: { repeat?: number; skip?: number } = {}) =>
-    contextMenu(
-      { kind: "pad", sequence: "beat", note: 36, start: 2, ...has },
-      CATALOGUE,
-    );
-
-  it("offers both values of both effects, fully filled in", () => {
-    expect(lines(pad())).toEqual([
-      "sequence note repeat beat 36 2 2",
-      "sequence note repeat beat 36 2 4",
-      "sequence note skip beat 36 2 2",
-      "sequence note skip beat 36 2 4",
-    ]);
-    // Named by the VALUE, since two rows share a verb — 'repeat' twice would be a menu you cannot choose from.
-    expect(labels(pad())).toEqual([
-      "repeat ×2",
-      "repeat ×4",
-      "skip 1/2",
-      "skip 1/4",
-    ]);
-  });
-
-  // Every row RUNS: the click already knows the sequence, the note, the beat and the value.
-  it("leaves nothing for the bar to ask", () => {
-    expect(pad().every((i) => i.complete)).toBe(true);
-  });
-
-  /** The value it is already ON is not offered, and an `off` row appears instead — else an effect would be a one-way decision. */
-  it("drops the value already set, and offers the way off", () => {
-    const menu = lines(pad({ repeat: 4 }));
-    expect(menu).not.toContain("sequence note repeat beat 36 2 4");
-    expect(menu).toContain("sequence note repeat beat 36 2 2");
-    expect(menu).toContain("sequence note repeat beat 36 2 off");
-    // …and the OTHER effect is untouched by that: both are still on offer.
-    expect(menu).toContain("sequence note skip beat 36 2 2");
-    expect(menu).not.toContain("sequence note skip beat 36 2 off");
-  });
-
-  it("offers no way off an effect that is not on", () => {
-    expect(lines(pad())).not.toContain("sequence note repeat beat 36 2 off");
-  });
-});
-
 /** A NOTE on the piano roll: its own two, then the RECTANGLE's, when the click landed in one. */
 describe("a roll note", () => {
   const note = (over: Record<string, unknown> = {}) =>
@@ -298,7 +253,7 @@ describe("a picture shot", () => {
   });
 
   it("drops the head, so the rows read as what they do", () => {
-    // Written out rather than derived, as `warp-point` and `pad` are: the four are a gesture set, not everything a lane answers.
+    // Written out rather than derived, as `warp-point` is: the four are a gesture set, not everything a lane answers.
     expect(labels(menu)).toEqual([
       "move",
       "head",

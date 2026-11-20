@@ -39,7 +39,7 @@ three times is one pass of material and two passes of the same thing again.
 
 ## sequences/<id>.k7x
 
-A MIDI sequence holds its notes inline as compact {t,d,k,v} structs — t/d in beats, k a MIDI key, v an optional 0..1 velocity. Toggle Tracker to edit them on a grid.
+A MIDI sequence holds its notes inline as compact {t,d,k,v} structs — t/d in beats, k a MIDI key, v an optional 0..1 velocity. The piano roll edits them.
 
 `from`/`to` window the NOTES, exactly as a clip's window the sample: this sequence is that slice of them, and a
 placement plays it `loop` times. Timecodes only, and positions — `"1:1"` is the first beat, `"5:1"` the fifth
@@ -49,7 +49,7 @@ meaning beats one folder over is a rule only ever learned by getting it wrong.
 Left out, the window is everything the notes cover, rounded up to the bar — so a two-bar pattern whose last hit
 falls on the fourth sixteenth is still two bars long, and repeats of it do not drift.
 
-The piano roll and the tracker mark that window the same way the waveform does — a lit band with its two edges
+The piano roll marks that window the same way the waveform does — a lit band with its two edges
 picked out — and here it says one more thing: notes lying **outside** it are in the file and are not played. A
 window that starts past the first beat, or ends before the last hit, is exactly when that is worth seeing.
 
@@ -74,7 +74,7 @@ every note you press, through the track's own instrument.
 // from("1:1")        — start at the sequence's own beginning (the default)
 // to("3:1")          — …and end it at bar 3, whatever the last note does
 // use_rack("drumrack") — a rack module whose symbols name these notes:
-//                      the tracker then labels rows by symbol, not by key
+//                      the piano roll then labels keys by symbol
 notes([t(0).d(1).k(60), t(1).d(1).k(62), t(2).d(1).k(64), t(3).d(1).k(65)])
 ```
 

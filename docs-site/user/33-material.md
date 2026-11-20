@@ -102,7 +102,7 @@ Each note:
 | `repeat` | whole number ≥ 2 | once | Retrigger: play the note this many times inside its own duration. |
 | `skip` | whole number ≥ 2 | every pass | Fall silent on every n-th pass of the pattern. |
 
-`repeat` and `skip` are mostly used on step-sequencer pads.
+`repeat` and `skip` are set with `sequence note repeat` and `sequence note skip`.
 
 ### The short note form (k7x only)
 

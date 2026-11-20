@@ -1,6 +1,5 @@
 // gridCaret.ts — the timeline's caret and `v` rectangle, restated for a surface whose rows and
-// columns are a plain GRID: the piano roll's pitches × ruler steps, the sequencer's rack sounds ×
-// steps. Pure arithmetic on indices, so the behaviour can be pinned without mounting a pane.
+// columns are a plain GRID: the piano roll's pitches × ruler steps. Pure arithmetic on indices, so the behaviour can be pinned without mounting a pane.
 // See apps/k7/frontend/docs/clipEditors.md.
 
 import type { Clipboard, MaybeClipboard } from "./clipboard";

@@ -76,6 +76,6 @@ The history panel (`ui history`) lists the steps. See [Sync, history and conflic
 | `ui edit sequence <name>` or `e` on a MIDI clip | The sequence's file |
 | `ui edit clip <name>` or `e` on an audio clip | The clip's file |
 | `ui builder <module>` | The module in the module builder, beside the tree |
-| `sequence edit roll <seq>` / `sequence edit tracker <seq>` | The sequence's notes as a piano roll / tracker in the bottom panel |
+| `sequence edit roll <seq>` | The sequence's notes as a piano roll in the bottom panel |
 
 The module builder is the one editing screen with a real **Save** button: a module is several files that only make sense together, so they are saved together, and `Ctrl+S` / `:w` press that button. It is described in the Chains section.

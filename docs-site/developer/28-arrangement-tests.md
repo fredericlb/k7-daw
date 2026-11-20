@@ -35,7 +35,7 @@ source comment or a Markdown page naming a file that is not there.
 | `historyMarks.test.ts` | Which lanes, clips and nodes a journal step lights. |
 | `keys.test.ts`, `commandFill.test.ts`, `contextMenu.test.ts` | Key resolution, caret answers for a command's form, menus derived from the catalogue. |
 | `clipLoop.test.ts`, `clipInstances.test.ts`, `clipEnvelope.test.ts`, `barWindow.test.ts`, `clipWarp.test.ts`, `clipOps.test.ts` | Loop marks, repeated material, the activity envelope, the waveform's bar window, file/beat conversion for warp points, process lines. |
-| `rollDrag.test.ts`, `stepGrid.test.ts`, `gridCaret.test.ts`, `curveDraft.test.ts` | Note gestures, step grid, the grid caret, curve drafts. |
+| `rollDrag.test.ts`, `gridCaret.test.ts`, `curveDraft.test.ts` | Note gestures, the grid caret, curve drafts. |
 | `takes.test.ts`, `takeCounter.test.ts`, `midiTake.test.ts`, `midiIn.test.ts`, `webmidi.test.ts`, `laneInput.test.ts`, `transportPanic.test.ts` | Comp lines and spans, the take counter, MIDI take trimming, device matching, inputs, the double-stop panic. |
 | `exportArgs.test.ts`, `gainTrim.test.ts`, `mixerStrips.test.ts`, `apps/k7/frontend/src/mastering/controls.test.ts` | Export syntax, the Fix trim, strip order, the mastering control list. |
 

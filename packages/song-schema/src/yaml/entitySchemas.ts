@@ -105,7 +105,7 @@ export const ClipSchema = z.union([
   AudioClipSchema,
 ]);
 
-/** One note — and, on a step sequencer, one PAD, which is why two effects live here (docs/padEffects.md). */
+/** One note — and a PAD when it carries effects, which is why two effects live here (docs/padEffects.md). */
 export const NoteSchema = z
   .object({
     t: z.number().min(0), // onset, beats (fractional = microtiming)
@@ -129,7 +129,7 @@ export const SequenceSchema = z
     notes: z.array(NoteSchema),
     from: SeqEdge.optional(), // default: the first note
     to: SeqEdge.optional(), // default: the end of the last note
-    // A rack module whose symbols name these notes — the tracker relabels by it.
+    // A rack module whose symbols name these notes — the roll relabels by it.
     use_rack: z.string().min(1).optional(),
   })
   .strict();

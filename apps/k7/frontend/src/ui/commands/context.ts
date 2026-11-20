@@ -26,7 +26,6 @@ import type { useProjectImport } from "../../hooks/useProjectDialogs";
 import type { Share } from "../../hooks/useShare";
 import type { VideoDocState } from "../../hooks/useVideoDoc";
 import type { Pane, Panel } from "../../routes";
-import type { SeqView } from "../../sequenceEdit";
 import type { WebProject, WorkspaceInfo } from "../../types";
 
 /** The curve editor popin (`ui curve [name]`, `ui automate`) — docs/curveEditor.md. */
@@ -44,7 +43,7 @@ export interface CurveEdit {
 
 /** What the chains slot shows INSTEAD of the graph — three occupants, one state (docs/shell.md). */
 export type GraphSlot =
-  | { kind: "grid"; path: string; view: SeqView }
+  | { kind: "grid"; path: string }
   | { kind: "clip"; target: EditTarget }
   | { kind: "recording" }
   // A MIDI take rolling: its notes drawn as they are played (MidiTakeRoll.tsx).

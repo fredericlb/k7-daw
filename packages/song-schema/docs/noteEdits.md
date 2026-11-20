@@ -1,7 +1,7 @@
 # Editing a sequence's notes
 
 The rationale behind `packages/song-schema/src/yaml/sequenceFile.ts` — the writers behind the piano
-roll, the step sequencer and `note add`. One note per line (a flow mapping), which is the shape a
+roll and `note add`. One note per line (a flow mapping), which is the shape a
 recorded sequence shares with a hand-entered one.
 
 ## How a note is addressed

@@ -85,7 +85,7 @@ These act while a clip is open in the bottom panel.
 
 | Key | When | Command |
 |---|---|---|
-| `Backspace`, `x` | a clip's grid is open (roll or sequencer) | `selection delete` — the rectangle, or the note under the caret |
+| `Backspace`, `x` | a clip's grid is open (the roll) | `selection delete` — the rectangle, or the note under the caret |
 | `a` | piano roll open | `ui roll select` |
 | `n` | piano roll open | `ui roll create` |
 | `d` | piano roll open | `ui roll remove` |
@@ -105,7 +105,7 @@ When two views could take the same letter, the one in front wins: the piano roll
 | Timeline, moving a clip (`m`) | `h` or `←` / `l` or `→` | Nudge the clip one beat left / right; `j` and `k` do nothing while a clip is in hand |
 | Timeline, moving a clip | `Enter` | Commit the move |
 | Timeline, moving a clip | `Esc` | Cancel the move |
-| Clip grid (roll, tracker) | `h` `j` `k` `l` or arrows, `v`, `Esc` | Same caret and rectangle as the timeline |
+| Clip grid (roll) | `h` `j` `k` `l` or arrows, `v`, `Esc` | Same caret and rectangle as the timeline |
 | Editor | `Ctrl+S`, `:w` (vim) | Save now (see [The text editor](./15-text-editor.md)) |
 | Editor | `Ctrl`-click on a name | Open the file that name refers to |
 | Right-click menu | `←` / `→` | Switch tab |

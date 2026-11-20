@@ -1,7 +1,6 @@
 // rackFor.ts — the rack a track's signal reaches: the first rack step in the chain the track
-// feeds, following the outs. What decides that a MIDI clip opens as a STEP SEQUENCER rather
-// than a piano roll — the rack's symbols are the rows, so without one there is no grid to draw.
-// Pure, because which panel a clip opens in is a decision worth pinning.
+// feeds, following the outs, and the key names its sounds give the piano roll's gutter.
+// Pure, because which rack a lane plays is a decision worth pinning.
 
 import type { WebGraph, WebRackSound } from "@studio/graph-model";
 

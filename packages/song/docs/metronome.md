@@ -71,8 +71,7 @@ showing what was asked for rather than what is.
 
 The slider commits on RELEASE, not on every frame — the command rewrites
 `settings.k7x` and re-sends the whole document, so a live commit would be forty writes and forty
-journal entries for one gesture. Same rule as the clip panel's velocity drag and the sequencer's
-nudge.
+journal entries for one gesture. Same rule as the clip panel's velocity drag.
 
 The menu says the floor out loud (`le plus bas est 20% — pour le silence, cliquez le métronome`),
 because a slider that stops short of zero reads as a bug otherwise, and the way to silence it is the

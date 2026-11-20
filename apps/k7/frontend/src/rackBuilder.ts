@@ -14,7 +14,7 @@ export const GRID = 4;
 export const padNote = (row: number, col: number): number =>
   RACK_FIRST_NOTE + (GRID - 1 - row) * GRID + col;
 
-/** Every cell in NOTE order — the order the symbols are WRITTEN in, so the hints, the colours and the sequencer read the grid as it plays. */
+/** Every cell in NOTE order — the order the symbols are WRITTEN in, so the hints and the colours read the grid as it plays. */
 export function cellsInNoteOrder(): { row: number; col: number }[] {
   const out: { row: number; col: number }[] = [];
   for (let row = GRID - 1; row >= 0; row--)

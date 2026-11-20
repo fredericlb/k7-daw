@@ -59,7 +59,7 @@ no length).
 
 ## Note views
 
-`ClipViewModes.tsx` switches between the sequencer, the piano roll and the tracker.
+A MIDI clip is edited in the piano roll alone.
 
 **Piano roll** — `apps/k7/frontend/src/components/PianoRoll.tsx` draws; `apps/k7/frontend/src/hooks/useRollGestures.ts` turns pointers into
 gestures; `rollDrag.ts` holds their arithmetic; `rollFit.ts` the key range and zoom. Modes come from
@@ -84,27 +84,19 @@ Notes are addressed by key and start, never by index. A command costs a round tr
 milliseconds, so `rollPending.ts` paints the expected result immediately and drops it when the
 reload lands or the command is refused.
 
-**Step sequencer** — `apps/k7/frontend/src/components/SequencerPanel.tsx` with `apps/k7/frontend/src/hooks/useStepPads.ts` and `stepGrid.ts`.
-Rows are the sounds of the rack downstream of the lane (the graph is needed to know them); the
-precision (`PRECISIONS`, 1/2 to 1/32) is session state. Pads map to the same note verbs; repeat and
-skip are `sequence note repeat|skip`, which the engine realises from the compiled document without
-expanding them, so the grid keeps drawing one pattern. `SeqDoubleButton.tsx` runs `sequence double`,
-whose writer then halves the loop count of every placement (`packages/song-edit/src/sequenceLoops.ts`)
-so the arrangement does not move.
+`SeqDoubleButton.tsx` runs `sequence double`, whose writer then halves the loop count of every placement
+(`packages/song-edit/src/sequenceLoops.ts`) so the arrangement does not move. Repeat and skip are
+`sequence note repeat|skip`, which the engine realises from the compiled document without expanding them.
 
-**Tracker** — `SeqGridFile.tsx` reads the sequence file and writes every edit back to it;
-`SeqGrid.tsx` is the controlled grid, mounted from `@studio/ui-editor`. This is the one note view
-that writes the file directly rather than through `sequence note` verbs, because it edits the
-file's text.
+**Inline grid** — `SeqGridFile.tsx` reads the sequence file and writes every edit back to it;
+`SeqGrid.tsx` is the controlled grid, mounted from `@studio/ui-editor`. It backs `sequence edit roll`
+and the editor popin's Roll tab, and writes the file directly rather than through `sequence note` verbs.
 
-The roll and the sequencer share the timeline's caret through `apps/k7/frontend/src/hooks/useGridCaret.ts` and `gridCaret.ts`, and expose
-the same `copy` / `pasteLine` / `deleteLine` contract to the shell, so `selection copy|paste|delete`
-route to whichever grid holds a rectangle (`App.tsx`, `clipGridRef`). `deleteLine` answers the same
-two lines in both: one note is `sequence note remove`, several are `sequence notes remove` over the
-rectangle. The sequencer plans it in `planSelectionDelete` (`stepGrid.ts`): a row there is a rack
-sound, so the key range from the lowest to the highest row can cross rows outside the rectangle, and
-when it would take a note on one of them the delete is refused rather than split into several
-journal entries. Region verbs
+The roll shares the timeline's caret through `apps/k7/frontend/src/hooks/useGridCaret.ts` and `gridCaret.ts`, and exposes
+the `copy` / `pasteLine` / `deleteLine` contract to the shell, so `selection copy|paste|delete`
+route to the grid holding a rectangle (`App.tsx`, `clipGridRef`). `deleteLine` answers two
+lines: one note is `sequence note remove`, several are `sequence notes remove` over the
+rectangle. Region verbs
 (`sequence notes remove|transpose|quantize|velocity`) take two keys and a half-open beat span: the
 rectangle exactly as drawn.
 

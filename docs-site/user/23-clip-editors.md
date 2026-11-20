@@ -1,8 +1,8 @@
-# Clip editors: waveform, piano roll, step sequencer
+# Clip editors: waveform and piano roll
 
 Double-click an event on the timeline and its contents open in the **bottom panel**, under the
-timeline, which stays on screen. An audio event opens the **waveform**; a sequence opens one of
-three **note views**. Clicking empty lane space closes it again.
+timeline, which stays on screen. An audio event opens the **waveform**; a sequence opens the
+**piano roll**. Clicking empty lane space closes it again.
 
 Both kinds of editor draw the same ruler as the timeline, offset to where the event sits in the
 song, and show the playhead as it passes through.
@@ -75,17 +75,9 @@ until you let go, then it is one `event loop points` command (seconds into the f
 
 ## The note views
 
-A sequence opens in one of three views. The view switch at the top offers:
+A sequence opens in the piano roll, which can also be opened by command: `sequence edit roll melody`.
 
-| View | For |
-|---|---|
-| **sequencer** | One step per cell, one row per sound of the rack downstream — drum programming. It needs the lane to be wired to a rack, and says so otherwise. |
-| **piano roll** | What a grid cannot say: velocities, notes off the grid, notes the rack does not name. |
-| **tracker** | The file's notes as text: the arrows move, the keys type. It edits the sequence file itself. |
-
-The same views can be opened by command: `sequence edit roll melody`, `sequence edit tracker melody`.
-
-All note views share the timeline's caret keys: `hjkl` or the arrows move a caret over the grid,
+The roll shares the timeline's caret keys: `hjkl` or the arrows move a caret over the grid,
 `v` grows it into a rectangle, Esc drops the rectangle, Shift+drag draws one with the pointer.
 `Shift+L` loops the rectangle, `c`/Ctrl+C copies the notes in it, `p`/Ctrl+V pastes at the caret,
 Backspace (or `x`) deletes what the rectangle holds, or the note under the caret when there is no
@@ -134,37 +126,17 @@ sequence notes velocity  melody C4 C5 0 4 0.7     # 1 clears the field
 A rectangle is two keys (inclusive) and a span of beats from the sequence's start (the far edge
 excluded); a note belongs to it when it **starts** inside. Each region command is one undo step.
 
-### Step sequencer
+### Pad effects
 
-Rows are the sounds of the rack the lane plays; columns are steps. The precision switch above the
-grid picks the step: 1/2, 1/4, **1/8** (default), 1/16 or 1/32. A row whose note no sound answers to
-is marked "off the rack".
+Two typed commands put an effect on a note, and the **×2** button doubles the sequence: its window
+twice as long, its notes played twice (`sequence double drums`).
 
-| Gesture on a cell | Effect | Command |
-|---|---|---|
-| Click an empty cell | Lay a hit there. | `sequence note new <seq> <note> <start> <end>` |
-| Click a lit cell | Take it off. | `sequence note remove <seq> <note> <start>` |
-| Drag a lit cell up/down | Set its velocity. | `sequence note velocity …` |
-| Ctrl+drag a lit cell | Move it to another step or row. | `sequence note move …` |
-| Shift+wheel on a lit cell | Nudge it by a hundredth of a step. | `sequence note move …` |
-| Drag inside a selection | Move every note in it (refused when a note would leave the grid or land on one that stays). | `sequence notes move …` |
-| Click a row's name | Hear that sound. | |
+| Command | Effect |
+|---|---|
+| `sequence note repeat drums C1 4 2` (or `4`, or `off`) | Retrigger the note 2 or 4 times inside its own duration. |
+| `sequence note skip drums C1 4 2` (or `4`, or `off`) | Silence the note one pass in 2 (or in 4). |
 
-Right-click a lit cell for its two effects:
-
-| Entry | Command | Effect |
-|---|---|---|
-| repeat ×2 / ×4, repeat off | `sequence note repeat drums C1 4 2` | Retrigger the hit 2 or 4 times inside its own step. |
-| skip 1/2 / 1/4, skip off | `sequence note skip drums C1 4 2` | Silence the hit one pass in 2 (or in 4). |
-
-Backspace or `x` clears the caret's pad or the rectangle's, as in the roll. A sequencer row is a rack
-sound rather than a semitone, so the rows of a rectangle are not always neighbouring notes: when the
-key range from its lowest to its highest row would also take a note on a row outside it, the delete
-is refused (`can't delete in one go — the rows between hold other notes`) and nothing is removed.
-Select fewer rows, or clear the pads one by one.
-
-Any whole number from 2 up can be typed. The **×2** button doubles the sequence: its window twice as
-long, its notes played twice (`sequence double drums`).
+Any whole number from 2 up can be typed.
 
 ### Typed note commands
 

@@ -30,7 +30,7 @@ export interface NoteDoc {
   vel: number; // 0..1
   channel: number;
   rel: number; // release velocity 0..1
-  /** A step sequencer PAD's two effects, carried UNREALISED and expanded by the ENGINE — see @studio/song docs/padEffects.md. */
+  /** A pad's two effects, carried UNREALISED and expanded by the ENGINE — see @studio/song docs/padEffects.md. */
   repeat?: number;
   skip?: number;
 }

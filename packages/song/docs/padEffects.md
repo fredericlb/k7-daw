@@ -1,7 +1,7 @@
-# padEffects.md — a step sequencer pad's two effects
+# padEffects.md — a pad's two effects
 
-A **pad** is one cell of the step sequencer, and one note in `sequences/<id>.k7x`. Two effects can
-be put on it, from the right-click menu:
+A **pad** is one note in `sequences/<id>.k7x` that carries effects. Two can be put on it, by the
+`sequence note repeat` and `sequence note skip` commands:
 
 | effect | file | what it does |
 |---|---|---|
@@ -20,8 +20,8 @@ which is the literal reading of "skip it every n". It counts passes of the whole
 means nothing on a sequence placed once; a `loop:` appearing on the placement later is what makes
 it audible, and that is not an error worth refusing.
 
-The menu offers 2 and 4. The **schema accepts any whole number from 2 up**, so a `skip: 3` can be
-typed for a three-against-four feel even though no row offers it.
+The **schema accepts any whole number from 2 up**, so a `skip: 3` can be typed for a
+three-against-four feel.
 
 ## Why the words are spelled out
 
@@ -52,15 +52,14 @@ The compiler carries both **unexpanded**: one note per pad, with `repeat`/`skip`
 way onto `ClipDoc.notes` and `WebClip.notes`. `EditBuilder::insertMidiClip` is what expands them.
 
 The temptation is to expand in the compiler, where it would be a dozen lines of TypeScript. It is
-wrong for one specific reason: **the sequencer draws the same document the engine plays.**
+wrong for one specific reason: **the piano roll draws the same document the engine plays.**
 
 - `repeat` alone could be expanded either side. A pad with `repeat: 4` would become four notes in
-  one cell, `notesByCell` takes the first, and the grid would still light one pad — but the pad
-  would have lost the attribute the icon is drawn from, and turning the effect off would mean
-  removing four notes instead of clearing one key.
+  one place, and the roll would draw four notes where one was authored, and turning the effect
+  off would mean removing four notes instead of clearing one key.
 - `skip` cannot be expanded there at all. A pass only exists because the clip carries a loop range
   the engine repeats; there is no pass index at compile time. Unrolling the passes would put four
-  bars of notes in a one-bar pattern, and the grid would draw all four.
+  bars of notes in a one-bar pattern, and the roll would draw all four.
 
 So the split is: the pattern as **authored** is what travels, and the notes as **played** are built
 where they are played. A render and live playback then agree for free, since both build their edit
@@ -69,9 +68,8 @@ through the same `EditBuilder`.
 ### What that costs the engine
 
 `repeat` is local to one note: `addNoteWithRepeat` divides the note's duration into `n` hits. The
-note's duration is the pad's own extent — the sequencer writes a step's worth when a pad is
-pressed — so "in the available time for the pad" needs no knowledge of the grid's precision, which
-the engine does not have.
+note's duration is the pad's own extent, so "in the available time for the pad" needs no
+knowledge of a grid's precision, which the engine does not have.
 
 `skip` unrolls. When any note in the clip asks for it, `insertMidiClip` writes the notes out for
 each pass, leaves out the pads that are skipped on that one, and **does not apply the loop range**

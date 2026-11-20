@@ -22,6 +22,7 @@ import {
   snapSpan,
   type TakesEvent,
   takeColor,
+  takeNumber,
 } from "../takes";
 import { TakeRow } from "./TakeRow";
 
@@ -315,7 +316,7 @@ export function TakesView({
             const heard = heardOf.get(r.ref) ?? [];
             const label = r.own
               ? m["takes.eventRow"]()
-              : m["takes.takeRow"]({ n: i + 1 });
+              : m["takes.takeRow"]({ n: takeNumber(ev.rows, i) });
             return (
               <div key={r.ref} className="flex min-h-10 flex-1 basis-0">
                 <div className="flex w-24 shrink-0 items-center gap-1 px-1 text-xs">

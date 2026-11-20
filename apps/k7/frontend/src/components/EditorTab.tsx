@@ -68,7 +68,6 @@ import {
 } from "../projectPaths";
 import { movedTheTree, movedTheVocabulary } from "../reloadScope";
 import { readScalarField } from "../scalarField";
-import type { SeqView } from "../sequenceEdit";
 import { type EditFocus, keepIfSame } from "../shellEquality";
 import { rackSliceRanges, setSliceWindow } from "../sliceSymbols";
 import { useShell, useVerbs } from "../state/shellStore";
@@ -83,7 +82,7 @@ import type {
 } from "../types";
 import { useIsMobile } from "../useIsMobile";
 import { EditorPane } from "./EditorPane";
-import { DiskConflictBar, EditorToolbar } from "./EditorToolbar";
+import { DiskConflictBar, EditorToolbar, type SeqTab } from "./EditorToolbar";
 import { FileTree, type FileTreeHandle } from "./FileTree";
 import { LibraryUpgrades } from "./LibraryUpgrades";
 import type { MinimapItem } from "./Minimap";
@@ -250,7 +249,7 @@ function EditorTabView({
   const shownPath = useRef<string | null>(null);
   shownPath.current = file?.path ?? null;
   // Which tab of a sequence is open in the POPIN — only there: fullscreened, the note grids have their own home.
-  const [tab, setTab] = useState<"text" | SeqView>("text");
+  const [tab, setTab] = useState<SeqTab>("text");
   // The readers strip, shown for a lane file until dismissed — per-session and per-pane, a dock over the text.
   const [strip, setStrip] = useState(true);
   // The audio clip this clips/*.k7x links to: it docks at the bottom of the CODE pane, not the shared panel.
@@ -1364,7 +1363,6 @@ function EditorTabView({
             {/* A grid edit lands in the SAME buffer a keystroke does, so switching tabs mid-edit shows the text you just drew. */}
             {grid && file ? (
               <SeqGrid
-                view={grid}
                 content={file.content}
                 racks={hints.racks}
                 resetKey={file.path}

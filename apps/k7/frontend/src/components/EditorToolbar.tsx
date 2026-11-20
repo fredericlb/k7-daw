@@ -11,7 +11,6 @@ import {
 } from "@studio/ui/dropdown-menu";
 import {
   FileText,
-  Grid3x3,
   LayoutGrid,
   Loader2,
   Piano,
@@ -28,14 +27,16 @@ import {
   projectDir,
 } from "../projectPaths";
 import { needsAttention, saveLabel } from "../saveLabel";
-import type { SeqView } from "../sequenceEdit";
 import type { FileContent, FileNode } from "../types";
 import { Breadcrumb } from "./Breadcrumb";
 import { ChainOpsList } from "./ChainOpsList";
 
 const UI_FILE = docPattern("ui");
 
-// The popin's three views of a sequence, in the order they read: the file, then its notes twice.
+/** The popin's two views of a sequence: the file, and its notes. */
+export type SeqTab = "text" | "roll";
+
+// The two tabs, in the order they read: the file, then its notes.
 const SEQ_TABS = [
   { id: "text", label: "Text", icon: FileText, title: "the file itself" },
   {
@@ -43,12 +44,6 @@ const SEQ_TABS = [
     label: "Roll",
     icon: Piano,
     title: "its notes as a piano roll",
-  },
-  {
-    id: "tracker",
-    label: "Tracker",
-    icon: Grid3x3,
-    title: "its notes as a tracker (arrows move, keys type notes)",
   },
 ] as const;
 
@@ -76,10 +71,10 @@ export function EditorToolbar({
   projectName: string | null;
   onOpen: (path: string) => void;
   onOpenProject: (path: string) => void;
-  /** Whether the sequence views are offered: a sequence, in the popin. */
+  /** Whether the sequence tabs are offered: a sequence, in the popin. */
   seqTabs: boolean;
-  tab: "text" | SeqView;
-  onTab: (tab: "text" | SeqView) => void;
+  tab: SeqTab;
+  onTab: (tab: SeqTab) => void;
   onOpenBuilder: (path: string, pane: "module" | "panel") => void;
   processing: boolean;
   opSearch: string;
@@ -104,7 +99,7 @@ export function EditorToolbar({
         onOpenProject={onOpenProject}
       />
       <div className="flex-1" />
-      {/* A sequence in the POPIN gets its three views as tabs, text and the two grids as peers (docs/shell.md). */}
+      {/* A sequence in the POPIN gets its two views as tabs, the text and the roll as peers (docs/shell.md). */}
       {seqTabs && (
         <div
           role="tablist"

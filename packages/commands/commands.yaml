@@ -768,14 +768,11 @@
       { name: velocity, type: number, hint: "0..1 — 1 clears the field" },
     ]
 
-# A PAD's two effects, in the step sequencer. Both address a note the way every other note verb
+# A PAD's two effects. Both address a note the way every other note verb
 # does — by key and by where it starts — and both take `off` to remove the effect rather than a 0
 # or a 1: the file has no way to write "plays once, every pass", because that is a pad with neither
-# key. The ENGINE is what realises them; the compiled document carries them unexpanded so the
-# sequencer keeps drawing one pattern rather than its expansion. See @studio/song docs/padEffects.md.
-#
-# The context menu offers 2 and 4 for each; the schema accepts any whole number from 2 up, so a
-# triplet feel can be typed even though no menu row offers it.
+# key. The ENGINE is what realises them; the compiled document carries them unexpanded.
+# The schema accepts any whole number from 2 up. See @studio/song docs/padEffects.md.
 - command: "sequence note repeat"
   sid: sequence.noteRepeat
   readable:
@@ -783,7 +780,6 @@
     fr: "Répéter un pad dans son propre pas"
   help: "retrigger one pad n times inside its step (e.g. sequence note repeat drums C1 4 2)"
   surfaces: [cli]
-  menu: [pad]
   args:
     [
       { name: sequence, complete: sequenceFiles },
@@ -799,7 +795,6 @@
     fr: "Rendre un pad muet une passe sur n"
   help: "silence one pad every nth pass of the pattern (e.g. sequence note skip drums C1 4 2)"
   surfaces: [cli]
-  menu: [pad]
   args:
     [
       { name: sequence, complete: sequenceFiles },
@@ -831,8 +826,8 @@
 
 # Move one note to another key and/or start, KEEPING what it is: its length and its velocity
 # ride along, because it is the same note put somewhere else. Remove-then-add would lose both —
-# `sequence note new` takes no velocity — and be two journal steps for one act. The step
-# sequencer's ctrl-drag runs this. A destination that already holds a note is refused: (key,
+# `sequence note new` takes no velocity — and be two journal steps for one act. The roll's
+# drag runs this. A destination that already holds a note is refused: (key,
 # start) is how every surface addresses one.
 - command: "sequence note move"
   sid: sequence.moveNote
@@ -871,7 +866,7 @@
     ]
 
 # Remove one note, addressed the way every note edit addresses one: by key and by where it
-# starts. The step sequencer's button-off and the roll's remove mode run this.
+# starts. The roll's remove mode runs this.
 # Twice as long, playing twice. What a length IS here is the window: `from`/`to` when the file
 # states them, else the notes' extent rounded up to the bar — so an unwindowed sequence is left
 # unwindowed, its extent doubling on its own once the copies are in. The notes the window HOLDS
@@ -1016,8 +1011,7 @@
       { name: velocity, type: number, hint: "0..1 — 1 clears the field" },
     ]
 
-# A dragged SELECTION, and not a rectangle verb: every note names its own destination, since a
-# step grid's rows are rack sounds and not a key range. One write, so one Ctrl+Z; a note may land
+# A dragged SELECTION, and not a rectangle verb: every note names its own destination. One write, so one Ctrl+Z; a note may land
 # where another MOVING note leaves, never on one that stays. See @studio/song-schema docs/noteEdits.md.
 - command: "sequence notes move"
   sid: sequence.notesMove

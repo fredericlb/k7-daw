@@ -8,19 +8,19 @@ import { resolveModuleFile } from "../../localTargets";
 import { describeDownload, followDownload } from "../../modelDownload";
 import { m } from "../../paraglide/messages.js";
 import { trackPlacing } from "../../rows";
-import { resolveSequence, type SeqView } from "../../sequenceEdit";
+import { resolveSequence } from "../../sequenceEdit";
 import type { LocalCommand } from "./context";
 
 /** `<node> <param>`, the param quoted when it holds a space. */
 const NODE_PARAM = /^(\S+)\s+(?:"([^"]*)"|(.+))$/;
 
-/** `sequence edit roll|tracker <sequence>` — the sequence's notes where the graph is. */
-const seqEdit = (
-  view: SeqView,
-  readable: { en: string; fr: string },
-): LocalCommand => ({
-  name: `sequence edit ${view}`,
-  readable,
+/** `sequence edit roll <sequence>` — the sequence's notes where the graph is. */
+const seqEditRoll: LocalCommand = {
+  name: "sequence edit roll",
+  readable: {
+    en: "Show a sequence's notes as a piano roll",
+    fr: "Afficher les notes d'une séquence en piano roll",
+  },
   args: [
     { name: "sequence", kind: "file", hint: "a sequence of this project" },
   ],
@@ -30,13 +30,13 @@ const seqEdit = (
     const path = resolveSequence(name, ctx.editorRef.current?.files() ?? []);
     if (!name)
       ctx.setStatus(
-        m["status.usage"]({ syntax: `sequence edit ${view} <sequence>` }),
+        m["status.usage"]({ syntax: "sequence edit roll <sequence>" }),
       );
     else if (!path) ctx.setStatus(m["status.noSequence"]({ name }));
-    else ctx.openEvent({ kind: "grid", path, view });
+    else ctx.openEvent({ kind: "grid", path });
     return true;
   },
-});
+};
 
 /** A command that opens its argument in the editor, by path or fuzzy name. */
 const opensFile = (
@@ -80,14 +80,7 @@ export const EDITOR_COMMANDS: LocalCommand[] = [
     { name: "name", hint: "a clip of this project" },
   ),
   // Bare-named: they open an editor that WRITES to the sequence they name.
-  seqEdit("roll", {
-    en: "Show a sequence's notes as a piano roll",
-    fr: "Afficher les notes d'une séquence en piano roll",
-  }),
-  seqEdit("tracker", {
-    en: "Show a sequence's notes as a tracker",
-    fr: "Afficher les notes d'une séquence en tracker",
-  }),
+  seqEditRoll,
   {
     // Reopens the take review on a clip; the lane is looked up rather than asked for (docs/clipEditors.md).
     name: "ui review",

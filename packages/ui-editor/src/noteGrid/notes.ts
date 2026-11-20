@@ -1,4 +1,4 @@
-// notes.ts — read and write a sequence file's `notes` list, the seam both note grids go through, so an edit
+// notes.ts — read and write a sequence file's `notes` list, the seam the note grid goes through, so an edit
 // round-trips to the exact k7x the compiler reads back. A write changes only the notes that changed, a pad keeps
 // its effects, and a `notes("c4 d4")` short form stays while it still says the same thing. See docs/noteGrids.md.
 
