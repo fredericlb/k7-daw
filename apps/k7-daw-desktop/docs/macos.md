@@ -17,7 +17,7 @@ before programs), at the end of `npm run stage`, with the hardened runtime.
 
 | binary | entitlements | why |
 |---|---|---|
-| the app | JIT, audio input, camera | Wasmtime compiles machine code in the front; the page asks for the camera, and the engine it launches records through the app's microphone grant |
+| the app | JIT, unsigned executable memory, audio input, camera | Wasmtime compiles machine code in the front and maps it executable with mprotect, not MAP_JIT, which the hardened runtime kills without the unsigned-memory key; the page asks for the camera, and the engine it launches records through the app's microphone grant |
 | node | JIT, unsigned executable memory, no library validation | V8 and the native addons the backend loads |
 | the engine (`k7-runtime`) | audio input, unsigned executable memory, no library validation | it records, and hosts plugins (AU, VST3) signed by others |
 | the supervisor and the ONNX dylib | the hardened runtime alone | they do nothing that needs more |
