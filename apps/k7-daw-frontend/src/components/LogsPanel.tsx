@@ -1,8 +1,9 @@
 // LogsPanel.tsx — the Logs panel: a transcript of engine and brain activity, newest line last.
-// The app shell keeps the buffer; the All | Problems filter is the store's `logsFilter`, which the header chip sets.
+// The app shell keeps the buffer; the tab (All, Problems, Commands, Engine) is the store's `logsFilter`, which the header chip sets.
 
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
+import { EmptyState } from "@studio/ui/empty-state";
 import {
   Ban,
   Cpu,
@@ -11,11 +12,13 @@ import {
   SquareTerminal,
   TriangleAlert,
 } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
 import { cn } from "@studio/ui/lib/utils";
 import { Row, RowGroup } from "@studio/ui/row-group";
-import { type ReactNode, useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { useShell } from "../state/shellStore";
+import type { LogsFilter } from "../state/toggleSlice";
 
 export interface LogLine {
   t: number; // epoch ms
@@ -47,6 +50,23 @@ const KIND_ICON: Record<LogLine["kind"], ReactNode> = {
 const isProblem = (l: LogLine): boolean =>
   l.kind === "error" || l.kind === "refused";
 
+const TABS: readonly LogsFilter[] = ["all", "problems", "commands", "engine"];
+
+/** Which tab a line is listed under; a line may sit in `all` and one more. */
+const IN_TAB: Record<LogsFilter, (l: LogLine) => boolean> = {
+  all: () => true,
+  problems: isProblem,
+  commands: (l) => l.kind === "cmd",
+  engine: (l) => l.kind === "engine" || l.kind === "file",
+};
+
+const TAB_LABEL: Record<LogsFilter, (n: number) => string> = {
+  all: (n) => m["logs.all"]({ n }),
+  problems: (n) => m["logs.problems"]({ n }),
+  commands: (n) => m["logs.commands"]({ n }),
+  engine: (n) => m["logs.engine"]({ n }),
+};
+
 export function LogsPanel({
   lines,
   onClear,
@@ -57,40 +77,46 @@ export function LogsPanel({
   const endRef = useRef<HTMLDivElement>(null);
   const filter = useShell((st) => st.logsFilter);
   const setFilter = useShell((st) => st.setLogsFilter);
-  const problems = lines.filter(isProblem);
-  const shown = filter === "problems" ? problems : lines;
+  const [text, setText] = useState("");
+  const needle = text.trim().toLowerCase();
+  const shown = lines.filter(
+    (l) =>
+      IN_TAB[filter](l) && (!needle || l.text.toLowerCase().includes(needle)),
+  );
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
   }, [shown]);
+  const bare = lines.length === 0;
+  const emptyTitle = bare ? m["logs.emptyTitle"]() : m["logs.noneTitle"]();
+  const emptyText = bare ? m["logs.emptyText"]() : m["logs.noneText"]();
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="flex shrink-0 items-center gap-2 pb-2">
-        <Chip
-          variant="filter"
-          selected={filter === "all"}
-          onClick={() => setFilter("all")}
-        >
-          {m["logs.all"]()}
-        </Chip>
-        <Chip
-          variant="filter"
-          selected={filter === "problems"}
-          onClick={() => setFilter("problems")}
-        >
-          {m["logs.problems"]({ n: problems.length })}
-        </Chip>
-        <Button size="sm" variant="ghost" className="ml-auto" onClick={onClear}>
-          {m["logs.clear"]()}
-        </Button>
+      <div className="flex shrink-0 flex-wrap items-center gap-2 pb-2">
+        {TABS.map((t) => (
+          <Chip
+            key={t}
+            variant="filter"
+            selected={filter === t}
+            onClick={() => setFilter(t)}
+          >
+            {TAB_LABEL[t](lines.filter(IN_TAB[t]).length)}
+          </Chip>
+        ))}
       </div>
+      <Input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder={m["logs.filter"]()}
+        aria-label={m["logs.filter"]()}
+        className="mb-2 shrink-0"
+      />
       <div className="min-h-0 flex-1 overflow-auto">
         {shown.length === 0 ? (
-          <p className="px-1 py-2 text-fg-2 text-sm">
-            {filter === "problems" ? m["logs.noProblems"]() : m["logs.empty"]()}
-          </p>
-        ) : (
-          <RowGroup>
+          <EmptyState compact glyph={<Info />} title={emptyTitle}>
+            {emptyText}
+          </EmptyState>
+        ) : (          <RowGroup>
             {shown.map((l, i) => (
               <Row
                 // biome-ignore lint/suspicious/noArrayIndexKey: a log line has no id; the list only grows at its end.
@@ -115,6 +141,26 @@ export function LogsPanel({
           </RowGroup>
         )}
         <div ref={endRef} />
+      </div>
+      <div className="flex shrink-0 items-center gap-2 pt-2">
+        <span className="type-status mr-auto text-fg-3">
+          {m["logs.count"]({ n: shown.length })}
+        </span>
+        <Button
+          size="sm"
+          variant="ghost"
+          disabled={shown.length === 0}
+          onClick={() =>
+            void navigator.clipboard?.writeText(
+              shown.map((l) => l.text).join("\n"),
+            )
+          }
+        >
+          {m["logs.copy"]()}
+        </Button>
+        <Button size="sm" variant="ghost" onClick={onClear}>
+          {m["logs.clear"]()}
+        </Button>
       </div>
     </div>
   );

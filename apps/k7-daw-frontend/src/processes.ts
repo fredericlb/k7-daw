@@ -16,10 +16,12 @@ let service: readonly ServiceProcess[] = [];
 let local: readonly ShownProcess[] = [];
 let merged: readonly ShownProcess[] = [];
 let counter = 0;
+/** Ended service processes the person cleared: the service keeps listing them, this page stops. */
+const dismissed = new Set<string>();
 const listeners = new Set<() => void>();
 
 function commit(): void {
-  merged = [...service, ...local].sort((a, b) => a.startedAt - b.startedAt);
+  merged = [...service.filter((p) => !dismissed.has(p.id)), ...local].sort((a, b) => a.startedAt - b.startedAt);
   for (const l of listeners) l();
 }
 
@@ -76,6 +78,13 @@ export function trackProcess(label: string): {
       }, LINGER_MS);
     },
   };
+}
+
+/** Drops every ended process from the list; the running ones stay. */
+export function clearEndedProcesses(): void {
+  for (const p of service) if (p.state !== "running") dismissed.add(p.id);
+  local = local.filter((p) => p.state === "running");
+  commit();
 }
 
 /** How many are running: the badge on the bar's button. */

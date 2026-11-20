@@ -4,6 +4,7 @@
 
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
+import { EmptyState } from "@studio/ui/empty-state";
 import {
   Film,
   Loader2,
@@ -82,9 +83,17 @@ export function ResourcesPanel({ reloadKey }: { reloadKey: number }) {
             <Loader2 className="h-4 w-4 animate-spin" /> {m["common.loading"]()}
           </div>
         ) : shown.length === 0 ? (
-          <p className="p-3 text-muted-foreground text-sm">
+          <EmptyState
+            compact
+            glyph={<Music />}
+            title={
+              rows.length === 0
+                ? m["res.emptyTitle"]()
+                : m["res.emptyFilterTitle"]()
+            }
+          >
             {rows.length === 0 ? m["res.empty"]() : m["res.emptyFilter"]()}
-          </p>
+          </EmptyState>
         ) : (
           <>
             <p className="px-3 pt-2 pb-1 text-muted-foreground text-xs">
@@ -138,8 +147,10 @@ function ResourceRow({
           variant="ghost"
           className="h-6 w-6 shrink-0"
           disabled={r.missing}
-          title={open ? m["res.stop"]() : m["res.preview"]()}
-          aria-label={open ? m["res.stop"]() : m["res.preview"]()}
+          title={open ? m["res.stop"]() : m["res.previewFile"]({ file: r.id })}
+          aria-label={
+            open ? m["res.stop"]() : m["res.previewFile"]({ file: r.id })
+          }
           aria-pressed={open}
           onClick={() => onOpen(!open)}
         >

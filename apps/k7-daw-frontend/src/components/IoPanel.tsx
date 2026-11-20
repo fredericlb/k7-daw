@@ -16,6 +16,7 @@ import { sortForPeople } from "@studio/web-protocol/tree";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../api";
 import { useLatest } from "../hooks/useLatest";
+import { m } from "../paraglide/messages.js";
 import { pitchName } from "../noteNames";
 import type { IoPort } from "../types";
 import { pollWhileVisible } from "../visiblePoll";
@@ -338,6 +339,9 @@ export function IoPanel({
             ) : (
               none
             )}
+            <p className="type-status px-3.5 pt-2 text-fg-3">
+              {m["io.masterNote"]()}
+            </p>
           </>
         )}
       </div>

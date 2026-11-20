@@ -7,6 +7,7 @@ import { useCallback, useEffect, useReducer, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { getLocale } from "../paraglide/runtime.js";
 import { explain, type GitTransport, git } from "./gitApi";
+import type { GitState } from "./gitTypes";
 import { cursor, emptyLog, logAfter, PAGE } from "./logState";
 
 const stamp = (sec: number) =>
@@ -19,11 +20,14 @@ export function CommitsList({
   transport: t,
   workspace,
   refreshKey,
+  state = null,
 }: {
   transport: GitTransport | null;
   workspace: string;
   /** Moves when the repository does (a commit, a pull): the list restarts at its head. */
   refreshKey: unknown;
+  /** The repository's state, for the line over the list: branch, remote, what a pull would bring. */
+  state?: GitState | null;
 }) {
   const [log, dispatch] = useReducer(logAfter, emptyLog);
   const [error, setError] = useState("");
@@ -61,6 +65,21 @@ export function CommitsList({
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto py-1 type-secondary">
+      {state?.branch && (
+        <p className="px-3 py-1.5 type-badge text-fg-2">
+          {[
+            state.branch,
+            state.remote,
+            state.behind
+              ? (state.behind === 1 ? m["git.toPull.one"] : m["git.toPull.other"])(
+                  { n: state.behind },
+                )
+              : null,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+      )}
       {error && <p className="px-3 py-2 text-error">{error}</p>}
       {log.commits.length === 0 && !error && (
         <p className="px-3 py-2 text-fg-2">{m["git.commitsEmpty"]()}</p>

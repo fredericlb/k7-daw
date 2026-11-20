@@ -8,6 +8,9 @@ import type { Tool } from "../timelineTools";
 import type { RightPanelId } from "../ui/commands/context";
 import { type Setter, type SliceSet, setterOf } from "./overlaySlice";
 
+/** The Logs panel's tabs. */
+export type LogsFilter = "all" | "problems" | "commands" | "engine";
+
 export interface ToggleSlice {
   /** Which panel has the RIGHT COLUMN, or null — one state because there is one column (docs/shell.md). */
   rightPanel: RightPanelId | null;
@@ -48,9 +51,9 @@ export interface ToggleSlice {
   setPictureShown: Setter<boolean>;
   tool: Tool;
   setTool: Setter<Tool>;
-  /** What the Logs panel lists: everything, or only the problems (the header chip opens it on "problems"). */
-  logsFilter: "all" | "problems";
-  setLogsFilter: Setter<"all" | "problems">;
+  /** What the Logs panel lists: a tab of it (the header chip opens it on "problems"). */
+  logsFilter: LogsFilter;
+  setLogsFilter: Setter<LogsFilter>;
   /** What the History panel's hovered row touched — lit on the graph and the timeline (historyMarks.ts). */
   historyMark: HistoryMark | null;
   setHistoryMark: Setter<HistoryMark | null>;
