@@ -61,6 +61,7 @@
   "engine.warn.clipMissing": "The audio file “{file}” could not be opened; that clip stays silent.",
   "engine.warn.recordFolder": "Recording is off: the record folder is outside the folders the engine may write to.",
   "engine.warn.pluginFailed": "The module “{name}” could not be loaded; its track plays without it.",
+  "engine.warn.automationParam": "The automation on “{param}” is ignored: this module has no such parameter.",
   "engine.warn.hung": "The audio engine is stuck inside a plugin. Restart the app.",
   "engine.warn.internal": "The engine hit an internal error. The Logs panel has the details.",
   "engine.warn.unknown": "The engine reported a problem: {text}",

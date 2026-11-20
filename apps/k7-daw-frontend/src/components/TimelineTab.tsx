@@ -153,6 +153,7 @@ import { LaneChip } from "./timeline/LaneChip";
 import { LaneMeter } from "./timeline/LaneMeter";
 import { LaneToggle } from "./timeline/LaneToggle";
 import { LaneVstFreeze } from "./timeline/LaneVstFreeze";
+import { LaneWarning } from "./timeline/LaneWarning";
 import { ownShots, PlacedShot } from "./timeline/PlacedShot";
 import { Playhead } from "./timeline/Playhead";
 import { RecordingClip } from "./timeline/RecordingClip";
@@ -353,6 +354,8 @@ function TimelineTabView({
   trackControls,
   onTrackToggle,
   laneNodes,
+  trackWarnings,
+  onProblems,
   onNodeMenu,
   videoArmed,
   videoRecording,
@@ -446,6 +449,10 @@ function TimelineTabView({
     id: string,
     control: "mute" | "solo" | "arm" | "highlight",
   ) => void;
+  /** The engine warnings that name a lane or one of its modules, as sentences by lane id: the gutter wears a warning icon. */
+  trackWarnings?: Record<string, string[]>;
+  /** The warning icon was clicked: open the problems list. */
+  onProblems?: () => void;
   /** What the graph knows about each lane's NODE, by lane id — the same maps the chains pane draws from (apps/k7-daw-frontend/packages/song/docs/alternatives.md). */
   laneNodes?: {
     alternatives?: Record<
@@ -3160,6 +3167,12 @@ function TimelineTabView({
                       )}
                       {/* The label alone: the row's position and the icon already say what "3.ge." would repeat at the gutter's expense. */}
                       <span className="truncate">{trackLabel(t.name)}</span>
+                      {trackWarnings?.[t.id] && (
+                        <LaneWarning
+                          sentences={trackWarnings[t.id]}
+                          onOpen={onProblems}
+                        />
+                      )}
                       <LaneVstFreeze
                         rendered={laneNodes?.autoFrozen?.[t.id]}
                         waiting={laneNodes?.autoFreezeWaiting?.[t.id]}

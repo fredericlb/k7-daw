@@ -61,6 +61,7 @@ export function GraphPanel({
   onTapEdit,
   onWatchWaveform,
   engineWarnings,
+  onProblems,
   pluginParamsStore,
   setPluginParam,
   moduleParams,
@@ -113,6 +114,8 @@ export function GraphPanel({
   ) => void;
   /** Engine load problems by plugin id, badged onto the module they concern. */
   engineWarnings?: Record<string, string>;
+  /** A module's warning badge was clicked: open the problems list. */
+  onProblems?: () => void;
   /** The live values, and the way back: without them a widget draws the FILE's number and a drag sends nothing (../../docs/chainsGraph.md). */
   pluginParamsStore: PluginParamsStore;
   setPluginParam: (id: string, name: string, value: number) => void;
@@ -302,6 +305,7 @@ export function GraphPanel({
         onTapEdit={onTapEdit}
         onWatchWaveform={onWatchWaveform}
         engineWarnings={engineWarnings}
+        onProblems={onProblems}
         pluginParamsStore={pluginParamsStore}
         setPluginParam={setPluginParam}
         moduleParams={moduleParams}

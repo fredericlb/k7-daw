@@ -67,6 +67,8 @@ const QUIET_UI = new Set([
   "slot close",
 ]);
 
+const noPlace = { current: () => false };
+
 export function ExternalSurface({
   name,
   project,
@@ -107,6 +109,8 @@ export function ExternalSurface({
     pluginParamsStore,
     setStatus,
     pushLog,
+    // A bare surface holds no project to mark: every warning toasts.
+    noPlace,
   );
 
   const rev = useRevision();

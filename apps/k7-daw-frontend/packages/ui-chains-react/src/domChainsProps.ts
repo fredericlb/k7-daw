@@ -116,6 +116,8 @@ export interface DomChainsProps {
   camStore?: CamStore;
   /** Engine load problems by PluginDoc id — a node badges itself from this. */
   engineWarnings?: Record<string, string>;
+  /** A module's warning badge was clicked: the host shows its problems list. */
+  onProblems?: () => void;
   // Identifies WHICH graph is on screen: a change re-frames, a redraw of the same one leaves the camera alone.
   fitKey?: string | number | null;
   /** Bumped by the host's auto-organize: the next layout is WATCHED — every card slides, and the camera glides to frame it (docs/nodeMotion.md). */

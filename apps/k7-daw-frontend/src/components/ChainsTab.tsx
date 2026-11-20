@@ -79,6 +79,7 @@ function ChainsTabView({
   onPresetStep,
   presetNames,
   engineWarnings,
+  onProblems,
   onAssetBrowse,
   onTapEdit,
   onWatchWaveform,
@@ -143,6 +144,8 @@ function ChainsTabView({
   presetNames?: Record<string, string>;
   /** Engine load problems by plugin id, badged onto the module they concern. */
   engineWarnings?: Record<string, string>;
+  /** A module's warning badge was clicked: open the problems list. */
+  onProblems?: () => void;
   /** Open the library browser for a module's asset field, at viewport coords. */
   onAssetBrowse?: (module: string, kind: string, x: number, y: number) => void;
   /** A rack tap's edit — the shell runs its `node tap` command (apps/k7-daw-frontend/packages/song/docs/racks.md). */
@@ -812,6 +815,7 @@ function ChainsTabView({
             midiActivity={midiActivity}
             marked={marked}
             engineWarnings={engineWarnings}
+            onProblems={onProblems}
             onSetModuleAsset={onSetModuleAsset}
             onAssetBrowse={onAssetBrowse}
             onTapEdit={onTapEdit}

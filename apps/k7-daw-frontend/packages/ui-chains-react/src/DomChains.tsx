@@ -173,6 +173,7 @@ function DomChainsBody({
   onTapEdit,
   camStore,
   engineWarnings,
+  onProblems,
   fitKey,
   organizeKey,
   fitAxis = "both",
@@ -1133,6 +1134,7 @@ function DomChainsBody({
                       warning={
                         n.pluginId ? engineWarnings?.[n.pluginId] : undefined
                       }
+                      onWarning={onProblems}
                       onDragStart={beginDrag}
                       onTapWidget={tapWidget}
                       onPickWidget={pickWidget}
