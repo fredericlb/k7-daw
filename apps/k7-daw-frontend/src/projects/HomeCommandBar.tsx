@@ -190,6 +190,7 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
         pending={pending}
         onPending={(p) => setPending(!!p)}
         commands={palette}
+        label={m["home.commandLabel"]()}
         listArg={async (command, prior) =>
           homeArgValues(command, prior.length, {
             fileService: files.current ?? null,

@@ -122,6 +122,8 @@ export interface CommandBarProps {
   onFocusChange?: (focused: boolean) => void;
   /** What the timeline caret is looking at — a PROP and not a hook: the bar is mounted twice, and the shell already holds the caret. */
   caret?: CaretAim | null;
+  /** The combobox's accessible name, when the host says more than "Command". */
+  label?: string;
 }
 
 export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
@@ -135,6 +137,7 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
       onPending,
       onFocusChange,
       caret,
+      label,
     },
     ref,
   ) {
@@ -483,7 +486,7 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
               spellCheck={false}
               autoComplete="off"
               role="combobox"
-              aria-label={m["commandBar.label"]()}
+              aria-label={label ?? m["commandBar.label"]()}
               aria-expanded={focused && shown.length > 0}
               aria-controls={listId}
               aria-activedescendant={

@@ -1629,6 +1629,7 @@
   "pluginScan.looking": "Looking for plugins…",
   "home.nav": "Home",
   "home.frozenShort": "Frozen",
+  "home.commandLabel": "Command, workspace or project",
   "home.commandBar": "Command bar: search workspaces and projects, run a command",
   "home.newMenu": "New workspace or clone from git",
   "home.new": "New",

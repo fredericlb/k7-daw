@@ -1629,6 +1629,7 @@
   "pluginScan.looking": "Recherche des plugins…",
   "home.nav": "Accueil",
   "home.frozenShort": "Figées",
+  "home.commandLabel": "Commande, espace de travail ou projet",
   "home.commandBar": "Barre de commandes : chercher un espace de travail ou un projet, lancer une commande",
   "home.newMenu": "Nouvel espace de travail ou clone depuis git",
   "home.new": "Nouveau",

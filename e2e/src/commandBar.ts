@@ -1,12 +1,12 @@
 // commandBar.ts — running a line from k7's command bar the way a person does: type it, pick its row.
-// The bar is a combobox named "Command" in `dialog "Command bar"`, a modal card once summoned (apps/k7-daw-frontend/docs/commandBar.md).
+// The bar is a combobox named "Command" ("Command, workspace or project" on Home) in `dialog "Command bar"`, a modal card once summoned (apps/k7-daw-frontend/docs/commandBar.md).
 import { expect, type Locator, type Page } from "@playwright/test";
 import { folded } from "./nav.ts";
 
 export const commandBar = (page: Page): Locator =>
   page
     .getByRole("dialog", { name: "Command bar", exact: true })
-    .getByRole("combobox", { name: "Command", exact: true });
+    .getByRole("combobox", { name: /^Command(, workspace or project)?$/ });
 
 /** The bar while it fills a command's parameters, which shows no combobox: the command's name, a button that goes back to picking one. */
 const filling = (page: Page): Locator =>
@@ -40,7 +40,9 @@ async function openCommandBar(page: Page): Promise<Locator> {
     if (await close.isVisible()) await close.click();
   if (!(await bar.isVisible()))
     await page
-      .getByRole("button", { name: "Command bar", exact: true })
+      .getByRole("button", {
+        name: /^Command bar(: search workspaces and projects, run a command)?$/,
+      })
       .first()
       .click();
   return bar;
