@@ -1020,8 +1020,6 @@
   "save.held": "non enregistré",
   "save.error": "échec de l'enregistrement",
   "cmds.placeholder": "que voulez-vous faire ?",
-  "panel.close": "fermer le panneau",
-  "panel.closeHint": "fermer le panneau (ui close)",
   "mode.label": "mode",
   "extsrf.commandPlaceholder": "commande…",
   "module.menu": "Modules",

@@ -1070,14 +1070,8 @@ find the sound behind the symbol, which is `ChainsTab`'s `triggerRack` and has n
 
 `GraphSlotPane` is the shell and the title bar. The occupants supply a body and what to call it, and
 nothing else about the chrome — written per occupant they drift, into title bars at three type scales.
-**Every Events panel view has a Close in its frame's heading** — a panel has only half the
-window, so the ✕ is never a row of its own. A view with a toolbar column (`ModeStrip`: the clip editors,
-a lane's modules) draws it as the column's FIRST item; a view with a header row (the graph and mix
-panels, the logs, the slot's `bar`, a rolling MIDI take) draws it
-as the row's first item, `PanelCloseButton`. Floating over the corner is the last resort, for a view
-with neither: a floating ✕ sits on whatever the view drew there, which is usually its title. So the
-empty event panel wears the slot's bar too, rather than a lone ✕ over nothing. The view CLAIMS the ✕
-at mount (`components/PanelClose.tsx`), so a panel shows one ✕ whatever it holds. It runs `ui close`, as the header's panel buttons and Escape do. Three ways
+**The dock's own Close is the only one**: a view never draws a second ✕ of its own, in a
+toolbar column or in a header row. It runs `ui close`, as the header's panel buttons and Escape do. Three ways
 to wear the frame, because the occupants genuinely differ:
 
 - **`title` (+ `note`)** — a name and a detail. The plain case.

@@ -1020,8 +1020,6 @@
   "save.held": "not saved",
   "save.error": "save failed",
   "cmds.placeholder": "what do you want to do?",
-  "panel.close": "close the panel",
-  "panel.closeHint": "close the panel (ui close)",
   "mode.label": "mode",
   "extsrf.commandPlaceholder": "command…",
   "module.menu": "Modules",
