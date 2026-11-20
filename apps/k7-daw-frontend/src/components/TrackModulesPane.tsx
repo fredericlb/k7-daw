@@ -4,8 +4,6 @@
 // See docs/shell.md.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
-import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { KeyboardMusic, Mic, Spline } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { splitTrailingMixer } from "@studio/ui-chains/anchorRight";
 import type { EdgeInsert, TrackControlValues } from "@studio/ui-chains/graph";
@@ -34,27 +32,13 @@ import { useLiveRackLit } from "../rackLit";
 import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import type { WebProject } from "../types";
 import { useIsMobile } from "../useIsMobile";
+import { ChainHeader } from "./ChainHeader";
 import { GraphSlotPane } from "./GraphSlotPane";
 import { ModuleCards } from "./ModuleCards";
 
 /** A card here is HORIZONTAL on a desktop, at most 4 rows, and VERTICAL on a phone, at most 4 columns — a panel without that shape is folded to it. */
 const TRACK_ROW_FIT: GridFit = { axis: "rows", max: 4 };
 const TRACK_COL_FIT: GridFit = { axis: "cols", max: 4 };
-
-/** The strip's modes: none — the row has no tools, only the toggles under them. */
-// A 36 px glass chip, the shape the kit gives a toggle inside a panel.
-const CHIP =
-  "glass grid h-9 min-w-9 cursor-pointer place-items-center rounded-full px-2 text-foreground focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none";
-
-/** The two inputs a lane can be given from here, each the `track input` kind it runs. */
-const INPUTS = [
-  { kind: "audio", label: "audio in", Icon: Mic },
-  { kind: "midi", label: "midi in", Icon: KeyboardMusic },
-] as const;
-
-/** A greyed button still shows its tooltip, which is what says why it is greyed. */
-const DISABLED =
-  "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground";
 
 export function TrackModulesPane({
   onPreviewNote,
@@ -414,63 +398,24 @@ export function TrackModulesPane({
 
   return frame(
     <div className="flex h-full min-h-0 flex-col gap-2">
-      {/* The track's name and what the row SHOWS and the inputs it may take: the dock's header row (docs/shell.md). */}
+      {/* The track's name and status, Arm, what the row SHOWS and the inputs it may take: the dock's header row (docs/shell.md). */}
       {(onToggleCurves || onInput || cards) && (
-        <DockHeaderRow>
-          <div className="flex min-w-0 flex-1 items-center gap-2">
-            {cards && (
-              <span
-                className="type-label min-w-0 shrink truncate"
-                title={trackName}
-              >
-                {trackName}
-              </span>
-            )}
-            <div className="flex shrink-0 items-center gap-2">
-              {cards && (
-                <button
-                  type="button"
-                  aria-pressed={controls}
-                  onClick={() => setControls((v) => !v)}
-                  className={`${CHIP} type-label aria-pressed:bg-on-fill aria-pressed:text-lavender`}
-                >
-                  {m["chain.controls"]()}
-                </button>
-              )}
-              {onInput &&
-                INPUTS.map(({ kind, label, Icon }) => (
-                  <button
-                    key={kind}
-                    type="button"
-                    onClick={() => onInput(kind)}
-                    disabled={hasInput}
-                    aria-label={label}
-                    title={
-                      hasInput
-                        ? `${label} — this lane already has an input`
-                        : `${label} — an input feeding this lane, ahead of its first node`
-                    }
-                    className={`${CHIP} ${DISABLED}`}
-                  >
-                    <Icon className="size-4" />
-                  </button>
-                ))}
-              {onToggleCurves && (
-                <button
-                  type="button"
-                  onClick={onToggleCurves}
-                  aria-pressed={showCurves}
-                  title={
-                    showCurves ? "hide the curve cards" : "show the curve cards"
-                  }
-                  className={`${CHIP} aria-pressed:bg-on-fill aria-pressed:text-lavender`}
-                >
-                  <Spline className="size-4" />
-                </button>
-              )}
-            </div>
-          </div>
-        </DockHeaderRow>
+        <ChainHeader
+          name={trackName}
+          moduleCount={cards ? cardNodes.length : undefined}
+          armed={trackControls?.[trackId]?.arm === 1}
+          onArm={
+            cards && onTrackToggle && trackControls?.[trackId]
+              ? () => onTrackToggle(trackId, "arm")
+              : undefined
+          }
+          controls={controls}
+          onControls={cards ? () => setControls((v) => !v) : undefined}
+          hasInput={hasInput}
+          onInput={onInput}
+          showCurves={showCurves}
+          onToggleCurves={onToggleCurves}
+        />
       )}
       {cards && glued && (
         <ModuleCards
@@ -484,7 +429,26 @@ export function TrackModulesPane({
           onInsert={
             edgeInsert ? (insert, x, y) => edgeInsert(insert, x, y) : undefined
           }
+          lane={{
+            id: trackId,
+            name: trackName,
+            values: trackControls?.[trackId],
+            onToggle: onTrackToggle,
+            onSet: onTrackSet,
+          }}
+          warningOf={(n) =>
+            n.pluginId ? engineWarnings?.[n.pluginId] : undefined
+          }
+          onProblems={onProblems}
+          paramsStore={pluginParamsStore}
+          onParam={setPluginParam}
+          onNativeUI={(module) => void command(`node external-ui ${module}`)}
         />
+      )}
+      {cards && glued && !controls && (
+        <p className="type-secondary shrink-0 px-1 text-fg-2">
+          {m["chain.saveHint"]()}
+        </p>
       )}
       <div
         className={cn(
@@ -500,6 +464,7 @@ export function TrackModulesPane({
         />
       </div>
     </div>,
-    aside,
+    // The lane's own card carries its fader and pan: the pinned mixer is the full row's alone.
+    cards && !controls ? undefined : aside,
   );
 }

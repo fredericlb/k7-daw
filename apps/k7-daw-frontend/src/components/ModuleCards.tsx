@@ -1,15 +1,43 @@
-// ModuleCards.tsx — the chain dock's module cards, left to right: name, engine chip, bypass, preset with its arrows, a "+" on each seam and a dashed "Add a module" at the end.
+// ModuleCards.tsx — the chain dock's cards, left to right: the lane's own card, then each module (name, engine chip, warning,
+// native UI, bypass, preset with its arrows, three knobs), a "+" on each seam and a dashed "Add a module at the end".
 // A summary of the lane's row, not a second editor: the controls stay on the full row (the panel's "Controls" chip shows it).
 
-import { ChevronLeft, ChevronRight, Plus, Power } from "@studio/ui/icons";
+import type { PluginParamsStore } from "@studio/engine-browser/params";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Power,
+  SquareArrowOutUpRight,
+} from "@studio/ui/icons";
+import { Knob } from "@studio/ui/knob";
 import { cn } from "@studio/ui/lib/utils";
-import type { EdgeInsert, GraphNode } from "@studio/ui-chains/graph";
+import { TrackToggle } from "@studio/ui/track-toggle";
+import type {
+  EdgeInsert,
+  GraphNode,
+  TrackControlValues,
+} from "@studio/ui-chains/graph";
 import { m } from "../paraglide/messages.js";
+import { ModuleKnobs } from "./ModuleKnobs";
+import { LaneWarning } from "./timeline/LaneWarning";
 
 export interface CardSeam {
   insert: EdgeInsert;
   end?: boolean;
 }
+
+/** The lane's own card: its status, M/S/A, volume and pan, where the song comes in, and where the row goes. */
+export interface LaneCard {
+  id: string;
+  name: string;
+  values?: TrackControlValues;
+  onToggle?: (id: string, control: "mute" | "solo" | "arm") => void;
+  onSet?: (id: string, control: "volume" | "pan", value: number) => void;
+}
+
+/** The module a seam's jack names, whatever port it leaves from or enters by. */
+const base = (ref: string) => ref.split("#")[0];
 
 export function ModuleCards({
   nodes,
@@ -19,6 +47,12 @@ export function ModuleCards({
   onPresetStep,
   onPresets,
   onInsert,
+  lane,
+  warningOf,
+  onProblems,
+  paramsStore,
+  onParam,
+  onNativeUI,
   className,
 }: {
   /** The row's module cards in signal order. */
@@ -30,10 +64,32 @@ export function ModuleCards({
   onPresetStep?: (module: string, step: -1 | 1) => void;
   onPresets?: (module: string, x: number, y: number) => void;
   onInsert?: (insert: EdgeInsert, x: number, y: number) => void;
+  /** The lane's card that opens the row; absent draws the modules alone. */
+  lane?: LaneCard;
+  /** The engine's warning for a module, drawn as an amber icon on its card. */
+  warningOf?: (n: GraphNode) => string | undefined;
+  /** The warning icon's click: the Logs panel on its problems. */
+  onProblems?: () => void;
+  /** The live params and how to write one: the card's three knobs. */
+  paramsStore?: PluginParamsStore;
+  onParam?: (id: string, name: string, value: number) => void;
+  /** A card's native plugin window, for a module that has one. */
+  onNativeUI?: (module: string) => void;
   className?: string;
 }) {
-  const between = seams.filter((s) => !s.end);
   const tail = seams.find((s) => s.end);
+  const ids = nodes.map((n) => n.module ?? n.id);
+  // Seams are matched by the modules they join, not by position: the lane's own seam would shift every index.
+  const after = (i: number) =>
+    seams.find(
+      (s) =>
+        !s.end &&
+        base(s.insert.before) === ids[i] &&
+        base(s.insert.after) === ids[i + 1],
+    );
+  const lead = seams.find(
+    (s) => !s.end && !s.insert.stack && base(s.insert.after) === ids[0],
+  );
   const plus = (s: CardSeam | undefined, label: string, dashed?: boolean) =>
     s && onInsert ? (
       <button
@@ -62,10 +118,21 @@ export function ModuleCards({
         className,
       )}
     >
+      {lane && (
+        <li className="flex shrink-0 items-stretch gap-1">
+          <LaneCardView lane={lane} />
+          {lead && (
+            <span className="flex items-center">
+              {plus(lead, m["chain.addBefore"]())}
+            </span>
+          )}
+        </li>
+      )}
       {nodes.map((n, i) => {
         const id = n.module ?? n.id;
         const off = !!n.bypassed || n.dim;
         const preset = presetNames?.[id];
+        const warning = warningOf?.(n);
         return (
           <li key={n.id} className="flex shrink-0 items-stretch gap-1">
             <div
@@ -78,10 +145,24 @@ export function ModuleCards({
                 <span className="min-w-0 flex-1 truncate font-bold text-[15px]">
                   {n.label}
                 </span>
+                {warning && (
+                  <LaneWarning sentences={[warning]} onOpen={onProblems} />
+                )}
                 {n.engine && (
                   <span className="rounded-full bg-on-fill px-2.5 py-0.5 font-mono text-[11px] text-lavender">
                     {n.engine}
                   </span>
+                )}
+                {n.hasNativePluginUI && n.module && onNativeUI && (
+                  <button
+                    type="button"
+                    aria-label={m["chainsUi.openPluginUi"]()}
+                    title={m["chainsUi.openPluginUi"]()}
+                    onClick={() => n.module && onNativeUI(n.module)}
+                    className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-fg-2 hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none"
+                  >
+                    <SquareArrowOutUpRight className="size-5" />
+                  </button>
                 )}
                 {onBypass && (
                   <button
@@ -96,6 +177,7 @@ export function ModuleCards({
                   </button>
                 )}
               </div>
+              <ModuleKnobs node={n} store={paramsStore} onSet={onParam} />
               {onPresets && (
                 <div className="flex items-center gap-1">
                   <button
@@ -129,15 +211,75 @@ export function ModuleCards({
             </div>
             {i < nodes.length - 1 && (
               <span className="flex items-center">
-                {plus(between[i], m["chain.addBetween"]())}
+                {plus(after(i), m["chain.addBetween"]())}
               </span>
             )}
           </li>
         );
       })}
       <li className="flex shrink-0 items-stretch">
-        {plus(tail, m["chain.addModule"](), true)}
+        {plus(tail, m["chain.addModuleEnd"](), true)}
       </li>
     </ul>
+  );
+}
+
+function LaneCardView({ lane }: { lane: LaneCard }) {
+  const v = lane.values;
+  return (
+    <div className="flex w-56 flex-col gap-2 rounded-2xl bg-(--k7-row) p-3">
+      <div className="flex items-center gap-2">
+        <span className="min-w-0 flex-1 truncate font-bold text-[15px]">
+          {lane.name}
+        </span>
+        {v && lane.onToggle && (
+          <div className="flex gap-1">
+            {(["mute", "solo", "arm"] as const).map((c) => (
+              <TrackToggle
+                key={c}
+                kind={c}
+                on={v[c] === 1}
+                aria-label={m[`chain.lane.${c}`]({ name: lane.name })}
+                onClick={() => lane.onToggle?.(lane.id, c)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      {v && (
+        <div className="flex items-start justify-around gap-1">
+          <div className="flex flex-col items-center gap-0.5">
+            <Knob
+              label={m["mixer.volume"]({ name: lane.name })}
+              size={36}
+              value={v.volume}
+              min={-60}
+              max={6}
+              step={0.5}
+              format={(x) => `${x.toFixed(1)} dB`}
+              onValueChange={(x) => lane.onSet?.(lane.id, "volume", x)}
+            />
+            <span className="type-secondary text-fg-2">VOL</span>
+          </div>
+          <div className="flex flex-col items-center gap-0.5">
+            <Knob
+              label={m["mixer.pan"]({ name: lane.name })}
+              size={36}
+              value={v.pan}
+              min={0}
+              max={1}
+              step={0.02}
+              format={(x) => `${Math.round((x * 2 - 1) * 100)}`}
+              onValueChange={(x) => lane.onSet?.(lane.id, "pan", x)}
+            />
+            <span className="type-secondary text-fg-2">PAN</span>
+          </div>
+        </div>
+      )}
+      <p className="type-secondary mt-auto flex justify-between text-fg-2">
+        <span>{m["chain.songComesIn"]()}</span>
+        <span>{m["chain.toMaster"]()}</span>
+      </p>
+    </div>
   );
 }
