@@ -15,8 +15,8 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 min-w-[10rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-[0_8px_28px_rgba(0,0,0,0.45)]",
-        "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
+        "menu z-(--k7-z-menu) min-w-[10rem] overflow-hidden rounded-(--k7-r-menu) p-1.5 text-popover-foreground",
+        "origin-(--radix-dropdown-menu-content-transform-origin) data-[state=open]:animate-[k7-menu-in_var(--k7-dur-menu)_var(--k7-ease-spring)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
         className,
       )}
       {...props}
@@ -32,7 +32,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "type-body relative flex min-h-11 cursor-pointer select-none items-center gap-2.5 rounded-xl px-3 py-2 outline-none transition-colors focus:bg-on-fill data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:size-[19px] [&_svg]:text-primary-text",
       className,
     )}
     {...props}
@@ -46,7 +46,7 @@ const DropdownMenuLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
     ref={ref}
-    className={cn("px-2 py-1.5 text-xs text-muted-foreground", className)}
+    className={cn("type-caps px-3 py-1.5 text-fg-3", className)}
     {...props}
   />
 ));
@@ -58,7 +58,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn("-mx-1 my-1 h-px bg-border", className)}
+    className={cn("-mx-1.5 my-1 h-px bg-(--k7-hairline-row)", className)}
     {...props}
   />
 ));

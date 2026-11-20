@@ -15,14 +15,9 @@ without each of them re-deciding it.
 - `variant="accent"` — solid primary, white text; `variant="plain"` — card
   background. Both kept for an app with a reason; none has one today.
 
-The **name** is set in the brand face, `font-brand` — Rubik 80s Fade, a
-striped display font, always in white. The same face sets
-the sign-in wordmark; headings (`h1`–`h6`) and `CardTitle` stay in the body
-face, Sansation. It has a single weight, and a browser-faked bold fills its stripes in, so
-`theme.css` turns weight synthesis off (`font-synthesis-weight: none`) on
-`:root`. The token lives in `theme.css` with Sansation as fallback, and so do
-the faces themselves: `theme.css` imports both from Fontsource, so an app that
-imports the theme links nothing itself. It is for titles and nothing else.
+The **name** is set in `font-brand`, always in white. It is an alias of the body face, Sansation
+at 700: the project has no display face, since the canvas draws every word in Sansation. The same
+token sets the sign-in wordmark; headings (`h1`–`h6`) and `CardTitle` stay at their own sizes.
 
 The faces ship in each app's own files rather than being linked from Google
 Fonts: a stylesheet from another host blocks the page's first paint and every

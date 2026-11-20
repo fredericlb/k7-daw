@@ -1,24 +1,41 @@
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as React from "react";
+import { useLozenge } from "./lib/lozenge";
 import { cn } from "./lib/utils";
 
-// A segmented control: a secondary track, the active segment filled in the
-// primary (the house purple) so the current tab reads at a glance.
+// A segmented control: a 40 px glass pill whose selected tab is a lozenge that slides under the labels.
 const Tabs = TabsPrimitive.Root;
 
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "flex w-full flex-wrap gap-1 rounded-md bg-secondary p-[3px]",
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, children, ...props }, forwarded) => {
+  const own = React.useRef<HTMLDivElement | null>(null);
+  const box = useLozenge(own, '[data-state="active"]');
+  return (
+    <TabsPrimitive.List
+      ref={(el) => {
+        own.current = el;
+        if (typeof forwarded === "function") forwarded(el);
+        else if (forwarded) forwarded.current = el;
+      }}
+      className={cn(
+        "glass relative flex h-10 w-full gap-0.5 rounded-full p-[3px]",
+        className,
+      )}
+      {...props}
+    >
+      {box ? (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute top-[3px] left-0 h-8 rounded-2xl bg-(--k7-on-fill-tab) shadow-(--k7-highlight) transition-[transform,width] duration-(--k7-dur-tab) ease-(--k7-ease-tab)"
+          style={{ transform: `translateX(${box.x}px)`, width: box.w }}
+        />
+      ) : null}
+      {children}
+    </TabsPrimitive.List>
+  );
+});
 TabsList.displayName = TabsPrimitive.List.displayName;
 
 const TabsTrigger = React.forwardRef<
@@ -28,7 +45,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex-1 cursor-pointer rounded-sm px-2.5 py-1.5 text-[13px] font-semibold text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm",
+      "type-tab relative z-10 inline-flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-2xl px-3 text-foreground outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40 data-[state=active]:text-lavender",
       className,
     )}
     {...props}

@@ -3,8 +3,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "./lib/utils";
 
-// default/amber/rec mirror the legacy .badge classes; tag mirrors .tag-chip
-// (the violet "#tag" pill). Use asChild to render a clickable chip.
+// `count` is the 22 px accent badge (`count-sm`: 20 px, on a round button's corner); `warn` is the
+// 30 px warning chip of the header; `amber` stays as its alias for unported code. Use asChild for a clickable chip.
 const badgeVariants = cva(
   "inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] transition-colors [a&]:cursor-pointer [button&]:cursor-pointer",
   {
@@ -13,7 +13,12 @@ const badgeVariants = cva(
         default: "bg-secondary text-muted-foreground tabular-nums",
         amber: "bg-amber/15 text-amber tabular-nums",
         rec: "bg-destructive/15 text-destructive tabular-nums",
-        tag: "border border-primary/35 bg-primary/20 font-semibold text-primary",
+        tag: "border border-primary/35 bg-primary/20 font-semibold text-primary-text",
+        count:
+          "type-badge h-[22px] min-w-[22px] rounded-[11px] bg-primary px-1.5 py-0 text-primary-foreground tabular-nums",
+        "count-sm":
+          "type-badge h-5 min-w-5 rounded-[10px] bg-primary px-1.5 py-0 text-primary-foreground tabular-nums",
+        warn: "type-secondary h-[30px] gap-1.5 rounded-[15px] border border-(--k7-warn-line) bg-(--k7-warn-fill) px-2.5 py-0 font-bold text-warn tabular-nums",
       },
     },
     defaultVariants: {

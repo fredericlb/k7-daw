@@ -32,7 +32,7 @@ export function Field({
     <>
       {children}
       {typeof hint === "string" ? <FieldHint>{hint}</FieldHint> : hint}
-      {error ? <FieldError className="text-xs">{error}</FieldError> : null}
+      {error ? <FieldError>{error}</FieldError> : null}
     </>
   );
   if (htmlFor)
@@ -44,9 +44,7 @@ export function Field({
     );
   return (
     <label className={cn("flex flex-col gap-1.5", className)}>
-      <span className="text-[13px] leading-none text-muted-foreground">
-        {label}
-      </span>
+      <span className="type-secondary text-fg-2">{label}</span>
       {rest}
     </label>
   );
@@ -65,8 +63,8 @@ export function FieldHint({
   return (
     <p
       className={cn(
-        "flex items-center gap-1 text-xs",
-        ok ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground",
+        "type-status flex items-center gap-1",
+        ok ? "text-ok" : "text-fg-2",
         className,
       )}
     >
@@ -85,7 +83,7 @@ export function FieldError({
   children: ReactNode;
 }) {
   return (
-    <p role="alert" className={cn("text-sm text-destructive", className)}>
+    <p role="alert" className={cn("type-secondary text-error", className)}>
       {children}
     </p>
   );

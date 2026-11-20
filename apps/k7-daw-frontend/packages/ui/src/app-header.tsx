@@ -4,7 +4,7 @@ import { HamburgerMenu, type HamburgerMenuItem } from "./hamburger-menu";
 import { cn } from "./lib/utils";
 
 // The app bar every SPA of the studio shares: the app NAME on the left in the
-// brand face (Rubik 80s Fade, white), its top-level entries on the right — inline buttons from
+// brand face (`font-brand`, Sansation 700, white), its top-level entries on the right — inline buttons from
 // `sm` up, collapsed into a hamburger menu below. The house look is `tint`:
 // the accent at 20 % over the page. `accent` (solid primary) and `plain` (card)
 // remain for an app that has a reason. See docs/app-header.md.
@@ -94,7 +94,7 @@ const AppHeader = React.forwardRef<HTMLElement, AppHeaderProps>(
             {/* The name in the brand face, white; the size is generous because
                 the face is built for display. */}
             <span
-              className="truncate font-brand text-xl leading-none text-white"
+              className="truncate font-brand text-xl font-bold leading-none text-white"
               title={version}
             >
               {title}

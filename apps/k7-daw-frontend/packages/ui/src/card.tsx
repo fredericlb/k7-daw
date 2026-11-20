@@ -1,16 +1,31 @@
 import * as React from "react";
 import { cn } from "./lib/utils";
 
-// A surface panel: border, 12px radius, 18px padding. No outer margin — spacing between cards is
-// the parent's (a `gap`, a `space-y-*`), so a card drops into a grid or a flex row as it is.
+const SURFACES = {
+  row: "row-group",
+  quiet:
+    "rounded-(--k7-r-rows) border border-(--k7-hairline-soft) bg-(--k7-card-quiet)",
+  glass: "glass rounded-(--k7-r-rows)",
+  float: "float rounded-(--k7-r-rows)",
+  panel: "panel rounded-(--k7-r-panel)",
+  dialog: "panel-dialog rounded-(--k7-r-dialog)",
+  sheet: "panel-sheet rounded-t-(--k7-r-sheet)",
+  menu: "menu rounded-(--k7-r-menu)",
+} as const;
+
+export type CardVariant = keyof typeof SURFACES;
+
+// A surface: `row` (a row group, the default), or one of the canvas's glass, float and panel surfaces.
+// No outer margin — spacing between cards is the parent's (a `gap`, a `space-y-*`).
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { variant?: CardVariant }
+>(({ className, variant = "row", ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "rounded-xl border border-border bg-card p-[18px] text-card-foreground",
+      SURFACES[variant],
+      "p-[18px] text-card-foreground",
       className,
     )}
     {...props}
@@ -36,11 +51,7 @@ const CardTitle = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("font-semibold leading-none", className)}
-    {...props}
-  />
+  <div ref={ref} className={cn("type-headline", className)} {...props} />
 ));
 CardTitle.displayName = "CardTitle";
 
@@ -50,7 +61,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("type-secondary text-fg-2", className)}
     {...props}
   />
 ));

@@ -15,7 +15,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/55 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
+      "scrim fixed inset-0 z-(--k7-z-dialog) data-[state=open]:animate-[k7-fade-in_var(--k7-dur-fade)_ease-out] data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
       className,
     )}
     {...props}
@@ -34,16 +34,16 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-1/2 top-1/2 z-50 grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-xl border border-border bg-popover p-5 text-popover-foreground shadow-[0_12px_40px_rgba(0,0,0,0.5)] outline-none sm:max-w-lg",
-        "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+        "panel-dialog fixed left-1/2 top-1/2 z-(--k7-z-dialog) grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-3.5 overflow-y-auto rounded-(--k7-r-dialog) p-[22px] text-popover-foreground outline-none sm:max-w-(--k7-dialog-w)",
+        "data-[state=open]:animate-[k7-dialog-in_var(--k7-dur-dialog)_var(--k7-ease-spring)] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
         className,
       )}
       {...props}
     >
       {children}
       {showCloseButton && (
-        <DialogPrimitive.Close className="absolute right-2 top-2 cursor-pointer rounded-sm p-1 text-muted-foreground opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring/50">
-          <XIcon className="size-4" />
+        <DialogPrimitive.Close className="absolute right-3 top-3 grid size-11 cursor-pointer place-items-center rounded-full text-fg-2 outline-none transition-colors hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)">
+          <XIcon className="size-5" strokeWidth={2.2} />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       )}
@@ -57,7 +57,7 @@ const DialogHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("flex flex-col gap-1.5 text-left", className)}
+    className={cn("flex flex-col gap-1.5 pe-9 text-left", className)}
     {...props}
   />
 );
@@ -69,7 +69,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+      "flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end",
       className,
     )}
     {...props}
@@ -83,7 +83,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("text-lg font-bold leading-none", className)}
+    className={cn("type-sheet-title", className)}
     {...props}
   />
 ));
@@ -95,7 +95,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("text-sm leading-[19px] text-fg-2", className)}
     {...props}
   />
 ));
