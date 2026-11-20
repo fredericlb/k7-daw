@@ -1,6 +1,7 @@
 // panels.tsx — the registry of the shell's panels: an id, a glyph and a title each, and the frame they open in.
 // The frame is the kit's SidePanel (Pad, Desk) or Sheet (Phone); what goes inside is each panel's own component.
 // `references` and `history` are segments of Resources and Tasks: they have no button, only the shared one.
+// `events`, `mixer` and `chain` are the DOCK's occupants, not right panels (docs/shell.md).
 
 import { EditorDock, EditorSheet } from "@studio/ui/editor-dock";
 import {
@@ -35,6 +36,12 @@ export type PanelId =
   | "chain"
   | "references"
   | "history";
+
+/** What the bottom dock holds: each is named and glyphed here, and none is a right panel. */
+export type DockPanel = "events" | "mixer" | "chain";
+
+/** The panels drawn in the right column. */
+export type RightPanel = Exclude<PanelId, DockPanel>;
 
 /** The panels with a button in the header's toolbar, in its order. */
 export const TOOLBAR_PANELS = [
@@ -112,19 +119,26 @@ export const PANEL_DEFS: Record<PanelId, PanelDef> = {
   },
 };
 
-/** The legacy bottom panel (`?panel=`) as the right panel that now holds it; `event` is the dock, not a right panel. */
-const OF_LEGACY: Record<Exclude<Panel, "event">, PanelId> = {
-  graph: "chain",
+/** The dock's occupant that each URL `?panel=` value names; `logs` is a right panel. */
+export const DOCK_OF_PANEL: Record<Exclude<Panel, "logs">, DockPanel> = {
+  event: "events",
   mix: "mixer",
-  logs: "logs",
+  graph: "chain",
 };
 
-/** The one panel on screen: the URL-borne one wins, there being never both (App keeps them exclusive). */
+/** The `?panel=` value an occupant rides as. */
+export const PANEL_OF_DOCK: Record<DockPanel, Panel> = {
+  events: "event",
+  mixer: "mix",
+  chain: "graph",
+};
+
+/** The one right panel on screen: the URL-borne one wins, there being never both (App keeps them exclusive). */
 export function shownPanel(
-  legacy: Exclude<Panel, "event"> | null,
+  legacy: "logs" | null,
   right: RightPanelId | null,
-): PanelId | null {
-  if (legacy) return OF_LEGACY[legacy];
+): RightPanel | null {
+  if (legacy) return legacy;
   if (right && right !== "comments") return right;
   return null;
 }
@@ -138,7 +152,7 @@ export function PanelFrame({
   actions,
   children,
 }: {
-  id: PanelId;
+  id: RightPanel;
   phone: boolean;
   onClose: () => void;
   subtitle?: ReactNode;
@@ -168,8 +182,9 @@ export function PanelFrame({
   );
 }
 
-/** The editor dock, which is the Events panel: a bottom dock on Pad and Desk, a partial sheet on a phone. */
+/** The dock, holding one occupant: a bottom dock on Pad and Desk, a partial sheet on a phone. */
 export function DockFrame({
+  occupant,
   layout,
   height,
   onHeightChange,
@@ -180,6 +195,7 @@ export function DockFrame({
   actions,
   children,
 }: {
+  occupant: DockPanel;
   layout: ShellLayout;
   height: number;
   onHeightChange: (h: number) => void;
@@ -190,7 +206,7 @@ export function DockFrame({
   actions?: ReactNode;
   children: ReactNode;
 }) {
-  const def = PANEL_DEFS.events;
+  const def = PANEL_DEFS[occupant];
   // The ladder's Escape leaves the expanded state first, as the dock's own Escape does.
   usePopin(true, () => (expanded ? onExpandedChange(false) : onClose()));
   const common = {

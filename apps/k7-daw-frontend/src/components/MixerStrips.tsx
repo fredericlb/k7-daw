@@ -1,4 +1,4 @@
-// MixerStrips.tsx — the Mixer panel's strips: one 84 px card per mixer module, fed by mixerStrips.ts.
+// MixerStrips.tsx — the Mixer dock's strips, left to right: one 84 px card per mixer module, fed by mixerStrips.ts.
 // M and S are the lane header's own state (the same `trackControls`); a shared bus strip is ONE card for its first track.
 
 import {
@@ -27,7 +27,7 @@ function Meter({ index, muted }: { index: number; muted: boolean }) {
   const shown = muted ? FLOOR_DB : db;
   return (
     <div
-      className="h-24 w-1.5 overflow-hidden rounded-[3px] bg-(--k7-progress-track)"
+      className="min-h-24 w-1.5 flex-1 overflow-hidden rounded-[3px] bg-(--k7-progress-track)"
       role="meter"
       aria-label={m["mixer.level"]()}
       aria-valuenow={shown}
@@ -63,7 +63,7 @@ function Strip({
   was.current = playing;
   const muted = values.mute === 1;
   return (
-    <li className="flex w-[84px] shrink-0 flex-col items-center gap-2 rounded-2xl bg-(--k7-row) px-1.5 py-2.5">
+    <li className="flex w-[84px] shrink-0 flex-col items-center self-stretch gap-2 rounded-2xl bg-(--k7-row) px-1.5 py-2.5">
       <span className="type-label w-full truncate text-center" title={name}>
         {name}
       </span>
@@ -126,7 +126,7 @@ export function MixerStrips({
   return (
     <ul
       aria-label={m["mixer.strips"]()}
-      className="flex min-h-0 gap-2 overflow-x-auto overflow-y-auto pb-1"
+      className="m-0 flex h-full min-h-0 shrink-0 list-none gap-2 p-0 pb-1"
     >
       {strips.map((mod) => {
         const index = tracks.findIndex((t) => t.mixer?.module === mod);

@@ -1,11 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { PANEL_DEFS, shownPanel, TOOLBAR_PANELS } from "./panels";
+import {
+  DOCK_OF_PANEL,
+  PANEL_DEFS,
+  PANEL_OF_DOCK,
+  shownPanel,
+  TOOLBAR_PANELS,
+} from "./panels";
 
 describe("shownPanel", () => {
-  it("names the right panel that holds each legacy ?panel= value", () => {
-    expect(shownPanel("mix", null)).toBe("mixer");
-    expect(shownPanel("graph", null)).toBe("chain");
+  it("names the right panel the URL-borne one holds, and none for the dock's", () => {
     expect(shownPanel("logs", null)).toBe("logs");
+    expect(shownPanel("logs", "export")).toBe("logs");
+  });
+
+  it("maps each ?panel= value of the dock to its occupant and back", () => {
+    expect(DOCK_OF_PANEL.mix).toBe("mixer");
+    expect(DOCK_OF_PANEL.graph).toBe("chain");
+    expect(DOCK_OF_PANEL.event).toBe("events");
+    for (const [panel, occupant] of Object.entries(DOCK_OF_PANEL))
+      expect(PANEL_OF_DOCK[occupant]).toBe(panel);
   });
 
   it("falls back to the store's panel, and to none", () => {

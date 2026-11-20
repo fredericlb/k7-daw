@@ -1,32 +1,22 @@
-// GraphPanel.tsx — the "Graph" bottom panel: the selected track's signal path, answering
+// GraphPanel.tsx — the dock's graph view: the selected track's signal path, answering
 // "where does THIS track go?" without leaving the timeline. Same pipeline as the Chains
 // tab (subgraph -> buildGraph -> dagre -> DomChains), only the input set differs; dagre
 // already lays the path out, so don't hand-roll a strip — it would lose the routed sends.
 // The track comes from the caret, so the panel has no selection state of its own. Given
-// `strips`, it is the MIX panel instead: the whole graph with every strip pulled onto one rank.
+// `strips`, it is the MIXER instead: the strips side by side, the Master section as the right column.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import { ASPECTS, aspectOf } from "@studio/song-schema/aspect";
+import { DockHeaderRow } from "@studio/ui/editor-dock";
+import { cn } from "@studio/ui/lib/utils";
 import type { LaneSpan } from "@studio/ui-chains/cables";
 import type { TrackControlValues } from "@studio/ui-chains/graph";
-import {
-  alignModuleRank,
-  buildGraph,
-  layout,
-  spaceModulesEvenly,
-} from "@studio/ui-chains/graph";
 import type { LaneNotes } from "@studio/ui-chains/noteLoad";
-import {
-  type Cam,
-  type ChainsCamApi,
-  DomChains,
-  type TapAction,
-} from "@studio/ui-chains-react";
+import { type Cam, DomChains, type TapAction } from "@studio/ui-chains-react";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { thawAutoFreeze } from "../api";
 import { STUDIO_ICONS } from "../chainsIcons";
 import { useChainsWords } from "../chainsLabels";
-import { withoutNotes } from "../graphNotes";
 import { nodePredicate } from "../historyMarks";
 import { useLatest } from "../hooks/useLatest";
 import { usePendingBypass } from "../hooks/usePendingBypass";
@@ -38,6 +28,7 @@ import { useLiveRackLit } from "../rackLit";
 import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import { layoutTrackPanel } from "../trackPanelLayout";
 import type { WebProject } from "../types";
+import { useIsMobile } from "../useIsMobile";
 import { MixerStrips } from "./MixerStrips";
 
 export function GraphPanel({
@@ -143,7 +134,7 @@ export function GraphPanel({
   } = useVerbs();
   // Parked HERE, because App mounts this panel conditionally — one per track, so another track's camera never stands in for a fit.
   const camStores = useRef(new Map<string, { current: Cam | null }>());
-  const camKey = strips ? "mix" : (trackId ?? "");
+  const camKey = trackId ?? "";
   let camStore = camStores.current.get(camKey);
   if (!camStore) {
     camStore = { current: null };
@@ -166,23 +157,6 @@ export function GraphPanel({
 
   const laid = useMemo(() => {
     if (!graph) return null;
-    if (strips) {
-      // The mixer row is an ARRANGEMENT: no pins and no held positions, one rank, then a console's even spacing.
-      const { nodes, edges } = buildGraph(
-        withoutNotes(graph, new Set(Object.keys(graph.modules ?? {}))),
-        {
-          drawMainOut: true,
-          cameras,
-          inputDevices,
-          midiDevices,
-          ...(aspectRow === undefined ? {} : { aspect: aspectRow }),
-        },
-      );
-      return spaceModulesEvenly(
-        layout(alignModuleRank(nodes, strips), edges),
-        strips,
-      );
-    }
     if (!trackId) return null;
     const scope = `${trackId}:${organizeKey}`;
     if (prevScope.current !== scope) {
@@ -209,24 +183,12 @@ export function GraphPanel({
   }, [
     graph,
     trackId,
-    strips,
     organizeKey,
     cameras,
     inputDevices,
     midiDevices,
     aspectRow,
   ]);
-
-  // The mix frames its STRIPS by height, a fifth back from a perfect fit, once — marked done only if it actually framed (docs/shell.md).
-  const [cam, setCam] = useState<ChainsCamApi | null>(null);
-  const stripsFramed = useRef(false);
-  useEffect(() => {
-    if (!strips || !laid || !cam || stripsFramed.current) return;
-    const wanted = new Set(strips);
-    const nodes = laid.nodes.filter((n) => n.module && wanted.has(n.module));
-    if (cam.fitTo(nodes, { axis: "height", zoom: 0.8 }))
-      stripsFramed.current = true;
-  }, [strips, laid, cam]);
 
   // A chain selected on one track means nothing once the caret moves to another.
   useEffect(() => setSelected(null), [trackId]);
@@ -285,11 +247,8 @@ export function GraphPanel({
         onTriggerRack={triggerRack}
         onSelect={setSelected}
         onContextMenu={onContextMenu}
-        // The mix is a ROW: the wheel walks along it.
-        row={!!strips}
-        onCamReady={setCam}
         // This panel follows the caret's track, so another track IS a different graph and earns a re-frame; a reload isn't.
-        fitKey={strips ? "mix" : trackId}
+        fitKey={trackId}
         organizeKey={organizeKey}
         camStore={camStore}
         command={command}
@@ -313,25 +272,55 @@ export function GraphPanel({
     );
   };
 
+  const mobile = useIsMobile();
+  const count = strips?.length ?? 0;
+  const title = strips
+    ? `${m["shell.panel.mixer"]()} · ${(count === 1 ? m["graph.strips.one"] : m["graph.strips.other"])({ n: count })}`
+    : (trackId ?? m["graph.noTrack"]());
+  const masterSection =
+    strips && master ? (
+      <section
+        aria-label={m["graph.master"]()}
+        className={cn(
+          "shrink-0 overflow-auto rounded-2xl bg-(--k7-row) p-3",
+          mobile ? "w-[85vw]" : "w-[440px] max-w-[45%]",
+        )}
+      >
+        <h3 className="type-caps pb-2 text-fg-2">{m["graph.master"]()}</h3>
+        {master}
+      </section>
+    ) : null;
+  // The Mixer is one row: strips left to right, then Master — a fixed column on Pad and Desk, the row's last group on a phone.
+  if (strips)
+    return (
+      <div className="flex h-full min-h-0 flex-col">
+        <DockHeaderRow>
+          <p className="truncate font-mono text-fg-2 text-xs">{title}</p>
+        </DockHeaderRow>
+        <div
+          className={cn(
+            "flex min-h-0 flex-1 gap-2",
+            mobile && "overflow-x-auto",
+          )}
+        >
+          <div
+            className={cn(
+              "flex min-h-0 gap-2",
+              mobile ? "shrink-0" : "min-w-0 flex-1 overflow-x-auto",
+            )}
+          >
+            {body()}
+          </div>
+          {masterSection}
+        </div>
+      </div>
+    );
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <p className="shrink-0 truncate pb-2 font-mono text-fg-2 text-xs">
-        {strips
-          ? (strips.length === 1
-              ? m["graph.strips.one"]
-              : m["graph.strips.other"])({ n: strips.length })
-          : (trackId ?? m["graph.noTrack"]())}
-      </p>
+      <DockHeaderRow>
+        <p className="truncate font-mono text-fg-2 text-xs">{title}</p>
+      </DockHeaderRow>
       <div className="min-h-0 flex-1">{body()}</div>
-      {strips && master ? (
-        <section
-          aria-label={m["graph.master"]()}
-          className="mt-2 max-h-[55%] shrink-0 overflow-auto rounded-2xl bg-(--k7-row) p-3"
-        >
-          <h3 className="type-caps pb-2 text-fg-2">{m["graph.master"]()}</h3>
-          {master}
-        </section>
-      ) : null}
     </div>
   );
 }

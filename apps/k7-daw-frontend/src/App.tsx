@@ -225,10 +225,13 @@ import {
   ProjectHeader,
 } from "./shell/ProjectHeader";
 import {
+  DOCK_OF_PANEL,
   DockFrame,
   PANEL_DEFS,
+  PANEL_OF_DOCK,
   PanelFrame,
   type PanelId,
+  type RightPanel,
   shownPanel,
   TOOLBAR_PANELS,
 } from "./shell/panels";
@@ -372,20 +375,22 @@ export default function App({
   const layoutKind = useShellLayout();
   // The timeline, because it is what the default view opens on — see ringPanes.
   const [focusPane, setFocusPane] = useState<Pane>("timeline");
-  // The dock (the Events panel) coexists with one other panel; `panel` is the one the URL carries (docs/shell.md).
+  // The dock (the editors, the Mixer or a chain) coexists with one right panel; `panel` is the one the URL carries (docs/shell.md).
   const dock = useEditorDock(layoutKind);
-  const [sidePanel, setSidePanel] = useState<Exclude<Panel, "event"> | null>(
-    null,
-  );
-  const panel: Panel | null = sidePanel ?? (dock.open ? "event" : null);
+  const [sidePanel, setSidePanel] = useState<"logs" | null>(null);
+  const panel: Panel | null =
+    sidePanel ?? (dock.open ? PANEL_OF_DOCK[dock.occupant] : null);
   const setDockOpen = dock.setOpen;
+  const showDock = dock.show;
   const setPanel = useCallback(
     (next: Panel | null) => {
-      if (next === "event") return setDockOpen(true);
-      if (next === null) setDockOpen(false);
-      setSidePanel(next);
+      if (next === null) {
+        setDockOpen(false);
+        setSidePanel(null);
+      } else if (next === "logs") setSidePanel("logs");
+      else showDock(DOCK_OF_PANEL[next]);
     },
-    [setDockOpen],
+    [setDockOpen, showDock],
   );
   // The CHAINS BUILDER: a library chain being edited by its ref, `""` for the list, null closed — docs/chainsBuilder.md.
   const [openBuilder, setOpenBuilder] = useState<string | null>(null);
@@ -983,7 +988,7 @@ export default function App({
   const chainsOffScreen = full !== "chains";
   /** Is ANY view of the graph on screen? Only then does a command bring a graph back (docs/shell.md, "A graph only when one is on screen"). */
   const graphOnScreen =
-    !chainsOffScreen || sidePanel === "graph" || sidePanel === "mix";
+    !chainsOffScreen || (dock.open && dock.occupant !== "events");
   const graphOnScreenRef = useLatest(graphOnScreen);
 
   const timelineVisible = visible("timeline");
@@ -1089,45 +1094,48 @@ export default function App({
     if (focusPane !== full) setFocusPane(full);
   }, [full, focusPane]);
 
+  // Pressing the occupant on show closes the dock; any other switches it (docs/shell.md).
   const togglePanel = useCallback(
-    (p: Panel) =>
-      p === "event"
-        ? setDockOpen((cur) => !cur)
-        : setSidePanel((cur) => (cur === p ? null : p)),
-    [setDockOpen],
+    (p: Panel) => {
+      if (p === "logs")
+        return setSidePanel((cur) => (cur === "logs" ? null : "logs"));
+      const want = DOCK_OF_PANEL[p];
+      if (dock.open && dock.occupant === want) setDockOpen(false);
+      else showDock(want);
+    },
+    [dock.open, dock.occupant, setDockOpen, showDock],
   );
   /** Put something in the slot and show it: the `event` panel is the one place the slot is drawn. */
   const openEvent = useCallback(
     (slot: NonNullable<typeof graphSlot>) => {
       setGraphSlot(slot);
-      // A lane's signal path is the chain panel's; every other occupant is the Events panel's.
-      if (slot.kind === "trackModules") setSidePanel("graph");
-      else setDockOpen(true);
+      // A lane's signal path is the chain's; every other occupant is the Events'.
+      showDock(slot.kind === "trackModules" ? "chain" : "events");
     },
-    [setDockOpen],
+    [showDock],
   );
-  /** The occupant's ✕ and Escape: the event is let go, and the panel that drew it goes with it. */
+  /** The occupant's ✕ and Escape: the event is let go, and the dock that drew it goes with it. */
   const closeEvent = useCallback(() => {
     setGraphSlot(null);
     setDockOpen(false);
-    setSidePanel((cur) => (cur === "graph" ? null : cur));
   }, [setDockOpen]);
-  /** The dock's own Close: the dock goes and so does its occupant, but a lane's chain open beside it stays. */
+  /** The dock's own Close: the dock goes and so does the slot it drew, but the Mixer drew none. */
   const closeDock = useCallback(() => {
     setDockOpen(false);
-    setGraphSlot((s) => (s?.kind === "trackModules" ? s : null));
-  }, [setDockOpen]);
-  // The dock's occupant survives a lane's chain taking the slot beside it, and comes back when the chain goes.
+    if (dock.occupant !== "mixer") setGraphSlot(null);
+  }, [setDockOpen, dock.occupant]);
+  // The editor survives a lane's chain taking the slot, and comes back when the dock returns to the Events.
   const dockOccupant = useRef<GraphSlot | null>(null);
   if (graphSlot?.kind !== "trackModules") dockOccupant.current = graphSlot;
   const dockSlot =
     graphSlot?.kind === "trackModules" ? dockOccupant.current : graphSlot;
-  /** The slot as it is on SCREEN — what the keys and the footer's badges may act on, a hidden panel's clip being nobody's target. */
-  const shownSlot =
-    sidePanel === "graph" && graphSlot?.kind === "trackModules"
-      ? graphSlot
-      : dock.open
-        ? dockSlot
+  /** The slot as it is on SCREEN — what the keys and the footer's badges may act on, a hidden occupant's clip being nobody's target. */
+  const shownSlot = !dock.open
+    ? null
+    : dock.occupant === "events"
+      ? dockSlot
+      : dock.occupant === "chain" && graphSlot?.kind === "trackModules"
+        ? graphSlot
         : null;
 
   // The initial fetch: the project header, the workspace (opening its active project), and the command catalogue.
@@ -2658,17 +2666,23 @@ export default function App({
   };
   // A mastering surface keeps the Mixer reachable: its Master section is the only way in.
   const mixerDead =
-    mixerStrips.length === 0 && !masteringSurface && pressedButton !== "mixer";
+    mixerStrips.length === 0 &&
+    !masteringSurface &&
+    !(dock.open && dock.occupant === "mixer");
   const pressPanel = (id: PanelId) => {
-    // The Events button is the dock's: it toggles the dock and leaves a right panel alone.
-    if (id === "events") return void runCommand("ui panel event");
+    // The Events and Mixer buttons are the dock's: each switches it, or closes it when its occupant is up; a right panel stays.
+    if (id === "events" || id === "mixer")
+      return void runCommand(PANEL_LINE[id] ?? "");
     if (pressedButton === id) return closeAnyPanel();
     const line = PANEL_LINE[id];
     if (line) void runCommand(line);
   };
   const headerPanels: HeaderPanel[] = TOOLBAR_PANELS.map((id) => ({
     id,
-    pressed: id === "events" ? dock.open : pressedButton === id,
+    pressed:
+      id === "events" || id === "mixer"
+        ? dock.open && dock.occupant === id
+        : pressedButton === id,
     disabled: (id === "mixer" && mixerDead) || (id === "export" && share.busy),
     title: id === "mixer" && mixerDead ? m["footer.mixNone"]() : undefined,
     onPress: () => pressPanel(id),
@@ -2945,7 +2959,29 @@ export default function App({
     </div>
   );
 
-  // The chain panel: one lane's signal path, or the caret track's while no lane was opened (the chain editor replaces it).
+  // The Mixer, in the dock: the strips side by side, the Master section after them.
+  const mixerBody = (
+    <PaneBoundary name="graph panel" resetKey={reloadKey} onError={paneError}>
+      <GraphPanel
+        {...graphHostProps}
+        trackId={null}
+        strips={mixerStrips}
+        master={
+          masteringSurface ? (
+            <MasteringTab
+              surface={masteringSurface}
+              paramsStore={pluginParamsStore}
+              setPluginParam={setPluginParam}
+              watchPluginParams={watchPluginParams}
+              command={quietCommand}
+            />
+          ) : null
+        }
+      />
+    </PaneBoundary>
+  );
+
+  // The chain, in the dock: one lane's signal path, or the caret track's while no lane was opened (the chain editor replaces it).
   const chainBody =
     graphSlot?.kind === "trackModules" ? (
       <PaneBoundary
@@ -2993,7 +3029,7 @@ export default function App({
       />
     );
   };
-  const panelBody = (id: PanelId): ReactNode => {
+  const panelBody = (id: RightPanel): ReactNode => {
     switch (id) {
       case "settings":
         return (
@@ -3099,35 +3135,6 @@ export default function App({
             onRun={(c) => void runCommand(c)}
           />
         );
-      case "mixer":
-        return (
-          <PaneBoundary
-            name="graph panel"
-            resetKey={reloadKey}
-            onError={paneError}
-          >
-            <GraphPanel
-              {...graphHostProps}
-              trackId={null}
-              strips={mixerStrips}
-              master={
-                masteringSurface ? (
-                  <MasteringTab
-                    surface={masteringSurface}
-                    paramsStore={pluginParamsStore}
-                    setPluginParam={setPluginParam}
-                    watchPluginParams={watchPluginParams}
-                    command={quietCommand}
-                  />
-                ) : null
-              }
-            />
-          </PaneBoundary>
-        );
-      case "events":
-        return null;
-      case "chain":
-        return chainBody;
       case "logs":
         return (
           <PaneBoundary name="logs" resetKey={reloadKey} onError={paneError}>
@@ -3174,8 +3181,13 @@ export default function App({
       expanded={dock.expanded}
       onExpandedChange={dock.setExpanded}
       onClose={closeDock}
+      occupant={dock.occupant}
     >
-      {eventsBody}
+      {dock.occupant === "mixer"
+        ? mixerBody
+        : dock.occupant === "chain"
+          ? chainBody
+          : eventsBody}
     </DockFrame>
   ) : null;
 

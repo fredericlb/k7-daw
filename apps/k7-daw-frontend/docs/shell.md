@@ -266,27 +266,32 @@ bottom margin for the bar instead.
 | git capsule | `shell/HeaderGit.tsx` | Commit & Push with its count, a menu (Pull, Commits); while a merge waits, one "Resolve N conflicts" button and a banner |
 | bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the Lane views |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
-| editor dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the Events panel, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone) |
+| dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
 | phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |
 
-**The editors are horizontal, at the bottom; only the per-track chain is vertical.** The clip editor,
-Takes, the piano roll and the live take live in the **editor dock** (the Events panel), a dock along
-the bottom of Pad and Desk and a partial-height sheet on a phone. The chain editor stays a right panel
-because a signal path reads left to right in a tall column. The kit's
-[editor dock](../packages/ui/docs/editor-dock.md) page has the dock's own rules; these are the shell's:
+**The editors, the Mixer and the per-track chain are horizontal, at the bottom.** They live in the
+**dock**, along the bottom of Pad and Desk and a partial-height sheet on a phone: a clip, a piano roll
+or a signal path reads left to right, and the dock gives them the width the right column never had.
+The right panels (Resources, Playlists, Logs, Tasks & history, Export, Settings) stay vertical lists.
+The kit's [editor dock](../packages/ui/docs/editor-dock.md) page has the dock's own rules; these are the shell's:
 
-- **The dock is not a `panel` value.** It coexists with a right panel or the chain, so its open state
-  is its own (`useEditorDock`) and `panel`, the one the URL carries, is derived: the right-hand one
-  wins, else `event` while the dock is open. `?panel=event` opens the dock.
-- **The Events button is the dock's and stays pressed while it is open**, whatever else is pressed.
-  Opening a clip, a note, a take or the roll opens the dock; a lane's chain opens the right panel
-  and the dock keeps its occupant, which comes back when the chain goes.
+- **The dock has ONE occupant at a time: Events, Mixer or Chain.** Two horizontal editors stacked at the
+  bottom would each get half a height that a signal path or a strip needs whole. The dock's accessible
+  name follows its occupant ("Events", "Mixer", "Chain"), so a suite finds each the way it finds a right panel.
+- **The Events and Mixer buttons switch the dock and stay pressed while their occupant is shown.** Pressing
+  the button of the current occupant closes the dock. Filling the slot opens Events, and opening a
+  lane's chain switches the dock to Chain; the clip Events held comes back when the dock returns to it.
+- **The dock is not a `panel` value.** It coexists with a right panel, so its open state is its own
+  (`useEditorDock`) and `panel`, the one the URL carries, is derived: Logs wins, else the occupant
+  (`event`, `mix`, `graph`) while the dock is open. `?panel=mix` and `?panel=graph` open the dock
+  on the Mixer and the Chain.
 - **A right panel opened beside the dock ends 12 px above it** (`--k7-panel-bottom-open`), and the
   toasts sit above the dock (`--toast-bottom`): the dock never covers what it must not.
 - **Expand is `ui expand`** (`ui editor` is the source pane's, key `1`). Escape leaves the expanded
   state before it closes the dock, through the popin ladder and through `ui close` alike.
-- **The dock's height is the person's, for the session**, not stored: the old bottom panel did not keep
-  it either, and a height stored across sessions would meet another screen.
+- **The dock's height is the person's, for the session**, not stored: a height stored across sessions
+  would meet another screen.
+- **Closing the dock lets go of its slot, except from the Mixer**, which drew none.
 
 Three layouts, said on the root as `data-layout`: `phone` (the folded shell), `pad` (a touch screen
 that is not folded) and `desk`. Pad and Desk draw the same chrome; the attribute is for the suites.
@@ -301,8 +306,8 @@ history. The warning chip counts the project's problems and opens Logs on "probl
 (`logsFilter` in the shell store).
 
 **The pane switcher is Arrangement, Graph, Source** (Turntables beside Arrangement on a project that
-declares a desk). Mastering is not a pane: it is a section of the Mixer panel, and `ui mastering`
-opens that panel.
+declares a desk). Mastering is not a pane: it is a section of the Mixer, and `ui mastering`
+opens the dock on it.
 
 **Command feedback is a toast** ("copied 1 event(s)"): what a command said is shown once, where the
 person looks. The line under the project's name (`StatusText`, `project-status-line`) carries only what
@@ -359,89 +364,34 @@ reports and what the `ui ruler` / `ui automation` commands flip, until the timel
 LANE VIEWS pills, the PANELS tiles (`menuitem`, pressed while open) and Settings and Keyboard. A panel
 opens as a full-screen sheet.
 
-### The Mixer is a panel: the graph, arranged
+### The Mixer is a dock occupant: strips left to right
 
-The `mix` panel is not a second picture. It is **the same graph** (same nodes, same cards, same cables)
-with the strips pulled onto one rank: `alignModuleRank` in `@studio/ui-chains`, between `buildGraph`
-and `layout`, drawn by `GraphPanel` given its `strips`. It is a panel and not a page so that the
-timeline stays on screen beside the faders it is mixing.
+The Mixer is drawn in the bottom dock (`GraphPanel` given its `strips`, then `MixerStrips.tsx`): one
+84 px card per strip side by side, a horizontal scroll when they overflow, and the **Master section
+as a fixed column at the right end** on Pad and Desk — the mastering knobs stay in reach whatever the
+scroll — and as the row's last group on a phone, where a fixed column would eat the width. Its header
+row carries "Mixer" and the strip count; expanded, the strips take the height. It is the dock's
+occupant and not a page so that the timeline stays on screen beside the faders it is mixing.
 
-Every track ends on a mixer module (`trackMixer`, by plugin type) but a track with a longer chain
-ends DEEPER, so by default the mixers sit on a staircase no zoom shows them all of. The shared rank
-is the **deepest** of theirs, never a shallower one — pulling a mixer up would put it above modules
-that feed it, and an edge that has to climb is a cable drawn backwards. Sinks are pushed past the row
-for the same reason.
-
-One rank puts them on a line; it does not give that line a rhythm, since dagre spaces a rank by what
-is ABOVE it. `spaceModulesEvenly` re-spaces them with one constant gap in the song's track order, and
-the cost is upstream and meant to be: the chains feeding the row stop being straight columns, and
-every moved card drops the dagre waypoints of the cables touching it — a bend around a card that has
-since moved is worse than no bend, so `cablePath` re-derives both ENDS from the nodes themselves.
-
-Known limit: a non-mixer node that happens to sit on the shared rank is not moved out of the row's
-way. In practice the row packs TIGHTER than dagre spaced it (gap 24 against `nodesep` 60), so it
-shrinks leftward rather than sprawling — but a song that puts something else at that depth could see
-an overlap.
-
-The camera frames those nodes once, as the panel opens, pulled back a fifth from a perfect fit:
-a row framed exactly fills the pane edge to edge and reads as a wall. The panel owns its camera, so
-the graph's page keeps its own place.
-
-That framing is the whole visible effect, so it must not fail quietly. `fitTo` answers whether it
-ACTUALLY framed (a pane with no size yet frames nothing), and the panel records the attempt as done
-only then.
+A strip is drawn by the Mixer itself, not through the graph canvas: a strip is a fader, a pan, a
+meter and M/S over the lane header's own `trackControls`, and a second implementation of a channel
+strip inside DomChains would drift from it. The cables stay on the Graph pane.
 
 Which modules are strips is the project's answer, not the package's: `mixerStrips.ts` reads it off
-the compiled doc and `useProjectDoc` hands the list up, so the row and the faders can never be one
-reload apart. Both sources are needed — the compiled project says *which* modules are strips (the
-graph doc carries no plugin type), the graph says what each looks like and what feeds it.
-
-**Every audio lane has a strip**, and `track new` writes it with the lane
+the compiled doc and `useProjectDoc` hands the list up. **Every audio lane has a strip**, and
+`track new` writes it with the lane
 ([apps/k7-daw-frontend/packages/song/docs/trackMixer.md](../packages/song/docs/trackMixer.md)): a module of
 plugin type `Mixer` (`trackMixer`, `MIXER_PLUGIN`) last in the lane's run.
-`track new` writes it with the lane.
 
 A song can still have **none** — one whose lanes all run into buses, or one with no `graph.k7x` at
 all. So the button stays **disabled** at zero and says why in its tooltip, and `ui panel mix` opened
-anyway says so in the panel. Nothing else explains an empty mixer, and a control that answers a click
-with nothing is worse than one visibly unavailable. That is why the mix button sits apart from the
-loop that draws the other panel buttons.
-
-A strip's controls are its module's own panel — the very card the graph draws. A hand-rolled strip per
-track would be a second implementation of a channel strip and would drift from what the module's
-`ui.k7x` declares. Three consequences, all of them the design rather than gaps:
+anyway says so in the dock. A control that answers a click with nothing is worse than one visibly
+unavailable, which is why the Mixer button sits apart from the loop that draws the other panel buttons.
 
 - **A track with no mixer module has no strip.** It is not "at unity" — it is a track with nowhere
   to put a level. It simply is not in the row.
-- **Mute and solo are not here.** They are the track's, not the strip's, and they live on the
-  timeline (`m`/`s`) and on the graph's track nodes.
 - **Two tracks sharing a strip draw one card.** `mixerModules` de-duplicates, because two cards for
   one value would be two controls fighting.
-
-The **sockets stay**, and the cables with them: you can see what reaches a fader without leaving the
-view, which is most of why the mixer belongs in the graph rather than beside it. A rank of strips
-drawn on its own would have no edges to plug its jacks into.
-
-#### It frames the HEIGHT, and the row pans
-
-`fitTo(..., "height")`, not the default fit-both. Fitting both axes divides the pane between however
-many strips the song has, and below `WIDGET_MIN_SCALE` (0.6) the renderer drops the widget grid
-altogether — so a busy song's mixer would frame to a rank of bare name cards, the one thing this view
-must not do. Measured on a 1200×280 pane with a 3×6 strip grid:
-
-| strips | fit-both | fit-height |
-|---|---|---|
-| 4 | k 0.85, card 152×225 | k 0.85, card 152×225 |
-| 8 | k 0.66, card 119×175 | k 0.85, card 152×225 |
-| 12 | **k 0.44 — widgets dropped** | k 0.85, card 152×225 |
-
-Framing the height keeps every strip the same readable size whatever the track count and lets the row
-run off the right, where it pans. A mixer you have to scroll beats one you cannot read. The cards are
-drawn at the graph's own size, without the elbow room a lane's row gives itself (`widthScale`) — they
-are the same nodes as the graph's, which is the point.
-
-`moduleRow` in `@studio/ui-chains` lays a bare rank of cards out, and this view is not its caller: it
-re-ranks the graph instead. The row it does lay out is one lane's signal path (below).
 
 ### ONE panel for an audio clip, recorded or not — and clicking one reaches it
 
@@ -1131,15 +1081,15 @@ to wear the frame, because the occupants genuinely differ:
   the row gets the height back. When there is no row to draw — loading, an error, a lane that reaches
   no module — the pane says so in its body, where the row would be.
 
-The **Mixer panel** is not an occupant. It is a panel of its own beside Events, and opening it leaves the
-slot alone.
+The **Mixer** is not an occupant of the slot. It shares the dock with Events, and showing it leaves the
+slot alone: Events shows it again.
 
 **Filling the slot opens the Events panel.** A lane's modules, a clip's waveform or piano roll, a
 grid, a take review — each is asked for, and a request the user cannot see is a miss, so every road
 into the slot (`onOpenClip`, `sequence edit`, `ui review`, a lane header's double-click, a take
-starting to roll) goes through `openEvent`, which also sets `panel` to `event`. The page is left as it
-was: the clip opens under the timeline it was clicked on. Toggling the panel off keeps the event, so
-the button brings it back; the keys and the mode badges act only on an event that is on
+starting to roll) goes through `openEvent`, which shows the dock on Events (on Chain for a lane's modules). The page is left as it
+was: the clip opens under the timeline it was clicked on. Switching the dock to the Mixer keeps the event, so
+the Events button brings it back; the keys and the mode badges act only on an event that is on
 screen (`shownSlot`).
 
 ## The command bar

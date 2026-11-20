@@ -1,8 +1,8 @@
 # The editor dock
 
-`@studio/ui/editor-dock`: `EditorDock` (Pad and Desk) and `EditorSheet` (Phone). The editors are
-horizontal and sit at the bottom; the right panel (`side-panel`) is for everything else, the
-per-track chain included.
+`@studio/ui/editor-dock`: `EditorDock` (Pad and Desk) and `EditorSheet` (Phone). What reads
+left to right sits at the bottom: the editors, the Mixer and the per-track chain, one occupant at a
+time; the right panel (`side-panel`) is for the vertical lists.
 
 ## Choices
 
@@ -20,6 +20,10 @@ per-track chain included.
   the editor. The editor keeps its state and fills the header through `DockHeaderRow` (a portal into
   the dock's slot); the title stays as a visually hidden name, so the dock is still found by it. The
   empty dock has Expand and Close only.
+- **The dock holds one occupant and is named by it.** The host swaps the children, the title and
+  the Dialog name together; the header row is the occupant's own (`DockHeaderRow`), so a Mixer
+  shows its count and a chain its track where an editor shows its tools. Strips and cards scroll
+  sideways inside the body, and on a phone Expand takes the sheet full screen.
 - **Escape leaves the expanded state before it closes the dock.** The kit does it for its own Escape;
   a host registering the dock in an Escape ladder must do the same in its closer.
 - **The height is the host's.** `EditorDock` is controlled (`height`, `onHeightChange`) so the host can

@@ -341,9 +341,9 @@ a trackpad that zooms when you meant to pan is a broken trackpad, while a mouse 
 merely a mouse that does not zoom yet. Mobile
 never reaches any of this — a touchscreen sends touch events, handled below.
 
-### The mixer row navigates differently, because it IS a row
+### A row navigates differently, because it IS a row
 
-While the graph is arranged as a row (`row`, from the mix panel), the wheel walks **along** it
+While the graph is arranged as a row (`row`, a lane's chain in the dock), the wheel walks **along** it
 instead of zooming, and nothing pans vertically — dragging included. There is one line of cards
 and everything above or below it is empty, so a gesture that could slide the line off the top
 has one useful direction out of two. A mouse has no horizontal delta to offer, so its notch
@@ -362,7 +362,8 @@ cancels the pan mid-gesture, and two fingers zoom the page instead of the graph.
 
 The Graph pane draws **Zoom fit**, **Auto layout** and **Stack** as labelled pills over its top-left
 corner, beside an output-level meter (`GraphActions.tsx`); the minimap is a card with no buttons of
-its own (`minimapBar={false}`). A lane's chain panel lists its modules as cards (`ModuleCards.tsx`):
-name, engine chip, bypass, the preset with its arrows, a "+" on each seam and a dashed "Add a module"
-row on the tail. The cards summarise the row; the **Controls** chip shows the full row beside them,
+its own (`minimapBar={false}`). A lane's chain, in the bottom dock, lists its modules as cards (`ModuleCards.tsx`) left to right in
+signal order: name, engine chip, bypass, the preset with its arrows, a "+" on each seam and a dashed
+"Add a module" at the end, scrolling sideways when they overflow. The track's name and its chain
+controls are the dock's header row. The cards summarise the row; the **Controls** chip shows the full row beside them,
 because the knobs live there and a second editor of the same parameters would drift.

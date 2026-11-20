@@ -4,6 +4,7 @@
 // See docs/shell.md.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
+import { DockHeaderRow } from "@studio/ui/editor-dock";
 import { KeyboardMusic, Mic, Spline } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { splitTrailingMixer } from "@studio/ui-chains/anchorRight";
@@ -309,6 +310,8 @@ export function TrackModulesPane({
 
   // The History panel's hover, as the per-card test DomChains reads — above the early returns, like every hook.
   const marked = useMemo(() => nodePredicate(mark), [mark]);
+  const trackName =
+    project?.tracks.find((t) => t.id === trackId)?.name || trackId;
   // The lane's panel reads as module cards; a popin's `nodes` keep the full row, and "Controls" shows it beside the cards.
   const cards = !nodes;
   const [controls, setControls] = useState(false);
@@ -408,54 +411,67 @@ export function TrackModulesPane({
 
   return frame(
     <div className="flex h-full min-h-0 flex-col gap-2">
-      {/* What the row SHOWS and the inputs it may take, as chips above it (docs/shell.md). */}
+      {/* The track's name and what the row SHOWS and the inputs it may take: the dock's header row (docs/shell.md). */}
       {(onToggleCurves || onInput || cards) && (
-        <div className="flex shrink-0 flex-wrap items-center gap-2">
-          {cards && (
-            <button
-              type="button"
-              aria-pressed={controls}
-              onClick={() => setControls((v) => !v)}
-              className={`${CHIP} type-label aria-pressed:bg-on-fill aria-pressed:text-lavender`}
-            >
-              {m["chain.controls"]()}
-            </button>
-          )}
-          {onInput &&
-            INPUTS.map(({ kind, label, Icon }) => (
-              <button
-                key={kind}
-                type="button"
-                onClick={() => onInput(kind)}
-                disabled={hasInput}
-                aria-label={label}
-                title={
-                  hasInput
-                    ? `${label} — this lane already has an input`
-                    : `${label} — an input feeding this lane, ahead of its first node`
-                }
-                className={`${CHIP} ${DISABLED}`}
+        <DockHeaderRow>
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            {cards && (
+              <span
+                className="type-label min-w-0 shrink truncate"
+                title={trackName}
               >
-                <Icon className="size-4" />
-              </button>
-            ))}
-          {onToggleCurves && (
-            <button
-              type="button"
-              onClick={onToggleCurves}
-              aria-pressed={showCurves}
-              title={
-                showCurves ? "hide the curve cards" : "show the curve cards"
-              }
-              className={`${CHIP} aria-pressed:bg-on-fill aria-pressed:text-lavender`}
-            >
-              <Spline className="size-4" />
-            </button>
-          )}
-        </div>
+                {trackName}
+              </span>
+            )}
+            <div className="flex shrink-0 items-center gap-2">
+              {cards && (
+                <button
+                  type="button"
+                  aria-pressed={controls}
+                  onClick={() => setControls((v) => !v)}
+                  className={`${CHIP} type-label aria-pressed:bg-on-fill aria-pressed:text-lavender`}
+                >
+                  {m["chain.controls"]()}
+                </button>
+              )}
+              {onInput &&
+                INPUTS.map(({ kind, label, Icon }) => (
+                  <button
+                    key={kind}
+                    type="button"
+                    onClick={() => onInput(kind)}
+                    disabled={hasInput}
+                    aria-label={label}
+                    title={
+                      hasInput
+                        ? `${label} — this lane already has an input`
+                        : `${label} — an input feeding this lane, ahead of its first node`
+                    }
+                    className={`${CHIP} ${DISABLED}`}
+                  >
+                    <Icon className="size-4" />
+                  </button>
+                ))}
+              {onToggleCurves && (
+                <button
+                  type="button"
+                  onClick={onToggleCurves}
+                  aria-pressed={showCurves}
+                  title={
+                    showCurves ? "hide the curve cards" : "show the curve cards"
+                  }
+                  className={`${CHIP} aria-pressed:bg-on-fill aria-pressed:text-lavender`}
+                >
+                  <Spline className="size-4" />
+                </button>
+              )}
+            </div>
+          </div>
+        </DockHeaderRow>
       )}
       {cards && glued && (
         <ModuleCards
+          className={controls ? "shrink-0" : "min-h-0 flex-1"}
           nodes={cardNodes}
           seams={cardSeams}
           presetNames={presetNames}

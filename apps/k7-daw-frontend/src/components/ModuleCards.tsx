@@ -1,4 +1,4 @@
-// ModuleCards.tsx — the chain panel's module cards: name, engine chip, bypass, preset with its arrows, a "+" between two cards and a dashed "Add a module" row.
+// ModuleCards.tsx — the chain dock's module cards, left to right: name, engine chip, bypass, preset with its arrows, a "+" on each seam and a dashed "Add a module" at the end.
 // A summary of the lane's row, not a second editor: the controls stay on the full row (the panel's "Controls" chip shows it).
 
 import { ChevronLeft, ChevronRight, Plus, Power } from "@studio/ui/icons";
@@ -19,6 +19,7 @@ export function ModuleCards({
   onPresetStep,
   onPresets,
   onInsert,
+  className,
 }: {
   /** The row's module cards in signal order. */
   nodes: readonly GraphNode[];
@@ -29,6 +30,7 @@ export function ModuleCards({
   onPresetStep?: (module: string, step: -1 | 1) => void;
   onPresets?: (module: string, x: number, y: number) => void;
   onInsert?: (insert: EdgeInsert, x: number, y: number) => void;
+  className?: string;
 }) {
   const between = seams.filter((s) => !s.end);
   const tail = seams.find((s) => s.end);
@@ -45,8 +47,8 @@ export function ModuleCards({
         className={cn(
           "flex cursor-pointer items-center justify-center gap-2 text-lavender focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none",
           dashed
-            ? "min-h-14 w-full rounded-2xl border-[1.5px] border-hairline border-dashed font-bold text-[14px] hover:bg-on-fill/40"
-            : "mx-auto size-8 rounded-full bg-(--k7-row) hover:bg-on-fill",
+            ? "min-h-14 w-52 self-stretch rounded-2xl border-[1.5px] border-hairline border-dashed font-bold text-[14px] hover:bg-on-fill/40"
+            : "size-8 rounded-full bg-(--k7-row) hover:bg-on-fill",
         )}
       >
         <Plus className="size-4" />
@@ -54,16 +56,21 @@ export function ModuleCards({
       </button>
     ) : null;
   return (
-    <ul className="m-0 flex min-h-0 list-none flex-col gap-1 overflow-y-auto p-0">
+    <ul
+      className={cn(
+        "m-0 flex min-w-0 list-none items-stretch gap-1 overflow-x-auto p-0 pb-1",
+        className,
+      )}
+    >
       {nodes.map((n, i) => {
         const id = n.module ?? n.id;
         const off = !!n.bypassed || n.dim;
         const preset = presetNames?.[id];
         return (
-          <li key={n.id} className="flex flex-col gap-1">
+          <li key={n.id} className="flex shrink-0 items-stretch gap-1">
             <div
               className={cn(
-                "flex flex-col gap-2 rounded-2xl bg-(--k7-row) p-3",
+                "flex w-64 flex-col gap-2 rounded-2xl bg-(--k7-row) p-3",
                 off && "opacity-60",
               )}
             >
@@ -120,11 +127,17 @@ export function ModuleCards({
                 </div>
               )}
             </div>
-            {i < nodes.length - 1 && plus(between[i], m["chain.addBetween"]())}
+            {i < nodes.length - 1 && (
+              <span className="flex items-center">
+                {plus(between[i], m["chain.addBetween"]())}
+              </span>
+            )}
           </li>
         );
       })}
-      <li>{plus(tail, m["chain.addModule"](), true)}</li>
+      <li className="flex shrink-0 items-stretch">
+        {plus(tail, m["chain.addModule"](), true)}
+      </li>
     </ul>
   );
 }

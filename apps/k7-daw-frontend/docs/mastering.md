@@ -1,7 +1,7 @@
 # The `mastering` surface — one node, drawn as three appliances
 
 A project that declares `surfaces/<id>.k7x` with `type("mastering")` gets a "Master" section at
-the end of the Mixer panel, holding ten sliders in three boxes: the compressor, the spreader, the limiter — the three parts of
+the right end of the Mixer, holding ten sliders in three boxes: the compressor, the spreader, the limiter — the three parts of
 one `quick-master` node, in the order the signal meets them.
 
 ```k7x
@@ -131,12 +131,12 @@ member of the enum is what stops a new type falling off the end silently.
 
 ## Where it sits
 
-The last section of the Mixer panel, under the strips: the master is the last thing the signal
+The last group of the Mixer dock, at the right of the strips: the master is the last thing the signal
 meets, so it reads last. It is a section and not a pane because the strips and the master are one
 mixing act, and a pane switch in the middle of it would hide the strips it is set against. Every
-knob on it is a param on one module in the graph, which the Chain panel shows.
+knob on it is a param on one module in the graph, which the Graph pane shows.
 
-It has no pane, no number key and no pane-ring entry: the Mixer panel's button reaches it.
+It has no pane, no number key and no pane-ring entry: the Mixer button reaches it.
 
 ## What it does NOT do
 
@@ -155,6 +155,6 @@ what the node actually does to the sound.
 
 ## The strips it sits under
 
-The Mixer panel draws its strips itself (`MixerStrips.tsx`, fed by `mixerStrips.ts`) and not through
+The Mixer draws its strips itself (`MixerStrips.tsx`, fed by `mixerStrips.ts`) and not through
 the graph canvas: a strip is a fader, a pan, a meter and M/S, and the lane header's `trackControls`
-are its one state. The graph, with the cables, stays in the Chain panel.
+are its one state. The graph, with the cables, stays on the Graph pane.
