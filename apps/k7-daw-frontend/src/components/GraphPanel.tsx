@@ -38,6 +38,7 @@ import { useLiveRackLit } from "../rackLit";
 import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import { layoutTrackPanel } from "../trackPanelLayout";
 import type { WebProject } from "../types";
+import { MixerStrips } from "./MixerStrips";
 
 export function GraphPanel({
   onPreviewNote,
@@ -256,6 +257,16 @@ export function GraphPanel({
       );
     if (!graph) return <Note>{m["common.loading"]()}</Note>;
     if (strips && !strips.length) return <Note>{m["graph.noStrip"]()}</Note>;
+    if (strips)
+      return (
+        <MixerStrips
+          strips={strips}
+          project={project}
+          trackControls={trackControls}
+          onTrackToggle={onTrackToggle}
+          onTrackSet={onTrackSet}
+        />
+      );
     if (!strips && !trackId) return <Note>{m["graph.selectTrack"]()}</Note>;
     if (!laidShown)
       return <Note>{m["graph.noChainFrom"]({ track: trackId ?? "" })}</Note>;
