@@ -60,30 +60,28 @@ export function CommitsList({
   }, [t, workspace, log]);
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto py-1 text-xs">
-      {error && <p className="px-3 py-2 text-destructive">{error}</p>}
+    <div className="min-h-0 flex-1 overflow-y-auto py-1 type-secondary">
+      {error && <p className="px-3 py-2 text-error">{error}</p>}
       {log.commits.length === 0 && !error && (
-        <p className="px-3 py-2 text-muted-foreground">
-          {m["git.commitsEmpty"]()}
-        </p>
+        <p className="px-3 py-2 text-fg-2">{m["git.commitsEmpty"]()}</p>
       )}
       <ul>
         {log.commits.map((c) => (
           <li
             key={c.id}
-            className="flex items-start gap-2 px-3 py-1 hover:bg-accent"
+            className="flex items-start gap-2 px-3 py-2 hover:bg-on-fill"
             title={c.id}
           >
-            <GitCommitHorizontal className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <GitCommitHorizontal className="mt-0.5 size-3.5 shrink-0 text-fg-2" />
             <div className="min-w-0 flex-1">
               <div className="truncate">{c.subject}</div>
-              <div className="truncate text-[10px] text-muted-foreground">
+              <div className="truncate type-badge text-fg-2">
                 {[c.author, c.device, stamp(c.time)]
                   .filter(Boolean)
                   .join(" · ")}
               </div>
             </div>
-            <span className="shrink-0 text-[10px] text-muted-foreground tabular-nums">
+            <span className="shrink-0 type-badge text-fg-2 tabular-nums">
               {(c.files_changed === 1
                 ? m["git.files.one"]
                 : m["git.files.other"])({

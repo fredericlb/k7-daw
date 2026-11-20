@@ -5,6 +5,7 @@ import {
   canFinish,
   choicesAfter,
   emptyChoices,
+  nextOpen,
   offered,
   remaining,
   resolveChoices,
@@ -92,5 +93,14 @@ describe("finishing the merge", () => {
       ["song.k7x", 2],
       ["x.txt", 1],
     ]);
+  });
+
+  it("finds the next conflict without a choice, wrapping round, then none", () => {
+    let s = loaded([c("a"), c("b"), c("d")]);
+    s = choicesAfter(s, { type: "pick", id: "b", choice: "mine" });
+    expect(nextOpen(s, "a")).toBe("d");
+    expect(nextOpen(s, "d")).toBe("a");
+    s = choicesAfter(s, { type: "pickAll", choice: "theirs" });
+    expect(nextOpen(s, "a")).toBeNull();
   });
 });

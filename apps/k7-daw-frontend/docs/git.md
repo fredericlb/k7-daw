@@ -10,10 +10,16 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 |---|---|
 | the bar branches on the route's `state` alone, through one function (`barView`) | the routes own the rules of what may go where; a screen that rebuilt them from `ahead`, `behind` and `changed` would drift |
 | Push, Pull and Commit are the person's acts: nothing is pushed, pulled or committed by itself | a take or a song is a unit of work the person names; the fetch only looks |
-| Push over a branch that is behind reads "Pull first" and is dimmed; Pull over uncommitted changes reads "Commit first" and is dimmed | the sentence says the next step, and the server's refusal (`behind`, `uncommitted`) is the same sentence if a stale bar lets a click through |
+| Commit & Push is one act, shown as a step list (Committing, Pushing, Done) inside the dialog | a commit nobody pushes is a step the person had to remember; the list says where an act stopped |
+| a push the remote refuses as `behind` is the dialog's own state, "Pull first", with the commit kept; any other failure is the failed step with Try again, which resumes at that step | the refusal is the next step, not an error, and a failed push must never commit twice |
+| with nothing to commit and commits waiting, Commit & Push only pushes; a workspace with no remote only commits | the act does what the workspace can do, so a pull that was merged can still be sent |
+| Pull over uncommitted changes reads "Commit first" and is dimmed | the sentence says the next step, and the server's refusal (`uncommitted`) is the same sentence if a stale bar lets a click through |
+| Abort asks inside the Conflict dialog, as a nested `dialog "Abort the merge?"`, not as a popin | a popin over a modal is drawn under it and cannot be clicked |
+| the remote dialog has no HTTPS / SSH choice | k7 is ssh only: a choice with a refused option would only be a trap |
+| the command editor is a full-screen editor; its Save writes the whole draft, and a key taken from another command is said under the filter row | a shortcut saved one at a time would half-apply when the person leaves |
 | a merge waiting shows only its own button: no Commit, Push or Pull | a commit during a merge would be a second history |
 | a pull that diverged opens the merge screen at once | the person was waiting for the answer to the pull |
-| one card per conflict, with the choices the route offers (`offered`): mine or theirs; both only where the route says; keep or remove for a file one side removed | "both" has a meaning only for a keyed list item, or for a binary kept beside under a free name, and the screen never offers what the merge would refuse |
+| the Conflict screen is a list of conflicts (marked "To choose" until picked) over the open conflict's cards: Mine, Theirs, Both only where the route says, keep or remove for a file one side removed; "Next conflict" walks the unchosen ones | "both" has a meaning only for a keyed list item, or for a binary kept beside under a free name, and the screen never offers what the merge would refuse |
 | "Mine for all" and "Theirs for all" skip binaries and removed files | those are the choices a person should look at |
 | the choices are sent once, on Finish merge, and Finish is allowed when every conflict has one | nothing moves in the workspace before the person is done; Abort leaves it as it was |
 | the editors are read-only while a merge waits, through the shell's write gate and `locked` | the file service answers 423 `merge-pending` to the same writes; the gate says it before the request leaves, and the engine plays on |
@@ -48,7 +54,7 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 | Clone from git | the home page's header, beside "New workspace" |
 | On your other devices | the home page, under the header, only where the host has a list (iOS) |
 | the bar | above the project bar in the editor, and above a workspace's tree on the home page |
-| Commit and the merge screen | dialogs opened from the bar |
+| Commit & Push and the Conflict screen | dialogs opened through `gitScreens.tsx` (`openCommitAndPush`, `openConflict`), by the header and the workspace card |
 | Commits | the History panel's second list, shown when the workspace is under git |
 | the commit author | settings, Devices |
 

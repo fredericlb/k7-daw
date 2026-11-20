@@ -74,8 +74,8 @@ export function MenuEntityPicker({
           type="button"
           title={m["cmdMenu.buttonHint"]()}
           className={cn(
-            "h-7 w-24 shrink-0 truncate rounded border border-border px-2 text-[11px]",
-            chosen ? "text-foreground" : "text-muted-foreground",
+            "h-9 w-24 shrink-0 cursor-pointer truncate rounded-xl border border-(--k7-hairline-strong) px-2 type-secondary",
+            chosen ? "text-foreground" : "text-fg-2",
           )}
         >
           {summary}
@@ -87,7 +87,7 @@ export function MenuEntityPicker({
         {MENU_ENTITIES.map((e) => (
           <label
             key={e}
-            className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 text-xs hover:bg-accent"
+            className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-2 type-secondary hover:bg-on-fill"
           >
             <input
               type="checkbox"
@@ -95,14 +95,14 @@ export function MenuEntityPicker({
               onChange={() => toggle(e)}
             />
             <span className="flex-1">{ENTITY_LABEL[e]()}</span>
-            <code className="text-[10px] text-muted-foreground">{e}</code>
+            <code className="type-badge text-fg-2">{e}</code>
           </label>
         ))}
         <DropdownMenuSeparator />
         <button
           type="button"
           disabled={!chosen}
-          className="w-full rounded-sm px-2 py-1 text-left text-xs text-muted-foreground hover:bg-accent disabled:opacity-40"
+          className="w-full rounded-lg px-2 py-2 text-left type-secondary text-fg-2 hover:bg-on-fill disabled:opacity-40"
           onClick={() => onMenu(c.canonical, c.menu, c.menu ?? MENU_ENTITIES)}
         >
           {m["cmdMenu.giveBack"]({
