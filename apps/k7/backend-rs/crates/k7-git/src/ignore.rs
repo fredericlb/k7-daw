@@ -42,6 +42,10 @@ pub const NAMES: &[(&str, &str)] = &[
         "a project's manual freezes (freeze.md), regenerable",
     ),
     ("stems/", "separated stems, regenerable (decision 4)"),
+    (
+        "exports/",
+        "a project's old renders and cuts, never committed",
+    ),
     ("_recycle_bin/", "the recycle bin (workspaceFilter `skip`)"),
     ("_history/", "the journal (workspaceFilter `skip`)"),
     ("node_modules/", "dependencies (workspaceFilter `skip`)"),

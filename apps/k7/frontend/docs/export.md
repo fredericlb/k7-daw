@@ -1,8 +1,7 @@
 # Export: the person chooses the folder
 
 An export (a mixdown, the tracks zip, a video, a cut for another editor) is saved where the person says,
-through the system's folder picker. The project never holds one: nothing writes `exports/`, and the git ignore
-list has no entry for it. The Export panel (`components/SharePanel.tsx`) is the surface; `hooks/useShare.ts`
+through the system's folder picker. Nothing writes the project's `exports/` any more; the git ignore list keeps it, since old projects hold films there that must never be committed. The Export panel (`components/SharePanel.tsx`) is the surface; `hooks/useShare.ts`
 is the one implementation under it and under `project export`; `src/exportHost.ts` is the seam to the host.
 
 ## The flow
