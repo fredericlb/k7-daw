@@ -27,7 +27,8 @@ folders: it is a second app on purpose, for a test of its own.
 |---|---|
 | a link stays in the window only on k7's own origin, the splash, `blob:`, `data:` and `about:`; any other `http(s)` or `mailto` link opens in the system browser, and every other scheme goes nowhere | k7.rocks, the docs and git hosts belong in the browser, and the window has no address bar to come back from |
 | a new window (`target="_blank"`: About, Notices, the docs site) is always denied, its URL opened in the system browser | WebView2 would open a raw popup, and WKWebView and WebKitGTK drop the click |
-| a download goes to the Downloads folder, never over a file ("name (2).ext"), then a dialog says where, with Show in Folder | `<a download>` on blobs and same-origin files is how k7 exports; every webview routes it to the host, which has to say where it went |
+| a download that is not an export goes to the Downloads folder, never over a file ("name (2).ext"), then a dialog says where, with Show in Folder | `<a download>` on blobs and same-origin files is how the rest of k7 saves; every webview routes it to the host, which has to say where it went. An export does not use it: the person chooses its folder (`apps/k7/frontend/docs/export.md`) |
+| the folder picker is Tauri's dialog plugin, called by the front through a trait the app installs (`src/exports.rs`), not by the page | the page has no IPC (above); the front is in this process and already holds the page's session, so a route answers where a command would |
 | the camera, the microphone and MIDI are allowed for k7's origin; the screen, the position and notifications are denied; the rest follows the platform | k7 uses the camera and Web MIDI, and records audio through the engine; macOS still asks once (`macos.md`) |
 
 ## The menu

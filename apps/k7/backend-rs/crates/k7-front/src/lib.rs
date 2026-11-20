@@ -13,6 +13,8 @@ mod listen;
 mod peer;
 mod prefs_schema;
 mod routes;
+/// The host's folder picker, installed before the front starts (`docs/export.md`).
+pub use routes::local::export;
 mod session;
 mod settings;
 mod streams;
@@ -35,7 +37,7 @@ use axum::Router;
 use axum::extract::{ConnectInfo, Request, State};
 use axum::middleware::{Next, from_fn_with_state};
 use axum::response::Response;
-use axum::routing::{MethodRouter, get, post};
+use axum::routing::{MethodRouter, get, post, put};
 use hyper::Method;
 
 /// What every handler reads: the settings and the last routes a declined request ends in.
@@ -188,6 +190,15 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
         )
         .route("/auth/me", sessioned(get(routes::auth::me)))
         .route("/api/local", get(routes::local::routes::info))
+        .route(
+            "/api/local/export/folder",
+            post(routes::local::export::folder),
+        )
+        .route("/api/local/export/file", put(routes::local::export::file))
+        .route(
+            "/api/local/export/reveal",
+            post(routes::local::export::reveal),
+        )
         .route("/api/local/engine", get(routes::local::routes::get))
         .route(
             "/api/local/engine/events",

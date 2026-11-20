@@ -3,6 +3,7 @@
 //! stopped before the front stops. Choices: `apps/k7/backend-rs/docs/local.md`.
 //! What a reader gets wrong: `/api/local` is a device's whether or not it runs the engine.
 
+pub mod export;
 pub mod internal;
 pub mod routes;
 
@@ -107,11 +108,15 @@ pub fn owns(method: &Method, path: &str) -> Option<bool> {
         "/api/local/engine/cmd" | "/api/local/engine/slots" => {
             *method == Method::POST || *method == Method::OPTIONS
         }
+        "/api/local/export/folder" | "/api/local/export/reveal" => {
+            *method == Method::POST || *method == Method::OPTIONS
+        }
+        "/api/local/export/file" => *method == Method::PUT || *method == Method::OPTIONS,
         _ => return None,
     })
 }
 
-/// Whether `path` is a device's own whatever runs its engine: the probe and the tray's status line.
+/// Whether `path` is a device's own whatever runs its engine: the probe and the export folder's routes.
 pub fn is_device_path(path: &str) -> bool {
-    path == "/api/local"
+    path == "/api/local" || path.starts_with("/api/local/export/")
 }

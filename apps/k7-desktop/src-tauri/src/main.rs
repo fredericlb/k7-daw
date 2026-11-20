@@ -8,6 +8,7 @@
 
 mod appmenu;
 mod backend;
+mod exports;
 mod handlers;
 mod http;
 mod job;
@@ -44,6 +45,7 @@ fn main() {
         .manage(backend::Process::default())
         .setup(|app| {
             let handle = app.handle().clone();
+            exports::install(&handle);
 
             // Before anything spawns: job membership is inherited, so the whole stack dies with the app.
             let job = job::init();
