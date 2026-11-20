@@ -364,7 +364,7 @@ counting in two units make every position a conversion. There is no separate clo
 ### On a phone, one menu holds everywhere there is to go
 
 `shell/OverflowMenu.tsx` (`menu "Views and panels"`): the PANE segmented control (`menuitemradio`), the
-current pane's pills (Lane views, or Graph views on the Graph; none on the editor), the PANELS tiles (`menuitem`, pressed while open) and Settings and Keyboard. A panel
+current pane's pills (Lane views, or Graph views on the Graph; none on the editor), the PANELS tiles (`menuitem`, pressed while open) and Settings; the command editor opens from the Settings panel's Commands button, not from the header. A panel
 opens as a full-screen sheet.
 
 ### The Mixer is a panel: the graph, arranged

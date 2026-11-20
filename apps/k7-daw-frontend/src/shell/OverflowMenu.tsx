@@ -3,7 +3,6 @@
 import { Button } from "@studio/ui/button";
 import {
   Ellipsis,
-  Keyboard,
   type LucideIcon,
   Settings,
 } from "@studio/ui/icons";
@@ -48,7 +47,6 @@ export function OverflowMenu({
   lanesHeading,
   panels,
   onSettings,
-  onKeyboard,
 }: {
   panes: OverflowPane[];
   pane: string;
@@ -58,7 +56,6 @@ export function OverflowMenu({
   lanesHeading: string;
   panels: OverflowPanel[];
   onSettings: () => void;
-  onKeyboard: () => void;
 }) {
   const [open, setOpen] = useState(false);
   usePopin(open, () => setOpen(false));
@@ -165,16 +162,6 @@ export function OverflowMenu({
               >
                 <Settings className="size-[18px]" />
                 {m["settings.menu"]()}
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                onClick={run(onKeyboard)}
-                aria-label={m["shell.keyboard"]()}
-                className="type-label glass flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full text-foreground"
-              >
-                <Keyboard className="size-[18px]" />
-                {m["shell.keyboard.short"]()}
               </button>
             </div>
           </div>

@@ -1559,8 +1559,6 @@
   "shell.pane": "Volet",
   "shell.panels": "Panneaux",
   "shell.app": "Application",
-  "shell.keyboard": "Clavier : éditer les commandes et raccourcis",
-  "shell.keyboard.short": "Clavier",
   "shell.overflow": "Vues et panneaux",
   "shell.overflow.pane": "Volet",
   "shell.overflow.lanes": "Vues des pistes",

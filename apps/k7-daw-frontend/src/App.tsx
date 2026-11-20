@@ -2699,7 +2699,6 @@ export default function App({
     { id: "chains", label: m["shell.pane.graph"](), icon: Workflow },
     { id: "editor", label: m["shell.pane.source"](), icon: FileCode },
   ];
-  const openKeyboard = () => setCommandsPage(true);
   const laneViewsOf = (): OverflowLaneView[] => [
     {
       id: "lanes",
@@ -2788,7 +2787,6 @@ export default function App({
           ? closeAnyPanel()
           : void runCommand("ui settings")
       }
-      onKeyboard={openKeyboard}
       lockBanner={merging ? lockedSay() : null}
       overflow={
         <OverflowMenu
@@ -2809,7 +2807,6 @@ export default function App({
           }
           panels={headerPanels}
           onSettings={() => void runCommand("ui settings")}
-          onKeyboard={openKeyboard}
         />
       }
     />

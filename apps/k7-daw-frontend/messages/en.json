@@ -1559,8 +1559,6 @@
   "shell.pane": "Pane",
   "shell.panels": "Panels",
   "shell.app": "App",
-  "shell.keyboard": "Keyboard: edit commands and shortcuts",
-  "shell.keyboard.short": "Keyboard",
   "shell.overflow": "Views and panels",
   "shell.overflow.pane": "Pane",
   "shell.overflow.lanes": "Lane views",
