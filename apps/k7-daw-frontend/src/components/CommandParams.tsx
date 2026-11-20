@@ -9,6 +9,7 @@
 import { cn } from "@studio/ui/lib/utils";
 import type { EnterAction } from "../commandFill";
 import type { ArgOption } from "../palette";
+import { m } from "../paraglide/messages.js";
 import type { ArgClass } from "../types";
 import type { PaletteArg, PaletteCommand } from "./CommandBar";
 
@@ -61,6 +62,7 @@ export function CommandParams({
         onClick={onRepick}
         className="h-5 shrink-0 font-mono text-sm leading-5 text-foreground hover:text-primary-text"
         title={`${command.readable} — click to pick another command`}
+        aria-label={m["commandBar.change"]()}
       >
         {command.canonical}
       </button>

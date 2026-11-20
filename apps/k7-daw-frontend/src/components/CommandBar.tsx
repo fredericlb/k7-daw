@@ -507,6 +507,9 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
                 key={c.canonical}
                 id={`${listId}-${i}`}
                 role="option"
+                aria-label={c.canonical}
+                aria-description={c.readable}
+                data-command={c.canonical}
                 tabIndex={-1}
                 aria-selected={i === highlighted}
                 ref={i === highlighted ? selRef : undefined}

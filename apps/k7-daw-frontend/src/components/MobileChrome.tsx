@@ -136,6 +136,8 @@ export function MobileInfo({
         onClick={() => onOpenChange(!open)}
         title={m["engineSwitch.info"]()}
         aria-label={m["engineSwitch.info"]()}
+        data-testid="engine-status"
+        data-state={status ?? "none"}
       >
         <Info className="h-4 w-4" />
         {/* Named like the desktop's light (EngineLink.tsx), so the link's state reads with the popover closed. */}

@@ -68,8 +68,11 @@ export function showToast(opts: {
 /** `dismissLabel` is the close button's accessible name, in the host app's language. */
 export function Toaster({
   dismissLabel = "Dismiss",
+  regionLabel = "Notifications",
 }: {
   dismissLabel?: string;
+  /** The landmark's accessible name that holds every toast. */
+  regionLabel?: string;
 } = {}) {
   const [items, setItems] = useState<ToastItem[]>([]);
 
@@ -113,7 +116,7 @@ export function Toaster({
   };
 
   return (
-    <>
+    <div role="region" aria-label={regionLabel} className="contents">
       {stack("top-right", "top-4")}
       {/* Above whatever bar the app keeps at the bottom (`--toast-bottom`, or `--toast-top` to move them up); on a phone, at the top. */}
       {stack(
@@ -124,7 +127,7 @@ export function Toaster({
           top: "var(--toast-top, auto)",
         },
       )}
-    </>
+    </div>
   );
 }
 

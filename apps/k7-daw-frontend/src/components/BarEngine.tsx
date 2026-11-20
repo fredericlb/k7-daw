@@ -74,6 +74,8 @@ export function BarEngine({
           className="relative shrink-0"
           title={`${label} — ${statusText}`}
           aria-label={m["engineSwitch.section"]()}
+          data-testid="engine-status"
+          data-state={status}
         >
           {icon}
           {/* The engine's state at a glance; the tooltip and the menu say it in words. */}

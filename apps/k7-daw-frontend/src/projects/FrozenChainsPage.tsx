@@ -279,7 +279,10 @@ export function FrozenChainsPage() {
   return (
     <HomeShell>
       <AskHostK7 />
-      <Toaster dismissLabel={m["common.dismiss"]()} />
+      <Toaster
+        dismissLabel={m["common.dismiss"]()}
+        regionLabel={m["toast.region"]()}
+      />
       <PageFrame
         title={m["frozen.title"]()}
         summary={m["frozen.summary"]()}

@@ -30,7 +30,10 @@ export function LibrariesPage() {
   return (
     <HomeShell>
       <AskHostK7 />
-      <Toaster dismissLabel={m["common.dismiss"]()} />
+      <Toaster
+        dismissLabel={m["common.dismiss"]()}
+        regionLabel={m["toast.region"]()}
+      />
       <PageFrame title={m["home.libraries"]()} narrow>
         {fileService === undefined ? (
           <div className="flex items-center gap-2 text-muted-foreground text-xs">

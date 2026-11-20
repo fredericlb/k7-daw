@@ -154,7 +154,10 @@ export function Home() {
           button on this page silently does nothing — see @studio/project-shell/ask. */}
       <AskHostK7 />
       {/* Where the page's passing notices are drawn. */}
-      <Toaster dismissLabel={m["common.dismiss"]()} />
+      <Toaster
+        dismissLabel={m["common.dismiss"]()}
+        regionLabel={m["toast.region"]()}
+      />
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
         {error && (

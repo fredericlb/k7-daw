@@ -123,7 +123,12 @@ export function TransportClock({
   const bar = Math.floor(beat / bpb) + 1;
   const beatInBar = Math.floor(beat % bpb) + 1;
   return (
-    <span className="mx-1 whitespace-nowrap font-mono text-xs text-muted-foreground tabular-nums">
+    <span
+      role="timer"
+      aria-label={m["transport.position"]()}
+      data-testid="timecode"
+      className="mx-1 whitespace-nowrap font-mono text-xs text-muted-foreground tabular-nums"
+    >
       {/* Under 380 px the bar keeps the musician's position and drops the seconds, or the clock runs under the menu. */}
       <span className="max-[380px]:hidden">
         {clock}

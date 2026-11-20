@@ -153,6 +153,7 @@ export function MiniPlayer({
   if (dock.docked && (dock.hidden || !dock.target)) return null;
   const bar = (
     <section
+      role="group"
       aria-label={labels.region}
       className={`relative flex h-10 shrink-0 items-center gap-1.5 bg-card px-3 py-1 sm:gap-3 [@media(hover:none)]:h-[60px]${onClose ? ` [@media(hover:none)]:pr-12${trail || endShown ? " pr-9" : ""}` : ""}`}
     >

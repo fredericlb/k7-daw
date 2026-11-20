@@ -367,7 +367,10 @@ export function ShellOverlays({
       </Dialog>
 
       {/* Global toast notifications — positioned bottom-right, above everything */}
-      <Toaster dismissLabel={m["common.dismiss"]()} />
+      <Toaster
+        dismissLabel={m["common.dismiss"]()}
+        regionLabel={m["toast.region"]()}
+      />
       {/* A LAN device asking to pair, answered here when this page runs on the engine's machine — docs/pairing.md. */}
       <PairRequestsPrompt engine={engineRef.current} connected={connected} />
       {/* A sample, clip, patch or plugin the engine is playing the project without (engineMissing.ts). */}
