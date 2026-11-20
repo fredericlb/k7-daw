@@ -66,7 +66,7 @@ export function toggleSlice(
     setSettingsTab: setterOf(set, "settingsTab"),
     showHelp: init.showHelp,
     setShowHelp: setterOf(set, "showHelp"),
-    showDocs: false,
+    showDocs: true,
     setShowDocs: setterOf(set, "showDocs"),
     docCount: 0,
     setDocCount: setterOf(set, "docCount"),

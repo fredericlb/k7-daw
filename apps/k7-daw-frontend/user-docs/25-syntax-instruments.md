@@ -41,9 +41,8 @@ modules:
   ampli: [ reverb, notes-amp ]
 ```
 
-Notes are **hidden by default** and shown by the note button in the footer, beside the mixer —
-they sit in the signal path, so drawing them always would put prose in the middle of the thing
-you are trying to read.
+Notes are **shown by default**. They sit in the signal path, so when the prose gets in the way of
+reading the graph, the command `ui notes` hides them, and runs again to show them.
 
 > There is no `docs:` and no `todos:` field on a module or a track, and no Docs panel to read
 > one: a file carrying either does not open. Move the prose into a `#` comment, or into a note

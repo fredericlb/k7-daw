@@ -46,14 +46,14 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
   },
   "doc-note.k7": {
     check: async (page) => {
-      // Notes are hidden until `ui notes`; its card, named for the note, is drawn on the Graph.
+      // Notes show by default, a card named for the note; `ui notes` hides them.
       await (await pane(page, "Graph")).click();
+      const note = page
+        .getByRole("region", { name: "Graph", exact: true })
+        .getByText("about-drums", { exact: true });
+      await expect(note).toBeVisible();
       await runCommand(page, "ui notes");
-      await expect(
-        page
-          .getByRole("region", { name: "Graph", exact: true })
-          .getByText("about-drums", { exact: true }),
-      ).toBeVisible();
+      await expect(note).toBeHidden();
     },
   },
   "mute-solo.k7": {
