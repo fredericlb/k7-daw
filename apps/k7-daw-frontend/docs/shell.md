@@ -33,12 +33,12 @@ pressed in that window reached the engine ahead of the project, and the build dr
 poll answer is applied, not only a changed one: the answer to the request an engine's arrival
 makes can land after a newer one, and a poll that skipped "unchanged" would leave it standing.
 
-**The plugin scan is one more step of that bar, and only for some projects.** A project whose
+**The plugin scan is one more step toasted by the shell, at the top and centred, and only for some projects.** A project whose
 modules name an external plugin is held at the file service while the engine scans
-(`engineLoad: "scanning"`, `apps/k7-daw-backend/docs/file-engine.md`), and the bar reads "Scanning
+(`engineLoad: "scanning"`, `apps/k7-daw-backend/docs/file-engine.md`), and the toast reads "Scanning
 plugins… N / M" from the poll's `engineScan`. The project is drawn meanwhile, as for every other
 wait; a plugin the stale scan does not know yet shows missing on its node until the scan ends and
-the revision moves. A scan the service gave up on is said once, in the status line, as an error:
+the revision moves. A scan the service gave up on is said once, as an error:
 the plugins it had not reached stay drawn missing, which is otherwise indistinguishable from a
 plugin that is not installed.
 
@@ -281,8 +281,8 @@ history. The warning chip counts the project's problems and opens Logs on "probl
 (`logsFilter` in the shell store).
 
 **The pane switcher is Arrangement, Graph, Source** (Turntables beside Arrangement on a project that
-declares a desk). The Mastering pane is not in it: mastering is a section of the Mixer, and the pane stays
-reachable by `ui mastering` and its URL until that section exists.
+declares a desk). Mastering is not a pane: it is a section of the Mixer panel, and `ui mastering`
+opens that panel.
 
 **Command feedback is a toast** ("copied 1 event(s)"): what a command said is shown once, where the
 person looks. The line under the project's name (`StatusText`, `project-status-line`) carries only what
@@ -609,9 +609,8 @@ anything:
   timeline, else the first pane declared), resolved against the layout before anything reads it.
   There is no split: two panes sharing the window each got too little of it to work in, and a second
   view under the page is the panel's job
-- `focus` — which pane gets the keys, which is the page on screen; F6 walks the pages of the ring
-  and Shift+F6 walks it back (`ringPanes`, which is `viewPanes(...).ring`, so the editor is not on
-  it, and F6 from the editor lands on the ring's first page)
+- `focus` — which pane gets the keys, which is the page on screen; `ui focus next` and `prev` walk the
+  ring (`viewPanes(...).ring`, which the editor is not on)
 - `panel` — the panel, independent of both
 
 There is no fourth piece: which pages exist is not state. It is a function of what the project
@@ -626,14 +625,10 @@ let `full` decide whether it is `hidden`.
 ### Escape backs out ONE layer, outermost first
 
 `esc` in `src/keys.ts` is an ordered list and the first match wins, which is what makes the key mean
-"back out of the thing in front of me" rather than one fixed action:
-
-| if there is… | Escape does | command |
-|---|---|---|
-| an overlay in front | closes the topmost one | `ui popin close` |
-| …else an open event | lets it go and closes its panel | `ui slot close` |
-| …else a page other than home | returns to the home page | `ui global` |
-| …else | closes the panel | `ui close` |
+"back out of the thing in front of me" rather than one fixed action. From the outside in: a pending
+MIDI learn, an overlay (the topmost one), the open Events item, a held tool, a page other than home,
+and last the open panel. The ladder is the one place that decides what Escape means; a surface that
+needs Escape for itself says so by being an overlay, not by listening on its own.
 
 The ladder only works if each rung is **exclusive**, and that is the whole reason
 [`src/popins.ts`](../src/popins.ts) exists. Several overlays answer Escape themselves with a plain
@@ -649,6 +644,8 @@ its `popin` condition. Two things fall out of it, both deliberate:
   keeps doing so; the registration exists to make the shell's binding resolve to `ui popin close` and
   stop there. `closeTopPopin` never pops the entry itself — the owner deregisters through its effect's
   cleanup, so a closer that is refused leaves the stack as it found it.
+- **A kit sheet answers for itself.** The phone sheet in the UI kit cannot import the app's registry,
+  so it closes on Escape and stops the key there; the overflow menu registers as an overlay.
 - **A stack, not a count.** "The current popin" is the last one opened, so a menu opened over a dialog
   is what Escape reaches first.
 
@@ -1007,7 +1004,7 @@ the builder's overlay holds no engine link at all, so a transport over it would 
 The floating bar sits outside the popin's backdrop, so scrubbing it is not the click-outside that
 dismisses the popin.
 
-## What a click in the timeline does to the event panel
+## What a click in the timeline does to the Events panel
 
 Two gestures move the slot. **A clip's click** selects it and nothing more: the caret parks on it,
 which is what fills the command conditions (`hover_midi_sequence`). **Its double-click** opens its
@@ -1015,7 +1012,7 @@ content in the Events panel, under the timeline still on screen, and lights that
 single click does not open the panel because the panel takes half the window and folds the lanes:
 selecting a clip to move or edit it must not change the layout under the pointer. **The bare lane**
 moves the caret to where you clicked and lets the event go — a click on nothing clears what was open.
-The panel stays up and says nothing is open, since it was asked for; Escape and its header button close it.
+The panel stays up and says nothing is open, since it was asked for; Escape and its close button close it.
 
 The caret mark is `pointer-events-none`, so a press landing on it reads as a press on the bare lane;
 clips stop propagation, so they never reach the lane's handler at all.
@@ -1095,7 +1092,7 @@ find the sound behind the symbol, which is `ChainsTab`'s `triggerRack` and has n
 
 `GraphSlotPane` is the shell and the title bar. The occupants supply a body and what to call it, and
 nothing else about the chrome — written per occupant they drift, into title bars at three type scales.
-**Every panel has a Close in its frame's heading** — a panel has only half the
+**Every Events panel view has a Close in its frame's heading** — a panel has only half the
 window, so the ✕ is never a row of its own. A view with a toolbar column (`ModeStrip`: the clip editors,
 a lane's modules) draws it as the column's FIRST item; a view with a header row (the graph and mix
 panels, the logs, the slot's `bar`, a rolling MIDI take) draws it
@@ -1114,10 +1111,10 @@ to wear the frame, because the occupants genuinely differ:
   the row gets the height back. When there is no row to draw — loading, an error, a lane that reaches
   no module — the pane says so in its body, where the row would be.
 
-The **mix panel** is not an occupant. It is a panel of its own beside `event`, and opening it leaves the
+The **Mixer panel** is not an occupant. It is a panel of its own beside Events, and opening it leaves the
 slot alone.
 
-**Filling the slot opens the `event` panel.** A lane's modules, a clip's waveform or piano roll, a
+**Filling the slot opens the Events panel.** A lane's modules, a clip's waveform or piano roll, a
 grid, a take review — each is asked for, and a request the user cannot see is a miss, so every road
 into the slot (`onOpenClip`, `sequence edit`, `ui review`, a lane header's double-click, a take
 starting to roll) goes through `openEvent`, which also sets `panel` to `event`. The page is left as it
@@ -1266,8 +1263,8 @@ the write is the whole file.
 
 The engine raises warnings in its own prose — a duplicated clip id it renamed, a file outside the
 folders it may read, a plugin it could not create. They are said in a **warning toast**, worded for
-a person, and never in the status line: the line carries the caret readout and what a command just
-did, and a warning there would replace it for the whole session, alarming and unactionable.
+a person, and never in the status line: that line is for what a pane reports while it is used, and a
+warning there would replace it for the whole session, alarming and unactionable.
 The engine's own text goes to the Logs panel, which is where a bug report reads it.
 
 - **The kinds are recognised by text.** The engine sends no code with a warning, so
@@ -1297,9 +1294,10 @@ re-renders everything that component draws. `s.playhead` read in the body of `Mi
 screen too**, because every pane here is mounted exactly once and merely `hidden`. Each has a playhead
 leaf instead, the shape `TimelineTab` uses ([`timeline.md`](timeline.md)).
 
-**The status line is live state too.** A timeline drag re-states it on every snapped cell, so it is
-not `App` state: it is the small store in `src/statusLine.ts`, written through `setStatus` and read by
-one leaf, `components/StatusText.tsx`. A menu hint borrows the same line through the same store. What
+**The status line is live state too.** It carries only what a pane says while it is used, such as a
+drag's snapped cell, restated on every cell, so it is not `App` state: it is the small store in
+`src/statusLine.ts`, read by one leaf, `components/StatusText.tsx`. What a command did is a toast, not
+this line. What
 the panes REPORT to `App` — the caret, the timeline's view, what the editor has open — goes through a
 setter that keeps the current object when the new one says the same thing (`src/shellEquality.ts`), and
 the editor reports an open sequence by PATH, never its text, so a keystroke is not a new shell state.
@@ -1729,10 +1727,8 @@ them), the footer's panel tabs and the settings in document order, which is what
 would forbid. The one component that keeps Tab is a field of the command bar, a form whose fields it
 steps through ([commandBar.md](commandBar.md)).
 
-**The pages are walked by F6**, Shift+F6 backwards: it is the platforms' "next pane" key, and Ctrl+Tab
-is not on offer, being the browser's own tab switch. F6 passes a focused control and a text field
-alike, being the way out of both, and it types nothing. The timeline is no tab stop: its caret is the
-shell's own keys, which answer wherever focus is, as the rule for drag surfaces below says.
+The timeline is no tab stop: its caret is the shell's own keys, which answer wherever focus is, as the
+rule for drag surfaces below says.
 
 `index.css` gives every button, link, `role="button"`/`option` and `tabindex` element one focus ring
 under `:focus-visible`, at zero specificity (`:where`) so a component's own ring still wins. A field
