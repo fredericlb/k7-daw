@@ -11,6 +11,8 @@ import { MergeDialog } from "./MergeDialog";
 type Screen = {
   kind: "commit" | "conflict" | "connect";
   workspace: string;
+  /** Connect only: the workspace already has a remote, which this one replaces. */
+  changing?: boolean;
 } | null;
 
 let current: Screen = null;
@@ -29,9 +31,11 @@ export const openCommitAndPush = (workspace: string): void =>
 export const openConflict = (workspace: string): void =>
   show({ kind: "conflict", workspace });
 
-/** Open the Connect-to-git dialog of `workspace`. */
-export const openConnect = (workspace: string): void =>
-  show({ kind: "connect", workspace });
+/** Open the Connect-to-git dialog of `workspace`; `changing` when it replaces a remote. */
+export const openConnect = (
+  workspace: string,
+  opts: { changing?: boolean } = {},
+): void => show({ kind: "connect", workspace, changing: opts.changing });
 
 const subscribe = (fn: () => void) => {
   listeners.add(fn);
@@ -48,7 +52,7 @@ export function GitScreensHost({
 }) {
   const screen = useSyncExternalStore(subscribe, () => current);
   if (!screen) return null;
-  const { kind, workspace } = screen;
+  const { kind, workspace, changing } = screen;
   const close = () => show(null);
   const moved = () => announceGitMoved(workspace);
   return (
@@ -75,6 +79,7 @@ export function GitScreensHost({
         <ConnectWorkspace
           workspace={workspace}
           open
+          changing={changing}
           onClose={close}
           onConnected={moved}
         />
