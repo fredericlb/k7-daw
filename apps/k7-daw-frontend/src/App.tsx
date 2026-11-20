@@ -2700,7 +2700,7 @@ export default function App({
     !masteringSurface &&
     !(dock.open && dock.occupant === "mixer");
   const pressPanel = (id: PanelId) => {
-    // The Events and Mixer buttons are the dock's: each switches it, or closes it when its occupant is up; a right panel stays.
+    // The Mixer button is the dock's: it switches it, or closes it when the Mixer is up; a right panel stays.
     if (id === "events" || id === "mixer")
       return void runCommand(PANEL_LINE[id] ?? "");
     if (pressedButton === id) return closeAnyPanel();
@@ -2710,8 +2710,8 @@ export default function App({
   const headerPanels: HeaderPanel[] = TOOLBAR_PANELS.map((id) => ({
     id,
     pressed:
-      id === "events" || id === "mixer"
-        ? dock.open && dock.occupant === id
+      id === "mixer"
+        ? dock.open && dock.occupant === "mixer"
         : pressedButton === id,
     disabled: (id === "mixer" && mixerDead) || (id === "export" && share.busy),
     title: id === "mixer" && mixerDead ? m["footer.mixNone"]() : undefined,
