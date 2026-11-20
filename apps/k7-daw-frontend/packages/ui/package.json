@@ -21,7 +21,6 @@
     "./switch": "./src/switch.tsx",
     "./table": "./src/table.tsx",
     "./tabs": "./src/tabs.tsx",
-    "./user-menu": "./src/user-menu.tsx",
     "./dialog": "./src/dialog.tsx",
     "./dev-perf": "./src/dev-perf.ts",
     "./dropdown-menu": "./src/dropdown-menu.tsx",

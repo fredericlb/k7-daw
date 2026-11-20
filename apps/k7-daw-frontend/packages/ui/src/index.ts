@@ -44,4 +44,3 @@ export * from "./tabs";
 export * from "./textarea";
 export * from "./timeline";
 export * from "./track-toggle";
-export * from "./user-menu";
