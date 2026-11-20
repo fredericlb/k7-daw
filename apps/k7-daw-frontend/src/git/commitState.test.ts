@@ -4,6 +4,7 @@ import {
   formatSize,
   identityReady,
   identityToSave,
+  stepRows,
 } from "./commitState";
 import type { StatusEntry } from "./gitTypes";
 
@@ -69,5 +70,53 @@ describe("the identity of a commit", () => {
       email: "ana@x.org",
     });
     expect(identityToSave(null, acct)).toEqual(acct);
+  });
+});
+
+describe("the step list of Commit & Push", () => {
+  const both = { commit: true, push: true };
+  const states = (rows: ReturnType<typeof stepRows>) =>
+    rows.map((r) => r.state);
+
+  it("runs commit, push, done in order", () => {
+    expect(states(stepRows({ kind: "running", step: "commit" }, both))).toEqual(
+      ["active", "pending", "pending"],
+    );
+    expect(states(stepRows({ kind: "running", step: "push" }, both))).toEqual([
+      "done",
+      "active",
+      "pending",
+    ]);
+    expect(states(stepRows({ kind: "done" }, both))).toEqual([
+      "done",
+      "done",
+      "done",
+    ]);
+  });
+
+  it("marks the push as a warning when the remote is ahead", () => {
+    expect(states(stepRows({ kind: "pullFirst" }, both))).toEqual([
+      "done",
+      "warn",
+      "pending",
+    ]);
+  });
+
+  it("keeps the sentence of a failed step", () => {
+    const rows = stepRows({ kind: "failed", step: "push", error: "no" }, both);
+    expect(rows[1]).toEqual({ id: "push", state: "error", detail: "no" });
+  });
+
+  it("drops the commit row for a push alone and the push row without a remote", () => {
+    expect(
+      stepRows({ kind: "ready" }, { commit: false, push: true }).map(
+        (r) => r.id,
+      ),
+    ).toEqual(["push", "done"]);
+    expect(
+      stepRows({ kind: "ready" }, { commit: true, push: false }).map(
+        (r) => r.id,
+      ),
+    ).toEqual(["commit", "done"]);
   });
 });

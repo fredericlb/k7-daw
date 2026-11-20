@@ -22,7 +22,7 @@ import {
   SquareTerminal,
   VolumeX,
 } from "@studio/ui/icons";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps, ReactNode, Ref } from "react";
 import { MetronomeButton } from "../components/MetronomeButton";
 import { Minimap } from "../components/Minimap";
 import type { RecInfo } from "../hooks/useProjectDoc";
@@ -83,7 +83,10 @@ export function FloatingBar({
   lanes,
   hidden,
   runCommand,
+  rootRef,
 }: {
+  /** The bar's root, so the editor popin can measure how tall it is. */
+  rootRef?: Ref<HTMLDivElement>;
   layout: ShellLayout;
   onCommandBar: () => void;
   /** The current tool, or null on a project with no arrangement to press on. */
@@ -229,6 +232,7 @@ export function FloatingBar({
 
   return (
     <div
+      ref={rootRef}
       className={`pointer-events-none absolute inset-x-4 z-(--k7-z-bar) flex items-end gap-3 ${phone ? "bottom-7" : "bottom-4"}`}
     >
       {!phone && commandButton}

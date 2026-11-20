@@ -95,7 +95,10 @@ export function Sheet({
       aria-modal="true"
       aria-label={head.title}
       onKeyDown={(e) => {
-        if (e.key === "Escape") head.onClose();
+        if (e.key !== "Escape") return;
+        // The sheet owns this Escape: the shell's ladder must not run as well.
+        e.stopPropagation();
+        head.onClose();
       }}
       className={cn(
         "panel-sheet absolute inset-x-0 bottom-0 top-(--k7-sheet-top) z-(--k7-z-panel) flex flex-col gap-2.5 rounded-t-(--k7-r-sheet) px-4 pt-1.5 pb-[34px] animate-[k7-sheet-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",

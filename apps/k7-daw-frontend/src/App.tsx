@@ -87,7 +87,6 @@ import { FloatingWindow } from "./components/FloatingWindow";
 import { GraphPanel } from "./components/GraphPanel";
 import { HistoryPanel } from "./components/HistoryPanel";
 import { LogsPanel } from "./components/LogsPanel";
-import { MasteringTab } from "./components/MasteringTab";
 import { MasterMeter, type MasterMeterHandle } from "./components/MasterMeter";
 import { MidiTakeRoll } from "./components/MidiTakeRoll";
 import type { MinimapItem } from "./components/Minimap";
@@ -352,11 +351,7 @@ export default function App({
     setStackView,
     setShowDocs,
     setLogsFilter,
-    setTool,
-    setLanesExpanded,
     setPictureShown,
-    setRulerSeconds,
-    setAutomationShown,
   } = shell.getState();
   const showHelp = useStore(shell, (s) => s.showHelp);
   const rightPanel = useStore(shell, (s) => s.rightPanel);
@@ -582,11 +577,6 @@ export default function App({
     (next: typeof tlView) => setTlView(keepIfEqual(next)),
     [],
   );
-  // The bar's tool and its Lane views follow what the timeline reports, until the timeline reads the store itself.
-  useEffect(() => {
-    setTool(tlView.tool);
-    setLanesExpanded(tlView.expanded);
-  }, [tlView.tool, tlView.expanded, setTool, setLanesExpanded]);
   /** The reference track the bar has loaded, or null for no bar — it outlives every tab, being nothing this project owns (docs/references.md). */
   const [reference, setReference] = useState<ReferenceTrack | null>(null);
   // Whether that track is sounding, and the bar's play/pause — for the panel row that stands for it.
@@ -874,16 +864,6 @@ export default function App({
   );
   const hasTurntables = !!turntablesSurface;
 
-  /** …and its MASTER STRIP, if it declares one — beside the graph, since every knob on it is a param on ONE module there (docs/mastering.md). */
-  const masteringSurface = useMemo(
-    () =>
-      surfaces.find(
-        (s) => s.surface.type === "mastering" && s.surface.layout === "split",
-      ) ?? null,
-    [surfaces],
-  );
-  const hasMastering = !!masteringSurface;
-
   const turntableDeck = useTurntableDeck({
     store,
     engineRef,
@@ -916,7 +896,6 @@ export default function App({
     {
       timeline: hasTimeline,
       turntables: hasTurntables,
-      mastering: hasMastering,
     },
   );
   const openHelp = useCallback(() => setShowHelp(true), [setShowHelp]);
@@ -957,9 +936,8 @@ export default function App({
       viewPanes({
         timeline: hasTimeline,
         turntables: hasTurntables,
-        mastering: hasMastering,
       }),
-    [hasTimeline, hasTurntables, hasMastering],
+    [hasTimeline, hasTurntables],
   );
   const ringPanes = layout.ring;
   /** The page a project opens on: its arrangement when it declares one, else the first pane it does (docs/shell.md). */
@@ -1635,10 +1613,6 @@ export default function App({
     setCommandsPage,
     toggleMixer,
     toggleStack,
-    mirrorLane: (view) =>
-      view === "ruler"
-        ? setRulerSeconds((v) => !v)
-        : setAutomationShown((v) => !v),
     toggleDocs,
     clearLogs,
     setTrackCurves,
@@ -2766,6 +2740,7 @@ export default function App({
       recInfo={recInfo}
       meter={masterMeter}
       hidden={false}
+      rootRef={stripRef}
       transport={
         showTransport
           ? {
@@ -3149,7 +3124,9 @@ export default function App({
               <DemoBanner project={ws.activeProject} />
             )}
             {/* The panes, with room kept for the floating bar; panels float over them and push nothing. */}
-            <div className="z-(--k7-z-pane) flex min-h-0 flex-1 flex-col pb-[88px]">
+            <div
+              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col pb-[88px]`}
+            >
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
                 {editorPopin && (

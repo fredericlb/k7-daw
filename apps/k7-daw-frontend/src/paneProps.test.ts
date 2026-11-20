@@ -14,7 +14,6 @@ const PANES = [
   "ChainsTab",
   "EditorTab",
   "SurfaceTab",
-  "MasteringTab",
   "ViewportTab",
 ];
 

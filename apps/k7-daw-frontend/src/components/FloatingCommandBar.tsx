@@ -39,18 +39,18 @@ export const FloatingCommandBar = forwardRef<
 ) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-(--k7-z-palette)">
+    <div className="pointer-events-none fixed inset-0 z-(--k7-z-palette)">
       <button
         type="button"
         tabIndex={-1}
         aria-label={m["common.close"]()}
         onClick={onDismiss}
-        className={`scrim absolute inset-0 cursor-default ${pending ? "pointer-events-none" : ""}`}
+        className={`scrim absolute inset-0 cursor-default ${pending ? "pointer-events-none" : "pointer-events-auto"}`}
       />
       <div
         role="dialog"
         aria-label={m["shell.commandBar"]()}
-        className="panel-dialog absolute top-[calc(var(--k7-header-h)+8px)] left-1/2 flex w-[min(560px,calc(100%-16px))] -translate-x-1/2 flex-col rounded-[22px] px-3.5 py-1.5 max-[820px]:top-[62px]"
+        className="panel-dialog pointer-events-auto absolute top-[calc(var(--k7-header-h)+8px)] left-1/2 flex w-[min(560px,calc(100%-16px))] -translate-x-1/2 flex-col rounded-[22px] px-3.5 py-1.5 max-[820px]:top-[62px]"
       >
         <CommandBar
           ref={ref}
