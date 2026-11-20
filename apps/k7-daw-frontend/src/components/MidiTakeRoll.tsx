@@ -107,8 +107,9 @@ export function MidiTakeRoll({
     barLines.push(b);
 
   return (
-    <section className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-card/40 px-3 py-2">
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+    <section className="flex min-h-full w-full min-w-0 flex-1 flex-col gap-2.5 px-1 @2xl:h-full @2xl:flex-row @2xl:gap-4">
+      {/* The left column: the recording card, 360 px beside the roll (docs/clipEditors.md). */}
+      <div className="flex min-w-0 shrink-0 flex-wrap items-center gap-x-3 gap-y-1 self-start text-muted-foreground text-xs @2xl:w-[360px]">
         <PanelCloseButton />
         {count.phase === "count-in" ? (
           <>
@@ -144,7 +145,7 @@ export function MidiTakeRoll({
           <Square className="mr-1 h-3 w-3" /> Stop
         </Button>
       </div>
-      <div className="relative flex min-h-0 flex-1 overflow-hidden rounded border border-border bg-background">
+      <div className="relative flex h-72 min-w-0 shrink-0 overflow-hidden rounded border border-border bg-background @2xl:h-auto @2xl:min-h-0 @2xl:flex-1">
         {/* The keys: a C is named, a black key shaded, so a pitch reads without counting rows. */}
         <div className="relative h-full shrink-0" style={{ width: KEYS_W }}>
           {Array.from({ length: rows }, (_, i) => {
