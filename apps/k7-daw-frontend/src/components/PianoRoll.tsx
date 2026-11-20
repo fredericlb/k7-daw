@@ -7,7 +7,7 @@
 // The gestures themselves are ../hooks/useRollGestures.ts; this file is the layout and the drawing.
 // Drawn by the Editor bottom panel and, when a clip is clicked, where the graph is (ClipView).
 
-import { DockHeaderRow } from "@studio/ui/editor-dock";
+import { DockHeaderRow, useInSheet } from "@studio/ui/editor-dock";
 import { cn } from "@studio/ui/lib/utils";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
@@ -54,6 +54,8 @@ import {
   type RollNote,
   settledNotes,
 } from "../rollPending";
+import { useShell } from "../state/shellStore";
+import { barBeat } from "../takeCounter";
 import type { WebClip, WebProject } from "../types";
 import { KEYS, KeyGutter, N_NOTES } from "./KeyGutter";
 import { LoopBrace, LoopToggle } from "./LoopBrace";
@@ -187,6 +189,8 @@ export function PianoRoll({
     takes?.ev.comp.length ? "takes" : "select",
   );
   const showTakes = mode === "takes" && !!takes;
+  const inSheet = useInSheet();
+  const rulerSeconds = useShell((st) => st.rulerSeconds);
   // `select` keeps the system's arrow: framing is what an arrow already means, and a picture of one is worse than one.
   const rollCursor =
     mode === "select" || mode === "takes" ? undefined : cursorOf(mode);
@@ -291,7 +295,7 @@ export function PianoRoll({
 
   // A PLACED clip stacks the ARRANGEMENT's ruler over its own; a sequence FILE has no placement and nothing global to point at.
   const placed = clip.length > 0;
-  const rulersH = RULER_H * (placed ? 2 : 1);
+  const rulersH = RULER_H;
 
   const availW = Math.max(0, pane.w - gutter);
   const availH = Math.max(0, pane.h - rulersH);
@@ -324,6 +328,12 @@ export function PianoRoll({
 
   /** The file's own ruler and the grid under it, on the SHARED ladder, in ABSOLUTE beats — the file's numbering, `origin` included. */
   const gridEnd = origin + canvasBeats;
+  // The ruler's left edge in beats: the song's position when placed, else the file's own.
+  const rulerStart = placed ? clip.start + origin - (loop?.from ?? 0) : origin;
+  const barBeatAt = (b: number) => {
+    const t = barBeat(b, barBeats);
+    return `${t.bar}.${t.beat}`;
+  };
   const bps = Math.max(1e-6, project.tempo / 60);
   const {
     unit: gridUnit,
@@ -603,7 +613,12 @@ export function PianoRoll({
     // min-w-0, as in the timeline: the fixed-width grid must not become this flex child's minimum.
     <div className="flex h-full min-h-0 min-w-0 flex-col border-t-2 border-border">
       <DockHeaderRow>
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+        <div
+          className={cn(
+            "flex min-w-0 flex-1 gap-x-2 gap-y-0.5 text-xs",
+            inSheet ? "flex-col" : "flex-wrap items-center",
+          )}
+        >
           {/* The name a musician knows the clip by; its id stays the tooltip's (clipNames.ts). */}
           <span
             className="min-w-0 truncate font-semibold text-primary-text"
@@ -638,8 +653,17 @@ export function PianoRoll({
               </span>
             )}
           </span>
-          {/* The right end of the bar, whatever it holds: the ✕ then needs no margin rule of its own. */}
-          <span className="ml-auto flex items-center gap-1">
+        </div>
+      </DockHeaderRow>
+      {/* Pad and Desk draw the tools in the dock's header; the phone sheet keeps them as the body's first row. */}
+      <DockHeaderRow bodyOnPhone>
+        <div
+          className={cn(
+            "flex shrink-0 items-center gap-1 text-xs",
+            inSheet ? "px-3 py-1" : "ml-auto",
+          )}
+        >
+          <span className="flex items-center gap-1">
             {onModeChange && (
               <RollToolMenu
                 modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
@@ -661,6 +685,12 @@ export function PianoRoll({
       {onModeChange && (
         <p className="shrink-0 px-3 py-1 text-xs text-muted-foreground">
           {m[`roll.toolHint.${mode}`]()}
+        </p>
+      )}
+      {!showTakes && (
+        <p className="shrink-0 px-3 pb-1 font-bold text-[11px] text-muted-foreground tracking-wider tabular-nums">
+          {m["clip.zoom"]().toUpperCase()} {barBeatAt(rulerStart)} –{" "}
+          {barBeatAt(rulerStart + canvasBeats)}
         </p>
       )}
       <div className="flex min-h-0 flex-1">
@@ -691,32 +721,8 @@ export function PianoRoll({
             className="relative font-mono"
             style={{ width: gutter + laneW, height: rulersH + gridH }}
           >
-            {/* The rulers, stacked and sticky as one: the SONG's positions on top, the file's own bars and beats below. */}
+            {/* ONE ruler, sticky: the song's positions when the clip is placed, else the file's own bars. */}
             <div className="sticky top-0 z-20 bg-background text-[10px] text-muted-foreground">
-              {placed && (
-                <div className="flex" style={{ height: RULER_H }}>
-                  <div
-                    className="sticky left-0 z-10 shrink-0 border-b border-r border-border bg-background"
-                    style={{ width: gutter }}
-                  />
-                  <div
-                    className="relative border-b border-border/50"
-                    style={{ width: laneW }}
-                  >
-                    <ArrangementRuler
-                      // The canvas starts at the FILE's beat `origin`, and the window's start is where the clip begins in the song.
-                      startBeat={clip.start + origin - (loop?.from ?? 0)}
-                      beats={canvasBeats}
-                      ppb={ppb}
-                      barBeats={barBeats}
-                      tempo={project.tempo}
-                      height={RULER_H}
-                      onSeek={onSeek}
-                    />
-                  </div>
-                </div>
-              )}
-              {/* bars + beats ruler — the FILE's own numbering, window origin included, on the ladder every ruler here draws. */}
               <div className="flex" style={{ height: RULER_H }}>
                 <div
                   className="sticky left-0 z-10 shrink-0 border-b border-r border-border bg-background"
@@ -726,6 +732,32 @@ export function PianoRoll({
                   className="relative overflow-hidden border-b border-border"
                   style={{ width: laneW }}
                 >
+                  {placed ? (
+                    <ArrangementRuler
+                      // The canvas starts at the FILE's beat `origin`, and the window's start is where the clip begins in the song.
+                      startBeat={rulerStart}
+                      beats={canvasBeats}
+                      ppb={ppb}
+                      barBeats={barBeats}
+                      tempo={project.tempo}
+                      height={RULER_H}
+                      mode={rulerSeconds ? "seconds" : "bars"}
+                      onSeek={onSeek}
+                    />
+                  ) : (
+                    <RulerTicks
+                      mode="bars"
+                      beatLo={origin}
+                      lastBeat={gridEnd}
+                      unit={gridUnit}
+                      barBeats={barBeats}
+                      bps={bps}
+                      secStep={gridSecStep}
+                      scroller={bodyRef}
+                      ppb={ppb}
+                      barStride={gridStride}
+                    />
+                  )}
                   {/* The event's loop, on the axis its points are written in: the notes' own beats. */}
                   {looped && loop && onLoopPoints && (
                     <LoopBrace
@@ -739,18 +771,6 @@ export function PianoRoll({
                       onCommit={onLoopPoints}
                     />
                   )}
-                  <RulerTicks
-                    mode="bars"
-                    beatLo={origin}
-                    lastBeat={gridEnd}
-                    unit={gridUnit}
-                    barBeats={barBeats}
-                    bps={bps}
-                    secStep={gridSecStep}
-                    scroller={bodyRef}
-                    ppb={ppb}
-                    barStride={gridStride}
-                  />
                 </div>
               </div>
             </div>

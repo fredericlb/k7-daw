@@ -1,6 +1,6 @@
 // FloatingBar.tsx — the bar floating over the panes: the command bar button, the tool, the transport capsule
 // (buttons, clock, song overview, tempo, metronome, master volume) and, at its right end, the current pane's views. On a phone the clock,
-// overview, tempo and volume move to a strip above the capsule. It holds no state of its own: App hands it all.
+// overview, tempo and volume move to a strip above the capsule, and the tool and metronome to the overflow menu. It holds no state of its own: App hands it all.
 import { CapsuleButton, CapsuleDivider } from "@studio/ui/capsule";
 import {
   DropdownMenu,
@@ -37,7 +37,7 @@ import { OutputRecordButton } from "./OutputRecordButton";
 import { ShellTransport } from "./ShellTransport";
 import { TempoMeter } from "./TempoMeter";
 
-const TOOL_NAME: Record<Tool, () => string> = {
+export const TOOL_NAME: Record<Tool, () => string> = {
   pointer: () => m["shell.tool.pointer"](),
   cut: () => m["shell.tool.cut"](),
   erase: () => m["shell.tool.erase"](),
@@ -53,7 +53,7 @@ const TOOL_ICON: Record<Tool, LucideIcon | null> = {
   crossfade: null,
 };
 
-function ToolGlyph({ tool }: { tool: Tool }) {
+export function ToolGlyph({ tool }: { tool: Tool }) {
   const Icon = TOOL_ICON[tool];
   return Icon ? <Icon /> : <ModeIcon mode="crossfade" className="size-5" />;
 }
@@ -135,32 +135,34 @@ export function FloatingBar({
       <SquareTerminal />
     </button>
   );
-  const toolButton = tool ? (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label={m["shell.tool"]({ name: TOOL_NAME[tool]() })}
-          title={m["shell.tool"]({ name: TOOL_NAME[tool]() })}
-          className={`float pointer-events-auto flex h-14 shrink-0 cursor-pointer items-center justify-center gap-1 rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-5 ${phone ? "w-14" : "w-[68px]"}`}
-        >
-          <ToolGlyph tool={tool} />
-          {!phone && <ChevronUp />}
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent side="top" align="start" className="w-[260px]">
-        {TOOLS.map((t) => (
-          <DropdownMenuItem key={t} onSelect={() => onTool(t)}>
-            <span className="grid size-5 place-items-center text-primary-text">
-              <ToolGlyph tool={t} />
-            </span>
-            {TOOL_NAME[t]()}
-            {t === tool && <Check className="ml-auto size-5 text-lavender" />}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  ) : null;
+  // The phone bar carries no tool: it lives in the overflow menu.
+  const toolButton =
+    tool && !phone ? (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            aria-label={m["shell.tool"]({ name: TOOL_NAME[tool]() })}
+            title={m["shell.tool"]({ name: TOOL_NAME[tool]() })}
+            className={`float pointer-events-auto flex h-14 shrink-0 cursor-pointer items-center justify-center gap-1 rounded-full text-foreground outline-none focus-visible:shadow-(--k7-focus-ring) [&_svg]:size-5 ${phone ? "w-14" : "w-[68px]"}`}
+          >
+            <ToolGlyph tool={tool} />
+            {!phone && <ChevronUp />}
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="top" align="start" className="w-[260px]">
+          {TOOLS.map((t) => (
+            <DropdownMenuItem key={t} onSelect={() => onTool(t)}>
+              <span className="grid size-5 place-items-center text-primary-text">
+                <ToolGlyph tool={t} />
+              </span>
+              {TOOL_NAME[t]()}
+              {t === tool && <Check className="ml-auto size-5 text-lavender" />}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ) : null;
 
   const clock = map ? (
     <TransportClock
@@ -202,7 +204,6 @@ export function FloatingBar({
           {meter}
         </>
       )}
-      {phone && metronome && <MetronomeButton {...metronome} />}
     </div>
   );
 

@@ -7,13 +7,8 @@ import { DEFAULT_TRIM_DB, trimWindow } from "@studio/audio-probe/trim-gate";
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
 import { projectApi } from "@studio/project-shell/project";
 import { Button } from "@studio/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { Check, Loader2, Play, Square, Trash2 } from "@studio/ui/icons";
+import { Play, Square } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
 import { wheelFactor } from "@studio/ui-timeline/panZoom";
@@ -38,7 +33,7 @@ import { useLiveEnvelope } from "../hooks/useLiveEnvelope";
 import { isTyping, useWindowKey } from "../hooks/useWindowKey";
 import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
-import { useReloadKey, useVerbs } from "../state/shellStore";
+import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import { barBeat, takeCounter } from "../takeCounter";
 import { pieceEdgeLines } from "../takes";
 import type { WebWaveform } from "../types";
@@ -48,18 +43,13 @@ import {
   WAVE_SOLO_MODES,
   type WaveMode,
 } from "../waveMode";
-import { ChainOpsList } from "./ChainOpsList";
-import {
-  OnsetThreshold,
-  TrimGateButton,
-  TrimGateCard,
-} from "./ClipGateControls";
+import { ClipControls } from "./ClipControls";
+import { TrimGateCard } from "./ClipGateControls";
 import { ClipMarksList, type MarkRow } from "./ClipMarksList";
 import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
-import { EventGainSlider } from "./EventGainSlider";
 import { LiveSeconds, LiveTakeWave, LiveWaveform } from "./LiveWaveform";
-import { LoopBrace, LoopToggle } from "./LoopBrace";
+import { LoopBrace } from "./LoopBrace";
 import { ArrangementRuler } from "./Ruler";
 import { type PanelTakes, TakesView } from "./TakesView";
 
@@ -145,6 +135,8 @@ export function AudioClipPanel({
 }) {
   // Bumped by the shell after a command it reloaded on — what re-reads the picture when the edit came from OUTSIDE the panel.
   const reloadKey = useReloadKey();
+  // The clock switch: the zoom ruler counts in the unit the timeline's does.
+  const rulerSeconds = useShell((s) => s.rulerSeconds);
   // Every edit goes through the shell, journalled; an edit confined to this clip goes the quiet way, with no shell-wide reload.
   const {
     seek: onSeek,
@@ -536,18 +528,29 @@ export function AudioClipPanel({
             </>
           ) : (
             <>
-              <span
-                className="min-w-0 truncate font-medium text-foreground"
-                title={clip ?? ""}
-              >
-                {clip &&
-                  clipShownName(
-                    clip,
-                    laneName,
-                    CLIP_NAME_WORDS,
-                    laneName(track),
-                  )}
-              </span>
+              {/* The name over where it lives: a clip nothing places has no lane to name, and works the same. */}
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span
+                  className="min-w-0 truncate font-bold text-[17px] text-foreground"
+                  title={clip ?? ""}
+                >
+                  {clip &&
+                    clipShownName(
+                      clip,
+                      laneName,
+                      CLIP_NAME_WORDS,
+                      laneName(track),
+                    )}
+                </span>
+                {clip && (
+                  <span className="truncate font-mono text-[12px]" title={clip}>
+                    {track
+                      ? m["clip.onTrack"]({ track })
+                      : m["clip.offTrack"]()}{" "}
+                    · {clip}
+                  </span>
+                )}
+              </div>
               {/* Plays the file's from/to window at its own tempo, through the same request the source strip's play button sends. */}
               {clip && (
                 <Button
@@ -561,135 +564,33 @@ export function AudioClipPanel({
                   <Play className="mr-1 h-3 w-3" /> {m["clip.listen"]()}
                 </Button>
               )}
-              {/* A clip nothing places has no lane to name, and works the same: waveform, onsets and level belong to the FILE. */}
-              {track ? (
-                <span>{m["clip.onTrack"]({ track })}</span>
-              ) : (
-                <span>{m["clip.offTrack"]()}</span>
-              )}
-              {clip && (
-                <span className="truncate font-mono" title={clip}>
-                  {clip}
-                </span>
-              )}
-              {editingOnsets && (
-                <span className="text-faint">{m["clip.onsetHint"]()}</span>
-              )}
-              {editingWarp && (
-                <span className="text-faint">{m["clip.warpHint"]()}</span>
-              )}
-              {/* What is on screen and the two ways out: a window showing only some bars without saying so reads as a clip that was cut. */}
-              {wf && win.allBars > 1 && (
-                <span className="whitespace-nowrap tabular-nums">
-                  {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
-                  {win.shown < win.allBars && (
-                    <button
-                      type="button"
-                      className="ml-1 underline hover:text-foreground"
-                      onClick={() => setAsked({ bars: win.allBars, start: 0 })}
-                    >
-                      {m["clip.allBars"]()}
-                    </button>
-                  )}
-                  {framed && (
-                    <button
-                      type="button"
-                      className="ml-1 underline hover:text-foreground"
-                      onClick={frameOnEvent}
-                      title={m["clip.backToEvent"]({
-                        from: act.from.toFixed(2),
-                        to: act.to.toFixed(2),
-                      })}
-                    >
-                      {m["clip.theEvent"]()}
-                    </button>
-                  )}
-                </span>
-              )}
-
-              {/* The event's own loop: its switch, and — when on — its points in the ruler below. */}
-              <span className="ml-auto flex items-center gap-3">
-                <EventGainSlider
-                  db={gainDb}
-                  onCommit={
-                    loopAddr
-                      ? (db) =>
-                          void command(
-                            `event gain ${loopAddr} ${db.toFixed(1)}`,
-                          )
-                      : undefined
-                  }
-                />
-                <LoopToggle
-                  on={looped}
-                  onToggle={
-                    loopAddr
-                      ? (on) =>
-                          void command(
-                            `event loop ${loopAddr} ${on ? "on" : "off"}`,
-                          )
-                      : undefined
-                  }
-                />
-              </span>
-              {/* The threshold belongs to the onset editor alone: under a stretch job a slider rewriting the sidecar would be a trap. */}
-              {editingOnsets && (
-                <OnsetThreshold value={sensitivity} onChange={setSensitivity} />
-              )}
-
-              {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
-              <TrimGateButton
-                open={gateOpen}
-                onToggle={() => setGateOpen(!gateOpen && !!clip)}
-                busy={busy === "trim"}
-                disabled={!!busy || !clip}
-              />
-              {/* Operations: every chain the project and the library offer, run over THIS clip (@studio/commands docs/processChain.md). */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={!!busy || !clip}
-                  >
-                    {busy === "process" ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    ) : (
-                      "operations"
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-64 p-1">
-                  <ChainOpsList
-                    search={opSearch}
-                    onSearch={setOpSearch}
-                    ops={ops}
-                    pending={chains === null}
-                    onPick={(c) =>
-                      clip && void run(processLine(clip, c), "process")
-                    }
-                  />
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {onDiscard && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={onDiscard}
-                  title={m["clip.discardHint"]()}
-                  aria-label={m["clip.discard"]()}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
-              )}
-              <Button size="sm" onClick={onClose} title={m["clip.done"]()}>
-                <Check className="h-3.5 w-3.5" />
-              </Button>
             </>
           )}
         </div>
       </DockHeaderRow>
 
+      {!rolling && (
+        <ClipControls
+          gainDb={gainDb}
+          loopAddr={loopAddr}
+          looped={looped}
+          command={command}
+          clip={clip}
+          busy={busy}
+          gateOpen={gateOpen}
+          onGateToggle={() => setGateOpen(!gateOpen && !!clip)}
+          editingOnsets={editingOnsets}
+          sensitivity={sensitivity}
+          onSensitivity={setSensitivity}
+          opSearch={opSearch}
+          onOpSearch={setOpSearch}
+          ops={ops}
+          opsPending={chains === null}
+          onPickOp={(c) => clip && void run(processLine(clip, c), "process")}
+          onDiscard={onDiscard}
+          onDone={onDiscard ? onClose : undefined}
+        />
+      )}
       {!rolling && gateOpen && clip && (
         <TrimGateCard
           gate={gate}
@@ -711,6 +612,11 @@ export function AudioClipPanel({
           current={view}
           onPick={(mode) => void command(`ui wave ${mode}`)}
         />
+      )}
+      {!rolling && (editingOnsets || editingWarp) && (
+        <p className="shrink-0 text-faint text-xs">
+          {editingOnsets ? m["clip.onsetHint"]() : m["clip.warpHint"]()}
+        </p>
       )}
       {/* The take list beside the wave: one row when there is nothing to choose between, two columns after several passes. */}
       <div className="flex min-h-0 flex-1 gap-2">
@@ -759,6 +665,42 @@ export function AudioClipPanel({
                 }));
                 void command("ui wave standard");
               }}
+              onEdit={
+                clip
+                  ? (r, sec) => {
+                      if (r.kind === "onset")
+                        return (
+                          inside(sec) &&
+                          void run(
+                            `clip onset move ${clip} ${r.sec.toFixed(4)} ${sec.toFixed(4)}`,
+                            `move:${r.key}`,
+                          )
+                        );
+                      if (r.kind === "stretch")
+                        return void run(
+                          warpLine(
+                            clip,
+                            r.sec,
+                            sec,
+                            wf.sourceMap,
+                            tempo,
+                            wf.warpMarks,
+                          ),
+                          "warp",
+                          true,
+                        );
+                      if (!eventAt || !track || piece) return;
+                      const w =
+                        r.key === "from"
+                          ? { from: sec, to: act.to }
+                          : { from: act.from, to: sec };
+                      if (w.to <= w.from) return;
+                      void command(
+                        `${looped ? "event loop points" : "event window"} ${track} ${eventAt} ${w.from.toFixed(4)} ${w.to.toFixed(4)}`,
+                      );
+                    }
+                  : undefined
+              }
               onRemove={
                 clip
                   ? (r, x, y) =>
@@ -781,6 +723,39 @@ export function AudioClipPanel({
               }
             />
           )}
+          {/* What is on screen and the two ways out: a window showing only some bars without saying so reads as a clip that was cut. */}
+          {!rolling && wf && !showList && win.allBars > 1 && (
+            <div className="flex shrink-0 items-center gap-2 text-muted-foreground text-xs">
+              <span className="font-bold tracking-wider">
+                {m["clip.zoom"]().toUpperCase()}
+              </span>
+              <span className="whitespace-nowrap tabular-nums">
+                {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
+                {win.shown < win.allBars && (
+                  <button
+                    type="button"
+                    className="ml-1 underline hover:text-foreground"
+                    onClick={() => setAsked({ bars: win.allBars, start: 0 })}
+                  >
+                    {m["clip.allBars"]()}
+                  </button>
+                )}
+                {framed && (
+                  <button
+                    type="button"
+                    className="ml-1 underline hover:text-foreground"
+                    onClick={frameOnEvent}
+                    title={m["clip.backToEvent"]({
+                      from: act.from.toFixed(2),
+                      to: act.to.toFixed(2),
+                    })}
+                  >
+                    {m["clip.theEvent"]()}
+                  </button>
+                )}
+              </span>
+            </div>
+          )}
           {/* The SONG's ruler over the wave (Ruler.tsx), the placement's grid rather than the warp — see docs/clipEditors.md. */}
           {!rolling &&
             wf &&
@@ -796,6 +771,7 @@ export function AudioClipPanel({
                   barBeats={beatsPerBar}
                   tempo={tempo}
                   height={18}
+                  mode={rulerSeconds ? "seconds" : "bars"}
                   onSeek={onSeek}
                   className="shrink-0 border-b border-border/50 font-mono text-[10px] text-muted-foreground"
                 />

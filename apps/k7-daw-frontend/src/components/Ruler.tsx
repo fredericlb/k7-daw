@@ -304,6 +304,7 @@ export function ArrangementRuler({
   height,
   onSeek,
   className,
+  mode = "bars",
 }: {
   /** Arrangement beat at the strip's left edge. */
   startBeat: number;
@@ -316,11 +317,13 @@ export function ArrangementRuler({
   /** Seek the transport, in SONG seconds — the same callback the timeline's ruler takes. */
   onSeek?: (seconds: number) => void;
   className?: string;
+  /** The unit it counts in — the clip editors follow the clock switch like the timeline. */
+  mode?: RulerMode;
 }) {
   const bps = Math.max(1e-6, tempo / 60);
   const lastBeat = startBeat + beats;
   const { unit, secStep, barStride } = rulerScale(
-    "bars",
+    mode,
     ppb,
     barBeats,
     bps,
@@ -347,7 +350,7 @@ export function ArrangementRuler({
               );
               // Snapped to the nearest tick the ruler DREW, the timeline's own rule.
               const ticks = rulerTicks(
-                "bars",
+                mode,
                 startBeat,
                 lastBeat,
                 unit,
@@ -361,7 +364,7 @@ export function ArrangementRuler({
       }
     >
       <RulerTicks
-        mode="bars"
+        mode={mode}
         beatLo={startBeat}
         lastBeat={lastBeat}
         unit={unit}

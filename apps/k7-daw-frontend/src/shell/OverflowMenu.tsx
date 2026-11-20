@@ -6,6 +6,9 @@ import { cn } from "@studio/ui/lib/utils";
 import { type ReactNode, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
+import { MetronomeIcon } from "../shellMeta";
+import type { Tool } from "../timelineTools";
+import { TOOL_NAME, ToolGlyph } from "./FloatingBar";
 import { PANEL_DEFS, type PanelId } from "./panels";
 
 export interface OverflowPane {
@@ -31,6 +34,12 @@ export interface OverflowPanel {
   onPress: () => void;
 }
 
+export interface OverflowTool {
+  current: Tool;
+  tools: readonly Tool[];
+  onPick: (tool: Tool) => void;
+}
+
 function Heading({ children }: { children: ReactNode }) {
   return <p className="type-caps px-1 pt-2 pb-1 text-fg-3">{children}</p>;
 }
@@ -43,6 +52,8 @@ export function OverflowMenu({
   lanesHeading,
   panels,
   onSettings,
+  tool,
+  metronome,
 }: {
   panes: OverflowPane[];
   pane: string;
@@ -52,6 +63,10 @@ export function OverflowMenu({
   lanesHeading: string;
   panels: OverflowPanel[];
   onSettings: () => void;
+  /** The timeline tool, which the phone bar does not carry; absent off the Arrangement. */
+  tool?: OverflowTool;
+  /** The metronome switch, which the phone bar does not carry either. */
+  metronome?: { on: boolean; onPress: () => void };
 }) {
   const [open, setOpen] = useState(false);
   usePopin(open, () => setOpen(false));
@@ -125,6 +140,43 @@ export function OverflowMenu({
                   ))}
                 </div>
               </>
+            )}
+            {tool && (
+              <>
+                <Heading>{m["shell.overflow.tool"]()}</Heading>
+                <div
+                  role="group"
+                  aria-label={m["shell.overflow.tool"]()}
+                  className="glass flex rounded-full p-[3px]"
+                >
+                  {tool.tools.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={tool.current === t}
+                      aria-label={TOOL_NAME[t]()}
+                      title={TOOL_NAME[t]()}
+                      onClick={run(() => tool.onPick(t))}
+                      className="grid h-9 min-w-0 flex-1 place-items-center rounded-full text-foreground aria-checked:bg-on-fill aria-checked:text-lavender [&_svg]:size-[18px]"
+                    >
+                      <ToolGlyph tool={t} />
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+            {metronome && (
+              <button
+                type="button"
+                role="menuitemcheckbox"
+                aria-checked={metronome.on}
+                onClick={run(metronome.onPress)}
+                className="type-label glass mt-1 flex h-11 items-center justify-center gap-1.5 rounded-full text-foreground aria-checked:bg-on-fill aria-checked:text-lavender"
+              >
+                <MetronomeIcon className="size-[18px]" />
+                {m["transport.metronome"]()}
+              </button>
             )}
             <Heading>{m["shell.overflow.panels"]()}</Heading>
             <div className="grid grid-cols-3 gap-1.5">

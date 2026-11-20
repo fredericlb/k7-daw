@@ -34,6 +34,7 @@ import {
   Columns3,
   Disc3,
   FileCode,
+  Image,
   Maximize,
   Network,
   Rows3,
@@ -244,7 +245,7 @@ import { PANE_META, VIEWPORT_META } from "./shellMeta";
 import { ShellContexts } from "./state/ShellContexts";
 import { createShellStore, type ShellVerbs } from "./state/shellStore";
 import { modeCondition, type TimelineMode } from "./timelineMode";
-import type { Tool } from "./timelineTools";
+import { TOOLS, type Tool } from "./timelineTools";
 import type {
   CommandInfo,
   EngineLoadPhase,
@@ -2743,6 +2744,11 @@ export default function App({
     { id: "chains", label: m["shell.pane.graph"](), icon: Workflow },
     { id: "editor", label: m["shell.pane.source"](), icon: FileCode },
   ];
+  const metronomeIsOn = optMetronome ?? metronomeOn;
+  const toggleMetronome = () => {
+    setOptMetronome((cur) => !(cur ?? metronomeOn));
+    void runCommand("transport metronome");
+  };
   const laneViewsOf = (): OverflowLaneView[] => [
     {
       id: "lanes",
@@ -2758,6 +2764,17 @@ export default function App({
       on: automationShown,
       onPress: () => void runCommand("ui automation"),
     },
+    ...(hasViewport
+      ? [
+          {
+            id: "picture",
+            label: m["shell.lane.picture"](),
+            icon: Image,
+            on: viewportOpen,
+            onPress: () => void runCommand("ui viewport"),
+          },
+        ]
+      : []),
   ];
   // The bar's capsule follows the pane: the lane views on the arrangement, the graph's on the Graph, none elsewhere.
   const graphCmds = shell.getState().commands;
@@ -2848,6 +2865,16 @@ export default function App({
           }
           panels={headerPanels}
           onSettings={() => void runCommand("ui settings")}
+          tool={
+            full === "timeline" && hasTimeline
+              ? {
+                  current: tool,
+                  tools: TOOLS,
+                  onPick: (t) => void runCommand(`ui tool ${t}`),
+                }
+              : undefined
+          }
+          metronome={{ on: metronomeIsOn, onPress: toggleMetronome }}
         />
       }
     />
@@ -2866,7 +2893,7 @@ export default function App({
       layout={layoutKind}
       runCommand={runCommand}
       onCommandBar={summonBar}
-      tool={hasTimeline ? tool : null}
+      tool={full === "timeline" && hasTimeline ? tool : null}
       onTool={(t) => void runCommand(`ui tool ${t}`)}
       recInfo={recInfo}
       clockSeconds={rulerSeconds}
@@ -2909,12 +2936,9 @@ export default function App({
             }
       }
       metronome={{
-        on: optMetronome ?? metronomeOn,
+        on: metronomeIsOn,
         level: metronomeLevel,
-        onToggle: () => {
-          setOptMetronome((cur) => !(cur ?? metronomeOn));
-          void runCommand("transport metronome");
-        },
+        onToggle: toggleMetronome,
         onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
       }}
       graph={

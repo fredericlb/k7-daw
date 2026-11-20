@@ -43,10 +43,23 @@ function ExpandButton({
 // undefined outside a dock (the row renders inline), null until the header's slot is mounted.
 const SlotCtx = React.createContext<HTMLElement | null | undefined>(undefined);
 
-/** An editor's first row, drawn in the dock's header beside Expand and Close; the editor keeps its state. */
-export function DockHeaderRow({ children }: { children: React.ReactNode }) {
+// True inside the phone sheet, whose header is slimmer than the dock's.
+const SheetCtx = React.createContext(false);
+
+/** Is the editor inside the phone sheet? Its header then holds less than the dock's. */
+export const useInSheet = () => React.useContext(SheetCtx);
+
+/** An editor's first row, drawn in the dock's header beside Expand and Close; `bodyOnPhone` keeps it in the body inside the sheet. */
+export function DockHeaderRow({
+  children,
+  bodyOnPhone = false,
+}: {
+  children: React.ReactNode;
+  bodyOnPhone?: boolean;
+}) {
   const slot = React.useContext(SlotCtx);
-  if (slot === undefined) return <>{children}</>;
+  const sheet = React.useContext(SheetCtx);
+  if (slot === undefined || (bodyOnPhone && sheet)) return <>{children}</>;
   return slot ? createPortal(children, slot) : null;
 }
 
@@ -254,7 +267,9 @@ export function EditorSheet({
         />
         {headerOf(head, setSlot, true)}
         <SlotCtx.Provider value={slot}>
-          <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+          <SheetCtx.Provider value>
+            <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+          </SheetCtx.Provider>
         </SlotCtx.Provider>
       </Dialog.Content>
     </Dialog.Root>
