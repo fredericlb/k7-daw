@@ -5,12 +5,38 @@
 import { sceneOf as videoSceneOf } from "@studio/k7-plugins/video";
 import { runRedo, runUndo } from "@studio/project-shell/undo";
 import { EXPORT_USAGE, parseExportAsk } from "../../exportArgs";
+import { exportHost } from "../../exportHost";
 import { resolveEntry } from "../../localTargets";
 import { m } from "../../paraglide/messages.js";
-import type { LocalCommand } from "./context";
+import type { LocalCommand, LocalCtx } from "./context";
 import { refuseWhileLocked } from "./locked";
 
+/** The folder of a background film, asked BEFORE it starts; the server's verb writes there when it ends. */
+async function askFilmFolder(ctx: LocalCtx, rest: string): Promise<void> {
+  try {
+    const folder = await exportHost().pickFolder();
+    if (!folder) return ctx.setStatus(m["share.cancelled"]());
+    // The front writes the film itself, so the folder must be a path it can reach.
+    if (!folder.path || folder.path.includes('"'))
+      return ctx.setStatus(m["share.filmNoPath"]());
+    await ctx.runCommand(`picture render ${rest} into="${folder.path}"`.trim());
+  } catch (e) {
+    ctx.setStatus(m["share.failed"]({ reason: (e as Error).message }));
+  }
+}
+
 export const PROJECT_COMMANDS: LocalCommand[] = [
+  {
+    // The verb is the server's; the shell only adds the folder the person picks, where a picker exists.
+    name: "picture render",
+    listed: false,
+    match: "names",
+    run: (ctx, rest) => {
+      if (!exportHost().canPick || /(^|\s)into=/.test(rest)) return false;
+      void askFilmFolder(ctx, rest.trim());
+      return true;
+    },
+  },
   // Ctrl+Z / Ctrl+Y as commands: the project-wide journal, the editor's own buffer history staying with the keys.
   {
     name: "project undo",
@@ -103,13 +129,7 @@ export const PROJECT_COMMANDS: LocalCommand[] = [
         void ctx.share.exportMix(ask.format, ask.timeline);
       else if (ask.kind === "tracks") void ctx.share.exportTracks(ask.timeline);
       else if (ask.kind === "timeline")
-        void ctx.share.exportTimeline(
-          ctx.ws?.activeProject ?? ".",
-          ask.format,
-          ask.lane,
-          name ?? "cut",
-          ctx.runCommand,
-        );
+        void ctx.share.exportTimeline(ask.format, ask.lane, name ?? "cut");
       else {
         const silent = ctx.videoDoc?.sound === null;
         if (silent && ask.audio) ctx.setStatus(m["status.videoSilent"]());

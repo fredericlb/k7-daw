@@ -3392,6 +3392,10 @@ export default function App({
                   {rightPanel === "share" && (
                     <SharePanel
                       busy={share.busy}
+                      host={share.host}
+                      last={share.last}
+                      onReveal={() => void share.reveal()}
+                      onShare={() => void share.shareLast()}
                       hasPicture={!!videoDoc}
                       timelines={(projectDoc?.timelines ?? []).map((t) => t.id)}
                       onRun={(c) => void runCommand(c)}

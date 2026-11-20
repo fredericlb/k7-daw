@@ -30,7 +30,10 @@ export interface EngineSnapshot {
   engineExit?: number;
 }
 
-const phone = window as { k7Android?: Channel; k7Ios?: Channel };
+const phone = (typeof window === "undefined" ? {} : window) as {
+  k7Android?: Channel;
+  k7Ios?: Channel;
+};
 const channel = phone.k7Android ?? phone.k7Ios ?? null;
 
 /** Inside the iOS app, whose engine trusts a bundled CA set rather than the system's. */
@@ -71,7 +74,12 @@ export function engineCall<T = Record<string, never>>(
     | "forgetCas"
     | "immersive"
     | "setImmersive"
-    | "quit",
+    | "quit"
+    | "pickExportFolder"
+    | "exportBegin"
+    | "exportChunk"
+    | "exportEnd"
+    | "shareExport",
   arg?: Record<string, string>,
 ): Promise<T> {
   if (!channel) return Promise.reject(new Error("not in a phone app"));

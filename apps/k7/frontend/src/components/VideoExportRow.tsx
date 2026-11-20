@@ -1,6 +1,6 @@
 // VideoExportRow.tsx — the share panel's video export: MP4 first when this browser can encode it,
 // since that is what a phone and every social site play, WebM otherwise; 720p or 1080p. It only
-// builds the `project export video …` line the shell already runs. See ../../docs/shell.md.
+// offers the `project export video …` line the panel runs once a folder is chosen. See ../../docs/shell.md.
 
 import { Download } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
@@ -20,11 +20,14 @@ const PROBE: Record<Size, [number, number]> = {
 export function VideoExportRow({
   busy,
   rowClass,
-  onRun,
+  chosen,
+  onChoose,
 }: {
   busy: boolean;
   rowClass: string;
-  onRun: (command: string) => void;
+  /** The line the panel has chosen, to mark this row when it is its own. */
+  chosen: string;
+  onChoose: (command: string) => void;
 }) {
   const [size, setSize] = useState<Size>("1080p");
   // Null while asked; MP4 is offered only once the encoder says yes.
@@ -52,13 +55,20 @@ export function VideoExportRow({
         : "bg-muted text-muted-foreground hover:text-foreground",
     );
 
+  const lineOf = (f: Format, z: Size) => `project export video ${f} size=${z}`;
+  const line = lineOf(fmt, size);
+  // A pill moved on a chosen row moves the chosen line with it.
+  const retarget = (f: Format, z: Size) => {
+    if (chosen.startsWith("project export video")) onChoose(lineOf(f, z));
+  };
   return (
     <div className="flex flex-col gap-1">
       <button
         type="button"
-        className={rowClass}
+        className={`${rowClass} ${chosen === line ? "bg-accent" : ""}`}
+        aria-pressed={chosen === line}
         disabled={busy || mp4 === null}
-        onClick={() => onRun(`project export video ${fmt} size=${size}`)}
+        onClick={() => onChoose(line)}
       >
         <Download className="h-4 w-4 text-muted-foreground" />
         {m["share.exportVideo"]({ format: fmt.toUpperCase(), size })}
@@ -69,7 +79,10 @@ export function VideoExportRow({
             key={f}
             type="button"
             className={pill(fmt === f)}
-            onClick={() => setFormat(f)}
+            onClick={() => {
+              setFormat(f);
+              retarget(f, size);
+            }}
           >
             {f.toUpperCase()}
           </button>
@@ -80,7 +93,10 @@ export function VideoExportRow({
             key={s}
             type="button"
             className={pill(size === s)}
-            onClick={() => setSize(s)}
+            onClick={() => {
+              setSize(s);
+              retarget(fmt, s);
+            }}
           >
             {s}
           </button>

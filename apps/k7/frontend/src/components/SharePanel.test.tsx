@@ -1,4 +1,4 @@
-// The share panel's tracks zip row: named in both languages, greyed while a render runs, and its line parses back.
+// The Export panel: the tracks zip row greyed while a render runs, the folder step, and the result's actions.
 
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
@@ -15,6 +15,48 @@ const tracksButton = (html: string) =>
   html.match(
     /<button[^>]*>(?:(?!<\/button>).)*Export tracks \(zip\)<\/button>/s,
   )?.[0] ?? "";
+
+const desktopHost = { canPick: true, canReveal: true, canShare: false };
+const saved = {
+  folder: { id: "/m", name: "Music" },
+  name: "mix.wav",
+  where: "/m/mix.wav",
+};
+
+describe("the folder step", () => {
+  it("is titled Export and offers the picker where the host has one", () => {
+    const html = renderToStaticMarkup(
+      <SharePanel
+        busy={false}
+        host={desktopHost}
+        onRun={() => {}}
+        onClose={() => {}}
+      />,
+    );
+    expect(html).toContain("Export</span>");
+    expect(html).toContain("Choose a folder…");
+  });
+
+  it("downloads in a browser, which has no picker", () => {
+    expect(render(false)).toContain("Download");
+    expect(render(false)).not.toContain("Choose a folder…");
+  });
+
+  it("names the folder of the last file, with the actions the host has", () => {
+    const html = renderToStaticMarkup(
+      <SharePanel
+        busy={false}
+        host={desktopHost}
+        last={saved}
+        onRun={() => {}}
+        onClose={() => {}}
+      />,
+    );
+    expect(html).toContain("Saved in Music");
+    expect(html).toContain("Show in folder");
+    expect(html).not.toContain("Share…");
+  });
+});
 
 describe("the tracks zip row", () => {
   it("is offered beside the mixdown exports", () => {

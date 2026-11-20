@@ -69,7 +69,9 @@ so it can take what comes in; a track needs an input to record. Press **Play** a
 ## 6. Keep it, share it
 
 k7 **saves by itself** — the word *saved* next to a file means it is on disk. To take the result
-somewhere else, open **Share / export**: an MP3 or WAV of the song, or, in a video project, an MP4
-(or WebM where the browser cannot make MP4) at 720p or 1080p. **Export tracks (zip)** gives each
+somewhere else, open **Export**: pick what to export, then **Choose a folder…** and the system's folder
+picker opens; the file is saved where you say, and the panel then names the folder, with **Show in folder**
+on a computer and **Share…** on a phone. What you can pick is an MP3 or WAV of the song, or, in a video
+project, an MP4 (or WebM where the browser cannot make MP4) at 720p or 1080p. **Export tracks (zip)** gives each
 track as its own WAV without effects, a MIDI file of its notes and a page listing the effects and
 settings it has in the song and where each setting comes from, which is what you hand to someone mixing it elsewhere.

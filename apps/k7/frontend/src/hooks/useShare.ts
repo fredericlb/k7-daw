@@ -1,27 +1,36 @@
-// useShare.ts — the export-panel entries that are not already CLI verbs: render a mixdown
-// through the engine, a track zip, a video, a cut. Held here rather than in `SharePanel` so the panel and
-// the command bar run one implementation — `project export` is those same entries, and a
-// second copy behind the palette is how the two come to differ.
+// useShare.ts — the export-panel entries: render a mixdown through the engine, a track zip, a video, a cut,
+// and put the file where the person chose (exportHost.ts). Held here rather than in `SharePanel` so the panel and
+// the command bar run one implementation — `project export` is those same entries. The folder is asked BEFORE the work.
 
 import { resolveVideoSettings } from "@studio/song-schema/renderSettings";
 import type { VideoScene } from "@studio/ui-eyes/scene";
 import { useCallback, useState } from "react";
 import { api } from "../api";
-import { downloadBlob as download, downloadLink } from "../downloadBlob";
+import { downloadLink } from "../downloadBlob";
 import { awaitStart, newToken } from "../downloadSignal";
-
 import type {
   MixFormat,
   TimelineFormat,
   VideoFormat,
   VideoSettings,
 } from "../exportArgs";
+import {
+  type ExportHost,
+  exportHost,
+  type Folder,
+  type Saved,
+} from "../exportHost";
 import { m } from "../paraglide/messages.js";
 import { trackProcess } from "../processes";
 
 export interface Share {
   /** A render is running: the menu greys itself out rather than starting a second one. */
   busy: boolean;
+  /** The file the last export put in the person's folder, for the panel's "Show in folder" and "Share…". */
+  last: Saved | null;
+  host: ExportHost;
+  reveal: () => Promise<void>;
+  shareLast: () => Promise<void>;
   exportMix: (format: MixFormat, timeline?: string) => Promise<void>;
   /** Every track as a zip, handed to the browser as a link; the panel greys out while the render runs. */
   exportTracks: (timeline?: string) => Promise<void>;
@@ -34,21 +43,45 @@ export interface Share {
     name: string,
     settings?: VideoSettings,
   ) => Promise<void>;
-  /** …and the CUT, for another editor: `picture interchange` writes it, then it is downloaded (song-video docs/interchange.md). */
+  /** …and the CUT, for another editor: `picture interchange` says it and it is saved (song-video docs/interchange.md). */
   exportTimeline: (
-    project: string,
     format: TimelineFormat,
     lane: string | undefined,
     name: string,
-    run: (line: string) => Promise<unknown>,
   ) => Promise<void>;
 }
 
 export function useShare(onStatus: (s: string) => void): Share {
   const [busy, setBusy] = useState(false);
+  const [last, setLast] = useState<Saved | null>(null);
+  const host = exportHost();
+
+  /** The folder, asked before any work; null when the person cancelled. */
+  const folderFor = useCallback(async (): Promise<Folder | null> => {
+    try {
+      const folder = await host.pickFolder();
+      if (!folder) onStatus(m["share.cancelled"]());
+      return folder;
+    } catch (e) {
+      onStatus(m["share.failed"]({ reason: (e as Error).message }));
+      return null;
+    }
+  }, [host, onStatus]);
+
+  /** Put `blob` in `folder` and say where it went. */
+  const place = useCallback(
+    async (folder: Folder, name: string, blob: Blob) => {
+      const saved = await host.save(folder, name, blob);
+      setLast(saved);
+      onStatus(m["share.saved"]({ name: saved.name, folder: folder.name }));
+    },
+    [host, onStatus],
+  );
 
   const exportMix = useCallback(
     async (format: MixFormat, timeline?: string) => {
+      const folder = await folderFor();
+      if (!folder) return;
       setBusy(true);
       const what = `${format.toUpperCase()} mixdown${timeline ? ` of ${timeline}` : ""}`;
       onStatus(`rendering ${what}…`);
@@ -56,43 +89,52 @@ export function useShare(onStatus: (s: string) => void): Share {
       const shown = trackProcess(`export ${what}`);
       try {
         const { blob, filename } = await api.exportMix(format, timeline);
-        download(blob, filename);
-        onStatus(`exported ${filename}`);
+        await place(folder, filename, blob);
         shown.end();
       } catch (e) {
-        onStatus(`export failed: ${(e as Error).message}`);
+        onStatus(m["share.failed"]({ reason: (e as Error).message }));
         shown.end((e as Error).message);
       } finally {
         setBusy(false);
       }
     },
-    [onStatus],
+    [folderFor, place, onStatus],
   );
 
   const exportTracks = useCallback(
     async (timeline?: string) => {
+      const folder = await folderFor();
+      if (!folder) return;
       setBusy(true);
       onStatus(m["share.tracksRendering"]());
       const shown = trackProcess(
         `export tracks${timeline ? ` of ${timeline}` : ""}`,
       );
       try {
-        const token = newToken();
-        downloadLink(api.tracksUrl(token, timeline));
-        // Held until the route's first byte, which sets the token's cookie, so a second click cannot start a second render.
-        const started = await awaitStart(token);
-        if (started.kind === "refused") {
-          onStatus(m["share.tracksFailed"]({ reason: started.message }));
-          shown.end(started.message);
-        } else {
+        if (host.kind === "browser") {
+          const token = newToken();
+          downloadLink(api.tracksUrl(token, timeline));
+          // Held until the route's first byte, which sets the token's cookie, so a second click cannot start a second render.
+          const started = await awaitStart(token);
+          if (started.kind === "refused") {
+            onStatus(m["share.tracksFailed"]({ reason: started.message }));
+            shown.end(started.message);
+            return;
+          }
           onStatus(m["share.tracksStarted"]());
-          shown.end();
+        } else {
+          const { blob, filename } = await api.exportTracks(timeline);
+          await place(folder, filename, blob);
         }
+        shown.end();
+      } catch (e) {
+        onStatus(m["share.tracksFailed"]({ reason: (e as Error).message }));
+        shown.end((e as Error).message);
       } finally {
         setBusy(false);
       }
     },
-    [onStatus],
+    [folderFor, host, place, onStatus],
   );
 
   const exportVideo = useCallback(
@@ -107,6 +149,8 @@ export function useShare(onStatus: (s: string) => void): Share {
         onStatus("this project draws no picture — nothing to render");
         return;
       }
+      const folder = await folderFor();
+      if (!folder) return;
       setBusy(true);
       // Rendered in this page, so no poll reports it: this page lists it (docs/processes.md).
       const shown = trackProcess(`export ${format.toUpperCase()} video`);
@@ -152,54 +196,67 @@ export function useShare(onStatus: (s: string) => void): Share {
           },
         );
         // Named by the container itself: mediabunny owns both strings, so the two cannot drift.
-        download(
-          new Blob([file.buffer], { type: file.mimeType }),
+        await place(
+          folder,
           `${name || "video"}${file.extension}`,
+          new Blob([file.buffer], { type: file.mimeType }),
         );
-        onStatus(`exported ${total} frames`);
         shown.end();
       } catch (e) {
-        onStatus(`export failed: ${(e as Error).message}`);
+        onStatus(m["share.failed"]({ reason: (e as Error).message }));
         shown.end((e as Error).message);
       } finally {
         setBusy(false);
       }
     },
-    [onStatus],
+    [folderFor, place, onStatus],
   );
 
   const exportTimeline = useCallback(
-    async (
-      project: string,
-      format: TimelineFormat,
-      lane: string | undefined,
-      name: string,
-      run: (line: string) => Promise<unknown>,
-    ) => {
+    async (format: TimelineFormat, lane: string | undefined, name: string) => {
+      const folder = await folderFor();
+      if (!folder) return;
       setBusy(true);
       try {
-        await run(`picture interchange ${format}${lane ? ` ${lane}` : ""}`);
-        // The verb writes to one FIXED path, so nothing it said has to be parsed to find the file.
-        const path = `${project === "." ? "" : `${project}/`}exports/cut.${format}`;
-        const { content } = await api.read(path);
-        download(
-          new Blob([content], {
+        // The verb SAYS the cut as its first output line and writes nothing; what it left out follows.
+        const said = await api.command(
+          `picture interchange ${format}${lane ? ` ${lane}` : ""}`,
+          { want: [] },
+        );
+        const [text, ...left] = said.output;
+        if (said.refused || text === undefined)
+          throw new Error(said.output.join(" · ") || "nothing to hand over");
+        await place(
+          folder,
+          `${name || "cut"}.${format}`,
+          new Blob([text], {
             type: format === "otio" ? "application/json" : "text/plain",
           }),
-          `${name || "cut"}.${format}`,
         );
-        onStatus(`exported ${name || "cut"}.${format}`);
+        if (left.length) onStatus(left.join("  ·  "));
       } catch (e) {
-        onStatus(`export failed: ${(e as Error).message}`);
+        onStatus(m["share.failed"]({ reason: (e as Error).message }));
       } finally {
         setBusy(false);
       }
     },
-    [onStatus],
+    [folderFor, place, onStatus],
   );
+
+  const reveal = useCallback(async () => {
+    if (last) await host.reveal(last).catch(() => {});
+  }, [host, last]);
+
+  const shareLast = useCallback(async () => {
+    if (last) await host.share(last).catch(() => {});
+  }, [host, last]);
 
   return {
     busy,
+    last,
+    host,
+    reveal,
+    shareLast,
     exportMix,
     exportTracks,
     exportVideo,

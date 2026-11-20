@@ -19,6 +19,9 @@ const READS = [
   "transport toggle",
   "transport rewind",
   "transport panic",
+  // They hand a film or a cut to the person's own folder and touch no file of the workspace.
+  "picture interchange",
+  "picture render",
 ];
 
 /** The verbs that write this machine's preferences, not the workspace (a locked workspace still runs them). */
@@ -133,10 +136,8 @@ const WRITES = [
   "picture unkey",
   "picture speed",
   "picture prepare",
-  "picture interchange",
   "picture import",
   "chain save",
-  "picture render",
   "picture sound",
   "picture silence",
   "module new",

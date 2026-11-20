@@ -248,6 +248,26 @@ export const api = {
     if (timeline) q.set("timeline", timeline);
     return `${cfg().base}/export/tracks?${q.toString()}`;
   },
+  // The tracks zip as a blob, for a host that saves it into the person's folder rather than streaming it to Downloads.
+  exportTracks: async (
+    timeline?: string,
+  ): Promise<{ blob: Blob; filename: string }> => {
+    const q = new URLSearchParams({ workspace: cfg().workspace });
+    if (timeline) q.set("timeline", timeline);
+    const res = await fetch(`${cfg().base}/export/tracks?${q}`, {
+      headers: fileHeaders(),
+    });
+    if (!res.ok)
+      throw new Error(
+        (await res.json().catch(() => ({}))).error ?? "export failed",
+      );
+    return {
+      blob: await res.blob(),
+      filename:
+        downloadName(res.headers.get("Content-Disposition") || "") ??
+        "tracks.zip",
+    };
+  },
   prewarmWaveforms: () =>
     fsend<WaveformStatus>("POST", "/waveforms/prewarm", {}, { fence: false }),
   waveformStatus: () => fget<WaveformStatus>("/waveforms/status"),
