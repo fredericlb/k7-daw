@@ -1,8 +1,9 @@
 # The minimap
 
 A small map of the whole graph in the bottom-right corner of the chains pane: every card as a
-block, the pane's view as a frame over them, and two buttons on top — **Zoom fit** and
-**Organize**, drawn as icons (`Maximize`, `Network`) whose tooltip names them. `Minimap.tsx`
+block and the pane's view as a frame over them. By default two icon buttons ride on top, **Zoom fit**
+and **Organize**; a host that draws them as labelled pills sets `minimapBar` to false, as k7's
+Graph pane does (`GraphActions.tsx`). `Minimap.tsx`
 draws it; `DomChains` places it and owns everything it does.
 
 ## It is opt-in, and k7's chains pane is the one that opts in

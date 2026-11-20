@@ -49,6 +49,7 @@ import { useLiveRackLit } from "../rackLit";
 import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import type { WebGraph, WebProject } from "../types";
 import { useIsMobile } from "../useIsMobile";
+import { GraphActions } from "./GraphActions";
 import { MidiFeedback } from "./MidiFeedback";
 
 // A card with no authored vertical layout is folded to the same 4 columns (apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md).
@@ -755,8 +756,16 @@ function ChainsTabView({
       <section
         aria-label={m["chains.canvas"]()}
         data-testid="graph-canvas"
-        className="min-w-0 flex-1"
+        className="relative min-w-0 flex-1"
       >
+        {active && laid && (
+          <GraphActions
+            onFit={() => camApi.current?.fitTo(laid.nodes)}
+            onOrganize={onOrganize}
+            onStack={onStack}
+            stacked={!!stack}
+          />
+        )}
         {active && (
           <DomChains
             labels={labels}
@@ -787,6 +796,7 @@ function ChainsTabView({
             onModuleField={onModuleField}
             // The corner minimap is this pane's: the graph panel and a lane's row are too small to want one.
             minimap
+            minimapBar={false}
             onOrganize={onOrganize}
             onStack={onStack}
             stacked={!!stack}

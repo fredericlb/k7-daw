@@ -42,6 +42,7 @@ export function Minimap({
   onOrganize,
   onStack,
   stacked,
+  bar = true,
 }: {
   nodes: readonly GraphNode[];
   bounds: Box;
@@ -58,6 +59,8 @@ export function Minimap({
   /** The host's stack view toggle, and whether it is on; the button exists only when given. */
   onStack?: () => void;
   stacked?: boolean;
+  /** The three buttons over the map; the host may draw them as pills instead. */
+  bar?: boolean;
 }) {
   const cvRef = useRef<HTMLCanvasElement>(null);
   const l = useChainsLabels();
@@ -147,38 +150,40 @@ export function Minimap({
       onDoubleClick={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="dgx-minimap-bar">
-        {onStack && (
+      {bar && (
+        <div className="dgx-minimap-bar">
+          {onStack && (
+            <button
+              type="button"
+              className={stacked ? "on" : undefined}
+              onClick={onStack}
+              title={l.stackViewHint}
+              aria-label={l.stackView}
+              aria-pressed={!!stacked}
+            >
+              <Columns3 />
+            </button>
+          )}
           <button
             type="button"
-            className={stacked ? "on" : undefined}
-            onClick={onStack}
-            title={l.stackViewHint}
-            aria-label={l.stackView}
-            aria-pressed={!!stacked}
+            onClick={onFit}
+            title={l.zoomFitHint}
+            aria-label={l.zoomFit}
           >
-            <Columns3 />
+            <Maximize />
           </button>
-        )}
-        <button
-          type="button"
-          onClick={onFit}
-          title={l.zoomFitHint}
-          aria-label={l.zoomFit}
-        >
-          <Maximize />
-        </button>
-        {onOrganize && (
-          <button
-            type="button"
-            onClick={onOrganize}
-            title={l.organizeHint}
-            aria-label={l.organize}
-          >
-            <Network />
-          </button>
-        )}
-      </div>
+          {onOrganize && (
+            <button
+              type="button"
+              onClick={onOrganize}
+              title={l.organizeHint}
+              aria-label={l.organize}
+            >
+              <Network />
+            </button>
+          )}
+        </div>
+      )}
       <canvas
         ref={cvRef}
         style={{ width: MAP_W, height: MAP_H }}

@@ -288,8 +288,8 @@ const CSS = `
 /* The corner minimap: over the pane rather than in the world, and above the cards. */
 .dgx-minimap { position:absolute; right:12px; bottom:12px; z-index:5; display:flex; flex-direction:column;
   gap:4px; align-items:stretch; cursor:default; }
-.dgx-minimap canvas { display:block; background:rgba(13,13,15,.86); border:1px solid var(--line);
-  border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,.5); cursor:crosshair; touch-action:none; }
+.dgx-minimap canvas { display:block; background:rgba(40,31,60,.92); border:1px solid rgba(255,255,255,.18);
+  border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.45); cursor:crosshair; touch-action:none; }
 /* The buttons sit over the map's right end, as square icons: the map is the thing, they are its tools. */
 .dgx-minimap-bar { display:flex; gap:4px; justify-content:flex-end; }
 .dgx-minimap-bar button { width:24px; height:24px; padding:0; display:grid; place-items:center;
