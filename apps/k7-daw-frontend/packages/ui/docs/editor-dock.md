@@ -23,5 +23,3 @@ per-track chain included.
   arrow keys (Up and Down by 16 px, Home and End for the extremes) resize it as well.
 - **The phone sheet is partial and non-modal** (`--k7-dock-sheet-top`) so the lanes stay in view;
   expanded it takes `--k7-sheet-top` and traps focus like any sheet.
-- **The dock lays nothing out inside.** Its body is a plain scroll box; the editors choose their own
-  columns from a container query on it, so the kit stays free of any editor's shape.

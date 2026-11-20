@@ -5,6 +5,14 @@
 
 import { DEFAULT_TRIM_DB, trimWindow } from "@studio/audio-probe/trim-gate";
 import { arrayEq, useEngineState } from "@studio/engine-browser/store";
+import { projectApi } from "@studio/project-shell/project";
+import { Button } from "@studio/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@studio/ui/dropdown-menu";
+import { Check, Loader2, Square, Trash2 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
 import { wheelFactor } from "@studio/ui-timeline/panZoom";
@@ -20,7 +28,9 @@ import {
 import { api } from "../api";
 import { anchorBars, barWindow, frameWindow, zoomBars } from "../barWindow";
 import { clamp } from "../clamp";
-import { laneNamer } from "../clipNames";
+import { clipShownName, laneNamer } from "../clipNames";
+import { CLIP_NAME_WORDS } from "../clipNameWords";
+import { chainOps, filterOps, processLine } from "../clipOps";
 import { warpLine } from "../clipWarp";
 import { useLatest } from "../hooks/useLatest";
 import { useLiveEnvelope } from "../hooks/useLiveEnvelope";
@@ -37,11 +47,14 @@ import {
   WAVE_SOLO_MODES,
   type WaveMode,
 } from "../waveMode";
+import { ChainOpsList } from "./ChainOpsList";
+import { OnsetThreshold, TrimGateMenu } from "./ClipGateControls";
 import { ClipMarksList, type MarkRow } from "./ClipMarksList";
-import { ClipControls, RecordingCard, ZoomRow } from "./ClipPanelControls";
+import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
-import { LiveTakeWave, LiveWaveform } from "./LiveWaveform";
-import { LoopBrace } from "./LoopBrace";
+import { EventGainSlider } from "./EventGainSlider";
+import { LiveSeconds, LiveTakeWave, LiveWaveform } from "./LiveWaveform";
+import { LoopBrace, LoopToggle } from "./LoopBrace";
 import { ArrangementRuler } from "./Ruler";
 import { type PanelTakes, TakesView } from "./TakesView";
 
@@ -139,6 +152,25 @@ export function AudioClipPanel({
   const [error, setError] = useState<string | null>(null);
   // undefined asks for whatever threshold the file was last built with; a number re-detects AND remembers it in the sidecar.
   const [sensitivity, setSensitivity] = useState<number | undefined>(undefined);
+  /** The chains this clip can be run through, as `clip process` names them — fetched once when the panel opens. */
+  const [chains, setChains] = useState<string[] | null>(null);
+  const [opSearch, setOpSearch] = useState("");
+  useEffect(() => {
+    let live = true;
+    projectApi
+      .libraryChains()
+      .then((r) => live && setChains(chainOps(r.chains)))
+      .catch(() => live && setChains([]));
+    return () => {
+      live = false;
+    };
+  }, []);
+  // Filtered on the whole ref, so a word is found wherever it sits — a chain is filed by path, and nobody remembers the folder.
+  const ops = useMemo(
+    () => filterOps(chains ?? [], opSearch),
+    [chains, opSearch],
+  );
+
   const [busy, setBusy] = useState<string | null>(null);
   // The trim gate, in dBFS, and whether its menu is open — open is what draws the preview, so the two travel together.
   const [gate, setGate] = useState(DEFAULT_TRIM_DB);
@@ -450,386 +482,504 @@ export function AudioClipPanel({
   }, [rolling, wf, zoomTo]);
 
   return (
-    /** `w-full min-w-0 flex-1` and not only `h-full`: the dock's body is a flex column and the canvas sizes itself to its parent. */
+    /** `w-full min-w-0 flex-1` and not only `h-full`: this panel takes the GRAPH's place, which is a flex ROW, and the canvas sizes itself to its parent. */
     <section
-      className="flex min-h-full w-full min-w-0 flex-1 flex-col gap-2.5 px-1 @2xl:h-full @2xl:flex-row @2xl:gap-4"
+      className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-card/40 px-3 py-2"
       aria-label={rolling ? m["clip.takeRolling"]() : `clip ${clip ?? ""}`}
     >
-      {/* The left column: 360 px and its own scroll beside the zoom; one column over it on a phone (docs/clipEditors.md). */}
-      <div className="flex min-w-0 shrink-0 flex-col gap-2.5 @2xl:w-[360px] @2xl:overflow-y-auto">
+      <div className="flex items-center gap-3 text-xs text-muted-foreground">
         {rolling ? (
-          <RecordingCard
-            counting={count.phase === "count-in"}
-            beats={count.beats}
-            at={at}
-            armedNames={armedNames}
-            live={live}
-            onStop={onStop}
-          />
+          <>
+            {/* The pre-roll counts DOWN, then the take counts up in bar:beat from where THIS take started (docs/shell.md). */}
+            {count.phase === "count-in" ? (
+              <>
+                <span className="text-sm uppercase tracking-wider text-muted-foreground">
+                  {m["clip.countIn"]()}
+                </span>
+                <span className="font-mono text-2xl tabular-nums text-red-400">
+                  {count.beats}
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="text-sm uppercase tracking-wider text-red-400">
+                  {m["clip.recording"]()}
+                </span>
+                <span className="font-mono text-2xl tabular-nums">
+                  {at.bar}:{at.beat}
+                </span>
+              </>
+            )}
+            <span className="truncate">
+              {armedNames.length
+                ? armedNames.join(", ")
+                : m["clip.noArmedTrack"]()}
+            </span>
+            <span className="font-mono tabular-nums">
+              <LiveSeconds live={live} />
+            </span>
+            <Button
+              size="sm"
+              variant="secondary"
+              className="ml-auto"
+              onClick={onStop}
+              title={m["clip.stopTake"]()}
+            >
+              <Square className="mr-1 h-3 w-3" /> Stop
+            </Button>
+          </>
         ) : (
-          <ClipControls
-            clip={clip}
-            track={track}
-            laneName={laneName}
-            view={view}
-            modes={takes ? WAVE_MODES : WAVE_SOLO_MODES}
-            gainDb={gainDb}
-            loopAddr={loopAddr}
-            looped={looped}
-            command={command}
-            sensitivity={sensitivity}
-            onSensitivity={setSensitivity}
-            gate={{
-              open: gateOpen,
-              onOpenChange: (o) => setGateOpen(o && !!clip),
-              gate,
-              onGate: setGate,
-              keep,
-            }}
-            busy={busy}
-            // The EVENT is the bound, and naming it is all the command needs — the same pair the preview was drawn against.
-            canTrim={!!keep && !busy && !!eventAt && !!track}
-            onTrim={() => {
-              setGateOpen(false);
-              if (eventAt && track)
-                void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
-            }}
-            onProcess={(line) => void run(line, "process")}
-            onDiscard={onDiscard}
-            onClose={onClose}
-          />
+          <>
+            <span className="font-medium text-foreground" title={clip ?? ""}>
+              {clip &&
+                clipShownName(clip, laneName, CLIP_NAME_WORDS, laneName(track))}
+            </span>
+            {/* A clip nothing places has no lane to name, and works the same: waveform, onsets and level belong to the FILE. */}
+            {track ? (
+              <span>{m["clip.onTrack"]({ track })}</span>
+            ) : (
+              <span>{m["clip.offTrack"]()}</span>
+            )}
+            {editingOnsets && (
+              <span className="text-faint">{m["clip.onsetHint"]()}</span>
+            )}
+            {editingWarp && (
+              <span className="text-faint">{m["clip.warpHint"]()}</span>
+            )}
+            {/* What is on screen and the two ways out: a window showing only some bars without saying so reads as a clip that was cut. */}
+            {wf && win.allBars > 1 && (
+              <span className="whitespace-nowrap tabular-nums">
+                {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
+                {win.shown < win.allBars && (
+                  <button
+                    type="button"
+                    className="ml-1 underline hover:text-foreground"
+                    onClick={() => setAsked({ bars: win.allBars, start: 0 })}
+                  >
+                    {m["clip.allBars"]()}
+                  </button>
+                )}
+                {framed && (
+                  <button
+                    type="button"
+                    className="ml-1 underline hover:text-foreground"
+                    onClick={frameOnEvent}
+                    title={m["clip.backToEvent"]({
+                      from: act.from.toFixed(2),
+                      to: act.to.toFixed(2),
+                    })}
+                  >
+                    {m["clip.theEvent"]()}
+                  </button>
+                )}
+              </span>
+            )}
+
+            {/* The event's own loop: its switch, and — when on — its points in the ruler below. */}
+            <span className="ml-auto flex items-center gap-3">
+              <EventGainSlider
+                db={gainDb}
+                onCommit={
+                  loopAddr
+                    ? (db) =>
+                        void command(`event gain ${loopAddr} ${db.toFixed(1)}`)
+                    : undefined
+                }
+              />
+              <LoopToggle
+                on={looped}
+                onToggle={
+                  loopAddr
+                    ? (on) =>
+                        void command(
+                          `event loop ${loopAddr} ${on ? "on" : "off"}`,
+                        )
+                    : undefined
+                }
+              />
+            </span>
+            {/* The threshold belongs to the onset editor alone: under a stretch job a slider rewriting the sidecar would be a trap. */}
+            {editingOnsets && (
+              <OnsetThreshold value={sensitivity} onChange={setSensitivity} />
+            )}
+
+            {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
+            <TrimGateMenu
+              open={gateOpen}
+              onOpenChange={(o) => setGateOpen(o && !!clip)}
+              gate={gate}
+              onGate={setGate}
+              keep={keep}
+              busy={busy === "trim"}
+              disabled={!!busy || !clip}
+              canTrim={!!keep && !busy && !!eventAt && !!track}
+              onTrim={() => {
+                setGateOpen(false);
+                // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
+                if (eventAt && track)
+                  void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
+              }}
+            />
+            {/* Operations: every chain the project and the library offer, run over THIS clip (@studio/commands docs/processChain.md). */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="outline" disabled={!!busy || !clip}>
+                  {busy === "process" ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    "operations"
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-64 p-1">
+                <ChainOpsList
+                  search={opSearch}
+                  onSearch={setOpSearch}
+                  ops={ops}
+                  pending={chains === null}
+                  onPick={(c) =>
+                    clip && void run(processLine(clip, c), "process")
+                  }
+                />
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {onDiscard && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={onDiscard}
+                title={m["clip.discardHint"]()}
+                aria-label={m["clip.discard"]()}
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            )}
+            <Button size="sm" onClick={onClose} title={m["clip.done"]()}>
+              <Check className="h-3.5 w-3.5" />
+            </Button>
+          </>
         )}
       </div>
-      {/* The right column: the zoom's range, then whichever picture the tool draws, taking the height left. */}
-      <div className="flex h-72 min-w-0 shrink-0 flex-col gap-1 @2xl:h-auto @2xl:min-h-0 @2xl:flex-1">
-        {!rolling && !showTakes && wf && win.allBars > 1 && (
-          <ZoomRow
-            shown={win.shown}
-            allBars={win.allBars}
-            onAll={() => setAsked({ bars: win.allBars, start: 0 })}
-            onEvent={
-              framed
-                ? { run: frameOnEvent, from: act.from, to: act.to }
-                : undefined
-            }
+
+      {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
+      {!rolling && clip && (
+        <ClipToolBar
+          modes={takes ? WAVE_MODES : WAVE_SOLO_MODES}
+          current={view}
+          onPick={(mode) => void command(`ui wave ${mode}`)}
+        />
+      )}
+      {/* The take list beside the wave: one row when there is nothing to choose between, two columns after several passes. */}
+      <div className="flex min-h-0 flex-1 gap-2">
+        {/* The TAKES mode draws in the wave's place; the wave stays mounted, hidden, so its state survives a switch. */}
+        {showTakes && takes && (
+          <TakesView
+            ev={takes.ev}
+            host={takes.host}
+            tempo={tempo}
+            num={takes.num}
+            den={takes.den}
+            reloadKey={reloadKey}
+            command={command}
+            onSeek={onSeek}
           />
         )}
-        {/* The take list beside the wave: one row when there is nothing to choose between, two columns after several passes. */}
-        <div className="flex min-h-0 flex-1 gap-2">
-          {/* The TAKES mode draws in the wave's place; the wave stays mounted, hidden, so its state survives a switch. */}
-          {showTakes && takes && (
-            <TakesView
+        <div
+          className={cn(
+            "flex min-h-0 min-w-0 flex-1 flex-col gap-1",
+            showTakes && "hidden",
+          )}
+        >
+          {/* A comped event: its parts in their takes' colours, the one clicked being the one below. */}
+          {piece && takes && (
+            <CompStrip
               ev={takes.ev}
-              host={takes.host}
-              tempo={tempo}
-              num={takes.num}
-              den={takes.den}
-              reloadKey={reloadKey}
-              command={command}
-              onSeek={onSeek}
+              selected={piece.id}
+              onSelect={(p) => setPieceId(p.id)}
+              project={{
+                tempo,
+                timeSigNumerator: takes.num,
+                timeSigDenominator: takes.den,
+              }}
             />
           )}
+          {showList && wf && (
+            <ClipMarksList
+              rows={markRows}
+              onFocus={(sec) => {
+                setAsked((a) => ({
+                  ...a,
+                  start:
+                    win.barSec > 0
+                      ? (sec - reach.from) / win.barSec - a.bars / 2
+                      : 0,
+                }));
+                void command("ui wave standard");
+              }}
+              onRemove={
+                clip
+                  ? (r, x, y) =>
+                      r.kind === "onset"
+                        ? void run(
+                            `clip onset remove ${clip} ${r.sec.toFixed(4)}`,
+                            `remove:${r.key}`,
+                          )
+                        : r.src != null &&
+                          onContextMenu?.(
+                            {
+                              kind: "warp-point",
+                              clip,
+                              src: r.src.toFixed(4),
+                            },
+                            x,
+                            y,
+                          )
+                  : undefined
+              }
+            />
+          )}
+          {/* The SONG's ruler over the wave (Ruler.tsx), the placement's grid rather than the warp — see docs/clipEditors.md. */}
+          {!rolling &&
+            wf &&
+            placedAt != null &&
+            waveW > 0 &&
+            win.view.end > win.view.start && (
+              <div className={cn("relative shrink-0", showList && "hidden")}>
+                <ArrangementRuler
+                  // `placedAt` is the beat the event's window starts playing at, so the song's beat here is measured from `act.from`.
+                  startBeat={placedAt + (win.view.start - act.from) * bps}
+                  beats={(win.view.end - win.view.start) * bps}
+                  ppb={waveW / ((win.view.end - win.view.start) * bps)}
+                  barBeats={beatsPerBar}
+                  tempo={tempo}
+                  height={18}
+                  onSeek={onSeek}
+                  className="shrink-0 border-b border-border/50 font-mono text-[10px] text-muted-foreground"
+                />
+                {/* The loop's points on the FILE's seconds, the axis the event's window is written in. */}
+                {looped && loopAddr && (
+                  <LoopBrace
+                    from={act.from}
+                    to={act.to}
+                    toPx={(sec) =>
+                      ((sec - win.view.start) /
+                        (win.view.end - win.view.start)) *
+                      waveW
+                    }
+                    fromPx={(x) =>
+                      win.view.start +
+                      (x / waveW) * (win.view.end - win.view.start)
+                    }
+                    min={reach.from}
+                    max={reach.to}
+                    onCommit={(f, t) =>
+                      void command(
+                        `event loop points ${loopAddr} ${f.toFixed(4)} ${t.toFixed(4)}`,
+                      )
+                    }
+                  />
+                )}
+              </div>
+            )}
+          {/* Two pictures, one frame: what the engine is hearing while it rolls, the file the service wrote once it stops. */}
+          {/* The wheel zooms the window ANCHORED under the cursor, a trackpad pinch arriving as Ctrl+wheel (@studio/ui-timeline/panZoom). */}
           <div
+            ref={waveBox}
+            // The view's own icon AS the pointer — `standard` keeps the system's, having no mark to place (modeIcons.tsx).
+            style={waveCursor ? { cursor: waveCursor } : undefined}
             className={cn(
-              "flex min-h-0 min-w-0 flex-1 flex-col gap-1",
-              showTakes && "hidden",
+              "min-h-0 flex-1 touch-none",
+              showList && "hidden",
+              waveCursor && "[&_*]:!cursor-[inherit]",
             )}
+            onWheel={(e) => {
+              if (rolling || !wf) return;
+              e.preventDefault();
+              const box = e.currentTarget;
+              zoomTo(
+                (cur) =>
+                  e.ctrlKey
+                    ? cur.bars / wheelFactor(e.deltaY, true)
+                    : zoomBars(cur.bars, e.deltaY, cur.allBars),
+                e.clientX,
+                box,
+              );
+            }}
           >
-            {/* A comped event: its parts in their takes' colours, the one clicked being the one below. */}
-            {piece && takes && (
-              <CompStrip
-                ev={takes.ev}
-                selected={piece.id}
-                onSelect={(p) => setPieceId(p.id)}
-                project={{
-                  tempo,
-                  timeSigNumerator: takes.num,
-                  timeSigDenominator: takes.den,
+            {counting ? (
+              // Nothing is being recorded yet, so there is nothing to draw — the header is already counting the pre-roll down.
+              <p className="py-6 text-center text-sm text-muted-foreground">
+                {m["clip.countingIn"]()}
+              </p>
+            ) : rolling || (bridge && !error) ? (
+              <LiveTakeWave live={live} height={waveH} />
+            ) : error ? (
+              <p className="py-6 text-center text-sm text-red-500">{error}</p>
+            ) : !clip ? (
+              <p className="py-6 text-center text-sm text-muted-foreground">
+                {m["clip.noTake"]()}
+              </p>
+            ) : !wf ? (
+              <p className="py-6 text-center text-sm text-muted-foreground">
+                {m["clip.readingTake"]()}
+              </p>
+            ) : (
+              <LiveWaveform
+                // Where this event sits in the song, and which slice of the file it plays — what turns the transport into a second of THIS picture.
+                placedAt={placedAt}
+                act={act}
+                tempo={tempo}
+                // k7's one waveform, the desk's: the PEAK as height and the three bands as colour (apps/k7-daw-frontend/packages/ui-waveform/docs/spectrum.md).
+                envelope={{
+                  intervalMs: wf.intervalMs,
+                  samples: wf.rms,
+                  peak: wf.peak,
+                  low: wf.low,
+                  mid: wf.mid,
+                  high: wf.high,
                 }}
-              />
-            )}
-            {showList && wf && (
-              <ClipMarksList
-                rows={markRows}
-                onFocus={(sec) => {
-                  setAsked((a) => ({
-                    ...a,
-                    start:
-                      win.barSec > 0
-                        ? (sec - reach.from) / win.barSec - a.bars / 2
-                        : 0,
-                  }));
-                  void command("ui wave standard");
-                }}
-                onRemove={
-                  clip
-                    ? (r, x, y) =>
-                        r.kind === "onset"
-                          ? void run(
-                              `clip onset remove ${clip} ${r.sec.toFixed(4)}`,
-                              `remove:${r.key}`,
-                            )
-                          : r.src != null &&
-                            onContextMenu?.(
-                              {
-                                kind: "warp-point",
-                                clip,
-                                src: r.src.toFixed(4),
-                              },
-                              x,
-                              y,
-                            )
+                duration={wf.seconds}
+                height={waveH}
+                // The project's bars and beats, straight from the same endpoint — the same three fields, so no translation is needed.
+                gridLines={wf.grid}
+                // Twelve bars by default: a minute of take drawn across a pane is a solid block, and the wheel opens it out.
+                view={win.view}
+                // The trim preview: what a cut at this gate would KEEP, while its menu is open.
+                selection={keep ? { start: keep.from, end: keep.to } : null}
+                // PINS inside the event, plain rules outside it: what lies past this window is context you can see and not material you can act on.
+                markers={
+                  editingOnsets
+                    ? inAct.map((t) => ({ id: t.toFixed(4), atSec: t }))
+                    : undefined
+                }
+                // Bubbles low on the line, not tabs along the top — a row of tabs covers the transients it points at.
+                markerPlace="low"
+                // The clip's stretch points, if it has a map: a dashed rule at the source moment, a blue one where its beat lands.
+                warps={editingWarp ? wf.warpMarks : undefined}
+                /** Double-click places a stretch point and dragging its handle says where it should land — one verb for both (clipWarp.ts). */
+                onWarpAdd={
+                  editingWarp && clip
+                    ? (sec) =>
+                        void run(
+                          // The marks go WITH the map: the picture is piecewise, so inverting it needs the points and not just the ratio.
+                          warpLine(
+                            clip,
+                            sec,
+                            sec,
+                            wf.sourceMap,
+                            tempo,
+                            wf.warpMarks,
+                          ),
+                          "warp",
+                          true, // quiet: a marker inside one clip file changes nothing else
+                        )
+                    : undefined
+                }
+                /** …and a RIGHT-CLICK on a point is where removing it lives — the shell's own menu, addressed by the FILE second the mark carries. */
+                onWarpMenu={
+                  editingWarp && clip && onContextMenu
+                    ? (mark, x, y) => {
+                        const hit = wf.warpMarks.find(
+                          (m) => Math.abs(m.orig - mark.orig) < 1e-9,
+                        );
+                        if (hit)
+                          onContextMenu(
+                            {
+                              kind: "warp-point",
+                              clip,
+                              src: hit.src.toFixed(4),
+                            },
+                            x,
+                            y,
+                          );
+                      }
+                    : undefined
+                }
+                onWarpMove={
+                  editingWarp && clip
+                    ? (mark, to) =>
+                        void run(
+                          warpLine(
+                            clip,
+                            mark.orig,
+                            to,
+                            wf.sourceMap,
+                            tempo,
+                            wf.warpMarks,
+                          ),
+                          "warp",
+                          true,
+                        )
+                    : undefined
+                }
+                // …and the onsets under them, as plain rules: reference, not pins — only the `onsets` view lets you touch them.
+                onsets={
+                  editingWarp ? onsets : editingOnsets ? outsideAct : undefined
+                }
+                // The EVENT's window, lit as ground with its edges picked out, and passed only when it actually cuts something.
+                sourceWindow={framed ? act : null}
+                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-frontend/packages/song/docs/materialCut.md). */
+                onWindowMove={
+                  piece && takes
+                    ? (w) => {
+                        // Seconds into the take's file, back to song beats: where the piece's edges now fall.
+                        const beat = (sec: number) =>
+                          piece.start +
+                          ((sec - (piece.sourceFrom ?? 0)) * tempo) / 60;
+                        const lines = pieceEdgeLines(
+                          takes.ev,
+                          piece,
+                          beat(w.from),
+                          beat(w.to),
+                          takes.num,
+                          takes.den,
+                        );
+                        void (async () => {
+                          for (const l of lines) await command(l);
+                        })();
+                      }
+                    : eventAt && track
+                      ? (w) =>
+                          // A LOOPED event's window is its loop: moved the way the ruler's brace moves it, its length kept.
+                          command(
+                            `${looped ? "event loop points" : "event window"} ${track} ${eventAt} ${w.from.toFixed(4)} ${w.to.toFixed(4)}`,
+                          )
+                      : undefined
+                }
+                // A click on a mark refuses that onset, or takes a hand-placed one back — one verb, because from here it is one act.
+                onMarkerClick={
+                  editingOnsets
+                    ? (m) =>
+                        void run(
+                          `clip onset remove ${clip} ${m.atSec.toFixed(4)}`,
+                          `remove:${m.id}`,
+                        )
+                    : undefined
+                }
+                // …and dragging one MOVES it; dropped outside the event it is not an edit at all, rather than being silently clamped.
+                onMarkerMove={
+                  editingOnsets
+                    ? (m, to) =>
+                        inside(to) &&
+                        void run(
+                          `clip onset move ${clip} ${m.atSec.toFixed(4)} ${to.toFixed(4)}`,
+                          `move:${m.id}`,
+                        )
+                    : undefined
+                }
+                // Anywhere else adds one — anywhere INSIDE the event; with the marks hidden the click is stowed with them.
+                onSeek={
+                  editingOnsets
+                    ? (sec) =>
+                        inside(sec) &&
+                        void run(
+                          `clip onset add ${clip} ${sec.toFixed(4)}`,
+                          "add",
+                        )
                     : undefined
                 }
               />
             )}
-            {/* The SONG's ruler over the wave (Ruler.tsx), the placement's grid rather than the warp — see docs/clipEditors.md. */}
-            {!rolling &&
-              wf &&
-              placedAt != null &&
-              waveW > 0 &&
-              win.view.end > win.view.start && (
-                <div className={cn("relative shrink-0", showList && "hidden")}>
-                  <ArrangementRuler
-                    // `placedAt` is the beat the event's window starts playing at, so the song's beat here is measured from `act.from`.
-                    startBeat={placedAt + (win.view.start - act.from) * bps}
-                    beats={(win.view.end - win.view.start) * bps}
-                    ppb={waveW / ((win.view.end - win.view.start) * bps)}
-                    barBeats={beatsPerBar}
-                    tempo={tempo}
-                    height={18}
-                    onSeek={onSeek}
-                    className="shrink-0 border-b border-border/50 font-mono text-[10px] text-muted-foreground"
-                  />
-                  {/* The loop's points on the FILE's seconds, the axis the event's window is written in. */}
-                  {looped && loopAddr && (
-                    <LoopBrace
-                      from={act.from}
-                      to={act.to}
-                      toPx={(sec) =>
-                        ((sec - win.view.start) /
-                          (win.view.end - win.view.start)) *
-                        waveW
-                      }
-                      fromPx={(x) =>
-                        win.view.start +
-                        (x / waveW) * (win.view.end - win.view.start)
-                      }
-                      min={reach.from}
-                      max={reach.to}
-                      onCommit={(f, t) =>
-                        void command(
-                          `event loop points ${loopAddr} ${f.toFixed(4)} ${t.toFixed(4)}`,
-                        )
-                      }
-                    />
-                  )}
-                </div>
-              )}
-            {/* Two pictures, one frame: what the engine is hearing while it rolls, the file the service wrote once it stops. */}
-            {/* The wheel zooms the window ANCHORED under the cursor, a trackpad pinch arriving as Ctrl+wheel (@studio/ui-timeline/panZoom). */}
-            <div
-              ref={waveBox}
-              // The view's own icon AS the pointer — `standard` keeps the system's, having no mark to place (modeIcons.tsx).
-              style={waveCursor ? { cursor: waveCursor } : undefined}
-              className={cn(
-                "min-h-0 flex-1 touch-none",
-                showList && "hidden",
-                waveCursor && "[&_*]:!cursor-[inherit]",
-              )}
-              onWheel={(e) => {
-                if (rolling || !wf) return;
-                e.preventDefault();
-                const box = e.currentTarget;
-                zoomTo(
-                  (cur) =>
-                    e.ctrlKey
-                      ? cur.bars / wheelFactor(e.deltaY, true)
-                      : zoomBars(cur.bars, e.deltaY, cur.allBars),
-                  e.clientX,
-                  box,
-                );
-              }}
-            >
-              {counting ? (
-                // Nothing is being recorded yet, so there is nothing to draw — the header is already counting the pre-roll down.
-                <p className="py-6 text-center text-sm text-muted-foreground">
-                  {m["clip.countingIn"]()}
-                </p>
-              ) : rolling || (bridge && !error) ? (
-                <LiveTakeWave live={live} height={waveH} />
-              ) : error ? (
-                <p className="py-6 text-center text-sm text-red-500">{error}</p>
-              ) : !clip ? (
-                <p className="py-6 text-center text-sm text-muted-foreground">
-                  {m["clip.noTake"]()}
-                </p>
-              ) : !wf ? (
-                <p className="py-6 text-center text-sm text-muted-foreground">
-                  {m["clip.readingTake"]()}
-                </p>
-              ) : (
-                <LiveWaveform
-                  // Where this event sits in the song, and which slice of the file it plays — what turns the transport into a second of THIS picture.
-                  placedAt={placedAt}
-                  act={act}
-                  tempo={tempo}
-                  // k7's one waveform, the desk's: the PEAK as height and the three bands as colour (apps/k7-daw-frontend/packages/ui-waveform/docs/spectrum.md).
-                  envelope={{
-                    intervalMs: wf.intervalMs,
-                    samples: wf.rms,
-                    peak: wf.peak,
-                    low: wf.low,
-                    mid: wf.mid,
-                    high: wf.high,
-                  }}
-                  duration={wf.seconds}
-                  height={waveH}
-                  // The project's bars and beats, straight from the same endpoint — the same three fields, so no translation is needed.
-                  gridLines={wf.grid}
-                  // Twelve bars by default: a minute of take drawn across a pane is a solid block, and the wheel opens it out.
-                  view={win.view}
-                  // The trim preview: what a cut at this gate would KEEP, while its menu is open.
-                  selection={keep ? { start: keep.from, end: keep.to } : null}
-                  // PINS inside the event, plain rules outside it: what lies past this window is context you can see and not material you can act on.
-                  markers={
-                    editingOnsets
-                      ? inAct.map((t) => ({ id: t.toFixed(4), atSec: t }))
-                      : undefined
-                  }
-                  // Bubbles low on the line, not tabs along the top — a row of tabs covers the transients it points at.
-                  markerPlace="low"
-                  // The clip's stretch points, if it has a map: a dashed rule at the source moment, a blue one where its beat lands.
-                  warps={editingWarp ? wf.warpMarks : undefined}
-                  /** Double-click places a stretch point and dragging its handle says where it should land — one verb for both (clipWarp.ts). */
-                  onWarpAdd={
-                    editingWarp && clip
-                      ? (sec) =>
-                          void run(
-                            // The marks go WITH the map: the picture is piecewise, so inverting it needs the points and not just the ratio.
-                            warpLine(
-                              clip,
-                              sec,
-                              sec,
-                              wf.sourceMap,
-                              tempo,
-                              wf.warpMarks,
-                            ),
-                            "warp",
-                            true, // quiet: a marker inside one clip file changes nothing else
-                          )
-                      : undefined
-                  }
-                  /** …and a RIGHT-CLICK on a point is where removing it lives — the shell's own menu, addressed by the FILE second the mark carries. */
-                  onWarpMenu={
-                    editingWarp && clip && onContextMenu
-                      ? (mark, x, y) => {
-                          const hit = wf.warpMarks.find(
-                            (m) => Math.abs(m.orig - mark.orig) < 1e-9,
-                          );
-                          if (hit)
-                            onContextMenu(
-                              {
-                                kind: "warp-point",
-                                clip,
-                                src: hit.src.toFixed(4),
-                              },
-                              x,
-                              y,
-                            );
-                        }
-                      : undefined
-                  }
-                  onWarpMove={
-                    editingWarp && clip
-                      ? (mark, to) =>
-                          void run(
-                            warpLine(
-                              clip,
-                              mark.orig,
-                              to,
-                              wf.sourceMap,
-                              tempo,
-                              wf.warpMarks,
-                            ),
-                            "warp",
-                            true,
-                          )
-                      : undefined
-                  }
-                  // …and the onsets under them, as plain rules: reference, not pins — only the `onsets` view lets you touch them.
-                  onsets={
-                    editingWarp
-                      ? onsets
-                      : editingOnsets
-                        ? outsideAct
-                        : undefined
-                  }
-                  // The EVENT's window, lit as ground with its edges picked out, and passed only when it actually cuts something.
-                  sourceWindow={framed ? act : null}
-                  /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-frontend/packages/song/docs/materialCut.md). */
-                  onWindowMove={
-                    piece && takes
-                      ? (w) => {
-                          // Seconds into the take's file, back to song beats: where the piece's edges now fall.
-                          const beat = (sec: number) =>
-                            piece.start +
-                            ((sec - (piece.sourceFrom ?? 0)) * tempo) / 60;
-                          const lines = pieceEdgeLines(
-                            takes.ev,
-                            piece,
-                            beat(w.from),
-                            beat(w.to),
-                            takes.num,
-                            takes.den,
-                          );
-                          void (async () => {
-                            for (const l of lines) await command(l);
-                          })();
-                        }
-                      : eventAt && track
-                        ? (w) =>
-                            // A LOOPED event's window is its loop: moved the way the ruler's brace moves it, its length kept.
-                            command(
-                              `${looped ? "event loop points" : "event window"} ${track} ${eventAt} ${w.from.toFixed(4)} ${w.to.toFixed(4)}`,
-                            )
-                        : undefined
-                  }
-                  // A click on a mark refuses that onset, or takes a hand-placed one back — one verb, because from here it is one act.
-                  onMarkerClick={
-                    editingOnsets
-                      ? (m) =>
-                          void run(
-                            `clip onset remove ${clip} ${m.atSec.toFixed(4)}`,
-                            `remove:${m.id}`,
-                          )
-                      : undefined
-                  }
-                  // …and dragging one MOVES it; dropped outside the event it is not an edit at all, rather than being silently clamped.
-                  onMarkerMove={
-                    editingOnsets
-                      ? (m, to) =>
-                          inside(to) &&
-                          void run(
-                            `clip onset move ${clip} ${m.atSec.toFixed(4)} ${to.toFixed(4)}`,
-                            `move:${m.id}`,
-                          )
-                      : undefined
-                  }
-                  // Anywhere else adds one — anywhere INSIDE the event; with the marks hidden the click is stowed with them.
-                  onSeek={
-                    editingOnsets
-                      ? (sec) =>
-                          inside(sec) &&
-                          void run(
-                            `clip onset add ${clip} ${sec.toFixed(4)}`,
-                            "add",
-                          )
-                      : undefined
-                  }
-                />
-              )}
-            </div>
           </div>
         </div>
       </div>

@@ -2848,7 +2848,7 @@ export default function App({
 
   // The Events panel: the empty state, the clip, the live take and the take just filed (the editors inside are the clip view's).
   const eventsBody = (
-    <div className="@container flex h-full min-h-0 min-w-0 flex-col">
+    <div className="flex h-full min-h-0 min-w-0 flex-col">
       {(!dockSlot || dockSlot.kind === "trackModules") && (
         <p className="flex h-full items-center justify-center px-4 text-center text-muted-foreground text-xs">
           {m["panel.eventEmpty"]()}

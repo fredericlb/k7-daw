@@ -692,21 +692,6 @@ one that a finger has. It is drawn only once there is a file: while a take rolls
 to point at. Each segment dispatches the command. There is **no whole-clip overview**: in the bottom dock the
 zoom runs the panel's whole width, so a second strip of the same file only takes height from it.
 
-### The editors are two columns in the dock
-
-Clip, piano roll and the live take share one layout (`ClipPanelControls.tsx` holds the clip's left
-column). **The left column is 360 px, scrolls by itself, and holds every control**: the clip line, gain,
-Loop, Trim, Ops, the tool bar and the tool's hint; for the roll, the tool menu, Loop, Double and its
-hint; for a take, the recording card and Stop. **The right column flexes and is the picture**: the ZOOM
-row, the ruler and the zoom, or the marks list, the takes view, or the roll's keys and grid. Expanding
-the dock only gives the right column more height.
-
-The switch to one column is a **container query on the dock's body** (`@2xl`), not a device test: the
-same components then serve the phone sheet, controls first and the picture under them at a fixed
-height, the sheet's own scroll covering the rest. The picture measures its own box (`ResizeObserver`),
-so it follows the column and not the old panel width. Trim keeps its dropdown card, because the wave
-draws what the gate keeps only while that menu is open.
-
 **The cursor over the wave is the button's own drawing**, built from the same SVG body — see
 `timeline.md` for why that matters and how the outline and hotspots work. `standard` (and `list`) keep the
 system's arrow, having no mark to place and so nothing to promise.

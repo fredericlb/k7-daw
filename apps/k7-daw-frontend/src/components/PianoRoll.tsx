@@ -601,47 +601,49 @@ export function PianoRoll({
 
   return (
     // min-w-0, as in the timeline: the fixed-width grid must not become this flex child's minimum.
-    <div className="flex min-h-full min-w-0 flex-col gap-2.5 px-1 @2xl:h-full @2xl:flex-row @2xl:gap-4">
-      {/* The left column: the clip's line, the tool menu and the hint, 360 px beside the roll (docs/clipEditors.md). */}
-      <div className="flex min-w-0 shrink-0 flex-col gap-2.5 text-xs @2xl:w-[360px] @2xl:overflow-y-auto">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          {/* The name a musician knows the clip by; its id stays the tooltip's (clipNames.ts). */}
-          <span
-            className="font-semibold text-primary-text"
-            title={clip.name || clip.id}
-          >
-            <Piano className="h-3.5 w-3.5" />{" "}
-            {clipShownName(
-              clip.name || clip.id,
-              laneNamer(project.tracks),
-              CLIP_NAME_WORDS,
-              laneNamer(project.tracks)(
-                project.tracks.find((t) =>
-                  t.clips.some((c) => c.id === clip.id),
-                )?.id ?? "",
-              ),
-            )}
-          </span>
-          <span className="text-muted-foreground">
-            {(visNotes.length === 1
-              ? m["roll.notes.one"]
-              : m["roll.notes.other"])({ n: visNotes.length })}
-            {/* What the cage hides, counted, so notes sitting before a file's `from` read as windowed rather than as data lost. */}
-            {notes.length > visNotes.length &&
-              ` (${m["roll.outsideWindow"]({
-                n: notes.length - visNotes.length,
-              })})`}{" "}
-            · {m["roll.beats"]({ n: Math.round(placedEnd) })}
-            {/* What the marks add up to, said in words: ten passes of eight beats is not an 80-beat pattern, though the pane is as wide. */}
-            {loop && (
-              <span className="ml-2 text-violet-400">
-                · {m["roll.loop"]({ win: +loop.win.toFixed(3) })}
-                {loop.passes > 1 && ` × ${loop.passes}`}
-              </span>
-            )}
-          </span>
-        </div>
-        <div className="flex flex-wrap items-center gap-1">
+    <div className="flex h-full min-h-0 min-w-0 flex-col border-t-2 border-border">
+      <div className="flex items-center gap-2 border-b border-border px-3 py-1 text-xs">
+        {/* The name a musician knows the clip by; its id stays the tooltip's (clipNames.ts). */}
+        <span
+          className="font-semibold text-primary-text"
+          title={clip.name || clip.id}
+        >
+          <Piano className="h-3.5 w-3.5" />{" "}
+          {clipShownName(
+            clip.name || clip.id,
+            laneNamer(project.tracks),
+            CLIP_NAME_WORDS,
+            laneNamer(project.tracks)(
+              project.tracks.find((t) => t.clips.some((c) => c.id === clip.id))
+                ?.id ?? "",
+            ),
+          )}
+        </span>
+        <span className="text-muted-foreground">
+          {(visNotes.length === 1
+            ? m["roll.notes.one"]
+            : m["roll.notes.other"])({ n: visNotes.length })}
+          {/* What the cage hides, counted, so notes sitting before a file's `from` read as windowed rather than as data lost. */}
+          {notes.length > visNotes.length &&
+            ` (${m["roll.outsideWindow"]({
+              n: notes.length - visNotes.length,
+            })})`}{" "}
+          · {m["roll.beats"]({ n: Math.round(placedEnd) })}
+          {/* What the marks add up to, said in words: ten passes of eight beats is not an 80-beat pattern, though the pane is as wide. */}
+          {loop && (
+            <span className="ml-2 text-violet-400">
+              · {m["roll.loop"]({ win: +loop.win.toFixed(3) })}
+              {loop.passes > 1 && ` × ${loop.passes}`}
+            </span>
+          )}
+          {onCreateNote && (
+            <span className="ml-2 text-faint">
+              · {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
+            </span>
+          )}
+        </span>
+        {/* The right end of the bar, whatever it holds: the ✕ then needs no margin rule of its own. */}
+        <span className="ml-auto flex items-center gap-1">
           {onModeChange && (
             <RollToolMenu
               modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
@@ -655,15 +657,10 @@ export function PianoRoll({
             seqId={seqId}
             command={onCreateNote ? onCommand : undefined}
           />
-        </div>
-        {onCreateNote && (
-          <p className="text-[12px] text-faint leading-4">
-            {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
-          </p>
-        )}
+        </span>
       </div>
 
-      <div className="flex h-72 min-w-0 shrink-0 @2xl:h-auto @2xl:min-h-0 @2xl:flex-1">
+      <div className="flex min-h-0 flex-1">
         {/* The TAKES mode draws in the lanes' place; the lanes stay mounted, hidden, so the caret and the scroll survive. */}
         {showTakes && takes && (
           <TakesView
