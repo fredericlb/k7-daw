@@ -135,6 +135,9 @@ export function BarBody({
               size="xs"
               variant="secondary"
               disabled={!!busy || !v.push}
+              data-testid={
+                v.pushBlocked === "pullFirst" ? "git-pull-first" : undefined
+              }
               title={
                 v.pushBlocked === "pullFirst" ? m["git.pullFirst"]() : undefined
               }

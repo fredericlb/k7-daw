@@ -58,7 +58,7 @@ export function SongBrowser({
       >
         <DialogHeader>
           <DialogTitle>{m["browser.title"]({ side })}</DialogTitle>
-          <DialogDescription>
+          <DialogDescription data-testid="set-count">
             {m[
               isOne(songs.length) ? "browser.count.one" : "browser.count.other"
             ]({

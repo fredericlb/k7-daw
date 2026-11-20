@@ -58,7 +58,12 @@ export function OutputRecordButton({
         )}
       </Button>
       {since !== null && (
-        <span className="font-mono text-xs tabular-nums">
+        <span
+          role="timer"
+          aria-label={m["record.clock"]()}
+          data-testid="output-record-clock"
+          className="font-mono text-xs tabular-nums"
+        >
           {clock(now - since)}
         </span>
       )}

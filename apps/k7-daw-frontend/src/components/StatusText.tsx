@@ -23,6 +23,7 @@ export function StatusText({
     <span
       // This line is the shell's whole error channel, so it is also its only live region.
       role="status"
+      data-testid="project-status-line"
       aria-live="polite"
       // Truncation is the layout's, not the message's: the full text has to stay reachable.
       title={shown}

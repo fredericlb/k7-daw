@@ -3008,7 +3008,10 @@ export default function App({
         {/* …and the ONE decoder their screens draw a module's sound files with — every graph, the per-track one included. */}
         <LcdSoundsContext.Provider value={shellSounds}>
           {/* `overflow-hidden`: a pane wider than the screen must not widen the page, or a phone moves every dialog off it (docs/shell.md). */}
-          <div className="relative flex h-full flex-col overflow-hidden bg-background text-foreground">
+          <div
+            data-layout={isMobile ? "phone" : "desk"}
+            className="relative flex h-full flex-col overflow-hidden bg-background text-foreground"
+          >
             {/* A demo is overwritten on the service's next start: said before an edit is lost (components/DemoBanner.tsx). */}
             {ws?.activeIsDemo && ws.activeProject && (
               <DemoBanner project={ws.activeProject} />

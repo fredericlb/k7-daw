@@ -75,6 +75,7 @@ function Meter({ db }: { db: number }) {
   return (
     <div
       className="relative w-1.5 shrink-0 overflow-hidden rounded-full bg-foreground/15"
+      data-testid="deck-meter"
       title={m["meter.level"]({ value: dbText(db) })}
     >
       {/* Scaled and not resized: a height would reflow this column every frame the engine speaks. */}

@@ -238,6 +238,7 @@ export function ProjectsTable(p: {
           {...mm}
           {...b.drop}
           data-workspace={w.name}
+          data-testid="workspace-card"
           className={`${BAND_ROW} ${b.lit}`}
         >
           {bandCells(columns, b.label, "pt-5 text-sm", b.acts)}

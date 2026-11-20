@@ -104,6 +104,7 @@ export function ShellTransport({
               size={toolSize}
               variant={loopOn ? "default" : "secondary"}
               aria-pressed={loopOn}
+              aria-label={m["transport.loop"]()}
               onClick={(e) => {
                 onLoop();
                 blurOnClick(e);
@@ -133,7 +134,7 @@ export function ShellTransport({
               blurOnClick(e);
             }}
             title={m["transport.record"]()}
-            aria-label={m["transport.record"]()}
+            aria-label={m["transport.recordLabel"]()}
           >
             <Circle
               className={`h-4 w-4 ${recordEnabled ? "fill-red-500 text-red-500" : ""}`}

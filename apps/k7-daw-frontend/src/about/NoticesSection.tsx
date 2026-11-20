@@ -133,7 +133,7 @@ export function NoticesSection() {
             </Action>
           ))}
         </div>
-        <p className="text-faint text-xs">
+        <p data-testid="notices-count" className="text-faint text-xs">
           {m["about.notices.count"]({
             shown: String(shown.length),
             total: String(notices.entries.length),
