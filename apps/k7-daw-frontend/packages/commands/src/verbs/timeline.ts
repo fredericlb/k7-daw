@@ -138,7 +138,8 @@ export const TIMELINE_VERBS: Record<string, SidHandler> = {
       return h.refuse([`no timeline "${id}"`]);
     if (!(await h.timelinePlay?.(id ?? null)))
       return h.refuse(["timeline play: this host drives no engine"]);
-    if (!id) return h.log(["playing the main timeline"]);
+    // Back on the song: the transport already says it, so no line.
+    if (!id) return;
     const hosts = auditionHosts(p, id);
     h.log([
       hosts.length
