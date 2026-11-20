@@ -1,11 +1,7 @@
 // OverflowMenu.tsx — the phone header's one menu: pane, lane views and the panel tiles (300 wide, over a 0.35 scrim).
 // Everything it holds is also a button of the Pad and Desk header: this is the same set, folded.
 import { Button } from "@studio/ui/button";
-import {
-  Ellipsis,
-  type LucideIcon,
-  Settings,
-} from "@studio/ui/icons";
+import { Ellipsis, type LucideIcon, Settings } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { type ReactNode, useState } from "react";
 import { m } from "../paraglide/messages.js";
