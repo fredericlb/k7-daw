@@ -3,17 +3,15 @@
 //
 // Each tab is a COMMAND the shell dispatches (`ui settings io`, …), not a callback — that is
 // what keeps the palette and the panel from drifting. COMMANDS stays a full page, reached by a
-// button here: a sixty-row catalogue does not fit 24rem.
+// row of the Editor tab: a sixty-row catalogue does not fit 24rem.
 //
 // Why several panels rather than one set of tabs, and why none of them is a pane:
 // ../docs/shell.md, "The right column".
 
 import type { EngineClient } from "@studio/engine-browser";
-import { Button } from "@studio/ui/button";
 import { Choice } from "@studio/ui/choice";
 import {
   AudioLines,
-  Command,
   FolderCog,
   type Settings,
   SlidersHorizontal,
@@ -88,16 +86,6 @@ export function SettingsPanel({
           })}
           className="min-w-0 flex-1"
         />
-        {/* The one screen that is still a page, and the button that opens it. */}
-        <Button
-          size="round"
-          variant="glass"
-          title={m["settings.commandsHint"]()}
-          aria-label={m["cmds.title"]()}
-          onClick={() => void onRun("ui settings commands")}
-        >
-          <Command className="size-5" />
-        </Button>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto">
@@ -105,6 +93,7 @@ export function SettingsPanel({
           <EditorSettingsPage
             vimMode={vimMode}
             onToggleVim={() => void onRun("ui vim")}
+            onOpenCommands={() => void onRun("ui settings commands")}
           />
         )}
         {tab === "io" && <IoPanel engine={engine} />}
