@@ -352,11 +352,7 @@ export default function App({
     setStackView,
     setShowDocs,
     setLogsFilter,
-    setTool,
-    setLanesExpanded,
     setPictureShown,
-    setRulerSeconds,
-    setAutomationShown,
   } = shell.getState();
   const showHelp = useStore(shell, (s) => s.showHelp);
   const rightPanel = useStore(shell, (s) => s.rightPanel);
@@ -582,11 +578,6 @@ export default function App({
     (next: typeof tlView) => setTlView(keepIfEqual(next)),
     [],
   );
-  // The bar's tool and its Lane views follow what the timeline reports, until the timeline reads the store itself.
-  useEffect(() => {
-    setTool(tlView.tool);
-    setLanesExpanded(tlView.expanded);
-  }, [tlView.tool, tlView.expanded, setTool, setLanesExpanded]);
   /** The reference track the bar has loaded, or null for no bar — it outlives every tab, being nothing this project owns (docs/references.md). */
   const [reference, setReference] = useState<ReferenceTrack | null>(null);
   // Whether that track is sounding, and the bar's play/pause — for the panel row that stands for it.
@@ -802,6 +793,13 @@ export default function App({
 
   // The special views this PROJECT declares (`surfaces/`), and the engine as a desk sees it — both cheap and unconditional.
   const { surfaces } = useSurfaces(surfacesKey);
+  const masteringSurface = useMemo(
+    () =>
+      surfaces.find(
+        (s) => s.surface.type === "mastering" && s.surface.layout === "split",
+      ) ?? null,
+    [surfaces],
+  );
   /** The project's ARRANGEMENT, if it declares one: a `split` surface of type `timeline`, false for a frame or two on open. */
   const timelineSurface = useMemo(
     () =>
@@ -874,16 +872,6 @@ export default function App({
   );
   const hasTurntables = !!turntablesSurface;
 
-  /** …and its MASTER STRIP, if it declares one — beside the graph, since every knob on it is a param on ONE module there (docs/mastering.md). */
-  const masteringSurface = useMemo(
-    () =>
-      surfaces.find(
-        (s) => s.surface.type === "mastering" && s.surface.layout === "split",
-      ) ?? null,
-    [surfaces],
-  );
-  const hasMastering = !!masteringSurface;
-
   const turntableDeck = useTurntableDeck({
     store,
     engineRef,
@@ -916,7 +904,6 @@ export default function App({
     {
       timeline: hasTimeline,
       turntables: hasTurntables,
-      mastering: hasMastering,
     },
   );
   const openHelp = useCallback(() => setShowHelp(true), [setShowHelp]);
@@ -957,9 +944,8 @@ export default function App({
       viewPanes({
         timeline: hasTimeline,
         turntables: hasTurntables,
-        mastering: hasMastering,
       }),
-    [hasTimeline, hasTurntables, hasMastering],
+    [hasTimeline, hasTurntables],
   );
   const ringPanes = layout.ring;
   /** The page a project opens on: its arrangement when it declares one, else the first pane it does (docs/shell.md). */
@@ -1635,10 +1621,6 @@ export default function App({
     setCommandsPage,
     toggleMixer,
     toggleStack,
-    mirrorLane: (view) =>
-      view === "ruler"
-        ? setRulerSeconds((v) => !v)
-        : setAutomationShown((v) => !v),
     toggleDocs,
     clearLogs,
     setTrackCurves,
@@ -2766,6 +2748,7 @@ export default function App({
       recInfo={recInfo}
       meter={masterMeter}
       hidden={false}
+      rootRef={stripRef}
       transport={
         showTransport
           ? {
@@ -2984,13 +2967,7 @@ export default function App({
           />
         );
       case "playlists":
-        return (
-          <PlaylistsPanel
-            vimMode={vimMode}
-            onRun={runCommand}
-            onClose={closePanelNow}
-          />
-        );
+        return <PlaylistsPanel vimMode={vimMode} onRun={runCommand} />;
       case "references":
         return (
           <>
@@ -3005,7 +2982,6 @@ export default function App({
                 sounding={referenceSounding}
                 onPlay={setReference}
                 onToggle={() => referenceToggle.current?.()}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -3019,7 +2995,7 @@ export default function App({
               resetKey={reloadKey}
               onError={paneError}
             >
-              <ResourcesPanel reloadKey={reloadKey} onClose={closePanelNow} />
+              <ResourcesPanel reloadKey={reloadKey} />
             </PaneBoundary>
           </>
         );
@@ -3049,7 +3025,6 @@ export default function App({
                   )
                 }
                 onRun={runCommand}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -3068,7 +3043,6 @@ export default function App({
                 git={gitHandle.state}
                 gitTransport={gitTransport}
                 onMark={setHistoryMark}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -3084,11 +3058,9 @@ export default function App({
             hasPicture={!!videoDoc}
             timelines={(projectDoc?.timelines ?? []).map((t) => t.id)}
             onRun={(c) => void runCommand(c)}
-            onClose={closePanelNow}
           />
         );
       case "mixer":
-        // The Master section of this panel is built with the mixer itself.
         return (
           <PaneBoundary
             name="graph panel"
@@ -3099,6 +3071,17 @@ export default function App({
               {...graphHostProps}
               trackId={null}
               strips={mixerStrips}
+              master={
+                masteringSurface ? (
+                  <MasteringTab
+                    surface={masteringSurface}
+                    paramsStore={pluginParamsStore}
+                    setPluginParam={setPluginParam}
+                    watchPluginParams={watchPluginParams}
+                    command={quietCommand}
+                  />
+                ) : null
+              }
             />
           </PaneBoundary>
         );
@@ -3149,7 +3132,9 @@ export default function App({
               <DemoBanner project={ws.activeProject} />
             )}
             {/* The panes, with room kept for the floating bar; panels float over them and push nothing. */}
-            <div className="z-(--k7-z-pane) flex min-h-0 flex-1 flex-col pb-[88px]">
+            <div
+              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col pb-[88px]`}
+            >
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
                 {editorPopin && (
@@ -3362,30 +3347,6 @@ export default function App({
                             trackIds={trackOrder}
                             readOnly={locked}
                             videoArmed={videoArmed}
-                          />
-                        </PaneBoundary>
-                      </div>
-                    )}
-                    {/* The MASTER STRIP, when declared: a page of its own over one quick-master node (docs/mastering.md). */}
-                    {masteringSurface && (
-                      <div
-                        {...paneProps("mastering")}
-                        className={cn(
-                          "flex min-h-0 min-w-0",
-                          full === "mastering" ? "flex-1" : "hidden",
-                        )}
-                      >
-                        <PaneBoundary
-                          name="mastering"
-                          resetKey={reloadKey}
-                          onError={paneError}
-                        >
-                          <MasteringTab
-                            surface={masteringSurface}
-                            paramsStore={pluginParamsStore}
-                            setPluginParam={setPluginParam}
-                            watchPluginParams={watchPluginParams}
-                            command={quietCommand}
                           />
                         </PaneBoundary>
                       </div>

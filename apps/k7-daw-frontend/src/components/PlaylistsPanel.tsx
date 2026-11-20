@@ -10,76 +10,34 @@
 
 import { playlistPathOf } from "@studio/song-schema/playlist";
 import { Button } from "@studio/ui/button";
-import {
-  ChevronDown,
-  ListMusic,
-  Loader2,
-  Maximize2,
-  Plus,
-  TriangleAlert,
-  X,
-} from "@studio/ui/icons";
+import { Loader2, Maximize2, Plus, TriangleAlert } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
+import { Picker } from "@studio/ui/picker";
 import type { PlaylistInfo } from "@studio/web-protocol/playlists";
 import { sortForPeople } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
-import { fuzzyScore } from "../fuzzy";
 import { parts } from "../i18nParts";
 import { m } from "../paraglide/messages.js";
 import { PlaylistEditor } from "./PlaylistEditor";
-import { type TreeNode, TreePicker } from "./TreePicker";
-
-/** How many playlists the dropdown's search lists before it stops — the same cap the module picker uses, and for the same reason. */
-const SEARCH_LIMIT = 40;
-
-/** What a playlist reads as in the dropdown — its title if the file states one, else the filename, with the path muted beside it. */
-const nodeOf = (p: PlaylistInfo): TreeNode<PlaylistInfo> => ({
-  key: p.path,
-  label: p.title || p.name,
-  hint: p.path,
-  entry: p,
-});
-
-/** The dropdown's search: fuzzy over the name AND the path, best first, with the shell's one matcher. */
-function searchPlaylists(
-  rows: PlaylistInfo[],
-  query: string,
-): TreeNode<PlaylistInfo>[] {
-  const q = query.trim();
-  if (!q) return [];
-  return rows
-    .map((p) => ({
-      p,
-      score: Math.max(fuzzyScore(q, p.title || p.name), fuzzyScore(q, p.path)),
-    }))
-    .filter((r) => r.score >= 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, SEARCH_LIMIT)
-    .map((r) => nodeOf(r.p));
-}
 
 export function PlaylistsPanel({
   vimMode,
   onRun,
-  onClose,
 }: {
   vimMode: boolean;
   /** Run a command line through the shell — what « Nouvelle playlist » dispatches, so the palette reaches it (../docs/shell.md). */
   onRun: (line: string) => Promise<void>;
-  onClose: () => void;
 }) {
   const [rows, setRows] = useState<PlaylistInfo[] | null>(null);
   const [error, setError] = useState("");
   /** Which one the panel is showing, by PATH — the listing is re-read on every save, so a row object would be a fresh identity. */
   const [open, setOpen] = useState<string | null>(null);
-  /** Where to put the dropdown, in viewport coords, or null when it is closed. */
-  const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   /** The FULL editor, over the shell: the panel is too narrow for the text, and the page is the escape hatch for what it cannot edit (../docs/playlists.md). */
   const [expanded, setExpanded] = useState(false);
   const [creating, setCreating] = useState(false);
   const [name, setName] = useState("");
   const nameRef = useRef<HTMLInputElement>(null);
-  const pickRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (creating) nameRef.current?.focus();
   }, [creating]);
@@ -110,8 +68,13 @@ export function PlaylistsPanel({
   }, [rows, open]);
 
   // By what each row reads as, for people: the service answers by path, in code points (../../docs/listOrder.md).
-  const tree = useMemo(
-    () => sortForPeople(rows ?? [], (p) => p.title || p.name).map(nodeOf),
+  const items = useMemo(
+    () =>
+      sortForPeople(rows ?? [], (p) => p.title || p.name).map((p) => ({
+        value: p.path,
+        label: p.title || p.name,
+        detail: p.path,
+      })),
     [rows],
   );
   const current = rows?.find((p) => p.path === open) ?? null;
@@ -150,64 +113,45 @@ export function PlaylistsPanel({
     );
 
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-l border-border bg-background">
-      <header className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1.5">
-        <ListMusic className="h-4 w-4 shrink-0 text-muted-foreground" />
-
-        {/* The dropdown is a BUTTON opening the module picker's searchable popup, not a <select>: the list is as long as the workspace is old. */}
-        <button
-          ref={pickRef}
-          type="button"
-          disabled={!rows?.length}
-          onClick={() => {
-            const r = pickRef.current?.getBoundingClientRect();
-            if (r) setMenu({ x: r.left, y: r.bottom + 4 });
-          }}
-          className="flex min-w-0 flex-1 items-center gap-1 rounded px-1.5 py-1 text-left text-sm hover:bg-accent disabled:opacity-50"
-          title={current?.path ?? m["pls.none"]()}
-        >
-          <span className="min-w-0 flex-1 truncate">
-            {rows === null
-              ? m["pls.loading"]()
-              : (current?.title ?? current?.name ?? m["pls.none"]())}
-          </span>
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-        </button>
-
+    <div className="flex min-h-0 flex-1 flex-col">
+      <header className="flex shrink-0 items-center gap-2 pb-2">
+        <Picker
+          className="min-w-0 flex-1"
+          items={items}
+          value={open}
+          onValueChange={setOpen}
+          label={m["pls.search"]()}
+          searchLabel={m["pls.search"]()}
+          placeholder={rows === null ? m["pls.loading"]() : m["pls.none"]()}
+          emptyLabel={m["pls.none"]()}
+        />
         <Button
-          size="icon"
-          variant={creating ? "default" : "ghost"}
+          size="round"
+          variant="glass"
+          aria-pressed={creating}
           title={m["pls.new"]()}
           aria-label={m["pls.new"]()}
           onClick={() => setCreating((c) => !c)}
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="size-5" />
         </Button>
         {/* The text, when the panel cannot do what you need — see `expanded`. */}
         <Button
-          size="icon"
-          variant="ghost"
+          size="round"
+          variant="glass"
           disabled={!open}
           title={m["pls.editFile"]()}
           aria-label={m["pls.editFileShort"]()}
           onClick={() => setExpanded(true)}
         >
-          <Maximize2 className="h-4 w-4" />
-        </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
+          <Maximize2 className="size-5" />
         </Button>
       </header>
 
       {creating ? (
-        <div className="flex shrink-0 items-center gap-2 border-b bg-muted/30 px-2 py-1.5">
+        <div className="mb-2 flex shrink-0 items-center gap-2">
           {/* Focused through a ref rather than `autoFocus`, which steals focus on MOUNT — not the same event as the opening press. */}
-          <input
+          <Input
             ref={nameRef}
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -217,7 +161,7 @@ export function PlaylistsPanel({
               if (e.key === "Enter") create();
             }}
             placeholder={m["pls.namePlaceholder"]()}
-            className="min-w-0 flex-1 rounded-sm bg-transparent text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
+            className="min-w-0 flex-1"
           />
           <Button size="sm" onClick={create} disabled={!name.trim()}>
             {m["common.create"]()}
@@ -226,13 +170,11 @@ export function PlaylistsPanel({
       ) : null}
 
       {error ? (
-        <p className="shrink-0 border-b px-2 py-1.5 text-xs text-destructive">
-          {error}
-        </p>
+        <p className="type-status shrink-0 pb-2 text-error">{error}</p>
       ) : null}
 
       {current && !current.ok ? (
-        <p className="flex shrink-0 items-center gap-1 border-b bg-muted/30 px-2 py-1.5 text-xs text-destructive">
+        <p className="type-status flex shrink-0 items-center gap-1.5 pb-2 text-error">
           <TriangleAlert className="h-3 w-3 shrink-0" /> {m["pls.brokenFile"]()}
         </p>
       ) : null}
@@ -261,20 +203,6 @@ export function PlaylistsPanel({
           />
         ) : null}
       </div>
-
-      {menu && rows ? (
-        <TreePicker<PlaylistInfo>
-          x={menu.x}
-          y={menu.y}
-          tree={tree}
-          search={(q) => searchPlaylists(rows, q)}
-          searchLimit={SEARCH_LIMIT}
-          placeholder={m["pls.search"]()}
-          emptyLabel={m["pls.none"]()}
-          onPick={(p) => setOpen(p.path)}
-          onClose={() => setMenu(null)}
-        />
-      ) : null}
-    </aside>
+    </div>
   );
 }

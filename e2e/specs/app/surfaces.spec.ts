@@ -5,7 +5,8 @@ import { join, relative } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import type { FileService } from "../../src/files.ts";
 import { FIXTURES_DIR, FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { navControl, pane } from "../../src/nav.ts";
+import { pane } from "../../src/nav.ts";
+import { openPanel } from "../../src/panels.ts";
 import { expect, type K7, TARGET, test } from "../../src/target.ts";
 import { engineUp, play, transportBar } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
@@ -374,7 +375,7 @@ test("a mastering control writes its node file", async ({ k7 }) => {
   const before = await files.readText(WORKSPACE, node);
   const page = await openProject(k7, WORKSPACE, "mastering.k7");
   const watch = watchPage(page);
-  await (await navControl(page, "Mastering")).click();
+  await openPanel(page, "Mixer");
   const width = page.getByRole("slider", { name: /^Width/ });
   await expect(width).toHaveValue("100");
   await width.focus();

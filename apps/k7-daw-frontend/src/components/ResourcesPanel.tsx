@@ -3,15 +3,14 @@
 // BROWSER, beside the engine, so a preview stops when asked (../docs/resources.md).
 
 import { Button } from "@studio/ui/button";
+import { Chip } from "@studio/ui/chip";
 import {
   Film,
-  FolderOpen,
   Loader2,
   Music,
   Play,
   Square,
   TriangleAlert,
-  X,
 } from "@studio/ui/icons";
 import { formatBytes } from "@studio/ui-chains-react/node-load";
 import type { ProjectResource } from "@studio/web-protocol/resources";
@@ -27,14 +26,12 @@ interface DraggedResource {
   url: string;
 }
 
-export function ResourcesPanel({
-  reloadKey,
-  onClose,
-}: {
-  /** Bumped by every write: a file dropped on the timeline joins the list without a refresh. */
-  reloadKey: number;
-  onClose: () => void;
-}) {
+type Filter = "all" | "audio" | "video";
+const FILTERS: Filter[] = ["all", "audio", "video"];
+
+// `reloadKey` is bumped by every write: a file dropped on the timeline joins the list without a refresh.
+export function ResourcesPanel({ reloadKey }: { reloadKey: number }) {
+  const [filter, setFilter] = useState<Filter>("all");
   const [rows, setRows] = useState<ProjectResource[] | null>(null);
   const [error, setError] = useState("");
   /** The one resource whose player is open, by id — opening another closes it, and unmounting it stops it. */
@@ -54,22 +51,24 @@ export function ResourcesPanel({
     void refresh();
   }, [refresh, reloadKey]);
 
+  const shown = (rows ?? []).filter(
+    (r) => filter === "all" || r.kind === filter,
+  );
+
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-border border-l bg-background">
-      <header className="flex shrink-0 items-center gap-1 border-border border-b px-2 py-1.5">
-        <FolderOpen className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 truncate px-1.5 text-sm">
-          {m["res.title"]()}
-        </span>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </header>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="flex shrink-0 flex-wrap gap-2 pb-2">
+        {FILTERS.map((f) => (
+          <Chip
+            key={f}
+            variant="filter"
+            selected={filter === f}
+            onClick={() => setFilter(f)}
+          >
+            {m[`res.filter.${f}` as "res.filter.all"]()}
+          </Chip>
+        ))}
+      </div>
 
       {error ? (
         <p className="shrink-0 border-b px-2 py-1.5 text-destructive text-xs">
@@ -82,9 +81,9 @@ export function ResourcesPanel({
           <div className="flex items-center gap-2 p-4 text-muted-foreground text-sm">
             <Loader2 className="h-4 w-4 animate-spin" /> {m["common.loading"]()}
           </div>
-        ) : rows.length === 0 ? (
+        ) : shown.length === 0 ? (
           <p className="p-3 text-muted-foreground text-sm">
-            {m["res.empty"]()}
+            {rows.length === 0 ? m["res.empty"]() : m["res.emptyFilter"]()}
           </p>
         ) : (
           <>
@@ -92,7 +91,7 @@ export function ResourcesPanel({
               {m["res.hint"]()}
             </p>
             <ul>
-              {rows.map((r) => (
+              {shown.map((r) => (
                 <ResourceRow
                   key={r.id}
                   r={r}
@@ -104,7 +103,7 @@ export function ResourcesPanel({
           </>
         )}
       </div>
-    </aside>
+    </div>
   );
 }
 

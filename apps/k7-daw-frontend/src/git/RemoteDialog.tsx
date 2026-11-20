@@ -101,15 +101,15 @@ export function RemoteDialog({
           fail={setError}
         />
         {busy && (
-          <p className="text-muted-foreground text-xs">
-            <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
+          <p className="text-fg-2 type-secondary">
+            <Loader2 className="mr-1 inline size-3 animate-spin" />
             {step}
           </p>
         )}
         {error && (
           <p
             role="alert"
-            className="whitespace-pre-wrap rounded border border-destructive/40 bg-destructive/10 px-3 py-2 text-destructive text-xs"
+            className="whitespace-pre-wrap rounded-xl border border-(--k7-error-line) bg-(--k7-error-fill) px-3 py-2 text-error type-secondary"
           >
             {error}
           </p>

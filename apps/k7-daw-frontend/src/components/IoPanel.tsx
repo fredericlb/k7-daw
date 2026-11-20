@@ -1,7 +1,7 @@
 // IoPanel.tsx — what this song can take in and put out: every module under an io/ folder, the
 // project's own and those inherited from a workspace's `_modules/io`, each with a meter.
 //
-// A TAB of SettingsPanel.tsx, which supplies the column, the title and the ✕.
+// A TAB of SettingsPanel.tsx, which supplies the column and the tab choice.
 //
 // The levels do NOT ride the state frame: metering an interface input enables its device
 // engine-side (EngineHost::channelLevelsDb), so it is polled by request and only while this is
@@ -11,6 +11,7 @@ import type { EngineClient, EngineInputDevice } from "@studio/engine-browser";
 import { INPUT_VU_MAX_DB, INPUT_VU_MIN_DB } from "@studio/engine-browser/store";
 import { ArrowDownToLine, ArrowUpFromLine } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { RowGroup } from "@studio/ui/row-group";
 import { sortForPeople } from "@studio/web-protocol/tree";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../api";
@@ -30,7 +31,7 @@ const norm = (db: number): number => {
 function Meter({ level, live }: { level: number; live: boolean }) {
   return (
     <div
-      className="relative h-2 w-28 shrink-0 overflow-hidden rounded-sm bg-muted"
+      className="relative h-1.5 w-28 shrink-0 overflow-hidden rounded-[3px] bg-(--k7-progress-track)"
       title={live ? undefined : "no device on this channel"}
     >
       <div
@@ -38,10 +39,10 @@ function Meter({ level, live }: { level: number; live: boolean }) {
           "absolute inset-y-0 left-0 origin-left",
           // Hot is worth seeing before it clips, so the bar changes colour rather than relying on a peak mark nobody watches.
           level > 0.94
-            ? "bg-red-500"
+            ? "bg-meter-clip"
             : level > 0.8
-              ? "bg-amber-400"
-              : "bg-emerald-500",
+              ? "bg-meter-hot"
+              : "bg-meter-ok",
         )}
         // Width, not transform: a scaled bar blurs its own edge at these sizes.
         style={{ width: `${(live ? level : 0) * 100}%` }}
@@ -79,7 +80,7 @@ function Tuner({ hz, clarity }: { hz: number; clarity: number }) {
   if (!note)
     return (
       <div className="flex flex-1 items-center pl-1">
-        <span className="text-[10px] text-faint">no note</span>
+        <span className="type-status text-fg-3">no note</span>
       </div>
     );
   const inTune = Math.abs(note.cents) <= IN_TUNE_CENTS;
@@ -94,25 +95,25 @@ function Tuner({ hz, clarity }: { hz: number; clarity: number }) {
     >
       <span
         className={cn(
-          "w-9 shrink-0 text-right font-mono text-[11px] tabular-nums",
-          inTune ? "text-emerald-500" : "text-foreground",
+          "type-mono-value w-9 shrink-0 text-right",
+          inTune ? "text-ok" : "text-foreground",
         )}
       >
         {note.name}
-        <span className="text-[9px] text-muted-foreground">{note.octave}</span>
+        <span className="text-fg-3">{note.octave}</span>
       </span>
-      <div className="relative h-2 flex-1 overflow-hidden rounded-sm bg-muted">
+      <div className="relative h-1.5 flex-1 overflow-hidden rounded-[3px] bg-(--k7-progress-track)">
         {/* The centre mark, so "in tune" is a place on the bar and not just a colour. */}
-        <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border" />
+        <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-(--k7-hairline-strong)" />
         <div
           className={cn(
             "absolute inset-y-0 w-1 -translate-x-1/2 rounded-sm",
-            inTune ? "bg-emerald-500" : "bg-amber-400",
+            inTune ? "bg-ok" : "bg-warn",
           )}
           style={{ left: `${offset}%` }}
         />
       </div>
-      <span className="w-7 shrink-0 text-[9px] tabular-nums text-muted-foreground">
+      <span className="type-mono-value w-8 shrink-0 text-fg-3">
         {note.cents > 0 ? `+${note.cents}` : note.cents}
       </span>
     </div>
@@ -140,14 +141,12 @@ function PortRow({
   clarity: number;
 }) {
   return (
-    <div className="flex flex-col gap-1 px-2 py-1.5">
+    <div className="flex flex-col gap-1.5 px-3.5 py-2.5">
       <div className="flex items-center gap-3">
-        <span className="min-w-0 flex-1 truncate font-mono text-xs">
+        <span className="type-mono-value min-w-0 flex-1 truncate text-foreground">
           {name}
         </span>
-        <span className="shrink-0 text-[10px] text-muted-foreground">
-          {detail}
-        </span>
+        <span className="type-status shrink-0 text-fg-3">{detail}</span>
         <Meter level={level} live={live} />
       </div>
       {/* The tuner on its own line, as wide as the row: a needle squeezed beside the meter was too short to tune against. */}
@@ -180,9 +179,7 @@ function portName(port: IoPort): React.ReactNode {
     <>
       {port.name}
       {port.namespace && (
-        <span className="ml-1 text-[10px] text-muted-foreground">
-          @{port.namespace}
-        </span>
+        <span className="type-status ml-1 text-fg-3">@{port.namespace}</span>
       )}
     </>
   );
@@ -271,15 +268,13 @@ export function IoPanel({
   }, [engine, ports]);
 
   const heading = (title: string, icon: React.ReactNode) => (
-    <div className="flex items-center gap-1.5 px-2 pb-1 pt-2 text-[10px] uppercase tracking-wide text-muted-foreground">
+    <h3 className="type-caps flex items-center gap-1.5 px-1 pt-3 pb-2 text-fg-2">
       {icon}
       {title}
-    </div>
+    </h3>
   );
   const none = (
-    <div className="px-2 py-1.5 text-xs text-muted-foreground">
-      none declared
-    </div>
+    <p className="type-status px-3.5 py-3 text-fg-3">none declared</p>
   );
   // The pitch arrays are indexed like the sets asked for, so an input row reads its own.
   const inputRows = devices.length
@@ -318,21 +313,15 @@ export function IoPanel({
     <div className="flex h-full min-h-0 flex-col">
       <div className="min-h-0 flex-1 overflow-y-auto pb-2">
         {ports === null ? (
-          <div className="px-3 py-6 text-center text-xs text-muted-foreground">
-            …
-          </div>
+          <div className="py-6 text-center text-fg-2 text-sm">…</div>
         ) : (
           <>
-            {heading("inputs", <ArrowDownToLine className="h-3 w-3" />)}
-            {inputRows.length ? (
-              <div className="divide-y divide-border/50">{inputRows}</div>
-            ) : (
-              none
-            )}
+            {heading("inputs", <ArrowDownToLine className="size-3.5" />)}
+            {inputRows.length ? <RowGroup>{inputRows}</RowGroup> : none}
             {/* Every out sink shares one meter: what leaves is the master mix, and Tracktion gives an output DEVICE no measurer. */}
-            {heading("outputs", <ArrowUpFromLine className="h-3 w-3" />)}
+            {heading("outputs", <ArrowUpFromLine className="size-3.5" />)}
             {outputs.length ? (
-              <div className="divide-y divide-border/50">
+              <RowGroup>
                 {outputs.map((p) => (
                   <PortRow
                     key={p.ref}
@@ -345,7 +334,7 @@ export function IoPanel({
                     clarity={0}
                   />
                 ))}
-              </div>
+              </RowGroup>
             ) : (
               none
             )}
@@ -353,9 +342,9 @@ export function IoPanel({
         )}
       </div>
       {!engine && (
-        <div className="shrink-0 border-t border-border px-3 py-1.5 text-[10px] text-muted-foreground">
+        <p className="type-status shrink-0 pt-2 text-fg-3">
           engine not connected — levels are idle
-        </div>
+        </p>
       )}
     </div>
   );

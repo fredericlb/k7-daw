@@ -1,5 +1,5 @@
-// HistoryPanel.tsx — the open project's history on the right: the undo journal's steps, newest
-// first, and under them the WORKSPACE's sync history (syncHistory.ts) — checkpoints and edits.
+// HistoryPanel.tsx — the History half of Tasks & history, in three segments: Edits (the undo journal's
+// steps, newest first), Workspace (the sync history, syncHistory.ts) and Commits (git's, step 6's list).
 // A step reads as its command's sentence (stepSentence.ts), the raw line staying its tooltip.
 // Hovering a journal row lights what it touched (historyMarks.ts); the journal changes nothing.
 // Restoring is the one write here, and it is a sync edit like any other: apps/k7-daw-backend/docs/files/history.md.
@@ -7,15 +7,15 @@
 import { askConfirm, askText } from "@studio/project-shell/ask";
 import { cfg } from "@studio/project-shell/fileApi";
 import { Button } from "@studio/ui/button";
+import { Choice } from "@studio/ui/choice";
 import {
   Bookmark,
   ChevronDown,
   ChevronRight,
-  History,
   RotateCcw,
   Undo2,
-  X,
 } from "@studio/ui/icons";
+import { Row, RowButton, RowGroup } from "@studio/ui/row-group";
 import type { HistoryListEntry } from "@studio/web-protocol";
 import {
   type ReactNode,
@@ -41,6 +41,9 @@ import {
   type SyncHistory,
 } from "../syncHistory";
 
+/** The 6 px dot that stands for an edit. */
+const Dot = () => <span className="size-1.5 rounded-full bg-fg-3" />;
+
 const time = (ts: number) =>
   new Date(ts).toLocaleTimeString(getLocale(), {
     hour: "2-digit",
@@ -58,7 +61,6 @@ export function HistoryPanel({
   git = null,
   gitTransport = null,
   onMark,
-  onClose,
 }: {
   /** The workspace's git state: with a repository the panel offers a second list, the commits. */
   git?: GitState | null;
@@ -67,11 +69,9 @@ export function HistoryPanel({
   describe?: (label: string) => string;
   /** What the hovered row touched, or null when none is — the graph and the timeline light it. */
   onMark: (mark: HistoryMark | null) => void;
-  onClose: () => void;
 }) {
   const [steps, setSteps] = useState<HistoryListEntry[]>([]);
-  // Two lists when the workspace is under git: the local edits, and the commits.
-  const [list, setList] = useState<"edits" | "commits">("edits");
+  const [list, setList] = useState<"edits" | "workspace" | "commits">("edits");
   const underGit = !!git && git.mode !== "none";
   const showCommits = underGit && list === "commits";
   // Only to tell which node of a touched chain a step's label names; a graph that will not build lights the chain.
@@ -101,44 +101,25 @@ export function HistoryPanel({
   const rows = useMemo(() => [...steps].sort((a, b) => b.ts - a.ts), [steps]);
 
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-border border-l bg-background">
-      <header className="flex shrink-0 items-center gap-1 border-border border-b px-2 py-1.5">
-        <History className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 truncate px-1.5 text-sm">
-          {m["history.title"]()}
-        </span>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </header>
+    <div className="flex min-h-0 flex-1 flex-col">
       {error && (
         <div className="shrink-0 px-3 py-2 text-destructive text-xs">
           {error}
         </div>
       )}
-      {underGit && (
-        <fieldset
-          className="flex shrink-0 gap-1 border-border border-b px-2 py-1"
-          aria-label={m["git.lists"]()}
-        >
-          {(["edits", "commits"] as const).map((k) => (
-            <Button
-              key={k}
-              size="xs"
-              variant={list === k ? "secondary" : "ghost"}
-              aria-pressed={list === k}
-              onClick={() => setList(k)}
-            >
-              {m[k === "edits" ? "git.listEdits" : "git.listCommits"]()}
-            </Button>
-          ))}
-        </fieldset>
-      )}
+      <Choice
+        label={m["git.lists"]()}
+        value={list}
+        onValueChange={setList}
+        options={[
+          { value: "edits", label: m["git.listEdits"]() },
+          { value: "workspace", label: m["history.listWorkspace"]() },
+          ...(underGit
+            ? [{ value: "commits" as const, label: m["git.listCommits"]() }]
+            : []),
+        ]}
+        className="mb-2 shrink-0"
+      />
       {showCommits && (
         <CommitsList
           transport={gitTransport}
@@ -152,50 +133,47 @@ export function HistoryPanel({
           ].join("/")}
         />
       )}
-      <ul
-        hidden={showCommits}
-        className="min-h-0 flex-1 basis-1/2 overflow-y-auto py-1 text-xs"
+      <div
+        hidden={list !== "edits"}
+        className="min-h-0 flex-1 overflow-y-auto"
         onMouseLeave={() => onMark(null)}
       >
         {rows.length === 0 && !error && (
-          <li className="px-3 py-2 text-muted-foreground">
-            {m["history.empty"]()}
-          </li>
+          <p className="px-1 py-2 text-fg-2 text-sm">{m["history.empty"]()}</p>
         )}
         {rows.map((r, i) => {
           const newDay = i === 0 || day(rows[i - 1].ts) !== day(r.ts);
           const { paths, label, undone } = r;
           return (
-            <li key={r.id}>
+            <div key={r.id}>
               {newDay && (
-                <div className="px-3 pt-2 pb-1 text-[10px] text-muted-foreground uppercase tracking-wide">
+                <h3 className="type-caps px-1 pt-3 pb-2 text-fg-2">
                   {day(r.ts)}
-                </div>
+                </h3>
               )}
-              <div
-                role="note"
-                className={`flex cursor-default items-start gap-2 px-3 py-1 hover:bg-accent ${undone ? "opacity-50" : ""}`}
-                title={`${label}\n${paths.join("\n")}`}
-                onMouseEnter={() => onMark(historyMarks(paths, label, graph))}
-              >
-                <span className="w-10 shrink-0 pt-px font-mono text-[10px] text-muted-foreground">
-                  {time(r.ts)}
-                </span>
-                {undone ? (
-                  <Undo2 className="mt-px h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                ) : (
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground/60" />
-                )}
-                <span className="min-w-0 flex-1 truncate">
+              <RowGroup>
+                <Row
+                  title={`${label}\n${paths.join("\n")}`}
+                  className={undone ? "opacity-50" : undefined}
+                  icon={undone ? <Undo2 /> : <Dot />}
+                  trailing={
+                    <span className="type-mono-value text-fg-3">
+                      {time(r.ts)}
+                    </span>
+                  }
+                  onMouseEnter={() => onMark(historyMarks(paths, label, graph))}
+                >
                   {describe ? describe(label) : label}
-                </span>
-              </div>
-            </li>
+                </Row>
+              </RowGroup>
+            </div>
           );
         })}
-      </ul>
-      {!showCommits && <SyncHistorySection revision={revision} git={git} />}
-    </aside>
+      </div>
+      {list === "workspace" && (
+        <SyncHistorySection revision={revision} git={git} />
+      )}
+    </div>
   );
 }
 
@@ -317,48 +295,47 @@ function SyncHistorySection({
     point: string,
     icon: ReactNode,
   ) => (
-    <li key={key}>
-      <div className="group flex items-start gap-2 px-3 py-1 hover:bg-accent">
-        <button
-          type="button"
-          className="flex min-w-0 flex-1 items-start gap-2 text-left"
+    <div key={key}>
+      <div className="flex items-center">
+        <RowButton
+          className="min-w-0 flex-1"
+          icon={icon}
+          detail={time(ts)}
+          trailing={
+            open === key ? (
+              <ChevronDown className="size-4 text-fg-3" />
+            ) : (
+              <ChevronRight className="size-4 text-fg-3" />
+            )
+          }
           onClick={() => void toggle(key, from, to)}
         >
-          {open === key ? (
-            <ChevronDown className="mt-px h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-          ) : (
-            <ChevronRight className="mt-px h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-          )}
-          <span className="w-10 shrink-0 pt-px font-mono text-[10px] text-muted-foreground">
-            {time(ts)}
-          </span>
-          {icon}
-          <span className="min-w-0 flex-1 truncate font-mono">{label}</span>
-        </button>
+          {label}
+        </RowButton>
         {offers.write && (
-          <button
-            type="button"
-            className="shrink-0 text-muted-foreground opacity-0 hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
+          <Button
+            variant="ghost"
+            size="round"
+            className="shrink-0"
             title={m["synchist.restore"]()}
+            aria-label={m["synchist.restore"]()}
             onClick={() => void restore(seq, point)}
           >
-            <RotateCcw className="h-3.5 w-3.5" />
-          </button>
+            <RotateCcw className="size-4" />
+          </Button>
         )}
       </div>
       {open === key &&
         (changes === null ? null : changes.length === 0 ? (
-          <div className="px-3 py-1 text-muted-foreground">
-            {m["synchist.noChange"]()}
-          </div>
+          <p className="px-3.5 py-2 text-fg-2">{m["synchist.noChange"]()}</p>
         ) : (
           changes.map((c) => <ChangeView key={c.file} c={c} />)
         ))}
-    </li>
+    </div>
   );
 
   return (
-    <section className="flex min-h-0 flex-1 basis-1/2 flex-col border-border border-t text-xs">
+    <section className="flex min-h-0 flex-1 flex-col text-xs">
       <header className="flex shrink-0 items-center gap-1 px-2 py-1">
         <span className="min-w-0 flex-1 truncate px-1.5 text-muted-foreground uppercase tracking-wide text-[10px]">
           {m["synchist.title"]()}
@@ -383,11 +360,9 @@ function SyncHistorySection({
           {error || m["synchist.noRoom"]({ error: hist?.error ?? "" })}
         </div>
       )}
-      <ul className="min-h-0 flex-1 overflow-y-auto pb-1">
+      <RowGroup className="min-h-0 flex-1 overflow-y-auto">
         {hist && hist.checkpoints.length === 0 && hist.entries.length === 0 && (
-          <li className="px-3 py-2 text-muted-foreground">
-            {m["synchist.empty"]()}
-          </li>
+          <p className="px-3.5 py-3 text-fg-2">{m["synchist.empty"]()}</p>
         )}
         {[...(hist?.checkpoints ?? [])]
           .reverse()
@@ -400,7 +375,7 @@ function SyncHistorySection({
               head,
               c.seq,
               c.by === "auto" ? String(c.seq) : c.name,
-              <Bookmark className="mt-px h-3.5 w-3.5 shrink-0 text-primary-text" />,
+              <Bookmark />,
             ),
           )}
         {(hist?.entries ?? []).map((e) =>
@@ -414,10 +389,10 @@ function SyncHistorySection({
             e.seq,
             e.seq,
             String(e.seq),
-            <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground/60" />,
+            <Dot />,
           ),
         )}
-      </ul>
+      </RowGroup>
     </section>
   );
 }

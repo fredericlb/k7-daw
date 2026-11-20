@@ -36,14 +36,14 @@ export function GitKey({ fail }: { fail: (message: string) => void }) {
   };
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-muted-foreground text-xs">{m["git.keyIntro"]()}</p>
+      <p className="text-fg-2 type-secondary">{m["git.keyIntro"]()}</p>
       {publicKey ? (
         <>
           <textarea
             ref={area}
             readOnly
             aria-label={m["git.publicKey"]()}
-            className="min-h-16 rounded border bg-muted px-2 py-1 font-mono text-xs"
+            className="min-h-16 rounded-xl border border-(--k7-hairline-strong) bg-(--k7-row) px-3 py-2 type-mono-value"
             value={publicKey}
             onFocus={(e) => e.currentTarget.select()}
           />
@@ -54,27 +54,25 @@ export function GitKey({ fail }: { fail: (message: string) => void }) {
             onClick={() => void copyKey()}
           >
             {copy === "copied" ? (
-              <Check className="mr-1 h-3 w-3" />
+              <Check className="mr-1 size-3" />
             ) : (
-              <Copy className="mr-1 h-3 w-3" />
+              <Copy className="mr-1 size-3" />
             )}
             {copy === "copied" ? m["git.keyCopied"]() : m["git.keyCopy"]()}
           </Button>
           {copy === "failed" && (
-            <p role="status" className="text-muted-foreground text-xs">
+            <p role="status" className="text-fg-2 type-secondary">
               {m["git.keyCopyFailed"]()}
             </p>
           )}
-          <p className="text-muted-foreground text-xs">
+          <p className="text-fg-2 type-secondary">
             {synced ? m["git.keyShared"]() : m["git.keyLocal"]()}
           </p>
-          <p className="text-muted-foreground text-xs">
-            {m["git.keyInstall"]()}
-          </p>
+          <p className="text-fg-2 type-secondary">{m["git.keyInstall"]()}</p>
         </>
       ) : (
-        <p className="text-muted-foreground text-xs">
-          <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
+        <p className="text-fg-2 type-secondary">
+          <Loader2 className="mr-1 inline size-3 animate-spin" />
           {m["git.keyLoading"]()}
         </p>
       )}

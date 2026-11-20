@@ -40,9 +40,9 @@ The repository comes down as a new workspace, large files included.
 
 | you see | what to press |
 |---|---|
-| files changed | **Commit**: the dialog lists them with their sizes, large files marked; write a message |
-| commits to push | **Push** |
-| **Pull first** | the remote has commits you lack: pull, then push |
+| files changed | **Commit & Push**: the dialog lists them with their sizes, large files marked; write a message, and a step list shows Committing, Pushing, Done |
+| commits to push, nothing changed | **Commit & Push** pushes them |
+| **Pull first** | the remote has commits you lack: your commit is kept, pull, then Commit & Push again |
 | commits to pull | **Pull** |
 | **Commit first** | you changed files since the last commit: commit them, then pull |
 
@@ -50,10 +50,10 @@ Your name and email sign the commits; k7 asks for them once, and they live in th
 
 ## When both sides changed the same thing
 
-A pull that cannot join the two sides opens the **merge screen**. Each conflict is a card: the key of the song that changed, or the
-lines of a text, with your side and theirs. Keep **mine** or **theirs**; **both** appears where it makes sense, for an item added
+A pull that cannot join the two sides opens the **Conflict** screen. It lists the conflicts, each marked **To choose** until you pick: the key of the song that changed, or the
+lines of a text, with your side and theirs. Choose **Mine** or **Theirs**, then **Next conflict**; **Both** appears where it makes sense, for an item added
 under the same name on both sides (theirs is named after its author) and for a file that cannot be merged (theirs is saved
-beside it). A file one side removed and the other changed is kept or removed. When every card has a choice press **Finish merge**.
+beside it). A file one side removed and the other changed is kept or removed. When every conflict has a choice press **Finish merge**.
 **Abort the merge** leaves the workspace exactly as it was.
 
 While a merge waits the editors are read-only and the music still plays.

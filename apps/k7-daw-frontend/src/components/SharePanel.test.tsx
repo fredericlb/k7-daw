@@ -6,14 +6,12 @@ import { parseExportAsk, tracksLine } from "../exportArgs";
 import { SharePanel } from "./SharePanel";
 
 const render = (busy: boolean) =>
-  renderToStaticMarkup(
-    <SharePanel busy={busy} onRun={() => {}} onClose={() => {}} />,
-  );
+  renderToStaticMarkup(<SharePanel busy={busy} onRun={() => {}} />);
 
 // The button holding the label, tag to close.
 const tracksButton = (html: string) =>
   html.match(
-    /<button[^>]*>(?:(?!<\/button>).)*Export tracks \(zip\)<\/button>/s,
+    /<button[^>]*>(?:(?!<\/button>).)*Export tracks \(zip\)(?:<\/span>)*<\/button>/s,
   )?.[0] ?? "";
 
 const desktopHost = { canPick: true, canReveal: true, canShare: false };
@@ -24,16 +22,10 @@ const saved = {
 };
 
 describe("the folder step", () => {
-  it("is titled Export and offers the picker where the host has one", () => {
+  it("offers the picker where the host has one", () => {
     const html = renderToStaticMarkup(
-      <SharePanel
-        busy={false}
-        host={desktopHost}
-        onRun={() => {}}
-        onClose={() => {}}
-      />,
+      <SharePanel busy={false} host={desktopHost} onRun={() => {}} />,
     );
-    expect(html).toContain("Export</span>");
     expect(html).toContain("Choose a folder…");
   });
 
@@ -49,7 +41,6 @@ describe("the folder step", () => {
         host={desktopHost}
         last={saved}
         onRun={() => {}}
-        onClose={() => {}}
       />,
     );
     expect(html).toContain("Saved in Music");

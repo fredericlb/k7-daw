@@ -72,3 +72,8 @@ route of its own, no import step and no sidecar to write.
 song's own files. That is the point of the folder being where it is:
 open the workspace on the machine at the venue and what you were mixing against is there. It is also worth knowing before you drop somebody's whole
 discography in.
+
+## A segment of Resources
+
+The list of references is the Resources panel's second segment; its `+` sits in a toolbar row of
+its own, since the panel frame owns the title and the Close button.

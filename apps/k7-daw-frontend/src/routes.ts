@@ -4,12 +4,7 @@
 // project declares. See docs/shellRouting.md.
 
 // No `viewport`: the picture is a WINDOW over the layout, not a page of it (apps/k7-daw-frontend/packages/song/docs/surfaces.md).
-export type Pane =
-  | "editor"
-  | "timeline"
-  | "turntables"
-  | "mastering"
-  | "chains";
+export type Pane = "editor" | "timeline" | "turntables" | "chains";
 // No `View` and no `docs` panel: there is ONE layout, and which panes it holds is `viewPanes`' answer (docs/shellRouting.md).
 export type Panel = "event" | "graph" | "mix" | "logs";
 
@@ -22,13 +17,7 @@ export interface RouteState {
   builder: string | null;
 }
 
-const PANES: Pane[] = [
-  "editor",
-  "timeline",
-  "turntables",
-  "mastering",
-  "chains",
-];
+const PANES: Pane[] = ["editor", "timeline", "turntables", "chains"];
 const PANELS: Panel[] = ["event", "graph", "mix", "logs"];
 
 /** What a layout does with the panes: the `ring` it cycles, and what `full` may fullscreen. */
@@ -43,21 +32,16 @@ export interface Declared {
   timeline?: boolean;
   /** A `split` surface of type `turntables` — the desk. */
   turntables?: boolean;
-  /** A `split` surface of type `mastering` — the master strip over one quick-master node. */
-  mastering?: boolean;
 }
 
-/** What the layout does with the panes, given what the PROJECT declares — a FUNCTION, three of the five panes not being the shell's to assume (docs/shellRouting.md). */
+/** What the layout does with the panes, given what the PROJECT declares — a FUNCTION, two of the four panes not being the shell's to assume (docs/shellRouting.md). */
 export function viewPanes({
   timeline = false,
   turntables = false,
-  mastering = false,
 }: Declared): Layout {
   const arrangement: Pane[] = timeline ? ["timeline"] : [];
   const desk: Pane[] = turntables ? ["turntables"] : [];
-  // Directly over the graph and below everything else: the master strip is the LAST thing the signal meets.
-  const master: Pane[] = mastering ? ["mastering"] : [];
-  const ring: Pane[] = [...arrangement, ...desk, ...master, "chains"];
+  const ring: Pane[] = [...arrangement, ...desk, "chains"];
   return { ring, fullscreen: ["editor", ...ring] };
 }
 
