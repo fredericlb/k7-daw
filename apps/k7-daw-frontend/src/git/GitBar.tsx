@@ -1,4 +1,4 @@
-// GitBar.tsx — a workspace under git, two ways: the file tree's bar (`BarBody`: remote, counts, Commit, Push, Pull, the
+// GitBar.tsx — a workspace under git, two ways: the file tree's bar (`BarBody`: remote, counts, Commit & Push, Pull, the
 // merge) and the home card's pills (`CardGitPills`: Pull in place, Commit & Push, Connect). Neither opens a dialog of its
 // own — gitScreens.tsx does. What a reader gets wrong: nothing here decides a rule (gitState.ts).
 
@@ -8,7 +8,6 @@ import { Button } from "@studio/ui/button";
 import {
   ArrowDown,
   ArrowDownToLine,
-  ArrowUp,
   GitBranch,
   GitCommitHorizontal,
   GitMerge,
@@ -110,48 +109,29 @@ export function BarBody({
             })}
           </Button>
         )}
-        {v.commit && (
+        {(v.commit || v.push) && (
           <Button size="xs" disabled={!!busy} onClick={onCommit}>
             <GitCommitHorizontal className="h-3.5 w-3.5" />
-            {m["git.commit"]()}
+            {m["shell.git.commitPush"]()}
           </Button>
         )}
         {v.remote && v.merge === null && (
-          <>
-            <Button
-              size="xs"
-              variant="secondary"
-              disabled={!!busy || !v.pull}
-              title={
-                v.pullBlocked === "commitFirst"
-                  ? m["git.commitFirst"]()
-                  : undefined
-              }
-              onClick={() => onAct("pull")}
-            >
-              {spin("pull") ?? <ArrowDown className="h-3.5 w-3.5" />}
-              {v.pullBlocked === "commitFirst"
-                ? m["git.commitFirstShort"]()
-                : m["git.pull"]()}
-            </Button>
-            <Button
-              size="xs"
-              variant="secondary"
-              disabled={!!busy || !v.push}
-              data-testid={
-                v.pushBlocked === "pullFirst" ? "git-pull-first" : undefined
-              }
-              title={
-                v.pushBlocked === "pullFirst" ? m["git.pullFirst"]() : undefined
-              }
-              onClick={() => onAct("push")}
-            >
-              {spin("push") ?? <ArrowUp className="h-3.5 w-3.5" />}
-              {v.pushBlocked === "pullFirst"
-                ? m["git.pullFirstShort"]()
-                : m["git.push"]()}
-            </Button>
-          </>
+          <Button
+            size="xs"
+            variant="secondary"
+            disabled={!!busy || !v.pull}
+            title={
+              v.pullBlocked === "commitFirst"
+                ? m["git.commitFirst"]()
+                : undefined
+            }
+            onClick={() => onAct("pull")}
+          >
+            {spin("pull") ?? <ArrowDown className="h-3.5 w-3.5" />}
+            {v.pullBlocked === "commitFirst"
+              ? m["git.commitFirstShort"]()
+              : m["git.pull"]()}
+          </Button>
         )}
       </div>
       {said && <p className="text-muted-foreground">{said}</p>}
@@ -284,10 +264,10 @@ export function CardGitPills({
         variant="glass"
         onClick={() => openConnect(workspace)}
         title={m["git.menuConnect"]()}
+        aria-label={m["git.menuConnect"]()}
       >
         <GitBranch className="size-5" />
         <span className="max-sm:hidden">{m["git.card.connect"]()}</span>
-        <span className="sm:hidden sr-only">{m["git.menuConnect"]()}</span>
       </Button>
     );
   if (!v.show || !v.remote) return null;

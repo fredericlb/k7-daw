@@ -1,39 +1,54 @@
-// PageFrame.tsx — the one page frame of the home side (Projects, Tasks, Libraries, Settings, About):
-// a column of the same width on every page, and a heading row with the page's own actions. A page
-// of narrow rows keeps them narrow INSIDE the frame rather than re-centring, so every title starts
-// at the same x.
-// See ../../docs/projects.md.
+// PageFrame.tsx — the one page frame of the home side (Projects, Tasks, Libraries, Settings): a column of the same
+// width on every page, and the top bar: a large title over a count line, the page's own actions, the cog to App
+// settings. The column ends clear of the floating tab bar. See ../../docs/projects.md.
 
+import { Button } from "@studio/ui/button";
+import { Settings } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { m } from "../paraglide/messages.js";
+import { SETTINGS_ROUTE } from "./api";
 
-/** The column every home-side page sits in. */
+/** The column every home-side page sits in; the foot leaves room for the tab bar (66 px at 28 from the bottom). */
 export const PAGE_COLUMN =
-  "mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 py-6 sm:px-6";
+  "mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 pt-6 pb-36 sm:px-6";
 
-/** The page's title, an optional line under it, and its actions on the right. */
+/** The page's title, an optional line under it, its actions, and the cog on the right. */
 export function PageHeader({
   title,
   summary,
   actions,
+  cog = true,
 }: {
   title: ReactNode;
   summary?: ReactNode;
   actions?: ReactNode;
+  /** The cog is the way to App settings: left out on the settings pages themselves. */
+  cog?: boolean;
 }) {
   return (
-    <header className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+    <header className="flex items-start justify-between gap-x-4 gap-y-3 max-sm:flex-wrap">
       <div className="flex min-w-0 flex-col gap-1">
-        <h1 className="font-semibold text-2xl leading-tight">{title}</h1>
+        <h1 className="type-large-title">{title}</h1>
         {summary && (
-          <p className="text-muted-foreground text-sm tabular-nums">
-            {summary}
-          </p>
+          <p className="type-secondary text-fg-2 tabular-nums">{summary}</p>
         )}
       </div>
-      {actions && (
-        <div className="flex flex-wrap items-center gap-2">{actions}</div>
-      )}
+      <div className="flex shrink-0 items-center gap-2">
+        {actions}
+        {cog && (
+          <Button asChild variant="glass" size="icon">
+            <Link
+              to={SETTINGS_ROUTE}
+              title={m["home.settings"]()}
+              aria-label={m["home.settings"]()}
+            >
+              <Settings className="size-5" />
+            </Link>
+          </Button>
+        )}
+      </div>
     </header>
   );
 }
@@ -44,18 +59,25 @@ export function PageFrame({
   summary,
   actions,
   narrow = false,
+  cog = true,
   children,
 }: {
   title: ReactNode;
   summary?: ReactNode;
   actions?: ReactNode;
   narrow?: boolean;
+  cog?: boolean;
   children: ReactNode;
 }) {
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
       <div className={PAGE_COLUMN}>
-        <PageHeader title={title} summary={summary} actions={actions} />
+        <PageHeader
+          title={title}
+          summary={summary}
+          actions={actions}
+          cog={cog}
+        />
         <div
           className={cn("flex min-w-0 flex-col gap-4", narrow && "max-w-2xl")}
         >

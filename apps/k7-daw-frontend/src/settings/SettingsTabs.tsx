@@ -11,7 +11,14 @@ export interface SettingsTab {
   content: ReactNode;
 }
 
-export function SettingsTabs({ tabs }: { tabs: SettingsTab[] }) {
+export function SettingsTabs({
+  tabs,
+  label,
+}: {
+  tabs: SettingsTab[];
+  /** The tablist's accessible name. */
+  label?: string;
+}) {
   const [params, setParams] = useSearchParams();
   const asked = params.get("tab");
   const current = tabs.find((t) => t.key === asked)?.key ?? tabs[0]?.key;
@@ -26,7 +33,7 @@ export function SettingsTabs({ tabs }: { tabs: SettingsTab[] }) {
     );
   return (
     <Tabs value={current} onValueChange={choose}>
-      <TabsList>
+      <TabsList aria-label={label}>
         {tabs.map((t) => (
           <TabsTrigger key={t.key} value={t.key}>
             {t.label}

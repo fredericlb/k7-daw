@@ -1,9 +1,9 @@
 // HomeRoutes.tsx — the pages with no project in the address, as ROUTES so going between them reloads nothing, with
-// the home frame (the sidebar's fold, the bar's dock) held above them so it outlives every one. A chunk of its own: a
+// the home frame (the command bar, the toasts) held above them so it outlives every one. A chunk of its own: a
 // project page never loads these pages (../../docs/shell.md).
 
 import { lazy, type ReactNode, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import {
   ABOUT_ROUTE,
   ENGINE_SETTINGS_ROUTE,
@@ -39,13 +39,10 @@ const SettingsPage = lazy(() =>
     default: m.SettingsPage,
   })),
 );
-const AboutPage = lazy(() =>
-  import("../about/AboutPage").then((m) => ({ default: m.AboutPage })),
-);
 
 export function HomeRoutes({ fallback }: { fallback: ReactNode }) {
   return (
-    // The sidebar's fold and the bar's dock, shared by every page below (HomeFrame.tsx).
+    // The command bar and the toasts, shared by every page below (HomeFrame.tsx).
     <HomeFrame>
       <Suspense fallback={fallback}>
         <Routes>
@@ -53,7 +50,11 @@ export function HomeRoutes({ fallback }: { fallback: ReactNode }) {
           <Route path={FROZEN_CHAINS_ROUTE} element={<FrozenChainsPage />} />
           <Route path={SETTINGS_ROUTE} element={<SettingsPage />} />
           <Route path={ENGINE_SETTINGS_ROUTE} element={<EnginePage />} />
-          <Route path={ABOUT_ROUTE} element={<AboutPage />} />
+          {/* About lives in App settings now; an old address lands there. */}
+          <Route
+            path={ABOUT_ROUTE}
+            element={<Navigate to={SETTINGS_ROUTE} replace />}
+          />
           <Route path={TASKS_ROUTE} element={<TasksPage />} />
           <Route path="*" element={<Home />} />
         </Routes>

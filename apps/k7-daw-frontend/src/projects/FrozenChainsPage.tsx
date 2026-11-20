@@ -5,22 +5,25 @@
 
 import { askConfirm, askText } from "@studio/project-shell/ask";
 import { launchUrl } from "@studio/project-shell/launch";
-import { showToast, Toaster } from "@studio/project-shell/toast";
+import { showToast } from "@studio/project-shell/toast";
 import { Button } from "@studio/ui/button";
+import { Chip } from "@studio/ui/chip";
+import { EmptyState } from "@studio/ui/empty-state";
+import { ErrorCard } from "@studio/ui/error-card";
 import {
   Copy,
-  Loader2,
   Pencil,
   Plus,
   Radio,
   Snowflake,
   Trash2,
 } from "@studio/ui/icons";
+import { RowGroup } from "@studio/ui/row-group";
+import { Spinner } from "@studio/ui/spinner";
 import type { FrozenChain } from "@studio/web-protocol";
 import { BENCH_REPO, benchProject } from "@studio/web-protocol/projects";
 import { byPeoplePath } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useState } from "react";
-import { AskHostK7 } from "../AskHostK7";
 import { m } from "../paraglide/messages.js";
 import { findAccountFiles } from "../settings/accountFiles";
 import { useDesktopEngine } from "../settings/desktopEngine";
@@ -93,53 +96,56 @@ function Row({
     ? m["frozen.notLive"]({ why: chain.liveRefusal })
     : m["frozen.editOnBench"]();
   return (
-    <li className="flex items-center gap-3 rounded px-2 py-2 hover:bg-muted/40">
-      {chain.cold ? (
-        <Snowflake className="size-4 shrink-0 text-sky-400" />
-      ) : (
-        <Radio className="size-4 shrink-0 text-muted-foreground" />
-      )}
+    <div className="flex min-h-16 items-center gap-3 px-3.5 py-2.5">
+      <span
+        aria-hidden
+        className="grid size-10 shrink-0 place-items-center rounded-xl bg-(--k7-glyph-tile) text-primary-text [&_svg]:size-5"
+      >
+        {chain.cold ? <Snowflake /> : <Radio />}
+      </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate font-mono text-sm">{chain.ref}</span>
+        <Chip variant="anchor" className="max-w-full truncate">
+          {chain.ref}
+        </Chip>
         <span
-          className={`block truncate text-xs ${chain.unreadable ? "text-destructive" : "text-muted-foreground"}`}
+          className={`type-secondary mt-1 block truncate ${chain.unreadable ? "text-error" : "text-fg-2"}`}
           title={summary}
         >
           {summary}
         </span>
-        <span className="block text-[11px] text-muted-foreground">
+        <span className="type-status flex items-center gap-2 text-fg-3">
           {chain.liveRefusal
             ? m["frozen.notLive"]({ why: chain.liveRefusal })
             : m["frozen.live"]()}
           {slot && (
-            <span className="ml-2 rounded bg-muted px-1.5">
+            <Chip variant="status" tone="renamed">
               {slot === "enabled"
                 ? m["frozen.slotEnabled"]()
                 : m["frozen.slotKept"]()}
-            </span>
+            </Chip>
           )}
         </span>
       </span>
       {onEdit && (
         <Button
-          size="icon-xs"
+          size="icon-sm"
           variant="ghost"
           disabled={!!chain.liveRefusal}
           onClick={onEdit}
           aria-label={editTitle}
           title={editTitle}
         >
-          <Pencil className="size-3.5" />
+          <Pencil className="size-5" />
         </Button>
       )}
       <Button
-        size="icon-xs"
+        size="icon-sm"
         variant="ghost"
         onClick={onCopy}
         aria-label={m["frozen.duplicate"]()}
         title={m["frozen.duplicate"]()}
       >
-        <Copy className="size-3.5" />
+        <Copy className="size-5" />
       </Button>
       {onSlot && (
         <SlotButton
@@ -151,16 +157,16 @@ function Row({
       )}
       {onDelete && (
         <Button
-          size="icon-xs"
+          size="icon-sm"
           variant="ghost"
           onClick={onDelete}
           aria-label={m["frozen.delete"]()}
           title={m["frozen.delete"]()}
         >
-          <Trash2 className="size-3.5" />
+          <Trash2 className="size-5" />
         </Button>
       )}
-    </li>
+    </div>
   );
 }
 
@@ -278,41 +284,37 @@ export function FrozenChainsPage() {
 
   return (
     <HomeShell>
-      <AskHostK7 />
-      <Toaster
-        dismissLabel={m["common.dismiss"]()}
-        regionLabel={m["toast.region"]()}
-      />
       <PageFrame
         title={m["frozen.title"]()}
         summary={m["frozen.summary"]()}
         actions={
           files ? (
-            <Button size="sm" onClick={() => openBench(null)}>
-              <Plus className="size-3.5" /> {m["frozen.new"]()}
+            <Button onClick={() => openBench(null)}>
+              <Plus className="size-5" /> {m["frozen.new"]()}
             </Button>
           ) : null
         }
       >
         {files === undefined || (files && chains === null && !error) ? (
-          <div className="flex items-center gap-2 text-muted-foreground text-xs">
-            <Loader2 className="size-3.5 animate-spin" /> {m["libs.reading"]()}
+          <div className="type-secondary flex items-center gap-2 text-fg-2">
+            <Spinner /> {m["libs.reading"]()}
           </div>
         ) : files === null ? (
-          <p className="text-muted-foreground text-sm">
-            {m["frozen.noServer"]()}
-          </p>
+          <ErrorCard title={m["frozen.noServer"]()} />
         ) : (
-          <div className="space-y-6">
-            {error && <p className="text-destructive text-sm">{error}</p>}
-            <section>
-              <h2 className="mb-1 font-medium text-sm">{m["frozen.mine"]()}</h2>
+          <div className="flex flex-col gap-6">
+            {error && <ErrorCard title={error} />}
+            <section className="flex flex-col gap-2">
+              <h2 className="type-caps px-1 text-fg-3">{m["frozen.mine"]()}</h2>
               {mine.length === 0 ? (
-                <p className="text-muted-foreground text-xs">
+                <EmptyState
+                  glyph={<Snowflake />}
+                  title={m["frozen.mineEmptyTitle"]()}
+                >
                   {m["frozen.mineEmpty"]()}
-                </p>
+                </EmptyState>
               ) : (
-                <ul>
+                <RowGroup>
                   {mine.map((c) => (
                     <Row
                       key={c.ref}
@@ -326,20 +328,20 @@ export function FrozenChainsPage() {
                       onSlot={(t) => void saveSlot(c, t)}
                     />
                   ))}
-                </ul>
+                </RowGroup>
               )}
-              <p className="mt-2 text-muted-foreground text-xs">
+              <p className="type-status px-1 text-fg-3">
                 {m["frozen.howToUse"]()}
               </p>
             </section>
-            <section>
-              <h2 className="mb-1 font-medium text-sm">{m["frozen.cold"]()}</h2>
+            <section className="flex flex-col gap-2">
+              <h2 className="type-caps px-1 text-fg-3">{m["frozen.cold"]()}</h2>
               {cold.length === 0 ? (
-                <p className="text-muted-foreground text-xs">
+                <p className="type-secondary px-1 text-fg-2">
                   {m["frozen.coldEmpty"]()}
                 </p>
               ) : (
-                <ul>
+                <RowGroup>
                   {cold.map((c) => (
                     <Row
                       key={c.ref}
@@ -347,7 +349,7 @@ export function FrozenChainsPage() {
                       onCopy={() => void duplicate(c)}
                     />
                   ))}
-                </ul>
+                </RowGroup>
               )}
             </section>
           </div>

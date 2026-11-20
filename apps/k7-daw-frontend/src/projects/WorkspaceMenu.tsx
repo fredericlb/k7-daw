@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import { GitBranch, Loader2, MoreVertical, Trash2 } from "@studio/ui/icons";
+import { GitBranch, Loader2, Ellipsis, Trash2 } from "@studio/ui/icons";
 import { EXAMPLES_WORKSPACE } from "@studio/web-protocol/projects";
 import { useState } from "react";
 import { ConnectWorkspace } from "../git/ConnectWorkspace";
@@ -64,8 +64,8 @@ export function WorkspaceMenu({
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            size="icon-xs"
-            className="shrink-0 text-muted-foreground"
+            size="icon-sm"
+            className="shrink-0 text-fg-2"
             title={blocked || m["ws.menu"]({ workspace })}
             aria-label={m["ws.menu"]({ workspace })}
             disabled={busy || Boolean(blocked)}
@@ -73,7 +73,7 @@ export function WorkspaceMenu({
             {busy ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <MoreVertical className="h-4 w-4" />
+              <Ellipsis className="size-5" />
             )}
           </Button>
         </DropdownMenuTrigger>

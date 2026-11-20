@@ -23,14 +23,16 @@ export function LibrariesNotice({
       : null;
   if (!said) return null;
   return (
-    <div className="flex items-center gap-2 border-b border-b-amber-500/40 bg-amber-500/5 px-6 py-3 text-xs">
-      <TriangleAlert className="h-4 w-4 shrink-0 text-amber-500" />
-      <span className="flex-1">{said}</span>
-      <Button variant="ghost" size="sm" asChild>
-        <Link to={LIBRARIES_ROUTE}>
-          <LibraryBig className="h-3.5 w-3.5" /> {m["home.libraries"]()}
-        </Link>
-      </Button>
+    <div className="type-secondary mx-auto flex w-full max-w-5xl items-center gap-3 px-4 pt-4 sm:px-6">
+      <div className="flex min-w-0 flex-1 items-center gap-3 rounded-(--k7-r-rows) border border-(--k7-warn-line) bg-(--k7-warn-fill) px-3.5 py-2.5">
+        <TriangleAlert className="size-5 shrink-0 text-warn" />
+        <span className="flex-1">{said}</span>
+        <Button variant="glass" size="sm" asChild>
+          <Link to={LIBRARIES_ROUTE}>
+            <LibraryBig className="size-5" /> {m["home.libraries"]()}
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }

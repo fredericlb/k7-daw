@@ -35,15 +35,15 @@ describe("the git bar's rendering", () => {
     expect(out).toContain("https://h/r.git");
   });
 
-  it("names Pull first over a push that is behind, and Commit first over a pull with changes", () => {
-    expect(html({ ...conn, ahead: 1, behind: 1 })).toContain("Pull first");
+  it("names Commit first over a pull with changes, and offers Commit & Push for a push alone", () => {
     expect(html({ ...conn, behind: 1, changed: 2 })).toContain("Commit first");
+    expect(html({ ...conn, ahead: 1 })).toContain("Commit &amp; Push");
   });
 
   it("offers the merge and no Commit while one waits", () => {
     const out = html({ ...conn, changed: 3, merge: 2 });
     expect(out).toContain("Resolve 2 conflicts");
-    expect(out).not.toContain(">Commit<");
+    expect(out).not.toContain("Commit &amp; Push");
   });
 
   it("says a failure as it came", () => {

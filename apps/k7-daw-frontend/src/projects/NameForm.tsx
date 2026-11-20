@@ -86,24 +86,24 @@ export function NameField({
         onChange={(e) => onName(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && onSubmit()}
       />
-      <p className="font-mono text-muted-foreground text-xs">
+      <p className="font-mono type-secondary text-fg-2">
         {/* An empty field is not yet a mistake: the refusal waits for something typed, Create staying greyed meanwhile. */}
         {badName && name.trim() ? (
           // A sentence, so the body face: the mono is for the folder path the line shows otherwise.
-          <span className="font-sans text-destructive">{badName}</span>
+          <span className="font-sans text-error">{badName}</span>
         ) : (
           preview || " "
         )}
       </p>
       {note}
       {step && (
-        <p className="text-muted-foreground text-xs">
+        <p className="type-secondary text-fg-2">
           <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
           {step}
         </p>
       )}
       {error && (
-        <p className="whitespace-pre-wrap rounded border border-destructive/40 bg-destructive/10 px-3 py-2 text-destructive text-xs">
+        <p className="whitespace-pre-wrap rounded-xl border border-(--k7-error-line) bg-(--k7-error-fill) px-3 py-2 text-error type-secondary">
           {error}
         </p>
       )}
@@ -149,11 +149,11 @@ export function NameFormDialog({
           <NameField {...field} />
         </div>
         <DialogFooter>
-          <Button variant="secondary" disabled={field.busy} onClick={onClose}>
+          <Button variant="glass" disabled={field.busy} onClick={onClose}>
             {m["common.cancel"]()}
           </Button>
           <Button disabled={field.busy || !canSubmit} onClick={field.onSubmit}>
-            {field.busy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}
+            {field.busy && <Loader2 className="mr-1 size-5 animate-spin" />}
             {submit}
           </Button>
         </DialogFooter>

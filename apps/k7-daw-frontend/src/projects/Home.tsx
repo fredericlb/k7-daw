@@ -3,12 +3,9 @@
 // service, and the two polls — for the presentational body beside it. The list is the SERVER's
 // files and needs no engine. See ../../docs/projects.md.
 
-import { Toaster } from "@studio/project-shell/toast";
 import type { AccountLibrary, AccountWorkspace } from "@studio/web-protocol";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { AskHostK7 } from "../AskHostK7";
-import { m } from "../paraglide/messages.js";
 import {
   homeAccountFiles,
   prefetchHome,
@@ -19,7 +16,6 @@ import { accountFiles } from "./api";
 import { useHomeCommandsChanged } from "./HomeCommandBar";
 import { HomeShell } from "./HomeFrame";
 import { WS_PARAM } from "./homeCommands";
-import { PluginScanBar } from "./PluginScanBar";
 import { ProjectsPane } from "./ProjectsPane";
 import type { AccountFiles } from "./workspaceOps";
 
@@ -150,15 +146,6 @@ export function Home() {
 
   return (
     <HomeShell>
-      {/* Without this, `askConfirm` answers NO with no host to draw on and every destructive
-          button on this page silently does nothing — see @studio/project-shell/ask. */}
-      <AskHostK7 />
-      {/* Where the page's passing notices are drawn. */}
-      <Toaster
-        dismissLabel={m["common.dismiss"]()}
-        regionLabel={m["toast.region"]()}
-      />
-
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
         {error && (
           <code className="mx-6 mt-3 overflow-x-auto rounded bg-muted px-2 py-1 text-xs text-red-400">
@@ -176,11 +163,6 @@ export function Home() {
           onChanged={reread}
           libraries={libraries}
         />
-      </div>
-
-      {/* The account's engine scanning its plugins, at the foot of the page and gone when it is done (PluginScanBar.tsx). */}
-      <div className="shrink-0 border-t border-border bg-popover empty:hidden">
-        <PluginScanBar />
       </div>
     </HomeShell>
   );

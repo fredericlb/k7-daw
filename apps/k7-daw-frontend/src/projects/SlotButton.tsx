@@ -37,14 +37,14 @@ export function SlotButton({
     : m["frozen.saveSlot"]();
   const button = (onClick?: () => void) => (
     <Button
-      size="icon-xs"
+      size="icon-sm"
       variant="ghost"
       disabled={!!refusal}
       onClick={onClick}
       aria-label={title}
       title={title}
     >
-      <Cpu className="size-3.5" />
+      <Cpu className="size-5" />
     </Button>
   );
   if (!remote.length) return button(() => onSave({ kind: "here" }));
@@ -54,7 +54,7 @@ export function SlotButton({
       <DropdownMenuContent align="end" className="w-56">
         {here && (
           <DropdownMenuItem
-            className="text-xs"
+            className="text-sm"
             onSelect={() => onSave({ kind: "here" })}
           >
             {m["frozen.slotHere"]()}
@@ -63,7 +63,7 @@ export function SlotButton({
         {remote.map((e) => (
           <DropdownMenuItem
             key={e.id}
-            className="text-xs"
+            className="text-sm"
             onSelect={() => onSave({ kind: "remote", engine: e })}
           >
             {m["frozen.slotOn"]({ host: e.hostname })}

@@ -1,153 +1,109 @@
-// HomeFrame.tsx — what every home page shares: whether the sidebar is folded, and the mini player's
-// dock, whose bar is always there at the foot. The engine selector sits above the sidebar's user menu,
-// and in the bar while the sidebar is folded. `HomeFrame` is held above the routes, so the fold
-// survives a page change; `HomeShell` is each page's layout. See ../../docs/projects.md, "The home bar".
+// HomeFrame.tsx — what every home page shares: the command bar, the question host, the toasts, and the floating tab bar.
+// `HomeFrame` is held above the routes, so a camera mode or an armed delete survives a page change; `HomeShell` is each
+// page's layout. The tabs are LINKS, one address per page. See ../../docs/projects.md, "The home frame".
 
-import { AudioLines, PanelLeftClose, PanelLeftOpen } from "@studio/ui/icons";
-import { MiniPlayer } from "@studio/ui-mini-player";
+import { Toaster } from "@studio/project-shell/toast";
 import {
-  MiniPlayerDock,
-  MiniPlayerDockOutlet,
-} from "@studio/ui-mini-player/dock";
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
-import { HomeEngine } from "../components/HomeEngine";
+  Folders,
+  LibraryBig,
+  ListChecks,
+  type LucideIcon,
+  Snowflake,
+} from "@studio/ui/icons";
+import { TabBar, TabBarItem } from "@studio/ui/tab-bar";
+import type { ReactNode } from "react";
+import { useHref, useLocation, useNavigate } from "react-router-dom";
+import { AskHostK7 } from "../AskHostK7";
 import { m } from "../paraglide/messages.js";
-import {
-  HomeCommandBar,
-  HomeCommandsButton,
-  HomeCommandsSaid,
-} from "./HomeCommandBar";
-import { HomeSidebar } from "./HomeSidebar";
-
-// Per browser: folding is a habit of this screen, not a setting of the account.
-const FOLD_KEY = "k7.homeSidebarFolded";
-
-const readFolded = (): boolean => {
-  try {
-    return localStorage.getItem(FOLD_KEY) === "1";
-  } catch {
-    return false;
-  }
-};
-
-interface Frame {
-  folded: boolean;
-  setFolded: (folded: boolean) => void;
-}
-
-const FrameContext = createContext<Frame>({
-  folded: false,
-  setFolded: () => {},
-});
-
-const useHomeFrame = (): Frame => useContext(FrameContext);
+import { FROZEN_CHAINS_ROUTE, LIBRARIES_ROUTE, TASKS_ROUTE } from "./api";
+import { HomeCommandBar, HomeCommandsButton } from "./HomeCommandBar";
+import { usePluginScanToast } from "./usePluginScanToast";
 
 export function HomeFrame({ children }: { children: ReactNode }) {
-  const [folded, setFoldedState] = useState(readFolded);
-  const setFolded = useCallback((next: boolean) => {
-    setFoldedState(next);
-    try {
-      localStorage.setItem(FOLD_KEY, next ? "1" : "0");
-    } catch {
-      // A browser refusing storage keeps the fold for this visit only.
-    }
-  }, []);
-  const frame = useMemo(() => ({ folded, setFolded }), [folded, setFolded]);
-  // The sidebar's ONE control, at the bar's left edge and at the bottom of the window, where it stays whether
-  // the sidebar is out or folded: a fold button that moved would be two buttons to learn.
-  const lead = (
-    <>
-      <button
-        type="button"
-        onClick={() => setFolded(!folded)}
-        title={folded ? m["home.unfoldSidebar"]() : m["home.foldSidebar"]()}
-        aria-label={
-          folded ? m["home.unfoldSidebar"]() : m["home.foldSidebar"]()
-        }
-        aria-expanded={!folded}
-        className="shrink-0 rounded p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"
-      >
-        {folded ? (
-          <PanelLeftOpen className="h-4 w-4" />
-        ) : (
-          <PanelLeftClose className="h-4 w-4" />
-        )}
-      </button>
-      {/* Right of it, as in a project: the command bar's opener (docs/commandBar.md). */}
-      <HomeCommandsButton />
-    </>
-  );
-  // What ends every bar a home page docks — a song playing, or nothing: the engine.
-  const end = <HomeEngine />;
+  usePluginScanToast();
   return (
-    <FrameContext.Provider value={frame}>
-      <HomeCommandBar>
-        <MiniPlayerDock lead={lead} end={end}>
-          {children}
-        </MiniPlayerDock>
-      </HomeCommandBar>
-    </FrameContext.Provider>
+    <HomeCommandBar>
+      {/* Without this, `askConfirm` answers NO with no host to draw on and every destructive button silently does nothing. */}
+      <AskHostK7 />
+      <Toaster
+        dismissLabel={m["common.dismiss"]()}
+        regionLabel={m["toast.region"]()}
+      />
+      {children}
+    </HomeCommandBar>
   );
 }
 
-/** The page frame: the sidebar on the left, the page's own column on the right, the bar under both. */
-export function HomeShell({
-  actions,
-  children,
+/** A tab is an address: a plain click is a router move, a modified one opens like any link. */
+function HomeTab({
+  icon: Icon,
+  label,
+  name,
+  route,
 }: {
-  /** Drawn in the bar, before the engine — a page's own control, such as a refresh. */
-  actions?: ReactNode;
-  children: ReactNode;
+  icon: LucideIcon;
+  label: string;
+  /** The accessible name when the label is shortened for the narrow bar. */
+  name?: string;
+  route: string;
 }) {
-  const { folded } = useHomeFrame();
+  const href = useHref(route);
+  const navigate = useNavigate();
+  const here = useLocation().pathname === route;
+  return (
+    <TabBarItem
+      href={href}
+      icon={<Icon />}
+      label={label}
+      aria-label={name}
+      selected={here}
+      className="max-sm:w-[68px]"
+      onClick={(e) => {
+        if (e.defaultPrevented || e.button !== 0) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        navigate(route);
+      }}
+    />
+  );
+}
+
+/** The floating tab bar and the round command-bar button beside it, centred at the window's foot. */
+export function HomeTabs() {
+  return (
+    <div className="pointer-events-none fixed inset-x-0 bottom-7 z-(--k7-z-bar) flex justify-center px-4">
+      <TabBar
+        label={m["home.nav"]()}
+        className="pointer-events-auto"
+        trailing={<HomeCommandsButton />}
+      >
+        <HomeTab icon={Folders} label={m["home.projects"]()} route="/" />
+        <HomeTab icon={ListChecks} label={m["home.tasks"]()} route={TASKS_ROUTE} />
+        <HomeTab
+          icon={LibraryBig}
+          label={m["home.libraries"]()}
+          route={LIBRARIES_ROUTE}
+        />
+        <HomeTab
+          icon={Snowflake}
+          label={m["home.frozenShort"]()}
+          name={m["frozen.title"]()}
+          route={FROZEN_CHAINS_ROUTE}
+        />
+      </TabBar>
+    </div>
+  );
+}
+
+/** The page frame: the page's own column, the tab bar floating over its foot. */
+export function HomeShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-full flex-col bg-background text-foreground">
-      <div className="flex min-h-0 flex-1">
-        {!folded && <HomeSidebar />}
-        {/* `contain: layout` holds a page's fixed docks and pop-ins inside its column, clear of the sidebar and the bar. */}
-        <div className="flex min-w-0 flex-1 flex-col [contain:layout]">
-          {children}
-          <HomeCommandsSaid />
-        </div>
+      {/* `contain: layout` holds a page's fixed docks and pop-ins inside its column. */}
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col [contain:layout]">
+        {children}
       </div>
-      {/* The mini player of whichever page plays, else the standby bar: always there, the whole width, docked by `HomeFrame`. */}
-      <MiniPlayerDockOutlet />
-      <MiniPlayer
-        standby
-        icon={AudioLines}
-        // Nothing is said here: the row is the home's controls, and a line about silence is noise in it.
-        title=""
-        end={
-          <>
-            {/* The page's own, first: the médiathèque's queue, which the bar holds while nothing plays. */}
-            {actions}
-            <HomeEngine />
-          </>
-        }
-        playing={false}
-        position={0}
-        duration={0}
-        mediaSession={false}
-        labels={{
-          region: m["home.player"](),
-          more: m["common.more"](),
-          play: m["transport.play"](),
-          pause: m["transport.pause"](),
-          position: m["minimap.movePlayhead"](),
-          close: m["common.close"](),
-        }}
-        onToggle={() => {}}
-        onSeek={() => {}}
-        transport={null}
-        track={null}
-      />
+      <HomeTabs />
     </div>
   );
 }

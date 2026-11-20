@@ -73,7 +73,7 @@ export function PairThisDevice({
       ) : (
         <>
           {step.k === "done" ? (
-            <p className="text-amber-500 text-xs">
+            <p className="text-warn type-secondary">
               {outcomeText(step.outcome)}
             </p>
           ) : (

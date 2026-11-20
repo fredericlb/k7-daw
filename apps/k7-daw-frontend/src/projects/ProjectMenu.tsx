@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import { Copy, MoreVertical, PenLine, Trash2 } from "@studio/ui/icons";
+import { Copy, Ellipsis, PenLine, Trash2 } from "@studio/ui/icons";
 import type { AccountWorkspace } from "@studio/web-protocol";
 import type { ProjectApp } from "@studio/web-protocol/projects";
 import { useState } from "react";
@@ -57,8 +57,8 @@ export function ProjectMenu({
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            size="icon-xs"
-            className="shrink-0 text-muted-foreground"
+            size="icon-sm"
+            className="shrink-0 text-fg-2"
             title={blocked || m["project.menu"]({ label })}
             aria-label={m["project.menu"]({ label })}
             disabled={Boolean(blocked)}
@@ -68,7 +68,7 @@ export function ProjectMenu({
               e.stopPropagation();
             }}
           >
-            <MoreVertical className="h-4 w-4" />
+            <Ellipsis className="size-5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">

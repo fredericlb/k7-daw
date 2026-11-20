@@ -1,8 +1,14 @@
-// Section.tsx — the shared furniture of the settings screen: a titled block, a row, and the
-// one button shape every action uses. Here rather than inline, so the screen reads as one
+// Section.tsx — the shared furniture of the settings screens: a titled block (a caps heading, a row group, the hint
+// under it), a row, the action every row uses and the text field. Here rather than inline, so the screens read as one
 // surface and a second section costs a title.
 
+import { Button } from "@studio/ui/button";
+import { RowGroup } from "@studio/ui/row-group";
 import type { ReactNode } from "react";
+
+/** A text field inside a row: 44 high, the input fill, the focus ring of the kit's inputs. */
+export const FIELD =
+  "type-mono-value h-11 w-full rounded-(--k7-r-input) border border-(--k7-hairline) bg-(--k7-input-fill) px-3 text-foreground placeholder:text-fg-3 focus:border-lavender focus:shadow-(--k7-focus-ring) focus:outline-none";
 
 export function Section({
   title,
@@ -14,13 +20,10 @@ export function Section({
   children: ReactNode;
 }) {
   return (
-    // A surface by its fill, not an outline: the card step above the page's ground (docs/shell.md).
-    <section className="rounded-lg bg-card">
-      <header className="border-border/60 border-b px-4 py-3">
-        <h2 className="font-semibold text-foreground text-sm">{title}</h2>
-        {hint && <p className="mt-1 text-faint text-xs">{hint}</p>}
-      </header>
-      <div className="divide-y divide-border/60">{children}</div>
+    <section aria-label={title} className="flex flex-col gap-2">
+      <h2 className="type-caps px-1 text-fg-3">{title}</h2>
+      <RowGroup>{children}</RowGroup>
+      {hint && <p className="type-status px-1 text-fg-3">{hint}</p>}
     </section>
   );
 }
@@ -36,10 +39,10 @@ export function Row({
   children?: ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-4 px-4 py-2.5">
+    <div className="flex min-h-11 items-center gap-4 px-3.5 py-2.5">
       <div className="min-w-0 flex-1">
-        <div className="truncate text-foreground text-sm">{label}</div>
-        {detail && <div className="truncate text-faint text-xs">{detail}</div>}
+        <div className="type-body truncate">{label}</div>
+        {detail && <div className="type-status truncate text-fg-3">{detail}</div>}
       </div>
       {children && <div className="flex shrink-0 gap-2">{children}</div>}
     </div>
@@ -61,18 +64,14 @@ export function Action({
   danger?: boolean;
 }) {
   return (
-    <button
-      type="button"
+    <Button
+      size="sm"
+      variant={danger ? "destructive" : "glass"}
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`rounded border px-2.5 py-1 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
-        danger
-          ? "border-red-900/60 text-red-300 hover:enabled:bg-red-950/40"
-          : "border-neutral-700 text-neutral-300 hover:enabled:bg-neutral-800"
-      }`}
     >
       {children}
-    </button>
+    </Button>
   );
 }

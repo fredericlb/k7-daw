@@ -1,5 +1,5 @@
-// EnginePage.tsx — `/settings/engine`, the user menu's Engine. On the desktop app, this machine's engine under four tabs:
-// Engine (whether it runs, which audio interface it takes first, whether its network may use it unpaired), Instruments, Chains (what it separates with) and Plugins.
+// EnginePage.tsx — `/settings/engine`, reached from App settings › Devices. On the desktop app, this machine's engine under three tabs:
+// Engine (whether it runs, which audio interface it takes first, whether its network may use it unpaired), Instruments and Plugins.
 // What the command-line engine reads from its config file; the desktop app hands its user no such file. Anywhere else,
 // the phone's own engine. See ../../docs/settings.md.
 
@@ -10,7 +10,6 @@ import { HomeShell } from "../projects/HomeFrame";
 import { PageFrame } from "../projects/PageFrame";
 import { AndroidEngineSection } from "./AndroidEngineSection";
 import { onAndroid } from "./androidEngine";
-import { ChainsSection } from "./ChainsSection";
 import {
   type DesktopEngineSnapshot,
   engineCommand,
@@ -45,7 +44,7 @@ function DeviceBadge({
     .filter(Boolean)
     .join(" · ");
   return (
-    <span className="shrink-0 rounded-full bg-emerald-500/15 px-2 py-0.5 font-medium text-[10px] text-emerald-500">
+    <span className="shrink-0 type-badge rounded-full border border-(--k7-ok-line) bg-(--k7-ok-fill) px-2 py-0.5 text-ok">
       {channels ? `${text} · ${channels}` : text}
     </span>
   );
@@ -104,7 +103,7 @@ export function EnginePage() {
         {asio && (
           <Row
             label={
-              <span className="text-amber-500">
+              <span className="text-warn">
                 {m["engine.asioHint"]({ driver: asio })}
               </span>
             }
@@ -210,7 +209,7 @@ export function EnginePage() {
 
   return (
     <HomeShell>
-      <PageFrame title={m["engine.title"]()} narrow>
+      <PageFrame title={m["engine.title"]()} narrow cog={false}>
         {here === undefined ? null : !here ? (
           <div className="flex min-w-0 flex-col gap-4">
             {/* On the phone the app is the engine's machine: this is where its engine is set. */}
@@ -236,11 +235,6 @@ export function EnginePage() {
                 content: (
                   <InstrumentsSection snapshot={s} send={engineCommand} />
                 ),
-              },
-              {
-                key: "chains",
-                label: m["engine.tabChains"](),
-                content: <ChainsSection engineId={s?.engineId ?? ""} />,
               },
               {
                 key: "plugins",

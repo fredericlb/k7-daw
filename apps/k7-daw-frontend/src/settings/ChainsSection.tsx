@@ -11,7 +11,7 @@ import { m } from "../paraglide/messages.js";
 import { type AccountFiles, accountFiles } from "../projects/api";
 import { findAccountFiles } from "./accountFiles";
 import { type EngineChains, loadChains, saveChains } from "./engineChains";
-import { Section } from "./Section";
+import { FIELD, Section } from "./Section";
 
 type Which = "stems" | "instrumental";
 type Chain = ColdChainsReply["chains"][number];
@@ -63,12 +63,12 @@ function ChainPicker({
   // …and fixed FROM here when its module says where the model lives.
   const mine = fetching && fetching.ref === value ? fetching : null;
   return (
-    <div className="flex flex-col gap-1.5 px-4 py-2.5">
+    <div className="flex flex-col gap-1.5 px-3.5 py-2.5">
       <select
         value={value ?? ""}
         disabled={disabled}
         onChange={(e) => onChoose(e.target.value)}
-        className="w-full rounded border border-neutral-700 bg-neutral-950 px-2 py-1 text-neutral-200 text-sm"
+        className={FIELD}
         aria-label={label}
       >
         <option value="">{none}</option>
@@ -86,7 +86,7 @@ function ChainPicker({
         ))}
       </select>
       {why && (
-        <p className="text-amber-400 text-xs">
+        <p className="type-secondary text-warn">
           {m["settings.chains.unavailable"]({ reason: why })}
         </p>
       )}
@@ -103,12 +103,12 @@ function ChainPicker({
       ) : null}
       {mine && (
         <p
-          className={`text-xs ${mine.failed ? "text-red-400" : "text-neutral-400"}`}
+          className={`text-xs ${mine.failed ? "text-error" : "text-fg-2"}`}
         >
           {mine.text}
         </p>
       )}
-      <p className="text-faint text-xs">{body}</p>
+      <p className="type-status text-fg-3">{body}</p>
     </div>
   );
 }
@@ -185,12 +185,12 @@ export function ChainsSection({ engineId }: { engineId: string }) {
       hint={m["settings.chains.hint"]()}
     >
       {fileService === null ? (
-        <p className="px-4 py-2.5 text-faint text-xs">
+        <p className="px-3.5 py-2.5 type-status text-fg-3">
           {m["settings.chains.noMachine"]()}
         </p>
       ) : (
         <>
-          <div className="px-4 pt-2.5 text-[10px] text-faint uppercase tracking-wide">
+          <div className="type-caps px-3.5 pt-2.5 text-fg-3">
             {m["stems.title"]()}
           </div>
           <ChainPicker
@@ -204,7 +204,7 @@ export function ChainsSection({ engineId }: { engineId: string }) {
             fetching={fetching}
             onDownload={download}
           />
-          <div className="px-4 pt-2.5 text-[10px] text-faint uppercase tracking-wide">
+          <div className="type-caps px-3.5 pt-2.5 text-fg-3">
             {m["instrumental.title"]()}
           </div>
           {/* Only those that WRITE an instrumental: four stems is not one, and the far side would refuse it. */}
@@ -221,13 +221,13 @@ export function ChainsSection({ engineId }: { engineId: string }) {
           />
           {/* An empty list is a real state — a library with no cold chain yet — and reads as a broken screen unless it says so. */}
           {view && chains.length === 0 && (
-            <p className="px-4 py-2.5 text-faint text-xs">
+            <p className="px-3.5 py-2.5 type-status text-fg-3">
               {parts((h) => m["settings.chains.noCold"](h), {
                 dir: <span className="font-mono">chains/</span>,
               })}
             </p>
           )}
-          {error && <p className="px-4 py-2.5 text-red-400 text-xs">{error}</p>}
+          {error && <p className="px-3.5 py-2.5 text-error type-secondary">{error}</p>}
         </>
       )}
     </Section>

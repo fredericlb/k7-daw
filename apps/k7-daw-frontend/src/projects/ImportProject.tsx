@@ -93,14 +93,14 @@ export function ImportProject({
 
         {done ? (
           // The log, and nothing else: what came across and what did not is the whole answer here.
-          <div className="max-h-60 overflow-y-auto rounded bg-muted px-2 py-1.5 font-mono text-xs">
+          <div className="max-h-60 overflow-y-auto rounded-xl bg-(--k7-input-fill) px-3 py-2 type-mono-log">
             {log.map((line, i) => (
               <div
                 key={i}
                 className={
                   line.startsWith("warning:")
-                    ? "text-amber-500"
-                    : "text-muted-foreground"
+                    ? "text-warn"
+                    : "text-fg-2"
                 }
               >
                 {line}
@@ -125,14 +125,14 @@ export function ImportProject({
         )}
 
         <DialogFooter>
-          <Button variant="secondary" disabled={busy} onClick={onClose}>
+          <Button variant="glass" disabled={busy} onClick={onClose}>
             {done ? m["common.close"]() : m["common.cancel"]()}
           </Button>
           {done ? (
             <Button onClick={onOpen}>{m["importDrop.open"]()}</Button>
           ) : (
             <Button disabled={busy || !folder} onClick={submit}>
-              {busy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}
+              {busy && <Loader2 className="mr-1 size-5 animate-spin" />}
               {m["importDrop.run"]()}
             </Button>
           )}

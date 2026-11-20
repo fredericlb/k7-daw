@@ -3,12 +3,16 @@
 // ticked inside its workspace, where the `task` commands run. See ../../docs/tasks.md.
 
 import { Button } from "@studio/ui/button";
-import { ArrowRight, ListChecks, Loader2, RefreshCw } from "@studio/ui/icons";
+import { Checkbox } from "@studio/ui/checkbox";
+import { EmptyState } from "@studio/ui/empty-state";
+import { ErrorCard } from "@studio/ui/error-card";
+import { ArrowRight, ListChecks, RefreshCw } from "@studio/ui/icons";
+import { RowGroup } from "@studio/ui/row-group";
+import { Spinner } from "@studio/ui/spinner";
 import { useCallback, useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { findAccountFiles } from "../settings/accountFiles";
 import { accountFiles, projectHref, workspaceHref } from "./api";
-import { EmptyState } from "./EmptyState";
 import { HomeShell } from "./HomeFrame";
 import { PageFrame } from "./PageFrame";
 import type { AccountFiles } from "./workspaceOps";
@@ -75,80 +79,76 @@ export function TasksPage() {
         actions={
           fileService ? (
             <>
-              <label className="flex cursor-pointer items-center gap-1.5 text-muted-foreground text-xs">
-                <input
-                  type="checkbox"
+              <label className="type-secondary flex cursor-pointer items-center gap-2 text-fg-2">
+                <Checkbox
                   checked={showDone}
-                  onChange={(e) => setShowDone(e.target.checked)}
+                  onCheckedChange={(on) => setShowDone(on === true)}
                 />
                 {m["tasks.showDone"]()}
               </label>
               <Button
-                size="sm"
-                variant="secondary"
+                size="icon"
+                variant="glass"
                 disabled={lists === null}
                 onClick={() => void load(fileService)}
                 title={m["tasks.refresh"]()}
                 aria-label={m["tasks.refresh"]()}
               >
-                <RefreshCw className="h-3.5 w-3.5" />
+                <RefreshCw className="size-5" />
               </Button>
             </>
           ) : undefined
         }
-        narrow
       >
         {fileService === null ? (
-          <p className="text-xs text-muted-foreground">
-            {m["repos.noFilesTitle"]()}
-          </p>
+          <ErrorCard title={m["repos.noFilesTitle"]()} />
         ) : fileService === undefined || lists === null ? (
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          <div className="type-secondary flex items-center gap-2 text-fg-2">
+            <Spinner />
             {m["tasks.reading"]()}
           </div>
         ) : (
           <>
             {error && (
-              <code className="block overflow-x-auto rounded bg-muted px-2 py-1 text-destructive text-xs">
-                {error}
-              </code>
+              <ErrorCard title={error} />
             )}
             {shown.length === 0 && !error && (
               // No act on the spot: a task is written inside its workspace, where the `task` commands run.
-              <EmptyState icon={ListChecks}>{m["tasks.none"]()}</EmptyState>
+              <EmptyState glyph={<ListChecks />} title={m["tasks.noneTitle"]()}>
+                {m["tasks.none"]()}
+              </EmptyState>
             )}
             {shown.map(({ workspace: ws, tasks, error: wsError }) => (
-              <section key={ws.name}>
-                <h2 className="mb-1.5 flex items-center justify-between gap-2 text-sm font-medium">
-                  <span className="truncate">{ws.name}</span>
+              <section
+                key={ws.name}
+                aria-label={m["tasks.of"]({ workspace: ws.name })}
+                className="flex flex-col gap-2"
+              >
+                <h2 className="flex items-center justify-between gap-2 px-1">
+                  <span className="type-caps truncate text-fg-3">{ws.name}</span>
                   {/* An ANCHOR, not a router link: a project is the router's basename, so opening one is a whole-page navigation. */}
                   <a
                     href={workspaceHref(ws)}
-                    className="flex shrink-0 items-center gap-1 text-xs font-normal text-muted-foreground hover:text-foreground"
+                    className="type-secondary flex shrink-0 items-center gap-1 font-bold text-primary-text hover:underline"
                   >
                     {m["tasks.openWorkspace"]()}
-                    <ArrowRight className="h-3 w-3" />
+                    <ArrowRight className="size-4" />
                   </a>
                 </h2>
-                {wsError && (
-                  <code className="block overflow-x-auto rounded bg-muted px-2 py-1 text-xs text-red-400">
-                    {wsError}
-                  </code>
-                )}
+                {wsError && <ErrorCard title={wsError} />}
                 {tasks.length > 0 && (
-                  <ul className="divide-y divide-border rounded border border-border">
+                  <RowGroup>
                     {tasks.map((t) => {
                       const p = anchorProject(ws, t.at);
                       return (
-                        <li
+                        <div
                           key={t.line}
-                          className="flex items-start gap-2 px-3 py-1.5 text-sm"
+                          className="type-body flex min-h-11 items-start gap-3 px-3.5 py-2.5"
                         >
                           <span
                             className={
                               t.done
-                                ? "min-w-0 flex-1 text-muted-foreground line-through"
+                                ? "min-w-0 flex-1 text-fg-3 line-through"
                                 : "min-w-0 flex-1"
                             }
                           >
@@ -158,7 +158,7 @@ export function TasksPage() {
                             (p ? (
                               <a
                                 href={projectHref(ws, p)}
-                                className="shrink-0 font-mono text-xs text-muted-foreground hover:text-foreground hover:underline"
+                                className="type-mono-value shrink-0 text-primary-text hover:underline"
                                 title={m["tasks.openProject"]({
                                   path: p.path,
                                 })}
@@ -167,14 +167,14 @@ export function TasksPage() {
                               </a>
                             ) : (
                               // The anchor names a project the workspace no longer holds: said, not linked.
-                              <span className="shrink-0 font-mono text-xs text-faint">
+                              <span className="type-mono-value shrink-0 text-fg-3">
                                 {t.at.project} @ {t.at.timecode}
                               </span>
                             ))}
-                        </li>
+                        </div>
                       );
                     })}
-                  </ul>
+                  </RowGroup>
                 )}
               </section>
             ))}

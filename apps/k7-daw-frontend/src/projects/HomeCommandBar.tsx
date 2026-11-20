@@ -1,10 +1,12 @@
 // HomeCommandBar.tsx — the home pages' command bar, held by the frame so every home page has it and a
-// camera mode or an armed delete survives going from one page to another. Its vocabulary is homeCommands.ts.
+// camera mode or an armed delete survives going from one page to another. Its vocabulary is homeCommands.ts; what it
+// says comes back as toasts.
 // The one thing a reader would get wrong: the workspaces are read when the bar opens, not polled (../../docs/commandBar.md).
 
 import { deviceName } from "@studio/engine-browser/pairing";
-import { Button } from "@studio/ui/button";
-import { Terminal } from "@studio/ui/icons";
+import { showToast } from "@studio/project-shell/toast";
+import { SquareTerminal } from "@studio/ui/icons";
+import { TabBarRound } from "@studio/ui/tab-bar";
 import type { AccountWorkspace } from "@studio/web-protocol";
 import {
   createContext,
@@ -17,6 +19,7 @@ import {
   useState,
 } from "react";
 import { useSearchParams } from "react-router-dom";
+import { go } from "../appNav";
 import { CameraMode } from "../camera/CameraMode";
 import type { CommandBarHandle } from "../components/CommandBar";
 import {
@@ -28,7 +31,7 @@ import { useLocale } from "../i18n";
 import { m } from "../paraglide/messages.js";
 import { findAccountFiles } from "../settings/accountFiles";
 import { DOUBLE_SHIFT_MS } from "../shellMeta";
-import { accountFiles } from "./api";
+import { accountFiles, projectHref } from "./api";
 import {
   type ArmedDelete,
   buildHomePalette,
@@ -51,21 +54,14 @@ function storedCameraName(): string {
   }
 }
 
-interface Said {
-  text: string;
-  refused: boolean;
-}
-
 interface Bar {
   summon: () => void;
-  said: Said | null;
   /** Called after a command wrote to the workspaces, so a page listing them reads them at once. */
   onChanged: (listener: () => void) => () => void;
 }
 
 const BarContext = createContext<Bar>({
   summon: () => {},
-  said: null,
   onChanged: () => () => {},
 });
 
@@ -76,13 +72,12 @@ export function useHomeCommandsChanged(listener: () => void): void {
 }
 
 export function HomeCommandBar({ children }: { children: ReactNode }) {
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const openWs = params.get(WS_PARAM);
   const cmdRef = useRef<CommandBarHandle>(null);
   // Hidden until summoned, as in the editor (../../docs/commandBar.md).
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
-  const [said, setSaid] = useState<Said | null>(null);
   const { locale } = useLocale();
   const palette = useMemo(() => buildHomePalette(locale), [locale]);
   /** The project a `project delete init` named, awaiting its confirm — read by the next command and never drawn. */
@@ -138,14 +133,28 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
 
   const run = useCallback(
     async (line: string) => {
-      setSaid(null);
       // Read afresh: a list from when the bar opened may miss what another tab just made.
       const ctx = await readWorkspaces();
+      const list = ctx.workspaces;
       const known = await runHomeCommand(line, {
         ...ctx,
         acts: HOME_ACTS,
-        say: (text) => setSaid({ text, refused: false }),
-        refuse: (text) => setSaid({ text, refused: true }),
+        say: (message) => showToast({ message }),
+        refuse: (message) => showToast({ message, variant: "warning" }),
+        open: (workspace, project) => {
+          const ws = list.find((w) => w.name === workspace);
+          if (!ws) return;
+          if (project) void go(projectHref(ws, project));
+          else
+            setParams(
+              (p) => {
+                const next = new URLSearchParams(p);
+                next.set(WS_PARAM, workspace);
+                return next;
+              },
+              { replace: true },
+            );
+        },
         changed: () => {
           for (const l of listeners.current) l();
           void readWorkspaces();
@@ -155,12 +164,12 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
       });
       // A line these pages do not know is refused HERE: no service behind it to pass it to.
       if (!known)
-        setSaid({
-          text: m["home.unknownCommand"]({ line: line.trim() }),
-          refused: true,
+        showToast({
+          message: m["home.unknownCommand"]({ line: line.trim() }),
+          variant: "warning",
         });
     },
-    [readWorkspaces, cameraMode],
+    [readWorkspaces, cameraMode, setParams],
   );
 
   const onChanged = useCallback((listener: () => void) => {
@@ -170,8 +179,8 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
     };
   }, []);
   const bar = useMemo(
-    () => ({ summon, said, onChanged }),
-    [summon, said, onChanged],
+    () => ({ summon, onChanged }),
+    [summon, onChanged],
   );
 
   return (
@@ -198,34 +207,16 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
   );
 }
 
-/** The bar's opener: a phone has no Ctrl+Shift+P nor double-Shift, so the bar needs a control of its own. */
+/** The bar's opener, the round button beside the tab bar: a phone has no Ctrl+Shift+P nor double-Shift. */
 export function HomeCommandsButton() {
   const { summon } = useContext(BarContext);
   return (
-    <Button
-      variant="ghost"
-      size="icon-sm"
+    <TabBarRound
       onClick={summon}
-      title={`${m["commandBar.list"]()} (Ctrl+Shift+P)`}
-      aria-label={m["commandBar.list"]()}
+      title={`${m["home.commandBar"]()} (Ctrl+Shift+P)`}
+      aria-label={m["home.commandBar"]()}
     >
-      <Terminal className="size-4" />
-    </Button>
-  );
-}
-
-/** What the bar last said, at the foot of the page's column in amber when refused; nothing while it said nothing. */
-export function HomeCommandsSaid() {
-  const { said } = useContext(BarContext);
-  if (!said) return null;
-  return (
-    <p
-      className={`shrink-0 truncate border-t border-border bg-popover px-3 py-1.5 text-xs ${
-        said.refused ? "text-amber-500" : "text-muted-foreground"
-      }`}
-      title={said.text}
-    >
-      {said.text}
-    </p>
+      <SquareTerminal />
+    </TabBarRound>
   );
 }

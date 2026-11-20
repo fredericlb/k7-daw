@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import { Check, MoreVertical } from "@studio/ui/icons";
+import { Check, Ellipsis } from "@studio/ui/icons";
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";
 
@@ -53,16 +53,16 @@ export function ProjectsMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="ghost"
+          variant="glass"
           size="icon"
-          className="shrink-0 text-muted-foreground"
+          className="shrink-0"
           title={m["repos.pageMenu"]()}
           aria-label={m["repos.pageMenu"]()}
         >
-          <MoreVertical className="h-4 w-4" />
+          <Ellipsis className="size-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" aria-label={m["repos.pageMenu"]()}>
         {/* A toggle, said as one to a screen reader; the menu stays open so the change is seen. */}
         <DropdownMenuItem
           role="menuitemcheckbox"

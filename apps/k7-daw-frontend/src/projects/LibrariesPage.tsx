@@ -1,16 +1,15 @@
-// LibrariesPage.tsx — `/libraries`, a page of its own: the bundled libraries, read-only: a library
-// changes with an app update.
-// A page and not a panel: it is visited on purpose, rarely.
-// See ../../docs/projects.md.
+// LibrariesPage.tsx — `/libraries`: the bundled libraries with their versions, read-only (a library changes with an
+// app update), then what each workspace pins of them, with Upgrade. A page and not a panel: it is visited on purpose,
+// rarely. See ../../docs/projects.md.
 
-import { Toaster } from "@studio/project-shell/toast";
-import { Loader2 } from "@studio/ui/icons";
+import type { AccountLibrary } from "@studio/web-protocol";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useState } from "react";
-import { AskHostK7 } from "../AskHostK7";
 import { m } from "../paraglide/messages.js";
 import { findAccountFiles } from "../settings/accountFiles";
 import { HomeShell } from "./HomeFrame";
 import { LibrariesCard } from "./LibrariesCard";
+import { LibraryPins } from "./LibraryPins";
 import { PageFrame } from "./PageFrame";
 import type { AccountFiles } from "./workspaceOps";
 
@@ -19,6 +18,7 @@ export function LibrariesPage() {
   const [fileService, setFileService] = useState<
     AccountFiles | null | undefined
   >(undefined);
+  const [libraries, setLibraries] = useState<AccountLibrary[]>([]);
   useEffect(() => {
     let live = true;
     void findAccountFiles(false).then((f) => live && setFileService(f));
@@ -29,19 +29,22 @@ export function LibrariesPage() {
 
   return (
     <HomeShell>
-      <AskHostK7 />
-      <Toaster
-        dismissLabel={m["common.dismiss"]()}
-        regionLabel={m["toast.region"]()}
-      />
       <PageFrame title={m["home.libraries"]()} narrow>
         {fileService === undefined ? (
-          <div className="flex items-center gap-2 text-muted-foreground text-xs">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />{" "}
-            {m["libs.reading"]()}
+          <div className="type-secondary flex items-center gap-2 text-fg-2">
+            <Spinner /> {m["libs.reading"]()}
           </div>
         ) : (
-          <LibrariesCard fileService={fileService} inPage />
+          <>
+            <LibrariesCard
+              fileService={fileService}
+              onLibraries={setLibraries}
+              inPage
+            />
+            {fileService && (
+              <LibraryPins fileService={fileService} libraries={libraries} />
+            )}
+          </>
         )}
       </PageFrame>
     </HomeShell>

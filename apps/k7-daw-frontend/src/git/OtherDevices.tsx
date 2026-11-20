@@ -4,6 +4,7 @@
 
 import { Button } from "@studio/ui/button";
 import { Cloud, GitBranch } from "@studio/ui/icons";
+import { RowGroup } from "@studio/ui/row-group";
 import { Input } from "@studio/ui/input";
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -32,20 +33,22 @@ function CloneRow({
   const { folder, error: badName } = workspaceFolderName(name);
   const remote = entry.remote ?? "";
   return (
-    <li
+    <div
       data-roam={entry.id}
-      className="flex items-center justify-between gap-3 py-1.5"
+      className="flex min-h-14 items-center justify-between gap-3 px-3.5 py-2"
     >
-      <span className="flex min-w-0 items-center gap-2">
-        <Cloud className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <span className="truncate">{entry.name}</span>
-        <span className="truncate text-muted-foreground text-xs">
-          {remoteName(remote)}
+      <span className="flex min-w-0 items-center gap-3">
+        <Cloud className="size-5 shrink-0 text-primary-text" />
+        <span className="min-w-0">
+          <span className="type-body block truncate">{entry.name}</span>
+          <span className="type-status block truncate text-fg-3">
+            {remoteName(remote)}
+          </span>
         </span>
       </span>
       <Button
         size="sm"
-        variant="secondary"
+        variant="glass"
         disabled={Boolean(blocked) || !t}
         title={blocked || m["git.cloneHint"]()}
         onClick={() => {
@@ -53,7 +56,7 @@ function CloneRow({
           setOpen(true);
         }}
       >
-        <GitBranch className="h-4 w-4" /> {m["roam.clone"]()}
+        <GitBranch className="size-5" /> {m["roam.clone"]()}
       </Button>
       <RemoteDialog
         open={open}
@@ -83,7 +86,7 @@ function CloneRow({
           onCloned();
         }}
       />
-    </li>
+    </div>
   );
 }
 
@@ -102,17 +105,11 @@ export function OtherList({
 }) {
   if (entries.length === 0) return null;
   return (
-    <section
-      aria-label={m["roam.title"]()}
-      className="rounded-md border border-border px-3 py-2 text-sm"
-    >
-      <h2
-        title={m["roam.hint"]()}
-        className="font-medium text-muted-foreground text-xs"
-      >
+    <section aria-label={m["roam.title"]()} className="flex flex-col gap-2">
+      <h2 title={m["roam.hint"]()} className="type-caps px-1 text-fg-3">
         {m["roam.title"]()}
       </h2>
-      <ul className="divide-y divide-border">
+      <RowGroup>
         {entries.map((e) => (
           <CloneRow
             key={e.id}
@@ -122,7 +119,7 @@ export function OtherList({
             onCloned={() => onCloned(e.id)}
           />
         ))}
-      </ul>
+      </RowGroup>
     </section>
   );
 }

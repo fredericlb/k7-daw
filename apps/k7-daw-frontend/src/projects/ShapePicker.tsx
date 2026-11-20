@@ -32,12 +32,12 @@ export function ShapePicker({
             <label
               key={sh.id}
               className={cn(
-                "flex min-w-0 cursor-pointer flex-col items-start gap-2 rounded-lg border p-3 transition-colors",
+                "flex min-w-0 cursor-pointer flex-col items-start gap-2 rounded-(--k7-r-rows) border p-3 transition-colors",
                 // The input is hidden, so its keyboard focus is drawn on the card it stands for.
                 "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring has-[:focus-visible]:outline-offset-2",
                 on
-                  ? "border-primary bg-primary/10"
-                  : "border-border hover:border-muted-foreground/40 hover:bg-accent/40",
+                  ? "border-primary bg-on-fill"
+                  : "border-(--k7-hairline-strong) hover:bg-on-fill",
               )}
             >
               <input
@@ -49,7 +49,7 @@ export function ShapePicker({
                 className="sr-only"
               />
               <span
-                className={on ? "text-primary-text" : "text-muted-foreground"}
+                className={on ? "text-primary-text" : "text-fg-2"}
               >
                 <ShapeSchematic shape={sh.id} />
               </span>
@@ -57,7 +57,7 @@ export function ShapePicker({
                 <sh.icon
                   className={cn(
                     "h-3.5 w-3.5 shrink-0",
-                    on ? "text-primary-text" : "text-muted-foreground",
+                    on ? "text-primary-text" : "text-fg-2",
                   )}
                 />
                 {/* `::first-letter` needs a block container, which a flex row is not. */}
@@ -65,7 +65,7 @@ export function ShapePicker({
                   {sh.label()}
                 </span>
               </span>
-              <span className="block text-muted-foreground text-xs leading-snug first-letter:uppercase">
+              <span className="block type-secondary text-fg-2 leading-snug first-letter:uppercase">
                 {sh.what()}
               </span>
             </label>

@@ -63,7 +63,7 @@ export function FirstProject({
             <FolderPlus className="h-5 w-5" />{" "}
             {m["project.firstTitle"]({ workspace })}
           </h1>
-          <p className="text-muted-foreground text-sm">
+          <p className="type-secondary text-fg-2">
             {m["project.firstBody"]()}
           </p>
         </div>
@@ -84,7 +84,7 @@ export function FirstProject({
         />
 
         {owed && (
-          <p className="rounded border border-amber-500/40 px-2 py-1 text-amber-500 text-xs">
+          <p className="rounded-xl border border-(--k7-warn-line) bg-(--k7-warn-fill) px-3 py-2 text-warn type-secondary">
             {owed}
           </p>
         )}
@@ -94,7 +94,7 @@ export function FirstProject({
             <Button onClick={onCreated}>{m["common.continue"]()}</Button>
           ) : (
             <Button disabled={busy || !folder} onClick={submit}>
-              {busy && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}
+              {busy && <Loader2 className="mr-1 size-5 animate-spin" />}
               {m["common.create"]()}
             </Button>
           )}

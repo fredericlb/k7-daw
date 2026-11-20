@@ -30,7 +30,7 @@ const VIEW_COMMANDS: { command: string; help: string }[] = [
   },
   {
     command: "ui mastering",
-    help: "fullscreen the master strip (projects declaring a mastering surface)",
+    help: "open the Mixer panel on its Master section (projects declaring a mastering surface)",
   },
   {
     command: "ui viewport",

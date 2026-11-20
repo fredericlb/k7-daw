@@ -13,6 +13,7 @@ import { isDroppableProject } from "@studio/web-protocol/projects";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { go } from "../appNav";
 import { GitProvider } from "../git/GitContext";
+import { GitScreensHost } from "../git/gitScreens";
 import { accountTransport as gitTransport } from "../git/transports";
 import { m } from "../paraglide/messages.js";
 import { accountFiles, projectHref, workspaceHref } from "./api";
@@ -234,6 +235,8 @@ export function ProjectsPane({
 
   return (
     <GitProvider value={gitTransportOf}>
+      {/* The Commit & Push, Conflict and Connect screens the cards' pills open (git/gitScreens.tsx). */}
+      <GitScreensHost transport={gitTransportOf} />
       <div className="flex min-h-0 flex-1 flex-col overflow-auto">
         {/* A project dropped on a row: what to call it, then what the translation cost. */}
         <ImportProject

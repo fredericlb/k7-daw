@@ -37,14 +37,14 @@ function Disclosure({
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-neutral-800/40"
+        className="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-on-fill"
       >
-        <Icon className="size-3.5 shrink-0 text-faint" />
-        <span className="min-w-0 flex-1 truncate text-neutral-200 text-sm">
+        <Icon className="size-3.5 shrink-0 text-fg-3" />
+        <span className="min-w-0 flex-1 truncate type-body">
           {label}
         </span>
         {detail && (
-          <span className="shrink-0 truncate text-faint text-xs">{detail}</span>
+          <span className="shrink-0 truncate text-fg-3 type-secondary">{detail}</span>
         )}
       </button>
       {open && <div className="pb-2">{children()}</div>}
@@ -56,7 +56,7 @@ function EntryBody({ entry }: { entry: NoticeEntry }) {
   const [standard, setStandard] = useState<string | null>(null);
   const text = entry.text ? notices.texts[entry.text] : null;
   return (
-    <div className="flex flex-col gap-2 px-4 text-neutral-400 text-xs">
+    <div className="flex flex-col gap-2 px-4 text-fg-2 type-secondary">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pl-5">
         <span>{entry.where.map((w) => WHERE_LABELS[w]()).join(", ")}</span>
         {entry.url && (
@@ -64,7 +64,7 @@ function EntryBody({ entry }: { entry: NoticeEntry }) {
             href={entry.url}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-neutral-300 hover:underline"
+            className="inline-flex items-center gap-1 text-primary-text hover:underline"
           >
             <ExternalLink className="size-3" />
             {m["about.notices.homepage"]()}
@@ -133,7 +133,7 @@ export function NoticesSection() {
             </Action>
           ))}
         </div>
-        <p data-testid="notices-count" className="text-faint text-xs">
+        <p data-testid="notices-count" className="text-fg-3 type-secondary">
           {m["about.notices.count"]({
             shown: String(shown.length),
             total: String(notices.entries.length),

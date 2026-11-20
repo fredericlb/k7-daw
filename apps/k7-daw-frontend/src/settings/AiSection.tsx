@@ -6,10 +6,7 @@ import { TriangleAlert } from "@studio/ui/icons";
 import { useEffect, useState } from "react";
 import { type AiSettingsView, aiOrganize } from "../api";
 import { m } from "../paraglide/messages.js";
-import { Action, Row, Section } from "./Section";
-
-const FIELD =
-  "w-full rounded border border-neutral-700 bg-neutral-950 px-2 py-1 font-mono text-neutral-200 text-xs placeholder:text-neutral-600 focus:border-neutral-500 focus:outline-none";
+import { Action, FIELD, Row, Section } from "./Section";
 
 export function AiSection() {
   const [view, setView] = useState<AiSettingsView | null>(null);
@@ -61,7 +58,7 @@ export function AiSection() {
           </Action>
         )}
       </Row>
-      <div className="flex gap-2 px-4 py-2.5">
+      <div className="flex gap-2 px-3.5 py-2.5">
         <input
           type="password"
           autoComplete="off"
@@ -81,7 +78,7 @@ export function AiSection() {
           {m["common.save"]()}
         </Action>
       </div>
-      <div className="flex gap-2 px-4 py-2.5">
+      <div className="flex gap-2 px-3.5 py-2.5">
         <input
           className={FIELD}
           placeholder={view?.defaultModel ?? m["ai.modelPlaceholder"]()}
@@ -104,7 +101,7 @@ export function AiSection() {
         <Row
           label={
             <>
-              <TriangleAlert className="size-3.5" /> {error}
+              <TriangleAlert className="size-5 inline text-warn" /> {error}
             </>
           }
         />

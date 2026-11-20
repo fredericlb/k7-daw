@@ -52,19 +52,19 @@ export function CopyProject({
       description={m["project.copyBody"]()}
       before={
         <>
-          <p className="rounded bg-muted px-3 py-2 font-mono text-xs">{path}</p>
+          <p className="rounded-xl bg-(--k7-input-fill) px-3 py-2 type-mono-value">{path}</p>
           <div className="flex max-h-48 flex-col gap-1 overflow-auto">
             {targets.map((w) => (
               <button
                 key={w.name}
                 type="button"
                 disabled={busy}
-                className={`flex items-center gap-2 rounded px-2 py-1 text-left text-sm ${
-                  to?.name === w.name ? "bg-accent" : "hover:bg-accent/50"
+                className={`flex min-h-11 items-center gap-2 rounded-xl px-3 py-1.5 text-left type-body ${
+                  to?.name === w.name ? "bg-on-fill text-lavender" : "hover:bg-on-fill"
                 }`}
                 onClick={() => setTo(w)}
               >
-                <Folder className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <Folder className="size-5 shrink-0 text-primary-text" />
                 <span className="truncate">{w.name}</span>
               </button>
             ))}

@@ -1,13 +1,12 @@
-// AboutPage.tsx — `/about`: k7's name and version, its licence with the full text, the link to its
+// AboutSection.tsx — About, inside App settings: k7's name and version, its licence with the full text, the link to its
 // source, and every third-party notice. The source link is not courtesy: the engine links JUCE under
 // the AGPLv3, so a network user must be offered the source. See ../../docs/about.md.
 
+import { buttonVariants } from "@studio/ui/button";
 import { ExternalLink } from "@studio/ui/icons";
 import { lazy, Suspense, useState } from "react";
 import { useLocalApp } from "../localApp";
 import { m } from "../paraglide/messages.js";
-import { HomeShell } from "../projects/HomeFrame";
-import { PageFrame } from "../projects/PageFrame";
 import { Action, Row, Section } from "../settings/Section";
 import { VERSION } from "../version";
 import { LicenseText } from "./LicenseText";
@@ -27,12 +26,11 @@ const OwnLicense = lazy(() =>
   })),
 );
 
-export function AboutPage() {
+export function AboutSection() {
   const [showLicense, setShowLicense] = useState(false);
   const local = useLocalApp();
   return (
-    <HomeShell>
-      <PageFrame title={m["about.title"]()} narrow>
+    <div role="region" aria-label={m["about.title"]()} className="flex flex-col gap-4">
         <Section title="K7 DAW" hint={m["about.tagline"]()}>
           <Row
             // version.ts is the frontend's one version source, whatever feeds it (../../docs/about.md).
@@ -69,9 +67,9 @@ export function AboutPage() {
               href={SOURCE_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 rounded border border-neutral-700 px-2.5 py-1 text-neutral-300 text-xs transition-colors hover:bg-neutral-800"
+              className={buttonVariants({ variant: "glass", size: "sm" })}
             >
-              <ExternalLink className="size-3.5" />
+              <ExternalLink className="size-5" />
               {m["about.source.open"]()}
             </a>
           </Row>
@@ -79,14 +77,13 @@ export function AboutPage() {
 
         <Suspense
           fallback={
-            <p className="text-muted-foreground text-xs">
+            <p className="type-secondary text-fg-2">
               {m["about.notices.loading"]()}
             </p>
           }
         >
           <NoticesSection />
         </Suspense>
-      </PageFrame>
-    </HomeShell>
+    </div>
   );
 }

@@ -52,6 +52,28 @@ const CAMERA_MODE_COMMAND: HomeCommandSpec = {
 
 export const HOME_COMMANDS: HomeCommandSpec[] = [
   {
+    canonical: "workspace open",
+    readable: {
+      en: "Find a workspace and open its files",
+      fr: "Trouver un espace de travail et ouvrir ses fichiers",
+    },
+    args: [{ name: "workspace", kind: "choice", hint: "a workspace's name" }],
+  },
+  {
+    canonical: "project open",
+    readable: {
+      en: "Find a project and open it",
+      fr: "Trouver un projet et l'ouvrir",
+    },
+    args: [
+      {
+        name: "project",
+        kind: "choice",
+        hint: "workspace/project, as listed",
+      },
+    ],
+  },
+  {
     canonical: "project new",
     readable: {
       en: "Create a project in the open workspace",
@@ -203,6 +225,12 @@ export function homeArgValues(
   ctx: HomeContext,
 ): string[] {
   if (canonical === "project new" && argIndex === 0) return [...PROJECT_SHAPES];
+  if (canonical === "workspace open" && argIndex === 0)
+    return ctx.workspaces.map((w) => w.name);
+  if (canonical === "project open" && argIndex === 0)
+    return ctx.workspaces.flatMap((w) =>
+      w.projects.map((p) => `${w.name}/${p.path}`),
+    );
   if (canonical.startsWith("project delete") && argIndex === 0) {
     const found = resolveWorkspace(ctx);
     return "ws" in found ? found.ws.projects.map((p) => p.path) : [];
@@ -263,6 +291,8 @@ export interface HomeDeps extends HomeContext {
   armed: { current: ArmedDelete | null };
   /** Turn this device into a camera under that name, null for its own — or the sentence saying why it cannot. */
   cameraMode?: (name: string | null) => string | null;
+  /** Go to a workspace's files, or to one of its projects. */
+  open?: (workspace: string, project?: RepoProject) => void;
 }
 
 /** The file service, or the sentence saying why there is nothing to act on. */
@@ -290,6 +320,24 @@ export async function runHomeCommand(
   d.armed.current = null;
 
   switch (spec.canonical) {
+    case "workspace open": {
+      const ws = d.workspaces.find((w) => w.name === rest);
+      if (!ws)
+        return use(d.refuse, msg["hc.noWorkspaceNamed"]({ name: rest }));
+      d.open?.(ws.name);
+      return true;
+    }
+
+    case "project open": {
+      const cut = rest.indexOf("/");
+      const ws = d.workspaces.find((w) => w.name === rest.slice(0, cut));
+      const p = ws && cut > 0 ? findProject(ws, rest.slice(cut + 1)) : null;
+      if (!ws || !p)
+        return use(d.refuse, msg["hc.noWorkspaceNamed"]({ name: rest }));
+      d.open?.(ws.name, p);
+      return true;
+    }
+
     case "project new": {
       const [type, ...words] = rest.split(/\s+/).filter(Boolean);
       const name = words.join(" ");
