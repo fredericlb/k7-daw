@@ -223,8 +223,9 @@ export function TakesView({
     <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-1">
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <Button
-          size="sm"
-          variant={host.recording ? "default" : "outline"}
+          size="icon"
+          variant={host.recording ? "default" : "glass"}
+          className="size-11 rounded-full"
           onClick={() =>
             host.recording
               ? host.stop()
@@ -246,10 +247,10 @@ export function TakesView({
           {host.recording ? (
             <Square className="h-3.5 w-3.5" />
           ) : (
-            <Circle className="h-3.5 w-3.5 fill-red-500 text-red-500" />
+            <Circle className="size-4 fill-record text-record" />
           )}
         </Button>
-        <span className="font-mono">
+        <span className="rounded-full bg-(--k7-row) px-3 py-1 font-mono text-[12px] text-foreground">
           {sel
             ? `${pos(sel.from)} → ${pos(sel.to)}`
             : m["takes.fromPosition"]({ position: pos(ev.start) })}
@@ -292,7 +293,7 @@ export function TakesView({
       </div>
       {/* The song's bars, which a click seeks to — the one ruler of this view. */}
       <div className="flex shrink-0">
-        <div className="w-24 shrink-0" />
+        <div className="w-28 shrink-0" />
         <button
           type="button"
           aria-label={m["takes.seek"]()}
@@ -319,7 +320,7 @@ export function TakesView({
               : m["takes.takeRow"]({ n: takeNumber(ev.rows, i) });
             return (
               <div key={r.ref} className="flex min-h-10 flex-1 basis-0">
-                <div className="flex w-24 shrink-0 items-center gap-1 px-1 text-xs">
+                <div className="flex w-28 shrink-0 items-center gap-1 px-1 text-xs">
                   <span
                     className={
                       heard.length ? "text-foreground" : "text-muted-foreground"
@@ -366,7 +367,7 @@ export function TakesView({
                 </div>
                 <div
                   ref={i === 0 ? area : undefined}
-                  className={`relative min-w-0 flex-1 rounded-sm bg-muted/30 ${wholeOnly ? "cursor-pointer" : "cursor-crosshair"}`}
+                  className={`relative min-w-0 flex-1 rounded-xl bg-(--k7-row) ${wholeOnly ? "cursor-pointer" : "cursor-crosshair"}`}
                   onPointerDown={(e) => onDown(e, r)}
                   role="presentation"
                 >
@@ -438,7 +439,7 @@ export function TakesView({
             );
           })}
           {/* One line across every row's track area, beside the 6rem label column. */}
-          <div className="pointer-events-none absolute inset-y-0 left-24 right-0 overflow-hidden">
+          <div className="pointer-events-none absolute inset-y-0 left-28 right-0 overflow-hidden">
             <TakesPlayhead view={view} tempo={tempo} />
           </div>
         </div>
