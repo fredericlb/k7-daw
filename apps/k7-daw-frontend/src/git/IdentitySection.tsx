@@ -1,9 +1,8 @@
 // IdentitySection.tsx — who this device is: the name and email that sign its commits and head the user menu (Settings).
-// One identity per device, shared with the commit dialog through ./identity (apps/k7-daw-backend/docs/files/git.md).
+// It saves itself (debounced, and on blur), with a quiet note. One identity per device, shared with the commit dialog through ./identity (apps/k7-daw-backend/docs/files/git.md).
 
-import { Button } from "@studio/ui/button";
 import { Input } from "@studio/ui/input";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { findAccountFiles } from "../settings/accountFiles";
 import { Row, Section } from "../settings/Section";
@@ -31,12 +30,14 @@ export function IdentitySection() {
   // A save made elsewhere (the commit dialog) lands here too.
   useEffect(() => {
     if (!known) return;
-    setName(known.name);
-    setEmail(known.email);
+    // Keep a draft that only differs by spaces: the save trims it, and the field must not jump under the caret.
+    setName((n) => (n.trim() === known.name ? n : known.name));
+    setEmail((e) => (e.trim() === known.email ? e : known.email));
   }, [known]);
 
   const save = async () => {
-    if (!t) return;
+    if (!t || !known) return;
+    if (name.trim() === known.name && email.trim() === known.email) return;
     try {
       await saveIdentity(t, { name, email });
       setSaid(m["git.identitySaved"]());
@@ -44,6 +45,15 @@ export function IdentitySection() {
       setSaid(explain(e));
     }
   };
+  // The latest save, so a timer set by an older render never writes older text.
+  const latest = useRef(save);
+  latest.current = save;
+  // An edit saves itself once the typing pauses; leaving a field saves at once.
+  useEffect(() => {
+    if (!known) return;
+    const id = setTimeout(() => void latest.current(), 800);
+    return () => clearTimeout(id);
+  }, [name, email, known]);
   if (!t) return null;
   const ready = known !== null;
   return (
@@ -54,6 +64,7 @@ export function IdentitySection() {
           value={name}
           disabled={!ready}
           onChange={(e) => setName(e.target.value)}
+          onBlur={() => void save()}
         />
       </Row>
       <Row label={m["git.identityEmail"]()} detail={said || undefined}>
@@ -62,10 +73,8 @@ export function IdentitySection() {
           value={email}
           disabled={!ready}
           onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => void save()}
         />
-        <Button size="sm" disabled={!ready} onClick={() => void save()}>
-          {m["common.save"]()}
-        </Button>
       </Row>
     </Section>
   );

@@ -1,4 +1,4 @@
-// HeaderGit.tsx — the header's git capsule: Commit & Push with its count, and a menu (Pull, Commits).
+// HeaderGit.tsx — the header's git capsule: Commit & Push with its count (it pushes alone when only commits wait), and a menu (Pull, Commits).
 // While a merge waits it is one accent "Resolve N conflicts" button. It decides no rule: gitState.ts's barView does.
 import { showToast } from "@studio/project-shell/toast";
 import { Badge } from "@studio/ui/badge";
@@ -13,7 +13,6 @@ import {
 } from "@studio/ui/dropdown-menu";
 import {
   ArrowDownToLine,
-  ArrowUpFromLine,
   ChevronDown,
   GitCommitHorizontal,
   GitMerge,
@@ -84,7 +83,7 @@ export function HeaderGit({
       <DropdownMenuLabel className="font-mono">{caption}</DropdownMenuLabel>
       {phone && (
         <DropdownMenuItem
-          disabled={!v.commit || !!g.busy}
+          disabled={!(v.commit || v.push) || !!g.busy}
           onSelect={() => openCommitAndPush(workspace)}
         >
           <GitCommitHorizontal className="size-5 text-primary-text" />
@@ -102,14 +101,6 @@ export function HeaderGit({
         <ArrowDownToLine className="size-5 text-primary-text" />
         {m["git.pull"]()}
         {v.toPull > 0 && <Badge variant="count">{v.toPull}</Badge>}
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        disabled={!v.push || !!g.busy}
-        onSelect={() => void g.act("push")}
-      >
-        <ArrowUpFromLine className="size-5 text-primary-text" />
-        {m["git.push"]()}
-        {v.toPush > 0 && <Badge variant="count">{v.toPush}</Badge>}
       </DropdownMenuItem>
       <DropdownMenuItem onSelect={onCommits}>
         <History className="size-5 text-primary-text" />
@@ -164,7 +155,7 @@ export function HeaderGit({
     <Capsule aria-label={m["git.bar"]()} className="shrink-0">
       <CapsuleButton
         aria-label={commitName}
-        disabled={!v.commit || !!g.busy}
+        disabled={!(v.commit || v.push) || !!g.busy}
         onClick={() => openCommitAndPush(workspace)}
         className="px-3.5"
       >

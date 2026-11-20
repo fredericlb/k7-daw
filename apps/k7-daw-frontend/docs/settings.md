@@ -143,6 +143,7 @@ whoever owns it. Where this device runs no engine the section says no machine an
 is what they typed here: the author of every git commit. It is stored once, in the backend's identity file
 (`apps/k7-daw-backend/docs/files/git.md`), and `git/identity.ts` mirrors it for every reader, so
 the commit dialog, which asks for it the first time a commit has none, and this section stay in sync.
+The fields save themselves (after a pause in typing, and when one loses focus) and say "Saved." quietly: a Save button would be a step a field does not need.
 
 **There is no fallback author.** An empty identity is a commit the backend refuses (`no-identity`) and the
 dialog asks for, never a commit signed by nobody; the heading falls back to "Local" instead.
