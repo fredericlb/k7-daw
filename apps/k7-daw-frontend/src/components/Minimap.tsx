@@ -13,7 +13,7 @@ import type { WebAutomationLane } from "../types";
 import { UNCOLOURED } from "./ClipActivity";
 
 const MAX_H = 80; // the minimap never grows past this
-const FOLDED_H = 20; // its height in the bar until it is peeked at
+const FOLDED_H = 24; // its height in the bar until it is peeked at
 const ROW_MAX = 12; // per-track row height ceiling (few tracks shouldn't look bloated)
 const NATURAL = 4; // beats drawn for a length-0 clip (matches the timeline)
 
@@ -76,7 +76,7 @@ export const Minimap = memo(function Minimap({
     `${Math.max(0, Math.min(100, (beat / totalBeats) * 100))}%`;
 
   // Nothing to overview yet, but the slot holds its place so the bar does not reflow.
-  if (!proj || rows.length === 0) return <div className="h-5 min-w-0 flex-1" />;
+  if (!proj || rows.length === 0) return <div className="h-6 min-w-0 flex-1" />;
 
   const caretRow = caret ? rowIndexOf(rows, caret.row) : -1;
   const onLabel = !!caret && caret.beat < 0; // the row is selected, not a beat
@@ -85,7 +85,7 @@ export const Minimap = memo(function Minimap({
 
   return (
     // The slot keeps the folded height, so the bar never grows when the map does.
-    <div className="relative h-5 min-w-0 flex-1">
+    <div className="relative h-6 min-w-0 flex-1">
       <div
         ref={ref}
         onPointerDown={(e) => {

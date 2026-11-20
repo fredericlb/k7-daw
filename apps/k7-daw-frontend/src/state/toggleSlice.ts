@@ -4,6 +4,7 @@
 
 import type { SettingsTab } from "../components/SettingsPanel";
 import type { HistoryMark } from "../historyMarks";
+import type { Tool } from "../timelineTools";
 import type { RightPanelId } from "../ui/commands/context";
 import { type Setter, type SliceSet, setterOf } from "./overlaySlice";
 
@@ -33,6 +34,20 @@ export interface ToggleSlice {
   /** The rack builder popin, opened by `module create rack`. */
   rackBuilder: boolean;
   setRackBuilder: Setter<boolean>;
+  /** The bar's Lane views and tool: the timeline reads them from here (step 5 wires it; until then the shell mirrors what the timeline reports). */
+  rulerSeconds: boolean;
+  setRulerSeconds: Setter<boolean>;
+  lanesExpanded: boolean;
+  setLanesExpanded: Setter<boolean>;
+  automationShown: boolean;
+  setAutomationShown: Setter<boolean>;
+  pictureShown: boolean;
+  setPictureShown: Setter<boolean>;
+  tool: Tool;
+  setTool: Setter<Tool>;
+  /** What the Logs panel lists: everything, or only the problems (the header chip opens it on "problems"). */
+  logsFilter: "all" | "problems";
+  setLogsFilter: Setter<"all" | "problems">;
   /** What the History panel's hovered row touched — lit on the graph and the timeline (historyMarks.ts). */
   historyMark: HistoryMark | null;
   setHistoryMark: Setter<HistoryMark | null>;
@@ -61,6 +76,18 @@ export function toggleSlice(
     setStackView: setterOf(set, "stackView"),
     rackBuilder: false,
     setRackBuilder: setterOf(set, "rackBuilder"),
+    rulerSeconds: false,
+    setRulerSeconds: setterOf(set, "rulerSeconds"),
+    lanesExpanded: true,
+    setLanesExpanded: setterOf(set, "lanesExpanded"),
+    automationShown: true,
+    setAutomationShown: setterOf(set, "automationShown"),
+    pictureShown: false,
+    setPictureShown: setterOf(set, "pictureShown"),
+    tool: "pointer",
+    setTool: setterOf(set, "tool"),
+    logsFilter: "all",
+    setLogsFilter: setterOf(set, "logsFilter"),
     historyMark: null,
     setHistoryMark: setterOf(set, "historyMark"),
   };

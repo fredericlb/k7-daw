@@ -8,7 +8,7 @@
 // track" has to find `track mute`. Commands you have run lately are nudged up the list
 // (recentCommands.ts). Empty, it offers a few recents and starters instead of the catalogue (emptyBar.ts).
 
-import { ChevronRight, History, Lightbulb } from "@studio/ui/icons";
+import { History, Lightbulb, SquareTerminal } from "@studio/ui/icons";
 import {
   forwardRef,
   useEffect,
@@ -405,102 +405,109 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
     };
 
     return (
-      <div className="relative flex flex-1 items-center">
-        <ChevronRight className="mr-1 h-4 w-4 text-primary-text" />
-        {command ? (
-          // While a command is being filled the row IS its form: the name, then a field per param, on one line.
-          <CommandParams
-            command={command}
-            values={values}
-            active={active}
-            suggestions={suggestions}
-            selected={selIdx}
-            argColor={ARG_COLOR}
-            // What Enter will do right now — the same decision the key itself takes.
-            enterDoes={
-              enterAction(
-                command.args,
-                values,
-                active,
-                suggestions.length ? suggestions[selIdx].value : undefined,
-              ).kind
-            }
-            onType={setField}
-            onFocusField={(i) => {
-              setActive(i);
-              setSel(0);
-            }}
-            onPick={takeSuggestion}
-            onHover={setSel}
-            onKeyDown={onFormKey}
-            onRepick={() => {
-              reset();
-              inputRef.current?.focus();
-            }}
-            inputRef={argRef}
-          />
-        ) : (
-          <input
-            ref={inputRef}
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              setSel(0);
-              setBrowsing(false);
-            }}
-            onFocus={() => {
-              setBrowsing(false);
-              setFocused(true);
-              onFocusChange?.(true);
-            }}
-            onBlur={() => {
-              setFocused(false);
-              onFocusChange?.(false);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === "Tab") {
-                e.preventDefault();
-                commitCommand();
-              } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                // The list opens downward, best first, so ↓ walks FORWARD through it.
-                if (shown.length) {
-                  e.preventDefault();
-                  // The first arrow on the empty bar lands on the nearest row rather than stepping past it.
-                  if (!query && !browsing) {
-                    setBrowsing(true);
-                    setSel(0);
-                  } else setSel((i) => (e.key === "ArrowDown" ? i + 1 : i - 1));
-                }
-              } else if (e.key === "Escape") {
-                e.preventDefault();
-                setValue("");
-                onClose?.();
+      <div className="relative flex flex-1 flex-col">
+        <div className="flex h-[52px] items-center gap-2.5">
+          <SquareTerminal className="size-5 shrink-0 text-primary-text" />
+          {command ? (
+            // While a command is being filled the row IS its form: the name, then a field per param, on one line.
+            <CommandParams
+              command={command}
+              values={values}
+              active={active}
+              suggestions={suggestions}
+              selected={selIdx}
+              argColor={ARG_COLOR}
+              // What Enter will do right now — the same decision the key itself takes.
+              enterDoes={
+                enterAction(
+                  command.args,
+                  values,
+                  active,
+                  suggestions.length ? suggestions[selIdx].value : undefined,
+                ).kind
               }
-            }}
-            placeholder={m["cmds.placeholder"]()}
-            spellCheck={false}
-            autoComplete="off"
-            role="combobox"
-            aria-label={m["commandBar.label"]()}
-            aria-expanded={focused && shown.length > 0}
-            aria-controls={listId}
-            aria-activedescendant={
-              focused && highlighted >= 0 && shown.length
-                ? `${listId}-${highlighted}`
-                : undefined
-            }
-            className="min-w-0 flex-1 bg-transparent font-mono text-sm text-foreground outline-none placeholder:text-faint"
-          />
+              onType={setField}
+              onFocusField={(i) => {
+                setActive(i);
+                setSel(0);
+              }}
+              onPick={takeSuggestion}
+              onHover={setSel}
+              onKeyDown={onFormKey}
+              onRepick={() => {
+                reset();
+                inputRef.current?.focus();
+              }}
+              inputRef={argRef}
+            />
+          ) : (
+            <input
+              ref={inputRef}
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+                setSel(0);
+                setBrowsing(false);
+              }}
+              onFocus={() => {
+                setBrowsing(false);
+                setFocused(true);
+                onFocusChange?.(true);
+              }}
+              onBlur={() => {
+                setFocused(false);
+                onFocusChange?.(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === "Tab") {
+                  e.preventDefault();
+                  commitCommand();
+                } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  // The list opens downward, best first, so ↓ walks FORWARD through it.
+                  if (shown.length) {
+                    e.preventDefault();
+                    // The first arrow on the empty bar lands on the nearest row rather than stepping past it.
+                    if (!query && !browsing) {
+                      setBrowsing(true);
+                      setSel(0);
+                    } else
+                      setSel((i) => (e.key === "ArrowDown" ? i + 1 : i - 1));
+                  }
+                } else if (e.key === "Escape") {
+                  e.preventDefault();
+                  setValue("");
+                  onClose?.();
+                }
+              }}
+              placeholder={m["cmds.placeholder"]()}
+              spellCheck={false}
+              autoComplete="off"
+              role="combobox"
+              aria-label={m["commandBar.label"]()}
+              aria-expanded={focused && shown.length > 0}
+              aria-controls={listId}
+              aria-activedescendant={
+                focused && highlighted >= 0 && shown.length
+                  ? `${listId}-${highlighted}`
+                  : undefined
+              }
+              className="type-mono-command min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-faint"
+            />
+          )}
+        </div>
+        {!command && focused && shown.length > 0 && !query && (
+          <p className="type-caps px-1 pt-1 pb-1.5 text-fg-3">
+            {m["commandBar.recentHeading"]()}
+          </p>
         )}
-
         {!command && focused && shown.length > 0 && (
-          // Opens DOWNWARD from the floating bar, so the best match sits right under the input.
+          // Opens in the card, under the input, so the best match sits right under it.
           <div
             id={listId}
             role="listbox"
             tabIndex={-1}
             aria-label={m["commandBar.list"]()}
-            className="absolute top-full left-0 right-0 z-30 mt-2 flex max-h-72 flex-col overflow-auto rounded-md border border-border bg-popover py-1 text-sm shadow-md"
+            className="flex max-h-[min(24rem,50dvh)] flex-col overflow-auto pb-1"
           >
             {shown.map((c, i) => (
               <div
@@ -521,17 +528,17 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
                   setBrowsing(true);
                   setSel(i);
                 }}
-                className={`flex shrink-0 cursor-pointer items-baseline justify-between gap-4 px-3 py-0.5 ${i === highlighted ? "bg-accent" : ""}`}
+                className={`flex min-h-11 shrink-0 cursor-pointer items-center justify-between gap-4 rounded-2xl px-3 ${i === highlighted ? "bg-on-fill" : ""}`}
               >
                 {/* On the empty bar, a mark says why the row is offered: you ran it, or it is a place to start. */}
                 {!query && emptyRows[i] && (
                   <EmptyMark recent={emptyRows[i].recent} />
                 )}
                 {/* The sentence leads, being what was searched for; the name follows in the corner, where a palette puts a keybinding. */}
-                <span className="min-w-0 flex-1 truncate text-foreground">
+                <span className="type-secondary min-w-0 flex-1 truncate text-foreground">
                   {c.readable}
                 </span>
-                <span className="shrink-0 font-mono text-xs text-muted-foreground">
+                <span className="type-mono-command shrink-0 text-fg-3">
                   {c.canonical}
                 </span>
               </div>
@@ -548,7 +555,7 @@ function EmptyMark({ recent }: { recent: boolean }) {
   const Icon = recent ? History : Lightbulb;
   return (
     <span title={label} className="shrink-0 self-center text-muted-foreground">
-      <Icon className="h-3 w-3" role="img" aria-label={label} />
+      <Icon className="size-[18px]" role="img" aria-label={label} />
     </span>
   );
 }

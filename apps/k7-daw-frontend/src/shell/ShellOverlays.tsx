@@ -36,6 +36,8 @@ import { ModulePicker } from "../components/ModulePicker";
 import { TapChainEditor } from "../components/TapChainEditor";
 import { TrackModulesPane } from "../components/TrackModulesPane";
 import type { MenuItem } from "../contextMenu";
+import type { GitTransport } from "../git/gitApi";
+import { GitScreensHost } from "../git/gitScreens";
 import { useGraphAt } from "../hooks/useGraphAt";
 import type { useProjectImport } from "../hooks/useProjectDialogs";
 import { isLibraryPath } from "../libraryTree";
@@ -49,6 +51,7 @@ import {
   useVerbs,
 } from "../state/shellStore";
 import type { EngineSyncState, WebProject } from "../types";
+import { useIsMobile } from "../useIsMobile";
 import type { useGraphActions } from "./useGraphActions";
 
 // The assembly builder carries an editor and a language of its own: loaded when opened, not with the shell.
@@ -87,6 +90,7 @@ export function ShellOverlays({
   paneError,
   engineRef,
   connected,
+  gitTransport,
 }: {
   commandPrefs: CommandPrefs;
   pickMenuItem: (item: MenuItem) => void;
@@ -108,7 +112,10 @@ export function ShellOverlays({
   paneError: ComponentProps<typeof PaneBoundary>["onError"];
   engineRef: RefObject<EngineClient | undefined>;
   connected: boolean;
+  /** The git screens (Commit & Push, Conflict, Connect) open over every page through this transport. */
+  gitTransport: GitTransport | null;
 }) {
+  const phone = useIsMobile();
   // What is open over the panes, read here rather than handed down (state/overlaySlice.ts).
   const menu = useShell((s) => s.menu);
   const tapChain = useShell((s) => s.tapChain);
@@ -276,7 +283,8 @@ export function ShellOverlays({
         onCancel={imp.cancelImport}
       />
 
-      {/* COMMANDS is the one settings screen still drawn as a page: a catalogue does not fit a 24rem column (docs/shell.md). */}
+      <GitScreensHost transport={gitTransport} />
+      {/* The command editor screen: the one full-screen slot, opened by the header's Keyboard button (docs/shell.md). */}
       {commandsPage && (
         <div className="absolute inset-0 z-40 bg-background">
           <CommandsSettings
@@ -366,8 +374,9 @@ export function ShellOverlays({
         </DialogContent>
       </Dialog>
 
-      {/* Global toast notifications — positioned bottom-right, above everything */}
+      {/* Every toast of the shell, above everything: bottom, and the plugin scan at the top (docs/shell.md). */}
       <Toaster
+        phone={phone}
         dismissLabel={m["common.dismiss"]()}
         regionLabel={m["toast.region"]()}
       />

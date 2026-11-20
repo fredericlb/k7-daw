@@ -1,12 +1,10 @@
-// FloatingCommandBar.tsx — the command bar as a palette: hidden until summoned (Ctrl/⌘+Shift+P,
-// double-Shift, a phone's menu), floating at the top of the window, focused. It goes away on
-// Escape, on a run, or when it loses the keyboard — never while a command waits on its answers,
-// since a gesture in a pane may be what answers it. See ../../docs/commandBar.md.
-
-import { forwardRef, useCallback, useEffect, useRef } from "react";
-import { barTint } from "../barTint";
-import { useLatest } from "../hooks/useLatest";
+// FloatingCommandBar.tsx — the command bar as a MODAL card: hidden until summoned (Ctrl/⌘+Shift+P, double-Shift,
+// the bar's button), a scrim under it, focused. It goes away on Escape, the scrim or a run, never on blur. While a
+// command waits on its answers the scrim lets pointers through, since a gesture in a pane may be the answer.
+// See ../../docs/commandBar.md.
+import { forwardRef } from "react";
 import { useWindowKey } from "../hooks/useWindowKey";
+import { m } from "../paraglide/messages.js";
 import {
   CommandBar,
   type CommandBarHandle,
@@ -32,42 +30,27 @@ export const FloatingCommandBar = forwardRef<
   Omit<CommandBarProps, "autoFocus" | "onClose" | "onFocusChange"> & {
     open: boolean;
     onDismiss: () => void;
-    /** Whether a command is waiting on its answers — tints the bar and keeps it up without the keyboard. */
+    /** Whether a command is waiting on its answers: the scrim then lets a gesture through to the panes. */
     pending: boolean;
   }
 >(function FloatingCommandBar(
   { open, onDismiss, pending, onRun, ...bar },
   ref,
 ) {
-  // Read LIVE by the dismiss timer, which fires after the render that would have told it not to.
-  const pendingRef = useLatest(pending);
-  const dismissRef = useLatest(onDismiss);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Picking a command hands the keys from the command field to the form one render later: wait before calling a blur 'gone'.
-  const onFocusChange = useCallback(
-    (focused: boolean) => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-        timer.current = null;
-      }
-      if (focused) return;
-      timer.current = setTimeout(() => {
-        timer.current = null;
-        if (!pendingRef.current) dismissRef.current();
-      }, 150);
-    },
-    [pendingRef, dismissRef],
-  );
-  useEffect(() => () => clearTimeout(timer.current ?? undefined), []);
   if (!open) return null;
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-2 z-50 flex justify-center">
-      {/* biome-ignore lint/a11y/noStaticElementInteractions: it only keeps a press on the padding from blurring the field, which would close the bar. */}
+    <div className="fixed inset-0 z-(--k7-z-palette)">
+      <button
+        type="button"
+        tabIndex={-1}
+        aria-label={m["common.close"]()}
+        onClick={onDismiss}
+        className={`scrim absolute inset-0 cursor-default ${pending ? "pointer-events-none" : ""}`}
+      />
       <div
-        className={`pointer-events-auto mx-4 flex w-full max-w-2xl items-center rounded-lg border border-border px-3 py-2.5 shadow-2xl ${barTint(pending)}`}
-        onMouseDown={(e) => {
-          if (!(e.target instanceof HTMLInputElement)) e.preventDefault();
-        }}
+        role="dialog"
+        aria-label={m["shell.commandBar"]()}
+        className="panel-dialog absolute top-[calc(var(--k7-header-h)+8px)] left-1/2 flex w-[min(560px,calc(100%-16px))] -translate-x-1/2 flex-col rounded-[22px] px-3.5 py-1.5 max-[820px]:top-[62px]"
       >
         <CommandBar
           ref={ref}
@@ -77,9 +60,11 @@ export const FloatingCommandBar = forwardRef<
             onDismiss();
           }}
           onClose={onDismiss}
-          onFocusChange={onFocusChange}
           autoFocus
         />
+        <p className="type-status px-1 pt-1 pb-2 text-fg-3 max-[820px]:hidden">
+          {m["shell.commandBar.hints"]()}
+        </p>
       </div>
     </div>
   );

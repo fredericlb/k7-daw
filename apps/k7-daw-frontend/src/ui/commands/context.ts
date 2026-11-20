@@ -59,7 +59,7 @@ export type RightPanelId =
   | "resources"
   | "tasks"
   | "history"
-  | "share"
+  | "export"
   | "comments";
 
 /** Everything a handler may touch — grouped as App holds it. */
@@ -93,6 +93,8 @@ export interface LocalCtx {
   setCommandsPage: (on: boolean) => void;
   toggleMixer: () => void;
   toggleStack: () => void;
+  /** The bar's Lane views follow the keys and commands that flip them in the timeline (until it reads the store). */
+  mirrorLane: (view: "ruler" | "automation") => void;
   toggleDocs: () => void;
   clearLogs: () => void;
   setTrackCurves: Dispatch<SetStateAction<boolean>>;

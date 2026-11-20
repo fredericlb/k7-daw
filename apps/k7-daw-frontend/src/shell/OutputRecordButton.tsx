@@ -1,8 +1,8 @@
-// OutputRecordButton.tsx — the bar's one button on a project with no timeline: record what the project sends out,
-// and its clock while it does. The recording itself is useOutputRecording's. See apps/k7-daw-frontend/packages/song/docs/outputRecording.md.
-
-import { Button } from "@studio/ui/button";
-import { Circle, Loader2 } from "@studio/ui/icons";
+// OutputRecordButton.tsx — the bar's record on a project with no timeline: record what the project sends out,
+// and its clock while it does. The recording itself is useOutputRecording's (apps/k7-daw-frontend/packages/song/docs/outputRecording.md).
+import { CapsuleButton } from "@studio/ui/capsule";
+import { Circle } from "@studio/ui/icons";
+import { Spinner } from "@studio/ui/spinner";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 
@@ -17,7 +17,6 @@ export function OutputRecordButton({
   filing,
   ready,
   onToggle,
-  size,
 }: {
   recording: boolean;
   /** The take is being filed: the button waits, so a press does not start another over it. */
@@ -25,7 +24,6 @@ export function OutputRecordButton({
   /** The engine runs this project's document: before that, a press would reach the last project's recorder. */
   ready: boolean;
   onToggle: () => void;
-  size: "icon" | "icon-xs";
 }) {
   const [since, setSince] = useState<number | null>(null);
   const [now, setNow] = useState(0);
@@ -39,34 +37,30 @@ export function OutputRecordButton({
   }, [recording]);
   const label = recording ? m["record.stop"]() : m["record.start"]();
   return (
-    <span className="flex items-center gap-2">
-      <Button
-        size={size}
-        variant={recording ? "default" : "secondary"}
-        aria-pressed={recording}
+    <>
+      <CapsuleButton
+        pressed={recording}
         disabled={filing || !ready}
         onClick={onToggle}
         title={label}
         aria-label={label}
       >
         {filing ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Spinner />
         ) : (
-          <Circle
-            className={`h-4 w-4 ${recording ? "fill-red-500 text-red-500" : ""}`}
-          />
+          <Circle className={recording ? "fill-record text-record" : ""} />
         )}
-      </Button>
+      </CapsuleButton>
       {since !== null && (
         <span
           role="timer"
           aria-label={m["record.clock"]()}
           data-testid="output-record-clock"
-          className="font-mono text-xs tabular-nums"
+          className="type-mono-value px-1 tabular-nums"
         >
           {clock(now - since)}
         </span>
       )}
-    </span>
+    </>
   );
 }

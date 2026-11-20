@@ -46,7 +46,7 @@ export const VIEW_COMMANDS: LocalCommand[] = [
       fr: "Revenir à la page d'accueil du projet",
     },
     run: (ctx) => {
-      // There is no split to return to; the panel closes as on any page change.
+      // The open panel closes as on any page change.
       if (ctx.full !== ctx.homePane) ctx.setPanel(null);
       ctx.setFull(null);
       return true;
@@ -101,9 +101,10 @@ export const VIEW_COMMANDS: LocalCommand[] = [
   },
   {
     name: "ui close",
-    readable: { en: "Close the bottom panel", fr: "Fermer le panneau du bas" },
+    readable: { en: "Close the open panel", fr: "Fermer le panneau ouvert" },
     run: (ctx) => {
       ctx.setPanel(null);
+      ctx.setRightPanel(null);
       return true;
     },
   },

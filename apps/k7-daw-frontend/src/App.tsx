@@ -5,7 +5,6 @@
 // ever lost. Live engine state goes to an external store, never App state. See docs/shell.md.
 
 import type { EngineUrl } from "@studio/engine-browser";
-import { meterFill } from "@studio/engine-browser/meter";
 import { PluginParamsStore } from "@studio/engine-browser/params";
 import {
   arrayEq,
@@ -29,18 +28,15 @@ import { type HistoryDeps, runRedo, runUndo } from "@studio/project-shell/undo";
 import { moduleKeyFromPath } from "@studio/song-schema/moduleTypes";
 import type { ReferenceTrack } from "@studio/song-schema/reference";
 import { beatsToPosition, parsePosition } from "@studio/song-schema/timecode";
-import { Button } from "@studio/ui/button";
+import { Choice } from "@studio/ui/choice";
 import {
-  FolderOpen,
-  Headphones,
-  History,
-  ListChecks,
-  ListMusic,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Settings,
-  Share2,
-  Terminal,
+  AudioLines,
+  Clock,
+  Disc3,
+  FileCode,
+  Rows3,
+  Spline,
+  Workflow,
   X,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
@@ -48,12 +44,11 @@ import { LcdSoundsContext, SongClockProvider } from "@studio/ui-chains-react";
 import { ModulePreview } from "@studio/ui-chains-react/module-preview";
 import { flushAutosaves } from "@studio/ui-editor/autosave-buffers";
 import type { BuilderPane } from "@studio/ui-module-builder";
-import { usePointerFollow } from "@studio/ui-timeline/drag";
 import { setUpdateBusy } from "@studio/vite-config/register";
-import type { EngineLatency } from "@studio/web-protocol/quality";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   lazy,
+  type ReactNode,
   Suspense,
   useCallback,
   useEffect,
@@ -63,7 +58,6 @@ import {
   useState,
 } from "react";
 import { useStore } from "zustand";
-import k7Logo from "../icon/k7.svg";
 import { useAndroidBusy } from "./androidBusy";
 import { aiOrganize, api, engines, moduleStore } from "./api";
 import { go } from "./appNav";
@@ -73,9 +67,7 @@ import { shownNamers } from "./clipNameWords";
 import { type CommandPrefs, labelOf, orderCommands } from "./commandPrefs";
 import type { AudioClipHandle } from "./components/AudioClipPanel";
 import { AudioClipPanel } from "./components/AudioClipPanel";
-import { BarEngine } from "./components/BarEngine";
 import { BenchSaveButton } from "./components/BenchSaveButton";
-import { BottomPanel } from "./components/BottomPanel";
 import { ChainsBuilder } from "./components/ChainsBuilder";
 import { ChainsTab } from "./components/ChainsTab";
 import { ClipView } from "./components/ClipView";
@@ -86,15 +78,12 @@ import type {
 } from "./components/CommandBar";
 import { DemoBanner } from "./components/DemoBanner";
 import { type EditorHandle, EditorTab } from "./components/EditorTab";
-import { EngineLink } from "./components/EngineLink";
-import { EngineLostStrip } from "./components/EngineLostStrip";
 import { syncRunning } from "./components/EngineSyncProgress";
 import {
   FloatingCommandBar,
   useSummonKey,
 } from "./components/FloatingCommandBar";
 import { FloatingWindow } from "./components/FloatingWindow";
-import { FooterTab } from "./components/FooterTab";
 import { GraphPanel } from "./components/GraphPanel";
 import { HistoryPanel } from "./components/HistoryPanel";
 import { LogsPanel } from "./components/LogsPanel";
@@ -102,19 +91,12 @@ import { MasteringTab } from "./components/MasteringTab";
 import { MasterMeter, type MasterMeterHandle } from "./components/MasterMeter";
 import { MidiTakeRoll } from "./components/MidiTakeRoll";
 import type { MinimapItem } from "./components/Minimap";
-import {
-  MobileInfo,
-  MobileMenu,
-  MobileMenuItem,
-} from "./components/MobileChrome";
 import type { RollHandle } from "./components/PianoRoll";
 import { PlaylistsPanel } from "./components/PlaylistsPanel";
-import { ProcessesButton } from "./components/ProcessesButton";
 import { RackBuilder } from "./components/RackBuilder";
 import { ReferenceBar } from "./components/ReferenceBar";
 import { ReferencesPanel } from "./components/ReferencesPanel";
 import { ResourcesPanel } from "./components/ResourcesPanel";
-import { RightPanel } from "./components/RightPanel";
 import { SeqGridPane } from "./components/SeqGridPane";
 import { SETTINGS_TABS, SettingsPanel } from "./components/SettingsPanel";
 import { SharePanel } from "./components/SharePanel";
@@ -169,7 +151,7 @@ import { useVideoDoc } from "./hooks/useVideoDoc";
 import { useVideoEdits } from "./hooks/useVideoEdits";
 import { useVideoRecording } from "./hooks/useVideoRecording";
 import { useLocale } from "./i18n";
-import { type ConditionCtx, commandKeyMap, effectiveKeys } from "./keys";
+import { type ConditionCtx, effectiveKeys } from "./keys";
 import {
   refreshLcdSounds,
   setLcdSoundsProject,
@@ -177,7 +159,6 @@ import {
   touchesSounds,
 } from "./lcdSounds";
 import { libraryModuleRef } from "./libraryTree";
-import { useLocalEngine } from "./localEngine";
 import { confirmMenuItem } from "./menuConfirm";
 import { menuTarget } from "./menuTitle";
 import { midiInDeviceFor, midiInLanes, midiInPlayed } from "./midiIn";
@@ -206,10 +187,8 @@ import { pageVerbs } from "./verbs/pageHost";
 // The shell's BROWSER composition point: k7's builtin plugins register their pane drawers here (apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md).
 import "./plugins";
 import { cfg } from "@studio/project-shell/fileApi";
-import { GraphSlotPane } from "./components/GraphSlotPane";
-import { PanelCloseFrame } from "./components/PanelClose";
+import { Backdrop } from "@studio/ui/backdrop";
 import { type FloatState, loadFloat, saveFloat } from "./floatingRect";
-import { GitBarOf } from "./git/GitBar";
 import { installGates, lockSentence } from "./git/gitLock";
 import { lockedBy as mergeLockedBy } from "./git/gitState";
 import { projectTransport } from "./git/transports";
@@ -235,11 +214,23 @@ import { type RollMode, rollCondition } from "./rollMode";
 import { type Pane, type Panel, viewPanes } from "./routes";
 import { pictureRowId, placementOf, type RowKey, type RowTarget } from "./rows";
 import { saveLabel } from "./saveLabel";
-import { OutputRecordButton } from "./shell/OutputRecordButton";
-import { ProjectBar } from "./shell/ProjectBar";
-import { ShellFooter } from "./shell/ShellFooter";
+import { useEngineLostToast, useProgressToast } from "./shell/engineToasts";
+import { FloatingBar } from "./shell/FloatingBar";
+import { HeaderGit } from "./shell/HeaderGit";
+import { type OverflowLaneView, OverflowMenu } from "./shell/OverflowMenu";
+import {
+  type HeaderPane,
+  type HeaderPanel,
+  ProjectHeader,
+} from "./shell/ProjectHeader";
+import {
+  PANEL_DEFS,
+  PanelFrame,
+  type PanelId,
+  shownPanel,
+  TOOLBAR_PANELS,
+} from "./shell/panels";
 import { ShellOverlays } from "./shell/ShellOverlays";
-import { TempoMeter } from "./shell/TempoMeter";
 import { type PendingWire, useGraphActions } from "./shell/useGraphActions";
 import { PANE_META, VIEWPORT_META } from "./shellMeta";
 import { ShellContexts } from "./state/ShellContexts";
@@ -260,7 +251,7 @@ import type {
 } from "./types";
 import type { GraphSlot, LocalCtx } from "./ui/commands/context";
 import { runLocal } from "./ui/commands/dispatch";
-import { useIsMobile } from "./useIsMobile";
+import { useIsMobile, useShellLayout } from "./useIsMobile";
 import { useViewRoute } from "./useViewRoute";
 import { videoSpans } from "./videoSpans";
 import { type WaveMode, waveCondition } from "./waveMode";
@@ -272,13 +263,6 @@ const EMPTY_PRESETS: PresetInfo[] = [];
 const EMPTY_VIDEO_TRACKS: WebVideoTrack[] = [];
 // One key for every song: where the picture's window sits is a habit of this screen (floatingRect.ts).
 const VIEWPORT_FLOAT_KEY = "k7.viewportWindow";
-
-// The home page's sidebar, as a drawer over the project: it carries the media sections, so it loads on first open.
-const HomeDrawer = lazy(() =>
-  import("./projects/HomeSidebar").then((mod) => ({
-    default: mod.HomeDrawer,
-  })),
-);
 
 // The two builders open on demand, and carry an editor and a language of their own: loaded then, not with the shell.
 const ModuleBuilder = lazy(() =>
@@ -295,15 +279,12 @@ const JOURNAL_ARM_MS = 3000;
 
 export default function App({
   engineUrl,
-  engineLatency,
   userEmail,
   onQuitWorkspace,
   engine,
   engineSearching = false,
 }: {
   engineUrl: EngineUrl;
-  /** What the link measured — the footer's Q badge; null when the gate could not, which the badge says. */
-  engineLatency: EngineLatency | null;
   /** Who is logged in — feeds the SESSION id, so two people on one engine hold two projects. */
   userEmail: string;
   onQuitWorkspace: () => void;
@@ -370,18 +351,27 @@ export default function App({
     setTrackCurves,
     setStackView,
     setShowDocs,
+    setLogsFilter,
+    setTool,
+    setLanesExpanded,
+    setPictureShown,
+    setRulerSeconds,
+    setAutomationShown,
   } = shell.getState();
   const showHelp = useStore(shell, (s) => s.showHelp);
   const rightPanel = useStore(shell, (s) => s.rightPanel);
   const settingsTab = useStore(shell, (s) => s.settingsTab);
   const rackBuilder = useStore(shell, (s) => s.rackBuilder);
   const trackCurves = useStore(shell, (s) => s.trackCurves);
+  const rulerSeconds = useStore(shell, (s) => s.rulerSeconds);
+  const lanesExpanded = useStore(shell, (s) => s.lanesExpanded);
+  const automationShown = useStore(shell, (s) => s.automationShown);
+  const tool = useStore(shell, (s) => s.tool);
   // The PAGE asked for; null is the project's home page, resolved into `full` once the layout is known (docs/shell.md).
   const [chosen, setFull] = useState<Pane | null>(null);
   // A phone draws the pages from its hamburger rather than from the header's row. See docs/shell.md.
   const isMobile = useIsMobile();
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const [mobileInfo, setMobileInfo] = useState(false);
+  const layoutKind = useShellLayout();
   // The timeline, because it is what the default view opens on — see ringPanes.
   const [focusPane, setFocusPane] = useState<Pane>("timeline");
   const [panel, setPanel] = useState<Panel | null>(null);
@@ -407,9 +397,6 @@ export default function App({
     module: string;
     pluginId: string;
   } | null>(null);
-  // Null until the divider is dragged: the panel opens on half the main column.
-  const [panelH, setPanelH] = useState<number | null>(null);
-  const panelEl = useRef<HTMLDivElement>(null);
   const [editTarget, setEditTarget] = useState<EditFocus | null>(null);
 
   // What the editor has open (a clip/track), for the minimap's highlight ring.
@@ -595,6 +582,11 @@ export default function App({
     (next: typeof tlView) => setTlView(keepIfEqual(next)),
     [],
   );
+  // The bar's tool and its Lane views follow what the timeline reports, until the timeline reads the store itself.
+  useEffect(() => {
+    setTool(tlView.tool);
+    setLanesExpanded(tlView.expanded);
+  }, [tlView.tool, tlView.expanded, setTool, setLanesExpanded]);
   /** The reference track the bar has loaded, or null for no bar — it outlives every tab, being nothing this project owns (docs/references.md). */
   const [reference, setReference] = useState<ReferenceTrack | null>(null);
   // Whether that track is sounding, and the bar's play/pause — for the panel row that stands for it.
@@ -612,9 +604,6 @@ export default function App({
   // The command bar floats, hidden until summoned — Ctrl/⌘+Shift+P, double-Shift, the phone's menu (docs/commandBar.md).
   const [paletteOpen, setPaletteOpen] = useState(false);
   const closePalette = useCallback(() => setPaletteOpen(false), []);
-  // The home sidebar's drawer, opened by the header's hamburger (docs/shell.md).
-  const [homeDrawer, setHomeDrawer] = useState(false);
-  const closeHomeDrawer = useCallback(() => setHomeDrawer(false), []);
   // Which field the command bar is waiting on, or null — it decides whether a gesture ACTS or feeds the bar (docs/commandBar.md).
   const [barPending, setBarPending] = useState<CommandPending | null>(null);
   // The editor as a POPIN: the SAME instance, restyled onto the surface — see docs/shell.md.
@@ -760,7 +749,6 @@ export default function App({
     engineBusy,
     // …and the same flag as a REF, for the local command dispatcher, which must not be rebuilt when it changes.
     engineBusyRef,
-    audioToBrowser,
     engineWarnings,
     watchWaveform,
     transport: engineTransport,
@@ -837,6 +825,10 @@ export default function App({
     loadFloat(VIEWPORT_FLOAT_KEY),
   );
   const viewportOpen = hasViewport && viewportFloat.open;
+  useEffect(
+    () => setPictureShown(viewportOpen),
+    [viewportOpen, setPictureShown],
+  );
   const setViewportWindow = useCallback(
     (next: (cur: FloatState) => Partial<FloatState>) =>
       setViewportFloat((cur) => {
@@ -1005,8 +997,6 @@ export default function App({
 
   /** How tall the floating bar is, so the popin can stop ABOVE it — measured, since the bar's row depends on what it holds. */
   const stripRef = useRef<HTMLDivElement | null>(null);
-  // The bar wherever it is drawn: the home drawer stops at its top edge.
-  const barRef = useRef<HTMLDivElement | null>(null);
   const [stripH, setStripH] = useState(0);
   useEffect(() => {
     const el = stripRef.current;
@@ -1107,41 +1097,20 @@ export default function App({
   /** Put something in the slot and show it: the `event` panel is the one place the slot is drawn. */
   const openEvent = useCallback((slot: NonNullable<typeof graphSlot>) => {
     setGraphSlot(slot);
-    setPanel("event");
+    // A lane's signal path is the chain panel's; every other occupant is the Events panel's.
+    setPanel(slot.kind === "trackModules" ? "graph" : "event");
   }, []);
   /** The occupant's ✕ and Escape: the event is let go, and the panel that drew it goes with it. */
   const closeEvent = useCallback(() => {
     setGraphSlot(null);
-    setPanel((cur) => (cur === "event" ? null : cur));
+    setPanel((cur) => (cur === "event" || cur === "graph" ? null : cur));
   }, []);
   /** The slot as it is on SCREEN — what the keys and the footer's badges may act on, a hidden panel's clip being nobody's target. */
-  const shownSlot = panel === "event" ? graphSlot : null;
-
-  // One pointer per drag, abandoned on a cancel or an unmount — @studio/ui-timeline/drag.
-  const follow = usePointerFollow();
-  const startResize = useCallback(
-    (e: React.PointerEvent) => {
-      e.preventDefault();
-      const startY = e.clientY;
-      const startH = panelH ?? panelEl.current?.offsetHeight ?? 280;
-      let h = startH;
-      // The drag moves the panel's own style; the shell learns the height once, on release, not per pointermove.
-      const onMove = (ev: PointerEvent) => {
-        h = Math.max(
-          120,
-          Math.min(window.innerHeight - 220, startH + (startY - ev.clientY)),
-        );
-        if (panelEl.current) panelEl.current.style.height = `${h}px`;
-      };
-      const onUp = () => setPanelH(h);
-      // A cancel puts the panel back at the height it had, rather than leaving it following the mouse until the next click.
-      const onCancel = () => {
-        if (panelEl.current) panelEl.current.style.height = `${startH}px`;
-      };
-      follow(e, { move: onMove, end: onUp, cancel: onCancel });
-    },
-    [panelH, follow],
-  );
+  const shownSlot =
+    panel === "event" ||
+    (panel === "graph" && graphSlot?.kind === "trackModules")
+      ? graphSlot
+      : null;
 
   // The initial fetch: the project header, the workspace (opening its active project), and the command catalogue.
   useEffect(() => {
@@ -1666,6 +1635,10 @@ export default function App({
     setCommandsPage,
     toggleMixer,
     toggleStack,
+    mirrorLane: (view) =>
+      view === "ruler"
+        ? setRulerSeconds((v) => !v)
+        : setAutomationShown((v) => !v),
     toggleDocs,
     clearLogs,
     setTrackCurves,
@@ -1829,11 +1802,6 @@ export default function App({
     [pushLog, runLocalCommand, warnHeadphones, queryClient],
   );
   runCommandRef.current = runCommand;
-  // The bottom panel's ✕ runs the command the footer and Escape do, as every button here does (docs/shell.md).
-  const closePanel = useCallback(
-    () => void runCommand("ui close"),
-    [runCommand],
-  );
   // A node's preset dropdown: the list, the save and the update, each a `node preset` verb — apps/k7-daw-frontend/packages/song/docs/userPresets.md.
   const {
     presetNames,
@@ -2495,154 +2463,8 @@ export default function App({
     [surfaces, locales],
   );
 
-  // Whatever key reaches each panel, for the tooltips below — undefined when nothing is bound, and the tooltip then says only what the button does.
-  const commandKeys = useMemo(
-    () => commandKeyMap(commandPrefs),
-    [commandPrefs],
-  );
-  const playlistKey = commandKeys.get("ui playlists");
-  const referencesKey = commandKeys.get("ui references");
-  const resourcesKey = commandKeys.get("ui resources");
-  const tasksKey = commandKeys.get("ui tasks");
-  const historyKey = commandKeys.get("ui history");
-  const shareKey = commandKeys.get("ui share");
-  const settingsKey = commandKeys.get("ui settings");
-
-  /** The bar's height IS its tallest control (docs/shell.md), so the desktop one is 24 px; a phone keeps a thumb-sized button. */
-  const toolSize = isMobile ? "icon" : "icon-xs";
-
-  const headerTools = (
-    <>
-      {/* The PLAYLIST, for a SET only — every project's are reachable from the palette instead (docs/playlists.md). */}
-      {hasTurntables && (
-        <FooterTab
-          plain={isMobile}
-          active={rightPanel === "playlists"}
-          title={`Playlists${playlistKey ? ` (${playlistKey})` : ""}`}
-          aria-label="Playlists"
-          aria-keyshortcuts={playlistKey}
-          onClick={() => void runCommand("ui playlists")}
-        >
-          <ListMusic className="h-4 w-4" />
-        </FooterTab>
-      )}
-      {/* What you listen AGAINST — always offered, a reference belonging to the workspace and not to a surface (docs/references.md). */}
-      <FooterTab
-        plain={isMobile}
-        active={rightPanel === "references"}
-        title={`${m["refs.title"]()}${referencesKey ? ` (${referencesKey})` : ""}`}
-        aria-label={m["refs.title"]()}
-        aria-keyshortcuts={referencesKey}
-        onClick={() => void runCommand("ui references")}
-      >
-        <Headphones className="h-4 w-4" />
-      </FooterTab>
-      {/* What this PROJECT imported — audio and video, to hear and place again (docs/resources.md). */}
-      <FooterTab
-        plain={isMobile}
-        active={rightPanel === "resources"}
-        title={`${m["res.title"]()}${resourcesKey ? ` (${resourcesKey})` : ""}`}
-        aria-label={m["res.title"]()}
-        aria-keyshortcuts={resourcesKey}
-        onClick={() => void runCommand("ui resources")}
-      >
-        <FolderOpen className="h-4 w-4" />
-      </FooterTab>
-      {/* What is left to do, for the whole WORKSPACE — TODOS.md at its root (docs/tasks.md). */}
-      <FooterTab
-        plain={isMobile}
-        active={rightPanel === "tasks"}
-        title={`${m["tasks.title"]()}${tasksKey ? ` (${tasksKey})` : ""}`}
-        aria-label={m["tasks.title"]()}
-        aria-keyshortcuts={tasksKey}
-        onClick={() => void runCommand("ui tasks")}
-      >
-        <ListChecks className="h-4 w-4" />
-      </FooterTab>
-      {/* HISTORY. The journal; a hovered row lights what it touched (docs/history.md). */}
-      <FooterTab
-        plain={isMobile}
-        active={rightPanel === "history"}
-        title={`${m["history.title"]()}${historyKey ? ` (${historyKey})` : ""}`}
-        aria-label={m["history.title"]()}
-        aria-keyshortcuts={historyKey}
-        onClick={() => void runCommand("ui history")}
-      >
-        <History className="h-4 w-4" />
-      </FooterTab>
-      {/* SHARE. */}
-      <FooterTab
-        plain={isMobile}
-        active={rightPanel === "share"}
-        disabled={share.busy}
-        title={`${m["share.button"]()}${shareKey ? ` (${shareKey})` : ""}`}
-        aria-label={m["share.button"]()}
-        aria-keyshortcuts={shareKey}
-        onClick={() => void runCommand("ui share")}
-      >
-        <Share2 className="h-4 w-4" />
-      </FooterTab>
-      {/* The COG opens the settings panel — one surface with a tab per entry, where a dropdown used to be. */}
-      <FooterTab
-        plain={isMobile}
-        active={rightPanel === "settings"}
-        title={`${m["settings.menu"]()}${settingsKey ? ` (${settingsKey})` : ""}`}
-        aria-label={m["settings.menu"]()}
-        aria-keyshortcuts={settingsKey}
-        onClick={() => void runCommand("ui settings")}
-      >
-        <Settings className="h-4 w-4" />
-      </FooterTab>
-    </>
-  );
-
-  // The project's name, linking home; in the phone's info popover it has the popover's width rather than the bar's.
-  const projectLink = (
-    <a
-      href={projectsUrl(window.location.href)}
-      title={m["project.backToProjects"]()}
-      className={cn(
-        "truncate text-muted-foreground text-sm hover:text-foreground hover:underline",
-        isMobile ? "px-1.5 font-medium text-foreground" : "max-w-[10rem]",
-      )}
-    >
-      {project?.name || "…"}
-    </a>
-  );
-  // How the engine is doing: the light, the latency, the memory (components/EngineLink.tsx); it is CHOSEN in the bar's engine slot.
-  const engineLink = (
-    <EngineLink connected={connected} latency={engineLatency} />
-  );
-  // The project bar's engine slot, right of the pages: the engine's state and where this device hears it (docs/shell.md).
-  const localEngine = useLocalEngine();
-  const barEngine = !localEngine ? null : (
-    <BarEngine
-      current={engine ?? null}
-      searching={engineSearching}
-      audioToBrowser={audioToBrowser}
-      stats={engineLink}
-      status={
-        engine
-          ? connected
-            ? "up"
-            : "down"
-          : engineSearching
-            ? "searching"
-            : "none"
-      }
-      onOpen={localEngine.searchAgain}
-      toolSize={toolSize}
-    />
-  );
-
-  // The bar's wave surges with the master meter — a GETTER, so its ~20 Hz frames re-render nothing (ui-mini-player/docs/miniPlayer.md).
-  const engineLevel = useCallback(
-    () => meterFill(store.getSnapshot().master),
-    [store],
-  );
-
   // The mix leaving for the interface, right of the minimap in the bar's centre; no phone fits it.
-  const masterMeter = !isMobile ? (
+  const masterMeter = (
     <MasterMeter
       className="shrink-0"
       ref={masterMeterRef}
@@ -2652,91 +2474,6 @@ export default function App({
       master={projectDoc?.masterVolume}
       onMaster={setMaster}
     />
-  ) : null;
-
-  // The project bar's right slot: the pages, or on a phone the one menu holding them.
-  const barTrail = (
-    <div className="flex min-w-0 items-center gap-1">
-      {/* On a phone ONE button holds everywhere there is to go, and a pane is a destination — always `ui <pane>` (docs/shell.md). */}
-      {isMobile ? (
-        <MobileMenu open={mobileMenu} onOpenChange={setMobileMenu}>
-          <div className="flex flex-col">
-            {layout.fullscreen.map((p) => (
-              <MobileMenuItem
-                key={p}
-                icon={PANE_META[p].icon}
-                label={PANE_META[p].label}
-                current={full === p}
-                onSelect={() => {
-                  setMobileMenu(false);
-                  void runCommand(`ui ${p}`);
-                }}
-              />
-            ))}
-            {/* The frame is not a destination but a window over one: the item shows or hides it. */}
-            {hasViewport && (
-              <MobileMenuItem
-                icon={VIEWPORT_META.icon}
-                label={VIEWPORT_META.label}
-                current={viewportOpen}
-                onSelect={() => {
-                  setMobileMenu(false);
-                  void runCommand("ui viewport");
-                }}
-              />
-            )}
-            {/* No double-Shift on a phone, so the command bar needs a control of its own and this is the only place left. */}
-            <MobileMenuItem
-              icon={Terminal}
-              label={m["commandBar.list"]()}
-              onSelect={() => {
-                setMobileMenu(false);
-                setPaletteOpen(true);
-              }}
-            />
-          </div>
-          <div className="h-px bg-border" />
-          <div className="flex items-center gap-1">{headerTools}</div>
-        </MobileMenu>
-      ) : (
-        <>
-          {/* The PAGES, one lit: the row is the LAYOUT's fullscreenable set, not PANES, and picking one never splits (docs/shell.md). */}
-          <nav className="flex items-center gap-1">
-            {layout.fullscreen.map((p) => {
-              const Icon = PANE_META[p].icon;
-              const key = commandKeys.get(`ui ${p}`);
-              return (
-                <Button
-                  key={p}
-                  size={toolSize}
-                  variant={full === p ? "default" : "ghost"}
-                  aria-current={full === p ? "page" : undefined}
-                  onClick={() => void runCommand(`ui ${p}`)}
-                  title={`${PANE_META[p].label}${key ? ` (${key})` : ""}`}
-                  aria-keyshortcuts={key}
-                  aria-label={PANE_META[p].label}
-                >
-                  <Icon className="h-4 w-4" />
-                </Button>
-              );
-            })}
-            {/* …and the frame's window, lit while it is up — a toggle over the pages rather than one of them. */}
-            {hasViewport && (
-              <Button
-                size={toolSize}
-                variant={viewportOpen ? "secondary" : "ghost"}
-                aria-pressed={viewportOpen}
-                onClick={() => void runCommand("ui viewport")}
-                title={VIEWPORT_META.label}
-                aria-label={VIEWPORT_META.label}
-              >
-                <VIEWPORT_META.icon className="h-4 w-4" />
-              </Button>
-            )}
-          </nav>
-        </>
-      )}
-    </div>
   );
 
   // EditorTab's two builders, built here so its own props stay references; each is null while closed.
@@ -2850,156 +2587,535 @@ export default function App({
     setStatus,
   });
 
-  // The project bar's left slot: the way back, a full address since the project is the router's BASENAME (appNav.ts).
-  const barLead = (
-    <span
-      className={cn(
-        "flex items-center gap-1",
-        isMobile ? "shrink-0" : "min-w-0",
-      )}
-    >
-      {/* The sidebar's one control, first in the bar: it opens the home drawer over the project, and closes it again; a
-          phone gives it a 44 px slot reaching the bar's edge (docs/shell.md). */}
-      <button
-        type="button"
-        onClick={() => setHomeDrawer(!homeDrawer)}
-        title={homeDrawer ? m["home.foldSidebar"]() : m["home.unfoldSidebar"]()}
-        aria-label={
-          homeDrawer ? m["home.foldSidebar"]() : m["home.unfoldSidebar"]()
+  // What the engine and the project are doing is said as toasts: the header holds no state of its own.
+  useEngineLostToast(connected, () => engineRef.current?.connect());
+  useProgressToast(
+    warm.warming
+      ? {
+          label: warm.total
+            ? m["footer.cachingWaveformsOf"]({
+                done: warm.done,
+                total: warm.total,
+              })
+            : m["footer.cachingWaveforms"](),
+          pct: warm.total ? Math.round((warm.done / warm.total) * 100) : null,
         }
-        aria-expanded={homeDrawer}
-        className={cn(
-          "flex shrink-0 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground",
-          isMobile ? "-ml-3 size-11" : "p-0.5",
-        )}
-      >
-        {homeDrawer ? (
-          <PanelLeftClose className="h-4 w-4" />
-        ) : (
-          <PanelLeftOpen className="h-4 w-4" />
-        )}
-      </button>
-      {/* The command bar's opener, right of it: the bar stays hidden until summoned (docs/commandBar.md). */}
-      <button
-        type="button"
-        onClick={summonBar}
-        title={`${m["commandBar.list"]()} (Ctrl+Shift+P)`}
-        aria-label={m["commandBar.list"]()}
-        className={cn(
-          "flex shrink-0 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground",
-          isMobile ? "size-11" : "p-0.5",
-        )}
-      >
-        <Terminal className="h-4 w-4" />
-      </button>
-      {!isMobile && (
-        <>
-          <img src={k7Logo} alt="" className="ml-1 h-4 w-auto shrink-0" />
-          {projectLink}
-        </>
-      )}
-    </span>
+      : null,
   );
-  // After the name in the bar's left slot: the background processes, a phone's info icon, the workspace warning.
-  const barState = (
-    <>
-      <ProcessesButton size={toolSize} />
-      {/* The bench's chain, written back into the account's chains — frozenChains.md. */}
-      <BenchSaveButton size={toolSize} runCommand={runCommand} />
-      {/* A phone folds the name and the engine into one icon, the bar having room for neither (docs/shell.md). */}
-      {isMobile ? (
-        <MobileInfo
-          open={mobileInfo}
-          onOpenChange={setMobileInfo}
-          status={!engine ? "none" : connected ? "up" : "down"}
-        >
-          {projectLink}
-          <div className="px-1.5">{engineLink}</div>
-          {/* The tempo and meter the footer holds on a desktop; a phone's footer has no room for them. */}
-          <div className="px-1.5 text-muted-foreground text-xs">
-            <TempoMeter recInfo={recInfo} runCommand={runCommand} />
-          </div>
-        </MobileInfo>
-      ) : null}
-      {ws && !ws.activeProject && (
-        <span className="truncate rounded bg-amber-500/15 px-2 py-0.5 text-xs text-amber-500">
-          workspace — pick a project ▶ in Editor
-        </span>
-      )}
-    </>
+  useEffect(() => {
+    if (formatTooNew)
+      showToast({
+        message: m["project.formatTooNew"](formatTooNew),
+        variant: "warning",
+      });
+  }, [formatTooNew]);
+
+  // The one panel on screen, and the buttons that stand for it (shell/panels.tsx).
+  const shownId = shownPanel(panel, rightPanel);
+  const pressedButton = shownId ? PANEL_DEFS[shownId].button : null;
+  const closeAnyPanel = useCallback(() => {
+    setPanel(null);
+    setRightPanel(null);
+  }, [setRightPanel]);
+  // One panel at a time, whichever of the two states opened it.
+  useEffect(() => {
+    if (rightPanel) setPanel(null);
+  }, [rightPanel]);
+  useEffect(() => {
+    if (panel) setRightPanel(null);
+  }, [panel, setRightPanel]);
+  const PANEL_LINE: Partial<Record<PanelId, string>> = {
+    resources: "ui resources",
+    playlists: "ui playlists",
+    mixer: "ui mixer",
+    events: "ui panel event",
+    logs: "ui panel logs",
+    tasks: "ui tasks",
+    export: "ui share",
+  };
+  const mixerDead = mixerStrips.length === 0 && pressedButton !== "mixer";
+  const pressPanel = (id: PanelId) => {
+    if (pressedButton === id) return closeAnyPanel();
+    const line = PANEL_LINE[id];
+    if (line) void runCommand(line);
+  };
+  const headerPanels: HeaderPanel[] = TOOLBAR_PANELS.map((id) => ({
+    id,
+    pressed: pressedButton === id,
+    disabled: (id === "mixer" && mixerDead) || (id === "export" && share.busy),
+    title: id === "mixer" && mixerDead ? m["footer.mixNone"]() : undefined,
+    onPress: () => pressPanel(id),
+  }));
+  const switcherPanes: HeaderPane[] = [
+    ...(hasTimeline
+      ? [
+          {
+            id: "timeline",
+            label: m["shell.pane.arrangement"](),
+            icon: AudioLines,
+          },
+        ]
+      : []),
+    ...(hasTurntables
+      ? [
+          {
+            id: "turntables",
+            label: m["shell.pane.turntables"](),
+            icon: Disc3,
+          },
+        ]
+      : []),
+    { id: "chains", label: m["shell.pane.graph"](), icon: Workflow },
+    { id: "editor", label: m["shell.pane.source"](), icon: FileCode },
+  ];
+  const openKeyboard = () => setCommandsPage(true);
+  const laneViewsOf = (): OverflowLaneView[] => [
+    {
+      id: "clock",
+      label: m["shell.lane.clockShort"](),
+      icon: Clock,
+      on: rulerSeconds,
+      onPress: () => void runCommand("ui ruler"),
+    },
+    {
+      id: "lanes",
+      label: m["shell.lane.lanesShort"](),
+      icon: Rows3,
+      on: lanesExpanded,
+      onPress: () => void runCommand("ui lanes"),
+    },
+    {
+      id: "auto",
+      label: m["shell.lane.automationShort"](),
+      icon: Spline,
+      on: automationShown,
+      onPress: () => void runCommand("ui automation"),
+    },
+  ];
+  const header = (
+    <ProjectHeader
+      layout={layoutKind}
+      name={project?.name ?? ""}
+      backHref={projectsUrl(window.location.href)}
+      statusStore={statusStore}
+      engine={engine ? (connected ? "up" : "down") : "none"}
+      problems={projectErrors}
+      onProblems={() => {
+        setLogsFilter("problems");
+        setPanel("logs");
+      }}
+      onProcesses={() => setRightPanel("tasks")}
+      extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
+      git={
+        gitWorkspace ? (
+          <HeaderGit
+            git={gitHandle}
+            workspace={gitWorkspace}
+            phone={isMobile}
+            onCommits={() => setRightPanel("history")}
+          />
+        ) : null
+      }
+      panes={switcherPanes}
+      pane={full}
+      onPane={(id) => void runCommand(`ui ${id}`)}
+      panels={headerPanels}
+      settingsPressed={shownId === "settings"}
+      onSettings={() =>
+        shownId === "settings"
+          ? closeAnyPanel()
+          : void runCommand("ui settings")
+      }
+      onKeyboard={openKeyboard}
+      lockBanner={merging ? lockedSay() : null}
+      overflow={
+        <OverflowMenu
+          panes={switcherPanes}
+          pane={full}
+          onPane={(id) => void runCommand(`ui ${id}`)}
+          lanes={hasTimeline ? laneViewsOf() : []}
+          panels={headerPanels}
+          onSettings={() => void runCommand("ui settings")}
+          onKeyboard={openKeyboard}
+        />
+      }
+    />
+  );
+  const outputRecord = output.available
+    ? {
+        recording: output.recording,
+        filing: output.filing,
+        // Dead while the engine loads the project, as play is: every project's recorder has one id (outputRecording.md).
+        ready: !transportWaiting || output.recording,
+        onToggle: output.toggle,
+      }
+    : null;
+  const bar = (
+    <FloatingBar
+      layout={layoutKind}
+      runCommand={runCommand}
+      onCommandBar={summonBar}
+      tool={hasTimeline ? tool : null}
+      onTool={(t) => void runCommand(`ui tool ${t}`)}
+      recInfo={recInfo}
+      meter={masterMeter}
+      hidden={false}
+      transport={
+        showTransport
+          ? {
+              playing,
+              transportWaiting,
+              recordWithoutArm,
+              transport,
+              noArrangement,
+              recordEnabled,
+              midiArmed,
+              openMidiInputs,
+              setStatus,
+              engineRef,
+              armForRecord,
+              loopOn: !!loopState?.on,
+              onLoop: toggleTransportLoop,
+              output: noArrangement ? undefined : (outputRecord ?? undefined),
+            }
+          : null
+      }
+      output={!showTransport && noArrangement ? outputRecord : null}
+      map={
+        noArrangement
+          ? null
+          : {
+              // Same map the timeline builds its rows from — a row it skipped would put every lane below it out.
+              automation: laneNodes.automation,
+              caret,
+              highlight: openItem,
+              onSeek: seek,
+            }
+      }
+      metronome={{
+        on: optMetronome ?? metronomeOn,
+        level: metronomeLevel,
+        onToggle: () => {
+          setOptMetronome((cur) => !(cur ?? metronomeOn));
+          void runCommand("transport metronome");
+        },
+        onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
+      }}
+      lanes={
+        hasTimeline
+          ? {
+              seconds: rulerSeconds,
+              expanded: lanesExpanded,
+              automation: automationShown,
+              picture: hasViewport ? viewportOpen : null,
+              onClock: () => void runCommand("ui ruler"),
+              onLanes: () => void runCommand("ui lanes"),
+              onAutomation: () => void runCommand("ui automation"),
+              onPicture: () => void runCommand("ui viewport"),
+            }
+          : null
+      }
+    />
   );
 
-  // The project bar, built once: it is drawn under the panes, or over the editor popin (docs/shell.md, "The project bar").
-  const projectBar = (
-    <div ref={barRef} className="shrink-0">
-      {/* The output's picture, off screen while a take rolls: what the recording captures (useOutputRecording.ts). */}
-      {output.drawPicture && videoDoc && (
-        <OutputPicture doc={videoDoc} onDriver={output.onPictureDriver} />
+  // The Events panel: the empty state, the clip, the live take and the take just filed (the editors inside are the clip view's).
+  const eventsBody = (
+    <div className="flex h-full min-h-0 min-w-0 flex-col">
+      {(!graphSlot || graphSlot.kind === "trackModules") && (
+        <p className="flex h-full items-center justify-center px-4 text-center text-muted-foreground text-xs">
+          {m["panel.eventEmpty"]()}
+        </p>
       )}
-      {/* A workspace under git: its remote, what to pull and push, Commit, and the way into a merge. */}
-      <GitBarOf
-        git={gitHandle}
-        transport={gitTransport}
-        workspace={gitWorkspace}
-      />
-      <ProjectBar
-        lead={
-          <>
-            {barLead}
-            {barState}
-          </>
-        }
-        trail={barTrail}
-        engine={barEngine}
-        meter={masterMeter}
-        recInfo={recInfo}
-        level={engineLevel}
-        record={
-          noArrangement && output.available ? (
-            <OutputRecordButton
-              recording={output.recording}
-              filing={output.filing}
-              // Dead while the engine loads the project, as play is: every project's recorder has one id (outputRecording.md).
-              ready={!transportWaiting || output.recording}
-              onToggle={output.toggle}
-              size={toolSize}
-            />
-          ) : undefined
-        }
-        transport={
-          showTransport
-            ? {
-                toolSize,
-                playing,
-                transportWaiting,
-                recordWithoutArm,
-                transport,
-                noArrangement,
-                recordEnabled,
-                midiArmed,
-                openMidiInputs,
-                setStatus,
-                engineRef,
-                armForRecord,
-                loopOn: !!loopState?.on,
-                onLoop: toggleTransportLoop,
-              }
-            : null
-        }
-        map={
-          noArrangement
-            ? null
-            : {
-                // Same map the timeline builds its rows from — a row it skipped would put every lane below it out.
-                automation: laneNodes.automation,
-                caret,
-                highlight: openItem,
-                onSeek: seek,
-              }
-        }
-      />
+      {graphSlot?.kind === "grid" && (
+        <PaneBoundary
+          name="sequence grid"
+          resetKey={reloadKey}
+          onError={paneError}
+        >
+          <SeqGridPane
+            path={graphSlot.path}
+            onChanged={bumpReload}
+            setStatus={setStatus}
+            reloadKey={reloadKey}
+          />
+        </PaneBoundary>
+      )}
+      {graphSlot?.kind === "clip" && (
+        <PaneBoundary name="clip view" resetKey={reloadKey} onError={paneError}>
+          <ClipView
+            target={graphSlot.target}
+            onClose={closeEvent}
+            // The takes mode's record button and files; a locked shell records nothing, so it offers no takes.
+            takesHost={locked ? undefined : takes.host}
+            // The caret's three verbs and the loop it sets, pointed at whichever grid this pane is drawing.
+            caretRef={clipGridRef}
+            onSelection={setClipSel}
+            // …and the ear. Straight down the engine's socket: a note heard is not an edit, so it is journalled nowhere.
+            onPreviewNote={previewNote}
+            waveRef={waveRef}
+            onWaveView={setWaveView}
+            rollRef={rollRef}
+            onRollMode={setRollMode}
+          />
+        </PaneBoundary>
+      )}
+      {graphSlot?.kind === "midiTake" && liveTake && (
+        <MidiTakeRoll
+          take={liveTake}
+          trackName={recInfo.names[liveTake.lane] ?? liveTake.lane}
+          beatsPerBar={recInfo.beatsPerBar}
+          countInBeats={
+            recordEnabled ? recInfo.countIn * recInfo.beatsPerBar : 0
+          }
+          onStop={() => void runCommand("transport stop")}
+        />
+      )}
+      {graphSlot?.kind === "recording" && (
+        <PaneBoundary
+          name="audio clip"
+          resetKey={reloadKey}
+          onError={paneError}
+        >
+          <AudioClipPanel
+            clip={rolling ? null : (reviewTake?.clip ?? null)}
+            track={reviewTake?.track ?? ""}
+            rolling={rolling}
+            tempo={recInfo.tempo}
+            beatsPerBar={recInfo.beatsPerBar}
+            countIn={recInfo.countIn}
+            startBeat={takeStart}
+            // Where the clip on screen actually SITS on its lane, asked of the document.
+            placedAt={reviewBeat ?? takeStart}
+            // …and as a timecode, without which trim and the window drag have no event to write.
+            eventAt={rolling ? null : reviewEventAt}
+            // …and its takes, so the takes mode is there the moment the recording ends.
+            takes={rolling ? undefined : reviewTakes}
+            trackOrder={trackOrder}
+            trackNames={recInfo.names}
+            onStop={() => void runCommand("transport stop")}
+            onClose={() => {
+              setReviewOn(null);
+              if (reviewTake) setReviewedTake(reviewTake.clip);
+              closeEvent();
+            }}
+            // The event goes and the file stays: one Ctrl+Z brings the take back.
+            onDiscard={
+              !rolling && reviewTake && reviewEventAt
+                ? () => {
+                    void runCommand(
+                      `event remove ${reviewTake.track} ${reviewEventAt}`,
+                    );
+                    setReviewOn(null);
+                    setReviewedTake(reviewTake.clip);
+                    closeEvent();
+                  }
+                : undefined
+            }
+          />
+        </PaneBoundary>
+      )}
     </div>
   );
+
+  // The chain panel: one lane's signal path, or the caret track's while no lane was opened (the chain editor replaces it).
+  const chainBody =
+    graphSlot?.kind === "trackModules" ? (
+      <PaneBoundary
+        name="lane modules"
+        resetKey={reloadKey}
+        onError={paneError}
+      >
+        <TrackModulesPane
+          {...liveCardProps}
+          trackId={graphSlot.trackId}
+          onTrackToggle={onLaneToggle}
+          onTrackSet={onTrackSet}
+          onEdgeInsert={locked ? undefined : insertIntoChain}
+          showCurves={trackCurves}
+          onToggleCurves={() => void runCommand("ui curves")}
+          onTrackInput={(kind) =>
+            void runCommand(`track input ${graphSlot.trackId} ${kind}`)
+          }
+        />
+      </PaneBoundary>
+    ) : (
+      <PaneBoundary name="graph panel" resetKey={reloadKey} onError={paneError}>
+        <GraphPanel {...graphHostProps} trackId={caret?.trackId ?? null} />
+      </PaneBoundary>
+    );
+
+  const closePanelNow = closeAnyPanel;
+  // Resources and References, Tasks and History: one panel each, with a segment between the two bodies.
+  const segment = (
+    id: "resources" | "references" | "tasks" | "history",
+  ): ReactNode => {
+    const pair =
+      id === "resources" || id === "references"
+        ? (["resources", "references"] as const)
+        : (["tasks", "history"] as const);
+    const label = (p: string) =>
+      m[`shell.segment.${p}` as "shell.segment.resources"]();
+    return (
+      <Choice
+        label={PANEL_DEFS[id].title()}
+        value={id}
+        onValueChange={(v) => setRightPanel(v)}
+        options={pair.map((p) => ({ value: p, label: label(p) }))}
+        className="mb-2"
+      />
+    );
+  };
+  const panelBody = (id: PanelId): ReactNode => {
+    switch (id) {
+      case "settings":
+        return (
+          <SettingsPanel
+            tab={settingsTab}
+            engine={engineRef.current ?? null}
+            vimMode={vimMode}
+            onRun={runCommand}
+            onClose={closePanelNow}
+          />
+        );
+      case "playlists":
+        return (
+          <PlaylistsPanel
+            vimMode={vimMode}
+            onRun={runCommand}
+            onClose={closePanelNow}
+          />
+        );
+      case "references":
+        return (
+          <>
+            {segment("references")}
+            <PaneBoundary
+              name="references"
+              resetKey={reloadKey}
+              onError={paneError}
+            >
+              <ReferencesPanel
+                playing={reference?.path ?? null}
+                sounding={referenceSounding}
+                onPlay={setReference}
+                onToggle={() => referenceToggle.current?.()}
+                onClose={closePanelNow}
+              />
+            </PaneBoundary>
+          </>
+        );
+      case "resources":
+        return (
+          <>
+            {segment("resources")}
+            <PaneBoundary
+              name="resources"
+              resetKey={reloadKey}
+              onError={paneError}
+            >
+              <ResourcesPanel reloadKey={reloadKey} onClose={closePanelNow} />
+            </PaneBoundary>
+          </>
+        );
+      case "tasks":
+        return (
+          <>
+            {segment("tasks")}
+            <PaneBoundary name="tasks" resetKey={reloadKey} onError={paneError}>
+              <TasksPanel
+                project={locked ? null : (ws?.activeProject ?? null)}
+                timecode={() =>
+                  beatsToPosition(
+                    (store.getSnapshot().playhead * recInfo.tempo) / 60,
+                    projectDoc?.timeSigNumerator ?? 4,
+                    projectDoc?.timeSigDenominator ?? 4,
+                  )
+                }
+                onSeek={(tc) =>
+                  seek(
+                    (parsePosition(
+                      tc,
+                      projectDoc?.timeSigNumerator ?? 4,
+                      projectDoc?.timeSigDenominator ?? 4,
+                    ) *
+                      60) /
+                      recInfo.tempo,
+                  )
+                }
+                onRun={runCommand}
+                onClose={closePanelNow}
+              />
+            </PaneBoundary>
+          </>
+        );
+      case "history":
+        return (
+          <>
+            {segment("history")}
+            <PaneBoundary
+              name="history"
+              resetKey={reloadKey}
+              onError={paneError}
+            >
+              <HistoryPanel
+                describe={describeStep}
+                git={gitHandle.state}
+                gitTransport={gitTransport}
+                onMark={setHistoryMark}
+                onClose={closePanelNow}
+              />
+            </PaneBoundary>
+          </>
+        );
+      case "export":
+        return (
+          <SharePanel
+            busy={share.busy}
+            host={share.host}
+            last={share.last}
+            onReveal={() => void share.reveal()}
+            onShare={() => void share.shareLast()}
+            hasPicture={!!videoDoc}
+            timelines={(projectDoc?.timelines ?? []).map((t) => t.id)}
+            onRun={(c) => void runCommand(c)}
+            onClose={closePanelNow}
+          />
+        );
+      case "mixer":
+        // The Master section of this panel is built with the mixer itself.
+        return (
+          <PaneBoundary
+            name="graph panel"
+            resetKey={reloadKey}
+            onError={paneError}
+          >
+            <GraphPanel
+              {...graphHostProps}
+              trackId={null}
+              strips={mixerStrips}
+            />
+          </PaneBoundary>
+        );
+      case "events":
+        return eventsBody;
+      case "chain":
+        return chainBody;
+      case "logs":
+        return (
+          <PaneBoundary name="logs" resetKey={reloadKey} onError={paneError}>
+            <LogsPanel
+              lines={logs}
+              onClear={() => void runCommand("ui logs clear")}
+            />
+          </PaneBoundary>
+        );
+    }
+  };
+  const panelHost = shownId ? (
+    <PanelFrame id={shownId} phone={isMobile} onClose={closeAnyPanel}>
+      {panelBody(shownId)}
+    </PanelFrame>
+  ) : null;
 
   return (
     <ShellContexts shell={shell} engine={store}>
@@ -3009,19 +3125,25 @@ export default function App({
         <LcdSoundsContext.Provider value={shellSounds}>
           {/* `overflow-hidden`: a pane wider than the screen must not widen the page, or a phone moves every dialog off it (docs/shell.md). */}
           <div
-            data-layout={isMobile ? "phone" : "desk"}
+            data-layout={layoutKind}
+            // The toasts clear the panel while one is open (project-shell toast.tsx reads --toast-right).
+            style={
+              shownId && !isMobile
+                ? ({
+                    "--toast-right": "var(--k7-toast-right-panel-open)",
+                  } as React.CSSProperties)
+                : undefined
+            }
             className="relative flex h-full flex-col overflow-hidden bg-background text-foreground"
           >
+            <Backdrop />
+            {header}
             {/* A demo is overwritten on the service's next start: said before an edit is lost (components/DemoBanner.tsx). */}
             {ws?.activeIsDemo && ws.activeProject && (
               <DemoBanner project={ws.activeProject} />
             )}
-            <EngineLostStrip
-              connected={connected}
-              onRetry={() => engineRef.current?.connect()}
-            />
-            {/* main: the panes on top, an optional bottom split panel below */}
-            <div className="flex min-h-0 flex-1 flex-col">
+            {/* The panes, with room kept for the floating bar; panels float over them and push nothing. */}
+            <div className="z-(--k7-z-pane) flex min-h-0 flex-1 flex-col pb-[88px]">
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
                 {editorPopin && (
@@ -3141,7 +3263,7 @@ export default function App({
                               // What one-shot commands are doing, on the lanes before the round trip (pendingEdits.ts).
                               pendingEdits={pendingEdits}
                               active={activePane === "timeline"}
-                              lanesLocked={panel !== null}
+                              lanesLocked={false}
                               // …so an armed lane draws the take as it is played, instead of showing nothing while you record.
                               rolling={rolling}
                               takeStartBeat={takeStart}
@@ -3300,337 +3422,25 @@ export default function App({
                     </div>
                   </div>
                 </div>
-
-                {/* THE RIGHT COLUMN — one panel at a time, docked beside the panes; none is a pane and `rightPanel` makes them exclusive (docs/shell.md). */}
-                <RightPanel open={rightPanel !== null} width="w-[24rem]">
-                  {rightPanel === "settings" && (
-                    <SettingsPanel
-                      tab={settingsTab}
-                      engine={engineRef.current ?? null}
-                      vimMode={vimMode}
-                      onRun={runCommand}
-                      onClose={() => setRightPanel(null)}
-                    />
-                  )}
-                  {rightPanel === "playlists" && (
-                    <PlaylistsPanel
-                      vimMode={vimMode}
-                      onRun={runCommand}
-                      onClose={() => setRightPanel(null)}
-                    />
-                  )}
-                  {rightPanel === "references" && (
-                    <PaneBoundary
-                      name="references"
-                      resetKey={reloadKey}
-                      onError={paneError}
-                    >
-                      <ReferencesPanel
-                        playing={reference?.path ?? null}
-                        sounding={referenceSounding}
-                        onPlay={setReference}
-                        onToggle={() => referenceToggle.current?.()}
-                        onClose={() => setRightPanel(null)}
-                      />
-                    </PaneBoundary>
-                  )}
-                  {rightPanel === "resources" && (
-                    <PaneBoundary
-                      name="resources"
-                      resetKey={reloadKey}
-                      onError={paneError}
-                    >
-                      <ResourcesPanel
-                        reloadKey={reloadKey}
-                        onClose={() => setRightPanel(null)}
-                      />
-                    </PaneBoundary>
-                  )}
-                  {rightPanel === "tasks" && (
-                    <PaneBoundary
-                      name="tasks"
-                      resetKey={reloadKey}
-                      onError={paneError}
-                    >
-                      <TasksPanel
-                        project={locked ? null : (ws?.activeProject ?? null)}
-                        timecode={() =>
-                          beatsToPosition(
-                            (store.getSnapshot().playhead * recInfo.tempo) / 60,
-                            projectDoc?.timeSigNumerator ?? 4,
-                            projectDoc?.timeSigDenominator ?? 4,
-                          )
-                        }
-                        onSeek={(tc) =>
-                          seek(
-                            (parsePosition(
-                              tc,
-                              projectDoc?.timeSigNumerator ?? 4,
-                              projectDoc?.timeSigDenominator ?? 4,
-                            ) *
-                              60) /
-                              recInfo.tempo,
-                          )
-                        }
-                        onRun={runCommand}
-                        onClose={() => setRightPanel(null)}
-                      />
-                    </PaneBoundary>
-                  )}
-                  {rightPanel === "history" && (
-                    <PaneBoundary
-                      name="history"
-                      resetKey={reloadKey}
-                      onError={paneError}
-                    >
-                      <HistoryPanel
-                        describe={describeStep}
-                        git={gitHandle.state}
-                        gitTransport={gitTransport}
-                        onMark={setHistoryMark}
-                        onClose={() => setRightPanel(null)}
-                      />
-                    </PaneBoundary>
-                  )}
-                  {rightPanel === "share" && (
-                    <SharePanel
-                      busy={share.busy}
-                      host={share.host}
-                      last={share.last}
-                      onReveal={() => void share.reveal()}
-                      onShare={() => void share.shareLast()}
-                      hasPicture={!!videoDoc}
-                      timelines={(projectDoc?.timelines ?? []).map((t) => t.id)}
-                      onRun={(c) => void runCommand(c)}
-                      onClose={() => setRightPanel(null)}
-                    />
-                  )}
-                </RightPanel>
               </div>
-
-              {/* bottom split panel — available on every tab, resizable divider */}
-              <BottomPanel
-                open={panel !== null}
-                height={panelH ?? "50%"}
-                panelRef={panelEl}
-                onResizeStart={startResize}
-              >
-                {/* The panel's ✕ at its top left: a view's own toolbar takes it, else it floats (PanelClose.tsx). */}
-                <PanelCloseFrame onClose={closePanel}>
-                  {/* The caret's track, or the MIX: every strip on one rank. Keyed, so switching the two remounts it. */}
-                  {(panel === "graph" || panel === "mix") && (
-                    <PaneBoundary
-                      key={panel}
-                      name="graph panel"
-                      resetKey={reloadKey}
-                      onError={paneError}
-                    >
-                      <GraphPanel
-                        {...graphHostProps}
-                        trackId={
-                          panel === "graph" ? (caret?.trackId ?? null) : null
-                        }
-                        strips={panel === "mix" ? mixerStrips : undefined}
-                      />
-                    </PaneBoundary>
-                  )}
-                  {/* The EVENT: what a clip's or a lane header's double-click opened, drawn under whichever page is on (docs/shell.md). */}
-                  {panel === "event" && (
-                    <div className="flex h-full min-h-0 min-w-0">
-                      {/* Empty, it still wears the slot's bar: a lone ✕ floating over nothing reads as a broken panel. */}
-                      {!graphSlot && (
-                        <GraphSlotPane
-                          bar={
-                            <span className="font-medium text-foreground">
-                              {m["panel.event"]()}
-                            </span>
-                          }
-                        >
-                          <p className="flex h-full items-center justify-center px-4 text-center text-xs text-muted-foreground">
-                            {m["panel.eventEmpty"]()}
-                          </p>
-                        </GraphSlotPane>
-                      )}
-                      {graphSlot?.kind === "grid" && (
-                        <PaneBoundary
-                          name="sequence grid"
-                          resetKey={reloadKey}
-                          onError={paneError}
-                        >
-                          <SeqGridPane
-                            path={graphSlot.path}
-                            onChanged={bumpReload}
-                            setStatus={setStatus}
-                            reloadKey={reloadKey}
-                          />
-                        </PaneBoundary>
-                      )}
-                      {/* A clicked clip's content: `ClipView` draws its own header and ✕, and tells audio from MIDI in one place. */}
-                      {graphSlot?.kind === "clip" && (
-                        <PaneBoundary
-                          name="clip view"
-                          resetKey={reloadKey}
-                          onError={paneError}
-                        >
-                          <ClipView
-                            target={graphSlot.target}
-                            onClose={closeEvent}
-                            // The takes mode's record button and files; a locked shell records nothing, so it offers no takes.
-                            takesHost={locked ? undefined : takes.host}
-                            // The caret's three verbs and the loop it sets, pointed at whichever grid this pane is drawing.
-                            caretRef={clipGridRef}
-                            onSelection={setClipSel}
-                            // …and the ear. Straight down the engine's socket: a note heard is not an edit, so it is journalled nowhere.
-                            onPreviewNote={previewNote}
-                            waveRef={waveRef}
-                            onWaveView={setWaveView}
-                            rollRef={rollRef}
-                            onRollMode={setRollMode}
-                          />
-                        </PaneBoundary>
-                      )}
-                      {/* One lane's whole signal path, read left to right; `moduleRow` lays out the graph's own cards (docs/shell.md). */}
-                      {graphSlot?.kind === "trackModules" && (
-                        <PaneBoundary
-                          name="lane modules"
-                          resetKey={reloadKey}
-                          onError={paneError}
-                        >
-                          <TrackModulesPane
-                            {...liveCardProps}
-                            trackId={graphSlot.trackId}
-                            onTrackToggle={onLaneToggle}
-                            onTrackSet={onTrackSet}
-                            onEdgeInsert={locked ? undefined : insertIntoChain}
-                            showCurves={trackCurves}
-                            onToggleCurves={() => void runCommand("ui curves")}
-                            onTrackInput={(kind) =>
-                              void runCommand(
-                                `track input ${graphSlot.trackId} ${kind}`,
-                              )
-                            }
-                          />
-                        </PaneBoundary>
-                      )}
-                      {/* A MIDI take's notes as they are played; its clip's own roll replaces it once it lands. */}
-                      {graphSlot?.kind === "midiTake" && liveTake && (
-                        <MidiTakeRoll
-                          take={liveTake}
-                          trackName={
-                            recInfo.names[liveTake.lane] ?? liveTake.lane
-                          }
-                          beatsPerBar={recInfo.beatsPerBar}
-                          countInBeats={
-                            recordEnabled
-                              ? recInfo.countIn * recInfo.beatsPerBar
-                              : 0
-                          }
-                          onStop={() => void runCommand("transport stop")}
-                        />
-                      )}
-                      {/* ONE panel for a take and for the file it becomes; `rolling` chooses the picture, not the mount (docs/shell.md). */}
-                      {graphSlot?.kind === "recording" && (
-                        <PaneBoundary
-                          name="audio clip"
-                          resetKey={reloadKey}
-                          onError={paneError}
-                        >
-                          <AudioClipPanel
-                            clip={rolling ? null : (reviewTake?.clip ?? null)}
-                            track={reviewTake?.track ?? ""}
-                            rolling={rolling}
-                            tempo={recInfo.tempo}
-                            beatsPerBar={recInfo.beatsPerBar}
-                            countIn={recInfo.countIn}
-                            startBeat={takeStart}
-                            // Where the clip on screen actually SITS on its lane, asked of the document.
-                            placedAt={reviewBeat ?? takeStart}
-                            // …and as a timecode, without which trim and the window drag have no event to write.
-                            eventAt={rolling ? null : reviewEventAt}
-                            // …and its takes, so the takes mode is there the moment the recording ends.
-                            takes={rolling ? undefined : reviewTakes}
-                            trackOrder={trackOrder}
-                            trackNames={recInfo.names}
-                            onStop={() => void runCommand("transport stop")}
-                            onClose={() => {
-                              setReviewOn(null);
-                              if (reviewTake) setReviewedTake(reviewTake.clip);
-                              closeEvent();
-                            }}
-                            // The event goes and the file stays: one Ctrl+Z brings the take back.
-                            onDiscard={
-                              !rolling && reviewTake && reviewEventAt
-                                ? () => {
-                                    void runCommand(
-                                      `event remove ${reviewTake.track} ${reviewEventAt}`,
-                                    );
-                                    setReviewOn(null);
-                                    setReviewedTake(reviewTake.clip);
-                                    closeEvent();
-                                  }
-                                : undefined
-                            }
-                          />
-                        </PaneBoundary>
-                      )}
-                    </div>
-                  )}
-                  {panel === "logs" && (
-                    <PaneBoundary
-                      name="logs"
-                      resetKey={reloadKey}
-                      onError={paneError}
-                    >
-                      <LogsPanel
-                        lines={logs}
-                        onClear={() => void runCommand("ui logs clear")}
-                      />
-                    </PaneBoundary>
-                  )}
-                </PanelCloseFrame>
-              </BottomPanel>
             </div>
 
-            {/* The take once it has stopped: the FILE, its onsets and its level — the editing step beside the live pane (docs/shell.md). */}
-
-            {/* What you are listening AGAINST — above the status line and below every pane, since it belongs to no tab (docs/references.md). */}
+            {/* What you are listening AGAINST — a card over the panes, since it belongs to no tab (docs/references.md). */}
             {reference && (
-              <ReferenceBar
-                track={reference}
-                onClose={() => setReference(null)}
-                onPlayingChange={setReferenceSounding}
-                toggleRef={referenceToggle}
-              />
+              <div className="absolute bottom-[88px] left-4 z-(--k7-z-floating-card)">
+                <ReferenceBar
+                  track={reference}
+                  onClose={() => setReference(null)}
+                  onPlayingChange={setReferenceSounding}
+                  toggleRef={referenceToggle}
+                />
+              </div>
             )}
 
-            {/* The transport and the song's map, under every pane and above the status line (shell/ProjectBar.tsx). */}
-            {!barFloating && projectBar}
-
-            {/* The status line on the left, the tempo, the metronome and the panels' buttons on the right (shell/ShellFooter.tsx). */}
-            <ShellFooter
-              isMobile={isMobile}
-              rollMode={rollMode}
-              waveView={waveView}
-              shownSlot={shownSlot}
-              ringPanes={ringPanes}
-              tlView={tlView}
-              statusStore={statusStore}
-              statusFallback={project?.root}
-              copyingToEngine={copyingToEngine}
-              engineSync={engineSync}
-              waitingForEngine={waitingForEngine}
-              warm={warm}
-              projectErrors={projectErrors}
-              formatTooNew={formatTooNew}
-              recInfo={recInfo}
-              optMetronome={optMetronome}
-              setOptMetronome={setOptMetronome}
-              metronomeOn={metronomeOn}
-              metronomeLevel={metronomeLevel}
-              panel={panel}
-              mixerStrips={mixerStrips}
-              headerTools={headerTools}
-            />
+            {/* The output's picture, off screen while a take rolls: what the recording captures (useOutputRecording.ts). */}
+            {output.drawPicture && videoDoc && (
+              <OutputPicture doc={videoDoc} onDriver={output.onPictureDriver} />
+            )}
 
             {/* The FRAME: a WINDOW over every page, hidden and never unmounted since it owns a GL context (docs/picture.md). */}
             {hasViewport && (
@@ -3661,22 +3471,11 @@ export default function App({
               </FloatingWindow>
             )}
 
-            {/* The same bar over the popin that hid the layout, last in the tree for painting order (docs/shell.md). */}
-            {barFloating && (
-              <div ref={stripRef} className="fixed inset-x-0 bottom-0 z-50">
-                {projectBar}
-              </div>
-            )}
+            {bar}
 
-            {/* The pages are the project bar's right slot — see `barTrail` and docs/shell.md. */}
+            {panelHost}
 
-            {homeDrawer && (
-              <Suspense fallback={null}>
-                <HomeDrawer open onClose={closeHomeDrawer} above={barRef} />
-              </Suspense>
-            )}
-
-            {/* The command bar, floating at the top once summoned and deliberately not modal (docs/commandBar.md). */}
+            {/* The command bar: a modal card over a scrim (docs/commandBar.md). */}
             <FloatingCommandBar
               ref={cmdRef}
               open={paletteOpen}
@@ -3717,6 +3516,7 @@ export default function App({
               paneError={paneError}
               engineRef={engineRef}
               connected={connected}
+              gitTransport={gitTransport}
             />
           </div>
         </LcdSoundsContext.Provider>

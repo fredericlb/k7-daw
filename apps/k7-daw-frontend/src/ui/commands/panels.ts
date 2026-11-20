@@ -9,7 +9,8 @@ const toggle = (
   id: RightPanelId,
   readable: { en: string; fr: string },
 ): LocalCommand => ({
-  name: `ui ${id}`,
+  // The export panel keeps its old command name, `ui share`: keys and docs name it.
+  name: `ui ${id === "export" ? "share" : id}`,
   readable,
   run: (ctx) => {
     ctx.toggleRight(id);
@@ -90,7 +91,7 @@ export const PANEL_COMMANDS: LocalCommand[] = [
     fr: "Ouvrir ou fermer l'historique de ce morceau",
   }),
   // `ui` because the PANEL is a view; every verb inside it is a `project` one and writes.
-  toggle("share", {
+  toggle("export", {
     en: "Open or close the share and export panel",
     fr: "Ouvrir ou fermer le panneau de partage",
   }),

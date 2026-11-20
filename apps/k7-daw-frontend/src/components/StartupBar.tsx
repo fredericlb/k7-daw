@@ -1,14 +1,14 @@
-// StartupBar.tsx — the bottom bar while the open project is still on its way to being heard: an
-// engine being looked for, the project copied to it, applied, warmed up. The project is drawn and
-// editable the whole time; this only says what Play is waiting for. See ../../docs/shell.md.
+// StartupBar.tsx — what the open project is still waiting for before it is heard: an engine being looked for,
+// the project copied to it, applied, warmed up. The project is drawn and editable the whole time; this only says
+// what Play is waiting for, as one toast (shell/engineToasts.tsx). See ../../docs/shell.md.
 
-import { GateProgress } from "@studio/project-shell/progress";
 import type {
   EngineLoadPhase,
   EngineScanState,
   EngineSyncState,
 } from "@studio/web-protocol";
 import { m } from "../paraglide/messages.js";
+import { useProgressToast } from "../shell/engineToasts";
 
 /** The engine's plugin scan as one line and a fraction, the same on the home page and under a project. */
 export function scanStep(scan: { done: number; total: number } | null): {
@@ -69,7 +69,9 @@ export function projectLoading(
   return load !== null;
 }
 
+/** Draws nothing: its toast follows the step. The plugin scan is the one that sits at the top. */
 export function StartupBar(props: Parameters<typeof startupStep>[0]) {
   const step = startupStep(props);
-  return step ? <GateProgress label={step.label} pct={step.pct} /> : null;
+  useProgressToast(step ? { ...step, top: props.load === "scanning" } : null);
+  return null;
 }

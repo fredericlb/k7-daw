@@ -136,7 +136,6 @@ export function ProjectGate({
               // A function, not the address: the editor stays open for hours and the relayed URL carries a one-minute ticket.
               engineUrl={engineUrl}
               // What this link measured, passed down rather than re-probed: a second round trip would report a different number.
-              engineLatency={engine?.latency ?? null}
               // The RAW email, not a slug: `sessionFor` does the slugging, so this half and the file service cannot drift.
               userEmail={userEmail}
               onQuitWorkspace={quit}

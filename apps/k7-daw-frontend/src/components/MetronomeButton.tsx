@@ -1,9 +1,9 @@
-// MetronomeButton.tsx — the footer's click toggle, with its LEVEL under a right-click. Two
+// MetronomeButton.tsx — the bar's click toggle, with its LEVEL under a right-click. Two
 // questions on one control: whether the metronome sounds (the click) and how loud (the menu).
 // Both are project settings written to settings.k7x; see @studio/song docs/metronome.md.
 
 import { METRONOME_MIN } from "@studio/engine-protocol/build";
-import { Button } from "@studio/ui/button";
+import { CapsuleButton } from "@studio/ui/capsule";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,11 +24,8 @@ export function MetronomeButton({
   level,
   onToggle,
   onLevel,
-  size = "icon-xs",
 }: {
   on: boolean;
-  /** The footer's button size: a phone's is finger-sized. */
-  size?: "icon-xs" | "icon-lg";
   /** 0.2 … 1, from the compiled doc. */
   level: number;
   onToggle: () => void;
@@ -56,10 +53,8 @@ export function MetronomeButton({
     <DropdownMenu open={open} onOpenChange={setOpen}>
       {/* The trigger ANCHORS the menu and never opens it — `onContextMenu` does, so a left click is the toggle and nothing else. */}
       <DropdownMenuTrigger asChild>
-        <Button
-          size={size}
-          variant={on ? "default" : "ghost"}
-          aria-pressed={on}
+        <CapsuleButton
+          pressed={on}
           onClick={onToggle}
           // Radix's trigger opens on POINTERDOWN, so a left click would toggle and open the menu at once; a cancelled pointerdown skips it and leaves the click.
           onPointerDown={(e: ReactPointerEvent) => e.preventDefault()}
@@ -80,8 +75,8 @@ export function MetronomeButton({
           })}
           aria-label={m["transport.metronome"]()}
         >
-          <MetronomeIcon className="h-3.5 w-3.5" />
-        </Button>
+          <MetronomeIcon />
+        </CapsuleButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 p-3">
         <label className="flex items-center gap-2 text-xs">

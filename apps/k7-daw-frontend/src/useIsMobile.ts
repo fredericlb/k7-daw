@@ -22,3 +22,22 @@ export function useIsMobile(): boolean {
   }, []);
   return isMobile;
 }
+
+export type ShellLayout = "phone" | "pad" | "desk";
+
+/** Phone is the folded shell; a touch screen that is not folded is a Pad, anything else a Desk. */
+export function useShellLayout(): ShellLayout {
+  const phone = useIsMobile();
+  const [touch, setTouch] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(pointer: coarse)").matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    const onChange = () => setTouch(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return phone ? "phone" : touch ? "pad" : "desk";
+}

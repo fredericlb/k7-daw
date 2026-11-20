@@ -127,7 +127,7 @@ export function TransportClock({
       role="timer"
       aria-label={m["transport.position"]()}
       data-testid="timecode"
-      className="mx-1 whitespace-nowrap font-mono text-xs text-muted-foreground tabular-nums"
+      className="type-mono-timecode mx-1 whitespace-nowrap text-foreground tabular-nums"
     >
       {/* Under 380 px the bar keeps the musician's position and drops the seconds, or the clock runs under the menu. */}
       <span className="max-[380px]:hidden">

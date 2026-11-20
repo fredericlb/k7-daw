@@ -183,7 +183,7 @@ export function MasterMeter({
             max={MASTER_MAX_DB}
             step={0.5}
             value={level}
-            aria-label={m["meter.outputLabel"]()}
+            aria-label={m["shell.masterVolume"]()}
             title={m["meter.hint"]({
               reading,
               level: `${level > 0 ? "+" : ""}${level.toFixed(1)}`,

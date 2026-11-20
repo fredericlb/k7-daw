@@ -1,5 +1,5 @@
 // TempoMeter.tsx — the project's tempo and meter, each number editing itself on a click.
-// The footer draws it on a desktop and the Info popover on a phone, whose footer has no room (docs/shell.md).
+// The floating bar draws it, inside the Transport group.
 import { askText } from "@studio/project-shell/ask";
 import type { RecInfo } from "../hooks/useProjectDoc";
 import { m } from "../paraglide/messages.js";
@@ -34,10 +34,10 @@ export function TempoMeter({
   runCommand: (line: string) => Promise<void>;
 }) {
   return (
-    <span className="flex items-center whitespace-nowrap font-mono tabular-nums">
+    <span className="type-mono-value flex items-center gap-0.5 whitespace-nowrap tabular-nums">
       <button
         type="button"
-        className="rounded px-0.5 hover:bg-accent hover:text-foreground"
+        className="h-9 cursor-pointer rounded-full px-2 text-foreground outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
         title={m["transport.tempoEdit"]()}
         onClick={() =>
           void askTempo(recInfo.tempo).then((v) => {
@@ -47,10 +47,10 @@ export function TempoMeter({
       >
         {recInfo.tempo} bpm
       </button>
-      <span className="mx-1 text-border">·</span>
+
       <button
         type="button"
-        className="rounded px-0.5 hover:bg-accent hover:text-foreground"
+        className="h-9 cursor-pointer rounded-full px-2 text-foreground outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
         title={m["transport.meterEdit"]()}
         onClick={() =>
           void askText({

@@ -165,7 +165,10 @@ export const TIMELINE_COMMANDS: LocalCommand[] = [
       en: "Read the ruler in bars or in seconds",
       fr: "Lire la règle en mesures ou en secondes",
     },
-    (ctx) => ctx.timelineRef.current?.toggleRuler(),
+    (ctx) => {
+      ctx.timelineRef.current?.toggleRuler();
+      ctx.mirrorLane("ruler");
+    },
   ),
   onTimeline(
     "ui lanes",
@@ -181,7 +184,10 @@ export const TIMELINE_COMMANDS: LocalCommand[] = [
       en: "Show or hide the automation lanes",
       fr: "Afficher ou masquer les pistes d'automation",
     },
-    (ctx) => ctx.timelineRef.current?.toggleAutomation(),
+    (ctx) => {
+      ctx.timelineRef.current?.toggleAutomation();
+      ctx.mirrorLane("automation");
+    },
   ),
   // Bare: the backend's `event move` takes three args, so a line WITH them still reaches it.
   onTimeline(
