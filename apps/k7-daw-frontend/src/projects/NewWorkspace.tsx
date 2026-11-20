@@ -14,13 +14,20 @@ export function NewWorkspace({
   blocked,
   onCreate,
   primary = false,
+  shown,
+  onShown,
 }: {
   blocked: string;
   onCreate: (workspace: string, onStep: (s: string) => void) => Promise<void>;
   /** In the empty list's place, where making a workspace IS the page's one act. */
   primary?: boolean;
+  /** Held by the New menu: the dialog is shown from outside and the button is not drawn. */
+  shown?: boolean;
+  onShown?: (shown: boolean) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const [own, setOwn] = useState(false);
+  const open = shown ?? own;
+  const setOpen = onShown ?? setOwn;
   const [name, setName] = useState("");
   const { busy, step, error, run } = useNameSubmit();
 
@@ -39,16 +46,16 @@ export function NewWorkspace({
 
   return (
     <>
-      {/* Secondary in the header: a workspace is made once in a while, a project every session — the page's primary is New project. */}
-      <Button
-        size="sm"
-        variant={primary ? "default" : "secondary"}
-        disabled={Boolean(blocked)}
-        title={blocked || m["ws.newHint"]()}
-        onClick={() => setOpen(true)}
-      >
-        <HardDrive className="h-4 w-4" /> {m["ws.new"]()}
-      </Button>
+      {shown === undefined && (
+        <Button
+          variant={primary ? "default" : "glass"}
+          disabled={Boolean(blocked)}
+          title={blocked || m["ws.newHint"]()}
+          onClick={() => setOpen(true)}
+        >
+          <HardDrive className="size-5" /> {m["ws.new"]()}
+        </Button>
+      )}
 
       <NameFormDialog
         open={open}

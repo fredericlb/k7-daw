@@ -1,14 +1,11 @@
-// ProjectRow.tsx — one project under its workspace's band in the home page's table: a LINK first (the
-// archetype's glyph, the name, whether it is the open one), its folder, when it last changed, then its ⋮. There is no app badge: every project here is opened by k7. See ../../docs/projects.md.
+// ProjectRow.tsx — one project in its workspace's card: a LINK first (the kind tile, the name over its status line,
+// the kind tag), then its ⋮. Every project here is opened by k7, so there is no app badge. See ../../docs/projects.md.
 
 import { Badge } from "@studio/ui/badge";
 import { CornerDownRight } from "@studio/ui/icons";
-import { TableCell, TableRow } from "@studio/ui/table";
 import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import { projectLabel } from "@studio/web-protocol/projects";
-import type { ComponentProps } from "react";
 import { m } from "../paraglide/messages.js";
-import type { Measured } from "./BandTable";
 import { ProjectMenu } from "./ProjectMenu";
 import { editedAgo, shapeOfSurfaces } from "./projectKind";
 import { shapeWords } from "./shapes";
@@ -26,7 +23,6 @@ const parentOf = (p: RepoProject): string | null => {
 };
 
 export function ProjectRow({
-  measured,
   workspace: w,
   project: p,
   href,
@@ -34,12 +30,10 @@ export function ProjectRow({
   blocked,
   now,
   locale,
-  drop,
   onCopy,
   onRename,
   onDelete,
 }: {
-  measured: Measured;
   workspace: AccountWorkspace;
   project: RepoProject;
   href: string;
@@ -49,11 +43,6 @@ export function ProjectRow({
   /** The clock "edited … ago" is read against, ticked by the list so every row ages together. */
   now: number;
   locale: string;
-  /** The workspace's drop handlers and its lit state, which every row of it shares. */
-  drop: { className: string } & Pick<
-    ComponentProps<"tr">,
-    "onDragOver" | "onDragLeave" | "onDrop"
-  >;
   onCopy: (
     to: AccountWorkspace,
     folder: string,
@@ -67,74 +56,86 @@ export function ProjectRow({
   const kind = shape ? shapeWords(shape) : null;
   const Glyph = kind?.icon ?? CornerDownRight;
   const parent = parentOf(p);
-  const { className: lit, ...dropHandlers } = drop;
+  const status = [
+    p.editedAt !== undefined ? editedAgo(p.editedAt, now, locale) : null,
+    parent,
+  ]
+    .filter(Boolean)
+    .join(" · ");
   return (
     // The row opens the project as its link does; the link stays for the keyboard and a middle click.
-    <TableRow
-      {...measured}
-      {...dropHandlers}
-      data-workspace={w.name}
-      className={`group cursor-pointer ${lit}`}
+    <div
+      className="group flex min-h-[60px] cursor-pointer items-center gap-3 px-3.5 py-2 transition-colors [content-visibility:auto] [contain-intrinsic-size:auto_60px] hover:bg-on-fill"
       onClick={() => window.location.assign(href)}
     >
-      <TableCell className="pl-8">
-        <a
-          className="flex min-w-0 items-center gap-2.5 text-sm"
-          title={m["repos.openProject"]({ path: p.path })}
-          href={href}
-          onClick={(e) => e.stopPropagation()}
+      <a
+        className="flex min-w-0 flex-1 items-center gap-3 outline-none focus-visible:shadow-(--k7-focus-ring)"
+        aria-label={m["repos.openProjectNamed"]({ name: labelOf(w, p) })}
+        title={m["repos.openProject"]({ path: p.path })}
+        href={href}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span
+          aria-hidden
+          className="grid size-10 shrink-0 place-items-center rounded-xl bg-(--k7-glyph-tile) text-primary-text [&_svg]:size-5"
         >
-          <Glyph
-            className="h-4 w-4 shrink-0 text-muted-foreground group-hover:text-foreground"
-            aria-label={kind?.label()}
-          />
-          <span className="min-w-16 truncate">{labelOf(w, p)}</span>
-          {p.active && (
-            <span
-              className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
-              title={m["repos.active"]()}
-              role="img"
-              aria-label={m["repos.active"]()}
-            />
-          )}
-          {/* A demo is overwritten on the next start: said before anyone edits one and loses it. */}
-          {p.demo && (
-            <Badge
-              variant="amber"
-              className="hidden shrink-0 sm:inline-flex"
-              title={m["demo.badgeHint"]()}
-            >
-              {m["demo.badge"]()}
-            </Badge>
-          )}
-          {/* On a phone the name needs the row: the badges are a wider screen's. */}
-          {p.tags?.map((t) => (
-            <Badge key={t} className="hidden shrink-0 sm:inline-flex">
-              {t}
-            </Badge>
-          ))}
-        </a>
-      </TableCell>
-      <TableCell className="hidden truncate text-muted-foreground text-xs md:table-cell">
-        {parent}
-      </TableCell>
-      <TableCell className="hidden text-muted-foreground text-xs tabular-nums sm:table-cell">
-        {p.editedAt !== undefined ? editedAgo(p.editedAt, now, locale) : null}
-      </TableCell>
-      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-        <span className="inline-flex items-center justify-end gap-1">
-          <ProjectMenu
-            path={p.path}
-            label={label}
-            app={p.app}
-            blocked={blocked}
-            targets={targets}
-            onCopy={onCopy}
-            onRename={onRename}
-            onDelete={onDelete}
-          />
+          <Glyph />
         </span>
-      </TableCell>
-    </TableRow>
+        <span className="min-w-0 flex-1">
+          <span className="type-body flex items-center gap-2">
+            <span className="min-w-0 truncate">{labelOf(w, p)}</span>
+            {p.active && (
+              <span
+                className="size-1.5 shrink-0 rounded-full bg-primary"
+                title={m["repos.active"]()}
+                role="img"
+                aria-label={m["repos.active"]()}
+              />
+            )}
+          </span>
+          {status && (
+            <span className="type-status block truncate text-fg-3">
+              {status}
+            </span>
+          )}
+        </span>
+        {/* A demo is overwritten on the next start: said before anyone edits one and loses it. */}
+        {p.demo && (
+          <Badge
+            variant="amber"
+            className="hidden shrink-0 sm:inline-flex"
+            title={m["demo.badgeHint"]()}
+          >
+            {m["demo.badge"]()}
+          </Badge>
+        )}
+        {kind && (
+          <Badge variant="tag" className="hidden shrink-0 sm:inline-flex">
+            {kind.label()}
+          </Badge>
+        )}
+        {/* On a phone the name needs the row: the tags are a wider screen's. */}
+        {p.tags?.map((t) => (
+          <Badge key={t} className="hidden shrink-0 md:inline-flex">
+            {t}
+          </Badge>
+        ))}
+      </a>
+      <span
+        className="inline-flex shrink-0 items-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <ProjectMenu
+          path={p.path}
+          label={label}
+          app={p.app}
+          blocked={blocked}
+          targets={targets}
+          onCopy={onCopy}
+          onRename={onRename}
+          onDelete={onDelete}
+        />
+      </span>
+    </div>
   );
 }

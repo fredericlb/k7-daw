@@ -1,13 +1,28 @@
-// RepoList.tsx — the account's workspaces and their projects: the page's heading and its two creates,
-// then the table (ProjectsTable.tsx), or what stands in for it when there is nothing to list yet.
-// Presentational — the section holds the async and this file draws. See ../../docs/projects.md.
+// RepoList.tsx — the account's workspaces and their projects: the Home top bar (title, New, More, the cog), then the
+// workspace cards (ProjectsTable.tsx), "On your other devices" at their foot, or what stands in for them when there is
+// nothing to list. Presentational — the section holds the async and this file draws. See ../../docs/projects.md.
 
 import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
-import { Folder, Loader2, ServerOff } from "@studio/ui/icons";
+import { Button } from "@studio/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@studio/ui/dropdown-menu";
+import { EmptyState } from "@studio/ui/empty-state";
+import {
+  Folder,
+  GitBranch,
+  HardDrive,
+  Loader2,
+  Plus,
+  ServerOff,
+} from "@studio/ui/icons";
 import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import { byPeople, byPeoplePath } from "@studio/web-protocol/tree";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CloneWorkspace } from "../git/CloneWorkspace";
 import { useGitTransport } from "../git/GitContext";
 import { lockSentence } from "../git/gitLock";
 import { OtherDevices } from "../git/OtherDevices";
@@ -15,8 +30,7 @@ import { useMergingWorkspaces } from "../git/useMergingWorkspaces";
 import { parts } from "../i18nParts";
 import { m } from "../paraglide/messages.js";
 import { SETTINGS_ROUTE } from "./api";
-import { EmptyState } from "./EmptyState";
-import { NewProject } from "./NewProject";
+import { CloneDialog } from "./CloneDialog";
 import { NewWorkspace } from "./NewWorkspace";
 import { PAGE_COLUMN, PageHeader } from "./PageFrame";
 import { ProjectsMenu, useShowExamples } from "./ProjectsMenu";
@@ -131,8 +145,6 @@ export function RepoList({
   const listed = workspaces.filter((w) => showExamples || !isExamples(w));
   const projectTotal = listed.reduce((n, w) => n + w.projects.length, 0);
   const ordered = pageOrder(listed);
-  // Where the page's New project may land: not a workspace that IS one project, nor the demos'.
-  const eligible = ordered.filter((w) => !w.isSingleProject && !isExamples(w));
   const createIn = (
     name: string,
     folder: string,
@@ -143,9 +155,12 @@ export function RepoList({
     if (!w) return Promise.reject(new Error(name));
     return refuse(w.name) ?? onCreate(w, folder, onStep, shape);
   };
+  // The New menu's two dialogs live here: a menu unmounts its items on select, and a dialog inside would go with them.
+  const [making, setMaking] = useState(false);
+  const [cloning, setCloning] = useState(false);
+  const newBlocked = blockedWorkspace;
   return (
     <div className={PAGE_COLUMN}>
-      {/* The page names itself, and its one call to action is the act people come for: a project. */}
       <PageHeader
         title={m["home.projects"]()}
         summary={
@@ -155,17 +170,36 @@ export function RepoList({
         }
         actions={
           <>
-            <NewWorkspace
-              blocked={blockedWorkspace}
-              onCreate={onCreateWorkspace}
-            />
-            <CloneWorkspace blocked={blocked} onCloned={onChanged} />
-            <NewProject
-              primary
-              blocked={blocked || blockedWorkspace}
-              workspaces={eligible.map((w) => w.name)}
-              onCreate={createIn}
-            />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="glass"
+                  size="icon"
+                  title={m["home.newMenu"]()}
+                  aria-label={m["home.newMenu"]()}
+                >
+                  <Plus className="size-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" aria-label={m["home.new"]()}>
+                <DropdownMenuItem
+                  disabled={Boolean(newBlocked)}
+                  title={newBlocked || m["ws.newHint"]()}
+                  onSelect={() => setMaking(true)}
+                >
+                  <HardDrive />
+                  {m["ws.new"]()}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled={Boolean(blocked)}
+                  title={blocked || m["git.cloneHint"]()}
+                  onSelect={() => setCloning(true)}
+                >
+                  <GitBranch />
+                  {m["git.clone"]()}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <ProjectsMenu
               showExamples={showExamples}
               onShowExamples={setShowExamples}
@@ -173,55 +207,56 @@ export function RepoList({
           </>
         }
       />
+      <NewWorkspace
+        blocked={blockedWorkspace}
+        onCreate={onCreateWorkspace}
+        shown={making}
+        onShown={setMaking}
+      />
+      <CloneDialog
+        open={cloning}
+        onClose={() => setCloning(false)}
+        onCloned={onChanged}
+      />
 
       {error && (
-        <code className="max-w-full overflow-x-auto rounded bg-muted px-2 py-1 text-destructive text-xs">
+        <code className="max-w-full overflow-x-auto rounded-xl bg-(--k7-error-fill) px-3 py-2 text-error text-xs">
           {error}
         </code>
       )}
       {notice && (
-        <p className="rounded border border-amber-500/40 px-2 py-1 text-amber-500 text-xs">
+        <p className="rounded-xl border border-(--k7-warn-line) bg-(--k7-warn-fill) px-3 py-2 text-warn text-xs">
           {notice}
         </p>
       )}
 
-      {/* The workspaces added on the person's other devices, which git can bring here. */}
-      {hasFileService && (
-        <OtherDevices
-          local={workspaces.map((w) => w.name)}
-          blocked={blocked}
-          onChanged={onChanged}
-        />
-      )}
-
       {lookingForFiles ? (
         // The file service boots after the page on a phone: its first silence is not a refusal (docs/projects.md).
-        <div className="flex items-center gap-2 text-muted-foreground text-sm">
-          <Loader2 className="h-4 w-4 animate-spin" /> {m["common.loading"]()}
+        <div className="type-secondary flex items-center gap-2 text-fg-2">
+          <Loader2 className="size-4 animate-spin" /> {m["common.loading"]()}
         </div>
       ) : !hasFileService ? (
         // With no file service there is no list, and an empty one would read as a new account.
-        <div className="flex flex-col items-center gap-2 rounded-md border border-border p-6 text-center text-sm text-muted-foreground">
-          <ServerOff className="h-5 w-5 text-amber-500" />
-          <span>{m["repos.noFilesTitle"]()}</span>
-          <span className="text-xs">
-            {parts((h) => m["repos.noFilesAside"](h), {
-              settings: (
-                <Link to={SETTINGS_ROUTE} className="underline">
-                  {m["repos.settingsWord"]()}
-                </Link>
-              ),
-            })}
-          </span>
-        </div>
+        <EmptyState
+          glyph={<ServerOff />}
+          title={m["repos.noFilesTitle"]()}
+          actions={
+            <Button asChild variant="glass">
+              <Link to={SETTINGS_ROUTE}>{m["repos.settingsWord"]()}</Link>
+            </Button>
+          }
+        >
+          {m["repos.noFilesAside"]()}
+        </EmptyState>
       ) : workspaces.length === 0 && busy ? (
-        <div className="flex items-center gap-2 text-muted-foreground text-sm">
-          <Loader2 className="h-4 w-4 animate-spin" /> {m["common.loading"]()}
+        <div className="type-secondary flex items-center gap-2 text-fg-2">
+          <Loader2 className="size-4 animate-spin" /> {m["common.loading"]()}
         </div>
       ) : workspaces.length === 0 ? (
-        // The act itself, on the spot: the header has the same button, but an empty page is read from its middle.
+        // The act itself, on the spot: the menu has the same item, but an empty page is read from its middle.
         <EmptyState
-          icon={Folder}
+          glyph={<Folder />}
+          title={m["repos.emptyTitle"]()}
           actions={
             <NewWorkspace
               primary
@@ -250,6 +285,15 @@ export function RepoList({
           projectHref={projectHref}
           workspaceHref={workspaceHref}
           onRemoveWorkspace={onRemoveWorkspace}
+          onChanged={onChanged}
+        />
+      )}
+
+      {/* The workspaces added on the person's other devices, which git can bring here. */}
+      {hasFileService && (
+        <OtherDevices
+          local={workspaces.map((w) => w.name)}
+          blocked={blocked}
           onChanged={onChanged}
         />
       )}
