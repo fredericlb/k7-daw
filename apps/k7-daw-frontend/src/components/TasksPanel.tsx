@@ -14,6 +14,7 @@ import { api } from "../api";
 import { useRevision } from "../hooks/useRevision";
 import { m } from "../paraglide/messages.js";
 import { projectDir } from "../projectPaths";
+import { ProcessesSection } from "./ProcessesSection";
 
 export function TasksPanel({
   project,
@@ -98,6 +99,7 @@ export function TasksPanel({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
+      <ProcessesSection />
       <p className="shrink-0 pb-2 font-mono text-[10px] text-muted-foreground">
         {TASKS_FILE}
       </p>
