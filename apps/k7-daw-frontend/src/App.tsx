@@ -31,7 +31,6 @@ import { beatsToPosition, parsePosition } from "@studio/song-schema/timecode";
 import { Choice } from "@studio/ui/choice";
 import {
   AudioLines,
-  Clock,
   Columns3,
   Disc3,
   FileCode,
@@ -2703,13 +2702,6 @@ export default function App({
   const openKeyboard = () => setCommandsPage(true);
   const laneViewsOf = (): OverflowLaneView[] => [
     {
-      id: "clock",
-      label: m["shell.lane.clockShort"](),
-      icon: Clock,
-      on: rulerSeconds,
-      onPress: () => void runCommand("ui ruler"),
-    },
-    {
       id: "lanes",
       label: m["shell.lane.lanesShort"](),
       icon: Rows3,
@@ -2839,6 +2831,10 @@ export default function App({
       tool={hasTimeline ? tool : null}
       onTool={(t) => void runCommand(`ui tool ${t}`)}
       recInfo={recInfo}
+      clockSeconds={rulerSeconds}
+      onClock={() =>
+        shell.getState().setRulerSeconds(!shell.getState().rulerSeconds)
+      }
       meter={masterMeter}
       hidden={false}
       rootRef={stripRef}
@@ -2896,11 +2892,9 @@ export default function App({
       lanes={
         full === "timeline" && hasTimeline
           ? {
-              seconds: rulerSeconds,
               expanded: lanesExpanded,
               automation: automationShown,
               picture: hasViewport ? viewportOpen : null,
-              onClock: () => void runCommand("ui ruler"),
               onLanes: () => void runCommand("ui lanes"),
               onAutomation: () => void runCommand("ui automation"),
               onPicture: () => void runCommand("ui viewport"),

@@ -227,22 +227,19 @@ test("project undo on a freshly opened project leaves the automatic pin alone", 
   watch.assertClean();
 });
 
-test("ui ruler from the command bar flips the timeline's ruler to seconds and back", async ({
+test("ui ruler and a press on the clock flip the timecode and the rulers between bars and seconds", async ({
   k7,
 }) => {
   const page = await k7.open(`/@local/${WS}/${PROJECT}`);
   const watch = watchPage(page);
   await openProject(page);
-  const inBars = page.getByRole("button", { name: /^(Clock: )?ruler in bars/ });
-  const inSeconds = page.getByRole("button", {
-    name: /^(Clock: )?ruler in seconds/,
-  });
-  await expect(inBars).toBeVisible();
+  // The clock carries the unit the rulers count in: a song opens in bars.
+  const clock = clockOf(page);
+  await expect(clock).toHaveAttribute("data-unit", "bars");
   await runCommand(page, "ui ruler");
-  await expect(inSeconds).toBeVisible();
-  await expect(inBars).toHaveCount(0);
-  await runCommand(page, "ui ruler");
-  await expect(inBars).toBeVisible();
+  await expect(clock).toHaveAttribute("data-unit", "seconds");
+  await clock.click();
+  await expect(clock).toHaveAttribute("data-unit", "bars");
   watch.assertClean();
 });
 

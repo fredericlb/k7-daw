@@ -1234,9 +1234,9 @@ A video placement is cut in **seconds** against the wall clock while a song's la
 in bars. Both are drawn here, on one grid, and both are editable: there is one `tempo:` and no
 tempo map, so seconds ↔ beats is exact and reversible.
 
-The ruler reads either unit — the bar's clock button — and a drag snaps to whichever
-ticks are on screen. A grid readable only in bars would make picture unreadable however
-accurately it was drawn, which is what that button is for. The full account, including the
+The ruler reads either unit — a press on the bar's clock switches it — and a drag snaps to
+whichever ticks are on screen. A grid readable only in bars would make picture unreadable however
+accurately it was drawn, which is why a picture project opens in seconds. The full account, including the
 three drags and why a placement is not a command, is in [picture.md](picture.md).
 
 `rulerTicks` is the one function behind both modes. It returns ticks positioned in BEATS, the

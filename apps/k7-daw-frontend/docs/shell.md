@@ -357,7 +357,9 @@ and the desk show nothing, not an empty capsule. Each view's buttons act on one 
 does nothing where it stands has no place there. The Graph keeps its camera, so its pane hands the
 bar the fit through the store (`graphView`); Auto layout and Stack are the shell's own commands.
 
-**Under 380 px the clock shows only bar:beat**: the seconds come back on any wider screen.
+**The clock shows one timecode, and it is the unit's switch.** Bars and beats on a song, seconds
+on a project with a picture; a press flips it, and the rulers follow, since a clock and a ruler
+counting in two units make every position a conversion. There is no separate clock button.
 
 ### On a phone, one menu holds everywhere there is to go
 
