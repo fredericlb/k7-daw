@@ -3,6 +3,7 @@ import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import { studioParaglide } from "@studio/i18n/vite";
 import { defineAppConfig } from "@studio/vite-config";
 import type { ConfigEnv } from "vite";
+import { defaultExclude } from "vitest/config";
 import { scaled } from "../../scripts/vitestScale.ts";
 import { noticesPlugin } from "./notices/vitePlugin.ts";
 import { entryPreloadPlugin } from "./preload/vitePlugin.ts";
@@ -57,7 +58,12 @@ export default ({ command }: ConfigEnv) => {
     pwaPrecacheIgnore: RARELY_USED,
     extend: {
       // Load-scaled timeouts: the gate sets K7_TEST_TIMEOUT_SCALE on a loaded machine (docs/agent-playbook.md).
-      test: { testTimeout: scaled(5_000), hookTimeout: scaled(10_000) },
+      test: {
+        // packages/ sits under this folder and each package runs its own tests, with its own config.
+        exclude: [...defaultExclude, "packages/**"],
+        testTimeout: scaled(5_000),
+        hookTimeout: scaled(10_000),
+      },
       // ONE React: a nested `npm install` can leave a copy that shadows the root's, and a pre-bundled dep then calls useContext with no dispatcher.
       resolve: { dedupe: ["react", "react-dom"] },
       // Compiled into src/paraglide/; no `preferredLanguage`, this app defaulting to ENGLISH — docs/settings.md.
