@@ -6,13 +6,7 @@ import { cpSync, existsSync, readdirSync, rmSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repo = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "..",
-  "..",
-  "..",
-);
+const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
 /** What the native pieces read at the root; switch.rs names what a code root must hold. */
 export const CODE_ROOT = [

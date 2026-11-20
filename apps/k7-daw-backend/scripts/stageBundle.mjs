@@ -7,13 +7,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { bundleLibrary } from "./libraryArchive.mjs";
 
-const repo = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "..",
-  "..",
-  "..",
-);
+const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const out = process.argv[2];
 if (!out) throw new Error("usage: stageBundle.mjs <outDir> [--no-frontend]");
 // The dev tray's page comes from Vite (K7_DEV_FRONTEND), so its bundle needs no built frontend.
