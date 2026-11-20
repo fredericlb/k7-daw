@@ -131,20 +131,24 @@ in the export.
 
 ## Exporting
 
-`project export video mp4` renders the picture with the song's sound. Add words to change the
+`project export video mp4` renders the picture with the song's sound and saves it in the folder you choose. Add words to change the
 render: `size=720p` (or `size=1280x720`), `quality=low`, `medium`, `high` or `max`, and a range,
 `from=1:30 to=2:00`. A range gives a file that starts at that moment.
 
 `picture render` makes the same file without keeping a browser open: the server renders it in
-the background and puts it in `exports/`, so you can close the tab and come back. It takes the
-same words — `picture render mp4 size=720p from=1:30 to=2:00`, or `none` for a silent film. It
+the background and puts it in the folder you choose, so you can close the tab and come back. The
+app opens its folder picker first, before the render starts; a command line says it with
+`into=<folder>`. It takes the same words — `picture render mp4 size=720p from=1:30 to=2:00`, or
+`none` for a silent film. On Android the background render is not offered: export the video from
+the Export panel instead. It
 is slower than the browser, and WebM is the safe choice there: the server may have no MP4
 encoder. A camera lane renders nothing, since there is no live picture to take.
 
 `project export timeline otio` hands the **cut** to another editor instead: every picture lane as
 an OpenTimelineIO timeline, which DaVinci Resolve opens and `otioconvert` turns into Final Cut,
 Premiere or Avid formats. `project export timeline edl main` writes one lane as an EDL, which
-every editor reads. Both name your original camera files, and both carry the shots, the gaps,
+every editor reads. Both name your original camera files as if the cut sat in an `exports/` folder
+beside your project (put it there, or relink in the editor), and both carry the shots, the gaps,
 the dissolves and the speeds. Moves, picture-in-picture positions, shaders and the shots' sound
 stay here.
 

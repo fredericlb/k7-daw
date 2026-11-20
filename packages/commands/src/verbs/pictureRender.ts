@@ -1,6 +1,6 @@
 // pictureRender.ts — `picture render [webm|mp4] [wav|none] [size= quality= from= to=]`: the picture
 // rendered on the SERVER, with no browser left open — in the background, since it takes as long
-// as the song or longer, and into `exports/`. The words are the browser export's own, read by the
+// as the song or longer, and into the folder `into=` names. The words are the browser export's own, read by the
 // one parser both use. The scene is built HERE, as the browser's export builds it, and posted to the host.
 // See apps/k7/backend-rs/docs/file-engine-jobs.md.
 
@@ -16,9 +16,20 @@ import { webVideoProjectOf } from "@studio/song-video/webVideo";
 import type { SidHandler } from "../commands.ts";
 import { splitWords } from "./shared.ts";
 
+/** `into=<folder>` or `into="<folder with spaces>"`, taken out of the line before the other words are read. */
+function takeInto(line: string): { into: string | null; rest: string } {
+  const found = /(?:^|\s)into=(?:"([^"]*)"|(\S+))/.exec(line);
+  if (!found) return { into: null, rest: line };
+  return {
+    into: found[1] ?? found[2] ?? null,
+    rest: line.replace(found[0], " "),
+  };
+}
+
 export const PICTURE_RENDER_VERBS: Record<string, SidHandler> = {
   "picture.render": async (a, h) => {
-    const words = splitWords(a).map((w) => w.toLowerCase());
+    const { into, rest } = takeInto(a);
+    const words = splitWords(rest).map((w) => w.toLowerCase());
     const format = (VIDEO_FORMATS as readonly string[]).includes(words[0] ?? "")
       ? (words.shift() as VideoFormat)
       : "webm";
@@ -32,7 +43,13 @@ export const PICTURE_RENDER_VERBS: Record<string, SidHandler> = {
     const settings = parseVideoSettings(words);
     if (!settings) {
       h.refuse([
-        "usage: picture render [webm|mp4] [wav|none] [size=720p|1280x720] [quality=low|medium|high|max] [from=<t>] [to=<t>]",
+        "usage: picture render [webm|mp4] [wav|none] [size=720p|1280x720] [quality=low|medium|high|max] [from=<t>] [to=<t>] into=<folder>",
+      ]);
+      return;
+    }
+    if (!into || !(into.startsWith("/") || /^[A-Za-z]:[\\/]/.test(into))) {
+      h.refuse([
+        "say where the film goes: into=<folder>, the absolute path of a folder (the app asks with its folder picker)",
       ]);
       return;
     }
@@ -66,18 +83,24 @@ export const PICTURE_RENDER_VERBS: Record<string, SidHandler> = {
     // The sound is what RENDER's audio input carries: unwired, the video is silent (song docs/videoOutputs.md).
     const mixes = audio && web.sound === "mix";
     const work = async () => {
-      const rel = await render({ scene, format, settings, audio: mixes });
-      return `picture rendered: ${rel}`;
+      const path = await render({
+        into,
+        scene,
+        format,
+        settings,
+        audio: mixes,
+      });
+      return `picture rendered: ${path}`;
     };
     if (h.background) {
       if (!h.background("picture render", work)) {
         h.refuse([
-          "a picture render is already running — it writes into exports/ when it ends",
+          "a picture render is already running — it writes into its folder when it ends",
         ]);
         return;
       }
       h.log([
-        `rendering the picture in the background (${format}${audio ? "" : ", silent"}) — it lands in exports/`,
+        `rendering the picture in the background (${format}${audio ? "" : ", silent"}) — it lands in ${into}`,
       ]);
       return;
     }

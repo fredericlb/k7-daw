@@ -83,11 +83,17 @@ test("a lane's footage a browser plays is left as it is", async () => {
 });
 
 // A 160x90 one-second film: a full-size one never ends in the Mac's software GL.
-test("the picture is rendered on the server into exports/, in the background", async () => {
-  const r = await verb("picture render webm none size=160x90 from=0 to=1");
-  // The Worker waits for the render the server runs, and says where it landed.
-  expect(r.body.output).toEqual(["picture rendered: exports/video-lane.webm"]);
+test("the picture is rendered on the server into the folder named, in the background", async () => {
   test.skip(!filesRoot, NO_FILES_ROOT);
+  // The person's folder, outside the project: the front writes there, as the app's picker would have it.
+  const films = mkdtempSync(join(tmpdir(), "k7-films-"));
+  const r = await verb(
+    `picture render webm none size=160x90 from=0 to=1 into="${films}"`,
+  );
+  // The Worker waits for the render the server runs, and says where it landed.
+  expect(r.body.output).toEqual([
+    `picture rendered: ${join(films, "video-lane.webm")}`,
+  ]);
   let bytes: Buffer | null = null;
   let seen = -1;
   // Done once two looks two seconds apart find the same non-empty file.
@@ -95,7 +101,7 @@ test("the picture is rendered on the server into exports/, in the background", a
     .poll(
       () => {
         try {
-          bytes = onDiskBytes(ws, "video-lane.k7/exports/video-lane.webm");
+          bytes = readFileSync(join(films, "video-lane.webm"));
         } catch {
           return false;
         }
@@ -225,29 +231,28 @@ test("a playlist's stems need a playlist and a separating chain", async () => {
   });
 });
 
-test("the cut is written for another editor, otio every lane, edl one, and read back into new lanes", async () => {
+test("the cut is said for another editor, otio every lane, edl one, written nowhere, and read back into new lanes", async () => {
   const otio = await verb("picture interchange otio");
-  expect([otio.body.output, otio.body.changed]).toEqual([
-    ["+ exports/cut.otio"],
-    [{ path: "exports/cut.otio", kind: "added" }],
-  ]);
-  const timeline = JSON.parse(
-    await svc.text(ws, "video-lane.k7/exports/cut.otio"),
-  );
+  expect(otio.body.changed).toEqual([]);
+  const timeline = JSON.parse(otio.body.output[0]);
   expect(timeline.OTIO_SCHEMA).toMatch(/^Timeline\./);
   const edl = await verb("picture interchange edl main");
-  expect(edl.body.output).toEqual(["+ exports/cut.edl"]);
-  expect(await svc.text(ws, "video-lane.k7/exports/cut.edl")).toMatch(
-    /^TITLE: /,
-  );
-  const missing = await verb("picture import exports/none.otio");
+  expect(edl.body.output[0]).toMatch(/^TITLE: /);
+  const missing = await verb("picture import imports/none.otio");
   expect([missing.body.output, missing.body.refused]).toEqual([
     [
-      "no exports/none.otio in this project — put the file in it, then name it from the project folder",
+      "no imports/none.otio in this project — put the file in it, then name it from the project folder",
     ],
     true,
   ]);
-  const back = await verb("picture import exports/cut.otio conf");
+  // The person saved the cut where they chose, then put it in the project to read it back.
+  await svc.upload(
+    ws,
+    "video-lane.k7",
+    "cut.otio",
+    Buffer.from(otio.body.output[0]),
+  );
+  const back = await verb("picture import cut.otio conf");
   expect(back.status).toBe(200);
   expect(back.body.refused).toBeUndefined();
   expect(back.body.output.length).toBeGreaterThan(0);

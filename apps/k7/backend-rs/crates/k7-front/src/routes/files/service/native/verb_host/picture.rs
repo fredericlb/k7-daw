@@ -1,4 +1,4 @@
-//! picture.rs — `picture`: the film of a scene the Worker made, rendered in the background into the project's `exports/` (3f, M8).
+//! picture.rs — `picture`: the film of a scene the Worker made, rendered in the background into the folder the person named.
 //! What a reader gets wrong: the scene is the Worker's, its `media/` paths go through the person's read gate, and the job outlives the page.
 
 use std::path::{Path, PathBuf};
@@ -90,7 +90,7 @@ fn options(body: &Value) -> Result<Value, String> {
     Ok(out)
 }
 
-/// `POST /verb-host/picture {at, scene, format?, audio?, settings?}`: a job whose value is `{rel}`, the film's path from the project.
+/// `POST /verb-host/picture {at, scene, into, format?, audio?, settings?}`: a job whose value is `{path}`, the film's file.
 pub async fn picture(
     req: &Checked,
     jobs: &Arc<Jobs>,
@@ -100,6 +100,15 @@ pub async fn picture(
     let Some(scene) = req.body.get("scene").filter(|s| s.is_object()) else {
         return bad("scene must be an object");
     };
+    let Some(into) = req
+        .body
+        .get("into")
+        .and_then(Value::as_str)
+        .filter(|i| Path::new(i).is_absolute())
+    else {
+        return bad("into must be the absolute path of a folder");
+    };
+    let into = PathBuf::from(into);
     let opts = match options(&req.body) {
         Ok(o) => o,
         Err(m) => return bad(m),
@@ -165,6 +174,7 @@ pub async fn picture(
         let none = |_: &str| -> Option<PathBuf> { None };
         let request = Request {
             project: &project,
+            into: &into,
             scene: &scene_text,
             sound: if sound { "mix" } else { "" },
             opts: &settings,
@@ -187,15 +197,15 @@ pub async fn picture(
         };
         drop(work);
         match &result {
-            Ok(rel) => {
-                Table::global().finish(&job, json!({ "rel": rel }), now());
-                log(&format!("picture rendered: {rel}"));
+            Ok(path) => {
+                Table::global().finish(&job, json!({ "path": path }), now());
+                log(&format!("picture rendered: {path}"));
             }
             Err(e) => fail(&job, e, None),
         }
         if let Some(r) = &runtime {
             match &result {
-                Ok(rel) => r.bg_end(&tag, Some(&format!("picture rendered: {rel}")), None),
+                Ok(path) => r.bg_end(&tag, Some(&format!("picture rendered: {path}")), None),
                 Err(e) => r.bg_end(&tag, None, Some(e)),
             }
         }

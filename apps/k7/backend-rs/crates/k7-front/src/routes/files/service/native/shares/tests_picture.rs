@@ -52,6 +52,7 @@ fn rig(name: &str) -> (PathBuf, super::Account, PathBuf, PathBuf) {
     std::fs::write(base.join("chromium"), "").unwrap();
     let project = a.root.join("song.k7");
     std::fs::create_dir_all(project.join("dir")).unwrap();
+    std::fs::create_dir_all(base.join("films")).unwrap();
     std::fs::write(project.join("a.mp4"), "a").unwrap();
     std::fs::write(project.join("dir/b.png"), "b").unwrap();
     let script = base.join("page.js");
@@ -71,6 +72,7 @@ async fn the_job_is_spliced_the_media_found_and_the_film_renamed_in_whole() {
     let o = opts(false);
     let req = Request {
         project: &project,
+        into: &base.join("films"),
         scene: &scene,
         sound: "mix",
         opts: &o,
@@ -79,9 +81,9 @@ async fn the_job_is_spliced_the_media_found_and_the_film_renamed_in_whole() {
         resolve: &res,
     };
     let rel = render_picture(&shares, &a, &w.ports, req).await.unwrap();
-    assert_eq!(rel, "exports/song.webm");
-    assert_eq!(std::fs::read(project.join(&rel)).unwrap(), b"WEBMfilm");
-    let names: Vec<String> = std::fs::read_dir(project.join("exports"))
+    assert_eq!(PathBuf::from(&rel), base.join("films/song.webm"));
+    assert_eq!(std::fs::read(&rel).unwrap(), b"WEBMfilm");
+    let names: Vec<String> = std::fs::read_dir(base.join("films"))
         .unwrap()
         .map(|e| e.unwrap().file_name().to_string_lossy().into_owned())
         .collect();
@@ -120,6 +122,7 @@ async fn sound_is_the_mixdown_only_when_asked_and_its_folder_is_removed() {
     let o = opts(true);
     let req = Request {
         project: &project,
+        into: &base.join("films"),
         scene: SCENE,
         sound: "mix",
         opts: &o,
@@ -149,6 +152,7 @@ async fn a_second_render_is_refused_while_one_runs() {
     let o = opts(false);
     let req = Request {
         project: &project,
+        into: &base.join("films"),
         scene: SCENE,
         sound: "none",
         opts: &o,
@@ -165,6 +169,7 @@ async fn a_second_render_is_refused_while_one_runs() {
     drop(held);
     let req = Request {
         project: &project,
+        into: &base.join("films"),
         scene: SCENE,
         sound: "none",
         opts: &o,
@@ -176,19 +181,16 @@ async fn a_second_render_is_refused_while_one_runs() {
     let _ = std::fs::remove_dir_all(&base);
 }
 
-/// 2556: `exports` that is a link out of the workspace is refused and nothing is written through it.
-#[cfg(unix)]
+/// The folder is the person's: one that is gone is refused and nothing is rendered.
 #[tokio::test]
-async fn an_exports_that_is_a_link_is_refused() {
-    let (base, a, project, script) = rig("exlink");
-    let outside = base.join("outside");
-    std::fs::create_dir_all(&outside).unwrap();
-    std::os::unix::fs::symlink(&outside, project.join("exports")).unwrap();
+async fn a_folder_that_is_gone_is_refused() {
+    let (base, a, project, script) = rig("gone");
     let w = world();
     let res = resolver(&a.root);
     let o = opts(false);
     let req = Request {
         project: &project,
+        into: &base.join("nowhere"),
         scene: SCENE,
         sound: "none",
         opts: &o,
@@ -199,8 +201,7 @@ async fn an_exports_that_is_a_link_is_refused() {
     let e = render_picture(&Shares::new(), &a, &w.ports, req)
         .await
         .unwrap_err();
-    assert_eq!(e, "exports is not a folder of the project");
-    assert!(std::fs::read_dir(&outside).unwrap().next().is_none());
+    assert!(e.ends_with("nowhere is not a folder"), "{e}");
     assert!(w.browser.jobs.lock().unwrap().is_empty());
     let _ = std::fs::remove_dir_all(&base);
 }
@@ -236,6 +237,7 @@ async fn a_failed_render_leaves_no_film_and_frees_the_slot() {
     let o = opts(false);
     let req = Request {
         project: &project,
+        into: &base.join("films"),
         scene: SCENE,
         sound: "none",
         opts: &o,
@@ -249,7 +251,7 @@ async fn a_failed_render_leaves_no_film_and_frees_the_slot() {
     );
     assert!(shares.begin_picture().is_some());
     assert!(
-        std::fs::read_dir(project.join("exports"))
+        std::fs::read_dir(base.join("films"))
             .unwrap()
             .next()
             .is_none()

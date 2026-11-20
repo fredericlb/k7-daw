@@ -38,7 +38,7 @@ const host = (opts: { render?: boolean; background?: boolean } = {}) =>
       : {
           renderPicture: async (o: unknown) => {
             asked.push(o);
-            return "exports/song.mp4";
+            return "/films/song.mp4";
           },
         }),
     ...(opts.background === false
@@ -71,14 +71,15 @@ const lastAsk = () => {
 describe("picture render", () => {
   it("hands the export's own settings to the renderer, in the background", async () => {
     await runCommand(
-      "picture render mp4 none size=720p quality=max from=0:10 to=40",
+      "picture render mp4 none size=720p quality=max from=0:10 to=40 into=/films",
       host(),
       "cli",
     );
     expect(refusals).toEqual([]);
     expect(logs[0]).toMatch(/in the background \(mp4, silent\)/);
-    expect(await queued[0]?.()).toBe("picture rendered: exports/song.mp4");
+    expect(await queued[0]?.()).toBe("picture rendered: /films/song.mp4");
     expect(lastAsk()).toEqual({
+      into: "/films",
       format: "mp4",
       audio: false,
       settings: { size: { height: 720 }, quality: "max", from: 10, to: 40 },
@@ -86,8 +87,16 @@ describe("picture render", () => {
   });
 
   it("defaults to a webm with the mixdown, and waits when the host has no background", async () => {
-    await runCommand("picture render", host({ background: false }), "cli");
-    expect(lastAsk()).toMatchObject({ format: "webm", settings: {} });
+    await runCommand(
+      'picture render into="/my films"',
+      host({ background: false }),
+      "cli",
+    );
+    expect(lastAsk()).toMatchObject({
+      into: "/my films",
+      format: "webm",
+      settings: {},
+    });
     // The scene is the browser export's own: the viewport, the lanes, and every media URL a path under media/.
     const scene = (
       asked.at(-1) as { scene: { viewport: number[]; fps: number } }
@@ -104,18 +113,24 @@ describe("picture render", () => {
     );
     expect(scene).toEqual(expected);
     expect(Object.keys(scene).length).toBeGreaterThan(3);
-    expect(logs).toEqual(["picture rendered: exports/song.mp4"]);
+    expect(logs).toEqual(["picture rendered: /films/song.mp4"]);
   });
 
   it("refuses a second render while one runs, a setting it cannot read, and a host with no renderer", async () => {
     const h = host();
+    await runCommand("picture render into=/films", h, "cli");
+    await runCommand("picture render into=/films", h, "cli");
+    await runCommand("picture render size=huge into=/films", h, "cli");
+    await runCommand(
+      "picture render into=/films",
+      host({ render: false }),
+      "cli",
+    );
     await runCommand("picture render", h, "cli");
-    await runCommand("picture render", h, "cli");
-    await runCommand("picture render size=huge", h, "cli");
-    await runCommand("picture render", host({ render: false }), "cli");
     expect(refusals[0]).toMatch(/already running/);
     expect(refusals[1]).toMatch(/^usage: picture render/);
     expect(refusals[2]).toMatch(/project export video/);
+    expect(refusals[3]).toMatch(/say where the film goes/);
   });
 
   it("refuses a project that draws no picture before asking the host", async () => {
@@ -125,7 +140,7 @@ describe("picture render", () => {
       join(song, "project.k7x"),
       "project:\n  name: t\n  tempo: 120\n",
     );
-    await runCommand("picture render", host(), "cli");
+    await runCommand("picture render into=/films", host(), "cli");
     expect(asked).toEqual([]);
     expect(refusals.at(-1)).toMatch(/draws no picture/);
   });

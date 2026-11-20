@@ -57,7 +57,11 @@ afterEach(() => rmSync(dirname(song), { recursive: true, force: true }));
 describe("picture import", () => {
   it("brings this app's own cut back as lanes that compile, on the clips already there", async () => {
     await runCommand("picture interchange otio", host(), "cli");
-    await runCommand("picture import exports/cut.otio back-", host(), "cli");
+    // Saved wherever the person chose, then put in the project to be named from it.
+    mkdirSync(join(song, "imports"), { recursive: true });
+    writeFileSync(join(song, "imports", "cut.otio"), logs[0] ?? "");
+    logs.length = 0;
+    await runCommand("picture import imports/cut.otio back-", host(), "cli");
     expect(refusals).toEqual([]);
     expect(logs).toContain("+ picture lane back-1: 2 shot(s) from main");
     const shots = listVideoPlacements(

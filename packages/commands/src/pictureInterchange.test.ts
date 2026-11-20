@@ -1,8 +1,9 @@
-// `picture interchange` over the video demo: the cut lands at the fixed path the shell downloads,
+// `picture interchange` over the video demo: the cut is the first output line and no file is written,
 // OTIO carries the lanes with media and none of shapes, an EDL the one lane named.
 
 import {
   cpSync,
+  existsSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -40,13 +41,11 @@ beforeEach(() => {
 afterEach(() => rmSync(dirname(song), { recursive: true, force: true }));
 
 describe("picture interchange", () => {
-  it("writes every lane with media as an OTIO track, media named from exports/", async () => {
+  it("says every lane with media as an OTIO track, media named from an exports/ folder, and writes nothing", async () => {
     await runCommand("picture interchange otio", host(), "cli");
     expect(refusals).toEqual([]);
-    expect(logs[0]).toBe("+ exports/cut.otio");
-    const t = JSON.parse(
-      readFileSync(join(song, "exports", "cut.otio"), "utf8"),
-    );
+    expect(existsSync(join(song, "exports"))).toBe(false);
+    const t = JSON.parse(logs[0] ?? "");
     expect(t.OTIO_SCHEMA).toBe("Timeline.1");
     const names = t.tracks.children.map((c: { name: string }) => c.name);
     expect(names).toEqual(["main", "pip"]);
@@ -54,9 +53,9 @@ describe("picture interchange", () => {
     expect(clip.media_reference.target_url).toBe("../clips/counter.mp4");
   });
 
-  it("writes one lane as an EDL, and refuses a lane that is not there", async () => {
+  it("says one lane as an EDL, and refuses a lane that is not there", async () => {
     await runCommand("picture interchange edl main", host(), "cli");
-    const edl = readFileSync(join(song, "exports", "cut.edl"), "utf8");
+    const edl = logs[0] ?? "";
     expect(edl).toMatch(/^TITLE: /);
     expect(edl).toContain("* FROM CLIP NAME: counter.mp4");
     await runCommand("picture interchange edl nope", host(), "cli");

@@ -51,6 +51,8 @@ export interface PrepareAnswer {
 
 /** What a picture render is asked for: the scene as the browser's export builds it, the settings, and whether the mixdown is married in. */
 export interface PictureAsk {
+  /** The absolute path of the folder the film lands in. */
+  into: string;
   scene: VideoScene;
   format: VideoFormat;
   settings: VideoSettings;

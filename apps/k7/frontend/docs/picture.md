@@ -432,7 +432,7 @@ whose first frame and first sample are both 1:30's.
 
 ### …and the CUT goes to another editor, rather than a render
 
-`project export timeline otio|edl [lane]` runs `picture interchange`, which writes the cut into the
-project's `exports/cut.<ext>`, then downloads that file under the song's name. The path is fixed
-so the shell reads the file without being told where it went. What the formats carry, and what
+`project export timeline otio|edl [lane]` runs `picture interchange`, which says the cut as its first
+output line, then saves that text under the song's name in the folder the person chose (`export.md`).
+The verb writes no file, so the project holds no copy. What the formats carry, and what
 they cannot, is [packages/song-video/docs/interchange.md](../../../../packages/song-video/docs/interchange.md).

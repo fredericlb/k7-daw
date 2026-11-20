@@ -220,16 +220,20 @@ const sceneOf = (src: string) => ({
   durationSec: 1,
 });
 
-test("a scene the Worker made is rendered into exports/ by the server's browser, and a bad shape is a 400", async () => {
+test("a scene the Worker made is rendered into the named folder by the server's browser, and a bad shape is a 400", async () => {
   const sample = join(REPO, "e2e/fixtures/video-lane.k7/clips/sample.mp4");
   expect(
     (await svc.upload(ws, project, "sample.mp4", readFileSync(sample))).status,
   ).toBe(200);
   const src = `media/${encodeURIComponent(`/w/${project}/sample.mp4`)}`;
-  const bad = await host("picture", { at: project, scene: [] });
+  const films = mkdtempSync(join(tmpdir(), "k7-films-"));
+  const bad = await host("picture", { at: project, into: films, scene: [] });
   expect(bad.status).toBe(400);
+  const noFolder = await host("picture", { at: project, scene: sceneOf(src) });
+  expect(noFolder.status).toBe(400);
   const started = await host("picture", {
     at: project,
+    into: films,
     scene: sceneOf(src),
     format: "webm",
     audio: false,
@@ -238,10 +242,10 @@ test("a scene the Worker made is rendered into exports/ by the server's browser,
   expect(started.status, JSON.stringify(started.body)).toBe(202);
   const end = await ended(started.body.job, 240_000);
   expect(end.state, JSON.stringify(end)).toBe("done");
-  expect(end.value.rel).toBe("exports/cold-normalize.webm");
-  // The host account's folder is not the suite's default one, so the tree is what says the film is there.
-  const tree = JSON.stringify((await svc.get("/tree", ws)).body);
-  expect(tree).toContain("cold-normalize.webm");
+  expect(end.value.path).toBe(join(films, "cold-normalize.webm"));
+  expect(readFileSync(end.value.path).subarray(0, 4).toString("hex")).toBe(
+    "1a45dfa3",
+  );
 });
 
 /** A film made by the runner's ffmpeg, or null when it has none. */

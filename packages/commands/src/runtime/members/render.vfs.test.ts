@@ -235,7 +235,7 @@ describe("the media members", () => {
     let sent: unknown;
     const job = server.startJob([
       { state: "running" },
-      { state: "done", value: { rel: "exports/song.mp4" } },
+      { state: "done", value: { path: "/films/song.mp4" } },
     ]);
     server.serve("picture", (body) => {
       sent = body;
@@ -245,14 +245,16 @@ describe("the media members", () => {
     const settings = { size: { height: 360 }, quality: "max" as const };
     expect(
       await media.renderPicture?.({
+        into: "/films",
         scene,
         format: "mp4",
         settings,
         audio: true,
       }),
-    ).toBe("exports/song.mp4");
+    ).toBe("/films/song.mp4");
     expect(sent).toEqual({
       at: "song.k7",
+      into: "/films",
       scene,
       format: "mp4",
       settings,
@@ -265,6 +267,7 @@ describe("the media members", () => {
     server.serve("picture", () => ({ status: 202, body: { job: busy } }));
     await expect(
       media.renderPicture?.({
+        into: "/films",
         scene,
         format: "webm",
         settings: {},
@@ -277,6 +280,7 @@ describe("the media members", () => {
     }));
     await expect(
       media.renderPicture?.({
+        into: "/films",
         scene,
         format: "webm",
         settings: {},

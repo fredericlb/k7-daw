@@ -140,7 +140,7 @@ export interface CommandHost {
     | Promise<{ ref: string; steps: number; outside: string[] }>;
   /** Run `work` after the command returns, once per tag; false when that tag is already running. Absent, a verb waits for it. */
   background?(tag: string, work: () => Promise<string>): boolean;
-  /** Render the PICTURE of `ask.scene` with no browser open; the file written, project-relative — apps/k7/backend-rs/docs/file-engine-jobs.md. */
+  /** Render the PICTURE of `ask.scene` with no browser open; the file written, as an absolute path — apps/k7/backend-rs/docs/file-engine-jobs.md. */
   renderPicture?(ask: PictureAsk): Promise<string>;
   /** What a video file is, read by the host's own tool; null for a file with no picture; throws NoFfmpegError when nothing reads it. */
   probe?(file: string): Promise<VideoFacts | null>;

@@ -70,7 +70,6 @@ fn every_ignored_name_stays_out_of_status_and_commits() {
         ".renders/x-1.wav",
         "song.k7/renders/amp.wav",
         "song.k7/stems/vocals.wav",
-        "exports/cut.otio",
         "_recycle_bin/old.k7x",
         "_history/j.log",
         "node_modules/p/i.js",

@@ -69,7 +69,14 @@ fn ask(extra: Value) -> Value {
     b
 }
 
-async fn go(r: &Rig, account: &str, browser: Arc<Fake>, body: Value) -> (u16, Value) {
+fn films(r: &Rig) -> PathBuf {
+    let dir = r.b.dir.join("films");
+    std::fs::create_dir_all(&dir).unwrap();
+    dir
+}
+
+async fn go(r: &Rig, account: &str, browser: Arc<Fake>, mut body: Value) -> (u16, Value) {
+    body["into"] = json!(films(r).display().to_string());
     let mut ctx = r.b.ctx(Member::Picture, false);
     ctx.account = account.into();
     ctx.verbs = drive::production_with(Some(r.jobs()), None, browser);
@@ -89,7 +96,7 @@ async fn done(r: &Rig, account: &str, a: &Value) -> Value {
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
-async fn the_scene_is_rendered_into_exports_with_only_the_media_the_person_reads() {
+async fn the_scene_is_rendered_into_the_chosen_folder_with_only_the_media_the_person_reads() {
     let r = rig("vh-pic-film", bound()).await;
     std::fs::write(song(&r, "a.mp4"), "film").unwrap();
     let fake = Arc::new(Fake::default());
@@ -97,9 +104,12 @@ async fn the_scene_is_rendered_into_exports_with_only_the_media_the_person_reads
     assert_eq!(s, 202, "{a}");
     let end = done(&r, "pa", &a).await;
     assert_eq!(end["state"], "done", "{end}");
-    assert_eq!(end["value"]["rel"], "exports/p.webm");
     assert_eq!(
-        std::fs::read(song(&r, "exports/p.webm")).unwrap(),
+        end["value"]["path"],
+        films(&r).join("p.webm").display().to_string()
+    );
+    assert_eq!(
+        std::fs::read(films(&r).join("p.webm")).unwrap(),
         b"WEBMfilm"
     );
     let seen = fake.seen.lock().unwrap();
@@ -257,7 +267,7 @@ async fn a_browser_that_fails_ends_the_job_with_its_sentence_and_leaves_no_film(
         (end["state"].as_str(), end["error"].as_str()),
         (Some("failed"), Some("the page threw"))
     );
-    assert!(!song(&r, "exports/p.webm").exists());
+    assert!(!films(&r).join("p.webm").exists());
     // The slot is given back: the next ask renders.
     let (_, a) = go(&r, "pg", Arc::new(Fake::default()), ask(json!({}))).await;
     assert_eq!(done(&r, "pg", &a).await["state"], "done");
@@ -276,8 +286,13 @@ async fn a_front_without_a_browser_on_the_machine_says_where_it_looked() {
         r.b.dir.join("nope").display().to_string(),
     );
     let (s, a) =
-        r.b.send(Member::Picture, "", ask(json!({})), Some(ctx))
-            .await;
+        r.b.send(
+            Member::Picture,
+            "",
+            ask(json!({ "into": films(&r).display().to_string() })),
+            Some(ctx),
+        )
+        .await;
     assert_eq!(s, 202, "{a}");
     let end = done(&r, "ph", &a).await;
     assert_eq!(end["state"], "failed", "{end}");
@@ -287,6 +302,22 @@ async fn a_front_without_a_browser_on_the_machine_says_where_it_looked() {
             .unwrap()
             .contains("STUDIO_CHROMIUM names"),
         "{end}"
+    );
+    let _ = std::fs::remove_dir_all(&r.b.dir);
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn a_film_with_no_folder_to_land_in_is_refused() {
+    let r = rig("vh-pic-nofolder", bound()).await;
+    let mut body = ask(json!({}));
+    let mut ctx = r.b.ctx(Member::Picture, false);
+    ctx.account = "pi".into();
+    ctx.verbs = drive::production_with(Some(r.jobs()), None, Arc::new(Fake::default()));
+    let (s, a) = r.b.send(Member::Picture, "", body.take(), Some(ctx)).await;
+    assert_eq!(s, 400, "{a}");
+    assert!(
+        a["error"].as_str().unwrap().starts_with("into must be"),
+        "{a}"
     );
     let _ = std::fs::remove_dir_all(&r.b.dir);
 }

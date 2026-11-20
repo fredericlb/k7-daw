@@ -1,11 +1,10 @@
-// pictureInterchange.ts — `picture interchange <otio|edl> [lane]`: the cut written for another
-// editor to open, into `exports/` beside the project's other renders. OTIO carries every lane;
+// pictureInterchange.ts — `picture interchange <otio|edl> [lane]`: the cut for another editor to open, SAID
+// as the first output line and written nowhere; the app saves it where the person chooses. OTIO carries every lane;
 // an EDL carries one, the bottom lane unless one is named. The camera ORIGINALS are what it
 // names, relative to the export, so a project folder copied whole relinks as it is.
 // See packages/song-video/docs/interchange.md.
 
-import { mkdirSync, writeFileSync } from "node:fs";
-import { basename, join, relative, resolve, sep } from "node:path";
+import { basename, relative, resolve, sep } from "node:path";
 import { loadProjectRoot } from "@studio/song/loader";
 import { toEdl } from "@studio/song-video/interchange/edl";
 import { toOtio } from "@studio/song-video/interchange/otio";
@@ -15,9 +14,6 @@ import type { SidHandler } from "../commands.ts";
 import { splitWords } from "./shared.ts";
 
 const FORMATS = ["otio", "edl"] as const;
-
-/** Where `picture interchange` writes, project-relative and FIXED, so the shell can fetch it without being told. */
-const interchangePath = (format: string): string => `exports/cut.${format}`;
 
 export const PICTURE_INTERCHANGE_VERBS: Record<string, SidHandler> = {
   "picture.interchange": async (a, h) => {
@@ -56,14 +52,12 @@ export const PICTURE_INTERCHANGE_VERBS: Record<string, SidHandler> = {
       (typeof named === "string" && named) ||
       basename(h.songPath).replace(/\.k7$/, "") ||
       "song";
-    const rel = interchangePath(format);
-    const abs = join(h.songPath, rel);
     let text: string;
     let skipped: string[];
     if (format === "otio") {
       ({ json: text, skipped } = toOtio(doc, {
         name,
-        // A URL, so its separators are slashes on every OS.
+        // Named as if the cut sat in an `exports/` folder beside the media; a URL, so its separators are slashes on every OS.
         mediaUrl: (c) =>
           relative(resolve(h.songPath, "exports"), c.source)
             .split(sep)
@@ -87,9 +81,7 @@ export const PICTURE_INTERCHANGE_VERBS: Record<string, SidHandler> = {
         naturalSeconds,
       }));
     }
-    mkdirSync(resolve(h.songPath, "exports"), { recursive: true });
-    writeFileSync(abs, text, "utf8");
-    h.log([`+ ${rel}`, ...skipped.map((s) => `  left out — ${s}`)]);
-    return h.reload();
+    // The cut is the FIRST output entry, whole; what was left out follows it.
+    h.log([text, ...skipped.map((s) => `left out — ${s}`)]);
   },
 };

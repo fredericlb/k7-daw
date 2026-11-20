@@ -1761,8 +1761,8 @@
   help: "make each shot's video playable (e.g. picture prepare main) — an optimized copy for codecs a browser cannot decode, a proxy for footage above 1080p"
   surfaces: [cli, timeline]
   args: [{ name: lane, complete: pictureLanes }]
-# The CUT for another editor — every lane as OpenTimelineIO, or one as a CMX 3600 EDL — written
-# into exports/ — packages/song-video/docs/interchange.md.
+# The CUT for another editor — every lane as OpenTimelineIO, or one as a CMX 3600 EDL — said as the
+# first output line, written nowhere — packages/song-video/docs/interchange.md.
 - command: "picture interchange"
   sid: picture.interchange
   readable:
@@ -1805,14 +1805,14 @@
         hint: "the chain's name — omitted on a bench opened on one of yours",
       },
     ]
-# The picture rendered on the SERVER, with no browser left open — in the background, into exports/;
+# The picture rendered on the SERVER, with no browser left open — in the background, into the folder `into=` names;
 # the words are `project export video`'s — apps/k7/backend-rs/docs/file-engine-jobs.md.
 - command: "picture render"
   sid: picture.render
   readable:
     en: "Render the picture on the server"
     fr: "Rendre l'image sur le serveur"
-  help: "render the picture with no browser left open (e.g. picture render mp4 size=720p) — in the background, into exports/"
+  help: "render the picture with no browser left open (e.g. picture render mp4 size=720p) — in the background, into the folder `into=` names (the app asks with its folder picker)"
   surfaces: [cli, timeline]
   args:
     [

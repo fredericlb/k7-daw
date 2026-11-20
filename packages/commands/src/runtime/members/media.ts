@@ -47,16 +47,17 @@ export function mediaMembers(h: Hosting, vfs: Vfs): MediaMembers {
         })
       ).started,
     }),
-    // The film is rendered and written into `exports/` by the server, which outlives the page; the run waits for its path.
-    renderPicture: async ({ scene, format, settings, audio }) =>
+    // The film is rendered and written into the person's folder by the server, which outlives the page; the run waits for its path.
+    renderPicture: async ({ into, scene, format, settings, audio }) =>
       (
-        await hostJob<{ rel: string }>(h, "picture", {
+        await hostJob<{ path: string }>(h, "picture", {
+          into,
           scene,
           format,
           settings,
           audio,
         })
-      ).value.rel,
+      ).value.path,
     transcribe: async (video) =>
       (await hostJob<{ srt: string | null }>(h, "transcribe", { video })).value
         .srt,

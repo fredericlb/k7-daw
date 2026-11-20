@@ -1,9 +1,9 @@
 # Handing the cut to another editor — OTIO and EDL
 
-`picture interchange otio` writes every picture lane as an OpenTimelineIO timeline;
-`picture interchange edl [lane]` writes one lane as a CMX 3600 EDL. Both land in the project's
-`exports/cut.<ext>` (`packages/commands/src/verbs/pictureInterchange.ts`), and
-`project export timeline` downloads the file. The writers are `src/interchange/`.
+`picture interchange otio` says every picture lane as an OpenTimelineIO timeline;
+`picture interchange edl [lane]` says one lane as a CMX 3600 EDL. The cut is the verb's first output line
+and the verb writes no file (`packages/commands/src/verbs/pictureInterchange.ts`); `project export timeline`
+saves it in the folder the person chooses (`apps/k7/frontend/docs/export.md`). The writers are `src/interchange/`.
 
 ## OpenTimelineIO first, an EDL beside it, and no FCPXML writer
 
@@ -77,7 +77,7 @@ which uses the newer `Clip.2` media map that this writer does not produce.
 |---|---|
 | shots, gaps, dissolves | as clips, gaps and transitions |
 | `speed` | OTIO: a `LinearTimeWarp` (a `FreezeFrame` at 0), an EDL an M2 line |
-| the media | the camera ORIGINALS, relative to `exports/`, never an optimized copy or a proxy ([media.md](media.md)) |
+| the media | the camera ORIGINALS, named as if the cut sat in an `exports/` folder beside the project's own, never an optimized copy or a proxy ([media.md](media.md)); a cut saved elsewhere is relinked by the editor |
 | lanes, bottom first | OTIO tracks in the same order; an EDL carries one lane |
 | a lane of shapes | nothing: there is no media to open |
 | `animate`, the lane's rect, a `with:` transition, a lane's shaders | nothing |

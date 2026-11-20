@@ -1,4 +1,4 @@
-//! picture.rs — the picture's job: the browser, the settings, the mixdown, the media and the film written whole (2550 to 2556).
+//! picture.rs — the picture's job: the browser, the settings, the mixdown, the media and the film written whole into the person's folder.
 //! What a reader gets wrong: the scene is the text the writer made, spliced into the job unparsed; it is read only for three numbers and its media.
 
 use std::collections::HashMap;
@@ -12,6 +12,7 @@ use serde_json::Value;
 
 use super::disk::{Folder, real_inside};
 use super::{Account, BoxFut, Ports, Shares};
+use crate::routes::local::export::unique;
 
 /// The most media a scene may name.
 pub const MEDIA_LIMIT: usize = 10_000;
@@ -34,6 +35,8 @@ impl Browser for Chromium {
 /// What `picture.render` is asked: the project, the scene's text, the sound and the options.
 pub struct Request<'a> {
     pub project: &'a Path,
+    /// The folder the film lands in: the person's choice, never the project's.
+    pub into: &'a Path,
     pub scene: &'a str,
     pub sound: &'a str,
     pub opts: &'a VideoSettings,
@@ -81,16 +84,13 @@ fn number(scene: &Value, at: &[&str]) -> f64 {
         .unwrap_or(f64::NAN)
 }
 
-/// `exports` made when missing, refused when it is a link or leaves the workspace (2556).
-fn exports_dir(root: &Path, project: &Path) -> Result<PathBuf, String> {
-    let real = real_inside(root, project).ok_or("the project is outside the workspace")?;
-    let exports = real.join("exports");
-    match std::fs::symlink_metadata(&exports) {
-        Ok(m) if m.is_dir() => {}
-        Ok(_) => return Err("exports is not a folder of the project".into()),
-        Err(_) => std::fs::create_dir(&exports).map_err(|e| e.to_string())?,
+/// The folder the film goes to: it must exist, since the person chose it.
+fn target_dir(into: &Path) -> Result<PathBuf, String> {
+    if into.is_dir() {
+        Ok(into.to_path_buf())
+    } else {
+        Err(format!("{} is not a folder", into.display()))
     }
-    Ok(exports)
 }
 
 /// `render_picture` with the media already mapped by the caller, whose gate is not the workspace's.
@@ -141,7 +141,7 @@ pub async fn render_with(
         number(&scene, &["fps"]),
         number(&scene, &["durationSec"]),
     );
-    let exports = exports_dir(&acct.root, req.project)?;
+    let exports = target_dir(req.into)?;
     // The sound is the mixdown's, only when the project's sound is its mix.
     let mix_folder = if req.opts.audio && req.sound == "mix" {
         let doc = ports.views.mix_doc(req.project, None).await?;
@@ -178,11 +178,10 @@ pub async fn render_with(
     } else {
         "webm"
     };
-    let rel = format!("exports/{name}.{ext}");
-    // The film appears whole by a rename, and `exports` is judged again just before it.
-    exports_dir(&acct.root, req.project)?;
+    // The film appears whole by a rename, under a name no file of the folder has.
     let part = done.into_part();
-    if let Err(e) = std::fs::rename(&part, exports.join(format!("{name}.{ext}"))) {
+    let film = unique(&exports, &format!("{name}.{ext}"), Path::exists);
+    if let Err(e) = std::fs::rename(&part, &film) {
         let _ = std::fs::remove_file(&part);
         return Err(e.to_string());
     }
@@ -190,5 +189,5 @@ pub async fn render_with(
         .counts
         .pictures
         .fetch_add(1, std::sync::atomic::Ordering::Relaxed);
-    Ok(rel)
+    Ok(film.to_string_lossy().into_owned())
 }

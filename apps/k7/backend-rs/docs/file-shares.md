@@ -53,7 +53,7 @@ account's parts fill in; its tests stand fakes on them.
 | choice | why |
 |---|---|
 | a mixdown lives in a `Folder` that removes itself when dropped | a client that leaves, a failed render and an unread body all end in the same cleanup (2522) |
-| the film is written to a dot-named part file beside its destination and renamed | a walk of `exports/` must not count a half film (2505); the brief's `<out>.part-<random>` is dot-named for that reason |
+| the film is written to a dot-named part file beside its destination and renamed, under a name the folder does not hold | the folder is the person's, and a half film or a film over another file must not be seen in it (2505); the brief's `<out>.part-<random>` is dot-named for that reason |
 | the scene is parsed only to read three numbers and to walk for `media/` strings; its depth is serde's own bound | the job is spliced from the text, so a scene deeper than the bound is refused rather than recursed into (2504, 2552) |
 | a second picture render is refused with "a picture render is already running" | the TypeScript has no sentence of its own for it |
 | the Fetch gate covers the page's own requests, not a worker's | a dedicated worker has its own DevTools session; the render page starts none |

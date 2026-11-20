@@ -139,7 +139,7 @@ test("a picture is not rendered: no browser can start", async ({ k7 }) => {
   await files.open(WS, PROJECT);
   const out = await files.command(
     WS,
-    "picture render webm none size=160x90 from=0 to=1",
+    "picture render webm none size=160x90 from=0 to=1 into=/tmp",
   );
   expect(JSON.stringify(out)).toMatch(WHY);
 });
