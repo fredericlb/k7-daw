@@ -10,6 +10,7 @@ mod ai_turn;
 mod auth;
 mod cameras;
 mod engine;
+mod export;
 mod files_ready;
 mod last_routes;
 mod leaves;
