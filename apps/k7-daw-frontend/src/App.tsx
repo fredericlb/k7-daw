@@ -87,7 +87,6 @@ import { FloatingWindow } from "./components/FloatingWindow";
 import { GraphPanel } from "./components/GraphPanel";
 import { HistoryPanel } from "./components/HistoryPanel";
 import { LogsPanel } from "./components/LogsPanel";
-import { MasteringTab } from "./components/MasteringTab";
 import { MasterMeter, type MasterMeterHandle } from "./components/MasterMeter";
 import { MidiTakeRoll } from "./components/MidiTakeRoll";
 import type { MinimapItem } from "./components/Minimap";
@@ -865,16 +864,6 @@ export default function App({
   );
   const hasTurntables = !!turntablesSurface;
 
-  /** …and its MASTER STRIP, if it declares one — beside the graph, since every knob on it is a param on ONE module there (docs/mastering.md). */
-  const masteringSurface = useMemo(
-    () =>
-      surfaces.find(
-        (s) => s.surface.type === "mastering" && s.surface.layout === "split",
-      ) ?? null,
-    [surfaces],
-  );
-  const hasMastering = !!masteringSurface;
-
   const turntableDeck = useTurntableDeck({
     store,
     engineRef,
@@ -907,7 +896,6 @@ export default function App({
     {
       timeline: hasTimeline,
       turntables: hasTurntables,
-      mastering: hasMastering,
     },
   );
   const openHelp = useCallback(() => setShowHelp(true), [setShowHelp]);
@@ -948,9 +936,8 @@ export default function App({
       viewPanes({
         timeline: hasTimeline,
         turntables: hasTurntables,
-        mastering: hasMastering,
       }),
-    [hasTimeline, hasTurntables, hasMastering],
+    [hasTimeline, hasTurntables],
   );
   const ringPanes = layout.ring;
   /** The page a project opens on: its arrangement when it declares one, else the first pane it does (docs/shell.md). */
@@ -3352,30 +3339,6 @@ export default function App({
                             trackIds={trackOrder}
                             readOnly={locked}
                             videoArmed={videoArmed}
-                          />
-                        </PaneBoundary>
-                      </div>
-                    )}
-                    {/* The MASTER STRIP, when declared: a page of its own over one quick-master node (docs/mastering.md). */}
-                    {masteringSurface && (
-                      <div
-                        {...paneProps("mastering")}
-                        className={cn(
-                          "flex min-h-0 min-w-0",
-                          full === "mastering" ? "flex-1" : "hidden",
-                        )}
-                      >
-                        <PaneBoundary
-                          name="mastering"
-                          resetKey={reloadKey}
-                          onError={paneError}
-                        >
-                          <MasteringTab
-                            surface={masteringSurface}
-                            paramsStore={pluginParamsStore}
-                            setPluginParam={setPluginParam}
-                            watchPluginParams={watchPluginParams}
-                            command={quietCommand}
                           />
                         </PaneBoundary>
                       </div>

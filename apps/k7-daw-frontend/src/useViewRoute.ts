@@ -52,20 +52,19 @@ export function useViewRoute(
   const prev = useRef<RouteState>(state);
 
   // Taken apart here and rebuilt inside each effect: the caller builds `declared` inline, so an object dependency would re-run both every render.
-  const { timeline, turntables, mastering } = declared;
+  const { timeline, turntables } = declared;
 
   // URL → state, on mount and every back/forward. useLayoutEffect, so a deep link draws its screen before paint.
   useLayoutEffect(() => {
     const next = stateForLocation(location.pathname, location.search, state, {
       timeline,
       turntables,
-      mastering,
     });
     if (next) apply(next);
     // `state` is deliberately NOT a dependency — this direction reacts to the LOCATION; the declared flags ARE, landing a moment later.
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, location.search, timeline, turntables, mastering]);
+  }, [location.pathname, location.search, timeline, turntables]);
 
   // state → URL.
   useEffect(() => {
@@ -74,7 +73,6 @@ export function useViewRoute(
     const url = urlForState(state, before, location.pathname, location.search, {
       timeline,
       turntables,
-      mastering,
     });
     if (url === null) return;
     // Entering help pushes so Back leaves it; everything else replaces (see the header).
@@ -86,6 +84,5 @@ export function useViewRoute(
     location.search,
     timeline,
     turntables,
-    mastering,
   ]);
 }
