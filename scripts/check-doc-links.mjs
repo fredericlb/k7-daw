@@ -68,7 +68,12 @@ for (const file of files) {
   const lines = text.split("\n");
   for (const [i, line] of lines.entries()) {
     // A Rust test names its fixtures from the crate's own folder (CARGO_MANIFEST_DIR), not the file's.
-    if (line.includes("CARGO_MANIFEST_DIR")) continue;
+    if (
+      lines
+        .slice(Math.max(0, i - 3), i + 1)
+        .some((l) => l.includes("CARGO_MANIFEST_DIR"))
+    )
+      continue;
     for (const hit of line.matchAll(REF)) {
       const ref = hit[0];
       cited += 1;
