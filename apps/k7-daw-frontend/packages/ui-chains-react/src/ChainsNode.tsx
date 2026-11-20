@@ -53,6 +53,7 @@ function NodeInner({
   presetName,
   onZoomTo,
   warning,
+  onWarning,
   onDragStart,
   onTapWidget,
   onPickWidget,
@@ -163,7 +164,7 @@ function NodeInner({
   // What the plugin costs, off the engine's load report — nothing without an engine or a plugin.
   const load = usePluginLoadBadge(useEngineStoreOrNull(), n.pluginId ?? null);
   // The state tags — the engine's warning, frozen, frozen automatically — wherever the card carries them.
-  const tags = nodeTags({ n, warning, l });
+  const tags = nodeTags({ n, warning, onWarning, l });
   // The open TAB, the card's own state: which page shows is a view, not a fact about the module (docs/nodeCard.md).
   const [ownTab, setTabAt] = useState(0);
   const tabAt = hostTab ?? ownTab;

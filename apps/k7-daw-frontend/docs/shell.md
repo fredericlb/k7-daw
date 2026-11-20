@@ -1287,21 +1287,34 @@ the timeline, the viewport, the desk and the master strip, with their state. The
 desk applies the same rule to its cue sheet, and writes no cue until it has read the sheet once —
 the write is the whole file.
 
-### Engine warnings are toasts
+### Engine warnings: marked in place, or a toast
 
-The engine raises warnings in its own prose — a duplicated clip id it renamed, a file outside the
-folders it may read, a plugin it could not create. They are said in a **warning toast**, worded for
-a person, and never in the status line: that line is for what a pane reports while it is used, and a
-warning there would replace it for the whole session, alarming and unactionable.
-The engine's own text goes to the Logs panel, which is where a bug report reads it.
+The engine raises warnings in its own prose — an automation lane aimed at a parameter that is not
+there, a duplicated clip id it renamed, a file outside the folders it may read, a plugin it could
+not create. What a person is told depends on whether the warning breaks the project or only one
+part of it, and they are never put in the status line: that line is for what a pane reports while
+it is used, and a warning there would replace it for the whole session, alarming and unactionable.
+The engine's own text goes to the Logs panel, which counts it as a problem and is where a bug
+report reads it.
 
+- **A warning that names a track or a module of the open project is marked IN PLACE.** The
+  engine's `subject` is a module's id (a track's id for a track); resolved against the project's
+  tracks and modules, it puts a warning icon on that track's header in the timeline and on that
+  module's card, whose tooltip is the sentence. No toast: the project works, and the part that is
+  off is shown where it lives. Both icons open Logs on its problems, as the header chip does.
+- **Everything else is a toast**, once per project for the page's life: no subject, or a subject that
+  names nothing in the project — a hung engine, an internal failure, a time signature, a record
+  folder. Those are about the whole session, with no card to carry them.
+- **The count next to the title adds both**: the compile findings, plus the in-place warnings.
+- **The set is the engine's own.** After every apply the engine sends the full standing set and the
+  start of an apply clears the previous one, so a warning an edit fixed disappears with its icon.
 - **The kinds are recognised by text.** The engine sends no code with a warning, so
   [`../src/engineWarnings.ts`](../src/engineWarnings.ts) matches the stable start of each known text
-  and gives it a sentence; one it does not know is still toasted, generically, with the raw words
+  and gives it a sentence; one it does not know still shows, generically, with the raw words
   after it, so a new engine warning is never silent.
-- **Once per project, for the page's life.** Every apply re-parses the document and re-raises
-  the same warnings, and a reconnect re-applies; the toast is keyed by the engine session and
-  the raw text, held above the hook so a remount forgets nothing.
+- **Once per project, for the page's life, for the toasts.** Every apply re-parses the document and
+  re-raises the same warnings, and a reconnect re-applies; the toast is keyed by the engine session
+  and the raw text, held above the hook so a remount forgets nothing.
 - **A background job that FAILED toasts too**, through the host's `onFailure`: a cut the backend
   refused is asked for from the bar's play menu, which closes on the press, so its reason would
   otherwise live in a menu nobody is looking at any more. The menu keeps its line for whoever

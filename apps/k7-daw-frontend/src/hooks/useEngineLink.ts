@@ -54,6 +54,8 @@ export function useEngineLink(
   pluginParamsStore: PluginParamsStore,
   onStatus: (s: string) => void,
   pushLog: (kind: LogLine["kind"], text: string) => void,
+  /** Whether a warning's subject names a track or module of the open project: that one is marked in place, not toasted. */
+  inProject: React.RefObject<(subject: string) => boolean>,
 ): EngineLink {
   const engineRef = useRef<EngineClient | undefined>(undefined);
   const engineBusyRef = useRef(false);
@@ -114,13 +116,14 @@ export function useEngineLink(
       engineBusyRef.current = b;
       setEngineBusy(b);
     });
-    // Engine trouble is a toast in plain words, once per project, and the engine's own text in the log (../engineWarnings.ts).
+    // Engine trouble is the engine's own text in the log, then marked in place or toasted in plain words (../engineWarnings.ts).
     const offWarning = engine.onWarning(({ subject, message, code }) => {
       // The pairing prompt asks every engine for its requests; a LAN one saying "not from here" is an answer, not trouble.
       if (code === "local-only") return;
       if (subject) setEngineWarnings((w) => ({ ...w, [subject]: message }));
       const w = { subject, message, code };
       pushLog("error", `engine: ${rawText(w)}`);
+      if (subject && inProject.current(subject)) return;
       toastEngineWarning(session, w);
     });
     // What the project was BUILT with, after every apply: a no-op apply's busy cleared the badges a build made before this page connected.
