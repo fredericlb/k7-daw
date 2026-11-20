@@ -148,16 +148,16 @@ export function OverflowMenu({
                   </button>
                 );
               })}
-            </div>
-            <div className="mt-1 flex gap-1.5">
               <button
                 type="button"
                 role="menuitem"
                 onClick={run(onSettings)}
-                className="type-label glass flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full text-foreground"
+                className="type-secondary flex h-[68px] flex-col items-center justify-center gap-1 rounded-2xl bg-(--k7-row) px-1 text-foreground"
               >
-                <Settings className="size-[18px]" />
-                {m["settings.menu"]()}
+                <Settings className="size-5" />
+                <span className="max-w-full truncate">
+                  {m["settings.menu"]()}
+                </span>
               </button>
             </div>
           </div>
