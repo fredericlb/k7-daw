@@ -14,7 +14,7 @@ const BOUND: Duration = Duration::from_secs(if cfg!(target_env = "musl") { 60 } 
 
 fn ts(rel: &str) -> String {
     std::fs::read_to_string(format!(
-        "{}/../../../../../{rel}",
+        "{}/../../../../{rel}",
         env!("CARGO_MANIFEST_DIR")
     ))
     .unwrap()

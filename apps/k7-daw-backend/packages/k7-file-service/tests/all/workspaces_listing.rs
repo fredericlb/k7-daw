@@ -30,7 +30,7 @@ fn project<'a>(rows: &'a [Row], ws: &str, path: &str) -> &'a Project {
 fn the_names_held_equal_to_web_protocols() {
     let repo = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .ancestors()
-        .nth(5)
+        .nth(4)
         .unwrap();
     let text = std::fs::read_to_string(
         repo.join("apps/k7-daw-frontend/packages/web-protocol/projects.ts"),

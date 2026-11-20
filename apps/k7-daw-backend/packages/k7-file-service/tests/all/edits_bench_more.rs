@@ -30,7 +30,7 @@ fn world(name: &str) -> (Scratch, Home) {
 
 fn open(home: &Home, project: &str, vocabulary_reads: bool) -> (Result<(), BenchError>, bool) {
     let env: BTreeMap<String, String> = BTreeMap::new();
-    let code = format!("{}/../../../../..", env!("CARGO_MANIFEST_DIR"));
+    let code = format!("{}/../../../..", env!("CARGO_MANIFEST_DIR"));
     let vocabulary = move |roots: &song::Roots, disk: &song::DiskSource| {
         if vocabulary_reads {
             Session::new(roots.paths).vocabulary(disk, roots).ok()

@@ -74,7 +74,7 @@ fn files_under(dir: &std::path::Path, base: &std::path::Path, out: &mut Vec<Stri
 #[test]
 fn every_archetype_is_written_as_scaffolds_json_holds_it() {
     let manifest = format!(
-        "{}/../../../../../e2e/specs/conformance/scaffolds.json",
+        "{}/../../../../e2e/specs/conformance/scaffolds.json",
         env!("CARGO_MANIFEST_DIR")
     );
     let want: Value = serde_json::from_str(&std::fs::read_to_string(manifest).unwrap()).unwrap();

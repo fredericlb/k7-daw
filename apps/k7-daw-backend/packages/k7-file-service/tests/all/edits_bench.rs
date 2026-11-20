@@ -83,7 +83,7 @@ fn a_hostile_step_id_in_the_bench_source_writes_nothing_outside_the_account() {
         ("STUDIO_LIBRARIES_HOME".to_owned(), home.libraries.clone()),
     ]
     .into();
-    let code = format!("{}/../../../../..", env!("CARGO_MANIFEST_DIR"));
+    let code = format!("{}/../../../..", env!("CARGO_MANIFEST_DIR"));
     let vocabulary = |roots: &song::Roots, disk: &song::DiskSource| {
         Session::new(roots.paths).vocabulary(disk, roots).ok()
     };
@@ -129,7 +129,7 @@ fn a_decline_after_the_chain_landed_is_a_refusal_not_a_handback() {
         ("STUDIO_LIBRARIES_HOME".to_owned(), home.libraries.clone()),
     ]
     .into();
-    let code = format!("{}/../../../../..", env!("CARGO_MANIFEST_DIR"));
+    let code = format!("{}/../../../..", env!("CARGO_MANIFEST_DIR"));
     let landed = s.path("home/library/chains/late.k7x");
     let vocabulary = |roots: &song::Roots, disk: &song::DiskSource| {
         if std::path::Path::new(&landed).exists() {

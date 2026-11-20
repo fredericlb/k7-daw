@@ -16,7 +16,7 @@ use crate::support::Scratch;
 #[cfg(unix)]
 #[test]
 fn a_clone_refuses_links() {
-    let code = format!("{}/../../../../..", env!("CARGO_MANIFEST_DIR"));
+    let code = format!("{}/../../../..", env!("CARGO_MANIFEST_DIR"));
     for (label, target) in [("file", "libraries/private/x.wav"), ("up", "..")] {
         let s = Scratch::new(&format!("em-clone-link-{label}"));
         s.file("libraries/private/x.wav", "secret");
