@@ -219,6 +219,13 @@ export function PlaylistPane({
         >
           <Split className="mr-1 h-4 w-4" /> {m["pl.separate"]()}
         </Button>
+        <Button
+          size="sm"
+          disabled={(!!run && !run.over) || !chain || !playable}
+          onClick={() => void separateAll()}
+        >
+          {m["pl.start"]({ n: playable })}
+        </Button>
         <span className="type-status text-fg-3">
           {m["pl.rowCount"]({
             n: rows.length,
@@ -234,9 +241,7 @@ export function PlaylistPane({
       {separating ? (
         <StemsBar
           chain={chain}
-          playable={playable}
           run={run}
-          onStart={() => void separateAll()}
           onSettings={onRun && (() => void onRun("ui settings io"))}
           onClose={() => setSeparating(false)}
         />

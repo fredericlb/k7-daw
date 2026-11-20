@@ -1,12 +1,12 @@
 // SharePanel.tsx — the Export panel: the person picks WHAT leaves (an MP3/WAV, each track's audio in a zip, a
-// video), then "Choose a folder…" opens the system picker and the export runs; the result names the folder.
+// video); pressing a row opens the system's folder picker at once and the export runs; the result names the folder.
 // A PANEL docked beside the panes, an export taking a minute and saying where the file went. See ../docs/export.md.
 // The chosen entry is a COMMAND LINE the shell dispatches (`project export`), not a call of its own: that keeps
 // this and the palette saying the same. The running card reads the page's process list (../processes.ts).
 
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
-import { Download, FileArchive, FolderOpen } from "@studio/ui/icons";
+import { Download, FileArchive } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { Progress } from "@studio/ui/progress";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
@@ -98,9 +98,16 @@ export function SharePanel({
   const chosen = timelines.includes(timeline) ? timeline : "";
   const audioLine = (format: string) =>
     `project export audio ${format}${chosen ? ` ${chosen}` : ""}`;
-  // What leaves, as the command line that does it; nothing runs until the folder step.
+  // The line whose folder picker is open; pressing a row runs it at once, and the card below offers a retry or a way out.
   const [line, setLine] = useState("");
-  const choose = (l: string) => setLine(l);
+  const choose = (l: string) => {
+    setLine(l);
+    onRun(l);
+  };
+  // A render started, or a file landed: the picker has been answered.
+  useEffect(() => {
+    if (busy || last) setLine("");
+  }, [busy, last]);
 
   const pressed = (l: string) => line === l;
 
@@ -209,18 +216,25 @@ export function SharePanel({
             </div>
           </section>
         ) : null}
-        <Button
-          className="w-full"
-          disabled={busy || !line}
-          onClick={() => onRun(line)}
-        >
-          {host?.canPick ? (
-            <FolderOpen className="size-5" />
-          ) : (
-            <Download className="size-5" />
-          )}
-          {host?.canPick ? m["share.choose"]() : m["share.download"]()}
-        </Button>
+        {line && host?.canPick && !busy ? (
+          <section
+            aria-label={m["share.whereTitle"]()}
+            className="rounded-2xl bg-(--k7-row) p-3.5"
+          >
+            <p className="type-body">{m["share.whereTitle"]()}</p>
+            <p className="type-status pt-1 text-fg-3">
+              {m["share.whereOpen"]()}
+            </p>
+            <div className="flex gap-2 pt-2.5">
+              <Button size="sm" onClick={() => onRun(line)}>
+                {m["share.choose"]()}
+              </Button>
+              <Button size="sm" variant="secondary" onClick={() => setLine("")}>
+                {m["share.cancel"]()}
+              </Button>
+            </div>
+          </section>
+        ) : null}
       </footer>
     </div>
   );

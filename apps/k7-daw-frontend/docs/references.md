@@ -35,15 +35,19 @@ is the mini player's, for its reason ([apps/k7-daw-frontend/packages/ui-mini-pla
 transport owned by a panel dies when the panel closes, and closing the list of references is
 exactly what you do before listening.
 
-The bar is mounted above the status footer, **outside every tab and every pane**, so switching
-from the timeline to the chains graph, opening a surface or resizing the bottom panel does not
-interrupt it. `App` holds the one piece of state that matters — which track is loaded — and
-`null` is what removes the bar. A track that ends leaves it up, reading "ended".
+The player is mounted in `App`, **outside every tab and every pane**, so switching from the timeline
+to the chains graph or opening another panel does not interrupt the sound. `App` holds the one piece
+of state that matters — which track is loaded — and `null` removes the player. A track that ends
+leaves it loaded, reading "ended".
+
+Its card is drawn inside the References segment, above the list (the panel offers a slot, the
+player portals into it): the card follows the segment and the sound does not. Leaving the segment
+hides the card while the track goes on; coming back shows it again.
 
 One track at a time: choosing another replaces what is loaded. Two references at once is not
 listening, it is a mix. The panel CHOOSES and the bar PLAYS, which is the whole of the split — a
 row loads its track and starts it, and everything after that (pausing, scrubbing, starting it
-again) is the bar, sitting where you can reach it with the list closed.
+again) is the card above the list.
 
 ## The row is `@studio/ui-mini-player`
 

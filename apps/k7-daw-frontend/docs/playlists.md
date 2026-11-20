@@ -162,16 +162,16 @@ building a setlist means adding eight records in a row. The same list feeds the 
 A record arrives in the workspace the way any file does, in the file tree; this screen only
 *names* it, and there is no second door for depositing one.
 
-### "Separate the stems" — preparing the whole set list
+### "Stems" — preparing the whole set list
 
-The second button, and the only one that costs hours. Each record is split into drums / bass /
+The second button (with **Start (n)** beside it in the header), and the only one that costs hours. Each record is split into drums / bass /
 other / vocals into the `stems/` folder beside it, so that one can be **removed** on the desk
 during the set
 ([../packages/k7-plugins/docs/turntables/stems.md](../packages/k7-plugins/docs/turntables/stems.md)).
 
 It is here and not on the desk because it is a question of **set list** and not of record: the
 desk never separates, this screen prepares the twelve you are going to drop. The button opens a
-bar above the list — same place as the search, and for the same reason.
+bar above the list (the chain and the progress; Start stays in the header) — same place as the search, and for the same reason.
 
 - **The chain is not asked for here.** It is DISPLAYED — the bar shows the one that will run and no
   more. Which module separates and which model it wants is a single answer for the machine: given

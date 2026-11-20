@@ -20,6 +20,7 @@ time; the right panel (`side-panel`) is for the vertical lists.
   the editor. The editor keeps its state and fills the header through `DockHeaderRow` (a portal into
   the dock's slot); the title stays as a visually hidden name, so the dock is still found by it. The
   empty dock has Expand and Close only.
+- **A row may stay in the body on a phone.** `DockHeaderRow bodyOnPhone` draws its row in the header on Pad and Desk and in the sheet's body on a phone, where the header is a name over its counts (`useInSheet` tells an editor which frame it is in).
 - **The dock holds one occupant and is named by it.** The host swaps the children, the title and
   the Dialog name together; the header row is the occupant's own (`DockHeaderRow`), so a Mixer
   shows its count and a chain its track where an editor shows its tools. Strips and cards scroll

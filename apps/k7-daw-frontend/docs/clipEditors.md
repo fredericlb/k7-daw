@@ -7,10 +7,18 @@ graph slot when a clip is clicked in the timeline (see [shell.md](shell.md)).
 A MIDI clip is edited in the piano roll alone: there is no second view of its notes, so the
 header carries no view switch.
 
-The editor's first row — the clip's name and its controls — is drawn in the dock's own header, on the
-line of Expand and Close, and not in the body: one line of chrome, so the dock's height goes to the
-editor (`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)). A long name ellipsizes
-before the dock's buttons are squeezed; on a phone the row wraps.
+The editor's first row is drawn in the dock's own header, on the line of Expand and Close
+(`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)). An audio clip's header holds only
+its name over its file path and Listen; its controls are body rows in the canvas order: gain, Loop /
+Trim / Operations (and Discard with Done for a take just filed), the trim gate, the tools, the active
+tool's hint, then a ZOOM row over the ruler and the wave. The piano roll's header holds its name,
+counts, tool menu, Loop and ×2 on Pad and Desk; on a phone the header is the name over the counts and
+the tool row is the body's first row. A long name ellipsizes before the dock's buttons are squeezed.
+
+The zoom ruler over an audio clip follows the clock switch (bars or seconds), like the timeline's. The
+piano roll draws one ruler and a ZOOM range label under its tool hint. The List tool's values
+(window edges, onsets, a stretch point's landing) tap into a field and commit through the same
+commands the drags use.
 
 The header names the clip as the timeline's block does — a take by its lane and bar, the id in
 the tooltip — see [timeline.md](timeline.md#a-block-is-labelled-by-what-a-musician-calls-it).

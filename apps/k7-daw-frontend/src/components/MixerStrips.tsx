@@ -40,6 +40,34 @@ function Meter({ index, muted }: { index: number; muted: boolean }) {
   );
 }
 
+/** The strip's level: a horizontal fader, −60 to +6 dB, with its value under it; the arrow keys step it by half a dB. */
+function Fader({
+  label,
+  value,
+  onValueChange,
+}: {
+  label: string;
+  value: number;
+  onValueChange: (db: number) => void;
+}) {
+  return (
+    <div className="flex w-full flex-col items-center gap-1">
+      <input
+        type="range"
+        min={-60}
+        max={6}
+        step={0.5}
+        value={value}
+        aria-label={label}
+        aria-valuetext={`${value.toFixed(1)} dB`}
+        onChange={(e) => onValueChange(Number(e.target.value))}
+        className="h-5 w-full cursor-pointer accent-(--k7-accent-text)"
+      />
+      <span className="type-mono-value text-fg-2">{value.toFixed(1)} dB</span>
+    </div>
+  );
+}
+
 function Strip({
   id,
   name,
@@ -77,17 +105,20 @@ function Strip({
         format={(v) => `${Math.round((v * 2 - 1) * 100)}`}
         onValueChange={(v) => onSet?.(id, "pan", v)}
       />
+      <span
+        className={cn(
+          "type-badge rounded-full px-1.5 py-0.5 tabular-nums",
+          peak.current >= 0 ? "bg-error text-ink" : "bg-on-fill text-fg-2",
+        )}
+      >
+        {peak.current > FLOOR_DB
+          ? `${peak.current >= 0 ? "clip +" : "pk "}${peak.current.toFixed(1)}`
+          : "–"}
+      </span>
       <Meter index={index} muted={muted} />
-      <Knob
+      <Fader
         label={m["mixer.volume"]({ name })}
-        size={40}
         value={values.volume}
-        min={-60}
-        max={6}
-        step={0.5}
-        format={(v) => `${v.toFixed(1)} dB`}
-        peak={peak.current > FLOOR_DB ? peak.current.toFixed(1) : "–"}
-        clipping={peak.current >= 0}
         onValueChange={(v) => onSet?.(id, "volume", v)}
       />
       <div className="flex gap-1">

@@ -1,5 +1,5 @@
-// ReferenceBar.tsx — the reference track's transport, at the bottom of the shell. The <audio>
-// element is HERE, so the sound is the BROWSER's and owes nothing to the engine: a reference
+// ReferenceBar.tsx — the reference track's transport: its card is drawn into the References segment (`into`). The <audio>
+// element is HERE, mounted while a track is loaded, so the sound is the BROWSER's and owes nothing to the engine: a reference
 // plays over a live rig or a running arrangement without asking either of them.
 // See ../docs/references.md.
 
@@ -7,6 +7,7 @@ import type { ReferenceTrack } from "@studio/song-schema/reference";
 import { Headphones } from "@studio/ui/icons";
 import { MiniPlayer } from "@studio/ui-mini-player";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { mediaUrl } from "../api";
 import { m } from "../paraglide/messages.js";
 
@@ -23,6 +24,7 @@ export function ReferenceBar({
   onClose,
   onPlayingChange,
   toggleRef,
+  into,
 }: {
   track: ReferenceTrack;
   onClose: () => void;
@@ -30,6 +32,8 @@ export function ReferenceBar({
   onPlayingChange?: (playing: boolean) => void;
   /** Filled with this bar's play/pause, for a control elsewhere that must not grow a second one. */
   toggleRef?: React.MutableRefObject<(() => void) | null>;
+  /** Where the card is drawn: the References segment's slot; the sound goes on while it is not on screen. */
+  into?: HTMLElement | null;
 }) {
   const el = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -80,50 +84,54 @@ export function ReferenceBar({
       >
         <track kind="captions" />
       </audio>
-      <MiniPlayer
-        icon={Headphones}
-        title={track.name}
-        playing={playing}
-        position={at}
-        duration={duration}
-        labels={{
-          region: m["refs.region"](),
-          more: m["common.more"](),
-          play: m["refs.play"](),
-          pause: m["refs.pause"](),
-          position: m["refs.position"](),
-          close: m["refs.closePlayer"](),
-        }}
-        onToggle={toggle}
-        onSeek={(s) => {
-          if (el.current) el.current.currentTime = s;
-          setAt(s);
-        }}
-        onClose={onClose}
-        meta={
-          folder ? (
-            <span className="hidden min-w-0 truncate text-muted-foreground text-xs sm:inline">
-              {folder}
+      {into &&
+        createPortal(
+          <MiniPlayer
+            icon={Headphones}
+            title={track.name}
+            playing={playing}
+            position={at}
+            duration={duration}
+            labels={{
+              region: m["refs.region"](),
+              more: m["common.more"](),
+              play: m["refs.play"](),
+              pause: m["refs.pause"](),
+              position: m["refs.position"](),
+              close: m["refs.closePlayer"](),
+            }}
+            onToggle={toggle}
+            onSeek={(s) => {
+              if (el.current) el.current.currentTime = s;
+              setAt(s);
+            }}
+            onClose={onClose}
+            meta={
+              folder ? (
+                <span className="hidden min-w-0 truncate text-muted-foreground text-xs sm:inline">
+                  {folder}
+                </span>
+              ) : null
+            }
+            status={
+              error ? (
+                <span className="min-w-0 truncate text-destructive text-xs">
+                  {error}
+                </span>
+              ) : done ? (
+                <span className="shrink-0 text-muted-foreground text-xs">
+                  {m["refs.ended"]()}
+                </span>
+              ) : null
+            }
+          >
+            {/* Said on the bar, because it is the one thing about this sound that surprises people. */}
+            <span className="hidden shrink-0 text-muted-foreground text-xs sm:inline">
+              {m["refs.throughBrowser"]()}
             </span>
-          ) : null
-        }
-        status={
-          error ? (
-            <span className="min-w-0 truncate text-destructive text-xs">
-              {error}
-            </span>
-          ) : done ? (
-            <span className="shrink-0 text-muted-foreground text-xs">
-              {m["refs.ended"]()}
-            </span>
-          ) : null
-        }
-      >
-        {/* Said on the bar, because it is the one thing about this sound that surprises people. */}
-        <span className="hidden shrink-0 text-muted-foreground text-xs sm:inline">
-          {m["refs.throughBrowser"]()}
-        </span>
-      </MiniPlayer>
+          </MiniPlayer>,
+          into,
+        )}
     </>
   );
 }

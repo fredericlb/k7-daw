@@ -1,6 +1,6 @@
 // ReferencesPanel.tsx — the workspace's reference tracks, as a panel on the right: what is in
 // `_references/`, a ＋ that uploads into it, and a row you click to hear. It plays nothing
-// itself — the bar at the bottom of the shell does (../docs/references.md).
+// itself — the player (ReferenceBar) does, drawing its card in this panel's slot (../docs/references.md).
 
 import {
   REFERENCE_ACCEPT,
@@ -22,12 +22,15 @@ export function ReferencesPanel({
   sounding,
   onPlay,
   onToggle,
+  playerSlot,
 }: {
   /** The track the bar has loaded, by path — the row for it reads as the current one. */
   playing: string | null;
   /** Whether that loaded track is sounding: its row then reads Pause. */
   sounding: boolean;
   onPlay: (track: ReferenceTrack) => void;
+  /** Receives the element the reference player's card is drawn into, above the list. */
+  playerSlot?: (el: HTMLElement | null) => void;
   /** The bar's own play/pause, for the loaded track's row. */
   onToggle: () => void;
 }) {
@@ -123,6 +126,8 @@ export function ReferencesPanel({
           {error}
         </p>
       ) : null}
+
+      <div ref={playerSlot} className="shrink-0 empty:hidden" />
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {rows === null ? (

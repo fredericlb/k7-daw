@@ -26,23 +26,17 @@ export interface Run {
 /** Preparing the whole set list: which chain, and how far it has got — a bar rather than a dialogue, since this runs for an hour. */
 export function StemsBar({
   chain,
-  playable,
   run,
-  onStart,
   onSettings,
   onClose,
 }: {
   /** The chain this MACHINE separates with: `null` for 'never told', `undefined` while the preference is being read. */
   chain: string | null | undefined;
-  /** How many lines have audio — what the run will actually go through. */
-  playable: number;
   run: Run | null;
-  onStart: () => void;
   /** Open the settings, where the chain is set. Absent in a host with no command bar. */
   onSettings?: () => void;
   onClose: () => void;
 }) {
-  const busy = !!run && !run.over;
   /** The bar's fill, 0..1 — songs finished PLUS how far into the one in hand, neither half being honest alone. */
   const at = run
     ? Math.min(1, (run.done + (run.percent ?? 0) / 100) / (run.total || 1))
@@ -56,13 +50,6 @@ export function StemsBar({
         <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground">
           {chain === undefined ? "…" : (chain ?? m["clip.noChain"]())}
         </span>
-        <Button
-          size="sm"
-          disabled={busy || !chain || !playable}
-          onClick={onStart}
-        >
-          {m["pl.start"]({ n: playable })}
-        </Button>
         <Button
           size="icon"
           variant="ghost"

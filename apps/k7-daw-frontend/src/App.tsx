@@ -202,6 +202,7 @@ import { useLatest } from "./hooks/useLatest";
 import { useShaderParam } from "./hooks/useShaderParam";
 import { isTyping } from "./hooks/useWindowKey";
 import { latestAnswer } from "./latestAnswer";
+import { isProblemLine } from "./logProblems";
 import { guardSwipeBack } from "./noSwipeBack";
 import { PaneBoundary } from "./PaneBoundary";
 import { useAnyPopin, usePopin } from "./popins";
@@ -515,6 +516,7 @@ export default function App({
     pageVerbs.foreignChange(rev);
   }, [rev]);
   const { logs, pushLog, clearLogs } = useLogs(panel);
+  const logProblems = useMemo(() => logs.filter(isProblemLine).length, [logs]);
   // A pane that threw draws its own card (PaneBoundary); the log keeps what it said.
   const paneError = useCallback(
     (name: string, e: Error) => pushLog("error", `${name}: ${e.message}`),
@@ -610,6 +612,8 @@ export default function App({
   // Whether that track is sounding, and the bar's play/pause — for the panel row that stands for it.
   const [referenceSounding, setReferenceSounding] = useState(false);
   const referenceToggle = useRef<(() => void) | null>(null);
+  // The References segment's slot, where the player's card is drawn while that segment is open.
+  const [referenceSlot, setReferenceSlot] = useState<HTMLElement | null>(null);
   // Vim mode is a global user preference (~/.k7/preferences.k7x). Starts ON to match the brain's default.
   const [vimMode, setVimMode] = useState(true);
   useEffect(() => {
@@ -1213,6 +1217,14 @@ export default function App({
   );
   const placed = useMemo(
     () => placeWarnings(nodeWarnings, projectDoc),
+    [nodeWarnings, projectDoc],
+  );
+  // The in-place warnings as sentences — what the Logs panel lists under Problems, and the header counts with `placed.count`.
+  const placedSentences = useMemo(
+    () =>
+      Object.entries(nodeWarnings)
+        .filter(([subject]) => placeSubject(subject, projectDoc) !== null)
+        .map(([, sentence]) => sentence),
     [nodeWarnings, projectDoc],
   );
   // What one-shot commands are doing to the lanes, shown at once until the document agrees (pendingEdits.ts).
@@ -2821,7 +2833,7 @@ export default function App({
       backHref={projectsUrl(window.location.href)}
       statusStore={statusStore}
       engine={engine ? (connected ? "up" : "down") : "none"}
-      problems={projectErrors + placed.count}
+      problems={projectErrors + placed.count + logProblems}
       onProblems={openProblems}
       onProcesses={() => setRightPanel("tasks")}
       extra={<BenchSaveButton size="icon" runCommand={runCommand} />}
@@ -3170,6 +3182,7 @@ export default function App({
                 sounding={referenceSounding}
                 onPlay={setReference}
                 onToggle={() => referenceToggle.current?.()}
+                playerSlot={setReferenceSlot}
               />
             </PaneBoundary>
           </>
@@ -3253,6 +3266,7 @@ export default function App({
           <PaneBoundary name="logs" resetKey={reloadKey} onError={paneError}>
             <LogsPanel
               lines={logs}
+              warnings={placedSentences}
               onClear={() => void runCommand("ui logs clear")}
             />
           </PaneBoundary>
@@ -3587,16 +3601,15 @@ export default function App({
               </div>
             </div>
 
-            {/* What you are listening AGAINST — a card over the panes, since it belongs to no tab (docs/references.md). */}
+            {/* What you are listening AGAINST: the player stays mounted, its card shows in the References segment (docs/references.md). */}
             {reference && (
-              <div className="absolute bottom-[88px] left-4 z-(--k7-z-floating-card)">
-                <ReferenceBar
-                  track={reference}
-                  onClose={() => setReference(null)}
-                  onPlayingChange={setReferenceSounding}
-                  toggleRef={referenceToggle}
-                />
-              </div>
+              <ReferenceBar
+                track={reference}
+                onClose={() => setReference(null)}
+                onPlayingChange={setReferenceSounding}
+                toggleRef={referenceToggle}
+                into={referenceSlot}
+              />
             )}
 
             {/* The output's picture, off screen while a take rolls: what the recording captures (useOutputRecording.ts). */}

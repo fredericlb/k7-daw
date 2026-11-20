@@ -8,11 +8,11 @@ is the one implementation under it and under `project export`; `src/exportHost.t
 
 | choice | why |
 |---|---|
-| the person picks WHAT first, then **Choose a folder…** runs it | the folder is asked once the format is known, and a palette line (`project export …`) asks the same way |
+| pressing a row opens the folder picker at once and runs the export | one press, no footer button; the row is the format, and a palette line (`project export …`) asks the same way |
 | the folder is asked BEFORE any work, a render included | a minute of rendering lost to a cancelled dialog is the worst order; a film that runs while the page is closed has nowhere to ask afterwards |
 | the result names the folder, with **Show in folder** on a computer and **Share…** on a phone | the person sees where it went; each button exists only where the platform has the thing |
 | a clash is numbered ("mix (2).wav"), never overwritten | the folder is the person's and holds their other files |
-| a plain browser has no picker: the same panel offers **Download** | the web build and the e2e suite run there; an export is a download, as it always was |
+| a plain browser has no picker: pressing a row downloads | the web build and the e2e suite run there; an export is a download, as it always was |
 | the last folder is remembered per device and the picker opens there | a device-only app has one person and a habit; it is kept in the device's own settings, never the account's |
 
 ## One shape, three hosts
@@ -56,5 +56,5 @@ The front's side is `apps/k7-daw-backend/docs/export.md`.
 ## The panel's steps
 
 The format step is one row group (MP3, WAV, tracks, and a video's MP4 or WebM at 720p or 1080p), with the
-mixdown's timeline as a picker above it. The folder step is the button under it, and the result is a
+mixdown's timeline as a picker above it. The folder step is the row's press: a card ("Where should it go?", with Choose a folder… to open the picker again and Cancel) waits while the system's picker is open, and the result is a
 card that names the file and the folder, with Show in folder and Share… where the host has them.

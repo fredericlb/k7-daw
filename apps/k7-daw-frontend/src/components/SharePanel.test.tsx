@@ -1,4 +1,4 @@
-// The Export panel: the tracks zip row greyed while a render runs, the folder step, and the result's actions.
+// The Export panel: the tracks zip row greyed while a render runs, the folder step (a row's press), and the result's actions.
 
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
@@ -22,16 +22,12 @@ const saved = {
 };
 
 describe("the folder step", () => {
-  it("offers the picker where the host has one", () => {
+  it("has no footer button: a row opens the picker, so the card waits for a press", () => {
     const html = renderToStaticMarkup(
       <SharePanel busy={false} host={desktopHost} onRun={() => {}} />,
     );
-    expect(html).toContain("Choose a folder…");
-  });
-
-  it("downloads in a browser, which has no picker", () => {
-    expect(render(false)).toContain("Download");
-    expect(render(false)).not.toContain("Choose a folder…");
+    expect(html).not.toContain("Choose a folder…");
+    expect(html).not.toContain("Where should it go?");
   });
 
   it("names the folder of the last file, with the actions the host has", () => {

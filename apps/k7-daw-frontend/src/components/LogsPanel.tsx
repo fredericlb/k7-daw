@@ -16,6 +16,7 @@ import { Input } from "@studio/ui/input";
 import { cn } from "@studio/ui/lib/utils";
 import { Row, RowGroup } from "@studio/ui/row-group";
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { isCommandLine, isProblemLine } from "../logProblems";
 import { m } from "../paraglide/messages.js";
 import { useShell } from "../state/shellStore";
 import type { LogsFilter } from "../state/toggleSlice";
@@ -46,17 +47,13 @@ const KIND_ICON: Record<LogLine["kind"], ReactNode> = {
   error: <TriangleAlert />,
 };
 
-/** A problem is a line that failed or that a verb refused. */
-const isProblem = (l: LogLine): boolean =>
-  l.kind === "error" || l.kind === "refused";
-
 const TABS: readonly LogsFilter[] = ["all", "problems", "commands", "engine"];
 
 /** Which tab a line is listed under; a line may sit in `all` and one more. */
 const IN_TAB: Record<LogsFilter, (l: LogLine) => boolean> = {
   all: () => true,
-  problems: isProblem,
-  commands: (l) => l.kind === "cmd",
+  problems: isProblemLine,
+  commands: isCommandLine,
   engine: (l) => l.kind === "engine" || l.kind === "file",
 };
 
@@ -70,23 +67,25 @@ const TAB_LABEL: Record<LogsFilter, (n: number) => string> = {
 export function LogsPanel({
   lines,
   onClear,
+  warnings = [],
 }: {
   lines: LogLine[];
   onClear: () => void;
+  /** The in-place warnings (a module or lane that complains), listed first under Problems. */
+  warnings?: readonly string[];
 }) {
   const endRef = useRef<HTMLDivElement>(null);
   const filter = useShell((st) => st.logsFilter);
   const setFilter = useShell((st) => st.setLogsFilter);
   const [text, setText] = useState("");
   const needle = text.trim().toLowerCase();
-  const shown = lines.filter(
-    (l) =>
-      IN_TAB[filter](l) && (!needle || l.text.toLowerCase().includes(needle)),
-  );
+  const matches = (t: string) => !needle || t.toLowerCase().includes(needle);
+  const shown = lines.filter((l) => IN_TAB[filter](l) && matches(l.text));
+  const shownWarnings = filter === "problems" ? warnings.filter(matches) : [];
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
-  }, [shown]);
-  const bare = lines.length === 0;
+  }, [shown, shownWarnings]);
+  const bare = lines.length === 0 && warnings.length === 0;
   const emptyTitle = bare ? m["logs.emptyTitle"]() : m["logs.noneTitle"]();
   const emptyText = bare ? m["logs.emptyText"]() : m["logs.noneText"]();
 
@@ -100,7 +99,10 @@ export function LogsPanel({
             selected={filter === t}
             onClick={() => setFilter(t)}
           >
-            {TAB_LABEL[t](lines.filter(IN_TAB[t]).length)}
+            {TAB_LABEL[t](
+              lines.filter(IN_TAB[t]).length +
+                (t === "problems" ? warnings.length : 0),
+            )}
           </Chip>
         ))}
       </div>
@@ -112,12 +114,23 @@ export function LogsPanel({
         className="mb-2 shrink-0"
       />
       <div className="min-h-0 flex-1 overflow-auto">
-        {shown.length === 0 ? (
+        {shown.length + shownWarnings.length === 0 ? (
           <EmptyState compact glyph={<Info />} title={emptyTitle}>
             {emptyText}
           </EmptyState>
         ) : (
           <RowGroup>
+            {shownWarnings.map((w) => (
+              <Row
+                key={w}
+                icon={<TriangleAlert />}
+                className="items-start bg-(--k7-warn-fill)"
+              >
+                <span className="type-mono-value whitespace-pre-wrap break-all text-warn">
+                  {w}
+                </span>
+              </Row>
+            ))}
             {shown.map((l, i) => (
               <Row
                 // biome-ignore lint/suspicious/noArrayIndexKey: a log line has no id; the list only grows at its end.
@@ -125,7 +138,7 @@ export function LogsPanel({
                 icon={KIND_ICON[l.kind]}
                 className={cn(
                   "items-start",
-                  isProblem(l) && "bg-(--k7-warn-fill)",
+                  isProblemLine(l) && "bg-(--k7-warn-fill)",
                 )}
                 detail={new Date(l.t).toLocaleTimeString()}
               >
@@ -145,12 +158,12 @@ export function LogsPanel({
       </div>
       <div className="flex shrink-0 items-center gap-2 pt-2">
         <span className="type-status mr-auto text-fg-3">
-          {m["logs.count"]({ n: shown.length })}
+          {m["logs.count"]({ n: shown.length + shownWarnings.length })}
         </span>
         <Button
           size="sm"
           variant="ghost"
-          disabled={shown.length === 0}
+          disabled={shown.length + shownWarnings.length === 0}
           onClick={() =>
             void navigator.clipboard?.writeText(
               shown.map((l) => l.text).join("\n"),

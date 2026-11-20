@@ -302,8 +302,8 @@ carries `data-testid="engine-status"` with its `data-state`, which the suites re
 be a second voice for what the toast already says.
 
 **The spinner is the background processes.** It shows only while something runs and opens Tasks &
-history. The warning chip counts the project's problems and opens Logs on "problems"
-(`logsFilter` in the shell store).
+history. The warning chip counts the project's problems (compile errors, the in-place warnings and the problem lines of Logs) and opens Logs on "problems"
+(`logsFilter` in the shell store). A verb's refusal is a command's answer, so it is listed under Commands, not Problems.
 
 **The pane switcher is Arrangement, Graph, Source** (Turntables beside Arrangement on a project that
 declares a desk). Mastering is not a pane: it is a section of the Mixer, and `ui mastering`
