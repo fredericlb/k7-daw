@@ -21,7 +21,7 @@ the zone's `docs/` directory is where the justification belongs:
 
 | zone | pages live in |
 |---|---|
-| a shared package (the UI kit, i18n, http, oidc, env, vite-config and tsconfig included) | `packages/<pkg>/docs/` |
+| a shared package (the UI kit, i18n, env, vite-config and tsconfig included) | `packages/<pkg>/docs/` |
 | the k7 frontend | `apps/k7/frontend/docs/` |
 | the engine reach | `apps/k7/backend-rs/docs/engine/` (the routes) |
 | the DJ desk | `packages/k7-plugins/docs/turntables/` |
@@ -66,7 +66,7 @@ the production image, and the repo-wide pages in `docs/`. The short map:
 | `apps/k7` | the text-first DAW — frontend (React/Vite) + `backend-rs`, its Rust front; k7 runs on devices only, no hosted app (its own `AGENTS.md`) |
 | `apps/k7/backend-rs` | k7's backend in Rust: one process answering the session, the preferences, the file hub, AI organize, the engine registry and the built page (`docs/rust-backend-plan.md`) |
 | `apps/k7-desktop` | K7 DAW, k7 on Windows, Linux and macOS (Apple silicon): a Tauri app with one window that runs k7's backend on `127.0.0.1:18789`, which runs the machine's supervisor and engine; k7 shows in its window, or in the browser from the desktop app's menu. Built locally on each OS (`apps/k7-desktop/docs/`) |
-| `packages/` | `@studio/*`, consumed as raw TypeScript through `exports` subpaths (a bare deep import fails on purpose); all private to the tree |
+| `packages/` | `@studio/*`, consumed as raw TypeScript through `exports` subpaths (a bare deep import fails on purpose); all private to the tree. Most serve the page or the verbs' Worker; `engine-client`, `engine-tunnel`, `env`, `song-strudel`, `tsconfig` and `vite-config` serve only scripts, tests and builds; the `rust/` crates of `song`, `song-edit` and `k7x` are built into the backend, `audio-analysis`'s into the supervisor, `k7-wasm`'s into the page as WebAssembly |
 | `k7-core/` | the `@k7-core` modules library, the seed every library folder is copied from |
 | `e2e/` | the Playwright functional suite (`e2e/docs/`) |
 | `docs/` | repo-wide notes: CI, deployment, the dev session, plans, audits |
