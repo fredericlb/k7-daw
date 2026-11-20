@@ -15,6 +15,7 @@ import {
   RotateCcw,
   Undo2,
 } from "@studio/ui/icons";
+import { Row, RowButton, RowGroup } from "@studio/ui/row-group";
 import type { HistoryListEntry } from "@studio/web-protocol";
 import {
   type ReactNode,
@@ -39,6 +40,9 @@ import {
   type SyncChange,
   type SyncHistory,
 } from "../syncHistory";
+
+/** The 6 px dot that stands for an edit. */
+const Dot = () => <span className="size-1.5 rounded-full bg-fg-3" />;
 
 const time = (ts: number) =>
   new Date(ts).toLocaleTimeString(getLocale(), {
@@ -129,48 +133,43 @@ export function HistoryPanel({
           ].join("/")}
         />
       )}
-      <ul
+      <div
         hidden={list !== "edits"}
-        className="min-h-0 flex-1 overflow-y-auto py-1 text-xs"
+        className="min-h-0 flex-1 overflow-y-auto"
         onMouseLeave={() => onMark(null)}
       >
         {rows.length === 0 && !error && (
-          <li className="px-3 py-2 text-muted-foreground">
-            {m["history.empty"]()}
-          </li>
+          <p className="px-1 py-2 text-fg-2 text-sm">{m["history.empty"]()}</p>
         )}
         {rows.map((r, i) => {
           const newDay = i === 0 || day(rows[i - 1].ts) !== day(r.ts);
           const { paths, label, undone } = r;
           return (
-            <li key={r.id}>
+            <div key={r.id}>
               {newDay && (
-                <div className="px-3 pt-2 pb-1 text-[10px] text-muted-foreground uppercase tracking-wide">
+                <h3 className="type-caps px-1 pt-3 pb-2 text-fg-2">
                   {day(r.ts)}
-                </div>
+                </h3>
               )}
-              <div
-                role="note"
-                className={`flex cursor-default items-start gap-2 px-3 py-1 hover:bg-accent ${undone ? "opacity-50" : ""}`}
-                title={`${label}\n${paths.join("\n")}`}
-                onMouseEnter={() => onMark(historyMarks(paths, label, graph))}
-              >
-                <span className="w-10 shrink-0 pt-px font-mono text-[10px] text-muted-foreground">
-                  {time(r.ts)}
-                </span>
-                {undone ? (
-                  <Undo2 className="mt-px h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                ) : (
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground/60" />
-                )}
-                <span className="min-w-0 flex-1 truncate">
+              <RowGroup>
+                <Row
+                  title={`${label}\n${paths.join("\n")}`}
+                  className={undone ? "opacity-50" : undefined}
+                  icon={undone ? <Undo2 /> : <Dot />}
+                  trailing={
+                    <span className="type-mono-value text-fg-3">
+                      {time(r.ts)}
+                    </span>
+                  }
+                  onMouseEnter={() => onMark(historyMarks(paths, label, graph))}
+                >
                   {describe ? describe(label) : label}
-                </span>
-              </div>
-            </li>
+                </Row>
+              </RowGroup>
+            </div>
           );
         })}
-      </ul>
+      </div>
       {list === "workspace" && (
         <SyncHistorySection revision={revision} git={git} />
       )}
@@ -296,44 +295,43 @@ function SyncHistorySection({
     point: string,
     icon: ReactNode,
   ) => (
-    <li key={key}>
-      <div className="group flex items-start gap-2 px-3 py-1 hover:bg-accent">
-        <button
-          type="button"
-          className="flex min-w-0 flex-1 items-start gap-2 text-left"
+    <div key={key}>
+      <div className="flex items-center">
+        <RowButton
+          className="min-w-0 flex-1"
+          icon={icon}
+          detail={time(ts)}
+          trailing={
+            open === key ? (
+              <ChevronDown className="size-4 text-fg-3" />
+            ) : (
+              <ChevronRight className="size-4 text-fg-3" />
+            )
+          }
           onClick={() => void toggle(key, from, to)}
         >
-          {open === key ? (
-            <ChevronDown className="mt-px h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-          ) : (
-            <ChevronRight className="mt-px h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-          )}
-          <span className="w-10 shrink-0 pt-px font-mono text-[10px] text-muted-foreground">
-            {time(ts)}
-          </span>
-          {icon}
-          <span className="min-w-0 flex-1 truncate font-mono">{label}</span>
-        </button>
+          {label}
+        </RowButton>
         {offers.write && (
-          <button
-            type="button"
-            className="shrink-0 text-muted-foreground opacity-0 hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
+          <Button
+            variant="ghost"
+            size="round"
+            className="shrink-0"
             title={m["synchist.restore"]()}
+            aria-label={m["synchist.restore"]()}
             onClick={() => void restore(seq, point)}
           >
-            <RotateCcw className="h-3.5 w-3.5" />
-          </button>
+            <RotateCcw className="size-4" />
+          </Button>
         )}
       </div>
       {open === key &&
         (changes === null ? null : changes.length === 0 ? (
-          <div className="px-3 py-1 text-muted-foreground">
-            {m["synchist.noChange"]()}
-          </div>
+          <p className="px-3.5 py-2 text-fg-2">{m["synchist.noChange"]()}</p>
         ) : (
           changes.map((c) => <ChangeView key={c.file} c={c} />)
         ))}
-    </li>
+    </div>
   );
 
   return (
@@ -362,11 +360,9 @@ function SyncHistorySection({
           {error || m["synchist.noRoom"]({ error: hist?.error ?? "" })}
         </div>
       )}
-      <ul className="min-h-0 flex-1 overflow-y-auto pb-1">
+      <RowGroup className="min-h-0 flex-1 overflow-y-auto">
         {hist && hist.checkpoints.length === 0 && hist.entries.length === 0 && (
-          <li className="px-3 py-2 text-muted-foreground">
-            {m["synchist.empty"]()}
-          </li>
+          <p className="px-3.5 py-3 text-fg-2">{m["synchist.empty"]()}</p>
         )}
         {[...(hist?.checkpoints ?? [])]
           .reverse()
@@ -379,7 +375,7 @@ function SyncHistorySection({
               head,
               c.seq,
               c.by === "auto" ? String(c.seq) : c.name,
-              <Bookmark className="mt-px h-3.5 w-3.5 shrink-0 text-primary-text" />,
+              <Bookmark />,
             ),
           )}
         {(hist?.entries ?? []).map((e) =>
@@ -393,10 +389,10 @@ function SyncHistorySection({
             e.seq,
             e.seq,
             String(e.seq),
-            <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-muted-foreground/60" />,
+            <Dot />,
           ),
         )}
-      </ul>
+      </RowGroup>
     </section>
   );
 }
