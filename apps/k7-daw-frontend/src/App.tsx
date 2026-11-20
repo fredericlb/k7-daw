@@ -3575,6 +3575,16 @@ export default function App({
             {hasViewport && (
               <FloatingWindow
                 title={VIEWPORT_META.label}
+                subtitle={
+                  videoDoc
+                    ? m["shell.picture.size"]({
+                        w: videoDoc.viewport[0],
+                        h: videoDoc.viewport[1],
+                        fps: videoDoc.fps,
+                      })
+                    : undefined
+                }
+                closeLabel={m["shell.picture.close"]()}
                 open={viewportOpen}
                 onClose={() => void runCommand("ui viewport")}
                 rect={viewportFloat.rect}

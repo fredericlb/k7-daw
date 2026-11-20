@@ -1612,6 +1612,8 @@
   "shell.lane.automation": "Automation",
   "shell.lane.picture": "Picture",
   "shell.lane.pictureName": "Picture: the viewport",
+  "shell.picture.size": "{w}×{h} · {fps} fps",
+  "shell.picture.close": "Close the picture",
   "shell.lane.lanesShort": "Lanes",
   "shell.lane.automationShort": "Auto",
   "shell.engine.lost": "Engine disconnected",
