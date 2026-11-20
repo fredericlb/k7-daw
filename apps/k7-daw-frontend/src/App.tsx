@@ -352,11 +352,7 @@ export default function App({
     setStackView,
     setShowDocs,
     setLogsFilter,
-    setTool,
-    setLanesExpanded,
     setPictureShown,
-    setRulerSeconds,
-    setAutomationShown,
   } = shell.getState();
   const showHelp = useStore(shell, (s) => s.showHelp);
   const rightPanel = useStore(shell, (s) => s.rightPanel);
@@ -582,11 +578,6 @@ export default function App({
     (next: typeof tlView) => setTlView(keepIfEqual(next)),
     [],
   );
-  // The bar's tool and its Lane views follow what the timeline reports, until the timeline reads the store itself.
-  useEffect(() => {
-    setTool(tlView.tool);
-    setLanesExpanded(tlView.expanded);
-  }, [tlView.tool, tlView.expanded, setTool, setLanesExpanded]);
   /** The reference track the bar has loaded, or null for no bar — it outlives every tab, being nothing this project owns (docs/references.md). */
   const [reference, setReference] = useState<ReferenceTrack | null>(null);
   // Whether that track is sounding, and the bar's play/pause — for the panel row that stands for it.
@@ -1635,10 +1626,6 @@ export default function App({
     setCommandsPage,
     toggleMixer,
     toggleStack,
-    mirrorLane: (view) =>
-      view === "ruler"
-        ? setRulerSeconds((v) => !v)
-        : setAutomationShown((v) => !v),
     toggleDocs,
     clearLogs,
     setTrackCurves,
