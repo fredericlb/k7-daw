@@ -284,7 +284,7 @@ export function ShellOverlays({
       />
 
       <GitScreensHost transport={gitTransport} />
-      {/* The command editor screen: the one full-screen slot, opened by the header's Keyboard button (docs/shell.md). */}
+      {/* The command editor screen: the one full-screen slot, opened from Settings, Editor, Commands and shortcuts (docs/shell.md). */}
       {commandsPage && (
         <div className="absolute inset-0 z-40 bg-background">
           <CommandsSettings

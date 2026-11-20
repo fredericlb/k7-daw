@@ -5,9 +5,11 @@ import { setServiceProcesses } from "../processes";
 import { ProcessesSection } from "./ProcessesSection";
 
 describe("the processes section", () => {
-  it("is empty with nothing listed", () => {
+  it("says nothing runs when nothing is listed", () => {
     setServiceProcesses([]);
-    expect(renderToStaticMarkup(<ProcessesSection />)).toBe("");
+    expect(renderToStaticMarkup(<ProcessesSection />)).toContain(
+      "Nothing running",
+    );
   });
 
   it("names a failed process and says why", () => {

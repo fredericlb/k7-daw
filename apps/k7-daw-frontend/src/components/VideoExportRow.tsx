@@ -57,6 +57,7 @@ export function VideoExportRow({
       <RowButton
         tall
         icon={<Download />}
+        detail={m["share.detailVideo"]()}
         selected={chosen === line}
         disabled={busy || mp4 === null}
         onClick={() => onChoose(line)}

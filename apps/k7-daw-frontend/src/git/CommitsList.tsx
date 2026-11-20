@@ -21,16 +21,18 @@ export function CommitsList({
   transport: t,
   workspace,
   refreshKey,
+  state = null,
 }: {
   transport: GitTransport | null;
   workspace: string;
   /** Moves when the repository does (a commit, a pull): the list restarts at its head. */
   refreshKey: unknown;
+  /** The repository's state, for the line over the list: branch, remote, what a pull would bring. */
+  state?: GitState | null;
 }) {
   const [log, dispatch] = useReducer(logAfter, emptyLog);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [st, setSt] = useState<GitState | null>(null);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: `refreshKey` is the trigger, not an input.
   useEffect(() => {
@@ -44,10 +46,6 @@ export function CommitsList({
         setError("");
       })
       .catch((e) => live && setError(explain(e)));
-    git
-      .state(t, workspace)
-      .then((r) => live && setSt(r))
-      .catch(() => live && setSt(null));
     return () => {
       live = false;
     };
@@ -68,10 +66,12 @@ export function CommitsList({
 
   // The newest `ahead` commits are the ones the remote has not got yet.
   const ahead =
-    st?.mode === "connected" ? Math.min(st.ahead ?? 0, log.commits.length) : 0;
+    state?.mode === "connected"
+      ? Math.min(state.ahead ?? 0, log.commits.length)
+      : 0;
   const pushed =
-    st?.mode === "connected" && st.remote
-      ? `${remoteName(st.remote)} · ${st.branch ?? ""}`
+    state?.mode === "connected" && state.remote
+      ? `${remoteName(state.remote)} · ${state.branch ?? ""}`
       : null;
   const row = (c: CommitInfo, up: boolean) => (
     <li
@@ -99,6 +99,21 @@ export function CommitsList({
   );
   return (
     <div className="min-h-0 flex-1 overflow-y-auto py-1 type-secondary">
+      {state?.branch && (
+        <p className="px-3 py-1.5 type-badge text-fg-2">
+          {[
+            state.branch,
+            state.remote,
+            state.behind
+              ? (state.behind === 1
+                  ? m["git.toPull.one"]
+                  : m["git.toPull.other"])({ n: state.behind })
+              : null,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+      )}
       {error && <p className="px-3 py-2 text-error">{error}</p>}
       {log.commits.length === 0 && !error && (
         <div className="px-3 py-2 text-fg-2">
