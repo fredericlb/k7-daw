@@ -8,7 +8,6 @@
 // Drawn by the Editor bottom panel and, when a clip is clicked, where the graph is (ClipView).
 
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { Piano } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
 import {
@@ -610,7 +609,6 @@ export function PianoRoll({
             className="min-w-0 truncate font-semibold text-primary-text"
             title={clip.name || clip.id}
           >
-            <Piano className="h-3.5 w-3.5" />{" "}
             {clipShownName(
               clip.name || clip.id,
               laneNamer(project.tracks),
@@ -639,11 +637,6 @@ export function PianoRoll({
                 {loop.passes > 1 && ` × ${loop.passes}`}
               </span>
             )}
-            {onCreateNote && (
-              <span className="ml-2 text-faint">
-                · {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
-              </span>
-            )}
           </span>
           {/* The right end of the bar, whatever it holds: the ✕ then needs no margin rule of its own. */}
           <span className="ml-auto flex items-center gap-1">
@@ -664,6 +657,12 @@ export function PianoRoll({
         </div>
       </DockHeaderRow>
 
+      {/* The tool's one-line hint opens the body; the gestures' hint closes it, under the roll. */}
+      {onModeChange && (
+        <p className="shrink-0 px-3 py-1 text-xs text-muted-foreground">
+          {m[`roll.toolHint.${mode}`]()}
+        </p>
+      )}
       <div className="flex min-h-0 flex-1">
         {/* The TAKES mode draws in the lanes' place; the lanes stay mounted, hidden, so the caret and the scroll survive. */}
         {showTakes && takes && (
@@ -924,6 +923,11 @@ export function PianoRoll({
           </div>
         </div>
       </div>
+      {onCreateNote && (
+        <p className="shrink-0 px-3 py-1 text-xs text-faint">
+          {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
+        </p>
+      )}
     </div>
   );
 }
