@@ -220,7 +220,7 @@ if(K7_ORT_URL)
         endif()
     endif()
     set(K7_AUDIO_LIB ${K7_AUDIO_OUT}/${CMAKE_STATIC_LIBRARY_PREFIX}k7_audio${CMAKE_STATIC_LIBRARY_SUFFIX})
-    set(K7_AUDIO_CRATE ${CMAKE_CURRENT_SOURCE_DIR}/../../packages/audio-analysis/rust)
+    set(K7_AUDIO_CRATE ${CMAKE_CURRENT_SOURCE_DIR}/../../k7-daw-backend/packages/waveform)
     file(GLOB_RECURSE K7_AUDIO_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/rust/src/*.rs ${K7_AUDIO_CRATE}/src/*.rs)
     add_custom_command(OUTPUT ${K7_AUDIO_LIB}
         COMMAND ${CMAKE_COMMAND} -E env ${K7_CARGO_ENV} ${K7_CARGO} ${K7_CARGO_ARGS}
