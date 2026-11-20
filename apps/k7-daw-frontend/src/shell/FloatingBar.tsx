@@ -231,8 +231,8 @@ export function FloatingBar({
       {lanes.picture !== null && (
         <CapsuleButton
           pressed={lanes.picture}
-          aria-label={m["shell.lane.picture"]()}
-          title={m["shell.lane.picture"]()}
+          aria-label={m["shell.lane.pictureName"]()}
+          title={m["shell.lane.pictureName"]()}
           onClick={lanes.onPicture}
         >
           <Image />
@@ -248,29 +248,32 @@ export function FloatingBar({
       className="float pointer-events-auto flex h-14 shrink-0 items-center gap-0.5 rounded-full p-1.5"
     >
       <CapsuleButton
-        aria-label={m["graph.zoomFit"]()}
-        title={m["graph.zoomFit"]()}
+        aria-label={m["graph.zoomFitName"]()}
+        title={m["graph.zoomFitName"]()}
         onClick={graph.onFit}
       >
         <Maximize />
+        {m["graph.zoomFit"]()}
       </CapsuleButton>
       {graph.onOrganize && (
         <CapsuleButton
-          aria-label={m["graph.autoLayout"]()}
-          title={m["graph.autoLayout"]()}
+          aria-label={m["graph.autoLayoutName"]()}
+          title={m["graph.autoLayoutName"]()}
           onClick={graph.onOrganize}
         >
           <Network />
+          {m["graph.autoLayout"]()}
         </CapsuleButton>
       )}
       {graph.onStack && (
         <CapsuleButton
           pressed={graph.stacked}
-          aria-label={m["graph.stack"]()}
-          title={m["graph.stack"]()}
+          aria-label={m["graph.stackName"]()}
+          title={m["graph.stackName"]()}
           onClick={graph.onStack}
         >
           <Columns3 />
+          {m["graph.stack"]()}
         </CapsuleButton>
       )}
     </div>
