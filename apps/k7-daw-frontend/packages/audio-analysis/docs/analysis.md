@@ -4,6 +4,9 @@ A `{file}.cache` sidecar carries a peak/RMS envelope, three colour bands, onsets
 this package is the only thing that writes one. It also measures a file's true peak. Both start
 from the same decode.
 
+The Rust crate is `apps/k7-daw-backend/packages/waveform`: the backend links it, the supervisor links it and `waveform.wasm` is built from it. It is
+no member of the backend's cargo workspace (`exclude`): its WebAssembly build has a lock of its own.
+
 ## One producer, three decoders
 
 The arithmetic lives here once. What varies is where the samples come from:

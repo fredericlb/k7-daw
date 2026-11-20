@@ -125,7 +125,9 @@ so those four repeat the two timeouts:
 
 Every other package inherits the root `vitest.config.ts`, because vitest walks up from the
 package directory when it finds no config of its own. That is also why the root file's `exclude`
-list is load-bearing for packages that never read it.
+list is load-bearing for packages that never read it. The frontend app's `packages/` sit inside the
+app, whose own `vite.config.ts` would be the nearest config upward, so `apps/k7-daw-frontend/packages/vitest.config.ts` hands
+them the root one, and the app's `vite.config.ts` leaves `packages/**` to them.
 
 ## The root config excludes four trees
 
