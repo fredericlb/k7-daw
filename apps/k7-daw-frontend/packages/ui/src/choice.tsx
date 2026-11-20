@@ -1,6 +1,7 @@
 // choice.tsx — a radiogroup of 2 to 4 options: a segmented control on Pad and Desk, 44 px radio rows on Phone.
-// The page picks the layout (it knows the device); arrow keys move the choice in both.
+// The page picks the layout (it knows the device); Radix RadioGroup owns the arrows and the roles in both.
 
+import { RadioGroup } from "radix-ui";
 import * as React from "react";
 import { Check } from "./icons";
 import { useLozenge } from "./lib/lozenge";
@@ -31,54 +32,41 @@ export function Choice<T extends string>({
 }) {
   const ref = React.useRef<HTMLDivElement | null>(null);
   const box = useLozenge(ref, '[aria-checked="true"]');
-  const move = (e: React.KeyboardEvent) => {
-    const step =
-      e.key === "ArrowRight" || e.key === "ArrowDown"
-        ? 1
-        : e.key === "ArrowLeft" || e.key === "ArrowUp"
-          ? -1
-          : 0;
-    if (!step) return;
-    e.preventDefault();
-    const i = options.findIndex((o) => o.value === value);
-    const next = options[(i + step + options.length) % options.length];
-    if (next) onValueChange(next.value);
-  };
 
   if (layout === "rows")
     return (
-      <RowGroup
-        role="radiogroup"
+      <RadioGroup.Root
+        asChild
         aria-label={label}
-        onKeyDown={move}
-        className={className}
+        value={value}
+        onValueChange={(v) => onValueChange(v as T)}
       >
-        {options.map((o) => (
-          <RowButton
-            key={o.value}
-            role="radio"
-            aria-checked={o.value === value}
-            selected={o.value === value}
-            icon={o.icon}
-            trailing={
-              o.value === value ? (
-                <Check className="size-4 text-lavender" strokeWidth={2.2} />
-              ) : null
-            }
-            onClick={() => onValueChange(o.value)}
-          >
-            {o.label}
-          </RowButton>
-        ))}
-      </RowGroup>
+        <RowGroup className={className}>
+          {options.map((o) => (
+            <RadioGroup.Item key={o.value} asChild value={o.value}>
+              <RowButton
+                selected={o.value === value}
+                icon={o.icon}
+                trailing={
+                  o.value === value ? (
+                    <Check className="size-4 text-lavender" strokeWidth={2.2} />
+                  ) : null
+                }
+              >
+                {o.label}
+              </RowButton>
+            </RadioGroup.Item>
+          ))}
+        </RowGroup>
+      </RadioGroup.Root>
     );
 
   return (
-    <div
+    <RadioGroup.Root
       ref={ref}
-      role="radiogroup"
       aria-label={label}
-      onKeyDown={move}
+      value={value}
+      onValueChange={(v) => onValueChange(v as T)}
       className={cn(
         "glass relative flex h-10 gap-0.5 rounded-full p-[3px]",
         className,
@@ -92,19 +80,15 @@ export function Choice<T extends string>({
         />
       ) : null}
       {options.map((o) => (
-        <button
+        <RadioGroup.Item
           key={o.value}
-          type="button"
-          role="radio"
-          aria-checked={o.value === value}
-          tabIndex={o.value === value ? 0 : -1}
-          onClick={() => onValueChange(o.value)}
+          value={o.value}
           className="type-tab relative z-10 inline-flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-2xl px-3 text-foreground outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) aria-checked:text-lavender [&_svg]:size-4"
         >
           {o.icon}
           {o.label}
-        </button>
+        </RadioGroup.Item>
       ))}
-    </div>
+    </RadioGroup.Root>
   );
 }
