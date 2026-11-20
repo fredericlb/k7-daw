@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import { GitBranch, Loader2, Ellipsis, Trash2 } from "@studio/ui/icons";
+import { Ellipsis, GitBranch, Loader2, Trash2 } from "@studio/ui/icons";
 import { EXAMPLES_WORKSPACE } from "@studio/web-protocol/projects";
 import { useState } from "react";
 import { ConnectWorkspace } from "../git/ConnectWorkspace";

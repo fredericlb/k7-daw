@@ -42,18 +42,20 @@ export function SettingsPage() {
         <PairedDevicesSection />
         <Section title={m["home.engine"]()}>
           <Link
-              to={ENGINE_SETTINGS_ROUTE}
-              className="type-body flex min-h-11 items-center gap-3 px-3.5 py-2.5 outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
-            >
-              <AudioLines className="size-5 shrink-0 text-primary-text" />
-              <span className="min-w-0 flex-1">
-                <span className="block truncate">{m["settings.engineRow"]()}</span>
-                <span className="type-status block truncate text-fg-3">
-                  {m["settings.engineRowDetail"]()}
-                </span>
+            to={ENGINE_SETTINGS_ROUTE}
+            className="type-body flex min-h-11 items-center gap-3 px-3.5 py-2.5 outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
+          >
+            <AudioLines className="size-5 shrink-0 text-primary-text" />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate">
+                {m["settings.engineRow"]()}
               </span>
-              <ChevronRight className="size-4 shrink-0 text-fg-3" aria-hidden />
-            </Link>
+              <span className="type-status block truncate text-fg-3">
+                {m["settings.engineRowDetail"]()}
+              </span>
+            </span>
+            <ChevronRight className="size-4 shrink-0 text-fg-3" aria-hidden />
+          </Link>
         </Section>
       </>
     ),

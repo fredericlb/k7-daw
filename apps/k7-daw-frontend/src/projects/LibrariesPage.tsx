@@ -2,8 +2,8 @@
 // app update), then what each workspace pins of them, with Upgrade. A page and not a panel: it is visited on purpose,
 // rarely. See ../../docs/projects.md.
 
-import type { AccountLibrary } from "@studio/web-protocol";
 import { Spinner } from "@studio/ui/spinner";
+import type { AccountLibrary } from "@studio/web-protocol";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { findAccountFiles } from "../settings/accountFiles";

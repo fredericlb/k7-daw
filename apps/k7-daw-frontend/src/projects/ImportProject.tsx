@@ -98,9 +98,7 @@ export function ImportProject({
               <div
                 key={i}
                 className={
-                  line.startsWith("warning:")
-                    ? "text-warn"
-                    : "text-fg-2"
+                  line.startsWith("warning:") ? "text-warn" : "text-fg-2"
                 }
               >
                 {line}

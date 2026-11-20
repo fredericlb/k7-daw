@@ -40,11 +40,11 @@ function Disclosure({
         className="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-on-fill"
       >
         <Icon className="size-3.5 shrink-0 text-fg-3" />
-        <span className="min-w-0 flex-1 truncate type-body">
-          {label}
-        </span>
+        <span className="min-w-0 flex-1 truncate type-body">{label}</span>
         {detail && (
-          <span className="shrink-0 truncate text-fg-3 type-secondary">{detail}</span>
+          <span className="shrink-0 truncate text-fg-3 type-secondary">
+            {detail}
+          </span>
         )}
       </button>
       {open && <div className="pb-2">{children()}</div>}

@@ -178,10 +178,7 @@ export function HomeCommandBar({ children }: { children: ReactNode }) {
       listeners.current.delete(listener);
     };
   }, []);
-  const bar = useMemo(
-    () => ({ summon, onChanged }),
-    [summon, onChanged],
-  );
+  const bar = useMemo(() => ({ summon, onChanged }), [summon, onChanged]);
 
   return (
     <BarContext.Provider value={bar}>

@@ -4,8 +4,8 @@
 
 import { Button } from "@studio/ui/button";
 import { Cloud, GitBranch } from "@studio/ui/icons";
-import { RowGroup } from "@studio/ui/row-group";
 import { Input } from "@studio/ui/input";
+import { RowGroup } from "@studio/ui/row-group";
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { workspaceFolderName } from "../projects/projectName";

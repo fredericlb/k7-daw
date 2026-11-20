@@ -78,7 +78,11 @@ export function HomeTabs() {
         trailing={<HomeCommandsButton />}
       >
         <HomeTab icon={Folders} label={m["home.projects"]()} route="/" />
-        <HomeTab icon={ListChecks} label={m["home.tasks"]()} route={TASKS_ROUTE} />
+        <HomeTab
+          icon={ListChecks}
+          label={m["home.tasks"]()}
+          route={TASKS_ROUTE}
+        />
         <HomeTab
           icon={LibraryBig}
           label={m["home.libraries"]()}

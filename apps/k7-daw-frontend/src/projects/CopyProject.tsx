@@ -52,7 +52,9 @@ export function CopyProject({
       description={m["project.copyBody"]()}
       before={
         <>
-          <p className="rounded-xl bg-(--k7-input-fill) px-3 py-2 type-mono-value">{path}</p>
+          <p className="rounded-xl bg-(--k7-input-fill) px-3 py-2 type-mono-value">
+            {path}
+          </p>
           <div className="flex max-h-48 flex-col gap-1 overflow-auto">
             {targets.map((w) => (
               <button
@@ -60,7 +62,9 @@ export function CopyProject({
                 type="button"
                 disabled={busy}
                 className={`flex min-h-11 items-center gap-2 rounded-xl px-3 py-1.5 text-left type-body ${
-                  to?.name === w.name ? "bg-on-fill text-lavender" : "hover:bg-on-fill"
+                  to?.name === w.name
+                    ? "bg-on-fill text-lavender"
+                    : "hover:bg-on-fill"
                 }`}
                 onClick={() => setTo(w)}
               >

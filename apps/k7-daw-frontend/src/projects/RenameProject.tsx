@@ -45,7 +45,9 @@ export function RenameProject({
       title={m["project.renameTitle"]({ label })}
       description={m["project.renameBody"]()}
       before={
-        <p className="rounded-xl bg-(--k7-input-fill) px-3 py-2 type-mono-value">{path}</p>
+        <p className="rounded-xl bg-(--k7-input-fill) px-3 py-2 type-mono-value">
+          {path}
+        </p>
       }
       name={name}
       label={m["project.renameField"]()}
@@ -58,16 +60,16 @@ export function RenameProject({
       badName={badName}
       preview={
         same ? (
-          <span className="text-fg-2">
-            {m["project.renameSame"]()}
-          </span>
+          <span className="text-fg-2">{m["project.renameSame"]()}</span>
         ) : (
           folder
         )
       }
       // What a rename COSTS, said before it happens: an address is a thing people keep.
       note={
-        <p className="text-warn type-secondary">{m["project.renameWarning"]()}</p>
+        <p className="text-warn type-secondary">
+          {m["project.renameWarning"]()}
+        </p>
       }
       submit={
         <>

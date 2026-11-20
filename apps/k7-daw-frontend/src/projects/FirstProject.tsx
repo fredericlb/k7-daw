@@ -63,9 +63,7 @@ export function FirstProject({
             <FolderPlus className="h-5 w-5" />{" "}
             {m["project.firstTitle"]({ workspace })}
           </h1>
-          <p className="type-secondary text-fg-2">
-            {m["project.firstBody"]()}
-          </p>
+          <p className="type-secondary text-fg-2">{m["project.firstBody"]()}</p>
         </div>
 
         <ShapePicker shape={shape} onShape={setShape} busy={busy} />

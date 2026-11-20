@@ -2,11 +2,12 @@
 // `/external`, `/settings`, `/settings/engine`, `/libraries`, `/about`, `/tasks`, and the docs host.
 import type { Page } from "@playwright/test";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
+import { homeTab } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
-/** Moves the router to `path` without a reload, as the account menu's own items do. */
+/** Moves the router to `path` without a reload, as a link of the router does. */
 async function routeTo(page: Page, path: string): Promise<void> {
   await page.evaluate((to) => {
     const win = globalThis as unknown as {
@@ -55,8 +56,10 @@ test("/settings draws every section with its controls, a tab at a time", async (
         page.getByRole("heading", { name, exact: true }),
       ).toBeVisible();
   };
-  // General opens first: the language and the AI key; the separation chains are the tray engine page's (apps/k7-daw-frontend/docs/settings.md).
+  // General opens first: the language, the AI key, the separation chains and About (apps/k7-daw-frontend/docs/settings.md).
+  await expect(page.getByRole("tablist", { name: "Settings" })).toBeVisible();
   await sections(["Language", "AI"]);
+  await expect(page.getByRole("region", { name: "About" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Français" })).toBeEnabled();
   await expect(
     page.getByRole("textbox", { name: "New API key" }),
@@ -64,6 +67,7 @@ test("/settings draws every section with its controls, a tab at a time", async (
   // Devices: this device's paired devices (apps/k7-daw-frontend/docs/settings.md).
   await page.getByRole("tab", { name: "Devices" }).click();
   await sections(["Paired devices"]);
+  await expect(page.getByRole("link", { name: /^Engine/ })).toBeVisible();
   await expect(page).toHaveURL(/[?&]tab=devices/);
   // A link straight to a tab opens on it.
   await page.reload();
@@ -80,7 +84,7 @@ test("/settings/engine opens as a route change, off the tray", {
   const page = await k7.open("/settings");
   await expect(page.getByRole("heading", { name: "Settings" })).toBeVisible();
   const watch = watchPage(page);
-  // Reached the way the account menu reaches it: a route change, not a load.
+  // Reached the way App settings reaches it: a route change, not a load.
   await routeTo(page, "/settings/engine");
   await expect(page.getByRole("heading", { name: "Engine" })).toBeVisible();
   watch.assertClean();
@@ -100,19 +104,21 @@ test("/libraries lists the bundled libraries, read-only", async ({ k7 }) => {
   const watch = watchPage(page);
   await expect(page.getByRole("heading", { name: "Libraries" })).toBeVisible();
   await expect(page.getByText("@k7-core", { exact: true })).toBeVisible();
-  await expect(page.getByText(/changes with an app update/)).toBeVisible();
+  await expect(page.getByTestId("libraries-readonly-note")).toBeVisible();
   await expect(
     page.getByRole("button", { name: /^(add|remove|publish draft)$/i }),
   ).toHaveCount(0);
   watch.assertClean();
 });
 
-test("/about shows the licence and filters the third-party notices", async ({
+test("About, inside App settings, shows the licence and filters the third-party notices", async ({
   k7,
 }) => {
+  // The old address lands on App settings, where About lives.
   const page = await k7.open("/about");
   const watch = watchPage(page);
-  await expect(page.getByRole("heading", { name: "About" })).toBeVisible();
+  await expect(page).toHaveURL(/\/settings/);
+  await expect(page.getByRole("region", { name: "About" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Licence" })).toBeVisible();
   await page.getByRole("button", { name: "Read it" }).click();
   await expect(
@@ -144,10 +150,11 @@ test("/tasks lists the workspaces' TODOS.md, done ones on demand", async ({
   const page = await k7.open("/tasks");
   const watch = watchPage(page);
   await expect(page.getByRole("heading", { name: "Tasks" })).toBeVisible();
-  await expect(page.getByText("E2E open task")).toBeVisible();
-  await expect(page.getByText("E2E done task")).toBeHidden();
+  const tasks = page.getByRole("region", { name: /^Tasks of / });
+  await expect(tasks.getByText("E2E open task")).toBeVisible();
+  await expect(tasks.getByText("E2E done task")).toBeHidden();
   await page.getByRole("checkbox", { name: "Show done" }).check();
-  await expect(page.getByText("E2E done task")).toBeVisible();
+  await expect(tasks.getByText("E2E done task")).toBeVisible();
   watch.assertClean();
 });
 
@@ -163,6 +170,6 @@ test("/docs on the app's origin is no page, and says the way back", async ({
     }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Back to Projects" }).click();
-  await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
+  await expect(homeTab(page, "Projects")).toBeVisible();
   watch.assertClean();
 });

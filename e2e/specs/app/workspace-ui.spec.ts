@@ -6,6 +6,7 @@ import type { Locator, Page } from "@playwright/test";
 import { gzipSync, strToU8, zipSync } from "fflate";
 import { FileService } from "../../src/files.ts";
 import { FIXTURES_DIR } from "../../src/fixtures.ts";
+import { newMenu, projectLink, workspaceCard } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
 import { watchPage } from "../../src/watch.ts";
 
@@ -39,9 +40,9 @@ async function expectListed(
     .toEqual(projects);
 }
 
-/** A workspace's rows on the home page's table: its band and its projects, each carrying its name. */
+/** A workspace's card on the home page: its header and its projects. */
 function workspaceRow(page: Page, ws: string): Locator {
-  return page.locator(`tr[data-workspace="${ws}"]`);
+  return workspaceCard(page, ws);
 }
 
 /** The project's ⋮ menu inside `row`, opened on the item named `act`. */
@@ -65,18 +66,13 @@ async function projectAct(
 
 /** Makes a workspace through the "New workspace" dialog. */
 async function newWorkspace(page: Page, ws: string): Promise<void> {
-  await page
-    .getByRole("button", { name: "New workspace", exact: true })
-    .click();
+  await newMenu(page, "New workspace");
   const dialog = page.getByRole("dialog", { name: "New workspace" });
   await dialog.getByRole("textbox").fill(ws);
   await dialog.getByRole("button", { name: "Create", exact: true }).click();
   await expect(dialog).toBeHidden({ timeout: 30_000 });
-  // The table draws a screenful: searched, both of this test's workspaces are on it, whatever else the account holds.
-  await page
-    .getByRole("searchbox", { name: "Search a workspace or a project" })
-    .fill(WS);
-  await expect(workspaceRow(page, ws).first()).toBeVisible();
+  // The card appears with the next read of the list.
+  await expect(workspaceRow(page, ws)).toBeVisible();
 }
 
 test("a workspace and its project are made, renamed, copied and deleted from the home page", async ({
@@ -104,9 +100,7 @@ test("a workspace and its project are made, renamed, copied and deleted from the
   const row = workspaceRow(page, WS);
 
   await test.step("create a DJ set project in the archetype dialog", async () => {
-    await row
-      .getByRole("button", { name: "Create a project in this workspace" })
-      .click();
+    await row.getByRole("button", { name: `New project in ${WS}` }).click();
     const dialog = page.getByRole("dialog", { name: "New project" });
     await dialog.getByText("DJ set", { exact: true }).click();
     await expect(dialog.getByRole("radio", { name: /^DJ set/ })).toBeChecked();
@@ -115,10 +109,8 @@ test("a workspace and its project are made, renamed, copied and deleted from the
     await dialog.getByRole("button", { name: "Create", exact: true }).click();
     await expect(dialog).toBeHidden({ timeout: 30_000 });
     await expectListed(page, WS, ["first.k7"]);
-    await expect(row.locator(`a[href$="/@local/${WS}/first.k7"]`)).toBeVisible(
-      SHOWN,
-    );
-    await expect(row.getByRole("img", { name: "DJ set" })).toBeVisible();
+    await expect(projectLink(page, WS, "first")).toBeVisible(SHOWN);
+    await expect(row.getByText("DJ set", { exact: true })).toBeVisible();
   });
 
   await test.step("rename it", async () => {
@@ -129,12 +121,8 @@ test("a workspace and its project are made, renamed, copied and deleted from the
     await dialog.getByRole("button", { name: "Rename", exact: true }).click();
     await expect(dialog).toBeHidden({ timeout: 30_000 });
     await expectListed(page, WS, ["renamed.k7"]);
-    await expect(
-      row.locator(`a[href$="/@local/${WS}/renamed.k7"]`),
-    ).toBeVisible(SHOWN);
-    await expect(row.locator(`a[href$="/@local/${WS}/first.k7"]`)).toHaveCount(
-      0,
-    );
+    await expect(projectLink(page, WS, "renamed")).toBeVisible(SHOWN);
+    await expect(projectLink(page, WS, "first")).toHaveCount(0);
   });
 
   await test.step("copy it into the other workspace, with the @workspace module it extends", async () => {
@@ -154,10 +142,7 @@ test("a workspace and its project are made, renamed, copied and deleted from the
     await dialog.getByRole("button", { name: "Copy", exact: true }).click();
     await expect(dialog).toBeHidden({ timeout: 60_000 });
     await expectListed(page, TARGET_WS, ["renamed.k7"]);
-    const target = workspaceRow(page, TARGET_WS);
-    await expect(
-      target.locator(`a[href$="/@local/${TARGET_WS}/renamed.k7"]`),
-    ).toBeVisible(SHOWN);
+    await expect(projectLink(page, TARGET_WS, "renamed")).toBeVisible(SHOWN);
     await expectListed(page, WS, ["renamed.k7"]);
     // Without its module the copy would open on "extends unknown module" (apps/k7-daw-backend/docs/file-workspaces.md).
     expect(await files.readText(TARGET_WS, MODULE)).toBe(
@@ -174,9 +159,7 @@ test("a workspace and its project are made, renamed, copied and deleted from the
     await dialog.getByRole("button", { name: "Delete", exact: true }).click();
     await expect(dialog).toBeHidden({ timeout: 30_000 });
     await expectListed(page, TARGET_WS, []);
-    await expect(
-      target.locator(`a[href$="/@local/${TARGET_WS}/renamed.k7"]`),
-    ).toHaveCount(0, SHOWN);
+    await expect(projectLink(page, TARGET_WS, "renamed")).toHaveCount(0, SHOWN);
     // The original is untouched by deleting its copy.
     await expectListed(page, WS, ["renamed.k7"]);
   });
@@ -217,7 +200,7 @@ test("an Ableton project zipped and dropped on a workspace row is translated by 
     "Song/Song.als": gzipSync(strToU8(SET)),
     "Song/Samples/take.wav": new Uint8Array(wav),
   });
-  await test.step("drop the zip on the workspace's row", async () => {
+  await test.step("drop the zip on the workspace's card", async () => {
     const data = await page.evaluateHandle(
       ({ name, bytes }) => {
         const d = new DataTransfer();
@@ -226,7 +209,7 @@ test("an Ableton project zipped and dropped on a workspace row is translated by 
       },
       { name: "Song.zip", bytes: [...zip] },
     );
-    const row = workspaceRow(page, DROP_WS).first();
+    const row = workspaceRow(page, DROP_WS);
     for (const type of ["dragenter", "dragover", "drop"])
       await row.dispatchEvent(type, { dataTransfer: data });
   });

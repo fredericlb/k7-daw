@@ -70,7 +70,9 @@ export function LibrariesCard({
     >
       {/* On the page the heading already says Libraries; only the warning is worth a row then. */}
       {missing ? (
-        <ErrorCard title={m["libs.needOne"]()}>{m["libs.missingBody"]()}</ErrorCard>
+        <ErrorCard title={m["libs.needOne"]()}>
+          {m["libs.missingBody"]()}
+        </ErrorCard>
       ) : (
         <>
           {!inPage && (

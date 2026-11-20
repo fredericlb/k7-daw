@@ -30,60 +30,60 @@ export function AboutSection() {
   const [showLicense, setShowLicense] = useState(false);
   const local = useLocalApp();
   return (
-    <div role="region" aria-label={m["about.title"]()} className="flex flex-col gap-4">
-        <Section title="K7 DAW" hint={m["about.tagline"]()}>
-          <Row
-            // version.ts is the frontend's one version source, whatever feeds it (../../docs/about.md).
-            label={m["about.version"]({ version: VERSION })}
-            detail={
-              local?.engine
-                ? m["settings.desktopVersion"]({ version: local.version })
-                : undefined
-            }
-          />
-        </Section>
-
-        <Section title={m["about.license.title"]()}>
-          <Row label={m["about.license.body"]()}>
-            <Action onClick={() => setShowLicense((s) => !s)}>
-              {showLicense
-                ? m["about.license.hide"]()
-                : m["about.license.show"]()}
-            </Action>
-          </Row>
-          {showLicense && (
-            <Suspense fallback={null}>
-              <OwnLicense />
-            </Suspense>
-          )}
-        </Section>
-
-        <Section
-          title={m["about.source.title"]()}
-          hint={m["about.source.hint"]()}
-        >
-          <Row label={SOURCE_URL}>
-            <a
-              href={SOURCE_URL}
-              target="_blank"
-              rel="noreferrer"
-              className={buttonVariants({ variant: "glass", size: "sm" })}
-            >
-              <ExternalLink className="size-5" />
-              {m["about.source.open"]()}
-            </a>
-          </Row>
-        </Section>
-
-        <Suspense
-          fallback={
-            <p className="type-secondary text-fg-2">
-              {m["about.notices.loading"]()}
-            </p>
+    <section aria-label={m["about.title"]()} className="flex flex-col gap-4">
+      <Section title="K7 DAW" hint={m["about.tagline"]()}>
+        <Row
+          // version.ts is the frontend's one version source, whatever feeds it (../../docs/about.md).
+          label={m["about.version"]({ version: VERSION })}
+          detail={
+            local?.engine
+              ? m["settings.desktopVersion"]({ version: local.version })
+              : undefined
           }
-        >
-          <NoticesSection />
-        </Suspense>
-    </div>
+        />
+      </Section>
+
+      <Section title={m["about.license.title"]()}>
+        <Row label={m["about.license.body"]()}>
+          <Action onClick={() => setShowLicense((s) => !s)}>
+            {showLicense
+              ? m["about.license.hide"]()
+              : m["about.license.show"]()}
+          </Action>
+        </Row>
+        {showLicense && (
+          <Suspense fallback={null}>
+            <OwnLicense />
+          </Suspense>
+        )}
+      </Section>
+
+      <Section
+        title={m["about.source.title"]()}
+        hint={m["about.source.hint"]()}
+      >
+        <Row label={SOURCE_URL}>
+          <a
+            href={SOURCE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className={buttonVariants({ variant: "glass", size: "sm" })}
+          >
+            <ExternalLink className="size-5" />
+            {m["about.source.open"]()}
+          </a>
+        </Row>
+      </Section>
+
+      <Suspense
+        fallback={
+          <p className="type-secondary text-fg-2">
+            {m["about.notices.loading"]()}
+          </p>
+        }
+      >
+        <NoticesSection />
+      </Suspense>
+    </section>
   );
 }

@@ -38,52 +38,22 @@ This screen is **the front door itself**. k7 answers at the origin root
 If the first thing you want at a front door is your own work, then the page listing that work IS
 the front door, and putting it behind a prefix you have to know how to type would rank it second.
 
-**The user menu — the account, the settings, the logout — is in THIS page's
-sidebar**, never in the editor's header. Inside a project the project bar's unfold, at the same edge, opens the same
-sidebar as a drawer (`HomeDrawer`), so everything this page links to is one click away from any
-project without the project bar carrying it. The router's basename is the project there, so the drawer's
-entries are full addresses resolved against `projectsUrl` — drawn in place, no page load
-(`shell.md`) — and none is lit. It is `@studio/ui/user-menu` (`userMenu.md`).
+**The home pages share ONE frame** (`HomeFrame.tsx`): a floating tab bar, a round command-bar button beside it, no
+sidebar and no bottom bar. The tabs are Projects, Tasks, Libraries and Frozen chains, drawn by `@studio/ui/tab-bar`.
+They are LINKS, since each page has its own address: a plain click is a router move, a modified click opens like any
+link, and the current page carries `aria-current`. The settings pages are reached by the cog at the right of every
+page's top bar and light no tab.
 
-**One left sidebar for this page and the ones that hang off it**, `/tasks`, `/libraries`,
-`/settings` (`HomeSidebar.tsx`), and no header: the page's whole
-height goes to the list. Its entries are **Projects**, **Tasks**, **Libraries** and
-**Frozen chains**. The one for the
-page you are on is lit in the accent, and the header's far right is the **user menu**, on the row of the k7
-name; where the `wide` step is not reached it is an ICON RAIL with no name to put it beside, so there the menu
-keeps the foot of the rail. `wide` is a landscape screen from
-640 px, or any screen wider than a tablet held upright (`src/index.css`): a tablet in portrait is
-768–1024 px wide, so a width rule alone would hand it the full sidebar and take a fifth of the page
-from what you were reading. The same entries in the same place on every page say which of them you
-are on, so none of the others carries a back button of its own.
+| choice | why |
+|---|---|
+| the tabs are links, not a tablist | a page is an address that copies, bookmarks and opens in a new tab |
+| no mini player and no engine slot on the home | the home plays nothing; engine state reaches a person as toasts, wherever they are |
+| no downloads button | a download is a task, and tasks are read in the Tasks & history panel |
+| the frame holds the command bar, the question host and the toasts | a camera mode, an armed delete or a toast outlives a page change |
+| the page column ends 144 px above the window's foot | the tab bar floats over it and must never cover the last row |
 
-Its foot carries the downloads button, and on the rail the user menu below it. The queue
-and the engine slot are the BAR's, at its right end (below). The drawer the sidebar becomes inside a
-project carries no user menu of its own either: it is the header's there, as here.
-
-## The home bar
-
-**Every home page has the same bar at its foot, always** (`HomeFrame.tsx`), under the sidebar and the
-page alike, so it spans the window. It is the mini player's DOCK (`apps/k7-daw-frontend/packages/ui-mini-player/docs/miniPlayer.md`):
-no home page mounts a player, so it is the standby bar holding the home's own controls. The row never comes and goes, so the way back
-to a folded sidebar at its left edge is always there.
-
-**Its two ends are fixed.** At the left, the fold/unfold and the command bar's opener (`commandBar.md`).
-At the right, **a page's own control** when it has one, then **the engine slot**. It is the
-bar's because the engine is a live control that must never leave the screen, and the row is where
-the eye already goes for what plays. The standby bar says NOTHING about the silence: the message
-filled the one row people look at for controls, and an empty bar already says it.
-
-**The engine slot is the bar's** (`shell.md`), on every home page and with the sidebar out or folded: the engine it shows
-is the one a project opens on, so it has to stay in sight.
-
-**The sidebar has ONE control, and it never moves**: the bar's left edge — the bottom-left of the window
-— holds a fold button while the sidebar is out and an unfold button while it is folded (`HomeFrame.tsx`,
-`lead`). The fold is kept per browser, being a habit of the screen, and the rail folds like the wide one:
-the control is in the bar, so the sidebar's width never decides whether it exists.
-
-**The page column holds its own fixed boxes** (`contain: layout`), so a page's docks and pop-ins
-stop at the sidebar and at the bar without knowing either's size.
+The round button opens the command bar, which also finds workspaces and projects (`workspace open`, `project open`)
+and says what it did as toasts (`commandBar.md`). There is no search field in the page: the bar is the one search.
 
 The entries are routes, so going between them reloads nothing. `/external` is not among them: it
 is the page a SECOND device opens, independent of this one, with a header of its own
@@ -172,11 +142,11 @@ opened, so it asks again either way.
 
 The engine scans its plugins at every start, and a project naming an external plugin waits for
 that scan before it goes to the engine (`apps/k7-daw-backend/docs/file-engine.md`). The home page
-says it is running — "Scanning plugins… N / M", a thin bar above the command bar
-(`projects/PluginScanBar.tsx`) — so that a project opened just then does not seem slow for no
+says it is running — a toast at the top, "Scanning plugins" with N / M and a bar
+(`projects/usePluginScanToast.ts`) — so that a project opened just then does not seem slow for no
 reason. Which engine: the one the policy would play the account's projects on, else the one the
 account remembers, else the only one that answered; under the desktop app that is the machine's own. With
-none, or one that reports no scan, there is no bar. It is asked after the list, beside it, and
+none, or one that reports no scan, there is no toast. It is asked after the list, beside it, and
 never in front of it, for the reason above: the list needs no engine. The page listens on a
 socket that claims nothing (`apps/k7-daw-frontend/packages/engine-browser/docs/access.md`), since it plays nothing.
 
@@ -241,15 +211,20 @@ avoided everywhere else. A line this
 screen does not know is refused **here**: there is no service behind to pass it to, unlike the
 editor's bar, whose lines end at `/command`.
 
-## The LIBRARIES, a read-only page
+## The LIBRARIES page: the libraries read-only, the workspaces' pins with Upgrade
 
 The libraries are named folders of the modules and chains every project inherits, **bundled with the
 app**: a library changes with an app update and nothing on this screen edits one. It is a PAGE,
-`/libraries` (`LibrariesPage.tsx`, drawing `LibrariesCard.tsx`), which the header's **Libraries**
-entry links to — reserved like `/external`, and read before `parseLaunch`. It lists each library
+`/libraries` (`LibrariesPage.tsx`, drawing `LibrariesCard.tsx`), which the **Libraries** tab
+links to — reserved like `/external`, and read before `parseLaunch`. It lists each library
 by name with the versions it holds, says so plainly, and flags a library whose folder is missing or
 whose version needs a newer k7 level. A device user is never an admin, and the backend answers 403 to
 a write or a publish anyway ([apps/k7-daw-backend/docs/files/hub.md](../../k7-daw-backend/docs/files/hub.md)).
+
+Under the libraries, **each workspace's pins** (`LibraryPins.tsx`): the versions it pins, the newest this k7 runs, and
+an **Upgrade** when the pin is behind. Upgrade rewrites `_library-pins.k7x` and nothing else — the home has no
+engine session to run the editor's `library upgrade` verb — so the forks whose base changed are listed by the verb,
+not here, and the songs recompile when next opened (`apps/k7-daw-frontend/../../docs/library-versions-plan.md`).
 
 Without a library k7 refuses to open anything — not on principle, but because no `@k7-core/…`
 reference would resolve, and a song opened with all its shared modules missing reads as a broken
@@ -296,8 +271,8 @@ workspace and a project in it to blame instead.
 
 ## Dropping a foreign project on a workspace
 
-A `.dawproject` dragged onto a workspace's band, or onto any of its projects' rows, is imported into
-it. The rows light up while the drag is over them — one workspace at a time, so what is about to
+A `.dawproject` dragged onto a workspace's card is imported into
+it. The card lights up while the drag is over it — one workspace at a time, so what is about to
 happen is never ambiguous — and the drop
 opens a popin that asks **what to call it** before anything is uploaded. It defaults to the file's
 own name, shows the folder that will be created under it (the same `projectFolderName` rule
@@ -336,13 +311,12 @@ chain, and the bare `/@banc/live.k7` is the rig alone. It edits no bundled libra
 reached by an address and rebuilt on every open; a row for it on this page would offer to open
 or delete a rig that is thrown away anyway. `workspaceNames` drops it with the hidden ones.
 
-## A project opens in THIS tab, and the sidebar returns
+## A project opens in THIS tab, and the project's name returns
 
 Every departure — the indented row under the workspace, the tree's button, the empty workspace's
 link, the import's **Open** — opens in the same tab. Opening a project is the main reason to be on
 this page, and a new tab for each one stacks tabs nobody closes, each one an editor holding a
-session. The way back is the **unfold** at the left of the editor's project bar, which opens this
-page's sidebar over the project, and the project's name, which links here too (`projectsUrl`, the same address both gates use when they send
+session. The way back is the Back button of the project's header and the project's name, which links here too (`projectsUrl`, the same address both gates use when they send
 you back). The browser's own Back works as well: each crossing is a history entry.
 Leaving with an edit the autosave is still holding back asks first (`hasUnsavedWork`,
 `apps/k7-daw-frontend/packages/ui-editor/src/unsaved.ts`), whichever way you leave.
@@ -374,22 +348,25 @@ descended into and reported — a `.k7` filed inside a `.k7` folder is a real ar
 tree keeps its button: it is for looking at what is inside, including folders that are not
 projects.
 
-### One band per WORKSPACE, in the songs' table
+### One card per WORKSPACE
 
 The list shows the account's folders under its `workspace/` on the server, every one addressed the
 same way, `@local`. `Examples`, seeded with the demos on first contact, is what a new account has
 on the day it has nothing else.
 
-It is drawn in `BandTable` (`src/projects/BandTable.tsx`), shared with the other lists:
-a search box, then each workspace as a band carrying its count, its New project and
-its ⋮, its projects as rows under it (`ProjectsTable.tsx`).
+Each workspace is a card (`ProjectsTable.tsx`), a `region "Workspace <name>"`: a header with its name, its
+count, its git pills (`git/GitBar.tsx`), New project and ⋮, then its projects as rows (`ProjectRow.tsx`).
 
 | choice | why |
 |---|---|
-| one table for songs and projects | the two lists are scanned the same way, and one component keeps them alike: the search, the bands, a screenful of rows in the page |
-| a band folds, any of them | the list grows by workspace; folding one is how a person keeps the others in view |
-| a search keeps the projects whose workspace, path or tags hold every word, and their bands | finding a project by part of its name beats opening workspaces one after the other |
-| every row of a workspace carries `data-workspace` | a table has no element grouping a band's rows: a drop, and a test, find a workspace's rows by it |
+| a card per workspace, not a table | a workspace has acts of its own (Pull, Commit & Push, New project) that a band squeezed into a column |
+| a card folds | the list grows by workspace; folding one keeps the others in view |
+| no virtual scroll | a card's rows skip rendering while off screen (`content-visibility`), which costs less than measuring them |
+| the card carries `data-workspace` and the drop handlers | a drop, and a test, find a workspace by its card |
+| Pull runs in place, with a busy pill and no percentage | a pull reports none; a bar that moved would lie |
+| Commit & Push is one act, opened as the shared `dialog "Commit & Push"` | Push alone is retired; the pill stays enabled when only a push is owed |
+| the pills open the git screens through `gitScreens.tsx` | one dialog host per page, never a dialog per card |
+| "On your other devices" follows the last card | it offers clones, which are rarer than the work above it |
 
 ## `@local` — every project's address
 
@@ -535,31 +512,24 @@ On the icon rail the glyph is all an entry has, so no two entries share one.
 
 ## An empty page offers the act that fills it
 
-Every list on this side that can be empty draws the same block when it is (`EmptyState.tsx`): a
-glyph, one sentence saying what would be here in the reader's words, and the button that makes the
-first one — New workspace on Projects. The button is there even when the same one exists elsewhere on the screen: an
-empty page is read from its middle, and a sentence telling the reader where a control is (*the red
-button at the foot of the sidebar*) is a map where an act was wanted. A page with nothing to do from
-here, Tasks, draws the block without one.
+Every list on this side that can be empty draws `@studio/ui/empty-state`: a glyph, a title, one sentence saying what
+would be here in the reader's words, and the button that makes the first one — New workspace on Projects. The button
+is there even when the New menu has the same one: an empty page is read from its middle. A page with nothing to do
+from here, Tasks, draws the block without one.
 
-## The page's hierarchy: one heading, one primary, violet for state
+## The page's hierarchy: one title, one menu for New, violet for state
 
-The page opens on a heading, **Projects**, with the counts under it, and two buttons beside it:
-**New project**, the primary, and **New workspace**, secondary. That order is how often each is
-wanted — a project every session, a workspace a few times a year — and an unlabelled "New" that
-made the rarer of the two was the only solid button on the page. The list is capped at `max-w-5xl`
-so a row's actions stay near its name on a wide screen.
+The top bar (`PageFrame.tsx`) is a large title with a count line under it, and at its right **New** (a menu: New
+workspace, Clone from git), **More** (Show examples) and the cog to App settings. A project is made from its
+workspace's card, where its destination is already known, so the page has no New project button. The list is capped
+at `max-w-5xl`.
 
-**Every page of the home side shares that frame** (`PageFrame.tsx`): Projects, Tasks, Libraries,
-Settings and About sit in the same column under the same heading row, a page's own controls in that
-row rather than in the sidebar's foot. A page of
-narrow rows (settings, the libraries card) keeps them narrow inside the frame instead of re-centring
-a narrower column, so moving between pages never moves where the title starts.
+**Every page of the home side shares that frame**: Projects, Tasks, Libraries and Frozen chains sit in the same
+column under the same top bar, a page's own controls in it. A page of narrow rows (settings, libraries) keeps them
+narrow inside the frame so moving between pages never moves where the title starts.
 
-**The chrome is neutral; violet is a state.** The sidebar and the editor's header and footer are the card surface, and the accent is kept for what is lit, selected or
-the main action — the sidebar's current entry, the archetype picked, the primary button, a
-selection on the timeline. A violet wash on every bar left that accent nothing to say once the thing
-it marked was on screen.
+**The chrome is neutral; violet is a state.** The accent is kept for what is lit, selected or the main action — the
+current tab, the archetype picked, the primary button.
 
 ### The suffix decides, and the name is shown first
 
@@ -641,7 +611,7 @@ The workspace comes **last**, after the person's own, and is **not listed** once
 workspace of one's own: the demos are then the reference rather than the work. **Show examples**,
 in the ⋮ beside the page's heading (`ProjectsMenu.tsx`), brings it back. Until that toggle is used
 it is on only while Examples is the only workspace, since a new account's page would otherwise show
-nothing at all; once used, the browser keeps the choice, as it keeps the sidebar's fold.
+nothing at all; once used, the browser keeps the choice.
 
 ### Renaming a project
 
@@ -701,17 +671,16 @@ and the bar's verbs (`homeCommands.test.ts`) are covered, the screen is not.
 - **delete a listed library's folder**, reload the home page → the amber line says the app holds no
   folder for some libraries, and the row reads *not on the server yet*;
 - **open a chain's bench, then go home** → `Banc` is not in the list of workspaces;
-- **drag a `.dawproject` onto a workspace row**: that row alone lights up, the popin opens on the
+- **drag a `.dawproject` onto a workspace card**: that card alone lights up, the popin opens on the
   file's name, and the folder under the field follows what you type. Import → the log, with its
-  warnings in amber, then **L'ouvrir** opens the project in this tab, and Back shows the row's
+  warnings in amber, then **L'ouvrir** opens the project in this tab, and Back shows the card's
   project count already gone up. Drop the same file twice under the same name → refused by name, and the
   first import is untouched. Drag a `.wav` onto a row → it lights up like any file drag (a
   dragover cannot read a name) and the drop is refused in a sentence saying what it takes;
 - unfold a workspace, reload → the same one unfolded, `?ws=` in the address;
 - create a project → the row appears **with no refresh**, in five seconds at worst. Longer means
   the list is not coming from the machine;
-- open a project → it opens in THIS tab; the unfold at the left of the project bar opens this
-  sidebar over it, its Projects entry (and the project's name) comes back here, and ctrl-click still
+- open a project → it opens in THIS tab; the project's name comes back here, and ctrl-click still
   opens a new tab;
 - leave a project from the editor, and lose its engine to somebody else → both come back here;
 - delete a project → it leaves the list, and its folder is in the workspace's `_recycle_bin/`;

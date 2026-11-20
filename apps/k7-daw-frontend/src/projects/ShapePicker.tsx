@@ -48,9 +48,7 @@ export function ShapePicker({
                 onChange={() => onShape(sh.id)}
                 className="sr-only"
               />
-              <span
-                className={on ? "text-primary-text" : "text-fg-2"}
-              >
+              <span className={on ? "text-primary-text" : "text-fg-2"}>
                 <ShapeSchematic shape={sh.id} />
               </span>
               <span className="flex items-center gap-1.5 font-semibold text-sm">

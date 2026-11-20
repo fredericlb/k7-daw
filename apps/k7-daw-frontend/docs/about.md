@@ -1,10 +1,10 @@
 # The About page, and where its notices come from
 
-`/about` is a page of the home, like `/settings` (`src/about/AboutPage.tsx`): k7's name and
-version, its licence with the full text, the link to its source, and every third-party notice.
-It is reached from the user menu, the row under Settings, because that menu is where every page
-of the origin keeps the things you visit on purpose and rarely. The word is reserved in
-`apps/k7-daw-frontend/packages/web-protocol/projects.ts`, so a reload or a pasted link lands on it.
+About is a section of App settings, the General tab (`src/about/AboutSection.tsx`): k7's name and
+version, its licence with the full text, the link to its source, and every third-party notice. The address `/about`
+stays reserved in `apps/k7-daw-frontend/packages/web-protocol/projects.ts` and redirects to `/settings`, so a pasted
+link still lands on it. None of it is a setting; it sits there because the things visited on purpose and rarely
+share one page.
 
 ## The version
 

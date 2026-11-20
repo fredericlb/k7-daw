@@ -322,8 +322,7 @@ export async function runHomeCommand(
   switch (spec.canonical) {
     case "workspace open": {
       const ws = d.workspaces.find((w) => w.name === rest);
-      if (!ws)
-        return use(d.refuse, msg["hc.noWorkspaceNamed"]({ name: rest }));
+      if (!ws) return use(d.refuse, msg["hc.noWorkspaceNamed"]({ name: rest }));
       d.open?.(ws.name);
       return true;
     }

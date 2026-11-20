@@ -51,7 +51,10 @@ export function LibraryPins({
     const own = all.filter((w) => !w.isSingleProject);
     setRows(
       await Promise.all(
-        own.map(async (ws) => ({ ws, pins: await readPins(fileService, ws.name) })),
+        own.map(async (ws) => ({
+          ws,
+          pins: await readPins(fileService, ws.name),
+        })),
       ),
     );
   }, [fileService]);
@@ -98,7 +101,9 @@ export function LibraryPins({
               const pinned = pinnedVersion(pins, l.name);
               const newest = newestRunnable(l);
               const behind =
-                typeof pinned === "number" && newest !== null && pinned < newest;
+                typeof pinned === "number" &&
+                newest !== null &&
+                pinned < newest;
               return (
                 <div
                   key={l.name}
@@ -127,7 +132,9 @@ export function LibraryPins({
                         name: l.name,
                         to: newest,
                       })}
-                      onClick={() => void upgrade(ws.name, pins, l.name, newest)}
+                      onClick={() =>
+                        void upgrade(ws.name, pins, l.name, newest)
+                      }
                     >
                       {m["libs.upgrade"]()}
                     </Button>

@@ -42,7 +42,9 @@ export function Row({
     <div className="flex min-h-11 items-center gap-4 px-3.5 py-2.5">
       <div className="min-w-0 flex-1">
         <div className="type-body truncate">{label}</div>
-        {detail && <div className="type-status truncate text-fg-3">{detail}</div>}
+        {detail && (
+          <div className="type-status truncate text-fg-3">{detail}</div>
+        )}
       </div>
       {children && <div className="flex shrink-0 gap-2">{children}</div>}
     </div>

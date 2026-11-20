@@ -171,9 +171,9 @@ while the bar has the keys, and a row commits on `mousedown` and preventDefaults
 **On the home pages the bar is the frame's, not a page's** (`src/projects/HomeCommandBar.tsx`, held
 by `HomeFrame`): every home page has it, the settings as much as Projects, and a
 `camera mode` or an armed `project delete` survives going from one page to the next. Its opener is
-in the home bar's left slot, right of the sidebar's toggle, and stays there whether the sidebar is out
-or folded: one pair of buttons at the bottom-left, as in a project. What the bar says is a line at the foot of
-the page's column, shown only while there is something to read.
+the round button beside the home tab bar: one control, on every home page, as in a project. What the bar says
+comes back as toasts (a refusal as a warning), so no line is kept at the page's foot. Besides the verbs, it finds
+workspaces and projects: `workspace open` unfolds a workspace's files and `project open` opens a project.
 
 The workspaces its verbs act on are read when the bar opens and again before a line runs, not
 polled: most home pages list no project, and a poll there would be a request every few seconds for

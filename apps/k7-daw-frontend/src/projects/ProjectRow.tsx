@@ -64,6 +64,7 @@ export function ProjectRow({
     .join(" · ");
   return (
     // The row opens the project as its link does; the link stays for the keyboard and a middle click.
+    // biome-ignore lint/a11y/useKeyWithClickEvents lint/a11y/noStaticElementInteractions: the inner link is the keyboard's way in.
     <div
       className="group flex min-h-[60px] cursor-pointer items-center gap-3 px-3.5 py-2 transition-colors [content-visibility:auto] [contain-intrinsic-size:auto_60px] hover:bg-on-fill"
       onClick={() => window.location.assign(href)}
@@ -121,6 +122,7 @@ export function ProjectRow({
           </Badge>
         ))}
       </a>
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents lint/a11y/noStaticElementInteractions: it only keeps the menu's click off the row. */}
       <span
         className="inline-flex shrink-0 items-center"
         onClick={(e) => e.stopPropagation()}

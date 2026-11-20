@@ -1,6 +1,7 @@
 // frozen-chains.spec.ts — the Frozen chains page: a library's cold chain duplicated into the account's and deleted, and the bench.
 // The bench is a project the page opens, saved nowhere, and in no list of workspaces (apps/k7-daw-frontend/docs/frozenChains.md).
 import type { Locator, Page } from "@playwright/test";
+import { homeTab } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
@@ -11,7 +12,10 @@ const MINE = "e2e-cold";
 
 /** A chain's row, found by the ref it prints. */
 const row = (page: Page, ref: string): Locator =>
-  page.getByRole("listitem").filter({ hasText: ref });
+  page
+    .locator("section")
+    .getByText(ref, { exact: true })
+    .locator("xpath=ancestor::div[.//button][1]");
 
 async function openPage(page: Page): Promise<void> {
   await expect(page.getByRole("heading", { name: "Your chains" })).toBeVisible({
@@ -77,12 +81,15 @@ test("a cold chain is duplicated into the account's and deleted, and New chain o
 
   await test.step("the bench is in no list of workspaces", async () => {
     page = await k7.open("/");
-    await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
+    await expect(homeTab(page, "Projects")).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
     await expect(
-      page.getByRole("button", { name: "New workspace", exact: true }),
+      page.getByRole("button", { name: "New workspace or clone from git" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("button", { name: /^Banc \d+ projects?$/ }),
+      page.getByRole("region", { name: /^Workspace Banc/ }),
     ).toHaveCount(0);
   });
 

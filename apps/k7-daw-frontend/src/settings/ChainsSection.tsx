@@ -102,9 +102,7 @@ function ChainPicker({
         </button>
       ) : null}
       {mine && (
-        <p
-          className={`text-xs ${mine.failed ? "text-error" : "text-fg-2"}`}
-        >
+        <p className={`text-xs ${mine.failed ? "text-error" : "text-fg-2"}`}>
           {mine.text}
         </p>
       )}
@@ -227,7 +225,9 @@ export function ChainsSection({ engineId }: { engineId: string }) {
               })}
             </p>
           )}
-          {error && <p className="px-3.5 py-2.5 text-error type-secondary">{error}</p>}
+          {error && (
+            <p className="px-3.5 py-2.5 text-error type-secondary">{error}</p>
+          )}
         </>
       )}
     </Section>

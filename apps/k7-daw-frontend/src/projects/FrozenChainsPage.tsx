@@ -10,14 +10,7 @@ import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import { EmptyState } from "@studio/ui/empty-state";
 import { ErrorCard } from "@studio/ui/error-card";
-import {
-  Copy,
-  Pencil,
-  Plus,
-  Radio,
-  Snowflake,
-  Trash2,
-} from "@studio/ui/icons";
+import { Copy, Pencil, Plus, Radio, Snowflake, Trash2 } from "@studio/ui/icons";
 import { RowGroup } from "@studio/ui/row-group";
 import { Spinner } from "@studio/ui/spinner";
 import type { FrozenChain } from "@studio/web-protocol";

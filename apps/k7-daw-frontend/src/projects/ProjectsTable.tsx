@@ -4,7 +4,12 @@
 // the card itself (`data-workspace` stays for the e2e). See ../../docs/projects.md.
 
 import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";
-import { ChevronDown, ChevronRight, Folder, FolderPlus } from "@studio/ui/icons";
+import {
+  ChevronDown,
+  ChevronRight,
+  Folder,
+  FolderPlus,
+} from "@studio/ui/icons";
 import { RowGroup } from "@studio/ui/row-group";
 import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import { EXAMPLES_WORKSPACE } from "@studio/web-protocol/projects";
@@ -77,7 +82,9 @@ function WorkspaceCard({
   now: number;
   locale: string;
   over: string | null;
-  setOver: (name: string | null | ((o: string | null) => string | null)) => void;
+  setOver: (
+    name: string | null | ((o: string | null) => string | null),
+  ) => void;
   open: boolean;
   onFold: () => void;
   targets: AccountWorkspace[];
@@ -188,7 +195,9 @@ function WorkspaceCard({
               blocked={p.blocked}
               now={now}
               locale={locale}
-              onCopy={(to, folder, onStep) => p.onCopy(w, x, to, folder, onStep)}
+              onCopy={(to, folder, onStep) =>
+                p.onCopy(w, x, to, folder, onStep)
+              }
               onRename={(folder, onStep) => p.onRename(w, x, folder, onStep)}
               onDelete={(onStep) => p.onDelete(w, x, onStep)}
             />

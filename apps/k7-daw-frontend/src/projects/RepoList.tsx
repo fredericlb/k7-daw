@@ -237,16 +237,14 @@ export function RepoList({
         </div>
       ) : !hasFileService ? (
         // With no file service there is no list, and an empty one would read as a new account.
-        <EmptyState
-          glyph={<ServerOff />}
-          title={m["repos.noFilesTitle"]()}
-          actions={
-            <Button asChild variant="glass">
-              <Link to={SETTINGS_ROUTE}>{m["repos.settingsWord"]()}</Link>
-            </Button>
-          }
-        >
-          {m["repos.noFilesAside"]()}
+        <EmptyState glyph={<ServerOff />} title={m["repos.noFilesTitle"]()}>
+          {parts((h) => m["repos.noFilesAside"](h), {
+            settings: (
+              <Link to={SETTINGS_ROUTE} className="underline">
+                {m["repos.settingsWord"]()}
+              </Link>
+            ),
+          })}
         </EmptyState>
       ) : workspaces.length === 0 && busy ? (
         <div className="type-secondary flex items-center gap-2 text-fg-2">

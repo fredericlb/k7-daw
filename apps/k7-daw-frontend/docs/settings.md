@@ -1,6 +1,6 @@
 # The settings page, and the line it draws
 
-The user menu's Settings row, on the home page, opens `/settings`, a page of its own: `settings/SettingsPage.tsx`,
+The cog at the right of every home page's top bar opens `/settings`, App settings, a page of its own: `settings/SettingsPage.tsx`,
 a route of the home page like `/libraries` (`appMain.tsx`), so going there reloads nothing.
 The editor keeps its own settings as a panel (`components/SettingsPanel.tsx`), because those are
 set while you look at the song they affect; these are not.
@@ -128,57 +128,19 @@ One package draws inside k7 alone and so carries a catalogue of its own, compile
 
 ## Separation chains — the engine's own setting
 
-`ChainsSection.tsx`, the engine page's Chains tab. WHICH chain separates a record into stems, and which
-one gives it without its voice (`system instrumental`). A section of the **engine's** page
-and not of `/settings`, because the answer is the machine's: `stems` and `instrumental` in its
+`ChainsSection.tsx`, in General. WHICH chain separates a record into stems, and which
+one gives it without its voice (`system instrumental`). The answer is the machine's: `stems` and `instrumental` in its
 `engine-host.json`, written by that machine's supervisor (`apps/k7-daw-backend/docs/engine/chains.md`),
 and read back from the machine rather than kept here — two machines of one account may answer
 differently, and a saved value that only lived on the server would be a lie about what runs.
 
-Only this machine's engine has the tab: another engine's chains are named on ITS own machine, by
-whoever owns it.
-
-**Only the library's COLD chains are offered** — a chain whose steps are all offline modules, the
-only kind that can separate (`apps/k7-daw-frontend/packages/song/docs/coldModules.md`); one that processes, or both
-separates and processes, is not one. The file service lists them (`GET /account/cold-chains`),
-against the bundled library the device reads. The instrumental picker narrows further, to the chains
-whose offline step declares an `instrumental` output.
-
-**A cold chain this machine cannot run YET is still listed**, and the reason shows under the picker
-once it is chosen — almost always the model: a separation needs `htdemucs_fp16weights.onnx` (166 MB)
-in `~/.k7/models`. The dropdown says which kind of "not yet" it is: « requires a download » when a
-model it is missing has a `model_url` its module gives — a link under the picker then fetches it —
-and « can't run here yet » when nothing here can fix it. (A chain missing both a downloadable model
-and something else reads as the first: the reason under the picker still names the rest.) It was
-first left out instead, and a library holding `stems` and `instrumental` then read as holding no
-cold chain at all, on exactly the machine that needed telling what was missing. Choosing it is
-allowed: the answer is the machine's, and it holds the day the model arrives.
-
-Choosing writes through `PUT /account/cold-chains/stems|instrumental`, which checks the same list
-again — the browser's copy is a menu, not the gate — and answers the new state, so a refused pick
-snaps back. The empty option clears it: "this machine does not do that" is a real answer. A stored
-chain the library no longer holds still shows, so a renamed chain does not read as "nothing is set".
-`system stems` and `system instrumental` still set the same two answers from the command bar.
-
-## AI — the device's Claude key
-
-`AiSection.tsx`. The key and model the module builder's AI organize runs on
-(`apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md`). It is here, on the settings page and not in
-the editor's panel, because it belongs to the DEVICE: the same key serves every project on it, and it is kept by this device's backend and
-reaches no other: a second device is given its own key, never the first one's.
-
-**The key can be set, replaced and removed, and never read.** The row shows a hint
-(`sk-ant-…wxyz`), enough to tell which key is stored and not enough to use it, and the field
-empties once a key is saved. A key shown again is a key that can be copied from any browser open on the device.
-
-With no key, the builder draws no AI organize button rather than a dead one. That makes this
-section the one place the feature can be found, and its row says so.
+Only this machine's engine is named: another engine's chains are named on ITS own machine, by
+whoever owns it. Where this device runs no engine the section says no machine answers.
 
 ## Identity — the one name and email of this device
 
 `git/IdentitySection.tsx`, in General. With no account to say who the person is, the device's identity
-is what they typed here: the author of every git commit and the user menu's heading
-(`userMenu.md`). It is stored once, in the backend's identity file
+is what they typed here: the author of every git commit. It is stored once, in the backend's identity file
 (`apps/k7-daw-backend/docs/files/git.md`), and `git/identity.ts` mirrors it for every reader, so
 the commit dialog, which asks for it the first time a commit has none, and this section stay in sync.
 
@@ -200,10 +162,9 @@ changed.
 
 ## The engine is a page beside it
 
-The user menu offers **Engine** right after Settings, and it is not a tab
-of this page. What this page holds is the account's; an engine is a machine's. Under one roof, a phone's engine — the reason its user opens the menu — sits behind a
-tab. It stays under the `settings/` prefix, so it takes no workspace name
-(`apps/k7-daw-frontend/packages/web-protocol/docs/addresses.md`).
+App settings carries a row for **Engine** in its Devices tab, and the engine is not a tab
+of this page. What this page holds is the account's; an engine is a machine's. It stays under the `settings/` prefix,
+so it takes no workspace name (`apps/k7-daw-frontend/packages/web-protocol/docs/addresses.md`).
 
 **Engine**, `/settings/engine` (`settings/EnginePage.tsx`), is the same entry everywhere, and what it
 holds follows the machine. Served by the desktop app's backend — `GET /api/local` says this backend runs the
@@ -213,7 +174,7 @@ plugins and its instruments, reached through k7's front, which runs the supervis
 app it opens on the phone's engine. Anywhere else it carries the sentence saying a computer's engine is
 set on that computer. No page lists or chooses among engines: the app drives the one on this device.
 
-## About is beside it, not in it
+## About is in General
 
-The user menu's About row, under Settings, opens `/about` (`about.md`): the version, the licence,
-the source and the third-party notices. None of it is a setting, so none of it is on this page.
+The version, the licence, the source and the third-party notices are a section at the foot of General (`about.md`).
+None of it is a setting; it shares the page because both are visited on purpose and rarely.

@@ -54,11 +54,11 @@ export function DeleteProject({
           <DialogDescription>{m["project.deleteBody"]()}</DialogDescription>
         </DialogHeader>
 
-        <p className="rounded-xl bg-(--k7-input-fill) px-3 py-2 type-mono-value">{path}</p>
-        {/* Where the contents go, said without overselling it: the recycle bin keeps them, which is not an undo button. */}
-        <p className="type-secondary text-fg-2">
-          {m["project.deleteKept"]()}
+        <p className="rounded-xl bg-(--k7-input-fill) px-3 py-2 type-mono-value">
+          {path}
         </p>
+        {/* Where the contents go, said without overselling it: the recycle bin keeps them, which is not an undo button. */}
+        <p className="type-secondary text-fg-2">{m["project.deleteKept"]()}</p>
 
         {step && (
           <p className="type-secondary text-fg-2">

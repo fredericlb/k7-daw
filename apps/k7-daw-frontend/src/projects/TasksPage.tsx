@@ -79,8 +79,12 @@ export function TasksPage() {
         actions={
           fileService ? (
             <>
-              <label className="type-secondary flex cursor-pointer items-center gap-2 text-fg-2">
+              <label
+                htmlFor="tasks-show-done"
+                className="type-secondary flex cursor-pointer items-center gap-2 text-fg-2"
+              >
                 <Checkbox
+                  id="tasks-show-done"
                   checked={showDone}
                   onCheckedChange={(on) => setShowDone(on === true)}
                 />
@@ -109,9 +113,7 @@ export function TasksPage() {
           </div>
         ) : (
           <>
-            {error && (
-              <ErrorCard title={error} />
-            )}
+            {error && <ErrorCard title={error} />}
             {shown.length === 0 && !error && (
               // No act on the spot: a task is written inside its workspace, where the `task` commands run.
               <EmptyState glyph={<ListChecks />} title={m["tasks.noneTitle"]()}>
@@ -125,7 +127,9 @@ export function TasksPage() {
                 className="flex flex-col gap-2"
               >
                 <h2 className="flex items-center justify-between gap-2 px-1">
-                  <span className="type-caps truncate text-fg-3">{ws.name}</span>
+                  <span className="type-caps truncate text-fg-3">
+                    {ws.name}
+                  </span>
                   {/* An ANCHOR, not a router link: a project is the router's basename, so opening one is a whole-page navigation. */}
                   <a
                     href={workspaceHref(ws)}
