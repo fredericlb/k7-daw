@@ -624,6 +624,8 @@
   "clip.allBars": "all",
   "clip.backToEvent": "back to the event — {from}s → {to}s",
   "clip.theEvent": "the event",
+  "editor.openedByCommand": "Opened by {command}",
+  "tree.browse": "Browse",
   "graph.zoomFit": "Zoom fit",
   "graph.autoLayout": "Auto layout",
   "graph.stack": "Stack",
