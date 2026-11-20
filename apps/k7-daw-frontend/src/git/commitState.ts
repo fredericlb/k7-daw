@@ -58,3 +58,62 @@ export const identityToSave = (
   now: Identity,
 ): Identity | null =>
   loaded && loaded.name === now.name && loaded.email === now.email ? null : now;
+
+/** Where the one act stands: the commit, then the push, and the way each can stop. */
+export type CommitPhase =
+  | { kind: "ready" }
+  | { kind: "running"; step: "commit" | "push" }
+  | { kind: "failed"; step: "commit" | "push"; error: string }
+  | { kind: "pullFirst" }
+  | { kind: "done" };
+
+export interface StepRow {
+  id: "commit" | "push" | "done";
+  state: "pending" | "active" | "done" | "warn" | "error";
+  /** The sentence under a warn or error step. */
+  detail?: string;
+}
+
+/** The rows of the step list: no commit row when only a push is left, no push row on a workspace with no remote. */
+export function stepRows(
+  phase: CommitPhase,
+  plan: { commit: boolean; push: boolean },
+): StepRow[] {
+  const ids: StepRow["id"][] = [
+    ...(plan.commit ? (["commit"] as const) : []),
+    ...(plan.push ? (["push"] as const) : []),
+    "done",
+  ];
+  const at = (id: StepRow["id"]) => ids.indexOf(id);
+  return ids.map((id) => {
+    const i = at(id);
+    switch (phase.kind) {
+      case "ready":
+        return { id, state: "pending" };
+      case "done":
+        return { id, state: "done" };
+      case "running":
+        return {
+          id,
+          state:
+            i < at(phase.step)
+              ? "done"
+              : i === at(phase.step)
+                ? "active"
+                : "pending",
+        };
+      case "failed":
+        return i < at(phase.step)
+          ? { id, state: "done" }
+          : i === at(phase.step)
+            ? { id, state: "error", detail: phase.error }
+            : { id, state: "pending" };
+      default:
+        return id === "commit"
+          ? { id, state: "done" }
+          : id === "push"
+            ? { id, state: "warn" }
+            : { id, state: "pending" };
+    }
+  });
+}

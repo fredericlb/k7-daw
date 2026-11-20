@@ -6,6 +6,7 @@
 
 import { askConfirm } from "@studio/project-shell/ask";
 import { Button } from "@studio/ui/button";
+import { Chip } from "@studio/ui/chip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -153,6 +154,8 @@ export function CommandsSettings({
 
   // The row whose shortcut cell is waiting for a key, by canonical. One at a time, obviously.
   const [capturing, setCapturing] = useState<string | null>(null);
+  // What the last bound key took from another command, said once under the filter row.
+  const [took, setTook] = useState("");
   /** The capture itself, on the window and in the capture phase; Escape renounces, and Backspace takes the shortcut away as KEY_NONE. */
   useWindowKey(
     (e) => {
@@ -174,9 +177,15 @@ export function CommandsSettings({
       const token = keyToken(e);
       // A modifier chord stays the browser's — ⌃C and ⌃V are the two exceptions, being the shell's own keys (keys.ts's CHORDS).
       if (!token) return;
+      const holder = effectiveKeys(draft)[token];
       patch(capturing, {
         key: token === keyForCommand(capturing) ? undefined : token,
       });
+      setTook(
+        holder && holder !== capturing
+          ? m["cmds.tookKey"]({ key: keyLabel(token), command: holder })
+          : "",
+      );
       setCapturing(null);
     },
     { enabled: !!capturing, capture: true },
@@ -206,25 +215,20 @@ export function CommandsSettings({
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <header className="flex shrink-0 items-center gap-3 border-b border-border px-4 py-2">
+      <header className="flex shrink-0 flex-wrap items-center gap-3 border-b border-(--k7-hairline) px-4 py-2">
         <Button size="sm" variant="ghost" onClick={() => void leave()}>
-          <ArrowLeft className="h-4 w-4" /> {m["common.back"]()}
+          <ArrowLeft className="size-4" /> {m["common.back"]()}
         </Button>
-        <h2 className="text-sm font-medium">{m["cmds.title"]()}</h2>
-        <span className="text-xs text-muted-foreground">
+        <h2 className="type-sheet-title">{m["cmds.title"]()}</h2>
+        <span className="hidden type-secondary text-fg-2 md:inline">
           {m["cmds.subtitle"]()}
         </span>
-        <Input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder={m["common.filter"]()}
-          className="ml-auto h-7 w-48 text-xs"
-        />
+        <span className="ml-auto" />
         {/* The button, and beside it what it would write: a shortcut assigned here does not run until it is saved. */}
         <span
           className={cn(
-            "shrink-0 text-xs",
-            dirty ? "text-amber-500" : "text-muted-foreground",
+            "shrink-0 type-secondary",
+            dirty ? "text-warn" : "text-fg-2",
           )}
         >
           {dirty ? m["cmds.unsaved"]() : m["cmds.upToDate"]()}
@@ -242,27 +246,34 @@ export function CommandsSettings({
         </Button>
       </header>
 
-      {/* The entity filter: what a command acts on, read off its sid. */}
-      <div className="flex shrink-0 flex-wrap items-center gap-1 border-b border-border px-4 py-1.5">
+      {/* The filter row: the text filter, then what a command acts on, read off its sid. */}
+      <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-(--k7-hairline) px-4 py-2">
+        <Input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={m["common.filter"]()}
+          aria-label={m["common.filter"]()}
+          className="w-full sm:w-56"
+        />
         {["", ...entities].map((e) => (
-          <button
-            type="button"
+          <Chip
+            variant="filter"
             key={e || "all"}
+            selected={entity === e}
             onClick={() => setEntity(e)}
-            className={cn(
-              "rounded px-2 py-0.5 text-xs",
-              entity === e
-                ? "bg-secondary text-foreground"
-                : "text-muted-foreground hover:text-foreground",
-            )}
           >
             {e || m["cmds.all"]()}
-          </button>
+          </Chip>
         ))}
-        <span className="ml-auto text-xs text-muted-foreground">
+        <span className="ml-auto type-secondary text-fg-2">
           {shown.length}/{commands.length}
         </span>
       </div>
+      {took && (
+        <p role="status" className="px-4 py-1.5 type-secondary text-warn">
+          {took}
+        </p>
+      )}
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {shown.map((c) => (
@@ -284,7 +295,7 @@ export function CommandsSettings({
           />
         ))}
         {shown.length === 0 && (
-          <p className="py-8 text-center text-sm text-muted-foreground">
+          <p className="py-8 text-center text-sm text-fg-2">
             {m["cmds.noMatch"]()}
           </p>
         )}
@@ -333,23 +344,23 @@ const CommandRow = memo(function CommandRow({
   const Icon = name ? icons?.[name] : undefined;
   const touched = !!pref;
   return (
-    <div className="flex items-center gap-2 border-b border-border/50 px-4 py-1.5">
+    <div className="relative flex flex-wrap items-center gap-2 border-b border-(--k7-hairline) px-4 py-2">
       {/* The icon, and the picker behind it. */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
             type="button"
             title={m["cmds.pickIcon"]()}
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-border text-muted-foreground hover:text-foreground"
+            className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-(--k7-hairline-strong) text-fg-2 hover:text-foreground"
           >
-            {Icon ? <Icon className="h-4 w-4" /> : "—"}
+            {Icon ? <Icon className="size-4" /> : "—"}
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="p-2">
           <Suspense
             fallback={
               <div className="flex h-24 w-72 items-center justify-center">
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="size-4 animate-spin" />
               </div>
             }
           >
@@ -365,7 +376,7 @@ const CommandRow = memo(function CommandRow({
       {locales.map((l) => (
         <label
           key={l}
-          className="flex min-w-0 flex-1 items-center gap-1"
+          className="flex min-w-40 flex-1 items-center gap-1"
           title={m["cmds.nameIn"]({ locale: l })}
         >
           <span
@@ -380,15 +391,15 @@ const CommandRow = memo(function CommandRow({
             value={labelIn(pref?.label, l)}
             placeholder={c.readableBy?.[l] || c.readable || c.canonical}
             onChange={(e) => onRename(c.canonical, l, e.target.value)}
-            className="h-7 min-w-0 flex-1 text-xs"
+            className="min-w-0 flex-1"
           />
         </label>
       ))}
       {/* The line, with a mark on the one that acts on SEVERAL: a plural verb lists under its singular, where anyone would look. */}
-      <code className="flex w-56 shrink-0 items-center gap-1 truncate text-[11px] text-muted-foreground">
+      <code className="flex w-56 shrink-0 items-center gap-1 truncate type-mono-value text-fg-2">
         {plural && (
           <Layers
-            className="h-3 w-3 shrink-0 text-primary-text/70"
+            className="size-3 shrink-0 text-primary-text/70"
             aria-label={m["cmds.plural"]()}
           />
         )}
@@ -403,11 +414,20 @@ const CommandRow = memo(function CommandRow({
         size="sm"
         variant={capturing ? "default" : "outline"}
         title={m["cmds.keyHint"]()}
-        className="h-7 w-16 shrink-0 justify-center font-mono text-[11px]"
+        aria-pressed={capturing}
+        className="h-9 w-[76px] shrink-0 justify-center type-mono-value"
         onClick={() => onCapture(capturing ? null : c.canonical)}
       >
         {capturing ? "…" : (keyText ?? "—")}
       </Button>
+      {capturing && (
+        <span
+          role="status"
+          className="glass absolute top-full right-4 z-10 rounded-xl px-3 py-1.5 type-secondary"
+        >
+          {m["cmds.captureHint"]()}
+        </span>
+      )}
 
       <Button
         size="icon-xs"
@@ -415,7 +435,7 @@ const CommandRow = memo(function CommandRow({
         title={m["cmds.up"]()}
         onClick={() => onMove(c.canonical, -1)}
       >
-        <ArrowUp className="h-3.5 w-3.5" />
+        <ArrowUp className="size-3.5" />
       </Button>
       <Button
         size="icon-xs"
@@ -423,7 +443,7 @@ const CommandRow = memo(function CommandRow({
         title={m["cmds.down"]()}
         onClick={() => onMove(c.canonical, 1)}
       >
-        <ArrowDown className="h-3.5 w-3.5" />
+        <ArrowDown className="size-3.5" />
       </Button>
       <Button
         size="icon-xs"
@@ -440,7 +460,7 @@ const CommandRow = memo(function CommandRow({
           })
         }
       >
-        <RotateCcw className={cn("h-3.5 w-3.5", !touched && "opacity-30")} />
+        <RotateCcw className={cn("size-3.5", !touched && "opacity-30")} />
       </Button>
     </div>
   );

@@ -11,6 +11,51 @@ import { useGitTransport } from "./GitContext";
 import { git } from "./gitApi";
 import { RemoteDialog } from "./RemoteDialog";
 
+/** The clone dialog alone, for a menu item that opens it (the Home "New" menu). */
+export function CloneDialog({
+  open,
+  onClose,
+  onCloned,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onCloned: () => void;
+}) {
+  const t = useGitTransport();
+  const [name, setName] = useState("");
+  const { folder, error: badName } = workspaceFolderName(name);
+  return (
+    <RemoteDialog
+      open={open}
+      onClose={onClose}
+      title={m["git.cloneTitle"]()}
+      description={m["git.cloneBody"]()}
+      submit={m["git.cloneSubmit"]()}
+      step={m["git.cloning"]()}
+      canSubmit={Boolean(folder)}
+      before={
+        <>
+          <Input
+            aria-label={m["git.cloneName"]()}
+            placeholder={m["git.cloneName"]()}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          {badName && name.trim() && (
+            <p className="text-error type-secondary">{badName}</p>
+          )}
+        </>
+      }
+      onSubmit={async (r) => {
+        if (!t || !folder) return;
+        await git.clone(t, folder, r);
+        setName("");
+        onCloned();
+      }}
+    />
+  );
+}
+
 export function CloneWorkspace({
   blocked,
   onCloned,
@@ -21,8 +66,6 @@ export function CloneWorkspace({
 }) {
   const t = useGitTransport();
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
-  const { folder, error: badName } = workspaceFolderName(name);
   return (
     <>
       <Button
@@ -32,35 +75,12 @@ export function CloneWorkspace({
         title={blocked || m["git.cloneHint"]()}
         onClick={() => setOpen(true)}
       >
-        <GitBranch className="h-4 w-4" /> {m["git.clone"]()}
+        <GitBranch className="size-4" /> {m["git.clone"]()}
       </Button>
-      <RemoteDialog
+      <CloneDialog
         open={open}
         onClose={() => setOpen(false)}
-        title={m["git.cloneTitle"]()}
-        description={m["git.cloneBody"]()}
-        submit={m["git.cloneSubmit"]()}
-        step={m["git.cloning"]()}
-        canSubmit={Boolean(folder)}
-        before={
-          <>
-            <Input
-              aria-label={m["git.cloneName"]()}
-              placeholder={m["git.cloneName"]()}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            {badName && name.trim() && (
-              <p className="text-destructive text-xs">{badName}</p>
-            )}
-          </>
-        }
-        onSubmit={async (r) => {
-          if (!t || !folder) return;
-          await git.clone(t, folder, r);
-          setName("");
-          onCloned();
-        }}
+        onCloned={onCloned}
       />
     </>
   );
