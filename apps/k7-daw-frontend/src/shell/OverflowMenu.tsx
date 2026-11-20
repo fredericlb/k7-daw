@@ -8,8 +8,9 @@ import {
   Settings,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { m } from "../paraglide/messages.js";
+import { usePopin } from "../popins";
 import { PANEL_DEFS, type PanelId } from "./panels";
 
 export interface OverflowPane {
@@ -55,12 +56,7 @@ export function OverflowMenu({
   onKeyboard: () => void;
 }) {
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  usePopin(open, () => setOpen(false));
   const run = (fn: () => void) => () => {
     setOpen(false);
     fn();

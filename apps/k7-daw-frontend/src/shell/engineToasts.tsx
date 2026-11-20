@@ -21,7 +21,11 @@ export interface ProgressStep {
 
 /** One toast following `step`: shown while there is one, updated as it moves, gone when it ends. */
 export function useProgressToast(step: ProgressStep | null): void {
-  const live = useRef<{ id: number; placement: ToastPlacement } | null>(null);
+  const live = useRef<{
+    id: number;
+    placement: ToastPlacement;
+    bar: boolean;
+  } | null>(null);
   const placement: ToastPlacement = step?.top ? "top-centre" : "bottom-right";
   const label = step?.label;
   const pct = step?.pct ?? null;
@@ -34,7 +38,8 @@ export function useProgressToast(step: ProgressStep | null): void {
       return;
     }
     const progress = pct === null ? undefined : { value: pct };
-    if (cur && cur.placement === placement) {
+    // A bar and a spinner share the icon slot: swapping one for the other needs a fresh toast.
+    if (cur && cur.placement === placement && cur.bar === !!progress) {
       updateToast(cur.id, { message: label, progress });
       return;
     }
@@ -47,7 +52,7 @@ export function useProgressToast(step: ProgressStep | null): void {
       progress,
       icon: progress ? undefined : <Spinner />,
     });
-    live.current = { id, placement };
+    live.current = { id, placement, bar: !!progress };
   }, [has, label, pct, placement]);
   useEffect(
     () => () => {

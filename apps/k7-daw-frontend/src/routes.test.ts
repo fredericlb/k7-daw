@@ -93,11 +93,7 @@ describe("fromLocation", () => {
     expect(fromLocation("/turntables", "", { turntables: true })).toEqual(s);
   });
 
-  it("round-trips the master strip only once the project declares it", () => {
-    // The flag is what App.tsx must hand useViewRoute; without it `/mastering` falls back to the timeline.
-    expect(fromLocation("/mastering", "", { mastering: true })).toEqual(
-      st({ full: "mastering" }),
-    );
+  it("has no master strip page: `/mastering` falls back to the timeline", () => {
     expect(fromLocation("/mastering", "")).toEqual(st());
   });
 

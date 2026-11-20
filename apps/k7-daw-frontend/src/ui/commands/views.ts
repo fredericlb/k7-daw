@@ -21,10 +21,6 @@ const PANE_READABLE: Record<Pane, { en: string; fr: string }> = {
     en: "Fullscreen the DJ desk",
     fr: "Passer le pupitre DJ en plein écran",
   },
-  mastering: {
-    en: "Fullscreen the master strip",
-    fr: "Passer le pupitre de mastering en plein écran",
-  },
   chains: {
     en: "Fullscreen the chains graph",
     fr: "Passer le graphe des chaînes en plein écran",
@@ -153,6 +149,18 @@ export const VIEW_COMMANDS: LocalCommand[] = [
     },
     run: (ctx) => {
       ctx.setOpenBuilder((cur) => (cur === null ? "" : null));
+      return true;
+    },
+  },
+  {
+    // The master strip is the Mixer panel's Master section, so the old pane's command opens it.
+    name: "ui mastering",
+    readable: {
+      en: "Show the mixer panel, master section",
+      fr: "Afficher le panneau de mixage, section master",
+    },
+    run: (ctx) => {
+      ctx.setPanel("mix");
       return true;
     },
   },

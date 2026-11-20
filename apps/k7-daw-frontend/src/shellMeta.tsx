@@ -8,7 +8,6 @@ import {
   AudioWaveform,
   Disc3,
   FileCode,
-  Gauge,
   Loader2,
   type LucideIcon,
   MonitorPlay,
@@ -24,13 +23,7 @@ import { m } from "./paraglide/messages.js";
 import type { Pane, Panel } from "./routes";
 
 // The panes, not tabs: a view is a LAYOUT over the same instances, and which of them a project mounts is `viewPanes` in routes.ts, not this table.
-export const PANES: Pane[] = [
-  "editor",
-  "timeline",
-  "turntables",
-  "mastering",
-  "chains",
-];
+export const PANES: Pane[] = ["editor", "timeline", "turntables", "chains"];
 
 // Max gap between the two Shift presses that open the command palette (IntelliJ style).
 export const DOUBLE_SHIFT_MS = 400;
@@ -53,12 +46,6 @@ export const PANE_META: Record<Pane, { icon: LucideIcon; label: string }> = {
     icon: Disc3,
     get label() {
       return m["pane.turntables"]();
-    },
-  },
-  mastering: {
-    icon: Gauge,
-    get label() {
-      return m["pane.mastering"]();
     },
   },
   chains: {
