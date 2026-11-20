@@ -2766,6 +2766,7 @@ export default function App({
       recInfo={recInfo}
       meter={masterMeter}
       hidden={false}
+      rootRef={stripRef}
       transport={
         showTransport
           ? {
@@ -3149,7 +3150,9 @@ export default function App({
               <DemoBanner project={ws.activeProject} />
             )}
             {/* The panes, with room kept for the floating bar; panels float over them and push nothing. */}
-            <div className="z-(--k7-z-pane) flex min-h-0 flex-1 flex-col pb-[88px]">
+            <div
+              className={`${editorPopin || rackBuilder ? "z-(--k7-z-menu)" : "z-(--k7-z-pane)"} flex min-h-0 flex-1 flex-col pb-[88px]`}
+            >
               <div className="flex min-h-0 flex-1">
                 {/* The popin's backdrop: a click outside is the reliable way out, Escape belonging to the editor's vim. */}
                 {editorPopin && (
