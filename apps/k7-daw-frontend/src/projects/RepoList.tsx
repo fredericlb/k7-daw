@@ -256,11 +256,22 @@ export function RepoList({
           glyph={<Folder />}
           title={m["repos.emptyTitle"]()}
           actions={
-            <NewWorkspace
-              primary
-              blocked={blockedWorkspace}
-              onCreate={onCreateWorkspace}
-            />
+            <>
+              <NewWorkspace
+                primary
+                blocked={blockedWorkspace}
+                onCreate={onCreateWorkspace}
+              />
+              <Button
+                variant="glass"
+                disabled={Boolean(blocked)}
+                title={blocked || m["git.cloneHint"]()}
+                onClick={() => setCloning(true)}
+              >
+                <GitBranch />
+                {m["git.clone"]()}
+              </Button>
+            </>
           }
         >
           {m["repos.empty"]()}

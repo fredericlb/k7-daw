@@ -64,6 +64,7 @@ export function GitScreensHost({
           open
           onClose={close}
           onDone={moved}
+          onConflict={() => show({ kind: "conflict", workspace })}
         />
       )}
       {kind === "conflict" && (

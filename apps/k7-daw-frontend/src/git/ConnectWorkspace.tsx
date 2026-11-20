@@ -44,6 +44,7 @@ export function ConnectWorkspace({
         announceGitMoved(workspace);
         onConnected();
         showToast({
+          title: m["git.connectedTitle"](),
           message: m["git.connectedToast"]({
             workspace,
             remote: remoteName(done.remote || r.url),

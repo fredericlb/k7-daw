@@ -3,12 +3,18 @@
 // ticked inside its workspace, where the `task` commands run. See ../../docs/tasks.md.
 
 import { Button } from "@studio/ui/button";
-import { Checkbox } from "@studio/ui/checkbox";
 import { EmptyState } from "@studio/ui/empty-state";
 import { ErrorCard } from "@studio/ui/error-card";
-import { ArrowRight, ListChecks, RefreshCw } from "@studio/ui/icons";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Circle,
+  ListChecks,
+  RefreshCw,
+} from "@studio/ui/icons";
 import { RowGroup } from "@studio/ui/row-group";
 import { Spinner } from "@studio/ui/spinner";
+import { Switch } from "@studio/ui/switch";
 import { useCallback, useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { findAccountFiles } from "../settings/accountFiles";
@@ -62,6 +68,7 @@ export function TasksPage() {
   const shown = (lists ?? [])
     .map((l) => ({
       ...l,
+      open: l.tasks.filter((t) => !t.done).length,
       tasks: showDone ? l.tasks : l.tasks.filter((t) => !t.done),
     }))
     .filter((l) => l.tasks.length > 0 || l.error);
@@ -83,10 +90,11 @@ export function TasksPage() {
                 htmlFor="tasks-show-done"
                 className="type-secondary flex cursor-pointer items-center gap-2 text-fg-2"
               >
-                <Checkbox
+                <Switch
                   id="tasks-show-done"
+                  size="sm"
                   checked={showDone}
-                  onCheckedChange={(on) => setShowDone(on === true)}
+                  onCheckedChange={setShowDone}
                 />
                 {m["tasks.showDone"]()}
               </label>
@@ -120,68 +128,97 @@ export function TasksPage() {
                 {m["tasks.none"]()}
               </EmptyState>
             )}
-            {shown.map(({ workspace: ws, tasks, error: wsError }) => (
-              <section
-                key={ws.name}
-                aria-label={m["tasks.of"]({ workspace: ws.name })}
-                className="flex flex-col gap-2"
-              >
-                <h2 className="flex items-center justify-between gap-2 px-1">
-                  <span className="type-caps truncate text-fg-3">
-                    {ws.name}
-                  </span>
-                  {/* An ANCHOR, not a router link: a project is the router's basename, so opening one is a whole-page navigation. */}
-                  <a
-                    href={workspaceHref(ws)}
-                    className="type-secondary flex shrink-0 items-center gap-1 font-bold text-primary-text hover:underline"
-                  >
-                    {m["tasks.openWorkspace"]()}
-                    <ArrowRight className="size-4" />
-                  </a>
-                </h2>
-                {wsError && <ErrorCard title={wsError} />}
-                {tasks.length > 0 && (
-                  <RowGroup>
-                    {tasks.map((t) => {
-                      const p = anchorProject(ws, t.at);
-                      return (
-                        <div
-                          key={t.line}
-                          className="type-body flex min-h-11 items-start gap-3 px-3.5 py-2.5"
-                        >
-                          <span
-                            className={
-                              t.done
-                                ? "min-w-0 flex-1 text-fg-3 line-through"
-                                : "min-w-0 flex-1"
-                            }
+            {shown.map(
+              ({ workspace: ws, tasks, open: wsOpen, error: wsError }) => (
+                <section
+                  key={ws.name}
+                  aria-label={m["tasks.of"]({ workspace: ws.name })}
+                  className="flex flex-col gap-2"
+                >
+                  <h2 className="flex items-center justify-between gap-2 px-1">
+                    <span className="flex min-w-0 items-baseline gap-2">
+                      <span className="type-caps truncate text-fg-3">
+                        {ws.name}
+                      </span>
+                      <span className="type-status shrink-0 text-fg-3 tabular-nums">
+                        {m["tasks.openCount"]({ n: wsOpen })}
+                      </span>
+                    </span>
+                    {/* An ANCHOR, not a router link: a project is the router's basename, so opening one is a whole-page navigation. */}
+                    <a
+                      href={workspaceHref(ws)}
+                      className="type-secondary flex shrink-0 items-center gap-1 font-bold text-primary-text hover:underline"
+                    >
+                      {m["tasks.openWorkspace"]()}
+                      <ArrowRight className="size-4" />
+                    </a>
+                  </h2>
+                  {wsError && (
+                    <ErrorCard title={m["tasks.readFailed"]()}>
+                      <code>{wsError}</code>
+                    </ErrorCard>
+                  )}
+                  {tasks.length > 0 && (
+                    <RowGroup>
+                      {tasks.map((t) => {
+                        const p = anchorProject(ws, t.at);
+                        return (
+                          <div
+                            key={t.line}
+                            className="type-body flex min-h-11 items-start gap-3 px-3.5 py-2.5"
                           >
-                            {t.text}
-                          </span>
-                          {t.at &&
-                            (p ? (
-                              <a
-                                href={projectHref(ws, p)}
-                                className="type-mono-value shrink-0 text-primary-text hover:underline"
-                                title={m["tasks.openProject"]({
-                                  path: p.path,
-                                })}
-                              >
-                                {t.at.project} @ {t.at.timecode}
-                              </a>
+                            {t.done ? (
+                              <CheckCircle2
+                                role="img"
+                                aria-label={m["tasks.statusDone"]()}
+                                className="mt-0.5 size-5 shrink-0 text-ok"
+                              />
                             ) : (
-                              // The anchor names a project the workspace no longer holds: said, not linked.
-                              <span className="type-mono-value shrink-0 text-fg-3">
-                                {t.at.project} @ {t.at.timecode}
-                              </span>
-                            ))}
-                        </div>
-                      );
-                    })}
-                  </RowGroup>
-                )}
-              </section>
-            ))}
+                              <Circle
+                                role="img"
+                                aria-label={m["tasks.statusOpen"]()}
+                                className="mt-0.5 size-5 shrink-0 text-fg-3"
+                              />
+                            )}
+                            <span
+                              className={
+                                t.done
+                                  ? "min-w-0 flex-1 text-fg-3 line-through"
+                                  : "min-w-0 flex-1"
+                              }
+                            >
+                              {t.text}
+                            </span>
+                            {t.at &&
+                              (p ? (
+                                <a
+                                  href={projectHref(ws, p)}
+                                  className="type-mono-value shrink-0 text-primary-text hover:underline"
+                                  title={m["tasks.openProject"]({
+                                    path: p.path,
+                                  })}
+                                >
+                                  {t.at.project} @ {t.at.timecode}
+                                </a>
+                              ) : (
+                                // The anchor names a project the workspace no longer holds: said, not linked.
+                                <span
+                                  className="type-mono-value shrink-0 text-fg-3"
+                                  title={m["tasks.orphan"]({
+                                    project: t.at.project,
+                                  })}
+                                >
+                                  {t.at.project} @ {t.at.timecode}
+                                </span>
+                              ))}
+                          </div>
+                        );
+                      })}
+                    </RowGroup>
+                  )}
+                </section>
+              ),
+            )}
           </>
         )}
       </PageFrame>

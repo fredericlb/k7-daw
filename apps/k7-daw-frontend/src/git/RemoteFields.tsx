@@ -4,7 +4,7 @@
 import { Button } from "@studio/ui/button";
 import { TriangleAlert } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import {
   type FormEvent,
@@ -28,6 +28,7 @@ export function RemoteFields({
   fail: (message: string) => void;
 }) {
   const t = useGitTransport();
+  const urlId = useId();
   const [forgetting, setForgetting] = useState(false);
   const host = sshHost(form.url)?.host ?? form.url.trim();
   const forget = async () => {
@@ -45,21 +46,26 @@ export function RemoteFields({
   };
   return (
     <>
-      <Input
-        autoFocus
-        placeholder={m["git.urlPlaceholder"]()}
-        aria-label={m["git.url"]()}
-        autoComplete="off"
-        value={form.url}
-        disabled={busy}
-        onChange={(e) => dispatch({ type: "edit", value: e.target.value })}
-      />
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor={urlId} className="type-label">
+          {m["git.url"]()}
+        </label>
+        <Input
+          id={urlId}
+          autoFocus
+          placeholder={m["git.urlPlaceholder"]()}
+          autoComplete="off"
+          value={form.url}
+          disabled={busy}
+          onChange={(e) => dispatch({ type: "edit", value: e.target.value })}
+        />
+      </div>
       {isWebAddress(form.url) && (
         <p role="alert" className="text-error type-secondary">
           {m["git.sshOnly"]()}
         </p>
       )}
-      <GitKey fail={fail} />
+      {!form.trust && !form.changed && <GitKey fail={fail} />}
       {form.trust && (
         <div
           role="alert"

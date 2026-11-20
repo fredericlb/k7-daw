@@ -279,7 +279,11 @@ export function FrozenChainsPage() {
     <HomeShell>
       <PageFrame
         title={m["frozen.title"]()}
-        summary={m["frozen.summary"]()}
+        summary={
+          chains
+            ? m["frozen.count"]({ mine: mine.length, cold: cold.length })
+            : undefined
+        }
         actions={
           files ? (
             <Button onClick={() => openBench(null)}>
@@ -296,6 +300,7 @@ export function FrozenChainsPage() {
           <ErrorCard title={m["frozen.noServer"]()} />
         ) : (
           <div className="flex flex-col gap-6">
+            <p className="type-secondary text-fg-2">{m["frozen.summary"]()}</p>
             {error && <ErrorCard title={error} />}
             <section className="flex flex-col gap-2">
               <h2 className="type-caps px-1 text-fg-3">{m["frozen.mine"]()}</h2>
@@ -324,7 +329,10 @@ export function FrozenChainsPage() {
                 </RowGroup>
               )}
               <p className="type-status px-1 text-fg-3">
-                {m["frozen.howToUse"]()}
+                {m["frozen.howToUse"]()}{" "}
+                <code className="type-mono-value">
+                  clip process &lt;clip&gt; @account/&lt;name&gt;
+                </code>
               </p>
             </section>
             <section className="flex flex-col gap-2">
@@ -343,6 +351,11 @@ export function FrozenChainsPage() {
                     />
                   ))}
                 </RowGroup>
+              )}
+              {cold.length > 0 && (
+                <p className="type-status px-1 text-fg-3">
+                  {m["frozen.coldNote"]()}
+                </p>
               )}
             </section>
           </div>

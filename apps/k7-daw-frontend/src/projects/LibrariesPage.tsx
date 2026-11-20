@@ -29,7 +29,17 @@ export function LibrariesPage() {
 
   return (
     <HomeShell>
-      <PageFrame title={m["home.libraries"]()} narrow>
+      <PageFrame
+        title={m["home.libraries"]()}
+        summary={
+          fileService && libraries.length > 0
+            ? (libraries.length === 1
+                ? m["libs.summary.one"]
+                : m["libs.summary.other"])({ n: libraries.length })
+            : undefined
+        }
+        narrow
+      >
         {fileService === undefined ? (
           <div className="type-secondary flex items-center gap-2 text-fg-2">
             <Spinner /> {m["libs.reading"]()}

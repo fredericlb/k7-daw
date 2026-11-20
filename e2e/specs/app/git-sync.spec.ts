@@ -83,21 +83,12 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
 
     await test.step("commit and push in one act", async () => {
       const dialog = await commitAndPush(page, A, "first take");
-      // The list always names Done; its mark is what says the push ended.
-      await expect(
-        dialog
-          .getByRole("list", { name: "Progress" })
-          .getByRole("listitem")
-          .filter({ hasText: "Done" }),
-      ).toHaveAttribute("data-state", "done", SHOWN);
+      // The dialog closes by itself when the push ends, and a toast says what went.
+      await expect(dialog).toBeHidden(SHOWN);
+      await expect(page.getByText("Committed and pushed")).toBeVisible(SHOWN);
       await expect
         .poll(() => git(bare, "log", "--format=%s", "main").trim(), SHOWN)
         .toContain("first take");
-      await dialog
-        .getByRole("button", { name: "Close", exact: true })
-        .first()
-        .click();
-      await expect(dialog).toBeHidden(SHOWN);
     });
 
     await test.step("clone it into a second workspace", async () => {
@@ -121,13 +112,10 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
       // A card reads its git state once, so a write made outside the page shows on a fresh load.
       await page.reload();
       const dialogB = await commitAndPush(page, B, "B's line");
+      await expect(dialogB).toBeHidden(SHOWN);
       await expect
         .poll(() => git(bare, "log", "--format=%s", "main").trim(), SHOWN)
         .toContain("B's line");
-      await dialogB
-        .getByRole("button", { name: "Close", exact: true })
-        .first()
-        .click();
 
       await files.writeText(A, "notes.txt", "one\nA says\nthree\n");
       await page.reload();
@@ -142,7 +130,8 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
     await test.step("pull, choose mine, finish the merge", async () => {
       const ws = await card(page, A);
       await ws.getByRole("button", { name: /^Pull/ }).click();
-      const dialog = page.getByRole("dialog", { name: "Conflict" });
+      // The Conflict screen is a full screen over the page, a region and no dialog.
+      const dialog = page.getByRole("region", { name: "Conflict" });
       await expect(dialog).toBeVisible(SLOW);
       await dialog
         .getByRole("listbox", { name: "Conflicts" })

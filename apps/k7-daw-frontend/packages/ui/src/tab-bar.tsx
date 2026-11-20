@@ -50,7 +50,7 @@ export function TabBarItem({
   ...props
 }: Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "children"> & {
   icon: React.ReactNode;
-  label: string;
+  label: React.ReactNode;
   selected?: boolean;
 }) {
   const cls = cn(

@@ -106,9 +106,7 @@ export function OtherList({
   if (entries.length === 0) return null;
   return (
     <section aria-label={m["roam.title"]()} className="flex flex-col gap-2">
-      <h2 title={m["roam.hint"]()} className="type-caps px-1 text-fg-3">
-        {m["roam.title"]()}
-      </h2>
+      <h2 className="type-caps px-1 text-fg-3">{m["roam.title"]()}</h2>
       <RowGroup>
         {entries.map((e) => (
           <CloneRow
@@ -120,6 +118,7 @@ export function OtherList({
           />
         ))}
       </RowGroup>
+      <p className="type-status px-1 text-fg-3">{m["roam.hint"]()}</p>
     </section>
   );
 }

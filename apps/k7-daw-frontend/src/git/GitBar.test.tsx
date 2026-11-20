@@ -78,18 +78,18 @@ describe("a conflict's card", () => {
   it("names the key path and offers mine and theirs", () => {
     const out = card({});
     expect(out).toContain("tracks.drums.volume");
-    expect(out).toContain('aria-label="Mine"');
-    expect(out).toContain('aria-label="Theirs"');
-    expect(out).not.toContain('aria-label="Both"');
+    expect(out).toContain("Keep mine");
+    expect(out).toContain("Keep theirs");
+    expect(out).not.toContain("Keep both");
   });
 
   it("offers both where the route says so", () => {
-    expect(card({ both: true })).toContain('aria-label="Both"');
+    expect(card({ both: true })).toContain("Keep both");
   });
 
   it("offers keep or remove for a removed file", () => {
     const out = card({ kind: "presence", mine: null });
     expect(out).toContain("Keep the file");
-    expect(out).not.toContain('aria-label="Mine"');
+    expect(out).not.toContain("Keep mine");
   });
 });

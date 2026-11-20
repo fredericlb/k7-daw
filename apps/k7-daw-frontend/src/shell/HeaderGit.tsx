@@ -75,7 +75,7 @@ export function HeaderGit({
   const commitName =
     v.changed > 0 ? m["shell.git.commitPushN"]({ n: v.changed }) : commitLabel;
   const caption = v.remote
-    ? m["git.headline"]({ remote: "origin", branch: v.branch })
+    ? m["git.caption"]({ branch: v.branch, remote: "origin" })
     : m["git.headlineLocal"]({ branch: v.branch });
   const pullDisabled = !!g.busy || !v.pull;
 

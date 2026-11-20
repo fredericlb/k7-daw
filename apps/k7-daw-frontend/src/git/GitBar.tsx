@@ -210,10 +210,11 @@ export function CardGitNote({ git: g }: { git: GitHandle }) {
     const id = window.setTimeout(() => setShown(false), PULLED_NOTE_MS);
     return () => window.clearTimeout(id);
   }, [said]);
-  if (!said || !shown || g.busy) return null;
+  // "Up to date" is the pills' lasting line; here only what a pull said that lasts no longer.
+  if (!said || !shown || g.busy || g.pulled === "up-to-date") return null;
   return (
     <span role="status" className="type-secondary shrink-0 text-fg-2">
-      {g.pulled === "up-to-date" ? m["git.card.upToDate"]() : said}
+      {said}
     </span>
   );
 }
@@ -284,58 +285,69 @@ export function CardGitPills({
   const pullName =
     v.toPull > 0 ? m["git.card.pullN"]({ n: v.toPull }) : m["git.pull"]();
   const pushable = v.commit || v.push;
+  // With nothing incoming and nothing to send, the pills step aside for a lasting line.
+  if (!pulling && !refused && v.toPull === 0 && !pushable)
+    return (
+      <span role="status" className="type-secondary shrink-0 text-fg-2">
+        {m["git.card.upToDate"]()}
+      </span>
+    );
   return (
     <>
-      <Button
-        size="sm"
-        variant="glass"
-        aria-label={pulling ? m["git.card.pulling"]() : pullName}
-        // Said, not disabled: a disabled button shows no tooltip, and this one has a reason to give.
-        aria-disabled={refused || !v.pull || !!g.busy || undefined}
-        title={refused ? m["git.commitFirst"]() : undefined}
-        onClick={() => {
-          if (!refused && v.pull && !g.busy) void g.act("pull");
-        }}
-        className={
-          refused
-            ? "border border-(--k7-warn-line) text-warn"
-            : !v.pull && !pulling
-              ? "opacity-45"
-              : undefined
-        }
-      >
-        {pulling ? (
-          <Loader2 className="size-5 animate-spin" />
-        ) : (
-          <ArrowDownToLine className="size-5" />
-        )}
-        {pulling
-          ? m["git.card.pulling"]()
-          : refused
-            ? m["git.commitFirstShort"]()
-            : m["git.pull"]()}
-        {!pulling && !refused && v.toPull > 0 && (
-          <Badge variant="count">{v.toPull}</Badge>
-        )}
-      </Button>
-      <Button
-        size="sm"
-        variant="glass"
-        aria-label={
-          v.changed > 0
-            ? m["git.card.commitPushN"]({ n: v.changed })
-            : m["shell.git.commitPush"]()
-        }
-        aria-disabled={!pushable || !!g.busy || undefined}
-        onClick={() => {
-          if (pushable && !g.busy) openCommitAndPush(workspace);
-        }}
-        className={pulling || !pushable ? "opacity-45" : undefined}
-      >
-        <GitCommitHorizontal className="size-5" />
-        <span className="max-sm:hidden">{m["shell.git.commitPush"]()}</span>
-        {v.changed > 0 && <Badge variant="count">{v.changed}</Badge>}
-      </Button>
+      {(pulling || refused || v.toPull > 0) && (
+        <Button
+          size="sm"
+          variant="glass"
+          aria-label={pulling ? m["git.card.pulling"]() : pullName}
+          // Said, not disabled: a disabled button shows no tooltip, and this one has a reason to give.
+          aria-disabled={refused || !v.pull || !!g.busy || undefined}
+          title={refused ? m["git.commitFirst"]() : undefined}
+          onClick={() => {
+            if (!refused && v.pull && !g.busy) void g.act("pull");
+          }}
+          className={
+            refused
+              ? "border border-(--k7-warn-line) text-warn"
+              : !v.pull && !pulling
+                ? "opacity-45"
+                : undefined
+          }
+        >
+          {pulling ? (
+            <Loader2 className="size-5 animate-spin" />
+          ) : (
+            <ArrowDownToLine className="size-5" />
+          )}
+          {pulling
+            ? m["git.card.pulling"]()
+            : refused
+              ? m["git.commitFirstShort"]()
+              : m["git.pull"]()}
+          {!pulling && !refused && v.toPull > 0 && (
+            <Badge variant="count">{v.toPull}</Badge>
+          )}
+        </Button>
+      )}
+      {(pulling || pushable) && (
+        <Button
+          size="sm"
+          variant="glass"
+          aria-label={
+            v.changed > 0
+              ? m["git.card.commitPushN"]({ n: v.changed })
+              : m["shell.git.commitPush"]()
+          }
+          aria-disabled={!pushable || !!g.busy || undefined}
+          onClick={() => {
+            if (pushable && !g.busy) openCommitAndPush(workspace);
+          }}
+          className={pulling || !pushable ? "opacity-45" : undefined}
+        >
+          <GitCommitHorizontal className="size-5" />
+          <span className="max-sm:hidden">{m["shell.git.commitPush"]()}</span>
+          {v.changed > 0 && <Badge variant="count">{v.changed}</Badge>}
+        </Button>
+      )}
     </>
   );
 }

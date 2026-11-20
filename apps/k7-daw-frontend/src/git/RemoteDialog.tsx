@@ -100,12 +100,6 @@ export function RemoteDialog({
           busy={busy}
           fail={setError}
         />
-        {busy && (
-          <p className="text-fg-2 type-secondary">
-            <Loader2 className="mr-1 inline size-3 animate-spin" />
-            {step}
-          </p>
-        )}
         {error && (
           <p
             role="alert"
@@ -119,7 +113,8 @@ export function RemoteDialog({
             {m["common.cancel"]()}
           </Button>
           <Button disabled={!ok || busy} onClick={() => void go()}>
-            {submit}
+            {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+            {busy ? step : submit}
           </Button>
         </DialogFooter>
       </DialogContent>

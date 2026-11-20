@@ -78,27 +78,21 @@ describe("the step list of Commit & Push", () => {
   const states = (rows: ReturnType<typeof stepRows>) =>
     rows.map((r) => r.state);
 
-  it("runs commit, push, done in order", () => {
+  it("runs commit then push in order", () => {
     expect(states(stepRows({ kind: "running", step: "commit" }, both))).toEqual(
-      ["active", "pending", "pending"],
+      ["active", "pending"],
     );
     expect(states(stepRows({ kind: "running", step: "push" }, both))).toEqual([
       "done",
       "active",
-      "pending",
     ]);
-    expect(states(stepRows({ kind: "done" }, both))).toEqual([
-      "done",
-      "done",
-      "done",
-    ]);
+    expect(states(stepRows({ kind: "done" }, both))).toEqual(["done", "done"]);
   });
 
   it("marks the push as a warning when the remote is ahead", () => {
     expect(states(stepRows({ kind: "pullFirst" }, both))).toEqual([
       "done",
       "warn",
-      "pending",
     ]);
   });
 
@@ -112,11 +106,11 @@ describe("the step list of Commit & Push", () => {
       stepRows({ kind: "ready" }, { commit: false, push: true }).map(
         (r) => r.id,
       ),
-    ).toEqual(["push", "done"]);
+    ).toEqual(["push"]);
     expect(
       stepRows({ kind: "ready" }, { commit: true, push: false }).map(
         (r) => r.id,
       ),
-    ).toEqual(["commit", "done"]);
+    ).toEqual(["commit"]);
   });
 });
