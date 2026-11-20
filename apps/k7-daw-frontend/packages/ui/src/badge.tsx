@@ -3,8 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "./lib/utils";
 
-// `count` is the 22 px accent badge (`count-sm`: 20 px, on a round button's corner); `warn` is the
-// 30 px warning chip of the header; `amber` stays as its alias for unported code. Use asChild for a clickable chip.
+// `count` is the 22 px badge (`count-sm` 20 px on a corner), `warn` the 30 px header chip, `amber` its alias.
 const badgeVariants = cva(
   "inline-flex w-fit shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] transition-colors [a&]:cursor-pointer [button&]:cursor-pointer",
   {

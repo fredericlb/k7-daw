@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "./button";
+import { Play, SquareTerminal } from "./icons";
 
 const meta = {
   title: "UI/Button",
@@ -13,11 +14,16 @@ const meta = {
         "secondary",
         "outline",
         "ghost",
+        "glass",
+        "chip",
         "destructive",
         "link",
       ],
     },
-    size: { control: "select", options: ["default", "sm", "lg", "icon"] },
+    size: {
+      control: "select",
+      options: ["default", "sm", "lg", "icon", "round"],
+    },
     disabled: { control: "boolean" },
   },
   args: {
@@ -61,4 +67,46 @@ export const Block: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
+};
+
+/** The 44 px round glass button, at rest, pressed and disabled. */
+export const Round: Story = {
+  render: () => (
+    <div className="flex items-center gap-3">
+      <Button variant="glass" size="round" aria-label="Command bar">
+        <SquareTerminal className="size-5" />
+      </Button>
+      <Button variant="glass" size="round" aria-pressed aria-label="Pressed">
+        <SquareTerminal className="size-5" />
+      </Button>
+      <Button variant="glass" size="round" disabled aria-label="Disabled">
+        <SquareTerminal className="size-5" />
+      </Button>
+      <Button size="round" aria-label="Play">
+        <Play className="size-5" />
+      </Button>
+      <Button size="round" disabled aria-label="Play, disabled">
+        <Play className="size-5" />
+      </Button>
+    </div>
+  ),
+};
+
+/** Label pills: 44 tall, 36 inside cards and toasts, the chip toggle in both states. */
+export const Pills: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button>Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="destructive">Delete</Button>
+      <Button size="sm">Pill 36</Button>
+      <Button size="sm" variant="chip">
+        Loop
+      </Button>
+      <Button size="sm" variant="chip" aria-pressed>
+        Loop on
+      </Button>
+      <Button disabled>Disabled</Button>
+    </div>
+  ),
 };

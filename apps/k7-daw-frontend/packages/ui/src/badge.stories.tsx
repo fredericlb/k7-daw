@@ -8,7 +8,7 @@ const meta = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "amber", "rec", "tag"],
+      options: ["default", "amber", "rec", "tag", "count", "count-sm", "warn"],
     },
   },
   args: {
@@ -42,5 +42,21 @@ export const TagActive: Story = {
 };
 
 export const ClickableTag: Story = {
-  args: { variant: "tag", asChild: true, children: <button>#clickme</button> },
+  args: {
+    variant: "tag",
+    asChild: true,
+    children: <button type="button">#clickme</button>,
+  },
+};
+
+export const Count: Story = {
+  args: { variant: "count", children: "3" },
+};
+
+export const CountOnACorner: Story = {
+  args: { variant: "count-sm", children: "9" },
+};
+
+export const WarningChip: Story = {
+  args: { variant: "warn", children: "2" },
 };

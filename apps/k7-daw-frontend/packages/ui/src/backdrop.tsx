@@ -1,7 +1,6 @@
 import { cn } from "./lib/utils";
 
-// The screen's background decor: two blurred blobs low on the screen and two wave strokes at the foot.
-// It sits behind everything (z-decor) and takes no pointer.
+// The screen's background decor: two blurred blobs and two wave strokes, behind everything and off the pointer.
 export function Backdrop({ className }: { className?: string }) {
   return (
     <div

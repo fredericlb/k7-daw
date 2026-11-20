@@ -1,8 +1,7 @@
 import type * as React from "react";
 import { cn } from "./lib/utils";
 
-// Drawn only when there is nothing: a dashed card, a glyph in a tinted circle, a title, one line, actions.
-// `compact` is the 64 px glyph and 18 px title of an empty panel.
+// Drawn only when there is nothing; `compact` is the 64 px glyph and 18 px title of an empty panel.
 export function EmptyState({
   glyph,
   title,

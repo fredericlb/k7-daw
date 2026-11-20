@@ -38,7 +38,7 @@ export function Knob({
   /** Keyboard step; a hundredth of the range when omitted. */
   step?: number;
   onValueChange: (v: number) => void;
-  /** The accessible name and the caption under the arc. */
+  /** The accessible name. */
   label: string;
   /** 36 to 44. */
   size?: number;

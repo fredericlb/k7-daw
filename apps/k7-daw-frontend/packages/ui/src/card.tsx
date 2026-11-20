@@ -15,8 +15,7 @@ const SURFACES = {
 
 export type CardVariant = keyof typeof SURFACES;
 
-// A surface: `row` (a row group, the default), or one of the canvas's glass, float and panel surfaces.
-// No outer margin — spacing between cards is the parent's (a `gap`, a `space-y-*`).
+// A surface: a row group by default, or a glass, float or panel one; no outer margin, the parent spaces cards.
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { variant?: CardVariant }

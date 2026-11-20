@@ -2,8 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "./lib/utils";
 
-// Four chips in one file: `anchor` (a library chain, mono; dashed amber when orphan), `version`
-// (the newest is filled), `filter` (a 32 px pill, pressed when selected) and `status` (git changes, 24 px).
+// Four chips: anchor (a library chain), version (the newest is filled), filter (pressed when selected), status (git).
 const chipVariants = cva(
   "inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap outline-none transition-colors focus-visible:shadow-(--k7-focus-ring) disabled:pointer-events-none disabled:opacity-40",
   {
