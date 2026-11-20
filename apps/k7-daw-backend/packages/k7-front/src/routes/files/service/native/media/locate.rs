@@ -330,7 +330,14 @@ fn roots_of(ctx: &Ctx, project: &str, d: &docs::Docs) -> Vec<String> {
     k7_file_service::confine::project_roots(
         &ctx.home,
         &k7_file_service::paths::resolve_in(&code, &[project]),
-        &k7_file_service::paths::join(&[&code, "apps", "k7-daw-frontend", "packages", "song", "meta"]),
+        &k7_file_service::paths::join(&[
+            &code,
+            "apps",
+            "k7-daw-frontend",
+            "packages",
+            "song",
+            "meta",
+        ]),
         &models,
     )
 }

@@ -32,7 +32,10 @@ fn the_names_held_equal_to_web_protocols() {
         .ancestors()
         .nth(5)
         .unwrap();
-    let text = std::fs::read_to_string(repo.join("apps/k7-daw-frontend/packages/web-protocol/projects.ts")).unwrap();
+    let text = std::fs::read_to_string(
+        repo.join("apps/k7-daw-frontend/packages/web-protocol/projects.ts"),
+    )
+    .unwrap();
     assert!(text.contains(&format!("EXAMPLES_WORKSPACE = \"{EXAMPLES}\"")));
     assert!(text.contains(&format!("BENCH_WORKSPACE = \"{BENCH}\"")));
 }

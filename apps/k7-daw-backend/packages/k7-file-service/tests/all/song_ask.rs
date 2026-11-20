@@ -54,7 +54,10 @@ fn a_plain_home_gives_every_field() {
         ),
         ("account", format!("{studio}/library").as_str(), true)
     );
-    assert_eq!(got.meta.as_deref(), Some("/code/apps/k7-daw-frontend/packages/song/meta"));
+    assert_eq!(
+        got.meta.as_deref(),
+        Some("/code/apps/k7-daw-frontend/packages/song/meta")
+    );
     assert_eq!(got.scan, Some(format!("{studio}/exts.json")));
     assert_eq!(got.renders, Some(format!("{studio}/.renders")));
     assert_eq!(got.models, Some(format!("{studio}/models")));
@@ -191,7 +194,10 @@ fn windows_spelled_homes_and_code_roots_keep_their_drive_and_slashes() {
         Some("C:/Users/a/.k7/workspace/ws")
     );
     assert_eq!(got.confine.as_deref(), Some("C:/Users/a/.k7/workspace/ws"));
-    assert_eq!(got.meta.as_deref(), Some("C:/k7/apps/k7-daw-frontend/packages/song/meta"));
+    assert_eq!(
+        got.meta.as_deref(),
+        Some("C:/k7/apps/k7-daw-frontend/packages/song/meta")
+    );
     assert_eq!(got.scan.as_deref(), Some("C:/Users/a/.k7/exts.json"));
     assert_eq!(got.models.as_deref(), Some("D:/models"));
     assert_eq!(got.libraries[0].root, "C:/Users/a/.k7/library");

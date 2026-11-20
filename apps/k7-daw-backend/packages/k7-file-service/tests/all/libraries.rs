@@ -34,7 +34,8 @@ fn knows_the_names_and_versions_the_typescript_does() {
             && types.contains("\"mediatek\", // an older name of the default library")
     );
     assert!(
-        ts("apps/k7-daw-frontend/packages/song-schema/src/metaRefs.ts").contains("export const META_NS = \"@meta\";")
+        ts("apps/k7-daw-frontend/packages/song-schema/src/metaRefs.ts")
+            .contains("export const META_NS = \"@meta\";")
     );
     let reserved: Vec<&str> = RESERVED.to_vec();
     assert_eq!(

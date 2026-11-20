@@ -62,7 +62,11 @@ mod tests {
         let env = BTreeMap::from([("K7_CODE_ROOT".to_string(), dir.display().to_string())]);
         assert!(!is_code_root(&dir));
         assert_ne!(code_root(&env).as_deref(), Some(dir.as_path()));
-        std::fs::write(dir.join("apps/k7-daw-frontend/packages/commands/commands.yaml"), "").unwrap();
+        std::fs::write(
+            dir.join("apps/k7-daw-frontend/packages/commands/commands.yaml"),
+            "",
+        )
+        .unwrap();
         std::fs::create_dir_all(dir.join("apps/k7-daw-frontend/packages/song/meta")).unwrap();
         std::fs::create_dir_all(dir.join("demos")).unwrap();
         assert_eq!(code_root(&env).as_deref(), Some(dir.as_path()));

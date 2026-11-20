@@ -106,7 +106,10 @@ fn holds<T: DeserializeOwned + Serialize>(faces: &BTreeMap<String, Face>, interf
 }
 
 fn faces() -> BTreeMap<String, Face> {
-    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../k7-daw-frontend/packages/engine-protocol/project.ts");
+    let path = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../k7-daw-frontend/packages/engine-protocol/project.ts"
+    );
     interfaces(&std::fs::read_to_string(path).expect("project.ts"))
 }
 
