@@ -52,3 +52,9 @@ folder beside the project (`apps/k7-daw-frontend/packages/song-video/docs/interc
 editor, which every editor offers.
 
 The front's side is `apps/k7-daw-backend/docs/export.md`.
+
+## The panel's steps
+
+The format step is one row group (MP3, WAV, tracks, and a video's MP4 or WebM at 720p or 1080p), with the
+mixdown's timeline as a picker above it. The folder step is the button under it, and the result is a
+card that names the file and the folder, with Show in folder and Share… where the host has them.

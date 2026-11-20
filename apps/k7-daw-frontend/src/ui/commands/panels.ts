@@ -49,10 +49,6 @@ export const PANEL_COMMANDS: LocalCommand[] = [
     en: "Open the project's settings — its mix console",
     fr: "Ouvrir les réglages du projet — sa console de mix",
   }),
-  tab("account", {
-    en: "Open the account, engine and language settings",
-    fr: "Ouvrir le compte, le moteur et la langue",
-  }),
   {
     // A full PAGE, a catalogue not being orderable in a 24rem column — see components/SettingsPanel.tsx.
     name: "ui settings commands",

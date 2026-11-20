@@ -1,6 +1,6 @@
 # External resources — what the project imported, to hear and place again
 
-`components/ResourcesPanel.tsx`, opened by its footer tab or `ui resources`, lists the open
+`components/ResourcesPanel.tsx`, opened by the toolbar's Resources button or `ui resources`, lists the open
 project's imported audio and video and lets them be previewed and dragged onto a lane. The listing
 is the file service's `GET /resources` (`apps/k7-daw-backend/docs/file-runtime.md`).
 
@@ -34,3 +34,9 @@ A recorded take lands in `clips/` too and is left out: it was played, not import
 with a session of takes would bury its imports under them. Stills and captions are picture material
 with nothing to hear or watch play. A clip whose file is gone stays listed, marked, since it is
 still placed somewhere and the user needs to see it is broken.
+
+## One panel, two segments, filtered rows
+
+References are a segment of this panel (`references.md`), not a second button: both are material
+heard beside the project. The rows filter by All, Audio and Video; there is no "records" filter
+because a clip does not say how it was made, and the id is all the listing knows.

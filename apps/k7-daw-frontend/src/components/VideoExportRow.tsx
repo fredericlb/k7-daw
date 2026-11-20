@@ -2,8 +2,9 @@
 // since that is what a phone and every social site play, WebM otherwise; 720p or 1080p. It only
 // offers the `project export video …` line the panel runs once a folder is chosen. See ../../docs/shell.md.
 
+import { Chip } from "@studio/ui/chip";
 import { Download } from "@studio/ui/icons";
-import { cn } from "@studio/ui/lib/utils";
+import { RowButton } from "@studio/ui/row-group";
 import { probeExportSupport } from "@studio/ui-eyes/exportSupport";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -19,12 +20,10 @@ const PROBE: Record<Size, [number, number]> = {
 
 export function VideoExportRow({
   busy,
-  rowClass,
   chosen,
   onChoose,
 }: {
   busy: boolean;
-  rowClass: string;
   /** The line the panel has chosen, to mark this row when it is its own. */
   chosen: string;
   onChoose: (command: string) => void;
@@ -47,14 +46,6 @@ export function VideoExportRow({
 
   // MP4 by default where it can be made; a choice made by hand is kept.
   const fmt: Format = format ?? (mp4 ? "mp4" : "webm");
-  const pill = (on: boolean) =>
-    cn(
-      "rounded px-1.5 py-0.5 text-xs",
-      on
-        ? "bg-primary text-primary-foreground"
-        : "bg-muted text-muted-foreground hover:text-foreground",
-    );
-
   const lineOf = (f: Format, z: Size) => `project export video ${f} size=${z}`;
   const line = lineOf(fmt, size);
   // A pill moved on a chosen row moves the chosen line with it.
@@ -62,48 +53,46 @@ export function VideoExportRow({
     if (chosen.startsWith("project export video")) onChoose(lineOf(f, z));
   };
   return (
-    <div className="flex flex-col gap-1">
-      <button
-        type="button"
-        className={`${rowClass} ${chosen === line ? "bg-accent" : ""}`}
-        aria-pressed={chosen === line}
+    <div>
+      <RowButton
+        tall
+        icon={<Download />}
+        selected={chosen === line}
         disabled={busy || mp4 === null}
         onClick={() => onChoose(line)}
       >
-        <Download className="h-4 w-4 text-muted-foreground" />
         {m["share.exportVideo"]({ format: fmt.toUpperCase(), size })}
-      </button>
-      <div className="flex flex-wrap items-center gap-1 px-8 pb-1">
+      </RowButton>
+      <div className="flex flex-wrap items-center gap-2 px-3.5 pb-3">
         {(mp4 ? (["mp4", "webm"] as const) : (["webm"] as const)).map((f) => (
-          <button
+          <Chip
             key={f}
-            type="button"
-            className={pill(fmt === f)}
+            variant="filter"
+            selected={fmt === f}
             onClick={() => {
               setFormat(f);
               retarget(f, size);
             }}
           >
             {f.toUpperCase()}
-          </button>
+          </Chip>
         ))}
-        <span className="mx-1 text-border">·</span>
-        {(["720p", "1080p"] as const).map((s) => (
-          <button
-            key={s}
-            type="button"
-            className={pill(size === s)}
+        {(["720p", "1080p"] as const).map((z) => (
+          <Chip
+            key={z}
+            variant="filter"
+            selected={size === z}
             onClick={() => {
-              setSize(s);
-              retarget(fmt, s);
+              setSize(z);
+              retarget(fmt, z);
             }}
           >
-            {s}
-          </button>
+            {z}
+          </Chip>
         ))}
       </div>
       {mp4 === false && (
-        <p className="px-8 pb-1 text-muted-foreground text-xs">
+        <p className="type-status px-3.5 pb-3 text-fg-3">
           {m["share.noMp4"]()}
         </p>
       )}

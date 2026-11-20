@@ -166,6 +166,7 @@ function DomChainsBody({
   row,
   fixed = false,
   minimap,
+  minimapBar = true,
   onOrganize,
   onStack,
   stacked,
@@ -1184,6 +1185,7 @@ function DomChainsBody({
                     paintRef={minimapPaint}
                     onCenter={centerOn}
                     onFit={zoomFit}
+                    bar={minimapBar}
                     onOrganize={onOrganize}
                     onStack={onStack}
                     stacked={stacked}

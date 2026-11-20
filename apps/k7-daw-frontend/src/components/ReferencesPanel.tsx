@@ -8,15 +8,7 @@ import {
   type ReferenceTrack,
 } from "@studio/song-schema/reference";
 import { Button } from "@studio/ui/button";
-import {
-  Headphones,
-  Loader2,
-  Pause,
-  Play,
-  Plus,
-  Trash2,
-  X,
-} from "@studio/ui/icons";
+import { Loader2, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
 import { formatBytes } from "@studio/ui-chains-react/node-load";
 import { byPeoplePath } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -29,7 +21,6 @@ export function ReferencesPanel({
   sounding,
   onPlay,
   onToggle,
-  onClose,
 }: {
   /** The track the bar has loaded, by path — the row for it reads as the current one. */
   playing: string | null;
@@ -38,7 +29,6 @@ export function ReferencesPanel({
   onPlay: (track: ReferenceTrack) => void;
   /** The bar's own play/pause, for the loaded track's row. */
   onToggle: () => void;
-  onClose: () => void;
 }) {
   const [rows, setRows] = useState<ReferenceTrack[] | null>(null);
   const [error, setError] = useState("");
@@ -97,12 +87,11 @@ export function ReferencesPanel({
   };
 
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-border border-l bg-background">
-      <header className="flex shrink-0 items-center gap-1 border-border border-b px-2 py-1.5">
-        <Headphones className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 truncate px-1.5 text-sm">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="flex shrink-0 items-center justify-between gap-2 pb-2">
+        <p className="min-w-0 truncate text-fg-2 text-xs">
           {m["refs.title"]()}
-        </span>
+        </p>
         <Button
           size="icon"
           variant="ghost"
@@ -113,15 +102,7 @@ export function ReferencesPanel({
         >
           <Plus className="h-4 w-4" />
         </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </header>
+      </div>
 
       {/* The OS picker, hidden: `accept` is the same extension list the listing goes by. */}
       <input
@@ -200,6 +181,6 @@ export function ReferencesPanel({
           </ul>
         )}
       </div>
-    </aside>
+    </div>
   );
 }

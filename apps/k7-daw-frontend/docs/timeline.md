@@ -84,49 +84,25 @@ A tool produces a command LINE rather than a named act, alone among this pane's 
 (`onToolLine`). Naming them would be one prop per tool and would move the verb out of the pure
 module that is tested for it.
 
-### The strip, and the cursor that is the same picture
+### The tool lives in the floating bar, and the cursor is the same picture
 
-Down the pane's left edge, a **32px column of icons** — one per tool, the current one lit. It is
-the third way to a tool beside the keys and the bar, and the only one a finger has: a tablet has no
-`b` to press. Each button DISPATCHES `ui tool <name>` rather than setting the state, which is the
-rule that keeps a control and its verb from drifting apart.
+The pane draws **no tool rail and no view buttons**. The tool, the ruler's unit, Expand and the
+automation rows are fields of the shell store (`tool`, `rulerSeconds`, `lanesExpanded`,
+`automationShown`); the floating bar's tool menu and Lane views write them and the timeline only
+reads them. Every control DISPATCHES `ui tool <name>`, `ui ruler`, `ui lanes` or `ui automation`
+rather than setting the state, which keeps a control and its verb from drifting apart.
 
-**The cursor is built from the button's own drawing.** `modeIcons.tsx` holds one SVG body per mode
-and both readers take it from there — two pictures for one tool is a pointer that can come to lie
-about what a click will do. Three things that fall out of doing it that way:
+**The cursor is built from the tool's own drawing.** `modeIcons.tsx` holds one SVG body per mode
+and both readers take it from there: two pictures for one tool is a pointer that can come to lie
+about what a click will do. The glyphs paint with `fill="currentColor"` so the cursor pass can
+recolour them, the cursor draws the body twice (a dark outline under a white fill) to read on a lit
+waveform and a dark lane alike, and each glyph carries its own hotspot, the pixel a click lands on.
+The pointer tool deliberately has no cursor: the system already draws that one.
 
-- the glyphs paint with `fill="currentColor"`, which is what lets the cursor pass recolour them;
-- the cursor draws the body **twice**, a heavy dark outline under a white fill, because it has to
-  read on a lit waveform and on a dark lane alike and neither background is ours to choose;
-- each glyph carries its own **hotspot**, since that is the pixel a click actually lands on — the
-  blade's is its tip, where the split goes, not the centre of the icon.
-
-The pointer tool has a drawing for the strip and deliberately no cursor: the system already draws
-that one, and replacing an arrow with a picture of an arrow only makes it worse.
-
-### The two view toggles, at the FOOT of the strip
-
-The pane has **no header of its own**: the surface starts at the ruler. A song's name, tempo and
-time signature are the shell's to say and the transport already says them, and a printed list of
-keys is the one thing on screen that cannot be trusted — it is stale the moment a key is rebound,
-and `/help` answers the same question from the keymap itself.
-
-What the header did carry that nothing else does is the **view** toggles, and they now hang
-under the tool column, below a rule: the ruler's unit (bars ↔ seconds), Expand, and the automation
-rows shown or hidden — that last one drawn only when some lane has automation, so it is never a
-toggle that changes nothing. Expand is ON by default, and its lanes travel to their new height
-rather than jump, along with every line spanning them — the playhead, the markers — so nothing
-overhangs the lanes mid-move (`GROW` in `TimelineTab.tsx`). While a bottom panel is open the lanes draw
-folded and Expand is dead, because the panel takes half the height and tall lanes would leave a
-handful of rows. The user's choice is kept, so closing the panel unfolds the lanes again
-(`lanesLocked`). They sit there
-because a control that changes what this surface SHOWS and writes nothing to disk is exactly what
-the strip already holds — the tools are the same kind of thing — and `ModeStrip`'s `footer` is the
-slot, `mt-auto` putting it at the bottom rather than at the end of the modes. `stripButton` is the
-look, shared so a footer control is the same object as a mode rather than a copy of it.
-
-The column is drawn **even where there are no tools**: a second device dispatches no tool line
-(`ExternalTimeline`), and these toggles are the pane's own either way.
+Expand is ON by default. While a bottom panel is open the lanes draw folded and Expand is dead,
+because the panel takes half the height; the stored choice is kept, so closing the panel unfolds
+the lanes again (`lanesLocked`). The ruler's unit follows the picture until the clock is pressed.
+Lanes travel to their new height rather than jump (`GROW` in `TimelineTab.tsx`).
 
 A hovered marker names itself in its own tooltip and glows its line; that is the whole of it now.
 
@@ -1179,18 +1155,16 @@ caret test and the zoom maths.
 
 ### M/S/A in the gutter
 
-**On a desktop the toggles are 20 px with 11 px letters and a 4 px gap**, solid when on (mute,
-solo, and arm in the record red), a muted chip when off. Smaller, they read as decoration and the
-arm sits close enough to solo to be pressed for it — and arm is the one that writes to disk.
+**The toggles are the kit's `TrackToggle`** (`components/timeline/LaneToggle.tsx`), the same object the
+mixer strip uses: mute amber, solo lavender, arm the record red. Arm is the one that writes to disk,
+so it keeps its own colour and sits last.
 
-**On a phone they take a line of their own under the name**, sharing the column's width, each with
-an invisible box reaching 44 px tall (`components/timeline/LaneToggle.tsx`). Beside the name they
-squeezed it to nothing, and a lane whose name you cannot read makes every toggle a guess. Three 44 px
-squares do not fit a 96 px column, so the boxes reach full height and touch each other edge to edge:
-no dead strip between two of them, and no press that lands on a neighbour's lane.
+**On a phone with Expand on they take a line of their own under the name**, sharing the column's
+width, each with an invisible box reaching 44 px tall. Three 44 px squares do not fit a 96 px
+column, so the boxes touch edge to edge: no dead strip between two of them.
 
-The second line needs a tall row, so a phone with Expand off draws the name alone: `track mute` and
-`track solo` stay in the lane's menu and the command bar, and the name's colour still says armed or soloed.
+**On a phone with Expand off the lane shows one chip** (`LaneChip.tsx`) whose letters say which of
+M, S and A are on; it opens the lane's menu, where `track mute` and `track solo` live.
 
 ### …and it STAYS, while the lanes pan under it
 
@@ -1256,7 +1230,7 @@ A video placement is cut in **seconds** against the wall clock while a song's la
 in bars. Both are drawn here, on one grid, and both are editable: there is one `tempo:` and no
 tempo map, so seconds ↔ beats is exact and reversible.
 
-The ruler reads either unit — the clock button in the header — and a drag snaps to whichever
+The ruler reads either unit — the bar's clock button — and a drag snaps to whichever
 ticks are on screen. A grid readable only in bars would make picture unreadable however
 accurately it was drawn, which is what that button is for. The full account, including the
 three drags and why a placement is not a command, is in [picture.md](picture.md).

@@ -104,7 +104,7 @@ export function EditorToolbar({
         <div
           role="tablist"
           aria-label={m["seq.views"]()}
-          className="flex items-center gap-0.5 rounded-md border border-border p-0.5"
+          className="glass flex h-10 items-center gap-0.5 rounded-full p-[3px]"
         >
           {SEQ_TABS.map((t) => (
             <button
@@ -114,10 +114,10 @@ export function EditorToolbar({
               aria-selected={tab === t.id}
               title={t.title}
               className={cn(
-                "flex items-center gap-1 rounded px-2 py-1 text-xs transition-colors",
+                "flex h-8 items-center gap-1 rounded-full px-3 font-bold text-[13px] transition-colors",
                 tab === t.id
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                  ? "bg-on-fill text-lavender"
+                  : "text-foreground/80 hover:bg-on-fill/60",
               )}
               onClick={() => onTab(t.id)}
             >

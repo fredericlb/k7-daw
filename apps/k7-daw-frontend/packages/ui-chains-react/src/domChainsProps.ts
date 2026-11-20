@@ -103,6 +103,8 @@ export interface DomChainsProps {
   fixed?: boolean;
   /** Draw the corner minimap, with its "Zoom fit" button — docs/minimap.md. Never on a ROW. */
   minimap?: boolean;
+  /** Draw the minimap's own Fit / Organize / Stack buttons; false when the host draws them as labelled pills. */
+  minimapBar?: boolean;
   /** The minimap's "Organize": the host's auto-layout, which is a command and its reload. */
   onOrganize?: () => void;
   /** The stack view's toggle, drawn left of the minimap's zoom fit, and whether it is on. */

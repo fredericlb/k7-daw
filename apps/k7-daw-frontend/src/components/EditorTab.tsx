@@ -17,8 +17,8 @@ import {
   setVideoPlacementField,
 } from "@studio/song-schema/yaml/videoTrackFile";
 import type { DroppedFile } from "@studio/ui/file-tree";
-import { FolderTree } from "@studio/ui/icons";
-import { cn } from "@studio/ui/lib/utils";
+import { FolderTree, X } from "@studio/ui/icons";
+import { Sheet } from "@studio/ui/side-panel";
 import { recallBuffer, useAutosave } from "@studio/ui-editor/autosave";
 import { editK7xText } from "@studio/ui-editor/k7x/bufferEdit";
 import type { LintItem } from "@studio/ui-editor/lint";
@@ -231,6 +231,8 @@ function EditorTabView({
   const cmViewRef = useRef<EditorView | null>(null);
   // The sidebar, for the two actions it alone holds — the pins and the OS file pickers.
   const treeRef = useRef<FileTreeHandle>(null);
+  // The file was put in front by a command (`ui file`), not by a press on the tree: a strip says so until it is dismissed.
+  const [byCommand, setByCommand] = useState(false);
   /** The module libraries, fetched beside the tree and refreshed with it — NOT read out of `tree`, which is the project's own files. */
   const [libraries, setLibraries] = useState<ModuleLibrary[]>([]);
   /** The library CHAINS, fetched and refreshed exactly as the module levels are — same repo. */
@@ -630,6 +632,7 @@ function EditorTabView({
   const open = useCallback(
     async (path: string): Promise<boolean> => {
       const seq = ++openSeq.current;
+      setByCommand(false);
       const posix = norm(path).toLowerCase();
       // A .dawproject and an Ableton project's .zip are ZIPs, a .als gzip — offer to import rather than decode bytes as text.
       if (
@@ -904,7 +907,11 @@ function EditorTabView({
   useImperativeHandle(
     ref,
     (): EditorHandle => ({
-      open,
+      open: async (path) => {
+        const landed = await open(path);
+        if (landed) setByCommand(true);
+        return landed;
+      },
       files: () => {
         const all = textFiles(tree);
         const ap = projectDir(activeProject);
@@ -1234,6 +1241,77 @@ function EditorTabView({
     [file, locked],
   );
 
+  const treeBody = (
+    <>
+      <LibraryUpgrades
+        levels={libraries}
+        engineLevel={engineLevel}
+        onUpgrade={async (ns, version) => {
+          await command(`library upgrade ${ns} ${version}`);
+          await refreshLibraries();
+        }}
+      />
+      <FileTree
+        ref={treeRef}
+        tree={tree}
+        activePath={file?.path ?? null}
+        activeProject={activeProject}
+        pictureLanes={hints.videoTracks}
+        projectName={projectName}
+        rootDir={activeProject ?? "."}
+        onOpen={(path) => {
+          open(path);
+          if (isMobile) setTreeOpen(false);
+        }}
+        // A module row opens the BUILDER on its panel — its three files are not rows of their own.
+        onOpenModule={(moduleFile) => {
+          onOpenBuilder(moduleFile, "panel");
+          if (isMobile) setTreeOpen(false);
+        }}
+        onOpenProject={onOpenProject}
+        onUpload={uploadFiles}
+        onRename={renameEntry}
+        onMove={moveEntry}
+        onDelete={deleteEntry}
+        onCreateProjectFile={createProjectFile}
+        onCreateFolder={createFolder}
+        onCloneModule={cloneModuleEntry}
+        onCreateNode={createNodeEntry}
+        levels={libraries}
+        chains={libChains}
+        onOpenChain={onOpenChain}
+        assemblies={libAssemblies}
+        onOpenAssembly={onOpenAssembly}
+        onCreateModule={async (root, rel) => {
+          try {
+            const { path } = await api.createModule(root, rel);
+            // Both halves: `root` IS a library level, so this is one of the two acts that can move that list.
+            await Promise.all([refresh(), refreshLibraries()]);
+            // Straight into the builder: making a module and then hunting for its row is two acts where somebody meant one.
+            onOpenLibraryModule(path);
+          } catch (e) {
+            setStatus((e as Error).message, "error");
+          }
+        }}
+        onRenameLibraryEntry={renameLibraryEntry}
+        onDeleteLibraryEntry={deleteLibraryEntry}
+        onMoveLibraryModule={moveLibraryModule}
+        onOpenLibraryModule={(moduleFile) => {
+          onOpenLibraryModule(moduleFile);
+          if (isMobile) setTreeOpen(false);
+        }}
+      />
+      <UploadProgress
+        fileName={uploadState?.fileName ?? null}
+        loaded={uploadState?.loaded ?? 0}
+        total={uploadState?.total ?? 0}
+        done={uploadState?.done ?? 0}
+        count={uploadState?.count ?? 0}
+        active={uploadState !== null}
+      />
+    </>
+  );
+
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <EditorToolbar
@@ -1254,6 +1332,24 @@ function EditorTabView({
         onProcess={(c) => void runProcess(c)}
         autosave={autosave}
       />
+      {byCommand && file && (
+        <div
+          role="status"
+          className="mx-3 mt-2 flex h-9 shrink-0 items-center gap-2 rounded-full bg-(--k7-warn-fill) px-4 text-[13px] text-(--k7-warn)"
+        >
+          <span className="min-w-0 flex-1 truncate font-bold">
+            {m["editor.openedByCommand"]({ command: "ui file" })}
+          </span>
+          <button
+            type="button"
+            aria-label={m["common.close"]()}
+            onClick={() => setByCommand(false)}
+            className="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-on-fill"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+      )}
       {diskSync.conflict !== null && (
         <DiskConflictBar
           onKeep={diskSync.keepEditing}
@@ -1274,83 +1370,23 @@ function EditorTabView({
             files
           </button>
         )}
-        {showTree && (!isMobile || treeOpen) && (
+        {showTree && !isMobile && (
           <aside
             aria-label={m["editor.filesLabel"]()}
-            className={cn(
-              "flex flex-col overflow-hidden border-r border-border",
-              isMobile
-                ? "absolute inset-y-0 left-0 z-20 w-64 bg-card shadow-xl"
-                : "w-64 shrink-0 bg-card/40",
-            )}
+            className="flex w-64 shrink-0 flex-col overflow-hidden border-r border-(--k7-hairline-row) bg-card/40 p-2"
           >
-            <LibraryUpgrades
-              levels={libraries}
-              engineLevel={engineLevel}
-              onUpgrade={async (ns, version) => {
-                await command(`library upgrade ${ns} ${version}`);
-                await refreshLibraries();
-              }}
-            />
-            <FileTree
-              ref={treeRef}
-              tree={tree}
-              activePath={file?.path ?? null}
-              activeProject={activeProject}
-              pictureLanes={hints.videoTracks}
-              projectName={projectName}
-              rootDir={activeProject ?? "."}
-              onOpen={(path) => {
-                open(path);
-                if (isMobile) setTreeOpen(false);
-              }}
-              // A module row opens the BUILDER on its panel — its three files are not rows of their own.
-              onOpenModule={(moduleFile) => {
-                onOpenBuilder(moduleFile, "panel");
-                if (isMobile) setTreeOpen(false);
-              }}
-              onOpenProject={onOpenProject}
-              onUpload={uploadFiles}
-              onRename={renameEntry}
-              onMove={moveEntry}
-              onDelete={deleteEntry}
-              onCreateProjectFile={createProjectFile}
-              onCreateFolder={createFolder}
-              onCloneModule={cloneModuleEntry}
-              onCreateNode={createNodeEntry}
-              levels={libraries}
-              chains={libChains}
-              onOpenChain={onOpenChain}
-              assemblies={libAssemblies}
-              onOpenAssembly={onOpenAssembly}
-              onCreateModule={async (root, rel) => {
-                try {
-                  const { path } = await api.createModule(root, rel);
-                  // Both halves: `root` IS a library level, so this is one of the two acts that can move that list.
-                  await Promise.all([refresh(), refreshLibraries()]);
-                  // Straight into the builder: making a module and then hunting for its row is two acts where somebody meant one.
-                  onOpenLibraryModule(path);
-                } catch (e) {
-                  setStatus((e as Error).message, "error");
-                }
-              }}
-              onRenameLibraryEntry={renameLibraryEntry}
-              onDeleteLibraryEntry={deleteLibraryEntry}
-              onMoveLibraryModule={moveLibraryModule}
-              onOpenLibraryModule={(moduleFile) => {
-                onOpenLibraryModule(moduleFile);
-                if (isMobile) setTreeOpen(false);
-              }}
-            />
-            <UploadProgress
-              fileName={uploadState?.fileName ?? null}
-              loaded={uploadState?.loaded ?? 0}
-              total={uploadState?.total ?? 0}
-              done={uploadState?.done ?? 0}
-              count={uploadState?.count ?? 0}
-              active={uploadState !== null}
-            />
+            {treeBody}
           </aside>
+        )}
+        {showTree && isMobile && treeOpen && (
+          <Sheet
+            title={m["editor.filesLabel"]()}
+            icon={<FolderTree className="size-5" />}
+            closeLabel={m["common.close"]()}
+            onClose={() => setTreeOpen(false)}
+          >
+            {treeBody}
+          </Sheet>
         )}
         <main className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
           {/* The chains builder takes the EDITOR's place beside the file tree, absolute inside this main so nothing unmounts (docs/chainsBuilder.md). */}

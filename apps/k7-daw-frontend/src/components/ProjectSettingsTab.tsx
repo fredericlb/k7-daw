@@ -2,6 +2,7 @@
 // whole mix, today its summing console. Every change is the `project …` verb, so the palette and
 // this tab write the same line. See apps/k7-daw-frontend/packages/song/docs/console.md.
 
+import { Picker } from "@studio/ui/picker";
 import { sortForPeople } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
@@ -49,39 +50,39 @@ export function ProjectSettingsTab({
 
   if (failed)
     return (
-      <p className="p-3 text-xs text-muted-foreground">
-        {m["settings.noProject"]()}
-      </p>
+      <p className="type-status p-1 text-fg-2">{m["settings.noProject"]()}</p>
     );
 
   const current = consoles?.current ?? "";
   // A system the file names but no library holds is kept in the list, so the select shows the truth.
   const missing = current && !consoles?.systems.some((s) => s.ref === current);
 
+  const items = [
+    { value: "", label: m["settings.consoleNone"]() },
+    ...(consoles?.systems.map((c) => ({
+      value: c.ref,
+      label: c.label,
+      detail: c.ref,
+    })) ?? []),
+    ...(missing ? [{ value: current, label: `${current} ?` }] : []),
+  ];
+
   return (
-    <div className="h-full overflow-y-auto p-3">
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium">{m["settings.console"]()}</span>
-        <select
-          value={current}
-          disabled={!consoles}
-          onChange={(e) => void pick(e.target.value)}
-          className="rounded-md border border-border bg-background px-2 py-1 text-sm text-foreground"
-        >
-          <option value="">{m["settings.consoleNone"]()}</option>
-          {consoles?.systems.map((s) => (
-            <option key={s.ref} value={s.ref} title={s.ref}>
-              {s.label}
-            </option>
-          ))}
-          {missing && <option value={current}>{current} ?</option>}
-        </select>
-        <span className="text-xs text-muted-foreground">
-          {consoles && !consoles.systems.length
-            ? m["settings.consoleEmpty"]()
-            : m["settings.consoleHint"]()}
-        </span>
-      </label>
+    <div className="flex flex-col gap-2">
+      <h3 className="type-caps text-fg-2">{m["settings.console"]()}</h3>
+      <Picker
+        items={items}
+        value={current}
+        onValueChange={(v) => void pick(v)}
+        label={m["settings.console"]()}
+        searchLabel={m["settings.console"]()}
+        emptyLabel={m["settings.consoleEmpty"]()}
+      />
+      <p className="type-status text-fg-3">
+        {consoles && !consoles.systems.length
+          ? m["settings.consoleEmpty"]()
+          : m["settings.consoleHint"]()}
+      </p>
     </div>
   );
 }

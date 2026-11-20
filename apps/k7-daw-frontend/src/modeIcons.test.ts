@@ -7,8 +7,10 @@ import { ROLL_MODES } from "./rollMode";
 import { TOOLS } from "./timelineTools";
 import { WAVE_MODES } from "./waveMode";
 
-// A set: `takes` is a mode of both clip panels, and one picture for one mode is the rule.
-const NAMED = [...new Set([...TOOLS, ...WAVE_MODES, ...ROLL_MODES])];
+// A set: `takes` is a mode of both clip panels, and one picture for one mode is the rule; `list` is a kit icon, with no pointer.
+const NAMED = [...new Set([...TOOLS, ...WAVE_MODES, ...ROLL_MODES])].filter(
+  (m) => m !== "list",
+);
 
 describe("the glyph table", () => {
   it("draws every mode either surface can be in", () => {

@@ -16,11 +16,9 @@ import {
 } from "@studio/song-schema/records";
 import { Button } from "@studio/ui/button";
 import {
-  AudioLines,
   ChevronDown,
   ChevronUp,
   Disc3,
-  FileQuestion,
   ListMusic,
   Pause,
   Play,
@@ -29,6 +27,9 @@ import {
   Split,
   X,
 } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
+import { cn } from "@studio/ui/lib/utils";
+import { Row, RowButton, RowGroup } from "@studio/ui/row-group";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { parts } from "../i18nParts";
@@ -205,7 +206,7 @@ export function PlaylistPane({
         <track kind="captions" />
       </audio>
 
-      <header className="flex shrink-0 flex-wrap items-center gap-2 border-b border-border px-3 py-2">
+      <header className="flex shrink-0 flex-wrap items-center gap-2 pb-2">
         <Button
           size="sm"
           variant={searching ? "default" : "secondary"}
@@ -227,7 +228,7 @@ export function PlaylistPane({
         >
           <Split className="mr-1 h-4 w-4" /> {m["pl.separate"]()}
         </Button>
-        <span className="text-xs text-muted-foreground">
+        <span className="type-status text-fg-3">
           {m["pl.rowCount"]({
             n: rows.length,
             s: rows.length > 1 ? "s" : "",
@@ -252,10 +253,10 @@ export function PlaylistPane({
 
       {/* The search, above the list and not over it: watching the set list grow as you pick is the only confirmation there is. */}
       {searching ? (
-        <div className="flex max-h-[55%] min-h-0 shrink-0 flex-col border-b bg-muted/30">
+        <div className="flex max-h-[55%] min-h-0 shrink-0 flex-col pb-2">
           <div className="flex shrink-0 items-center gap-2 px-3 py-2">
             <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <input
+            <Input
               ref={queryRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -267,58 +268,49 @@ export function PlaylistPane({
                 if (e.key === "Enter" && hits[0]) add(hits[0]);
               }}
               placeholder={m["pl.searchPlaceholder"]()}
-              className="min-w-0 flex-1 rounded-sm bg-transparent text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
+              className="min-w-0 flex-1"
             />
-            <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+            <span className="type-mono-value shrink-0 text-fg-3">
               {hits.length}
             </span>
             <Button
-              size="icon"
+              size="icon-sm"
               variant="ghost"
-              className="h-7 w-7 shrink-0"
               aria-label={m["pl.closeSearch"]()}
               onClick={() => setSearching(false)}
             >
               <X className="h-3.5 w-3.5" />
             </Button>
           </div>
-          <ul className="min-h-0 flex-1 overflow-auto px-2 pb-2">
+          <div className="min-h-0 flex-1 overflow-auto px-3 pb-3">
             {hits.length === 0 ? (
-              <li className="px-2 py-3 text-sm text-muted-foreground">
-                {m["pl.noHit"]()}
-              </li>
+              <p className="py-3 text-fg-2 text-sm">{m["pl.noHit"]()}</p>
             ) : (
-              hits.slice(0, MAX_HITS).map((r) => (
-                <li
-                  key={r}
-                  className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent/40"
-                >
-                  <Disc3 className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                  <button
-                    type="button"
-                    className="min-w-0 flex-1 truncate text-left"
+              <RowGroup>
+                {hits.slice(0, MAX_HITS).map((r) => (
+                  <RowButton
+                    key={r}
+                    icon={<Disc3 />}
+                    detail={r}
+                    trailing={<Plus className="size-4 text-fg-3" />}
                     onClick={() => add(r)}
                   >
                     {recordName(r)}
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      {r}
-                    </span>
-                  </button>
-                  <Plus className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                </li>
-              ))
+                  </RowButton>
+                ))}
+              </RowGroup>
             )}
             {/* Never a silent cap: a search that quietly hid the song you wanted is worse than one that says to type another word. */}
             {hits.length > MAX_HITS ? (
-              <li className="px-2 py-1.5 text-xs text-muted-foreground">
+              <p className="type-status py-2 text-fg-3">
                 {m["pl.moreHits"]({ n: hits.length - MAX_HITS })}
-              </li>
+              </p>
             ) : null}
-          </ul>
+          </div>
         </div>
       ) : null}
 
-      <div className="min-h-0 flex-1 overflow-auto p-2">
+      <div className="min-h-0 flex-1 overflow-auto">
         {rows.length === 0 ? (
           <div className="flex flex-col items-start gap-3 p-4">
             <p className="text-sm text-muted-foreground">
@@ -341,7 +333,7 @@ export function PlaylistPane({
             )}
           </div>
         ) : (
-          <ol className="flex flex-col">
+          <RowGroup role="list">
             {rows.map((r, i) => {
               const problem = !r.path
                 ? m["pl.notARecord"]()
@@ -350,13 +342,12 @@ export function PlaylistPane({
                   : "";
               const missing = !problem && !r.present;
               const playingHere = current === i && playing;
-              const loadedHere = current === i;
               return (
-                <li
+                <Row
                   // The index IS the identity: a playlist may name the same song twice, and keying on the ref would make those one row.
-
                   // biome-ignore lint/suspicious/noArrayIndexKey: see above
                   key={i}
+                  role="listitem"
                   // Draggable onto a DECK — the record's path travels, see apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/setList.md.
                   draggable={!problem && !missing}
                   onDragStart={(e) => {
@@ -367,86 +358,84 @@ export function PlaylistPane({
                     );
                     e.dataTransfer.effectAllowed = "copy";
                   }}
-                  className={`group/row flex items-center gap-2 rounded-md px-2 py-1.5 text-sm ${
-                    loadedHere ? "bg-accent/60" : "hover:bg-accent/30"
-                  } ${!problem && !missing ? "cursor-grab active:cursor-grabbing" : ""}`}
-                >
-                  <span className="w-6 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
-                    {i + 1}
-                  </span>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="h-7 w-7 shrink-0"
-                    disabled={!!problem || missing}
-                    title={problem}
-                    onClick={() => toggleRow(i)}
-                  >
-                    {playingHere ? (
-                      <Pause className="h-3.5 w-3.5" />
-                    ) : (
-                      <Play className="h-3.5 w-3.5" />
-                    )}
-                  </Button>
-                  {r.present ? (
-                    <AudioLines className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                  ) : (
-                    <FileQuestion className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                  selected={current === i}
+                  className={cn(
+                    !problem &&
+                      !missing &&
+                      "cursor-grab active:cursor-grabbing",
+                    // A file outside the workspace reads amber.
+                    problem && "text-warn",
                   )}
-                  <span className="min-w-0 flex-1 truncate">{labelOf(r)}</span>
-                  {r.path && recordFolder(r.path) ? (
-                    <span className="shrink-0 truncate text-xs text-muted-foreground">
-                      {recordFolder(r.path)}
-                    </span>
-                  ) : null}
-                  {/* Already separated, so the night-before run will skip it: its four stems are beside it. */}
-                  {r.stems ? (
-                    <span
-                      className="shrink-0 text-muted-foreground"
-                      title={m["pl.alreadySplit"]()}
-                    >
-                      <Split className="h-3.5 w-3.5" />
-                    </span>
-                  ) : null}
-                  {problem ? (
-                    <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-xs text-destructive">
-                      {problem}
-                    </span>
-                  ) : null}
-                  {/* The running order and what is on it: the two acts that would otherwise mean opening the file. */}
-                  {onMove || onRemove ? (
-                    <span className="flex shrink-0 items-center opacity-0 focus-within:opacity-100 group-hover/row:opacity-100 [@media(hover:none)]:opacity-100">
+                  icon={
+                    playingHere ? (
+                      <Pause />
+                    ) : (
+                      <span className="type-mono-value">{i + 1}</span>
+                    )
+                  }
+                  detail={
+                    problem ||
+                    (r.path && recordFolder(r.path) ? recordFolder(r.path) : "")
+                  }
+                  trailing={
+                    <span className="flex shrink-0 items-center">
+                      {/* Already separated, so the night-before run will skip it: its four stems are beside it. */}
+                      {r.stems ? (
+                        <span
+                          className="px-1 text-fg-3"
+                          title={m["pl.alreadySplit"]()}
+                        >
+                          <Split className="size-4" />
+                        </span>
+                      ) : null}
+                      <Button
+                        size="icon-sm"
+                        variant="ghost"
+                        disabled={!!problem || missing}
+                        title={problem || undefined}
+                        aria-label={
+                          playingHere ? m["pl.pauseRow"]() : m["pl.playRow"]()
+                        }
+                        onClick={() => toggleRow(i)}
+                      >
+                        {playingHere ? (
+                          <Pause className="size-4" />
+                        ) : (
+                          <Play className="size-4" />
+                        )}
+                      </Button>
+                      {/* The running order and what is on it: the two acts that would otherwise mean opening the file. */}
                       {onMove ? (
                         <>
                           <Button
-                            size="icon"
+                            size="icon-sm"
                             variant="ghost"
-                            className="h-7 w-7"
                             disabled={i === 0 || !!editRefusal}
                             title={editRefusal || m["pl.moveUp"]()}
+                            aria-label={m["pl.moveUp"]()}
                             onClick={() => onMove(i, i - 1)}
                           >
-                            <ChevronUp className="h-3.5 w-3.5" />
+                            <ChevronUp className="size-4" />
                           </Button>
                           <Button
-                            size="icon"
+                            size="icon-sm"
                             variant="ghost"
-                            className="h-7 w-7"
                             disabled={i === rows.length - 1 || !!editRefusal}
                             title={editRefusal || m["pl.moveDown"]()}
+                            aria-label={m["pl.moveDown"]()}
                             onClick={() => onMove(i, i + 1)}
                           >
-                            <ChevronDown className="h-3.5 w-3.5" />
+                            <ChevronDown className="size-4" />
                           </Button>
                         </>
                       ) : null}
                       {onRemove ? (
                         <Button
-                          size="icon"
+                          size="icon-sm"
                           variant="ghost"
-                          className="h-7 w-7 hover:text-destructive"
                           disabled={!!editRefusal}
                           title={editRefusal || m["pl.removeRow"]()}
+                          aria-label={m["pl.removeRow"]()}
                           onClick={() => {
                             // The row playing IS this one: silence it before the line under the transport goes.
                             if (current === i) {
@@ -456,19 +445,21 @@ export function PlaylistPane({
                             onRemove(i);
                           }}
                         >
-                          <X className="h-3.5 w-3.5" />
+                          <X className="size-4" />
                         </Button>
                       ) : null}
                     </span>
-                  ) : null}
-                </li>
+                  }
+                >
+                  {labelOf(r)}
+                </Row>
               );
             })}
-          </ol>
+          </RowGroup>
         )}
       </div>
 
-      <footer className="flex shrink-0 items-center gap-2 border-t px-3 py-1 text-xs text-muted-foreground">
+      <footer className="type-status flex shrink-0 items-center gap-2 pt-2 text-fg-3">
         <ListMusic className="h-3.5 w-3.5" />
         <span className="min-w-0 flex-1 truncate">
           {notice ||

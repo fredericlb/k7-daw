@@ -87,6 +87,7 @@ import { FloatingWindow } from "./components/FloatingWindow";
 import { GraphPanel } from "./components/GraphPanel";
 import { HistoryPanel } from "./components/HistoryPanel";
 import { LogsPanel } from "./components/LogsPanel";
+import { MasteringTab } from "./components/MasteringTab";
 import { MasterMeter, type MasterMeterHandle } from "./components/MasterMeter";
 import { MidiTakeRoll } from "./components/MidiTakeRoll";
 import type { MinimapItem } from "./components/Minimap";
@@ -792,6 +793,13 @@ export default function App({
 
   // The special views this PROJECT declares (`surfaces/`), and the engine as a desk sees it — both cheap and unconditional.
   const { surfaces } = useSurfaces(surfacesKey);
+  const masteringSurface = useMemo(
+    () =>
+      surfaces.find(
+        (s) => s.surface.type === "mastering" && s.surface.layout === "split",
+      ) ?? null,
+    [surfaces],
+  );
   /** The project's ARRANGEMENT, if it declares one: a `split` surface of type `timeline`, false for a frame or two on open. */
   const timelineSurface = useMemo(
     () =>
@@ -2959,13 +2967,7 @@ export default function App({
           />
         );
       case "playlists":
-        return (
-          <PlaylistsPanel
-            vimMode={vimMode}
-            onRun={runCommand}
-            onClose={closePanelNow}
-          />
-        );
+        return <PlaylistsPanel vimMode={vimMode} onRun={runCommand} />;
       case "references":
         return (
           <>
@@ -2980,7 +2982,6 @@ export default function App({
                 sounding={referenceSounding}
                 onPlay={setReference}
                 onToggle={() => referenceToggle.current?.()}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -2994,7 +2995,7 @@ export default function App({
               resetKey={reloadKey}
               onError={paneError}
             >
-              <ResourcesPanel reloadKey={reloadKey} onClose={closePanelNow} />
+              <ResourcesPanel reloadKey={reloadKey} />
             </PaneBoundary>
           </>
         );
@@ -3024,7 +3025,6 @@ export default function App({
                   )
                 }
                 onRun={runCommand}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -3043,7 +3043,6 @@ export default function App({
                 git={gitHandle.state}
                 gitTransport={gitTransport}
                 onMark={setHistoryMark}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -3059,11 +3058,9 @@ export default function App({
             hasPicture={!!videoDoc}
             timelines={(projectDoc?.timelines ?? []).map((t) => t.id)}
             onRun={(c) => void runCommand(c)}
-            onClose={closePanelNow}
           />
         );
       case "mixer":
-        // The Master section of this panel is built with the mixer itself.
         return (
           <PaneBoundary
             name="graph panel"
@@ -3074,6 +3071,17 @@ export default function App({
               {...graphHostProps}
               trackId={null}
               strips={mixerStrips}
+              master={
+                masteringSurface ? (
+                  <MasteringTab
+                    surface={masteringSurface}
+                    paramsStore={pluginParamsStore}
+                    setPluginParam={setPluginParam}
+                    watchPluginParams={watchPluginParams}
+                    command={quietCommand}
+                  />
+                ) : null
+              }
             />
           </PaneBoundary>
         );

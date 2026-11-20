@@ -19,20 +19,18 @@ import {
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
 import {
-  Clock,
   Ghost,
   Layers,
   ListTodo,
   Music,
   Plus,
   Repeat,
-  Spline,
-  StretchVertical,
   Timer,
   TimerOff,
   Volume2,
 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import type { TrackToggleKind } from "@studio/ui/track-toggle";
 import { usePointerFollow } from "@studio/ui-timeline/drag";
 import {
   GUTTER_DESKTOP,
@@ -86,7 +84,7 @@ import { useLatest } from "../hooks/useLatest";
 import type { ResourceDropEvent } from "../hooks/useTimelineDrop";
 import { useVideoDrag } from "../hooks/useVideoDrag";
 import { isTyping } from "../hooks/useWindowKey";
-import { cursorOf, ModeStrip, stripButton } from "../modeIcons";
+import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
 import {
   type PendingEdit,
@@ -113,15 +111,18 @@ import {
 } from "../rows";
 import type { EditFocus } from "../shellEquality";
 import { moveOffset, snapMode, snapTo } from "../snap";
-import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
+import {
+  useReloadKey,
+  useShell,
+  useShellStore,
+  useVerbs,
+} from "../state/shellStore";
 import type { DropLane, DropUpload, TimelineDropEvent } from "../timelineDrop";
 import { moveNudge, type TimelineMode, timelineMode } from "../timelineMode";
 import {
   CROSSFADE_BEATS,
   crossfadePair,
   pictureToolLine,
-  TOOL_LABEL,
-  TOOLS,
   type Tool,
   toolLine,
 } from "../timelineTools";
@@ -148,6 +149,7 @@ import {
 } from "./Ruler";
 import { GROW } from "./timeline/grow";
 import { LaneAlternative } from "./timeline/LaneAlternative";
+import { LaneChip } from "./timeline/LaneChip";
 import { LaneMeter } from "./timeline/LaneMeter";
 import { LaneToggle } from "./timeline/LaneToggle";
 import { LaneVstFreeze } from "./timeline/LaneVstFreeze";
@@ -197,11 +199,9 @@ const DROP_ROW = "outline outline-1 -outline-offset-1 outline-primary";
 const GRAB_ROW = "cursor-grab active:cursor-grabbing";
 // The corner's new-lane button, named because it is spelled twice: bare, and as a dropdown's trigger.
 const NEW_TRACK_BTN =
-  "flex h-5 items-center gap-1 rounded px-1 text-[10px] text-muted-foreground uppercase tracking-wider hover:bg-accent hover:text-foreground";
+  "type-label flex h-7 items-center gap-1 rounded-full bg-(--k7-track-btn-off) px-3 text-[11px] text-foreground hover:bg-on-fill";
 // How wide a pass must be before its loop mark also gets the glyph: the 8px icon needs its own width plus air.
 const MIN_LOOP_GLYPH_PX = 18;
-// No tool line to dispatch ⇒ no tools, and a stable array so the strip is not handed a new one per render.
-const NO_TOOLS: readonly Tool[] = [];
 
 // A track row as the CLIPBOARD reads it — both halves of `copy` go through it, and `event` carries the placement's own words (clipboard.ts).
 /** A lane's M/S/A button, named for a screen reader in the reader's language. */
@@ -538,23 +538,30 @@ function TimelineTabView({
   const [caret, setCaret] = useState<Caret>({ row: "", beat: 0 });
   const [sel, setSel] = useState<Selection | null>(null);
   // Expanded: taller lanes showing each clip's content. A per-session view toggle, on by default, not a saved preference.
-  const [wantExpanded, setExpanded] = useState(true);
+  const wantExpanded = useShell((s) => s.lanesExpanded);
+  const setExpanded = useShell((s) => s.setLanesExpanded);
   const expanded = wantExpanded && !lanesLocked;
   // Whether each lane's automation rows are drawn under it — a view toggle like Expand, writing nothing.
-  const [showAutomation, setShowAutomation] = useState(true);
+  const showAutomation = useShell((s) => s.automationShown);
+  const setShowAutomation = useShell((s) => s.setAutomationShown);
   // Which unit the RULER counts in: a song carrying picture is read in bars while you write it and in seconds while you cut it.
-  const [rulerMode, setRulerMode] = useState<RulerMode>(
-    fps ? "seconds" : "bars",
-  );
+  const shellStore = useShellStore();
+  const rulerSeconds = useShell((s) => s.rulerSeconds);
+  const setRulerSeconds = useShell((s) => s.setRulerSeconds);
+  const rulerMode: RulerMode = rulerSeconds ? "seconds" : "bars";
   // Set once the clock button is pressed: from then on the picture arriving no longer picks the unit.
   const rulerChosen = useRef(false);
   useEffect(() => {
-    if (!rulerChosen.current) setRulerMode(fps ? "seconds" : "bars");
-  }, [fps]);
+    // A picture project opens in seconds, once, as a store write the bar then shows; a press of the clock ends it.
+    if (fps && !rulerChosen.current) {
+      rulerChosen.current = true;
+      setRulerSeconds(true);
+    }
+  }, [fps, setRulerSeconds]);
   const toggleRuler = useCallback(() => {
     rulerChosen.current = true;
-    setRulerMode((m) => (m === "bars" ? "seconds" : "bars"));
-  }, []);
+    setRulerSeconds(!shellStore.getState().rulerSeconds);
+  }, [setRulerSeconds, shellStore]);
   // The name of the marker the cursor is over, shown in the header while hovering.
   const [hoverMarker, setHoverMarker] = useState<string | null>(null);
   // The task flag the cursor is over: its text is drawn under the ruler, which clips its own children.
@@ -600,7 +607,8 @@ function TimelineTabView({
     null,
   );
   /** …and the TOOL, which is CHOSEN rather than derived: what a press means. Session only, never written (timelineTools.ts). */
-  const [tool, setTool] = useState<Tool>("pointer");
+  const tool = useShell((s) => s.tool);
+  const setTool = useShell((s) => s.setTool);
   const toolRef = useLatest<Tool>(tool);
   // The tool's icon as the pointer — undefined for the arrow, whose picture the system already draws (modeIcons.tsx).
   const toolCursor = tool === "pointer" ? undefined : cursorOf(tool);
@@ -1838,9 +1846,9 @@ function TimelineTabView({
         selecting: !!sel,
         zoomed: zoom.length > 0,
         loop: !!loop,
-        expanded,
+        expanded: wantExpanded,
       }),
-    [mode, tool, sel, zoom, loop, expanded, onView],
+    [mode, tool, sel, zoom, loop, wantExpanded, onView],
   );
 
   // Leaving the tab drops the pickup, rather than stranding a move whose keys no longer reach it.
@@ -2197,66 +2205,6 @@ function TimelineTabView({
         />
       )}
       <div className="flex min-h-0 flex-1">
-        {/* The tools as a 32px column — the third way to one, beside the keys and the bar, and the only one a finger has. */}
-        <ModeStrip
-          // A second device dispatches no tool line, and the column is still drawn: the two view toggles under it are the pane's own.
-          modes={onToolLine ? TOOLS : NO_TOOLS}
-          current={tool}
-          onPick={(t) => onToolLine?.(`ui tool ${t}`)}
-          title={(t) => TOOL_LABEL[t]()}
-          footer={
-            <>
-              {/* The ruler's unit, beside Expand because it is the same kind of control: what this surface SHOWS, changing nothing on disk. */}
-              <button
-                type="button"
-                onClick={toggleRuler}
-                aria-pressed={rulerMode === "seconds"}
-                title={
-                  rulerMode === "seconds"
-                    ? m["tl.rulerSeconds"]()
-                    : m["tl.rulerBars"]()
-                }
-                className={stripButton(rulerMode === "seconds")}
-              >
-                <Clock className="h-4 w-4" />
-              </button>
-              {/* Expand: taller lanes that reveal each clip's waveform / notes. */}
-              <button
-                type="button"
-                onClick={() => setExpanded((v) => !v)}
-                disabled={lanesLocked}
-                aria-pressed={expanded}
-                title={
-                  lanesLocked
-                    ? m["tl.lanesLocked"]()
-                    : expanded
-                      ? m["tl.collapseLanes"]()
-                      : m["tl.expandLanes"]()
-                }
-                className={`${stripButton(expanded)} disabled:opacity-40`}
-              >
-                <StretchVertical className="h-4 w-4" />
-              </button>
-              {/* Automation lanes shown or hidden: only drawn when a lane HAS automation, so the button is never a dead toggle. */}
-              {laneNodes?.automation &&
-                Object.keys(laneNodes.automation).length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setShowAutomation((v) => !v)}
-                    aria-pressed={showAutomation}
-                    title={
-                      showAutomation
-                        ? m["tl.hideAutomation"]()
-                        : m["tl.showAutomation"]()
-                    }
-                    className={stripButton(showAutomation)}
-                  >
-                    <Spline className="h-4 w-4" />
-                  </button>
-                )}
-            </>
-          }
-        />
         {/* `isolate` — load-bearing: it keeps this pane's four z-indices private from the shell's (docs/timeline.md). */}
         <div
           ref={scrollRef}
@@ -2442,7 +2390,7 @@ function TimelineTabView({
               </div>
               {/* The ruler is both the transport scrubber and a time-range selector — click seeks, drag sweeps `v`'s rectangle (docs/timeline.md). */}
               <div
-                className="relative cursor-pointer overflow-hidden"
+                className="relative cursor-pointer overflow-hidden font-mono"
                 style={{ width: laneW }}
                 onMouseDown={(e) => {
                   // A macOS Ctrl+click is the context menu's, not a seek: answered here, it cleared the selection the menu then looped.
@@ -2652,7 +2600,7 @@ function TimelineTabView({
                     // Hit-tested by the shift-drag selection, as laneAtPoint does with data-lane-track.
                     data-sel-row={rowKey(row)}
                     className={cn(
-                      "flex border-b border-border/40",
+                      "flex border-b border-(--k7-hairline-row)",
                       // A group dims on its own flag only: with no lane of its own, the mixer-wide solo rule doesn't reach the header.
                       row.group.mute && "opacity-50",
                     )}
@@ -2712,7 +2660,7 @@ function TimelineTabView({
                     key={`video:${vt.id}`}
                     data-sel-row={rowKey(row)}
                     className={cn(
-                      "flex border-b border-border/40",
+                      "flex border-b border-(--k7-hairline-row)",
                       // Dimmed == not on screen: hidden itself, or hidden because something else is soloed.
                       pictureOff(vt) && "opacity-50",
                       rowDrag?.lane === vt.id && "opacity-40",
@@ -2781,27 +2729,11 @@ function TimelineTabView({
                           )}
                         >
                           {onVideoToggle &&
-                            (
-                              [
-                                [
-                                  "M",
-                                  "mute",
-                                  vt.mute,
-                                  "bg-mute text-background",
-                                ],
-                                [
-                                  "S",
-                                  "solo",
-                                  vt.solo,
-                                  "bg-solo text-background",
-                                ],
-                              ] as const
-                            ).map(([label, control, on, onCls]) => (
+                            (["mute", "solo"] as const).map((control) => (
                               <LaneToggle
                                 key={control}
-                                label={label}
-                                on={on}
-                                onCls={onCls}
+                                kind={control}
+                                on={vt[control]}
                                 title={controlLabel(control, vt.name)}
                                 ariaLabel={controlLabel(control, vt.name)}
                                 touch={msaLine}
@@ -2810,13 +2742,9 @@ function TimelineTabView({
                             ))}
                           {onVideoArm && !vt.shapes.length && (
                             <LaneToggle
-                              label="A"
+                              kind="arm"
                               on={videoArmed === vt.id}
-                              onCls={cn(
-                                "bg-arm text-background",
-                                // Pulsing while the camera is actually rolling: armed and recording are two states.
-                                videoRecording && "animate-pulse",
-                              )}
+                              pulse={videoRecording}
                               title={m["tl.armVideoTitle"]({ name: vt.name })}
                               ariaLabel={controlLabel("arm", vt.name)}
                               touch={msaLine}
@@ -2824,6 +2752,21 @@ function TimelineTabView({
                             />
                           )}
                         </div>
+                      )}
+                      {!shownTimeline && isMobile && !msaLine && (
+                        <LaneChip
+                          mute={vt.mute}
+                          solo={vt.solo}
+                          arm={videoArmed === vt.id}
+                          title={m["tl.laneChip"]({ name: vt.name })}
+                          onOpen={(cx, cy) =>
+                            onContextMenu?.(
+                              { kind: "picture-lane", lane: vt.id },
+                              cx,
+                              cy,
+                            )
+                          }
+                        />
                       )}
                     </div>
                     <div
@@ -3027,7 +2970,7 @@ function TimelineTabView({
                   <div
                     key={rowKey(row)}
                     data-sel-row={rowKey(row)}
-                    className="flex border-border/40 border-b opacity-80"
+                    className="flex border-(--k7-hairline-row) border-b opacity-80"
                     style={{ height: ROW_H }}
                     onContextMenu={(e) => {
                       e.preventDefault();
@@ -3104,28 +3047,17 @@ function TimelineTabView({
               const ctl = trackControls?.[t.id];
               // Armed by the engine (audio) or by the browser (MIDI), which only trackControls knows of.
               const armed = armedIds.includes(t.id) || ctl?.arm === 1;
-              const msa: [string, "mute" | "solo" | "arm", boolean, string][] =
-                [
-                  [
-                    "M",
-                    "mute",
-                    ctl ? ctl.mute === 1 : !!t.mute,
-                    "bg-mute text-background",
-                  ],
-                  [
-                    "S",
-                    "solo",
-                    ctl ? ctl.solo === 1 : !!eff.solo,
-                    "bg-solo text-background",
-                  ],
-                  ["A", "arm", armed, "bg-arm text-background"],
-                ];
+              const msa: [TrackToggleKind, boolean][] = [
+                ["mute", ctl ? ctl.mute === 1 : !!t.mute],
+                ["solo", ctl ? ctl.solo === 1 : !!eff.solo],
+                ["arm", armed],
+              ];
               return (
                 <div
                   key={t.id}
                   data-sel-row={rowKey(row)}
                   className={cn(
-                    "flex border-b border-border/40",
+                    "flex border-b border-(--k7-hairline-row)",
                     GROW,
                     // Dimmed == not audible: muted itself, muted by its group, or silenced because something else is soloed.
                     silent(t) && "opacity-50",
@@ -3233,12 +3165,11 @@ function TimelineTabView({
                             msaLine ? "w-full gap-0.5" : "shrink-0 gap-1",
                           )}
                         >
-                          {msa.map(([label, control, on, onCls]) => (
+                          {msa.map(([control, on]) => (
                             <LaneToggle
                               key={control}
-                              label={label}
+                              kind={control}
                               on={on}
-                              onCls={onCls}
                               title={controlLabel(control, t.name)}
                               ariaLabel={controlLabel(control, t.name)}
                               touch={msaLine}
@@ -3246,6 +3177,20 @@ function TimelineTabView({
                             />
                           ))}
                         </div>
+                      )}
+                    {onTrackToggle &&
+                      !shownTimeline &&
+                      isMobile &&
+                      !msaLine && (
+                        <LaneChip
+                          mute={msa[0][1]}
+                          solo={msa[1][1]}
+                          arm={msa[2][1]}
+                          title={m["tl.laneChip"]({ name: t.name })}
+                          onOpen={(cx, cy) =>
+                            onContextMenu?.({ kind: "track", id: t.id }, cx, cy)
+                          }
+                        />
                       )}
                   </div>
                   {/* overflow-hidden because a zoom puts out-of-view clips at negative offsets, which would spill across the gutter. */}
@@ -3517,7 +3462,7 @@ function TimelineTabView({
                                 }}
                                 className={cn(
                                   // `isolate` keeps the activity layer's -z-10 inside this block; `group` is what the name reads.
-                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded px-1 text-[10px] active:cursor-grabbing isolate",
+                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-xl px-2 font-mono text-[10px] active:cursor-grabbing isolate",
                                   // Disabled: still placed, still readable, plainly off — an event you cannot see is a deleted one.
                                   c.disabled &&
                                     "opacity-40 saturate-0 outline-dashed outline-1 outline-muted-foreground",

@@ -2,7 +2,8 @@
 // One entry per fixture in e2e/fixtures; the table is what a reader checks against fixtures/README.md.
 import type { Page } from "@playwright/test";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { navControl, pane, panel, tempoReadout } from "../../src/nav.ts";
+import { pane, tempoReadout } from "../../src/nav.ts";
+import { openPanel } from "../../src/panels.ts";
 import { expect, type K7, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
@@ -62,13 +63,12 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
     },
   },
   "mixer-strip.k7": {
-    check: async (page) =>
-      expect(await panel(page, "Mixer", "Mix panel")).toBeEnabled(),
+    check: async (page) => expect(await openPanel(page, "Mixer")).toBeVisible(),
   },
   "master-chain.k7": { check: lane("drums") },
   "mastering.k7": {
     check: async (page) => {
-      await (await navControl(page, "Mastering")).click();
+      await openPanel(page, "Mixer");
       await expect(
         page.getByRole("group", { name: "Limiter", exact: true }),
       ).toBeVisible();

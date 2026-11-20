@@ -547,7 +547,11 @@ export function FileTree({
 
       {/* Two trees, one sidebar, drawn only for a shell that has libraries: one lonely tab is a control that decides nothing. */}
       {levels !== undefined && (
-        <div className="mb-1 flex shrink-0 items-center gap-1 border-b border-border/60 pb-1">
+        <div
+          role="radiogroup"
+          aria-label={m["tree.browse"]()}
+          className="glass mb-2 flex h-10 shrink-0 items-center gap-0.5 rounded-full p-[3px]"
+        >
           {(
             [
               ["project", projectName ?? m["tree.projectTab"](), Folder],
@@ -557,12 +561,14 @@ export function FileTree({
             <button
               key={id}
               type="button"
+              role="radio"
+              aria-checked={tab === id}
               onClick={() => setTab(id)}
               className={cn(
-                "flex items-center gap-1 rounded px-2 py-0.5 text-xs",
+                "flex h-8 min-w-0 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full px-2 font-bold text-[13px]",
                 tab === id
-                  ? "bg-secondary text-foreground"
-                  : "text-muted-foreground hover:text-foreground",
+                  ? "bg-on-fill text-lavender"
+                  : "text-foreground/80 hover:bg-on-fill/60",
               )}
             >
               <Icon className="h-3.5 w-3.5 shrink-0" />

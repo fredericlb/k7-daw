@@ -5,6 +5,7 @@
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import { KeyboardMusic, Mic, Spline } from "@studio/ui/icons";
+import { cn } from "@studio/ui/lib/utils";
 import { splitTrailingMixer } from "@studio/ui-chains/anchorRight";
 import type { EdgeInsert, TrackControlValues } from "@studio/ui-chains/graph";
 import { moduleRow, trackInputs, trackModules } from "@studio/ui-chains/graph";
@@ -25,7 +26,6 @@ import { usePendingBypass } from "../hooks/usePendingBypass";
 import { useRackTrigger } from "../hooks/useRackTrigger";
 import { laneHasInput } from "../laneInput";
 import { midiActivity } from "../midiActivity";
-import { ModeStrip, stripButton } from "../modeIcons";
 import { nodeNameFor } from "../nodeInsert";
 import { m } from "../paraglide/messages.js";
 import { usePaneGraph } from "../queries/graph";
@@ -34,14 +34,16 @@ import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import type { WebProject } from "../types";
 import { useIsMobile } from "../useIsMobile";
 import { GraphSlotPane } from "./GraphSlotPane";
-import { usePanelInside } from "./PanelClose";
+import { ModuleCards } from "./ModuleCards";
 
 /** A card here is HORIZONTAL on a desktop, at most 4 rows, and VERTICAL on a phone, at most 4 columns — a panel without that shape is folded to it. */
 const TRACK_ROW_FIT: GridFit = { axis: "rows", max: 4 };
 const TRACK_COL_FIT: GridFit = { axis: "cols", max: 4 };
 
 /** The strip's modes: none — the row has no tools, only the toggles under them. */
-const NO_MODES: readonly string[] = [];
+// A 36 px glass chip, the shape the kit gives a toggle inside a panel.
+const CHIP =
+  "glass grid h-9 min-w-9 cursor-pointer place-items-center rounded-full px-2 text-foreground focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none";
 
 /** The two inputs a lane can be given from here, each the `track input` kind it runs. */
 const INPUTS = [
@@ -305,10 +307,22 @@ export function TrackModulesPane({
     return rowSeams(row, rowExit(laidShown, row, graph), !!graph.stacks);
   }, [laidShown, split, graph]);
 
-  // In a bottom panel the strip always shows, being where the panel's ✕ goes (PanelClose.tsx); peeked, not claimed — ModeStrip claims.
-  const inPanel = usePanelInside();
   // The History panel's hover, as the per-card test DomChains reads — above the early returns, like every hook.
   const marked = useMemo(() => nodePredicate(mark), [mark]);
+  // The lane's panel reads as module cards; a popin's `nodes` keep the full row, and "Controls" shows it beside the cards.
+  const cards = !nodes;
+  const [controls, setControls] = useState(false);
+  const cardNodes = useMemo(
+    () =>
+      (glued?.graph.nodes ?? [])
+        .filter((n) => n.kind === "module")
+        .sort((a, b) => a.x - b.x || a.y - b.y),
+    [glued],
+  );
+  const cardSeams = useMemo(
+    () => [...(glued?.seams ?? [])].sort((a, b) => a.x - b.x),
+    [glued],
+  );
 
   // No bar: the row IS the view, the lane's own card names it, and the ✕ is the strip's first item (PanelClose.tsx).
   // Every state keeps the frame, so the ✕ is reachable even with nothing to draw — a view you cannot close is worse than an empty one.
@@ -393,52 +407,72 @@ export function TrackModulesPane({
   );
 
   return frame(
-    <div className="flex h-full min-h-0">
-      {/* The view's toggles down its left edge, the timeline's column: no modes here, only what the row SHOWS (docs/shell.md). */}
-      {(onToggleCurves || onInput || inPanel) && (
-        <ModeStrip
-          modes={NO_MODES}
-          current=""
-          onPick={() => {}}
-          title={() => ""}
-          footer={
-            <>
-              {onInput &&
-                INPUTS.map(({ kind, label, Icon }) => (
-                  <button
-                    key={kind}
-                    type="button"
-                    onClick={() => onInput(kind)}
-                    disabled={hasInput}
-                    aria-label={label}
-                    title={
-                      hasInput
-                        ? `${label} — this lane already has an input`
-                        : `${label} — an input feeding this lane, ahead of its first node`
-                    }
-                    className={`${stripButton(false)} ${DISABLED}`}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </button>
-                ))}
-              {onToggleCurves && (
-                <button
-                  type="button"
-                  onClick={onToggleCurves}
-                  aria-pressed={showCurves}
-                  title={
-                    showCurves ? "hide the curve cards" : "show the curve cards"
-                  }
-                  className={stripButton(showCurves)}
-                >
-                  <Spline className="h-4 w-4" />
-                </button>
-              )}
-            </>
+    <div className="flex h-full min-h-0 flex-col gap-2">
+      {/* What the row SHOWS and the inputs it may take, as chips above it (docs/shell.md). */}
+      {(onToggleCurves || onInput || cards) && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {cards && (
+            <button
+              type="button"
+              aria-pressed={controls}
+              onClick={() => setControls((v) => !v)}
+              className={`${CHIP} type-label aria-pressed:bg-on-fill aria-pressed:text-lavender`}
+            >
+              {m["chain.controls"]()}
+            </button>
+          )}
+          {onInput &&
+            INPUTS.map(({ kind, label, Icon }) => (
+              <button
+                key={kind}
+                type="button"
+                onClick={() => onInput(kind)}
+                disabled={hasInput}
+                aria-label={label}
+                title={
+                  hasInput
+                    ? `${label} — this lane already has an input`
+                    : `${label} — an input feeding this lane, ahead of its first node`
+                }
+                className={`${CHIP} ${DISABLED}`}
+              >
+                <Icon className="size-4" />
+              </button>
+            ))}
+          {onToggleCurves && (
+            <button
+              type="button"
+              onClick={onToggleCurves}
+              aria-pressed={showCurves}
+              title={
+                showCurves ? "hide the curve cards" : "show the curve cards"
+              }
+              className={`${CHIP} aria-pressed:bg-on-fill aria-pressed:text-lavender`}
+            >
+              <Spline className="size-4" />
+            </button>
+          )}
+        </div>
+      )}
+      {cards && glued && (
+        <ModuleCards
+          nodes={cardNodes}
+          seams={cardSeams}
+          presetNames={presetNames}
+          onBypass={bypassModule}
+          onPresetStep={onPresetStep}
+          onPresets={onPresets && ((module, x, y) => onPresets(module, x, y))}
+          onInsert={
+            edgeInsert ? (insert, x, y) => edgeInsert(insert, x, y) : undefined
           }
         />
       )}
-      <div className="relative min-h-0 min-w-0 flex-1">
+      <div
+        className={cn(
+          "relative min-h-0 min-w-0 flex-1",
+          cards && !controls && "hidden",
+        )}
+      >
         <DomChains
           {...shared}
           graph={glued?.graph ?? split?.row ?? laidShown}
