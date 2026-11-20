@@ -1,24 +1,26 @@
-// LaneToggle.tsx — one of a lane gutter's M/S/A buttons, the same on an audio and a picture lane.
+// LaneToggle.tsx — one of a lane gutter's M/S/A buttons, the kit's TrackToggle with the gutter's rules.
 // On touch it fills its share of a second line and grows an invisible 44 px-tall hit box; its
 // visual size is not its target size. See docs/timeline.md, "M/S/A in the gutter".
 
 import { cn } from "@studio/ui/lib/utils";
+import { TrackToggle, type TrackToggleKind } from "@studio/ui/track-toggle";
 import { blurOnClick } from "../../keys";
 
-/** A lane's toggle: `on` wears `onCls` (the mute, solo or arm colour), off it is a quiet chip. */
+/** A lane's toggle: the kit draws the three states, this adds what a gutter needs around them. */
 export function LaneToggle({
-  label,
+  kind,
   on,
-  onCls,
+  pulse,
   title,
   ariaLabel,
   touch,
   className,
   onToggle,
 }: {
-  label: string;
+  kind: TrackToggleKind;
   on: boolean;
-  onCls: string;
+  /** An armed lane whose camera is rolling: armed and recording are two states. */
+  pulse?: boolean;
   title: string;
   ariaLabel: string;
   /** A phone's gutter: the button takes a third of the line and a finger-sized hit box. */
@@ -27,11 +29,11 @@ export function LaneToggle({
   onToggle: () => void;
 }) {
   return (
-    <button
-      type="button"
+    <TrackToggle
+      kind={kind}
+      on={on}
       title={title}
       aria-label={ariaLabel}
-      aria-pressed={on}
       // Stopped so a press does not also start a row drag or move the caret.
       onPointerDown={(e) => e.stopPropagation()}
       // dblclick is its own event and bubbles past the click handler's stop.
@@ -43,17 +45,12 @@ export function LaneToggle({
         blurOnClick(e);
       }}
       className={cn(
-        "relative flex items-center justify-center rounded-sm font-bold text-[11px] leading-none",
-        touch
-          ? "h-7 min-w-0 flex-1 after:absolute after:inset-x-0 after:-inset-y-2 after:content-['']"
-          : "h-5 w-5 shrink-0",
-        on
-          ? onCls
-          : "bg-muted text-foreground/70 hover:bg-accent hover:text-foreground",
+        "relative size-7",
+        touch &&
+          "min-w-0 flex-1 after:absolute after:inset-x-0 after:-inset-y-2 after:content-['']",
+        pulse && "animate-pulse",
         className,
       )}
-    >
-      {label}
-    </button>
+    />
   );
 }

@@ -1142,6 +1142,7 @@
   "tl.videoLaneTitle": "{name} — une piste vidéo ; montée en secondes, composée dans la fenêtre vidéo",
   "tl.muteLane": "rendre {name} muet",
   "tl.soloLane": "solo sur {name}",
+  "tl.laneChip": "{name} : muet, solo, armement",
   "tl.armLane": "armer {name}",
   "tl.armVideoTitle": "armer {name} — enregistrer + lecture capture sa caméra",
   "tl.generatedTitle": "{name} — générée par un motif algorithmique ; ne peut pas contenir de clips",
