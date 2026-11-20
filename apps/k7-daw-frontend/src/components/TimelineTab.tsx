@@ -246,7 +246,7 @@ const laneEvents = (r: Extract<Row, { kind: "track" }>) => ({
 const LABEL_SELECTED =
   "bg-primary/25 outline outline-1 -outline-offset-1 outline-primary";
 
-/** What holds the NAME COLUMN still while the lanes pan under it: `sticky left-0` on every cell, over an opaque `before:` ground, at z-30 (docs/timeline.md). */
+/** What holds the NAME COLUMN still while the lanes pan under it: `sticky left-0` on every cell, over the screen's own ground so the header reads transparent yet hides what pans under it, at z-30 (docs/timeline.md). */
 const GUTTER_STICKY =
   "sticky left-0 z-30 before:absolute before:inset-0 before:-z-10 before:bg-background before:content-['']";
 
@@ -2621,7 +2621,7 @@ function TimelineTabView({
                       style={{ width: GUTTER }}
                       {...gutterProps(row)}
                       className={cn(
-                        "flex shrink-0 cursor-pointer select-none items-center gap-1 border-r border-border bg-muted/60 px-2",
+                        "flex shrink-0 cursor-pointer select-none items-center gap-1 border-r border-border px-2",
                         GUTTER_STICKY,
                         inSel && "bg-primary/20",
                         labelled && LABEL_SELECTED,
@@ -2684,7 +2684,7 @@ function TimelineTabView({
                         );
                       }}
                       className={cn(
-                        "flex shrink-0 cursor-pointer select-none border-r border-border bg-muted/40",
+                        "flex shrink-0 cursor-pointer select-none border-r border-border",
                         msaLine
                           ? "flex-col justify-center gap-2 px-1"
                           : twoLine
@@ -3011,7 +3011,7 @@ function TimelineTabView({
                       style={{ width: GUTTER }}
                       {...gutterProps(row)}
                       className={cn(
-                        "flex shrink-0 cursor-pointer select-none items-center gap-1 truncate border-r border-border bg-muted/30 px-2 text-[10px] text-muted-foreground",
+                        "flex shrink-0 cursor-pointer select-none items-center gap-1 truncate border-r border-border px-2 text-[10px] text-muted-foreground",
                         GUTTER_STICKY,
                         // Indented past its lane: the knob belongs to the lane above.
                         "pl-5",
