@@ -32,7 +32,7 @@ gates the workspaces, and neither a person nor a test reaches "create a workspac
 
 | case | what happens |
 |---|---|
-| the copy fails | the libraries' service logs why; creating a workspace answers 503 with that reason, not the admin message (`packages/k7-libraries/src/lib.rs`, `libraryRefusal`). Everything that needs no new workspace still works |
+| the copy fails | the libraries' service logs why; creating a workspace answers 503 with that reason, not the admin message (`apps/k7-daw-backend/packages/k7-libraries/src/lib.rs`, `libraryRefusal`). Everything that needs no new workspace still works |
 | the copy is still running after 45 s | the gate opens anyway, under the hosts' own 60 s for a first answer; a workspace asked for meanwhile WAITS, since its request queues behind the copy in the libraries' service |
 
 ## It answers its own machine only

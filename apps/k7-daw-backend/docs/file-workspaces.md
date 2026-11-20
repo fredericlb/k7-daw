@@ -2,7 +2,7 @@
 
 What the home page asks of the file service and the three acts it offers on a whole workspace, in Rust.
 `GET /workspaces`, `GET /workspaces/projects`, `GET /workspaces/surfaces`, `POST /workspaces` (make), `/workspaces/remove`,
-`/workspaces/copy-project`, and Examples stocked when an account is made. The crate is `packages/k7-file-service` (`workspaces/`).
+`/workspaces/copy-project`, and Examples stocked when an account is made. The crate is `apps/k7-daw-backend/packages/k7-file-service` (`workspaces/`).
 This page carries the crate's half and the front's: the hook, the capture calls around an act, the memo.
 
 A listing walks every workspace of the account and a copy moves a whole project's bytes, so both run off the request's

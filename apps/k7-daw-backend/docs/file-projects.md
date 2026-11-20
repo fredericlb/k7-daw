@@ -1,6 +1,6 @@
 # The file service's native projects (piece `projects`)
 
-`POST /open`, `/project/rename`, `/project/delete` and `GET /project` in Rust. The crate is `packages/k7-file-service` (`projects/`: the marker, the open's and the moves' plans, the
+`POST /open`, `/project/rename`, `/project/delete` and `GET /project` in Rust. The crate is `apps/k7-daw-backend/packages/k7-file-service` (`projects/`: the marker, the open's and the moves' plans, the
 lists); the front's half is `native/projects.rs` and `projects_open.rs`. The active project is the native side's own fact, written into its marker.
 
 A row marked DEPARTS differs from the TypeScript's behaviour or from the spec. Rows 2000 to 2099 are the decisions, each

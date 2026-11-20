@@ -2,7 +2,7 @@
 
 `PUT /file` with its base, `POST /undo`, `/redo`, `GET /history`, `/history/entries` and the journal's brackets of
 every verb. The journal is a folder of files, read and written byte for byte by the Rust crate
-(`packages/k7-file-service/src/journal`). Choices and what forced them; the code says how.
+(`apps/k7-daw-backend/packages/k7-file-service/src/journal`). Choices and what forced them; the code says how.
 
 ## The format is a contract (1720 to 1727)
 

@@ -1,7 +1,7 @@
 # The claim — which project runs where, and who has it
 
 A claim carries a **project** and a **holder**, and the registry enforces three rules
-(`packages/k7-engine/src/registry/claims.rs`). A bare
+(`apps/k7-daw-backend/packages/k7-engine/src/registry/claims.rs`). A bare
 "somebody is on this machine" timestamp, refusing nobody, is not enough the moment two people
 can open the same project: nothing anywhere says they cannot, and the two halves that then
 fight are not visible from either browser.

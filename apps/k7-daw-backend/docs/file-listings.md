@@ -4,7 +4,7 @@ What a page draws without compiling anything, answered by Rust: the workspace's 
 reference tracks (`GET /playlists`, `/references`), the libraries' chains and assemblies (`GET /library-chains`,
 `/library-assemblies`) and the module levels the editor's library tab and the rack builder draw (`GET /module-libraries`).
 It stands on [file-native.md](file-native.md): the path model and the limits are 1a's. The crate is
-`packages/k7-file-service/src/listings/`, the front's half `packages/k7-front/src/routes/files/service/native/listings.rs`.
+`apps/k7-daw-backend/packages/k7-file-service/src/listings/`, the front's half `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/listings.rs`.
 A row marked DEPARTS differs from the TypeScript's behaviour or from the spec; a row marked USER is the user's to rule,
 and is taken on the side it recommends until then.
 

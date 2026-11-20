@@ -6,7 +6,7 @@ listed a moment ago stays in a browser's cached list, whose next `select` then f
 
 ## Only three fields can refuse one
 
-`read_heartbeat` (`packages/k7-engine/src/registry/heartbeat.rs`) requires what there is no entry without: the **id** (at most 128 characters of
+`read_heartbeat` (`apps/k7-daw-backend/packages/k7-engine/src/registry/heartbeat.rs`) requires what there is no entry without: the **id** (at most 128 characters of
 `[A-Za-z0-9._-]`, since it travels in paths and log lines), the **token** (at most 256), and
 **`addresses.port`**, where the engine answers. `tunnelSecret` is optional, for a supervisor older
 than it, but a malformed one refuses the heartbeat rather than being cleaned away: dropping it would
@@ -45,7 +45,7 @@ come from loopback is the device's to use (`ownership.md`).
 ## What is logged here
 
 `[registry] …` on the front's stderr, at most once a minute per engine and per complaint
-(`packages/k7-engine/src/log.rs`), since a refused machine retries every 5 s:
+(`apps/k7-daw-backend/packages/k7-engine/src/log.rs`), since a refused machine retries every 5 s:
 
 - a heartbeat refused, and why;
 - a heartbeat taken with fields cleaned, and which;

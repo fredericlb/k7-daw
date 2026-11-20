@@ -1,7 +1,7 @@
 # One registry, and it is the origin's
 
 An engine heartbeats to **one** registry per studio family, answered by k7's front
-(`packages/k7-engine/src/registry/`, routed by `packages/k7-front/src/routes/engine/`) on k7's origin — `engineRegistryUrl` in
+(`apps/k7-daw-backend/packages/k7-engine/src/registry/`, routed by `apps/k7-daw-backend/packages/k7-front/src/routes/engine/`) on k7's origin — `engineRegistryUrl` in
 `apps/k7-daw-frontend/packages/web-protocol/services.ts`.
 The editor and the other apps that drive an engine list their engines from it.
 
@@ -43,7 +43,7 @@ An engine is still listed once and driven by several apps at once, through separ
 
 ## Which routes are open
 
-The registry's routes are the front's, listed in one place (`packages/k7-front/src/routes/engine/mod.rs`).
+The registry's routes are the front's, listed in one place (`apps/k7-daw-backend/packages/k7-front/src/routes/engine/mod.rs`).
 The ones an ENGINE calls — `heartbeat`, `deregister`, `hello`, the tunnel — are open, since a machine
 proves itself with its tunnel secret and holds no session; every one a BROWSER calls checks the session
 first. One list draws that line, so it is one place to read rather than a rule every mount must keep: a

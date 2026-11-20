@@ -1,7 +1,7 @@
 # The machine's engine, run by its own backend
 
 Under the desktop app (`apps/k7-daw-desktop`), k7's front runs on the person's computer and runs that computer's
-supervisor, and so its engine (`packages/k7-local`, routed by `packages/k7-front/src/routes/local/`). It is
+supervisor, and so its engine (`apps/k7-daw-backend/packages/k7-local`, routed by `apps/k7-daw-backend/packages/k7-front/src/routes/local/`). It is
 off everywhere else: the desktop app turns it on (`K7_LOCAL_ENGINE=front`, the supervisor named by
 `K7_SUPERVISOR_BIN`); a server never runs one, and a phone's app hosts its own (`supervisorHost.md`).
 How the front keeps these promises is `local.md`.
@@ -14,7 +14,7 @@ How the front keeps these promises is `local.md`.
 | a slot saved through `POST /api/local/engine/slots`, staged in a file the supervisor takes (`slot.save`) | a compiled chain is too big for a one-line command, and on this machine the supervisor reads the same disk (`apps/k7-daw-engine/k7-supervisor/docs/slots.md`) |
 | removing a server on the engine page unlists the engine from that registry alone | the account keeps syncing with it; removing the server in the settings lets go of the sync |
 | the snapshot pushed as Server-Sent Events | a whole picture every time, as the supervisor emits it; the browser reconnects by itself across a restart |
-| this machine's own k7 pinned first in the supervisor's `engine-host.json` before each start (`packages/k7-local/src/settings.rs`) | `$STUDIO_REGISTRY_URL` counts only while the file lists no registry, and the page finds the engine in this machine's registry |
+| this machine's own k7 pinned first in the supervisor's `engine-host.json` before each start (`apps/k7-daw-backend/packages/k7-local/src/settings.rs`) | `$STUDIO_REGISTRY_URL` counts only while the file lists no registry, and the page finds the engine in this machine's registry |
 | every other loopback registry dropped when pinning | the supervisor reaches any loopback registry at k7's one port, which `STUDIO_PORTS` makes this front's (`apps/k7-daw-engine/k7-supervisor/src/Url.cpp`): another loopback entry is this front spelt otherwise, and two hold two tunnels that displace each other. A second k7 on the machine (the dev session's) is listed by its public name |
 | the engine opens the machine's own folders by path (`STUDIO_ENGINE_ROOTS`) | a project here is a folder on this disk; nothing is copied through the tunnel |
 | the supervisor stopped before the rest | it deregisters from this front, which must still be up to hear it |

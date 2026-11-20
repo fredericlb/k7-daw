@@ -3,8 +3,8 @@
 The account's file logic in Rust, piece by piece, on the I/O the front has (`service.md`). The compiler is the `song` crate
 (`apps/k7-daw-frontend/packages/song/docs/rustCompiler.md`), which the native file service calls directly. 
 
-The crate is `packages/k7-file-service`: no HTTP, no tokio runtime of its own; plain functions over a
-workspace's folder, called by the front's routes (`packages/k7-front/src/routes/files/service/`).
+The crate is `apps/k7-daw-backend/packages/k7-file-service`: no HTTP, no tokio runtime of its own; plain functions over a
+workspace's folder, called by the front's routes (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/`).
 
 ## What stays a contract
 

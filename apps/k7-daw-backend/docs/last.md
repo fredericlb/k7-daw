@@ -1,6 +1,6 @@
 # The last routes
 
-What no family answers ends in `packages/k7-front/src/routes/last/`: the `/api` guard, the built page with its fallback, and the 404 page. The front hands nothing to another process.
+What no family answers ends in `apps/k7-daw-backend/packages/k7-front/src/routes/last/`: the `/api` guard, the built page with its fallback, and the 404 page. The front hands nothing to another process.
 
 ## The choices
 

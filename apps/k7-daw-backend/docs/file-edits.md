@@ -2,7 +2,7 @@
 
 What the front writes to a song file on its own behalf, with no verb behind it: a finished take filed, the format stamp, the
 open's repairs, a library module moved or made, a project created, the bench, the account's chains, a node's presets. They are
-native in `packages/k7-file-service/src/edits/` and `bench/`, over `song-edit`'s `Fs`; the front's half is in `native/` (`bracket.rs`,
+native in `apps/k7-daw-backend/packages/k7-file-service/src/edits/` and `bench/`, over `song-edit`'s `Fs`; the front's half is in `native/` (`bracket.rs`,
 `modules.rs`, `bench.rs`, `engine/filing.rs`). A verb is still the browser's Worker; these are the ones it never runs.
 
 ## Choices

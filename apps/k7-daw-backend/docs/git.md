@@ -1,4 +1,4 @@
-# The git crate (`packages/k7-git`)
+# The git crate (`apps/k7-daw-backend/packages/k7-git`)
 
 A workspace as a git repository over libgit2. The decisions of what a repository is, what it commits and who it
 commits as are in `docs/project-sync-plan.md`; this page holds the choices the code makes under them.

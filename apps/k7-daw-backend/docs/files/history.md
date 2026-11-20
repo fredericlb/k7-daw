@@ -1,7 +1,7 @@
 # A workspace's history
 
 `k7_sync::log` keeps a room's whole log on disk; `k7_sync::history` serves it to the device's own routes
-(`packages/k7-capture/src/account/history_ask.rs`, "History on the device", below).
+(`apps/k7-daw-backend/packages/k7-capture/src/account/history_ask.rs`, "History on the device", below).
 
 ## The room's log is the history
 

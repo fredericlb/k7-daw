@@ -1,6 +1,6 @@
 # What is left of the replica, a native library
 
-`packages/k7-replica` holds what the capture still uses of live sync's replica: the ops a change is made of (`ops.rs`),
+`apps/k7-daw-backend/packages/k7-replica` holds what the capture still uses of live sync's replica: the ops a change is made of (`ops.rs`),
 the blob refs (`blob.rs`) and the `Confirmed` store the capture's confirmed folder implements (`lib.rs`). A device runs no
 replica: no workspace joins a relay room, so nothing orders its batches but its own disk. The k7x diff and replay are native in
 `k7-sync`.
@@ -24,11 +24,11 @@ replica: no workspace joins a relay room, so nothing orders its batches but its 
 
 | proof | what it holds |
 |---|---|
-| `packages/k7-replica/tests/all/file_op.rs` | the 1,048 `fileOpFor` vectors: 105 not k7x, 943 k7x, 16 with `beforeHash`, equal as `Value`s, key order included |
-| `packages/k7-replica/tests/all/blob.rs` | a blob ref's spelling and parse, and the first-seen order of `blobs_of` |
+| `apps/k7-daw-backend/packages/k7-replica/tests/all/file_op.rs` | the 1,048 `fileOpFor` vectors: 105 not k7x, 943 k7x, 16 with `beforeHash`, equal as `Value`s, key order included |
+| `apps/k7-daw-backend/packages/k7-replica/tests/all/blob.rs` | a blob ref's spelling and parse, and the first-seen order of `blobs_of` |
 
 Not ported: `fileOp.test.ts`' other seven, `k7xOps.test.ts`, `k7xCorpus.test.ts` and `listOps.test.ts` test the k7x half (their
-calls are in `settle-vectors.json`); `textMerge.test.ts` tests diff3 (`packages/k7-sync/tests/all/diff3.rs`).
+calls are in `settle-vectors.json`); `textMerge.test.ts` tests diff3 (`apps/k7-daw-backend/packages/k7-sync/tests/all/diff3.rs`).
 
 ## Risks
 

@@ -18,9 +18,9 @@ and the hub starts no node process: every account's file service is the front's 
 
 ## The hub
 
-The ticket, the routes to a device's account runtime and the libraries: `packages/k7-hub` (tickets, the allow-list, the
+The ticket, the routes to a device's account runtime and the libraries: `apps/k7-daw-backend/packages/k7-hub` (tickets, the allow-list, the
 account names and environments, the engine bindings, the caches' sweep, with no HTTP framework) and
-`packages/k7-front/src/routes/files/hub/` (the routes). The ticket, the allow-list and the claim are
+`apps/k7-daw-backend/packages/k7-front/src/routes/files/hub/` (the routes). The ticket, the allow-list and the claim are
 [files/hub.md](files/hub.md); this table is how the front does it.
 
 | choice | why |
@@ -70,7 +70,7 @@ nothing is fetched. They answer `/account/libraries*` and
 
 `fixtures/hub-vectors.json` holds account keys, tickets minted and read, the allow-list and the sync target as the
 TypeScript hub answered them (its cap and port-range cases are no longer replayed); it is the reference as committed, nothing regenerates it,
-and `packages/k7-hub/tests/all/vectors.rs` fails when Rust disagrees.
+and `apps/k7-daw-backend/packages/k7-hub/tests/all/vectors.rs` fails when Rust disagrees.
 
 ## The settle
 
@@ -90,7 +90,7 @@ node might have merged.
 
 ## AI organize
 
-`POST /api/ai/organize/turn` (`packages/k7-front/src/routes/ai/turn.rs`) makes ONE model turn with the account's key
+`POST /api/ai/organize/turn` (`apps/k7-daw-backend/packages/k7-front/src/routes/ai/turn.rs`) makes ONE model turn with the account's key
 and model; the AI settings and `GET /api/ai/organize` are the front's phase-3 routes. The conversation, the
 prompts and every check run in the page (`apps/k7-daw-frontend/docs/aiOrganize.md` holds those choices). The backend
 has no `/api/ai` route: a request the front hands it there meets its `/api` guard.
@@ -116,7 +116,7 @@ has no `/api/ai` route: a request the front hands it there meets its `/api` guar
 
 ### The proofs
 
-`apps/k7-daw-frontend/packages/panel-rules/src/aiLoop.test.ts` drives the page's loop with recorded model replies. `packages/k7-front/tests/all/ai_turn.rs` runs the guards through a whole front.
+`apps/k7-daw-frontend/packages/panel-rules/src/aiLoop.test.ts` drives the page's loop with recorded model replies. `apps/k7-daw-backend/packages/k7-front/tests/all/ai_turn.rs` runs the guards through a whole front.
 
 Not proven: the abort on a closed tab (timing, read in the code); a timeout or a connection error (the messages are
 the SDK's constants); a real Claude answer.
@@ -144,7 +144,7 @@ the SDK's constants); a real Claude answer.
 
 ## The history rooms
 
-A device's workspace history is an ordered log in a room folder, kept by `packages/k7-sync` (`room`, `log`, `relay`, `settle`,
+A device's workspace history is an ordered log in a room folder, kept by `apps/k7-daw-backend/packages/k7-sync` (`room`, `log`, `relay`, `settle`,
 `history`) and driven by the capture (`k7-capture/src/history/`). Why each is what it is: [files/history.md](files/history.md);
 No socket, blob store or change stream is left: nothing dials a room.
 
@@ -155,7 +155,7 @@ No socket, blob store or change stream is left: nothing dials a room.
 | the rooms are this process's alone | the log folder of a workspace has one writer |
 | a room is loaded outside the rooms' map lock, one load per room at a time, and the idle pass takes one room at a time | a big room's replay or a slow room would otherwise hold up every other room's batches |
 | the history reads a room's folder with the room locked | a save rolls `entries.jsonl` into a segment; a page read meanwhile would miss its entries |
-| `fixtures/sync-vectors.json`, written by the retired TypeScript relay and never regenerated: the history functions' pages and files at every point | the reference as committed; `packages/k7-sync/tests/all/vectors.rs` fails when Rust disagrees |
+| `fixtures/sync-vectors.json`, written by the retired TypeScript relay and never regenerated: the history functions' pages and files at every point | the reference as committed; `apps/k7-daw-backend/packages/k7-sync/tests/all/vectors.rs` fails when Rust disagrees |
 
 ### Security review
 

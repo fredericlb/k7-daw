@@ -113,7 +113,7 @@ A whole text whose file moved, merged against its base (`mergeTexts`), is `k7_sy
 
 | proof | what |
 |---|---|
-| `packages/k7-sync/tests/all/diff3.rs` | every one of the 241 non-k7x settles of `settle-vectors.json` (82 with a base) answered by the native settle as node's `settleFileOp` and `applyFileOp` answered, with a `Js` that panics if asked |
+| `apps/k7-daw-backend/packages/k7-sync/tests/all/diff3.rs` | every one of the 241 non-k7x settles of `settle-vectors.json` (82 with a base) answered by the native settle as node's `settleFileOp` and `applyFileOp` answered, with a `Js` that panics if asked |
 
 ### Measured costs
 
@@ -136,11 +136,11 @@ would take over an hour.
 
 ## The replica
 
-What is left of the replica (`packages/k7-replica`, `files/replica.md`) is native for whole texts, removals, hashes and
+What is left of the replica (`apps/k7-daw-backend/packages/k7-replica`, `files/replica.md`) is native for whole texts, removals, hashes and
 blob refs, with the k7x diff and replay native in `k7-sync` (step 4).
 
 | proof | what it holds |
 |---|---|
-| `fixtures/settle-vectors.json`' 1,048 `fileOpFor` vectors | `packages/k7-replica/tests/all/file_op.rs`: the native `file_op_for` against node's, key order included |
+| `fixtures/settle-vectors.json`' 1,048 `fileOpFor` vectors | `apps/k7-daw-backend/packages/k7-replica/tests/all/file_op.rs`: the native `file_op_for` against node's, key order included |
 
 

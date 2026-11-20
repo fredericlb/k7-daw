@@ -2,7 +2,7 @@
 
 The studio's **one** engine registry is k7's Rust front's (`apps/k7-daw-backend/docs/engine/shared.md`):
 the editor lists its engines from it, and every installed supervisor heartbeats to it. The engine slots
-(`packages/k7-front/src/routes/engine_reach/`) live in the same front.
+(`apps/k7-daw-backend/packages/k7-front/src/routes/engine_reach/`) live in the same front.
 
 ## What it asks of a machine: a slot
 
@@ -38,7 +38,5 @@ except playback on it.
 
 ## Proofs
 
-`fixtures/engine-jobs-vectors.json`, node's answers kept as committed; `packages/k7-front/src/engine_jobs_vectors.rs`
-checks Rust: zod's verdict on the slot bodies.
 `engines_tests.rs` drives a `Link` and a job through a real hub against a fake supervisor on an in-memory socket.
 The conformance spec `engineJobs` (`e2e/docs/conformance.md`) drives the routes through HTTP.

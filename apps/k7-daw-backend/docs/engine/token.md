@@ -34,7 +34,7 @@ to the engine process, never logs them, and no engine message carries them, so n
 sees them.
 
 The registry binds an id to the **first** secret a heartbeat carries for it — trust on first use —
-and keeps that binding on disk as `id → sha256(secret)` (`packages/k7-engine/src/registry/bindings.rs`,
+and keeps that binding on disk as `id → sha256(secret)` (`apps/k7-daw-backend/packages/k7-engine/src/registry/bindings.rs`,
 `engine-bindings.json` in `STUDIO_ENGINES_DIR`, else `<instance data folder>/.engines`). The previous release
 reads the same file, so a rollback keeps every binding. The binding outlives the 15 s expiry
 of a listing and a restart of the backend, because those are exactly the gaps a lookalike would use.

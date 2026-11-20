@@ -1,7 +1,7 @@
 # The engine core in Rust
 
 The registry, the relay and its gate, and the tunnel hub — the server's engine core — answered by the
-front (`packages/k7-engine`, routed by `packages/k7-front/src/routes/engine/`). What it decides is in
+front (`apps/k7-daw-backend/packages/k7-engine`, routed by `apps/k7-daw-backend/packages/k7-front/src/routes/engine/`). What it decides is in
 `engine/`: who has which project (`engine/claim.md`), a heartbeat read (`engine/heartbeat.md`), which
 engines the device's account may use (`engine/ownership.md`), the relay (`engine/proxy.md`), one registry per origin
 (`engine/shared.md`) and an engine's credentials (`engine/token.md`); the tunnel's pages are

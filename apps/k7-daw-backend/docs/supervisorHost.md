@@ -1,6 +1,6 @@
 # The supervisor host
 
-`apps/k7-daw-engine/k7-supervisor` as the child of the front: `packages/k7-local`, which the front runs on the desktop app
+`apps/k7-daw-engine/k7-supervisor` as the child of the front: `apps/k7-daw-backend/packages/k7-local`, which the front runs on the desktop app
 to host the machine's supervisor and so its engine (`localEngine.md`, `local.md`). The Android and iOS
 apps drive the same supervisor the same way, from Kotlin and Swift (`SupervisorHost.kt`,
 `SupervisorHost.swift`, `apps/k7-daw-engine/k7-runtime/docs/android.md`, `apps/k7-daw-engine/k7-runtime/docs/ios.md`): the
@@ -14,7 +14,7 @@ newest engine and supervisor builds into an app's staging `bin/`: the desktop ap
 
 `apps/k7-daw-engine/k7-supervisor` is native and speaks NDJSON on stdio
 (`apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`), so it listens on no port and the host spawns it
-directly and keeps it running (`packages/k7-local/src/host.rs`). The choices:
+directly and keeps it running (`apps/k7-daw-backend/packages/k7-local/src/host.rs`). The choices:
 
 - **Death is read from the process, never the pipe.** The engine outlives a supervisor crash by
   design, and a stdout copy inside it would hold the pipe open; the child's own `wait` is the
@@ -25,7 +25,7 @@ directly and keeps it running (`packages/k7-local/src/host.rs`). The choices:
   supervisor on Windows takes about 4 s to deregister, stop its engine and exit; a shorter grace
   kills it at the end of its own clean stop.
 - **The backstop kills only an engine the pidfile proves.** An engine still alive after the
-  teardown is killed from `engine.pid`, and a pid is reused by the OS: `packages/k7-local/src/pidfile.rs`
+  teardown is killed from `engine.pid`, and a pid is reused by the OS: `apps/k7-daw-backend/packages/k7-local/src/pidfile.rs`
   reads the start time and executable the supervisor wrote there and kills only when the OS reports
   the same for an executable named `k7-runtime`, the verdict `PidFile.cpp` gives. A bare pid, or a
   process the OS will not describe, is left running (`apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`).
@@ -49,7 +49,7 @@ engine's CMake points `HostProtocol_test.cpp` at `schema/fixtures/`. The choices
 - **The fixtures are what holds each side.** `HostProtocol_test.cpp` compares the writer with them
   byte for byte, so a change to the schema changes its fixtures in the same commit.
 - **A snapshot has every list and no null.** A frame may leave an empty list out and writes null
-  for "none"; `packages/k7-local/src/protocol.rs` fills them, so a page reads one shape whatever the
+  for "none"; `apps/k7-daw-backend/packages/k7-local/src/protocol.rs` fills them, so a page reads one shape whatever the
   supervisor's version left out.
 - **The phones decode no typed frame.** `SupervisorHost.kt` and `SupervisorHost.swift` hand each
   snapshot, as the dictionary it arrived as, to the page that draws it, and read only a handful of

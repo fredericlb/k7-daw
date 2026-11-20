@@ -20,7 +20,7 @@ An anonymous session — no email, no subject — can neither use an engine nor 
 ## What decides "on this machine"
 
 The engine's heartbeats came from loopback: `Registry::may_use` and `on_this_machine`
-(`packages/k7-engine/src/registry/mod.rs`) are the one rule the listing, a select and the relay apply.
+(`apps/k7-daw-backend/packages/k7-engine/src/registry/mod.rs`) are the one rule the listing, a select and the relay apply.
 "Came from loopback" is any heartbeat in the last 15 s, not the last one: a supervisor may list the same
 backend twice, once on `localhost` and once through a reverse proxy whose address is all the second
 heartbeat shows, and the engine would otherwise flip between usable and not every few seconds. A heartbeat

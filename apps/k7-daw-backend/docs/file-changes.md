@@ -1,7 +1,7 @@
 # The change set and the verb bundle (step 3d)
 
 `POST /changes`, `GET /verb-bundle` and `GET /verb-bundle/library`: what the browser's verbs commit to and read from, native in
-the Rust file service. The code is `packages/k7-file-service/src/changes/`
+the Rust file service. The code is `apps/k7-daw-backend/packages/k7-file-service/src/changes/`
 and `verb_bundle.rs`, and the front's `native/changes.rs` and `native/verb_bundle.rs`. The routes belong to the `journal` piece and
 have no fallback: a front that does not answer the journal says 503.
 

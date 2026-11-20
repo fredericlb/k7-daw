@@ -1,6 +1,6 @@
 # The file service in the front
 
-An account's routes are answered in the front, by native pieces and nothing else (`packages/k7-front/src/routes/files/service/`;
+An account's routes are answered in the front, by native pieces and nothing else (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/`;
 the pieces are in `file-native.md`). No JavaScript runtime exists for an account: a route no piece
 answers is refused with a sentence (`declines.md`), and nothing falls back to anything.
 
@@ -52,11 +52,11 @@ The media the file service reaches is `src/media/`: the waveform module runs in 
 
 | choice | why |
 |---|---|
-| `picture render` makes the scene, the settings and the mixdown natively, then hands chromium the job (`packages/k7-picture`) | decision 10: the image's chromium driven over the DevTools protocol by `chromiumoxide`, Playwright being node's |
+| `picture render` makes the scene, the settings and the mixdown natively, then hands chromium the job (`apps/k7-daw-backend/packages/k7-picture`) | decision 10: the image's chromium driven over the DevTools protocol by `chromiumoxide`, Playwright being node's |
 | the browser is `STUDIO_CHROMIUM`, else the newest Chromium Playwright installed (every platform's `ms-playwright` folder, `PLAYWRIGHT_BROWSERS_PATH` first), else the system's | a dev machine and the Mac's beds have Playwright's browser and no system one; the front looks in every platform's folder |
-| WebGL draws on SwiftShader where the browser ships it (`libvk_swiftshader.so`, `vk_swiftshader.dll` beside it: Playwright's), else, on Linux, on Mesa's lavapipe through Vulkan (`--use-angle=vulkan --ignore-gpu-blocklist`); the image installs `mesa-vulkan-swrast` and `vulkan-loader` (`packages/k7-picture`) | Alpine's chromium ships no SwiftShader, so `--use-angle=swiftshader` gave the render page no WebGL2 and every render failed; lavapipe is a CPU device, which chromium's GPU blocklist refuses unless told |
+| WebGL draws on SwiftShader where the browser ships it (`libvk_swiftshader.so`, `vk_swiftshader.dll` beside it: Playwright's), else, on Linux, on Mesa's lavapipe through Vulkan (`--use-angle=vulkan --ignore-gpu-blocklist`); the image installs `mesa-vulkan-swrast` and `vulkan-loader` (`apps/k7-daw-backend/packages/k7-picture`) | Alpine's chromium ships no SwiftShader, so `--use-angle=swiftshader` gave the render page no WebGL2 and every render failed; lavapipe is a CPU device, which chromium's GPU blocklist refuses unless told |
 | the page fetches from a one-off loopback server under a random path, which serves the page, `job.json`, the mixdown and only the media the scene names, each resolved by the workspace before | the page needs no account; nothing else of the machine is reachable through it |
-| the render page is built beforehand by `k7-picture/page.mjs`: by the image's build into `K7_RENDER_PAGE`, by hand in a checkout (`packages/k7-picture/page/`, ignored); without it the verb says how to build it | the plan's "no esbuild at run time"; a committed copy would drift with every change to the compositor |
+| the render page is built beforehand by `k7-picture/page.mjs`: by the image's build into `K7_RENDER_PAGE`, by hand in a checkout (`apps/k7-daw-backend/packages/k7-picture/page/`, ignored); without it the verb says how to build it | the plan's "no esbuild at run time"; a committed copy would drift with every change to the compositor |
 | chromium is found as node finds it: `STUDIO_CHROMIUM`, then the usual paths | the image names it; a device keeps the browser's own export |
 | chromium is started by `k7-picture`, not by `chromiumoxide`, with the account's environment alone, then reached over its DevTools socket | the front holds the install's token and the hub's keys; `chromiumoxide`'s launch adds to what chromium inherits and cannot clear it |
 | the page posts the film back as base64 text in 3 MiB chunks (`result?type=…&last=1`), and the server appends each to a part file | the request gate pauses every request and chromium puts the body in the DevTools event: a binary body carries lone surrogates that no JSON parser accepts, so the event is lost and the render hangs, depending on the film's bytes |

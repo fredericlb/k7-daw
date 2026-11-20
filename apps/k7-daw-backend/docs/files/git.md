@@ -1,7 +1,7 @@
 # The git routes (`/api/files/git/*`)
 
-A workspace under git, its remote, its commits and its merges, answered by `packages/k7-front/src/routes/files/service/native/git.rs` (with `git_sync.rs` and `git_keys.rs`)
-over `packages/k7-git` (`../git.md`). The choices of the repository, the transports, LFS and the merge are on that page; this one is the contract.
+A workspace under git, its remote, its commits and its merges, answered by `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/git.rs` (with `git_sync.rs` and `git_keys.rs`)
+over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the repository, the transports, LFS and the merge are on that page; this one is the contract.
 
 ## The routes
 

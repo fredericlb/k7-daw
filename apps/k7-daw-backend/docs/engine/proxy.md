@@ -31,14 +31,14 @@ browser, each application holding its own.
 ## The way out
 
 The browser composes no LAN address at all. It opens a `wss://` towards **the registry's own backend** — k7's front,
-the page's own origin — and the front composes towards the engine (`packages/k7-engine/src/relay/`):
+the page's own origin — and the front composes towards the engine (`apps/k7-daw-backend/packages/k7-engine/src/relay/`):
 
 ```
 browser ──wss://app.priv.k7.rocks/api/engine/<id>/ws──▶ k7's front ──tunnel, or ws://<address>:8765──▶ engine
 ```
 
 The front is not a secure context: it calls whom it likes, which is why it calls only one place
-(`hosts_for`, `packages/k7-engine/src/registry/mod.rs`): the address the engine's **heartbeat came from** — loopback when the engine shares the
+(`hosts_for`, `apps/k7-daw-backend/packages/k7-engine/src/registry/mod.rs`): the address the engine's **heartbeat came from** — loopback when the engine shares the
 backend's machine, its LAN address when it shares its network. Never an address the heartbeat
 NAMES: the heartbeat is open, and dialling what it names would let anyone aim this server at any
 host it can reach. An engine whose heartbeat arrives over IPv6 or through a NAT is reached through
@@ -54,7 +54,7 @@ engine's network.
 ## Sockets only
 
 The relay is an upgrade the front accepts outside its route chain, like every socket of the core
-(`packages/k7-front/src/routes/engine/upgrade.rs`), and its credential is a **ticket**, not the
+(`apps/k7-daw-backend/packages/k7-front/src/routes/engine/upgrade.rs`), and its credential is a **ticket**, not the
 cookie: a page of another origin dials it too (below). There is no file half: files are the server's own
 (`apps/k7-daw-backend/docs/files/hub.md`), so nothing plain-HTTP crosses to the engine's machine here.
 
@@ -72,7 +72,7 @@ already the authenticated one, and already returns every engine. A ticket asked 
 would have cost a round trip per engine, before a single one had been measured.
 
 It lives a minute, HMAC-signed by a secret drawn at the startup of the **process that verifies
-it** (`packages/k7-engine/src/registry/ticket.rs`): nothing to share between machines, no secret to wire into each backend. A restart
+it** (`apps/k7-daw-backend/packages/k7-engine/src/registry/ticket.rs`): nothing to share between machines, no secret to wire into each backend. A restart
 invalidates those in flight, which costs the browser a reload of a list it polls anyway.
 
 The engine's `id` is **in the path**, and the ticket is verified against it: a ticket cannot be
@@ -90,7 +90,7 @@ got no ticket.
 
 The engine trusts the relay's socket as it trusts its own machine (`token.md`): whatever crosses it
 can load a document, drop a session, approve a pairing. So a ticket is not enough to drive.
-The gate (`packages/k7-engine/src/relay/gate/`) asks whether the ticket's account holds a live claim on the engine (`claim.md`) on
+The gate (`apps/k7-daw-backend/packages/k7-engine/src/relay/gate/`) asks whether the ticket's account holds a live claim on the engine (`claim.md`) on
 every frame the browser sends, and on the engine's frames at most every 250 ms (`CLAIM_REUSE_MS`):
 the engine streams audio far faster than a claim changes, and asking for each frame is a registry
 walk per audio block. A claim found missing is asked again on the next frame.
@@ -130,7 +130,7 @@ upstream is open. Losing it would time out every probe: the relay would be "reac
 nothing, which is worse than unreachable.
 
 That queue is bounded like the claim gate's (256 frames, 8 MiB — `HeldFrames` in
-`packages/k7-engine/src/tunnel/backpressure.rs`): a client that sends more before the engine answers is
+`apps/k7-daw-backend/packages/k7-engine/src/tunnel/backpressure.rs`): a client that sends more before the engine answers is
 closed with 1013. Once both ends are up, every frame goes through the same file's `admit`, so
 a browser that stops reading costs the server at most a bounded backlog
 (`apps/k7-daw-frontend/packages/engine-tunnel/docs/backpressure.md`).
