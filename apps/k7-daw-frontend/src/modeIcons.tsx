@@ -4,7 +4,6 @@
 // every one of them paints with `fill="currentColor"` so the cursor's halo pass can recolour it.
 // See docs/timeline.md and docs/clipEditors.md.
 
-import { X } from "@studio/ui/icons";
 import type { ReactNode } from "react";
 import { m as msg } from "./paraglide/messages.js";
 

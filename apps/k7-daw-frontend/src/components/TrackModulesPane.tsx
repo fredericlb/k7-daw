@@ -329,7 +329,7 @@ export function TrackModulesPane({
     [glued],
   );
 
-  // No bar: the row IS the view, the lane's own card names it, and the ✕ is the strip's first item (PanelClose.tsx).
+  // No bar: the row IS the view, the lane's own card names it; the dock's Close is the only one.
   // Every state keeps the frame, so the ✕ is reachable even with nothing to draw — a view you cannot close is worse than an empty one.
   const frame = (body: React.ReactNode, aside?: React.ReactNode) =>
     nodes ? body : <GraphSlotPane aside={aside}>{body}</GraphSlotPane>;
