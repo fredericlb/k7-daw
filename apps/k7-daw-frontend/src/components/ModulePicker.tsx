@@ -320,6 +320,8 @@ export function ModulePicker({
       search={(q) => [...searchBuiltins(q), ...searchModules(baseModules, q)]}
       searchLimit={SEARCH_LIMIT}
       placeholder={msg["module.search"]()}
+      menuLabel={msg["module.menu"]()}
+      searchLabel={msg["module.searchLabel"]()}
       emptyLabel={msg["module.noMatch"]()}
       onPick={onPick}
       onClose={onClose}

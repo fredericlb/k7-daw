@@ -1267,6 +1267,7 @@ function EditorTabView({
             type="button"
             onClick={() => setTreeOpen((o) => !o)}
             aria-expanded={treeOpen}
+            aria-label={m["editor.filesLabel"]()}
             className="absolute left-2 top-2 z-30 flex items-center gap-1 rounded border border-border bg-card/90 px-2 py-1 text-xs shadow"
           >
             <FolderTree className="h-3.5 w-3.5" />
@@ -1275,6 +1276,7 @@ function EditorTabView({
         )}
         {showTree && (!isMobile || treeOpen) && (
           <aside
+            aria-label={m["editor.filesLabel"]()}
             className={cn(
               "flex flex-col overflow-hidden border-r border-border",
               isMobile

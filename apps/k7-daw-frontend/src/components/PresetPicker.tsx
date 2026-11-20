@@ -197,6 +197,8 @@ export function PresetPicker({
       search={(q) => searchPresets(data.presets, q)}
       searchLimit={SEARCH_LIMIT}
       placeholder={`search presets of ${data.ref ?? node}…`}
+      menuLabel={m["preset.menu"]()}
+      searchLabel={m["preset.searchLabel"]()}
       emptyLabel={data.presets.length ? "no preset matches" : "no presets yet"}
       onPick={onApply}
       onClose={onClose}

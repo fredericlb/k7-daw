@@ -752,7 +752,11 @@ function ChainsTabView({
       )}
 
       {/* Mount the graph only while the tab is visible: a display:none container has no size, so fit() would frame to 0. */}
-      <main className="min-w-0 flex-1">
+      <section
+        aria-label={m["chains.canvas"]()}
+        data-testid="graph-canvas"
+        className="min-w-0 flex-1"
+      >
         {active && (
           <DomChains
             labels={labels}
@@ -811,7 +815,7 @@ function ChainsTabView({
             onTrackSet={onTrackSet}
           />
         )}
-      </main>
+      </section>
     </div>
   );
 }

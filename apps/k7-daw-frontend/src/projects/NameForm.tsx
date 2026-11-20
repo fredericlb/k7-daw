@@ -80,7 +80,7 @@ export function NameField({
       <Input
         autoFocus={autoFocus}
         placeholder={placeholder}
-        aria-label={label ?? placeholder}
+        aria-label={label ?? placeholder ?? m["common.nameLabel"]()}
         value={name}
         disabled={busy}
         onChange={(e) => onName(e.target.value)}

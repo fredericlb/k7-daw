@@ -163,7 +163,11 @@ function Part({
 }) {
   const has = bindings.some((b) => b.control.part === part);
   return (
-    <section className="flex min-w-0 flex-col gap-2 rounded border border-border p-3">
+    <section
+      role="group"
+      aria-label={PART_LABEL[part]()}
+      className="flex min-w-0 flex-col gap-2 rounded border border-border p-3"
+    >
       <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
         {PART_LABEL[part]()}
       </h3>

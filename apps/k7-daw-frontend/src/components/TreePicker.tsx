@@ -31,12 +31,14 @@ function Level<T>({
   nodes,
   onPick,
   header,
+  label,
   selected,
   onHover,
 }: {
   nodes: TreeNode<T>[];
   onPick: (e: T) => void;
   header?: React.ReactNode;
+  label?: string;
   selected?: string | null;
   onHover?: (key: string) => void;
 }) {
@@ -64,7 +66,7 @@ function Level<T>({
   const hasBranches = nodes.some((n) => n.children?.length);
 
   return (
-    <div className={MENU_BASE} role="menu">
+    <div className={MENU_BASE} role="menu" aria-label={label}>
       {header}
       <div className={hasBranches ? "" : MENU_SCROLL}>
         {nodes.map((n) => {
@@ -74,6 +76,8 @@ function Level<T>({
               <button
                 type="button"
                 role="menuitem"
+                aria-label={n.label}
+                aria-description={n.hint}
                 ref={n.key === selected ? selRef : undefined}
                 // Hover opens a branch, click picks a leaf; a branch isn't clickable, there being nothing to pick.
                 onMouseEnter={() => {
@@ -132,6 +136,8 @@ export function TreePicker<T>({
   search: runSearch,
   searchLimit,
   placeholder,
+  menuLabel,
+  searchLabel,
   emptyLabel,
   onPick,
   onClose,
@@ -147,6 +153,9 @@ export function TreePicker<T>({
   /** The cap `search` applies, so this can say the list was cut rather than look complete. */
   searchLimit: number;
   placeholder: string;
+  /** The accessible names of the menu and its search box (the placeholder is not one a restyle may keep). */
+  menuLabel?: string;
+  searchLabel?: string;
   emptyLabel: string;
   onPick: (pick: T) => void;
   onClose: () => void;
@@ -244,6 +253,8 @@ export function TreePicker<T>({
           }
         }}
         placeholder={placeholder}
+        role="searchbox"
+        aria-label={searchLabel ?? placeholder}
         spellCheck={false}
         autoComplete="off"
         className="w-full bg-transparent px-1 py-1 rounded-sm font-mono text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-faint"
@@ -276,6 +287,7 @@ export function TreePicker<T>({
           }
           onPick={pick}
           header={search}
+          label={menuLabel}
           selected={results.length ? results[selIdx].key : null}
           onHover={(key) => {
             const i = results.findIndex((r) => r.key === key);
@@ -287,6 +299,7 @@ export function TreePicker<T>({
           nodes={tree.length ? tree : [{ key: "none", label: emptyLabel }]}
           onPick={pick}
           header={search}
+          label={menuLabel}
         />
       )}
     </div>

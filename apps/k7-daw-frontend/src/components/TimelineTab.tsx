@@ -2013,7 +2013,7 @@ function TimelineTabView({
   // Only with nothing to draw: a failed RE-read keeps the last song on screen while useDocument retries.
   if (error && !proj)
     return (
-      <div className="p-4 text-sm text-red-400">
+      <div role="alert" className="p-4 text-sm text-red-400">
         {m["tl.unavailable"]({ error })}
       </div>
     );
@@ -2647,6 +2647,8 @@ function TimelineTabView({
                 return (
                   <div
                     key={`group:${row.group.id}`}
+                    role="group"
+                    aria-label={row.group.name}
                     // Hit-tested by the shift-drag selection, as laneAtPoint does with data-lane-track.
                     data-sel-row={rowKey(row)}
                     className={cn(

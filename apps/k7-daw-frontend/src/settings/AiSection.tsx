@@ -65,6 +65,7 @@ export function AiSection() {
         <input
           type="password"
           autoComplete="off"
+          aria-label={m["ai.newKey"]()}
           className={FIELD}
           placeholder={view?.keyHint ? m["ai.replaceKey"]() : "sk-ant-…"}
           value={key}
