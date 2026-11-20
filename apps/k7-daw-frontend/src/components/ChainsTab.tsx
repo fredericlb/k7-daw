@@ -49,7 +49,6 @@ import { useLiveRackLit } from "../rackLit";
 import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import type { WebGraph, WebProject } from "../types";
 import { useIsMobile } from "../useIsMobile";
-import { GraphActions } from "./GraphActions";
 import { MidiFeedback } from "./MidiFeedback";
 
 // A card with no authored vertical layout is folded to the same 4 columns (apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md).
@@ -485,6 +484,18 @@ function ChainsTabView({
 
   // Read by bypassModule without making it depend on the layout, which would rebind it on every refetch.
   const laidRef = useLatest(laid);
+  // The bar's Graph views fit through this pane's camera, offered only while a laid graph is on screen.
+  const setGraphView = useShell((s) => s.setGraphView);
+  const canFit = active && !!laid;
+  useEffect(() => {
+    if (!canFit) return;
+    setGraphView({
+      fit: () => {
+        if (laidRef.current) camApi.current?.fitTo(laidRef.current.nodes);
+      },
+    });
+    return () => setGraphView(null);
+  }, [canFit, setGraphView]);
   // A pad clicked auditions its sound, the same way in every pane that draws a kit.
   const triggerRack = useRackTrigger(laidRef, onPreviewNote, rackLit.flash);
 
@@ -758,14 +769,6 @@ function ChainsTabView({
         data-testid="graph-canvas"
         className="relative min-w-0 flex-1"
       >
-        {active && laid && (
-          <GraphActions
-            onFit={() => camApi.current?.fitTo(laid.nodes)}
-            onOrganize={onOrganize}
-            onStack={onStack}
-            stacked={!!stack}
-          />
-        )}
         {active && (
           <DomChains
             labels={labels}
