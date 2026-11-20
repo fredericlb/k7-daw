@@ -2600,7 +2600,7 @@ function TimelineTabView({
                     // Hit-tested by the shift-drag selection, as laneAtPoint does with data-lane-track.
                     data-sel-row={rowKey(row)}
                     className={cn(
-                      "flex border-b border-border/40",
+                      "flex border-b border-(--k7-hairline-row)",
                       // A group dims on its own flag only: with no lane of its own, the mixer-wide solo rule doesn't reach the header.
                       row.group.mute && "opacity-50",
                     )}
@@ -2660,7 +2660,7 @@ function TimelineTabView({
                     key={`video:${vt.id}`}
                     data-sel-row={rowKey(row)}
                     className={cn(
-                      "flex border-b border-border/40",
+                      "flex border-b border-(--k7-hairline-row)",
                       // Dimmed == not on screen: hidden itself, or hidden because something else is soloed.
                       pictureOff(vt) && "opacity-50",
                       rowDrag?.lane === vt.id && "opacity-40",
@@ -2970,7 +2970,7 @@ function TimelineTabView({
                   <div
                     key={rowKey(row)}
                     data-sel-row={rowKey(row)}
-                    className="flex border-border/40 border-b opacity-80"
+                    className="flex border-(--k7-hairline-row) border-b opacity-80"
                     style={{ height: ROW_H }}
                     onContextMenu={(e) => {
                       e.preventDefault();
@@ -3057,7 +3057,7 @@ function TimelineTabView({
                   key={t.id}
                   data-sel-row={rowKey(row)}
                   className={cn(
-                    "flex border-b border-border/40",
+                    "flex border-b border-(--k7-hairline-row)",
                     GROW,
                     // Dimmed == not audible: muted itself, muted by its group, or silenced because something else is soloed.
                     silent(t) && "opacity-50",
@@ -3462,7 +3462,7 @@ function TimelineTabView({
                                 }}
                                 className={cn(
                                   // `isolate` keeps the activity layer's -z-10 inside this block; `group` is what the name reads.
-                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded px-1 text-[10px] active:cursor-grabbing isolate",
+                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-xl px-2 font-mono text-[10px] active:cursor-grabbing isolate",
                                   // Disabled: still placed, still readable, plainly off — an event you cannot see is a deleted one.
                                   c.disabled &&
                                     "opacity-40 saturate-0 outline-dashed outline-1 outline-muted-foreground",
