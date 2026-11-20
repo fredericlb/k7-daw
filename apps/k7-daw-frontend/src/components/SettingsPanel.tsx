@@ -10,32 +10,28 @@
 
 import type { EngineClient } from "@studio/engine-browser";
 import { Button } from "@studio/ui/button";
+import { Choice } from "@studio/ui/choice";
 import {
   AudioLines,
   Command,
-  DoorOpen,
   FolderCog,
-  Server,
   type Settings,
   SlidersHorizontal,
-  UserCircle2,
 } from "@studio/ui/icons";
-import { useEffect, useState } from "react";
-import { type AuthUser, api } from "../api";
 import { useWindowKey } from "../hooks/useWindowKey";
 import { m } from "../paraglide/messages.js";
 import { EditorSettingsPage } from "./EditorSettingsPage";
 import { IoPanel } from "./IoPanel";
-import { LocaleSwitcher } from "./LocaleSwitcher";
 import { ProjectSettingsTab } from "./ProjectSettingsTab";
 
 /** The tabs, in the order they are drawn — `commands` is a PAGE and `playlists` its own panel: settings are set and left, a set list is worked from. */
-export const SETTINGS_TABS = ["editor", "io", "project", "account"] as const;
+export const SETTINGS_TABS = ["editor", "io", "project"] as const;
 
-export type SettingsTab = (typeof SETTINGS_TABS)[number];
+/** `account` has no tab any more: the command that names it stays typed until the command table drops it. */
+export type SettingsTab = (typeof SETTINGS_TABS)[number] | "account";
 
 const TAB_META: Record<
-  SettingsTab,
+  (typeof SETTINGS_TABS)[number],
   { icon: typeof Settings; label: string; command: string }
 > = {
   editor: {
@@ -53,12 +49,6 @@ const TAB_META: Record<
     icon: FolderCog,
     label: m["settings.project"](),
     command: "ui settings project",
-  },
-  // Not translated through paraglide like its neighbours: the message catalogue is generated, and a key not in it yet fails the build.
-  account: {
-    icon: UserCircle2,
-    label: "Compte",
-    command: "ui settings account",
   },
 };
 
@@ -84,45 +74,33 @@ export function SettingsPanel({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      {/* The one screen that is still a page, and the button that opens it. */}
-      <div className="flex shrink-0 justify-end pb-1">
+      {/* The tabs each dispatch their own `ui settings <tab>` rather than setting state here, so the panel and the palette are one road. */}
+      <div className="flex shrink-0 items-center gap-2 pb-2">
+        <Choice
+          label={m["shell.panel.settings"]()}
+          value={tab}
+          onValueChange={(t) => {
+            if (t !== "account") void onRun(TAB_META[t].command);
+          }}
+          options={SETTINGS_TABS.map((t) => {
+            const { icon: Icon, label } = TAB_META[t];
+            return { value: t, label, icon: <Icon className="size-4" /> };
+          })}
+          className="min-w-0 flex-1"
+        />
+        {/* The one screen that is still a page, and the button that opens it. */}
         <Button
-          size="icon"
-          variant="ghost"
+          size="round"
+          variant="glass"
           title={m["settings.commandsHint"]()}
           aria-label={m["cmds.title"]()}
           onClick={() => void onRun("ui settings commands")}
         >
-          <Command className="h-4 w-4" />
+          <Command className="size-5" />
         </Button>
       </div>
 
-      {/* The tabs each dispatch their own `ui settings <tab>` rather than setting state here, so the panel and the palette are one road. */}
-      <nav className="flex shrink-0 border-b border-border">
-        {SETTINGS_TABS.map((t) => {
-          const { icon: Icon, label, command } = TAB_META[t];
-          const on = t === tab;
-          return (
-            <button
-              key={t}
-              type="button"
-              aria-current={on ? "page" : undefined}
-              title={label}
-              onClick={() => void onRun(command)}
-              className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 border-b-2 px-1 py-1.5 text-xs ${
-                on
-                  ? "border-primary text-foreground"
-                  : "border-transparent text-muted-foreground hover:bg-accent/40"
-              }`}
-            >
-              <Icon className="h-4 w-4 shrink-0" />
-              <span className="truncate">{label}</span>
-            </button>
-          );
-        })}
-      </nav>
-
-      <div className="min-h-0 flex-1">
+      <div className="min-h-0 flex-1 overflow-y-auto">
         {tab === "editor" && (
           <EditorSettingsPage
             vimMode={vimMode}
@@ -131,64 +109,6 @@ export function SettingsPanel({
         )}
         {tab === "io" && <IoPanel engine={engine} />}
         {tab === "project" && <ProjectSettingsTab onRun={onRun} />}
-        {tab === "account" && <AccountTab onRun={onRun} />}
-      </div>
-    </div>
-  );
-}
-
-/** Who you are, and the three ways out of here — ACTIONS rather than a screen, given a tab of their own because there is nowhere else to put them. */
-function AccountTab({ onRun }: { onRun: (line: string) => Promise<void> }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  useEffect(() => {
-    void api
-      .getMe()
-      .then(setUser)
-      .catch(() => {}); // the tab still works; it just shows no name
-  }, []);
-
-  const row =
-    "flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-sm hover:bg-accent";
-
-  return (
-    <div className="h-full overflow-y-auto p-2">
-      <div className="flex items-center gap-2 px-2 pb-2">
-        <UserCircle2 className="h-6 w-6 shrink-0 text-muted-foreground" />
-        <div className="min-w-0 flex-1">
-          <div className="truncate text-sm font-medium">
-            {user?.name || user?.email || "…"}
-          </div>
-          {user?.name && user.email && (
-            <div className="truncate text-xs text-muted-foreground">
-              {user.email}
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="my-1 border-t border-border" />
-      {/* The engine's settings page: whether it runs and which audio interface it takes. */}
-      <button
-        type="button"
-        className={row}
-        onClick={() => void onRun("ui engine")}
-      >
-        <Server className="h-4 w-4 text-muted-foreground" />
-        {m["settings.engine"]()}
-      </button>
-      <button
-        type="button"
-        className={row}
-        onClick={() => void onRun("ui workspace quit")}
-      >
-        <DoorOpen className="h-4 w-4 text-muted-foreground" />
-        {m["settings.quitWorkspace"]()}
-      </button>
-      <div className="my-1 border-t border-border" />
-      <div className="flex items-center justify-between gap-2 px-2 py-1.5">
-        <span className="text-sm text-muted-foreground">
-          {m["settings.language"]()}
-        </span>
-        <LocaleSwitcher />
       </div>
     </div>
   );
