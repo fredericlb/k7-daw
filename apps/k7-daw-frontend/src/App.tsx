@@ -87,6 +87,7 @@ import { FloatingWindow } from "./components/FloatingWindow";
 import { GraphPanel } from "./components/GraphPanel";
 import { HistoryPanel } from "./components/HistoryPanel";
 import { LogsPanel } from "./components/LogsPanel";
+import { MasteringTab } from "./components/MasteringTab";
 import { MasterMeter, type MasterMeterHandle } from "./components/MasterMeter";
 import { MidiTakeRoll } from "./components/MidiTakeRoll";
 import type { MinimapItem } from "./components/Minimap";
@@ -792,6 +793,13 @@ export default function App({
 
   // The special views this PROJECT declares (`surfaces/`), and the engine as a desk sees it — both cheap and unconditional.
   const { surfaces } = useSurfaces(surfacesKey);
+  const masteringSurface = useMemo(
+    () =>
+      surfaces.find(
+        (s) => s.surface.type === "mastering" && s.surface.layout === "split",
+      ) ?? null,
+    [surfaces],
+  );
   /** The project's ARRANGEMENT, if it declares one: a `split` surface of type `timeline`, false for a frame or two on open. */
   const timelineSurface = useMemo(
     () =>

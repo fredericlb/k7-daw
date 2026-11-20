@@ -28,7 +28,7 @@ import { ProjectSettingsTab } from "./ProjectSettingsTab";
 export const SETTINGS_TABS = ["editor", "io", "project"] as const;
 
 /** `account` has no tab any more: the command that names it stays typed until the command table drops it. */
-export type SettingsTab = (typeof SETTINGS_TABS)[number] | "account";
+export type SettingsTab = (typeof SETTINGS_TABS)[number];
 
 const TAB_META: Record<
   (typeof SETTINGS_TABS)[number],
@@ -80,7 +80,7 @@ export function SettingsPanel({
           label={m["shell.panel.settings"]()}
           value={tab}
           onValueChange={(t) => {
-            if (t !== "account") void onRun(TAB_META[t].command);
+            void onRun(TAB_META[t].command);
           }}
           options={SETTINGS_TABS.map((t) => {
             const { icon: Icon, label } = TAB_META[t];
