@@ -24,6 +24,8 @@ export interface OverflowLaneView {
   label: string;
   icon: LucideIcon;
   on: boolean;
+  /** A plain action (Zoom fit) rather than a switch: no checked state. */
+  action?: boolean;
   onPress: () => void;
 }
 
@@ -43,6 +45,7 @@ export function OverflowMenu({
   pane,
   onPane,
   lanes,
+  lanesHeading,
   panels,
   onSettings,
   onKeyboard,
@@ -50,7 +53,9 @@ export function OverflowMenu({
   panes: OverflowPane[];
   pane: string;
   onPane: (id: string) => void;
+  /** The current pane's views: the Lane views or the Graph views, empty where the pane has none. */
   lanes: OverflowLaneView[];
+  lanesHeading: string;
   panels: OverflowPanel[];
   onSettings: () => void;
   onKeyboard: () => void;
@@ -110,14 +115,14 @@ export function OverflowMenu({
             </div>
             {lanes.length > 0 && (
               <>
-                <Heading>{m["shell.overflow.lanes"]()}</Heading>
+                <Heading>{lanesHeading}</Heading>
                 <div className="flex gap-1.5">
                   {lanes.map((l) => (
                     <button
                       key={l.id}
                       type="button"
-                      role="menuitemcheckbox"
-                      aria-checked={l.on}
+                      role={l.action ? "menuitem" : "menuitemcheckbox"}
+                      aria-checked={l.action ? undefined : l.on}
                       onClick={l.onPress}
                       className="type-label glass flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full text-foreground aria-checked:bg-on-fill aria-checked:text-lavender"
                     >

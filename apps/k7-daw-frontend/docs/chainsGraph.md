@@ -358,11 +358,13 @@ progress is dropped, and the gesture is measured from the camera it STARTED on.
 there is nothing to hand back to the browser; without it a one-finger drag scrolls the page and
 cancels the pan mid-gesture, and two fingers zoom the page instead of the graph.
 
-## The Graph pane's pills, and the lane's module cards
+## The Graph's actions live in the bar, and the lane's module cards
 
-The Graph pane draws **Zoom fit**, **Auto layout** and **Stack** as labelled pills over its top-left
-corner, beside an output-level meter (`GraphActions.tsx`); the minimap is a card with no buttons of
-its own (`minimapBar={false}`). A lane's chain, in the bottom dock, lists its modules as cards (`ModuleCards.tsx`) left to right in
+**Zoom fit**, **Auto layout** and **Stack** are the floating bar's capsule while the Graph is the pane
+(`group "Graph views"`, docs/shell.md): the pane draws no buttons over its canvas, and no output meter,
+the master level already being the bar's. `ChainsTab` keeps the camera, so it hands the bar the fit
+through the shell store (`graphView`) for as long as a laid graph is on screen; the minimap is a card
+with no buttons of its own (`minimapBar={false}`). A lane's chain, in the bottom dock, lists its modules as cards (`ModuleCards.tsx`) left to right in
 signal order: name, engine chip, bypass, the preset with its arrows, a "+" on each seam and a dashed
 "Add a module" at the end, scrolling sideways when they overflow. The track's name and its chain
 controls are the dock's header row. The cards summarise the row; the **Controls** chip shows the full row beside them,

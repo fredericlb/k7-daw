@@ -264,7 +264,7 @@ bottom margin for the bar instead.
 |---|---|---|
 | header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the pane switcher (centred), the panel toolbar, the app buttons |
 | git capsule | `shell/HeaderGit.tsx` | Commit & Push with its count, a menu (Pull, Commits); while a merge waits, one "Resolve N conflicts" button and a banner |
-| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the Lane views |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the pane's capsule (Lane views or Graph views) |
 | panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
 | dock | `shell/panels.tsx` (`DockFrame`), `hooks/useEditorDock.ts` | the bottom dock, in the kit's `EditorDock` (Pad, Desk) or `EditorSheet` (Phone); it holds the editors, the Mixer or a track's chain |
 | phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |
@@ -356,12 +356,18 @@ visible.
 `automationShown`, `pictureShown`). The timeline still holds its own state, so the shell mirrors what it
 reports and what the `ui ruler` / `ui automation` commands flip, until the timeline reads the store.
 
+**The right-end capsule belongs to the current pane.** The arrangement shows the Lane views; the Graph
+shows `group "Graph views"` (Zoom fit, Auto layout, Stack, the last pressed while stacked); the editor
+and the desk show nothing, not an empty capsule. Each view's buttons act on one pane, so a button that
+does nothing where it stands has no place there. The Graph keeps its camera, so its pane hands the
+bar the fit through the store (`graphView`); Auto layout and Stack are the shell's own commands.
+
 **Under 380 px the clock shows only bar:beat**: the seconds come back on any wider screen.
 
 ### On a phone, one menu holds everywhere there is to go
 
 `shell/OverflowMenu.tsx` (`menu "Views and panels"`): the PANE segmented control (`menuitemradio`), the
-LANE VIEWS pills, the PANELS tiles (`menuitem`, pressed while open) and Settings and Keyboard. A panel
+current pane's pills (Lane views, or Graph views on the Graph; none on the editor), the PANELS tiles (`menuitem`, pressed while open) and Settings and Keyboard. A panel
 opens as a full-screen sheet.
 
 ### The Mixer is a dock occupant: strips left to right

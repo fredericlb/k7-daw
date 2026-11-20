@@ -32,8 +32,11 @@ import { Choice } from "@studio/ui/choice";
 import {
   AudioLines,
   Clock,
+  Columns3,
   Disc3,
   FileCode,
+  Maximize,
+  Network,
   Rows3,
   Spline,
   Workflow,
@@ -365,6 +368,8 @@ export default function App({
   const rackBuilder = useStore(shell, (s) => s.rackBuilder);
   const trackCurves = useStore(shell, (s) => s.trackCurves);
   const rulerSeconds = useStore(shell, (s) => s.rulerSeconds);
+  const graphView = useStore(shell, (s) => s.graphView);
+  const stackView = useStore(shell, (s) => s.stackView);
   const lanesExpanded = useStore(shell, (s) => s.lanesExpanded);
   const automationShown = useStore(shell, (s) => s.automationShown);
   const tool = useStore(shell, (s) => s.tool);
@@ -2733,6 +2738,44 @@ export default function App({
       onPress: () => void runCommand("ui automation"),
     },
   ];
+  // The bar's capsule follows the pane: the lane views on the arrangement, the graph's on the Graph, none elsewhere.
+  const graphCmds = shell.getState().commands;
+  const graphViewsOf = (): OverflowLaneView[] =>
+    !graphView
+      ? []
+      : [
+          {
+            id: "fit",
+            label: m["graph.zoomFit"](),
+            icon: Maximize,
+            on: false,
+            action: true,
+            onPress: graphView.fit,
+          },
+          ...(graphCmds.organize
+            ? [
+                {
+                  id: "organize",
+                  label: m["graph.autoLayout"](),
+                  icon: Network,
+                  on: false,
+                  action: true,
+                  onPress: graphCmds.organize,
+                },
+              ]
+            : []),
+          ...(graphCmds.stack
+            ? [
+                {
+                  id: "stack",
+                  label: m["graph.stack"](),
+                  icon: Columns3,
+                  on: stackView,
+                  onPress: graphCmds.stack,
+                },
+              ]
+            : []),
+        ];
   const header = (
     <ProjectHeader
       layout={layoutKind}
@@ -2774,7 +2817,18 @@ export default function App({
           panes={switcherPanes}
           pane={full}
           onPane={(id) => void runCommand(`ui ${id}`)}
-          lanes={hasTimeline ? laneViewsOf() : []}
+          lanes={
+            full === "timeline" && hasTimeline
+              ? laneViewsOf()
+              : full === "chains"
+                ? graphViewsOf()
+                : []
+          }
+          lanesHeading={
+            full === "chains"
+              ? m["shell.overflow.graph"]()
+              : m["shell.overflow.lanes"]()
+          }
           panels={headerPanels}
           onSettings={() => void runCommand("ui settings")}
           onKeyboard={openKeyboard}
@@ -2843,8 +2897,18 @@ export default function App({
         },
         onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
       }}
+      graph={
+        full === "chains" && graphView
+          ? {
+              onFit: graphView.fit,
+              onOrganize: graphCmds.organize,
+              onStack: graphCmds.stack,
+              stacked: stackView,
+            }
+          : null
+      }
       lanes={
-        hasTimeline
+        full === "timeline" && hasTimeline
           ? {
               seconds: rulerSeconds,
               expanded: lanesExpanded,

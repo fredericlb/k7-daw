@@ -4,7 +4,7 @@ import type { Locator, Page } from "@playwright/test";
 import { closeCommandBar, runCommand } from "../../src/commandBar.ts";
 import { expectFile, readFile, restoreProject } from "../../src/disk.ts";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { pane } from "../../src/nav.ts";
+import { folded, pane } from "../../src/nav.ts";
 import { expect, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
@@ -98,6 +98,30 @@ async function pickOnCable(
   ).toBeVisible();
   return { node, before };
 }
+
+test("the bar's right-end capsule follows the pane: Graph views on the Graph, none on the Source", async ({
+  k7,
+}) => {
+  const page = await openChains(k7);
+  // A phone folds the capsule into the overflow menu, which the nav helpers cover.
+  test.skip(await folded(page), "the capsule is a desktop bar's");
+  const views = page.getByRole("group", { name: "Graph views", exact: true });
+  await expect(views.getByRole("button", { name: "Zoom fit" })).toBeVisible();
+  await expect(
+    views.getByRole("button", { name: "Auto layout" }),
+  ).toBeVisible();
+  const stack = views.getByRole("button", { name: "Stack" });
+  await expect(stack).toHaveAttribute("aria-pressed", "false");
+  await stack.click();
+  await expect(stack).toHaveAttribute("aria-pressed", "true");
+  await stack.click();
+  await expect(stack).toHaveAttribute("aria-pressed", "false");
+  await (await pane(page, "Source")).click();
+  await expect(views).toHaveCount(0);
+  await expect(
+    page.getByRole("group", { name: "Lane views", exact: true }),
+  ).toHaveCount(0);
+});
 
 test("a library effect picked on the MIX → OUT cable is created and wired between them", async ({
   k7,
