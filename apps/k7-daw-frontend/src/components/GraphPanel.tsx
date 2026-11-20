@@ -3,7 +3,7 @@
 // tab (subgraph -> buildGraph -> dagre -> DomChains), only the input set differs; dagre
 // already lays the path out, so don't hand-roll a strip — it would lose the routed sends.
 // The track comes from the caret, so the panel has no selection state of its own. Given
-// `strips`, it is the MIXER instead: the strips side by side, the Master section as the right column.
+// `strips`, it is the MIXER instead: the strips side by side, Master the last, its controls below the row.
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import { ASPECTS, aspectOf } from "@studio/song-schema/aspect";
@@ -40,6 +40,8 @@ export function GraphPanel({
   trackId,
   strips,
   master,
+  masterVolume,
+  onMaster,
   trackOrder,
   videoSpans,
   noteLanes,
@@ -76,6 +78,9 @@ export function GraphPanel({
   strips?: readonly string[];
   /** The Master section drawn under the strips (the mastering surface): the Mixer panel's last section. */
   master?: ReactNode;
+  /** The song's output level in dB and how to write it: Master's fader, the Mixer row's last strip. */
+  masterVolume?: number;
+  onMaster?: (db: number) => void;
   // The engine's track order; the live-signal set is derived off the store (see ChainsTab).
   trackOrder: string[];
   /** …and when each video lane shows a picture, which nothing meters — straight through, for a subgraph holding one (../videoSpans.ts). */
@@ -212,6 +217,9 @@ export function GraphPanel({
     onBypassModule,
   );
 
+  // The mastering controls open under the strips by default: Master's OUT folds them away.
+  const [masteringOpen, setMasteringOpen] = useState(true);
+
   const body = () => {
     // Only with nothing to draw: a failed RE-read keeps the last graph while useDocument retries.
     if (error && !graph)
@@ -230,6 +238,16 @@ export function GraphPanel({
           trackControls={trackControls}
           onTrackToggle={onTrackToggle}
           onTrackSet={onTrackSet}
+          master={{
+            volume: masterVolume ?? 0,
+            onVolume: onMaster,
+            mastering: master
+              ? {
+                  open: masteringOpen,
+                  onToggle: () => setMasteringOpen((o) => !o),
+                }
+              : undefined,
+          }}
         />
       );
     if (!strips && !trackId) return <Note>{m["graph.selectTrack"]()}</Note>;
@@ -279,34 +297,33 @@ export function GraphPanel({
   const mobile = useIsMobile();
   const count = strips?.length ?? 0;
   const title = strips
-    ? `${m["shell.panel.mixer"]()} · ${(count === 1 ? m["graph.strips.one"] : m["graph.strips.other"])({ n: count })}`
+    ? m["shell.panel.mixer"]()
     : (trackId ?? m["graph.noTrack"]());
   const masterSection =
-    strips && master ? (
+    strips && master && masteringOpen ? (
       <section
         aria-label={m["graph.master"]()}
-        className={cn(
-          "shrink-0 overflow-auto rounded-2xl bg-(--k7-row) p-3",
-          mobile ? "w-[85vw]" : "w-[440px] max-w-[45%]",
-        )}
+        className="max-h-[55%] shrink-0 overflow-auto rounded-2xl bg-(--k7-row) p-3"
       >
         <h3 className="type-caps pb-2 text-fg-2">{m["graph.master"]()}</h3>
         {master}
       </section>
     ) : null;
-  // The Mixer is one row: strips left to right, then Master — a fixed column on Pad and Desk, the row's last group on a phone.
+  // The Mixer is one row, the strips left to right and Master last; its controls open below the row, and the note and the link close it.
   if (strips)
     return (
-      <div className="flex h-full min-h-0 flex-col">
+      <div className="flex h-full min-h-0 flex-col gap-2">
         <DockHeaderRow>
-          <p className="truncate font-mono text-fg-2 text-xs">{title}</p>
+          <p className="flex min-w-0 items-baseline gap-2 truncate">
+            <span className="type-label text-foreground">{title}</span>
+            <span className="font-mono text-fg-2 text-xs">
+              {(count === 1 ? m["graph.strips.one"] : m["graph.strips.other"])({
+                n: count,
+              })}
+            </span>
+          </p>
         </DockHeaderRow>
-        <div
-          className={cn(
-            "flex min-h-0 flex-1 gap-2",
-            mobile && "overflow-x-auto",
-          )}
-        >
+        <div className={cn("flex min-h-0 flex-1", mobile && "overflow-x-auto")}>
           <div
             className={cn(
               "flex min-h-0 gap-2",
@@ -315,8 +332,18 @@ export function GraphPanel({
           >
             {body()}
           </div>
-          {masterSection}
         </div>
+        {masterSection}
+        <p className="type-secondary flex shrink-0 flex-wrap items-center gap-x-3 px-1 text-fg-2">
+          <span>{m["mixer.footer"]()}</span>
+          <button
+            type="button"
+            onClick={() => void onModuleField("ui graph")}
+            className="cursor-pointer text-lavender underline"
+          >
+            {m["mixer.inGraph"]()}
+          </button>
+        </p>
       </div>
     );
   return (

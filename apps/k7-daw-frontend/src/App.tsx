@@ -3049,6 +3049,8 @@ export default function App({
         {...graphHostProps}
         trackId={null}
         strips={mixerStrips}
+        masterVolume={projectDoc?.masterVolume}
+        onMaster={setMaster}
         master={
           masteringSurface ? (
             <MasteringTab

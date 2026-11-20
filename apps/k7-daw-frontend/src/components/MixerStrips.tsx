@@ -108,6 +108,82 @@ function Strip({
   );
 }
 
+/** Master: the last strip of the row, the sum of every lane; its OUT opens the mastering controls below the row. */
+function MasterStrip({
+  lanes,
+  volume,
+  onVolume,
+  mastering,
+}: {
+  lanes: number;
+  volume: number;
+  onVolume?: (db: number) => void;
+  mastering?: { open: boolean; onToggle: () => void };
+}) {
+  const db = useEngineState((s) => s.master);
+  const playing = useEngineState((s) => s.playing);
+  const was = useRef(false);
+  const peak = useRef(FLOOR_DB);
+  peak.current = peakHold(peak.current, db, playing, was.current);
+  was.current = playing;
+  const shown = Math.round(db);
+  return (
+    <li
+      aria-label={m["graph.master"]()}
+      className="flex w-[84px] shrink-0 flex-col items-center self-stretch gap-2 rounded-2xl bg-(--k7-row) px-1.5 py-2.5"
+    >
+      <span className="type-label w-full truncate text-center">
+        {m["graph.master"]()}
+      </span>
+      <span className="type-secondary w-full truncate text-center text-fg-2">
+        {m["mixer.masterSum"]({ n: lanes })}
+      </span>
+      <span
+        className={cn(
+          "type-secondary rounded-full bg-on-fill px-2 tabular-nums",
+          peak.current >= 0 && "text-meter-clip",
+        )}
+      >
+        {peak.current > FLOOR_DB ? peak.current.toFixed(1) : "–"}
+      </span>
+      <div
+        className="min-h-24 w-1.5 flex-1 overflow-hidden rounded-[3px] bg-(--k7-progress-track)"
+        role="meter"
+        aria-label={m["mixer.level"]()}
+        aria-valuenow={shown}
+      >
+        <div
+          className={cn("h-full origin-bottom", ZONE[meterZone(shown)])}
+          style={{ transform: `scaleY(${meterFill(shown)})` }}
+        />
+      </div>
+      <Knob
+        label={m["shell.masterVolume"]()}
+        size={40}
+        value={volume}
+        min={-60}
+        max={6}
+        step={0.5}
+        format={(v) => `${v.toFixed(1)} dB`}
+        onValueChange={(v) => onVolume?.(v)}
+      />
+      {mastering ? (
+        <button
+          type="button"
+          aria-expanded={mastering.open}
+          title={m["mixer.masterOpen"]()}
+          onClick={mastering.onToggle}
+          className="type-label rounded-full px-2 py-0.5 text-foreground hover:bg-on-fill aria-expanded:bg-on-fill aria-expanded:text-lavender"
+        >
+          {m["mixer.masterOut"]()}
+        </button>
+      ) : (
+        <span className="type-label text-fg-2">{m["mixer.masterOut"]()}</span>
+      )}
+    </li>
+  );
+}
+
 /** The strips of `strips` (mixer module names), each for the first track that owns it. */
 export function MixerStrips({
   strips,
@@ -115,8 +191,15 @@ export function MixerStrips({
   trackControls,
   onTrackToggle,
   onTrackSet,
+  master,
 }: {
   strips: readonly string[];
+  /** Draws Master as the row's last strip: its fader and, when the song masters, the OUT toggle. */
+  master?: {
+    volume: number;
+    onVolume?: (db: number) => void;
+    mastering?: { open: boolean; onToggle: () => void };
+  };
   project: WebProject | null | undefined;
   trackControls?: Record<string, TrackControlValues>;
   onTrackToggle?: (id: string, control: "mute" | "solo") => void;
@@ -145,6 +228,14 @@ export function MixerStrips({
           />
         );
       })}
+      {master && (
+        <MasterStrip
+          lanes={strips.length}
+          volume={master.volume}
+          onVolume={master.onVolume}
+          mastering={master.mastering}
+        />
+      )}
     </ul>
   );
 }
