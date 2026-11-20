@@ -1,4 +1,4 @@
-// CommitSteps.tsx — the progress list of Commit & Push: Committing…, Pushing…, Done, each with its mark.
+// CommitSteps.tsx — the progress list of Commit & Push: a Commit row and a Push row, each with its mark and its detail.
 // What a reader gets wrong: a warn step (pull first) is not a failure, so it has no Try again.
 
 import { Check, Loader2, TriangleAlert } from "@studio/ui/icons";
@@ -8,7 +8,6 @@ import type { StepRow } from "./commitState";
 const LABEL = {
   commit: "git.stepCommitting",
   push: "git.stepPushing",
-  done: "git.stepDone",
 } as const;
 
 function Mark({ state }: { state: StepRow["state"] }) {
@@ -21,7 +20,14 @@ function Mark({ state }: { state: StepRow["state"] }) {
   );
 }
 
-export function CommitSteps({ rows }: { rows: StepRow[] }) {
+export function CommitSteps({
+  rows,
+  details,
+}: {
+  rows: StepRow[];
+  /** What each row says under its name: the message and file count, the remote, the live sending line. */
+  details: Partial<Record<StepRow["id"], string>>;
+}) {
   return (
     <ul aria-label={m["git.progress"]()} className="flex flex-col gap-2">
       {rows.map((r) => (
@@ -38,6 +44,9 @@ export function CommitSteps({ rows }: { rows: StepRow[] }) {
             <span className={r.state === "pending" ? "text-fg-2" : undefined}>
               {m[LABEL[r.id]]()}
             </span>
+            {details[r.id] && r.state !== "warn" && r.state !== "error" && (
+              <span className="text-fg-3">{details[r.id]}</span>
+            )}
             {r.state === "warn" && (
               <span className="text-warn">{m["git.pullFirst"]()}</span>
             )}

@@ -3,10 +3,10 @@
 // settings. The column ends clear of the floating tab bar. See ../../docs/projects.md.
 
 import { Button } from "@studio/ui/button";
-import { Settings } from "@studio/ui/icons";
+import { ChevronLeft, Settings } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { m } from "../paraglide/messages.js";
 import { SETTINGS_ROUTE } from "./api";
 
@@ -14,26 +14,56 @@ import { SETTINGS_ROUTE } from "./api";
 export const PAGE_COLUMN =
   "mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 pt-6 pb-36 sm:px-6";
 
+/** Back to where the page was reached from, or to Home when it was opened by its address. */
+function BackButton() {
+  const navigate = useNavigate();
+  return (
+    <Button
+      variant="glass"
+      size="icon"
+      title={m["common.back"]()}
+      aria-label={m["common.back"]()}
+      onClick={() =>
+        window.history.state?.idx > 0 ? navigate(-1) : navigate("/")
+      }
+    >
+      <ChevronLeft className="size-5" />
+    </Button>
+  );
+}
+
 /** The page's title, an optional line under it, its actions, and the cog on the right. */
 export function PageHeader({
   title,
   summary,
   actions,
   cog = true,
+  back = false,
 }: {
   title: ReactNode;
   summary?: ReactNode;
   actions?: ReactNode;
+  /** A sub-page: a Back button leads the bar. */
+  back?: boolean;
   /** The cog is the way to App settings: left out on the settings pages themselves. */
   cog?: boolean;
 }) {
   return (
     <header className="flex items-start justify-between gap-x-4 gap-y-3 max-sm:flex-wrap">
-      <div className="flex min-w-0 flex-col gap-1">
-        <h1 className="type-large-title">{title}</h1>
-        {summary && (
-          <p className="type-secondary text-fg-2 tabular-nums">{summary}</p>
-        )}
+      <div className="flex min-w-0 items-start gap-3">
+        {back && <BackButton />}
+        <img
+          src="/icon/k7.svg"
+          alt=""
+          className="mt-1.5 h-7 w-auto shrink-0"
+          draggable={false}
+        />
+        <div className="flex min-w-0 flex-col gap-1">
+          <h1 className="type-large-title">{title}</h1>
+          {summary && (
+            <p className="type-secondary text-fg-2 tabular-nums">{summary}</p>
+          )}
+        </div>
       </div>
       <div className="flex shrink-0 items-center gap-2">
         {actions}
@@ -60,8 +90,10 @@ export function PageFrame({
   actions,
   narrow = false,
   cog = true,
+  back = false,
   children,
 }: {
+  back?: boolean;
   title: ReactNode;
   summary?: ReactNode;
   actions?: ReactNode;
@@ -77,6 +109,7 @@ export function PageFrame({
           summary={summary}
           actions={actions}
           cog={cog}
+          back={back}
         />
         <div
           className={cn("flex min-w-0 flex-col gap-4", narrow && "max-w-2xl")}

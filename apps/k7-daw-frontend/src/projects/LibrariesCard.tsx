@@ -91,55 +91,65 @@ export function LibrariesCard({
       )}
 
       {!missing && (
-        <RowGroup>
+        <div className="flex flex-col gap-3">
           {libraries.map((l) => {
             const versions = l.versions ?? [];
             const newest = versions
               .filter((v) => v.requires <= LIBRARY_LEVEL)
               .reduce((n, v) => Math.max(n, v.version), 0);
             return (
-              <div
-                key={l.name}
-                className="flex min-h-14 flex-wrap items-center gap-2 px-3.5 py-2"
-              >
-                <Chip variant="anchor" orphan={!l.present}>
-                  @{l.name}
-                </Chip>
-                <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
-                  {versions.length ? (
-                    versions.map((v) => (
-                      <Chip
-                        key={v.version}
-                        variant="version"
-                        newest={v.version === newest}
-                        title={
-                          v.requires > LIBRARY_LEVEL
-                            ? m["libs.needsLevel"]({
-                                version: v.version,
-                                level: v.requires,
-                              })
-                            : undefined
-                        }
-                      >
-                        v{v.version}
-                        {v.version === newest && ` · ${m["libs.newest"]()}`}
-                      </Chip>
-                    ))
-                  ) : (
-                    <span className="type-secondary text-fg-3">
-                      {m["libs.noVersion"]()}
+              <RowGroup key={l.name}>
+                <section
+                  aria-label={`@${l.name}`}
+                  className="flex flex-col gap-2.5 px-3.5 py-3"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Chip variant="anchor" orphan={!l.present}>
+                      @{l.name}
+                    </Chip>
+                    <span className="type-secondary text-fg-2">
+                      {m["libs.bundled"]()}
                     </span>
-                  )}
-                </span>
-                {!l.present && (
-                  <span className="type-secondary shrink-0 text-warn">
-                    {m["libs.notPresent"]()}
+                    {!l.present && (
+                      <span className="type-secondary shrink-0 text-warn">
+                        {m["libs.notPresent"]()}
+                      </span>
+                    )}
+                  </div>
+                  <p className="type-caps text-fg-3">
+                    {m["libs.versionsLabel"]()}
+                  </p>
+                  <span className="flex min-w-0 flex-wrap items-center gap-1.5">
+                    {versions.length ? (
+                      versions.map((v) => (
+                        <Chip
+                          key={v.version}
+                          variant="version"
+                          newest={v.version === newest}
+                          title={
+                            v.requires > LIBRARY_LEVEL
+                              ? m["libs.needsLevel"]({
+                                  version: v.version,
+                                  level: v.requires,
+                                })
+                              : undefined
+                          }
+                        >
+                          v{v.version}
+                          {v.version === newest && ` · ${m["libs.newest"]()}`}
+                        </Chip>
+                      ))
+                    ) : (
+                      <span className="type-secondary text-fg-3">
+                        {m["libs.noVersion"]()}
+                      </span>
+                    )}
                   </span>
-                )}
-              </div>
+                </section>
+              </RowGroup>
             );
           })}
-        </RowGroup>
+        </div>
       )}
 
       {error && <ErrorCard title={error} />}

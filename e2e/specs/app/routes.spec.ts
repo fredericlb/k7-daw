@@ -155,7 +155,7 @@ test("/tasks lists the workspaces' TODOS.md, done ones on demand", async ({
   const tasks = page.getByRole("region", { name: /^Tasks of / });
   await expect(tasks.getByText("E2E open task")).toBeVisible();
   await expect(tasks.getByText("E2E done task")).toBeHidden();
-  await page.getByRole("checkbox", { name: "Show done" }).check();
+  await page.getByRole("switch", { name: "Show done" }).click();
   await expect(tasks.getByText("E2E done task")).toBeVisible();
   watch.assertClean();
 });

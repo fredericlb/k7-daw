@@ -68,7 +68,7 @@ export type CommitPhase =
   | { kind: "done" };
 
 export interface StepRow {
-  id: "commit" | "push" | "done";
+  id: "commit" | "push";
   state: "pending" | "active" | "done" | "warn" | "error";
   /** The sentence under a warn or error step. */
   detail?: string;
@@ -82,7 +82,6 @@ export function stepRows(
   const ids: StepRow["id"][] = [
     ...(plan.commit ? (["commit"] as const) : []),
     ...(plan.push ? (["push"] as const) : []),
-    "done",
   ];
   const at = (id: StepRow["id"]) => ids.indexOf(id);
   return ids.map((id) => {
@@ -109,11 +108,7 @@ export function stepRows(
             ? { id, state: "error", detail: phase.error }
             : { id, state: "pending" };
       default:
-        return id === "commit"
-          ? { id, state: "done" }
-          : id === "push"
-            ? { id, state: "warn" }
-            : { id, state: "pending" };
+        return id === "commit" ? { id, state: "done" } : { id, state: "warn" };
     }
   });
 }

@@ -1,5 +1,5 @@
 // SettingsPage.tsx — `/settings`, App settings: what a BROWSER may change for its account, under two tabs — General
-// (the language, the AI key, the commit identity, the separation chains, About) and Devices (the devices paired with the
+// (the language, the commit identity, About, the AI key, the separation chains) and Devices (the devices paired with the
 // engine, and the row that opens this machine's Engine page). A page and not a panel: it is visited on purpose and
 // rarely. See ../../docs/settings.md.
 
@@ -27,10 +27,10 @@ export function SettingsPage() {
     content: (
       <>
         <LanguageSection />
-        <AiSection />
         <IdentitySection />
-        <ChainsSection engineId={engineId} />
         <AboutSection />
+        <AiSection />
+        <ChainsSection engineId={engineId} />
       </>
     ),
   };
@@ -61,8 +61,14 @@ export function SettingsPage() {
     ),
   };
   return (
-    <HomeShell>
-      <PageFrame title={m["settings.title"]()} narrow cog={false}>
+    <HomeShell tabs={false}>
+      <PageFrame
+        title={m["settings.title"]()}
+        summary={m["settings.scope"]()}
+        narrow
+        cog={false}
+        back
+      >
         <SettingsTabs label={m["settings.title"]()} tabs={[general, devices]} />
       </PageFrame>
     </HomeShell>

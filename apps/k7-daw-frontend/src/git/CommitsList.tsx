@@ -2,12 +2,13 @@
 // The first list (Edits) is the local history; this one is what was committed, and what a pull brought.
 
 import { Button } from "@studio/ui/button";
-import { GitCommitHorizontal } from "@studio/ui/icons";
+import { ArrowUp, GitCommitHorizontal } from "@studio/ui/icons";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { getLocale } from "../paraglide/runtime.js";
 import { explain, type GitTransport, git } from "./gitApi";
-import type { GitState } from "./gitTypes";
+import { remoteName } from "./gitState";
+import type { CommitInfo, GitState } from "./gitTypes";
 import { cursor, emptyLog, logAfter, PAGE } from "./logState";
 
 const stamp = (sec: number) =>
@@ -63,6 +64,39 @@ export function CommitsList({
     }
   }, [t, workspace, log]);
 
+  // The newest `ahead` commits are the ones the remote has not got yet.
+  const ahead =
+    state?.mode === "connected"
+      ? Math.min(state.ahead ?? 0, log.commits.length)
+      : 0;
+  const pushed =
+    state?.mode === "connected" && state.remote
+      ? `${remoteName(state.remote)} · ${state.branch ?? ""}`
+      : null;
+  const row = (c: CommitInfo, up: boolean) => (
+    <li
+      key={c.id}
+      className="flex items-start gap-2 px-3 py-2 hover:bg-on-fill"
+      title={c.id}
+    >
+      {up ? (
+        <ArrowUp className="mt-0.5 size-3.5 shrink-0 text-primary-text" />
+      ) : (
+        <GitCommitHorizontal className="mt-0.5 size-3.5 shrink-0 text-fg-2" />
+      )}
+      <div className="min-w-0 flex-1">
+        <div className="truncate">{c.subject}</div>
+        <div className="truncate type-badge text-fg-2">
+          {[c.author, c.device, stamp(c.time)].filter(Boolean).join(" · ")}
+        </div>
+      </div>
+      <span className="shrink-0 type-badge text-fg-2 tabular-nums">
+        {(c.files_changed === 1 ? m["git.files.one"] : m["git.files.other"])({
+          n: c.files_changed,
+        })}
+      </span>
+    </li>
+  );
   return (
     <div className="min-h-0 flex-1 overflow-y-auto py-1 type-secondary">
       {state?.branch && (
@@ -82,34 +116,23 @@ export function CommitsList({
       )}
       {error && <p className="px-3 py-2 text-error">{error}</p>}
       {log.commits.length === 0 && !error && (
-        <p className="px-3 py-2 text-fg-2">{m["git.commitsEmpty"]()}</p>
+        <div className="px-3 py-2 text-fg-2">
+          <p>{m["git.commitsEmpty"]()}</p>
+          <p className="type-status text-fg-3">{m["git.commitsEmptyNote"]()}</p>
+        </div>
       )}
-      <ul>
-        {log.commits.map((c) => (
-          <li
-            key={c.id}
-            className="flex items-start gap-2 px-3 py-2 hover:bg-on-fill"
-            title={c.id}
-          >
-            <GitCommitHorizontal className="mt-0.5 size-3.5 shrink-0 text-fg-2" />
-            <div className="min-w-0 flex-1">
-              <div className="truncate">{c.subject}</div>
-              <div className="truncate type-badge text-fg-2">
-                {[c.author, c.device, stamp(c.time)]
-                  .filter(Boolean)
-                  .join(" · ")}
-              </div>
-            </div>
-            <span className="shrink-0 type-badge text-fg-2 tabular-nums">
-              {(c.files_changed === 1
-                ? m["git.files.one"]
-                : m["git.files.other"])({
-                n: c.files_changed,
-              })}
-            </span>
-          </li>
-        ))}
-      </ul>
+      {ahead > 0 && (
+        <>
+          <h3 className="type-caps px-3 pt-1 text-fg-3">
+            {m["git.toPushGroup"]({ n: ahead })}
+          </h3>
+          <ul>{log.commits.slice(0, ahead).map((c) => row(c, true))}</ul>
+        </>
+      )}
+      {pushed && log.commits.length > ahead && (
+        <h3 className="type-caps px-3 pt-2 text-fg-3">{pushed}</h3>
+      )}
+      <ul>{log.commits.slice(ahead).map((c) => row(c, false))}</ul>
       {!log.end && log.commits.length > 0 && (
         <div className="px-3 py-2">
           <Button

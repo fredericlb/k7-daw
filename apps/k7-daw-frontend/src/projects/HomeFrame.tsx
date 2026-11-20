@@ -42,7 +42,7 @@ function HomeTab({
   route,
 }: {
   icon: LucideIcon;
-  label: string;
+  label: ReactNode;
   /** The accessible name when the label is shortened for the narrow bar. */
   name?: string;
   route: string;
@@ -90,7 +90,12 @@ export function HomeTabs() {
         />
         <HomeTab
           icon={Snowflake}
-          label={m["home.frozenShort"]()}
+          label={
+            <>
+              <span className="max-sm:hidden">{m["frozen.title"]()}</span>
+              <span className="sm:hidden">{m["home.frozenShort"]()}</span>
+            </>
+          }
           name={m["frozen.title"]()}
           route={FROZEN_CHAINS_ROUTE}
         />
@@ -100,14 +105,21 @@ export function HomeTabs() {
 }
 
 /** The page frame: the page's own column, the tab bar floating over its foot. */
-export function HomeShell({ children }: { children: ReactNode }) {
+export function HomeShell({
+  children,
+  tabs = true,
+}: {
+  children: ReactNode;
+  /** A sub-page (App settings) leaves the tab bar out and carries its own Back. */
+  tabs?: boolean;
+}) {
   return (
     <div className="flex h-full flex-col bg-background text-foreground">
       {/* `contain: layout` holds a page's fixed docks and pop-ins inside its column. */}
       <div className="flex min-h-0 min-w-0 flex-1 flex-col [contain:layout]">
         {children}
       </div>
-      <HomeTabs />
+      {tabs && <HomeTabs />}
     </div>
   );
 }

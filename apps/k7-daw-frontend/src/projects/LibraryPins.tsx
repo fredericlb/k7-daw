@@ -10,7 +10,7 @@ import {
   stringifyLibraryPins,
 } from "@studio/song-schema/libraryVersions";
 import { Button } from "@studio/ui/button";
-import { Chip } from "@studio/ui/chip";
+import { Check } from "@studio/ui/icons";
 import { RowGroup } from "@studio/ui/row-group";
 import type { AccountLibrary, AccountWorkspace } from "@studio/web-protocol";
 import { useCallback, useEffect, useState } from "react";
@@ -89,15 +89,14 @@ export function LibraryPins({
           {error}
         </p>
       )}
-      {rows.map(({ ws, pins }) => (
-        <section
-          key={ws.name}
-          aria-label={m["libs.pinsOf"]({ workspace: ws.name })}
-          className="flex flex-col gap-2"
-        >
-          <h2 className="type-caps px-1 text-fg-3">{ws.name}</h2>
-          <RowGroup>
-            {versioned.map((l) => {
+      <section
+        aria-label={m["libs.pinnedBy"]()}
+        className="flex flex-col gap-2"
+      >
+        <h2 className="type-caps px-1 text-fg-3">{m["libs.pinnedBy"]()}</h2>
+        <RowGroup>
+          {rows.flatMap(({ ws, pins }) =>
+            versioned.map((l) => {
               const pinned = pinnedVersion(pins, l.name);
               const newest = newestRunnable(l);
               const behind =
@@ -106,24 +105,27 @@ export function LibraryPins({
                 pinned < newest;
               return (
                 <div
-                  key={l.name}
+                  key={`${ws.name}/${l.name}`}
+                  role="group"
+                  aria-label={m["libs.pinsOf"]({ workspace: ws.name })}
                   className="flex min-h-14 flex-wrap items-center gap-2 px-3.5 py-2"
                 >
-                  <Chip variant="anchor">@{l.name}</Chip>
-                  <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
-                    {(l.versions ?? []).map((v) => (
-                      <Chip
-                        key={v.version}
-                        variant="version"
-                        newest={v.version === pinned}
-                        aria-current={v.version === pinned ? "true" : undefined}
-                      >
-                        v{v.version}
-                        {v.version === newest && ` · ${m["libs.newest"]()}`}
-                      </Chip>
-                    ))}
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span className="type-label truncate">{ws.name}</span>
+                    <span className="type-secondary text-fg-2">
+                      {behind
+                        ? m["libs.upgradeReady"]({
+                            name: l.name,
+                            from: String(pinned),
+                            to: newest,
+                          })
+                        : m["libs.plays"]({
+                            name: l.name,
+                            version: String(pinned),
+                          })}
+                    </span>
                   </span>
-                  {behind && (
+                  {behind ? (
                     <Button
                       size="sm"
                       variant="glass"
@@ -138,13 +140,19 @@ export function LibraryPins({
                     >
                       {m["libs.upgrade"]()}
                     </Button>
+                  ) : (
+                    <span className="type-secondary flex shrink-0 items-center gap-1.5 text-ok">
+                      <Check className="size-4" aria-hidden />
+                      {m["libs.onNewest"]()}
+                    </span>
                   )}
                 </div>
               );
-            })}
-          </RowGroup>
-        </section>
-      ))}
+            }),
+          )}
+        </RowGroup>
+        <p className="type-status px-1 text-fg-3">{m["libs.pinsNote"]()}</p>
+      </section>
     </>
   );
 }
