@@ -9,5 +9,7 @@ fn main() {
         .as_str()
         .expect("a version in the root package.json");
     println!("cargo:rustc-env=K7_RELEASE={version}");
+    // A fresh checkout has no staged resources, and tauri-build refuses a missing resource folder.
+    std::fs::create_dir_all("resources").expect("the resources folder");
     tauri_build::build();
 }
