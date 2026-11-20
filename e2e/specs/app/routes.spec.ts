@@ -103,7 +103,9 @@ test("/libraries lists the bundled libraries, read-only", async ({ k7 }) => {
   const page = await k7.open("/libraries");
   const watch = watchPage(page);
   await expect(page.getByRole("heading", { name: "Libraries" })).toBeVisible();
-  await expect(page.getByText("@k7-core", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("@k7-core", { exact: true }).first(),
+  ).toBeVisible();
   await expect(page.getByTestId("libraries-readonly-note")).toBeVisible();
   await expect(
     page.getByRole("button", { name: /^(add|remove|publish draft)$/i }),

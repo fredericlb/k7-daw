@@ -1,6 +1,7 @@
 // features.spec.ts — each fixture project opens in the browser and DRAWS its feature; playing is transport.spec's and the golden render's.
 // One entry per fixture in e2e/fixtures; the table is what a reader checks against fixtures/README.md.
 import type { Page } from "@playwright/test";
+import { runCommand } from "../../src/commandBar.ts";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { pane, tempoReadout } from "../../src/nav.ts";
 import { openPanel } from "../../src/panels.ts";
@@ -44,7 +45,16 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
     },
   },
   "doc-note.k7": {
-    check: async (page) => expect(button(page, "Toggle docs")).toBeEnabled(),
+    check: async (page) => {
+      // Notes are hidden until `ui notes`; its card, named for the note, is drawn on the Graph.
+      await (await pane(page, "Graph")).click();
+      await runCommand(page, "ui notes");
+      await expect(
+        page
+          .getByRole("region", { name: "Graph", exact: true })
+          .getByText("about-drums", { exact: true }),
+      ).toBeVisible();
+    },
   },
   "mute-solo.k7": {
     check: async (page) => {
@@ -77,7 +87,7 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
   "library-module.k7": { check: lane("drums") },
   "video-lane.k7": {
     check: async (page) =>
-      expect(page.getByRole("dialog", { name: "Viewport" })).toBeVisible(),
+      expect(page.getByRole("dialog", { name: "Picture" })).toBeVisible(),
   },
   "markers-settings.k7": {
     check: async (page) => {

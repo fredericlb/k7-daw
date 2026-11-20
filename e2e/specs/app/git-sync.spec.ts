@@ -83,9 +83,13 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
 
     await test.step("commit and push in one act", async () => {
       const dialog = await commitAndPush(page, A, "first take");
+      // The list always names Done; its mark is what says the push ended.
       await expect(
-        dialog.getByRole("list", { name: "Progress" }),
-      ).toContainText("Done", SHOWN);
+        dialog
+          .getByRole("list", { name: "Progress" })
+          .getByRole("listitem")
+          .filter({ hasText: "Done" }),
+      ).toHaveAttribute("data-state", "done", SHOWN);
       await expect
         .poll(() => git(bare, "log", "--format=%s", "main").trim(), SHOWN)
         .toContain("first take");
@@ -114,6 +118,8 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
 
     await test.step("both sides change the same line; the second to push is told to pull first", async () => {
       await files.writeText(B, "notes.txt", "one\nB says\nthree\n");
+      // A card reads its git state once, so a write made outside the page shows on a fresh load.
+      await page.reload();
       const dialogB = await commitAndPush(page, B, "B's line");
       await expect
         .poll(() => git(bare, "log", "--format=%s", "main").trim(), SHOWN)
@@ -124,6 +130,7 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
         .click();
 
       await files.writeText(A, "notes.txt", "one\nA says\nthree\n");
+      await page.reload();
       const dialogA = await commitAndPush(page, A, "A's line");
       await expect(dialogA.getByTestId("git-pull-first")).toBeVisible(SLOW);
       await dialogA

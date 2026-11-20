@@ -116,7 +116,7 @@ test("a workspace and its project are made, renamed, copied and deleted from the
   await test.step("rename it", async () => {
     const dialog = await projectAct(page, row, "first", "Rename");
     await dialog
-      .getByRole("textbox", { name: "Name", exact: true })
+      .getByRole("textbox", { name: "New name", exact: true })
       .fill("renamed");
     await dialog.getByRole("button", { name: "Rename", exact: true }).click();
     await expect(dialog).toBeHidden({ timeout: 30_000 });

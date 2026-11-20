@@ -26,7 +26,7 @@ those lanes are checked for playing, not for sound.
 | `rack.k7` | a drum rack with three symbols and a sequence that uses it | the lane, then play |
 | `library-rack.k7` | `k7-rack` on its `samples` engine, its taps three `@k7-core` library samples | `specs/app/engines.spec.ts`: a `sampler` with the three taps resolved, then the lane and play |
 | `ports.k7` | two lanes into the two inputs of one module (`#b`) | both lanes, then play |
-| `doc-note.k7` | an `@meta/doc` note wired from a lane | "Toggle docs" is enabled |
+| `doc-note.k7` | an `@meta/doc` note wired from a lane | `ui notes` draws the note on the Graph |
 | `mute-solo.k7` | a bypassed lane, a soloed lane, a highlighted lane | the mute and solo buttons' pressed state |
 | `mixer-strip.k7` | an `@meta/audio/mixer` strip at the end of a lane | "Mix panel" is enabled |
 | `master-chain.k7` | a module between `MIX` and `OUT` | the lane, then play |
