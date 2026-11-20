@@ -6,7 +6,6 @@ import { Button } from "@studio/ui/button";
 import { Capsule, CapsuleButton } from "@studio/ui/capsule";
 import {
   ChevronLeft,
-  Keyboard,
   type LucideIcon,
   Settings,
   TriangleAlert,
@@ -55,7 +54,6 @@ export function ProjectHeader({
   panels,
   settingsPressed,
   onSettings,
-  onKeyboard,
   overflow,
   lockBanner,
 }: {
@@ -76,7 +74,6 @@ export function ProjectHeader({
   panels: HeaderPanel[];
   settingsPressed: boolean;
   onSettings: () => void;
-  onKeyboard: () => void;
   /** The phone's menu, standing in for the capsules on the right. */
   overflow: ReactNode;
   /** The sentence under the header while a merge locks editing. */
@@ -196,13 +193,6 @@ export function ProjectHeader({
                 onClick={onSettings}
               >
                 <Settings />
-              </CapsuleButton>
-              <CapsuleButton
-                aria-label={m["shell.keyboard"]()}
-                title={m["shell.keyboard"]()}
-                onClick={onKeyboard}
-              >
-                <Keyboard />
               </CapsuleButton>
             </Capsule>
           </>

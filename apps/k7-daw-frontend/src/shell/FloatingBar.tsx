@@ -11,7 +11,6 @@ import {
 import {
   Check,
   ChevronUp,
-  Clock,
   Columns3,
   Eraser,
   Image,
@@ -60,13 +59,10 @@ function ToolGlyph({ tool }: { tool: Tool }) {
 }
 
 export interface BarLaneViews {
-  /** The ruler reads seconds rather than bars. */
-  seconds: boolean;
   expanded: boolean;
   automation: boolean;
   /** Only on a project with a picture lane: the picture card's toggle. */
   picture: boolean | null;
-  onClock: () => void;
   onLanes: () => void;
   onAutomation: () => void;
   onPicture: () => void;
@@ -88,6 +84,8 @@ export function FloatingBar({
   transport,
   output,
   recInfo,
+  clockSeconds,
+  onClock,
   map,
   meter,
   metronome,
@@ -109,6 +107,9 @@ export function FloatingBar({
   /** The output recorder's props, for a project with no arrangement. */
   output: ComponentProps<typeof OutputRecordButton> | null;
   recInfo: RecInfo;
+  /** The clock reads seconds, and so do the rulers; pressing it switches both. */
+  clockSeconds: boolean;
+  onClock: () => void;
   map: ComponentProps<typeof Minimap> | null;
   meter: ReactNode;
   metronome: ComponentProps<typeof MetronomeButton> | null;
@@ -162,7 +163,12 @@ export function FloatingBar({
   ) : null;
 
   const clock = map ? (
-    <TransportClock tempo={recInfo.tempo} beatsPerBar={recInfo.beatsPerBar} />
+    <TransportClock
+      tempo={recInfo.tempo}
+      beatsPerBar={recInfo.beatsPerBar}
+      seconds={clockSeconds}
+      onToggle={onClock}
+    />
   ) : null;
   const overview = map ? (
     <div
@@ -206,16 +212,6 @@ export function FloatingBar({
       aria-label={m["shell.laneViews"]()}
       className="float pointer-events-auto flex h-14 shrink-0 items-center gap-0.5 rounded-full p-1.5"
     >
-      <CapsuleButton
-        pressed={lanes.seconds}
-        aria-label={m[
-          lanes.seconds ? "shell.lane.clockSeconds" : "shell.lane.clockBars"
-        ]()}
-        title={m[lanes.seconds ? "tl.rulerSeconds" : "tl.rulerBars"]()}
-        onClick={lanes.onClock}
-      >
-        <Clock />
-      </CapsuleButton>
       <CapsuleButton
         pressed={lanes.expanded}
         aria-label={m["shell.lane.lanes"]()}

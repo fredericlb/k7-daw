@@ -18,6 +18,7 @@ import {
   SlidersVertical,
   Workflow,
 } from "@studio/ui/icons";
+import { cn } from "@studio/ui/lib/utils";
 import { formatAt } from "./formatAt";
 import { m } from "./paraglide/messages.js";
 import type { Pane, Panel } from "./routes";
@@ -98,30 +99,49 @@ export const PANEL_META: Record<Panel, { icon: LucideIcon; label: string }> = {
 export function TransportClock({
   tempo,
   beatsPerBar,
+  seconds = false,
+  onToggle,
 }: {
   tempo: number;
   beatsPerBar: number;
+  /** Which timecode it reads: seconds, or bar:beat; the rulers count in the same unit. */
+  seconds?: boolean;
+  /** Pressing the clock switches the unit, here and on the rulers. */
+  onToggle?: () => void;
 }) {
   const s = useEngineState((st) => st.playhead);
-  const clock = formatAt(s);
   // Position as 1-based bar:beat, clamped at 0 so a count-in's negative playhead doesn't read as a negative bar.
   const beat = Math.max(0, (s * tempo) / 60);
   const bpb = Math.max(1, beatsPerBar);
   const bar = Math.floor(beat / bpb) + 1;
   const beatInBar = Math.floor(beat % bpb) + 1;
+  const label =
+    m[seconds ? "transport.positionSeconds" : "transport.positionBars"]();
   return (
+    // A timer that is also the unit's switch: a button would hide the timer role from assistive tech.
     <span
       role="timer"
-      aria-label={m["transport.position"]()}
+      aria-label={label}
+      title={
+        onToggle
+          ? m[seconds ? "transport.clockToBars" : "transport.clockToSeconds"]()
+          : label
+      }
       data-testid="timecode"
-      className="type-mono-timecode mx-1 whitespace-nowrap text-foreground tabular-nums"
+      data-unit={seconds ? "seconds" : "bars"}
+      tabIndex={onToggle ? 0 : undefined}
+      onClick={onToggle}
+      onKeyDown={(e) => {
+        if (!onToggle || (e.key !== "Enter" && e.key !== " ")) return;
+        e.preventDefault();
+        onToggle();
+      }}
+      className={cn(
+        "type-mono-timecode mx-1 whitespace-nowrap rounded-md px-1 text-foreground tabular-nums",
+        onToggle && "cursor-pointer hover:bg-on-fill",
+      )}
     >
-      {/* Under 380 px the bar keeps the musician's position and drops the seconds, or the clock runs under the menu. */}
-      <span className="max-[380px]:hidden">
-        {clock}
-        <span className="mx-1 text-border">·</span>
-      </span>
-      {bar}:{beatInBar}
+      {seconds ? formatAt(s) : `${bar}:${beatInBar}`}
     </span>
   );
 }

@@ -1,12 +1,7 @@
 // OverflowMenu.tsx — the phone header's one menu: pane, lane views and the panel tiles (300 wide, over a 0.35 scrim).
 // Everything it holds is also a button of the Pad and Desk header: this is the same set, folded.
 import { Button } from "@studio/ui/button";
-import {
-  Ellipsis,
-  Keyboard,
-  type LucideIcon,
-  Settings,
-} from "@studio/ui/icons";
+import { Ellipsis, type LucideIcon, Settings } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { type ReactNode, useState } from "react";
 import { m } from "../paraglide/messages.js";
@@ -48,7 +43,6 @@ export function OverflowMenu({
   lanesHeading,
   panels,
   onSettings,
-  onKeyboard,
 }: {
   panes: OverflowPane[];
   pane: string;
@@ -58,7 +52,6 @@ export function OverflowMenu({
   lanesHeading: string;
   panels: OverflowPanel[];
   onSettings: () => void;
-  onKeyboard: () => void;
 }) {
   const [open, setOpen] = useState(false);
   usePopin(open, () => setOpen(false));
@@ -165,16 +158,6 @@ export function OverflowMenu({
               >
                 <Settings className="size-[18px]" />
                 {m["settings.menu"]()}
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                onClick={run(onKeyboard)}
-                aria-label={m["shell.keyboard"]()}
-                className="type-label glass flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full text-foreground"
-              >
-                <Keyboard className="size-[18px]" />
-                {m["shell.keyboard.short"]()}
               </button>
             </div>
           </div>

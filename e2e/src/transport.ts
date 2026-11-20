@@ -28,7 +28,7 @@ export async function play(page: Page, timeoutMs = 30_000): Promise<string> {
 /** Waits until the clock has read `beats` more beats than it did: the engine is rendering the project, not just started. */
 export async function rolls(page: Page, beats: number): Promise<void> {
   const seen = new Set<string>();
-  // The clock reads `m:ss·bar:beat`, or `bar:beat` alone on a narrow screen: a beat is the part after the dot.
+  // The clock reads one timecode, `bar:beat` on a song: each new reading is a beat gone by.
   const beatsSeen = async () => {
     const text = await clockOf(page).innerText();
     seen.add(text.split("·").at(-1) ?? text);
