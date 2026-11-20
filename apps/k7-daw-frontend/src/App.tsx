@@ -1050,6 +1050,10 @@ export default function App({
     [focusOn, layout, full],
   );
 
+  const backToArrangement = useCallback(
+    () => fullscreen("timeline"),
+    [fullscreen],
+  );
   // The layout before the module builder took the editor fullscreen — put back when it closes; undefined = nothing to restore.
   const beforeBuilder = useRef<Pane | null | undefined>(undefined);
   // Whether the open module has unsaved edits: the tree beside the builder can swap it for another.
@@ -3373,9 +3377,7 @@ export default function App({
                         onEditTarget={setEditTargetIfOther}
                         onOpenItem={setOpenItemIfOther}
                         onOpenBuilder={openModuleBuilder}
-                        onBack={
-                          hasTimeline ? () => fullscreen("timeline") : undefined
-                        }
+                        onBack={hasTimeline ? backToArrangement : undefined}
                         onOpenLibraryModule={paneFns.openLibraryModule}
                         // The module builder takes the editor's place BESIDE the file tree, as the chains builder does (docs/moduleBuilder.md).
                         moduleBuilder={moduleBuilderEl}
