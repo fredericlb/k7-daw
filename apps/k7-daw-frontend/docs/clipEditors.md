@@ -689,9 +689,8 @@ message and passes, a mode does not.
 
 The tools are a **40 px segmented radiogroup** above the wave (`ClipToolBar.tsx`), the only way to
 one that a finger has. It is drawn only once there is a file: while a take rolls there is no mark
-to point at. Each segment dispatches the command. Above the zoom sits the **whole-clip overview**
-(`ClipOverview.tsx`): the file's envelope with a frame on the part the zoom shows, which drags
-without changing the zoom's width.
+to point at. Each segment dispatches the command. There is **no whole-clip overview**: in the bottom dock the
+zoom runs the panel's whole width, so a second strip of the same file only takes height from it.
 
 **The cursor over the wave is the button's own drawing**, built from the same SVG body — see
 `timeline.md` for why that matters and how the outline and hotspots work. `standard` (and `list`) keep the

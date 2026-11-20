@@ -63,7 +63,6 @@ import {
   type RollNoteCaps,
   type RollNoteHandlers,
 } from "./RollNoteBox";
-import { RollOverview } from "./RollOverview";
 import { RollPlayhead } from "./RollPlayhead";
 import { RollToolMenu } from "./RollToolMenu";
 import { ArrangementRuler, Grid, RulerTicks, rulerScale } from "./Ruler";
@@ -661,16 +660,6 @@ export function PianoRoll({
         </span>
       </div>
 
-      {!showTakes && visNotes.length > 0 && (
-        <RollOverview
-          notes={visNotes}
-          origin={origin}
-          beats={canvasBeats}
-          scroller={bodyRef}
-          gutter={gutter}
-          laneW={laneW}
-        />
-      )}
       <div className="flex min-h-0 flex-1">
         {/* The TAKES mode draws in the lanes' place; the lanes stay mounted, hidden, so the caret and the scroll survive. */}
         {showTakes && takes && (

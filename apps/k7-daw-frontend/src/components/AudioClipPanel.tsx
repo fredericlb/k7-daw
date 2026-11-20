@@ -50,7 +50,6 @@ import {
 import { ChainOpsList } from "./ChainOpsList";
 import { OnsetThreshold, TrimGateMenu } from "./ClipGateControls";
 import { ClipMarksList, type MarkRow } from "./ClipMarksList";
-import { ClipOverview } from "./ClipOverview";
 import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
 import { EventGainSlider } from "./EventGainSlider";
@@ -702,21 +701,6 @@ export function AudioClipPanel({
                 timeSigNumerator: takes.num,
                 timeSigDenominator: takes.den,
               }}
-            />
-          )}
-          {/* The whole file with the zoom's frame on it; dragging the frame moves the window, never its width. */}
-          {!rolling && wf && !showList && (
-            <ClipOverview
-              rms={wf.rms}
-              seconds={wf.seconds}
-              view={win.view}
-              act={framed ? act : null}
-              onMove={(sec) =>
-                setAsked((a) => ({
-                  ...a,
-                  start: win.barSec > 0 ? (sec - reach.from) / win.barSec : 0,
-                }))
-              }
             />
           )}
           {showList && wf && (
