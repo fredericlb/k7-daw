@@ -7,6 +7,11 @@ graph slot when a clip is clicked in the timeline (see [shell.md](shell.md)).
 A MIDI clip is edited in the piano roll alone: there is no second view of its notes, so the
 header carries no view switch.
 
+The editor's first row — the clip's name and its controls — is drawn in the dock's own header, on the
+line of Expand and Close, and not in the body: one line of chrome, so the dock's height goes to the
+editor (`DockHeaderRow`, [editor-dock](../packages/ui/docs/editor-dock.md)). A long name ellipsizes
+before the dock's buttons are squeezed; on a phone the row wraps.
+
 The header names the clip as the timeline's block does — a take by its lane and bar, the id in
 the tooltip — see [timeline.md](timeline.md#a-block-is-labelled-by-what-a-musician-calls-it).
 

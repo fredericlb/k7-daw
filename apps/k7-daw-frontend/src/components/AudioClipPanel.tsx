@@ -12,6 +12,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
+import { DockHeaderRow } from "@studio/ui/editor-dock";
 import { Check, Loader2, Square, Trash2 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
@@ -487,179 +488,195 @@ export function AudioClipPanel({
       className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-card/40 px-3 py-2"
       aria-label={rolling ? m["clip.takeRolling"]() : `clip ${clip ?? ""}`}
     >
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        {rolling ? (
-          <>
-            {/* The pre-roll counts DOWN, then the take counts up in bar:beat from where THIS take started (docs/shell.md). */}
-            {count.phase === "count-in" ? (
-              <>
-                <span className="text-sm uppercase tracking-wider text-muted-foreground">
-                  {m["clip.countIn"]()}
-                </span>
-                <span className="font-mono text-2xl tabular-nums text-red-400">
-                  {count.beats}
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="text-sm uppercase tracking-wider text-red-400">
-                  {m["clip.recording"]()}
-                </span>
-                <span className="font-mono text-2xl tabular-nums">
-                  {at.bar}:{at.beat}
-                </span>
-              </>
-            )}
-            <span className="truncate">
-              {armedNames.length
-                ? armedNames.join(", ")
-                : m["clip.noArmedTrack"]()}
-            </span>
-            <span className="font-mono tabular-nums">
-              <LiveSeconds live={live} />
-            </span>
-            <Button
-              size="sm"
-              variant="secondary"
-              className="ml-auto"
-              onClick={onStop}
-              title={m["clip.stopTake"]()}
-            >
-              <Square className="mr-1 h-3 w-3" /> Stop
-            </Button>
-          </>
-        ) : (
-          <>
-            <span className="font-medium text-foreground" title={clip ?? ""}>
-              {clip &&
-                clipShownName(clip, laneName, CLIP_NAME_WORDS, laneName(track))}
-            </span>
-            {/* A clip nothing places has no lane to name, and works the same: waveform, onsets and level belong to the FILE. */}
-            {track ? (
-              <span>{m["clip.onTrack"]({ track })}</span>
-            ) : (
-              <span>{m["clip.offTrack"]()}</span>
-            )}
-            {editingOnsets && (
-              <span className="text-faint">{m["clip.onsetHint"]()}</span>
-            )}
-            {editingWarp && (
-              <span className="text-faint">{m["clip.warpHint"]()}</span>
-            )}
-            {/* What is on screen and the two ways out: a window showing only some bars without saying so reads as a clip that was cut. */}
-            {wf && win.allBars > 1 && (
-              <span className="whitespace-nowrap tabular-nums">
-                {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
-                {win.shown < win.allBars && (
-                  <button
-                    type="button"
-                    className="ml-1 underline hover:text-foreground"
-                    onClick={() => setAsked({ bars: win.allBars, start: 0 })}
-                  >
-                    {m["clip.allBars"]()}
-                  </button>
-                )}
-                {framed && (
-                  <button
-                    type="button"
-                    className="ml-1 underline hover:text-foreground"
-                    onClick={frameOnEvent}
-                    title={m["clip.backToEvent"]({
-                      from: act.from.toFixed(2),
-                      to: act.to.toFixed(2),
-                    })}
-                  >
-                    {m["clip.theEvent"]()}
-                  </button>
-                )}
+      <DockHeaderRow>
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+          {rolling ? (
+            <>
+              {/* The pre-roll counts DOWN, then the take counts up in bar:beat from where THIS take started (docs/shell.md). */}
+              {count.phase === "count-in" ? (
+                <>
+                  <span className="text-sm uppercase tracking-wider text-muted-foreground">
+                    {m["clip.countIn"]()}
+                  </span>
+                  <span className="font-mono text-2xl tabular-nums text-red-400">
+                    {count.beats}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-sm uppercase tracking-wider text-red-400">
+                    {m["clip.recording"]()}
+                  </span>
+                  <span className="font-mono text-2xl tabular-nums">
+                    {at.bar}:{at.beat}
+                  </span>
+                </>
+              )}
+              <span className="truncate">
+                {armedNames.length
+                  ? armedNames.join(", ")
+                  : m["clip.noArmedTrack"]()}
               </span>
-            )}
-
-            {/* The event's own loop: its switch, and — when on — its points in the ruler below. */}
-            <span className="ml-auto flex items-center gap-3">
-              <EventGainSlider
-                db={gainDb}
-                onCommit={
-                  loopAddr
-                    ? (db) =>
-                        void command(`event gain ${loopAddr} ${db.toFixed(1)}`)
-                    : undefined
-                }
-              />
-              <LoopToggle
-                on={looped}
-                onToggle={
-                  loopAddr
-                    ? (on) =>
-                        void command(
-                          `event loop ${loopAddr} ${on ? "on" : "off"}`,
-                        )
-                    : undefined
-                }
-              />
-            </span>
-            {/* The threshold belongs to the onset editor alone: under a stretch job a slider rewriting the sidecar would be a trap. */}
-            {editingOnsets && (
-              <OnsetThreshold value={sensitivity} onChange={setSensitivity} />
-            )}
-
-            {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
-            <TrimGateMenu
-              open={gateOpen}
-              onOpenChange={(o) => setGateOpen(o && !!clip)}
-              gate={gate}
-              onGate={setGate}
-              keep={keep}
-              busy={busy === "trim"}
-              disabled={!!busy || !clip}
-              canTrim={!!keep && !busy && !!eventAt && !!track}
-              onTrim={() => {
-                setGateOpen(false);
-                // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
-                if (eventAt && track)
-                  void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
-              }}
-            />
-            {/* Operations: every chain the project and the library offer, run over THIS clip (@studio/commands docs/processChain.md). */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="outline" disabled={!!busy || !clip}>
-                  {busy === "process" ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  ) : (
-                    "operations"
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-64 p-1">
-                <ChainOpsList
-                  search={opSearch}
-                  onSearch={setOpSearch}
-                  ops={ops}
-                  pending={chains === null}
-                  onPick={(c) =>
-                    clip && void run(processLine(clip, c), "process")
-                  }
-                />
-              </DropdownMenuContent>
-            </DropdownMenu>
-            {onDiscard && (
+              <span className="font-mono tabular-nums">
+                <LiveSeconds live={live} />
+              </span>
               <Button
                 size="sm"
-                variant="outline"
-                onClick={onDiscard}
-                title={m["clip.discardHint"]()}
-                aria-label={m["clip.discard"]()}
+                variant="secondary"
+                className="ml-auto"
+                onClick={onStop}
+                title={m["clip.stopTake"]()}
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <Square className="mr-1 h-3 w-3" /> Stop
               </Button>
-            )}
-            <Button size="sm" onClick={onClose} title={m["clip.done"]()}>
-              <Check className="h-3.5 w-3.5" />
-            </Button>
-          </>
-        )}
-      </div>
+            </>
+          ) : (
+            <>
+              <span
+                className="min-w-0 truncate font-medium text-foreground"
+                title={clip ?? ""}
+              >
+                {clip &&
+                  clipShownName(
+                    clip,
+                    laneName,
+                    CLIP_NAME_WORDS,
+                    laneName(track),
+                  )}
+              </span>
+              {/* A clip nothing places has no lane to name, and works the same: waveform, onsets and level belong to the FILE. */}
+              {track ? (
+                <span>{m["clip.onTrack"]({ track })}</span>
+              ) : (
+                <span>{m["clip.offTrack"]()}</span>
+              )}
+              {editingOnsets && (
+                <span className="text-faint">{m["clip.onsetHint"]()}</span>
+              )}
+              {editingWarp && (
+                <span className="text-faint">{m["clip.warpHint"]()}</span>
+              )}
+              {/* What is on screen and the two ways out: a window showing only some bars without saying so reads as a clip that was cut. */}
+              {wf && win.allBars > 1 && (
+                <span className="whitespace-nowrap tabular-nums">
+                  {Math.round(win.shown)}/{win.allBars} {m["clip.bars"]()}
+                  {win.shown < win.allBars && (
+                    <button
+                      type="button"
+                      className="ml-1 underline hover:text-foreground"
+                      onClick={() => setAsked({ bars: win.allBars, start: 0 })}
+                    >
+                      {m["clip.allBars"]()}
+                    </button>
+                  )}
+                  {framed && (
+                    <button
+                      type="button"
+                      className="ml-1 underline hover:text-foreground"
+                      onClick={frameOnEvent}
+                      title={m["clip.backToEvent"]({
+                        from: act.from.toFixed(2),
+                        to: act.to.toFixed(2),
+                      })}
+                    >
+                      {m["clip.theEvent"]()}
+                    </button>
+                  )}
+                </span>
+              )}
+
+              {/* The event's own loop: its switch, and — when on — its points in the ruler below. */}
+              <span className="ml-auto flex items-center gap-3">
+                <EventGainSlider
+                  db={gainDb}
+                  onCommit={
+                    loopAddr
+                      ? (db) =>
+                          void command(
+                            `event gain ${loopAddr} ${db.toFixed(1)}`,
+                          )
+                      : undefined
+                  }
+                />
+                <LoopToggle
+                  on={looped}
+                  onToggle={
+                    loopAddr
+                      ? (on) =>
+                          void command(
+                            `event loop ${loopAddr} ${on ? "on" : "off"}`,
+                          )
+                      : undefined
+                  }
+                />
+              </span>
+              {/* The threshold belongs to the onset editor alone: under a stretch job a slider rewriting the sidecar would be a trap. */}
+              {editingOnsets && (
+                <OnsetThreshold value={sensitivity} onChange={setSensitivity} />
+              )}
+
+              {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
+              <TrimGateMenu
+                open={gateOpen}
+                onOpenChange={(o) => setGateOpen(o && !!clip)}
+                gate={gate}
+                onGate={setGate}
+                keep={keep}
+                busy={busy === "trim"}
+                disabled={!!busy || !clip}
+                canTrim={!!keep && !busy && !!eventAt && !!track}
+                onTrim={() => {
+                  setGateOpen(false);
+                  // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
+                  if (eventAt && track)
+                    void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
+                }}
+              />
+              {/* Operations: every chain the project and the library offer, run over THIS clip (@studio/commands docs/processChain.md). */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={!!busy || !clip}
+                  >
+                    {busy === "process" ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      "operations"
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-64 p-1">
+                  <ChainOpsList
+                    search={opSearch}
+                    onSearch={setOpSearch}
+                    ops={ops}
+                    pending={chains === null}
+                    onPick={(c) =>
+                      clip && void run(processLine(clip, c), "process")
+                    }
+                  />
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {onDiscard && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={onDiscard}
+                  title={m["clip.discardHint"]()}
+                  aria-label={m["clip.discard"]()}
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              )}
+              <Button size="sm" onClick={onClose} title={m["clip.done"]()}>
+                <Check className="h-3.5 w-3.5" />
+              </Button>
+            </>
+          )}
+        </div>
+      </DockHeaderRow>
 
       {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
       {!rolling && clip && (

@@ -4,6 +4,7 @@
 // piano roll. Not PianoRoll itself, which fits its view ONCE per clip — a take outgrows that fit.
 
 import { Button } from "@studio/ui/button";
+import { DockHeaderRow } from "@studio/ui/editor-dock";
 import { Music2, Square } from "@studio/ui/icons";
 import { useEffect, useRef, useState } from "react";
 import type { LiveMidiTake } from "../hooks/useMidiRecording";
@@ -108,42 +109,44 @@ export function MidiTakeRoll({
 
   return (
     <section className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-1 bg-card/40 px-3 py-2">
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <PanelCloseButton />
-        {count.phase === "count-in" ? (
-          <>
-            <span className="text-sm uppercase tracking-wider">
-              {m["clip.countIn"]()}
-            </span>
-            <span className="font-mono text-2xl tabular-nums text-red-400">
-              {count.beats}
-            </span>
-          </>
-        ) : (
-          <>
-            <span className="text-sm uppercase tracking-wider text-red-400">
-              {m["clip.recording"]()}
-            </span>
-            <span className="font-mono text-2xl tabular-nums">
-              {at.bar}:{at.beat}
-            </span>
-          </>
-        )}
-        <span className="truncate">{trackName}</span>
-        <span className="inline-flex items-center gap-1 font-mono tabular-nums">
-          <Music2 className="h-3 w-3" />
-          {notes.length}
-        </span>
-        <Button
-          size="sm"
-          variant="secondary"
-          className="ml-auto"
-          onClick={onStop}
-          title={m["clip.stopTake"]()}
-        >
-          <Square className="mr-1 h-3 w-3" /> Stop
-        </Button>
-      </div>
+      <DockHeaderRow>
+        <div className="flex min-w-0 flex-1 items-center gap-3 text-xs text-muted-foreground">
+          <PanelCloseButton />
+          {count.phase === "count-in" ? (
+            <>
+              <span className="text-sm uppercase tracking-wider">
+                {m["clip.countIn"]()}
+              </span>
+              <span className="font-mono text-2xl tabular-nums text-red-400">
+                {count.beats}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="text-sm uppercase tracking-wider text-red-400">
+                {m["clip.recording"]()}
+              </span>
+              <span className="font-mono text-2xl tabular-nums">
+                {at.bar}:{at.beat}
+              </span>
+            </>
+          )}
+          <span className="truncate">{trackName}</span>
+          <span className="inline-flex items-center gap-1 font-mono tabular-nums">
+            <Music2 className="h-3 w-3" />
+            {notes.length}
+          </span>
+          <Button
+            size="sm"
+            variant="secondary"
+            className="ml-auto"
+            onClick={onStop}
+            title={m["clip.stopTake"]()}
+          >
+            <Square className="mr-1 h-3 w-3" /> Stop
+          </Button>
+        </div>
+      </DockHeaderRow>
       <div className="relative flex min-h-0 flex-1 overflow-hidden rounded border border-border bg-background">
         {/* The keys: a C is named, a black key shaded, so a pitch reads without counting rows. */}
         <div className="relative h-full shrink-0" style={{ width: KEYS_W }}>

@@ -39,29 +39,40 @@ export function PanelHeading({
   onClose,
   closeLabel,
   sheet,
+  row,
 }: Omit<PanelProps, "children" | "className" | "onEscapeKeyDown"> & {
   sheet?: boolean;
+  /** Replaces the glyph and the visible title by an empty slot (the editor dock's first row); the title stays as the name. */
+  row?: React.Ref<HTMLDivElement>;
 }) {
   return (
     <div className="flex min-h-11 shrink-0 items-center gap-2.5">
-      {icon ? (
+      {row ? (
+        <>
+          <Dialog.Title className="sr-only">{title}</Dialog.Title>
+          <div ref={row} className="flex min-w-0 flex-1 items-center" />
+        </>
+      ) : null}
+      {!row && icon ? (
         <span className="grid shrink-0 place-items-center text-primary-text [&_svg]:size-5">
           {icon}
         </span>
       ) : null}
-      <div className="min-w-0 flex-1">
-        <Dialog.Title
-          className={cn(
-            "truncate text-foreground",
-            sheet ? "type-sheet-title" : "type-headline",
-          )}
-        >
-          {title}
-        </Dialog.Title>
-        {subtitle ? (
-          <p className="type-status truncate text-fg-2">{subtitle}</p>
-        ) : null}
-      </div>
+      {row ? null : (
+        <div className="min-w-0 flex-1">
+          <Dialog.Title
+            className={cn(
+              "truncate text-foreground",
+              sheet ? "type-sheet-title" : "type-headline",
+            )}
+          >
+            {title}
+          </Dialog.Title>
+          {subtitle ? (
+            <p className="type-status truncate text-fg-2">{subtitle}</p>
+          ) : null}
+        </div>
+      )}
       {actions}
       <Button
         variant={sheet ? "secondary" : "ghost"}

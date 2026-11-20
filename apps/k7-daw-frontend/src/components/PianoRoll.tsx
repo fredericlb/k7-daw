@@ -7,6 +7,7 @@
 // The gestures themselves are ../hooks/useRollGestures.ts; this file is the layout and the drawing.
 // Drawn by the Editor bottom panel and, when a clip is clicked, where the graph is (ClipView).
 
+import { DockHeaderRow } from "@studio/ui/editor-dock";
 import { Piano } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
@@ -602,63 +603,66 @@ export function PianoRoll({
   return (
     // min-w-0, as in the timeline: the fixed-width grid must not become this flex child's minimum.
     <div className="flex h-full min-h-0 min-w-0 flex-col border-t-2 border-border">
-      <div className="flex items-center gap-2 border-b border-border px-3 py-1 text-xs">
-        {/* The name a musician knows the clip by; its id stays the tooltip's (clipNames.ts). */}
-        <span
-          className="font-semibold text-primary-text"
-          title={clip.name || clip.id}
-        >
-          <Piano className="h-3.5 w-3.5" />{" "}
-          {clipShownName(
-            clip.name || clip.id,
-            laneNamer(project.tracks),
-            CLIP_NAME_WORDS,
-            laneNamer(project.tracks)(
-              project.tracks.find((t) => t.clips.some((c) => c.id === clip.id))
-                ?.id ?? "",
-            ),
-          )}
-        </span>
-        <span className="text-muted-foreground">
-          {(visNotes.length === 1
-            ? m["roll.notes.one"]
-            : m["roll.notes.other"])({ n: visNotes.length })}
-          {/* What the cage hides, counted, so notes sitting before a file's `from` read as windowed rather than as data lost. */}
-          {notes.length > visNotes.length &&
-            ` (${m["roll.outsideWindow"]({
-              n: notes.length - visNotes.length,
-            })})`}{" "}
-          · {m["roll.beats"]({ n: Math.round(placedEnd) })}
-          {/* What the marks add up to, said in words: ten passes of eight beats is not an 80-beat pattern, though the pane is as wide. */}
-          {loop && (
-            <span className="ml-2 text-violet-400">
-              · {m["roll.loop"]({ win: +loop.win.toFixed(3) })}
-              {loop.passes > 1 && ` × ${loop.passes}`}
-            </span>
-          )}
-          {onCreateNote && (
-            <span className="ml-2 text-faint">
-              · {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
-            </span>
-          )}
-        </span>
-        {/* The right end of the bar, whatever it holds: the ✕ then needs no margin rule of its own. */}
-        <span className="ml-auto flex items-center gap-1">
-          {onModeChange && (
-            <RollToolMenu
-              modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
-              current={mode}
-              onPick={(next) => void onCommand?.(`ui roll ${next}`)}
+      <DockHeaderRow>
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+          {/* The name a musician knows the clip by; its id stays the tooltip's (clipNames.ts). */}
+          <span
+            className="min-w-0 truncate font-semibold text-primary-text"
+            title={clip.name || clip.id}
+          >
+            <Piano className="h-3.5 w-3.5" />{" "}
+            {clipShownName(
+              clip.name || clip.id,
+              laneNamer(project.tracks),
+              CLIP_NAME_WORDS,
+              laneNamer(project.tracks)(
+                project.tracks.find((t) =>
+                  t.clips.some((c) => c.id === clip.id),
+                )?.id ?? "",
+              ),
+            )}
+          </span>
+          <span className="text-muted-foreground">
+            {(visNotes.length === 1
+              ? m["roll.notes.one"]
+              : m["roll.notes.other"])({ n: visNotes.length })}
+            {/* What the cage hides, counted, so notes sitting before a file's `from` read as windowed rather than as data lost. */}
+            {notes.length > visNotes.length &&
+              ` (${m["roll.outsideWindow"]({
+                n: notes.length - visNotes.length,
+              })})`}{" "}
+            · {m["roll.beats"]({ n: Math.round(placedEnd) })}
+            {/* What the marks add up to, said in words: ten passes of eight beats is not an 80-beat pattern, though the pane is as wide. */}
+            {loop && (
+              <span className="ml-2 text-violet-400">
+                · {m["roll.loop"]({ win: +loop.win.toFixed(3) })}
+                {loop.passes > 1 && ` × ${loop.passes}`}
+              </span>
+            )}
+            {onCreateNote && (
+              <span className="ml-2 text-faint">
+                · {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
+              </span>
+            )}
+          </span>
+          {/* The right end of the bar, whatever it holds: the ✕ then needs no margin rule of its own. */}
+          <span className="ml-auto flex items-center gap-1">
+            {onModeChange && (
+              <RollToolMenu
+                modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
+                current={mode}
+                onPick={(next) => void onCommand?.(`ui roll ${next}`)}
+              />
+            )}
+            {/* Editable rolls only — `onCreateNote` is what says this one is (docs/clipEditors.md). */}
+            <LoopToggle on={looped} onToggle={onLoop} />
+            <SeqDoubleButton
+              seqId={seqId}
+              command={onCreateNote ? onCommand : undefined}
             />
-          )}
-          {/* Editable rolls only — `onCreateNote` is what says this one is (docs/clipEditors.md). */}
-          <LoopToggle on={looped} onToggle={onLoop} />
-          <SeqDoubleButton
-            seqId={seqId}
-            command={onCreateNote ? onCommand : undefined}
-          />
-        </span>
-      </div>
+          </span>
+        </div>
+      </DockHeaderRow>
 
       <div className="flex min-h-0 flex-1">
         {/* The TAKES mode draws in the lanes' place; the lanes stay mounted, hidden, so the caret and the scroll survive. */}

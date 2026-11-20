@@ -15,6 +15,11 @@ per-track chain included.
   `aria-pressed` says which one it is in; the glyph (`Maximize2` / `Minimize2`) and the lavender
   "on" look follow it. Expanded on Pad and Desk the top goes to just under the header and the bottom
   stays above the bar; on a phone the sheet goes full screen and becomes modal.
+- **The header carries the open editor's first row, not a title.** The row (clip name, counts, tools)
+  sits on one line with Expand and Close, so the chrome is one line and the dock's height goes to
+  the editor. The editor keeps its state and fills the header through `DockHeaderRow` (a portal into
+  the dock's slot); the title stays as a visually hidden name, so the dock is still found by it. The
+  empty dock has Expand and Close only.
 - **Escape leaves the expanded state before it closes the dock.** The kit does it for its own Escape;
   a host registering the dock in an Escape ladder must do the same in its closer.
 - **The height is the host's.** `EditorDock` is controlled (`height`, `onHeightChange`) so the host can

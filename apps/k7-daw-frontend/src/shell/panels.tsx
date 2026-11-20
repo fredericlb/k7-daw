@@ -195,7 +195,6 @@ export function DockFrame({
   usePopin(true, () => (expanded ? onExpandedChange(false) : onClose()));
   const common = {
     title: def.title(),
-    icon: <def.icon aria-hidden />,
     subtitle,
     actions,
     expanded,
