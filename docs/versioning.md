@@ -39,11 +39,9 @@ Gradle refuses a shallow clone rather than count one commit.
 
 | app | SPA | render site |
 |---|---|---|
-| k7 | `k7-frontend` | `apps/k7-daw-frontend/src/projects/HomeSidebar.tsx` — tooltip on the sidebar's title, on every home page |
+| k7 | `k7-frontend` | `apps/k7-daw-frontend/src/about/AboutSection.tsx` — the About section of the app settings |
 
-`VERSION` is read at module scope so it constant-folds into the bundle. In k7's home sidebar the version is a
-tooltip on the app's name and never visible text: nobody needs it in the moment, and it is one hover
-away for whoever asks which build this is.
+`VERSION` is read at module scope so it constant-folds into the bundle. In k7 the version sits in the About section of the app settings, out of the way: nobody needs it in the moment.
 
 ## The shell is asked again on every load, its assets never
 

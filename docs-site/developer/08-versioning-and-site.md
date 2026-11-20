@@ -27,7 +27,7 @@ private workspace's `package.json`; `npm run lint:version` (`scripts/check-versi
 copies and `node scripts/check-version.mjs --set X.Y.Z` writes them all. See `docs/versioning.md`.
 
 Every build takes its version from the root `package.json`. `apps/k7-daw-frontend/src/version.ts` exports `VERSION`,
-and the home sidebar shows it as the tooltip of the `k7` wordmark (`apps/k7-daw-frontend/src/projects/HomeSidebar.tsx`);
+and the About section of the app settings shows it (`apps/k7-daw-frontend/src/about/AboutSection.tsx`);
 `/api/health` answers `{ ok, version, build }`, both the front's.
 
 The front serves the frontend shell with `Cache-Control: no-cache` and the hashed files under

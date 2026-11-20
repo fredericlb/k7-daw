@@ -1,8 +1,7 @@
 # Downloads under way
 
 `src/downloads.ts` is the page's one list of what is coming down: the copies a page starts, a model the file service fetches, an instrument the supervisor fetches.
-The sidebar's download manager (`apps/k7-daw-frontend/src/components/DownloadsButton.tsx`) draws it, and a
-row that started a download reads its spinner from it.
+The page's toasts and a row that started a download read their state from it.
 
 ## Choices
 
