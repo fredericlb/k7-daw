@@ -152,6 +152,9 @@ What k7's view does that a browser would do on its own:
   the page's host in its subjectAltName (a DNS name, one leftmost `*` label at most, or the IP);
   a wrong name, an expired or not-yet-valid date, or any fault besides the unknown issuer is never
   forgiven.
+- **An export goes to the folder the person picks** (`ExportFolders.kt`, `apps/k7/frontend/docs/export.md`), not to
+  Downloads: the Storage Access Framework's document-tree picker, a persisted URI grant, and each file created in it
+  from the page's chunks over `k7Android`.
 - **A download is saved to the phone's Downloads.** The WebView's own download hands a URL to
   a listener that can neither read a `blob:` URL nor send the session's cookie, and the exports are
   blobs (`apps/k7/frontend/src/downloadBlob.ts`, a release's files). So the

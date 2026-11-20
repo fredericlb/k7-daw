@@ -2,7 +2,7 @@
 // (`window.k7Android`). The page reports the colour at the top of it (assets/top-color.js), which paints the status
 // bar above it, who is signed in (assets/account.js), what it plays (assets/media-session.js, to MediaPlayback), what
 // keeps it busy (`busy`, to Busy), the files it saves (assets/download.js, to Downloads), and calls the engine and
-// full screen: its settings panel is this phone's tray (apps/k7/frontend/src/settings/androidEngine.ts).
+// full screen, and the folder its exports go to (ExportFolders.kt): its settings panel is this phone's tray (apps/k7/frontend/src/settings/androidEngine.ts).
 // The object is offered to every origin, so each message is checked for k7's own instead. See docs/android.md.
 
 package se.frediver.k7
@@ -32,6 +32,7 @@ class StudioBridge(
     private var k7: JavaScriptReplyProxy? = null
     private var pickedCa: ((Uri?) -> Unit)? = null
     private val downloads = Downloads(activity)
+    private val exports = ExportFolders(activity)
     private val pickCa: ActivityResultLauncher<Intent> =
         activity.activityResultRegistry.register("k7-bridge-ca", ActivityResultContracts.StartActivityForResult()) {
             val uri = if (it.resultCode == android.app.Activity.RESULT_OK) it.data?.data else null
@@ -47,6 +48,7 @@ class StudioBridge(
         SupervisorHost.unlisten(this)
         pickCa.unregister()
         downloads.destroy()
+        exports.destroy()
     }
 
     fun attach(view: WebView) {
@@ -101,6 +103,12 @@ class StudioBridge(
                 pickCa.launch(Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*"))
             }
             "forgetCas" -> EngineOps.forgetCas(activity, answer)
+            // The export folder: the system picker, then each file created in it from the page's chunks.
+            "pickExportFolder" -> exports.pick(answer)
+            "exportBegin" -> exports.begin(arg.optString("folder"), arg.optString("name"), answer)
+            "exportChunk" -> exports.chunk(arg.optString("token"), arg.optString("data"), answer)
+            "exportEnd" -> exports.end(arg.optString("token"), arg.optString("cancel") == "1", answer)
+            "shareExport" -> exports.share(arg.optString("where"), arg.optString("name"), answer)
             // The Engine page's Full screen switch, a setting of this device (Immersive.kt).
             "immersive" -> ok(JSONObject().put("on", Immersive.isOn(activity)))
             "setImmersive" -> {

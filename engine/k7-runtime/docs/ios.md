@@ -71,6 +71,7 @@ Where iOS does a thing itself, the app lets it:
 
 | Android | iOS |
 |---|---|
+| an export goes to a folder picked with the system folder picker, kept as a security-scoped bookmark (`ExportFolders.swift`, `apps/k7/frontend/docs/export.md`) | the person says where it lands; Files shows any folder they grant, and the grant outlives the launch |
 | `download.js` fetching blobs in 512 KiB chunks | `WKDownload`, which takes a `blob:`, `data:` or same-origin URL with the session's cookies; the file lands in Documents/Downloads, which the Files app shows under k7 |
 | `back.js` and the Back button | the edge swipe, over the view's own history |
 | `CertTrust.kt` checking the leaf's name and dates | iOS's own trust evaluation with the imported CAs as anchors (`TrustedCas.swift`): a wrong name, an expired date or a certificate iOS's TLS rules refuse is refused here too. Android's rule stands: an imported non-CA is trusted as that exact leaf and never as an issuer, read from its DER since iOS has no public API for extensions (`CertTrust.swift`) |

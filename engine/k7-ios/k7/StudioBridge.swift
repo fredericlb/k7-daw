@@ -1,7 +1,7 @@
 // StudioBridge.swift — what k7's page in AppViews' view may ask of this app, over one script message handler
 // that `window.k7Ios` wraps in the protocol Android's `k7Android` speaks: the page reports its top colour, who
 // is signed in, what it plays and what keeps it busy, and reaches the engine
-// (apps/k7/frontend/src/settings/androidEngine.ts). The handler is offered to every origin, so each message is
+// (apps/k7/frontend/src/settings/androidEngine.ts) and the folder its exports go to (ExportFolders.swift). The handler is offered to every origin, so each message is
 // checked for k7's own instead. See engine/k7-runtime/docs/ios.md.
 
 import UIKit
@@ -136,6 +136,17 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
             }
         case "forgetCas":
             EngineOps.forgetCas(done: answer)
+        // The export folder: the system picker, then each file written into it from the page's chunks.
+        case "pickExportFolder":
+            ExportFolders.shared.pick(answer)
+        case "exportBegin":
+            ExportFolders.shared.begin(folder: arg["folder"] as? String ?? "", name: arg["name"] as? String ?? "", answer)
+        case "exportChunk":
+            ExportFolders.shared.chunk(token: arg["token"] as? String ?? "", data: arg["data"] as? String ?? "", answer)
+        case "exportEnd":
+            ExportFolders.shared.end(token: arg["token"] as? String ?? "", cancel: arg["cancel"] as? String == "1", answer)
+        case "shareExport":
+            ExportFolders.shared.share(where: arg["where"] as? String ?? "", answer)
         case "quit":
             answer(.success([:]))
             AppDelegate.quit()
