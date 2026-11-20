@@ -152,3 +152,9 @@ It has no pane, no number key and no pane-ring entry: the Mixer panel's button r
 
 See `apps/k7-daw-frontend/packages/song/docs/surfaces.md` for the format and `apps/k7-daw-engine/k7-runtime/docs/quickMaster.md` for
 what the node actually does to the sound.
+
+## The strips it sits under
+
+The Mixer panel draws its strips itself (`MixerStrips.tsx`, fed by `mixerStrips.ts`) and not through
+the graph canvas: a strip is a fader, a pan, a meter and M/S, and the lane header's `trackControls`
+are its one state. The graph, with the cables, stays in the Chain panel.

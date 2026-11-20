@@ -77,3 +77,9 @@ read says so in its own section, and the others still show.
 The panel's first segment switches Tasks and History; History has its own three, Edits (the undo
 journal), Workspace (the sync history) and Commits (git's list, offered only under git). One
 segment shows one list, since two stacked lists leave each half a panel high.
+
+## Processes sit above the tasks
+
+A running process, and a failed one, are listed first in the Tasks segment (`ProcessesSection.tsx`),
+one kit row each with its state and its failure text. The header's spinner counts only what runs, so
+a process that failed is seen here and nowhere else.

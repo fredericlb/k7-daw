@@ -675,6 +675,8 @@
   "pl.emptyBody": "Cette playlist ne nomme aucun disque. Cherchez parmi les fichiers audio de l'espace, ou écrivez les lignes sous {items} à gauche — c'est le même fichier.",
   "pl.alreadySplit": "déjà séparé en stems — la préparation le sautera",
   "pl.moveUp": "monter",
+  "pl.playRow": "Lire",
+  "pl.pauseRow": "Pause",
   "pl.moveDown": "descendre",
   "pl.removeRow": "retirer de la playlist",
   "pl.playing": "en cours : {label}",

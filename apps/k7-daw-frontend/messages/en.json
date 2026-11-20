@@ -675,6 +675,8 @@
   "pl.emptyBody": "This playlist names no record. Search the workspace's audio files for one, or write the lines under {items} on the left — it is the same file.",
   "pl.alreadySplit": "already separated into stems — the preparation will skip it",
   "pl.moveUp": "move up",
+  "pl.playRow": "Play",
+  "pl.pauseRow": "Pause",
   "pl.moveDown": "move down",
   "pl.removeRow": "remove from the playlist",
   "pl.playing": "playing: {label}",
