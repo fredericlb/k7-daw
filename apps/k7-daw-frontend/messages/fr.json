@@ -402,6 +402,7 @@
   "demo.badge": "démo — réinitialisée",
   "demo.badgeHint": "Une démo est remise dans son état d'origine à chaque redémarrage de k7. Copiez-la dans un autre espace pour garder vos changements.",
   "demo.banner": "Ceci est une démo : elle est remise dans son état d'origine au redémarrage de k7, et vos changements avec. Copiez-la pour les garder.",
+  "demo.bannerShort": "Démo : remise à zéro au redémarrage",
   "demo.copy": "Copier dans mon espace",
   "demo.noTarget": "Vous n'avez pas encore d'autre espace où la copier — créez-en un sur la page des projets, puis copiez-y cette démo.",
   "demo.noFiles": "Vos espaces sont injoignables pour l'instant — réessayez dans un moment.",

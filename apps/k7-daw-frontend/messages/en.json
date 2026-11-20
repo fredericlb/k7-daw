@@ -402,6 +402,7 @@
   "demo.badge": "demo — resets",
   "demo.badgeHint": "A demo is put back as it shipped each time k7 restarts. Copy it to another workspace to keep your changes.",
   "demo.banner": "This is a demo: it is put back as it shipped when k7 restarts, and your changes go with it. Copy it to keep them.",
+  "demo.bannerShort": "Demo: resets on restart",
   "demo.copy": "Copy to my workspace",
   "demo.noTarget": "You have no other workspace to copy into yet — create one on the projects page, then copy this demo there.",
   "demo.noFiles": "Your workspaces cannot be reached right now — try again in a moment.",

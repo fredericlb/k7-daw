@@ -18,6 +18,7 @@ import { accountFiles, projectHref } from "../projects/api";
 import { CopyProject } from "../projects/CopyProject";
 import { type AccountFiles, copyProject } from "../projects/workspaceOps";
 import { findAccountFiles } from "../settings/accountFiles";
+import { useIsMobile } from "../useIsMobile";
 
 /** The workspace the address names — the one the demo sits in. */
 function addressedWorkspace(): string | null {
@@ -37,6 +38,7 @@ export function DemoBanner({ project }: { project: string }) {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState("");
   const from = addressedWorkspace();
+  const phone = useIsMobile();
 
   // Asked on the click, not on mount: most people reading the line never copy.
   const start = async () => {
@@ -55,7 +57,7 @@ export function DemoBanner({ project }: { project: string }) {
     <div className="type-secondary relative z-(--k7-z-header) mx-4 mb-1 flex h-[38px] shrink-0 items-center gap-2 rounded-2xl border border-(--k7-warn-line) bg-(--k7-warn-fill) px-3.5 text-warn">
       <TriangleAlert className="h-3.5 w-3.5 shrink-0" />
       <span className="min-w-0 flex-1 truncate">
-        {note || m["demo.banner"]()}
+        {note || (phone ? m["demo.bannerShort"]() : m["demo.banner"]())}
       </span>
       <Button size="xs" variant="glass" onClick={() => void start()}>
         <Copy className="h-3 w-3" /> {m["demo.copy"]()}
