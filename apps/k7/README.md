@@ -58,7 +58,7 @@ packages/                  k7-daw's shared tier (consumed as raw TS source):
   engine-client/           @studio/engine-client   — drives the engine over the WebSocket protocol
   engine-protocol/         @studio/engine-protocol — the JSON wire shapes shared with the C++ engine
   ui-chains/               @studio/ui-chains       — routing-graph engine: dagre layout (drawn by the web app as DOM nodes + SVG cables)
-  ui-editor/               @studio/ui-editor       — CodeMirror k7x language + tracker note-grid (web UI)
+  ui-editor/               @studio/ui-editor       — CodeMirror k7x language + note-grid roll (web UI)
   translator/              @studio/translator      — DAWproject (.dawproject) → song folder; `k7 import` is its caller
   web-protocol/            @studio/web-protocol    — the browser↔server wire types
 ```

@@ -353,7 +353,7 @@ song reads them, canvases included (through the CSS variable, since a canvas can
 
 | meaning | token | why one |
 |---|---|---|
-| the playhead | `playhead` | the timeline, the roll, the step grid, the minimap, the takes view, the clip's waveform and the desk drew five different lines; an audition's line stays amber, being another clock |
+| the playhead | `playhead` | the timeline, the roll, the minimap, the takes view, the clip's waveform and the desk drew five different lines; an audition's line stays amber, being another clock |
 | mute, solo, arm | `mute`, `solo`, `arm` | the timeline's solo and the graph's were two yellows; a lit pad takes dark type, which reads on all three |
 | the meter's zones | `meter-ok`, `meter-hot`, `meter-clip` | the project bar, the desk and the graph's faders say the same thing about the same level |
 | violet as text | `primary-text` | no one violet passes both as a fill under white type and as text on this ground (`primary` is the fill) |
@@ -1078,7 +1078,7 @@ Three details it needs to be usable:
   it leaves insert mode, and a key that both leaves insert mode and closes the window you are typing in
   is a trap. The shell's listener stands aside for a text editor (CodeMirror is `contentEditable`), so an
   Escape typed *into* the file never reaches the shell. What reaches it is an Escape pressed from outside
-  the text — the roll or tracker tab, a toolbar button, the backdrop — where "close this" is the only
+  the text — the roll tab, a toolbar button, the backdrop — where "close this" is the only
   reading left.
 - **Any change of layout puts it away.** It is a detour to one file, not a place to be, so it is
   deliberately NOT URL state — a reload lands you in the view, not in the popin.
@@ -1133,11 +1133,11 @@ outliving the pad it came from reads as a fault.
 
 #### A sequence in the popin has TABS
 
-Text / Roll / Tracker, and only here. A popin was opened by a command that named this sequence, so "now
+Text / Roll, and only here. A popin was opened by a command that named this sequence, so "now
 show me its notes" is the likely next thing; a fullscreen editor pane is the text editor, and a grid
 wants more room than a popin has to give.
 
-All three write to the same buffer, so a note drawn in the roll makes the file dirty exactly as a
+Both write to the same buffer, so a note drawn in the roll makes the file dirty exactly as a
 keystroke does and one Save writes it whichever way you made the change.
 
 **A sequence opens on the ROLL**: its notes are what the command was about, and the k7x is one tab away.
@@ -1173,7 +1173,7 @@ where they have room: the timeline stays above, which is what you read any of th
 
 | what | opened by |
 |---|---|
-| a sequence's note grid | `sequence edit roll <sequence>` / `sequence edit tracker <sequence>` |
+| a sequence's note grid | `sequence edit roll <sequence>` |
 | a clip's content — the waveform for audio, the piano roll for a sequence | clicking the clip in the timeline |
 | the take being recorded, and the take just recorded | a take starting to roll (above) |
 
@@ -1326,7 +1326,7 @@ nothing else about the chrome — written per occupant they drift, into title ba
 **Every bottom panel has a ✕ at its top left, and it takes no height** — a panel has only half the
 window, so the ✕ is never a row of its own. A view with a toolbar column (`ModeStrip`: the clip editors,
 a lane's modules) draws it as the column's FIRST item; a view with a header row (the graph and mix
-panels, the logs, the slot's `bar`, the sequencer and tracker headers, a rolling MIDI take) draws it
+panels, the logs, the slot's `bar`, a rolling MIDI take) draws it
 as the row's first item, `PanelCloseButton`. Floating over the corner is the last resort, for a view
 with neither: a floating ✕ sits on whatever the view drew there, which is usually its title. So the
 empty event panel wears the slot's bar too, rather than a lone ✕ over nothing. The view CLAIMS the ✕
@@ -1861,7 +1861,7 @@ Keeping it costs one habit — **the button runs the command, it does not call t
 | Ctrl+Z / Ctrl+Y | `project undo`, `project redo` | `@studio/project-shell/undo` |
 | the file tree's right-click menu | `fs file new`, `fs folder new`, `fs file rename`, `fs file move`, `fs file delete`, `fs file upload`, `ui pin`, `ui copy path` | `EditorHandle`, and `FileTreeHandle` under it |
 | the clip panel's *stop*, while a take rolls | `transport stop` | the engine |
-| the sequencer's and the roll's *×2* | `sequence double <séquence>` | `@studio/commands`, over `doubleSequence` — see [clipEditors.md](clipEditors.md) |
+| the roll's *×2* | `sequence double <séquence>` | `@studio/commands`, over `doubleSequence` — see [clipEditors.md](clipEditors.md) |
 | a `.dawproject` / `.als` clicked in the tree | `project import <path>` | `useProjectImport` |
 | a file dropped on a timeline lane | `event add`, `picture add` — the PLACING half; the upload and the `clips/<id>.k7x` go through routes | `hooks/useTimelineDrop.ts`, see [timeline.md](timeline.md) |
 | the master meter's *fix* | `project master fix` | `fixClipping` in `App`, over `MasterMeterHandle` |
@@ -1955,7 +1955,7 @@ no binding can take it and a stored `key: tab` is read as no assignment. A keybo
 screen-reader user walks the project bar, the transport, the page's controls (a lane's M/S/A among
 them), the footer's panel tabs and the settings in document order, which is what a key bound to Tab
 would forbid. The one component that keeps Tab is a field of the command bar, a form whose fields it
-steps through ([commandBar.md](commandBar.md)). The tracker grid lets Tab go by.
+steps through ([commandBar.md](commandBar.md)).
 
 **The pages are walked by F6**, Shift+F6 backwards: it is the platforms' "next pane" key, and Ctrl+Tab
 is not on offer, being the browser's own tab switch. F6 passes a focused control and a text field

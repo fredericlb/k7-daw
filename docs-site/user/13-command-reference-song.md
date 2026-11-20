@@ -54,7 +54,6 @@ Positions inside a sequence are in **beats** from its start (decimal numbers).
 | `sequence notes move` | `<sequence> <moves>` | Moves several notes in one write, JSON `[[note,start,newNote,newStart],…]`. |
 | `sequence record` | `<track> <notes>` | Records notes into a new sequence placed on a lane (JSON, song beats). Used by MIDI recording. |
 | `sequence edit roll` | `<sequence>` | Shows a sequence's notes as a piano roll in the bottom panel. |
-| `sequence edit tracker` | `<sequence>` | Shows them as a tracker. |
 
 ## Curves (automation)
 

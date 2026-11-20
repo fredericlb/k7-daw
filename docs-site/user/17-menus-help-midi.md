@@ -24,7 +24,6 @@ What you can right-click:
 | A box (assembly) | delete or dissolve it |
 | A stretch point in the warp view | remove it |
 | A shot on a picture lane | move, length, head, delete |
-| A pad in the step sequencer | repeat, skip |
 | A note in the piano roll | split, remove, and the region commands |
 | A rack tap | note, sample, rename, mute, route, its chain, remove |
 

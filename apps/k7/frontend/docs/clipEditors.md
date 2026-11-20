@@ -1,128 +1,16 @@
-# The clip editors — the piano roll, the waveform, and the step sequencer
+# The clip editors — the piano roll and the waveform
 
-Panes over one event: `PianoRoll` for a sequence, `WaveformView` for audio, and — when the
-sequence's track feeds a RACK — `SequencerPanel`, a step sequencer. `ClipView` picks between
-them and all are mounted by the same two hosts — the editor's bottom strip, and the graph slot
-when a clip is clicked in the timeline (see [shell.md](shell.md)).
+Panes over one event: `PianoRoll` for a sequence, `WaveformView` for audio. `ClipView` picks
+between them and both are mounted by the same two hosts — the editor's bottom strip, and the
+graph slot when a clip is clicked in the timeline (see [shell.md](shell.md)).
 
-A MIDI clip's three readings — sequencer, piano roll, tracker — are one **view switch** in the
-pane's header rather than three ways in; see [The view switch](#the-view-switch).
+A MIDI clip is edited in the piano roll alone: there is no second view of its notes, so the
+header carries no view switch.
 
 The header names the clip as the timeline's block does — a take by its lane and bar, the id in
 the tooltip — see [timeline.md](timeline.md#a-block-is-labelled-by-what-a-musician-calls-it).
 
-## The step sequencer
-
-A MIDI clip is a list of notes, but when its signal lands on a rack the notes are not pitches —
-they are SOUNDS, the rack's symbols. So the editor for that case is a grid, not a roll: one row
-per rack sound (`rackFor.ts` finds the first rack downstream of the track, following the outs;
-bypassed steps still count, since a muted kit still defines the vocabulary), one column per step
-of the clip's window at a chosen **precision** — 1/2, 1/4, 1/8, 1/16 or 1/32 notes, a closed set so
-the grid never lands on a step nothing musical means, session state of the panel and written
-nowhere.
-
-A vertical line marks each bar, in the gap before its first step. It is an overlay placed as a
-share of the grid's width — the playhead's own rule — and not a divider between buttons: a divider
-would widen every bar by its own width, and the playhead, which knows nothing of it, would drift
-a little further off the music with every bar it crossed.
-
-### It paints first, and asks the document afterwards
-
-A `sequence note` command costs ~400 ms on the service — it recompiles the project — and the
-reload lands after that. So a press paints at once and only fires the command; the ghost is held
-until the document AGREES (`settledEdits`), which is the rule the timeline follows for a clip
-drag. Waiting for the reload before lighting the cell means disabling the whole grid for that
-half second and dropping everything pressed during it in silence. Commands are chained rather
-than gated — each is a read-modify-write of one file, so they must not overlap, but nothing has
-to be refused.
-
-Two costs are avoided the same way. `notesByCell` indexes the notes in one pass, where asking
-`noteInCell` per cell is a scan of every note per cell — sixteen rows of sixty-four cells over a
-hundred notes is a hundred thousand comparisons, redone on every render. And a velocity drag does
-not render at all: it moves the pressed cell's three level layers in place (`drawLevel`), the same
-rule the transport line follows. A ghost is keyed `<note>@<cellIndex>`, so changing the PRECISION
-drops the pending ones — an index counts cells of the step it was made at.
-
-A lit cell is "this sound hits here". A press toggles — `sequence note new` for on,
-`sequence note remove` for off — and a vertical DRAG on a lit cell is **the roll's velocity
-gesture restated for a button**: the cell splits at the level (solid below, lighter above, a
-white line at the value, the roll's own geometry at a fixed height), undecided until the press
-travels the roll's 4px slop, committed as `sequence note velocity` on release. Every commit is
-one line in the journal and one Ctrl+Z, and the grid redraws from the reload. The arithmetic is
-`stepGrid.ts`, pure and tested: a cell claims any note STARTING inside it (a played take's hit
-lives mid-cell and must still show, and toggling it off addresses the note at its real start,
-not the cell's); the grid divides the clip's window — the same cage the roll draws — and a
-window that does not divide evenly keeps its last, partial cell, whose note is clamped to fit.
-
-**Ctrl+drag MOVES a note** to the cell it is released over — another step, another pad, or
-both, since the grid is two axes of one thing. It carries the note's velocity and its length
-across by construction: `sequence note move` rewrites the note's `k` and `t` and touches
-nothing else, where a remove-then-add would have lost both (`sequence note new` takes no
-velocity) and been two journal steps for one act. The modifier is read at the PRESS and cannot
-change mid-drag, and the destination comes from the point under the cursor rather than from the
-event's target — the press captured the pointer, so every release lands on the cell it started
-on. A drop outside the grid, onto its own cell, or onto one that already holds a note does
-nothing: (key, start) is how a note is addressed, and two on one pad would be the same note
-twice. The writer refuses that last case as well, as the last word.
-
-**Dragging the rectangle MOVES everything it holds**, by the rows and steps between the cell
-pressed and the cell released over (`planSelectionMove` in `stepGrid.ts`). No modifier: a press
-INSIDE a live rectangle is that gesture, and a press that never leaves its cell is still a click —
-it places the caret and toggles the pad, as anywhere else. What a selected pad gives up is the
-velocity drag; the rectangle is dropped with a click first when a level is wanted. Rows are rack
-SOUNDS in the rack's order, so two rows down is not two semitones: each note is sent to the row
-`d` below its own and the command carries every destination (`sequence notes move`). Each note
-keeps its nudge inside its step. The drop is refused, with the reason in the status line, when a
-note would leave the grid or land on a pad that is not itself moving — landing where another
-selected note leaves is fine, so a run shifted by one step moves. It is ONE command, so one
-Ctrl+Z, the pads are painted at once like every other gesture here, and the rectangle follows the
-notes. While dragging, the status line says what the drop would do, updated only when the cell
-under the pointer changes: a grid of a thousand buttons is not redrawn per pointer event.
-
-### Shift+wheel NUDGES the pad under the cursor
-
-One notch is a **hundredth of the sequence's own step** — at 1/16 and 120 bpm, 1.25 ms. The grid
-says which step a hit is on; the nudge says how it sits against it, which is the whole of a
-groove. The value is drawn top-right of the pad, in hundredths, and only when there is one: a
-grid of zeroes would be noise over the thing it annotates.
-
-**Bounded by the pad's own step, 0..99**, and that bound is the gesture rather than a limitation.
-A note that left its step would be on ANOTHER step: the pad would vanish from under the cursor
-mid-turn and the next notch would fall on an empty cell. To place a hit just *before* a beat,
-nudge the pad on the step before it — 95 hundredths of the previous step is five hundredths
-early, and the pad you are turning stays where your hand is.
-
-Two things it does differently from every other gesture here, both because a wheel is a stream
-rather than an act:
-
-- **The command waits for the wheel to stop** (250 ms). A press is one command and a drag commits
-  on release, but a flick is twenty notches, and each `sequence note` recompiles the project. So
-  the pad is painted per notch and written once — one line in the journal, one Ctrl+Z for the
-  gesture a hand actually made.
-- **The ghost carries the nudge**, so the next notch reads where the last one put the note rather
-  than where the document still says it is, and the command that finally goes addresses the note
-  by where it is NOW.
-
-Shift, because a bare wheel scrolls a grid that is usually wider than its pane. React binds
-`onWheel` on the element, where it is not passive, so `preventDefault` holds — the same reasoning
-the audio clip panel's zoom states.
-
-Keys the rack has no row for are **rows too**, not a count: they follow the rack's rows, high
-first, labelled by their pitch and drawn amber — a played take with keys the kit does not name
-must show, and stay editable, rather than read as data lost.
-
-## The view switch
-
-One clip's notes have three readings, and the header's dropdown (`ClipViewModes.tsx`) is how you
-move between them. It is drawn in **all three headers**, which is the whole point: a one-way
-button out of the grid would make leaving it a click and coming back a matter of closing the pane
-and clicking the clip again.
-
-| mode | what it is | how it writes |
-|---|---|---|
-| `sequencer` | one row per rack sound, one column per step | `sequence note …` commands — one press, one Ctrl+Z |
-| `roll` | the piano roll — off-grid timing, precise lengths, keys the rack does not name | the same commands |
-| `tracker` | the sequence FILE as a text grid — arrows move, keys type notes | straight to the file (`SeqGridFile`) |
+## The roll
 
 ### The roll's key column names a rack's keys
 
@@ -132,12 +20,11 @@ with its note name, since there the roll is read key by key rather than by octav
 widens to make room. A lane with no rack keeps the plain keyboard: octave Cs only, as a pitch
 reader expects.
 
-### ×2, beside the switch
+### ×2
 
-`SeqDoubleButton.tsx`, in the sequencer's header and the roll's: the sequence twice as long, its
-notes played twice. One component in two headers rather than the same twelve lines in each,
-because a button drawn in both has to mean the same thing in both — and it is a `sequence double`
-command like every other edit here, so it is one Ctrl+Z and reachable from the bar.
+`SeqDoubleButton.tsx`, in the roll's header: the sequence twice as long, its notes played twice.
+It is a `sequence double` command like every other edit here, so it is one Ctrl+Z and reachable
+from the bar.
 
 On a clip that LOOPS, it halves the passes as it doubles the window: four passes of one beat
 become two of two, so the same span plays and the two halves can now differ — which is the whole
@@ -145,42 +32,21 @@ reason to press it on a loop. A placement it cannot follow (an odd number of pas
 of its own) is left alone and NAMED in the status line, because that one just got twice as long.
 `packages/song-edit/docs/sequenceLoops.md` is the page.
 
-It is **the one edit in these headers that is about the sequence** rather than about a note or a
-pad, which is why it sits with the view switch rather than among the precisions. What a "length"
+It is **the one edit in this header that is about the sequence** rather than about a note, which
+is why it sits apart from the precisions. What a "length"
 is — the stated window, else the notes' extent rounded up to the bar — is decided in the writer,
 and `packages/song-schema/docs/noteEdits.md` is where that reasoning lives.
 
 The roll draws it only when the roll can be EDITED (`onCreateNote`, the same signal its "drag to
 draw" hint follows): a locked workspace draws the notes and takes none, and a ×2 there would be a
-button that reports a refusal. The tracker has no ×2 — it writes the file directly rather than
-through commands, so the button would be the one control in that header that goes the other way.
+button that reports a refusal.
 
-Two rules decide what you get:
-
-- **The sequencer is offered only when there is a rack.** `rackFor.ts` answers that, and with no
-  rack the entry is not in the menu at all rather than present and dead — there would be no rows
-  to draw.
-- **Every MIDI clip opens on the roll**, a rack's included: the roll shows what was PLAYED, timing
-  and length and velocity as they are, where the sequencer's steps quantise the picture. The
-  sequencer is one pick away in the header's dropdown.
-- **The mode resets per clip.** It is about what you are looking at, not a state the pane is stuck
-  in, so the next clip opens on the roll again.
-
-The tracker is the same grid `sequence edit tracker <sequence>` opens in the graph slot — the
-file-owning half is `SeqGridFile`, mounted by both, so there is one answer to "read it, hand it to
-the grid, write it back". It edits the sequence file directly where the other two go through
-commands; both land in the same k7x, and the difference is only whose undo you get — the
-editor's, rather than the shell's journal. A clip whose `ref` names no sequence file says so
-instead of drawing an empty grid.
-
-One consequence worth naming: the tracker reads its file **once**, deliberately, so an edit made
-elsewhere needs the view reopening — refetching under a hand mid-edit is how a cursor and a
-half-typed note are lost. Switching mode and back is what reopens it.
+A MIDI clip always opens on the roll, a rack's included: it shows what was PLAYED, timing and
+length and velocity as they are.
 
 One plumbing fact: the graph slot's `target` is a snapshot taken at the click, so `ClipView`
 re-reads the compiled project on every `reloadKey` and re-finds the placement by (id, start) —
-without that, a cell writes its note and lights nothing, and the roll's drags snap back on
-release.
+without that, the roll's drags snap back on release.
 
 They share their pan/zoom hook (`@studio/ui-timeline/panZoom`, and
 [timeline.md](timeline.md) says how a mouse wheel is told from a trackpad slide — one zooms, the
@@ -330,12 +196,8 @@ the timeline the line is one `events remove` naming each event the rectangle hol
 and a cleared rectangle is one Ctrl+Z. The pane answers with a command **line** rather than
 running one, which is what keeps a gesture worth exactly one Ctrl+Z; the shell runs it.
 
-The roll and the step sequencer answer the same two lines: one note is `sequence note remove`,
-several are one `sequence notes remove` over the rectangle. A sequencer row is a rack SOUND, in the
-rack's order, so the key range from a rectangle's lowest row to its highest can cross rows outside
-it. When that range would take a note on such a row, the delete is REFUSED (`planSelectionDelete`
-in `stepGrid.ts`): splitting it into one line per row would cost a Ctrl+Z per row, and taking the
-stray note would delete something the rectangle does not show as selected.
+The roll answers two lines: one note is `sequence note remove`, several are one
+`sequence notes remove` over the rectangle.
 
 Right-click on a note offers the same removal and, when the caret sits strictly inside it,
 `sequence note split`. Both were verbs with no gesture. The menu is derived from the catalogue
@@ -374,14 +236,9 @@ click is worth `gridUnit` all the same.
 applied where the span is READ, so Ctrl pressed or released mid-drag changes the whole answer
 rather than half of it.
 
-**In the step sequencer, Ctrl+drag means something else** — it MOVES a note to another cell (see
-above). No contradiction: that grid has no free positions to reach, so there is nothing there for
-Ctrl to suspend. Worth knowing before assuming one modifier means one thing across all three
-views.
-
 ## The caret, and the rectangle it grows into
 
-The timeline's caret is here too, on both grids: `hjkl`/arrows move it, `v` grows it into a
+The timeline's caret is here too, on the roll: `hjkl`/arrows move it, `v` grows it into a
 rectangle, Escape drops that, **Shift+drag** draws one with the pointer, anchored where the
 pointer PRESSED rather than at the caret: a hand reaching for a region means that region, not
 wherever the keyboard last left the caret. Same keys, same marks —
@@ -392,15 +249,11 @@ The arithmetic is `src/gridCaret.ts`, pure and tested; `src/hooks/useGridCaret.t
 state, the key listener and the drag. It is a **second** implementation rather than the
 timeline's, and deliberately: the timeline's caret walks rows by IDENTITY (`RowKey`), has a
 `LABEL` position no lane grid has, and refuses rows that cannot hold a clip. A clip editor's rows
-are a dense array — 128 pitches, or the rack's sounds — so the shared thing is the behaviour, not
+are a dense array — 128 pitches — so the shared thing is the behaviour, not
 the code, and retrofitting one onto the other would have made both answer questions neither asks.
 
-What a cell IS differs, and that is the whole of the per-pane work:
-
-| pane | a row | a column |
-|---|---|---|
-| the roll | a pitch, top-down like the keys (`row = 127 − key`) | one step of the **ruler's current unit** |
-| the sequencer | a rack sound, then the keys the rack does not name | one step of the chosen precision |
+A cell of the roll is a pitch (top-down like the keys, `row = 127 − key`) by one step of the
+**ruler's current unit**.
 
 The roll's column following the zoom is the point rather than a side effect: the ladder is the
 resolution control everywhere else here (`packages/ui-timeline/docs/ticks.md`), so a finer caret
@@ -465,8 +318,7 @@ Two smaller rules, both the timeline's:
 coordinates relative to the rectangle's corner, so the copy's START lands where the caret is and every
 note keeps its distance from it. On the ROLL a paste keeps each note's own **pitch** and takes only the
 time from the caret: you click where the phrase should go, and a melody or a drum pattern pasted
-elsewhere is the same phrase, not one transposed to whichever row the click fell on. The sequencer's
-grid, whose rows are pads, still puts the top row under the caret. `src/clipboard.ts` is the arithmetic,
+elsewhere is the same phrase, not one transposed to whichever row the click fell on. `src/clipboard.ts` is the arithmetic,
 pure and tested.
 
 **With no rectangle drawn, the caret is one.** A caret is already pointing at something, so it is
@@ -502,16 +354,15 @@ timeline**, first answer winning.
 |---|---|---|
 | the timeline | placements, by lane offset and beat | `events add` |
 | the roll | notes, by semitones below the top row | `sequence note add` |
-| the sequencer | the same, through the rack's rows | `sequence note add` |
 
-**The selection is the subject, and that is what the naming says.** The head names what all three
-verbs act on — the region you drew — once. A bare `paste` would promise nothing, leaving the status
+**The selection is the subject, and that is what the naming says.** The head names what all
+the verbs act on — the region you drew — once. A bare `paste` would promise nothing, leaving the status
 line as the only place to find out what had been pasted where; a pair of verbs naming the material
 (`events paste`, `sequence notes paste`) would say it twice, since the same rectangle goes out
 under one head and would come back under one of two others, across a namespace line.
 
 The routing that a plural would buy is a **fact the clipboard already carries**: it was copied as
-events or as notes, so notes land in the open roll or sequencer and events on the timeline's caret
+events or as notes, so notes land in the open roll and events on the timeline's caret
 whatever else is on screen (a clip pane holds notes and could not place a placement). Read off the
 held rectangle by `selection paste` (`src/ui/commands/timeline.ts`), which is not a guess. The paste is one binding, and a
 plain one: what the clipboard holds is read by the handler, so no key has to ask.
@@ -555,16 +406,13 @@ the field — is in `@studio/song-schema` `docs/noteEdits.md`, beside the writer
 
 ### The roll paints first too
 
-`sequence note` costs the same ~400 ms here as it does in the sequencer, and the roll holds
-its own ghost while the reload is out: `src/rollPending.ts`, keyed by `${key}@${start}` — the
-address every note verb takes — rather than by cell and precision, which is the sequencer's shape
-and not this one's. `settledEdits` is deliberately not generalised over the two.
-
-One thing it has that the sequencer's has not: a **move** is one ghost saying "gone from here,
-there instead", so it settles only when both halves have landed. A document holding the note at
-both addresses is a half-read reload, not a settled edit. And the same rule as the sequencer's
-otherwise — nothing in flight and a document arrived means the document has the last word, so a
-ghost that still disagrees was a command that FAILED and is dropped. That is why the four commit
+A `sequence note` command costs ~400 ms on the service — it recompiles the project — so the roll
+holds its own ghost while the reload is out: `src/rollPending.ts`, keyed by `${key}@${start}` —
+the address every note verb takes. A **move** is one ghost saying "gone from here, there
+instead", so it settles only when both halves have landed: a document holding the note at both
+addresses is a half-read reload, not a settled edit. Nothing in flight and a document arrived
+means the document has the last word, so a ghost that still disagrees was a command that FAILED
+and is dropped. That is why the four commit
 callbacks answer the command's promise instead of dropping it.
 
 ### The click is HEARD
@@ -585,7 +433,7 @@ through the file service (`engine/k7-runtime/docs/protocol.md`). Two things foll
   own `playGuideNote`. A release that has to arrive is a hanging voice every time it does not —
   a dropped pointerup, a closed pane, a socket that blinked.
 
-A row's NAME plays too: a key in the roll's gutter, a sound's name in the sequencer's. That click
+A row's NAME plays too: a key in the roll's gutter. That click
 is at **half velocity** (`AUDITION_VEL`, MIDI 64), whatever the notes on the row are worth. It is
 a check of which sound a row is, and a full-velocity hit to identify a kick is louder than the
 question. How quiet half velocity actually sounds is up to the instrument's velocity response.
@@ -803,7 +651,7 @@ answer it two ways:
 | `WaveformView` (a clip file in the editor, `whole`) | shaded over the whole file, from the TEXT, live as you type — the view the window is JUDGED in, and the one it is SET in: both edges drag |
 | `AudioClipPanel` (clicking an audio event) | the pane roams the FILE and the event's window is a band on it — see below |
 | the roll, placed sequence or `sequences/*.k7x` | the canvas spans the sequence and the pair is a band on it — the panel's shape, in beats |
-| the tracker and the inline grids | the band, drawn as ground under the notes |
+| the inline grid (`sequence edit roll`) | the band, drawn as ground under the notes |
 
 Where it is still a band it is deliberately colourless — a white wash with its two edges picked
 out. These panes already spend violet on a selection, blue on a warp, teal on a marker, emerald on
@@ -1077,7 +925,7 @@ does not play also hides what a trim would give back.
 
 The outside is treated two ways, and the difference is real. On the **roll**, a note outside the
 window is dimmed and inert: a sequence's window is its pattern, so a note before or after it sounds
-in no pass at all, and saying so is honest. In the **tracker, the inline grids and `WaveformView`'s
+in no pass at all, and saying so is honest. In the **inline grid and `WaveformView`'s
 whole view**, the outside is not dimmed — the band lights what plays rather than greying what does
 not, because for a repeated AUDIO clip the pane past the window is not silence, it is the next
 pass, and a rule reading "this does not play" would be wrong in the commoner case.

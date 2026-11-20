@@ -162,7 +162,6 @@ sits on a page with the timeline's layer count.
 | `TimelineTab` | `Playhead` (a compositor animation, above) and `RecordingClip` (**width** — it is a growing block, and only its right edge moves) |
 | `Minimap` | `MinimapPlayhead` |
 | `PianoRoll` | `RollPlayhead` |
-| `SequencerPanel` | `StepPlayhead` — a transform and not `left`: `left` is layout, and it would relay out the grid of buttons twenty times a second |
 | `AudioClipPanel` | `LiveWaveform` — the clip panel's own line, on the FILE's axis; see below |
 | `WaveformView` | `ClipWaveform` — through `Waveform`'s `setTime` handle, which moves a CSS clip and a line and redraws no canvas (`packages/ui-waveform/docs/layers.md`) |
 | `TakesView` | `TakesPlayhead` — ONE line across every row, a transform and not `left`: one per row would cost a layout invalidation and an animation callback per row per frame; the view itself renders on gestures only |

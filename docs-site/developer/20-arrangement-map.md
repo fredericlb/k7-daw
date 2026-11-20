@@ -20,7 +20,7 @@ is the one after.
 | Waveform drawing | `packages/ui-waveform/src/Waveform.tsx`, `spectrum.ts`, `ticks.ts` |
 | Waveform data | `packages/audio-probe/src/waveform.ts` (envelope slicing, beat grid), `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/media/waveform.rs` (serving it) |
 | Trim gate | `packages/audio-probe/src/trimGate.ts` |
-| Note views | `apps/k7/frontend/src/components/PianoRoll.tsx`, `apps/k7/frontend/src/hooks/useRollGestures.ts`, `rollDrag.ts`, `rollMode.ts`; `SequencerPanel.tsx`, `apps/k7/frontend/src/hooks/useStepPads.ts`, `stepGrid.ts`; `ClipViewModes.tsx`; grid caret in `apps/k7/frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
+| Note views | `apps/k7/frontend/src/components/PianoRoll.tsx`, `apps/k7/frontend/src/hooks/useRollGestures.ts`, `rollDrag.ts`, `rollMode.ts`; grid caret in `apps/k7/frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
 | Curve editor | `apps/k7/frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveKnob.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
 | MIDI | `apps/k7/frontend/src/webmidi.ts`, `midiIn.ts`, `midiControl.ts`, `midiActivity.ts`, `apps/k7/frontend/src/hooks/useMidiRecording.ts`, `apps/k7/frontend/src/hooks/useMidiControl.ts`, `apps/k7/frontend/src/components/MidiTakeRoll.tsx` |
 | Takes | `apps/k7/frontend/src/takes.ts`, `takeCounter.ts`, `apps/k7/frontend/src/hooks/useTakeRecording.ts`, `apps/k7/frontend/src/components/TakesView.tsx`, `TakeRow.tsx`, `CompStrip.tsx`; server side `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/engine/queue.rs` (the arm) |

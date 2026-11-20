@@ -226,7 +226,7 @@ The timeline and the note editors share one clipboard.
 |---|---|---|
 | `c` or Ctrl+C | `selection copy` | Copy the events that **start** inside the rectangle — or, with no rectangle, the event under the caret. |
 | `p` or Ctrl+V | `selection paste` | Put them down with the rectangle's top-left at the caret. |
-| Backspace | `selection delete` | Remove what the rectangle holds, or the event under the caret. In an open roll or sequencer, the notes instead. |
+| Backspace | `selection delete` | Remove what the rectangle holds, or the event under the caret. In an open roll, the notes instead. |
 
 Pasted events keep everything they had — window, fades, loop count, mute, warp — and only their
 start moves. The first copied row lands on the caret's lane and each following row on the next lane

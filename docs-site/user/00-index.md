@@ -36,7 +36,7 @@ New to k7? Read [What k7 is](./01-what-is-k7.md), then [The home page](./03-home
 - [The arrangement timeline](./20-timeline.md)
 - [Tracks and lanes](./21-tracks.md)
 - [Events and clips](./22-clips.md)
-- [Clip editors: waveform, piano roll, step sequencer](./23-clip-editors.md)
+- [Clip editors: waveform and piano roll](./23-clip-editors.md)
 - [Automation and curves](./24-automation.md)
 - [Recording: audio, MIDI and takes](./25-recording.md)
 - [Mixing, metering and mastering](./26-mixing.md)

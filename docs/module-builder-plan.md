@@ -20,7 +20,7 @@ In the media library, clicking any of them opens the same builder as k7.
 
 1. The shared builder is a package of its own, **`@studio/ui-module-builder`**, and not a piece of
    `@studio/ui-editor`. The latter is the *language* stack — CodeMirror k7x mode, completions
-   derived from the schema, entity links, tracker widget — and it is framework-agnostic; the
+   derived from the schema, entity links, note-grid widget — and it is framework-agnostic; the
    builder is a React *view*. Merging them would bring React into a package that does without it.
    (Which does not stop a piece moving up into `ui-editor` when it really belongs to the language —
    see the vocabulary, below.)

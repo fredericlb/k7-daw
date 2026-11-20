@@ -48,7 +48,7 @@ In move mode (`m` on an event): `h`/← and `l`/→ nudge one beat, Enter writes
 | `w` | waveform | `ui wave warp` |
 | `n` | roll | `ui roll create` |
 | `d` | roll | `ui roll remove` |
-| `x`, Backspace | roll, sequencer | `selection delete` |
+| `x`, Backspace | roll | `selection delete` |
 | Esc | waveform / roll | back to standard / select |
 
 ## Mouse modifiers

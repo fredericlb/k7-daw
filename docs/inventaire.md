@@ -172,20 +172,18 @@ offering the list of a VST's parameters to bind.
 
 ## 4. Duplication
 
-### A MIDI note's name, four times, in four spellings
+### A MIDI note's name, twice
 
 The same chromatic table and the same arithmetic (`((k%12)+12)%12`, `Math.floor(k/12)-1`):
 
 | where | constant |
 |---|---|
-| `packages/ui-editor/src/tracker/RollGrid.ts` | `NOTE_NAMES` |
-| `packages/ui-editor/src/tracker/TrackerGrid.ts` | `NAMES2` (two characters: `C-`) |
+| `packages/ui-editor/src/noteGrid/RollGrid.ts` | `NOTE_NAMES` |
 | `apps/k7/frontend/src/noteNames.ts` | `NAMES`, behind `noteName` |
 
-Two aggravating details. The first two are in **the same folder of the same package**. And
-`noteNames.ts` calls itself "one spelling of a MIDI key, for every view" — true within k7,
-false the moment you step into `@studio/ui-editor`, which k7 already depends on and which has two of
-its own. The predicate follows: `isBlack = [1,3,6,8,10].includes(...)`, identical in two files.
+One aggravating detail: `noteNames.ts` calls itself "one spelling of a MIDI key, for every view" — true within k7,
+false the moment you step into `@studio/ui-editor`, which k7 already depends on and which has one of
+its own. The predicate follows: `isBlack = [1,3,6,8,10].includes(...)`, kept by the roll grid.
 
 Not addressed: it is a decision about **where to put the table**, not a cleanup.
 
