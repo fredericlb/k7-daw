@@ -124,6 +124,7 @@ export function HistoryPanel({
         <CommitsList
           transport={gitTransport}
           workspace={cfg().workspace}
+          state={git}
           refreshKey={[
             git?.ahead,
             git?.behind,
@@ -138,6 +139,9 @@ export function HistoryPanel({
         className="min-h-0 flex-1 overflow-y-auto"
         onMouseLeave={() => onMark(null)}
       >
+        <p className="type-status px-1 pt-1 text-fg-3">
+          {m["history.intro"]()}
+        </p>
         {rows.length === 0 && !error && (
           <p className="px-1 py-2 text-fg-2 text-sm">{m["history.empty"]()}</p>
         )}
@@ -337,8 +341,8 @@ function SyncHistorySection({
   return (
     <section className="flex min-h-0 flex-1 flex-col text-xs">
       <header className="flex shrink-0 items-center gap-1 px-2 py-1">
-        <span className="min-w-0 flex-1 truncate px-1.5 text-muted-foreground uppercase tracking-wide text-[10px]">
-          {m["synchist.title"]()}
+        <span className="min-w-0 flex-1 px-1.5 text-fg-3">
+          {m["synchist.title"]({ workspace })}
         </span>
         {offers.write && (
           <Button size="sm" variant="ghost" onClick={() => void name()}>
@@ -393,6 +397,9 @@ function SyncHistorySection({
           ),
         )}
       </RowGroup>
+      <p className="type-status shrink-0 px-3.5 py-2 text-fg-3">
+        {m["synchist.footnote"]()}
+      </p>
     </section>
   );
 }

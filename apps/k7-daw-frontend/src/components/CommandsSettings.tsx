@@ -154,7 +154,7 @@ export function CommandsSettings({
 
   // The row whose shortcut cell is waiting for a key, by canonical. One at a time, obviously.
   const [capturing, setCapturing] = useState<string | null>(null);
-  // What the last bound key took from another command, said once under the filter row.
+  // What the last bound key took from another command, said once on the status line.
   const [took, setTook] = useState("");
   /** The capture itself, on the window and in the capture phase; Escape renounces, and Backspace takes the shortcut away as KEY_NONE. */
   useWindowKey(
@@ -223,7 +223,13 @@ export function CommandsSettings({
         <span className="hidden type-secondary text-fg-2 md:inline">
           {m["cmds.subtitle"]()}
         </span>
-        <span className="ml-auto" />
+        <Input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={m["common.filter"]()}
+          aria-label={m["common.filter"]()}
+          className="ml-auto w-full sm:w-56"
+        />
         {/* The button, and beside it what it would write: a shortcut assigned here does not run until it is saved. */}
         <span
           className={cn(
@@ -246,15 +252,8 @@ export function CommandsSettings({
         </Button>
       </header>
 
-      {/* The filter row: the text filter, then what a command acts on, read off its sid. */}
+      {/* The chips: what a command acts on, read off its sid. */}
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-(--k7-hairline) px-4 py-2">
-        <Input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder={m["common.filter"]()}
-          aria-label={m["common.filter"]()}
-          className="w-full sm:w-56"
-        />
         {["", ...entities].map((e) => (
           <Chip
             variant="filter"
@@ -269,11 +268,21 @@ export function CommandsSettings({
           {shown.length}/{commands.length}
         </span>
       </div>
-      {took && (
-        <p role="status" className="px-4 py-1.5 type-secondary text-warn">
-          {took}
-        </p>
-      )}
+      <div
+        aria-hidden
+        className="hidden shrink-0 items-center gap-2 border-b border-(--k7-hairline) px-4 py-1.5 type-badge text-fg-3 uppercase md:flex"
+      >
+        <span className="w-9 shrink-0">{m["cmds.colIcon"]()}</span>
+        {locales.map((l) => (
+          <span key={l} className="min-w-40 flex-1">
+            {m["cmds.colName"]({ locale: l })}
+          </span>
+        ))}
+        <span className="w-56 shrink-0">{m["cmds.colCommand"]()}</span>
+        <span className="w-28 shrink-0">{m["cmds.colMenu"]()}</span>
+        <span className="w-[76px] shrink-0">{m["cmds.colKey"]()}</span>
+        <span className="w-24 shrink-0">{m["cmds.colOrder"]()}</span>
+      </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {shown.map((c) => (
@@ -300,6 +309,17 @@ export function CommandsSettings({
           </p>
         )}
       </div>
+
+      {/* One status line: the capture hint while a key is awaited, else what the last bound key took. */}
+      <p
+        role="status"
+        className={cn(
+          "min-h-8 shrink-0 border-t border-(--k7-hairline) px-4 py-1.5 type-secondary",
+          capturing ? "text-fg-2" : "text-warn",
+        )}
+      >
+        {capturing ? m["cmds.captureHint"]() : took}
+      </p>
     </div>
   );
 }
@@ -420,14 +440,6 @@ const CommandRow = memo(function CommandRow({
       >
         {capturing ? "…" : (keyText ?? "—")}
       </Button>
-      {capturing && (
-        <span
-          role="status"
-          className="glass absolute top-full right-4 z-10 rounded-xl px-3 py-1.5 type-secondary"
-        >
-          {m["cmds.captureHint"]()}
-        </span>
-      )}
 
       <Button
         size="icon-xs"

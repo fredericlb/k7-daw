@@ -207,15 +207,6 @@ export function PlaylistPane({
       </audio>
 
       <header className="flex shrink-0 flex-wrap items-center gap-2 pb-2">
-        <Button
-          size="sm"
-          variant={searching ? "default" : "secondary"}
-          disabled={!!cannotAdd}
-          title={cannotAdd}
-          onClick={() => setSearching((s) => !s)}
-        >
-          <Search className="mr-1 h-4 w-4" /> {m["media.playlists.search"]()}
-        </Button>
         {/* The night-before job, here rather than on the desk because it is about the SET LIST and not about one record. */}
         <Button
           size="sm"
@@ -251,65 +242,6 @@ export function PlaylistPane({
         />
       ) : null}
 
-      {/* The search, above the list and not over it: watching the set list grow as you pick is the only confirmation there is. */}
-      {searching ? (
-        <div className="flex max-h-[55%] min-h-0 shrink-0 flex-col pb-2">
-          <div className="flex shrink-0 items-center gap-2 px-3 py-2">
-            <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <Input
-              ref={queryRef}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                // The shell binds bare keys; a search field must keep its own.
-                e.stopPropagation();
-                // Escape closes without adding; Enter takes the first hit, which is what 'type three letters and press return' expects.
-                if (e.key === "Escape") return setSearching(false);
-                if (e.key === "Enter" && hits[0]) add(hits[0]);
-              }}
-              placeholder={m["pl.searchPlaceholder"]()}
-              className="min-w-0 flex-1"
-            />
-            <span className="type-mono-value shrink-0 text-fg-3">
-              {hits.length}
-            </span>
-            <Button
-              size="icon-sm"
-              variant="ghost"
-              aria-label={m["pl.closeSearch"]()}
-              onClick={() => setSearching(false)}
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
-          </div>
-          <div className="min-h-0 flex-1 overflow-auto px-3 pb-3">
-            {hits.length === 0 ? (
-              <p className="py-3 text-fg-2 text-sm">{m["pl.noHit"]()}</p>
-            ) : (
-              <RowGroup>
-                {hits.slice(0, MAX_HITS).map((r) => (
-                  <RowButton
-                    key={r}
-                    icon={<Disc3 />}
-                    detail={r}
-                    trailing={<Plus className="size-4 text-fg-3" />}
-                    onClick={() => add(r)}
-                  >
-                    {recordName(r)}
-                  </RowButton>
-                ))}
-              </RowGroup>
-            )}
-            {/* Never a silent cap: a search that quietly hid the song you wanted is worse than one that says to type another word. */}
-            {hits.length > MAX_HITS ? (
-              <p className="type-status py-2 text-fg-3">
-                {m["pl.moreHits"]({ n: hits.length - MAX_HITS })}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
-
       <div className="min-h-0 flex-1 overflow-auto">
         {rows.length === 0 ? (
           <div className="flex flex-col items-start gap-3 p-4">
@@ -318,19 +250,6 @@ export function PlaylistPane({
                 items: <span className="font-mono">items:</span>,
               })}
             </p>
-            {/* The empty state is where the header's button is most needed and least findable, so it is offered again here. */}
-            {searching ? null : (
-              <Button
-                size="sm"
-                variant="secondary"
-                disabled={!!cannotAdd}
-                title={cannotAdd}
-                onClick={() => setSearching(true)}
-              >
-                <Search className="mr-1 h-4 w-4" />{" "}
-                {m["media.playlists.search"]()}
-              </Button>
-            )}
           </div>
         ) : (
           <RowGroup role="list">
@@ -457,6 +376,74 @@ export function PlaylistPane({
             })}
           </RowGroup>
         )}
+      </div>
+
+      {/* The search sits under the list, where a record is added: the list grows above it, which is the only confirmation there is. */}
+      <div className="flex max-h-[55%] min-h-0 shrink-0 flex-col pt-2">
+        {searching ? (
+          <div className="min-h-0 flex-1 overflow-auto px-3 pb-3">
+            {hits.length === 0 ? (
+              <p className="py-3 text-fg-2 text-sm">{m["pl.noHit"]()}</p>
+            ) : (
+              <RowGroup>
+                {hits.slice(0, MAX_HITS).map((r) => (
+                  <RowButton
+                    key={r}
+                    icon={<Disc3 />}
+                    detail={r}
+                    trailing={<Plus className="size-4 text-fg-3" />}
+                    onClick={() => add(r)}
+                  >
+                    {recordName(r)}
+                  </RowButton>
+                ))}
+              </RowGroup>
+            )}
+            {/* Never a silent cap: a search that quietly hid the song you wanted is worse than one that says to type another word. */}
+            {hits.length > MAX_HITS ? (
+              <p className="type-status py-2 text-fg-3">
+                {m["pl.moreHits"]({ n: hits.length - MAX_HITS })}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+        <div className="flex shrink-0 items-center gap-2 px-3 py-2">
+          <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+          <Input
+            ref={queryRef}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSearching(true);
+            }}
+            onFocus={() => setSearching(true)}
+            onKeyDown={(e) => {
+              // The shell binds bare keys; a search field must keep its own.
+              e.stopPropagation();
+              // Escape closes without adding; Enter takes the first hit, which is what 'type three letters and press return' expects.
+              if (e.key === "Escape") return setSearching(false);
+              if (e.key === "Enter" && hits[0]) add(hits[0]);
+            }}
+            placeholder={m["pl.searchPlaceholder"]()}
+            aria-label={m["media.playlists.search"]()}
+            disabled={!!cannotAdd}
+            title={cannotAdd}
+            className="min-w-0 flex-1"
+          />
+          <span className="type-mono-value shrink-0 text-fg-3">
+            {hits.length}
+          </span>
+          {searching ? (
+            <Button
+              size="icon-sm"
+              variant="ghost"
+              aria-label={m["pl.closeSearch"]()}
+              onClick={() => setSearching(false)}
+            >
+              <X className="h-3.5 w-3.5" />
+            </Button>
+          ) : null}
+        </div>
       </div>
 
       <footer className="type-status flex shrink-0 items-center gap-2 pt-2 text-fg-3">

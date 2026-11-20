@@ -6,6 +6,7 @@
 // It holds NO state: CommandBar owns the command, the answers and the gesture inlets, and two
 // copies of that would be two commands. See docs/commandBar.md.
 
+import { Button } from "@studio/ui/button";
 import { cn } from "@studio/ui/lib/utils";
 import type { EnterAction } from "../commandFill";
 import type { ArgOption } from "../palette";
@@ -31,6 +32,8 @@ export function CommandParams({
   onHover,
   onKeyDown,
   onRepick,
+  onRun,
+  canRun,
   inputRef,
 }: {
   command: PaletteCommand;
@@ -49,6 +52,10 @@ export function CommandParams({
   onKeyDown: (e: React.KeyboardEvent) => void;
   /** The command's name was clicked: drop it and pick another. */
   onRepick: () => void;
+  /** Run the line as it stands — the panel's Run button. */
+  onRun: () => void;
+  /** Whether every required field is answered. */
+  canRun: boolean;
   inputRef: React.RefObject<HTMLInputElement | null>;
 }) {
   const arg: PaletteArg | undefined = command.args[active];
@@ -109,39 +116,70 @@ export function CommandParams({
             : "↵ next"}
       </span>
 
-      {suggestions.length > 0 && (
-        // Opens DOWNWARD, as the command list does, so the best value sits right under the row.
-        <ul className="absolute top-full left-0 right-0 z-30 mt-2 flex max-h-72 flex-col overflow-auto rounded-md border border-border bg-popover py-1 text-xs shadow-md">
-          {suggestions.map((o, i) => (
-            <li
-              key={o.value}
-              ref={
-                i === selected
-                  ? (el) => el?.scrollIntoView({ block: "nearest" })
-                  : undefined
-              }
-            >
-              <button
-                type="button"
-                // mousedown, and preventDefault: the blur that would close this list must never be the one that was about to pick from it.
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  onPick(o.value);
-                }}
-                onMouseEnter={() => onHover(i)}
-                className={cn(
-                  "w-full cursor-pointer px-3 py-0.5 text-left font-mono",
-                  arg ? argColor[arg.kind] : "text-foreground",
-                  i === selected && "bg-accent",
-                )}
-              >
-                {/* A labelled option is LISTED by its label and inserts its value, which a person cannot read (commands/docs/completions.md). */}
-                {o.label ?? o.value}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      {/* Opens DOWNWARD, as the command list does: the sentence, the active field's hint, its values, then Back and Run. */}
+      <div className="absolute top-full left-0 right-0 z-30 mt-2 flex flex-col rounded-md border border-border bg-popover py-1 text-xs shadow-md">
+        <p className="truncate px-3 pt-1 font-bold type-secondary text-foreground">
+          {command.readable}
+        </p>
+        {arg?.hint && (
+          <p className="truncate px-3 pb-1 type-status text-fg-3">
+            {arg.name}: {arg.hint}
+          </p>
+        )}
+        {suggestions.length > 0 && (
+          <>
+            <p className="type-caps px-3 pt-1 pb-0.5 text-fg-3">{arg?.name}</p>
+            <ul className="flex max-h-60 flex-col overflow-auto">
+              {suggestions.map((o, i) => (
+                <li
+                  key={o.value}
+                  ref={
+                    i === selected
+                      ? (el) => el?.scrollIntoView({ block: "nearest" })
+                      : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    // mousedown, and preventDefault: the blur that would close this list must never be the one that was about to pick from it.
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onPick(o.value);
+                    }}
+                    onMouseEnter={() => onHover(i)}
+                    className={cn(
+                      "w-full cursor-pointer px-3 py-0.5 text-left font-mono",
+                      arg ? argColor[arg.kind] : "text-foreground",
+                      i === selected && "bg-accent",
+                    )}
+                  >
+                    {/* A labelled option is LISTED by its label and inserts its value, which a person cannot read (commands/docs/completions.md). */}
+                    {o.label ?? o.value}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        <div className="flex justify-end gap-2 px-2 pt-1">
+          <Button
+            size="sm"
+            variant="ghost"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={onRepick}
+          >
+            {m["common.back"]()}
+          </Button>
+          <Button
+            size="sm"
+            disabled={!canRun}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={onRun}
+          >
+            {m["commandBar.run"]()}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

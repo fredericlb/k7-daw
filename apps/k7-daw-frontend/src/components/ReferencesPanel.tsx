@@ -8,7 +8,8 @@ import {
   type ReferenceTrack,
 } from "@studio/song-schema/reference";
 import { Button } from "@studio/ui/button";
-import { Loader2, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
+import { EmptyState } from "@studio/ui/empty-state";
+import { Loader2, Music, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
 import { formatBytes } from "@studio/ui-chains-react/node-load";
 import { byPeoplePath } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -88,21 +89,14 @@ export function ReferencesPanel({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex shrink-0 items-center justify-between gap-2 pb-2">
-        <p className="min-w-0 truncate text-fg-2 text-xs">
-          {m["refs.title"]()}
-        </p>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["refs.add"]()}
-          aria-label={m["refs.add"]()}
-          disabled={busy !== null}
-          onClick={() => pick.current?.click()}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
-      </div>
+      <Button
+        variant="outline"
+        className="mb-2 w-full shrink-0 justify-center"
+        disabled={busy !== null}
+        onClick={() => pick.current?.click()}
+      >
+        <Plus className="size-4" /> {m["refs.add"]()}
+      </Button>
 
       {/* The OS picker, hidden: `accept` is the same extension list the listing goes by. */}
       <input
@@ -136,11 +130,11 @@ export function ReferencesPanel({
             <Loader2 className="h-4 w-4 animate-spin" /> {m["common.loading"]()}
           </div>
         ) : rows.length === 0 ? (
-          <p className="p-3 text-muted-foreground text-sm">
+          <EmptyState compact glyph={<Music />} title={m["refs.emptyTitle"]()}>
             {parts((h) => m["refs.empty"](h), {
               dir: <span className="font-mono">{REFERENCES_DIR}/</span>,
             })}
-          </p>
+          </EmptyState>
         ) : (
           <ul>
             {rows.map((r) => (
