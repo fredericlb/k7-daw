@@ -13,6 +13,7 @@ import {
 } from "@studio/ui/dropdown-menu";
 import {
   ArrowDownToLine,
+  ArrowUpFromLine,
   ChevronDown,
   GitCommitHorizontal,
   GitMerge,
@@ -101,6 +102,14 @@ export function HeaderGit({
         <ArrowDownToLine className="size-5 text-primary-text" />
         {m["git.pull"]()}
         {v.toPull > 0 && <Badge variant="count">{v.toPull}</Badge>}
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        disabled={!v.push || !!g.busy}
+        onSelect={() => void g.act("push")}
+      >
+        <ArrowUpFromLine className="size-5 text-primary-text" />
+        {m["git.push"]()}
+        {v.toPush > 0 && <Badge variant="count">{v.toPush}</Badge>}
       </DropdownMenuItem>
       <DropdownMenuItem onSelect={onCommits}>
         <History className="size-5 text-primary-text" />
