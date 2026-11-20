@@ -49,7 +49,11 @@ import {
   type WaveMode,
 } from "../waveMode";
 import { ChainOpsList } from "./ChainOpsList";
-import { OnsetThreshold, TrimGateMenu } from "./ClipGateControls";
+import {
+  OnsetThreshold,
+  TrimGateButton,
+  TrimGateCard,
+} from "./ClipGateControls";
 import { ClipMarksList, type MarkRow } from "./ClipMarksList";
 import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
@@ -634,21 +638,11 @@ export function AudioClipPanel({
               )}
 
               {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
-              <TrimGateMenu
+              <TrimGateButton
                 open={gateOpen}
-                onOpenChange={(o) => setGateOpen(o && !!clip)}
-                gate={gate}
-                onGate={setGate}
-                keep={keep}
+                onToggle={() => setGateOpen(!gateOpen && !!clip)}
                 busy={busy === "trim"}
                 disabled={!!busy || !clip}
-                canTrim={!!keep && !busy && !!eventAt && !!track}
-                onTrim={() => {
-                  setGateOpen(false);
-                  // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
-                  if (eventAt && track)
-                    void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
-                }}
               />
               {/* Operations: every chain the project and the library offer, run over THIS clip (@studio/commands docs/processChain.md). */}
               <DropdownMenu>
@@ -696,6 +690,20 @@ export function AudioClipPanel({
         </div>
       </DockHeaderRow>
 
+      {!rolling && gateOpen && clip && (
+        <TrimGateCard
+          gate={gate}
+          onGate={setGate}
+          keep={keep}
+          canTrim={!!keep && !busy && !!eventAt && !!track}
+          onTrim={() => {
+            setGateOpen(false);
+            // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
+            if (eventAt && track)
+              void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
+          }}
+        />
+      )}
       {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
       {!rolling && clip && (
         <ClipToolBar

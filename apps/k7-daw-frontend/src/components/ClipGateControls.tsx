@@ -1,13 +1,8 @@
 // ClipGateControls.tsx — the clip panel's two thresholds: the onset editor's sensitivity, and the
-// trim gate, whose menu OPENS a gate rather than applying one so the wave can draw what it would keep.
+// trim gate, whose pill OPENS a gate card rather than applying one so the wave can draw what it would keep.
 // See ../../docs/clipEditors.md.
 
 import { Button } from "@studio/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@studio/ui/dropdown-menu";
 import { Loader2 } from "@studio/ui/icons";
 import { m } from "../paraglide/messages.js";
 
@@ -45,76 +40,88 @@ export function OnsetThreshold({
   );
 }
 
-/** The Trim button and its gate: a threshold, what it would keep, and the trim itself. */
-export function TrimGateMenu({
+/** The Trim pill: pressed while the gate card below the header is open. */
+export function TrimGateButton({
   open,
-  onOpenChange,
+  onToggle,
+  busy,
+  disabled,
+}: {
+  open: boolean;
+  onToggle: () => void;
+  busy: boolean;
+  disabled: boolean;
+}) {
+  return (
+    <Button
+      size="sm"
+      variant="outline"
+      disabled={disabled}
+      aria-pressed={open}
+      onClick={onToggle}
+      className={open ? "bg-on-fill text-lavender" : undefined}
+    >
+      {busy ? (
+        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+      ) : (
+        m["clip.trim"]()
+      )}
+    </Button>
+  );
+}
+
+/** The gate card: a threshold, what it would keep, and the trim itself; it draws the kept part over the wave while open. */
+export function TrimGateCard({
   gate,
   onGate,
   keep,
-  busy,
-  disabled,
   canTrim,
   onTrim,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
   gate: number;
   onGate: (db: number) => void;
   /** What a trim at this gate would keep, in file seconds, or null for nothing above it. */
   keep: { from: number; to: number } | null;
-  /** A trim is running. */
-  busy: boolean;
-  disabled: boolean;
   /** Off with no EVENT to name: the verb addresses a placement, and a take being reviewed has none. */
   canTrim: boolean;
   onTrim: () => void;
 }) {
   return (
-    <DropdownMenu open={open} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline" disabled={disabled}>
-          {busy ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            m["clip.trim"]()
-          )}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-72 p-3">
-        <div className="flex items-center gap-2 text-xs">
-          {m["clip.threshold"]()}
-          <input
-            type="range"
-            min={GATE_MIN}
-            max={GATE_MAX}
-            step={1}
-            value={gate}
-            onChange={(e) => onGate(Number(e.target.value))}
-            className="flex-1"
-            aria-label={m["clip.gateLabel"]()}
-          />
-          <span className="w-12 tabular-nums">{gate} dB</span>
-        </div>
-        <p className="mt-2 text-[11px] text-muted-foreground">
+    <div
+      role="group"
+      aria-label={m["clip.trim"]()}
+      className="mx-1 shrink-0 rounded-2xl bg-(--k7-row) p-3"
+    >
+      <div className="flex items-center gap-2 text-xs">
+        {m["clip.threshold"]()}
+        <input
+          type="range"
+          min={GATE_MIN}
+          max={GATE_MAX}
+          step={1}
+          value={gate}
+          onChange={(e) => onGate(Number(e.target.value))}
+          className="flex-1"
+          aria-label={m["clip.gateLabel"]()}
+        />
+        <span className="w-14 tabular-nums">{gate} dB</span>
+      </div>
+      <div className="mt-2 flex items-center gap-3">
+        <p className="min-w-0 flex-1 text-[11px] text-muted-foreground">
           {keep
-            ? m["clip.keeps"]({
+            ? `${m["clip.trim"]()} · ${m["clip.keeps"]({
                 from: keep.from.toFixed(2),
                 to: keep.to.toFixed(2),
-              })
+              })}`
             : m["clip.nothingAbove"]()}
+          {" · "}
+          {m["clip.trimHint"]()}
         </p>
         {/* No warning needed: a trim writes this EVENT's window, not the material (song/docs/materialCut.md). */}
-        <Button
-          size="sm"
-          className="mt-2 w-full"
-          disabled={!canTrim}
-          onClick={onTrim}
-          title={m["clip.trimHint"]()}
-        >
+        <Button size="sm" disabled={!canTrim} onClick={onTrim}>
           {m["clip.trim"]()}
         </Button>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </div>
+    </div>
   );
 }
