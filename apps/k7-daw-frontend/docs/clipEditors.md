@@ -123,8 +123,8 @@ here mounts a component, so arithmetic left inline in one is arithmetic no test 
 `rollMode.ts`: `select`, `create`, `remove` — and a fourth, `takes`, which is a VIEW rather than a
 gesture and is described below. They are the roll's own rather than the timeline's
 tools — what a lane holds here is NOTES, so creating and removing are the two acts, and neither
-means anything on a track. A 32px column of icons down the pane's left edge is the third way to
-one, beside the keys and the bar, and the only one a finger has; each button dispatches
+means anything on a track. A tool menu in the panel header (`RollToolMenu.tsx`) is the third way to
+one, beside the keys and the bar, and the only one a finger has; each item dispatches
 `ui roll <mode>` rather than setting the state beside it.
 
 | mode | a press on a bare lane | a press on a note |
@@ -657,9 +657,9 @@ Where it is still a band it is deliberately colourless — a white wash with its
 out. These panes already spend violet on a selection, blue on a warp, teal on a marker, emerald on
 a note; a seventh hue for the thing all of those sit *inside* would compete with every one of them.
 
-### The waveform's three views ARE its three gestures
+### The waveform's tools ARE its gestures
 
-`standard`, `onsets`, `warp` — named in `waveMode.ts`, and they were always modes: each one decides
+The clip tools read Range, Split, Stretch, List and Takes; their ids stay `standard`, `onsets`, `warp`, `list`, `takes` — named in `waveMode.ts`, and they were always modes: each one decides
 what is DRAWN over the wave *and* what pointing at it does. That pairing is deliberate and is why,
 unlike the timeline, there is **no separate tool axis here**. On a lane a tool and a mode are worth
 keeping apart, because the pointer's meaning is not drawn anywhere. On the wave it is: the marks
@@ -670,6 +670,7 @@ pointer disagree about what a click would do.
 |---|---|
 | `standard` | nothing on the wave itself — the window's two edges still drag, which is what sets an event's window |
 | `onsets` | a click adds a transient, a click on a pin removes it, dragging one moves it — `clip onset add` / `remove` / `move` |
+| `list` | every mark of the event (window edges, onsets, stretch points) as a row; a row frames the zoom on it, its x removes the mark |
 | `warp` | a double-click pins a stretch point, dragging it says where its beat lands, a right-click removes it — `clip warp` / `clip warp remove` |
 
 The modality has **a way in that is not the mouse**, by the shell's own rule that no control on
@@ -686,14 +687,14 @@ The panel says what a press would do on every change of view, and the footer's b
 name while it is anything but `standard`. Same reason as the timeline's: the status line is a
 message and passes, a mode does not.
 
-A **32px column of icons** sits down the panel's left edge, one per view, the current one lit —
-the same strip the timeline carries, from the same table (`modeIcons.tsx`), and the only way to a
-view that a finger has. It is drawn only once there is a file: while a take rolls there is no mark
-to point at, so there would be nothing to choose between. Like the select above it, each button
-dispatches the command.
+The tools are a **40 px segmented radiogroup** above the wave (`ClipToolBar.tsx`), the only way to
+one that a finger has. It is drawn only once there is a file: while a take rolls there is no mark
+to point at. Each segment dispatches the command. Above the zoom sits the **whole-clip overview**
+(`ClipOverview.tsx`): the file's envelope with a frame on the part the zoom shows, which drags
+without changing the zoom's width.
 
 **The cursor over the wave is the button's own drawing**, built from the same SVG body — see
-`timeline.md` for why that matters and how the outline and hotspots work. `standard` keeps the
+`timeline.md` for why that matters and how the outline and hotspots work. `standard` (and `list`) keep the
 system's arrow, having no mark to place and so nothing to promise.
 
 ### The clip panel frames the EVENT, and acts only on it

@@ -35,7 +35,7 @@ import { warpLine } from "../clipWarp";
 import { useLatest } from "../hooks/useLatest";
 import { useLiveEnvelope } from "../hooks/useLiveEnvelope";
 import { isTyping, useWindowKey } from "../hooks/useWindowKey";
-import { cursorOf, ModeStrip } from "../modeIcons";
+import { cursorOf } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
 import { useReloadKey, useVerbs } from "../state/shellStore";
 import { barBeat, takeCounter } from "../takeCounter";
@@ -49,6 +49,9 @@ import {
 } from "../waveMode";
 import { ChainOpsList } from "./ChainOpsList";
 import { OnsetThreshold, TrimGateMenu } from "./ClipGateControls";
+import { ClipMarksList, type MarkRow } from "./ClipMarksList";
+import { ClipOverview } from "./ClipOverview";
+import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
 import { EventGainSlider } from "./EventGainSlider";
 import { LiveSeconds, LiveTakeWave, LiveWaveform } from "./LiveWaveform";
@@ -192,6 +195,7 @@ export function AudioClipPanel({
     : eventWindowProp;
   // A piece is no placement: the event verbs refuse it, so trim is off and its edges edit the comp instead.
   const eventAt = piece ? null : eventAtProp;
+  const showList = view === "list" && !rolling;
   const editingOnsets = view === "onsets";
   const editingWarp = view === "warp";
   // `standard` keeps the system's arrow: it places no mark, so there is nothing for a picture to promise.
@@ -338,6 +342,23 @@ export function AudioClipPanel({
     lastFramed.current = framedKey;
     frameOnEvent();
   }, [wf, framedKey, frameOnEvent]);
+  // The List tool's rows: the window's edges, the onsets inside it and the stretch points, in file order.
+  const markRows: MarkRow[] = [
+    { key: "from", kind: "edge" as const, sec: act.from },
+    { key: "to", kind: "edge" as const, sec: act.to },
+    ...inAct.map((sec) => ({
+      key: `o${sec}`,
+      kind: "onset" as const,
+      sec,
+    })),
+    ...(wf?.warpMarks ?? []).map((w) => ({
+      key: `w${w.orig}`,
+      kind: "stretch" as const,
+      sec: w.orig,
+      lands: w.src,
+      src: w.src,
+    })),
+  ].sort((a, b) => a.sec - b.sec);
   // Beats per second — the whole of the conversion, since there is no tempo map.
   const bps = Math.max(1e-6, tempo / 60);
   /** The event the loop verbs address, or null: a piece of a comp is no placement, and an unplaced clip has none. */
@@ -578,22 +599,6 @@ export function AudioClipPanel({
                 }
               />
             </span>
-            {/* What the picture is for — and the select DISPATCHES the command rather than doubling it (docs/shell.md). */}
-            <label className="flex items-center gap-1.5 whitespace-nowrap">
-              {m["clip.view"]()}
-              <select
-                className="rounded border border-input bg-background px-1 py-0.5"
-                value={view}
-                onChange={(e) => void command(`ui wave ${e.target.value}`)}
-                aria-label={m["clip.viewLabel"]()}
-              >
-                {WAVE_MODES.map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </label>
             {/* The threshold belongs to the onset editor alone: under a stretch job a slider rewriting the sidecar would be a trap. */}
             {editingOnsets && (
               <OnsetThreshold value={sensitivity} onChange={setSensitivity} />
@@ -657,18 +662,16 @@ export function AudioClipPanel({
         )}
       </div>
 
+      {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
+      {!rolling && clip && (
+        <ClipToolBar
+          modes={takes ? WAVE_MODES : WAVE_SOLO_MODES}
+          current={view}
+          onPick={(mode) => void command(`ui wave ${mode}`)}
+        />
+      )}
       {/* The take list beside the wave: one row when there is nothing to choose between, two columns after several passes. */}
       <div className="flex min-h-0 flex-1 gap-2">
-        {/* The three views as a 32px column — the only way to one a finger has; absent while a take rolls, there being no mark yet. */}
-        {!rolling && clip && (
-          <ModeStrip
-            modes={takes ? WAVE_MODES : WAVE_SOLO_MODES}
-            current={view}
-            onPick={(m) => void command(`ui wave ${m}`)}
-            title={(m) => `${m} — ${WAVE_PRESS[m]}`}
-            className="-my-2 -ml-2"
-          />
-        )}
         {/* The TAKES mode draws in the wave's place; the wave stays mounted, hidden, so its state survives a switch. */}
         {showTakes && takes && (
           <TakesView
@@ -701,13 +704,63 @@ export function AudioClipPanel({
               }}
             />
           )}
+          {/* The whole file with the zoom's frame on it; dragging the frame moves the window, never its width. */}
+          {!rolling && wf && !showList && (
+            <ClipOverview
+              rms={wf.rms}
+              seconds={wf.seconds}
+              view={win.view}
+              act={framed ? act : null}
+              onMove={(sec) =>
+                setAsked((a) => ({
+                  ...a,
+                  start: win.barSec > 0 ? (sec - reach.from) / win.barSec : 0,
+                }))
+              }
+            />
+          )}
+          {showList && wf && (
+            <ClipMarksList
+              rows={markRows}
+              onFocus={(sec) => {
+                setAsked((a) => ({
+                  ...a,
+                  start:
+                    win.barSec > 0
+                      ? (sec - reach.from) / win.barSec - a.bars / 2
+                      : 0,
+                }));
+                void command("ui wave standard");
+              }}
+              onRemove={
+                clip
+                  ? (r, x, y) =>
+                      r.kind === "onset"
+                        ? void run(
+                            `clip onset remove ${clip} ${r.sec.toFixed(4)}`,
+                            `remove:${r.key}`,
+                          )
+                        : r.src != null &&
+                          onContextMenu?.(
+                            {
+                              kind: "warp-point",
+                              clip,
+                              src: r.src.toFixed(4),
+                            },
+                            x,
+                            y,
+                          )
+                  : undefined
+              }
+            />
+          )}
           {/* The SONG's ruler over the wave (Ruler.tsx), the placement's grid rather than the warp — see docs/clipEditors.md. */}
           {!rolling &&
             wf &&
             placedAt != null &&
             waveW > 0 &&
             win.view.end > win.view.start && (
-              <div className="relative shrink-0">
+              <div className={cn("relative shrink-0", showList && "hidden")}>
                 <ArrangementRuler
                   // `placedAt` is the beat the event's window starts playing at, so the song's beat here is measured from `act.from`.
                   startBeat={placedAt + (win.view.start - act.from) * bps}
@@ -752,6 +805,7 @@ export function AudioClipPanel({
             style={waveCursor ? { cursor: waveCursor } : undefined}
             className={cn(
               "min-h-0 flex-1 touch-none",
+              showList && "hidden",
               waveCursor && "[&_*]:!cursor-[inherit]",
             )}
             onWheel={(e) => {

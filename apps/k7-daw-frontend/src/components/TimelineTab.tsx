@@ -552,7 +552,11 @@ function TimelineTabView({
   // Set once the clock button is pressed: from then on the picture arriving no longer picks the unit.
   const rulerChosen = useRef(false);
   useEffect(() => {
-    if (!rulerChosen.current) setRulerSeconds(!!fps);
+    // A picture project opens in seconds, once, as a store write the bar then shows; a press of the clock ends it.
+    if (fps && !rulerChosen.current) {
+      rulerChosen.current = true;
+      setRulerSeconds(true);
+    }
   }, [fps, setRulerSeconds]);
   const toggleRuler = useCallback(() => {
     rulerChosen.current = true;

@@ -42,14 +42,13 @@ import { useGridCaret } from "../hooks/useGridCaret";
 import { useRollGestures } from "../hooks/useRollGestures";
 import { useRollHover } from "../hooks/useRollHover";
 import { useRollWindow } from "../hooks/useRollWindow";
-import { cursorOf, ModeStrip } from "../modeIcons";
+import { cursorOf } from "../modeIcons";
 import { isBlack, noteName, pc } from "../noteNames";
 import { m } from "../paraglide/messages.js";
 import { groupOffset, tSpan } from "../rollDrag";
 import { rollFit } from "../rollFit";
 import {
   ROLL_MODES,
-  ROLL_PRESS,
   ROLL_SOLO_MODES,
   type RollMode,
 } from "../rollMode";
@@ -69,6 +68,7 @@ import {
   type RollNoteHandlers,
 } from "./RollNoteBox";
 import { RollPlayhead } from "./RollPlayhead";
+import { RollToolMenu } from "./RollToolMenu";
 import { ArrangementRuler, Grid, RulerTicks, rulerScale } from "./Ruler";
 import { SeqDoubleButton } from "./SeqDoubleButton";
 import { type PanelTakes, TakesView } from "./TakesView";
@@ -648,6 +648,13 @@ export function PianoRoll({
         </span>
         {/* The right end of the bar, whatever it holds: the ✕ then needs no margin rule of its own. */}
         <span className="ml-auto flex items-center gap-1">
+          {onModeChange && (
+            <RollToolMenu
+              modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
+              current={mode}
+              onPick={(next) => void onCommand?.(`ui roll ${next}`)}
+            />
+          )}
           {/* Editable rolls only — `onCreateNote` is what says this one is (docs/clipEditors.md). */}
           <LoopToggle on={looped} onToggle={onLoop} />
           <SeqDoubleButton
@@ -658,15 +665,6 @@ export function PianoRoll({
       </div>
 
       <div className="flex min-h-0 flex-1">
-        {/* The three modes as a 32px column — the only way to one a finger has, the keys and the bar being the other two. */}
-        {onModeChange && (
-          <ModeStrip
-            modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
-            current={mode}
-            onPick={(m) => void onCommand?.(`ui roll ${m}`)}
-            title={(mode) => `${mode} — ${ROLL_PRESS[mode]()}`}
-          />
-        )}
         {/* The TAKES mode draws in the lanes' place; the lanes stay mounted, hidden, so the caret and the scroll survive. */}
         {showTakes && takes && (
           <TakesView
