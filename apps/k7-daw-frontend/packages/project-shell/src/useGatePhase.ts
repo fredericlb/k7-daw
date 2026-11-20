@@ -90,8 +90,14 @@ export function useGatePhase({
     if (p) configure(p.userEmail, p.workspace);
   }, [engineKey, configure]);
 
+  // What the unmount below reads: the phase when the gate goes, and whether quit already let the engine go.
+  const phaseNow = useRef(phase.k);
+  phaseNow.current = phase.k;
+  const released = useRef(false);
+
   /** Leave: go back to where projects live. Nothing to forget. */
   const quit = useCallback(() => {
+    released.current = true;
     // Not from under another tab of this account still using the session.
     if (!anotherTabActive(IDLE_TIMEOUT_MS))
       void fileRoutes.unloadEngine().catch(() => {
@@ -99,6 +105,18 @@ export function useGatePhase({
       });
     goToAddress(projectsUrl(window.location.href));
   }, []);
+
+  /** Any other way out (the header's Back link, the browser's Back) unmounts the gate: it stops and unloads too — docs/idle.md. */
+  useEffect(
+    () => () => {
+      const held = phaseNow.current === "open" || phaseNow.current === "loading";
+      if (released.current || !held || anotherTabActive(IDLE_TIMEOUT_MS)) return;
+      void fileRoutes.unloadEngine().catch(() => {
+        /* engine or file service gone — leaving is still right */
+      });
+    },
+    [],
+  );
 
   /** Armed only while the project is OPEN — every other phase idles already. See docs/idle.md. */
   useIdleTimeout(phase.k === "open" ? idleTimeoutMs : 0, () => {

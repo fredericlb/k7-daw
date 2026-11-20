@@ -88,6 +88,11 @@ pushed a document in behind it.
 `unloadEngine` is exactly the call `quit()` makes — leaving a project and falling asleep on it are
 the same close, and only one is written.
 
+**Leaving by any road unloads.** The header's Back is a link and the browser's Back a history move:
+both draw Home in place without passing through `quit()`. So the gate unloads when it unmounts
+while it held a project (`open` or `loading`), unless `quit()` already did; a project left playing
+in the engine keeps sounding and holding memory behind the home page.
+
 `onIdle` is held in a **ref**, and that carries: an application passing an inline closure would
 give a fresh `onIdle` on every render, and with it in the dependencies the effect would replay —
 returning the lease and emptying the engine on every frame of the idle screen.
