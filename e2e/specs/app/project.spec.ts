@@ -1,7 +1,7 @@
 // project.spec.ts — each seeded example project opens into its editor on the machine's engine.
 // It needs an engine the account can reach; without one the picker is all a project shows (docs/e2e.md).
 import { expect, test } from "../../src/target.ts";
-import { engineUp } from "../../src/transport.ts";
+import { engineUp, transportBar } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
 // One demo, the one with a picture: the golden suite renders all five and judges their sound.
@@ -20,7 +20,7 @@ for (const name of EXAMPLES) {
     const watch = watchPage(page);
     await engineUp(page);
     await expect(
-      page.getByRole("button", { name: "Play", exact: true }),
+      transportBar(page).getByRole("button", { name: "Play", exact: true }),
     ).toBeEnabled();
     await page.screenshot({
       path: `test-results/projects/${k7.target}-${name}.png`,

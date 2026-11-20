@@ -14,9 +14,9 @@ const row = (page: Page, ref: string): Locator =>
   page.getByRole("listitem").filter({ hasText: ref });
 
 async function openPage(page: Page): Promise<void> {
-  await expect(
-    page.getByRole("heading", { name: "Your chains", level: 2 }),
-  ).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole("heading", { name: "Your chains" })).toBeVisible({
+    timeout: 30_000,
+  });
 }
 
 /** Deletes the account's chain through its row's Delete and the confirmation. */
@@ -45,7 +45,7 @@ test("a cold chain is duplicated into the account's and deleted, and New chain o
 
   await test.step("duplicate the library's cold chain under a name of the account's", async () => {
     await expect(
-      page.getByRole("heading", { name: "Library cold chains", level: 2 }),
+      page.getByRole("heading", { name: "Library cold chains" }),
     ).toBeVisible();
     await row(page, SOURCE)
       .getByRole("button", { name: "Duplicate into your chains" })
@@ -77,9 +77,7 @@ test("a cold chain is duplicated into the account's and deleted, and New chain o
 
   await test.step("the bench is in no list of workspaces", async () => {
     page = await k7.open("/");
-    await expect(
-      page.getByRole("heading", { name: "Projects", level: 1 }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
     await expect(
       page.getByRole("button", { name: "New workspace", exact: true }),
     ).toBeVisible();

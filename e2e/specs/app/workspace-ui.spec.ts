@@ -123,8 +123,9 @@ test("a workspace and its project are made, renamed, copied and deleted from the
 
   await test.step("rename it", async () => {
     const dialog = await projectAct(page, row, "first", "Rename");
-    // The rename field carries no label and no placeholder: the dialog's only textbox.
-    await dialog.getByRole("textbox").fill("renamed");
+    await dialog
+      .getByRole("textbox", { name: "Name", exact: true })
+      .fill("renamed");
     await dialog.getByRole("button", { name: "Rename", exact: true }).click();
     await expect(dialog).toBeHidden({ timeout: 30_000 });
     await expectListed(page, WS, ["renamed.k7"]);

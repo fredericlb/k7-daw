@@ -66,8 +66,7 @@ async function workspace(k7: K7): Promise<FileService> {
 
 /** Waits until the output recorder's clock, beside its button, has counted a second of the take. */
 async function recordedASecond(page: Page): Promise<void> {
-  const stop = button(page, "Stop and file the recording");
-  await expect(stop.locator("xpath=..").getByText(/^\d+:\d\d$/)).toHaveText(
+  await expect(page.getByTestId("output-record-clock")).toHaveText(
     /^(0:0[1-9]|0:[1-5]\d|[1-9]\d*:\d\d)$/,
     { timeout: 30_000 },
   );
@@ -88,9 +87,15 @@ async function recordTake(page: Page, lane: string) {
     timeout: 30_000,
   });
   // Record once the project is playable: the load's dry run rolls in between, and its stop switches a younger record off.
-  const play = button(page, "Play");
+  const play = transportBar(page).getByRole("button", {
+    name: "Play",
+    exact: true,
+  });
   await expect(play).toBeEnabled({ timeout: 90_000 });
-  const record = button(page, "Record (arm + play records)");
+  const record = transportBar(page).getByRole("button", {
+    name: "Record",
+    exact: true,
+  });
   await record.click();
   await expect(record).toHaveAttribute("aria-pressed", "true");
   const before = await clockOf(page).innerText();

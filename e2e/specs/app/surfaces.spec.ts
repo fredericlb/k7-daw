@@ -5,7 +5,7 @@ import { join, relative } from "node:path";
 import type { Locator, Page } from "@playwright/test";
 import type { FileService } from "../../src/files.ts";
 import { FIXTURES_DIR, FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { navControl } from "../../src/nav.ts";
+import { navControl, pane } from "../../src/nav.ts";
 import { expect, type K7, TARGET, test } from "../../src/target.ts";
 import { engineUp, play, transportBar } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
@@ -38,7 +38,7 @@ const ARCHETYPES: Record<
       await expect(
         p.getByRole("button", { name: /^mute / }).first(),
       ).toBeVisible();
-      await expect(await navControl(p, "Timeline")).toBeVisible();
+      await expect(await pane(p, "Arrangement")).toBeVisible();
     },
   },
   mix: {
@@ -63,7 +63,7 @@ const ARCHETYPES: Record<
     transport: false,
     draws: async (p) => {
       await expect(recordButton(p)).toBeVisible({ timeout: 30_000 });
-      await expect(await navControl(p, "Timeline")).toHaveCount(0);
+      await expect(await pane(p, "Arrangement")).toHaveCount(0);
     },
   },
   "live-video": {
@@ -263,7 +263,9 @@ async function makeSet(k7: K7): Promise<void> {
 async function putOnDeckA(page: Page) {
   await button(page, "deck A").click();
   const browser = page.getByRole("dialog", { name: "Deck A" });
-  await expect(browser.getByText("1 song in the set")).toBeVisible();
+  await expect(browser.getByTestId("set-count")).toHaveText(
+    "1 song in the set",
+  );
   // A page wider than the screen makes a phone lay its dialogs out in a bigger viewport, where a tap misses the row.
   const width = await page.evaluate(() => {
     // The suite compiles without the DOM lib, so the one element read is typed here.
@@ -335,7 +337,10 @@ test("a record on deck A plays", async ({ k7 }) => {
   ).toHaveAttribute("aria-pressed", "true");
   // The needle is drawn on a canvas, so a meter's title says the record sounds; a refused one never would.
   await expect(
-    page.getByTitle(/^(level|output) -?\d+\.\d dB/).first(),
+    page
+      .getByTestId("deck-meter")
+      .and(page.getByTitle(/^(level|output) -?\d+\.\d dB/))
+      .first(),
   ).toBeVisible({
     timeout: 15_000,
   });

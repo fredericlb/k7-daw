@@ -2,7 +2,7 @@
 // Both are seeded from e2e/fixtures, and read from inside any project of the workspace.
 import type { Page } from "@playwright/test";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { navControl } from "../../src/nav.ts";
+import { panel } from "../../src/nav.ts";
 import { expect, type K7, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
@@ -16,7 +16,7 @@ async function openClipLane(k7: K7): Promise<Page> {
 test("the Tasks panel lists TODOS.md", async ({ k7 }) => {
   const page = await openClipLane(k7);
   const watch = watchPage(page);
-  await (await navControl(page, "Tasks")).click();
+  await (await panel(page, "Tasks & history", "Tasks")).click();
   await expect(page.getByText("E2E open task")).toBeVisible();
   await expect(page.getByText("E2E done task")).toBeVisible();
   watch.assertClean();
@@ -25,7 +25,7 @@ test("the Tasks panel lists TODOS.md", async ({ k7 }) => {
 test("the Reference tracks panel lists _references/", async ({ k7 }) => {
   const page = await openClipLane(k7);
   const watch = watchPage(page);
-  await (await navControl(page, "Reference tracks")).click();
+  await (await panel(page, "Resources", "Reference tracks")).click();
   await expect(page.getByText(/e2e-reference/)).toBeVisible();
   watch.assertClean();
 });

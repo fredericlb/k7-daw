@@ -2,7 +2,7 @@
 // One entry per fixture in e2e/fixtures; the table is what a reader checks against fixtures/README.md.
 import type { Page } from "@playwright/test";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { navControl, tempoReadout } from "../../src/nav.ts";
+import { navControl, pane, panel, tempoReadout } from "../../src/nav.ts";
 import { expect, type K7, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
@@ -30,7 +30,7 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
       await lane("kicks")(page);
       await lane("snares")(page);
       await expect(
-        page.getByText("drums", { exact: false }).first(),
+        page.getByRole("group", { name: "drums", exact: true }),
       ).toBeVisible();
     },
   },
@@ -62,13 +62,16 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
     },
   },
   "mixer-strip.k7": {
-    check: async (page) => expect(button(page, "Mix panel")).toBeEnabled(),
+    check: async (page) =>
+      expect(await panel(page, "Mixer", "Mix panel")).toBeEnabled(),
   },
   "master-chain.k7": { check: lane("drums") },
   "mastering.k7": {
     check: async (page) => {
       await (await navControl(page, "Mastering")).click();
-      await expect(page.getByText("Limiter", { exact: true })).toBeVisible();
+      await expect(
+        page.getByRole("group", { name: "Limiter", exact: true }),
+      ).toBeVisible();
     },
   },
   "library-module.k7": { check: lane("drums") },
@@ -78,10 +81,9 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
   },
   "markers-settings.k7": {
     check: async (page) => {
-      // The tempo button's row also holds the meter, in the footer or in a phone's Info popover.
-      const tempo = await tempoReadout(page, 96);
-      await expect(tempo).toBeVisible();
-      await expect(tempo.locator("xpath=..")).toContainText("3/4");
+      // The meter button sits beside the tempo's, in the transport or in a phone's Info popover.
+      await expect(await tempoReadout(page, 96)).toBeVisible();
+      await expect(button(page, "3/4")).toBeVisible();
       await expect(button(page, "Metronome")).toHaveAttribute(
         "aria-pressed",
         "true",
@@ -90,8 +92,8 @@ const FEATURES: Record<string, { check: Check; bug?: string }> = {
   },
   "chains-only.k7": {
     check: async (page) => {
-      await expect(await navControl(page, "Chains")).toBeVisible();
-      await expect(await navControl(page, "Timeline")).toHaveCount(0);
+      await expect(await pane(page, "Graph")).toBeVisible();
+      await expect(await pane(page, "Arrangement")).toHaveCount(0);
     },
   },
 };
@@ -120,7 +122,10 @@ for (const project of BROKEN) {
     const watch = watchPage(page);
     await expect(page.getByText(/timeline unavailable/)).toBeVisible();
     await expect(
-      page.getByRole("contentinfo").getByText(/\d+ errors?/),
+      page
+        .getByText(/\d+ errors?/)
+        .or(page.getByRole("link", { name: /^\d+ problems? reported/ }))
+        .first(),
     ).toBeVisible();
     watch.assertClean();
   });

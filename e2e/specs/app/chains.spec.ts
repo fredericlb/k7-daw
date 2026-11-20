@@ -4,7 +4,7 @@ import type { Locator, Page } from "@playwright/test";
 import { closeCommandBar, runCommand } from "../../src/commandBar.ts";
 import { expectFile, readFile, restoreProject } from "../../src/disk.ts";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
-import { navControl } from "../../src/nav.ts";
+import { pane } from "../../src/nav.ts";
 import { expect, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
@@ -27,16 +27,19 @@ async function openChains(k7: {
 }): Promise<Page> {
   const page = await k7.open(`/@local/${WS}/${PROJECT}`);
   await engineUp(page);
-  await (await navControl(page, "Chains")).click();
+  await (await pane(page, "Graph")).click();
   return page;
 }
 
+/** The graph canvas: a region named "Graph". */
+const canvas = (page: Page): Locator =>
+  page.getByRole("region", { name: "Graph", exact: true });
+
 /** A card of the canvas, named "node (module)" or just its name: a button while zoomed out, a group once its panel is drawn. */
 const card = (page: Page, name: string): Locator =>
-  page
-    .getByRole("main")
+  canvas(page)
     .getByRole("button", { name, exact: true })
-    .or(page.getByRole("main").getByRole("group", { name, exact: true }));
+    .or(canvas(page).getByRole("group", { name, exact: true }));
 
 async function centre(of: Locator): Promise<Point> {
   const box = await of.boundingBox();
@@ -66,8 +69,8 @@ async function pickOnCable(
 
   // Enter on the focused `+` is what a keyboard does, and needs no pointer on a cable drawn in SVG.
   const plus = cablePlus(page, "MIX", "OUT");
-  const picker = page.getByRole("menu");
-  const search = picker.getByRole("textbox", { name: "search modules…" });
+  const picker = page.getByRole("menu", { name: "Modules", exact: true });
+  const search = picker.getByRole("searchbox", { name: "Search modules" });
   // Before the module catalogue lands the `+` pre-writes the command instead (apps/k7-daw-frontend/src/shell/useGraphActions.ts): put it away and press again.
   await expect(async () => {
     await closeCommandBar(page);
@@ -77,7 +80,7 @@ async function pickOnCable(
   }).toPass({ timeout: 30_000 });
   await search.fill(EFFECT);
   await picker
-    .getByRole("menuitem", { name: new RegExp(`^${EFFECT}\\b`) })
+    .getByRole("menuitem", { name: EFFECT, exact: true })
     .first()
     .click();
 
@@ -142,19 +145,15 @@ test("a factory preset from the node's dropdown switches the Surge node's base, 
   const before = await readFile(page, WS, SYNTH_NODE);
   expect(before).not.toContain("base");
 
-  const dropdown = page
-    .getByRole("main")
-    .getByRole("button", { name: /^preset(: |$)/ });
+  const dropdown = canvas(page).getByRole("button", { name: /^preset(: |$)/ });
   await zoomOnto(page, synth, dropdown);
   await dropdown.click();
-  const shelf = page.getByRole("menu");
+  const shelf = page.getByRole("menu", { name: "Presets", exact: true });
   await expect(
-    shelf.getByRole("textbox", {
-      name: `search presets of ${SYNTH_MODULE}…`,
-    }),
+    shelf.getByRole("searchbox", { name: "Search presets" }),
   ).toBeVisible();
   await shelf
-    .getByRole("menuitem", { name: "Basses - Bass 2 k7-core", exact: true })
+    .getByRole("menuitem", { name: "Basses - Bass 2", exact: true })
     .click();
 
   const after = await expectFile(page, WS, SYNTH_NODE, (t) =>

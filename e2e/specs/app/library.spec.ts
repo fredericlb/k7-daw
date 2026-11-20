@@ -6,7 +6,7 @@ import type { Page } from "@playwright/test";
 import { builtinPluginForRef } from "@studio/song-schema/builtinParams";
 import { FileService } from "../../src/files.ts";
 import { expect, TARGET, test } from "../../src/target.ts";
-import { engineUp } from "../../src/transport.ts";
+import { engineUp, transportBar } from "../../src/transport.ts";
 
 const WORKSPACE = "E2E-library";
 const LIBRARY = join(import.meta.dirname, "../../../k7-core/modules");
@@ -330,7 +330,7 @@ for (const family of FAMILIES) {
     await writeProject(files, project, projectFiles(loadable, name));
     const page = await k7.open(`/@local/${WORKSPACE}/${project}`);
     await expect(
-      page.getByRole("button", { name: "Play", exact: true }),
+      transportBar(page).getByRole("button", { name: "Play", exact: true }),
     ).toBeEnabled({ timeout: 120_000 });
     // The engine's warning ends `(for '<track>:<node>')`, the plugin id.
     const warnings = await buildWarnings(page, name);

@@ -2,7 +2,7 @@
 // The clock rolling is all a spec sees of the sound; the engine document is what proves the patch was sent (apps/k7-daw-engine/k7-runtime/docs/surgePlugin.md).
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, test } from "../../src/target.ts";
-import { engineUp, play, rolls } from "../../src/transport.ts";
+import { engineUp, play, rolls, transportBar } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
 const PROJECT = "surge-synth.k7";
@@ -35,6 +35,8 @@ test("the Surge default patch plays", async ({ k7 }) => {
   await play(page);
   // Two beats of the chord rendered: a patch that failed to load has surfaced as a page error by then.
   await rolls(page, 2);
-  await page.getByRole("button", { name: "Stop", exact: true }).click();
+  await transportBar(page)
+    .getByRole("button", { name: "Stop", exact: true })
+    .click();
   watch.assertClean();
 });

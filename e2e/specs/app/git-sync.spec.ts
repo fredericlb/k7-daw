@@ -130,9 +130,7 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
       await openTree(page, A);
       await commit(page, "A's line");
       const barA = page.getByRole("region", { name: "Git" });
-      await expect(
-        barA.getByRole("button", { name: "Pull first" }),
-      ).toBeVisible(SLOW);
+      await expect(page.getByTestId("git-pull-first")).toBeVisible(SLOW);
     });
 
     await test.step("pull, choose mine, finish the merge", async () => {

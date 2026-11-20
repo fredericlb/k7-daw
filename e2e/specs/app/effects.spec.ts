@@ -2,7 +2,7 @@
 // The engine document is the proof a module was sent; a cold module's measuring pass runs only under `clip process` (apps/k7-daw-frontend/packages/song/docs/coldModules.md).
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, type K7, TARGET, test } from "../../src/target.ts";
-import { engineUp, play, rolls } from "../../src/transport.ts";
+import { engineUp, play, rolls, transportBar } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
 // The slice of @studio/engine-protocol's ProjectDoc read here.
@@ -49,7 +49,9 @@ async function playsClean(k7: K7, project: string, lane: string) {
   await play(page);
   // Two beats rendered through the plugins: one the engine failed to build has surfaced as a page error by then.
   await rolls(page, 2);
-  await page.getByRole("button", { name: "Stop", exact: true }).click();
+  await transportBar(page)
+    .getByRole("button", { name: "Stop", exact: true })
+    .click();
   watch.assertClean();
 }
 

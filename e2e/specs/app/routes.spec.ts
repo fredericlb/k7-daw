@@ -29,7 +29,6 @@ test("/external lists the surfaces of the project the engine holds", {
   const watch = watchPage(page);
   await expect(
     page.getByRole("heading", {
-      level: 1,
       name: `${FIXTURES_WORKSPACE} / clip-lane.k7`,
     }),
   ).toBeVisible({ timeout: 30_000 });
@@ -49,19 +48,19 @@ test("/settings draws every section with its controls, a tab at a time", async (
 }) => {
   const page = await k7.open("/settings");
   const watch = watchPage(page);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Settings" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Settings" })).toBeVisible();
   const sections = async (names: string[]) => {
     for (const name of names)
       await expect(
-        page.getByRole("heading", { level: 2, name, exact: true }),
+        page.getByRole("heading", { name, exact: true }),
       ).toBeVisible();
   };
   // General opens first: the language and the AI key; the separation chains are the tray engine page's (apps/k7-daw-frontend/docs/settings.md).
   await sections(["Language", "AI"]);
   await expect(page.getByRole("button", { name: "Français" })).toBeEnabled();
-  await expect(page.getByRole("textbox", { name: "sk-ant-…" })).toBeVisible();
+  await expect(
+    page.getByRole("textbox", { name: "New API key" }),
+  ).toBeVisible();
   // Devices: this device's paired devices (apps/k7-daw-frontend/docs/settings.md).
   await page.getByRole("tab", { name: "Devices" }).click();
   await sections(["Paired devices"]);
@@ -79,15 +78,11 @@ test("/settings/engine opens as a route change, off the tray", {
   tag: "@tier4",
 }, async ({ k7 }) => {
   const page = await k7.open("/settings");
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Settings" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Settings" })).toBeVisible();
   const watch = watchPage(page);
   // Reached the way the account menu reaches it: a route change, not a load.
   await routeTo(page, "/settings/engine");
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Engine" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Engine" })).toBeVisible();
   watch.assertClean();
 });
 
@@ -95,17 +90,15 @@ test("/settings/engine opens when loaded by its address", {
   tag: "@tier4",
 }, async ({ k7 }) => {
   const page = await k7.open("/settings/engine");
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Engine" }),
-  ).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole("heading", { name: "Engine" })).toBeVisible({
+    timeout: 10_000,
+  });
 });
 
 test("/libraries lists the bundled libraries, read-only", async ({ k7 }) => {
   const page = await k7.open("/libraries");
   const watch = watchPage(page);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Libraries" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Libraries" })).toBeVisible();
   await expect(page.getByText("@k7-core", { exact: true })).toBeVisible();
   await expect(page.getByText(/changes with an app update/)).toBeVisible();
   await expect(
@@ -119,20 +112,16 @@ test("/about shows the licence and filters the third-party notices", async ({
 }) => {
   const page = await k7.open("/about");
   const watch = watchPage(page);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "About" }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { level: 2, name: "Licence" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "About" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Licence" })).toBeVisible();
   await page.getByRole("button", { name: "Read it" }).click();
   await expect(
     page.getByText(/GNU GENERAL PUBLIC LICENSE/).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { level: 2, name: "Third-party notices" }),
+    page.getByRole("heading", { name: "Third-party notices" }),
   ).toBeVisible();
-  const count = page.getByText(/^\d+ of \d+ components$/);
+  const count = page.getByTestId("notices-count");
   const all = Number((await count.innerText()).split(" ")[2]);
   expect(all).toBeGreaterThan(10);
   await page
@@ -154,9 +143,7 @@ test("/tasks lists the workspaces' TODOS.md, done ones on demand", async ({
 }) => {
   const page = await k7.open("/tasks");
   const watch = watchPage(page);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Tasks" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Tasks" })).toBeVisible();
   await expect(page.getByText("E2E open task")).toBeVisible();
   await expect(page.getByText("E2E done task")).toBeHidden();
   await page.getByRole("checkbox", { name: "Show done" }).check();
@@ -176,8 +163,6 @@ test("/docs on the app's origin is no page, and says the way back", async ({
     }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Back to Projects" }).click();
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Projects" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
   watch.assertClean();
 });

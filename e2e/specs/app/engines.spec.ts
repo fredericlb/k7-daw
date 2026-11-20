@@ -2,7 +2,7 @@
 // The engine document is what proves the engine was picked; the clock rolling is all a spec sees of the sound.
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, test } from "../../src/target.ts";
-import { engineUp, play, rolls } from "../../src/transport.ts";
+import { engineUp, play, rolls, transportBar } from "../../src/transport.ts";
 import { watchPage } from "../../src/watch.ts";
 
 // The slice of @studio/engine-protocol's PluginDoc read here.
@@ -91,7 +91,9 @@ for (const [project, { plugins, lanes, bug }] of Object.entries(ENGINES)) {
     await play(page);
     // Two beats rendered through the plugins: one that failed to build or load has surfaced as a page error by then.
     await rolls(page, 2);
-    await page.getByRole("button", { name: "Stop", exact: true }).click();
+    await transportBar(page)
+      .getByRole("button", { name: "Stop", exact: true })
+      .click();
     watch.assertClean();
   });
 }

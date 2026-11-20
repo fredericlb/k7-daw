@@ -4,11 +4,11 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { folded, navControl } from "./nav.ts";
 
 export const commandBar = (page: Page): Locator =>
-  page.getByRole("combobox", { name: "Command" });
+  page.getByRole("combobox", { name: "Command", exact: true });
 
 /** The bar while it fills a command's parameters, which shows no combobox: the command's name, a button that goes back to picking one. */
 const filling = (page: Page): Locator =>
-  page.getByTitle(/ — click to pick another command$/);
+  page.getByRole("button", { name: "Change command", exact: true });
 
 /** Puts the bar away whichever form it is in; a pre-written command (a graph `+` before the catalogue landed) is dropped first. */
 export async function closeCommandBar(page: Page): Promise<void> {
@@ -30,11 +30,16 @@ async function openCommandBar(page: Page): Promise<Locator> {
   }
   // A phone's toast sits where the popin's suggestions open, and covers them until it is closed.
   for (const close of await page
+    .getByRole("region", { name: "Notifications" })
     .getByRole("button", { name: "Dismiss", exact: true })
     .all())
     if (await close.isVisible()) await close.click();
   if (!(await bar.isVisible()))
-    await (await navControl(page, "Commands")).click();
+    await page
+      .getByRole("button", { name: "Command bar", exact: true })
+      .or(await navControl(page, "Commands"))
+      .first()
+      .click();
   return bar;
 }
 
@@ -43,17 +48,17 @@ export async function runCommand(page: Page, name: string): Promise<void> {
   const bar = await openCommandBar(page);
   await bar.click();
   await bar.fill(name);
-  // A row reads "<sentence> <name>", so its accessible name ends with the command's.
+  // A row's accessible name is the command's name; the sentence is its description.
   const row = page
     .getByRole("listbox", { name: "Commands" })
-    .getByRole("option", { name: new RegExp(` ${name}$`) });
+    .getByRole("option", { name, exact: true });
   await expect(row).toBeVisible();
   await row.click();
 }
 
-/** The status line in the page's footer, where a command says what it did. */
+/** The project's status line, where a command says what it did. */
 const statusLine = (page: Page): Locator =>
-  page.getByRole("contentinfo").getByRole("status").first();
+  page.getByTestId("project-status-line").first();
 
 /** Expects the status line to read `text`; a phone draws none, so there the caller's disk check stands alone. */
 export async function expectStatus(
