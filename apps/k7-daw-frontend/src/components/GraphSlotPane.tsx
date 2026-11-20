@@ -1,9 +1,8 @@
 // GraphSlotPane.tsx — the frame every occupant of the graph's slot wears: the shell that fills
-// the pane and the title bar, drawn in the dock's header. A bar's first item is the bottom panel's ✕ (PanelClose.tsx).
+// the pane and the title bar, drawn in the dock's header; the dock's own Close is the only one.
 // The occupants supply a body and what to call it. See docs/shell.md on the slot itself.
 
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { PanelCloseButton } from "./PanelClose";
 
 /** One frame for everything that takes the graph's place — the SHELL is the point, worn two ways: with a `bar`, or with none. */
 export function GraphSlotPane({
@@ -22,7 +21,6 @@ export function GraphSlotPane({
       {bar !== undefined && (
         <DockHeaderRow>
           <div className="flex min-w-0 flex-1 items-center gap-2 text-xs text-muted-foreground">
-            <PanelCloseButton />
             {bar}
           </div>
         </DockHeaderRow>

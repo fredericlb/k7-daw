@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { Check, Loader2, Square, Trash2 } from "@studio/ui/icons";
+import { Check, Loader2, Play, Square, Trash2 } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { followPointer } from "@studio/ui-timeline/drag";
 import { wheelFactor } from "@studio/ui-timeline/panZoom";
@@ -49,7 +49,11 @@ import {
   type WaveMode,
 } from "../waveMode";
 import { ChainOpsList } from "./ChainOpsList";
-import { OnsetThreshold, TrimGateMenu } from "./ClipGateControls";
+import {
+  OnsetThreshold,
+  TrimGateButton,
+  TrimGateCard,
+} from "./ClipGateControls";
 import { ClipMarksList, type MarkRow } from "./ClipMarksList";
 import { ClipToolBar } from "./ClipToolBar";
 import { CompStrip } from "./CompStrip";
@@ -544,11 +548,29 @@ export function AudioClipPanel({
                     laneName(track),
                   )}
               </span>
+              {/* Plays the file's from/to window at its own tempo, through the same request the source strip's play button sends. */}
+              {clip && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  title={m["wave.listenHint"]()}
+                  onClick={() =>
+                    void api.preview({ kind: "clip", clip }).catch(() => {})
+                  }
+                >
+                  <Play className="mr-1 h-3 w-3" /> {m["clip.listen"]()}
+                </Button>
+              )}
               {/* A clip nothing places has no lane to name, and works the same: waveform, onsets and level belong to the FILE. */}
               {track ? (
                 <span>{m["clip.onTrack"]({ track })}</span>
               ) : (
                 <span>{m["clip.offTrack"]()}</span>
+              )}
+              {clip && (
+                <span className="truncate font-mono" title={clip}>
+                  {clip}
+                </span>
               )}
               {editingOnsets && (
                 <span className="text-faint">{m["clip.onsetHint"]()}</span>
@@ -616,21 +638,11 @@ export function AudioClipPanel({
               )}
 
               {/* Trim OPENS a gate rather than applying one, drawing what would be KEPT over the wave (docs/shell.md). */}
-              <TrimGateMenu
+              <TrimGateButton
                 open={gateOpen}
-                onOpenChange={(o) => setGateOpen(o && !!clip)}
-                gate={gate}
-                onGate={setGate}
-                keep={keep}
+                onToggle={() => setGateOpen(!gateOpen && !!clip)}
                 busy={busy === "trim"}
                 disabled={!!busy || !clip}
-                canTrim={!!keep && !busy && !!eventAt && !!track}
-                onTrim={() => {
-                  setGateOpen(false);
-                  // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
-                  if (eventAt && track)
-                    void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
-                }}
               />
               {/* Operations: every chain the project and the library offer, run over THIS clip (@studio/commands docs/processChain.md). */}
               <DropdownMenu>
@@ -678,6 +690,20 @@ export function AudioClipPanel({
         </div>
       </DockHeaderRow>
 
+      {!rolling && gateOpen && clip && (
+        <TrimGateCard
+          gate={gate}
+          onGate={setGate}
+          keep={keep}
+          canTrim={!!keep && !busy && !!eventAt && !!track}
+          onTrim={() => {
+            setGateOpen(false);
+            // The EVENT is the bound, and naming it is all the command needs — the same pair the preview above was drawn against.
+            if (eventAt && track)
+              void run(`event trim ${track} ${eventAt} ${gate}`, "trim");
+          }}
+        />
+      )}
       {/* The tool axis, absent while a take rolls (no mark yet): it DISPATCHES `ui wave`, the only way to a tool a finger has. */}
       {!rolling && clip && (
         <ClipToolBar

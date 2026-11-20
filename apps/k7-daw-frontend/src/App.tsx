@@ -1050,6 +1050,10 @@ export default function App({
     [focusOn, layout, full],
   );
 
+  const backToArrangement = useCallback(
+    () => fullscreen("timeline"),
+    [fullscreen],
+  );
   // The layout before the module builder took the editor fullscreen — put back when it closes; undefined = nothing to restore.
   const beforeBuilder = useRef<Pane | null | undefined>(undefined);
   // Whether the open module has unsaved edits: the tree beside the builder can swap it for another.
@@ -2942,9 +2946,14 @@ export default function App({
   const eventsBody = (
     <div className="flex h-full min-h-0 min-w-0 flex-col">
       {(!dockSlot || dockSlot.kind === "trackModules") && (
-        <p className="flex h-full items-center justify-center px-4 text-center text-muted-foreground text-xs">
-          {m["panel.eventEmpty"]()}
-        </p>
+        <div className="flex h-full flex-col items-center justify-center gap-1 px-4 text-center">
+          <p className="font-semibold text-foreground text-sm">
+            {m["panel.eventEmptyTitle"]()}
+          </p>
+          <p className="max-w-md text-muted-foreground text-xs">
+            {m["panel.eventEmpty"]()}
+          </p>
+        </div>
       )}
       {dockSlot?.kind === "grid" && (
         <PaneBoundary
@@ -3044,6 +3053,8 @@ export default function App({
         {...graphHostProps}
         trackId={null}
         strips={mixerStrips}
+        masterVolume={projectDoc?.masterVolume}
+        onMaster={setMaster}
         master={
           masteringSurface ? (
             <MasteringTab
@@ -3366,6 +3377,7 @@ export default function App({
                         onEditTarget={setEditTargetIfOther}
                         onOpenItem={setOpenItemIfOther}
                         onOpenBuilder={openModuleBuilder}
+                        onBack={hasTimeline ? backToArrangement : undefined}
                         onOpenLibraryModule={paneFns.openLibraryModule}
                         // The module builder takes the editor's place BESIDE the file tree, as the chains builder does (docs/moduleBuilder.md).
                         moduleBuilder={moduleBuilderEl}
@@ -3572,6 +3584,16 @@ export default function App({
             {hasViewport && (
               <FloatingWindow
                 title={VIEWPORT_META.label}
+                subtitle={
+                  videoDoc
+                    ? m["shell.picture.size"]({
+                        w: videoDoc.viewport[0],
+                        h: videoDoc.viewport[1],
+                        fps: videoDoc.fps,
+                      })
+                    : undefined
+                }
+                closeLabel={m["shell.picture.close"]()}
                 open={viewportOpen}
                 onClose={() => void runCommand("ui viewport")}
                 rect={viewportFloat.rect}

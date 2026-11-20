@@ -17,6 +17,10 @@ import { useLatest } from "../hooks/useLatest";
 
 export interface FloatingWindowProps {
   title: string;
+  /** A muted line under the title (the picture's size and rate); absent draws the title alone. */
+  subtitle?: string;
+  /** The close button's name; defaults to "Hide <title>". */
+  closeLabel?: string;
   open: boolean;
   onClose: () => void;
   /** The saved rect, or null for the first placement. */
@@ -30,6 +34,8 @@ const screen = () => ({ vw: window.innerWidth, vh: window.innerHeight });
 
 export function FloatingWindow({
   title,
+  subtitle,
+  closeLabel,
   open,
   onClose,
   rect,
@@ -84,13 +90,16 @@ export function FloatingWindow({
       >
         {/* The title bar is the handle: no text selection, and `touch-none` so a finger drags rather than scrolls. */}
         <div className="floating-window-handle type-status flex h-9 shrink-0 cursor-grab touch-none select-none items-center gap-2 px-3 text-fg-2 active:cursor-grabbing">
-          <span className="flex-1 truncate">{title}</span>
+          <span className="min-w-0 flex-1 truncate">
+            {title}
+            {subtitle && <span className="ml-2 text-fg-3">{subtitle}</span>}
+          </span>
           <button
             type="button"
             onClick={onClose}
             className="floating-window-cancel rounded p-0.5 hover:bg-accent hover:text-foreground"
-            aria-label={`Hide ${title.toLowerCase()}`}
-            title={`Hide ${title.toLowerCase()}`}
+            aria-label={closeLabel ?? `Hide ${title.toLowerCase()}`}
+            title={closeLabel ?? `Hide ${title.toLowerCase()}`}
           >
             <X className="h-3.5 w-3.5" />
           </button>
