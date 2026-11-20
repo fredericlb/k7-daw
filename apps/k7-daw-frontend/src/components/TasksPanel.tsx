@@ -8,7 +8,7 @@ import { askConfirm } from "@studio/project-shell/ask";
 import { projectTagsOf } from "@studio/song-schema/projectTags";
 import { parseTasks, TASKS_FILE, type Task } from "@studio/song-schema/tasks";
 import { Button } from "@studio/ui/button";
-import { ListChecks, Plus, Trash2, X } from "@studio/ui/icons";
+import { Plus, Trash2, X } from "@studio/ui/icons";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
 import { useRevision } from "../hooks/useRevision";
@@ -20,7 +20,6 @@ export function TasksPanel({
   timecode,
   onSeek,
   onRun,
-  onClose,
 }: {
   /** The open project as the workspace names it — a task pinned there can be jumped to. */
   project: string | null;
@@ -29,7 +28,6 @@ export function TasksPanel({
   /** Put the playhead on a timecode of the open project. */
   onSeek: (timecode: string) => void;
   onRun: (line: string) => Promise<void>;
-  onClose: () => void;
 }) {
   const [tasks, setTasks] = useState<Task[] | null>(null);
   const [error, setError] = useState("");
@@ -99,24 +97,10 @@ export function TasksPanel({
   };
 
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-border border-l bg-background">
-      <header className="flex shrink-0 items-center gap-1 border-border border-b px-2 py-1.5">
-        <ListChecks className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 truncate px-1.5 text-sm">
-          {m["tasks.title"]()}
-        </span>
-        <span className="shrink-0 px-1 font-mono text-[10px] text-muted-foreground">
-          {TASKS_FILE}
-        </span>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </header>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <p className="shrink-0 pb-2 font-mono text-[10px] text-muted-foreground">
+        {TASKS_FILE}
+      </p>
 
       {project && (
         <form
@@ -255,6 +239,6 @@ export function TasksPanel({
           );
         })}
       </div>
-    </aside>
+    </div>
   );
 }

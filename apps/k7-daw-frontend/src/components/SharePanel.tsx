@@ -5,14 +5,7 @@
 // this and the palette saying the same.
 
 import { Button } from "@studio/ui/button";
-import {
-  Download,
-  FileArchive,
-  FolderOpen,
-  Loader2,
-  Share2,
-  X,
-} from "@studio/ui/icons";
+import { Download, FileArchive, FolderOpen, Loader2 } from "@studio/ui/icons";
 import { useState } from "react";
 import { tracksLine } from "../exportArgs";
 import type { ExportHost, Saved } from "../exportHost";
@@ -28,7 +21,6 @@ export function SharePanel({
   onReveal,
   onShare,
   onRun,
-  onClose,
 }: {
   /** A render is already running — the rows grey out rather than starting a second. */
   busy: boolean;
@@ -44,7 +36,6 @@ export function SharePanel({
   onReveal?: () => void;
   onShare?: () => void;
   onRun: (command: string) => void;
-  onClose: () => void;
 }) {
   const row =
     "flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-sm hover:bg-accent disabled:opacity-50";
@@ -60,27 +51,13 @@ export function SharePanel({
   const on = (l: string) => (line === l ? "bg-accent" : "");
 
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-l border-border bg-background">
-      <header className="flex shrink-0 items-center gap-2 border-b border-border px-2 py-1.5">
-        <Share2 className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 truncate text-sm font-medium">
-          {m["share.button"]()}
-        </span>
-        {busy ? (
-          <Loader2
-            className="h-4 w-4 shrink-0 animate-spin text-muted-foreground"
-            aria-label={m["share.rendering2"]()}
-          />
-        ) : null}
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </header>
+    <div className="flex min-h-0 flex-1 flex-col">
+      {busy ? (
+        <div className="flex shrink-0 items-center gap-2 pb-2 text-fg-2 text-sm">
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
+          {m["share.rendering2"]()}
+        </div>
+      ) : null}
 
       <div className="min-h-0 flex-1 overflow-y-auto p-2">
         <div className={head}>{m["share.mixdown"]()}</div>
@@ -182,6 +159,6 @@ export function SharePanel({
           </div>
         ) : null}
       </footer>
-    </aside>
+    </div>
   );
 }

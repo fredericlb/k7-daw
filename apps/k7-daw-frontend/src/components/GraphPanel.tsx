@@ -22,7 +22,7 @@ import {
   DomChains,
   type TapAction,
 } from "@studio/ui-chains-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { thawAutoFreeze } from "../api";
 import { STUDIO_ICONS } from "../chainsIcons";
 import { useChainsWords } from "../chainsLabels";
@@ -38,7 +38,6 @@ import { useLiveRackLit } from "../rackLit";
 import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import { layoutTrackPanel } from "../trackPanelLayout";
 import type { WebProject } from "../types";
-import { PanelCloseButton } from "./PanelClose";
 
 export function GraphPanel({
   onPreviewNote,
@@ -48,6 +47,7 @@ export function GraphPanel({
   organizeKey = 0,
   trackId,
   strips,
+  master,
   trackOrder,
   videoSpans,
   noteLanes,
@@ -81,6 +81,8 @@ export function GraphPanel({
   trackId: string | null;
   /** The mixer strips (mixerStrips.ts): set, the panel draws the whole graph lined up on them rather than one track's path. */
   strips?: readonly string[];
+  /** The Master section drawn under the strips (the mastering surface): the Mixer panel's last section. */
+  master?: ReactNode;
   // The engine's track order; the live-signal set is derived off the store (see ChainsTab).
   trackOrder: string[];
   /** …and when each video lane shows a picture, which nothing meters — straight through, for a subgraph holding one (../videoSpans.ts). */
@@ -302,20 +304,23 @@ export function GraphPanel({
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="flex items-center gap-2 border-b border-border px-2 py-1 text-xs">
-        <PanelCloseButton />
-        <span className="font-semibold text-primary-text">
-          {strips ? m["graph.mixTitle"]() : m["graph.graphTitle"]()}
-        </span>
-        <span className="truncate font-mono text-muted-foreground">
-          {strips
-            ? (strips.length === 1
-                ? m["graph.strips.one"]
-                : m["graph.strips.other"])({ n: strips.length })
-            : (trackId ?? m["graph.noTrack"]())}
-        </span>
-      </div>
+      <p className="shrink-0 truncate pb-2 font-mono text-fg-2 text-xs">
+        {strips
+          ? (strips.length === 1
+              ? m["graph.strips.one"]
+              : m["graph.strips.other"])({ n: strips.length })
+          : (trackId ?? m["graph.noTrack"]())}
+      </p>
       <div className="min-h-0 flex-1">{body()}</div>
+      {strips && master ? (
+        <section
+          aria-label={m["graph.master"]()}
+          className="mt-2 max-h-[55%] shrink-0 overflow-auto rounded-2xl bg-(--k7-row) p-3"
+        >
+          <h3 className="type-caps pb-2 text-fg-2">{m["graph.master"]()}</h3>
+          {master}
+        </section>
+      ) : null}
     </div>
   );
 }

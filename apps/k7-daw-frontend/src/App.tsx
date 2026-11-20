@@ -2984,13 +2984,7 @@ export default function App({
           />
         );
       case "playlists":
-        return (
-          <PlaylistsPanel
-            vimMode={vimMode}
-            onRun={runCommand}
-            onClose={closePanelNow}
-          />
-        );
+        return <PlaylistsPanel vimMode={vimMode} onRun={runCommand} />;
       case "references":
         return (
           <>
@@ -3005,7 +2999,6 @@ export default function App({
                 sounding={referenceSounding}
                 onPlay={setReference}
                 onToggle={() => referenceToggle.current?.()}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -3019,7 +3012,7 @@ export default function App({
               resetKey={reloadKey}
               onError={paneError}
             >
-              <ResourcesPanel reloadKey={reloadKey} onClose={closePanelNow} />
+              <ResourcesPanel reloadKey={reloadKey} />
             </PaneBoundary>
           </>
         );
@@ -3049,7 +3042,6 @@ export default function App({
                   )
                 }
                 onRun={runCommand}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -3068,7 +3060,6 @@ export default function App({
                 git={gitHandle.state}
                 gitTransport={gitTransport}
                 onMark={setHistoryMark}
-                onClose={closePanelNow}
               />
             </PaneBoundary>
           </>
@@ -3084,11 +3075,9 @@ export default function App({
             hasPicture={!!videoDoc}
             timelines={(projectDoc?.timelines ?? []).map((t) => t.id)}
             onRun={(c) => void runCommand(c)}
-            onClose={closePanelNow}
           />
         );
       case "mixer":
-        // The Master section of this panel is built with the mixer itself.
         return (
           <PaneBoundary
             name="graph panel"
@@ -3099,6 +3088,17 @@ export default function App({
               {...graphHostProps}
               trackId={null}
               strips={mixerStrips}
+              master={
+                masteringSurface ? (
+                  <MasteringTab
+                    surface={masteringSurface}
+                    paramsStore={pluginParamsStore}
+                    setPluginParam={setPluginParam}
+                    watchPluginParams={watchPluginParams}
+                    command={quietCommand}
+                  />
+                ) : null
+              }
             />
           </PaneBoundary>
         );
@@ -3362,30 +3362,6 @@ export default function App({
                             trackIds={trackOrder}
                             readOnly={locked}
                             videoArmed={videoArmed}
-                          />
-                        </PaneBoundary>
-                      </div>
-                    )}
-                    {/* The MASTER STRIP, when declared: a page of its own over one quick-master node (docs/mastering.md). */}
-                    {masteringSurface && (
-                      <div
-                        {...paneProps("mastering")}
-                        className={cn(
-                          "flex min-h-0 min-w-0",
-                          full === "mastering" ? "flex-1" : "hidden",
-                        )}
-                      >
-                        <PaneBoundary
-                          name="mastering"
-                          resetKey={reloadKey}
-                          onError={paneError}
-                        >
-                          <MasteringTab
-                            surface={masteringSurface}
-                            paramsStore={pluginParamsStore}
-                            setPluginParam={setPluginParam}
-                            watchPluginParams={watchPluginParams}
-                            command={quietCommand}
                           />
                         </PaneBoundary>
                       </div>

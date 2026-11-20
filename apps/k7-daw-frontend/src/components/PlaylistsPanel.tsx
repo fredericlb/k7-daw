@@ -12,12 +12,10 @@ import { playlistPathOf } from "@studio/song-schema/playlist";
 import { Button } from "@studio/ui/button";
 import {
   ChevronDown,
-  ListMusic,
   Loader2,
   Maximize2,
   Plus,
   TriangleAlert,
-  X,
 } from "@studio/ui/icons";
 import type { PlaylistInfo } from "@studio/web-protocol/playlists";
 import { sortForPeople } from "@studio/web-protocol/tree";
@@ -61,12 +59,10 @@ function searchPlaylists(
 export function PlaylistsPanel({
   vimMode,
   onRun,
-  onClose,
 }: {
   vimMode: boolean;
   /** Run a command line through the shell — what « Nouvelle playlist » dispatches, so the palette reaches it (../docs/shell.md). */
   onRun: (line: string) => Promise<void>;
-  onClose: () => void;
 }) {
   const [rows, setRows] = useState<PlaylistInfo[] | null>(null);
   const [error, setError] = useState("");
@@ -150,10 +146,8 @@ export function PlaylistsPanel({
     );
 
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-l border-border bg-background">
-      <header className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1.5">
-        <ListMusic className="h-4 w-4 shrink-0 text-muted-foreground" />
-
+    <div className="flex min-h-0 flex-1 flex-col">
+      <header className="flex shrink-0 items-center gap-1 pb-2">
         {/* The dropdown is a BUTTON opening the module picker's searchable popup, not a <select>: the list is as long as the workspace is old. */}
         <button
           ref={pickRef}
@@ -193,14 +187,6 @@ export function PlaylistsPanel({
           onClick={() => setExpanded(true)}
         >
           <Maximize2 className="h-4 w-4" />
-        </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
         </Button>
       </header>
 
@@ -275,6 +261,6 @@ export function PlaylistsPanel({
           onClose={() => setMenu(null)}
         />
       ) : null}
-    </aside>
+    </div>
   );
 }

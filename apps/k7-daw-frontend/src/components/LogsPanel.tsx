@@ -1,10 +1,11 @@
-// LogsPanel.tsx — the "Logs" bottom panel: a scrolling transcript of engine +
-// brain activity (command output, status changes, engine connection events). The
-// app shell keeps the buffer; this just renders and auto-scrolls to the newest line.
+// LogsPanel.tsx — the Logs panel: a transcript of engine and brain activity, newest line last.
+// The app shell keeps the buffer; the All | Problems filter is the store's `logsFilter`, which the header chip sets.
 
+import { Button } from "@studio/ui/button";
+import { Chip } from "@studio/ui/chip";
 import { useEffect, useRef } from "react";
 import { m } from "../paraglide/messages.js";
-import { PanelCloseButton } from "./PanelClose";
+import { useShell } from "../state/shellStore";
 
 export interface LogLine {
   t: number; // epoch ms
@@ -23,6 +24,10 @@ const KIND_CLASS: Record<LogLine["kind"], string> = {
   error: "text-red-400",
 };
 
+/** A problem is a line that failed or that a verb refused. */
+const isProblem = (l: LogLine): boolean =>
+  l.kind === "error" || l.kind === "refused";
+
 export function LogsPanel({
   lines,
   onClear,
@@ -31,28 +36,42 @@ export function LogsPanel({
   onClear: () => void;
 }) {
   const endRef = useRef<HTMLDivElement>(null);
+  const filter = useShell((st) => st.logsFilter);
+  const setFilter = useShell((st) => st.setLogsFilter);
+  const problems = lines.filter(isProblem);
+  const shown = filter === "problems" ? problems : lines;
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
-  }, [lines]);
+  }, [shown]);
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="flex items-center gap-2 border-b border-border px-2 py-1 text-xs">
-        <PanelCloseButton />
-        <span className="font-semibold text-primary-text">Logs</span>
-        <span className="text-muted-foreground">{lines.length} lines</span>
-        <button
-          onClick={onClear}
-          className="ml-auto rounded px-2 py-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+      <div className="flex shrink-0 items-center gap-2 pb-2">
+        <Chip
+          variant="filter"
+          selected={filter === "all"}
+          onClick={() => setFilter("all")}
         >
-          clear
-        </button>
+          {m["logs.all"]()}
+        </Chip>
+        <Chip
+          variant="filter"
+          selected={filter === "problems"}
+          onClick={() => setFilter("problems")}
+        >
+          {m["logs.problems"]({ n: problems.length })}
+        </Chip>
+        <Button size="sm" variant="ghost" className="ml-auto" onClick={onClear}>
+          {m["logs.clear"]()}
+        </Button>
       </div>
       <div className="min-h-0 flex-1 overflow-auto px-2 py-1 font-mono text-[11px] leading-relaxed">
-        {lines.length === 0 ? (
-          <div className="text-muted-foreground">{m["logs.empty"]()}</div>
+        {shown.length === 0 ? (
+          <div className="text-muted-foreground">
+            {filter === "problems" ? m["logs.noProblems"]() : m["logs.empty"]()}
+          </div>
         ) : (
-          lines.map((l, i) => (
+          shown.map((l, i) => (
             <div key={i} className="flex gap-2">
               <span className="shrink-0 text-faint">
                 {new Date(l.t).toLocaleTimeString()}

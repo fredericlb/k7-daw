@@ -16,10 +16,9 @@ import {
   DoorOpen,
   FolderCog,
   Server,
-  Settings,
+  type Settings,
   SlidersHorizontal,
   UserCircle2,
-  X,
 } from "@studio/ui/icons";
 import { useEffect, useState } from "react";
 import { type AuthUser, api } from "../api";
@@ -84,13 +83,9 @@ export function SettingsPanel({
   });
 
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-l border-border bg-background">
-      <header className="flex shrink-0 items-center gap-2 border-b border-border px-2 py-1.5">
-        <Settings className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 truncate text-sm font-medium">
-          {m["settings.menu"]()}
-        </span>
-        {/* The one screen that is still a page, and the button that opens it. */}
+    <div className="flex min-h-0 flex-1 flex-col">
+      {/* The one screen that is still a page, and the button that opens it. */}
+      <div className="flex shrink-0 justify-end pb-1">
         <Button
           size="icon"
           variant="ghost"
@@ -100,15 +95,7 @@ export function SettingsPanel({
         >
           <Command className="h-4 w-4" />
         </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </header>
+      </div>
 
       {/* The tabs each dispatch their own `ui settings <tab>` rather than setting state here, so the panel and the palette are one road. */}
       <nav className="flex shrink-0 border-b border-border">
@@ -146,7 +133,7 @@ export function SettingsPanel({
         {tab === "project" && <ProjectSettingsTab onRun={onRun} />}
         {tab === "account" && <AccountTab onRun={onRun} />}
       </div>
-    </aside>
+    </div>
   );
 }
 

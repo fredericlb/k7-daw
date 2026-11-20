@@ -71,3 +71,9 @@ set of rules for it. The page links into the workspace instead, where the panel 
 **It is read on arrival and on Refresh, not polled.** It costs one read per workspace, and the page is
 visited rather than watched. A workspace with no `TODOS.md` has no tasks; one whose file cannot be
 read says so in its own section, and the others still show.
+
+## Tasks and History are one panel
+
+The panel's first segment switches Tasks and History; History has its own three, Edits (the undo
+journal), Workspace (the sync history) and Commits (git's list, offered only under git). One
+segment shows one list, since two stacked lists leave each half a panel high.

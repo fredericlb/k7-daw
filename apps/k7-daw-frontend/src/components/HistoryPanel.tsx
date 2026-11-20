@@ -1,5 +1,5 @@
-// HistoryPanel.tsx — the open project's history on the right: the undo journal's steps, newest
-// first, and under them the WORKSPACE's sync history (syncHistory.ts) — checkpoints and edits.
+// HistoryPanel.tsx — the History half of Tasks & history, in three segments: Edits (the undo journal's
+// steps, newest first), Workspace (the sync history, syncHistory.ts) and Commits (git's, step 6's list).
 // A step reads as its command's sentence (stepSentence.ts), the raw line staying its tooltip.
 // Hovering a journal row lights what it touched (historyMarks.ts); the journal changes nothing.
 // Restoring is the one write here, and it is a sync edit like any other: apps/k7-daw-backend/docs/files/history.md.
@@ -7,14 +7,13 @@
 import { askConfirm, askText } from "@studio/project-shell/ask";
 import { cfg } from "@studio/project-shell/fileApi";
 import { Button } from "@studio/ui/button";
+import { Choice } from "@studio/ui/choice";
 import {
   Bookmark,
   ChevronDown,
   ChevronRight,
-  History,
   RotateCcw,
   Undo2,
-  X,
 } from "@studio/ui/icons";
 import type { HistoryListEntry } from "@studio/web-protocol";
 import {
@@ -58,7 +57,6 @@ export function HistoryPanel({
   git = null,
   gitTransport = null,
   onMark,
-  onClose,
 }: {
   /** The workspace's git state: with a repository the panel offers a second list, the commits. */
   git?: GitState | null;
@@ -67,11 +65,9 @@ export function HistoryPanel({
   describe?: (label: string) => string;
   /** What the hovered row touched, or null when none is — the graph and the timeline light it. */
   onMark: (mark: HistoryMark | null) => void;
-  onClose: () => void;
 }) {
   const [steps, setSteps] = useState<HistoryListEntry[]>([]);
-  // Two lists when the workspace is under git: the local edits, and the commits.
-  const [list, setList] = useState<"edits" | "commits">("edits");
+  const [list, setList] = useState<"edits" | "workspace" | "commits">("edits");
   const underGit = !!git && git.mode !== "none";
   const showCommits = underGit && list === "commits";
   // Only to tell which node of a touched chain a step's label names; a graph that will not build lights the chain.
@@ -101,44 +97,25 @@ export function HistoryPanel({
   const rows = useMemo(() => [...steps].sort((a, b) => b.ts - a.ts), [steps]);
 
   return (
-    <aside className="flex w-[24rem] min-w-0 shrink-0 flex-col border-border border-l bg-background">
-      <header className="flex shrink-0 items-center gap-1 border-border border-b px-2 py-1.5">
-        <History className="h-4 w-4 shrink-0 text-muted-foreground" />
-        <span className="min-w-0 flex-1 truncate px-1.5 text-sm">
-          {m["history.title"]()}
-        </span>
-        <Button
-          size="icon"
-          variant="ghost"
-          title={m["common.close"]()}
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </header>
+    <div className="flex min-h-0 flex-1 flex-col">
       {error && (
         <div className="shrink-0 px-3 py-2 text-destructive text-xs">
           {error}
         </div>
       )}
-      {underGit && (
-        <fieldset
-          className="flex shrink-0 gap-1 border-border border-b px-2 py-1"
-          aria-label={m["git.lists"]()}
-        >
-          {(["edits", "commits"] as const).map((k) => (
-            <Button
-              key={k}
-              size="xs"
-              variant={list === k ? "secondary" : "ghost"}
-              aria-pressed={list === k}
-              onClick={() => setList(k)}
-            >
-              {m[k === "edits" ? "git.listEdits" : "git.listCommits"]()}
-            </Button>
-          ))}
-        </fieldset>
-      )}
+      <Choice
+        label={m["git.lists"]()}
+        value={list}
+        onValueChange={setList}
+        options={[
+          { value: "edits", label: m["git.listEdits"]() },
+          { value: "workspace", label: m["history.listWorkspace"]() },
+          ...(underGit
+            ? [{ value: "commits" as const, label: m["git.listCommits"]() }]
+            : []),
+        ]}
+        className="mb-2 shrink-0"
+      />
       {showCommits && (
         <CommitsList
           transport={gitTransport}
@@ -153,8 +130,8 @@ export function HistoryPanel({
         />
       )}
       <ul
-        hidden={showCommits}
-        className="min-h-0 flex-1 basis-1/2 overflow-y-auto py-1 text-xs"
+        hidden={list !== "edits"}
+        className="min-h-0 flex-1 overflow-y-auto py-1 text-xs"
         onMouseLeave={() => onMark(null)}
       >
         {rows.length === 0 && !error && (
@@ -194,8 +171,10 @@ export function HistoryPanel({
           );
         })}
       </ul>
-      {!showCommits && <SyncHistorySection revision={revision} git={git} />}
-    </aside>
+      {list === "workspace" && (
+        <SyncHistorySection revision={revision} git={git} />
+      )}
+    </div>
   );
 }
 
@@ -358,7 +337,7 @@ function SyncHistorySection({
   );
 
   return (
-    <section className="flex min-h-0 flex-1 basis-1/2 flex-col border-border border-t text-xs">
+    <section className="flex min-h-0 flex-1 flex-col text-xs">
       <header className="flex shrink-0 items-center gap-1 px-2 py-1">
         <span className="min-w-0 flex-1 truncate px-1.5 text-muted-foreground uppercase tracking-wide text-[10px]">
           {m["synchist.title"]()}
