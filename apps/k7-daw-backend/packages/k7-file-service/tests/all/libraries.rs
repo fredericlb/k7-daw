@@ -13,11 +13,7 @@ use support::Scratch;
 const BOUND: Duration = Duration::from_secs(if cfg!(target_env = "musl") { 60 } else { 15 });
 
 fn ts(rel: &str) -> String {
-    std::fs::read_to_string(format!(
-        "{}/../../../../{rel}",
-        env!("CARGO_MANIFEST_DIR")
-    ))
-    .unwrap()
+    std::fs::read_to_string(format!("{}/../../../../{rel}", env!("CARGO_MANIFEST_DIR"))).unwrap()
 }
 
 #[test]
