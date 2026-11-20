@@ -441,6 +441,8 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
                 reset();
                 inputRef.current?.focus();
               }}
+              onRun={() => runNow(values)}
+              canRun={canRun(command.args, values)}
               inputRef={argRef}
             />
           ) : (
@@ -547,6 +549,11 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
               </div>
             ))}
           </div>
+        )}
+        {!command && focused && shown.length > 0 && (
+          <p aria-hidden className="type-badge px-3 pb-1.5 text-fg-3">
+            {m["commandBar.footer"]()}
+          </p>
         )}
       </div>
     );

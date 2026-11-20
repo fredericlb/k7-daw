@@ -2,18 +2,71 @@
 // video), then "Choose a folder…" opens the system picker and the export runs; the result names the folder.
 // A PANEL docked beside the panes, an export taking a minute and saying where the file went. See ../docs/export.md.
 // The chosen entry is a COMMAND LINE the shell dispatches (`project export`), not a call of its own: that keeps
-// this and the palette saying the same.
+// this and the palette saying the same. The running card reads the page's process list (../processes.ts).
 
 import { Button } from "@studio/ui/button";
+import { Chip } from "@studio/ui/chip";
 import { Download, FileArchive, FolderOpen } from "@studio/ui/icons";
-import { Picker } from "@studio/ui/picker";
+import { cn } from "@studio/ui/lib/utils";
+import { Progress } from "@studio/ui/progress";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
-import { Spinner } from "@studio/ui/spinner";
-import { useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { tracksLine } from "../exportArgs";
 import type { ExportHost, Saved } from "../exportHost";
 import { m } from "../paraglide/messages.js";
+import { elapsedOf, processesSnapshot, subscribeProcesses } from "../processes";
 import { VideoExportRow } from "./VideoExportRow";
+
+/** The running card: what renders, how far when the render says, and how long it has taken. */
+function RunningCard({ timeline }: { timeline: string }) {
+  const all = useSyncExternalStore(
+    subscribeProcesses,
+    processesSnapshot,
+    processesSnapshot,
+  );
+  // The newest running export this page tracks; the engine's own mixdown reports no fraction.
+  const job = [...all]
+    .reverse()
+    .find(
+      (p) => p.local && p.state === "running" && p.label.startsWith("export"),
+    );
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const pct =
+    job?.progress === undefined ? null : Math.floor(job.progress * 100);
+  const what = job ? job.label.replace(/^export /, "") : "";
+  return (
+    <div
+      role="status"
+      className="mb-2 shrink-0 rounded-2xl bg-(--k7-row) px-3.5 py-3"
+    >
+      <div className="flex items-baseline gap-3">
+        <span className="type-body min-w-0 flex-1 truncate">
+          {what ? m["share.renderingWhat"]({ what }) : m["share.rendering2"]()}
+        </span>
+        {pct === null ? null : (
+          <span className="type-mono-value text-fg-2">{pct} %</span>
+        )}
+      </div>
+      <Progress
+        value={pct ?? 100}
+        label={what || m["share.rendering2"]()}
+        className={cn("my-2", pct === null && "animate-pulse")}
+      />
+      <p className="type-status text-fg-3">
+        {[
+          timeline || m["tl.main"](),
+          job ? m["share.elapsed"]({ time: elapsedOf(job, now) }) : "",
+        ]
+          .filter(Boolean)
+          .join(" · ")}
+      </p>
+    </div>
+  );
+}
 
 export function SharePanel({
   busy,
@@ -53,35 +106,33 @@ export function SharePanel({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      {busy ? (
-        <div
-          role="status"
-          className="mb-2 flex shrink-0 items-center gap-3 rounded-2xl bg-(--k7-row) px-3.5 py-3"
-        >
-          <Spinner />
-          <span className="type-body">{m["share.rendering2"]()}</span>
-        </div>
-      ) : null}
+      {busy ? <RunningCard timeline={chosen} /> : null}
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         <h3 className="type-caps pb-2 text-fg-2">{m["share.mixdown"]()}</h3>
         {/* Only once there is a choice, as the timeline pane's tabs are. */}
         {timelines.length ? (
-          <Picker
-            className="mb-2"
-            items={[
-              { value: "", label: m["tl.main"]() },
-              ...timelines.map((t) => ({ value: t, label: t })),
-            ]}
-            value={chosen}
-            onValueChange={(t) => {
-              setTimeline(t);
-              setLine("");
-            }}
-            label={m["share.timeline"]()}
-            searchLabel={m["share.timeline"]()}
-            emptyLabel={m["share.timeline"]()}
-          />
+          <div
+            role="radiogroup"
+            aria-label={m["share.timeline"]()}
+            className="mb-2 flex flex-wrap gap-2"
+          >
+            {["", ...timelines].map((t) => (
+              <Chip
+                key={t || "main"}
+                variant="filter"
+                role="radio"
+                aria-checked={chosen === t}
+                selected={chosen === t}
+                onClick={() => {
+                  setTimeline(t);
+                  setLine("");
+                }}
+              >
+                {t || m["tl.main"]()}
+              </Chip>
+            ))}
+          </div>
         ) : null}
         <RowGroup>
           {(["mp3", "wav"] as const).map((f) => (
@@ -89,6 +140,11 @@ export function SharePanel({
               key={f}
               tall
               icon={<Download />}
+              detail={
+                f === "wav"
+                  ? m["share.detailWav"]()
+                  : m["share.detailMix"]({ timeline: chosen || m["tl.main"]() })
+              }
               selected={pressed(audioLine(f))}
               disabled={busy}
               onClick={() => choose(audioLine(f))}
@@ -99,17 +155,26 @@ export function SharePanel({
           <RowButton
             tall
             icon={<FileArchive />}
+            detail={m["share.detailTracks"]()}
             selected={pressed(tracksLine(chosen || undefined))}
             disabled={busy}
             onClick={() => choose(tracksLine(chosen || undefined))}
           >
             {m["share.exportTracks"]()}
           </RowButton>
-          {/* …and the PICTURE, on a project that draws one. */}
-          {hasPicture ? (
-            <VideoExportRow busy={busy} chosen={line} onChoose={choose} />
-          ) : null}
         </RowGroup>
+        {/* …and the PICTURE, on a project that draws one. */}
+        {hasPicture ? (
+          <>
+            <h3 className="type-caps pt-4 pb-2 text-fg-2">
+              {m["share.video"]()}
+            </h3>
+            <RowGroup>
+              <VideoExportRow busy={busy} chosen={line} onChoose={choose} />
+            </RowGroup>
+          </>
+        ) : null}
+        <p className="type-status px-1 pt-3 text-fg-3">{m["share.note"]()}</p>
       </div>
 
       <footer className="shrink-0 pt-3">

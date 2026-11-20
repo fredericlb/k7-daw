@@ -71,9 +71,9 @@ export function CommitsList({
             state.branch,
             state.remote,
             state.behind
-              ? (state.behind === 1 ? m["git.toPull.one"] : m["git.toPull.other"])(
-                  { n: state.behind },
-                )
+              ? (state.behind === 1
+                  ? m["git.toPull.one"]
+                  : m["git.toPull.other"])({ n: state.behind })
               : null,
           ]
             .filter(Boolean)

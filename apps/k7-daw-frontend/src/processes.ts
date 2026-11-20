@@ -21,7 +21,9 @@ const dismissed = new Set<string>();
 const listeners = new Set<() => void>();
 
 function commit(): void {
-  merged = [...service.filter((p) => !dismissed.has(p.id)), ...local].sort((a, b) => a.startedAt - b.startedAt);
+  merged = [...service.filter((p) => !dismissed.has(p.id)), ...local].sort(
+    (a, b) => a.startedAt - b.startedAt,
+  );
   for (const l of listeners) l();
 }
 
@@ -90,3 +92,9 @@ export function clearEndedProcesses(): void {
 /** How many are running: the badge on the bar's button. */
 export const runningCount = (all: readonly ShownProcess[]): number =>
   all.filter((p) => p.state === "running").length;
+
+/** "m:ss" since the process began, or until it ended. */
+export const elapsedOf = (p: ShownProcess, now: number): string => {
+  const s = Math.max(0, Math.round(((p.endedAt ?? now) - p.startedAt) / 1000));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+};

@@ -116,7 +116,8 @@ export function LogsPanel({
           <EmptyState compact glyph={<Info />} title={emptyTitle}>
             {emptyText}
           </EmptyState>
-        ) : (          <RowGroup>
+        ) : (
+          <RowGroup>
             {shown.map((l, i) => (
               <Row
                 // biome-ignore lint/suspicious/noArrayIndexKey: a log line has no id; the list only grows at its end.

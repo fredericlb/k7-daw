@@ -11,16 +11,12 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { m } from "../paraglide/messages.js";
 import {
   clearEndedProcesses,
+  elapsedOf,
   processesSnapshot,
   runningCount,
   type ShownProcess,
   subscribeProcesses,
 } from "../processes";
-
-const elapsed = (p: ShownProcess, now: number): string => {
-  const s = Math.max(0, Math.round(((p.endedAt ?? now) - p.startedAt) / 1000));
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-};
 
 function ProcessRow({ p, now }: { p: ShownProcess; now: number }) {
   const pct =
@@ -31,7 +27,7 @@ function ProcessRow({ p, now }: { p: ShownProcess; now: number }) {
   const said = [
     pct === null ? state : `${pct} %`,
     p.detail,
-    elapsed(p, now),
+    elapsedOf(p, now),
     p.local ? m["processes.here"]() : undefined,
   ]
     .filter(Boolean)

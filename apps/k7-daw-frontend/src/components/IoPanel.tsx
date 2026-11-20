@@ -16,8 +16,8 @@ import { sortForPeople } from "@studio/web-protocol/tree";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../api";
 import { useLatest } from "../hooks/useLatest";
-import { m } from "../paraglide/messages.js";
 import { pitchName } from "../noteNames";
+import { m } from "../paraglide/messages.js";
 import type { IoPort } from "../types";
 import { pollWhileVisible } from "../visiblePoll";
 
