@@ -357,3 +357,12 @@ progress is dropped, and the gesture is measured from the camera it STARTED on.
 `.dgx` carries `touch-action: none`. This surface pans and zooms itself and scrolls nothing, so
 there is nothing to hand back to the browser; without it a one-finger drag scrolls the page and
 cancels the pan mid-gesture, and two fingers zoom the page instead of the graph.
+
+## The Graph pane's pills, and the lane's module cards
+
+The Graph pane draws **Zoom fit**, **Auto layout** and **Stack** as labelled pills over its top-left
+corner, beside an output-level meter (`GraphActions.tsx`); the minimap is a card with no buttons of
+its own (`minimapBar={false}`). A lane's chain panel lists its modules as cards (`ModuleCards.tsx`):
+name, engine chip, bypass, the preset with its arrows, a "+" on each seam and a dashed "Add a module"
+row on the tail. The cards summarise the row; the **Controls** chip shows the full row beside them,
+because the knobs live there and a second editor of the same parameters would drift.
