@@ -5,6 +5,7 @@
 
 import type { PluginParamsStore } from "@studio/engine-browser/params";
 import { KeyboardMusic, Mic, Spline } from "@studio/ui/icons";
+import { cn } from "@studio/ui/lib/utils";
 import { splitTrailingMixer } from "@studio/ui-chains/anchorRight";
 import type { EdgeInsert, TrackControlValues } from "@studio/ui-chains/graph";
 import { moduleRow, trackInputs, trackModules } from "@studio/ui-chains/graph";
@@ -33,6 +34,7 @@ import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import type { WebProject } from "../types";
 import { useIsMobile } from "../useIsMobile";
 import { GraphSlotPane } from "./GraphSlotPane";
+import { ModuleCards } from "./ModuleCards";
 
 /** A card here is HORIZONTAL on a desktop, at most 4 rows, and VERTICAL on a phone, at most 4 columns — a panel without that shape is folded to it. */
 const TRACK_ROW_FIT: GridFit = { axis: "rows", max: 4 };
@@ -307,6 +309,20 @@ export function TrackModulesPane({
 
   // The History panel's hover, as the per-card test DomChains reads — above the early returns, like every hook.
   const marked = useMemo(() => nodePredicate(mark), [mark]);
+  // The lane's panel reads as module cards; a popin's `nodes` keep the full row, and "Controls" shows it beside the cards.
+  const cards = !nodes;
+  const [controls, setControls] = useState(false);
+  const cardNodes = useMemo(
+    () =>
+      (glued?.graph.nodes ?? [])
+        .filter((n) => n.kind === "module")
+        .sort((a, b) => a.x - b.x || a.y - b.y),
+    [glued],
+  );
+  const cardSeams = useMemo(
+    () => [...(glued?.seams ?? [])].sort((a, b) => a.x - b.x),
+    [glued],
+  );
 
   // No bar: the row IS the view, the lane's own card names it, and the ✕ is the strip's first item (PanelClose.tsx).
   // Every state keeps the frame, so the ✕ is reachable even with nothing to draw — a view you cannot close is worse than an empty one.
@@ -393,8 +409,18 @@ export function TrackModulesPane({
   return frame(
     <div className="flex h-full min-h-0 flex-col gap-2">
       {/* What the row SHOWS and the inputs it may take, as chips above it (docs/shell.md). */}
-      {(onToggleCurves || onInput) && (
+      {(onToggleCurves || onInput || cards) && (
         <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {cards && (
+            <button
+              type="button"
+              aria-pressed={controls}
+              onClick={() => setControls((v) => !v)}
+              className={`${CHIP} type-label aria-pressed:bg-on-fill aria-pressed:text-lavender`}
+            >
+              {m["chain.controls"]()}
+            </button>
+          )}
           {onInput &&
             INPUTS.map(({ kind, label, Icon }) => (
               <button
@@ -428,7 +454,25 @@ export function TrackModulesPane({
           )}
         </div>
       )}
-      <div className="relative min-h-0 min-w-0 flex-1">
+      {cards && glued && (
+        <ModuleCards
+          nodes={cardNodes}
+          seams={cardSeams}
+          presetNames={presetNames}
+          onBypass={bypassModule}
+          onPresetStep={onPresetStep}
+          onPresets={onPresets && ((module, x, y) => onPresets(module, x, y))}
+          onInsert={
+            edgeInsert ? (insert, x, y) => edgeInsert(insert, x, y) : undefined
+          }
+        />
+      )}
+      <div
+        className={cn(
+          "relative min-h-0 min-w-0 flex-1",
+          cards && !controls && "hidden",
+        )}
+      >
         <DomChains
           {...shared}
           graph={glued?.graph ?? split?.row ?? laidShown}
