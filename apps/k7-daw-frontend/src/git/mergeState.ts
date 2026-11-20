@@ -77,3 +77,14 @@ export function byFile(
   }
   return out;
 }
+
+/** The next conflict after `from` that still has no choice (wrapping round), or null once every one has one. */
+export function nextOpen(s: MergeChoices, from: string | null): string | null {
+  const ids = byFile(s.conflicts).flatMap((g) => g.items.map((c) => c.id));
+  const start = from ? ids.indexOf(from) + 1 : 0;
+  for (let i = 0; i < ids.length; i++) {
+    const id = ids[(start + i) % ids.length];
+    if (!s.chosen[id]) return id;
+  }
+  return null;
+}

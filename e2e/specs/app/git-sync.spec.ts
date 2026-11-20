@@ -4,7 +4,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "../../src/target.ts";
 
 const A = "E2E-git-a";
@@ -15,27 +15,23 @@ const SLOW = { timeout: 120_000 };
 const git = (dir: string, ...args: string[]): string =>
   execFileSync("git", ["-C", dir, ...args], { encoding: "utf8" });
 
-/** Opens a workspace's tree from the home page, where its git bar is. */
-async function openTree(page: Page, ws: string): Promise<void> {
-  await page.getByRole("link", { name: "Projects", exact: true }).click();
-  const search = page.getByRole("searchbox", {
-    name: "Search a workspace or a project",
-  });
-  await expect(async () => {
-    await search.fill(ws);
-    await page
-      .locator(`tr[data-workspace="${ws}"]`)
-      .first()
-      .getByRole("button", { name: new RegExp(`^${ws} \\d+ projects?$`) })
-      .click({ timeout: 5_000 });
-  }).toPass({ timeout: 60_000 });
+/** A workspace's card on the home page, found once the list has it. */
+async function card(page: Page, ws: string): Promise<Locator> {
+  const region = page.getByRole("region", { name: `Workspace ${ws}` });
+  await expect(region).toBeVisible({ timeout: 60_000 });
+  return region;
 }
 
-/** Commits through the bar's dialog, signing as a test author when the device has none. */
-async function commit(page: Page, message: string): Promise<void> {
-  const bar = page.getByRole("region", { name: "Git" });
-  await bar.getByRole("button", { name: "Commit", exact: true }).click();
-  const dialog = page.getByRole("dialog");
+/** Commit & Push from the card, signing as a test author when the device has none; resolves with the open dialog. */
+async function commitAndPush(
+  page: Page,
+  ws: string,
+  message: string,
+): Promise<Locator> {
+  await (await card(page, ws))
+    .getByRole("button", { name: /^Commit & Push, \d+ changes?$/ })
+    .click();
+  const dialog = page.getByRole("dialog", { name: "Commit & Push" });
   const name = dialog.getByLabel("Name", { exact: true });
   // The author question comes once the device's identity is read: isVisible would not wait for it.
   const asked = await name
@@ -47,8 +43,10 @@ async function commit(page: Page, message: string): Promise<void> {
     await dialog.getByLabel("Email", { exact: true }).fill("e2e@example.org");
   }
   await dialog.getByLabel("Message", { exact: true }).fill(message);
-  await dialog.getByRole("button", { name: "Commit", exact: true }).click();
-  await expect(dialog).toBeHidden(SHOWN);
+  await dialog
+    .getByRole("button", { name: "Commit & Push", exact: true })
+    .click();
+  return dialog;
 }
 
 test("a workspace is connected, pushed, cloned and merged through a bare repository", async ({
@@ -68,22 +66,14 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
     const page = await k7.open("/");
 
     await test.step("connect the workspace from its menu", async () => {
-      const search = page.getByRole("searchbox", {
-        name: "Search a workspace or a project",
-      });
-      await expect(async () => {
-        await search.fill(A);
-        await page
-          .locator(`tr[data-workspace="${A}"]`)
-          .first()
-          .getByRole("button", {
-            name: `What can be done with ${A}`,
-            exact: true,
-          })
-          .click({ timeout: 5_000 });
-      }).toPass({ timeout: 60_000 });
+      await (await card(page, A))
+        .getByRole("button", {
+          name: `What can be done with ${A}`,
+          exact: true,
+        })
+        .click();
       await page.getByRole("menuitem", { name: "Connect to git…" }).click();
-      const dialog = page.getByRole("dialog");
+      const dialog = page.getByRole("dialog", { name: /^Connect .+ to git$/ });
       await dialog.getByLabel("Repository address").fill(url);
       await dialog
         .getByRole("button", { name: "Connect", exact: true })
@@ -91,21 +81,27 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
       await expect(dialog).toBeHidden(SHOWN);
     });
 
-    await test.step("commit and push", async () => {
-      await openTree(page, A);
-      const bar = page.getByRole("region", { name: "Git" });
-      await expect(bar).toContainText("remote.git", SHOWN);
-      await commit(page, "first take");
-      await bar.getByRole("button", { name: "Push", exact: true }).click();
+    await test.step("commit and push in one act", async () => {
+      const dialog = await commitAndPush(page, A, "first take");
+      await expect(
+        dialog.getByRole("list", { name: "Progress" }),
+      ).toContainText("Done", SHOWN);
       await expect
         .poll(() => git(bare, "log", "--format=%s", "main").trim(), SHOWN)
         .toContain("first take");
+      await dialog
+        .getByRole("button", { name: "Close", exact: true })
+        .first()
+        .click();
+      await expect(dialog).toBeHidden(SHOWN);
     });
 
     await test.step("clone it into a second workspace", async () => {
-      await page.getByRole("link", { name: "Projects", exact: true }).click();
-      await page.getByRole("button", { name: "Clone from git" }).click();
-      const dialog = page.getByRole("dialog");
+      await page
+        .getByRole("button", { name: "New workspace or clone from git" })
+        .click();
+      await page.getByRole("menuitem", { name: "Clone from git" }).click();
+      const dialog = page.getByRole("dialog", { name: "Clone a repository" });
       await dialog.getByLabel("Name of the workspace").fill(B);
       await dialog.getByLabel("Repository address").fill(url);
       await dialog.getByRole("button", { name: "Clone", exact: true }).click();
@@ -118,34 +114,43 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
 
     await test.step("both sides change the same line; the second to push is told to pull first", async () => {
       await files.writeText(B, "notes.txt", "one\nB says\nthree\n");
-      await openTree(page, B);
-      await commit(page, "B's line");
-      const barB = page.getByRole("region", { name: "Git" });
-      await barB.getByRole("button", { name: "Push", exact: true }).click();
+      const dialogB = await commitAndPush(page, B, "B's line");
       await expect
         .poll(() => git(bare, "log", "--format=%s", "main").trim(), SHOWN)
         .toContain("B's line");
+      await dialogB
+        .getByRole("button", { name: "Close", exact: true })
+        .first()
+        .click();
 
       await files.writeText(A, "notes.txt", "one\nA says\nthree\n");
-      await openTree(page, A);
-      await commit(page, "A's line");
-      const barA = page.getByRole("region", { name: "Git" });
-      await expect(page.getByTestId("git-pull-first")).toBeVisible(SLOW);
+      const dialogA = await commitAndPush(page, A, "A's line");
+      await expect(dialogA.getByTestId("git-pull-first")).toBeVisible(SLOW);
+      await dialogA
+        .getByRole("button", { name: "Close", exact: true })
+        .first()
+        .click();
     });
 
     await test.step("pull, choose mine, finish the merge", async () => {
-      const bar = page.getByRole("region", { name: "Git" });
-      await bar.getByRole("button", { name: "Pull", exact: true }).click();
-      const dialog = page.getByRole("dialog");
-      await expect(dialog.getByRole("heading", { name: "Merge" })).toBeVisible(
-        SHOWN,
-      );
-      await dialog.getByRole("button", { name: "Keep mine" }).first().click();
+      const ws = await card(page, A);
+      await ws.getByRole("button", { name: /^Pull/ }).click();
+      const dialog = page.getByRole("dialog", { name: "Conflict" });
+      await expect(dialog).toBeVisible(SLOW);
+      await dialog
+        .getByRole("listbox", { name: "Conflicts" })
+        .getByRole("option")
+        .first()
+        .click();
+      await dialog
+        .getByRole("radiogroup", { name: "Choice" })
+        .getByRole("radio", { name: "Mine" })
+        .click();
       await dialog.getByRole("button", { name: "Finish merge" }).click();
       await expect(dialog).toBeHidden(SHOWN);
       expect(await files.readText(A, "notes.txt")).toContain("A says");
       await expect(
-        bar.getByRole("button", { name: /Resolve \d+ conflicts?/ }),
+        ws.getByRole("button", { name: /Resolve \d+ conflicts?/ }),
       ).toBeHidden(SHOWN);
     });
   } finally {

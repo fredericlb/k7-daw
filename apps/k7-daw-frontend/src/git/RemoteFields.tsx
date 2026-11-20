@@ -55,7 +55,7 @@ export function RemoteFields({
         onChange={(e) => dispatch({ type: "edit", value: e.target.value })}
       />
       {isWebAddress(form.url) && (
-        <p role="alert" className="text-destructive text-xs">
+        <p role="alert" className="text-error type-secondary">
           {m["git.sshOnly"]()}
         </p>
       )}
@@ -63,11 +63,13 @@ export function RemoteFields({
       {form.trust && (
         <div
           role="alert"
-          className="flex flex-col gap-2 rounded border px-3 py-2 text-xs"
+          className="flex flex-col gap-2 rounded-2xl border border-(--k7-hairline-strong) bg-(--k7-row) px-3 py-2 type-secondary"
         >
           <p>{m["git.hostUnknown"]({ host })}</p>
-          <code className="break-all font-mono">{form.trust.fingerprint}</code>
-          <p className="text-muted-foreground">{m["git.hostUnknownNote"]()}</p>
+          <code className="break-all type-mono-value">
+            {form.trust.fingerprint}
+          </code>
+          <p className="text-fg-2">{m["git.hostUnknownNote"]()}</p>
           <Button
             size="sm"
             variant={form.trust.confirmed ? "secondary" : "default"}
@@ -84,16 +86,18 @@ export function RemoteFields({
       {form.changed && (
         <div
           role="alert"
-          className="flex flex-col gap-1 rounded border border-destructive/40 bg-destructive/10 px-3 py-2 text-destructive text-xs"
+          className="flex flex-col gap-1 rounded-2xl border border-(--k7-error-line) bg-(--k7-error-fill) px-3 py-2 text-error type-secondary"
         >
           <p className="font-medium">
-            <TriangleAlert className="mr-1 inline h-3 w-3" />
+            <TriangleAlert className="mr-1 inline size-3" />
             {m["git.hostChanged"]({ host })}
           </p>
           <p>{m["git.hostChangedTrusted"]()}</p>
-          <code className="break-all font-mono">{form.changed.expected}</code>
+          <code className="break-all type-mono-value">
+            {form.changed.expected}
+          </code>
           <p>{m["git.hostChangedShown"]()}</p>
-          <code className="break-all font-mono">{form.changed.got}</code>
+          <code className="break-all type-mono-value">{form.changed.got}</code>
           <p>{m["git.hostChangedNote"]()}</p>
           <Button
             size="sm"

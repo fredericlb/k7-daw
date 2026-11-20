@@ -1,7 +1,8 @@
-// CommitDialog.tsx — Commit: the changed files with their sizes (large ones marked), a message, the whole tree.
-// What a reader gets wrong: there is no per-file choice, and a file over the host's limit is left out and named.
+// CommitDialog.tsx — Commit & Push as one act: the changed files, a message, then a step list that ends in Done.
+// What a reader gets wrong: a push the remote refuses as behind is a state of this dialog (pull first), not an error.
 
 import { Button } from "@studio/ui/button";
+import { Chip } from "@studio/ui/chip";
 import {
   Dialog,
   DialogContent,
@@ -14,21 +15,30 @@ import { Loader2 } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
+import { CommitSteps } from "./CommitSteps";
 import {
+  type CommitPhase,
   commitView,
   formatSize,
   identityReady,
   identityToSave,
+  stepRows,
 } from "./commitState";
-import { explain, type GitTransport, git, type Identity } from "./gitApi";
-import type { StatusEntry } from "./gitTypes";
+import {
+  explain,
+  GitError,
+  type GitTransport,
+  git,
+  type Identity,
+} from "./gitApi";
+import type { GitState, StatusEntry } from "./gitTypes";
 import { saveIdentity } from "./identity";
 
 const CHANGE = {
-  added: "git.changeAdded",
-  modified: "git.changeModified",
-  removed: "git.changeRemoved",
-  renamed: "git.changeRenamed",
+  added: { key: "git.changeAdded", tone: "new" },
+  modified: { key: "git.changeModified", tone: "changed" },
+  removed: { key: "git.changeRemoved", tone: "removed" },
+  renamed: { key: "git.changeRenamed", tone: "renamed" },
 } as const;
 
 export function CommitDialog({
@@ -45,10 +55,11 @@ export function CommitDialog({
   onDone: () => void;
 }) {
   const [entries, setEntries] = useState<StatusEntry[] | null>(null);
+  const [state, setState] = useState<GitState | null>(null);
   const [message, setMessage] = useState("");
   const [who, setWho] = useState<Identity | null>(null);
   const [prefilled, setPrefilled] = useState<Identity | null>(null);
-  const [busy, setBusy] = useState(false);
+  const [phase, setPhase] = useState<CommitPhase>({ kind: "ready" });
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -56,10 +67,15 @@ export function CommitDialog({
     let live = true;
     setEntries(null);
     setError("");
+    setPhase({ kind: "ready" });
     git
       .status(t, workspace)
       .then((r) => live && setEntries(r.entries))
       .catch((e) => live && setError(explain(e)));
+    git
+      .state(t, workspace)
+      .then((s) => live && setState(s))
+      .catch(() => live && setState(null));
     git
       .identity(t)
       .then((id) => {
@@ -74,29 +90,52 @@ export function CommitDialog({
   }, [open, t, workspace]);
 
   const view = commitView(entries ?? [], message);
+  const connected = state?.mode === "connected";
+  const pushOnly =
+    view.block === "noChanges" && connected && (state?.ahead ?? 0) > 0;
+  const plan = { commit: !pushOnly, push: connected };
   const signed = identityReady(who);
-  const ok = view.block === null && signed && !busy;
+  const busy = phase.kind === "running";
+  // Every state of the act but ready has left the form behind: only the step list and its way out show.
+  const started = phase.kind !== "ready";
+  const finished = phase.kind === "done" || phase.kind === "pullFirst";
+  const retryFrom = phase.kind === "failed" ? phase.step : null;
+  const ready =
+    pushOnly || retryFrom === "push" || (view.block === null && signed);
+  const ok = ready && !busy && Boolean(t) && !(entries === null && !error);
 
   const go = async () => {
-    if (!t || !ok || !who) return;
-    setBusy(true);
+    if (!t || !ok) return;
     setError("");
     try {
-      const save = identityToSave(prefilled, who);
-      if (save) await saveIdentity(t, save);
-      await git.commit(
-        t,
-        workspace,
-        message.trim(),
-        view.leftOut.map((e) => e.path),
-      );
-      setMessage("");
-      onDone();
-      onClose();
+      if (plan.commit && retryFrom !== "push") {
+        setPhase({ kind: "running", step: "commit" });
+        const save = who ? identityToSave(prefilled, who) : null;
+        if (save) await saveIdentity(t, save);
+        await git.commit(
+          t,
+          workspace,
+          message.trim(),
+          view.leftOut.map((e) => e.path),
+        );
+        setMessage("");
+        onDone();
+      }
     } catch (e) {
-      setError(explain(e));
-    } finally {
-      setBusy(false);
+      setPhase({ kind: "failed", step: "commit", error: explain(e) });
+      return;
+    }
+    if (!plan.push) return setPhase({ kind: "done" });
+    try {
+      setPhase({ kind: "running", step: "push" });
+      await git.push(t, workspace);
+      onDone();
+      setPhase({ kind: "done" });
+    } catch (e) {
+      onDone();
+      if (e instanceof GitError && e.code === "behind")
+        setPhase({ kind: "pullFirst" });
+      else setPhase({ kind: "failed", step: "push", error: explain(e) });
     }
   };
 
@@ -104,60 +143,59 @@ export function CommitDialog({
     <Dialog open={open} onOpenChange={(o) => !busy && !o && onClose()}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>{m["git.commitTitle"]()}</DialogTitle>
+          <DialogTitle>{m["git.commitPushTitle"]()}</DialogTitle>
           <DialogDescription>{m["git.commitBody"]()}</DialogDescription>
         </DialogHeader>
         <ul
           aria-label={m["git.files"]()}
-          className="max-h-56 overflow-y-auto rounded border text-xs"
+          className="max-h-56 overflow-y-auto rounded-xl border border-(--k7-hairline) type-secondary"
         >
           {entries === null && !error && (
-            <li className="px-3 py-2 text-muted-foreground">
-              <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
+            <li className="px-3 py-2 text-fg-2">
+              <Loader2 className="mr-1 inline size-3 animate-spin" />
               {m["git.reading"]()}
             </li>
           )}
           {entries?.length === 0 && (
-            <li className="px-3 py-2 text-muted-foreground">
-              {m["git.noChanges"]()}
-            </li>
+            <li className="px-3 py-2 text-fg-2">{m["git.noChanges"]()}</li>
           )}
           {view.rows.map((e) => (
             <li
               key={e.path}
-              className="flex items-center gap-2 border-b px-3 py-1 last:border-b-0"
+              className="flex items-center gap-2 border-b border-(--k7-hairline) px-3 py-1.5 last:border-b-0"
             >
-              <span className="w-16 shrink-0 text-muted-foreground">
-                {m[CHANGE[e.change]]()}
-              </span>
+              <Chip variant="status" tone={CHANGE[e.change].tone}>
+                {m[CHANGE[e.change].key]()}
+              </Chip>
               <span
-                className="min-w-0 flex-1 truncate font-mono"
+                className="min-w-0 flex-1 truncate type-mono-value"
                 title={e.from ? `${e.from} → ${e.path}` : e.path}
               >
                 {e.path}
               </span>
               {e.lfs && (
-                <span
-                  className="rounded bg-muted px-1 text-[10px]"
+                <Chip
+                  variant="status"
+                  tone="renamed"
                   title={m["git.lfsHint"]()}
                 >
                   {m["git.lfs"]()}
-                </span>
+                </Chip>
               )}
-              <span className="w-16 shrink-0 text-right tabular-nums text-muted-foreground">
+              <span className="w-16 shrink-0 text-right tabular-nums text-fg-2">
                 {formatSize(e.size)}
               </span>
             </li>
           ))}
         </ul>
         {view.leftOut.map((e) => (
-          <p key={e.path} className="text-muted-foreground text-xs">
+          <p key={e.path} className="type-secondary text-fg-2">
             {m["git.leftOut"]({ name: e.path, size: formatSize(e.size) })}
           </p>
         ))}
-        {who && !signed && (
+        {!started && who && !signed && plan.commit && (
           <div className="flex flex-col gap-2">
-            <p className="text-muted-foreground text-xs">
+            <p className="type-secondary text-fg-2">
               {m["git.identityNeeded"]()}
             </p>
             <Input
@@ -174,30 +212,31 @@ export function CommitDialog({
             />
           </div>
         )}
-        <textarea
-          aria-label={m["git.message"]()}
-          placeholder={m["git.message"]()}
-          className="min-h-20 rounded border bg-background px-2 py-1 text-sm"
-          value={message}
-          disabled={busy}
-          onChange={(e) => setMessage(e.target.value)}
-        />
+        {!started && plan.commit && (
+          <textarea
+            aria-label={m["git.message"]()}
+            placeholder={m["git.message"]()}
+            className="min-h-20 rounded-xl border border-(--k7-hairline-strong) bg-transparent px-3 py-2 text-sm"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+        )}
+        {started && <CommitSteps rows={stepRows(phase, plan)} />}
         {error && (
-          <p
-            role="alert"
-            className="whitespace-pre-wrap text-destructive text-xs"
-          >
+          <p role="alert" className="whitespace-pre-wrap text-error text-xs">
             {error}
           </p>
         )}
         <DialogFooter>
           <Button variant="ghost" disabled={busy} onClick={onClose}>
-            {m["common.cancel"]()}
+            {finished ? m["common.close"]() : m["common.cancel"]()}
           </Button>
-          <Button disabled={!ok} onClick={() => void go()}>
-            {busy && <Loader2 className="mr-1 h-3 w-3 animate-spin" />}
-            {m["git.commit"]()}
-          </Button>
+          {!finished && (
+            <Button disabled={!ok} onClick={() => void go()}>
+              {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+              {retryFrom ? m["git.tryAgain"]() : m["git.commitPush"]()}
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
