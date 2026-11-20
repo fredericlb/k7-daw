@@ -2942,9 +2942,14 @@ export default function App({
   const eventsBody = (
     <div className="flex h-full min-h-0 min-w-0 flex-col">
       {(!dockSlot || dockSlot.kind === "trackModules") && (
-        <p className="flex h-full items-center justify-center px-4 text-center text-muted-foreground text-xs">
-          {m["panel.eventEmpty"]()}
-        </p>
+        <div className="flex h-full flex-col items-center justify-center gap-1 px-4 text-center">
+          <p className="font-semibold text-foreground text-sm">
+            {m["panel.eventEmptyTitle"]()}
+          </p>
+          <p className="max-w-md text-muted-foreground text-xs">
+            {m["panel.eventEmpty"]()}
+          </p>
+        </div>
       )}
       {dockSlot?.kind === "grid" && (
         <PaneBoundary

@@ -5,7 +5,7 @@
 
 import { Button } from "@studio/ui/button";
 import { DockHeaderRow } from "@studio/ui/editor-dock";
-import { Music2, Square } from "@studio/ui/icons";
+import { Square } from "@studio/ui/icons";
 import { useEffect, useRef, useState } from "react";
 import type { LiveMidiTake } from "../hooks/useMidiRecording";
 import { isBlack } from "../noteNames";
@@ -102,6 +102,7 @@ export function MidiTakeRoll({
     countInBeats,
   );
   const at = barBeat(Math.max(0, now - take.from), bar);
+  const startAt = barBeat(Math.max(0, take.from), bar);
   const barLines: number[] = [];
   for (let b = Math.ceil(beats.lo / bar) * bar; b < beats.hi; b += bar)
     barLines.push(b);
@@ -121,28 +122,23 @@ export function MidiTakeRoll({
             </>
           ) : (
             <>
-              <span className="text-sm uppercase tracking-wider text-red-400">
-                {m["clip.recording"]()}
-              </span>
-              <span className="font-mono text-2xl tabular-nums">
+              <div className="flex min-w-0 flex-col">
+                <span className="text-sm uppercase tracking-wider text-red-400">
+                  {m["clip.recording"]()}
+                </span>
+                <span className="truncate">
+                  {m["clip.takeSub"]({
+                    track: trackName,
+                    from: `${startAt.bar}.${startAt.beat}`,
+                    n: notes.length,
+                  })}
+                </span>
+              </div>
+              <span className="ml-auto font-mono text-2xl tabular-nums">
                 {at.bar}:{at.beat}
               </span>
             </>
           )}
-          <span className="truncate">{trackName}</span>
-          <span className="inline-flex items-center gap-1 font-mono tabular-nums">
-            <Music2 className="h-3 w-3" />
-            {notes.length}
-          </span>
-          <Button
-            size="sm"
-            variant="secondary"
-            className="ml-auto"
-            onClick={onStop}
-            title={m["clip.stopTake"]()}
-          >
-            <Square className="mr-1 h-3 w-3" /> Stop
-          </Button>
         </div>
       </DockHeaderRow>
       <div className="relative flex min-h-0 flex-1 overflow-hidden rounded border border-border bg-background">
@@ -197,6 +193,17 @@ export function MidiTakeRoll({
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
+        <p className="min-w-0 flex-1">{m["clip.takeHint"]()}</p>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={onStop}
+          title={m["clip.stopTake"]()}
+        >
+          <Square className="mr-1 h-3 w-3" /> Stop
+        </Button>
       </div>
     </section>
   );
