@@ -5,6 +5,7 @@
 
 import { Dialog } from "radix-ui";
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { Button } from "./button";
 import { Maximize2, Minimize2 } from "./icons";
 import { cn } from "./lib/utils";
@@ -39,11 +40,24 @@ function ExpandButton({
   );
 }
 
-const headerOf = (p: Omit<DockProps, "children">, sheet?: boolean) => (
+// undefined outside a dock (the row renders inline), null until the header's slot is mounted.
+const SlotCtx = React.createContext<HTMLElement | null | undefined>(undefined);
+
+/** An editor's first row, drawn in the dock's header beside Expand and Close; the editor keeps its state. */
+export function DockHeaderRow({ children }: { children: React.ReactNode }) {
+  const slot = React.useContext(SlotCtx);
+  if (slot === undefined) return <>{children}</>;
+  return slot ? createPortal(children, slot) : null;
+}
+
+const headerOf = (
+  p: Omit<DockProps, "children">,
+  row: React.Ref<HTMLDivElement>,
+  sheet?: boolean,
+) => (
   <PanelHeading
     title={p.title}
-    subtitle={p.subtitle}
-    icon={p.icon}
+    row={row}
     onClose={p.onClose}
     closeLabel={p.closeLabel}
     sheet={sheet}
@@ -158,6 +172,7 @@ export function EditorDock({
   resizeLabel: string;
 }) {
   const ref = React.useRef<HTMLDivElement>(null);
+  const [slot, setSlot] = React.useState<HTMLElement | null>(null);
   return (
     <Dialog.Root
       open
@@ -191,8 +206,10 @@ export function EditorDock({
           onHeightChange={onHeightChange}
           label={resizeLabel}
         />
-        {headerOf(head)}
-        <div className="min-h-0 flex-1 overflow-y-auto pr-2">{children}</div>
+        {headerOf(head, setSlot)}
+        <SlotCtx.Provider value={slot}>
+          <div className="min-h-0 flex-1 overflow-y-auto pr-2">{children}</div>
+        </SlotCtx.Provider>
       </Dialog.Content>
     </Dialog.Root>
   );
@@ -205,6 +222,7 @@ export function EditorSheet({
   onEscapeKeyDown,
   ...head
 }: DockProps) {
+  const [slot, setSlot] = React.useState<HTMLElement | null>(null);
   return (
     <Dialog.Root
       open
@@ -234,8 +252,10 @@ export function EditorSheet({
           aria-hidden
           className="mx-auto mb-1 h-[5px] w-9 shrink-0 rounded-full bg-(--k7-grabber)"
         />
-        {headerOf(head, true)}
-        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+        {headerOf(head, setSlot, true)}
+        <SlotCtx.Provider value={slot}>
+          <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+        </SlotCtx.Provider>
       </Dialog.Content>
     </Dialog.Root>
   );

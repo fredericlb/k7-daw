@@ -15,6 +15,7 @@ import { audioFilesOf } from "@studio/song-schema/records";
 import type { Validity } from "@studio/song-schema/yaml/validate";
 import { Button } from "@studio/ui/button";
 import { ArrowLeft, ListMusic, Loader2 } from "@studio/ui/icons";
+import { cn } from "@studio/ui/lib/utils";
 import { recallBuffer, useAutosave } from "@studio/ui-editor/autosave";
 import { editK7xText } from "@studio/ui-editor/k7x/bufferEdit";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -198,7 +199,13 @@ export function PlaylistEditor({
   });
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-background text-foreground">
+    <div
+      className={cn(
+        "flex h-full min-h-0 flex-col text-foreground",
+        // In the panel the glass shows through; only the full-screen editor brings its own ground.
+        !panel && "bg-background",
+      )}
+    >
       {panel ? null : (
         <header className="flex items-center gap-3 border-b border-border px-3 py-2">
           <Button variant="secondary" size="sm" onClick={onBack}>

@@ -7,6 +7,7 @@
 // The gestures themselves are ../hooks/useRollGestures.ts; this file is the layout and the drawing.
 // Drawn by the Editor bottom panel and, when a clip is clicked, where the graph is (ClipView).
 
+import { DockHeaderRow } from "@studio/ui/editor-dock";
 import { Piano } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { useHZoom, usePanScroll } from "@studio/ui-timeline/panZoom";
@@ -601,13 +602,12 @@ export function PianoRoll({
 
   return (
     // min-w-0, as in the timeline: the fixed-width grid must not become this flex child's minimum.
-    <div className="flex min-h-full min-w-0 flex-col gap-2.5 px-1 @2xl:h-full @2xl:flex-row @2xl:gap-4">
-      {/* The left column: the clip's line, the tool menu and the hint, 360 px beside the roll (docs/clipEditors.md). */}
-      <div className="flex min-w-0 shrink-0 flex-col gap-2.5 text-xs @2xl:w-[360px] @2xl:overflow-y-auto">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+    <div className="flex h-full min-h-0 min-w-0 flex-col border-t-2 border-border">
+      <DockHeaderRow>
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
           {/* The name a musician knows the clip by; its id stays the tooltip's (clipNames.ts). */}
           <span
-            className="font-semibold text-primary-text"
+            className="min-w-0 truncate font-semibold text-primary-text"
             title={clip.name || clip.id}
           >
             <Piano className="h-3.5 w-3.5" />{" "}
@@ -639,31 +639,32 @@ export function PianoRoll({
                 {loop.passes > 1 && ` × ${loop.passes}`}
               </span>
             )}
+            {onCreateNote && (
+              <span className="ml-2 text-faint">
+                · {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
+              </span>
+            )}
+          </span>
+          {/* The right end of the bar, whatever it holds: the ✕ then needs no margin rule of its own. */}
+          <span className="ml-auto flex items-center gap-1">
+            {onModeChange && (
+              <RollToolMenu
+                modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
+                current={mode}
+                onPick={(next) => void onCommand?.(`ui roll ${next}`)}
+              />
+            )}
+            {/* Editable rolls only — `onCreateNote` is what says this one is (docs/clipEditors.md). */}
+            <LoopToggle on={looped} onToggle={onLoop} />
+            <SeqDoubleButton
+              seqId={seqId}
+              command={onCreateNote ? onCommand : undefined}
+            />
           </span>
         </div>
-        <div className="flex flex-wrap items-center gap-1">
-          {onModeChange && (
-            <RollToolMenu
-              modes={takes ? ROLL_MODES : ROLL_SOLO_MODES}
-              current={mode}
-              onPick={(next) => void onCommand?.(`ui roll ${next}`)}
-            />
-          )}
-          {/* Editable rolls only — `onCreateNote` is what says this one is (docs/clipEditors.md). */}
-          <LoopToggle on={looped} onToggle={onLoop} />
-          <SeqDoubleButton
-            seqId={seqId}
-            command={onCreateNote ? onCommand : undefined}
-          />
-        </div>
-        {onCreateNote && (
-          <p className="text-[12px] text-faint leading-4">
-            {fingerFirst() ? m["roll.hintTouch"]() : m["roll.hintKeys"]()}
-          </p>
-        )}
-      </div>
+      </DockHeaderRow>
 
-      <div className="flex h-72 min-w-0 shrink-0 @2xl:h-auto @2xl:min-h-0 @2xl:flex-1">
+      <div className="flex min-h-0 flex-1">
         {/* The TAKES mode draws in the lanes' place; the lanes stay mounted, hidden, so the caret and the scroll survive. */}
         {showTakes && takes && (
           <TakesView
