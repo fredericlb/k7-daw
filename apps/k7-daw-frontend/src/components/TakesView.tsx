@@ -270,7 +270,7 @@ export function TakesView({
         {ev.kind === "audio" && (
           <Button
             size="sm"
-            variant={xfTool ? "default" : "ghost"}
+            variant={xfTool ? "default" : "chip"}
             onClick={() => setXfTool((v) => !v)}
             aria-pressed={xfTool}
             title={m["takes.crossfadeHint"]()}
