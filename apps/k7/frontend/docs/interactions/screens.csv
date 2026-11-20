@@ -1,0 +1,41 @@
+Number,Name,Tablet id,Mobile id,Desktop id,Canvas boards,Interactions board,Drawn,Shared with,Canvas y
+01,Home,01T,01M,01D,"Artboard-hb0q, HomePhone, HomeDesk",Ix01,TRUE,,0
+02,Tasks,02T,02M,02D,"TasksPad, TasksPhone, TasksDesk",Ix02,TRUE,,964
+03,Arrangement · Audio,03T,03M,03D,"ArrangePad, ArrangePhone, ArrangeDesk",Ix03,TRUE,,1928
+04,Arrangement · Video,04T,04M,04D,"ArrangeVideoPad, ArrangeVideoPhone, ArrangeVideoDesk",Ix04,TRUE,,2892
+05,Graph,05T,05M,05D,"GraphPad, GraphPhone, GraphDesk",Ix05,TRUE,,3856
+06,Source,06T,06M,06D,"SourcePad, SourcePhone, SourceDesk",Ix06,TRUE,,4820
+07,Resources panel,07T,07M,07D,"ResourcesPad, ResourcesPhone, ResourcesDesk",Ix07,TRUE,,5784
+08,Tasks & history panel,08T,08M,08D,"LogPad, LogPhone, LogDesk",Ix08,TRUE,,6748
+09,Export panel,09T,09M,09D,"SharePad, SharePhone, ShareDesk",Ix09,TRUE,,7712
+10,Settings panel,10T,10M,10D,"SettingsPad, SettingsPhone, SettingsDesk",Ix10,TRUE,,8676
+11,Clip editor,11T,11M,11D,"ClipZoomPad, ClipPhone, ClipZoomDesk",Ix11,TRUE,,9640
+12,Piano roll,12T,12M,12D,"PianoSidePad, PianoPhone, PianoSideDesk",Ix12,TRUE,,10604
+13,Node chain editor,13T,13M,13D,"ChainSidePad, ChainPhone, ChainSideDesk",Ix13,TRUE,,11568
+14,Export · folder picker,14T,14M,14D,"ExportPickPad, ExportPickPhone, ExportPickDesk",Ix14,TRUE,09 01,12532
+15,Export · saved,15T,15M,15D,"ExportDonePad, ExportDonePhone, ExportDoneDesk",Ix15,TRUE,09 01,13496
+16,Pull in place,16T,16M,16D,"PullPad, PullPhone, PullDesk",Ix16,TRUE,,14460
+17,Takes mode,17T,17M,17D,"TakesPad, TakesPhone, TakesDesk",Ix17,TRUE,,15424
+18,Command palette,18T,18M,18D,"CommandPad, CommandPhone, CommandDesk",Ix18,TRUE,,16388
+19,Command palette · argument,19T,19M,19D,"CommandArgPad, CommandArgPhone, CommandArgDesk",Ix19,TRUE,,17352
+20,Turntables,20T,20M,20D,"TurntablesPad, TurntablesPhone, TurntablesDesk",Ix20,TRUE,,18316
+21,Libraries,21T,21M,21D,"LibrariesPad, LibrariesPhone, LibrariesDesk",Ix21,TRUE,01,29528
+22,Frozen chains,22T,22M,22D,"FrozenPad, FrozenPhone, FrozenDesk",Ix22,TRUE,,30492
+23,App settings,23T,23M,23D,"AppSettingsPad, AppSettingsPhone, AppSettingsDesk",Ix23,TRUE,,31456
+24,Logs panel,24T,24M,24D,"LogsPad, LogsPhone, LogsDesk",Ix24,TRUE,,32420
+25,Playlists panel,25T,25M,25D,"PlaylistsPad, PlaylistsPhone, PlaylistsDesk",Ix25,TRUE,,33384
+26,Command editor screen,26T,26M,26D,"CommandEditorPad, CommandEditorPhone, CommandEditorDesk",Ix26,TRUE,,34348
+27,Mixer panel,27T,27M,27D,"MixerPad, MixerPhone, MixerDesk",Ix27,TRUE,,35312
+28,Events panel,28T,28M,28D,"EventsPad, EventsPhone, EventsDesk",Ix28,TRUE,,36276
+29,Connect to git,29T,29M,29D,"ConnectPad, ConnectPhone, ConnectDesk",Ix29,TRUE,,37240
+30,Workspace history,30T,30M,30D,"SyncHistoryPad, SyncHistoryPhone, SyncHistoryDesk",Ix30,TRUE,,38204
+31,Conflict,31T,31M,31D,"ConflictPad, ConflictPhone, ConflictDesk",Ix31,TRUE,,39168
+32,Host key prompt,32T,32M,32D,"HostKeyPad, HostKeyPhone, HostKeyDesk",Ix32,TRUE,,40132
+33,Commits list,33T,33M,33D,"CommitsPad, CommitsPhone, CommitsDesk",Ix33,TRUE,,41096
+34,Commit & Push,34T,34M,34D,"CommitPad, CommitPhone, CommitDesk",Ix34,TRUE,,42060
+35,Workspace tree,,,,,,FALSE,,
+36,Engine page,,,,,,FALSE,,
+37,Help,,,,,,FALSE,,
+38,Curves,,,,,,FALSE,,
+39,Chain and module builders,,,,,,FALSE,,
+40,Surfaces,,,,,,FALSE,,
