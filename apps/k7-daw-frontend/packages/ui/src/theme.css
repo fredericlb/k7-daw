@@ -1,10 +1,7 @@
-/* Shared design tokens for @studio/ui — the single source of truth for the
-   palette and radii every consuming app inherits. Apps import this once
-   (`@import "@studio/ui/theme.css";`) after `@import "tailwindcss";`.
-
-   The shadcn-style tokens use their own --sh-* names so they don't collide
-   with any legacy --accent / --muted / --border an app may already define.
-   The theme is dark-only, so the tokens live straight on :root. */
+/* Design tokens of @studio/ui: the K7 DAW canvas, dark only (the accent is fixed, there is no light theme).
+   Apps import this once (`@import "@studio/ui/theme.css";`) after `@import "tailwindcss";`.
+   The one thing a reader gets wrong: "glass" has NO blur, it sits on the ground; only float and panel blur.
+   Every choice behind a value is in docs/tokens.md. */
 
 /* The house faces, shipped in the app's own files: a stylesheet linked from another host blocks the page until it answers. */
 @import "@fontsource/sansation/300.css";
@@ -13,59 +10,299 @@
 @import "@fontsource/sansation/400-italic.css";
 @import "@fontsource/sansation/700.css";
 @import "@fontsource/sansation/700-italic.css";
-@import "@fontsource/rubik-80s-fade/400.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/600.css";
 
 :root {
-  --sh-background: #101114;
-  --sh-foreground: #e9e9ee;
-  --sh-card: #1b1c22;
-  --sh-card-foreground: #e9e9ee;
-  --sh-popover: #1b1c22;
-  --sh-popover-foreground: #e9e9ee;
-  --sh-primary: #8b5cf6;
-  --sh-primary-hover: #7c3aed;
-  --sh-primary-foreground: #ffffff;
-  --sh-secondary: #24252c;
-  --sh-secondary-hover: #2c2d36;
-  --sh-secondary-foreground: #e9e9ee;
-  --sh-muted: #24252c;
-  --sh-muted-foreground: #92929e;
-  --sh-accent: #24252c;
-  --sh-accent-foreground: #e9e9ee;
-  --sh-destructive: #f16469;
-  --sh-border: #2f303a;
-  --sh-input: #2f303a;
-  --sh-ring: #8b5cf6;
-  --sh-amber: #f0a94e;
-  --sh-green: #34d399;
-  /* rounded-md resolves to 8px — the legacy control radius. */
+  color-scheme: dark;
+
+  /* ---- Type ---- */
+  --k7-font-sans: "Sansation", system-ui, sans-serif; /* every word; weights 300/400/700 only */
+  --k7-font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace; /* numbers, rulers, timecodes, commands, code; 400/600 */
+  --k7-font-system-picker: -apple-system, system-ui, sans-serif; /* only inside the OS folder-picker placeholder; never app text */
+
+  /* size / line-height / weight */
+  --k7-type-display: 300 40px/48px var(--k7-font-sans);
+  --k7-type-large-title: 700 34px/40px var(--k7-font-sans); /* Home page titles */
+  --k7-type-sheet-title: 700 20px/26px var(--k7-font-sans); /* phone sheet, dialog title */
+  --k7-type-headline: 700 17px/21px var(--k7-font-sans); /* header title, panel title */
+  --k7-type-body: 400 15px/21px var(--k7-font-sans); /* rows, menus, inputs */
+  --k7-type-label: 700 14px/18px var(--k7-font-sans); /* buttons, capsule labels, toast title */
+  --k7-type-secondary: 400 13px/18px var(--k7-font-sans); /* toast line, hints */
+  --k7-type-status: 400 12px/15px var(--k7-font-sans); /* header status line, row detail */
+  --k7-type-caps: 700 12px/16px var(--k7-font-sans); /* RECENT · PANELS · LANE VIEWS */
+  --k7-caps-tracking: 0.6px;
+  --k7-type-tab: 700 13px/16px var(--k7-font-sans); /* segmented tabs in a panel (14 in History's second row) */
+  --k7-type-badge: 700 11px/1 var(--k7-font-sans);
+  --k7-type-mono-timecode: 600 17px/1 var(--k7-font-mono);
+  --k7-type-mono-command: 400 15px/1.3 var(--k7-font-mono); /* palette input and argument chip (600 on the chip) */
+  --k7-type-mono-value: 400 12px/1.3 var(--k7-font-mono); /* dB, pan, bpm, paths */
+  --k7-type-mono-ruler: 11px; /* 700 on the bar, 400 on beats */
+  --k7-type-mono-log: 400 12px/1.4 var(--k7-font-mono);
+
+  /* ---- Colour (contrast measured on the panel, #251d38 once blended) ---- */
+  --k7-ground: #07040f; /* every screen's background */
+  --k7-text: #f6f3fb; /* 14.6:1 */
+  --k7-text-2: #c5bdd4; /* 8.9:1, status lines, secondary */
+  --k7-text-3: #aaa2ba; /* 6.6:1, captions: the lowest text level */
+  --k7-accent: #6f4fe0; /* FILLS only: play, primary buttons, badges; white on it 5.4:1 */
+  --k7-on-accent: #ffffff;
+  --k7-accent-text: #c9b6ff; /* accent-coloured text and icons */
+  --k7-on: #d6c8ff; /* lavender: pressed / selected text and icon */
+  --k7-on-fill: rgba(255, 255, 255, 0.16); /* pressed capsule segment */
+  --k7-on-fill-tab: rgba(255, 255, 255, 0.17); /* selected tab of a 40 px segmented control */
+  --k7-warn: #ffc46b;
+  --k7-warn-fill: rgba(255, 196, 107, 0.12);
+  --k7-warn-line: rgba(255, 196, 107, 0.35);
+  --k7-warn-toast-line: rgba(255, 196, 107, 0.4);
+  --k7-warn-strip-fill: rgba(255, 196, 107, 0.1); /* demo banner, "opened by a command" strip */
+  --k7-warn-strip-line: rgba(255, 196, 107, 0.25);
+  --k7-warn-strip-text: #ffd89a;
+  --k7-error: #ff8a7a;
+  --k7-error-toast-line: rgba(255, 138, 122, 0.45);
+  --k7-error-fill: rgba(255, 138, 122, 0.1); /* "before" diff card, error card tint */
+  --k7-error-line: rgba(255, 138, 122, 0.3);
+  --k7-ok: #5ee0a0; /* meters, done checks */
+  --k7-ok-fill: rgba(94, 224, 160, 0.1); /* "after" diff card */
+  --k7-ok-line: rgba(94, 224, 160, 0.4); /* status card done border */
+  --k7-ink: #2a1640; /* text on a light fill: clip, M/S on, destructive pill */
+  --k7-record: #ff5a4e; /* record dot in Takes and the clip editor */
+  --k7-clip: #bd93e3; /* clip fill */
+  --k7-clip-detail: #f4eaff; /* notes and waveform drawn on a clip */
+  --k7-playhead: #ffffff;
+  --k7-glyph-tile: rgba(183, 156, 255, 0.16); /* 64/76 px empty-state glyph circle */
+
+  /* Track buttons (one component for the lane header and the mixer strip) */
+  --k7-mute-on: var(--k7-warn);
+  --k7-solo-on: var(--k7-on);
+  --k7-track-btn-off: rgba(255, 255, 255, 0.1);
+
+  /* Meters and editor marks */
+  --k7-meter-gradient: linear-gradient(0deg, #5ee0a0 70%, #ffc46b);
+  --k7-meter-track: rgba(255, 255, 255, 0.1);
+  --k7-fader-track: rgba(255, 255, 255, 0.18);
+  --k7-mark-onset: #5fd4d0; /* onset pins, tuner needle */
+  --k7-mark-stretch: #8fb8ff; /* stretch points */
+  --k7-span-fill: rgba(255, 196, 107, 0.18); /* Takes span band */
+  --k7-span-line: rgba(255, 196, 107, 0.6);
+  --k7-take-1: #8fb8ff; /* take rows, in order; heard part solid, the rest at --k7-take-unheard */
+  --k7-take-2: #bd93e3;
+  --k7-take-3: #5fd4d0;
+  --k7-take-4: #ffc46b;
+  --k7-take-unheard: 0.32;
+
+  /* Source editor syntax (SourceDesk) */
+  --k7-code-text: #d9d3e6;
+  --k7-code-keyword: #ff9fb0;
+  --k7-code-string: #b5e08a;
+  --k7-code-punct: #d3cce0;
+  --k7-code-name: #c9b6ff;
+
+  /* Lines and fills */
+  --k7-hairline: rgba(255, 255, 255, 0.1);
+  --k7-hairline-soft: rgba(255, 255, 255, 0.07);
+  --k7-hairline-row: rgba(255, 255, 255, 0.08); /* between rows of a row group */
+  --k7-hairline-strong: rgba(255, 255, 255, 0.18); /* capsule dividers */
+  --k7-row: rgba(255, 255, 255, 0.07); /* row groups, mixer strips; border = --k7-hairline-soft */
+  --k7-row-selected: rgba(255, 255, 255, 0.08);
+  --k7-lane-header: rgba(255, 255, 255, 0.04);
+  --k7-card-quiet: rgba(255, 255, 255, 0.03); /* design-system specimen cards only */
+  --k7-input-fill: rgba(255, 255, 255, 0.08);
+  --k7-input-fill-focus: rgba(255, 255, 255, 0.1);
+  --k7-input-line: rgba(255, 255, 255, 0.1);
+  --k7-focus-line: #c9b6ff;
+  --k7-focus-ring: 0 0 0 3px rgba(201, 182, 255, 0.25);
+  --k7-switch-off: rgba(255, 255, 255, 0.24);
+  --k7-progress-track: rgba(255, 255, 255, 0.14);
+  --k7-progress-fill: #c9b6ff;
+  --k7-grabber: rgba(255, 255, 255, 0.35);
+  --k7-scrim: rgba(4, 2, 10, 0.55); /* modal command bar, dialogs */
+  --k7-scrim-menu: rgba(4, 2, 10, 0.35); /* behind an open menu */
+
+  /* Background decor (two blobs, two wave strokes at the bottom) */
+  --k7-blob-a: #6f4fe0; /* opacity 0.5, blur 70px */
+  --k7-blob-b: #c14fd0; /* opacity 0.35, blur 75px */
+  --k7-blob-a-opacity: 0.5;
+  --k7-blob-b-opacity: 0.35;
+  --k7-blob-a-blur: blur(70px);
+  --k7-blob-b-blur: blur(75px);
+  --k7-wave-a: #b79cff;
+  --k7-wave-b: #e59cff;
+
+  /* ---- Surfaces ---- */
+  /* glass: header controls and capsules; no blur */
+  --k7-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+  --k7-glass-border: 1px solid rgba(255, 255, 255, 0.16);
+  --k7-glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  /* float: transport bar, toasts, home tab bar */
+  --k7-float: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+  --k7-float-border: 1px solid rgba(255, 255, 255, 0.18);
+  --k7-float-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 12px 32px rgba(0, 0, 0, 0.5);
+  --k7-float-blur: blur(28px) saturate(190%);
+  /* panel: right panels 0.92, menus 0.9 (#2c2240), command bar and dialogs 0.94, phone sheets 0.97 */
+  --k7-panel: rgba(40, 31, 60, 0.92);
+  --k7-panel-dialog: rgba(40, 31, 60, 0.94);
+  --k7-panel-sheet: rgba(40, 31, 60, 0.97);
+  --k7-menu: rgba(44, 34, 64, 0.9);
+  --k7-menu-overflow: rgba(44, 34, 64, 0.92); /* phone "Views and panels" menu */
+  --k7-panel-border: 1px solid rgba(255, 255, 255, 0.18);
+  --k7-panel-blur: blur(30px) saturate(190%);
+
+  /* ---- Shadows ---- */
+  --k7-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.3); /* pressed segment, accent fills */
+  --k7-shadow-panel: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 14px 48px rgba(0, 0, 0, 0.6);
+  --k7-shadow-menu: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 18px 48px rgba(0, 0, 0, 0.6);
+  --k7-shadow-dialog: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 18px 56px rgba(0, 0, 0, 0.65);
+  --k7-shadow-sheet: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 -14px 48px rgba(0, 0, 0, 0.6);
+  --k7-shadow-card: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 8px 20px rgba(0, 0, 0, 0.45); /* floating picture, minimap */
+  --k7-shadow-thumb: 0 2px 6px rgba(0, 0, 0, 0.45); /* fader and slider thumbs */
+  --k7-shadow-knob: 0 2px 5px rgba(0, 0, 0, 0.35); /* switch knob */
+
+  /* ---- Radii: a control is a pill, radius = height / 2 ---- */
+  --k7-r-44: 22px;
+  --k7-r-36: 18px;
+  --k7-r-32: 16px; /* 32 px tab inside a 40 px segmented control */
+  --k7-r-bar: 28px; /* 56 px floating bar items */
+  --k7-r-tabbar: 33px; /* 66 px home tab bar and its command-bar button */
+  --k7-r-panel: 28px;
+  --k7-r-dialog: 28px;
+  --k7-r-sheet: 28px; /* phone sheet top corners (28 28 0 0); 32 is the device frame */
+  --k7-r-rows: 16px;
+  --k7-r-input: 14px;
+  --k7-r-chip: 15px; /* 30 px warning chip */
+  --k7-r-badge: 11px; /* 22 px count badge; 20 px badge = 10 */
+  --k7-r-menu: 20px;
+  --k7-r-overflow: 22px;
+  --k7-r-palette: 22px;
+  --k7-r-toast: 24px;
+  --k7-r-track-btn: 10px; /* 34 px M / S / A */
+  --k7-r-clip: 9px;
+  --k7-r-diff: 10px;
+
+  /* ---- Spacing: 4 px steps ---- */
+  --k7-space-1: 4px; /* inside chips */
+  --k7-space-2: 8px; /* between header items */
+  --k7-space-3: 12px; /* panel inset, bar gaps */
+  --k7-space-4: 16px; /* screen gutter */
+  --k7-space-6: 24px; /* group gap */
+  --k7-space-8: 32px; /* section padding */
+
+  /* ---- Sizes ---- */
+  --k7-touch: 44px; /* minimum target on every device, desktop included */
+  --k7-header-h: 60px; /* desktop and iPad; padding 8px 16px, gap 8 */
+  --k7-header-phone-h: 48px;
+  --k7-header-landscape-h: 52px;
+  --k7-bar-h: 56px; /* floating transport bar, 16 from the edges (phone bottom 28) */
+  --k7-bar-bottom: 16px;
+  --k7-bar-bottom-phone: 28px;
+  --k7-info-strip-h: 38px; /* phone strip above the bar */
+  --k7-tool-w: 68px;
+  --k7-tabbar-h: 66px; /* home; tabs 112 x 54 */
+  --k7-panel-w: 400px;
+  --k7-panel-right: 12px;
+  --k7-panel-gap-top: 8px; /* under the header */
+  --k7-panel-bottom: 84px; /* clear of the bar; also the toast's bottom */
+  --k7-panel-padding: 6px 6px 14px 14px;
+  --k7-panel-header-h: 44px;
+  --k7-sheet-top: 54px; /* phone sheet; padding 6 16 34; grabber 36 x 5 */
+  --k7-toast-max-w: 460px; /* 440 on the Arrange boards */
+  --k7-toast-right-panel-open: 428px;
+  --k7-toast-bottom-phone: 140px;
+  --k7-toast-top-phone: 112px; /* plugin-scan toast on iPhone */
+  --k7-palette-w: 560px; /* phone: left/right 8 */
+  --k7-palette-input-h: 52px;
+  --k7-dialog-w: 420px;
+  --k7-menu-w: 260px;
+  --k7-overflow-w: 300px;
+  --k7-segmented-h: 40px; /* padding 3, tabs 32 */
+  --k7-capsule-h: 44px; /* padding 3, buttons 44 x 36 */
+  --k7-switch-w: 51px;
+  --k7-switch-h: 31px;
+  --k7-track-btn: 34px;
+  --k7-badge: 22px;
+  --k7-chip-h: 30px; /* warning chip */
+  --k7-pill-sm-h: 36px; /* pills inside cards, editor chips */
+  --k7-filter-chip-h: 32px;
+  --k7-lane-header-w: 220px;
+  --k7-icon: 24px; /* viewBox; stroke 1.8 (2.2 for chevrons and close), round caps */
+
+  /* ---- Layers (the canvas draws them by DOM order; these numbers keep that order) ---- */
+  --k7-z-decor: 0; /* blobs and waves */
+  --k7-z-pane: 1;
+  --k7-z-floating-card: 10; /* picture card, minimap, reference player */
+  --k7-z-header: 20;
+  --k7-z-toast: 30;
+  --k7-z-bar: 40;
+  --k7-z-panel: 50; /* right panel, phone sheet */
+  --k7-z-menu: 60; /* menu with its 0.35 scrim */
+  --k7-z-palette: 70; /* command bar with its 0.55 scrim */
+  --k7-z-dialog: 80;
+  --k7-z-system-toast: 90; /* plugin-scan toast on top */
+
+  /* ---- Motion (all off under prefers-reduced-motion) ---- */
+  --k7-ease-spring: cubic-bezier(0.3, 1.2, 0.5, 1); /* panelIn, sheetIn, dialogIn */
+  --k7-ease-lozenge: cubic-bezier(0.3, 1.35, 0.45, 1); /* home tab lozenge 0.5 s, toastIn */
+  --k7-ease-tab: cubic-bezier(0.3, 1.3, 0.45, 1); /* segmented lozenge 0.4 s */
+  --k7-dur-panel: 0.32s;
+  --k7-dur-menu: 0.28s; /* 0.26 for the command bar card, 0.24 for small menus */
+  --k7-dur-dialog: 0.24s;
+  --k7-dur-fade: 0.2s; /* scrim */
+  --k7-dur-toast: 0.4s;
+  --k7-dur-tab: 0.4s;
+  --k7-dur-lane: 0.3s; /* lane height on Lanes: expand */
+  --k7-dur-spin: 0.9s;
+  --k7-dur-pulse: 1.2s;
+}
+
+@keyframes k7-panel-in { 0% { opacity: 0; transform: translateX(40px); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes k7-sheet-in { 0% { opacity: 0; transform: translateY(60px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes k7-menu-in { 0% { opacity: 0; transform: scale(0.82); } 60% { opacity: 1; transform: scale(1.03); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes k7-dialog-in { 0% { opacity: 0; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes k7-toast-in { 0% { opacity: 0; transform: translateY(-16px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes k7-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes k7-spin { to { transform: rotate(360deg); } }
+@keyframes k7-pulse { 50% { opacity: 0.35; } }
+@keyframes k7-squish { 0% { transform: scale(1, 1); } 35% { transform: scale(1.28, 0.84); } 70% { transform: scale(0.95, 1.05); } 100% { transform: scale(1, 1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+
+/* The shadcn-style --sh-* names stay, now pointing at the canvas, so every `bg-*`/`text-*` class keeps compiling. */
+:root {
+  --sh-background: var(--k7-ground);
+  --sh-foreground: var(--k7-text);
+  --sh-card: var(--k7-panel);
+  --sh-card-foreground: var(--k7-text);
+  --sh-popover: var(--k7-menu);
+  --sh-popover-foreground: var(--k7-text);
+  --sh-primary: var(--k7-accent);
+  --sh-primary-hover: color-mix(in srgb, var(--k7-accent) 88%, white);
+  --sh-primary-foreground: var(--k7-on-accent);
+  --sh-secondary: var(--k7-row);
+  --sh-secondary-hover: var(--k7-on-fill);
+  --sh-secondary-foreground: var(--k7-text);
+  --sh-muted: var(--k7-row);
+  --sh-muted-foreground: var(--k7-text-2);
+  --sh-accent: var(--k7-row);
+  --sh-accent-foreground: var(--k7-text);
+  --sh-destructive: var(--k7-error);
+  --sh-border: var(--k7-hairline);
+  --sh-input: var(--k7-input-line);
+  --sh-ring: var(--k7-focus-line);
+  --sh-amber: var(--k7-warn);
+  --sh-green: var(--k7-ok);
   --sh-radius: 10px;
 }
 
-/* Frediverse type: Rubik 80s Fade for titles (--font-brand), Sansation
-   for everything else (--font-sans, --font-display; 300, 400, 700). Both are
-   Fontsource packages, imported at the top of this file.
-   An app with its own identity (acu's Noto/CJK, z0's Press Start 2P)
-   overrides these in its own stylesheet. */
-/* `static` so both vars are always emitted: Tailwind tree-shakes unused theme
-   vars, and --font-display has no utility usage yet in most apps — but legacy
-   stylesheets reference it as plain `var(--font-display)`, which the shaker
-   can't see. */
+/* `static` so both vars are always emitted: Tailwind tree-shakes unused theme vars, and legacy
+   stylesheets reference --font-display as plain `var(--font-display)`, which the shaker cannot see. */
 @theme static {
-  --font-sans: "Sansation", system-ui, sans-serif;
-  --font-display: "Sansation", system-ui, sans-serif;
-  /* Titles — the app name in AppHeader and the sign-in wordmark: Rubik 80s
-     Fade, in white. h1–h6 and CardTitle stay in the body face. Until its
-     file arrives the titles fall back to the body face. Never for body copy. */
-  --font-brand: "Rubik 80s Fade", "Sansation", system-ui, sans-serif;
-}
-
-@layer base {
-  /* Rubik 80s Fade has one weight, and a faked bold fills its fade stripes in;
-     Sansation has a real 700, so nothing else ever needed the fake. */
-  :root {
-    font-synthesis-weight: none;
-  }
+  --font-sans: var(--k7-font-sans);
+  --font-display: var(--k7-font-sans);
+  --font-brand: var(--k7-font-sans);
+  --font-mono: var(--k7-font-mono);
 }
 
 @theme inline {
@@ -95,12 +332,100 @@
   --radius-md: calc(var(--sh-radius) - 2px);
   --radius-lg: var(--sh-radius);
   --radius-xl: calc(var(--sh-radius) + 2px);
+  /* The canvas's own names, for classes such as `text-fg-2`, `bg-on-fill`, `text-lavender`. */
+  --color-fg-2: var(--k7-text-2);
+  --color-fg-3: var(--k7-text-3);
+  --color-primary-text: var(--k7-accent-text);
+  --color-lavender: var(--k7-on);
+  --color-on-fill: var(--k7-on-fill);
+  --color-row: var(--k7-row);
+  --color-ink: var(--k7-ink);
+  --color-warn: var(--k7-warn);
+  --color-error: var(--k7-error);
+  --color-ok: var(--k7-ok);
+  --color-record: var(--k7-record);
+  --color-hairline: var(--k7-hairline);
+}
+
+/* Surfaces, one utility each (docs/tokens.md). */
+@utility glass {
+  background: var(--k7-glass);
+  border: var(--k7-glass-border);
+  box-shadow: var(--k7-glass-shadow);
+}
+@utility float {
+  background: var(--k7-float);
+  border: var(--k7-float-border);
+  box-shadow: var(--k7-float-shadow);
+  backdrop-filter: var(--k7-float-blur);
+}
+@utility panel {
+  background: var(--k7-panel);
+  border: var(--k7-panel-border);
+  box-shadow: var(--k7-shadow-panel);
+  backdrop-filter: var(--k7-panel-blur);
+}
+@utility panel-dialog {
+  background: var(--k7-panel-dialog);
+  border: var(--k7-panel-border);
+  box-shadow: var(--k7-shadow-dialog);
+  backdrop-filter: var(--k7-panel-blur);
+}
+@utility panel-sheet {
+  background: var(--k7-panel-sheet);
+  border: var(--k7-panel-border);
+  box-shadow: var(--k7-shadow-sheet);
+  backdrop-filter: var(--k7-panel-blur);
+}
+@utility menu {
+  background: var(--k7-menu);
+  border: var(--k7-panel-border);
+  box-shadow: var(--k7-shadow-menu);
+  backdrop-filter: var(--k7-panel-blur);
+}
+@utility row-group {
+  background: var(--k7-row);
+  border: 1px solid var(--k7-hairline-soft);
+  border-radius: var(--k7-r-rows);
+}
+@utility scrim {
+  background: var(--k7-scrim);
+}
+@utility scrim-menu {
+  background: var(--k7-scrim-menu);
+}
+
+/* The type scale as utilities: one class sets size, line height, weight and face together. */
+@utility type-display { font: var(--k7-type-display); }
+@utility type-large-title { font: var(--k7-type-large-title); }
+@utility type-sheet-title { font: var(--k7-type-sheet-title); }
+@utility type-headline { font: var(--k7-type-headline); }
+@utility type-body { font: var(--k7-type-body); }
+@utility type-label { font: var(--k7-type-label); }
+@utility type-secondary { font: var(--k7-type-secondary); }
+@utility type-status { font: var(--k7-type-status); }
+@utility type-caps {
+  font: var(--k7-type-caps);
+  letter-spacing: var(--k7-caps-tracking);
+  text-transform: uppercase;
+}
+@utility type-tab { font: var(--k7-type-tab); }
+@utility type-badge { font: var(--k7-type-badge); }
+@utility type-mono-timecode { font: var(--k7-type-mono-timecode); }
+@utility type-mono-command { font: var(--k7-type-mono-command); }
+@utility type-mono-value { font: var(--k7-type-mono-value); }
+@utility type-mono-log { font: var(--k7-type-mono-log); }
+
+@layer base {
+  /* Sansation has real 300, 400 and 700: a faked weight would only blur them. */
+  :root {
+    font-synthesis-weight: none;
+  }
 }
 
 /* Vertical (portrait) tablets: collapse header navigation to icons only. Nav
    items keep their `.nav-icon` and drop the text `.nav-label`, so the header
-   stays compact without a hamburger. Shared by every app that imports this
-   stylesheet (radiok7, routine, …) — a header opts in simply by wrapping its
+   stays compact without a hamburger. A header opts in simply by wrapping its
    text in `.nav-label`. Bounds: min 600px excludes portrait phones (which have
    their own icons-only rules); max 1024px covers up to a 12.9" iPad portrait. */
 @media (min-width: 600px) and (max-width: 1024px) and (orientation: portrait) {
