@@ -5,7 +5,10 @@
 // this and the palette saying the same.
 
 import { Button } from "@studio/ui/button";
-import { Download, FileArchive, FolderOpen, Loader2 } from "@studio/ui/icons";
+import { Download, FileArchive, FolderOpen } from "@studio/ui/icons";
+import { Picker } from "@studio/ui/picker";
+import { RowButton, RowGroup } from "@studio/ui/row-group";
+import { Spinner } from "@studio/ui/spinner";
 import { useState } from "react";
 import { tracksLine } from "../exportArgs";
 import type { ExportHost, Saved } from "../exportHost";
@@ -37,9 +40,6 @@ export function SharePanel({
   onShare?: () => void;
   onRun: (command: string) => void;
 }) {
-  const row =
-    "flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-sm hover:bg-accent disabled:opacity-50";
-  const head = "px-2 pb-1 pt-2 text-xs font-medium text-muted-foreground";
   // Which timeline the mixdown renders; one that has gone since is Main again.
   const [timeline, setTimeline] = useState("");
   const chosen = timelines.includes(timeline) ? timeline : "";
@@ -48,116 +48,114 @@ export function SharePanel({
   // What leaves, as the command line that does it; nothing runs until the folder step.
   const [line, setLine] = useState("");
   const choose = (l: string) => setLine(l);
-  const on = (l: string) => (line === l ? "bg-accent" : "");
+
+  const pressed = (l: string) => line === l;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       {busy ? (
-        <div className="flex shrink-0 items-center gap-2 pb-2 text-fg-2 text-sm">
-          <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
-          {m["share.rendering2"]()}
+        <div
+          role="status"
+          className="mb-2 flex shrink-0 items-center gap-3 rounded-2xl bg-(--k7-row) px-3.5 py-3"
+        >
+          <Spinner />
+          <span className="type-body">{m["share.rendering2"]()}</span>
         </div>
       ) : null}
 
-      <div className="min-h-0 flex-1 overflow-y-auto p-2">
-        <div className={head}>{m["share.mixdown"]()}</div>
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <h3 className="type-caps pb-2 text-fg-2">{m["share.mixdown"]()}</h3>
         {/* Only once there is a choice, as the timeline pane's tabs are. */}
         {timelines.length ? (
-          <label className="flex items-center gap-2 px-2 py-1 text-sm">
-            <span className="text-muted-foreground">
-              {m["share.timeline"]()}
-            </span>
-            <select
-              className="min-w-0 flex-1 rounded border border-border bg-background px-1 py-0.5"
-              value={chosen}
-              disabled={busy}
-              onChange={(e) => setTimeline(e.target.value)}
-            >
-              <option value="">{m["tl.main"]()}</option>
-              {timelines.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          </label>
-        ) : null}
-        <button
-          type="button"
-          className={`${row} ${on(audioLine("mp3"))}`}
-          aria-pressed={line === audioLine("mp3")}
-          disabled={busy}
-          onClick={() => choose(audioLine("mp3"))}
-        >
-          <Download className="h-4 w-4 text-muted-foreground" />
-          {m["share.exportAudio"]({ format: "MP3" })}
-        </button>
-        <button
-          type="button"
-          className={`${row} ${on(audioLine("wav"))}`}
-          aria-pressed={line === audioLine("wav")}
-          disabled={busy}
-          onClick={() => choose(audioLine("wav"))}
-        >
-          <Download className="h-4 w-4 text-muted-foreground" />
-          {m["share.exportAudio"]({ format: "WAV" })}
-        </button>
-
-        <button
-          type="button"
-          className={`${row} ${on(tracksLine(chosen || undefined))}`}
-          aria-pressed={line === tracksLine(chosen || undefined)}
-          disabled={busy}
-          onClick={() => choose(tracksLine(chosen || undefined))}
-        >
-          <FileArchive className="h-4 w-4 text-muted-foreground" />
-          {m["share.exportTracks"]()}
-        </button>
-
-        {/* …and the PICTURE, on a project that draws one. The sound is married in: a video of a
-            song is a video of its sound, so the silent one is `… video <container> none`. */}
-        {hasPicture ? (
-          <VideoExportRow
-            busy={busy}
-            rowClass={row}
-            chosen={line}
-            onChoose={choose}
+          <Picker
+            className="mb-2"
+            items={[
+              { value: "", label: m["tl.main"]() },
+              ...timelines.map((t) => ({ value: t, label: t })),
+            ]}
+            value={chosen}
+            onValueChange={(t) => {
+              setTimeline(t);
+              setLine("");
+            }}
+            label={m["share.timeline"]()}
+            searchLabel={m["share.timeline"]()}
+            emptyLabel={m["share.timeline"]()}
           />
         ) : null}
+        <RowGroup>
+          {(["mp3", "wav"] as const).map((f) => (
+            <RowButton
+              key={f}
+              tall
+              icon={<Download />}
+              selected={pressed(audioLine(f))}
+              disabled={busy}
+              onClick={() => choose(audioLine(f))}
+            >
+              {m["share.exportAudio"]({ format: f.toUpperCase() })}
+            </RowButton>
+          ))}
+          <RowButton
+            tall
+            icon={<FileArchive />}
+            selected={pressed(tracksLine(chosen || undefined))}
+            disabled={busy}
+            onClick={() => choose(tracksLine(chosen || undefined))}
+          >
+            {m["share.exportTracks"]()}
+          </RowButton>
+          {/* …and the PICTURE, on a project that draws one. */}
+          {hasPicture ? (
+            <VideoExportRow busy={busy} chosen={line} onChoose={choose} />
+          ) : null}
+        </RowGroup>
       </div>
 
-      <footer className="shrink-0 border-t border-border p-2">
+      <footer className="shrink-0 pt-3">
+        {last && host?.canPick ? (
+          <section
+            aria-label={m["share.savedIn"]({ folder: last.folder.name })}
+            className="mb-3 rounded-2xl border border-(--k7-ok-line) bg-(--k7-ok-fill) p-3.5"
+          >
+            <p className="type-mono-value truncate text-foreground">
+              {last.name}
+            </p>
+            <p className="type-body pt-1">
+              {m["share.savedIn"]({ folder: last.folder.name })}
+            </p>
+            <p
+              className="type-status truncate font-mono text-fg-3"
+              title={last.where}
+            >
+              {last.where}
+            </p>
+            <div className="flex gap-2 pt-2.5">
+              {host.canReveal ? (
+                <Button size="sm" variant="secondary" onClick={onReveal}>
+                  {m["share.showInFolder"]()}
+                </Button>
+              ) : null}
+              {host.canShare ? (
+                <Button size="sm" variant="secondary" onClick={onShare}>
+                  {m["share.shareFile"]()}
+                </Button>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
         <Button
           className="w-full"
           disabled={busy || !line}
           onClick={() => onRun(line)}
         >
           {host?.canPick ? (
-            <FolderOpen className="mr-2 h-4 w-4" />
+            <FolderOpen className="size-5" />
           ) : (
-            <Download className="mr-2 h-4 w-4" />
+            <Download className="size-5" />
           )}
           {host?.canPick ? m["share.choose"]() : m["share.download"]()}
         </Button>
-        {last && host?.canPick ? (
-          <div className="mt-2 text-sm">
-            <p className="truncate text-muted-foreground" title={last.where}>
-              {m["share.savedIn"]({ folder: last.folder.name })} · {last.name}
-            </p>
-            <div className="mt-1 flex gap-2">
-              {host.canReveal ? (
-                <Button size="sm" variant="outline" onClick={onReveal}>
-                  {m["share.showInFolder"]()}
-                </Button>
-              ) : null}
-              {host.canShare ? (
-                <Button size="sm" variant="outline" onClick={onShare}>
-                  {m["share.shareFile"]()}
-                </Button>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
       </footer>
     </div>
   );

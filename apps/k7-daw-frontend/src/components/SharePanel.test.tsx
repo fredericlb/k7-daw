@@ -11,7 +11,7 @@ const render = (busy: boolean) =>
 // The button holding the label, tag to close.
 const tracksButton = (html: string) =>
   html.match(
-    /<button[^>]*>(?:(?!<\/button>).)*Export tracks \(zip\)<\/button>/s,
+    /<button[^>]*>(?:(?!<\/button>).)*Export tracks \(zip\)(?:<\/span>)*<\/button>/s,
   )?.[0] ?? "";
 
 const desktopHost = { canPick: true, canReveal: true, canShare: false };
