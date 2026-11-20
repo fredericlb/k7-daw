@@ -1,10 +1,10 @@
-# Background processes — the project bar's list
+# Background processes — the header's spinner
 
-Right of the project's name, an icon button lists what is still running: a transcription, a chain
-bounce or a separation, a picture render or a video's copies, an export. While anything runs the icon
-is a spinner with the running count on it; the popover lists each process with its command line, how
-far it is when it says so, and how long it has run. An ended process stays a few seconds with a check
-or an alert, so its end is seen. With nothing to list there is no button.
+Right of the project's name, a spinner shows while anything runs: a transcription, a chain bounce or a
+separation, a picture render or a video's copies, an export. It is a link named by the running count and
+opens Tasks & history, which lists each process with its command line, how far it is when it says so and
+how long it has run. An ended process stays a few seconds with a check or an alert, so its end is seen.
+With nothing running there is no spinner.
 
 ## Two sources, one list
 

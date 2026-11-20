@@ -52,12 +52,12 @@ export function DemoBanner({ project }: { project: string }) {
   };
 
   return (
-    <div className="flex shrink-0 items-center gap-2 border-b border-amber-500/30 bg-amber-500/10 px-3 py-1 text-amber-600 text-xs dark:text-amber-400">
+    <div className="type-secondary relative z-(--k7-z-header) mx-4 mb-1 flex h-[38px] shrink-0 items-center gap-2 rounded-2xl border border-(--k7-warn-line) bg-(--k7-warn-fill) px-3.5 text-warn">
       <TriangleAlert className="h-3.5 w-3.5 shrink-0" />
       <span className="min-w-0 flex-1 truncate">
         {note || m["demo.banner"]()}
       </span>
-      <Button size="xs" variant="secondary" onClick={() => void start()}>
+      <Button size="xs" variant="glass" onClick={() => void start()}>
         <Copy className="h-3 w-3" /> {m["demo.copy"]()}
       </Button>
       {files && from && (

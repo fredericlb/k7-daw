@@ -75,7 +75,7 @@ export function FloatingWindow({
       }
       // An inline display, since Rnd's own inline `inline-block` would beat a `hidden` class.
       style={{ display: open ? "flex" : "none" }}
-      className="z-40 flex-col overflow-hidden rounded-md border bg-background shadow-xl"
+      className="float z-(--k7-z-floating-card) flex-col overflow-hidden rounded-[20px]"
     >
       <div
         role="dialog"
@@ -83,7 +83,7 @@ export function FloatingWindow({
         className="flex h-full min-h-0 w-full flex-col"
       >
         {/* The title bar is the handle: no text selection, and `touch-none` so a finger drags rather than scrolls. */}
-        <div className="floating-window-handle flex h-7 shrink-0 cursor-grab touch-none select-none items-center gap-2 border-b bg-muted/60 px-2 text-xs text-muted-foreground active:cursor-grabbing">
+        <div className="floating-window-handle type-status flex h-9 shrink-0 cursor-grab touch-none select-none items-center gap-2 px-3 text-fg-2 active:cursor-grabbing">
           <span className="flex-1 truncate">{title}</span>
           <button
             type="button"

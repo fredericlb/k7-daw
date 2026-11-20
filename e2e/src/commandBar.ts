@@ -1,14 +1,18 @@
 // commandBar.ts — running a line from k7's command bar the way a person does: type it, pick its row.
-// The bar is a combobox named "Command", floating once summoned (apps/k7-daw-frontend/docs/commandBar.md).
+// The bar is a combobox named "Command" in `dialog "Command bar"`, a modal card once summoned (apps/k7-daw-frontend/docs/commandBar.md).
 import { expect, type Locator, type Page } from "@playwright/test";
-import { folded, navControl } from "./nav.ts";
+import { folded } from "./nav.ts";
 
 export const commandBar = (page: Page): Locator =>
-  page.getByRole("combobox", { name: "Command", exact: true });
+  page
+    .getByRole("dialog", { name: "Command bar", exact: true })
+    .getByRole("combobox", { name: "Command", exact: true });
 
 /** The bar while it fills a command's parameters, which shows no combobox: the command's name, a button that goes back to picking one. */
 const filling = (page: Page): Locator =>
-  page.getByRole("button", { name: "Change command", exact: true });
+  page
+    .getByRole("dialog", { name: "Command bar", exact: true })
+    .getByRole("button", { name: "Change command", exact: true });
 
 /** Puts the bar away whichever form it is in; a pre-written command (a graph `+` before the catalogue landed) is dropped first. */
 export async function closeCommandBar(page: Page): Promise<void> {
@@ -19,7 +23,7 @@ export async function closeCommandBar(page: Page): Promise<void> {
   await expect(bar).toBeHidden();
 }
 
-/** The bar, summoned by Ctrl/⌘+Shift+P, or from the Menu's Commands item on a phone; a command left half-filled is dropped. */
+/** The bar, summoned by Ctrl/⌘+Shift+P, or from the floating bar's button on a phone; a command left half-filled is dropped. */
 async function openCommandBar(page: Page): Promise<Locator> {
   const bar = commandBar(page);
   if (await filling(page).isVisible()) await filling(page).click();
@@ -37,7 +41,6 @@ async function openCommandBar(page: Page): Promise<Locator> {
   if (!(await bar.isVisible()))
     await page
       .getByRole("button", { name: "Command bar", exact: true })
-      .or(await navControl(page, "Commands"))
       .first()
       .click();
   return bar;
@@ -56,11 +59,15 @@ export async function runCommand(page: Page, name: string): Promise<void> {
   await row.click();
 }
 
-/** The project's status line, where a command says what it did. */
+/** What a command said: a toast of the notifications region, or the line under the project's name. */
 const statusLine = (page: Page): Locator =>
-  page.getByTestId("project-status-line").first();
+  page
+    .getByRole("region", { name: "Notifications" })
+    .getByRole("status")
+    .or(page.getByTestId("project-status-line"))
+    .first();
 
-/** Expects the status line to read `text`; a phone draws none, so there the caller's disk check stands alone. */
+/** Expects what a command said to read `text`; a phone draws no status line, so there the caller's disk check stands alone. */
 export async function expectStatus(
   page: Page,
   text: string | RegExp,

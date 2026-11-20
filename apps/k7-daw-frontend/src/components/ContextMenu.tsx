@@ -154,7 +154,7 @@ export function ContextMenu({
         // The status line follows the pointer, and the KEYBOARD too — walking the menu is a way of reading it.
         onPointerEnter={() => onHint?.(it.description)}
         onFocus={() => onHint?.(it.description)}
-        className={`flex w-full items-center gap-2 px-3 py-1 text-left outline-none hover:bg-accent focus-visible:bg-accent ${
+        className={`type-label flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-2xl px-3 text-left outline-none hover:bg-on-fill focus-visible:bg-on-fill ${
           destructive
             ? "text-destructive"
             : "hover:text-accent-foreground focus-visible:text-accent-foreground"
@@ -189,7 +189,7 @@ export function ContextMenu({
       ref={ref}
       style={{ left: pos.x, top: pos.y }}
       // Bounded and scrollable: a track offers sixteen rows, and a menu that runs off the bottom of the screen hides its own tail.
-      className="fixed z-50 max-h-[70vh] min-w-[12rem] max-w-[min(26rem,calc(100vw-16px))] overflow-y-auto rounded-md border border-border bg-popover py-1 text-sm shadow-md"
+      className="menu fixed z-(--k7-z-menu) max-h-[70vh] min-w-[12rem] max-w-[min(26rem,calc(100vw-16px))] overflow-y-auto rounded-[20px] p-1.5 text-sm"
       role="menu"
       aria-label={target?.name}
       // One handler for the whole list: leaving the menu by the gap between two rows should clear the line, and only the container sees that.
@@ -204,7 +204,7 @@ export function ContextMenu({
       />
       {safe.map((it) => row(it, false))}
       {safe.length > 0 && danger.length > 0 && (
-        <hr className="my-1 border-border" />
+        <hr className="my-1 border-(--k7-hairline-row)" />
       )}
       {danger.map((it) => row(it, true))}
     </div>

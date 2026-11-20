@@ -22,7 +22,7 @@ test.setTimeout(120_000);
 const button = (page: Page, name: string) =>
   page.getByRole("button", { name, exact: true });
 const lane = (page: Page, name: string) => button(page, `mute ${name}`);
-const viewport = (page: Page) => page.getByRole("dialog", { name: "Viewport" });
+const viewport = (page: Page) => page.getByRole("dialog", { name: "Picture" });
 // A project with no timeline records its output from the bar (apps/k7-daw-frontend/packages/song/docs/outputRecording.md).
 const recordButton = (page: Page) => button(page, "Record the output");
 

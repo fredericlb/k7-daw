@@ -73,7 +73,7 @@ export const PANE_META: Record<Pane, { icon: LucideIcon; label: string }> = {
 export const VIEWPORT_META: { icon: LucideIcon; label: string } = {
   icon: MonitorPlay,
   get label() {
-    return m["pane.viewport"]();
+    return m["shell.lane.picture"]();
   },
 };
 

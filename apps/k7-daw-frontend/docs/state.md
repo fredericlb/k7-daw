@@ -102,7 +102,7 @@ did. A read that wants to be FRESH at the moment of a gesture — the asset pick
 ## What stays in App
 
 **State that App derives from, or that drives App's own layout, stays local to App.** The page
-and the bottom panel (`full`, `panel`) are mirrored in the URL by `useViewRoute`; the caret, the
+and the panel (`full`, `panel`) are mirrored in the URL by `useViewRoute`; the caret, the
 timeline's view and the edit target feed the key conditions App builds; the editor popin and the
 phone's palette are tied to refs and timers in App (the deferred prewrite, the dismiss timer).
 Moving those would move App's logic into the store, not remove a prop.

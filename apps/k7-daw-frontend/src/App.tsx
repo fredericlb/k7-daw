@@ -1770,6 +1770,12 @@ export default function App({
           : m["status.ran"]({ line: s });
         if (refused) setRefusal(said);
         else setStatus(said);
+        // What a command said ("copied 1 event(s)") is a toast; the bare "Ran: …" echo is not worth one.
+        if (output.length)
+          showToast({
+            message: said,
+            variant: refused ? "warning" : "success",
+          });
         settle(!refused);
         for (const o of output) pushLog(refused ? "refused" : "info", o);
         // The graph the service built while we waited — the answer for the reload below, so for the NEXT key.

@@ -150,17 +150,23 @@ catalogue is non-empty from the moment it loads, so "are there matches" would le
 hanging over the minimap for ever. A row commits on `mousedown` and preventDefaults to keep the
 focus, so the blur that closes the list can never be the one that was about to pick from it.
 
-## It is NOT modal, and it is not there until summoned
+## It is a modal card, and it is not there until summoned
 
-The bar is **hidden** until you ask for it, and then floats at the top of the window, centred,
-focused — the palette of a code editor. **Ctrl+Shift+P** (⌘+Shift+P on a Mac) summons it from
-anywhere, the text editor included: the key is caught before CodeMirror sees it, since a palette you
-cannot reach while typing is one you leave the keyboard to reach. Double-Shift summons it too, and so
-does a **command icon**, the one opener a mouse finds without being told. It stands at the bottom-left in
-BOTH views, immediately right of the sidebar's own fold/unfold button: in the project bar's left slot
-(`shell/ProjectBar.tsx`) and in the home bar's (`projects/HomeFrame.tsx`), so the two screens put the same
-pair in the same corner. On a phone, which has neither key, the tools menu carries a second.
-Both screens mount the same wrapper, `FloatingCommandBar.tsx`.
+The bar is **hidden** until you ask for it, and then it is a card under the header, centred, over a
+scrim, focused — the palette of a code editor, role `dialog` named "Command bar". **Ctrl+Shift+P**
+(⌘+Shift+P on a Mac) summons it from anywhere, the text editor included: the key is caught before
+CodeMirror sees it, since a palette you cannot reach while typing is one you leave the keyboard to
+reach. Double-Shift summons it too, and so does the floating bar's first button, the one opener a
+mouse or a finger finds without being told (`shell/FloatingBar.tsx`). The home pages mount the same
+wrapper, `FloatingCommandBar.tsx`.
+
+**It closes on Escape, on the scrim and on a run — never on losing focus.** Before anything is typed it
+lists the commands run lately, then starters, under a "Recent" heading.
+
+**While a command waits for its answers the scrim lets pointers through.** A gesture in the timeline or
+the graph may be what answers a field, and a scrim in the way would make that impossible; the card
+stays up and the panes answer. A completion list is part of the field being typed in, so it shows only
+while the bar has the keys, and a row commits on `mousedown` and preventDefaults to keep the focus.
 
 **On the home pages the bar is the frame's, not a page's** (`src/projects/HomeCommandBar.tsx`, held
 by `HomeFrame`): every home page has it, the settings as much as Projects, and a
@@ -178,25 +184,9 @@ Hidden, because the panes are what the window is for: a permanent strip is a row
 spent on a prompt that is idle almost all the time. At the top, because that is where the eye
 already goes for a palette, and because a phone's soft keyboard rises from the bottom.
 
-It has no backdrop, because a backdrop blocks the very gestures that fill it (see below) and
-dimming hides the clip you are being asked to point at.
+Before any character the card offers a few recents and starters instead (`emptyBar.ts`).
 
-### It goes away when it loses the keyboard
-
-Escape, a run, or a blur closes it. A floating bar left up after you have clicked past it covers
-the top of the pane you clicked *into*.
-
-**Unless a command is being completed.** While the bar is asking a command's questions it is not
-idle, whatever the command field's focus says — a gesture in a pane may be what answers it, and the
-receiver has to exist for that. So the dismissal reads the `pending` flag, the same signal the shell
-uses to route a gesture to the field that is waiting.
-
-The bar REPORTS the focus (`onFocusChange`) and the wrapper decides. It waits a moment rather than
-acting on the blur itself — picking a command takes the keyboard from the command field and hands
-it to the parameter form one render later, so closing in between would dismiss the bar at the
-exact moment it was about to ask you something. The timer re-reads `pending` when it fires, for the
-same reason. A press on the bar's own padding keeps the focus where it was, or clicking beside a
-field would close the bar under the pointer.
+### A line pre-written by a menu
 
 A line pre-written by a menu or a graph insert opens the bar if it is hidden, and is written into it
 once it is mounted.
@@ -315,12 +305,9 @@ in the bar would compete for the keys. Clicking it abandons the command and give
 Each param KIND has its own colour (`ARG_COLOR`) — worn by the active field, its label and its
 suggestions — so a question tells you what it is asking for before you read the prompt.
 
-The bar floats at the top of the window, so the command list opens DOWNWARD: the best match sits
-right under the input (where the eye already is) and ↓ walks away from it.
-
-Both lists, the commands and a field's values, are positioned ABOVE the row rather than in it:
-the bar is a flex row, and a list in its flow would push the fields
-around under the caret.
+The card sits at the top of the window, so the command list opens DOWNWARD inside it: the best match
+sits right under the input (where the eye already is) and ↓ walks away from it. A field's values open
+under the row the same way.
 
 ## `ModulePicker.tsx` — "which module?"
 

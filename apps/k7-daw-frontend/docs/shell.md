@@ -250,101 +250,43 @@ not.
 
 ## The layout (`App.tsx`)
 
-`App` is the k7 web editor itself: **one page at a time, full width** — the timeline, the graph, the
-desk, the frame, the master strip or the editor — with the project bar under it, holding the way home,
-the transport and the page buttons; there is no header. Two pages are never split side by side; the one way to see a second view under the page is
-the footer's bottom panel (`event`, `graph`, `mix`, `logs`), which opens on half the main column's height
-until its divider is dragged. It is the wiring and the layout; almost nothing else.
+`App` is the k7 editor itself: **one page at a time, full width** — the timeline, the graph, the desk,
+the frame, the master strip or the editor — under a header, with a floating bar over its foot and ONE
+panel floating over its right edge. It is the wiring and the layout; almost nothing else.
 
-### No header: the project bar is the one row above the footer
+### The header, the floating bar, and panels that cover
 
-Every row of chrome is a row the panes don't get, and a phone in landscape is about 400 px tall. So a
-project draws no header: its chrome is the project bar (`shell/ProjectBar.tsx`, the app's mini player)
-under the panes, and the footer under that. The bar fills the mini player's slots:
+**Panels float OVER the panes and push nothing.** A pane is laid out once, for the whole width; a
+panel opening must not make a graph or a roll re-fit under the person's hands. The panes keep a
+bottom margin for the bar instead.
 
-| slot | what k7 puts there |
-|---|---|
-| `lead`, at the left edge | the **unfold** (the home sidebar, as a drawer), the k7 logo and the project's name, then the **background processes** button (`processes.md`) and the workspace warning — on a phone the unfold, the processes button and the info icon |
-| `transport` | play/pause, stop, loop and record |
-| `track` | the clock and the peekable minimap |
-| the host's controls | the **master meter**, right of the minimap |
-| `trail`, at the right edge | the pane row and the frame's toggle — or, on a phone, the one menu that also holds the side panels' buttons |
-| `end`, after `trail` | the **engine selector**: an icon button with the engine's state as a dot, opening the engine's state and where you hear it — on a phone, behind the bar's `More controls` chevron with the home pages' run |
+| piece | file | what it is |
+|---|---|---|
+| header | `shell/ProjectHeader.tsx` | Back, the name over its status, the spinner, the warning chip, the git capsule, the pane switcher (centred), the panel toolbar, the app buttons |
+| git capsule | `shell/HeaderGit.tsx` | Commit & Push with its count, a menu (Pull, Commits); while a merge waits, one "Resolve N conflicts" button and a banner |
+| bar | `shell/FloatingBar.tsx`, `shell/ShellTransport.tsx` | the command bar button, the tool, the transport capsule, the Lane views |
+| panels | `shell/panels.tsx` | the registry: an id, a glyph and a title each, in the kit's `SidePanel` (Pad, Desk) or `Sheet` (Phone) |
+| phone menu | `shell/OverflowMenu.tsx` | pane, lane views and the panel tiles in one menu |
 
-**No brand name and no build stamp.** The brand is what the home page says — repeating it over a song
-names the tool rather than the work — and the stamp goes with it, being the tooltip of that name on the
-home page (`../../../docs/versioning.md`). The project's name has the bar's left edge.
+Three layouts, said on the root as `data-layout`: `phone` (the folded shell), `pad` (a touch screen
+that is not folded) and `desk`. Pad and Desk draw the same chrome; the attribute is for the suites.
 
-**The master meter is in the centre, beside what plays.** It is read while playing, not clicked, so it
-stands with the transport and the song's map rather than with the page buttons; the minimap's peek grows
-upward and leaves it in place. No phone has room for it. It is also
-what the wave behind the bar speeds up with, handed over as a getter so its 20 Hz frames re-render
-nothing (`apps/k7-daw-frontend/packages/ui-mini-player/docs/miniPlayer.md`).
+**The header shows no engine state.** The engine says what it does in toasts — the project waiting for
+it, a lost link with Retry, the waveforms being cached (`shell/engineToasts.tsx`); the header only
+carries `data-testid="engine-status"` with its `data-state`, which the suites read. A lit light would
+be a second voice for what the toast already says.
 
-**The pages are at the right edge**, outside the centred part. A **pane** button shows a page that is
-already mounted, and exactly one of them is lit — the page on screen: `aria-current="page"`, not
-`aria-pressed`, since pressing the lit one changes nothing rather than switching it off. Each one
-carries its key in its tooltip, which is why the row stays icons rather than labelled entries that
-would drop the shortcut.
+**The spinner is the background processes.** It shows only while something runs and opens Tasks &
+history. The warning chip counts the project's problems and opens Logs on "problems"
+(`logsFilter` in the shell store).
 
-**Its buttons are 24 px on the desktop** (`toolSize` is `icon-xs`). **A phone keeps `icon`**: the menu
-everything else collapses into is under a thumb, and a 24-pixel target there is a miss. That is the only
-reason `toolSize` reads the breakpoint instead of being a constant. Both phone popovers open upward,
-the bar being at the foot (`components/MobileChrome.tsx`).
+**The pane switcher is Arrangement, Graph, Source** (Turntables beside Arrangement on a project that
+declares a desk). The Mastering pane is not in it: mastering is a section of the Mixer, and the pane stays
+reachable by `ui mastering` and its URL until that section exists.
 
-**Under 380 px the clock shows only bar:beat.** Two 44 px slots, four transport buttons, the menu
-and the engine leave no room for both positions on a 360 px phone, and the bar and beat are what a
-musician steers by; the seconds come back on any wider screen.
-
-**On a phone the unfold and the info icon each own a 44 px slot**, side by side and never
-shrinking: two icons sharing one finger's width make the way home a few pixels wide, and that is the
-control a phone needs most from a project. The unfold's slot reaches into the bar's left padding,
-and below 640 px the bar's gaps narrow, which pays for the two slots without taking width from the
-transport. The transport, the menu and the engine stay at 36 px (`icon`): a 360 px bar holding eight
-44 px targets has no room left for the clock, and those three are a row apart from the lead.
-
-The **way back to the home page** is one button at the left edge of the project bar, before the k7
-logo and the project's name: it shows the home page's own sidebar as a drawer over the project and hides it again
-(`HomeDrawer`, `projects.md`), and the name links
-home too. Projects open in the home page's tab rather than a new one, so a drawer entry is the
-gesture that ends a session, drawn in place like any crossing (see above). The drawer is loaded on first open.
-It is the **same glyph, the same slot and the same behaviour** the home pages have at that edge, so one control means "the sidebar" everywhere
-(`projects.md`, "The home bar"); it is named **Show the sidebar** (`Hide the sidebar` while the drawer is out), not Menu, since on a phone the bar's tools menu is the
-Menu, and two controls of one name cannot be told apart by anyone reading the names.
-
-**The drawer stops at the bar's top edge**, so the bar stays whole, full width and live while the
-sidebar is out: the transport keeps playing what you hear, and the button is still where you left it — which is why
-it CLOSES the drawer too, one control meaning one thing in both worlds. A click beside it and Escape close it as well.
-The edge is MEASURED, since the bar's height depends on what it holds and it floats over the editor
-popin. The drawer carries no button of its own, and no engine block: inside a project the engine is the bar's.
-
-**There is ONE engine slot** (`components/BarEngine.tsx`), and it names no choice: the engine is this
-device's own. In a project it is in the project
-bar's engine slot, right of the right slot: the engine is what plays, so it stands with what plays
-rather than one drawer away. On the home pages it is above the sidebar's user menu, or in the home
-bar while the sidebar is folded (`projects.md`, "The home bar").
-It is **an icon button with a dot**: green while the link is up, red when it is down, amber with no
-engine, grey while one is looked for. One glyph, because the bar's right end
-is crowded on any screen and the state is what is glanced at; the words are in its tooltip and its menu.
-
-**Its menu is the engine's state and where you hear it.** At the top, WHERE THE SOUND COMES OUT, in the
-same words on both bars (`components/engineWords.tsx`) — "Sound on <machine>", or "Sound in this
-browser" — since a laptop driving the desktop at home is silent with no other clue; with no engine it
-reads "No sound — the engine is not running". Under it the engine's figures, an entry to its settings
-page (`/settings/engine`, where it is started and restarted) and, last, two radios: **Plays on This machine** or **The engine**.
-Opening the menu looks for the engine again when none was found.
-
-**This machine** subscribes to the engine's master broadcast and plays it in this browser
-(`listenHere.ts`, `@studio/engine-browser`'s `engineOutput`); **The engine** is its own speakers. It
-is a choice of the DEVICE you sit at, so it is kept per browser, and it applies without reconnecting.
-The engine's speakers play on either way: its interface is one per process and shared by every
-session on it, so a page cannot silence it for itself. An engine whose `whoami` says `audioToBrowser`
-has no speakers at all: it is heard here whatever the radio says, and **The engine** is disabled.
-
-- **In a project** the figures under the name are `EngineLink`'s.
-- **On a home page** there is no session (`components/HomeEngine.tsx`): it shows the probe's latency and
-  performance for the engine on this machine. The probe is shared for 30 s, since the bar a page docks
-  remounts the slot.
+**Command feedback is a toast** ("copied 1 event(s)"): what a command said is shown once, where the
+person looks. The line under the project's name (`StatusText`, `project-status-line`) carries only what
+a pane says while it is used — a drag's snapped cell, a menu's hint.
 
 ### One colour per meaning, across every view
 
@@ -355,7 +297,7 @@ song reads them, canvases included (through the CSS variable, since a canvas can
 |---|---|---|
 | the playhead | `playhead` | the timeline, the roll, the minimap, the takes view, the clip's waveform and the desk drew five different lines; an audition's line stays amber, being another clock |
 | mute, solo, arm | `mute`, `solo`, `arm` | the timeline's solo and the graph's were two yellows; a lit pad takes dark type, which reads on all three |
-| the meter's zones | `meter-ok`, `meter-hot`, `meter-clip` | the project bar, the desk and the graph's faders say the same thing about the same level |
+| the meter's zones | `meter-ok`, `meter-hot`, `meter-clip` | the floating bar, the desk and the graph's faders say the same thing about the same level |
 | violet as text | `primary-text` | no one violet passes both as a fill under white type and as text on this ground (`primary` is the fill) |
 | text below muted | `faint` | it replaces `/50`–`/70` fades of the muted grey, which fell to 2.4:1 |
 
@@ -369,196 +311,40 @@ hovered row looked like a panel. A panel that is a surface (the home page's work
 sections, the libraries card) is its fill with no outline; a hairline is kept where it SEPARATES
 something, between a header and its rows.
 
-#### The project bar, and what a SET drops from it
+#### The floating bar, and what a SET drops from it
 
-**The transport is the app's mini player** (`shell/ProjectBar.tsx` over `@studio/ui-mini-player`), the
-bar the reference tracks already wear: one shape for "what plays,
-and where in it", wherever k7 is. It sits under the panes and above the footer, full width, in every project.
+The transport capsule holds Play, Stop, Loop and Record, the clock (`role="timer"`), the song overview
+(`img "Song overview"`, the minimap), the tempo and the metre as buttons, the metronome and the master
+volume (`slider "Master volume"`), all in `group "Transport"`. A phone moves the clock, overview, tempo and
+volume to a strip above the capsule.
 
-- **Its left slot is the project's**: the unfold, the k7 logo and the name, aligned to the bar's
-  edge rather than in its centred part. The name is what the transport is playing, so it stands with
-  it, and the way home goes with the name it shares a link with. On a phone the name and the engine
-  fold into an info icon beside the unfold.
-- **The buttons stand where the bar keeps its play/pause**, all of them: a project's transport is more
-  than one button, and a cluster split across two rows would be two places to look.
-- **The progress row is the clock and the minimap**, in place of the scrubber: a project's "where" is
-  bars and lanes, not a fraction of a file. See "The minimap is the bar's progress" below.
-- **No close.** A project's transport is not something you dismiss, and the bar is the way home: it
-  stays, and only its buttons and its minimap go where they would address nothing (below).
-- **It leaves the system's media session alone.** The sound is the engine's, rarely this page's, and
-  the reference bar is the one whose sound the lock screen should drive.
+**Record has two meanings, and the long press is the second.** A press arms and records the lanes; a
+long press, a right click or ArrowDown opens a one-item menu, "Record the output", for what the project
+sends out. A project with no timeline has no lanes to arm, so there Record IS the output's
+(`shell/OutputRecordButton.tsx`).
 
-Play/pause, stop, loop, then the record button, and each **drops focus on click**
-(`blurOnClick`). These are the buttons a mouse is most likely to land on right before reaching for
-Space, and a focused one eats the keypress. On play/pause the theft is invisible, because the button
-does what Space would; on stop and on record it is not.
+**A SET (no arrangement) drops** Loop, Record, the overview and the tool, having no bars to count and no
+lane to press on; a desk alone on screen drops the transport buttons too, since they would drive nothing
+visible.
 
-**Record turned on with nothing armed arms a track first** — the caret's, else the song's only one
-(`armForRecord` in `App.tsx`). Record mode with no armed lane leaves Play dead, and someone who has
-never heard of arming reads that as a broken button; a track with no input still refuses on the
-status line, which then says why.
+**The tool and the Lane views read the shell store** (`tool`, `rulerSeconds`, `lanesExpanded`,
+`automationShown`, `pictureShown`). The timeline still holds its own state, so the shell mirrors what it
+reports and what the `ui ruler` / `ui automation` commands flip, until the timeline reads the store.
 
-**Loop sits after stop.** On, it turns the loop off; off, it loops the timeline's selection
-when there is one, and otherwise four bars from the playhead — so the one gesture needs nothing
-selected first. The region is the engine's session state, as Shift+L's is.
-
-**The footer's tempo and time signature edit themselves on a click**, through `project tempo` and
-`project meter`, which write `project.k7x` — the two numbers were otherwise reachable only by editing
-the file.
-
-**The tempo question has a Tap button, and Space taps too** (`shell/tapTempo.ts`): a tempo is easier
-to play than to count. Space is the transport everywhere else, but with the question open nothing is
-playing that the person means to stop, and a key held near the field beats reaching for the mouse
-in time. The field takes the taps' tempo in whole bpm, averaged over the last eight, and a pause of
-two seconds starts a new run; Enter writes it as any typed value.
-
-**One record, whatever the lane holds.** The circle flips the ENGINE's record state, and play records
-every lane armed there (`transport arm`) — and the MIDI-armed lane too, which the BROWSER captures
-(`useMidiRecording.ts`): the engine never hears a controller, so the notes are timed here, in
-playhead beats interpolated between frames ([playhead.md](playhead.md)). Arm, record, play is one
-gesture for audio and MIDI alike, so there is no second button to know about; `midiRecord` in App is
-what the takes view sets for a MIDI pass, and nothing in the bar shows it. Which half a lane arms is
-its arm button's business (`rec <track>` reaches the same split): `useTrackControls.ts` resolves it
-by what the lane holds and what feeds it, and one red lane reads both.
-
-The engine counts in even when it records no lane of its own, since the browser's take is owed the
-same count (`apps/k7-daw-engine/k7-runtime/docs/engineHost.md`); what is played during it belongs to no take,
-bar a downbeat a hair early (`inTake`). While a MIDI take rolls, the lane draws it growing and the
-event panel draws its notes as they are played (`MidiTakeRoll.tsx`) — a window that follows the
-playhead, since the clip's own piano roll fits its view once and a take outgrows it. When the take
-ends it lands as a NEW clip placed where it was played, as an audio take does, and that clip's piano
-roll replaces the live one.
-
-**A record is one take, not a mode.** Record goes OFF when the roll that recorded stops — the
-engine clears its own in `stop()`, and App clears `midiRecord` on the same edge. Left on, the next
-Play is another take, and an ordinary take mutes the armed lane at its punch-in: an armed track that
-plays silent reads as a broken track, not as a record still lit. Pressing a record while it rolls
-ends the take there and keeps playing; during the engine's count-in there is no take yet, so it
-stops the roll (`apps/k7-daw-engine/k7-runtime/docs/engineHost.md`).
-
-**Play waits for an arm.** With record on and no lane armed — audio, MIDI or picture — Play
-is greyed and `transport play` (Space included) is refused with the two ways out (`recordWithoutArm`
-in App). Rolling then would be a take of nothing: the engine plays on without recording, and the
-record panel opens on a pass that captures no lane. A rolling transport can always be stopped.
-
-The picker in the bar's right end — LEFT of the output meter — chooses **which input** feeds the
-take. The recorder listens to every input the browser exposes until one is picked — right for the
-one-keyboard rig, wrong the day a pad grid shares the desk and its notes land in the same sequence.
-The list re-offers itself when a device is plugged in mid-session, and the browser's permission
-prompt rides the first press of whichever control needs the access.
-
-The cluster is absent where there is nothing here to address, and there are two such cases.
-
-A project with **neither a timeline nor a desk**: every control here addresses a position in
-something, and that project has none; sound still reaches the engine, played by whatever is wired in
-the graph. See [apps/k7-daw-frontend/packages/song/docs/surfaces.md](../packages/song/docs/surfaces.md).
-
-…and the **DESK alone on screen** (`deskOnly`), the ordinary state of a set. Each deck is a platter
-carrying its own position, so the transport there drives nothing but the metronome's click — and
-each deck has its own PLAY, at the foot of its tempo column
-([../packages/k7-plugins/docs/turntables/mix.md](../packages/k7-plugins/docs/turntables/mix.md)). Buttons that
-look like they start the music without starting it are worse than none. The test is the SCREEN and
-not the project: a project that declares a desk *and* a timeline keeps its transport the moment
-the timeline is showing or the viewport's window is up, because there it moves something you can see.
-
-A set that still shows the cluster gets the two that mean something and not the other two, **in the
-same place**: this is the bar you reach for whichever project is open, so play and stop must not
-move around. What it drops is the clock and record. A set declares no tempo and no time signature,
-so the clock would count bars nothing is written against, and record would arm a lane with nowhere
-to put a take.
-
-The **engine's health** sits in the project bar's engine slot, beside the engine it describes
-(`components/EngineLink.tsx`): the connection light, the Q badge and the engine process's memory. The
-bar keeps them because a dropped link is what to see while playing, without opening anything. Q1/Q2/Q3
-off the measured latency is a property of the SESSION rather than of a screen — it decides what you
-can do here (`@studio/web-protocol/quality`) — and it is the same line the home page shows. The light changes SHAPE as well as colour — a dot when connected, an unplugged
-plug when not — so it reads for someone who cannot tell red from green.
-
-A link that stays down says so in words, on a strip at the top of the window
-(`components/EngineLostStrip.tsx`): a red dot is easy to miss while every gesture quietly does nothing.
-The strip is an OVERLAY on a zero-height anchor, not a row: arriving two seconds into an outage, a
-row would push every pane down under the pointer, mid-gesture. It covers the panes' top edge instead,
-on the card surface so it reads over whatever is there, until the link is back or it is dismissed.
-It waits two seconds before showing, because the client reconnects on its own and a blip that
-flashed a banner would teach people to ignore it. Its Retry dials at once rather than waiting out the
-backoff; its close hides it for this outage only, and the next one is announced again. A transport
-press made while the link is down is DROPPED with a sentence on the status line rather than queued:
-the client's outbox would otherwise play it up to thirty seconds later, when the person has moved on.
+**Under 380 px the clock shows only bar:beat**: the seconds come back on any wider screen.
 
 ### On a phone, one menu holds everywhere there is to go
 
-`MobileMenu` holds all of it: the panes, then the tools. There is no **bottom tab bar** — it would
-spend a row of a screen ~400 px tall in landscape on a control used a few times a session, and it
-could only ever hold the panes, leaving anything else to a second hamburger beside the first.
+`shell/OverflowMenu.tsx` (`menu "Views and panels"`): the PANE segmented control (`menuitemradio`), the
+LANE VIEWS pills, the PANELS tiles (`menuitem`, pressed while open) and Settings and Keyboard. A panel
+opens as a full-screen sheet.
 
-**Its rows send `ui <pane>`, never the bare pane name.** `runLocalCommand` refuses a bare one, so a
-tap dispatching `timeline` sets the status line to *"timeline" is a ui command* and changes nothing
-else.
-
-A pane row is `aria-current`, not `aria-pressed`, exactly like the desktop's pane row: picking one
-means "show me that page", and the current row is where you are, not a switch left on.
-
-**The project's name and the engine's health fold into one info icon** in the
-bar's left slot, beside the unfold (`MobileInfo`). Their labels and figures would take the width the
-transport needs, and they are read far less often than the transport is pressed. The icon carries a
-dot that keeps the link's state visible with the popover closed — green when up, red when down,
-amber with no engine at all — since a silent song with nothing on screen saying why is the failure
-the engine's name in the bar exists to prevent. The dot is an image named like the desktop's light
-(*Engine connected*, *Engine disconnected*, *No engine*), so the state is readable without opening the
-popover by a screen reader and by the functional suite alike.
-
-**The footer keeps state and drops prose.** On a phone it shows no status line — a sentence
-truncated to a few characters says nothing — while the mode badges, the waiting-for-engine line and the
-error count stay, since each is a state you would otherwise leave by surprise. What an output
-recording came to — filed, nothing heard, failed — is a toast there instead, since it ends an act the
-person started and waits for. The tempo and meter
-move into the same info popover (`shell/TempoMeter.tsx`, drawn by both): read rarely, still editable
-on a tap. What is left starts at the left edge with the metronome, the logo gone, and the states sit at
-the right end, so one appearing never moves a control from under a thumb. **Its buttons are 40 px**
-(`icon-lg`, the panel tabs `min-w-10`) where the desktop's are 24: seven of them fit a 360 px phone at
-that size, and a footer a few pixels taller costs less than a mis-tap that opens a panel over the song.
-
-**The panes' tool rails grow to 44 px under a coarse pointer** (`stripButton` and `ModeStrip` in
-`modeIcons.tsx`), on any screen width, since a touch laptop's finger is no smaller than a phone's.
-The rail has few buttons and a whole column of height, so only its width is paid for.
-
-**There is ONE layout**, and no project chooses a second one. `project.k7x`'s `project_type` is
-accepted and ignored — the schema keeps it as a plain string so a folder still carrying it loads —
-and nothing here reads it: it could say `live` while the folder declared a timeline, a contradiction
-`surfaces/` cannot have.
-
-**The timeline itself is a SURFACE, and the project has to ask for it.** `surfaces/timeline.k7x`
-(`type: timeline`, `layout: split`) is what puts it in the layout, and it is the **home page** — the
-one a project opens on, `/` and `ui global` lead to, and Escape comes back to. A folder without one
-opens on the first pane it does declare (a set's desk, a rig's graph), keeps its editor, and is warned
-about in its diagnostics. `noArrangement` is what the transport and the minimap read: a rig and a song
-that has not declared its arrangement look alike on screen and are not the same fact. See
-[apps/k7-daw-frontend/packages/song/docs/surfaces.md](../packages/song/docs/surfaces.md).
-
-**The VIEWPORT is the second**, `surfaces/viewport.k7x` — and NOT a page: a floating window over
-whichever page is up, moved and sized by hand, shown and hidden by `ui viewport` or its button beside
-the pages. It owns a WebGL context and one `<video>` per layer, which is the most expensive thing the
-never-unmount rule below protects: hiding the window keeps both. See [picture.md](picture.md).
-
-**The DESK is the third**, `surfaces/turntables.k7x` (usually named `desk.k7x`). A set declares no
-timeline, so the desk is its home page. A fader on the desk is a param on a module in the graph, and
-the bottom panel's `graph` is how both are read at once. What it holds is a DOCUMENT — the loaded
-songs, the crossfader, the six EQ knobs — and a set does not stop existing because you went to look
-at the graph. See
-[../packages/k7-plugins/docs/turntables/deckSet.md](../packages/k7-plugins/docs/turntables/deckSet.md).
-
-The editor is never the home page: every song would open on a k7x file you had not asked for, rather
-than on a view that is *about the song*. `ui editor` gives it the screen, and a command that sends it
-to a file opens it as a popin (below). It stays mounted throughout, so summoning it costs nothing.
-
-See also [shellRouting.md](shellRouting.md) for how the screen state maps to the URL.
-
-### The Mixer is a bottom PANEL: the graph, arranged
+### The Mixer is a panel: the graph, arranged
 
 The `mix` panel is not a second picture. It is **the same graph** (same nodes, same cards, same cables)
 with the strips pulled onto one rank: `alignModuleRank` in `@studio/ui-chains`, between `buildGraph`
 and `layout`, drawn by `GraphPanel` given its `strips`. It is a panel and not a page so that the
-timeline stays on screen above the faders it is mixing.
+timeline stays on screen beside the faders it is mixing.
 
 Every track ends on a mixer module (`trackMixer`, by plugin type) but a track with a longer chain
 ends DEEPER, so by default the mixers sit on a staircase no zoom shows them all of. The shared rank
@@ -709,7 +495,7 @@ the file's picture has loaded, the panel keeps the take's live envelope on scree
 heard is a truer picture of it than a "reading" line. The shell does two things with it: `setWs`, which opens the review panel on the new
 clip, and a reload, which puts the clip on its lane. Both have to hang off that read and nothing else
 — the transport keys go straight to the engine socket (below), so no reply from the file service comes
-back to bump a reload, and a take stopped from the project bar's Stop button would otherwise be on disk, on
+back to bump a reload, and a take stopped from the floating bar's Stop button would otherwise be on disk, on
 the lane, and off the screen.
 
 The first answer only SEEDS: `lastTake` is the service's memory of the newest take it ever wrote, not
@@ -805,7 +591,7 @@ uses, so a twitch while removing a mark does not re-place it.
 
 ### The clip under the caret is REPORTED, not drawn
 
-`ClipView` is drawn in one place, the bottom panel's `event`, and it answers the CLICK rather than the
+`ClipView` is drawn in one place, the Events panel, and it answers the CLICK rather than the
 caret. A panel that followed the caret would redraw a roll at every step of `hjkl` and drop the clip you
 were working on as soon as the caret moved off it.
 
@@ -822,11 +608,11 @@ anything:
 - `full` — the page on screen, never empty: `null` in the state means the project's home page (the
   timeline, else the first pane declared), resolved against the layout before anything reads it.
   There is no split: two panes sharing the window each got too little of it to work in, and a second
-  view under the page is the bottom panel's job
+  view under the page is the panel's job
 - `focus` — which pane gets the keys, which is the page on screen; F6 walks the pages of the ring
   and Shift+F6 walks it back (`ringPanes`, which is `viewPanes(...).ring`, so the editor is not on
   it, and F6 from the editor lands on the ring's first page)
-- `panel` — the bottom panel, independent of both
+- `panel` — the panel, independent of both
 
 There is no fourth piece: which pages exist is not state. It is a function of what the project
 declares, read fresh wherever it is needed. See [shellRouting.md](shellRouting.md) and
@@ -847,7 +633,7 @@ let `full` decide whether it is `hidden`.
 | an overlay in front | closes the topmost one | `ui popin close` |
 | …else an open event | lets it go and closes its panel | `ui slot close` |
 | …else a page other than home | returns to the home page | `ui global` |
-| …else | closes the bottom panel | `ui close` |
+| …else | closes the panel | `ui close` |
 
 The ladder only works if each rung is **exclusive**, and that is the whole reason
 [`src/popins.ts`](../src/popins.ts) exists. Several overlays answer Escape themselves with a plain
@@ -876,31 +662,28 @@ The **docked panels** are deliberately not in that list: a docked panel leaves t
 screen, so the keys that drive them have to keep working — Space while you watch a level on the I/O tab
 is the whole point of that tab not being a dialog over the thing it meters.
 
-## The right column: four panels, one at a time
+## The right panels: one at a time
 
-The right end of the FOOTER holds four buttons, after a separator, and each toggles a panel **docked at
-the right** of the pane row — pushing the panes rather than covering them. They sit at the bottom right
-because the footer is where every other panel button is, and that corner is the nearest one to the
-column they open; the project bar keeps the pages and the meter. A phone has no room in its footer and keeps
-them in its menu.
+The header's toolbar holds seven buttons — Resources, Playlists, Mixer, Events, Logs, Tasks & history,
+Export — and Settings sits with the app buttons. Each toggles a panel floating over the right of the
+panes (a full-screen sheet on a phone); pressing the open one closes it. **One panel at a time**:
+`rightPanel` (the store) and the `?panel=` route state are two doors onto the same slot, and App keeps
+them exclusive.
 
-**Every button that opens a panel is a TAB** (`components/FooterTab.tsx`), the bottom panels' and these
-alike: a tab row upside down, hanging from the footer's top rule, the open one taking the
-page's background and opening into the panel it shows. A lit button says a toggle is on; a tab says
-WHICH of several places you are looking at, which is what a panel row is. The footer wears the card surface for it, since a tab in the page's own colour on a bar of the same colour is not seen. The notes
-button stays a toggle: it opens nothing.
+| id | what it holds |
+|---|---|
+| `resources` (with `references`) | the project's imported audio and video; the workspace's reference tracks, a segment away |
+| `playlists` | the workspace's set lists |
+| `mixer` | the strips lined up (`GraphPanel`) |
+| `events` | the clip, the live MIDI take, the take just filed, or "no event open" |
+| `chain` | one lane's signal path (`TrackModulesPane`), else the caret track's graph |
+| `logs` | what happened |
+| `tasks` (with `history`) | the task list; the undo journal and the sync history, a segment away |
+| `export` | export and publish |
+| `settings` | tabs: Editor, I/O, Project, Account |
 
-The buttons:
-
-| button | panel | what it is |
-|---|---|---|
-| ♪ (a SET only) | Playlists | the workspace's set lists: a searchable dropdown, its songs under it |
-| ⌾ | Références | the workspace's reference tracks — what you listen AGAINST ([references.md](references.md)) |
-| 🗀 | Ressources externes | the PROJECT's imported audio and video, to preview and drag onto a lane ([resources.md](resources.md)) |
-| ☑ | Tâches | the workspace's task list, `TODOS.md` at its root ([tasks.md](tasks.md)) |
-| ⟲ | Historique | the open song's undo steps, newest first |
-| ⇪ | Partager | export, publish |
-| ⚙ | Réglages | tabs: Éditeur, I/O, Compte |
+`references` and `history` have no button of their own: the toolbar's Resources and Tasks & history
+stand for the pair, and a segment inside the panel moves between the two.
 
 **The I/O tab lists the INTERFACE's inputs, not the song's** (`components/IoPanel.tsx`): every
 input device the engine reports, each with its meter and a tuner on the line below, and beside it
@@ -926,17 +709,6 @@ the journal is this project's undo, local and offline; the sync history is what 
 agreed on. A row opens on what it changed as plain text before and after, with no diff library, and
 "Restore to here" asks first, because a restore reaches every device at once. It is the panel's one
 write, and it is an edit like any other, so it is itself in the list.
-
-`rightPanel` in `App` is one value and not one boolean each, because there is **one column**: two panels
-open at once would be two columns, and the panes have already given up the width for one.
-
-**The column animates its WIDTH** (`components/RightPanel.tsx`), because the panels push the panes
-rather than cover them — a slide-over would promise the panes had not moved. There is one wrapper
-holding whichever panel is open, not one per panel: two wrappers mid-swap would be two columns for
-the length of an animation, squeezing the panes and releasing them for nothing. The panel inside
-keeps its own width and is clipped, so nothing reflows while the column travels, and the content
-being drawn on the way OUT is the last one open — by then the caller has stopped choosing a panel.
-`motion-reduce` skips the travel.
 
 Panels rather than one set of tabs, because they are different verbs — what you **set**, what you
 **play from**, what you **listen against**, what you **send**. Settings are things you set and leave, a
@@ -992,7 +764,7 @@ The key listener draws a line between two groups rather than standing aside for 
 mouse click, which the listener lets a focused control keep.
 
 Space takes the **direct route when it can**. `transport play|stop|toggle|rewind` (`BARE_TRANSPORT` in
-`src/ui/commands/transport.ts`) are answered by the shell over the engine WebSocket — the same socket the project bar's
+`src/ui/commands/transport.ts`) are answered by the shell over the engine WebSocket — the same socket the floating bar's
 play button uses. The file service route is a real cost, not a theoretical one: it sends this very
 message, but only after an HTTP round trip, after the undo journal has walked the whole project twice to
 find that a transport verb changed no file (**62 ms warm, 215 ms cold**, on a real song), and behind
@@ -1218,7 +990,7 @@ What it draws is `ClipView`, so audio and MIDI are told apart in one place.
 
 ## The minimap is the bar's progress
 
-It is a **second view of the timeline**, drawn in the project bar where a player keeps its scrubber, for
+It is a **second view of the timeline**, drawn in the floating bar where a player keeps its scrubber, for
 every project with an arrangement — over the timeline too, where it is the one reading of the whole song
 the timeline's scrolled window cannot give.
 
@@ -1239,11 +1011,11 @@ dismisses the popin.
 
 Two gestures move the slot. **A clip's click** selects it and nothing more: the caret parks on it,
 which is what fills the command conditions (`hover_midi_sequence`). **Its double-click** opens its
-content in the bottom panel's `event`, under the timeline still on screen, and lights that button. A
+content in the Events panel, under the timeline still on screen, and lights that button. A
 single click does not open the panel because the panel takes half the window and folds the lanes:
 selecting a clip to move or edit it must not change the layout under the pointer. **The bare lane**
 moves the caret to where you clicked and lets the event go — a click on nothing clears what was open.
-The panel stays up and says nothing is open, since it was asked for; Escape and its footer button close it.
+The panel stays up and says nothing is open, since it was asked for; Escape and its header button close it.
 
 The caret mark is `pointer-events-none`, so a press landing on it reads as a press on the bare lane;
 clips stop propagation, so they never reach the lane's handler at all.
@@ -1323,14 +1095,14 @@ find the sound behind the symbol, which is `ChainsTab`'s `triggerRack` and has n
 
 `GraphSlotPane` is the shell and the title bar. The occupants supply a body and what to call it, and
 nothing else about the chrome — written per occupant they drift, into title bars at three type scales.
-**Every bottom panel has a ✕ at its top left, and it takes no height** — a panel has only half the
+**Every panel has a Close in its frame's heading** — a panel has only half the
 window, so the ✕ is never a row of its own. A view with a toolbar column (`ModeStrip`: the clip editors,
 a lane's modules) draws it as the column's FIRST item; a view with a header row (the graph and mix
 panels, the logs, the slot's `bar`, a rolling MIDI take) draws it
 as the row's first item, `PanelCloseButton`. Floating over the corner is the last resort, for a view
 with neither: a floating ✕ sits on whatever the view drew there, which is usually its title. So the
 empty event panel wears the slot's bar too, rather than a lone ✕ over nothing. The view CLAIMS the ✕
-at mount (`components/PanelClose.tsx`), so a panel shows one ✕ whatever it holds. It runs `ui close`, as the footer's panel buttons and Escape do. Three ways
+at mount (`components/PanelClose.tsx`), so a panel shows one ✕ whatever it holds. It runs `ui close`, as the header's panel buttons and Escape do. Three ways
 to wear the frame, because the occupants genuinely differ:
 
 - **`title` (+ `note`)** — a name and a detail. The plain case.
@@ -1350,15 +1122,15 @@ grid, a take review — each is asked for, and a request the user cannot see is 
 into the slot (`onOpenClip`, `sequence edit`, `ui review`, a lane header's double-click, a take
 starting to roll) goes through `openEvent`, which also sets `panel` to `event`. The page is left as it
 was: the clip opens under the timeline it was clicked on. Toggling the panel off keeps the event, so
-the button brings it back; the keys and the footer's mode badges act only on an event that is on
+the button brings it back; the keys and the mode badges act only on an event that is on
 screen (`shownSlot`).
 
 ## The command bar
 
-It is the last row of the shell, under the project bar when there is one, full width — always there, not
-summoned. It runs the brain's shared commands — the same ones `k7 cmd` runs on the CLI — so the UI adds
-no command vocabulary of its own. The catalogue and the argument completers live in
-[`../src/palette.ts`](../src/palette.ts); why it is docked rather than opened is in
+It is a modal card under the header, over a scrim, summoned by the bar's button, Ctrl/⌘+Shift+P or a
+double tap of Shift; it is not always there. It runs the brain's shared commands — the same ones `k7 cmd`
+runs on the CLI — so the UI adds no command vocabulary of its own. The catalogue and the argument
+completers live in [`../src/palette.ts`](../src/palette.ts); why it is a card is in
 [`commandBar.md`](commandBar.md).
 
 It takes focus on a **double-tap of Shift**: two lone Shift presses within `DOUBLE_SHIFT_MS` with no other
@@ -1837,11 +1609,11 @@ Keeping it costs one habit — **the button runs the command, it does not call t
 
 | what draws it | the command | where the behaviour lives |
 |---|---|---|
-| the footer's mix / notes buttons | `ui mixer`, `ui notes` | `toggleMixer` (→ `togglePanel`) / `toggleDocs` in `App` |
+| the header's Mixer button, and notes | `ui mixer`, `ui notes` | `toggleMixer` (→ `togglePanel`) / `toggleDocs` in `App` |
 | the minimap's stack button, left of zoom fit | `ui stack` | `toggleStack` in `App` |
-| the footer's panel row | `ui panel <event\|graph\|mix\|logs>` | `togglePanel` |
+| the panel toolbar | `ui panel <event\|graph\|mix\|logs>` | `togglePanel` |
 | the log panel's *clear* | `ui logs clear` | `useLogs` |
-| a pane button in the project bar (the desk, the timeline…) | `ui <pane>` | `fullscreen` / `setFull` in `App`, like any pane |
+| a pane button in the floating bar (the desk, the timeline…) | `ui <pane>` | `fullscreen` / `setFull` in `App`, like any pane |
 | the timeline header's clock / height / automation | `ui ruler`, `ui lanes`, `ui automation` | `TimelineHandle` |
 | the per-track view's curve button, in its left column (`ModeStrip`, the timeline's) | `ui curves` — shows or hides its curve cards | `App` |
 | the per-track view's *audio in* / *midi in*, above it — greyed while something already feeds the lane (`laneHasInput`) | `track input <track> audio\|midi` | `App` |
@@ -1850,8 +1622,8 @@ Keeping it costs one habit — **the button runs the command, it does not call t
 | a layer moved or resized in the VIEWPORT | `picture rect` | `App` — the selection box is `components/ViewportOverlay.tsx`, see [picture.md](picture.md) |
 | a picture lane's **A** button, and `r` on its row | `ui picture arm <lane>` | `App` — browser-side like `ui midi learn`, since the camera is the browser's ([picture.md](picture.md)) |
 | the cog | `ui settings` — toggles its panel | `App` |
-| the footer's Playlists tab, on a SET | `ui playlists` — toggles its panel | `App` |
-| the footer's Share button | `ui share` — toggles its panel | `App` |
+| the header's Playlists button | `ui playlists` — toggles its panel | `App` |
+| the header's Export button | `ui share` — toggles its panel | `App` |
 | the settings panel's tabs | `ui settings editor\|io\|account` | `App` |
 | the settings panel's *Commandes* | `ui settings commands` — the one that is still a page | `App` |
 | the account tab's rows | `ui engine`, `ui workspace quit`, `ui language` | `App` |
@@ -1897,7 +1669,7 @@ something you could *ask for*, and none of these is:
 - **Typing into the open buffer.** The video readers' *Set From* / *Set To* look like actions and are not:
   they write a number into the file the editor is showing, which autosave then saves like any keystroke.
 
-The two transport buttons in the project bar are the clearest place a button does NOT dispatch its command, and
+The two transport buttons in the floating bar are the clearest place a button does NOT dispatch its command, and
 the reason is latency: `transport toggle` is a CLI verb, so it travels to the file service and back, while
 the button already holds an open socket to the engine.
 
@@ -1933,7 +1705,7 @@ does. The home page is the same one, the timeline being the one pane that says w
 editor needs a keyboard and the graph needs room.
 
 Every row of chrome is a row the panes do not get. On a phone in landscape the whole window is about 400px
-tall, so the project bar and the footer are trimmed to what a touch target needs and no more. The one control that
+tall, so the floating bar and the footer are trimmed to what a touch target needs and no more. The one control that
 could not simply move is the command bar's opener: a phone has neither Ctrl+Shift+P nor double-Shift, so the menu carries it.
 
 **The shell's root clips its overflow** (`overflow-hidden` on `App.tsx`'s outer box). A pane
@@ -1952,7 +1724,7 @@ layout. What a touch screen of any size does need is the right-click, and a fing
 
 **Tab and Shift+Tab are the browser's**, everywhere in the shell: `keyToken` makes no token of Tab, so
 no binding can take it and a stored `key: tab` is read as no assignment. A keyboard-only or
-screen-reader user walks the project bar, the transport, the page's controls (a lane's M/S/A among
+screen-reader user walks the floating bar, the transport, the page's controls (a lane's M/S/A among
 them), the footer's panel tabs and the settings in document order, which is what a key bound to Tab
 would forbid. The one component that keeps Tab is a field of the command bar, a form whose fields it
 steps through ([commandBar.md](commandBar.md)).
@@ -2028,18 +1800,8 @@ be revisited when the edge's path table moves is a manifest written wrong.
 | the palette catalogue and argument completion | `src/palette.ts` |
 | the shell's own commands — row and handler, one entry each | `src/ui/commands/` |
 | every popin, dialog and menu drawn over the panes | `src/shell/ShellOverlays.tsx` |
-| the bar under the panes, and the project bar above it | `src/shell/ShellFooter.tsx`, `src/shell/ProjectBar.tsx`, `src/shell/ShellTransport.tsx` |
+| the header, its git capsule, the floating bar, the phone menu | `src/shell/ProjectHeader.tsx`, `HeaderGit.tsx`, `FloatingBar.tsx`, `OverflowMenu.tsx` |
+| the panel registry and its frame | `src/shell/panels.tsx` |
+| the git screens' one entry | `src/git/gitScreens.tsx` |
 | what the graph's gestures run — the module picker, the asset browser, a tap's edit | `src/shell/useGraphActions.ts` |
 | self-contained slices of state | `src/hooks/` — engine link, project doc, track controls, polls, logs, MIDI recording, dialogs |
-
-## The one seam is the bottom panel's
-
-A page takes the whole width and height, so there is no seam between panes to drag. The one splitter
-is the bottom panel's (`event`/`graph`/`logs`): written in place, it resizes the panel that FOLLOWS it.
-
-**The bottom panel animates its HEIGHT** (`components/BottomPanel.tsx`), for the right column's reason:
-it pushes the page up rather than covering it. Two differences follow from what it holds. Its content
-is pinned at the panel's final height while it travels, since a graph or a roll inside re-fits itself
-on every resize and would do so on every frame. And the transition exists only during the travel:
-the divider drag writes the height per pointermove, and a transition there would make it lag the
-pointer. `motion-reduce` skips the travel.
