@@ -375,10 +375,11 @@ opens as a full-screen sheet.
 ### The Mixer is a dock occupant: strips left to right
 
 The Mixer is drawn in the bottom dock (`GraphPanel` given its `strips`, then `MixerStrips.tsx`): one
-84 px card per strip side by side, a horizontal scroll when they overflow, and the **Master section
-as a fixed column at the right end** on Pad and Desk — the mastering knobs stay in reach whatever the
-scroll — and as the row's last group on a phone, where a fixed column would eat the width. Its header
-row carries "Mixer" and the strip count; expanded, the strips take the height. It is the dock's
+84 px card per strip side by side, a horizontal scroll when they overflow, and **Master as the row's
+last strip on every device**: the sum of the lanes, its peak, its fader and an OUT button. The
+mastering knobs open in a section under the row, open by default, and OUT folds them away. A footer
+says where each strip comes from and links to the Graph. Its header row carries "Mixer" and the strip
+count; expanded, the strips take the height. It is the dock's
 occupant and not a page so that the timeline stays on screen beside the faders it is mixing.
 
 A strip is drawn by the Mixer itself, not through the graph canvas: a strip is a fader, a pan, a
