@@ -177,6 +177,11 @@ export function compFadeLine(
   return `event comp fade ${ev.track} ${ev.at} ${beatsToPosition(seam, num, den)} ${len}`;
 }
 
+/** The number a take's row shows: its place among the takes, the event's own row not counted, from 1. */
+export function takeNumber(rows: readonly TakeRow[], i: number): number {
+  return rows.slice(0, i + 1).filter((r) => !r.own).length;
+}
+
 /** One colour per take, by its row: the event's own first. The same in the takes view and the comp strip, and the studio's one series palette. */
 export const TAKE_COLORS: readonly string[] = SERIES_COLORS.map((_, i) =>
   seriesColor(i),
