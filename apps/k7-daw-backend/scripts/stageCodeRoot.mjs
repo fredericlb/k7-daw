@@ -16,9 +16,9 @@ const repo = join(
 
 /** What the native pieces read at the root; switch.rs names what a code root must hold. */
 export const CODE_ROOT = [
-  "packages/song/meta",
-  "packages/song/samples/video/sample.mp4",
-  "packages/commands/commands.yaml",
+  "apps/k7-daw-frontend/packages/song/meta",
+  "apps/k7-daw-frontend/packages/song/samples/video/sample.mp4",
+  "apps/k7-daw-frontend/packages/commands/commands.yaml",
   "demos",
 ];
 

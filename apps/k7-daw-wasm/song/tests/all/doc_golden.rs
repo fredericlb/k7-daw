@@ -26,7 +26,7 @@ fn files_in(dir: &Path, out: &mut Vec<PathBuf>) {
 }
 
 fn golden() -> Vec<(PathBuf, Value)> {
-    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../apps/k7/backend-rs/fixtures/golden");
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../k7-daw-backend/fixtures/golden");
     let mut paths = Vec::new();
     files_in(&root, &mut paths);
     paths

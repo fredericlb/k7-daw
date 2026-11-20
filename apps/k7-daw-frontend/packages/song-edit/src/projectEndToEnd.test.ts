@@ -36,8 +36,17 @@ const here = dirname(
   new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1"),
 );
 // Three, not four: `song-edit/src` → the package → `packages/` → the repo root.
-const SONG = join(here, "..", "..", "..", "demos", "synth-demo.k7");
-const DEMO_MODULES = join(here, "..", "..", "..", "demos", "_modules");
+const SONG = join(here, "..", "..", "..", "..", "..", "demos", "synth-demo.k7");
+const DEMO_MODULES = join(
+  here,
+  "..",
+  "..",
+  "..",
+  "..",
+  "..",
+  "demos",
+  "_modules",
+);
 // A module lives at `@workspace` now, in `_modules` BESIDE the project — not `dir` itself.
 const SYNTH = ["..", "_modules", "instruments", "synth"];
 

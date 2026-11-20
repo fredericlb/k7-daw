@@ -4,7 +4,7 @@
 > choices as dropdowns, built by `inputUI` in `@studio/ui-chains` and written by
 > `node param <node> @channel …`. There the socket is a PARAMETER of the node exactly as
 > `@monitor` is — one verb for every control a module has, the `@` saying it is the module's
-> own field rather than a plugin's (`packages/song/docs/intrinsics.md`) — which is what lets a
+> own field rather than a plugin's (`apps/k7-daw-frontend/packages/song/docs/intrinsics.md`) — which is what lets a
 > built-in module carry its own panel; see that package's `docs/graphBuild.md`. This page is
 > about the strip in the editor and the builder, which edit the file's text directly.
 
@@ -71,7 +71,7 @@ Two consequences that are the interface's and not ours:
 The grouping is remembered in `<state>/preferences.k7x` (`inputPairs`) and replayed to the
 engine on every connect, exactly as the audio device is. Tracktion persists a copy of its own
 and it is unreadable in practice — the only call that loads it also reopens the remembered
-interface, which `engine/k7-runtime/AGENTS.md` forbids — so without this the pairing lasts until
+interface, which `apps/k7-daw-engine/k7-runtime/AGENTS.md` forbids — so without this the pairing lasts until
 the next engine restart and then silently reverts, taking the module's sound with it.
 
 ### Both halves are one COMMAND

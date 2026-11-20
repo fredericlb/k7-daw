@@ -1,10 +1,10 @@
 // render-once.ts — the offline bounce through the SAME renderProject every file-service render
 // goes through, so this proves the wrapper and not just the CLI. No engine needs to be running:
 // a render opens no audio device, which is the whole reason it can't collide with one.
-//   npx tsx engine/k7-runtime/scripts/render-once.ts
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/render-once.ts
 
 import { statSync } from "node:fs";
-import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 
 const doc = {
   name: "bounce",

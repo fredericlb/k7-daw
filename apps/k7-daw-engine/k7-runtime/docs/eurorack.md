@@ -124,7 +124,7 @@ last one rings on in tune. The first note of a session never glides, having noth
 
 **mu-rings and mu-elements take audio from two places.** They are instruments, played from notes,
 and their library modules declare a MIDI input plus an optional audio one, `in`
-(`packages/song/docs/ports.md`). What is wired into `in` arrives as the sidechain pair, the way a
+(`apps/k7-daw-frontend/packages/song/docs/ports.md`). What is wired into `in` arrives as the sidechain pair, the way a
 carrier reaches mu-warps; the lane's own audio arrives as the main pair, as it always did. Each pair
 is averaged to mono and the two are SUMMED into the module's one exciter input, since a lane holding
 audio and a cable are two things to excite the same strings with, not a choice between them. With

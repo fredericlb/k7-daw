@@ -61,7 +61,7 @@ component sit over a workspace and over a hosted library without knowing which i
 be right in both path spaces today and is exactly the kind of rule that rots.
 
 `widgetsScript` answers the same way for the `widgets.js` that draws a panel's lcdscreen
-widgets (`packages/ui-chains-react/docs/lcdScreen.md`). It is a call of its own rather than
+widgets (`apps/k7-daw-frontend/packages/ui-chains-react/docs/lcdScreen.md`). It is a call of its own rather than
 `dspSource` with another name, because it is not DSP: every module may have one, whatever its
 plugin, and the stub a host writes for it is a screen, not a graph.
 
@@ -78,7 +78,7 @@ the file or has no engine.
 
 `snapshotBase` keeps the plugin's CURRENT state as a named base in the module's own `base/` folder.
 A base is an opaque `.vstpreset` blob, for the plugins whose sound is not in their automatable
-parameters — which a preset cannot hold, being named numbers (`packages/song/docs/userPresets.md`). Snapshotting reads the instance
+parameters — which a preset cannot hold, being named numbers (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`). Snapshotting reads the instance
 behind the Native UI window, so what is kept is what somebody dialled in by hand.
 
 It is on this interface rather than an `on…` prop, even though half of it is an engine call,
@@ -115,7 +115,7 @@ k7, because on a SHARED module a save is not a private write: it lands in front 
 
 `publish` is optional, and no host implements it: the save ends at the disk. In k7 that is
 already everybody's: a library module is written into the library's folder on the server, which
-every account there reads at once (`apps/k7/frontend/docs/sharedModules.md`). The hook stays for a
+every account there reads at once (`apps/k7-daw-frontend/docs/sharedModules.md`). The hook stays for a
 host whose save must leave the machine with the module itself.
 
 Called **once, after every dirty file has landed**, and never per file. The four files of a
@@ -151,7 +151,7 @@ ref is the one act that turns "no file" into a file.
 The engine link. Only a live plugin can say what its parameters are called, what they span and
 what presets it ships. k7 reaches its engine through the shell's shared socket and finds the
 plugin in the OPEN project's compiled graph — for a shared module too, by its
-`@k7-core/…` ref (`apps/k7/frontend/docs/sharedModules.md`). So those arrive as plain props
+`@k7-core/…` ref (`apps/k7-daw-frontend/docs/sharedModules.md`). So those arrive as plain props
 (`pluginParamNames`, `pluginParamMeta`, `presets` and the two callbacks behind the dropdown),
 and a host with no engine passes nothing. The grid, the params list and the file pair work
 without one; they are just less well informed.

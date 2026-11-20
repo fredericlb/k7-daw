@@ -77,7 +77,7 @@ export function paneCommandsFor(go: (line: string) => void): PaneCommands {
       go(timeline ? `timeline play ${timeline}` : "timeline play"),
     videoArm: (id) => go(`ui picture arm ${id}`),
     videoToggle: (id, control) => go(`picture ${control} ${id}`),
-    // A header dragged to another slot: two lists, one gesture (packages/song/docs/trackKind.md).
+    // A header dragged to another slot: two lists, one gesture (apps/k7-daw-frontend/packages/song/docs/trackKind.md).
     reorder: (family, lane, target) =>
       go(
         family === "video"

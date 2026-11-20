@@ -9,9 +9,7 @@ the module library k7 ships with. It is one npm workspace tree driven from the r
 
 | Folder | What lives there |
 |---|---|
-| `apps/` | The applications: `apps/k7` (the web app: `frontend/`, and `backend-rs/`, the Rust front that is its backend) and `apps/k7-desktop` (K7 DAW: k7 on a computer, a Tauri app with one window that runs k7's front and shows k7). |
-| `packages/` | The shared `@studio/*` packages, consumed as raw TypeScript source. |
-| `engine/` | The native side: `k7-runtime` (the C++ audio engine), `k7-supervisor` (the C++ program that runs and watches it), `k7-android` (the phone app, Gradle), `scripts` (the Node scripts that build and package the native binaries). |
+| `apps/` | Every program of the repo, one folder each: `k7-daw-frontend` (the web app, with the shared `@studio/*` packages in its `packages/` and the documentation it ships in `user-docs/`), `k7-daw-backend` (the Rust front that is its backend, its crates in `packages/`), `k7-daw-wasm` (the Rust crates built to WebAssembly), `k7-daw-engine` (`k7-runtime`, the C++ audio engine; `k7-supervisor`, the C++ program that runs and watches it; `scripts`, the Node scripts that build and package the native binaries), `k7-daw-android` (the phone app, Gradle), `k7-daw-ios` (the iPhone app, Xcode) and `k7-daw-desktop` (K7 DAW: k7 on a computer, a Tauri app with one window that runs k7's front and shows k7). |
 | `k7-core/` | The default module library, as plain files: modules, chains, assemblies, presets, impulse responses, amp models, samples, wavetables. |
 | `site/` | The front page of `k7.rocks`, a static HTML file (`scripts/buildSite.mjs` builds it with the documentation). |
 | `scripts/` | Root scripts behind the npm scripts: the dev session, the workspace runner, the custom lints, the remote-machine helpers. |
@@ -40,31 +38,28 @@ The root `package.json` declares these workspace globs:
 
 ```json
 "workspaces": [
-  "packages/*",
-  "apps/k7",
-  "apps/k7/frontend",
-  "apps/k7/backend",
-  "apps/k7-desktop",
-  "engine/k7-runtime",
-  "engine/k7-android/web",
+  "apps/k7-daw-frontend",
+  "apps/k7-daw-frontend/packages/*",
+  "apps/k7-daw-desktop",
+  "apps/k7-daw-engine/k7-runtime",
+  "apps/k7-daw-android/web",
   "e2e"
 ]
 ```
 
 | Workspace | Package name | Notes |
 |---|---|---|
-| `apps/k7` | `k7` | An aggregator: its `dev` script runs the frontend. |
-| `apps/k7/frontend` | `k7-frontend` | React + Vite single-page app. |
-| `apps/k7-desktop` | `k7-desktop` | The desktop app; its code is Rust under `src-tauri/`, and the workspace exists for its npm scripts (`stage`, `dev`, `build`). |
-| `engine/k7-runtime` | `k7-runtime` | Not JavaScript: the workspace exists for its npm scripts (`dev`, `build:win`, `build:mac`, `build:android`, `test`, `test:all` and the `gen:*` generators). It declares no `build` script, so `npm run build` never compiles C++. |
-| `engine/k7-android/web` | `@studio/k7-android-shell` | The Capacitor page of the Android app. |
-| `packages/*` | `@studio/*` | The shared tier, below. |
+| `apps/k7-daw-frontend` | `k7-frontend` | React + Vite single-page app. |
+| `apps/k7-daw-desktop` | `k7-desktop` | The desktop app; its code is Rust under `src-tauri/`, and the workspace exists for its npm scripts (`stage`, `dev`, `build`). |
+| `apps/k7-daw-engine/k7-runtime` | `k7-runtime` | Not JavaScript: the workspace exists for its npm scripts (`dev`, `build:win`, `build:mac`, `build:android`, `test`, `test:all` and the `gen:*` generators). It declares no `build` script, so `npm run build` never compiles C++. |
+| `apps/k7-daw-android/web` | `@studio/k7-android-shell` | The Capacitor page of the Android app. |
+| `apps/k7-daw-frontend/packages/*` | `@studio/*` | The shared tier, below. |
 
-`engine/k7-supervisor` is a CMake project only and is not a workspace.
+`apps/k7-daw-engine/k7-supervisor` is a CMake project only and is not a workspace.
 
-## `packages/`: raw TypeScript through `exports`
+## `apps/k7-daw-frontend/packages/`: raw TypeScript through `exports`
 
-Every package under `packages/` is named `@studio/<folder>` and has no build step. A package's
+Every package under `apps/k7-daw-frontend/packages/` is named `@studio/<folder>` and has no build step. A package's
 `package.json` maps public subpaths straight to `.ts` source files:
 
 ```json
@@ -89,16 +84,16 @@ Consequences of that choice:
 - **Every consumer compiles the source.** The packages' `tsconfig.json` files use
   `"moduleResolution": "bundler"`, `"allowImportingTsExtensions": true` and `"noEmit": true`, so
   relative imports carry their `.ts` extension. The frontend's Vite build compiles them as part of
-  the app; `apps/k7/frontend/vite.config.ts` excludes `@studio/ui-chains`, `@studio/ui-chains-react`,
+  the app; `apps/k7-daw-frontend/vite.config.ts` excludes `@studio/ui-chains`, `@studio/ui-chains-react`,
   `@studio/ui-editor` and `@studio/ui-timeline` from dependency pre-bundling because esbuild's scanner
   rejects the `.ts` extension in their export maps.
-- **The backend is Rust.** `apps/k7/backend-rs` is a cargo workspace, no npm workspace; the file service is in the front.
+- **The backend is Rust.** `apps/k7-daw-backend` is a cargo workspace, no npm workspace; the file service is in the front.
 - **`k7.rocks` is a static site** built from `site/` and `docs-site/` (see [Versioning and the static site](./08-versioning-and-site.md)).
 - **A package's `build` script is a typecheck.** Most packages declare `"build": "tsc --noEmit"`;
   the exception is `@studio/dsp`, whose `build` runs `tsx src/emit.ts`.
 
 The per-account file service is not a package: it is the Rust crate
-`apps/k7/backend-rs/crates/k7-file-service`, held by the front.
+`apps/k7-daw-backend/packages/k7-file-service`, held by the front.
 
 Every package is private to the tree.
 
@@ -110,7 +105,7 @@ Every package is private to the tree.
 | Commands | `commands` |
 | Audio processing | `audio-analysis`, `audio-probe`, `audio-passes`, `take-render`, `dsp` |
 | Engine connection | `engine-protocol`, `engine-client`, `engine-browser`, `engine-registry`, `engine-tunnel` |
-| Disk | `user-prefs` (the file service and the hub are Rust crates under `apps/k7/backend-rs/crates/`) |
+| Disk | `user-prefs` (the file service and the hub are Rust crates under `apps/k7-daw-backend/packages/`) |
 | Media and recording | `ui-mini-player`, `recorder`, `http-client` (the media core is the Rust crate `k7-mediatek`) |
 | App shell and views | `project-shell`, `ui-chains`, `ui-chains-react`, `ui-editor`, `ui-eyes`, `ui-timeline`, `ui-waveform`, `ui-module-builder` |
 | Shared types | `web-protocol`, `graph-model` |
@@ -119,20 +114,20 @@ Every package is private to the tree.
 Each area has its own section in this guide; the package's own `package.json` description and its
 `exports` map are the quickest way to see what it offers.
 
-## `engine/`
+## `apps/k7-daw-engine`, `apps/k7-daw-android` and `apps/k7-daw-ios`
 
 | Folder | Build system | Output |
 |---|---|---|
-| `engine/k7-runtime` | CMake (`CMakePresets.json`: `macos-clang`, `windows-msvc`, `windows-msvc-ninja`, `dev-gcc`, `release-gcc`, `android-arm64` and others) | The `k7-runtime` executable (or `libk7runtime.so` on Android) |
-| `engine/k7-supervisor` | CMake, its own presets | The `k7-supervisor` executable and its unit-test binary |
-| `engine/k7-android` | Gradle (`./gradlew assembleDebug`) | The Android APK, which builds its own arm64 engine and supervisor |
-| `engine/scripts` | Node | `build-engine.mjs` (build and stage the command-line engine into `dist/k7-runtime/`), `package-release.mjs` (archive it, or rename the desktop app's installers), `devEngine.mjs` and `supervisorBuild.mjs` (used by the dev session) |
+| `apps/k7-daw-engine/k7-runtime` | CMake (`CMakePresets.json`: `macos-clang`, `windows-msvc`, `windows-msvc-ninja`, `dev-gcc`, `release-gcc`, `android-arm64` and others) | The `k7-runtime` executable (or `libk7runtime.so` on Android) |
+| `apps/k7-daw-engine/k7-supervisor` | CMake, its own presets | The `k7-supervisor` executable and its unit-test binary |
+| `apps/k7-daw-android` | Gradle (`./gradlew assembleDebug`) | The Android APK, which builds its own arm64 engine and supervisor |
+| `apps/k7-daw-engine/scripts` | Node | `build-engine.mjs` (build and stage the command-line engine into `dist/k7-runtime/`), `package-release.mjs` (archive it, or rename the desktop app's installers), `devEngine.mjs` and `supervisorBuild.mjs` (used by the dev session) |
 
 The engine section of this guide covers the C++ code itself.
 
 ## The UI kit and the build tooling
 
-Seven packages of `packages/` are not the song model or the engine: they are what the apps are
+Seven packages of the frontend's `packages/` are not the song model or the engine: they are what the apps are
 assembled with.
 
 | Package | Used for |
@@ -152,8 +147,8 @@ are `modules/`, `chains/`, `assemblies/`, `presets/`, `irs/`, `models/`, `sample
 It is consumed in three ways:
 
 - **The server** copies a library listed by an origin but missing on disk from
-  `$STUDIO_LIBRARY_SEED` (`apps/k7/backend-rs/crates/k7-libraries`), which can name `k7-core`.
-- **The desktop app and phone bundles** carry a copy: `apps/k7/backend-rs/scripts/stageBundle.mjs` writes one
+  `$STUDIO_LIBRARY_SEED` (`apps/k7-daw-backend/packages/k7-libraries`), which can name `k7-core`.
+- **The desktop app and phone bundles** carry a copy: `apps/k7-daw-backend/scripts/stageBundle.mjs` writes one
   into the bundle, which the front seeds from (`STUDIO_LIBRARY_SEED`).
 - **Lints** read it: `npm run lint:layouts` and `npm run lint:panels` check its module panels.
 

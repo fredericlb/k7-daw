@@ -1,5 +1,5 @@
 //! What a whole-text merge costs, for docs/parity.md: the native port on 2,000, 5,000 and 20,000 lines.
-//! `cargo run --release -p k7-sync --example diff3_measure` from backend-rs.
+//! `cargo run --release -p k7-sync --example diff3_measure` from apps/k7-daw-backend.
 
 use std::time::{Duration, Instant};
 

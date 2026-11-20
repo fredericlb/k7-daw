@@ -1,6 +1,6 @@
 // intrinsics.ts — what `node param` writes when the name is not a plugin parameter: a
 // module's intrinsic fields, its file-valued params, the master volume. Holds no verbs;
-// see packages/song/docs/intrinsics.md.
+// see apps/k7-daw-frontend/packages/song/docs/intrinsics.md.
 
 import { join, relative } from "node:path";
 import { libraryFiles } from "@studio/song/libraryFiles";
@@ -61,7 +61,7 @@ const INTRINSICS: Record<
     if (!Number.isFinite(db)) throw new Error(`'${raw}' is not a number of dB`);
     return { path: setModuleInputGain(dir, module, db), said: `gain ${db} dB` };
   },
-  /** The engine's dry/wet around an effect, 0 all dry .. 1 all wet — engine/k7-runtime/docs/mix.md. */
+  /** The engine's dry/wet around an effect, 0 all dry .. 1 all wet — apps/k7-daw-engine/k7-runtime/docs/mix.md. */
   mix: (dir, module, raw) => {
     const mix = Number(raw);
     if (!Number.isFinite(mix) || mix < 0 || mix > 1)
@@ -71,7 +71,7 @@ const INTRINSICS: Record<
       said: `mix ${Math.round(mix * 100)}% wet`,
     };
   },
-  /** The engine's level into and out of the module, in dB — engine/k7-runtime/docs/mix.md. */
+  /** The engine's level into and out of the module, in dB — apps/k7-daw-engine/k7-runtime/docs/mix.md. */
   "input-volume": (dir, module, raw) =>
     volumeIntrinsic(dir, module, "input", raw),
   "output-volume": (dir, module, raw) =>
@@ -92,7 +92,7 @@ const INTRINSICS: Record<
       said: name ? `camera ${name}` : "the default camera",
     };
   },
-  /** Which MIDI DEVICE a midi-in node records from, by its LABEL; `any` clears it — packages/song/docs/midiIn.md. */
+  /** Which MIDI DEVICE a midi-in node records from, by its LABEL; `any` clears it — apps/k7-daw-frontend/packages/song/docs/midiIn.md. */
   device: (dir, module, raw) => {
     const name = raw.trim() === "any" ? "" : raw.trim();
     return {
@@ -142,7 +142,7 @@ export async function setFileParam(
       ? sharedFamilyOf(param)
       : null;
   if (!clearing && family) {
-    // A library's file, by `@<library>/<path>`: the same list the panel's picker offers (packages/song/docs/libraryFiles.md).
+    // A library's file, by `@<library>/<path>`: the same list the panel's picker offers (apps/k7-daw-frontend/packages/song/docs/libraryFiles.md).
     const shared = libraryFiles(family, h.songPath);
     if (!shared.includes(file)) {
       h.refuse([
@@ -210,7 +210,7 @@ export async function setIntrinsic(
   }
 }
 
-/** The OUT node's one parameter, written to `project.masterVolume`; unity is NOT written — packages/song/docs/masterVolume.md. */
+/** The OUT node's one parameter, written to `project.masterVolume`; unity is NOT written — apps/k7-daw-frontend/packages/song/docs/masterVolume.md. */
 export async function writeMasterVolume(
   h: CommandHost,
   db: number,
@@ -220,7 +220,7 @@ export async function writeMasterVolume(
       `${db} dB is outside the fader — it runs ${MASTER_MIN_DB}..+${MASTER_MAX_DB} dB`,
       ...(db > MASTER_MAX_DB
         ? [
-            "a mix that needs more than +12 on its output has its headroom in the STRIPS — see packages/song/docs/masterVolume.md",
+            "a mix that needs more than +12 on its output has its headroom in the STRIPS — see apps/k7-daw-frontend/packages/song/docs/masterVolume.md",
           ]
         : []),
     ]);

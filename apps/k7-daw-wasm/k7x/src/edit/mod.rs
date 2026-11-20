@@ -1,4 +1,4 @@
-// edit — the k7x document editor and printer, after ../../../src/edit.ts and its writers (docs/wasm-step3a-brief.md).
+// edit — the k7x document editor and printer, after ../../../../k7-daw-frontend/packages/k7x/src/edit.ts and its writers (docs/wasm-step3a-brief.md).
 // A reader would get wrong what an offset is: a BYTE of the text; only widths and columns count UTF-16 units, as the TypeScript does.
 
 mod apply;

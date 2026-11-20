@@ -18,7 +18,7 @@ a phase of their own and not left behind.
 
 ## The method
 
-A strangler, never a big bang. The Rust front (`apps/k7/backend-rs/docs/front.md`) takes the
+A strangler, never a big bang. The Rust front (`apps/k7-daw-backend/docs/front.md`) takes the
 backend's address from the first phase and proxies whatever is not ported yet. A route family
 moves when its gates pass, and its TypeScript is deleted in the same change. Every gate is a
 check that runs against BOTH implementations:
@@ -27,7 +27,7 @@ check that runs against BOTH implementations:
   backend tests are rewritten into before that family is ported;
 - the functional suite (`e2e/docs/e2e.md`) through the front;
 - golden corpora for what is written to disk or to the engine: ProjectDocs, sidecars, k7x edits,
-  the session cookie (`apps/k7/backend-rs/docs/sessions.md`), tunnel frames.
+  the session cookie (`apps/k7-daw-backend/docs/sessions.md`), tunnel frames.
 
 **A family moves with every route that shares its in-memory state.** The TypeScript backend keeps
 some state in memory and writes it back whole: the API tokens (read once, `lastUsed` flushed over
@@ -48,7 +48,7 @@ process of its own and already reaches the hub over a socket.
 
 | phase | content | gate |
 |---|---|---|
-| 0. foundations | the Cargo workspace (`apps/k7/backend-rs`); the front and its peer secret; `k7-embed` for Android and iOS; the conformance suite | conformance identical direct and through the front; the embed running on a phone |
+| 0. foundations | the Cargo workspace (`apps/k7-daw-backend`); the front and its peer secret; `k7-embed` for Android and iOS; the conformance suite | conformance identical direct and through the front; the embed running on a phone |
 | 1. small surfaces | health, preferences, app releases, cameras | conformance, and each implementation reading what the other wrote |
 | 2. engine trust, tested | the relay, ticket and tunnel lifecycle tests `docs/audit-moteur.md` §E lacks, written against TypeScript and kept as the gate of phase 4 | they pass, several runs in a row |
 | 3. the session and the leaves | `/auth/*` and the API tokens; the analysis, uploads, AI organize | the on-disk corpus read and written byte for byte; a token minted by either implementation accepted by the other's gate |
@@ -57,10 +57,10 @@ process of its own and already reaches the hub over a socket.
 | 6. cut-over (done) | the tray links the backend, Android and iOS load it, the backend is one binary; `apps/k7/backend`, node, Termux and `bundle.mjs` are gone | the functional suite on the web, the phone and the tray; one published version per switch before its TypeScript goes |
 
 The front is the backend in the dev session, the tray and every phone build
-(`apps/k7/backend-rs/docs/front.md`, `routes.md`). It owns the session (`/auth/me`),
+(`apps/k7-daw-backend/docs/front.md`, `routes.md`). It owns the session (`/auth/me`),
 the preferences, the engine registry and tunnel hub, the file hub and the file service, the libraries (frozen to the
 bundled seed), the AI settings and the built page; the embed carries it on a phone
-(`apps/k7/backend-rs/docs/embed.md`).
+(`apps/k7-daw-backend/docs/embed.md`).
 
 ## What it costs
 
@@ -68,7 +68,7 @@ bundled seed), the AI settings and the built page; the embed carries it on a pho
   the k7x reader and editor, the mediatek types and helpers, lyrics, panel-rules, web-protocol's
   helpers, and engine-protocol, which gets a THIRD spelling beside TypeScript and C++. Shared
   vectors bound the drift; nothing removes it.
-- **The session cookie is a contract**, frozen by vectors (`apps/k7/backend-rs/fixtures`) and minted for the suite by `e2e/src/sessionCookie.ts`.
+- **The session cookie is a contract**, frozen by vectors (`apps/k7-daw-backend/fixtures`) and minted for the suite by `e2e/src/sessionCookie.ts`.
 - **Feature work pays twice during the migration**: a backend change is written in TypeScript and
   ported later, or it waits.
 - **The trust code is the riskiest to rewrite**: the relay gate, tickets, path containment, the

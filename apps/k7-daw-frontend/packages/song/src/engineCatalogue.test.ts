@@ -153,11 +153,11 @@ describe("the catalogue of modules", () => {
     expect(Object.keys(m)).toEqual([
       "@meta/IN",
       "@meta/OUT",
-      // The lens, which the BROWSER opens rather than the engine — packages/song/docs/camera.md.
+      // The lens, which the BROWSER opens rather than the engine — apps/k7-daw-frontend/packages/song/docs/camera.md.
       "@meta/CAM",
       "@meta/CUE",
       "@meta/FILE",
-      // …and a MIDI device, which the BROWSER records from — packages/song/docs/midiIn.md.
+      // …and a MIDI device, which the BROWSER records from — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
       "@meta/MIDI",
     ]);
     expect(m["@meta/IN"]).toMatchObject({

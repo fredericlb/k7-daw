@@ -175,7 +175,7 @@ tunnel::Jobs machineJobs(const MachineAccess& access)
         emit({{"type", "prefetched"}, {"count", count}});
     };
 
-    // Send this machine's copy of a file BACK up: an undo's audio, which only this machine keeps (apps/k7/backend-rs/docs/files/history.md).
+    // Send this machine's copy of a file BACK up: an undo's audio, which only this machine keeps (apps/k7-daw-backend/docs/files/history.md).
     jobs["send-up"] = [](const json& req, const tunnel::Emit& emit, tunnel::JobContext& ctx) {
         const std::string file = req.value("file", "");
         requireWritable(ctx, file, "send-up");
@@ -238,7 +238,7 @@ tunnel::Jobs machineJobs(const MachineAccess& access)
         });
     };
 
-    // Bounce a ProjectDoc through THIS machine's engine binary: `out` takes the mix alone, `outDir` the whole manifest (packages/engine-tunnel/docs/jobs.md).
+    // Bounce a ProjectDoc through THIS machine's engine binary: `out` takes the mix alone, `outDir` the whole manifest (apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md).
     jobs["render"] = [access](const json& req, const tunnel::Emit& emit, tunnel::JobContext& ctx) {
         const std::string out = req.value("out", "");
         const std::string outDir = req.value("outDir", "");

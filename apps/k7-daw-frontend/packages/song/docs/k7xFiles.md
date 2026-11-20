@@ -1,7 +1,7 @@
 # A workspace file is a .k7x file
 
-Every file of a workspace is k7x (`packages/k7x/docs/language.md`): no `.yaml` file of a workspace is
-read, listed or written. The plan this belongs to is [k7x-plan.md](../../../docs/k7x-plan.md).
+Every file of a workspace is k7x (`apps/k7-daw-frontend/packages/k7x/docs/language.md`): no `.yaml` file of a workspace is
+read, listed or written. The plan this belongs to is [k7x-plan.md](../../../../../docs/k7x-plan.md).
 
 ## Two modules, two jobs
 
@@ -17,7 +17,7 @@ read, listed or written. The plan this belongs to is [k7x-plan.md](../../../docs
 
 - **An edit of a file with short forms sees their expanded data.** The edit runs on a scratch
   document of that data, and the result goes back over the real one by `applySugared`
-  (`packages/k7x/src/sugared.ts`, `packages/song-schema/docs/sugar.md`), so a writer never has to know
+  (`apps/k7-daw-frontend/packages/k7x/src/sugared.ts`, `apps/k7-daw-frontend/packages/song-schema/docs/sugar.md`), so a writer never has to know
   that `notes("c4 d4")` is a string. A file that holds no short form is edited as written, so a
   key renamed or an item inserted keeps its line and its comments: a data diff would delete and
   re-add it. A writer that keeps a short form itself — graphFile's, which rename inside `runs(...)`
@@ -25,8 +25,8 @@ read, listed or written. The plan this belongs to is [k7x-plan.md](../../../docs
 - **An absent file is an error unless the caller says `create`**: then it is an empty document, and
   is only written once the edit put something in it.
 - **A finding carries the line of the k7x text.** Each parser validates the file's data and places
-  zod's findings back on the text by key path (`packages/song-schema/src/yaml/k7xPosition.ts`); a
-  syntax error is one finding with its own line and column (`packages/song-schema/src/yaml/k7xIssues.ts`).
+  zod's findings back on the text by key path (`apps/k7-daw-frontend/packages/song-schema/src/yaml/k7xPosition.ts`); a
+  syntax error is one finding with its own line and column (`apps/k7-daw-frontend/packages/song-schema/src/yaml/k7xIssues.ts`).
 - **A library's pins and manifest are workspace files too**: `_library-pins.k7x` and `library.k7x`.
 - **What is not a workspace file is read by name.** A
   machine's `preferences.k7x` under the studio home, the repository's `commands.yaml` and `env.yaml`
@@ -37,7 +37,7 @@ read, listed or written. The plan this belongs to is [k7x-plan.md](../../../docs
 
 The undo journal and the capture read and write the files that changed on
 disk, by their real names: they must restore exactly the bytes that were there. A change travels as
-k7x path ops, diffed on the k7x text itself (`apps/k7/backend-rs/crates/k7-sync/src/k7x/`).
+k7x path ops, diffed on the k7x text itself (`apps/k7-daw-backend/packages/k7-sync/src/k7x/`).
 
 ## Known limits
 

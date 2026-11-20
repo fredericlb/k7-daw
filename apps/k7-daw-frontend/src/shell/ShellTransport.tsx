@@ -119,7 +119,7 @@ export function ShellTransport({
             size={toolSize}
             variant={recordEnabled ? "default" : "secondary"}
             aria-pressed={recordEnabled}
-            // Not turned ON while the project loads: the load's silent dry run would roll it and its stop switch it off (apps/k7/backend-rs/docs/file-engine.md).
+            // Not turned ON while the project loads: the load's silent dry run would roll it and its stop switch it off (apps/k7-daw-backend/docs/file-engine.md).
             disabled={transportWaiting && !recordEnabled}
             onClick={(e) => {
               // A MIDI-armed lane is recorded by THIS record too: the press is the gesture Web MIDI's request rides.

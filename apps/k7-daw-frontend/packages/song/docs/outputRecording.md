@@ -12,7 +12,7 @@ transport; it has no such button.
 
 ## The sound: a recorder no node names
 
-The engine's own `Recorder` built-in does the capture (`engine/k7-runtime/docs/recorder.md`): it
+The engine's own `Recorder` built-in does the capture (`apps/k7-daw-engine/k7-runtime/docs/recorder.md`): it
 writes a wav as the audio passes, free-running, the transport never consulted. The compile puts
 it **last on the master run** of a project with no timeline whose graph reaches `OUT`
 (`src/outputRecorder.ts`), keyed `MIX:@record` (`OUTPUT_RECORDER_ID`), so a take is the whole mix,
@@ -33,9 +33,9 @@ post-master-chain — what `OUT` receives.
 The engine never sees a picture: the compositor is the browser's
 ([videoOutputs.md](videoOutputs.md), [camera.md](camera.md)). So while a take rolls, the page
 draws the project's frame a second time, **off screen**, on a driver that never parks
-(`packages/k7-plugins/src/video/OutputPicture.tsx`), and records that canvas with a
+(`apps/k7-daw-frontend/packages/k7-plugins/src/video/OutputPicture.tsx`), and records that canvas with a
 `MediaRecorder`, its chunks spooled to disk as a picture lane's take is
-(`apps/k7/frontend/docs/picture.md`).
+(`apps/k7-daw-frontend/docs/picture.md`).
 
 - **Not the viewport.** It may be hidden, and a hidden viewport stops drawing; a recording must not
   depend on which window happens to be open. The copy costs a GL context while a take rolls, and
@@ -54,13 +54,13 @@ draws the project's frame a second time, **off screen**, on a driver that never 
 ## Keeping it
 
 On stop the page waits for the engine to close its take, then **joins the two itself**
-(`packages/ui-eyes/src/joinTake.ts`): the picture's packets copied as its `MediaRecorder` encoded
+(`apps/k7-daw-frontend/packages/ui-eyes/src/joinTake.ts`): the picture's packets copied as its `MediaRecorder` encoded
 them, the engine's wav read through the project's media route and encoded to Opus by WebCodecs,
 one WebM streamed to a scratch file on disk as it is made. It uploads that into the project's
 `clips/` — the record directory the engine writes its takes into — and runs
-`project record save <take.wav|none> [<picture.webm>]` (`packages/commands/commands.yaml`). The
+`project record save <take.wav|none> [<picture.webm>]` (`apps/k7-daw-frontend/packages/commands/commands.yaml`). The
 file service, which runs on the engine's machine, keeps what it is handed in that directory and
-answers the take's file name (`apps/k7/backend-rs/crates/k7-file-service/src/media/mod.rs`):
+answers the take's file name (`apps/k7-daw-backend/packages/k7-file-service/src/media/mod.rs`):
 
 | what was recorded | what is kept |
 |---|---|

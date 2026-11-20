@@ -1,7 +1,7 @@
 //! ai/ — `/api/ai/settings`, `GET /api/ai/organize` and `POST /api/ai/organize/turn`: the account's Claude key and model
 //! in one small file under `<prefs>/ai`, re-read on every request.
 //! The thing a reader would get wrong: the turn (`turn.rs`) makes ONE model turn; the conversation and every check are
-//! the page's (`apps/k7/frontend/docs/aiOrganize.md`).
+//! the page's (`apps/k7-daw-frontend/docs/aiOrganize.md`).
 
 pub mod claude;
 pub mod sse;

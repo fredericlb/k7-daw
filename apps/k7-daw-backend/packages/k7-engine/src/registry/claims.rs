@@ -1,6 +1,6 @@
 //! claims.rs — taking an engine and keeping it: an OPEN (no secret) always
 //! wins and displaces under the rules; a RENEWAL (its secret) holds while that secret is registered, and
-//! says which of three ways it went otherwise (`apps/k7/backend-rs/docs/engine/claim.md`).
+//! says which of three ways it went otherwise (`apps/k7-daw-backend/docs/engine/claim.md`).
 
 use super::{ENGINE_ASSIGN_TTL_MS, Entry, Holder, REGISTRY_TTL_MS, Registry, State};
 

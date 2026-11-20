@@ -1,5 +1,5 @@
 // A SHAPE is a picture source: it starts the chain of the lane it draws on, as a camera would.
-// See packages/song-video/docs/shapes.md.
+// See apps/k7-daw-frontend/packages/song-video/docs/shapes.md.
 start(true)
 steps([
   id("c3abff25-19a8-49b0-9dd2-d7661d118d3e").extends("@workspace/shapes/box"),

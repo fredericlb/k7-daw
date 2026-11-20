@@ -10,7 +10,7 @@ import { SOURCES } from "./k7xWasm.generated.ts";
 import { nativeData, nativeKind, nativeReady } from "./native.ts";
 import { K7SyntaxError, parseTree } from "./parse.ts";
 
-const ROOT = join(import.meta.dirname, "..", "..", "..");
+const ROOT = join(import.meta.dirname, "..", "..", "..", "..", "..");
 const walk = (dir: string): string[] =>
   readdirSync(dir).flatMap((name) => {
     const abs = join(dir, name);

@@ -1,7 +1,7 @@
 Gap
 "One-finger drags on timeline clips, edges, fade corners, headers and shots scroll the pane (`touch-action: pan-x pan-y`), so move, resize, fade, reorder and range select have no touch way."
 "The piano roll lane takes a one-finger swipe as a native scroll, which competes with drawing notes and framing rectangles by touch."
-`apps/k7/frontend/docs/timeline.md` says the mouse wheel zooms the timeline; the code zooms only on ⌘/Ctrl+wheel or a pinch.
+`apps/k7-daw-frontend/docs/timeline.md` says the mouse wheel zooms the timeline; the code zooms only on ⌘/Ctrl+wheel or a pinch.
 "The bare wheel zooms in the audio clip panel and the graph but scrolls in the timeline, the piano roll and the waveform strip."
 "The clip tooltip says ""shift: off the grid"", but ⇧ pressed on a clip starts a rectangle instead; it frees the grid only once a drag has begun."
 "HTML5 drag and drop rows have no touch path: OS files and resources onto lanes, timeline tabs, file tree moves, parameter binding in the module builder, records onto decks."
@@ -16,4 +16,4 @@ Help has no button: on touch it is reachable only by typing `ui help`.
 "A chain or OUT card opens no menu on right-click, unlike every other card."
 "Removing a takes crossfade needs Alt, and sizing a timeline crossfade needs a drag: touch gets only the default."
 "The in-project Settings panel's Account tab label is hard-coded in French (""Compte"")."
-`apps/k7/frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.
+`apps/k7-daw-frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.

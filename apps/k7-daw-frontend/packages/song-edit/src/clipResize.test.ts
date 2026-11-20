@@ -13,7 +13,7 @@ import { describe, expect, it } from "vitest";
 import { resizeToWindow } from "./clipResize";
 import { resizeTrackPlacement } from "./trackMix";
 
-// Dragging a clip's edge: a resize writes the EVENT's `from`/`to` — packages/song/docs/clipResize.md.
+// Dragging a clip's edge: a resize writes the EVENT's `from`/`to` — apps/k7-daw-frontend/packages/song/docs/clipResize.md.
 
 const NUM = 4;
 const DEN = 4;

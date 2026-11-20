@@ -1,7 +1,7 @@
 // useRackTrigger.ts — a rack PAD clicked: audition that sound through `preview`, off the node's
 // effective rack in the layout the pane is drawing. One implementation for every pane that draws
 // a kit, since a pad that plays in one and is silent in another reads as a broken card.
-// The one thing a reader would get wrong: what plays is the material, DRY — see packages/song/docs/racks.md —
+// The one thing a reader would get wrong: what plays is the material, DRY — see apps/k7-daw-frontend/packages/song/docs/racks.md —
 // except an SFZ KIT's pad, which has no file: its note goes through the node's own lane, kit and chain.
 
 import { showToast } from "@studio/project-shell/toast";
@@ -29,7 +29,7 @@ export function rackPreviewReq(sound: {
   return null;
 }
 
-/** The engine lane a node plays on: its plugin id is `<lane>:<node>` (packages/song's nodeProject). */
+/** The engine lane a node plays on: its plugin id is `<lane>:<node>` (apps/k7-daw-frontend/packages/song's nodeProject). */
 export function laneOfPlugin(
   pluginId: string | undefined,
   module: string,

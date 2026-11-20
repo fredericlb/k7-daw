@@ -2,7 +2,7 @@
 // long-press, opt-in), inline prompts, drag-to-move and OS file drops.
 // Extracted from lanes's sidebar so calepin's note tree is the same widget.
 // Everything app-specific is a prop: the menu is a list of TreeAction, the
-// trailing widget a render prop. See packages/ui/docs/file-tree.md.
+// trailing widget a render prop. See apps/k7-daw-frontend/packages/ui/docs/file-tree.md.
 
 import {
   type ReactNode,

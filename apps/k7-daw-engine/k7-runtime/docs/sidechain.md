@@ -1,6 +1,6 @@
 # A module's second input
 
-A module declares its own input ports — `packages/song/docs/ports.md` is where that starts, and
+A module declares its own input ports — `apps/k7-daw-frontend/packages/song/docs/ports.md` is where that starts, and
 where the chains syntax (`crossfade#b`) lives. This page is the other end: how a second signal
 actually reaches a `GraphDspPlugin`, and why it takes the shape it does.
 
@@ -67,7 +67,7 @@ That is not a quirk to work around, it is the mechanism a song needs. In the com
 `out` is a parallel path — the dry signal carries on to the master, which is what makes a send a
 send — so a deck feeding only a crossfade's second port would otherwise be heard twice. Muting it
 says "through the module only", and the sidechain is unaffected. `crossfade-demo` relies on it,
-and `packages/song/docs/ports.md` says why from the song's side.
+and `apps/k7-daw-frontend/packages/song/docs/ports.md` says why from the song's side.
 
 ## An unfed port is silence, not a failure
 

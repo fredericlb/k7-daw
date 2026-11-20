@@ -1,9 +1,9 @@
 # Picture in k7 — one timeline, two units
 
-A song carries video lanes ([packages/song-video/docs/picture.md](../../../../packages/song-video/docs/picture.md)).
+A song carries video lanes ([apps/k7-daw-frontend/packages/song-video/docs/picture.md](../packages/song-video/docs/picture.md)).
 This page is the k7 half: where they are drawn, how they are edited, and what the ruler does.
 
-Two surfaces are involved (`packages/song/docs/surfaces.md`):
+Two surfaces are involved (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`):
 
 | surface | layout | draws |
 |---|---|---|
@@ -31,7 +31,7 @@ resulting draw order.
 
 The compile hands out `videoTracks` bottom-first, and turning them back into rows top-first is
 `projectRows`' alone. Nothing downstream re-sorts: the compositor draws them in the compile's order
-(`packages/ui-eyes/src/compositor.ts`), so the frame is unaffected by how the timeline lists them.
+(`apps/k7-daw-frontend/packages/ui-eyes/src/compositor.ts`), so the frame is unaffected by how the timeline lists them.
 
 A picture row stands where `trackOrder` puts it among the sound rows: the picture document carries
 the stated order whole (`rowOrder`), since the song document lists sound lanes only. A picture row
@@ -77,7 +77,7 @@ only coordinate — each carrying its own label and weight.
 | `seconds`, with a picture | 1, 2, 5, 10, 15 FRAMES below a second (`secondTicks(fps)`), then the same | minute · second · frame |
 
 The frame rungs come from the picture's `fps`, which App hands the timeline only when the song
-has a picture lane: a song with none has no frame to land on (`packages/ui-timeline/docs/ticks.md`).
+has a picture lane: a song with none has no frame to land on (`apps/k7-daw-frontend/packages/ui-timeline/docs/ticks.md`).
 They apply to the whole grid and not just to the picture rows, since an audio lane's cut or a hit
 point is placed against that same picture.
 
@@ -103,7 +103,7 @@ from the keyboard through the same ordered binding `r` uses — `caret_track` fi
 
 - **M** is `picture mute`, which on picture means HIDDEN — the lane's own file carries it.
 - **S** is `picture solo`, which writes `project.k7x`'s `soloed:` — the SAME list audio uses
-  ([packages/song-video/docs/picture.md](../../../../packages/song-video/docs/picture.md)).
+  ([apps/k7-daw-frontend/packages/song-video/docs/picture.md](../packages/song-video/docs/picture.md)).
 
 `pictureMix.ts` is the fold, and it is one module because two surfaces read it: the frame, which
 composites, and the timeline, which dims a row that is off screen. Two copies of "is this lane
@@ -111,7 +111,7 @@ showing" is two answers to a question with one.
 
 The third rule in it is the LENS: a camera wired to a lane opens `off` never, `auto` while that
 lane is armed, and `on` always
-([packages/song/docs/camera.md](../../../../packages/song/docs/camera.md)). A shut lens is dropped
+([apps/k7-daw-frontend/packages/song/docs/camera.md](../packages/song/docs/camera.md)). A shut lens is dropped
 from the scene rather than drawn-and-hidden, so the camera is never opened and its indicator stays
 off — which is what `off` has to mean to be worth having.
 
@@ -128,7 +128,7 @@ only kind there is for now — is captured while the transport rolls, and on sto
 other placement.
 
 **The capture is the browser's, top to bottom**, for exactly the reason the lens itself is: the
-engine never hears about a camera ([packages/song/docs/camera.md](../../../../packages/song/docs/camera.md)).
+engine never hears about a camera ([apps/k7-daw-frontend/packages/song/docs/camera.md](../packages/song/docs/camera.md)).
 `useVideoRecording.ts` is the hook, and `useMidiRecording.ts` beside it is the same shape — the
 third kind of arm this app holds, after the ENGINE's (an audio lane) and the browser's (a MIDI
 lane). Which is why arming a picture lane is `ui picture arm` and not `transport arm`: nothing is
@@ -149,7 +149,7 @@ which cameras there are — `matchCamera`, the lens's own rule rather than a res
 - **A fresh WebM has no duration in it**, which makes it unseekable, which makes it a clip the
   frame cannot scrub. `@studio/recorder`'s `withDuration` repairs the blob before it is
   uploaded — the header patch, and the whole-file fix only on a short take
-  (`packages/recorder/docs/recorder.md`).
+  (`apps/k7-daw-frontend/packages/recorder/docs/recorder.md`).
 - **The lens is let go** on stop and on unmount. A stream left running keeps the indicator lit and
   the device held until the tab closes.
 
@@ -244,7 +244,7 @@ under the cursor and the shot would slide away from the pointer.
 The three above move a shot that is already there. Dropping a video file from the desktop onto a
 picture lane is what CREATES one: the bytes into `clips/`, a `clips/<id>.k7x` declaring the
 source, then `picture add <lane> <ref> <seconds>` — a command, so it is one journal entry and one
-Ctrl+Z, unlike the three drags. `apps/k7/frontend/docs/timeline.md` has the whole account; what
+Ctrl+Z, unlike the three drags. `apps/k7-daw-frontend/docs/timeline.md` has the whole account; what
 matters here is that the position is converted at the timeline's edge, since the verb's dialect is
 the lane file's own and the grid is in beats.
 
@@ -257,7 +257,7 @@ every continuous gesture is left out (`shell.md`): a pointer move is not a sente
 `setVideoPlacementField`, and writes it once.
 
 The same five edits have verbs beside them — `picture move | length | head | delete | add`, in
-`packages/commands/docs/picture.md` — which is what buys a context menu on a picture lane, an
+`apps/k7-daw-frontend/packages/commands/docs/picture.md` — which is what buys a context menu on a picture lane, an
 entry in the palette, a CLI and an undo entry.
 
 **The caret reports no track id on a picture lane**: a video lane is not an engine track — no
@@ -269,7 +269,7 @@ A surgical rewrite, never a re-serialisation: these files carry the comments tha
 format. **The drag's edit is keyed by the placement's INDEX** in the lane's `events:`, which is
 the only address that is always unique and always there: one source may be placed twice on a
 lane, and an ACTIVATION on a lane of shapes names no source at all
-(`packages/song-video/docs/shapes.md`). A lane's OWN shots are its `events:` one to one, so the
+(`apps/k7-daw-frontend/packages/song-video/docs/shapes.md`). A lane's OWN shots are its `events:` one to one, so the
 row the pointer is over knows the address. The shots a placed timeline puts on a song lane come
 first in its compiled clips and are in no file of that lane: `ownShots` takes them off before an
 index is read, and they are drawn apart, out of the drag's reach (`docs/timeline.md`). A timeline's
@@ -339,7 +339,7 @@ same way.
 
 `project.viewport` is a size in pixels and nothing else — everything that reads it reads pixels.
 What is chosen is a RATIO: 16:9 or 9:16 for now, and 1920×1080 / 1080×1920 is what that means
-([aspect.ts](../../../../packages/song-schema/src/aspect.ts)).
+([aspect.ts](../packages/song-schema/src/aspect.ts)).
 
 The RENDER node's card carries the list. Three things hold it together:
 
@@ -370,13 +370,13 @@ project export tracks [timeline]               every track as a zip: audio witho
 
 `project export tracks` is a LINK the browser downloads, not a blob this page holds: the zip can be
 gigabytes of audio, so the page hands the address to the browser and the server streams it
-([tracks-export.md](../../backend-rs/docs/tracks-export.md)). A link carries no header, so the workspace
+([tracks-export.md](../../k7-daw-backend/docs/tracks-export.md)). A link carries no header, so the workspace
 rides in the query, as `mediaUrl`'s does. The browser says nothing of the answer, so the link carries a token (`dl`) and the route sets
 the cookie `k7dl-<token>` on its first byte, `ok` or `err.<sentence>`: the panel is greyed until it
 reads one, then says the download started or why it was refused (`downloadSignal.ts`).
 
 The same render runs on the SERVER as `picture render`, in a headless Chromium
-([apps/k7/backend-rs/docs/file-engine-jobs.md](../../backend-rs/docs/file-engine-jobs.md)).
+([apps/k7-daw-backend/docs/file-engine-jobs.md](../../k7-daw-backend/docs/file-engine-jobs.md)).
 
 `exportScene` (`@studio/ui-eyes`) renders the viewport frame by frame into that container: the
 same compositor as in real time, but frame *n* is second *n/fps* and every source frame is pulled
@@ -385,7 +385,7 @@ EXACTLY, so a song always renders the same picture.
 **WebM is the default**, VP9 and Opus — the one codec pair every browser encodes. `mp4` is the
 word to type when the file is going somewhere that wants an mp4, and it asks the build for an
 H.264 and an AAC encoder, which Firefox has only the first of.
-[passes.md](../../../../packages/ui-eyes/docs/passes.md) is where that choice is argued;
+[passes.md](../packages/ui-eyes/docs/passes.md) is where that choice is argued;
 `ViewportTab` says in the viewport's strip when this build cannot encode what the button sends.
 
 **The sound is married into the same container.** `ExportOptions.audio` takes an `AudioBuffer` —
@@ -435,4 +435,4 @@ whose first frame and first sample are both 1:30's.
 `project export timeline otio|edl [lane]` runs `picture interchange`, which says the cut as its first
 output line, then saves that text under the song's name in the folder the person chose (`export.md`).
 The verb writes no file, so the project holds no copy. What the formats carry, and what
-they cannot, is [packages/song-video/docs/interchange.md](../../../../packages/song-video/docs/interchange.md).
+they cannot, is [apps/k7-daw-frontend/packages/song-video/docs/interchange.md](../packages/song-video/docs/interchange.md).

@@ -37,7 +37,7 @@ down in advance.
    interchangeable with the one it drives on the same contract, so this phase is optional.
 5. **Each application, one by one**, from the smallest consumer of the base to the largest. The
    order matters: an app holding its own engine registry proves nothing about the one next door.
-6. **Non-regression** on the apps that consume `packages/*` without having been the rename's
+6. **Non-regression** on the apps that consume `apps/k7-daw-frontend/packages/*` without having been the rename's
    target. A consumer of the headers outside the base is the last place a partial rename shows,
    so the first to check here.
 
@@ -46,7 +46,7 @@ down in advance.
 A rename touching an identifier **written into a user's file** is not of the same order as the
 others: the repo can be green and that person's projects broken. Those need a migration and a
 readable failure signature — see
-[packages/song/docs/moduleNamespaces.md](../packages/song/docs/moduleNamespaces.md) for the module
+[apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md](../apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md) for the module
 level, the only one of this family.
 
 The corollary: an identifier nobody types and that never leaves the machine renames without a

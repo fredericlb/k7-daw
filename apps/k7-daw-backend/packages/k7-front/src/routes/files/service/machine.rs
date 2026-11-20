@@ -12,7 +12,7 @@ pub fn engine_binary(studio_engine: Option<&str>, code_root: &Path) -> Option<Pa
     {
         return Some(p);
     }
-    let build = code_root.join("engine/k7-runtime/build");
+    let build = code_root.join("apps/k7-daw-engine/k7-runtime/build");
     let mut found: Vec<(bool, std::time::SystemTime, PathBuf)> = Vec::new();
     for preset in std::fs::read_dir(&build).ok()?.flatten() {
         for cfg in ["", "Release", "RelWithDebInfo", "Debug"] {

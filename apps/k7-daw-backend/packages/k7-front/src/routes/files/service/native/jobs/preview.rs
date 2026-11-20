@@ -56,6 +56,8 @@ pub struct World<'a> {
 pub fn resolve(w: &World<'_>, req: &PreviewReq) -> Result<Window, PreviewError> {
     let meta = join(&[
         &w.code_root.display().to_string(),
+        "apps",
+        "k7-daw-frontend",
         "packages",
         "song",
         "meta",

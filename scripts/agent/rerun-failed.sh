@@ -19,11 +19,11 @@ rerun_in_changed_file() {
   if [[ "$name" == *::* ]]; then mp="${name%::*}"; mp="${mp//::/\/}"; fi
   if [[ "$bin" == *::* && "$bin" != *::bin/* ]]; then target="${bin#*::}"; fi
   if [ -n "$target" ]; then
-    base="crates/$crate/tests"
+    base="packages/$crate/tests"
     sufs=("$base/$target.rs" "$base/$target/main.rs")
     if [ -n "$mp" ]; then sufs+=("$base/$target/$mp.rs" "$base/$target/$mp/mod.rs"); fi
   else
-    base="crates/$crate/src"
+    base="packages/$crate/src"
     if [ -n "$mp" ]; then sufs=("$base/$mp.rs" "$base/$mp/mod.rs"); else sufs=("$base/lib.rs" "$base/main.rs"); fi
   fi
   while IFS= read -r f; do

@@ -16,8 +16,17 @@ beforeAll(compileReady);
 // The model these exercise: the MATERIAL owns its window, the PLACEMENT its `start` and `loop`.
 
 const here = dirname(fileURLToPath(import.meta.url));
-const SONG = join(here, "..", "..", "..", "demos", "synth-demo.k7");
-const DEMO_MODULES = join(here, "..", "..", "..", "demos", "_modules");
+const SONG = join(here, "..", "..", "..", "..", "..", "demos", "synth-demo.k7");
+const DEMO_MODULES = join(
+  here,
+  "..",
+  "..",
+  "..",
+  "..",
+  "..",
+  "demos",
+  "_modules",
+);
 
 let root: string;
 let dir: string;

@@ -2,7 +2,7 @@
 // than the timeline's tools: what a lane holds is notes, so `create` and `remove` are the two acts,
 // and neither means anything on a track. The one thing a reader would get wrong: `select` is the
 // default HERE, where drawing used to be — a bare drag now frames notes rather than laying one down.
-// See apps/k7/frontend/docs/clipEditors.md.
+// See apps/k7-daw-frontend/docs/clipEditors.md.
 
 import { m } from "./paraglide/messages.js";
 

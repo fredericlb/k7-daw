@@ -5,12 +5,12 @@ decoded record and reads it at a rate the desk drives, forwards, backwards or st
 
 It exists because the other answer was measured and refused. A deck is normally a clip on a
 timeline, and moving one costs a re-insertion; driven at gesture rates that came out as a third of
-a beat of error, worse the faster it was driven (`packages/k7-plugins/docs/turntables/scratch.md`).
+a beat of error, worse the faster it was driven (`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/scratch.md`).
 
 It is CATALOGUED, as `Turntable` with the role `instrument` (a source: no audio in). A mix project's
 deck nodes name it through `@meta/audio/turntable`, and an engine's compatibility with a project is
 scored against the catalogue, so a platter left out of it reads as "this engine is missing:
-studio_turntable" on every engine that plays the deck. `packages/song/src/metaCatalogue.test.ts`
+studio_turntable" on every engine that plays the deck. `apps/k7-daw-frontend/packages/song/src/metaCatalogue.test.ts`
 holds every `@meta` module's built-in to that.
 
 ## Rate, not position
@@ -102,7 +102,7 @@ the wall clock:
 
 ### What KEY was measured to do
 
-`engine/k7-runtime/scripts/keylock.ts`. A tone alone cannot answer this — it has a pitch and no tempo, so
+`apps/k7-daw-engine/k7-runtime/scripts/keylock.ts`. A tone alone cannot answer this — it has a pitch and no tempo, so
 a stretcher would leave it untouched and the bench would pass by doing nothing. The source is
 therefore a tone that is **chopped**: 1 kHz in bursts of 120 ms on, 80 ms off. One file, two
 quantities, read apart — the carrier inside a burst is the pitch, the interval between bursts is the
@@ -136,7 +136,7 @@ Two more readings, and both are nothing:
 
 ## What was measured
 
-`engine/k7-runtime/scripts/turntable.ts`, on a running engine. It drives the real plugin over
+`apps/k7-daw-engine/k7-runtime/scripts/turntable.ts`, on a running engine. It drives the real plugin over
 `set-plugin-param` at 60 Hz with a ±2× swing and reads the result off the broadcast tap.
 
 **The source is not the clip bench's, and that is the method.** There, position was encoded as
@@ -166,7 +166,7 @@ rate does not remove it, because the smear is in the audio and not in the comman
 ## How SOON it follows
 
 Accuracy is one question and promptness is the other; a platter that lands in the right place a
-quarter-second late is not a record. `engine/k7-runtime/scripts/turntable-latency.ts` steps the rate at a
+quarter-second late is not a record. `apps/k7-daw-engine/k7-runtime/scripts/turntable-latency.ts` steps the rate at a
 known moment and finds where the tone changed.
 
 The tap carries its own buffering, so the stream's origin is estimated by keeping the LEAST DELAYED
@@ -220,7 +220,7 @@ rate change or a scratch mid-roll — which arithmetic on the desk's side would 
 Whether a loop is a roll is **latched when it engages** and never read at release. `Roll` is a
 param, so it arrives on its own message; reading it at the release would mean a `Roll = 0` landing
 one block early turns a roll into a plain loop and the record never comes back. The desk's ordering
-rules are the other half of the same seam — `packages/k7-plugins/docs/turntables/loop.md`.
+rules are the other half of the same seam — `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/loop.md`.
 
 Two consequences worth naming rather than discovering:
 
@@ -308,18 +308,18 @@ anything is packed. It is scaled DOWN only, so a quiet record keeps its level, a
 the gain at playback — one multiply for both.
 
 **A stem is NOT one of those.** `wavPcm24` and ffmpeg's `pcm_s24le` both write 24-bit integer
-(`packages/k7-plugins/docs/turntables/stems.md`), so the four parts take the direct read like any other
+(`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md`), so the four parts take the direct read like any other
 record. It is worth saying because it is worth 89 ms: a bench that wrote the stems as float measured
 192 ms to put a separated record on, against 102 for the same thing in 24-bit.
 
 What 16 bits costs is 96 dB of range on a signal that is played, not delivered. The stems' own
-summing sits at −34 dB (`packages/k7-plugins/docs/turntables/stems.md`), nowhere near it.
+summing sits at −34 dB (`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md`), nowhere near it.
 
 ### A separated deck is FOUR platters, and what that costs
 
 The number to read is not the cold apply — 441 ms against 267 is an apply **on an empty engine**,
 the page loading, once. The gesture that matters is putting a record
-on a deck that already holds one, and `packages/k7-plugins/scripts/turntables/put-on.ts` measures exactly
+on a deck that already holds one, and `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` measures exactly
 that, by timing the `applied` reply to the document `withDecks` produces:
 
 | record | one platter | four platters | difference |
@@ -367,7 +367,7 @@ Three things follow from a deck carrying its own position, and they are all the 
 
 - **Each deck starts alone.** `Rate` is per deck, so deck B rolls while deck A is stopped — the thing
   a single transport forbade. Only an EMPTY deck has no button: there is nothing to start.
-- **Any record can be scratched**, separated or not. `packages/k7-plugins/docs/turntables/scratch.md`.
+- **Any record can be scratched**, separated or not. `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/scratch.md`.
 - **The transport is not a deck's clock**, nor anything's: `needle(deck)` is, and it is the only
   position reader there is.
 
@@ -381,6 +381,6 @@ The plugin, the wire, the loading, the diff identity, the desk driving it, the p
 the scratch, KEY and the separated record are done, and no deck plays off a clip. What is not:
 
 - **The metronome is a clip on the transport**, which no deck follows. It is a separate question —
-  `packages/k7-plugins/docs/turntables/metronome.md`: the click has its SPACING and no phase.
+  `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/metronome.md`: the click has its SPACING and no phase.
 - **Nothing has LISTENED.** Everything above says the audio is where and when it was asked for.
   Whether that feels like a record under a hand is a judgement no render makes.

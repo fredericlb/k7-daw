@@ -1,5 +1,5 @@
 // takes.rs — the comp arithmetic the take writers need: a span laid over an event's comp, in song beats.
-// A reader would get wrong the unit: a span is in SONG time, not in the take's own time (packages/song/docs/takes.md).
+// A reader would get wrong the unit: a span is in SONG time, not in the take's own time (apps/k7-daw-frontend/packages/song/docs/takes.md).
 
 const EPS: f64 = 1e-9;
 

@@ -1,10 +1,10 @@
 # Registry and tunnel
 
-The registry, which knows which engines exist and who holds them, and the tunnel hub, which reaches them, are k7's Rust front: the crate `apps/k7/backend-rs/crates/k7-engine`, routed by `apps/k7/backend-rs/crates/k7-front/src/routes/engine/`, once for the whole origin (`apps/k7/backend-rs/docs/engine.md`). What stays TypeScript is the client side: `@studio/engine-tunnel` the tunnel's wire, its reference agent and the jobs client.
+The registry, which knows which engines exist and who holds them, and the tunnel hub, which reaches them, are k7's Rust front: the crate `apps/k7-daw-backend/packages/k7-engine`, routed by `apps/k7-daw-backend/packages/k7-front/src/routes/engine/`, once for the whole origin (`apps/k7-daw-backend/docs/engine.md`). What stays TypeScript is the client side: `@studio/engine-tunnel` the tunnel's wire, its reference agent and the jobs client.
 
 ## The registry
 
-`apps/k7/backend-rs/crates/k7-engine/src/`:
+`apps/k7-daw-backend/packages/k7-engine/src/`:
 
 | File | What |
 |---|---|
@@ -15,7 +15,7 @@ The registry, which knows which engines exist and who holds them, and the tunnel
 | `relay/` | The relay: dialling, piping |
 | `relay/gate/` | What a relayed socket may do before its account holds a claim |
 
-The HTTP routes are `k7-front`'s `routes/engine/registry.rs` and `ownership.rs`; the pages are `apps/k7/backend-rs/docs/engine/`.
+The HTTP routes are `k7-front`'s `routes/engine/registry.rs` and `ownership.rs`; the pages are `apps/k7-daw-backend/docs/engine/`.
 
 ### Routes (under `/api`)
 
@@ -33,7 +33,7 @@ The HTTP routes are `k7-front`'s `routes/engine/registry.rs` and `ownership.rs`;
 
 Engines expire 15 s (`REGISTRY_TTL_MS`) after their last heartbeat. The list carries what a picker shows: host name, addresses, performance, library level, `assigned`, and the caller's own held projects.
 
-The claim rules: one project per engine and session, one engine per project, and the newcomer wins. `select` without a secret opens a claim and displaces whoever held it (returning `tookOver`); a renewal with the secret is refused once the claim has moved, with the reason (`project`, `engine`, `lapsed`). Claims expire after `ENGINE_ASSIGN_TTL_MS` (90 s) without renewal. The browser side is `packages/engine-browser/src/lease.ts` ([84](./84-engine-clients.md)).
+The claim rules: one project per engine and session, one engine per project, and the newcomer wins. `select` without a secret opens a claim and displaces whoever held it (returning `tookOver`); a renewal with the secret is refused once the claim has moved, with the reason (`project`, `engine`, `lapsed`). Claims expire after `ENGINE_ASSIGN_TTL_MS` (90 s) without renewal. The browser side is `apps/k7-daw-frontend/packages/engine-browser/src/lease.ts` ([84](./84-engine-clients.md)).
 
 ### Identity and the tunnel secret
 
@@ -50,7 +50,7 @@ An `https:` page may not open `ws://` to a LAN host, so a browser on another net
 
 ## The tunnel
 
-The server end is `apps/k7/backend-rs/crates/k7-engine/src/tunnel/` (`hub.rs`, `hub_tunnel.rs`, `files/`, `put.rs`, `uploads.rs`): it accepts supervisors on `/api/engine-tunnel`, opens channels and serves files. The rest of the wire's TypeScript is `packages/engine-tunnel/`:
+The server end is `apps/k7-daw-backend/packages/k7-engine/src/tunnel/` (`hub.rs`, `hub_tunnel.rs`, `files/`, `put.rs`, `uploads.rs`): it accepts supervisors on `/api/engine-tunnel`, opens channels and serves files. The rest of the wire's TypeScript is `apps/k7-daw-frontend/packages/engine-tunnel/`:
 
 | File | Subpath | What |
 |---|---|---|
@@ -97,24 +97,24 @@ A `synced` channel (the server copied every file already) is only rewritten. The
 
 | Job | Caller |
 |---|---|
-| `separate` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/separate.rs`, `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/verb_host/stems.rs` |
-| `prefetch` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/media/prefetch.rs`, `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/journal_undo.rs` |
-| `send-up` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/journal_undo.rs` |
-| `local` | `apps/k7/backend-rs/crates/k7-front/src/routes/engine_reach/engine_jobs.rs` |
-| `render` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/freezer.rs` |
-| `log` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/runtime/logs.rs` |
-| `onnx-providers` | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/verb_host/onnx.rs` |
+| `separate` | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/jobs/separate.rs`, `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/verb_host/stems.rs` |
+| `prefetch` | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/prefetch.rs`, `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/journal_undo.rs` |
+| `send-up` | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/journal_undo.rs` |
+| `local` | `apps/k7-daw-backend/packages/k7-front/src/routes/engine_reach/engine_jobs.rs` |
+| `render` | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/jobs/freezer.rs` |
+| `log` | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/runtime/logs.rs` |
+| `onnx-providers` | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/verb_host/onnx.rs` |
 
-The machine side of each job is in [82](./82-k7-supervisor.md#tunnels-jobs-and-webrtc). The file service learns which jobs path belongs to its bound engine through `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/machine.rs`.
+The machine side of each job is in [82](./82-k7-supervisor.md#tunnels-jobs-and-webrtc). The file service learns which jobs path belongs to its bound engine through `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/jobs/machine.rs`.
 
-To add a job: add a handler to `machineJobs()` in `engine/k7-supervisor/src/MachineJobs.cpp` (and to the reference agent's tests if the TypeScript agent should answer it), confine any input path to the machine's copies of the server's folders, and call it with `requestJob` from the server side.
+To add a job: add a handler to `machineJobs()` in `apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp` (and to the reference agent's tests if the TypeScript agent should answer it), confine any input path to the machine's copies of the server's folders, and call it with `requestJob` from the server side.
 
 ## Tests
 
 ```sh
-cargo build --manifest-path apps/k7/backend-rs/Cargo.toml -p k7-front --features test-hooks --bin k7-engine-testbed
+cargo build --manifest-path apps/k7-daw-backend/Cargo.toml -p k7-front --features test-hooks --bin k7-engine-testbed
 ENGINE_CORE_BIN=<that binary> npm test --workspace @studio/engine-registry
 ENGINE_CORE_BIN=<that binary> npm test --workspace @studio/engine-tunnel
 ```
 
-The registry suites cover heartbeat cleaning, claims, the relay and its gate, and trust bindings; they run against the Rust core, started per test from `ENGINE_CORE_BIN` (`apps/k7/backend-rs/docs/engine.md`, "The testbed"), and skip without it unless `ENGINE_CORE_REQUIRED=1`, as CI sets. The tunnel suites (`tunnel.test.ts`, `jobs.test.ts`, `hubConfinement.test.ts`, `pathMap.test.ts`, `rtc.test.ts`, `renderKey.test.ts`, `frames.test.ts`, `jobsClient.test.ts`, `drain.test.ts`) run that hub against the agents listed in `testAgents.ts`: the TypeScript agent always, and the native supervisor's `tunnel_harness` when a build of it exists, so both agents are held to one wire. The native agent is skipped, not failed, when it is not built.
+The registry suites cover heartbeat cleaning, claims, the relay and its gate, and trust bindings; they run against the Rust core, started per test from `ENGINE_CORE_BIN` (`apps/k7-daw-backend/docs/engine.md`, "The testbed"), and skip without it unless `ENGINE_CORE_REQUIRED=1`, as CI sets. The tunnel suites (`tunnel.test.ts`, `jobs.test.ts`, `hubConfinement.test.ts`, `pathMap.test.ts`, `rtc.test.ts`, `renderKey.test.ts`, `frames.test.ts`, `jobsClient.test.ts`, `drain.test.ts`) run that hub against the agents listed in `testAgents.ts`: the TypeScript agent always, and the native supervisor's `tunnel_harness` when a build of it exists, so both agents are held to one wire. The native agent is skipped, not failed, when it is not built.

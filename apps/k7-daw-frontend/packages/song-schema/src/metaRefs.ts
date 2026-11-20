@@ -6,7 +6,7 @@
 export const META_NS = "@meta";
 export const metaRef = (slug: string): string => `${META_NS}/${slug}`;
 
-// --- curve refs (see packages/song/docs/curves.md) -------------------------------
+// --- curve refs (see apps/k7-daw-frontend/packages/song/docs/curves.md) -------------------------------
 
 /** The type folder a curve ref names — the file still lives at `curves/<id>.k7x`, per-project; this is REF-CONSISTENCY only. */
 const CURVES_CATEGORY = "curves";
@@ -25,7 +25,7 @@ export const curveIdFromRef = (ref: string): string =>
 export const DOC_CATEGORY = "docs";
 export const DOC_REF = `${META_NS}/doc`;
 
-// --- the not-supported module (see packages/song/docs/notSupported.md) -----------
+// --- the not-supported module (see apps/k7-daw-frontend/packages/song/docs/notSupported.md) -----------
 
 /** `@meta/not-supported` — what a node stands on when the plugin it WAS is one k7 cannot load. */
 export const NOT_SUPPORTED_REF = `${META_NS}/not-supported`;
@@ -42,7 +42,7 @@ export const GROUP_TRACK_REF = `${META_NS}/group-track`;
 /** A lane of SHOTS, composited rather than heard: stated, since an empty one would otherwise read as sound. */
 export const PICTURE_TRACK_REF = `${META_NS}/picture-track`;
 
-/** A picture lane's STRIP, its red, green, blue and transparency — shipped in `packages/song/meta/` (packages/song/docs/videoMixer.md). */
+/** A picture lane's STRIP, its red, green, blue and transparency — shipped in `apps/k7-daw-frontend/packages/song/meta/` (apps/k7-daw-frontend/packages/song/docs/videoMixer.md). */
 export const PICTURE_STRIP = `${META_NS}/shaders/video-mixer`;
 /** The strip's shader name, which is what the compiled scene still carries of it. */
 export const PICTURE_STRIP_SHADER = "video-mixer";

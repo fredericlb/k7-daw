@@ -26,7 +26,7 @@ never heard of sessions still works.
 **Every reply about one project carries it back**, and only these do not, because they are
 the machine's rather than a project's: `plugins`, `plugin-scan`, `audio-devices`, `sessions`,
 `edit-plugins`, `whoami` and `rendered`, and the pairing and plugin-type replies beside them. That is a closed set — it is `ENGINE_GLOBAL_REPLIES` in
-`packages/engine-protocol/sessions.ts`, with `PER_SESSION_REPLIES` beside it, and
+`apps/k7-daw-frontend/packages/engine-protocol/sessions.ts`, with `PER_SESSION_REPLIES` beside it, and
 `sessions.test.ts` pins both. It matters that the set is closed: the client's filter passes a
 frame with **no** session at all (so an older engine does not strike it deaf), which is safe
 only for as long as this engine stamps everything else. In `Serve.cpp` the choice is a verb —
@@ -41,7 +41,7 @@ hears the session it subscribed for, not the machine's master.
 
 The engine's own half of this — the registry's threading model and the lifecycle rule — is
 `docs/sessions.md`. Client rules, who picks the name, and why k7's two halves must agree on it
-are in `packages/engine-protocol/docs/sessions.md`.
+are in `apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`.
 
 ## A malformed message is ANSWERED, never thrown
 
@@ -121,7 +121,7 @@ two are one wire.
 
 They go on the master plugin list **before** the meter and the broadcast tap, and therefore before
 `MasterGainPlugin`: those process the mix, this one trims the delivery. The song side of it is
-`packages/song/docs/masterChain.md`.
+`apps/k7-daw-frontend/packages/song/docs/masterChain.md`.
 
 ### `tracks` — the delta, and what it deliberately cannot do
 
@@ -150,7 +150,7 @@ document once and moves it into the baseline; the diff still walks the whole son
 
 No `busy` and no `applied` come back. This path is incremental by construction, and announcing a
 changeset six times a second would drown the one that matters — the full-document path still
-announces its own. `engine/k7-runtime/scripts/track-delta.ts` exercises the three answers.
+announces its own. `apps/k7-daw-engine/k7-runtime/scripts/track-delta.ts` exercises the three answers.
 
 ### The numbers are bounded where they arrive
 
@@ -261,7 +261,7 @@ drained or pumped on a skipped tick, which is safe precisely because a tap or a 
 makes a session non-idle.
 
 A client must not read the cadence as a signal: it is not a heartbeat, and
-`packages/engine-browser`'s store drops an identical frame anyway (`docs/meters.md`).
+`apps/k7-daw-frontend/packages/engine-browser`'s store drops an identical frame anyway (`docs/meters.md`).
 
 ### …and it goes only to the sockets that asked about that project
 
@@ -292,6 +292,6 @@ socket's own filter drops.
 
 One message type, and the only binary this socket carries: a frame of master audio, sent
 only to connections that asked with `broadcast`. A 32-byte header then interleaved
-float32, or little-endian int16 for a connection that asked for `pcm16` (codec byte 2) — the format lives in `packages/engine-protocol/stream.ts` and is mirrored in
+float32, or little-endian int16 for a connection that asked for `pcm16` (codec byte 2) — the format lives in `apps/k7-daw-frontend/packages/engine-protocol/stream.ts` and is mirrored in
 `server/AudioSender.cpp`'s `encodeStreamFrame`. The two must agree byte for byte, and nothing
 checks that they do but a listener. See docs/broadcast.md.

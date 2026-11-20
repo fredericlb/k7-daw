@@ -73,7 +73,7 @@ export function toWebVideoTracks(
     color: t.color,
     mute: t.mute,
     solo: t.solo,
-    // The LENS wired to this lane, when one is, and when it opens — packages/song/docs/camera.md.
+    // The LENS wired to this lane, when one is, and when it opens — apps/k7-daw-frontend/packages/song/docs/camera.md.
     ...(t.camera === undefined
       ? {}
       : { camera: t.camera, cameraMonitor: t.cameraMonitor ?? "on" }),

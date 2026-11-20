@@ -1,8 +1,8 @@
 # A workspace under git: the screens
 
 The home page connects a workspace to a git remote or clones one, and a bar over the workspace shows where it stands
-against the remote. The routes are `apps/k7/backend-rs/docs/files/git.md`, the repository and the merge are
-`apps/k7/backend-rs/docs/git.md`; this page covers what the screens decided. The code is `src/git/`.
+against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the repository and the merge are
+`apps/k7-daw-backend/docs/git.md`; this page covers what the screens decided. The code is `src/git/`.
 
 ## Choices
 

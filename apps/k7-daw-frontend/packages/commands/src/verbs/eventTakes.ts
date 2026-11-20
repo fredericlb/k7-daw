@@ -1,7 +1,7 @@
 // eventTakes.ts — the takes verbs: `event comp` picks which take plays over a span, `event take
 // remove` drops one, `event take midi` files a MIDI pass recorded in the takes view. The event is
 // found in the LANE FILE by its start, not among the compiled clips: once comped, its first piece
-// may be a take starting elsewhere. See packages/song/docs/takes.md.
+// may be a take starting elsewhere. See apps/k7-daw-frontend/packages/song/docs/takes.md.
 
 import {
   addEventTake,

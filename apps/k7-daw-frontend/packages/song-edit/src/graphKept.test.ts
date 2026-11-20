@@ -15,7 +15,7 @@ import { renameChainNode } from "./projectEdit";
 let dir: string;
 beforeEach(() => {
   dir = join(mkdtempSync(join(tmpdir(), "graph-kept-")), "synth-demo.k7");
-  cpSync(join(__dirname, "../../../demos/synth-demo.k7"), dir, {
+  cpSync(join(__dirname, "../../../../../demos/synth-demo.k7"), dir, {
     recursive: true,
   });
 });

@@ -23,7 +23,7 @@ import { openSocket } from "./rtcSocket.ts";
 export type BeginActivity = (name: string) => () => void;
 const noActivity: BeginActivity = () => () => {};
 
-/** Add up work by name, for a host that watches for stalls — see apps/k7/frontend/docs/shell.md. */
+/** Add up work by name, for a host that watches for stalls — see apps/k7-daw-frontend/docs/shell.md. */
 export type Tally = (name: string, ms: number, bytes?: number) => void;
 const noTally: Tally = () => {};
 
@@ -125,7 +125,7 @@ export abstract class EngineLink {
       // The device's key before anything: over the LAN the engine answers nothing else until it sees one (docs/pairing.md).
       const pair = pairFrameFor(url);
       if (pair) ws.send(pair);
-      // Say we DRIVE this session first: the engine frees a project whose last driver left — see engine/k7-runtime/docs/sessions.md.
+      // Say we DRIVE this session first: the engine frees a project whose last driver left — see apps/k7-daw-engine/k7-runtime/docs/sessions.md.
       this.sendNow({ type: "hello", role: "driver" });
       // What this client holds and a restarted engine does not — each layer adds its own.
       this.replay();

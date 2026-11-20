@@ -1,7 +1,7 @@
 // mapping.ts — which controls a `turntables` surface must have wired before it can be drawn,
 // and which of them a given `mapping` is missing. The desk's own vocabulary: @studio/song
 // validates the SHAPE of a mapping and deliberately not its ids.
-// See packages/song/docs/surfaces.md.
+// See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
 
 import type { MixView } from "@studio/song-schema/yaml/mixViewSchema";
 import { unmappedControls as unmapped } from "@studio/ui-chains/bindings";

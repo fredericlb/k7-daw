@@ -124,7 +124,7 @@ fn expected_tree(c: &Json) -> BTreeMap<String, String> {
 }
 
 fn open_cases() -> Vec<(Json, MemFs, Vec<Json>)> {
-    let meta = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../song/meta");
+    let meta = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../k7-daw-frontend/packages/song/meta");
     cases("openRepairs")
         .into_iter()
         .map(|c| {

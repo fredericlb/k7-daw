@@ -1,7 +1,7 @@
 // sceneFrom.ts — a WebVideoProject -> the plain VideoScene @studio/ui-eyes takes, every URL made
 // by the caller's own `urlOf`. Browser-free, so a SERVER render builds the very scene a browser
 // export does; scene.ts is the browser's door to it, with the file service's /media as its URLs.
-// See apps/k7/backend-rs/docs/file-engine-jobs.md.
+// See apps/k7-daw-backend/docs/file-engine-jobs.md.
 
 import { PICTURE_STRIP_SHADER } from "@studio/song-schema/moduleTypes";
 import {
@@ -60,7 +60,7 @@ export function sceneFrom(
       id: t.id,
       // The FOLD, done here: `mute` on the wire is the lane's own flag, and the scene wants the answer.
       mute: laneHidden(proj.videoTracks, t, armed),
-      // The lens, DROPPED when shut: a camera nothing draws must not be opened (packages/song/docs/camera.md).
+      // The lens, DROPPED when shut: a camera nothing draws must not be opened (apps/k7-daw-frontend/packages/song/docs/camera.md).
       ...(t.camera !== undefined && lensOpen(t, armed)
         ? { camera: t.camera }
         : {}),

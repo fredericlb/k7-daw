@@ -2,7 +2,7 @@
 // minimal immediately-playable project (one MIDI track through a 4OSC synth + a live
 // Strudel pattern), and `video`, the same thing with a lane of PICTURE over it. The third
 // archetype, `mix`, is scaffoldSet.ts. A new project is written as chain files.
-// Full rationale: docs/scaffold.md, and packages/song-video/docs/picture.md for the video half.
+// Full rationale: docs/scaffold.md, and apps/k7-daw-frontend/packages/song-video/docs/picture.md for the video half.
 
 import { copyFileSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -21,7 +21,7 @@ const SAMPLE_VIDEO = resolve(
   "samples",
   "video",
   "sample.mp4",
-); // packages/song/samples/video/sample.mp4
+); // apps/k7-daw-frontend/packages/song/samples/video/sample.mp4
 
 /** Write a project's file map under `dir`, making the folders it implies; a `.k7x` must read, anything else goes as given. */
 export function writeProjectFiles(

@@ -10,11 +10,11 @@ import { join } from "node:path";
 import { DENY, denied } from "./cargoLockDeny.mjs";
 
 const LOCKED = [
-  "apps/k7/backend-rs",
-  "apps/k7-desktop/src-tauri",
-  "packages/song-schema/rust",
-  "packages/k7-wasm/rust",
-  "packages/song/rust",
+  "apps/k7-daw-backend",
+  "apps/k7-daw-desktop/src-tauri",
+  "apps/k7-daw-wasm/song-schema",
+  "apps/k7-daw-wasm/k7-wasm",
+  "apps/k7-daw-wasm/song",
 ];
 
 const refused = LOCKED.flatMap((dir) => {

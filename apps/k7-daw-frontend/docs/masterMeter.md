@@ -19,7 +19,7 @@ with the desk) gives the top 20 dB — where a mix is judged — 60 % of the len
 of three zones (ok, hot from −6 dB, clip from full scale) in k7's meter tokens, and a **peak mark**
 holds where the loudest moment put it for 1.5 s, then falls at 20 dB/s. The mark is a NUMBER computed
 with the frame (`nextPeakMark`, `peakMarkLevel`), never a CSS ease, for the reason
-`packages/engine-browser/docs/meters.md` gives; it is drawn only while the transport rolls, since no
+`apps/k7-daw-frontend/packages/engine-browser/docs/meters.md` gives; it is drawn only while the transport rolls, since no
 frame moves it once stopped and a mark frozen mid-fall would read as a level. Its value joins the
 reading in the fader's tooltip, the one that shows: the mark sits under the fader like the bar.
 
@@ -61,7 +61,7 @@ them. Then one reload, so the fader catches up with the number just written unde
 > strip needs deduplicating to avoid a race between two absolute writes, and a strip already near
 > the floor cannot take the full trim — so the balance the trim promised to preserve shifts anyway.
 > The output has none of those shapes. See
-> `@studio/song`'s [`docs/masterVolume.md`](../../../../packages/song/docs/masterVolume.md)
+> `@studio/song`'s [`docs/masterVolume.md`](../packages/song/docs/masterVolume.md)
 > for why the level sits on the node.
 
 `gainTrim.ts` is the arithmetic, pure and tested. Three decisions live in it:
@@ -137,7 +137,7 @@ fall back on and "nothing to fix" has to be said out loud.
 ## The fader ON it
 
 The bar says how loud the mix IS; the handle riding on it says how loud it should be — the song's own
-output level (`@studio/song`'s [`docs/masterVolume.md`](../../../../packages/song/docs/masterVolume.md)).
+output level (`@studio/song`'s [`docs/masterVolume.md`](../packages/song/docs/masterVolume.md)).
 **One lane, not two controls**: they are the same subject read in two directions, and the level the
 handle sets is half the reason the bar reads where it does. The meter IS the fader's track.
 
@@ -188,7 +188,7 @@ are looking at.
 ## What the meter DOES include
 
 The **output level is upstream of it** (`@studio/song`'s
-[`docs/masterVolume.md`](../../../../packages/song/docs/masterVolume.md)). The bar, the clip light
+[`docs/masterVolume.md`](../packages/song/docs/masterVolume.md)). The bar, the clip light
 and the peak the Fix button spends all read the mix *with* the handle's own level applied.
 
 That is what makes the two halves of this component one control. The button writes the fader's own
@@ -202,7 +202,7 @@ will tell you when it stops fitting — at the price that the bar cannot separat
 not tell you how loud the mix was before the fader.
 
 The master **chain** is upstream of all of it (`@studio/song`'s
-[`docs/masterChain.md`](../../../../packages/song/docs/masterChain.md)), so a limiter there is
+[`docs/masterChain.md`](../packages/song/docs/masterChain.md)), so a limiter there is
 something the clip light cannot see past.
 
 ## The engine's memory, beside its name
@@ -211,5 +211,5 @@ something the clip light cannot see past.
 of each audio block. It sits in the project bar's engine health, with the connection light and the
 latency (`EngineLink.tsx`), and not beside this meter: the figure is the engine's, not this
 project's — every session on that engine counts in it. Why memory is the process's and not a node's is
-`engine/k7-runtime/docs/load.md`; the node's own CPU is on its card. Rounded to whole megabytes
+`apps/k7-daw-engine/k7-runtime/docs/load.md`; the node's own CPU is on its card. Rounded to whole megabytes
 and percents in the selectors, so a report that moves neither re-renders nothing.

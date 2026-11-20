@@ -2,7 +2,7 @@
 // the timeline's file DROP and by a recorded picture TAKE, which do the same thing for different
 // reasons and must not drift on the one that matters: an existing declaration is never overwritten.
 // A name already taken by DIFFERENT bytes is not reused: the clip gets the next free id. See
-// apps/k7/frontend/docs/timeline.md, "Same name, different file".
+// apps/k7-daw-frontend/docs/timeline.md, "Same name, different file".
 
 import { parse } from "@studio/k7x/document";
 import { mediaUrl } from "@studio/project-shell/fileApi";

@@ -1,6 +1,6 @@
 //! registry — the engines a heartbeat listed, the CLAIMS saying which project each drives for whom, and the
 //! store that outlives a listing (the secret bindings). The claim's three rules are
-//! `apps/k7/backend-rs/docs/engine/claim.md`; the token proves nothing (`token.md` there).
+//! `apps/k7-daw-backend/docs/engine/claim.md`; the token proves nothing (`token.md` there).
 
 pub mod bindings;
 mod claims;

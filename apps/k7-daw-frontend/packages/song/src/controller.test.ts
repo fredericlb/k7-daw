@@ -21,8 +21,8 @@ import {
 import { bindModuleCc } from "./controllerBind";
 import { loadGraph } from "./graph";
 
-const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
-const DEMOS = join(here, "..", "..", "..", "demos");
+const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
+const DEMOS = join(here, "..", "..", "..", "..", "..", "demos");
 const SONG = join(DEMOS, "synth-demo.k7");
 const REF = "@workspace/instruments/synth";
 

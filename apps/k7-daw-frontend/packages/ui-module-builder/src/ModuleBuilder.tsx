@@ -117,7 +117,7 @@ export function ModuleScreen({
   baseModules?: string[];
   // A save the host REDIRECTED: this component does not follow paths on its own — see docs/builder.md.
   onRelocated?: (path: string) => void;
-  // What fills the box under the grid; the host owns its contents — packages/ui-chains-react/docs/hosting.md.
+  // What fills the box under the grid; the host owns its contents — apps/k7-daw-frontend/packages/ui-chains-react/docs/hosting.md.
   renderPreview?: (view: {
     ui: ModuleUI;
     params: Record<string, number>;

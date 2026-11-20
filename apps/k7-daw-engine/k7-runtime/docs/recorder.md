@@ -7,10 +7,10 @@ same reason — the capture is a side effect, not a detour the signal takes.
 
 It is **free-running**. Press record and it captures; press again and it stops. The transport is
 never consulted, and that is the whole point: a `live` rig has no arrangement and never presses
-play (`packages/song/docs/liveProject.md`). This is what track-and-transport recording
+play (`apps/k7-daw-frontend/packages/song/docs/liveProject.md`). This is what track-and-transport recording
 (`Recording.cpp`) has no answer for.
 
-The browser half is `packages/song/docs/outputRecording.md`; this page is the engine's.
+The browser half is `apps/k7-daw-frontend/packages/song/docs/outputRecording.md`; this page is the engine's.
 
 ## Where the audio is copied, and by whom
 
@@ -188,7 +188,7 @@ anywhere is the file service's, which runs on the machine the file is on.
 
 `<recordDir>/<node>-<stamp>.wav`, 32-bit float at whatever rate the samples are actually at.
 `recordDir` is the document's — the same directory transport takes go to — which is what lets the
-file service check a path a browser hands it (`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/verb_host/take.rs`).
+file service check a path a browser hands it (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/verb_host/take.rs`).
 
 Float, and not converted here: a take is raw capture, and a bit depth is a decision the person
 saving it has not made yet.

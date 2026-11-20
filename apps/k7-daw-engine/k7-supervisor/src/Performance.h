@@ -1,7 +1,7 @@
 // Performance.h — measures this machine once, for the rating the heartbeat carries: one core's DSP
 // throughput, the cores, a durable write and an fsync rate on the state dir's disk, the memory. Run
 // before the engine starts, so the CPU loop does not measure a plugin scan. The SCORING is
-// packages/web-protocol/performance.ts's, ported line for line and tested against its numbers.
+// apps/k7-daw-frontend/packages/web-protocol/performance.ts's, ported line for line and tested against its numbers.
 
 #pragma once
 

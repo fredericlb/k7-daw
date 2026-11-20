@@ -1,17 +1,17 @@
 # song-edit: surgical writes
 
-`packages/song-edit` changes a project in its own vocabulary — "set `Filter Freq` on node `lead`",
+`apps/k7-daw-frontend/packages/song-edit` changes a project in its own vocabulary — "set `Filter Freq` on node `lead`",
 "split this event at beat 9", "insert two bars at bar 17" — by finding the file a name lives in and
 rewriting **only the value that changes**. Every other byte stays: comments, key order, quoting,
 inline lists. A knob drag is therefore a one-line diff, the file stays readable in git, and the
 history can express the change as a key-path operation instead of a whole-file replace.
 
-The writes themselves are Rust: `packages/song-edit/rust` is the one implementation, and each exported function under
-`packages/song-edit/src` (and song's write subpaths) is a call into it — over WebAssembly in the verbs' Worker and in
-node, and called directly by the Rust file service (`packages/k7-wasm/docs/edit.md`). The TypeScript that stays is the glue for the
+The writes themselves are Rust: `apps/k7-daw-wasm/song-edit` is the one implementation, and each exported function under
+`apps/k7-daw-frontend/packages/song-edit/src` (and song's write subpaths) is a call into it — over WebAssembly in the verbs' Worker and in
+node, and called directly by the Rust file service (`apps/k7-daw-frontend/packages/k7-wasm/docs/edit.md`). The TypeScript that stays is the glue for the
 functions that take a document callback (`editTrackStruct`, `editModuleFile`).
 
-Its callers are the verbs of `packages/commands` (for example `packages/commands/src/verbs/track.ts`,
+Its callers are the verbs of `apps/k7-daw-frontend/packages/commands` (for example `apps/k7-daw-frontend/packages/commands/src/verbs/track.ts`,
 `crossfade.ts`, `preset.ts`, `eventTakes.ts`, `engine.ts`), which every surface — the command bar,
 the timeline, the mixer, the chains view — goes through.
 
@@ -19,10 +19,10 @@ the timeline, the mixer, the chains view — goes through.
 
 | Layer | File | What it does |
 |---|---|---|
-| One value in one file | `packages/song/src/yaml/edit.ts` | `setFileValue(file, path, value)`, `deleteFileValue`: one key path set or removed on the file's k7x document, so the rest of it is reproduced byte for byte; an inline list stays inline. |
-| Writers per file kind | the `*File.ts` modules of `packages/song-schema/src/yaml/` | Functions over a `K7Scope`: `trackFile` (events), `sequenceFile` (notes), `videoTrackFile`, `takeFile`, `curveFile`, `graphFile` (segments), `chainFile`, `moduleFile`. Browser-safe, because editor panes apply them to unsaved buffers too. |
-| The k7x document | `packages/k7x/src/edit.ts` | `K7Document` with `setIn`/`deleteIn`/`applyIn` on key paths, rewriting only the span of the value. |
-| The door | `packages/song/src/yaml/workspaceDoc.ts` | `wsEdit(path, edit)` runs a writer on the file's document and writes it back atomically, skipping a write that changes nothing (`packages/song/docs/k7xFiles.md`). |
+| One value in one file | `apps/k7-daw-frontend/packages/song/src/yaml/edit.ts` | `setFileValue(file, path, value)`, `deleteFileValue`: one key path set or removed on the file's k7x document, so the rest of it is reproduced byte for byte; an inline list stays inline. |
+| Writers per file kind | the `*File.ts` modules of `apps/k7-daw-frontend/packages/song-schema/src/yaml/` | Functions over a `K7Scope`: `trackFile` (events), `sequenceFile` (notes), `videoTrackFile`, `takeFile`, `curveFile`, `graphFile` (segments), `chainFile`, `moduleFile`. Browser-safe, because editor panes apply them to unsaved buffers too. |
+| The k7x document | `apps/k7-daw-frontend/packages/k7x/src/edit.ts` | `K7Document` with `setIn`/`deleteIn`/`applyIn` on key paths, rewriting only the span of the value. |
+| The door | `apps/k7-daw-frontend/packages/song/src/yaml/workspaceDoc.ts` | `wsEdit(path, edit)` runs a writer on the file's document and writes it back atomically, skipping a write that changes nothing (`apps/k7-daw-frontend/packages/song/docs/k7xFiles.md`). |
 
 ## Modules
 
@@ -61,5 +61,5 @@ the timeline, the mixer, the chains view — goes through.
 
 `npm test` in the package. Each module has a `*.test.ts` that writes a small project to a temporary
 folder (or works on a literal text), applies the edit, and compares text: the assertion that matters
-is that unrelated lines and comments are unchanged. `packages/song-edit/src/projectEndToEnd.test.ts`
+is that unrelated lines and comments are unchanged. `apps/k7-daw-frontend/packages/song-edit/src/projectEndToEnd.test.ts`
 loads a project, runs the writers over it, and checks it still compiles.

@@ -1,5 +1,5 @@
 //! export.rs — where an export lands on a computer: the host's folder picker, a file written into the folder it
-//! gave, and that folder shown. Choices: `apps/k7/backend-rs/docs/export.md`.
+//! gave, and that folder shown. Choices: `apps/k7-daw-backend/docs/export.md`.
 //! What a reader gets wrong: a folder is writable only if the host's dialog returned it during this run.
 
 use std::collections::HashSet;

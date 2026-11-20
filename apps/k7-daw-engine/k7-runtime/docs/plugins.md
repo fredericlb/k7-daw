@@ -211,7 +211,7 @@ path reaches the child's argv intact.
 `~/Library/Application Support` on macOS), so a per-platform rule would have these two halves
 computing different directories on two of the three. A wrong path here does not throw — the engine
 reads its own cache and logs "N from cache" while the TypeScript finds nothing and draws every
-`@engine/…` module unresolved. See packages/engine-client/docs/paths.md.
+`@engine/…` module unresolved. See apps/k7-daw-frontend/packages/engine-client/docs/paths.md.
 
 The cache is `<state>/exts.json` (in `$K7_SETTINGS_DIR` instead when one is set, `docs/settingsDir.md`), keyed by identifier and carrying the file's mtime. An entry is
 reused only when the file is unchanged **and** it already holds a full `PluginDescription` as XML
@@ -246,7 +246,7 @@ reply carries `scanning` too, so whoever asks for the list knows it is about to 
 `plugin-scan` with `scanning: false` — a scan that throws included, since a gate waiting on it
 would otherwise wait for nothing. A client that re-reads the catalogue on the end finds the list
 already sent; the account file services and the hub write their copy of the scan from it
-(`packages/song/docs/enginePlugin.md`).
+(`apps/k7-daw-frontend/packages/song/docs/enginePlugin.md`).
 
 `cachedPluginInfos()` memoises the parsed cache, because `makeExternalPlugin` runs per plugin and
 re-parsing added up on projects with many. It is handed out as a **shared snapshot**, not a

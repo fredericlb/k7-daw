@@ -1,4 +1,4 @@
-// RtcFrames_test.cpp — the cases of packages/web-protocol/rtcFrames.test.ts: a frame cut into
+// RtcFrames_test.cpp — the cases of apps/k7-daw-frontend/packages/web-protocol/rtcFrames.test.ts: a frame cut into
 // fragments comes back byte for byte, text or binary, at every size around the fragment boundary.
 
 #include "RtcFrames.h"

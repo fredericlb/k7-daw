@@ -2,7 +2,7 @@
 //
 // It declares no `surfaces/` — no timeline, no viewport, no desk — and that is the whole
 // of what makes it this shape rather than another. A project draws what it DECLARES, so
-// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.
+// this one opens on its graph and nothing else. See apps/k7-daw-frontend/packages/song/docs/liveProject.md.
 //
 // It holds no material either: no `clips/`, no `sequences/`. Nothing is arranged, so
 // nothing warns about an arrangement that is not drawn.

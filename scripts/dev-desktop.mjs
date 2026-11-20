@@ -8,21 +8,21 @@ import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, statSync, watch } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { stopAll } from "../engine/scripts/devEngine.mjs";
-import { sccacheEnv } from "../engine/scripts/sccache.mjs";
-import { CROSS } from "../engine/scripts/stageEngine.mjs";
+import { stopAll } from "../apps/k7-daw-engine/scripts/devEngine.mjs";
+import { sccacheEnv } from "../apps/k7-daw-engine/scripts/sccache.mjs";
+import { CROSS } from "../apps/k7-daw-engine/scripts/stageEngine.mjs";
 import {
   buildSupervisor,
   findSupervisor,
-} from "../engine/scripts/supervisorBuild.mjs";
+} from "../apps/k7-daw-engine/scripts/supervisorBuild.mjs";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
-const engineDir = join(repo, "engine", "k7-runtime");
-const supervisorDir = join(repo, "engine", "k7-supervisor");
-const desktopDir = join(repo, "apps", "k7-desktop");
+const engineDir = join(repo, "apps", "k7-daw-engine", "k7-runtime");
+const supervisorDir = join(repo, "apps", "k7-daw-engine", "k7-supervisor");
+const desktopDir = join(repo, "apps", "k7-daw-desktop");
 const tauriDir = join(desktopDir, "src-tauri");
-// The Rust front, which the desktop app links: its crates are in the desktop app's binary (apps/k7/backend-rs/docs/front.md).
-const frontDir = join(repo, "apps", "k7", "backend-rs");
+// The Rust front, which the desktop app links: its crates are in the desktop app's binary (apps/k7-daw-backend/docs/front.md).
+const frontDir = join(repo, "apps", "k7-daw-backend");
 // The bundle the dev desktop app reads (the library it seeds), rebuilt at every start of the task; gitignored.
 const bundleDir = join(desktopDir, ".dev", "backend");
 
@@ -85,10 +85,10 @@ const TARGETS = {
         match: (b) => b === "Cargo.toml" || b === "tauri.conf.json",
       },
     ],
-    // The front the desktop app links (Cargo.toml, `path = ../../k7/backend-rs/crates/…`): its own task builds it too.
+    // The front the desktop app links (Cargo.toml, `path = ../../k7-daw-backend/packages/…`): its own task builds it too.
     linked: [
       {
-        path: join(frontDir, "crates"),
+        path: join(frontDir, "packages"),
         recursive: true,
         match: (b) => b.endsWith(".rs") || b === "Cargo.toml",
       },
@@ -114,7 +114,7 @@ function buildEngine() {
   const script = { win32: "build:win", darwin: "build:mac" }[process.platform];
   if (!script) {
     log(
-      "no engine build script for this platform — leaving engine/k7-runtime/build as it is",
+      "no engine build script for this platform — leaving apps/k7-daw-engine/k7-runtime/build as it is",
     );
     return;
   }
@@ -133,7 +133,7 @@ function buildEngine() {
     );
 }
 
-/** The bundle, with k7's frontend built inside unless the page comes from Vite (apps/k7-desktop/scripts/stage.mjs). */
+/** The bundle, with k7's frontend built inside unless the page comes from Vite (apps/k7-daw-desktop/scripts/stage.mjs). */
 function buildBundle() {
   if (!devFrontend)
     run(
@@ -145,8 +145,7 @@ function buildBundle() {
   const bundle = join(
     repo,
     "apps",
-    "k7",
-    "backend-rs",
+    "k7-daw-backend",
     "scripts",
     "stageBundle.mjs",
   );
@@ -166,7 +165,7 @@ function engineBinary() {
   if (!existsSync(build)) return null;
   const names = ["k7-runtime.exe", "k7-runtime"];
   const found = [];
-  // A phone's build sits beside this machine's; running it here fails to spawn (engine/scripts/stageEngine.mjs).
+  // A phone's build sits beside this machine's; running it here fails to spawn (apps/k7-daw-engine/scripts/stageEngine.mjs).
   for (const preset of readdirSync(build).filter((p) => !CROSS.test(p)))
     for (const cfg of ["", "Release", "RelWithDebInfo", "Debug"])
       for (const name of names) {

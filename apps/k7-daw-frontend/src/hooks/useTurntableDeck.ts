@@ -1,7 +1,7 @@
 // useTurntableDeck.ts — k7's engine link, seen as the desk's `Deck`. The one thing
 // the turntables plugin (@studio/k7-plugins) asks of a host, and the one place a host's own arrangements show:
 // obtaining an engine is the app's business, and k7 already has one by the time a surface can
-// exist. See packages/k7-plugins/docs/turntables/hosting.md.
+// exist. See apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/hosting.md.
 
 import type { EngineClient } from "@studio/engine-browser";
 import type { PluginParamsStore } from "@studio/engine-browser/params";

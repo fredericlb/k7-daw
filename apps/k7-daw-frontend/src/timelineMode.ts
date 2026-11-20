@@ -1,8 +1,8 @@
 // timelineMode.ts — which MODE the timeline's keyboard is in, and it is DERIVED rather than
 // stored. The three states already exist and already exclude one another (`move`, `sel`, neither);
 // naming them must not add a fourth source of truth that can disagree with them — the rule
-// `packages/song/docs/surfaces.md` states for `surfaces/` against a `project_type`.
-// See apps/k7/frontend/docs/timeline.md.
+// `apps/k7-daw-frontend/packages/song/docs/surfaces.md` states for `surfaces/` against a `project_type`.
+// See apps/k7-daw-frontend/docs/timeline.md.
 
 /** Where the keyboard is. A TOOL is the other axis — what a PRESS means (timelineTools.ts). */
 export type TimelineMode = "normal" | "select" | "move";

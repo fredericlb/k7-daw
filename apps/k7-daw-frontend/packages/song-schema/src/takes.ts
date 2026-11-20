@@ -2,7 +2,7 @@
 // song. Pure, so the compiler, the writers and the browser's takes view share one rule.
 // The one thing a reader would get wrong: a comp span is in SONG time, not in the take's own time —
 // a take carries where it starts, and its material is read from (span start − take start).
-// See packages/song/docs/takes.md.
+// See apps/k7-daw-frontend/packages/song/docs/takes.md.
 
 /** A take on an event: its material, and the song beat its material's first beat lands on. */
 export interface Take {

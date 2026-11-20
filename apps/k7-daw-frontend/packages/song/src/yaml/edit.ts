@@ -1,5 +1,5 @@
 // edit.ts — set or clear one field of a workspace file, in place: the FILE primitive, which knows nothing about
-// modules or chains (that's packages/song-edit/src/projectEdit.ts). An edit through the k7x door, so every other byte stays.
+// modules or chains (that's apps/k7-daw-frontend/packages/song-edit/src/projectEdit.ts). An edit through the k7x door, so every other byte stays.
 
 import type { K7Path } from "@studio/k7x/ast";
 import { stub } from "../editStub";

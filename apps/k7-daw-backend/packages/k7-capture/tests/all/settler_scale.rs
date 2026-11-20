@@ -49,7 +49,7 @@ fn burst(
 fn a_burst_of_library_joins_through_the_process_k7x_half() {
     let mut files = vec![];
     k7x_files(
-        &std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../../k7-core"),
+        &std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../k7-core"),
         &mut files,
     );
     println!(

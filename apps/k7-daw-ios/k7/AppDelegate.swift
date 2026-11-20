@@ -2,7 +2,7 @@
 // engine); its one scene (SceneDelegate) hosts the shell page and, over it, the studio apps in views of their own
 // (MainViewController, AppViews). Everything lives in this one process, as long as iOS lets it: Quit stops the supervisor, the backend
 // and the engine and ends the process, which is also the only way to restart an engine (EngineBridge).
-// See engine/k7-runtime/docs/ios.md.
+// See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import UIKit
 
@@ -10,7 +10,7 @@ import UIKit
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     static let supervisorStop: TimeInterval = 4
     private static let engineStop: TimeInterval = 3
-    // Longer than the front's own stop, so its accounts are not ended mid-teardown (apps/k7/backend-rs/docs/embed.md).
+    // Longer than the front's own stop, so its accounts are not ended mid-teardown (apps/k7-daw-backend/docs/embed.md).
     private static let backendStop: TimeInterval = 10
 
     func application(_ application: UIApplication,

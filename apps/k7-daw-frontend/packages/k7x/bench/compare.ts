@@ -19,8 +19,8 @@ import { K7SyntaxError, parseTree } from "../src/parse.ts";
 import { stringify } from "../src/print.ts";
 
 const HERE = import.meta.dirname;
-const ROOT = join(HERE, "..", "..", "..");
-const RUST = join(HERE, "..", "rust");
+const ROOT = join(HERE, "..", "..", "..", "..", "..");
+const RUST = join(HERE, "..", "..", "..", "..", "k7-daw-wasm", "k7x");
 const ITERS = Number(process.env.K7X_BENCH_ITERS ?? 50);
 const out = mkdtempSync(join(tmpdir(), "k7x-bench-"));
 

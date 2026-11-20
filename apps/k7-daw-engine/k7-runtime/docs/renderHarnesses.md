@@ -1,6 +1,6 @@
 # The render-and-measure harnesses
 
-Three scripts under `engine/k7-runtime/scripts/` prove something about the SOUND by rendering a
+Three scripts under `apps/k7-daw-engine/k7-runtime/scripts/` prove something about the SOUND by rendering a
 document and measuring the wav: `warp-points.ts` (a clip's interior warp map), `pad-effects.ts` (a
 sequencer pad's `repeat` and `skip`) and `quick-master.ts` (what `QuickMasterPlugin` claims). They
 exist because the claim is a fact about a live `te::Edit`, which the four C++ suites build none of
@@ -10,14 +10,14 @@ They all cost a real render, so none of them is in `ctest` or in vitest, and no 
 `nam-rate.ts` is not among them: it measures a `.nam` model it is handed. Run them by hand:
 
 ```
-npx tsx engine/k7-runtime/scripts/warp-points.ts
-npx tsx engine/k7-runtime/scripts/pad-effects.ts
-npx tsx engine/k7-runtime/scripts/quick-master.ts
+npx tsx apps/k7-daw-engine/k7-runtime/scripts/warp-points.ts
+npx tsx apps/k7-daw-engine/k7-runtime/scripts/pad-effects.ts
+npx tsx apps/k7-daw-engine/k7-runtime/scripts/quick-master.ts
 ```
 
 What follows is the measurement method, which is the hard part. The subject matter itself lives
 elsewhere: [warp.md](warp.md), [quickMaster.md](quickMaster.md), and
-`packages/song/docs/padEffects.md`.
+`apps/k7-daw-frontend/packages/song/docs/padEffects.md`.
 
 ## Measure what the process does not smear
 
@@ -110,7 +110,7 @@ single hits instead of whole passes.
 
 ## `master-chain.ts`: prove the plugin RAN, then prove the number
 
-A fourth harness, `engine/k7-runtime/scripts/master-chain.ts`, checks that a master chain and the OUT
+A fourth harness, `apps/k7-daw-engine/k7-runtime/scripts/master-chain.ts`, checks that a master chain and the OUT
 node's own trim both reach the sound. It makes two different kinds of claim and measures them
 differently on purpose.
 
@@ -120,7 +120,7 @@ that check is a MARGIN rather than exact silence: the fader's own curve decides 
 question being asked is only whether the plugin ran at all.
 
 The parameter is `Volume`, capitalised, which is the name the plugin publishes
-(`packages/song-schema/src/builtinParams.generated.json`). A lowercase key matches nothing and
+(`apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json`). A lowercase key matches nothing and
 changes nothing, silently, which is the failure this case is shaped to catch.
 
 The trim case is the opposite. `MasterGainPlugin` takes dB straight to a linear factor with no

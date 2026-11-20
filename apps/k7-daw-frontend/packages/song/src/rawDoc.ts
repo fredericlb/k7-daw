@@ -159,7 +159,7 @@ export interface LoadedModule {
   tap_outs?: Record<string, string>;
   // Needs the WHOLE input before producing any of it, and is inherited — see docs/coldModules.md.
   cold?: boolean;
-  // The engine's dry/wet around the effect, 0..1, inherited like any field — engine/k7-runtime/docs/mix.md.
+  // The engine's dry/wet around the effect, 0..1, inherited like any field — apps/k7-daw-engine/k7-runtime/docs/mix.md.
   mix?: number;
   // …and its levels on the same stage, in dB.
   input_volume?: number;
@@ -181,8 +181,8 @@ export interface LoadedModule {
   // The module's MIDI map from its folder's `controller.k7x`, stamped on beside `ui` and by the same rule.
   cc?: unknown;
   channel?: unknown; // io "in" only
-  camera?: unknown; // io "camera" only — the LABEL, see packages/song/docs/camera.md
-  device?: unknown; // io "midi" only — the MIDI device's LABEL, see packages/song/docs/midiIn.md
+  camera?: unknown; // io "camera" only — the LABEL, see apps/k7-daw-frontend/packages/song/docs/camera.md
+  device?: unknown; // io "midi" only — the MIDI device's LABEL, see apps/k7-daw-frontend/packages/song/docs/midiIn.md
   frame?: unknown; // …and its rectangle in the viewport, [x, y, w, h]
   // io "file" only — the audio it reads, project-relative; NOT `file`, which the loader owns (moduleSchema).
   source?: unknown;

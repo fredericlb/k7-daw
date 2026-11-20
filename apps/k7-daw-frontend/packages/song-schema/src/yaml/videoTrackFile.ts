@@ -21,7 +21,7 @@ export interface VideoPlacement {
   sourceFrom: number;
   /** How fast its source runs, signed — present only when the file states one (song-video docs/speed.md). */
   speed?: number;
-  /** Its sound is not played — present only when the file says so (packages/song/docs/videoSound.md). */
+  /** Its sound is not played — present only when the file says so (apps/k7-daw-frontend/packages/song/docs/videoSound.md). */
   silent?: true;
 }
 
@@ -76,7 +76,7 @@ export function listVideoPlacements(
   });
 }
 
-/** Set the LANE's own rect — `frame([x, y, w, h])`, in viewport px, the camera module's spelling (packages/song-video/docs/picture.md). */
+/** Set the LANE's own rect — `frame([x, y, w, h])`, in viewport px, the camera module's spelling (apps/k7-daw-frontend/packages/song-video/docs/picture.md). */
 export function setVideoLaneRect(
   doc: K7Scope,
   rect: { x: number; y: number; w: number; h: number },

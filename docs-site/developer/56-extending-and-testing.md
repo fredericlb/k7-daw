@@ -4,44 +4,44 @@
 
 ### A new field on a shot
 
-1. Add it to `PlacementSchema` in `packages/song-schema/src/yaml/placementSchema.ts`, the one event
+1. Add it to `PlacementSchema` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts`, the one event
    schema sound and shots share. The schema is `.strict()`, so an unknown key is refused on its
    line; a shot-only field goes in `SHOT_KEYS` (refused on sound), and a field that needs a source
    in the list the `superRefine` refuses on an activation.
-2. Carry it in `VideoClipDoc` (`packages/song-video/src/videoDoc.ts`) and read it in
-   `videoPlacementToClip` (`packages/song-video/src/videoTracks.ts`). Keep "absent stays absent".
-3. Mirror it in `WebVideoProject` (`packages/web-protocol/timelineTypes.ts`), in `SceneClip`
-   (`packages/ui-eyes/src/scene.ts`) and in `sceneFrom` (`packages/song-video/src/sceneFrom.ts`).
-4. Use it in `packages/ui-eyes/src/timeline.ts` when it changes *which* frame shows, or in
+2. Carry it in `VideoClipDoc` (`apps/k7-daw-frontend/packages/song-video/src/videoDoc.ts`) and read it in
+   `videoPlacementToClip` (`apps/k7-daw-frontend/packages/song-video/src/videoTracks.ts`). Keep "absent stays absent".
+3. Mirror it in `WebVideoProject` (`apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts`), in `SceneClip`
+   (`apps/k7-daw-frontend/packages/ui-eyes/src/scene.ts`) and in `sceneFrom` (`apps/k7-daw-frontend/packages/song-video/src/sceneFrom.ts`).
+4. Use it in `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts` when it changes *which* frame shows, or in
    `slots.ts` / `motion.ts` when it changes *how* a slot is drawn — every driver goes through those.
 5. Decide what the writers must do with it: `splitVideoPlacementAt` (which half keeps it),
-   `packages/song/src/videoSound.ts` (does the sound follow it), and
-   `packages/song-video/src/interchange/` (carried, or listed as left out).
+   `apps/k7-daw-frontend/packages/song/src/videoSound.ts` (does the sound follow it), and
+   `apps/k7-daw-frontend/packages/song-video/src/interchange/` (carried, or listed as left out).
 6. If it is editable by command, add a verb (below) and a writer in
-   `packages/song-schema/src/yaml/videoTrackFile.ts` that edits by index and rounds as the others do.
+   `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` that edits by index and rounds as the others do.
 
 ### A new `picture …` verb
 
-Declare it in `packages/commands/commands.yaml` in the picture section: `command`, `sid`,
+Declare it in `apps/k7-daw-frontend/packages/commands/commands.yaml` in the picture section: `command`, `sid`,
 `readable` in `en` and `fr` (60 characters at most each; the spec test enforces it), `help`,
 `surfaces: [cli, timeline]`, `args` with `complete: pictureLanes` for a lane, and `menu: [shot]`
-if a shot's right-click should offer it. Implement the handler in `packages/commands/src/verbs/`,
+if a shot's right-click should offer it. Implement the handler in `apps/k7-daw-frontend/packages/commands/src/verbs/`,
 reusing `target`, `laneFile`, `seconds` and `put` from `verbs/picture.ts` (they give addressing,
 containment, refusals and the undo snapshot), and list its table in `VERB_TABLES` in
-`packages/commands/src/commands.ts`. Long-running work goes through `h.background(tag, work)`.
+`apps/k7-daw-frontend/packages/commands/src/commands.ts`. Long-running work goes through `h.background(tag, work)`.
 
 ### A new uniform for shaders
 
-Add it to the shader list in `packages/ui-eyes/src/passes.ts` and set it in the pass-drawing
+Add it to the shader list in `apps/k7-daw-frontend/packages/ui-eyes/src/passes.ts` and set it in the pass-drawing
 function there; extend `ScenePass` if it comes from the document. The list is the contract every
 shader author reads, so keep its comment the one-line definition of the value.
 
 ### A new shape kind
 
-Add the kind to `SHAPE_KINDS` in `packages/song-schema/src/moduleTypes.ts`, a `ShapeDoc` variant in
-`packages/song-video/src/videoDoc.ts`, a branch in `compileShape`
-(`packages/song-video/src/videoChains.ts`), the matching `SceneShape`, and its drawing in
-`packages/ui-eyes/src/rasterize.ts`. Geometry belongs in `params`, as for the existing kinds.
+Add the kind to `SHAPE_KINDS` in `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts`, a `ShapeDoc` variant in
+`apps/k7-daw-frontend/packages/song-video/src/videoDoc.ts`, a branch in `compileShape`
+(`apps/k7-daw-frontend/packages/song-video/src/videoChains.ts`), the matching `SceneShape`, and its drawing in
+`apps/k7-daw-frontend/packages/ui-eyes/src/rasterize.ts`. Geometry belongs in `params`, as for the existing kinds.
 
 ### A shipped shader or transition
 
@@ -53,9 +53,9 @@ module with its two stages directly in the module folder, reading `uFrom`, `uTo`
 
 ### A new project archetype field
 
-The `video` and `live-video` file maps are `videoProjectFiles` in `packages/song/src/scaffold.ts`
-and `liveVideoProjectFiles` in `packages/song/src/scaffoldLive.ts`; both splice the base
-archetype's graph rather than restating it, and `addVideoRun` (`packages/song/src/videoOutputs.ts`)
+The `video` and `live-video` file maps are `videoProjectFiles` in `apps/k7-daw-frontend/packages/song/src/scaffold.ts`
+and `liveVideoProjectFiles` in `apps/k7-daw-frontend/packages/song/src/scaffoldLive.ts`; both splice the base
+archetype's graph rather than restating it, and `addVideoRun` (`apps/k7-daw-frontend/packages/song/src/videoOutputs.ts`)
 adds the `RENDER → VIDEO_OUT` run.
 
 ## Tests
@@ -66,19 +66,19 @@ are split out precisely so they can be tested.
 
 | area | tests |
 |---|---|
-| schemas and writers | `packages/song-schema/src/yaml/videoTrackFile.test.ts`, `videoTrackYaml.test.ts`, `videoKeys.test.ts`, `videoSpeed.test.ts`, `packages/song-schema/src/aspect.test.ts` |
-| the compile | `packages/song-video/src/videoProject.test.ts`, `videoChains.test.ts`, `shaders.test.ts`, `shapes.test.ts`, `videoTitles.test.ts`, `captions.test.ts`, `videoTransitions.test.ts`, `videoStretches.test.ts`, `videoEffects.test.ts`, `videoAnimate.test.ts`, `videoMedia.test.ts`, `camera.test.ts` |
-| interchange | `packages/song-video/src/interchange/interchange.test.ts` (writers, round trips), `import.test.ts` (readers, the OTIO 0.18 fixture) |
-| song side | `packages/song/src/videoOutputs.test.ts`, `videoSound.test.ts`, `chainPicture.test.ts` |
-| renderer | `packages/ui-eyes/src/timeline.test.ts`, `compositor.test.ts`, `passes.test.ts`, `motion.test.ts`, `text.test.ts`, `cube.test.ts`, `camera.test.ts`, `exportSupport.test.ts` |
-| plugin | `packages/song-video/src/pictureMix.test.ts`, `viewportRect.test.ts`, `shaderAudio.test.ts` |
-| verbs | `packages/commands/src/picture.test.ts`, `pictureSpeed.test.ts`, `pictureSound.test.ts`, `pictureMedia.test.ts`, `pictureInterchange.test.ts`, `pictureImport.test.ts`, `pictureRender.test.ts`, `projectAspect.test.ts` |
-| media preparation | `packages/video-prep/src/plan.test.ts`, `transcode.test.ts` (the ffmpeg arguments, not a run) |
-| frontend | `apps/k7/frontend/src/exportArgs.test.ts`, `videoDrag.test.ts`, `videoSpans.test.ts`, `videoTake.test.ts`, `timelineDrop.test.ts` |
+| schemas and writers | `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.test.ts`, `videoTrackYaml.test.ts`, `videoKeys.test.ts`, `videoSpeed.test.ts`, `apps/k7-daw-frontend/packages/song-schema/src/aspect.test.ts` |
+| the compile | `apps/k7-daw-frontend/packages/song-video/src/videoProject.test.ts`, `videoChains.test.ts`, `shaders.test.ts`, `shapes.test.ts`, `videoTitles.test.ts`, `captions.test.ts`, `videoTransitions.test.ts`, `videoStretches.test.ts`, `videoEffects.test.ts`, `videoAnimate.test.ts`, `videoMedia.test.ts`, `camera.test.ts` |
+| interchange | `apps/k7-daw-frontend/packages/song-video/src/interchange/interchange.test.ts` (writers, round trips), `import.test.ts` (readers, the OTIO 0.18 fixture) |
+| song side | `apps/k7-daw-frontend/packages/song/src/videoOutputs.test.ts`, `videoSound.test.ts`, `chainPicture.test.ts` |
+| renderer | `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.test.ts`, `compositor.test.ts`, `passes.test.ts`, `motion.test.ts`, `text.test.ts`, `cube.test.ts`, `camera.test.ts`, `exportSupport.test.ts` |
+| plugin | `apps/k7-daw-frontend/packages/song-video/src/pictureMix.test.ts`, `viewportRect.test.ts`, `shaderAudio.test.ts` |
+| verbs | `apps/k7-daw-frontend/packages/commands/src/picture.test.ts`, `pictureSpeed.test.ts`, `pictureSound.test.ts`, `pictureMedia.test.ts`, `pictureInterchange.test.ts`, `pictureImport.test.ts`, `pictureRender.test.ts`, `projectAspect.test.ts` |
+| media preparation | `apps/k7-daw-frontend/packages/video-prep/src/plan.test.ts`, `transcode.test.ts` (the ffmpeg arguments, not a run) |
+| frontend | `apps/k7-daw-frontend/src/exportArgs.test.ts`, `videoDrag.test.ts`, `videoSpans.test.ts`, `videoTake.test.ts`, `timelineDrop.test.ts` |
 
-Two tests pin rules that live in two places: `apps/k7/frontend/src/videoSpans.test.ts` holds the
+Two tests pin rules that live in two places: `apps/k7-daw-frontend/src/videoSpans.test.ts` holds the
 graph's "lane is on screen" spans against the compositor's `activeAt`, and
-`packages/song-video/src/pictureMix.test.ts` holds the mute/solo/lens fold that both the
+`apps/k7-daw-frontend/packages/song-video/src/pictureMix.test.ts` holds the mute/solo/lens fold that both the
 timeline and the frame draw. When you change a rule in `ui-eyes/src/timeline.ts`, run both.
 
 The demo project `demos/video-demo.k7` exercises lanes, a picture-in-picture, shapes, a title, a

@@ -41,6 +41,6 @@ call site (a flag), which this vocabulary does not have and does not want.
 - It is not a default. The handler still decides what absence means — `track new` picks
   `track-N`, and that lives in the handler, not here.
 - It does not make the arg unreachable. In k7's bar, **Tab** steps onto a trailing optional
-  where **Enter** would run past it; see `apps/k7/frontend/docs/commandBar.md`.
+  where **Enter** would run past it; see `apps/k7-daw-frontend/docs/commandBar.md`.
 - It changes no CLI behaviour. `argv` is the handler's to read, and a handler that treats an
   argument as optional needs no field to do it.

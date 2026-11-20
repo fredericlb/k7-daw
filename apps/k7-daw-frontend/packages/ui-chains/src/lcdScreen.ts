@@ -2,7 +2,7 @@
 // pointer handlers, its `visible` rule) and the rolling history of the audio taps the draws read.
 // No script runs here: they run in the widget sandbox (widgetSandbox.ts, widgetRuntime.ts), an
 // opaque origin, so these types describe what the sandbox hands a script, not page objects.
-// Rationale and the draw contract: packages/ui-chains-react/docs/lcdScreen.md.
+// Rationale and the draw contract: apps/k7-daw-frontend/packages/ui-chains-react/docs/lcdScreen.md.
 
 /** One tap point as the engine sends it — structural, so this package needs no engine dependency. */
 type Envelope = { min: number; max: number };

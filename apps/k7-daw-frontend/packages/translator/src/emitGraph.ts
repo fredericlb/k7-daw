@@ -69,7 +69,7 @@ function chainSegments(chains: Record<string, ChainDef>): {
   return { tracks, modules, bypassed };
 }
 
-/** A lane's strip, last in its run: a node on the LIBRARY's mixer (`SHARED_STRIP`) — packages/song/docs/liveProject.md. */
+/** A lane's strip, last in its run: a node on the LIBRARY's mixer (`SHARED_STRIP`) — apps/k7-daw-frontend/packages/song/docs/liveProject.md. */
 function addTrackMixer(ctx: EmitCtx, entry: string): string {
   const { usedChainNames, usedNodeNames } = ctx;
   let name = `mix-${entry}`;
@@ -89,7 +89,7 @@ function addTrackMixer(ctx: EmitCtx, entry: string): string {
       note:
         `${entry}'s strip: volume, pan and three bands, and the one place its level lives.\n\n` +
         "Written by the import, because a lane without one plays at unity with nowhere to put a\n" +
-        "level — see packages/song/docs/trackMixer.md.",
+        "level — see apps/k7-daw-frontend/packages/song/docs/trackMixer.md.",
     },
   );
   // Not counted in `nodeFiles`: that stat is one node per plugin USE, and a strip is neither.
@@ -180,7 +180,7 @@ export function writeGraph(ctx: EmitCtx, masterChain?: string): void {
   // What the sum runs into: the master run's FIRST module, or `OUT` when nothing treats the whole (docs/masterChain.md).
   const mixSink =
     (masterChain ? chains[masterChain]?.use[0]?.module : undefined) ?? OUT_NODE;
-  // ONE map, lanes first and `MIX` last, so the file reads the way the signal flows — packages/song/docs/trackModules.md.
+  // ONE map, lanes first and `MIX` last, so the file reads the way the signal flows — apps/k7-daw-frontend/packages/song/docs/trackModules.md.
   const chainNodes = { ...chainTracks, ...chainModules, [MIX_NODE]: [mixSink] };
   const seg: Record<string, unknown> = {};
   if (Object.keys(chainNodes).length) seg.modules = chainNodes;

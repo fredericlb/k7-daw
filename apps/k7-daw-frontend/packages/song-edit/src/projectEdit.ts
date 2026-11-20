@@ -127,7 +127,7 @@ export function newModuleAlternative(
   );
 }
 
-/** Point a module at its render, or clear it — refused on a SHARED one, see packages/song/docs/freeze.md. */
+/** Point a module at its render, or clear it — refused on a SHARED one, see apps/k7-daw-frontend/packages/song/docs/freeze.md. */
 export function setModuleFrozen(
   dir: string,
   module: string,
@@ -154,7 +154,7 @@ export function setModuleShader(
   return stub("song-edit/projectEdit.setModuleShader", dir, module, name);
 }
 
-/** Which CAMERA a live picture node opens, by its LABEL, never a per-browser deviceId; empty is the default — packages/song/docs/camera.md. */
+/** Which CAMERA a live picture node opens, by its LABEL, never a per-browser deviceId; empty is the default — apps/k7-daw-frontend/packages/song/docs/camera.md. */
 export function setModuleCamera(
   dir: string,
   module: string,
@@ -163,7 +163,7 @@ export function setModuleCamera(
   return stub("song-edit/projectEdit.setModuleCamera", dir, module, label);
 }
 
-/** Choose which MIDI device a midi-in node records from, by its label; empty clears it — any device (packages/song/docs/midiIn.md). */
+/** Choose which MIDI device a midi-in node records from, by its label; empty clears it — any device (apps/k7-daw-frontend/packages/song/docs/midiIn.md). */
 export function setModuleDevice(
   dir: string,
   module: string,
@@ -172,7 +172,7 @@ export function setModuleDevice(
   return stub("song-edit/projectEdit.setModuleDevice", dir, module, label);
 }
 
-/** Choose which named BASE this module starts from, per instance — see packages/song/docs/userPresets.md. */
+/** Choose which named BASE this module starts from, per instance — see apps/k7-daw-frontend/packages/song/docs/userPresets.md. */
 export function setModuleBase(
   dir: string,
   module: string,
@@ -190,7 +190,7 @@ export function setModuleInputGain(
   return stub("song-edit/projectEdit.setModuleInputGain", dir, module, db);
 }
 
-/** Set an effect's `mix`, the engine's dry/wet around it; 1 (all wet) is no line at all — engine/k7-runtime/docs/mix.md. */
+/** Set an effect's `mix`, the engine's dry/wet around it; 1 (all wet) is no line at all — apps/k7-daw-engine/k7-runtime/docs/mix.md. */
 export function setModuleMix(dir: string, module: string, mix: number): string {
   return stub("song-edit/projectEdit.setModuleMix", dir, module, mix);
 }

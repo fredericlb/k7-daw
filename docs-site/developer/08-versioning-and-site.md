@@ -7,13 +7,13 @@ served by GitHub Pages: a front page, and this documentation under `k7.rocks/doc
 
 `.github/workflows/pages.yml` runs `node scripts/buildSite.mjs dist-site` and deploys the result with
 `actions/upload-pages-artifact` and `actions/deploy-pages`. The script builds the documentation as its own Vite
-bundle (`apps/k7/frontend/vite.docs.config.ts`, base `/docs/`), copies `site/` (the front page) beside it, writes an
+bundle (`apps/k7-daw-frontend/vite.docs.config.ts`, base `/docs/`), copies `site/` (the front page) beside it, writes an
 `index.html` for every documentation page, a `404.html`, a `CNAME` of `k7.rocks` and a `.nojekyll`.
 
 | Piece | Where |
 |---|---|
 | the front page: the stores and the release page | `site/index.html` |
-| the documentation bundle | `apps/k7/frontend/docs-entry/`, `src/docs/` |
+| the documentation bundle | `apps/k7-daw-frontend/docs-entry/`, `src/docs/` |
 | the pages, user and developer guides | `docs-site/` |
 | the assembly and the workflow | `scripts/buildSite.mjs`, `.github/workflows/pages.yml` |
 
@@ -26,8 +26,8 @@ The release version is the root `package.json`'s `version` (for example `0.1.0`)
 private workspace's `package.json`; `npm run lint:version` (`scripts/check-version.mjs`) checks the
 copies and `node scripts/check-version.mjs --set X.Y.Z` writes them all. See `docs/versioning.md`.
 
-Every build takes its version from the root `package.json`. `apps/k7/frontend/src/version.ts` exports `VERSION`,
-and the home sidebar shows it as the tooltip of the `k7` wordmark (`apps/k7/frontend/src/projects/HomeSidebar.tsx`);
+Every build takes its version from the root `package.json`. `apps/k7-daw-frontend/src/version.ts` exports `VERSION`,
+and the home sidebar shows it as the tooltip of the `k7` wordmark (`apps/k7-daw-frontend/src/projects/HomeSidebar.tsx`);
 `/api/health` answers `{ ok, version, build }`, both the front's.
 
 The front serves the frontend shell with `Cache-Control: no-cache` and the hashed files under

@@ -2,7 +2,7 @@
 // LIBRARIES it can name. The tree itself — expansion, right-click menu, inline prompts, file
 // drops — is @studio/ui/file-tree, shared with calepin; this file is only what is k7's:
 // pinned files, the "open project" button, and the module-folder actions.
-// Why the second tab exists: apps/k7/frontend/docs/sharedModules.md.
+// Why the second tab exists: apps/k7-daw-frontend/docs/sharedModules.md.
 
 import { showToast } from "@studio/project-shell/toast";
 import { docPattern } from "@studio/song-schema/docExt";
@@ -589,7 +589,7 @@ export function FileTree({
             reveal={lib.tree[0]?.path ?? null}
             // A read-only level's rows are greyed: they name a plugin the engine reports, with no file behind them to open.
             isDisabled={(n) => isBinary(n) || frozen.has(n.path)}
-            // A MODULE row drags onto another folder of its library: a move, its refs following it (packages/song/docs/moduleMove.md).
+            // A MODULE row drags onto another folder of its library: a move, its refs following it (apps/k7-daw-frontend/packages/song/docs/moduleMove.md).
             onMove={onMoveLibraryModule}
             canMove={(n) =>
               lib.modules.has(n.path) &&

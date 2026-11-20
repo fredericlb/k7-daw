@@ -3,7 +3,7 @@
 Most modules come from a **library**: a repository the account clones, which anyone with access can
 change, and which a project only finds once it is cloned ([sharedFolders.md](sharedFolders.md)).
 A few modules cannot work that way, because the way lanes and sets behave depends on them. Those
-ship WITH k7, in `packages/song/meta/`, and answer under `@meta`:
+ship WITH k7, in `apps/k7-daw-frontend/packages/song/meta/`, and answer under `@meta`:
 
 | ref | what depends on it |
 |---|---|
@@ -21,7 +21,7 @@ with the code, they are there wherever k7 runs, and they change only with k7.
 
 ## How they are read
 
-`packages/song/meta/` has a library's shape (`<type>/<name>/module.k7x`, `ui.k7x`, `widgets.js`)
+`apps/k7-daw-frontend/packages/song/meta/` has a library's shape (`<type>/<name>/module.k7x`, `ui.k7x`, `widgets.js`)
 and is read by the same loader. `META_MODULES_ROOT` names the folder and `moduleNamespaceOf`
 answers `meta` for it. It is added **only where modules are read**: the loader, and the panel and
 controller lookups (`modulePanelRoots`). It is deliberately absent from `moduleLibraryDirs`, which

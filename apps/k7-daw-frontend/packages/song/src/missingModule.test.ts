@@ -15,8 +15,8 @@ import { insertChainStepAfter, replaceChainStep } from "./testSupport";
 
 // A dangling step is not FATAL: it is a skipped step, a `?` node and a warning.
 
-const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
-const DEMOS = join(here, "..", "..", "..", "demos");
+const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
+const DEMOS = join(here, "..", "..", "..", "..", "..", "demos");
 const SONG = join(DEMOS, "synth-demo.k7");
 
 // Point the instrument step at a module that does not exist, and change nothing else.

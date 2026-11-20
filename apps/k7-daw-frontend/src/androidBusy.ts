@@ -1,6 +1,6 @@
 // androidBusy.ts — tell the phone app what the engine is doing for this page, so it holds the process (a foreground
 // service on Android, background audio on iOS) and the screen while a take rolls, a track is armed or a rig sounds
-// (engine/k7-runtime/docs/android.md, docs/ios.md). A no-op in a browser: only the apps' views have the channel.
+// (apps/k7-daw-engine/k7-runtime/docs/android.md, docs/ios.md). A no-op in a browser: only the apps' views have the channel.
 
 import type { EngineStore } from "@studio/engine-browser/store";
 import type { EngineState } from "@studio/engine-protocol";

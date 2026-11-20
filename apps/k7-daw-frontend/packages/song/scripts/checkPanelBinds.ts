@@ -2,9 +2,9 @@
 // REALLY exposes to the engine. A bind the plugin does not have is a control that moves and does
 // nothing: the engine drops the value with a warning nobody sees. Built-ins read the generated list;
 // an external is instantiated by the engine's own `--dump-params-ext`, so this runs only where the
-// plugin is installed. See packages/song/docs/panelBinds.md.
+// plugin is installed. See apps/k7-daw-frontend/packages/song/docs/panelBinds.md.
 //
-// npx tsx packages/song/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
+// npx tsx apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
 
 import { execFileSync } from "node:child_process";
 import { readdirSync, statSync } from "node:fs";
@@ -22,7 +22,7 @@ import { byCodePoint } from "@studio/song-schema/textOrder";
 import { scannedPlugins } from "../src/engineCatalogue";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const REPO = resolve(HERE, "../../..");
+const REPO = resolve(HERE, "../../../../..");
 const args = process.argv.slice(2);
 const flag = (name: string) => {
   const i = args.indexOf(name);
@@ -38,7 +38,7 @@ const modulesRoot = join(root, "modules");
 /** The engine binary: `$K7_RUNTIME`, else the first build preset that has one. */
 function engineBinary(): string {
   if (process.env.K7_RUNTIME) return process.env.K7_RUNTIME;
-  const build = join(REPO, "engine/k7-runtime/build");
+  const build = join(REPO, "apps/k7-daw-engine/k7-runtime/build");
   for (const p of [
     "macos-clang",
     "windows-msvc/RelWithDebInfo",

@@ -1,8 +1,8 @@
 # Sessions — which project on the engine a client is driving
 
-One engine process hosts several projects at once (`engine/k7-runtime/docs/multiEdit.md`). A
+One engine process hosts several projects at once (`apps/k7-daw-engine/k7-runtime/docs/multiEdit.md`). A
 **session** is the name of one of them. The wire rule lives in
-`engine/k7-runtime/docs/protocol.md`; this page is about the client side: who picks the name, and
+`apps/k7-daw-engine/k7-runtime/docs/protocol.md`; this page is about the client side: who picks the name, and
 the two ways it goes wrong.
 
 ## Why there is a name at all
@@ -38,7 +38,7 @@ is the one project a person opens BESIDE the song rather than instead of it: a r
 through while the song stays loaded. It is also
 thrown away on every open, so the "stopped project loaded forever" above costs one small rig at
 most. The browser names it from the `@banc` address, the file service from the `Banc` workspace
-(`apps/k7/frontend/src/engineSession.ts`, `sessionOf`), and a test on each side pins both to this
+(`apps/k7-daw-frontend/src/engineSession.ts`, `sessionOf`), and a test on each side pins both to this
 constant.
 
 `sessionFor` takes the raw email and slugs it itself. Each caller slugging first would be
@@ -47,15 +47,15 @@ two chances to slug differently, which is exactly the failure the next section i
 ## Two ways it goes wrong
 
 **Both halves of an app must spell it the same.** k7 has two: the file service compiles
-the song and sends it (`apps/k7/backend-rs/crates/k7-file-service/src/engine/mod.rs`), the browser drives its
-transport (`apps/k7/frontend/src/hooks/useEngineLink.ts`). Give them different ids and
+the song and sends it (`apps/k7-daw-backend/packages/k7-file-service/src/engine/mod.rs`), the browser drives its
+transport (`apps/k7-daw-frontend/src/hooks/useEngineLink.ts`). Give them different ids and
 nothing errors — the song plays in one session while the frontend steers an empty other,
 which reads as "the engine ignores Play".
 
 They reach the same string by different routes: the browser slugs the logged-in email, and the
 file service is TOLD the email — `noteOwner`, from the header every request carries — rather than
 reading it out of a path: no level of the workspace path names a person
-(`packages/engine-client/docs/paths.md`), since one machine holds one person's workspaces. a test of the file service's engine module says the two halves still agree.
+(`apps/k7-daw-frontend/packages/engine-client/docs/paths.md`), since one machine holds one person's workspaces. a test of the file service's engine module says the two halves still agree.
 It is the only thing in the repo that would catch them drifting.
 
 **Filtering incoming frames is on disagreement, not absence.** `forSession()` lets a frame
@@ -79,7 +79,7 @@ only frames that arrive unstamped are genuinely the machine's. Against an engine
 sessions nothing is stamped, and that is the case pass-on-absence exists for — requiring the
 field would make a new client silently deaf rather than merely unsorted.
 
-So the correctness of one line here lives in the engine's message handlers, `engine/k7-runtime/server/Serve*.cpp`, in their choice
+So the correctness of one line here lives in the engine's message handlers, `apps/k7-daw-engine/k7-runtime/server/Serve*.cpp`, in their choice
 between the `broadcast` and `broadcastTo` verbs. Stamp one reply too few and a media-library module
 audition makes k7 flash `busy` and receive `applied`/`flushed`/`recorded` for a project it
 does not own.
@@ -106,4 +106,4 @@ process dies. A surface that is done with a project should say so.
 **A session is created by driving it, and asking about one never creates it.** That is the
 engine's rule rather than this package's, but it is what makes the supervisor's polling safe —
 it holds a `DEFAULT_SESSION` client and would otherwise have conjured `""` on every tick. See
-`engine/k7-runtime/docs/sessions.md`, which also covers when an empty session is reaped.
+`apps/k7-daw-engine/k7-runtime/docs/sessions.md`, which also covers when an empty session is reaped.

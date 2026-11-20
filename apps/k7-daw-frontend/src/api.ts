@@ -55,7 +55,7 @@ export interface K7Prefs extends EnginePrefs {
 }
 /** The registry, the probe and the relay, and the preferences with the remembered engine among them: one origin. */
 export const engines = engineAccess<PublicEngine, K7Prefs>(ORIGIN, json, {
-  // A workspace the server hosts is opened there, whichever engine plays it — apps/k7/backend-rs/docs/files/hub.md.
+  // A workspace the server hosts is opened there, whichever engine plays it — apps/k7-daw-backend/docs/files/hub.md.
   hostedFiles: true,
 });
 
@@ -151,9 +151,9 @@ export const api = {
 
   // --- What a project asks of its engine ---
 
-  // Copy the project to the engine's machine again after a copy failed — apps/k7/backend-rs/docs/file-engine.md.
+  // Copy the project to the engine's machine again after a copy failed — apps/k7-daw-backend/docs/file-engine.md.
   retryEngineSync: () => fsend<{ ok: true }>("POST", "/engine/sync/retry", {}),
-  // Leave an automatically frozen VST live while it is edited — packages/song/docs/autoFreeze.md.
+  // Leave an automatically frozen VST live while it is edited — apps/k7-daw-frontend/packages/song/docs/autoFreeze.md.
   thawAutoFreeze: (module: string, on = true) =>
     fsend<{ ok: true }>("POST", "/auto-freeze/thaw", { module, on }),
   // --- A node's model, fetched onto this machine (the right-click's "Download model") ---
@@ -399,7 +399,7 @@ export const moduleStore: ModuleStore = {
 
 export type { AiSettingsView };
 
-/** The module builder's "AI organize", on THIS origin's front — the one holding the account's key (apps/k7/backend-rs/docs/files.md). */
+/** The module builder's "AI organize", on THIS origin's front — the one holding the account's key (apps/k7-daw-backend/docs/files.md). */
 export const aiOrganize = {
   settings: async (): Promise<AiSettingsView> =>
     json(await fetch(`${BASE}/api/ai/settings`), "ai/settings"),
@@ -422,7 +422,7 @@ export const aiOrganize = {
     if (!res?.ok) return false;
     return ((await res.json()) as { enabled?: boolean }).enabled === true;
   },
-  /** One run: the conversation and its checks are here, each model turn is the host's (apps/k7/frontend/docs/aiOrganize.md). */
+  /** One run: the conversation and its checks are here, each model turn is the host's (apps/k7-daw-frontend/docs/aiOrganize.md). */
   run: (
     req: AiOrganizeRequest,
     onStatus: (text: string) => void,

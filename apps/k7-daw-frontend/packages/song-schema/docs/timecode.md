@@ -1,9 +1,9 @@
 # timecode.ts — implementation notes
 
-The NOTATION is written up in `packages/song/docs/timecode.md`: what a position and a duration
+The NOTATION is written up in `apps/k7-daw-frontend/packages/song/docs/timecode.md`: what a position and a duration
 mean, why the chain halves, why anything finer than the double-croche is ticks, and how the old
 ÷4 chain is told apart from this one. This page holds only what is about
-`packages/song-schema/src/timecode.ts` as code.
+`apps/k7-daw-frontend/packages/song-schema/src/timecode.ts` as code.
 
 ## Everything in TICKS, rounded ONCE at the top
 

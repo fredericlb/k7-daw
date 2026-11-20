@@ -1,6 +1,6 @@
 # The module vocabulary
 
-The rationale behind `packages/song-schema/src/moduleTypes.ts` — the type folders, what each one
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` — the type folders, what each one
 means, and how a module is NAMED. The file itself is a leaf: no filesystem, no imports beyond
 `@studio/graph-model`, because these tables are the one thing everything about a module derives
 from and a browser has to read them too.
@@ -11,7 +11,7 @@ from and a browser has to read them too.
 sink unless it is a source. A role added without joining that list becomes a silent sink, and a
 chain would route INTO the thing meant to feed it. The two roles differ only in where the audio
 comes from — `in` is a live interface channel, `file` reads an audio file
-(`packages/song/docs/fileInput.md`).
+(`apps/k7-daw-frontend/packages/song/docs/fileInput.md`).
 
 ## The five built-in outputs
 
@@ -20,24 +20,24 @@ answers for. `OUT` is the interface. A chain wired `from: MIX` to `OUT` is the M
 steps process the whole mix on the way out; with no such chain the two are one wire and the mix
 reaches the interface untouched. They are built-in NAMES rather than modules on disk — `isSink`
 takes them literally, so no project needs a `modules/io/` folder for either, and every demo song
-relies on that (`packages/song/docs/masterChain.md`).
+relies on that (`apps/k7-daw-frontend/packages/song/docs/masterChain.md`).
 
 `RENDER` and `VIDEO_OUT` are the same two for PICTURE, and exist only on a project that declares a
 viewport. `RENDER` is where the compositor sums: every video lane arrives there the way every audio
 lane arrives at `MIX`, and carries no parameter for the same reason. A chain wired `from: RENDER` to
 `VIDEO_OUT` is the VIDEO MASTER CHAIN — where a `video_effects` or `shaders` module processes the
 whole composited frame. Not a `video_transitions` one: a transition is NAMED by a cut rather than
-wired, so it is never a chain step (`packages/song-video/docs/transitions.md`).
+wired, so it is never a chain step (`apps/k7-daw-frontend/packages/song-video/docs/transitions.md`).
 
 `VideoPluginDoc` is modelled and nothing compiles it, so a module on this run is drawn and validated
-but changes no frame (`packages/song/docs/videoOutputs.md`). Unlike the audio pair these are added
+but changes no frame (`apps/k7-daw-frontend/packages/song/docs/videoOutputs.md`). Unlike the audio pair these are added
 AUTOMATICALLY: a project with a viewport surface and no such run gets one written into its
 `graph.k7x`. A song with no picture never sees either name.
 
 `CUE` is the fifth, and the odd one: it is the only built-in output that really leaves the mixer's
 sum, for a SECOND PAIR of the interface — the headphones on a DJ desk. `MIX` and `OUT` are a
 notation over one bus; `CUE` is a track routed off it, which is what
-`packages/song/docs/cue.md` is about. A machine that names no pair plays it nowhere at all, never
+`apps/k7-daw-frontend/packages/song/docs/cue.md` is about. A machine that names no pair plays it nowhere at all, never
 into the room.
 
 ## `@master`, the owner of a master chain's plugins
@@ -51,7 +51,7 @@ code as every track and cannot drift from it. `@` cannot begin a lane name — w
 Up with the rest of the vocabulary rather than beside the `@meta/…` refs at the foot of the file,
 because `moduleEmits` has to ask about it: the five track modules share one category and do NOT
 share one signal, which is the one place the folder stops being the answer
-(`packages/song/docs/trackModules.md`).
+(`apps/k7-daw-frontend/packages/song/docs/trackModules.md`).
 
 ## A shader's own vocabulary
 
@@ -72,7 +72,7 @@ both.
 a shader will call its controls, and a shader author cannot rename a knob on a panel they never see.
 Four is what fits a row of the grid, and 0..1 is the range a GLSL uniform wants — no shader has to
 normalise, and no panel has to ask what the units are. They reach the fragment as `uP1`..`uP4`,
-beside `uAudio` (`packages/song-video/docs/shaders.md`).
+beside `uAudio` (`apps/k7-daw-frontend/packages/song-video/docs/shaders.md`).
 
 The `shaders` entry of `MODULE_TYPES` is the only module type in the repo whose ports are of two
 different signals, and the reason is what a shader is for — a visual that MOVES with the sound. The
@@ -114,7 +114,7 @@ about a lane.
 
 ## The doc module's ports
 
-ONE input, NO output (`packages/song/docs/docModules.md`). The input is what attaches it: a note is
+ONE input, NO output (`apps/k7-daw-frontend/packages/song/docs/docModules.md`). The input is what attaches it: a note is
 wired from whatever it is about, so `ampli: [ reverb, notes ]` says "this note is about the amp". No
 output, because a note is where a run stops being signal — anything downstream of it would be
 documentation feeding audio. Its `audio` port type is not a claim about the note: nothing is
@@ -168,7 +168,7 @@ the monitoring and the trim. The nodes belong to the song that records through t
 node per interface channel in `_modules` would put one rig's wiring in a library every song reads.
 `FILE` is audio off disk rather than off an interface — one module like the other two, and a node
 carries WHICH file, or carries none in a chain template where the audio belongs to whatever the
-template is applied to (`packages/song/docs/fileInput.md`).
+template is applied to (`apps/k7-daw-frontend/packages/song/docs/fileInput.md`).
 
 They are in this leaf rather than in `engineCatalogue.ts` because a node saying
 `extends: "@meta/IN"` declares no `io:` of its own, so ANYTHING asking what kind of module it is
@@ -189,7 +189,7 @@ no wiring. A `hidden` module still loads, still plays and can still be NAMED —
 an offer, never a validator — which is what keeps this an ergonomic setting rather than a way to
 break a project from a dropdown. Absent means `listed`, and `listed` is never written: the loader
 applies the default, so a file that has nothing to say about this says nothing (the rule `type:`
-follows). Full rationale: `packages/song/docs/moduleStatus.md`.
+follows). Full rationale: `apps/k7-daw-frontend/packages/song/docs/moduleStatus.md`.
 
 `moduleStatusOf` is deliberately forgiving: an unreadable or half-written module answers `listed`
 rather than vanishing. Losing a module from the completions is the one failure this field must not
@@ -211,7 +211,7 @@ knob. A param not in this list is a number, and that is still the overwhelming m
 that picks it: a widget that had to repeat them would be a second place to get them wrong, and its
 author already wrote `bind: model`. Most params are named after the one format they load (`onnx`),
 and the name is the rule. `model` is the exception, and has a table entry: an amp model is a `.nam`
-or an RTNeural `.json` (AIDA-X, Proteus — `engine/k7-runtime/docs/namPlugin.md`), one param for
+or an RTNeural `.json` (AIDA-X, Proteus — `apps/k7-daw-engine/k7-runtime/docs/namPlugin.md`), one param for
 both, because a module picks an amp and should not have to know which trainer made it. It sits beside `FILE_PARAMS` and free of `node:fs` because the PICKER runs in a
 browser: the panel filters the module's assets down to the ones its param can take.
 `moduleAssetChoices` reads disk and is the node-only half.
@@ -221,12 +221,12 @@ browser: the panel filters the module's assets down to the ones its param can ta
 `OFFLINE_TYPE` lives here and not in `@studio/engine-protocol/build` beside `JSDSP_TYPE` because
 there is nothing for the engine to load. That is also why it must be a WORD: the compiler's gate
 drops any type it does not know, silently, and a module dropped for being unknown is
-indistinguishable from one dropped for being offline (`packages/song/docs/coldModules.md`).
+indistinguishable from one dropped for being offline (`apps/k7-daw-frontend/packages/song/docs/coldModules.md`).
 
 ## `@meta/doc`
 
 It names no folder, exactly as `@engine/nam` names none
-(`packages/song/docs/moduleNamespaces.md`): there is one doc module for the whole studio and nothing
+(`apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md`): there is one doc module for the whole studio and nothing
 to scaffold, so a note costs one file — its node — and nothing else. It is the second module in the
 repo that exists without a file, and the first that exists without an engine behind it either. A
 note is a node because that is what a node IS here: one USE of a module with its own settings. Two
@@ -241,7 +241,7 @@ lane costs exactly its own node. Three and not five, because a lane is NOT typed
 carries: it holds events, each of which names a clip or a sequence and is therefore audio or notes
 on its own, so the lane offers BOTH outputs and every event leaves by the one its material fits.
 What is left to say is where the events come from (written down, or streamed) and whether this is a
-relationship rather than a lane at all (`packages/song/docs/trackModules.md`).
+relationship rather than a lane at all (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`).
 
 `TRACK_OUTPUTS` is re-exported from `@studio/graph-model`,
 beside `splitPort`, and for the same reason: the RENDERER draws a jack per entry and does not depend
@@ -250,12 +250,12 @@ about how many there are or which is first. The re-export is because this is whe
 module-vocabulary caller already looks. The same holds for `PORT_SEP`, `portRef` and `splitPort`:
 `graph-model` is a types-only tier with no dependencies, the one place BOTH the compiler and the
 graph renderer can reach, and `ui-chains` draws ported edges while deliberately not depending on
-this package (`packages/song/docs/ports.md`).
+this package (`apps/k7-daw-frontend/packages/song/docs/ports.md`).
 
 The retired signal-typed lane spellings (`@meta/sequence-track`…) have no constant here: nothing
 resolves them, and a file saying one names a module that does not exist, which the loader reports
-as such. There is no migration code, deliberately — the same call `packages/song/docs/nodes.md` and
-`packages/song/docs/trackModules.md` already made.
+as such. There is no migration code, deliberately — the same call `apps/k7-daw-frontend/packages/song/docs/nodes.md` and
+`apps/k7-daw-frontend/packages/song/docs/trackModules.md` already made.
 
 ## The three levels
 
@@ -280,7 +280,7 @@ a level names a folder of modules.
 file saying `@mediatek/…` names a module that does not exist, which the loader reports as such; the
 constant exists so the migration and the diagnostics can say that word out loud instead of spelling
 it inline in three places. It is also the measure of what a level rename costs, and the argument for
-not spending it again. See `packages/song/docs/moduleNamespaces.md`.
+not spending it again. See `apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md`.
 
 ## The libraries, and `_modules`
 
@@ -299,7 +299,7 @@ simply look for.
 at — `_libraries/<name>/…` — though no workspace holds one on disk. It and `SHARED_MODULES_DIR` are
 here rather than beside `moduleLibraryDirs` because a browser names these folders too — k7's
 Libraries tab reads a module's ref and its library off such a path — and `sharedFolders.ts` reads
-the disk on its first line (`packages/song/docs/sharedFolders.md`).
+the disk on its first line (`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`).
 
 ## The three spellings a built-in answers to
 

@@ -1,5 +1,5 @@
 // RoamStore.swift — the roaming list's store: NSUbiquitousKeyValueStore under the two C callbacks the Rust front reads and
-// writes it through (apps/k7/backend-rs/docs/roam.md). What a reader gets wrong: only keys `ws.<id>` pass, and the callbacks
+// writes it through (apps/k7-daw-backend/docs/roam.md). What a reader gets wrong: only keys `ws.<id>` pass, and the callbacks
 // capture nothing, since a C function pointer cannot.
 
 import Foundation

@@ -3,7 +3,7 @@
 Sub-step 2j of `rustCompiler.md`: what the frontend READS of a project, apart from the document the engine plays. It holds the
 surface file, the field vocabulary, the WAV header and `Measure`, one clip for the browser, the catalogue and the base modules, the
 surface issues, the I/O ports, the hints, the web project, the error list and `answer`, which gives a host any of them from one
-compile. Nothing here is wired to a route (2l). Paths below are relative to `packages/song`.
+compile. Nothing here is wired to a route (2l). Paths below are relative to `apps/k7-daw-frontend/packages/song`.
 
 ## Corrections to the 2j row of `rustCompiler.md`
 
@@ -156,7 +156,7 @@ account library (662). Not in the corpus: a jsdsp graph that is stale, which nee
 TypeScript rebuilds (the unit test in `views_errors_list.rs` holds the invalid one).
 
 The twin check (decision 644) is run by hand: `cargo test --locked --features ts --test all -- --ignored views_twin::` with `K7_SONG_TWIN`
-set, then `npx tsx scripts/viewsTwinCheck.ts "$K7_SONG_TWIN"` from `packages/song`. It passes 28 pairs, the three enums both ways and
+set, then `npx tsx scripts/viewsTwinCheck.ts "$K7_SONG_TWIN"` from `apps/k7-daw-frontend/packages/song`. It passes 28 pairs, the three enums both ways and
 its two refusals; a changed `volume`, a renamed `sfzFile`, a dropped `countIn`, a widened `dir`, a `BindTarget` without `invert` and a `ViewBinding` with a key more each fail it.
 
 ## The hostile table

@@ -4,12 +4,13 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { filter, pieces, SEED_RANGES } from "./affected-tests.mjs";
 
-const F = "apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/";
-const S = "apps/k7/backend-rs/crates/k7-file-service/";
+const F =
+  "apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/";
+const S = "apps/k7-daw-backend/packages/k7-file-service/";
 const dirs = [
-  "apps/k7/backend-rs/crates/k7-front/",
-  "apps/k7/backend-rs/crates/k7-file-service/",
-  "packages/song/rust/",
+  "apps/k7-daw-backend/packages/k7-front/",
+  "apps/k7-daw-backend/packages/k7-file-service/",
+  "apps/k7-daw-wasm/song/",
 ];
 const opts = { dirs };
 const LATER = `not (${SEED_RANGES.join(" | ")})`;
@@ -49,7 +50,7 @@ test("a core file runs everything", () => {
     assert.equal(filter([`${F}${core}`], opts, {}), LATER, core);
   }
   assert.equal(filter([`${S}src/lib.rs`], opts, {}), LATER);
-  assert.equal(filter(["packages/song/rust/src/lib.rs"], opts, {}), LATER);
+  assert.equal(filter(["apps/k7-daw-wasm/song/src/lib.rs"], opts, {}), LATER);
 });
 
 test("a mod.rs diff that only registers modules is no core change", () => {
@@ -66,7 +67,7 @@ test("an unknown or new file runs everything, and a workspace file does too", ()
   assert.equal(filter([`${F}docs.rs`, `${F}brand_new.rs`], opts, {}), LATER);
   assert.equal(filter([`${S}tests/all/hostile.rs`], opts, {}), LATER);
   assert.equal(
-    filter([`${F}docs.rs`, "apps/k7/backend-rs/Cargo.lock"], opts, {}),
+    filter([`${F}docs.rs`, "apps/k7-daw-backend/Cargo.lock"], opts, {}),
     LATER,
   );
   assert.equal(

@@ -25,7 +25,7 @@ repository on every machine at once, and the failure signature is a `?` on a gra
 nothing else. That is worth paying to stop a word that appears nowhere; it is not worth paying
 to chase a path.
 
-> **`@k7-core` is not the app `apps/k7`.** Nothing resolves through an app either way. The level
+> **`@k7-core` is not the app `apps/k7-daw-frontend`.** Nothing resolves through an app either way. The level
 > names a folder of modules, and that folder is what the name follows.
 
 `<state>/mediatek` is a **cache path** on one machine, not a name anybody writes in a file —
@@ -76,7 +76,7 @@ the three, each of which costs a real afternoon.
 
 What this does NOT do is put the bytes there. The library lives on the server, and a module
 reaches the engine's machine through the tunnel when the engine opens it
-(`packages/engine-tunnel/docs/tunnel.md`).
+(`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`).
 
 `@engine` is the odd one and always will be: it names **no folder at all**. A scanned
 plugin is a module the engine merely reports (`engineCatalogue.ts`), which is fine until

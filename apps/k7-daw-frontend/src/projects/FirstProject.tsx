@@ -2,7 +2,7 @@
 // empty on purpose (NewWorkspace.tsx): the archetype decides what the screen will LOOK like, so
 // it is asked here, where the answer is about to be looked at, rather than in a dialog on a list.
 // Not a dialog either — there is nothing behind it to dismiss it onto.
-// See ../../docs/projects.md and packages/project-shell/docs/launch.md.
+// See ../../docs/projects.md and apps/k7-daw-frontend/packages/project-shell/docs/launch.md.
 
 import { projectApi } from "@studio/project-shell/project";
 import type { ProjectShape } from "@studio/song-schema/yaml/projectSchema";

@@ -9,7 +9,7 @@ import { spawn } from "node:child_process";
 import { createServer } from "node:net";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { stopAll } from "../engine/scripts/devEngine.mjs";
+import { stopAll } from "../apps/k7-daw-engine/scripts/devEngine.mjs";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PORT = 10350;

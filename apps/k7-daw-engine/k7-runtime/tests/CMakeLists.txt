@@ -180,7 +180,7 @@ target_compile_definitions(studio_midigraph_tests PRIVATE
     JUCE_WEB_BROWSER=0
     DONT_SET_USING_JUCE_NAMESPACE=1)
 add_test(NAME studio_midigraph_tests COMMAND studio_midigraph_tests)
-# `slow` is what keeps this out of `npm run test`: linking Tracktion can cost minutes — ../../../docs/tests.md.
+# `slow` is what keeps this out of `npm run test`: linking Tracktion can cost minutes — ../../../../docs/tests.md.
 set_tests_properties(studio_midigraph_tests PROPERTIES LABELS slow)
 
 

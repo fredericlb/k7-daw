@@ -1,7 +1,7 @@
 // videoKeys.ts — set and remove one KEY of a shot's `animate:` in a video track, by the placement's index and in seconds
 // from the shot's own start. Edits a K7Scope at the file's root, and only the placement's `animate:` is rewritten.
 // A reader would get wrong that a lone key at 0 stays a key: it is written back as the constant it means.
-// See packages/song-video/docs/animation.md.
+// See apps/k7-daw-frontend/packages/song-video/docs/animation.md.
 
 import type { K7Scope } from "@studio/k7x/document";
 import { K7SyntaxError } from "@studio/k7x/parse";

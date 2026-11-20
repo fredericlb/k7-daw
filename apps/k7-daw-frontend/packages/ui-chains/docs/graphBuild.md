@@ -108,7 +108,7 @@ A widget spanning rows or columns covers the gaps between them (`rowsHeight`, `c
 fader, a screen or a group is one box, not a stack of cells.
 
 A module card is its panel and, under it, a bottom bar of `FOOTER_H` — the engine stage's knobs and
-the alternatives (`packages/ui-chains-react/docs/nodeCard.md`) — which `nodeSize` adds when asked; a
+the alternatives (`apps/k7-daw-frontend/packages/ui-chains-react/docs/nodeCard.md`) — which `nodeSize` adds when asked; a
 strip has neither, and is its panel alone.
 
 ### The header's name has to be readable at that width
@@ -137,7 +137,7 @@ and no lookup table to keep in step with one.
 
 ## Two layouts, and the fold behind them
 
-A panel has two AUTHORED shapes (`packages/ui-module-builder/docs/layouts.md`): itself, the
+A panel has two AUTHORED shapes (`apps/k7-daw-frontend/packages/ui-module-builder/docs/layouts.md`): itself, the
 HORIZONTAL layout, at most 4 rows, and its `vertical` twin, at most 4 columns. `buildGraph`'s
 `layout` (and `moduleRow`'s, which passes it on) picks one. `"vertical"` swaps the twin in for the
 panel and marks it `tabsAs: "dropdown"`, so its tabs are a menu across the card's top (`menuH`)
@@ -212,7 +212,7 @@ in `@studio/song`).
 A **picture lane** gets the picture's mute and solo — mute means hidden — and no record arm, gain or
 pan: a full strip there would be controls that do nothing to a picture. Its card has two outputs, its
 picture and its shots' sound; the sound's fader, mute and solo are its `#audio` half's strip, which a
-cable leaving that output feeds (`packages/song/docs/videoSound.md`).
+cable leaving that output feeds (`apps/k7-daw-frontend/packages/song/docs/videoSound.md`).
 
 ## A RACK carries one too — a grid of pads
 
@@ -307,7 +307,7 @@ disagree. The price is that the read-back path is load-bearing, and it fails **s
 with no arm in `moduleFieldValue` writes correctly, the file changes, the graph rebuilds, and the
 select snaps back to `—`. It reads as "the control is broken" while every part of it works.
 
-That is why the function is its own file — `packages/ui-chains-react/src/moduleField.ts` — with a
+That is why the function is its own file — `apps/k7-daw-frontend/packages/ui-chains-react/src/moduleField.ts` — with a
 case per intrinsic rather than a branch inside the renderer: `@channel` (both dropdowns, matched on
 the CHANNELS through `arg`), `@monitor`, `@base`, `@shader`, `@camera`. A dropdown that writes an
 intrinsic with no arm in that list is the exact shape the list guards against.
@@ -501,7 +501,7 @@ plugged into a jack that will not give it back.
 
 > What may LAND on that socket is narrower than what may be dragged to it: a run carrying a live
 > interface input, and nothing else — recording a preamp onto a lane. `graph chain connect` asks the
-> same question `packages/song` asks, by walking UPSTREAM of the cable's source (`runCarriesInput`).
+> same question `apps/k7-daw-frontend/packages/song` asks, by walking UPSTREAM of the cable's source (`runCarriesInput`).
 > Refusing every track outright would be stricter than the model it guards and leave an `IN` node in
 > the graph with nowhere to go; and since the derivation splits `mic → comp` into two chains,
 > reading either one's steps would answer no for every recording path with a plugin on it.
@@ -514,7 +514,7 @@ destination is a bus (named after the module it starts at) or a sink.
 
 The **pending** node — the module being created, drawn where it will land — is not built by
 `buildGraph`: the host adds it, with its `jacks` and the two cables of the splice already decided
-(k7's `apps/k7/frontend/src/pendingNode.ts`). The renderer draws those sockets and nothing that
+(k7's `apps/k7-daw-frontend/src/pendingNode.ts`). The renderer draws those sockets and nothing that
 answers a hand: it is dashed and spinning because it does not exist yet, but where its cables run
 is exactly what the wait is for.
 
@@ -606,7 +606,7 @@ changed for any of this: a cable dropped on `turntableA#mix` writes `graph chain
 `graph move` address, which is why `layout`'s pin lookup reads `module` for an assembly as it does
 for a module.
 
-See `packages/song/docs/assemblies.md`.
+See `apps/k7-daw-frontend/packages/song/docs/assemblies.md`.
 
 ## Cables
 
@@ -899,7 +899,7 @@ audio.
 `isLane` — either kind — is what decides three things: whether a chain's source is drawn as a lane,
 whether its signal is followed or read off the lane, and whether a run's DESTINATION is an existing
 card or a sink to invent. Reading `graph.tracks` alone for that third one makes a lens wired to a
-picture lane (`packages/song/docs/camera.md`) resolve to an unknown destination and get a **sink
+picture lane (`apps/k7-daw-frontend/packages/song/docs/camera.md`) resolve to an unknown destination and get a **sink
 card of its own**, named after the lane — an output node nobody asked for, sitting beside the real
 lane with the camera cabled to the wrong one. A lane is never a sink: it is already on the canvas.
 

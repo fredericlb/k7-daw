@@ -76,7 +76,7 @@ and removes in place: reshaping the mix bus is a decision taken between two take
 
 Turning a master module's knob or bypassing it does NOT: those are applied in place, like a
 track's, since a rebuild for a knob costs seconds and cuts every tail
-(`engine/k7-runtime/docs/projectDiff.md`).
+(`apps/k7-daw-engine/k7-runtime/docs/projectDiff.md`).
 
 **Order** is part of the comparison: swapping the compressor and the EQ leaves both keys present
 and changes the sound, so an unordered comparison would conclude "nothing moved".
@@ -102,13 +102,13 @@ project without it, which `masterChain.test.ts` pins. What it buys is elsewhere:
 - there is a **place to drop a master module**, written in advance, rather than a line to guess.
 
 A place in the literal sense: the graph's `+` is offered **on that wire**, between the two built-in
-cards (`insertFor`, `packages/ui-chains/docs/graphBuild.md`), and the click writes
+cards (`insertFor`, `apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md`), and the click writes
 `node insert MIX OUT <node>`. A project without the line sees the wire anyway — the graph draws it
 as soon as something reaches the sum — and the verb writes it before inserting, so the `+` keeps
 its promise of a single command.
 
 The scaffolds write it — `scaffold.ts`, `scaffoldSet.ts` and `scaffoldLive.ts`, the last of which
-is also what the bench opens on (`apps/k7/backend-rs/docs/banc.md`).
+is also what the bench opens on (`apps/k7-daw-backend/docs/banc.md`).
 
 One detail `validate()` has to carry: `from: MIX` is accepted. The sum is neither a track nor a
 chain, it is where all of them arrive, and refusing it warns **every** project at once about the
@@ -122,18 +122,18 @@ one line that is always right.
 | derived | `chainsGraph.ts`: `MIX` starts a run, like `@in` and like a track |
 | compiled | `nodeProject.ts`: that run's owner is `@master`, and its steps become `masterPlugins` |
 | the wire | `@studio/engine-protocol`'s `ProjectDoc.masterPlugins` — always sent, empty by default |
-| decoded | `docFromJson` in `engine/k7-runtime/server/DocJson.cpp` (via `pluginFromJson`, shared with tracks) |
+| decoded | `docFromJson` in `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp` (via `pluginFromJson`, shared with tracks) |
 | placed | `populateMasterChain` in `EditBuilder.cpp`, at the head of the master list — followed by the output gain |
 | drawn | the graph's `MIX` and `OUT` cards (`MAIN_OUT_UI` in `@studio/ui-chains`), the second with its fader |
 | diffed | `ChangeKind::MasterChainChanged` — full rebuild; a knob or a bypass is `PluginParamChanged` / `PluginEnabledChanged`, in place |
-| measured | `engine/k7-runtime/scripts/master-chain.ts` |
+| measured | `apps/k7-daw-engine/k7-runtime/scripts/master-chain.ts` |
 
 One nuance on the drawing side: **the graph draws no cable TO `MIX`**. Every track arrives there —
 that is what the mixer is — so those arrows would say nothing the shape does not already say, one
 per track, across the whole picture. Only the run LEAVING it is drawn,
 `MIX → [ master chain ] → OUT`, independent of the rest. The routing does not move for that: the
 engine reads the compiled document, where each of those tracks still arrives at the sum. See
-`packages/ui-chains/docs/graphBuild.md`.
+`apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md`.
 
 That has one price: the live cable's **ripple** propagates forward from the tracks the engine
 measures, so a node nothing arrives at is a node it never reaches — the master run, the cable
@@ -147,7 +147,7 @@ The TypeScript suites prove the document, the C++ suite proves the diff, and **n
 plugin landed on the bus**. That is what the harness measures:
 
 ```bash
-npx tsx engine/k7-runtime/scripts/master-chain.ts
+npx tsx apps/k7-daw-engine/k7-runtime/scripts/master-chain.ts
 ```
 
 It renders the same note twice changing only `masterPlugins`, and compares the peaks. With a

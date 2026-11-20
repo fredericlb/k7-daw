@@ -9,7 +9,7 @@ header fix). It has no root export and no stylesheet.
 
 `MediaRecorder` omits a WebM's duration, which makes the file unseekable: `duration` is `Infinity`
 and assignments to `currentTime` are ignored. The editor's camera take is such a file
-(`apps/k7/frontend/docs/picture.md`). `src/webmDuration.ts` reads the first 64 kB, adds a `Duration`
+(`apps/k7-daw-frontend/docs/picture.md`). `src/webmDuration.ts` reads the first 64 kB, adds a `Duration`
 to the Segment's `Info` (moving a sized Segment's size and any `SeekHead` position past `Info` with
 it), and hands back a Blob of the patched head and a SLICE of the rest — the take's bytes are never
 copied into the JS heap. A layout the patch does not know falls back to `fix-webm-duration`, which

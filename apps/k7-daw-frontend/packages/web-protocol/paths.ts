@@ -23,7 +23,11 @@ export const isBelow = (root: string, path: string): boolean =>
 
 /** Whether a `path.relative(root, x)` result leaves `root`: `..` first, or another drive's absolute path. */
 export function climbsOut(rel: string): boolean {
-  if (rel === ".." || rel.startsWith("../") || rel.startsWith("..\\"))
+  if (
+    rel === ".." ||
+    rel.startsWith("../../../../packages/") ||
+    rel.startsWith("..\\")
+  )
     return true;
   return rel.startsWith("/") || isWindowsPath(rel);
 }

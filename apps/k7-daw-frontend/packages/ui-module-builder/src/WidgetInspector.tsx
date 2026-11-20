@@ -189,7 +189,7 @@ export function WidgetInspector({
         )}
 
         {w.type === "dropdown" && !!w.library && (
-          // The older spelling of a file picker, kept editable — packages/song/docs/filePicker.md.
+          // The older spelling of a file picker, kept editable — apps/k7-daw-frontend/packages/song/docs/filePicker.md.
           <Field label="Files (legacy)">
             <PickField
               value={w.library ?? ""}

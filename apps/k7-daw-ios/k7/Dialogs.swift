@@ -1,6 +1,6 @@
 // Dialogs.swift — the few things the app says natively, over whatever is on screen: a yes-or-no a page can neither
 // draw nor click, which is what keeps a script from listing the engine at a studio of its own, and a short notice
-// that fades, iOS having no toast. See engine/k7-runtime/docs/ios.md.
+// that fades, iOS having no toast. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import UIKit
 

@@ -54,7 +54,7 @@ export function pendingCard({
   );
 }
 
-/** An OPEN assembly's frame, with no sockets: the members show the real ones — packages/song/docs/assemblies.md. */
+/** An OPEN assembly's frame, with no sockets: the members show the real ones — apps/k7-daw-frontend/packages/song/docs/assemblies.md. */
 export function assemblyFrame({
   n,
   onHeaderDrag,

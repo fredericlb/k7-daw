@@ -6,4 +6,4 @@ International (https://creativecommons.org/licenses/by/4.0/).
 
 Changed from the original: each file is ONE hit, at velocity 100 on the kit's General MIDI program, rendered through
 k7's SFZ player with the close mics and overheads mixed, its silent tail trimmed. Made by
-`engine/k7-runtime/scripts/sfz-to-rack.ts`; the rack preset `Naked Drums` maps them to their General MIDI notes.
+`apps/k7-daw-engine/k7-runtime/scripts/sfz-to-rack.ts`; the rack preset `Naked Drums` maps them to their General MIDI notes.

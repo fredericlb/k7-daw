@@ -1,7 +1,7 @@
 // moduleField.ts — what an INTRINSIC dropdown shows: the node's own field, read back as the
 // position of the option that names it. Its own file so every intrinsic that can be SET has a
 // test that it can also be SEEN — a missing arm here is a control that writes and never moves.
-// See packages/ui-chains/docs/graphBuild.md.
+// See apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md.
 
 import type { WebWidget } from "@studio/graph-model";
 import type { GraphNode } from "@studio/ui-chains/graph";

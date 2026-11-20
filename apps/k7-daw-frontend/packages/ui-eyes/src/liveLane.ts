@@ -1,6 +1,6 @@
 // liveLane.ts — a LIVE lane's state and the lens feeding it: one <video> carrying a camera's
 // stream, which chases no clock and holds no clip. Apart from realtime.ts, which is about the
-// elements that do. See packages/song/docs/camera.md.
+// elements that do. See apps/k7-daw-frontend/packages/song/docs/camera.md.
 
 import { type LensOpener, releaseLens } from "./camera";
 

@@ -1,4 +1,4 @@
-// gitTypes.ts — the shapes the git routes answer (apps/k7/backend-rs/docs/files/git.md).
+// gitTypes.ts — the shapes the git routes answer (apps/k7-daw-backend/docs/files/git.md).
 
 export interface GitState {
   mode: "none" | "local" | "connected";

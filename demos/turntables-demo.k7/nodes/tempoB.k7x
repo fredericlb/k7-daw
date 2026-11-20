@@ -4,7 +4,7 @@
 // The module is COLD: a tempo change is a time stretch, and a stretch has to know where
 // the file ends. That is why it sits on a deck at all — a deck's source is a file on the
 // machine's disk, which is the one input whose whole length is knowable up front. See
-// packages/song/docs/coldModules.md.
+// apps/k7-daw-frontend/packages/song/docs/coldModules.md.
 //
 // This is what the BPM fader in Mix moves. Both at 0 is a no-op: the record plays at its
 // own tempo until the analysis has measured one and somebody has asked for another.

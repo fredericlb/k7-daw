@@ -33,7 +33,7 @@ export interface ResizeResult {
   loops: number;
 }
 
-/** The EVENT's window and count spanning `startBeats..endBeats`, clamped inside `bounds` — packages/song/docs/clipResize.md. */
+/** The EVENT's window and count spanning `startBeats..endBeats`, clamped inside `bounds` — apps/k7-daw-frontend/packages/song/docs/clipResize.md. */
 export function resizeToWindow(
   before: ResizeBefore,
   to: ResizeTo,

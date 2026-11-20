@@ -2,8 +2,8 @@
 // supervisor as xcframeworks, the Rust front as a static library, the CA bundle as pinned in pins.json (checked by its
 // SHA-256), the shell page as `cap copy` would lay it out, and what the front reads. Run BEFORE
 // Xcode: it plans an xcframework's slices when the build starts, so one staged mid-build is not seen.
-// Usage: node engine/k7-ios/scripts/stage.mjs [--sim] [--only=engine,supervisor,embed,cacert,shell,backend]
-// See engine/k7-runtime/docs/ios.md.
+// Usage: node apps/k7-daw-ios/scripts/stage.mjs [--sim] [--only=engine,supervisor,embed,cacert,shell,backend]
+// See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -81,9 +81,14 @@ mkdirSync(frameworks, { recursive: true });
 mkdirSync(resources, { recursive: true });
 
 if (wanted("engine")) {
-  run("node", ["engine/k7-runtime/scripts/build.mjs", preset]);
+  run("node", ["apps/k7-daw-engine/k7-runtime/scripts/build.mjs", preset]);
   xcframework(
-    join(repo, "engine/k7-runtime/build", preset, "k7runtime.framework"),
+    join(
+      repo,
+      "apps/k7-daw-engine/k7-runtime/build",
+      preset,
+      "k7runtime.framework",
+    ),
     join(frameworks, "k7runtime.xcframework"),
   );
 }
@@ -93,7 +98,7 @@ if (wanted("supervisor")) {
     "node",
     [
       "-e",
-      "import('./engine/scripts/supervisorBuild.mjs').then((m) => m.buildSupervisor(process.cwd()))",
+      "import('./apps/k7-daw-engine/scripts/supervisorBuild.mjs').then((m) => m.buildSupervisor(process.cwd()))",
     ],
     repo,
     {
@@ -101,7 +106,12 @@ if (wanted("supervisor")) {
     },
   );
   xcframework(
-    join(repo, "engine/k7-supervisor/build", preset, "k7supervisor.framework"),
+    join(
+      repo,
+      "apps/k7-daw-engine/k7-supervisor/build",
+      preset,
+      "k7supervisor.framework",
+    ),
     join(frameworks, "k7supervisor.xcframework"),
   );
 }
@@ -124,7 +134,7 @@ if (wanted("embed")) {
       "--target-dir",
       targetDir,
     ],
-    join(repo, "apps/k7/backend-rs"),
+    join(repo, "apps/k7-daw-backend"),
     { IPHONEOS_DEPLOYMENT_TARGET: "17.0" },
   );
   mkdirSync(join(staged, "lib"), { recursive: true });
@@ -140,7 +150,7 @@ if (wanted("cacert")) {
 
 // The shell page Android shows too, laid out as `cap copy` lays it: public/ beside the config Capacitor reads at start.
 if (wanted("shell")) {
-  const web = join(repo, "engine/k7-android/web");
+  const web = join(repo, "apps/k7-daw-android/web");
   run("npm", ["run", "build"], web);
   rmSync(join(resources, "public"), { recursive: true, force: true });
   cpSync(join(web, "dist"), join(resources, "public"), { recursive: true });
@@ -157,7 +167,7 @@ if (wanted("shell")) {
   mkdirSync(scripts, { recursive: true });
   for (const name of ["account.js", "media-session.js", "top-color.js"])
     cpSync(
-      join(repo, "engine/k7-android/app/src/main/assets", name),
+      join(repo, "apps/k7-daw-android/app/src/main/assets", name),
       join(scripts, name),
     );
 }
@@ -168,10 +178,10 @@ if (wanted("backend")) {
   const out = join(resources, "backend");
   rmSync(out, { recursive: true, force: true });
   mkdirSync(out, { recursive: true });
-  cpSync(join(repo, "apps/k7/frontend/dist"), join(out, "dist"), {
+  cpSync(join(repo, "apps/k7-daw-frontend/dist"), join(out, "dist"), {
     recursive: true,
   });
-  const rust = join(repo, "apps/k7/backend-rs/scripts");
+  const rust = join(repo, "apps/k7-daw-backend/scripts");
   run("node", [join(rust, "stageCodeRoot.mjs"), join(out, "code")]);
   run("node", [
     "--input-type=module",
@@ -179,7 +189,7 @@ if (wanted("backend")) {
     `const m = await import(${JSON.stringify(join(rust, "libraryArchive.mjs"))}); await m.bundleLibrary(${JSON.stringify(repo)}, ${JSON.stringify(join(out, "k7-core"))});`,
   ]);
   cpSync(
-    join(repo, "apps/k7/backend-rs/standalone.json"),
+    join(repo, "apps/k7-daw-backend/standalone.json"),
     join(out, "standalone.json"),
   );
 }

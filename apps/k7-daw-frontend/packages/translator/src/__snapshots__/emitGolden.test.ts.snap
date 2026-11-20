@@ -85,25 +85,25 @@ params({ Mix: 0.5 })
     "song.k7/nodes/mix-bass.k7x": "// bass's strip: volume, pan and three bands, and the one place its level lives.
 //
 // Written by the import, because a lane without one plays at unity with nowhere to put a
-// level — see packages/song/docs/trackMixer.md.
+// level — see apps/k7-daw-frontend/packages/song/docs/trackMixer.md.
 extends("@meta/audio/mixer")
 ",
     "song.k7/nodes/mix-drums.k7x": "// drums's strip: volume, pan and three bands, and the one place its level lives.
 //
 // Written by the import, because a lane without one plays at unity with nowhere to put a
-// level — see packages/song/docs/trackMixer.md.
+// level — see apps/k7-daw-frontend/packages/song/docs/trackMixer.md.
 extends("@meta/audio/mixer")
 ",
     "song.k7/nodes/mix-keys.k7x": "// keys's strip: volume, pan and three bands, and the one place its level lives.
 //
 // Written by the import, because a lane without one plays at unity with nowhere to put a
-// level — see packages/song/docs/trackMixer.md.
+// level — see apps/k7-daw-frontend/packages/song/docs/trackMixer.md.
 extends("@meta/audio/mixer")
 ",
     "song.k7/nodes/mix-vox.k7x": "// vox's strip: volume, pan and three bands, and the one place its level lives.
 //
 // Written by the import, because a lane without one plays at unity with nowhere to put a
-// level — see packages/song/docs/trackMixer.md.
+// level — see apps/k7-daw-frontend/packages/song/docs/trackMixer.md.
 extends("@meta/audio/mixer")
 ",
     "song.k7/nodes/pro_q_3_bass.k7x": "// pro_q_3_bass — inherits pro_q_3 (the plugin); only what this use sets differs.

@@ -63,7 +63,7 @@ describe("sequence empty", () => {
 describe("a project holding an empty sequence", () => {
   it("still loads, the sequence placed and as long as its period", () => {
     const here = dirname(fileURLToPath(import.meta.url));
-    const demos = join(here, "..", "..", "..", "demos");
+    const demos = join(here, "..", "..", "..", "..", "..", "demos");
     const ws = mkdtempSync(join(tmpdir(), "seq-empty-load-"));
     const song = join(ws, "song");
     try {

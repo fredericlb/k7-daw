@@ -37,7 +37,7 @@ export function deriveChains(
   if (Array.isArray((raw as { chains?: unknown }).chains))
     throw new Error(
       "graph.k7x: `chains:` is a chain LIST, which is not read — a graph holds " +
-        "`modules:` segments, who feeds whom (packages/song/docs/graphFile.md)",
+        "`modules:` segments, who feeds whom (apps/k7-daw-frontend/packages/song/docs/graphFile.md)",
     );
   const parsed = GraphFileSchema.safeParse(raw);
   if (!parsed.success)

@@ -11,14 +11,14 @@ can name comes from:
 - **`/@banc/<chain ref>/live.k7`** — the rig with a **copy** of that library chain between the
   input and the fader (`/@banc/@k7-core/vocals/warm/live.k7`, `/@banc/@account/warm-vox/live.k7`).
   It is how a chain is HEARD on a live input, and how one of the
-  account's frozen chains is EDITED ([frozenChains.md](../../frontend/docs/frozenChains.md)). The
+  account's frozen chains is EDITED ([frozenChains.md](../../k7-daw-frontend/docs/frozenChains.md)). The
   copy is the RIG's own: the template's steps become the rig's segments and node files, a chain
   file's nodes named after the modules they extend, since an id says nothing on a card
-  (`apps/k7/backend-rs/crates/k7-file-service/src/bench/mod.rs`).
+  (`apps/k7-daw-backend/packages/k7-file-service/src/bench/mod.rs`).
 - **`/@banc/live.k7`** — the bare rig, input straight to the fader: where a new chain is built.
 
 A bare library ref, `/@banc/@k7-core/live.k7`, is refused: a library is not edited on a bench, an
-admin edits it from any project ([apps/k7/frontend/docs/sharedModules.md](../../frontend/docs/sharedModules.md)).
+admin edits it from any project ([apps/k7-daw-frontend/docs/sharedModules.md](../../k7-daw-frontend/docs/sharedModules.md)).
 
 ## What is kept, and where
 
@@ -42,26 +42,26 @@ another chain is opened.
 ## The shape is `live`
 
 No arrangement, no lane, no surface: the same scaffold `k7` writes for a `live` project
-([packages/song/docs/liveProject.md](../../../../packages/song/docs/liveProject.md)), and the
+([apps/k7-daw-frontend/packages/song/docs/liveProject.md](../../k7-daw-frontend/packages/song/docs/liveProject.md)), and the
 same file that writes it — a second copy of a rig is a second rig to keep in step. The rig is a
 GRAPH project rather than chain files, since `spliceChain` wires the chain between nodes it names.
 
 ## What it needs
 
 The **library** — every module the rig can name is in one, except the fader: it is a use of
-`@meta/audio/mixer`, which ships with k7 (`packages/song/docs/metaModules.md`). So the file service
+`@meta/audio/mixer`, which ships with k7 (`apps/k7-daw-frontend/packages/song/docs/metaModules.md`). So the file service
 refuses a bench before the origin lists a library. The workspace the rig sits in is the bench's
 own, `Banc`, reserved by convention the way `Examples` is.
 
 **`Banc` is pinned as a NEW workspace**, to the newest version of each library this k7 runs, the first
-time anything reads through it (`benchViewDir` in `apps/k7/backend-rs/crates/k7-file-service/src/bench/mod.rs`). The account's
+time anything reads through it (`benchViewDir` in `apps/k7-daw-backend/packages/k7-file-service/src/bench/mod.rs`). The account's
 own views — its frozen chains, the libraries' cold and live chains, a slot — resolve through it when no
 workspace is open, and an unpinned folder hears version 1, which a fresh install holding only a later
 version does not have: those views would list nothing. No pins are written while no library is here,
 since pins naming none are never written again.
 
 A chain with a **cold** step is refused on the seeded address, since it cannot run on a live input
-(`apps/k7/backend-rs/crates/k7-file-service/src/bench/mod.rs`). Anything else under `@banc` — `chains/<path>.k7`,
+(`apps/k7-daw-backend/packages/k7-file-service/src/bench/mod.rs`). Anything else under `@banc` — `chains/<path>.k7`,
 `modules.k7` — is a 404 whose sentence says where the editing happens.
 
 ## What it is not
@@ -72,7 +72,7 @@ A chain with a **cold** step is refused on the seeded address, since it cannot r
   name resolution on the server, no clone, one call to the machine.
 - **Not in the song's way.** It plays in a session of its own, `banc:<you>`, so it opens beside the
   song you have open rather than taking its place — on the same engine, since your files drive one
-  engine at a time ([apps/k7/backend-rs/docs/engine/claim.md](../../../../apps/k7/backend-rs/docs/engine/claim.md)).
+  engine at a time ([apps/k7-daw-backend/docs/engine/claim.md](./engine/claim.md)).
 - **Not shared, and one at a time.** It lives in your account's `Banc` workspace, on the chosen
   machine: one bench per account, so a second tab on another chain replaces the first's rig.
 - **Not a song.** Nothing is arranged. What a trial produces that is worth keeping is a chain saved
@@ -80,7 +80,7 @@ A chain with a **cold** step is refused on the seeded address, since it cannot r
 
 ## What to check in a browser
 
-The `bench` module's tests in `apps/k7/backend-rs/crates/k7-file-service/src/bench/` prove the folder, the kept
+The `bench` module's tests in `apps/k7-daw-backend/packages/k7-file-service/src/bench/` prove the folder, the kept
 edits and the save; the screen is a browser's:
 
 - open `/@banc/<chain ref>/live.k7` → the chain sits between `IN` and `fader`; the library's own

@@ -3,7 +3,7 @@
 A VST is the plugin an engine is most likely not to have. It is installed on one machine and not the
 next, and some exist on one platform only. A song through one plays on the machine that has it and
 nowhere else — which is what an engine's compatibility score counts
-(`packages/engine-browser/docs/access.md`).
+(`apps/k7-daw-frontend/packages/engine-browser/docs/access.md`).
 
 So a track through a VST is **frozen automatically**: rendered once, while nobody is listening, on
 a machine that has the VST, and the render plays instead **on an engine that lacks it** — until
@@ -51,7 +51,7 @@ Three details make it hold:
 - **A VST's params are its `.vstpreset`**, which its own window rewrites IN PLACE — same path, new
   bytes. Files the doc names are therefore entered by CONTENT when under 1 MB (presets, NAM models,
   IRs), by name and size when larger (audio), memoised on mtime. The file service's revision token
-  counts `.vstpreset` for the same reason (`apps/k7/backend-rs/crates/k7-file-service/src/workspaces/mod.rs`,
+  counts `.vstpreset` for the same reason (`apps/k7-daw-backend/packages/k7-file-service/src/workspaces/mod.rs`,
   `REVISION_FILE`).
 - **Portable names.** A file inside the project enters by its path there; one outside (a
   library) by its name. The same song in two places gives the same
@@ -75,15 +75,15 @@ every engine copy and every LFS quota pays for renders nobody will play again.
   no longer unique to one project, and an older fingerprint may be another project's current one.
 - **Reached by the engine as a root of its own.** The bound engine sees the cache as
   `renders-<account>`, WRITABLE: the render job writes its wav there and the tunnel uploads it, and a
-  doc that plays it gets it copied down like any clip (`apps/k7/backend-rs/crates/k7-hub/src/binding.rs`).
-- **Purged after a month (30 days) unused** (`apps/k7/backend-rs/crates/k7-hub/src/stale.rs`). The HUB sweeps every
+  doc that plays it gets it copied down like any clip (`apps/k7-daw-backend/packages/k7-hub/src/binding.rs`).
+- **Purged after a month (30 days) unused** (`apps/k7-daw-backend/packages/k7-hub/src/stale.rs`). The HUB sweeps every
   account's cache hourly, not the file service: an account's service is stopped when idle, which is
   exactly when its renders go stale. A purged render is only a missing one — the next compile plays
   the track live and the freezer makes it again.
 - **"Used" is the atime.** A compile that plays a render marks it — at most once an hour — on its
   ATIME alone, and the sweep reads the later of atime and mtime. Not the mtime: the engine sync
   compares size and mtime to decide what to copy, and a bump there would send the wav to the
-  machine again (`apps/k7/backend-rs/docs/file-engine.md`). Set explicitly, an atime holds on a
+  machine again (`apps/k7-daw-backend/docs/file-engine.md`). Set explicitly, an atime holds on a
   volume mounted `noatime`.
 
 ## The compile, in two passes
@@ -101,7 +101,7 @@ they differ — at the next stop if the transport runs.
 
 ## Making the renders
 
-`apps/k7/backend-rs/crates/k7-file-service/src/jobs/freezer.rs` looks at each served project every few seconds. When
+`apps/k7-daw-backend/packages/k7-file-service/src/jobs/freezer.rs` looks at each served project every few seconds. When
 the engine is **stopped** and the revision moved, it asks for every missing render whose VSTs the
 rendering engine has — ALL of them, and a non-empty catalogue: a render made without the VST would
 bake its stub, and then play everywhere as the song.
@@ -109,8 +109,8 @@ bake its stub, and then play everywhere as the song.
 The render is made on the engine's MACHINE, which is the one with the VSTs:
 
 - when the server hosts the files, as a `render` job on the bound machine's jobs path
-  (`engine/k7-supervisor/src/MachineJobs.cpp`). The doc travels in the request; the tunnel brings
-  its clips down and the render back up (`packages/engine-tunnel/docs/jobs.md`);
+  (`apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp`). The doc travels in the request; the tunnel brings
+  its clips down and the render back up (`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`);
 - when the file service runs beside the engine, by the local engine binary, without blocking.
 
 Nothing is committed and nothing reloads: the render lands in the cache for the engines that will
@@ -144,7 +144,7 @@ from its existing render if nothing changed, by a new one otherwise.
 account's scan says. A share is played by the server's engine, which hosts no VST, and the account's
 `exts.json` names whichever engine was bound last. Compiled that way, every VST track with a render
 plays the render, and one without a render is what a share refuses to go out with
-(`apps/k7/backend-rs/docs/file-shares.md`). `AutoFreezer.renderAllNow` is how it gets them: every missing
+(`apps/k7-daw-backend/docs/file-shares.md`). `AutoFreezer.renderAllNow` is how it gets them: every missing
 render made at once, transport running or not, and those no connected machine can make named back.
 
 ## On screen
@@ -157,8 +157,8 @@ gives way to them. Both wear the frost; only a manual freeze hides the plugin an
 ## Compatibility
 
 A frozen VST still COUNTS in what a project needs its engine to host
-(`apps/k7/backend-rs/crates/k7-file-service/src/jobs/plugin.rs`). The render lets an engine without the VST play the
+(`apps/k7-daw-backend/packages/k7-file-service/src/jobs/plugin.rs`). The render lets an engine without the VST play the
 track, not edit it — a knob, the plugin window, a param change all need the real plugin — so that
 engine keeps its compatibility loss, and the auto-pick still prefers one that has the VST.
 
-The pass runs as the Rust freezer, replaying this page's traces: `apps/k7/backend-rs/docs/file-engine-jobs.md`.
+The pass runs as the Rust freezer, replaying this page's traces: `apps/k7-daw-backend/docs/file-engine-jobs.md`.

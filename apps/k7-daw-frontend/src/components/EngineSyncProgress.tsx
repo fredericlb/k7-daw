@@ -1,6 +1,6 @@
 // EngineSyncProgress.tsx — the footer's bar while the project's files are copied to the engine's
 // machine: the project is sent, and plays, only once they are all there, so nothing is fetched
-// mid-set. Counts only what had to be copied. See apps/k7/backend-rs/docs/file-engine.md.
+// mid-set. Counts only what had to be copied. See apps/k7-daw-backend/docs/file-engine.md.
 
 import { formatBytes } from "@studio/ui-chains-react/node-load";
 import type { EngineSyncState } from "@studio/web-protocol";

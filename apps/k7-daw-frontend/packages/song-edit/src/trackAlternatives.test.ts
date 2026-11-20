@@ -1,4 +1,4 @@
-// Editing a lane playing one of its ALTERNATIVES must edit that one — packages/song/docs/alternatives.md.
+// Editing a lane playing one of its ALTERNATIVES must edit that one — apps/k7-daw-frontend/packages/song/docs/alternatives.md.
 
 import { mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

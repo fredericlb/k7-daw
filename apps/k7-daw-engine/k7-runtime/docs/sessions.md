@@ -1,12 +1,12 @@
 # Sessions inside the engine
 
-One engine holds N projects. `packages/engine-protocol/docs/sessions.md` covers the id and the
+One engine holds N projects. `apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md` covers the id and the
 client rules; this page is the engine's half — who may create a session, who may only look at
 one, what the lock protects, and when a session goes away.
 
 ## The registry, and what the lock is on
 
-`engine/k7-runtime/engine/SessionRegistry.h` is a `std::map<std::string, std::unique_ptr<T>>` behind
+`apps/k7-daw-engine/k7-runtime/engine/SessionRegistry.h` is a `std::map<std::string, std::unique_ptr<T>>` behind
 a mutex. Three things about it are load-bearing:
 
 **The lock protects the MAP's structure, never a session's contents.** `std::map` does not
@@ -83,7 +83,7 @@ the supervisor's own client.
 
 ## Which replies carry a session
 
-`packages/engine-protocol/sessions.ts` holds the two lists, `PER_SESSION_REPLIES` and
+`apps/k7-daw-frontend/packages/engine-protocol/sessions.ts` holds the two lists, `PER_SESSION_REPLIES` and
 `ENGINE_GLOBAL_REPLIES`, and `sessions.test.ts` pins them. In the server's handlers (`server/Serve*.cpp`) the choice is a **verb**:
 
 | verb | for |
@@ -160,7 +160,7 @@ Three regressions it exists to catch:
   other project's meters to throw them away, and one session playing keeps every other session's
   tabs awake past their own idle divider.
 
-Its body is wrapped in a function rather than using top-level await, because `engine/k7-runtime`
+Its body is wrapped in a function rather than using top-level await, because `apps/k7-daw-engine/k7-runtime`
 declares no `"type": "module"` and tsx transforms it to CJS, where a bare await is a syntax error.
 
 `list-sessions.ts` is **read-only against a REAL engine**: it must not send projects or drop
@@ -170,7 +170,7 @@ and asking about everyone — which is why `list-sessions` carries no session fi
 everything the supervisor polls BEFORE listing, because that is the regression it guards: should reading
 ever CREATE again, those queries conjure a `""` session which then appears in the supervisor's own
 session list, reported by the process that has just invented it. It asks through
-`EngineControl`, the way `engine/k7-supervisor/src/EngineQueries.cpp` does: one question at a
+`EngineControl`, the way `apps/k7-daw-engine/k7-supervisor/src/EngineQueries.cpp` does: one question at a
 time, each waiting for its typed reply.
 
 ## When a session goes away
@@ -246,7 +246,7 @@ the count has to be restored. Registered once per socket — the browser's keepa
 
 ### The socket side, in the front
 
-The front holds one socket per session (`apps/k7/backend-rs/docs/file-engine.md`). An abandoned link is not merely a
+The front holds one socket per session (`apps/k7-daw-backend/docs/file-engine.md`). An abandoned link is not merely a
 leaked socket: it would re-dial for the life of the process and keep that session alive on the engine, so an idle link is
 reaped after five minutes **without** telling the engine, since the person may come back and their project should still
 be loaded.
@@ -257,7 +257,7 @@ does.
 ## The slot
 
 One session is the supervisor's: `slot` (`EngineHost::kSlotSession`), where the frozen chain the
-machine keeps compiled plays with nobody attached (`engine/k7-supervisor/docs/slots.md`).
+machine keeps compiled plays with nobody attached (`apps/k7-daw-engine/k7-supervisor/docs/slots.md`).
 
 - **It is never let go for having no driver.** `releaseAbandonedProjects` skips it: playing with no
   page is what it is for, and a page that drove it and left must not take it down.

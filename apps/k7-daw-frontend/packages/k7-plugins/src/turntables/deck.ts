@@ -117,7 +117,7 @@ export function platterRate(
 /** What a platter's `Key` should be: 1 holds the pitch, 0 lets it follow the speed.
  *
  * A hand on the record wins over the switch, and that is not a compromise — a scratch CHANGES pitch,
- * that is the sound of the gesture. See ../../../../packages/k7-plugins/docs/turntables/scratch.md. */
+ * that is the sound of the gesture. See ../../docs/turntables/scratch.md. */
 export function platterKey(
   tempo: DeckTempo | undefined,
   /** Is a hand holding the record right now? */
@@ -167,7 +167,7 @@ function onPlatter(
     params: {
       ...held,
       Rate: platterRate(tempo, playing),
-      // KEY is a param of the platter, not a second way of playing — ../../../../engine/k7-runtime/docs/turntable.md.
+      // KEY is a param of the platter, not a second way of playing — ../../../../../k7-daw-engine/k7-runtime/docs/turntable.md.
       // No hand here: a document is what the deck does when nobody is touching it.
       Key: platterKey(tempo, false),
     },

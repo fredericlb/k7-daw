@@ -131,7 +131,7 @@ export const EVENT_EDIT_VERBS: Record<string, SidHandler> = {
       h.log([
         `${track.id}: ${hit.name || hit.id} -> ${startTc}..${endTc} (${span})` +
           (done.loops > 1 ? ` × ${done.loops}` : ""),
-        // The EVENT's own window, clamped inside the material's from/to — packages/song/docs/clipResize.md.
+        // The EVENT's own window, clamped inside the material's from/to — apps/k7-daw-frontend/packages/song/docs/clipResize.md.
         `  this event only — ${done.material} keeps its own from/to`,
       ]);
       await h.reload();

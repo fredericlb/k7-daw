@@ -159,7 +159,7 @@ function shownNode(dir: string, rel: string): string {
 }
 
 export const NODE_NEW_VERBS: Record<string, SidHandler> = {
-  // One-shot format repairs are scripts under packages/song/scripts/, not rows in every palette.
+  // One-shot format repairs are scripts under apps/k7-daw-frontend/packages/song/scripts/, not rows in every palette.
 
   /** module new <category>/<name> [extends-ref] — scaffold a module, and only that; docs/verbs.md. */
   "module.create": async (a, h) => {

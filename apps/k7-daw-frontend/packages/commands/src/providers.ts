@@ -130,7 +130,7 @@ export const PROVIDERS = {
       return []; // an unreadable module folder costs the completion, not the command
     }
   },
-  /** Every engine name the project's modules offer, deduped — packages/song/docs/engines.md. */
+  /** Every engine name the project's modules offer, deduped — apps/k7-daw-frontend/packages/song/docs/engines.md. */
   moduleEngines: (h) => {
     if (!h.songPath) return [];
     try {
@@ -198,7 +198,7 @@ export const PROVIDERS = {
       return []; // a broken curve file costs the completion, not the command
     }
   },
-  // The OPEN registry, not the schema's enum, so a plugin's surface completes like a builtin's (packages/k7-sdk/docs/sdk.md).
+  // The OPEN registry, not the schema's enum, so a plugin's surface completes like a builtin's (apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md).
   surfaceTypes: () => [...allSurfaceTypes()],
   // Sequence FILE ids, read off disk: a file id can differ from the midi-clip name it reports.
   sequenceFiles: (h) => {

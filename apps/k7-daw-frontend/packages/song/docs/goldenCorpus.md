@@ -1,6 +1,6 @@
 # The golden corpus
 
-What the compiler made of 174 projects, committed and frozen under `apps/k7/backend-rs/fixtures/golden/`.
+What the compiler made of 174 projects, committed and frozen under `apps/k7-daw-backend/fixtures/golden/`.
 The files are recorded behaviour: `doc_golden.rs` decodes every `engine` document into the Rust `ProjectDoc`, and
 `serviceGolden.spec.ts` compiles the same projects on a running service, renders them and
 judges what they sound like. The native compiler is not held to the files byte for byte.
@@ -36,7 +36,7 @@ compiled by a project that uses it, so the corpus holds one per module.
 | the waveform prewarm is left out | it runs in the background, decodes audio and writes caches; it changes no document |
 | the key order is the compiler's own, never sorted | the engine receives the document as written, so the order is part of the bytes |
 | one pretty-printed file per project | a drift then reads as a diff naming the project. The tree is 11 MB, mostly the graph's module panels; git stores it compressed, about 0.7 MB |
-| the files sit in `apps/k7/backend-rs/fixtures/` | beside the other vectors the Rust side reads, so a crate test needs nothing outside `backend-rs` |
+| the files sit in `apps/k7-daw-backend/fixtures/` | beside the other vectors the Rust side reads, so a crate test needs nothing outside `apps/k7-daw-backend` |
 | k7-core is staged as a real folder: its data families (`samples`, `models`, `irs`, `wavetables`) joined by junction, the rest copied | the library walk skips a top-level symlink; a compile writes caches beside a module, which must never land in the repo; 50 MB of audio and models is not worth copying. A junction needs no Developer Mode on Windows |
 | every `jsdsp.json` stays in the staged tree | no host builds a `jsdsp.ts`, so that file IS the graph played for its module |
 | a module's lanes play a clip (`kick.wav` from `clip-lane.k7`), notes only where the module needs notes | a synth before every effect would put its panel in nearly every graph |

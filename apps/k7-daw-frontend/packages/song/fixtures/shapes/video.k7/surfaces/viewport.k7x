@@ -5,6 +5,6 @@
 // it keeps its GL context and its <video> per layer, so showing it again costs nothing.
 //
 // Delete this file and the lanes still compile and still draw on the timeline — nothing
-// composites them. See packages/song/docs/surfaces.md.
+// composites them. See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
 type("viewport")
 layout("floating")

@@ -14,11 +14,11 @@ export const run = (cmd, args, cwd, env = {}) =>
 
 // Files that change every crate's build or check: the workspace's manifests and settings, the toolchain, the Rust checks' own scripts.
 export const WIDE = [
-  "apps/k7/backend-rs/Cargo.toml",
-  "apps/k7/backend-rs/Cargo.lock",
-  "apps/k7/backend-rs/.config/",
+  "apps/k7-daw-backend/Cargo.toml",
+  "apps/k7-daw-backend/Cargo.lock",
+  "apps/k7-daw-backend/.config/",
   "rust-toolchain",
-  "engine/scripts/sccache.mjs",
+  "apps/k7-daw-engine/scripts/sccache.mjs",
   "scripts/agent/mac-checks.sh",
   "scripts/agent/rerun-failed.sh",
   "scripts/agent/affected-crates.mjs",
@@ -28,8 +28,8 @@ export const WIDE = [
 ];
 
 export const MANIFESTS = [
-  "apps/k7/backend-rs/Cargo.toml",
-  "apps/k7/backend-rs/Cargo.lock",
+  "apps/k7-daw-backend/Cargo.toml",
+  "apps/k7-daw-backend/Cargo.lock",
 ];
 
 // The base is K7_CRATES_BASE (gate.sh --milestone passes the last milestone that passed on this branch), else main's merge-base.
@@ -70,7 +70,8 @@ export function branchFiles(root, base = branchBase(root)) {
 export function wideFiles(files) {
   const crateManifest = files.some(
     (f) =>
-      f.startsWith("apps/k7/backend-rs/crates/") && f.endsWith("/Cargo.toml"),
+      f.startsWith("apps/k7-daw-backend/packages/") &&
+      f.endsWith("/Cargo.toml"),
   );
   return files.filter(
     (f) =>

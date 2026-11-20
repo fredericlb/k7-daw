@@ -3,7 +3,7 @@
 // The wait is the startup splash, full screen over the tray, on the colour the native launch screen drew (k7's docs/icons.md).
 
 import { Button } from "@studio/ui/button";
-import splash from "../../../../apps/k7/frontend/icon/k7-splash.svg";
+import splash from "../../../k7-daw-frontend/icon/k7-splash.svg";
 import { AppViews, type BackendStatus } from "./native";
 
 export function BackendPanel({ status }: { status: BackendStatus }) {
@@ -26,7 +26,7 @@ export function BackendPanel({ status }: { status: BackendStatus }) {
     status.step === "unpacking" && status.progress != null
       ? Math.round(status.progress * 100)
       : null;
-  // One screen with the web splash (apps/k7/frontend/index.html): the cassette, the ring, then two reserved lines.
+  // One screen with the web splash (apps/k7-daw-frontend/index.html): the cassette, the ring, then two reserved lines.
   const line =
     status.step === "unpacking"
       ? `Unpacking k7… ${pct ?? 0}%`

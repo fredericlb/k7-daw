@@ -1,5 +1,5 @@
 // engineChains.ts — what an ENGINE separates with, kept in that machine's own `engine-host.json` and reached over
-// its tunnel (`apps/k7/backend-rs/docs/engine/chains.md`). Only its owner may write: the server answers 403 for
+// its tunnel (`apps/k7-daw-backend/docs/engine/chains.md`). Only its owner may write: the server answers 403 for
 // anyone else, and an engine holding no tunnel answers 503 rather than a copy of an answer it cannot vouch for.
 
 import { API_ROOT } from "../api";

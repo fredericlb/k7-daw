@@ -3,7 +3,7 @@ import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import { studioParaglide } from "@studio/i18n/vite";
 import { defineAppConfig } from "@studio/vite-config";
 import type { ConfigEnv } from "vite";
-import { scaled } from "../../../scripts/vitestScale.ts";
+import { scaled } from "../../scripts/vitestScale.ts";
 import { noticesPlugin } from "./notices/vitePlugin.ts";
 import { entryPreloadPlugin } from "./preload/vitePlugin.ts";
 import { verbsWorkerPlugin } from "./verbs/vitePlugin.ts";
@@ -11,7 +11,7 @@ import { verbsWorkerPlugin } from "./verbs/vitePlugin.ts";
 /** The paths on this origin that are NOT k7's shell: the worker's scope is `/`, so only this list keeps a navigation to `/api` off it. */
 const OTHER_APPS = /^\/(api|auth)(\/|$)/;
 
-/** Heavy build files few sessions open, left out of the precache (packages/vite-config/docs/pwa.md): the About page's notices, the Cyrillic subsets. */
+/** Heavy build files few sessions open, left out of the precache (apps/k7-daw-frontend/packages/vite-config/docs/pwa.md): the About page's notices, the Cyrillic subsets. */
 const RARELY_USED = [
   "assets/_virtual_k7-notices-*.js",
   "assets/*-cyrillic*",
@@ -26,10 +26,10 @@ const STRATEGY: ["localStorage", "baseLocale"] = ["localStorage", "baseLocale"];
 const outputFor = (command: ConfigEnv["command"]) =>
   command === "build" ? "message-modules" : "locale-modules";
 
-/** The builtin plugins' catalogue (the desk, the viewport), compiled where k7-plugins reads it — packages/k7-plugins/docs/i18n.md. */
+/** The builtin plugins' catalogue (the desk, the viewport), compiled where k7-plugins reads it — apps/k7-daw-frontend/packages/k7-plugins/docs/i18n.md. */
 // fileURLToPath, not `.pathname`: on Windows the latter is `/D:/…`, which a resolve turns into `D:\D:\…`.
 const PLUGINS_I18N = fileURLToPath(
-  new URL("../../../packages/k7-plugins/", import.meta.url),
+  new URL("./packages/k7-plugins/", import.meta.url),
 );
 
 // Unlike the other apps, k7's dev server has no fixed port: the backend URL it proxies to is env-driven, and always localhost.
@@ -48,7 +48,7 @@ export default ({ command }: ConfigEnv) => {
     backendPort,
     // `/auth` (the local user's session), beside `/api`.
     proxyPaths: ["/auth"],
-    // The engine relay, live sync's relay and the remote cameras' signalling: only a declared wsPath gets `ws: true` (apps/k7/backend-rs/docs/engine/proxy.md).
+    // The engine relay, live sync's relay and the remote cameras' signalling: only a declared wsPath gets `ws: true` (apps/k7-daw-backend/docs/engine/proxy.md).
     wsPaths: ["/api/engine", "/api/sync", "/api/cameras"],
     // No `base`: k7 is the front door, so its assets and routes sit at `/`. Polling only when asked for (`$STUDIO_POLL`), for a tree native file events cannot see.
     poll: !!process.env.STUDIO_POLL,
@@ -74,7 +74,7 @@ export default ({ command }: ConfigEnv) => {
         noticesPlugin(),
         // appMain's chunks named in the built page, so they arrive with the entry rather than after it — docs/shell.md.
         entryPreloadPlugin(),
-        // The verbs' Worker, built from packages/commands' own bundle — docs/verbs.md.
+        // The verbs' Worker, built from apps/k7-daw-frontend/packages/commands' own bundle — docs/verbs.md.
         verbsWorkerPlugin(),
       ],
       server: {

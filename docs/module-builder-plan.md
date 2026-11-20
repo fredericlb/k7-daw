@@ -12,7 +12,7 @@ modules/<type>/<name>/ui.k7x         what it looks like
 ```
 
 Its named settings are NOT here: a preset is a file of the presets tree, keyed by the module's ref
-and kept in the workspace or a library (`packages/song/docs/userPresets.md`).
+and kept in the workspace or a library (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`).
 
 In the media library, clicking any of them opens the same builder as k7.
 
@@ -31,7 +31,7 @@ In the media library, clicking any of them opens the same builder as k7.
 3. The folder is the key, and the file carries no `ref:`: that would be a second source of truth.
    `uiPathFor` writes `<type>/<sub>/ui.k7x`, `loadUiLibrary` walks the **module** libraries and
    derives the ref from the folder, `writeUiFile` resolves the ref to its library
-   (`packages/song/src/uiLibrary.ts`, rationale in `packages/song/docs/uiLibrary.md`).
+   (`apps/k7-daw-frontend/packages/song/src/uiLibrary.ts`, rationale in `apps/k7-daw-frontend/packages/song/docs/uiLibrary.md`).
 
 The `io/` case is the remaining exception: a bare io ref (`desk`) has no type segment, so
 `uiPathFor` puts the `io/` back or the file lands at the root of the library. The test states it
@@ -41,7 +41,7 @@ explicitly.
 
 It appears at every storey, always the same way: counting as a **node** every `.k7x` in the folder
 that is not `module.k7x`. Unguarded, a panel comes back as a `reverb:ui` node.
-`nodeFiles` (`packages/song/src/yaml/moduleIO.ts`) and `scanModules` therefore skip the module's own
+`nodeFiles` (`apps/k7-daw-frontend/packages/song/src/yaml/moduleIO.ts`) and `scanModules` therefore skip the module's own
 basenames, named in one place — `MODULE_OWN_BASES`, where `presets` stays reserved so a stale shelf
 file is never read as a node. On the media library side, a module's
 entry carries `files`: what the folder really contains.
@@ -65,7 +65,7 @@ block offers it in place of `ui file`, which has no file to open. `writeUiFile` 
 ## Presets are not the builder's
 
 A preset is chosen, saved and updated on a NODE of the graph, which is where its values are heard;
-the builder's Preset menu holds the plugin's factory banks only (`packages/song/docs/userPresets.md`).
+the builder's Preset menu holds the plugin's factory banks only (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`).
 
 ## The shared package, and the seam
 
@@ -76,7 +76,7 @@ Both apps draw it.
 **The seam is `ModuleStore`** (`read`, `moduleUi`, `hints`, `write` and the optional ones), and
 the builder never builds a path — it only hands back the ones it was given. The two path spaces
 resemble each other too closely for it to construct one. Full rationale in
-`packages/ui-module-builder/docs/store.md`, including the one asymmetry: `write` may answer "it
+`apps/k7-daw-frontend/packages/ui-module-builder/docs/store.md`, including the one asymmetry: `write` may answer "it
 landed elsewhere", because k7 redirects a save aimed at `_modules` to a local copy. The builder
 surfaces that through `onRelocated` and does not follow the path itself.
 
@@ -103,6 +103,6 @@ created in the builder, which offers them anyway — it is the entrance, not the
 ## What is left
 
 - **Nothing is exercised in a browser.** Both apps typecheck, build, and the dev server serves the
-  modules through the workspace alias; the frontend shell has no tests (see `apps/k7/AGENTS.md`).
+  modules through the workspace alias; the frontend shell has no tests (see `apps/k7-daw-frontend/AGENTS.md`).
   The k7 overlay wants a real click.
 

@@ -1,7 +1,7 @@
 // tapChain.ts — a tap's SUBCHAIN, edited from the tap: add a module (the first one creating the subchain and routing
 // the tap to it), remove one, move one. The last one removed takes the subchain with it and puts the tap back on
 // the main output, since a tap-fed subchain with no node feeds nothing. Written straight into the node's chain file,
-// one write per edit, never through a graph rewrite. See packages/song/docs/racks.md.
+// one write per edit, never through a graph rewrite. See apps/k7-daw-frontend/packages/song/docs/racks.md.
 
 import { stub } from "@studio/song/editStub";
 

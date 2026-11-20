@@ -7,7 +7,7 @@ Two files, and the line between them is which MACHINE answers.
 | `src/fileApi.ts` + `src/files.ts` + `src/project.ts` | the **file service**, on the engine's machine, cross-origin and header-authenticated | `base` from the engine probe |
 | `src/repoLookup.ts` | **k7's backend**, at a fixed path on the page's own origin, with the session cookie | `serviceUrl(origin, "pl8")` |
 
-`apps/k7/AGENTS.md` lists the three servers a project app talks to and which is which.
+`apps/k7-daw-frontend/AGENTS.md` lists the three servers a project app talks to and which is which.
 
 ## The transport
 
@@ -82,7 +82,7 @@ exception is `PUT /file`, given `WRITE_MS` (60 s): an autosave waiting on a writ
 answers holds every later edit in the tab only, for as long as TCP takes to give up. A write that
 timed out may still have landed, so "no answer" is not "failed": the autosave keeps the text and
 tries again, and the file service takes a retry that finds its own text already on disk as no
-conflict with its base (`apps/k7/backend-rs/docs/file-native.md`).
+conflict with its base (`apps/k7-daw-backend/docs/file-native.md`).
 
 ### A broken-off read is asked once more, and never comes from the browser's cache
 
@@ -91,7 +91,7 @@ the workspace's revision is what decides when to ask again, so a copy the browse
 own could only be older than the one asked for. A read whose connection broke, or that came back 2xx
 with an empty body, is asked a second time before anyone is told. The file service restarts while
 it is being developed, and the file hub breaks the connection rather than ending it cleanly when the
-service goes away mid-answer (`apps/k7/backend-rs/crates/k7-front/src/routes/files/hub/proxy.rs`). A clean end would pass a cut-off body as
+service goes away mid-answer (`apps/k7-daw-backend/packages/k7-front/src/routes/files/hub/proxy.rs`). A clean end would pass a cut-off body as
 a whole one, and every caller would fail to parse it.
 
 ### A read waits while the page is leaving
@@ -155,11 +155,11 @@ waveforms, video; an app that needs no more uses it as it stands.
 
 - **`openBench`**: `@banc` in the address routes here. It can be slow the first time — a library
   that is not yet on disk — which is why it has a progress screen rather than being asked for silently
-  (`apps/k7/backend-rs/docs/banc.md`). It is handed the project part of the address verbatim, because the
+  (`apps/k7-daw-backend/docs/banc.md`). It is handed the project part of the address verbatim, because the
   MACHINE is what builds the bench and therefore what decides which address it answers; the
   libraries are the machine's already.
 - **`open`** takes the project and nothing else: the server keeps the origin's libraries and
-  brings them up to date on the way (`apps/k7/backend-rs/docs/libraries.md`). Its answer also
+  brings them up to date on the way (`apps/k7-daw-backend/docs/libraries.md`). Its answer also
   carries the change token as of the open, kept for `openedRevision()`. A page polling `/revision`
   starts from it: otherwise its token begins at null, and the first poll's answer looks like a
   change, so every view that fetched on mounting fetched again. On a phone that was the project
@@ -172,7 +172,7 @@ waveforms, video; an app that needs no more uses it as it stands.
   filled into the project's own compile. It goes through the file service rather than out of the
   app's socket so that ONE thing writes to the engine: the service already loads k7's project
   itself, and a second writer meant whichever pushed last would win
-  (`packages/song/docs/surfaces.md`).
+  (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`).
 - **The derived views** — `projectDoc`, `engineDoc`, `videoDoc`, `graph`, `surfaces`,
   `projectErrors` — are expensive. `revision()` is the cheap token that changes when the sources
   do: poll THAT, not these.
@@ -207,7 +207,7 @@ what lets a client stop re-asking what the reply already said.
 
 `refused` is the same shape of fact about the other half — the command was understood and declined,
 and the lines in `output` say why. Present only when true, so a surface that ignores it reads a
-refusal as an ordinary reply (see `packages/commands/docs/refusal.md`).
+refusal as an ordinary reply (see `apps/k7-daw-frontend/packages/commands/docs/refusal.md`).
 
 `changed` names the FILES it wrote, project-relative, out of the journal's own diff. It is what
 lets a host reload only what depends on them; absent means the service could not say, which is
@@ -226,11 +226,11 @@ list.
 ## Two things this client deliberately has no route for
 
 - **Cutting stems** is a verb: `clip process` and `playlist stems` run in the Worker with every other act,
-  and the file service sends the cut to the engine's machine (`engine/k7-supervisor/docs/stemSplit.md`).
+  and the file service sends the cut to the engine's machine (`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`).
 - **Grouping two interface inputs into one stereo device** is a verb, not a route:
   `system channel type <channel> <mono|stereo>` writes the preference and tells the engine both,
   so it runs in the Worker with every other act
-  (`packages/ui-module-builder/docs/inputChannels.md`). Split over two doors it would be one act
+  (`apps/k7-daw-frontend/packages/ui-module-builder/docs/inputChannels.md`). Split over two doors it would be one act
   with no name, and the two halves could disagree.
 
 ## Asking k7's backend: the two lookups
@@ -251,6 +251,6 @@ the reason `launch.md` gives at step 0.
 ### A busy file service is asked again
 
 A native piece that is out of weight answers a 503 with `Retry-After` before it has done anything
-(`apps/k7/backend-rs/docs/declines.md`). `fget` and `fsend` ask again after the pause that header names,
+(`apps/k7-daw-backend/docs/declines.md`). `fget` and `fsend` ask again after the pause that header names,
 at most five seconds and at most three times, and only for that answer: a 503 without it is a runtime
 that failed, and is told at once.

@@ -1,6 +1,6 @@
 //! engine — the registry's routes, the relay, the tunnel hub's upgrades and the internal seam, answered by
 //! `k7-engine` when the engine core is ON (`K7_ENGINE_CORE=front`), declined to the backend, which answers 404, when
-//! OFF. Which paths move together and why: `apps/k7/backend-rs/docs/engine.md`.
+//! OFF. Which paths move together and why: `apps/k7-daw-backend/docs/engine.md`.
 
 mod chains;
 #[cfg(test)]

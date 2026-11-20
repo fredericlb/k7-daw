@@ -32,7 +32,7 @@ extends("@meta/track")
 // engine imposes: a module's second port is wired as a SIDECHAIN, and a sidechain reads a
 // track only while that track also reaches an audible output. A deck feeding nothing but a
 // crossfade would therefore be heard BESIDE it, raw, with no way to take it back — see
-// engine/k7-runtime/docs/sidechain.md. One input each, and the blend happens at the mixer.
+// apps/k7-daw-engine/k7-runtime/docs/sidechain.md. One input each, and the blend happens at the mixer.
 //
 //
 // `Level` IS this lane's gain, so the panel reads true on its own: 0 silent, 1 full. The
@@ -40,7 +40,7 @@ extends("@meta/track")
 // surfaces/desk.k7x states rather than either module knowing about the other.
 //
 // The module is NOT copied into this project: pl8 owns the only editable catalogue, so a
-// copy here would be a second Fade nobody maintains — packages/song/docs/nodes.md.
+// copy here would be a second Fade nobody maintains — apps/k7-daw-frontend/packages/song/docs/nodes.md.
 extends("@k7-core/audio/zz_utility/fade")
 params({
   // Centred, like the fader that drives it: both decks at half, which is where a set starts.
@@ -56,7 +56,7 @@ params({
 // engine imposes: a module's second port is wired as a SIDECHAIN, and a sidechain reads a
 // track only while that track also reaches an audible output. A deck feeding nothing but a
 // crossfade would therefore be heard BESIDE it, raw, with no way to take it back — see
-// engine/k7-runtime/docs/sidechain.md. One input each, and the blend happens at the mixer.
+// apps/k7-daw-engine/k7-runtime/docs/sidechain.md. One input each, and the blend happens at the mixer.
 //
 //
 // `Level` IS this lane's gain, so the panel reads true on its own: 0 silent, 1 full. The
@@ -64,7 +64,7 @@ params({
 // surfaces/desk.k7x states rather than either module knowing about the other.
 //
 // The module is NOT copied into this project: pl8 owns the only editable catalogue, so a
-// copy here would be a second Fade nobody maintains — packages/song/docs/nodes.md.
+// copy here would be a second Fade nobody maintains — apps/k7-daw-frontend/packages/song/docs/nodes.md.
 extends("@k7-core/audio/zz_utility/fade")
 params({
   // Centred, like the fader that drives it: both decks at half, which is where a set starts.
@@ -87,7 +87,7 @@ params({
 // Where it comes OUT is not this file's business and not the project's: `CUE` is a pair of
 // the interface, named once per MACHINE in preferences.yaml. A machine with no
 // second pair plays this bus nowhere at all — never into the room, which is measured in
-// engine/k7-runtime/scripts/cue-bus.ts. See packages/song/docs/cue.md.
+// apps/k7-daw-engine/k7-runtime/scripts/cue-bus.ts. See apps/k7-daw-frontend/packages/song/docs/cue.md.
 extends("@k7-core/audio/zz_utility/fade")
 params({
   // SILENT at rest: a set starts with nothing in the headphones, and the button is what opens it.
@@ -110,7 +110,7 @@ params({
 // Where it comes OUT is not this file's business and not the project's: `CUE` is a pair of
 // the interface, named once per MACHINE in preferences.yaml. A machine with no
 // second pair plays this bus nowhere at all — never into the room, which is measured in
-// engine/k7-runtime/scripts/cue-bus.ts. See packages/song/docs/cue.md.
+// apps/k7-daw-engine/k7-runtime/scripts/cue-bus.ts. See apps/k7-daw-frontend/packages/song/docs/cue.md.
 extends("@k7-core/audio/zz_utility/fade")
 params({
   // SILENT at rest: a set starts with nothing in the headphones, and the button is what opens it.
@@ -126,7 +126,7 @@ params({
 // The module is COLD: a tempo change is a time stretch, and a stretch has to know where
 // the file ends. That is why it sits on a deck at all — a deck's source is a file on the
 // machine's disk, which is the one input whose whole length is knowable up front. See
-// packages/song/docs/coldModules.md.
+// apps/k7-daw-frontend/packages/song/docs/coldModules.md.
 //
 // This is what the BPM fader in Mix moves. Both at 0 is a no-op: the record plays at its
 // own tempo until the analysis has measured one and somebody has asked for another.
@@ -147,7 +147,7 @@ params({
 // The module is COLD: a tempo change is a time stretch, and a stretch has to know where
 // the file ends. That is why it sits on a deck at all — a deck's source is a file on the
 // machine's disk, which is the one input whose whole length is knowable up front. See
-// packages/song/docs/coldModules.md.
+// apps/k7-daw-frontend/packages/song/docs/coldModules.md.
 //
 // This is what the BPM fader in Mix moves. Both at 0 is a no-op: the record plays at its
 // own tempo until the analysis has measured one and somebody has asked for another.
@@ -175,7 +175,7 @@ params({
 // "mid" means.
 //
 // The EQ module has several engines; the desk's is Tracktion's, named so a change of default
-// moves no deck (packages/song/docs/engines.md).
+// moves no deck (apps/k7-daw-frontend/packages/song/docs/engines.md).
 extends("@k7-core/audio/eq")
 engine("tracktion")
 engines({
@@ -200,7 +200,7 @@ engines({
 // "mid" means.
 //
 // The EQ module has several engines; the desk's is Tracktion's, named so a change of default
-// moves no deck (packages/song/docs/engines.md).
+// moves no deck (apps/k7-daw-frontend/packages/song/docs/engines.md).
 extends("@k7-core/audio/eq")
 engine("tracktion")
 engines({
@@ -295,11 +295,11 @@ params({
 // INPUT and not its output. Wired before the fader it would be cut along with everything else.
 //
 // `mix` is what the desk's knob moves — the ENGINE's dry/wet around the delay, whose own is
-// held at full wet (engine/k7-runtime/docs/mix.md) — and it rests at 0: an effect you drop
+// held at full wet (apps/k7-daw-engine/k7-runtime/docs/mix.md) — and it rests at 0: an effect you drop
 // into a chain must not be heard before somebody asks for it.
 //
 // `Time` is in MILLISECONDS and follows nothing: the desk knows each deck's BPM, but no
-// binding carries it here yet. See packages/k7-plugins/docs/turntables/fx.md.
+// binding carries it here yet. See apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/fx.md.
 // The delay's ECHO engine: the one of them whose Time is in milliseconds.
 extends("@k7-core/audio/delay")
 engine("echo")
@@ -368,11 +368,11 @@ params({
 // INPUT and not its output. Wired before the fader it would be cut along with everything else.
 //
 // `mix` is what the desk's knob moves — the ENGINE's dry/wet around the delay, whose own is
-// held at full wet (engine/k7-runtime/docs/mix.md) — and it rests at 0: an effect you drop
+// held at full wet (apps/k7-daw-engine/k7-runtime/docs/mix.md) — and it rests at 0: an effect you drop
 // into a chain must not be heard before somebody asks for it.
 //
 // `Time` is in MILLISECONDS and follows nothing: the desk knows each deck's BPM, but no
-// binding carries it here yet. See packages/k7-plugins/docs/turntables/fx.md.
+// binding carries it here yet. See apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/fx.md.
 // The delay's ECHO engine: the one of them whose Time is in milliseconds.
 extends("@k7-core/audio/delay")
 engine("echo")

@@ -34,7 +34,7 @@ export function useVideoEdits(
       const tl = timelineLaneOf(trackId);
       const inProject = (file: string) => `${dir ? `${dir}/` : ""}${file}`;
       try {
-        // A lane's file is `nodes/`, or a chain project's `tracks/` (packages/song/docs/chainFiles.md).
+        // A lane's file is `nodes/`, or a chain project's `tracks/` (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
         const { path, content } = tl
           ? await readAt(inProject(`timelines/${tl.timeline}.k7x`))
           : await readAt(inProject(`nodes/${trackId}.k7x`)).catch(() =>

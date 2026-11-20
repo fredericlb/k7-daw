@@ -108,7 +108,7 @@ export interface DomChainsProps {
   /** The stack view's toggle, drawn left of the minimap's zoom fit, and whether it is on. */
   onStack?: () => void;
   stacked?: boolean;
-  /** A rack tap's edit on a node: the host writes the node's file — packages/song/docs/racks.md. */
+  /** A rack tap's edit on a node: the host writes the node's file — apps/k7-daw-frontend/packages/song/docs/racks.md. */
   onTapEdit?: (module: string, action: TapAction) => void;
   // Where the camera lives BETWEEN mounts: the graph unmounts with its pane. See docs/chainsGraph.md.
   camStore?: CamStore;
@@ -129,7 +129,7 @@ export interface DomChainsProps {
   command: (line: string) => void | Promise<void>;
   // Bypass a module. Separate from `command` because it must RELOAD — the quiet path never bumps reloadKey.
   onBypassModule?: (module: string) => void;
-  /** Thaw an AUTOMATIC freeze before a control on it is used: its VST is baked, and an edit must reach a live one (packages/song/docs/autoFreeze.md). */
+  /** Thaw an AUTOMATIC freeze before a control on it is used: its VST is baked, and an edit must reach a live one (apps/k7-daw-frontend/packages/song/docs/autoFreeze.md). */
   onThawAutoFreeze?: (module: string) => void;
   /** Set a module's own FIELD, `node param <node> @<field> <v>`: it must reload, the reload being its only feedback. */
   onModuleField?: (line: string) => void | Promise<void>;
@@ -137,9 +137,9 @@ export interface DomChainsProps {
   onToggleAssembly?: (name: string) => void;
   /** An alternative badge: switch a module to a set (`name`), or copy the one on (null) — docs/hosting.md. */
   onAlternative?: (module: string, name: string | null) => void;
-  /** A node's engine dropdown: run a module as another of its engines — packages/song/docs/engines.md. */
+  /** A node's engine dropdown: run a module as another of its engines — apps/k7-daw-frontend/packages/song/docs/engines.md. */
   onEngine?: (module: string, name: string) => void;
-  /** A node's preset dropdown: the host lists that node's presets at the point given — packages/song/docs/userPresets.md. */
+  /** A node's preset dropdown: the host lists that node's presets at the point given — apps/k7-daw-frontend/packages/song/docs/userPresets.md. */
   onPresets?: (
     module: string,
     x: number,

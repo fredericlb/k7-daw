@@ -1,7 +1,7 @@
 // A picture lane's schema — a lane node's, its shots `PlacementSchema` events: the two spellings of a
 // fade, the located error a typo produces, and the activation. A `fadeOut` on the LAST length-0 shot
 // is the picture compile's to refuse, since only it knows the lane is picture (song-video videoProject.test.ts).
-// See packages/song-video/docs/transitions.md.
+// See apps/k7-daw-frontend/packages/song-video/docs/transitions.md.
 
 import { K7Document } from "@studio/k7x/document";
 import { describe, expect, it } from "vitest";

@@ -9,13 +9,13 @@ draws screens that show the sound's shape.
 
 | file | holds |
 |---|---|
-| `packages/panel-rules/src/aiPrompt.ts` | the system prompt: the grid, every widget, the lcdscreen contract, the design brief |
-| `packages/panel-rules/src/aiOrganize.ts` | the wire types, the per-module message, the check — in `@studio/panel-rules`, which has no React (`packages/panel-rules/docs/panelRules.md`) |
-| `packages/panel-rules/src/aiAnswer.ts` | the JSON the model answers, and its turn into `ui.k7x` text |
+| `apps/k7-daw-frontend/packages/panel-rules/src/aiPrompt.ts` | the system prompt: the grid, every widget, the lcdscreen contract, the design brief |
+| `apps/k7-daw-frontend/packages/panel-rules/src/aiOrganize.ts` | the wire types, the per-module message, the check — in `@studio/panel-rules`, which has no React (`apps/k7-daw-frontend/packages/panel-rules/docs/panelRules.md`) |
+| `apps/k7-daw-frontend/packages/panel-rules/src/aiAnswer.ts` | the JSON the model answers, and its turn into `ui.k7x` text |
 | `src/useAiOrganize.ts` | the builder's half: ask, send, land the answer in the buffers |
-| `packages/panel-rules/src/aiLoop.ts` | the conversation: the request check, the prompts, the checks above and one repair round, run by the host's page with a turn function it is given |
-| `apps/k7/backend-rs/crates/k7-front/src/routes/ai/turn.rs` | k7's half: one model turn on the account's key (`apps/k7/frontend/docs/aiOrganize.md`) |
-| `apps/k7/backend-rs/crates/k7-front/src/routes/ai/mod.rs` | the account's key and model, write-only from the browser |
+| `apps/k7-daw-frontend/packages/panel-rules/src/aiLoop.ts` | the conversation: the request check, the prompts, the checks above and one repair round, run by the host's page with a turn function it is given |
+| `apps/k7-daw-backend/packages/k7-front/src/routes/ai/turn.rs` | k7's half: one model turn on the account's key (`apps/k7-daw-frontend/docs/aiOrganize.md`) |
+| `apps/k7-daw-backend/packages/k7-front/src/routes/ai/mod.rs` | the account's key and model, write-only from the browser |
 
 ## The key is the account's, and the button is the host's to offer
 
@@ -25,7 +25,7 @@ when its server says this account has a key. A host that passes nothing draws no
 button.
 
 **Each account sets its own key and model** in k7's settings page
-(`apps/k7/frontend/docs/settings.md`), and k7's server keeps them in a file per account
+(`apps/k7-daw-frontend/docs/settings.md`), and k7's server keeps them in a file per account
 beside the preferences. An account is a person, and a request billed to somebody else's key is
 one they never agreed to. Nothing in the server's environment has to change for one person to
 turn the feature on. The model is optional: `claude-opus-5` when none is named.
@@ -93,7 +93,7 @@ where one color means one parameter. A neutral brief gets a neutral panel, and a
 150 identical knobs is the one thing Auto organize already produces.
 
 **No `@` controls.** The engine's stage around the module — `@input-volume`, `@mix`,
-`@output-volume` — is drawn by k7 itself on the second line of the card's header (`packages/ui-chains-react/docs/nodeCard.md`),
+`@output-volume` — is drawn by k7 itself on the second line of the card's header (`apps/k7-daw-frontend/packages/ui-chains-react/docs/nodeCard.md`),
 and a lane's controls on its strip, so a panel holds none of them: a knob there would be a second
 control for the same thing, placed wherever the model chose. `atControlIssues` refuses a knob,
 slider, fader or number on any `@` param; a `@base` dropdown is not one of those and stays allowed,
@@ -149,7 +149,7 @@ reported rather than dropped. Then `checkAiResult` refuses what would break the 
 
 - the schema's own refusals, with their paths, since `UiFileSchema` is what the loader runs;
 - a widget outside the grid, or two on top of each other — a `group` excepted, which frames what
-  lies wholly inside it, so a widget straddling a group's edge is refused (`packages/panel-rules/src/groupGeometry.ts`,
+  lies wholly inside it, so a widget straddling a group's edge is refused (`apps/k7-daw-frontend/packages/panel-rules/src/groupGeometry.ts`,
   the rule the grid editor applies too); a page is checked **together with the
   panel-level widgets**, because those are drawn over every page;
 - an id used twice anywhere in the panel;

@@ -1,7 +1,7 @@
 // amp-knobs.ts — does a conditioned amp model's KNOB reach the sound? Offline, no engine needed: one sawtooth
 // through the amp plugin with `Knob n` at 0 and at 1, at the model's own rate and through the rate bridge.
 //
-//   npx tsx engine/k7-runtime/scripts/amp-knobs.ts <model.json> [knob=1] [otherRate=44100]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/amp-knobs.ts <model.json> [knob=1] [otherRate=44100]
 //
 // A knob the plugin forgets to feed leaves the model at its default and the two renders identical, which
 // sounds like a model that "does not react much". The harmonic profiles must differ (docs/namPlugin.md).

@@ -229,7 +229,7 @@ A viewport surface draws the composited picture and nothing else. Where the pict
 *placed* is the timeline's business — the same timeline the song's audio lanes are on, whose ruler
 reads bars or seconds. There is deliberately no second arrangement surface for picture: one grid
 that can be read in two units beats two grids that must be kept in step. See
-[picture.md](../../song-video/docs/picture.md) and `apps/k7/frontend/docs/picture.md`.
+[picture.md](../../song-video/docs/picture.md) and `apps/k7-daw-frontend/docs/picture.md`.
 
 ### `split` is not `view` drawn smaller
 
@@ -237,12 +237,12 @@ A surface's DOCUMENT is not its screen. A desk holds the loaded songs, the cross
 knobs and a compiled project; a set does not stop existing because you went to look at the graph.
 Hold the document in the screen and a round trip re-centres the crossfader and flattens the EQ while
 the sound stays where you put it. See
-[../../../packages/k7-plugins/docs/turntables/deckSet.md](../../../packages/k7-plugins/docs/turntables/deckSet.md).
+[../../k7-plugins/docs/turntables/deckSet.md](../../k7-plugins/docs/turntables/deckSet.md).
 
 A `split` surface does not raise the question: **a pane is mounted once and never unmounted**,
 `hidden` takes it off screen, and that one invariant covers it. The timeline holds a caret and a
 zoom stack, the viewport a GL context and a `<video>` per layer, the desk its document — all cheap
-to keep, all maddening to rebuild (`apps/k7/frontend/docs/shell.md`).
+to keep, all maddening to rebuild (`apps/k7-daw-frontend/docs/shell.md`).
 
 ## `mapping` is `views/mix.k7x`'s binding, reused
 
@@ -269,12 +269,12 @@ different people.
 
 The check is a **gate** rather than a per-knob badge: the components required are the ones that make
 a desk a desk — a crossfade, three EQ bands and a filter per deck. A desk missing its crossfade is
-not a desk with one feature off. `unmappedControls` in `packages/k7-plugins/src/turntables/mapping.ts` owns
+not a desk with one feature off. `unmappedControls` in `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/mapping.ts` owns
 the list, because which components a type needs is the surface's own business and `@studio/song`
 does not know what a `crossfade` is. It is internal to the desk — the package publishes four
 subpaths, and this is not one of them.
 
-The mastering strip has its own `unmappedControls`, in `apps/k7/frontend/src/mastering/`, and it
+The mastering strip has its own `unmappedControls`, in `apps/k7-daw-frontend/src/mastering/`, and it
 requires **all ten**. That is not a stricter mood; it is what the surface is. A desk with no stem
 cuts is a complete desk, so those are offered and not required — there is no smaller mastering
 strip, because every control on it names one node, and a missing line is the same strip with a dead
@@ -306,10 +306,10 @@ to "is this surface valid".
 
 ```
 surfaces/<id>.k7x
-  → SurfaceSchema          packages/song-schema/src/yaml/surfaceSchema.ts   (browser-safe)
-  → projectSurfaces(dir)   packages/song/src/surfaces.ts             (the disk walk)
+  → SurfaceSchema          apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts   (browser-safe)
+  → projectSurfaces(dir)   apps/k7-daw-frontend/packages/song/src/surfaces.ts             (the disk walk)
   → GET /surfaces          a derived view, like /graph beside it
-  → useSurfaces            apps/k7/frontend/src/hooks/useSurfaces.ts
+  → useSurfaces            apps/k7-daw-frontend/src/hooks/useSurfaces.ts
   → the layout             App.tsx: `timelineSurface` / `viewportSurface` /
                            `turntablesSurface` / `masteringSurface` decide the panes,
                            `viewPanes({…})` the ring
@@ -373,7 +373,7 @@ PROJECT is: its lanes, its picture, its decks. This one draws a single module's 
 needs a mapping for the same reason the desk does — the node's *name* is the project's to choose, so
 nothing but the file can say which of them this is.
 
-The vocabulary is `apps/k7/frontend/src/mastering/controls.ts`, ten ids in three groups (`comp.*`,
+The vocabulary is `apps/k7-daw-frontend/src/mastering/controls.ts`, ten ids in three groups (`comp.*`,
 `spread.*`, `limiter.*`), and `SURFACE_MAPPING_SKELETON.mastering` is the scaffold's copy of it under
 the same duplication rule as the desk's — held to it by `mastering/controls.test.ts` over there.
 
@@ -390,14 +390,14 @@ surface, unlike the timeline's and the viewport's. Those two exist because mater
 nowhere without them; a node with no surface is drawn perfectly well — its panel is on the graph,
 where every other module's is. The strip is a convenience, not a missing half.
 
-See `apps/k7/frontend/docs/mastering.md` for the screen, and
-`engine/k7-runtime/docs/quickMaster.md` for what the node actually does to the sound.
+See `apps/k7-daw-frontend/docs/mastering.md` for the screen, and
+`apps/k7-daw-engine/k7-runtime/docs/quickMaster.md` for what the node actually does to the sound.
 
 ## `turntables`
 
 The DJ desk, drawn by `@studio/ui-turntables`. Its one seam is the engine (`./engine`), which k7
 satisfies from the link its shell already holds; see that package's
-[docs/hosting.md](../../../packages/k7-plugins/docs/turntables/hosting.md).
+[docs/hosting.md](../../k7-plugins/docs/turntables/hosting.md).
 
 A turntables surface plays a **set**, and it says which one: `playlist:`, a name under the
 workspace's `_playlists/` ([playlists.md](playlists.md)). That is what the desk's record browser lists
@@ -415,7 +415,7 @@ project over a set list nobody has chosen yet.
 `stems:` is still ACCEPTED by the parser and IGNORED: the desk never separates a record, a set is
 prepared beforehand with `playlist stems`, and the scaffold no longer writes the line. A file
 written for an earlier desk keeps reading. See
-[packages/k7-plugins/docs/turntables/stems.md](../../../packages/k7-plugins/docs/turntables/stems.md).
+[apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md](../../k7-plugins/docs/turntables/stems.md).
 
 A playlist is not desk-specific and is not the project's either — it is a document in the
 repository, shared by every project in the workspace and written in k7 under the cog. So an `.k7`

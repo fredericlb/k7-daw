@@ -249,7 +249,7 @@ test("a pick on a graph's arrow is one step: the node made, then spliced in with
     expect((await save(path, content)).status).toBe(200);
   if (filesRoot) journals.push(journalDir(root, "pick.k7"));
   expect((await svc.open(ws, "pick.k7")).status).toBe(200);
-  // The two lines the chains view sends for a module picked on the MIX → OUT arrow (apps/k7/frontend/src/App.tsx).
+  // The two lines the chains view sends for a module picked on the MIX → OUT arrow (apps/k7-daw-frontend/src/App.tsx).
   const run = (line: string, journal?: "join") =>
     svc.verb(ws, line, { want: ["graph"], ...(journal ? { journal } : {}) });
   const made = await run(

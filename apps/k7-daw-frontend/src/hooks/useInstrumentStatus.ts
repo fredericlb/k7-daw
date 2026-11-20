@@ -1,6 +1,6 @@
 // useInstrumentStatus.ts — asks the ENGINE whether the sampled instruments the open project names are on its
 // machine, and turns each missing one into an error on the nodes that need it. The engine waits silently for a
-// missing one; this is what says so. See engine/k7-supervisor/docs/instruments.md.
+// missing one; this is what says so. See apps/k7-daw-engine/k7-supervisor/docs/instruments.md.
 
 import type { EngineClient } from "@studio/engine-browser";
 import type { WebProject } from "@studio/web-protocol";

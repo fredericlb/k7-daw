@@ -129,7 +129,7 @@ resolves to nothing and reads as silence. Anything offering a choice of input ha
 sets and not raw numbers.
 
 `set-input-stereo` is what makes and unmakes a pair — sent by the file service
-(`setInputStereo` in `apps/k7/backend-rs/crates/k7-file-service/src/engine/mod.rs`), not by this client. `channel` names the PAIR,
+(`setInputStereo` in `apps/k7-daw-backend/packages/k7-file-service/src/engine/mod.rs`), not by this client. `channel` names the PAIR,
 not one side: the interface pairs even/odd hardware channels and nothing else, so 1 and 2 name
 the same pair and 2 can never be paired with 3. Nothing comes back — the device layout rides on
 `ioLevels`, the only message that carries it, so ask for that again to see the result; the

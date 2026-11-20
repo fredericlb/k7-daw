@@ -50,7 +50,7 @@ export function readTransition(
   name: string,
   refs: Readonly<Record<string, ShaderOwner>>,
 ): VideoTransitionDoc | null {
-  // Refused before any path is built, since `../../` is how a module's containment is climbed out of.
+  // Refused before any path is built, since `../../../../../packages/` is how a module's containment is climbed out of.
   if (!/^[A-Za-z0-9_-]+$/.test(name)) return null;
   const module = refs[`${TRANSITION_CATEGORY}/${name}`];
   if (!module) return null;

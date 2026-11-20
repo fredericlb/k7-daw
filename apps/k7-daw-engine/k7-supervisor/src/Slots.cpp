@@ -179,7 +179,7 @@ std::optional<json> document(const fs::path& dir, const std::string& id)
     const auto j = readSlot(dir, id);
     if (!j) return std::nullopt;
     auto doc = (*j)["doc"];
-    // What a press bypasses is the chain's own plugins, which the compiler named (engine/k7-runtime/docs/sessions.md).
+    // What a press bypasses is the chain's own plugins, which the compiler named (apps/k7-daw-engine/k7-runtime/docs/sessions.md).
     const auto cc = footswitchOf(*j);
     if (cc && j->contains("chainPlugins") && (*j)["chainPlugins"].is_array())
         doc["footswitch"] = {{"cc", *cc}, {"plugins", (*j)["chainPlugins"]}};

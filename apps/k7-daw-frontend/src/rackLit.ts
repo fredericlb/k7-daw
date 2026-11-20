@@ -3,7 +3,7 @@
 // The engine reports no notes: its live frame is transport, playhead, meters and armed tracks,
 // and nothing about a sampler's voices. But the browser holds the arrangement and the playhead at
 // the same time, so "which note is sounding" is a question it can answer itself. See
-// packages/song/docs/racks.md for what that costs — live MIDI and strudel lanes light nothing,
+// apps/k7-daw-frontend/packages/song/docs/racks.md for what that costs — live MIDI and strudel lanes light nothing,
 // because their notes were never written down.
 
 import { useEngineStoreOrNull } from "@studio/engine-browser/store";

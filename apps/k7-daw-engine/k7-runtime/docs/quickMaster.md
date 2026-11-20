@@ -169,7 +169,7 @@ What covers it:
 ```
 cmake --build --preset windows-msvc
 npm run gen:builtin-params --workspace k7-runtime   # INSTANTIATES each built-in and reads its params
-npx tsx engine/k7-runtime/scripts/quick-master.ts   # RETURNS sound and measures it
+npx tsx apps/k7-daw-engine/k7-runtime/scripts/quick-master.ts   # RETURNS sound and measures it
 ```
 
 The two stages lifted from Airwindows have unit tests, being JUCE-free headers: `studio_dither_tests`
@@ -180,7 +180,7 @@ grid and the ceiling with the word length on, the low cut thinning the mid and s
 and the HF limit pulling high notes down while leaving low ones alone.
 
 The second line creates the plugin, reads its ten parameters and writes
-`packages/song-schema/src/builtinParams.generated.json`. A plugin that fails to instantiate, or
+`apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json`. A plugin that fails to instantiate, or
 whose ranges are not what you thought, shows up there immediately — and that file is committed, so
 `git diff` is the comparison.
 

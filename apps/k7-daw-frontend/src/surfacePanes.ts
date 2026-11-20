@@ -1,7 +1,7 @@
 // surfacePanes.ts — the shell's registry of surface DRAWERS: which component draws a surface
 // type, in the two mounts that exist. A plugin contributes one at the shell's composition point
 // (plugins.ts); the four builtins are the seed, so the builtins are simply the first plugins.
-// Full rationale: packages/k7-sdk/docs/sdk.md.
+// Full rationale: apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md.
 
 import type { EngineClient } from "@studio/engine-browser";
 import type { PluginParamsStore } from "@studio/engine-browser/params";

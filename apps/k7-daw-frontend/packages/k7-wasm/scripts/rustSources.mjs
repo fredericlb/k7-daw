@@ -5,16 +5,16 @@ import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 
-const ROOT = join(import.meta.dirname, "..", "..", "..");
+const ROOT = join(import.meta.dirname, "..", "..", "..", "..", "..");
 const PKG = join(import.meta.dirname, "..");
 
 /** The crates the module is built from, from the repo root; the facade first, the one whose lock counts. */
 export const CRATES = [
-  "packages/k7-wasm/rust",
-  "packages/song-schema/rust",
-  "packages/song/rust",
-  "packages/song-edit/rust",
-  "packages/k7x/rust",
+  "apps/k7-daw-wasm/k7-wasm",
+  "apps/k7-daw-wasm/song-schema",
+  "apps/k7-daw-wasm/song",
+  "apps/k7-daw-wasm/song-edit",
+  "apps/k7-daw-wasm/k7x",
 ];
 
 function files(dir) {
@@ -39,13 +39,13 @@ function hashOf(paths, base) {
 
 /** The locks that pin what the hashed crates build against: the facade's, and the compiler's, which holds `song` and `k7x`. */
 const LOCKS = [
-  "packages/k7-wasm/rust/Cargo.lock",
-  "packages/song/rust/Cargo.lock",
+  "apps/k7-daw-wasm/k7-wasm/Cargo.lock",
+  "apps/k7-daw-wasm/song/Cargo.lock",
 ];
 
 /** The files outside a crate's src/ that a crate compiles in with `include_str!`, from the repo root. */
 export const INCLUDED = [
-  "packages/song-schema/src/builtinParams.generated.json",
+  "apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json",
 ];
 
 /** One hash over every crate's Cargo.toml and src/, what they compile in, and the two locks; `root` may be a copy of the repo's crates. */

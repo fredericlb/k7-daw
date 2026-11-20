@@ -5,19 +5,19 @@ the *drawing* is React, which buys real type, CSS effects and a DOM a test can r
 both the Chains tab and the Graph panel, so mount it only where it has a real size: `fit()`
 frames to the host.
 
-**The renderer does not live in this app.** It is `packages/ui-chains-react`
-(`DomChains.tsx`) and the geometry is `packages/ui-chains`, because the module builder and the
+**The renderer does not live in this app.** It is `apps/k7-daw-frontend/packages/ui-chains-react`
+(`DomChains.tsx`) and the geometry is `apps/k7-daw-frontend/packages/ui-chains`, because the module builder and the
 decks draw the same view. This page stays here because k7 is the demanding host —
 the command bar, the context menu and the edge inserts are all k7's — but the rules below
-describe the package. See `packages/ui-chains-react/docs/hosting.md` for what a host has to
-supply, and `packages/ui-chains/docs/graphBuild.md` for the layout half.
+describe the package. See `apps/k7-daw-frontend/packages/ui-chains-react/docs/hosting.md` for what a host has to
+supply, and `apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md` for the layout half.
 
 ## The camera
 
 Framing is the fiddliest part of this component, and every rule below is a bug already paid
 for once. How the camera *moves* — that it is not React state, the frame loop, why a pan is
 instant and a zoom glides — is the package's own
-[camera.md](../../../../packages/ui-chains-react/docs/camera.md).
+[camera.md](../packages/ui-chains-react/docs/camera.md).
 
 - **`fitKey`, not the graph object.** The graph is a fresh object on every refetch, so
   keying the fit on it throws away the user's pan and zoom whenever they bypass a module or
@@ -76,7 +76,7 @@ has to say so: a graph that merely looks unchanged reads as the gesture having m
 A widget shows, in order: the hand's **optimistic override**, else what the **engine**
 reports (which already folds in any authored override), else what the **project** authored,
 else what the **plugin declares** it plays at unset, else nothing. Undefined means "unknown" and
-paints as an empty control — the reasons are in `packages/ui-chains-react/docs/widgets.md`.
+paints as an empty control — the reasons are in `apps/k7-daw-frontend/packages/ui-chains-react/docs/widgets.md`.
 
 When a plugin frame lands, the overrides it now speaks for are dropped — except the one
 under the hand: the commit reconciles, then the frame owns the value.
@@ -189,7 +189,7 @@ camera fitting that box draws them a few pixels wide with empty grid around them
 its slice out with dagre and its own session memory, and takes no drag, so it never writes a pin.
 
 **The layout's own pins are no undo step.** Where dagre put a card that had no pin, the canvas
-writes down with one `graph pin` (`packages/commands/docs/verbs.md`) — as a project opens, among
+writes down with one `graph pin` (`apps/k7-daw-frontend/packages/commands/docs/verbs.md`) — as a project opens, among
 other times — and sends it with `journal: "skip"`. Nobody made that write, so the first Ctrl+Z on a
 freshly opened project must reach the person's own last edit, not take back a layout they never
 touched.
@@ -222,14 +222,14 @@ undoing it for every click above the first lane.
 **One pick is one undo step.** On an arrow the pick is two commands — `node new`, then the
 `node insert` that splices it, which needs the name the first one made — and the second goes out
 with `journal: "join"`, folding its writes into the step the first one made
-(`apps/k7/backend-rs/docs/files/history.md`). One `project undo` takes the node file and the splice
+(`apps/k7-daw-backend/docs/files/history.md`). One `project undo` takes the node file and the splice
 back together and leaves `graph.k7x` byte for byte as it was before the pick: the unwired node
 between the two commands is the shell's plumbing, never a state the person made, so no undo may
 stop on it.
 
 **A typed line has no cursor, and the verb answers for it** rather than handing the node to
 dagre: spliced, it is born halfway along the cable it was spliced into; wired to nothing, at
-`0,-30`, just above the origin. Both are in [verbs.md](../../../../packages/commands/docs/verbs.md),
+`0,-30`, just above the origin. Both are in [verbs.md](../packages/commands/docs/verbs.md),
 and the reason is that a fresh layout has least to say about exactly these two cases — an
 unconnected node has no run to be ranked within, so it lands wherever the pass happens to put it
 and the person who typed the line has to go looking. dagre is still the fallback for anything
@@ -254,14 +254,14 @@ gesture with the button released in the middle: the cable stays in hand between 
 
 Both, and without a mode or a distance threshold to guess at, because the press ARMS and the
 release LANDS — a release over the socket the press came from is what a click looks like to a
-pointer, and lands nothing (`@studio/ui-chains/patchGesture`, and `packages/ui-chains/docs/cable.md`
+pointer, and lands nothing (`@studio/ui-chains/patchGesture`, and `apps/k7-daw-frontend/packages/ui-chains/docs/cable.md`
 for why a cable drawn on `click` makes the drag impossible).
 
 Pressing an OCCUPIED jack lifts that cable's end
 instead: land it on another jack and the shell runs `graph chain replug` (one end moved, one undo
 step); drop it on the bare canvas and the arrow is deleted (`graph chain disconnect`) — a NEW
 cable dropped there simply ceases. Esc or right-click puts everything back, writing nothing.
-The gestures live in the renderer (`packages/ui-chains-react/docs/hosting.md` — `onConnect`,
+The gestures live in the renderer (`apps/k7-daw-frontend/packages/ui-chains-react/docs/hosting.md` — `onConnect`,
 `onReplug`, `onDisconnect`), armed here in `App.tsx` beside `onEdgeInsert`; the verbs and
 their refusals — unknown node, arrow already there or not there, the sink as a source — are
 `@studio/commands`', because the graph on screen can be a compile older than the file.

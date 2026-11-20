@@ -7,9 +7,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium } from "playwright";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { fakeServer } from "../../../../packages/commands/src/runtime/testing/fakeServer.ts";
-import { serveHttp } from "../../../../packages/commands/src/runtime/testing/httpServer.ts";
-import { Vfs } from "../../../../packages/commands/src/runtime/vfs.ts";
+import { fakeServer } from "../packages/commands/src/runtime/testing/fakeServer.ts";
+import { serveHttp } from "../packages/commands/src/runtime/testing/httpServer.ts";
+import { Vfs } from "../packages/commands/src/runtime/vfs.ts";
 import { buildWorkerFiles, type WorkerFiles } from "./workerBuild.ts";
 
 const installed = existsSync(chromium.executablePath());
@@ -23,7 +23,7 @@ beforeAll(async () => {
   const disk = new Vfs(true);
   const root = mkdtempSync(join(tmpdir(), "k7-flow-"));
   const { writeCapacity } = await import(
-    "../../../../packages/commands/src/runtime/testing/capacity.ts"
+    "../packages/commands/src/runtime/testing/capacity.ts"
   );
   writeCapacity(join(root, "cap.k7"), 8);
   const fake = await serveHttp(fakeServer(disk, root, "cap.k7"));

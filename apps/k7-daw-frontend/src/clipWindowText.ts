@@ -1,6 +1,6 @@
 // A clip file's own window (`from`/`to`), read from and written back into the OPEN BUFFER's k7x text.
 // A drag sets the two root values in place, through the buffer like a keystroke, and keeps how each edge was
-// spelled: a number is seconds, a timecode string follows the grid. See apps/k7/frontend/docs/clipEditors.md.
+// spelled: a number is seconds, a timecode string follows the grid. See apps/k7-daw-frontend/docs/clipEditors.md.
 
 import { parse } from "@studio/k7x/document";
 import { beatsToPosition, parsePosition } from "@studio/song-schema/timecode";

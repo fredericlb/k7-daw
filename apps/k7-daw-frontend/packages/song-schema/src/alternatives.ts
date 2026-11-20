@@ -1,7 +1,7 @@
 // alternatives.ts — a module's other attribute SETS: which ones it has, and which is on.
 // Pure string and struct work, no filesystem and no module system, so a browser and the file
 // readers beside it can ask. APPLYING one is @studio/song's, because the merge it uses is the
-// one a node gets over the module it extends. Full rationale: packages/song/docs/alternatives.md.
+// one a node gets over the module it extends. Full rationale: apps/k7-daw-frontend/packages/song/docs/alternatives.md.
 
 /** One entry as a surface lists it: what to call it, and where it sits. */
 export interface AlternativeInfo {

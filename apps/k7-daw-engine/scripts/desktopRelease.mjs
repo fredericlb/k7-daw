@@ -1,4 +1,4 @@
-// desktopRelease.mjs — K7 DAW's installers from what `tauri build` left in apps/k7-desktop/src-tauri/target, copied into
+// desktopRelease.mjs — K7 DAW's installers from what `tauri build` left in apps/k7-daw-desktop/src-tauri/target, copied into
 // the release folder under a name made of the version, like every other file of a release (docs/release.md).
 
 import { copyFileSync, existsSync, readdirSync } from "node:fs";

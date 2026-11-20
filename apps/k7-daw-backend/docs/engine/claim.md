@@ -1,7 +1,7 @@
 # The claim — which project runs where, and who has it
 
 A claim carries a **project** and a **holder**, and the registry enforces three rules
-(`crates/k7-engine/src/registry/claims.rs`). A bare
+(`packages/k7-engine/src/registry/claims.rs`). A bare
 "somebody is on this machine" timestamp, refusing nobody, is not enough the moment two people
 can open the same project: nothing anywhere says they cannot, and the two halves that then
 fight are not visible from either browser.
@@ -15,7 +15,7 @@ that each believe they own it.
 
 Read that last clause carefully, because it is the whole rule and not a flourish: **two
 sessions**. One account on one engine is ONE session — `sessionFor(<service>, email)`, one
-project loaded in it (`packages/engine-protocol/docs/sessions.md`) — so its screens are not two
+project loaded in it (`apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`) — so its screens are not two
 drivers of a project, they are one driver with two windows. Rule 1 exempts them: same account,
 same engine, same project, no displacement.
 
@@ -36,10 +36,10 @@ lands somewhere else entirely (a take recorded into the wrong workspace, a trans
 wrong song).
 
 An account has two sessions k7 plays in: its song's and its **bench**'s
-(`packages/engine-protocol/docs/sessions.md`). The registry tells them apart by the claimed address
+(`apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`). The registry tells them apart by the claimed address
 — `claimSlot`, `@banc/…` being the bench — so an account's bench sits beside its own song on one
 engine rather than taking the song's place. A different ACCOUNT still displaces
-either: an engine serves one account at a time (`apps/k7/backend-rs/docs/files/hub.md`).
+either: an engine serves one account at a time (`apps/k7-daw-backend/docs/files/hub.md`).
 
 The list names the asking account's claims (`heldProjects`) beside the one a picker shows
 (`heldProject`, the song before the bench), since a client looking for its bench must find it on an
@@ -100,7 +100,7 @@ re-opening displaces nobody by construction — and the tab coming out of sleep 
 anything it did not already have. Our own other screen does not turn that into a `project`: it
 holds what we hold and took nothing, and the exemption above is what then lets the retry land
 beside it rather than on top of it. `@studio/engine-browser`'s `holdEngine` drops the dead secret and re-opens
-on its next tick; see `packages/engine-browser/docs/lease.md` for why the next tick and
+on its next tick; see `apps/k7-daw-frontend/packages/engine-browser/docs/lease.md` for why the next tick and
 not at once. Treated like the other two it would be a dead end on screen, telling someone to
 re-open by hand a project nobody had taken from them.
 
@@ -114,7 +114,7 @@ still driving.
 Everything. The secret does not change that a holder is a browser tab, which can be closed,
 crash, or be put to sleep, and cannot be relied on to say goodbye. `ENGINE_ASSIGN_TTL_MS`
 (90 s, renewed every 5 s) is what forgets a holder nobody heard from — see
-`packages/engine-browser/docs/lease.md` for the bug that shape exists to prevent.
+`apps/k7-daw-frontend/packages/engine-browser/docs/lease.md` for the bug that shape exists to prevent.
 
 Which means a crashed tab costs the next person a minute and a half, and never a lockout. That is
 deliberate: a claim that needed clearing by hand would be a worse failure than the one it
@@ -152,10 +152,10 @@ first, with the holder read from the session by `claimHolder` — the same name 
   caller holds no claim on, since it reaches that machine;
 - the relay forwards a browser's driving frames only while the ticket's account holds a claim, the
   probe alone passing before (`proxy.md`), and a WebRTC offer is answered only for a claim holder
-  (`packages/engine-tunnel/docs/rtc.md`).
+  (`apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md`).
 
 The browser takes a claim only on an engine it chose or was allowed to take unasked
-(`packages/engine-browser/docs/access.md`, "Who is taken unasked"), so these checks are the second
+(`apps/k7-daw-frontend/packages/engine-browser/docs/access.md`, "Who is taken unasked"), so these checks are the second
 of two locks, not the only one.
 
 ## What this does NOT solve
@@ -168,4 +168,4 @@ Nor does a claim decide WHICH engine may be claimed: ownership does, before any 
 ([ownership.md](ownership.md)). `select` answers `403 unowned` for an engine that does not run on this device.
 
 It also says nothing about a tab that goes away. That is the other half, and it is the engine's:
-see `engine/k7-runtime/docs/sessions.md`.
+see `apps/k7-daw-engine/k7-runtime/docs/sessions.md`.

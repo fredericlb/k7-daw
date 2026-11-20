@@ -206,7 +206,7 @@ object SupervisorHost {
     private const val ENGINE_STOP_MS = 3000L
     // How long an exited supervisor's last lines may take to drain before its readers are cut off.
     private const val DRAIN_MS = 2_000L
-    // The desktop host's bounds (apps/k7/backend-rs/crates/k7-local/src/host.rs).
+    // The desktop host's bounds (apps/k7-daw-backend/packages/k7-local/src/host.rs).
     private const val RELAUNCH_FIRST_MS = 1_000L
     private const val RELAUNCH_MAX_MS = 30_000L
     private const val HEALTHY_MS = 20_000L

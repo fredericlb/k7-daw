@@ -1,6 +1,6 @@
 # Audit — stability and speed of k7
 
-A standing audit of `apps/k7`: the backend that mints the origin's session, and the SPA. The audio
+A standing audit of `apps/k7-daw-frontend` and its backend: the backend that mints the origin's session, and the SPA. The audio
 axis as a whole — the engine, the file service and the costed web routes — is `docs/constat.md`'s
 and `docs/audit-perf-web.md`'s, and this page does not repeat them. Findings are either an
 invariant this app holds, written down so it is not broken again, or a numbered lot still open, and
@@ -47,7 +47,7 @@ and renders nothing. What holds it here:
 
 - **The clip waveforms** steer `@studio/ui-waveform` through its `setTime` handle, which moves a CSS
   clip over the played canvas and a line, and redraws no canvas
-  (`packages/ui-waveform/docs/layers.md`).
+  (`apps/k7-daw-frontend/packages/ui-waveform/docs/layers.md`).
 - **The takes view** draws its line in a leaf per row, and its rows are memoised with their
   envelope paths, so a drag across the takes rebuilds no path.
 - **A take being recorded** grows in a ring buffer outside React (`src/ringBuffer.ts`,
@@ -88,7 +88,7 @@ before it is sent.
 The home page and the sign-in share one entry chunk, and every static import
 from it is paid before the first row is drawn. What lives behind a click is therefore behind a dynamic
 import: the home's other pages (`appMain.tsx`), the desk and the viewport in the editor
-(`packages/k7-plugins/docs/plugins.md`), and the icon set, which the context menu asks for only when one of
+(`apps/k7-daw-frontend/packages/k7-plugins/docs/plugins.md`), and the icon set, which the context menu asks for only when one of
 its rows carries a picked icon (`docs/shell.md`). A module reached through a package's barrel is pulled
 into the entry whenever the bundler cannot prove it inert — a top-level `lazy()` call is enough — so
 a package holding lazy views declares itself free of side effects. The chunks to read after such a change are
@@ -108,7 +108,7 @@ a package holding lazy views declares itself free of side effects. The chunks to
 
 A `tap` binds a rack sound, not a parameter. The answer check accepts the sounds the module's own
 `rack:` declares, on taps and only there, and the prompt lists them — a kit's panel comes back with
-its pads (`packages/ui-module-builder/docs/aiOrganize.md`). Both ends check the same list: the
+its pads (`apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md`). Both ends check the same list: the
 builder and this app's page call the same `bindableNames`.
 
 ## Already sound — do not re-suspect
@@ -144,9 +144,8 @@ builder and this app's page call the same `bindableNames`.
 ## What a change here should be verified with
 
 ```
-cd apps/k7/frontend && npx tsc --noEmit -p . && npx vitest run
-cd apps/k7/backend && npx tsc --noEmit -p .
-cd packages/ui-waveform && npx vitest run
-cd packages/project-shell && npx vitest run
-cd packages/user-prefs && npx vitest run
+cd apps/k7-daw-frontend && npx tsc --noEmit -p . && npx vitest run
+cd apps/k7-daw-frontend/packages/ui-waveform && npx vitest run
+cd apps/k7-daw-frontend/packages/project-shell && npx vitest run
+cd apps/k7-daw-frontend/packages/user-prefs && npx vitest run
 ```

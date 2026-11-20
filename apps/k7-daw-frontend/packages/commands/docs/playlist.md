@@ -5,8 +5,8 @@ never on `songPath`: a playlist belongs to the workspace and stays the same what
 open. They are the only verbs in the catalogue that work **without a project** — except
 `playlist stems`, which needs one to resolve its chain and says so.
 
-Where a playlist lives and what shape it has is `packages/song/docs/playlists.md`; what the screen
-does with one is `apps/k7/frontend/docs/playlists.md`.
+Where a playlist lives and what shape it has is `apps/k7-daw-frontend/packages/song/docs/playlists.md`; what the screen
+does with one is `apps/k7-daw-frontend/docs/playlists.md`.
 
 ## Where a name lands — `playlistFile`
 
@@ -79,7 +79,7 @@ not there.
 
 Separate every song of a set list, before the evening. This is the preparation half of cutting a
 stem live: a deck plays a separated record as its four parts and doses each one
-(`packages/song-schema/docs/stems.md`), and it can only do that over files that already exist. Minutes per song, so it is a command you run the
+(`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`), and it can only do that over files that already exist. Minutes per song, so it is a command you run the
 night before rather than mid-set.
 
 **The chain is optional** and defaults to the machine's, `system stems`. Which module separates and
@@ -95,7 +95,7 @@ panel's button — and asking each of them would be asking the same question thr
 module separates and which model it wants is a fact about the library and about this machine's
 `<state>/models`, not about the set list in front of you.
 
-k7's settings page sets the same answer with no command (*Separation chains*, apps/k7/frontend/docs/settings.md),
+k7's settings page sets the same answer with no command (*Separation chains*, apps/k7-daw-frontend/docs/settings.md),
 choosing only from the library's cold chains; this verb is the command-bar road to it.
 
 It is **checked while it is set**, which is the cheap moment: a chain that does not separate is
@@ -117,11 +117,11 @@ instrumental, and a song that plays with its voice still in it.
 
 `system stems` is resolved against the **open project's** module vocabulary, like every other cold step: that is
 where a `@k7-core/…` ref becomes a module and a model becomes a path on this machine
-(`packages/audio-passes/docs/processChain.md`). This is the one playlist verb that needs a project,
+(`apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`). This is the one playlist verb that needs a project,
 and it says so rather than throwing.
 
 The records are the workspace's files, because a deck opens file paths and what matters is what is
-on this disk. The stems go into `stems/` beside each record (`packages/song-schema/docs/stems.md`),
+on this disk. The stems go into `stems/` beside each record (`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`),
 which nothing else writes.
 
 **Sequential and resumable**, and both halves matter for thirty songs on one machine:

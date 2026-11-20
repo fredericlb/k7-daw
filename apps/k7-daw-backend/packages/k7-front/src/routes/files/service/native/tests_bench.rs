@@ -45,7 +45,7 @@ pub(super) fn run_in(dir: &Path) -> Run {
     Run {
         home: Home::of(&env),
         code_root: Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../../..")
+            .join("../../../..")
             .display()
             .to_string(),
         acct: crate::routes::files::service::Acct::make(env.clone(), super::tests_account::HEAP),

@@ -43,7 +43,7 @@ export const PANEL_COMMANDS: LocalCommand[] = [
     en: "Open the audio inputs and outputs",
     fr: "Ouvrir les entrées et sorties audio",
   }),
-  // What the open song says about its whole mix — its console (packages/song/docs/console.md).
+  // What the open song says about its whole mix — its console (apps/k7-daw-frontend/packages/song/docs/console.md).
   tab("project", {
     en: "Open the project's settings — its mix console",
     fr: "Ouvrir les réglages du projet — sa console de mix",

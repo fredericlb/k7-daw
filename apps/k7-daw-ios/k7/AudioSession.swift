@@ -1,6 +1,6 @@
 // AudioSession.swift — what the app's audio session is, said in the machine log at each open, and what interrupts it.
 // JUCE sets the category and the options (EXCLUSIVE here: no MixWithOthers) and restarts its device after an
-// interruption; this only watches and logs, so it never fights JUCE. See engine/k7-runtime/docs/ios.md.
+// interruption; this only watches and logs, so it never fights JUCE. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import AVFAudio
 import Foundation

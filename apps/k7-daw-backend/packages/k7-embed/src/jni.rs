@@ -1,5 +1,5 @@
 //! jni.rs — the two calls `RustFront.kt` declares, under the names JNI looks them up by. The config string
-//! is read through the JNIEnv's own function table, so no JNI crate is needed; `apps/k7/backend-rs/docs/embed.md`.
+//! is read through the JNIEnv's own function table, so no JNI crate is needed; `apps/k7-daw-backend/docs/embed.md`.
 
 use std::ffi::{c_char, c_void};
 use std::ptr::null_mut;

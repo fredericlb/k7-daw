@@ -1,7 +1,7 @@
 // gainTrim.ts — the header meter's Fix button, as arithmetic: a pass that clipped, and where the
 // OUT node's Volume has to land for that pass to have peaked at -6 dB. Pure, so the thing that
 // would be wrong silently — the size of the trim — can be pinned without an engine.
-// See apps/k7/frontend/docs/masterMeter.md.
+// See apps/k7-daw-frontend/docs/masterMeter.md.
 
 import {
   MASTER_MAX_DB,

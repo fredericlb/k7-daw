@@ -56,7 +56,7 @@ always there says nothing.
 
 A key such as `C# minor` is **entered and never detected**: the detector was written and measured
 against seventeen labelled tracks, and comes in at 53 % — enough to lie, not enough to serve
-([key-detection-plan.md](../../../../docs/key-detection-plan.md)). When a record's load carries
+([key-detection-plan.md](../../../../../../docs/key-detection-plan.md)). When a record's load carries
 one, the desk shows its **Camelot** code under the fader — `12A` for C sharp minor. The wheel is
 a RENDERING and the key keeps the mode's name; the conversion is in `BpmFader`, and a string it
 cannot read comes back out as it went in rather than disappearing.

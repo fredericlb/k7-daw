@@ -25,15 +25,15 @@ Platform dependencies fetched at configure time: the Steinberg ASIO SDK on Windo
 
 | Script | What |
 |---|---|
-| `engine/k7-runtime/scripts/build.mjs <preset>` | Configure only when there is no `CMakeCache.txt`, then build. Takes `engine/k7-runtime/scripts/buildLock.mjs`'s lock on the build folder (a second build waits instead of corrupting Ninja's records) and caps compiler parallelism. Behind `npm run build:mac`, `build:win`, `build:android` in the `k7-runtime` workspace. |
-| `engine/k7-runtime/scripts/run-tests.mjs` | Builds and runs the `studio_*` test targets in the platform's preset, under the same lock; skips an unconfigured tree |
-| `engine/scripts/supervisorBuild.mjs` | `buildSupervisor(repo)` (preset from `$STUDIO_SUPERVISOR_PRESET` or the platform), `findSupervisor(repo)` (newest build, Debug last) |
-| `engine/scripts/build-engine.mjs` | `npm run engine:build`: builds the engine (preset from `$STUDIO_ENGINE_PRESET` or the platform: `macos-clang`, `windows-msvc`, `release-gcc`) and the supervisor, then stages the command-line engine into `dist/k7-runtime/` with `stageEngine` and copies `engine.example.json` as `engine.json` |
-| `engine/scripts/package-release.mjs --kind engine\|desktop` | Into `dist/release/`: `engine` archives `dist/k7-runtime/` as `k7-runtime_<version>_<platform>-<arch>.tar.gz` (`.zip` on Windows, made with System32's bsdtar); `desktop app` renames the installers `tauri build` left under `apps/k7-desktop/src-tauri/target` (K7 DAW's) to `k7-daw_<version>_<platform>-<arch>.<ext>` (`engine/scripts/desktopRelease.mjs`). The version is the root package.json's. |
-| `engine/scripts/buildTools.mjs` | `distDir`, and `run` with the Windows shell quirk |
-| `engine/scripts/devEngine.mjs` | What the dev session stops before a relink: every running desktop app, supervisor and engine (a running image cannot be relinked on Windows) |
+| `apps/k7-daw-engine/k7-runtime/scripts/build.mjs <preset>` | Configure only when there is no `CMakeCache.txt`, then build. Takes `apps/k7-daw-engine/k7-runtime/scripts/buildLock.mjs`'s lock on the build folder (a second build waits instead of corrupting Ninja's records) and caps compiler parallelism. Behind `npm run build:mac`, `build:win`, `build:android` in the `k7-runtime` workspace. |
+| `apps/k7-daw-engine/k7-runtime/scripts/run-tests.mjs` | Builds and runs the `studio_*` test targets in the platform's preset, under the same lock; skips an unconfigured tree |
+| `apps/k7-daw-engine/scripts/supervisorBuild.mjs` | `buildSupervisor(repo)` (preset from `$STUDIO_SUPERVISOR_PRESET` or the platform), `findSupervisor(repo)` (newest build, Debug last) |
+| `apps/k7-daw-engine/scripts/build-engine.mjs` | `npm run engine:build`: builds the engine (preset from `$STUDIO_ENGINE_PRESET` or the platform: `macos-clang`, `windows-msvc`, `release-gcc`) and the supervisor, then stages the command-line engine into `dist/k7-runtime/` with `stageEngine` and copies `engine.example.json` as `engine.json` |
+| `apps/k7-daw-engine/scripts/package-release.mjs --kind engine\|desktop` | Into `dist/release/`: `engine` archives `dist/k7-runtime/` as `k7-runtime_<version>_<platform>-<arch>.tar.gz` (`.zip` on Windows, made with System32's bsdtar); `desktop app` renames the installers `tauri build` left under `apps/k7-daw-desktop/src-tauri/target` (K7 DAW's) to `k7-daw_<version>_<platform>-<arch>.<ext>` (`apps/k7-daw-engine/scripts/desktopRelease.mjs`). The version is the root package.json's. |
+| `apps/k7-daw-engine/scripts/buildTools.mjs` | `distDir`, and `run` with the Windows shell quirk |
+| `apps/k7-daw-engine/scripts/devEngine.mjs` | What the dev session stops before a relink: every running desktop app, supervisor and engine (a running image cannot be relinked on Windows) |
 | `scripts/dev-desktop.mjs` | The dev session's desktop app task (the k7-desktop workspace's `dev` script): build the engine, the supervisor, the backend bundle and the desktop app, run the desktop app on them, rebuild and restart on save |
-| `engine/scripts/stageEngine.mjs` | Copy the binaries and what they load into a `bin/` ([86](./86-desktop-and-android.md#the-supervisor-host-k7-local)) |
+| `apps/k7-daw-engine/scripts/stageEngine.mjs` | Copy the binaries and what they load into a `bin/` ([86](./86-desktop-and-android.md#the-supervisor-host-k7-local)) |
 
 ## The command-line engine archive
 
@@ -41,4 +41,4 @@ Platform dependencies fetched at configure time: the Steinberg ASIO SDK on Windo
 
 ## CI
 
-No CI workflow compiles the C++ engine: a developer builds it locally with `engine/scripts/build-engine.mjs`, and packages it with `engine/scripts/package-release.mjs`. `.github/workflows/k7.yml` runs the TypeScript checks and builds the native supervisor for its unit tests and the tunnel suites, but not the engine.
+No CI workflow compiles the C++ engine: a developer builds it locally with `apps/k7-daw-engine/scripts/build-engine.mjs`, and packages it with `apps/k7-daw-engine/scripts/package-release.mjs`. `.github/workflows/k7.yml` runs the TypeScript checks and builds the native supervisor for its unit tests and the tunnel suites, but not the engine.

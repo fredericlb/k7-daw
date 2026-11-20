@@ -26,8 +26,8 @@ import { setTrackPlacementFade } from "./trackMix";
 
 beforeAll(compileReady);
 
-const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
-const SONG = join(here, "..", "..", "..", "demos", "node-demo.k7");
+const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
+const SONG = join(here, "..", "..", "..", "..", "..", "demos", "node-demo.k7");
 
 const NUM = 4;
 const DEN = 4;

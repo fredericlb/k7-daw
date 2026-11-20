@@ -1,8 +1,8 @@
 // list-sessions.ts — the supervisor's view of a running engine: a client on the DEFAULT session,
-// driving nothing, asking what the native supervisor asks (engine/k7-supervisor/src/EngineQueries.cpp).
+// driving nothing, asking what the native supervisor asks (apps/k7-daw-engine/k7-supervisor/src/EngineQueries.cpp).
 // Creates two sessions, lists them, drops one, lists again.
-//   npx tsx engine/k7-runtime/scripts/list-sessions.ts            (a throwaway engine on :8833)
-//   npx tsx engine/k7-runtime/scripts/list-sessions.ts 8765 --peek  (LOOK at a live one, change nothing)
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/list-sessions.ts            (a throwaway engine on :8833)
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/list-sessions.ts 8765 --peek  (LOOK at a live one, change nothing)
 
 import { once } from "node:events";
 import { EngineClient } from "@studio/engine-client/engineClient";
@@ -121,7 +121,7 @@ async function main() {
   // EXACTLY two: a "" session here means the supervisor's requests are creating one.
   if ((before ?? []).some((s) => s.id === ""))
     problems.push(
-      "une session '' existe — une LECTURE a cree une session (cf. engine/k7-runtime/docs/sessions.md)",
+      "une session '' existe — une LECTURE a cree une session (cf. apps/k7-daw-engine/k7-runtime/docs/sessions.md)",
     );
   // edit-plugins is engine-wide: it answers for BOTH sessions, each one named.
   const sessionsVues = new Set((plugins ?? []).map((p) => p.session));

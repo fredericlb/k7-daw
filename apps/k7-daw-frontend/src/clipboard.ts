@@ -1,7 +1,7 @@
 // clipboard.ts — what `selection copy` puts aside and `selection paste` puts down: a
 // rectangle's contents, in coordinates RELATIVE to its top-left corner. Pure, so the offset
 // arithmetic that decides where a paste lands can be pinned without a project. See
-// apps/k7/frontend/docs/clipEditors.md.
+// apps/k7-daw-frontend/docs/clipEditors.md.
 
 /** One copied note. `t` is beats from the rectangle's left edge, `k` semitones below its top row. */
 interface CopiedNote {

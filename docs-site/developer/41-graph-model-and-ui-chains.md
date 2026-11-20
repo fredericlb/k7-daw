@@ -2,14 +2,14 @@
 
 ## `@studio/graph-model`
 
-`packages/graph-model` is the routing graph as the browser receives it. It exists apart from
+`apps/k7-daw-frontend/packages/graph-model` is the routing graph as the browser receives it. It exists apart from
 `@studio/web-protocol` so that drawing a graph does not import auth, workspaces or the engine
 registry. It has two entry points and no build step.
 
 | Export | File | Contents |
 |---|---|---|
-| `@studio/graph-model` | `packages/graph-model/types.ts` | `WebGraph`, `WebChain`, `WebChainStep`, `WebOut`, `WebWidget`, `WebModuleUI`, `WebCurve`, `WebAutomation`, `WebRackSound`, `WebCc`, `WebTrackClip`, `WebNodeAssembly`, `WebPlug`, plus `MODULE_CATEGORIES`, `PORT_SEP` (`#`), `splitPort`/`portRef`, `TRACK_OUTPUTS` and `automationLanes`. |
-| `@studio/graph-model/panel` | `packages/graph-model/panel.ts` | `panelWidgets(ui)` (every widget of a panel, shared ones first, then each tab's) and `hasTabs(ui)`. Every lookup by `bind` (MIDI, automation, file pickers) goes through `panelWidgets`, so a widget on a tab is never missed. |
+| `@studio/graph-model` | `apps/k7-daw-frontend/packages/graph-model/types.ts` | `WebGraph`, `WebChain`, `WebChainStep`, `WebOut`, `WebWidget`, `WebModuleUI`, `WebCurve`, `WebAutomation`, `WebRackSound`, `WebCc`, `WebTrackClip`, `WebNodeAssembly`, `WebPlug`, plus `MODULE_CATEGORIES`, `PORT_SEP` (`#`), `splitPort`/`portRef`, `TRACK_OUTPUTS` and `automationLanes`. |
+| `@studio/graph-model/panel` | `apps/k7-daw-frontend/packages/graph-model/panel.ts` | `panelWidgets(ui)` (every widget of a panel, shared ones first, then each tab's) and `hasTabs(ui)`. Every lookup by `bind` (MIDI, automation, file pickers) goes through `panelWidgets`, so a widget on a tab is never missed. |
 
 ### The shape
 
@@ -24,12 +24,12 @@ registry. It has two entry points and no build step.
   and `autoFrozen`, `tapFeeds`, `curves`, `modules` (doc-note text), `assemblies`, and
   `warnings`.
 
-The producer is the `song` crate's graph, answered by `GET /graph` (`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/docs.rs`). When you add a field, add it there and
+The producer is the `song` crate's graph, answered by `GET /graph` (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/docs.rs`). When you add a field, add it there and
 in `types.ts` together; nothing else checks that the two agree.
 
 ## `@studio/ui-chains`
 
-`packages/ui-chains` turns a `WebGraph` into geometry. It is framework-agnostic and imported
+`apps/k7-daw-frontend/packages/ui-chains` turns a `WebGraph` into geometry. It is framework-agnostic and imported
 through its `package.json` subpaths (`@studio/ui-chains/graph`, `@studio/ui-chains/cables`...).
 dagre (`@dagrejs/dagre`) computes the layout.
 
@@ -82,7 +82,7 @@ A panel's `widgets.js` is code from a library or a workspace, so it never runs i
 hidden `sandbox="allow-scripts"` iframe per page (opaque origin, no network) runs a worker that
 compiles every script and draws each screen to an `OffscreenCanvas`, returning a bitmap. Every
 call is a postMessage request, so answers are asynchronous; the React side
-(`packages/ui-chains-react/src/widgetScript.ts`) shows the last known answer. A request that times
+(`apps/k7-daw-frontend/packages/ui-chains-react/src/widgetScript.ts`) shows the last known answer. A request that times
 out means a hung script: the iframe is rebuilt and that script text is not run again.
 
 `widgetRuntime` is shipped into the iframe as source text (`Function.prototype.toString`), so it

@@ -1,5 +1,5 @@
 // video-mixer — a picture lane's STRIP: its red, green and blue, and how transparent it is, last in
-// the lane's own run. Shipped with k7, as the audio strip is (packages/song/docs/videoMixer.md).
+// the lane's own run. Shipped with k7, as the audio strip is (apps/k7-daw-frontend/packages/song/docs/videoMixer.md).
 // NEUTRAL as made: each channel whole and the lane opaque, so the compositor skips it until a knob moves.
 type("shader")
 shader("video-mixer")

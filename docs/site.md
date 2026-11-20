@@ -10,7 +10,7 @@ stores, and desktop builds are attached to the GitHub release page.
 |---|---|
 | GitHub Pages, built by `.github/workflows/pages.yml` on a push to `main` that touches the site | the site changes only with the docs, and a host that is free and has nothing to patch or watch keeps no server to retire |
 | the front page is one static file, `site/index.html`, with the splash drawing and three links | the page says where to get k7; it fetches nothing and needs no build |
-| the documentation is its own Vite bundle, `apps/k7/frontend/vite.docs.config.ts`, base `/docs/` | the editor's bundle never carries the guides and the guides never load the editor (`apps/k7/frontend/docs/docsSite.md`) |
+| the documentation is its own Vite bundle, `apps/k7-daw-frontend/vite.docs.config.ts`, base `/docs/` | the editor's bundle never carries the guides and the guides never load the editor (`apps/k7-daw-frontend/docs/docsSite.md`) |
 | `scripts/buildSite.mjs` writes an `index.html` for every route, and a `404.html` | Pages has no SPA fallback: a deep link needs its own file, and a mistyped one needs an answer that is the app's own "No page here" |
 | `CNAME` and `.nojekyll` are written by the build | the custom domain survives every deploy, and Jekyll would otherwise drop the `_`-prefixed files |
 | no download page and no update feed | the stores update the phone apps, and a person fetches a desktop build from the release page: no app asks a server whether it is current |
@@ -22,7 +22,7 @@ stores, and desktop builds are attached to the GitHub release page.
 node scripts/buildSite.mjs dist-site   # the front page, then the guides, into dist-site/
 ```
 
-The script builds the bundle with `npx vite build --config vite.docs.config.ts` from `apps/k7/frontend`, so the
+The script builds the bundle with `npx vite build --config vite.docs.config.ts` from `apps/k7-daw-frontend`, so the
 repository's dependencies must be installed. Serve `dist-site/` from any static file server to read it.
 
 ## Turning it on

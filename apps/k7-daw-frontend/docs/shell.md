@@ -15,7 +15,7 @@ still see their song: a full-screen wait in front of it read as "k7 does not wor
 link asks for its URL on every dial and waits for the search's answer, so the engine found by the
 search is reached without a reconnect delay; an engine found later — the bar's menu looks again when it
 opens — is joined without a remount, unless its files are not the hub's. Once an engine is held, the files'
-ticket names it, and that is what binds it at the hub (`apps/k7/backend-rs/docs/files/hub.md`).
+ticket names it, and that is what binds it at the hub (`apps/k7-daw-backend/docs/files/hub.md`).
 
 **Every wait is one bar along the bottom** (`@studio/project-shell/progress`), never a screen: the
 sign-in check, the files, the address resolved, the sync, then — with the project already drawn —
@@ -35,7 +35,7 @@ makes can land after a newer one, and a poll that skipped "unchanged" would leav
 
 **The plugin scan is one more step of that bar, and only for some projects.** A project whose
 modules name an external plugin is held at the file service while the engine scans
-(`engineLoad: "scanning"`, `apps/k7/backend-rs/docs/file-engine.md`), and the bar reads "Scanning
+(`engineLoad: "scanning"`, `apps/k7-daw-backend/docs/file-engine.md`), and the bar reads "Scanning
 plugins… N / M" from the poll's `engineScan`. The project is drawn meanwhile, as for every other
 wait; a plugin the stale scan does not know yet shows missing on its node until the scan ends and
 the revision moves. A scan the service gave up on is said once, in the status line, as an error:
@@ -48,7 +48,7 @@ it draws the home page instead. That address is the router's `basename`, so the 
 own routes are written below it and cannot rewrite it away. The gate is `@studio/project-shell`'s,
 and `components/ProjectGate.tsx` supplies this app's wording
 alone. Read
-[packages/project-shell/docs/launch.md](../../../../packages/project-shell/docs/launch.md)
+[apps/k7-daw-frontend/packages/project-shell/docs/launch.md](../packages/project-shell/docs/launch.md)
 before touching any of it, in particular why the address is a path and the workspace is named
 rather than spelled out.
 
@@ -83,14 +83,14 @@ refused; a real reload keeps the browser's `beforeunload` prompt.
 editor — which is what closes the engine socket — flushes the project out of the engine and draws
 a card offering to resume. EngineGate lets go of its lease at the same moment, since a tab with no
 socket that kept renewing a claim would be squatting the machine.
-[packages/project-shell/docs/idle.md](../../../../packages/project-shell/docs/idle.md) is the
+[apps/k7-daw-frontend/packages/project-shell/docs/idle.md](../packages/project-shell/docs/idle.md) is the
 page, including why a playing transport does not count as idleness.
 
 ### When somebody else takes the engine
 
 **The claim waits for the address.** EngineGate holds its lease only once the gate reports a phase
 `projectResolved` accepts (`@studio/project-shell/gate`). A claim is an OPEN, which displaces
-whoever held that project or that engine (`apps/k7/backend-rs/docs/engine/claim.md`): made for an
+whoever held that project or that engine (`apps/k7-daw-backend/docs/engine/claim.md`): made for an
 address that names nothing, it threw a real project off the machine for nothing, and the "taken"
 answer that came back hid the not-found screen the address deserved.
 
@@ -144,7 +144,7 @@ into evidence at all.
 The per-pane render counter in `PaneBoundary.tsx` is behind it too, for the same reason
 ("The panes are memoised" below).
 
-The flag is `packages/project-shell/src/profiling.ts`, and it is deliberately ONE flag rather than one per instrument.
+The flag is `apps/k7-daw-frontend/packages/project-shell/src/profiling.ts`, and it is deliberately ONE flag rather than one per instrument.
 The viewport's per-lane drift readout is behind the same one (`picture.md`): it polls and
 re-renders its pane at 5 Hz, the same trade — worth it while somebody is looking, and an
 instrument measuring itself the rest of the time. Anything else that costs per-frame to *report*
@@ -221,7 +221,7 @@ entry until somebody clears it — about 140 a second on the editor. Measured af
 the tab at **3.5 GB**, one CC visiting **8.9 million** live objects and freeing 28 000, slices up to
 131 ms, and the cycle collector at **79 %** of the tab's CPU while the app's own JS was 13 %. So every
 studio app's entry calls `clearDevPerfEntries`
-(`packages/ui/src/dev-perf.ts`) at boot, which clears the measures and marks every few
+(`apps/k7-daw-frontend/packages/ui/src/dev-perf.ts`) at boot, which clears the measures and marks every few
 seconds in DEV and does nothing in production. Nothing of the apps reads them: the profiler records
 them as markers as they happen, so a recording still shows them.
 
@@ -231,7 +231,7 @@ fresh array every three seconds re-rendered every project row and its menus for 
 
 Graphics is the other thing none of it can see, and two rules of this app exist because of it:
 
-- `packages/ui-chains/docs/wobble.md` — the cables are drawn on a canvas: writing `d` on an SVG path
+- `apps/k7-daw-frontend/packages/ui-chains/docs/wobble.md` — the cables are drawn on a canvas: writing `d` on an SVG path
   puts the layer on WebRender's blob-image path, and one moving cable re-serialises, re-parses and
   re-uploads the whole group every frame (62 % of the content main thread in paint, measured).
 - [timeline.md](timeline.md) — live state is drawn by leaves: a timeline BODY subscribed to the
@@ -279,7 +279,7 @@ home page (`../../../docs/versioning.md`). The project's name has the bar's left
 stands with the transport and the song's map rather than with the page buttons; the minimap's peek grows
 upward and leaves it in place. No phone has room for it. It is also
 what the wave behind the bar speeds up with, handed over as a getter so its 20 Hz frames re-render
-nothing (`packages/ui-mini-player/docs/miniPlayer.md`).
+nothing (`apps/k7-daw-frontend/packages/ui-mini-player/docs/miniPlayer.md`).
 
 **The pages are at the right edge**, outside the centred part. A **pane** button shows a page that is
 already mounted, and exactly one of them is lit — the page on screen: `aria-current="page"`, not
@@ -422,7 +422,7 @@ its arm button's business (`rec <track>` reaches the same split): `useTrackContr
 by what the lane holds and what feeds it, and one red lane reads both.
 
 The engine counts in even when it records no lane of its own, since the browser's take is owed the
-same count (`engine/k7-runtime/docs/engineHost.md`); what is played during it belongs to no take,
+same count (`apps/k7-daw-engine/k7-runtime/docs/engineHost.md`); what is played during it belongs to no take,
 bar a downbeat a hair early (`inTake`). While a MIDI take rolls, the lane draws it growing and the
 event panel draws its notes as they are played (`MidiTakeRoll.tsx`) — a window that follows the
 playhead, since the clip's own piano roll fits its view once and a take outgrows it. When the take
@@ -434,7 +434,7 @@ engine clears its own in `stop()`, and App clears `midiRecord` on the same edge.
 Play is another take, and an ordinary take mutes the armed lane at its punch-in: an armed track that
 plays silent reads as a broken track, not as a record still lit. Pressing a record while it rolls
 ends the take there and keeps playing; during the engine's count-in there is no take yet, so it
-stops the roll (`engine/k7-runtime/docs/engineHost.md`).
+stops the roll (`apps/k7-daw-engine/k7-runtime/docs/engineHost.md`).
 
 **Play waits for an arm.** With record on and no lane armed — audio, MIDI or picture — Play
 is greyed and `transport play` (Space included) is refused with the two ways out (`recordWithoutArm`
@@ -451,12 +451,12 @@ The cluster is absent where there is nothing here to address, and there are two 
 
 A project with **neither a timeline nor a desk**: every control here addresses a position in
 something, and that project has none; sound still reaches the engine, played by whatever is wired in
-the graph. See [packages/song/docs/surfaces.md](../../../../packages/song/docs/surfaces.md).
+the graph. See [apps/k7-daw-frontend/packages/song/docs/surfaces.md](../packages/song/docs/surfaces.md).
 
 …and the **DESK alone on screen** (`deskOnly`), the ordinary state of a set. Each deck is a platter
 carrying its own position, so the transport there drives nothing but the metronome's click — and
 each deck has its own PLAY, at the foot of its tempo column
-([../../../../packages/k7-plugins/docs/turntables/mix.md](../../../../packages/k7-plugins/docs/turntables/mix.md)). Buttons that
+([../packages/k7-plugins/docs/turntables/mix.md](../packages/k7-plugins/docs/turntables/mix.md)). Buttons that
 look like they start the music without starting it are worse than none. The test is the SCREEN and
 not the project: a project that declares a desk *and* a timeline keeps its transport the moment
 the timeline is showing or the viewport's window is up, because there it moves something you can see.
@@ -533,7 +533,7 @@ one a project opens on, `/` and `ui global` lead to, and Escape comes back to. A
 opens on the first pane it does declare (a set's desk, a rig's graph), keeps its editor, and is warned
 about in its diagnostics. `noArrangement` is what the transport and the minimap read: a rig and a song
 that has not declared its arrangement look alike on screen and are not the same fact. See
-[packages/song/docs/surfaces.md](../../../../packages/song/docs/surfaces.md).
+[apps/k7-daw-frontend/packages/song/docs/surfaces.md](../packages/song/docs/surfaces.md).
 
 **The VIEWPORT is the second**, `surfaces/viewport.k7x` — and NOT a page: a floating window over
 whichever page is up, moved and sized by hand, shown and hidden by `ui viewport` or its button beside
@@ -545,7 +545,7 @@ timeline, so the desk is its home page. A fader on the desk is a param on a modu
 the bottom panel's `graph` is how both are read at once. What it holds is a DOCUMENT — the loaded
 songs, the crossfader, the six EQ knobs — and a set does not stop existing because you went to look
 at the graph. See
-[../../../../packages/k7-plugins/docs/turntables/deckSet.md](../../../../packages/k7-plugins/docs/turntables/deckSet.md).
+[../packages/k7-plugins/docs/turntables/deckSet.md](../packages/k7-plugins/docs/turntables/deckSet.md).
 
 The editor is never the home page: every song would open on a k7x file you had not asked for, rather
 than on a view that is *about the song*. `ui editor` gives it the screen, and a command that sends it
@@ -591,7 +591,7 @@ reload apart. Both sources are needed — the compiled project says *which* modu
 graph doc carries no plugin type), the graph says what each looks like and what feeds it.
 
 **Every audio lane has a strip**, and `track new` writes it with the lane
-([packages/song/docs/trackMixer.md](../../../../packages/song/docs/trackMixer.md)): a module of
+([apps/k7-daw-frontend/packages/song/docs/trackMixer.md](../packages/song/docs/trackMixer.md)): a module of
 plugin type `Mixer` (`trackMixer`, `MIXER_PLUGIN`) last in the lane's run.
 `track new` writes it with the lane.
 
@@ -830,7 +830,7 @@ anything:
 
 There is no fourth piece: which pages exist is not state. It is a function of what the project
 declares, read fresh wherever it is needed. See [shellRouting.md](shellRouting.md) and
-[packages/song/docs/surfaces.md](../../../../packages/song/docs/surfaces.md).
+[apps/k7-daw-frontend/packages/song/docs/surfaces.md](../packages/song/docs/surfaces.md).
 
 Because nothing is torn down by a change of page, the state that would be expensive to rebuild — the
 open file and its undo history, the timeline caret, the zoom stack, the graph canvas — simply never
@@ -921,7 +921,7 @@ the tooltip.
 
 Under the journal, the same panel lists the WORKSPACE's sync history (`syncHistory.ts`): its
 checkpoints and latest edits from every device, read from the device's own log, or the relay's for a
-relay-synced workspace (`apps/k7/backend-rs/docs/files/history.md`). The two stay apart because they answer different questions:
+relay-synced workspace (`apps/k7-daw-backend/docs/files/history.md`). The two stay apart because they answer different questions:
 the journal is this project's undo, local and offline; the sync history is what every replica
 agreed on. A row opens on what it changed as plain text before and after, with no diff library, and
 "Restore to here" asks first, because a restore reaches every device at once. It is the panel's one
@@ -944,7 +944,7 @@ set list is a thing you work from, and a reference is a thing you put on beside 
 takes a minute and says where the file went.
 
 None of them is a **pane**. A pane is what the project DECLARES ([shellRouting.md](shellRouting.md),
-`packages/song/docs/surfaces.md`); none of this is the project's, which is why none of it is in the URL
+`apps/k7-daw-frontend/packages/song/docs/surfaces.md`); none of this is the project's, which is why none of it is in the URL
 either.
 
 ## The open file follows the disk (`hooks/useDiskSync.ts`)
@@ -967,7 +967,7 @@ app, on a two-second poll; see
 The poll alone leaves a window: an autosave due in under a second, and a drag or an undo that
 rewrites the same file inside it. So the editor's write names its BASE — the text it last read or
 wrote, `saved` — and the file service refuses it with a 409 when the disk has moved
-(`apps/k7/backend-rs/docs/file-native.md`). A refusal raises the same banner the poll would
+(`apps/k7-daw-backend/docs/file-native.md`). A refusal raises the same banner the poll would
 (`useDiskSync`'s `raise`), with the buffer held. "Keep editing" makes the disk's text the new base,
 so the next write goes over it, which is what the person chose; "take the disk" drops the buffer.
 The project journal flushes every pane before it moves (`HistoryDeps.flush`), so Ctrl+Z never
@@ -1039,7 +1039,7 @@ itself, instead of letting the browser offer to save the page.
 
 ### Headphones, said when a live input becomes audible
 
-A live rig monitors its input on purpose (`packages/song/docs/liveProject.md`), so the moment the
+A live rig monitors its input on purpose (`apps/k7-daw-frontend/packages/song/docs/liveProject.md`), so the moment the
 input reaches a channel it is heard — and a laptop's own mic and speakers feed back. The scaffold
 stays audible; what changes is that it is SAID, in a toast that stays until dismissed, at the two
 moments it becomes true: a channel picked on the input's card (`node param <input> @channel …`), or
@@ -1118,7 +1118,7 @@ through `node new <ref>`, so the node lands in the graph, journalled and extendi
 as it stands, then its taps in one write rather than a reload per pad. The builder writes no sampler
 of its own: one per workspace would be one copy of the same `type: rack` per workspace, so a library
 holding none is said on the popin before any upload runs. A kit is the node's and a
-sample lives in a samples/ folder, never in a module (`packages/song/docs/racks.md`), so the builder no
+sample lives in a samples/ folder, never in a module (`apps/k7-daw-frontend/packages/song/docs/racks.md`), so the builder no
 longer writes a module at all. Auditioning is a local object-URL, with no server round trip.
 
 The notes are the drum-machine page, pinned in `rackBuilder.ts`: bottom-left is 36, rightward, then the
@@ -1148,18 +1148,18 @@ instead of flashing the text editor for a frame.
 ### The TAP CHAIN popin — one pad's own chain of effects
 
 `ui tap chain <node> <tap>`, a pad's **Edit chain…**, opens `TapChainEditor.tsx` on the subchain that
-pad feeds (`packages/song/docs/racks.md`, "A tap with a chain of its own"): the modules in order, each
+pad feeds (`apps/k7-daw-frontend/packages/song/docs/racks.md`, "A tap with a chain of its own"): the modules in order, each
 moved or removed, **Add module…** through the ordinary module picker, and the cards themselves below.
 
 - **Every button is a command** — `node tap chain add|move|remove` — so the popin holds no state of
   its own and re-reads the graph after each, as every pane here does. The first module added makes the
-  subchain and routes the tap; the last one removed takes both away (`packages/song-edit/src/tapChain.ts`).
+  subchain and routes the tap; the last one removed takes both away (`apps/k7-daw-frontend/packages/song-edit/src/tapChain.ts`).
 - **The cards are the lane view's.** `TrackModulesPane` draws any list of nodes when handed one, with
   no lane card, inputs or frame, so a knob here is the same knob, on the same stores, as on the graph.
 - **The chain starts at a node called `input`**, cabled into its first card: a pass-through that says
   where the sound arrives from and does nothing else — no controls, no menu, no file. Without it the
   cards float with nothing feeding them, and a reader cannot tell which end the signal enters
-  (`moduleRow`'s `lead`, in `packages/ui-chains/src/graph.ts`).
+  (`moduleRow`'s `lead`, in `apps/k7-daw-frontend/packages/ui-chains/src/graph.ts`).
 - **The picker hands back a ref** rather than placing a node (`onRef` on its state): the chain is
   written by the verb, not by `node new` and a splice. This project's own modules leave as `@workspace/…`.
 - **Not a modal dialog.** It is a hand-rolled overlay at `z-40`, under the pickers' `z-50`, as the rack
@@ -1594,7 +1594,7 @@ feature its persistence. A zod object strips what it does not declare, so a laye
 `backend/src/server.ts`'s `prefsSchema` says nothing about is accepted, answered `{ok:true}` and dropped:
 renaming works, saving says it worked, a reload shows the catalogue's own names again, and the disk holds
 `{"engineId": "…"}` alone. Widening `K7Prefs` is half of adding a preference. The router refuses a write
-it would have to shorten (`droppedKeys`, `apps/k7/backend-rs/crates/k7-front/src/routes/prefs.rs`), so an omission is a 400
+it would have to shorten (`droppedKeys`, `apps/k7-daw-backend/packages/k7-front/src/routes/prefs.rs`), so an omission is a 400
 naming the field rather than a feature that quietly does not last the session.
 
 ### A name is a SENTENCE, so there is one field per language
@@ -1708,7 +1708,7 @@ the editor arrives; an `import App` there would make every gate wait for the who
 
 Inside the editor, what opens on demand loads on demand: the module and assembly builders, the video export
 (its muxer is the largest dependency there is), the icon set (above), and the drawers of the DJ desk and of
-the viewport, which only a project declaring that surface fetches (`packages/k7-plugins/docs/plugins.md`).
+the viewport, which only a project declaring that surface fetches (`apps/k7-daw-frontend/packages/k7-plugins/docs/plugins.md`).
 The code editor is its own chunk too (`components/EditorPane.tsx`): it mounts the first time its pane
 is on screen and then stays mounted like every pane, and the chunk is fetched at idle so that first
 show rarely waits — a project opened on its timeline no longer builds a CodeMirror view nobody sees.
@@ -1966,7 +1966,7 @@ shell's own keys, which answer wherever focus is, as the rule for drag surfaces 
 under `:focus-visible`, at zero specificity (`:where`) so a component's own ring still wins. A field
 that removes the outline (`outline-none`) puts a cue of its own in its place — a border that turns the
 primary colour, or a ring under `focus-visible:` — never nothing. The chains graph injects its own
-sheet, so it carries the same rule (`packages/ui-chains-react/src/chainsCss.ts`).
+sheet, so it carries the same rule (`apps/k7-daw-frontend/packages/ui-chains-react/src/chainsCss.ts`).
 
 A selection ROW — a node card, a corner button drawn as a `span` — is focusable and answers Enter as
 it answers a click. Not Space: Space is the transport wherever focus is ("Space is the transport, wherever the last click

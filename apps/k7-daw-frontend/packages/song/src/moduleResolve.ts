@@ -129,7 +129,7 @@ export function resolveModule(
   seen: Set<string> = new Set(),
 ): ResolvedModule {
   const own = foldExtends(m, byRef, new Set(seen));
-  // A set naming another module makes the node that module — except a lane or a fader (packages/song/docs/alternatives.md).
+  // A set naming another module makes the node that module — except a lane or a fader (apps/k7-daw-frontend/packages/song/docs/alternatives.md).
   const swapped = keepsItsModule(own) ? null : swappedModule(m);
   const chosen = swapped
     ? foldExtends(swapped, byRef, new Set(seen))

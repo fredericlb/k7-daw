@@ -6,14 +6,14 @@ First decide **where it runs**:
 
 | It… | Goes |
 |---|---|
-| changes project or workspace files, or asks the engine through the file service | the catalogue: `packages/commands` |
+| changes project or workspace files, or asks the engine through the file service | the catalogue: `apps/k7-daw-frontend/packages/commands` |
 | only changes what the shell shows (a page, a panel, a tool, a zoom) | a `ui` command in the frontend |
 | needs something only the browser has (the clipboard, Web MIDI, a camera, a download) but writes through a file route | a bare-named web-local command |
 | belongs to a plugin | the plugin's `commands` list |
 
 ## A catalogue verb
 
-1. **Declare it** in `packages/commands/commands.yaml`:
+1. **Declare it** in `apps/k7-daw-frontend/packages/commands/commands.yaml`:
 
    ```yaml
    - command: "track colour"
@@ -32,7 +32,7 @@ First decide **where it runs**:
 
    Pick the first word for the entity the command acts on: the settings page groups by it, and the right-click menu matches on the **leading arguments** (here a `tracks` value, so it appears on a track's menu). Use `menu:` only to narrow that. Add `confirm: true` if the menu should ask first. Give every free-text argument a `hint`.
 
-2. **Write the handler**, in a family file under `packages/commands/src/verbs/` (or a new one exported as `XXX_VERBS` and listed in `VERB_TABLES` in `packages/commands/src/commands.ts`):
+2. **Write the handler**, in a family file under `apps/k7-daw-frontend/packages/commands/src/verbs/` (or a new one exported as `XXX_VERBS` and listed in `VERB_TABLES` in `apps/k7-daw-frontend/packages/commands/src/commands.ts`):
 
    ```ts
    "track.colour": async (args, h) => {
@@ -47,7 +47,7 @@ First decide **where it runs**:
 
    Refuse with a sentence that says what to do instead. Write files through the song-edit writers so an edit stays a one-line diff. The change set lands as one undo step on its own.
 
-3. **Test it** with a family test over `packages/commands/src/testHost.ts`, and run `npm run test` in `packages/commands`: `commandSpec.test.ts` fails on a missing language, a description over 60 characters, an unknown provider or an argument without a hint.
+3. **Test it** with a family test over `apps/k7-daw-frontend/packages/commands/src/testHost.ts`, and run `npm run test` in `apps/k7-daw-frontend/packages/commands`: `commandSpec.test.ts` fails on a missing language, a description over 60 characters, an unknown provider or an argument without a hint.
 
 4. **Use it** from the UI by dispatching the line: `void runCommand(\`track colour ${id} ${hex}\`)`. A knob-like edit that must not reload the shell uses `quietCommand`.
 
@@ -55,20 +55,20 @@ Nothing else is needed: the verbs runtime serves it to the palette and the help 
 
 ### A new completion provider
 
-Add it to `PROVIDERS` in `packages/commands/src/providers.ts`, then give it a class in `PROVIDER_CLASS` and a hint in `PROVIDER_HINT` (both are exhaustive records, so the build tells you). The provider and class names are mirrored on the wire as the `ArgProvider` and `ArgClass` unions in `packages/web-protocol/commandTypes.ts`, which `commandSpec.test.ts` holds against the package; add the new name there too.
+Add it to `PROVIDERS` in `apps/k7-daw-frontend/packages/commands/src/providers.ts`, then give it a class in `PROVIDER_CLASS` and a hint in `PROVIDER_HINT` (both are exhaustive records, so the build tells you). The provider and class names are mirrored on the wire as the `ArgProvider` and `ArgClass` unions in `apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts`, which `commandSpec.test.ts` holds against the package; add the new name there too.
 
 ## A `ui` command
 
-1. Add an entry to the group file it belongs to under `apps/k7/frontend/src/ui/commands/`: its name, its sentence in both languages (60 characters), its arguments, and `run`, returning `true`. `UI_EXACT`, `UI_HEADS`, `LOCAL_COMMANDS`, `LOCAL_READABLE` and `LOCAL_ARGS` are derived from that registry. A fixed vocabulary goes in `makeListArg` (`apps/k7/frontend/src/palette.ts`).
-2. If the help page should describe it, add it to `VIEW_COMMANDS` in `apps/k7/frontend/src/components/HelpPage.tsx`.
-3. If a one-surface device should answer it, add it to `ExternalSurface`'s `runLocal` (`apps/k7/frontend/src/components/ExternalSurface.tsx`); otherwise it answers that it is editor-only.
+1. Add an entry to the group file it belongs to under `apps/k7-daw-frontend/src/ui/commands/`: its name, its sentence in both languages (60 characters), its arguments, and `run`, returning `true`. `UI_EXACT`, `UI_HEADS`, `LOCAL_COMMANDS`, `LOCAL_READABLE` and `LOCAL_ARGS` are derived from that registry. A fixed vocabulary goes in `makeListArg` (`apps/k7-daw-frontend/src/palette.ts`).
+2. If the help page should describe it, add it to `VIEW_COMMANDS` in `apps/k7-daw-frontend/src/components/HelpPage.tsx`.
+3. If a one-surface device should answer it, add it to `ExternalSurface`'s `runLocal` (`apps/k7-daw-frontend/src/components/ExternalSurface.tsx`); otherwise it answers that it is editor-only.
 
 `localCommands.test.ts` fails if the palette lists a line the dispatcher does not recognise.
 
 ## A key for it
 
-Add a binding to `KEYS` in `apps/k7/frontend/src/keys.ts`. A plain string is a default a person can move; a conditional binding (`{ if: "caret_track", command: "…{caret_track}" }`, or a list tried in order) stays the app's. Conditions are computed in `App.tsx`'s `conditions` memo. Add a case to `keys.test.ts`. See [Keys, palette and menus](./14-keys-palette-menus.md).
+Add a binding to `KEYS` in `apps/k7-daw-frontend/src/keys.ts`. A plain string is a default a person can move; a conditional binding (`{ if: "caret_track", command: "…{caret_track}" }`, or a list tried in order) stays the app's. Conditions are computed in `App.tsx`'s `conditions` memo. Add a case to `keys.test.ts`. See [Keys, palette and menus](./14-keys-palette-menus.md).
 
 ## A plugin's verb
 
-A plugin declares `commands: [{ sid, spec, handler }]` in its `definePlugin` (see `packages/k7-plugins/src/transcription/index.ts`). The SID may live in a core family (`track.transcribe`) or under `plugin.<id>.*`. It is installed at file-service boot by `installBuiltinPlugins`; a word or SID already taken throws at install, never at use. The Chains and plugins section covers the plugin contract.
+A plugin declares `commands: [{ sid, spec, handler }]` in its `definePlugin` (see `apps/k7-daw-frontend/packages/k7-plugins/src/transcription/index.ts`). The SID may live in a core family (`track.transcribe`) or under `plugin.<id>.*`. It is installed at file-service boot by `installBuiltinPlugins`; a word or SID already taken throws at install, never at use. The Chains and plugins section covers the plugin contract.

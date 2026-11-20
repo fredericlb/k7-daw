@@ -13,7 +13,7 @@
 // key names the one a run leaves by whenever there is anything to say. "melody" holds only
 // sequences, so its bare key is unambiguous; "pad" streams from a pattern and holds nothing
 // until the transport rolls, so nothing but this line can say its events are notes for the
-// synth. See packages/song/docs/trackModules.md.
+// synth. See apps/k7-daw-frontend/packages/song/docs/trackModules.md.
 
 // `MIX` is the mixer's sum and `OUT` is the interface; the run between them is the MASTER
 // CHAIN, and `OUT` carries the song's output level as its `Volume`. Name a module on that

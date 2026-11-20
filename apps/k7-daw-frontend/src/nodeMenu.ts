@@ -1,6 +1,6 @@
 // nodeMenu.ts — a lane's gutter menu: its module's other attribute SETS, and its freeze. This project's
 // data rather than the command catalogue, which is why it is not derived like contextMenu.ts's rows.
-// See packages/song/docs/alternatives.md.
+// See apps/k7-daw-frontend/packages/song/docs/alternatives.md.
 
 import type { MenuItem } from "./contextMenu";
 
@@ -12,7 +12,7 @@ export interface NodeMenuTarget {
   frozen?: "at" | "inside";
 }
 
-/** A lane's gutter menu: its module's other attribute SETS, and its freeze — this project's data rather than the catalogue (packages/song/docs/alternatives.md). */
+/** A lane's gutter menu: its module's other attribute SETS, and its freeze — this project's data rather than the catalogue (apps/k7-daw-frontend/packages/song/docs/alternatives.md). */
 export function nodeMenu(n: NodeMenuTarget): MenuItem[] {
   const module = n.module;
   if (!module) return [];

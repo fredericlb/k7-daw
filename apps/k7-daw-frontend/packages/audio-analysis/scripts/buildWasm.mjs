@@ -7,8 +7,19 @@ import { join } from "node:path";
 import { rustSourceHash } from "./rustSources.mjs";
 
 const PKG = join(import.meta.dirname, "..");
-const RUST = join(PKG, "rust");
+const RUST = join(
+  PKG,
+  "..",
+  "..",
+  "..",
+  "k7-daw-backend",
+  "packages",
+  "waveform",
+);
 const TARGET = "wasm32-unknown-unknown";
+// A target folder is named with --target-dir, never CARGO_TARGET_DIR, which sccache hashes.
+const OUT = process.env.K7_WASM_TARGET_DIR;
+const dirArgs = OUT ? ["--target-dir", OUT] : [];
 
 execFileSync(
   "cargo",
@@ -20,6 +31,7 @@ execFileSync(
     TARGET,
     "--features",
     "decode encode",
+    ...dirArgs,
   ],
   {
     cwd: RUST,
@@ -27,6 +39,9 @@ execFileSync(
   },
 );
 const out = join(PKG, "waveform.wasm");
-copyFileSync(join(RUST, "target", TARGET, "release", "waveform.wasm"), out);
+copyFileSync(
+  join(OUT ?? join(RUST, "target"), TARGET, "release", "waveform.wasm"),
+  out,
+);
 writeFileSync(`${out}.sources`, `${rustSourceHash()}\n`);
 console.log(`${out}: written`);

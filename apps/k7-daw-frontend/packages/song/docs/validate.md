@@ -2,7 +2,7 @@
 
 song-schema's `yaml/validate.ts` answers that about a **buffer**, in a browser, for any file a project is made
 of. It exists because the editors autosave now
-([packages/ui-editor/docs/autosave.md](../../ui-editor/docs/autosave.md)) and something has to
+([apps/k7-daw-frontend/packages/ui-editor/docs/autosave.md](../../ui-editor/docs/autosave.md)) and something has to
 decide whether the text in the pane is worth writing.
 
 It adds no schema of its own. Every file kind here already had a parser — `parseModule`,
@@ -60,7 +60,7 @@ twice — once for syntax, once by the kind's parser — which costs nothing at 
 
 ## Where the line and column come from
 
-`packages/song-schema/src/yaml/k7xPosition.ts`, which every parser uses: walk the k7x tree to the
+`apps/k7-daw-frontend/packages/song-schema/src/yaml/k7xPosition.ts`, which every parser uses: walk the k7x tree to the
 deepest node on the issue's path and read its line and column from its span. An unknown key is reported by Zod against its *containing* object, so the key is appended to the
 path before locating — otherwise every typo would point at the top of the file.
 

@@ -113,7 +113,7 @@ and `track rename` gain the collision refusal `createVideoTrackFile` already mak
    open, unjournaled: the journal records asynchronously and would race the first compile, and
    undoing it would leave a project this build cannot read. `layers:` is refused when it names a
    lane and accepted empty, as most songs carry it. The fixtures and demos are migrated, the old
-   layout kept as test data in `packages/song/fixtures/pictureLanesV2`, and the docs describe the
+   layout kept as test data in `apps/k7-daw-frontend/packages/song/fixtures/pictureLanesV2`, and the docs describe the
    new one.
 4. **Done:** the timeline draws each picture row where `trackOrder` puts it among the sound rows,
    and the e2e suite passes against the running instance.

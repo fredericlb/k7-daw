@@ -172,7 +172,7 @@ export function registerVerb(spec: CommandSpec, handler: SidHandler): void {
   registerCommand({ sid: spec.sid, handler });
 }
 
-// Where a right-click may offer a command, mirrored on the wire — apps/k7/frontend/docs/contextMenu.md.
+// Where a right-click may offer a command, mirrored on the wire — apps/k7-daw-frontend/docs/contextMenu.md.
 export const MENU_ENTITIES = [
   "track",
   "group",

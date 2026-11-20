@@ -1,5 +1,5 @@
 // localEngine.spec.ts — a machine's own backend as its pages see it: /api/local and the
-// internal seam's local half. Skipped against a backend that is no machine's own (apps/k7/backend-rs/docs/local.md).
+// internal seam's local half. Skipped against a backend that is no machine's own (apps/k7-daw-backend/docs/local.md).
 // The engine routes (snapshot, events, commands, slots) run in k7-local's tests/all/front.rs, against a fake supervisor.
 import { type APIRequestContext, expect, test } from "@playwright/test";
 

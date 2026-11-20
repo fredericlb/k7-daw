@@ -1,5 +1,5 @@
 // frontVersion.test.mjs — the front's version is the app's, which is the repository's.
-// Run by the desktop app's workspace, which stages from this folder (apps/k7-desktop/package.json).
+// Run by the desktop app's workspace, which stages from this folder (apps/k7-daw-desktop/package.json).
 
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -18,8 +18,11 @@ const read = (rel) => readFileSync(join(repo, rel), "utf8");
 const version = (rel) => JSON.parse(read(rel)).version;
 
 test("the front's version is the app's, which is the repository's", () => {
-  const build = read("apps/k7/backend-rs/crates/k7-front/build.rs");
-  assert.match(build, /"\.\.\/\.\.\/\.\.\/package\.json"/);
+  const build = read("apps/k7-daw-backend/packages/k7-front/build.rs");
+  assert.match(build, /"\.\.\/\.\.\/\.\.\/k7-daw-frontend\/package\.json"/);
   assert.doesNotMatch(build, /backend\/package\.json/);
-  assert.equal(version("apps/k7/package.json"), version("package.json"));
+  assert.equal(
+    version("apps/k7-daw-frontend/package.json"),
+    version("package.json"),
+  );
 });

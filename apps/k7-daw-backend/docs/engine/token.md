@@ -1,7 +1,7 @@
 # The engine's credentials: the token, the tunnel secret, and what each one proves
 
 An engine's supervisor holds three things in `<state>/engine-id.json`
-(`engine/k7-supervisor/src/Identity.cpp`): an **id**, a **token** and a **tunnel secret**. They
+(`apps/k7-daw-engine/k7-supervisor/src/Identity.cpp`): an **id**, a **token** and a **tunnel secret**. They
 are not three spellings of one credential. The token is readable by whoever reaches the engine
 directly, and through the relay by the accounts that may use it; the tunnel secret is read by
 nothing but the supervisor and the registries it dials. The
@@ -11,17 +11,17 @@ file is the owner's alone — 0600, in a 0700 folder when the supervisor creates
 
 The engine answers `whoami` with its id, its token and its audio timing — to the machine's own
 sockets, to the server's relay, and to a LAN device once it is PAIRED. An unpaired LAN peer gets the
-id and `needsPairing` and never the token (`engine/k7-runtime/docs/pairing.md`):
+id and `needsPairing` and never the token (`apps/k7-daw-engine/k7-runtime/docs/pairing.md`):
 
 ```
-// engine/k7-runtime/server/Serve.cpp, the `whoami` / `hello` branch
+// apps/k7-daw-engine/k7-runtime/server/Serve.cpp, the `whoami` / `hello` branch
 ws.send(json{{"type", "whoami"}, {"id", engineId}, {"token", engineToken}, …}.dump());
 ```
 
 The relay forwards a `whoami` for any account holding a ticket, before it holds a claim
 (`proxy.md`), but strips the token from it for an engine the account may not use — one that does not run
 on this device ([ownership.md](ownership.md)). The browser keeps the token:
-it is what `select` takes to claim that engine (`packages/engine-browser/src/probe.ts`). So the
+it is what `select` takes to claim that engine (`apps/k7-daw-frontend/packages/engine-browser/src/probe.ts`). So the
 token is held by the account for an engine of this device, and by whoever reached the engine
 directly. It is an unguessable identifier, not an authentication ([ownership.md](ownership.md)).
 
@@ -34,7 +34,7 @@ to the engine process, never logs them, and no engine message carries them, so n
 sees them.
 
 The registry binds an id to the **first** secret a heartbeat carries for it — trust on first use —
-and keeps that binding on disk as `id → sha256(secret)` (`crates/k7-engine/src/registry/bindings.rs`,
+and keeps that binding on disk as `id → sha256(secret)` (`packages/k7-engine/src/registry/bindings.rs`,
 `engine-bindings.json` in `STUDIO_ENGINES_DIR`, else `<instance data folder>/.engines`). The previous release
 reads the same file, so a rollback keeps every binding. The binding outlives the 15 s expiry
 of a listing and a restart of the backend, because those are exactly the gaps a lookalike would use.

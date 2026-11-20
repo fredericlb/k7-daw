@@ -1,7 +1,7 @@
 # Library versions: upgrade a library without reinstalling k7
 
 The decisions of the library-versions work, in one place. What is built is described by
-`../packages/song/docs/sharedFolders.md` and `apps/k7/backend-rs/docs/files/hub.md`; this page
+`../apps/k7-daw-frontend/packages/song/docs/sharedFolders.md` and `apps/k7-daw-backend/docs/files/hub.md`; this page
 says the whole design and which lots remain.
 
 ## The goal
@@ -48,7 +48,7 @@ k7 has several version schemes: the image stamp (`26.08031412`), the desktop's s
   the previous version's, so a publish never raises the floor by accident.
 - On a desktop or a phone the backend and the engine ship together, so they share one level. On the
   server, the supervisor states its machine's level in every heartbeat (`kLibraryLevel`, which
-  `../packages/song-schema/src/libraryLevel.test.ts` keeps equal to `LIBRARY_LEVEL`); one older than
+  `../apps/k7-daw-frontend/packages/song-schema/src/libraryLevel.test.ts` keeps equal to `LIBRARY_LEVEL`); one older than
   the field states none and runs level 1. The editor then warns, above the file tree, for each
   library whose pinned version `requires` more than the engine playing it. A warning and not a
   refusal: what that version adds is unknown to the old engine, and the rest of the song still plays.
@@ -75,7 +75,7 @@ drums(2)
 ## Upgrade
 
 - **Nothing is fetched.** A machine holds the seed its app bundles, and a library changes with an app update
-  (`apps/k7/backend-rs/docs/libraries.md`).
+  (`apps/k7-daw-backend/docs/libraries.md`).
 - **First run is the installer's copy.** The desktop and the phone bundle the repo's `k7-core/`, `library.k7x`
   included, and install it under the number it declares on first run, with no network. A folder rather than an
   archive: the bundle is files already, and the hub copies a folder. An app update carrying a newer version adds
@@ -84,7 +84,7 @@ drums(2)
   installs as on every machine whose bundle carries it. So **a change to `k7-core` content raises that number** in
   the same commit: a version a machine holds is never rewritten, and an unchanged number reaches nobody. A seed
   never overwrites a version already held; it takes the next free number
-  (`apps/k7/backend-rs/docs/files/hub.md`).
+  (`apps/k7-daw-backend/docs/files/hub.md`).
 - **Upgrade is a per-workspace action**, the verb `library upgrade <library> [version]` and the
   strip above the editor's file tree: it refuses by name a version the machine lacks, else rewrites
   the pin and recompiles the song. It lists the forks whose base changed between the two versions —
@@ -121,24 +121,24 @@ library and every workspace, and runs at the highest level, so latest, old and f
 
 ## Lots
 
-1. **Built.** `library.k7x`, `LIBRARY_LEVEL` (`../packages/song-schema/src/libraryVersions.ts`), the
+1. **Built.** `library.k7x`, `LIBRARY_LEVEL` (`../apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts`), the
    `draft/` + `<n>/` layout on the origin, an existing library moved into `1/`, the draft made on an
    admin's ask, and `LibraryStore.publish` (`k7-libraries`).
 2. **Built.** `_library-pins.k7x`: the compile, the file tree and the presets read the pinned
-   folder, and `ensureLibraryPins` (`crates/k7-file-service/src/pins.rs`) writes it on
+   folder, and `ensureLibraryPins` (`apps/k7-daw-backend/packages/k7-file-service/src/pins.rs`) writes it on
    workspace creation and on the first open.
 3. **Built:** Publish on the Libraries page, `POST /account/libraries/<name>/publish`, and each
    library's versions in `GET /account/libraries`.
-4. **Built:** `library versions` and `library upgrade` (`../packages/commands/src/verbs/library.ts`),
+4. **Built:** `library versions` and `library upgrade` (`../apps/k7-daw-frontend/packages/commands/src/verbs/library.ts`),
    the strip above the file tree, the public listing and per-file download
    (`k7-libraries`). **Remains:** a paired machine still
    follows each library whole through the relay, every version and the draft included; fetching
    only what its workspaces pin is a disk saving, not a correctness one.
-5. **Built.** `apps/k7/backend-rs/scripts/libraryArchive.mjs` bundles the published version; the hub
+5. **Built.** `apps/k7-daw-backend/scripts/libraryArchive.mjs` bundles the published version; the hub
    seeds a published seed under its number and adds a newer one on an app update.
-6. **Built.** `@account` (`accountLibraryHome` in `../packages/song/src/sharedFolders.ts`), its room
-   (`attachAccountLibrary`, `crates/k7-file-service/src/workspaces`), `module fork`
-   (`../packages/song/src/accountFork.ts`), its presets scope, and upgrade's list of the forks whose
+6. **Built.** `@account` (`accountLibraryHome` in `../apps/k7-daw-frontend/packages/song/src/sharedFolders.ts`), its room
+   (`attachAccountLibrary`, `apps/k7-daw-backend/packages/k7-file-service/src/workspaces`), `module fork`
+   (`../apps/k7-daw-frontend/packages/song/src/accountFork.ts`), its presets scope, and upgrade's list of the forks whose
    base moved.
 7. **Built.** The supervisor's heartbeat carries `libraryLevel`, the registry hands it to the
    browser, and `LibraryUpgrades.tsx` warns.

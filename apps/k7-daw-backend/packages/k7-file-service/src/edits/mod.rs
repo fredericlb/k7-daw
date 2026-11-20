@@ -35,7 +35,7 @@ pub fn env_of(home: &Home, code_root: &str) -> Env {
     let code = crate::paths::resolve_all(&[&code]);
     let mut env = Env::at(
         &posix(&home.studio),
-        &posix(&join(&[&code, "packages/song/meta"])),
+        &posix(&join(&[&code, "apps/k7-daw-frontend/packages/song/meta"])),
     );
     env.libraries_home.clone_from(&home.libraries);
     edge::posix_env(env)
@@ -79,7 +79,7 @@ mod tests {
         let env = env_of(&home, "C:\\code");
         assert_eq!(env.studio_home, "/C:/Users/a/.k7");
         assert_eq!(env.libraries_home, "/C:/Users/a/.k7/libraries");
-        assert_eq!(env.meta_root, "/C:/code/packages/song/meta");
+        assert_eq!(env.meta_root, "/C:/code/apps/k7-daw-frontend/packages/song/meta");
         assert!(env.models_root.starts_with("/C:/Users/a/.k7"));
     }
 

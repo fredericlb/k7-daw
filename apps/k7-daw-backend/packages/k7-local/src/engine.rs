@@ -1,6 +1,6 @@
 //! engine.rs — the machine's engine as its own backend runs it: the supervisor hosted over stdio, its last snapshot
 //! and why it is away, its notes filed under `[host]` in the merged log, and `engine-host.json` pinned before each
-//! start. The choices are in `apps/k7/backend-rs/docs/localEngine.md` and `local.md`.
+//! start. The choices are in `apps/k7-daw-backend/docs/localEngine.md` and `local.md`.
 
 use std::io::Write;
 use std::path::{Path, PathBuf};

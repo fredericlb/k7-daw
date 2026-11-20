@@ -1,7 +1,7 @@
 // accountFork.ts — FORK a module of the origin's libraries into the account's own: a module at
 // `@account/<path>` that `extends` it, its panel copied so it draws the same, and the project's refs
 // repointed to it. The library is never written: changing a module of it is forking it, and the
-// fork keeps inheriting whatever it does not change. See ../../../docs/library-versions-plan.md.
+// fork keeps inheriting whatever it does not change. See ../../../../../docs/library-versions-plan.md.
 
 import { stub } from "./editStub";
 

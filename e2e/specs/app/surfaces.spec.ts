@@ -23,7 +23,7 @@ const button = (page: Page, name: string) =>
   page.getByRole("button", { name, exact: true });
 const lane = (page: Page, name: string) => button(page, `mute ${name}`);
 const viewport = (page: Page) => page.getByRole("dialog", { name: "Viewport" });
-// A project with no timeline records its output from the bar (packages/song/docs/outputRecording.md).
+// A project with no timeline records its output from the bar (apps/k7-daw-frontend/packages/song/docs/outputRecording.md).
 const recordButton = (page: Page) => button(page, "Record the output");
 
 /** What each archetype draws on opening, and whether its bar offers a transport to roll. */

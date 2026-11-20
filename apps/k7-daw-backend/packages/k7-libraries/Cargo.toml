@@ -9,7 +9,7 @@ publish.workspace = true
 # Names, atomic writes, the path model and the confinement gate: the file service's own.
 k7-file-service = { path = "../k7-file-service" }
 # The manifests are k7x files.
-k7x = { path = "../../../../../packages/k7x/rust" }
+k7x = { path = "../../../k7-daw-wasm/k7x" }
 serde_json.workspace = true
 tokio = { workspace = true, features = ["sync", "rt", "time", "fs"] }
 

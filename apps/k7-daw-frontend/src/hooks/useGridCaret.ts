@@ -1,7 +1,7 @@
 // useGridCaret.ts — the timeline's caret behaviour on a clip editor's grid: hjkl/arrows move it,
 // `v` grows it into a rectangle, Escape drops that, shift+drag draws one with the pointer. The
 // arithmetic is gridCaret.ts; what is here is the state, the key listener and the drag.
-// See apps/k7/frontend/docs/clipEditors.md.
+// See apps/k7-daw-frontend/docs/clipEditors.md.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {

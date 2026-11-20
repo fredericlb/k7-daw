@@ -1,6 +1,6 @@
 # Supervisor policy — registries, logs, processes, audio
 
-Background for the one-line headers in `engine/k7-supervisor/src`. Each section names its file.
+Background for the one-line headers in `apps/k7-daw-engine/k7-supervisor/src`. Each section names its file.
 
 ## `Supervisor.cpp` — the loops, and the pace each one runs at
 
@@ -14,7 +14,7 @@ interval is the whole of the design.
 | `kDevicesPoll` (10 s) | this is what notices an interface being plugged in or pulled out — and it is the one poll that TOUCHES A DRIVER. See below. |
 | `kSessionsPoll` (2 s) | an app connecting or a song loading is a human-speed event, and the submenu redraws only when the signature moves anyway. |
 | `kEditPluginsPoll` (3 s) | a user swaps songs at human speed, not interface-unplug speed. |
-| `kPluginsPoll` (60 s) | the plugin scan is expensive and the answer barely moves. Until it lands, and while the engine's `plugins` reply says `scanning` — the engine scans at every start, and the list it answers then is about to change — we ask at `kPluginsPollFast` (2 s) instead, to keep the spinner and the count honest; that poll reschedules itself rather than sitting on one interval. The scan's progress is not carried here: the page follows it on the engine's own socket (`engine/k7-runtime/docs/plugins.md`). |
+| `kPluginsPoll` (60 s) | the plugin scan is expensive and the answer barely moves. Until it lands, and while the engine's `plugins` reply says `scanning` — the engine scans at every start, and the list it answers then is about to change — we ask at `kPluginsPollFast` (2 s) instead, to keep the spinner and the count honest; that poll reschedules itself rather than sitting on one interval. The scan's progress is not carried here: the page follows it on the engine's own socket (`apps/k7-daw-engine/k7-runtime/docs/plugins.md`). |
 | `kBackoffMaxS` (30 s) | the relaunch backoff for a crashing engine, doubling from 1 s. One that dies on startup — a bad audio device, a missing DLL — would otherwise be relaunched forever at one per second, and the log would be nothing but that. |
 | `kDeregisterBound` (1.5 s) | a hung registry must not hold the quit open. An app gives the supervisor a few seconds in total before it kills it. |
 
@@ -87,11 +87,11 @@ remove, never per heartbeat.
 
 Every URL, whichever tier it came from, is read as its family's **one registry, k7's backend's**
 (`url::engineRegistryUrl` in `Url.cpp`, the twin of `engineRegistryUrl` in
-`packages/web-protocol/services.ts` — `Url_test.cpp` replays that file's cases): `https://app.k7.rocks`
+`apps/k7-daw-frontend/packages/web-protocol/services.ts` — `Url_test.cpp` replays that file's cases): `https://app.k7.rocks`
 means itself, and any loopback URL means
 `http://localhost:8789` — or k7's port in `$STUDIO_PORTS` when a host moved it, as the desktop app
-does (`packages/web-protocol/docs/addresses.md`). The registry is mounted by k7's backend
-(`apps/k7/backend-rs/docs/engine/shared.md`). The answer is a **list**, one per studio this engine is connected to, deduped.
+does (`apps/k7-daw-frontend/packages/web-protocol/docs/addresses.md`). The registry is mounted by k7's backend
+(`apps/k7-daw-backend/docs/engine/shared.md`). The answer is a **list**, one per studio this engine is connected to, deduped.
 
 **Plain http reaches loopback and nothing else.** A heartbeat carries the engine's token and the
 tunnel secret, and the tunnel's handshake carries them again, so a registry on `http://` past
@@ -126,7 +126,7 @@ five seconds.
 
 `weburi.add` therefore asks the family's registry first — `GET /api/registry/hello`, which a registry
 answers with `{ service: "k7-registry" }` (`REGISTRY_HELLO_PATH` / `REGISTRY_SERVICE` in
-`packages/web-protocol/services.ts`) — and writes NOTHING unless that is the answer: no pinned
+`apps/k7-daw-frontend/packages/web-protocol/services.ts`) — and writes NOTHING unless that is the answer: no pinned
 registry, no heartbeat. A redirect is refused rather than followed, so the answer comes from
 the address the token would go to. While it asks, and after a refusal, the snapshot's
 `instanceCheck` says so, which is how the phone's form shows *Checking…* and the reason. Under a dev
@@ -143,7 +143,7 @@ there is no other way to pin a registry: every add goes through this one.
 account this machine paired: asked the same way, then the token saved under the registry URL the
 heartbeat looks it up by, before the list, so the first heartbeat already carries it. The pages never
 send it, and the desktop app's backend no longer does (a server lists no device's engine and refuses such a heartbeat,
-`apps/k7/backend-rs/docs/engine/heartbeat.md`); the phone apps send it once a pairing is stored, through
+`apps/k7-daw-backend/docs/engine/heartbeat.md`); the phone apps send it once a pairing is stored, through
 the command rather than the file, since a running supervisor saves its own settings over a file
 written behind it. `weburi.remove` forgets the studio's token with it.
 
@@ -153,7 +153,7 @@ listed at the supervisor's first start with this version (`listPairedStudios`, `
 ### A heartbeat proves its machine
 
 A heartbeat carries `Authorization: Bearer <device token>` for THAT registry when the settings hold one, though a
-studio refuses it (`apps/k7/backend-rs/docs/engine/heartbeat.md`): `deviceTokens` in the
+studio refuses it (`apps/k7-daw-backend/docs/engine/heartbeat.md`): `deviceTokens` in the
 settings, by registry URL, which the phone writes when it pairs; `$STUDIO_DEVICE_TOKEN` when the
 registries themselves come from the environment, never to one the user added, since a token is
 one studio's and must not reach another.
@@ -216,7 +216,7 @@ command's reply would sit behind seconds of meters nobody will see.
 
 So past 256 KB unsent toward the peer (`kDropAboveBytes` in `Backpressure.h`), those two kinds are
 **dropped**, and nothing else is. They are the two the engine itself skips for a socket that is
-behind (`engine/k7-runtime/server/Outbox.h`, `AudioSender.cpp`): the next `state` carries the whole
+behind (`apps/k7-daw-engine/k7-runtime/server/Outbox.h`, `AudioSender.cpp`): the next `state` carries the whole
 transport again, and the audio listener reads a gap in the sequence and re-cushions. A reply, a
 `plugin-params-live` value, a recorder's `takes`, a job's answer and every file chunk are always sent
 — none of them is superseded by the next. A jobs channel is never shed at all.
@@ -251,7 +251,7 @@ executable's path, and three rules follow:
 
 A port that answers with no pidfile naming its owner is asked of `lsof`; that owner is recorded and
 adopted only when it is not some other program, and some other program is an error, never a kill.
-`k7-local` (`apps/k7/backend-rs/crates/k7-local/src/pidfile.rs`) reads the same file before its own
+`k7-local` (`apps/k7-daw-backend/packages/k7-local/src/pidfile.rs`) reads the same file before its own
 backstop kill, by the same rules.
 
 The port is asked as well: adopt only if something is actually serving on it, and otherwise treat

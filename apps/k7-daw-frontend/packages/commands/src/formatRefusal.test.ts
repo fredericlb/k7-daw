@@ -1,5 +1,5 @@
 // No verb runs on a project a newer k7 wrote: several write its root without reading it first.
-// See packages/song-schema/docs/formatLevel.md.
+// See apps/k7-daw-frontend/packages/song-schema/docs/formatLevel.md.
 
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

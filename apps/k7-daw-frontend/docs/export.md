@@ -22,7 +22,7 @@ puts them in the folder.
 
 | host | how the page reaches it | why |
 |---|---|---|
-| desktop | the front's routes `/api/local/export/*`; the front calls Tauri's dialog plugin through a trait the app installs (`apps/k7-desktop/src-tauri/src/exports.rs`) | the desktop page has no IPC by design (`apps/k7-desktop/docs/desktop.md`), and the front is in the app's process; a plugin already linked (the app's own dialogs use it) costs nothing more |
+| desktop | the front's routes `/api/local/export/*`; the front calls Tauri's dialog plugin through a trait the app installs (`apps/k7-daw-desktop/src-tauri/src/exports.rs`) | the desktop page has no IPC by design (`apps/k7-daw-desktop/docs/desktop.md`), and the front is in the app's process; a plugin already linked (the app's own dialogs use it) costs nothing more |
 | iOS and Android | the `k7Ios` / `k7Android` bridge's `call` messages (`pickExportFolder`, `exportBegin`, `exportChunk`, `exportEnd`, `shareExport`) | the phones already speak that protocol for the engine page and the certificate picker; a folder there is a grant only the app holds |
 | browser | a download | nothing else exists |
 
@@ -48,7 +48,7 @@ render starts (`ui/commands/project.ts`). The folder is therefore a path the fro
 
 `picture interchange` writes nothing: the cut is its first output line, `useShare` saves that text, and what the
 writers left out follows as further lines. The media in an OTIO are named as if the cut sat in an `exports/`
-folder beside the project (`packages/song-video/docs/interchange.md`); a cut saved elsewhere is relinked by the
+folder beside the project (`apps/k7-daw-frontend/packages/song-video/docs/interchange.md`); a cut saved elsewhere is relinked by the
 editor, which every editor offers.
 
-The front's side is `apps/k7/backend-rs/docs/export.md`.
+The front's side is `apps/k7-daw-backend/docs/export.md`.

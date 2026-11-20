@@ -10,20 +10,20 @@ are in [supervisorPolicy.md](supervisorPolicy.md).
 
 | | run by | settings | stdout | stops when |
 |---|---|---|---|---|
-| **under an app** | k7's front under the desktop app (`apps/k7/backend-rs/docs/localEngine.md`, through `k7-local`) or the phone (`engine/k7-android`) | `<state>/engine-host.json`, changed by the app's commands and saved | the app's protocol ([hostProtocol.md](hostProtocol.md)) | stdin closes — the app went away |
+| **under an app** | k7's front under the desktop app (`apps/k7-daw-backend/docs/localEngine.md`, through `k7-local`) or the phone (`apps/k7-daw-android`) | `<state>/engine-host.json`, changed by the app's commands and saved | the app's protocol ([hostProtocol.md](hostProtocol.md)) | stdin closes — the app went away |
 | **the command-line engine** | `k7-supervisor --config <file>`, a terminal, a service, the server's container | the file, read once and never written | nothing | SIGINT or SIGTERM |
-| **inside the iOS app** | `k7_supervisor_run` on a thread of `engine/k7-ios`, a framework since no iOS app may run a program (`src/Embedded.cpp`) | as under an app | the same protocol, on a pipe of its own: the app's stdout is shared | the command pipe closes |
+| **inside the iOS app** | `k7_supervisor_run` on a thread of `apps/k7-daw-ios`, a framework since no iOS app may run a program (`src/Embedded.cpp`) | as under an app | the same protocol, on a pipe of its own: the app's stdout is shared | the command pipe closes |
 
 `--config <file> --port <n>` fixes the engine's port, which otherwise is only the first one tried
 ("The engine's port", below).
 
 The config file has the settings' schema (`registryUrls`, `port`, `audioPriority`, `onnxProviders`,
 `instruments`, `deviceTokens`, `lanOpen` — whether a device on this network drives the engine unpaired,
-`engine/k7-runtime/docs/pairing.md`), **`stems` and `instrumental`** — the chain THIS machine separates
+`apps/k7-daw-engine/k7-runtime/docs/pairing.md`), **`stems` and `instrumental`** — the chain THIS machine separates
 with, by what the cut wants, since which module and model it runs is that machine's CPU, GPU and
-downloaded models, not an account's (`engine/k7-supervisor/docs/stemSplit.md`); its owner names them
+downloaded models, not an account's (`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`); its owner names them
 from the studio's Engines card as well as by hand, through the `chains` job
-(`apps/k7/backend-rs/docs/engine/chains.md`), plus a single
+(`apps/k7-daw-backend/docs/engine/chains.md`), plus a single
 `deviceToken` for every studio the file names, and the two keys that otherwise come from the environment — `machineName` and
 `extraCaCerts` — and `"instruments": ["all"]` for `$STUDIO_INSTRUMENTS=all`. A key the
 file names wins over the environment; one it leaves out falls back to it, so `{}` is a valid config.
@@ -50,7 +50,7 @@ Tracktion and JUCE.
 `engine-id.json` (`src/Identity.cpp`) holds the id, the token and the **tunnel secret**. The engine
 gets the id and the token, and echoes the token on `whoami` to whoever it trusts; the tunnel secret
 goes only into the heartbeat body and the tunnel's upgrade header, which is what lets a registry bind
-the id to this machine (`apps/k7/backend-rs/docs/engine/token.md`). A file from before the secret
+the id to this machine (`apps/k7-daw-backend/docs/engine/token.md`). A file from before the secret
 keeps its id and token and gains one on the next start. The file is 0600, and its folder 0700 when
 the supervisor creates it, since it is the machine's credential.
 
@@ -115,10 +115,10 @@ were spent. A heartbeat still in flight now makes the next tick skip.
 
 ## One wire, two implementations, one set of tests
 
-The server's half of the tunnel is Rust (`apps/k7/backend-rs/crates/k7-engine/src/tunnel/`), and this program
+The server's half of the tunnel is Rust (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/`), and this program
 speaks the machine's half in C++: `TunnelFrames`, `TunnelFiles`, `PathMap` and `TunnelAgent` are
 the twins of `frames.ts`, `agentFiles.ts`, `pathMap.ts` and `agent.ts`. Two spellings of a wire
-drift apart silently, so they are held to ONE suite: `packages/engine-tunnel`'s tunnel, jobs and
+drift apart silently, so they are held to ONE suite: `apps/k7-daw-frontend/packages/engine-tunnel`'s tunnel, jobs and
 WebRTC tests run against the Rust hub with every agent `testAgents.ts` finds — the TypeScript
 reference, and this program's `tunnel_harness` when it is built. CI builds it and runs them.
 
@@ -190,7 +190,7 @@ even with media off, and threading, for the next section.
 
 A stem cut needs every format a record arrives in, among them Opus in WebM and AAC in m4a. JUCE, the engine's decoder, reads no WebM; ffmpeg is one more
 program a musician would have to install, and the server's engine image has none. The
-decoder (`packages/audio-analysis/rust`, symphonia and opus-rs) reads all of them, is held
+decoder (`apps/k7-daw-backend/packages/waveform`, symphonia and opus-rs) reads all of them, is held
 to ffmpeg's frame counts by its own tests, and trims an mp3's encoder delay as ffmpeg does — so a
 stem lines up with the record as it did. Its rubato resampler takes the mix to the model's 44.1 kHz
 and the stems back to the record's rate.
@@ -284,7 +284,7 @@ signal may interrupt while the loop holds it.
 
 The tunnel never blocks a socket's own thread: a frame that must wait for a download waits on its
 channel's queue (`SerialQueue`), one per direction, which also keeps frames in order; a channel's
-close drains that queue first, within a bound (`packages/engine-tunnel/docs/tunnel.md`). A job runs on
+close drains that queue first, within a bound (`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`). A job runs on
 a thread of its own. What a job changes in the settings goes through the loop, the settings'
 single writer — a job writing the file beside the loop's own copy would be undone by the next save
 of that copy.
@@ -327,12 +327,12 @@ The library is looked for at the first separation — at `$STUDIO_ONNXRUNTIME_DI
 executable or in a `resources/onnxruntime` near it — and loaded then. Linked, a machine
 missing it could not start the supervisor at all, engine and tunnel included, over one feature;
 loaded, only the separate job says what is missing. The build copies it beside every executable it
-makes, and the staging (`engine/scripts/docs/buildEngine.md`) keeps it there.
+makes, and the staging (`apps/k7-daw-engine/scripts/docs/buildEngine.md`) keeps it there.
 
 **iOS is the one exception.** Microsoft's iOS package is a static xcframework, and a phone has no library to find,
 so it is linked into `k7supervisor.framework` (CocoaPods archive, hash-pinned in `CMakeLists.txt`) and
 `OnnxSession.cpp` takes `OrtGetApiBase` directly. The app grows by what the linker keeps of it
-(`engine/k7-runtime/docs/ios.md`). CoreML is left out on iOS: it cannot compile HT-Demucs, so a cut is CPU.
+(`apps/k7-daw-engine/k7-runtime/docs/ios.md`). CoreML is left out on iOS: it cannot compile HT-Demucs, so a cut is CPU.
 
 Windows takes the DirectML package, whose last release is 1.24; macOS arm64 and Linux take 1.30,
 and macOS 1.30 needs macOS 14. A platform ONNX Runtime ships no binary for builds without
@@ -380,11 +380,11 @@ nothing. The JSON is dumped with `error_handler_t::replace`,
 so a byte that is not UTF-8 costs one character rather than throwing the whole heartbeat away; and
 on Windows the hostname is `GetComputerNameExW`'s, converted to UTF-8, since `gethostname` answers
 in the ANSI code page and `PC-FRÉDÉRIC` there is not UTF-8. The registry's half is
-`apps/k7/backend-rs/docs/engine/heartbeat.md`.
+`apps/k7-daw-backend/docs/engine/heartbeat.md`.
 
 ## The performance rating is compiled
 
 The single-core figure of the rating is a biquad over a fixed budget, compiled rather than
 JIT-compiled, so it reads several times higher than a JIT-measured one on the same machine. The
-reference in `packages/web-protocol/performance.ts` was measured under a JIT; ratings are
+reference in `apps/k7-daw-frontend/packages/web-protocol/performance.ts` was measured under a JIT; ratings are
 comparable between machines running this supervisor, not with a figure measured another way.

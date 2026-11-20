@@ -158,7 +158,7 @@ test("a workspace and its project are made, renamed, copied and deleted from the
       target.locator(`a[href$="/@local/${TARGET_WS}/renamed.k7"]`),
     ).toBeVisible(SHOWN);
     await expectListed(page, WS, ["renamed.k7"]);
-    // Without its module the copy would open on "extends unknown module" (apps/k7/backend-rs/docs/file-workspaces.md).
+    // Without its module the copy would open on "extends unknown module" (apps/k7-daw-backend/docs/file-workspaces.md).
     expect(await files.readText(TARGET_WS, MODULE)).toBe(
       await files.readText(WS, MODULE),
     );

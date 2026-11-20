@@ -110,7 +110,7 @@ export default function EditorPaneView({
     Vim.defineEx("write", "w", () => saveRef.current());
   }, []);
 
-  // A workspace file — the ones that get the k7x mode, completion, links, the ▶ gutter and lint (packages/k7x/docs/language.md).
+  // A workspace file — the ones that get the k7x mode, completion, links, the ▶ gutter and lint (apps/k7-daw-frontend/packages/k7x/docs/language.md).
   const isK7xFile = !!file && /\.k7x$/i.test(file.path);
   const isStrudel = !!file && file.path.endsWith(".strudel");
   // The textbox's accessible name: the open file, `project.k7x — editor`.
@@ -118,7 +118,7 @@ export default function EditorPaneView({
   const extensions = useMemo<Extension[]>(() => {
     const ext: Extension[] = [];
     // Prec.highest: our extensions are concatenated AFTER basicSetup's, whose keymap would otherwise outrank vim's.
-    // …and one vim change is one Ctrl+Z, as it is one `u` (packages/ui-editor/docs/vimUndo.md).
+    // …and one vim change is one Ctrl+Z, as it is one `u` (apps/k7-daw-frontend/packages/ui-editor/docs/vimUndo.md).
     if (vimMode) ext.push(Prec.highest(vim()), vimUndoSteps(), vimModeStatus());
     if (label) ext.push(editorLabel(label));
     ext.push(
@@ -158,7 +158,7 @@ export default function EditorPaneView({
     file?.path,
   ]);
 
-  // A dock gesture's edit reaches the view as its own splices, so the cursor and the undo history stay (packages/ui-editor/docs/k7xTree.md).
+  // A dock gesture's edit reaches the view as its own splices, so the cursor and the undo history stay (apps/k7-daw-frontend/packages/ui-editor/docs/k7xTree.md).
   useBufferSync(() => cmRef.current?.view, file?.content ?? "");
 
   // New diagnostics but the same document, so nudge the linter. A no-op until the view mounts (grids have none).

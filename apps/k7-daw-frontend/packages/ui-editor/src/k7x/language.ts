@@ -1,4 +1,4 @@
-// language.ts (k7x) — colouring for a workspace's .k7x files, the Strudel-looking format of packages/k7x.
+// language.ts (k7x) — colouring for a workspace's .k7x files, the Strudel-looking format of apps/k7-daw-frontend/packages/k7x.
 // A hand-written StreamLanguage: a key is the word before `(` or `:`, so a line is enough to tell.
 
 import {

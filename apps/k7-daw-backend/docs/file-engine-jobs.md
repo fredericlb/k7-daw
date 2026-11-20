@@ -72,8 +72,8 @@ The jobs' replays are fixed scenarios with no seeded sequence: each step waits o
 
 ## On disk and on the wire
 
-The engine's frames and the jobs path's requests are unchanged (`engine/k7-runtime/docs/protocol.md`,
-`packages/engine-tunnel/docs/jobs.md`). An automatic render keeps its name (`<studio home>/.renders/<module>-<hash>.wav`,
+The engine's frames and the jobs path's requests are unchanged (`apps/k7-daw-engine/k7-runtime/docs/protocol.md`,
+`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`). An automatic render keeps its name (`<studio home>/.renders/<module>-<hash>.wav`,
 the fingerprint the `song` crate computes) and is written beside itself under a temporary name, then renamed: a
 render killed mid-copy must never be read as made, since its name is never rendered again.
 

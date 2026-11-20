@@ -3,8 +3,8 @@
 `projects.ts` states two contracts: which studio app owns a folder, decided by the folder's NAME,
 and the address that names one, `/@local/<workspace>/<project>`. Both sit between the side that
 WRITES an address — k7's home page — and the apps that read one back, which is why they are stated
-once, browser-safe, and nowhere else. See `apps/k7/frontend/docs/projects.md` and
-`packages/project-shell/docs/launch.md`.
+once, browser-safe, and nowhere else. See `apps/k7-daw-frontend/docs/projects.md` and
+`apps/k7-daw-frontend/packages/project-shell/docs/launch.md`.
 
 ## Where each service answers
 
@@ -31,18 +31,18 @@ does not trust, so `https://app.priv.k7.rocks` fails with `UNABLE_TO_GET_ISSUER_
 a backend while working perfectly in the browser beside it.
 
 On a loopback host the same table is what a PAGE uses too, and a host may move it:
-`STUDIO_PORTS=k7=18789` (the desktop app publishing the port `apps/k7/backend-rs/standalone.json` fixes) in the environment of the front and the supervisor, whose
+`STUDIO_PORTS=k7=18789` (the desktop app publishing the port `apps/k7-daw-backend/standalone.json` fixes) in the environment of the front and the supervisor, whose
 `Url.cpp` reads the same variable — or `globalThis.__STUDIO_PORTS__` for a page, set before its
 scripts run (`servicePorts`). `pl8` and `k7` have no port of their own: they are k7's. The desktop app's port is apart from the dev session's, so the two run side by side
-(`apps/k7-desktop/docs/app.md`). Unset, the table is `SERVICE_PORTS`.
+(`apps/k7-daw-desktop/docs/app.md`). Unset, the table is `SERVICE_PORTS`.
 
 ## One suffix, and every shape inside it
 
 `PROJECT_SUFFIXES` has one entry, `.k7`, because one app opens a project. Everything an k7 project
 can BE is a shape *inside* `.k7` rather than a folder kind of its own: a song carries
 picture lanes and a `viewport` surface, a set carries `songs.k7x` and a `turntables` surface
-(`PROJECT_SHAPES` in `@studio/song`). See `packages/song-video/docs/picture.md` and
-`packages/song/docs/setProject.md`. It stays a `Record<ProjectApp, string>`, so an app added to
+(`PROJECT_SHAPES` in `@studio/song`). See `apps/k7-daw-frontend/packages/song-video/docs/picture.md` and
+`apps/k7-daw-frontend/packages/song/docs/setProject.md`. It stays a `Record<ProjectApp, string>`, so an app added to
 `ProjectApp` fails to compile until its suffix is stated.
 
 `projectApp` reads the NAME, not the contents, and the two are different questions: "who opens
@@ -108,7 +108,7 @@ IS a project has nothing after its name and the project is `"."`.
 
 The price, stated where it is paid: this address names a machine's folder, so it is **not
 portable** — a link pasted to somebody names a folder in yours. What it buys is that no service has
-to answer before a project opens (`apps/k7/backend-rs/docs/projects.md`).
+to answer before a project opens (`apps/k7-daw-backend/docs/projects.md`).
 
 ### `@banc` — the bench
 
@@ -124,7 +124,7 @@ a bare library ref, `/@banc/@k7-core/live.k7`, are refused by the service: a lib
 a bench but by an admin from any project. `benchChainOf` is the whole rule — spelled
 once, in this package, so the browser that builds the link and the service that reads it cannot
 drift. Anything else under `@banc` names nothing and is a 404 whose sentence says where a chain and
-a module are edited instead (`apps/k7/frontend/docs/sharedModules.md`).
+a module are edited instead (`apps/k7-daw-frontend/docs/sharedModules.md`).
 
 The project part is safe to join onto a root, because it never is: the folder is the constant
 `live.k7` whatever the address says, and the chain ref is only ever MATCHED against the chains the

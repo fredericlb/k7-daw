@@ -1,7 +1,7 @@
 // pictureLane.ts — `picture lane rename` and `picture lane delete`, a picture lane's `track rename` and
 // `track delete`. What a reader gets wrong: a picture lane is named in six places — its file, `trackOrder`,
 // `soloed:`, the graph, a sounding lane's `video_source`, and every timeline lane drawing on it — and a
-// rename that missed one would leave that one pointing at nothing (packages/song-video/docs/picture.md).
+// rename that missed one would leave that one pointing at nothing (apps/k7-daw-frontend/packages/song-video/docs/picture.md).
 
 import { existsSync, readdirSync, renameSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -48,7 +48,7 @@ import { followStripName } from "./track.ts";
 
 const NAME = /^[A-Za-z0-9_.-]+$/;
 
-/** The lane's own STRIP, deleted with it as `track delete` deletes a sound lane's (packages/song/docs/videoMixer.md). */
+/** The lane's own STRIP, deleted with it as `track delete` deletes a sound lane's (apps/k7-daw-frontend/packages/song/docs/videoMixer.md). */
 function dropStrip(dir: string, lane: string): string[] {
   const strip = ownLaneStrip(dir, loadGraph(dir), lane);
   if (!strip) return [];

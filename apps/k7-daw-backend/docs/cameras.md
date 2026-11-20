@@ -2,7 +2,7 @@
 
 `src/routes/cameras/` in `k7-front`: the routes and the signalling socket behind the home page's
 `camera mode` and the `remote:` camera nodes. What a remote camera is, and why the picture goes peer
-to peer, is `packages/web-protocol/docs/cameras.md`. How the front serves them (the crate, the lock,
+to peer, is `apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md`. How the front serves them (the crate, the lock,
 the vectors) is `routes.md`, "The remote cameras".
 
 | | |

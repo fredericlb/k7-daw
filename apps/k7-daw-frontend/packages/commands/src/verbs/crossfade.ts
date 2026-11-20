@@ -1,7 +1,7 @@
 // crossfade.ts — `event crossfade <track> <atA> <atB> <length>`: the timeline's crossfade tool. The
 // two events are made to overlap by `length` out of material neither plays yet, and each fades over
 // it; 0 takes the two fades away and leaves the overlap. A comped event's seams are crossfaded in its
-// takes view instead (`event comp fade`). See packages/song/docs/takes.md.
+// takes view instead (`event comp fade`). See apps/k7-daw-frontend/packages/song/docs/takes.md.
 
 import { loadAudioClipDoc } from "@studio/song/project";
 import { type CrossfadeSide, planCrossfade } from "@studio/song-edit/crossfade";

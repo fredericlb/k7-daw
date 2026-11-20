@@ -14,9 +14,9 @@ alternatives([
 ```
 
 On the graph, each set is a badge above the node's corner — click one to switch, and the `+` after
-them copies the set that is on (`packages/ui-chains-react/docs/nodeCard.md`). A LANE names the set
+them copies the set that is on (`apps/k7-daw-frontend/packages/ui-chains-react/docs/nodeCard.md`). A LANE names the set
 it is playing in the timeline's gutter too, and clicking that badge opens a menu running the same
-verbs (`apps/k7/frontend/docs/timeline.md`).
+verbs (`apps/k7-daw-frontend/docs/timeline.md`).
 
 ## The module's own fields are the first set
 
@@ -92,7 +92,7 @@ plays. A set's taps are merged over the module's one whole entry at a time, so a
 name would replace that file with nothing, and the lane would receive its notes and sound no pad.
 
 Switching between two such sets is a different PLUGIN, so it is never the values-only fast path of
-`select` (`packages/commands/docs/verbs.md`): the engine rebuilds that plugin.
+`select` (`apps/k7-daw-frontend/packages/commands/docs/verbs.md`): the engine rebuilds that plugin.
 
 ## Order against `extends`, and why it is applied ONCE
 
@@ -147,7 +147,7 @@ wishes.
 the timeline's menu all three. `create` and `copy` end in a project RELOAD: a set may change the
 plugin, the panel or a whole clip list, so there is nothing cheap to diff. `select` between two
 sets that differ in numbers alone is the exception, pushed to the engine as values without a
-recompile (`packages/commands/docs/verbs.md`).
+recompile (`apps/k7-daw-frontend/packages/commands/docs/verbs.md`).
 
 `create` is EMPTY by default, and that is not the empty-looking thing it seems: a set states only
 what it changes, so an empty one is "the module as it is" and you then change the two knobs you

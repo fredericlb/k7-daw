@@ -1,4 +1,4 @@
-// The edit verbs on a CHAIN project (packages/song/docs/chainFiles.md): a node's edit lands in its
+// The edit verbs on a CHAIN project (apps/k7-daw-frontend/packages/song/docs/chainFiles.md): a node's edit lands in its
 // item, a lane's in `tracks/`, a graph edit in the chain files — and an edit that changes nothing
 // in meaning changes nothing on disk.
 

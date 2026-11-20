@@ -1,6 +1,6 @@
 //! turn.rs — `POST /api/ai/organize/turn`: ONE model turn on the account's key and model, streamed to the browser
 //! as NDJSON with a heartbeat. The browser owns the conversation and the checks (`panel-rules`' `aiLoop.ts`); this
-//! side owns what must not reach a page: the key, the model, the output limits. Choices: `apps/k7/frontend/docs/aiOrganize.md`.
+//! side owns what must not reach a page: the key, the model, the output limits. Choices: `apps/k7-daw-frontend/docs/aiOrganize.md`.
 
 use std::sync::{Arc, Mutex};
 use std::time::Duration;

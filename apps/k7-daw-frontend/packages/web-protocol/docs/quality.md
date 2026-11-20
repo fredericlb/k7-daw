@@ -46,7 +46,7 @@ unknown" instead of a band.
 
 ## Where it is measured, and where it is drawn
 
-- **Measured once**, in `packages/engine-browser/src/probe.ts`, by the same round trip that
+- **Measured once**, in `apps/k7-daw-frontend/packages/engine-browser/src/probe.ts`, by the same round trip that
   identifies the engine — a second query would measure a second, warmer trip.
 - **Drawn** in the pickers (fastest first, each row badged) and in the status bar of every
   service that drives an engine. It belongs there because it describes the SESSION, not a
@@ -57,7 +57,7 @@ unknown" instead of a band.
 
 ## The engine's half of it
 
-`whoami` carries `bufferSize` and `sampleRate` (`engine/k7-runtime/server/Serve.cpp`), read off the
+`whoami` carries `bufferSize` and `sampleRate` (`apps/k7-daw-engine/k7-runtime/server/Serve.cpp`), read off the
 open device through `EngineHost::audioTiming()`. It is answered on the connection thread, not
 posted to the message thread: posting would put the probe behind whatever the engine is doing
 and turn the ping into a measure of its queue.

@@ -1,4 +1,4 @@
-// SlotFiles.cpp — see SlotFiles.h. The fields walked are the document's file fields (engine/k7-runtime/engine/ProjectDoc.h).
+// SlotFiles.cpp — see SlotFiles.h. The fields walked are the document's file fields (apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h).
 
 #include "SlotFiles.h"
 

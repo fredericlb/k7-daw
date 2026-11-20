@@ -1,6 +1,6 @@
 # ui-chains-react: the renderer
 
-`packages/ui-chains-react` draws what `@studio/ui-chains` laid out. It is the renderer only: the
+`apps/k7-daw-frontend/packages/ui-chains-react` draws what `@studio/ui-chains` laid out. It is the renderer only: the
 fetching, the chain list and the parked camera stay in each host.
 
 | Export | File |

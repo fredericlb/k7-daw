@@ -1,7 +1,7 @@
 // stems.ts — the four sources a separation produces, and what they are called. One definition,
 // because three packages have to agree on it and nothing in the data says which is which: the
 // model's output tensor is `[1, 4, 2, N]` and the ORDER is the whole of the knowledge.
-// See engine/k7-supervisor/docs/stemSplit.md and docs/stems.md.
+// See apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md and docs/stems.md.
 
 /** The four sources, IN THE ORDER the model returns them — the order IS the knowledge (docs/stems.md). */
 export const STEMS = ["drums", "bass", "other", "vocals"] as const;
@@ -58,7 +58,7 @@ export const stemPlatter = (deck: string, stem: Stem): string =>
 /** The platter a deck's own RECORD plays on: `platterA`. Its lane is the deck itself. */
 export const deckPlatter = (deck: string): string => `platter${letterOf(deck)}`;
 
-/** The BOX a deck's nodes are drawn as, and its template, beside the set's other names — packages/song/docs/assemblies.md. */
+/** The BOX a deck's nodes are drawn as, and its template, beside the set's other names — apps/k7-daw-frontend/packages/song/docs/assemblies.md. */
 export const TURNTABLE_REF = "@k7-core/turntable";
 export const turntableBox = (deck: string): string =>
   `turntable${letterOf(deck)}`;

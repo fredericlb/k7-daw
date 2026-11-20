@@ -1,10 +1,10 @@
-# The supervisor (`engine/k7-supervisor`)
+# The supervisor (`apps/k7-daw-engine/k7-supervisor`)
 
-The supervisor is the engine machine's resident program, in C++20. It owns the state folder, starts or adopts the engine and relaunches it when it dies, keeps the engine listed at every studio by heartbeat, holds one tunnel per studio, answers the jobs a server sends through those tunnels, answers WebRTC offers, and takes commands from the app that runs it. Its file formats and fingerprint match the TypeScript helpers in `packages/engine-client`, so both sides read one state folder.
+The supervisor is the engine machine's resident program, in C++20. It owns the state folder, starts or adopts the engine and relaunches it when it dies, keeps the engine listed at every studio by heartbeat, holds one tunnel per studio, answers the jobs a server sends through those tunnels, answers WebRTC offers, and takes commands from the app that runs it. Its file formats and fingerprint match the TypeScript helpers in `apps/k7-daw-frontend/packages/engine-client`, so both sides read one state folder.
 
 ## Source layout
 
-All sources are in `engine/k7-supervisor/src/`, compiled into a `k7_supervisor_core` library that the executable, the tests and the tunnel harness link.
+All sources are in `apps/k7-daw-engine/k7-supervisor/src/`, compiled into a `k7_supervisor_core` library that the executable, the tests and the tunnel harness link.
 
 | File | Role |
 |---|---|
@@ -20,17 +20,17 @@ All sources are in `engine/k7-supervisor/src/`, compiled into a `k7_supervisor_c
 | `EngineQueries.cpp` | The supervisor's own WebSocket to the engine (devices, plugins, sessions, pairing) |
 | `AudioPolicy.cpp` | Which interface the engine should be on (pure, tested) |
 | `Instruments.cpp` | The pinned list of sampled instruments, download, hash check, unpack |
-| `Registry.cpp`, `Http.cpp`, `Url.cpp` | Heartbeat, deregister, probe; the URL rules shared with `packages/web-protocol/services.ts` |
+| `Registry.cpp`, `Http.cpp`, `Url.cpp` | Heartbeat, deregister, probe; the URL rules shared with `apps/k7-daw-frontend/packages/web-protocol/services.ts` |
 | `Addresses.cpp` | The heartbeat's presence: host name, LAN IPv4s, machine fingerprint |
 | `Performance.cpp` | The machine rating carried by the heartbeat |
-| `TunnelAgent.cpp`, `TunnelFrames.cpp`, `TunnelFiles.cpp`, `PathMap.cpp` | The tunnel agent (twin of `packages/engine-tunnel/agent.ts`) |
+| `TunnelAgent.cpp`, `TunnelFrames.cpp`, `TunnelFiles.cpp`, `PathMap.cpp` | The tunnel agent (twin of `apps/k7-daw-frontend/packages/engine-tunnel/agent.ts`) |
 | `MachineJobs.cpp` | The jobs a server can ask of the machine |
 | `Separation.cpp`, `SeparationAudio.cpp`, `SeparationDecode.cpp`, `OnnxSession.cpp` | Stem separation: decode through the media core's Rust decoder (`rust/`, no ffmpeg), HT-Demucs on ONNX Runtime, 24-bit WAV out |
 | `Rtc.cpp`, `RtcFrames.cpp` | The WebRTC answerer (libdatachannel) and its fragment format |
 | `Tls.cpp`, `TrustRoots.cpp` | mbedTLS setup and the OS trust store (+ `STUDIO_EXTRA_CA_CERTS`) |
 | `Crash.cpp`, `Log.cpp` | Crash handler and the merged log |
 
-Dependencies are fetched by `engine/k7-supervisor/CMakeLists.txt`: nlohmann/json, mbedTLS 3.6, miniz, IXWebSocket (patched to use mbedTLS by `engine/k7-supervisor/cmake/patch_ixwebsocket.cmake`), libdatachannel, and a prebuilt ONNX Runtime per platform (DirectML on Windows).
+Dependencies are fetched by `apps/k7-daw-engine/k7-supervisor/CMakeLists.txt`: nlohmann/json, mbedTLS 3.6, miniz, IXWebSocket (patched to use mbedTLS by `apps/k7-daw-engine/k7-supervisor/cmake/patch_ixwebsocket.cmake`), libdatachannel, and a prebuilt ONNX Runtime per platform (DirectML on Windows).
 
 ## Run modes
 
@@ -45,7 +45,7 @@ On Windows, `main()` initialises Winsock before any socket, puts stdio in binary
 
 ## The host protocol
 
-Stdout carries frames and nothing else, one JSON object per line. Its single definition is the JSON Schema `engine/k7-supervisor/schema/hostProtocol.schema.json`: the C++ writer in `engine/k7-supervisor/src/HostProtocol.cpp` is held to its fixtures, and the Android and iPhone apps read the same frames in `SupervisorHost.kt` and `SupervisorHost.swift`.
+Stdout carries frames and nothing else, one JSON object per line. Its single definition is the JSON Schema `apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json`: the C++ writer in `apps/k7-daw-engine/k7-supervisor/src/HostProtocol.cpp` is held to its fixtures, and the Android and iPhone apps read the same frames in `SupervisorHost.kt` and `SupervisorHost.swift`.
 
 **Supervisor → app:**
 
@@ -95,7 +95,7 @@ U+001F (`kUnitSep`) joins multi-part arguments because no device name contains i
 
 ## The state folder
 
-`Paths.cpp` and `packages/engine-client/src/paths.ts` must spell every name the same way; a wrong path reads as an empty file rather than throwing.
+`Paths.cpp` and `apps/k7-daw-frontend/packages/engine-client/src/paths.ts` must spell every name the same way; a wrong path reads as an empty file rather than throwing.
 
 | Path under `$STUDIO_HOME` (default `~/.k7`) | Owner |
 |---|---|
@@ -125,17 +125,17 @@ U+001F (`kUnitSep`) joins multi-part arguments because no device name contains i
 | Host lock refresh | 2 s |
 | Purge of kept undo audio older than 30 days | 1 h |
 
-**Engine start** (`engine/k7-supervisor/src/EngineProcess.cpp`): if the pidfile names a live process and the port answers, adopt it; if the port does not answer, the pidfile is stale. The pidfile records the engine's port (`port=`), so a surviving engine is asked where it was started. Otherwise the ports from `port` on (ten, or only that one under `--port`) are tried in turn: an engine answering on one with no pidfile is adopted, its pid asked of `lsof` on Unix and of the TCP table on Windows; a port another program holds is skipped, the log naming it; the first port that binds gets a fresh engine. Otherwise spawn the binary found by `findBinary()`: `$STUDIO_ENGINE`, then `k7-runtime` beside the supervisor, then the newest build under `engine/k7-runtime/build/*/` in the checkout (Debug ranked last). The engine gets `STUDIO_ENGINE_HOST=0.0.0.0`, the id and token, and `STUDIO_ENGINE_ALLOWED_ORIGINS` built from the registries' origins at that moment (a registry added later counts from the next start); its output goes to the merged log under `[engine]`. Stop kills the whole process tree. Shutdown deregisters first, bounded to 1.5 s so a hung registry cannot hang Quit, then stops the engine even if it was adopted.
+**Engine start** (`apps/k7-daw-engine/k7-supervisor/src/EngineProcess.cpp`): if the pidfile names a live process and the port answers, adopt it; if the port does not answer, the pidfile is stale. The pidfile records the engine's port (`port=`), so a surviving engine is asked where it was started. Otherwise the ports from `port` on (ten, or only that one under `--port`) are tried in turn: an engine answering on one with no pidfile is adopted, its pid asked of `lsof` on Unix and of the TCP table on Windows; a port another program holds is skipped, the log naming it; the first port that binds gets a fresh engine. Otherwise spawn the binary found by `findBinary()`: `$STUDIO_ENGINE`, then `k7-runtime` beside the supervisor, then the newest build under `apps/k7-daw-engine/k7-runtime/build/*/` in the checkout (Debug ranked last). The engine gets `STUDIO_ENGINE_HOST=0.0.0.0`, the id and token, and `STUDIO_ENGINE_ALLOWED_ORIGINS` built from the registries' origins at that moment (a registry added later counts from the next start); its output goes to the merged log under `[engine]`. Stop kills the whole process tree. Shutdown deregisters first, bounded to 1.5 s so a hung registry cannot hang Quit, then stops the engine even if it was adopted.
 
-**Audio policy** (`engine/k7-supervisor/src/AudioPolicy.cpp`): the first ranked interface that is present wins; no default, no fallback beyond the list. A switch that did not take is not retried until the device set's signature changes.
+**Audio policy** (`apps/k7-daw-engine/k7-supervisor/src/AudioPolicy.cpp`): the first ranked interface that is present wins; no default, no fallback beyond the list. A switch that did not take is not retried until the device set's signature changes.
 
-**Heartbeat** (`engine/k7-supervisor/src/Registry.cpp`): `POST <registry>/api/registry/heartbeat` to every registry in parallel, with `{id, token, tunnelSecret, hostname, machineFingerprint, port, addresses: {loopback, lanIps, port}, performance, libraryLevel, protocol, build, safeMode}`. Deregistering sends the secret too, since a bound id cannot be unlisted by its token alone. At most one heartbeat in flight. Each registry's failures are logged once per new reason and then once a minute. LAN IPs exclude loopback, link-local and virtual interfaces (Docker, WSL, VPNs, Tailscale and similar). The fingerprint is `sha256(host|sorted MACs)`, the same as the TypeScript supervisor computed.
+**Heartbeat** (`apps/k7-daw-engine/k7-supervisor/src/Registry.cpp`): `POST <registry>/api/registry/heartbeat` to every registry in parallel, with `{id, token, tunnelSecret, hostname, machineFingerprint, port, addresses: {loopback, lanIps, port}, performance, libraryLevel, protocol, build, safeMode}`. Deregistering sends the secret too, since a bound id cannot be unlisted by its token alone. At most one heartbeat in flight. Each registry's failures are logged once per new reason and then once a minute. LAN IPs exclude loopback, link-local and virtual interfaces (Docker, WSL, VPNs, Tailscale and similar). The fingerprint is `sha256(host|sorted MACs)`, the same as the TypeScript supervisor computed.
 
 ## Tunnels, jobs and WebRTC
 
 `syncTunnels()` keeps exactly one `TunnelAgent` per resolved registry. Each agent dials `<registry>/api/engine-tunnel?id=<id>` with the engine token and the tunnel secret in headers, redials with backoff, opens a real socket to the local engine for each `engine` channel, and answers `jobs` channels itself. Its cache folder is `remote/<cacheKey>`.
 
-Jobs registered by `machineJobs()` in `engine/k7-supervisor/src/MachineJobs.cpp`:
+Jobs registered by `machineJobs()` in `apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp`:
 
 | Request `type` | Replies | Does |
 |---|---|---|
@@ -157,11 +157,11 @@ Under `__ANDROID__`, `EngineProcess.cpp` does not spawn: it emits an `engine` fr
 ## Tests
 
 ```sh
-cd engine/k7-supervisor
+cd apps/k7-daw-engine/k7-supervisor
 cmake --build --preset <preset> --target k7_supervisor_tests
 ./build/<preset>/k7_supervisor_tests
 ```
 
 This compiles C++ and fetches dependencies on a first configure; on the Windows dev machine leave builds to Tilt.
 
-`k7_supervisor_tests` covers URLs, settings, the host protocol, audio policy, performance scoring, machine jobs, RTC frames, separation audio, the host lock, the registry, TLS and instruments, with no device and no network. `tunnel_harness` is the agent alone, used by `packages/engine-tunnel`'s suites to hold the native agent to the same tests as the TypeScript one.
+`k7_supervisor_tests` covers URLs, settings, the host protocol, audio policy, performance scoring, machine jobs, RTC frames, separation audio, the host lock, the registry, TLS and instruments, with no device and no network. `tunnel_harness` is the agent alone, used by `apps/k7-daw-frontend/packages/engine-tunnel`'s suites to hold the native agent to the same tests as the TypeScript one.

@@ -27,7 +27,7 @@ modules under its own name.
 ## Libraries are the ORIGIN's, and the file hub keeps them
 
 The origin has one list of named libraries, edited by its admins from k7's Libraries panel. The
-file hub keeps ONE folder of each (`apps/k7/backend-rs/docs/files/hub.md`). **Every workspace of every
+file hub keeps ONE folder of each (`apps/k7-daw-backend/docs/files/hub.md`). **Every workspace of every
 account sees every library; none holds a copy.** A copy mounted INTO each workspace would make the
 workspace the wrong owner: each copy drifting from the others with nothing to reconcile them, a song
 carrying somebody else's catalogue, and one library per account, since a fixed folder name is what
@@ -73,15 +73,15 @@ library that would delete files somebody wrote.
 
 **A shared module is edited by an admin, from any project, and by nobody else.** In a workspace's
 file API a library answers at the VIRTUAL folder `_libraries/<name>/…` — confined to that library's
-root, never on the workspace's disk (`apps/k7/backend-rs/docs/file-workspaces.md`). `libraryOf` answers
+root, never on the workspace's disk (`apps/k7-daw-backend/docs/file-workspaces.md`). `libraryOf` answers
 null for a path under `librariesHome()` whose first segment is no library — the relay's `.sync-relay/`
 lies there — so the file service refuses such a path before it asks. The hub's folder is
 every account's, so only an admin may write it. A library is OVERLAID to say so
 (`setLibraryOverlays`): an admin's account overlays each onto its own folder, and everything that
 asks `libraryRoot(name)` — the compile, the file tree, the engine's paths — reads the overlay's
 root. `isLibraryEditable(name)` is true for an overlaid library and only for one; writes are refused
-anywhere else, and the write is what publishes (`apps/k7/backend-rs/docs/libraries.md`,
-`apps/k7/frontend/docs/sharedModules.md`). For a versioned library the overlay is its `draft/`:
+anywhere else, and the write is what publishes (`apps/k7-daw-backend/docs/libraries.md`,
+`apps/k7-daw-frontend/docs/sharedModules.md`). For a versioned library the overlay is its `draft/`:
 `isLibraryRootEditable(lib)` asks whether the folder a path lies in IS the overlay, so a published
 version refuses every write, an admin's included. A pin outranks the overlay, so an admin hears the
 draft only in a workspace that pins `draft` or pins nothing.
@@ -225,7 +225,7 @@ string an author chose inside the library: a workspace library could call itself
 collide head-on with the synthesised catalogue, and nothing would tie the name to where the folder
 sits. A library's name is the one the ORIGIN's list gave it, which is its folder's, which is its refs'.
 
-**Why the default library is spelled `@k7-core`.** It names a library, not the app `apps/k7` its
+**Why the default library is spelled `@k7-core`.** It names a library, not the app `apps/k7-daw-frontend` its
 spelling suggests. It stays on purpose — a level is
 written into user files, and moving it would cost every repository a rewrite for a name nobody
 types.

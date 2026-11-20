@@ -1,5 +1,5 @@
 // `project console` — what the settings' Project tab runs. Through the dispatcher and asserting
-// the FILE, for the reason bypass.test.ts gives. See packages/song/docs/console.md.
+// the FILE, for the reason bypass.test.ts gives. See apps/k7-daw-frontend/packages/song/docs/console.md.
 
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

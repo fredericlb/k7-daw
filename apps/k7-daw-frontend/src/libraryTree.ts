@@ -2,7 +2,7 @@
 // the account's library repositories as one row with its three families. The
 // levels come from the file service (`GET /module-libraries`), which reads the same roots the
 // LOADER resolves against — they sit outside the active project, so the file tree does not and
-// must not contain them. Why the tab exists: apps/k7/frontend/docs/sharedModules.md.
+// must not contain them. Why the tab exists: apps/k7-daw-frontend/docs/sharedModules.md.
 
 import { isDocFile } from "@studio/song-schema/docExt";
 import {
@@ -227,7 +227,7 @@ export function libraryModuleRef(file: string): string | null {
 const refOf = (ns: string, segs: string[]): string | null =>
   segs.length >= 2 ? `${nsLabel(ns)}/${segs.join("/")}` : null;
 
-/** Is this workspace path inside one of the ACCOUNT's libraries? Only `_libraries/…`; a `@workspace` module forks instead (packages/song/docs/moduleFork.md). */
+/** Is this workspace path inside one of the ACCOUNT's libraries? Only `_libraries/…`; a `@workspace` module forks instead (apps/k7-daw-frontend/packages/song/docs/moduleFork.md). */
 export const isLibraryPath = (path: string): boolean =>
   path.split("/").includes(LIBRARIES_DIR);
 

@@ -1,10 +1,10 @@
 // LaneAlternative.tsx — the gutter badge naming the attribute set a lane plays. See
-// packages/song/docs/alternatives.md.
+// apps/k7-daw-frontend/packages/song/docs/alternatives.md.
 
 import { cn } from "@studio/ui/lib/utils";
 import { blurOnClick } from "../../keys";
 
-/** Which attribute set a lane is playing, drawn only when it HAS a choice — amber away from the first, and the click opens the lane's ⋮ menu (packages/song/docs/alternatives.md). */
+/** Which attribute set a lane is playing, drawn only when it HAS a choice — amber away from the first, and the click opens the lane's ⋮ menu (apps/k7-daw-frontend/packages/song/docs/alternatives.md). */
 export function LaneAlternative({
   track,
   names,

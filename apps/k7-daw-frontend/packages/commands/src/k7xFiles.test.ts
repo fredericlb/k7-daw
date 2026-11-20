@@ -20,7 +20,7 @@ import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 
 beforeAll(compileReady);
 
-const DEMOS = join(import.meta.dirname, "..", "..", "..", "demos");
+const DEMOS = join(import.meta.dirname, "..", "..", "..", "..", "..", "demos");
 const roots: string[] = [];
 afterAll(() => {
   for (const r of roots) rmSync(r, { recursive: true, force: true });

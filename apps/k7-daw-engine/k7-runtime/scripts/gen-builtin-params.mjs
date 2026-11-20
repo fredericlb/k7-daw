@@ -16,6 +16,7 @@ const OUT = join(
   moteur,
   "..",
   "..",
+  "k7-daw-frontend",
   "packages",
   "song-schema",
   "src",

@@ -207,7 +207,7 @@ pub(super) fn invalid(c: &Call, schema: &[(&str, Field)]) -> Option<Response> {
 pub(super) const PATH: [(&str, Field); 1] = [("path", Field::Text)];
 pub(super) const PATH_NAME: [(&str, Field); 2] = [("path", Field::Text), ("name", Field::Text)];
 pub(super) const PATH_TO: [(&str, Field); 2] = [("path", Field::Text), ("toDir", Field::Text)];
-/// `PROJECT_SHAPES` (`packages/song-schema/src/projectShapes.ts`), held to it by a test.
+/// `PROJECT_SHAPES` (`apps/k7-daw-frontend/packages/song-schema/src/projectShapes.ts`), held to it by a test.
 pub(super) const SHAPES: &[&str] = &["arrangement", "mix", "video", "live", "live-video"];
 
 /// Whether a route answers a compile of the project, and so names the compiler that made it (decision 758).
@@ -334,8 +334,8 @@ mod tests {
     #[test]
     fn knows_every_archetype_the_typescript_does() {
         let at = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../../..")
-            .join("packages/song-schema/src")
+            .join("../../../..")
+            .join("apps/k7-daw-frontend/packages/song-schema/src")
             .join("projectShapes.ts");
         let ts = std::fs::read_to_string(at).unwrap();
         let list = &ts[ts.find("PROJECT_SHAPES = [").unwrap()..];

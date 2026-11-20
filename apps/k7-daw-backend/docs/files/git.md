@@ -1,7 +1,7 @@
 # The git routes (`/api/files/git/*`)
 
-A workspace under git, its remote, its commits and its merges, answered by `crates/k7-front/src/routes/files/service/native/git.rs` (with `git_sync.rs` and `git_keys.rs`)
-over `crates/k7-git` (`../git.md`). The choices of the repository, the transports, LFS and the merge are on that page; this one is the contract.
+A workspace under git, its remote, its commits and its merges, answered by `packages/k7-front/src/routes/files/service/native/git.rs` (with `git_sync.rs` and `git_keys.rs`)
+over `packages/k7-git` (`../git.md`). The choices of the repository, the transports, LFS and the merge are on that page; this one is the contract.
 
 ## The routes
 
@@ -18,7 +18,7 @@ over `crates/k7-git` (`../git.md`). The choices of the repository, the transport
 | `GET /git/merge?workspace=` | | `{ pending, theirs, conflicts: [{ id, path, kind, keyPath?, line?, base, mine, theirs, both, choice }] }` |
 | `POST /git/merge/resolve` | `{ workspace, choices: [{ id, choice }] }` | `{ ok, id }` |
 | `POST /git/merge/abort` | `{ workspace }` | `{ ok }` |
-| `GET` / `POST /git/identity` | `{ name, email }` | `{ name, email }`, per device, the one identity of Settings (`frontend/docs/settings.md`); nothing stored answers two empty fields, and a commit with an incomplete identity is refused `no-identity` |
+| `GET` / `POST /git/identity` | `{ name, email }` | `{ name, email }`, per device, the one identity of Settings (`apps/k7-daw-frontend/docs/settings.md`); nothing stored answers two empty fields, and a commit with an incomplete identity is refused `no-identity` |
 | `GET /git/key` | | `{ publicKey, synced }`: the one ed25519 public key as an `authorized_keys` line, made on the first call, and whether its keychain item travels to the person's other Apple devices; the private half is never answered |
 | `POST /git/forget-host` | `{ host, port? }` | `{ ok, forgotten }` |
 | `POST /git/focus` | `{ workspace, front, opened? }` | `{ ok }`: the page says it is in front, which drives the fetch; the page repeats it with each state poll, and a page silent for 10 minutes (two fetch periods) is no longer in front |

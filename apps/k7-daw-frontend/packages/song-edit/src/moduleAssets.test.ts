@@ -1,4 +1,4 @@
-// A module carries the files it loads, in its own `assets/`, named in `params:` — packages/song/docs/moduleAssets.md.
+// A module carries the files it loads, in its own `assets/`, named in `params:` — apps/k7-daw-frontend/packages/song/docs/moduleAssets.md.
 
 import {
   cpSync,
@@ -28,9 +28,18 @@ import { setModuleAsset } from "./projectEdit";
 
 beforeAll(compileReady);
 
-const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
-const SONG = join(here, "..", "..", "..", "demos", "synth-demo.k7");
-const DEMO_MODULES = join(here, "..", "..", "..", "demos", "_modules");
+const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
+const SONG = join(here, "..", "..", "..", "..", "..", "demos", "synth-demo.k7");
+const DEMO_MODULES = join(
+  here,
+  "..",
+  "..",
+  "..",
+  "..",
+  "..",
+  "demos",
+  "_modules",
+);
 
 let ws: string;
 let dir: string;

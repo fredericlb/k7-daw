@@ -1,7 +1,7 @@
 // alternativeSwitch.ts — switching a module to another of its attribute SETS, and saying whether
 // the switch reaches a running engine as plain VALUES. When the two sets differ in numeric params
 // alone, the answer carries what to set, so the caller can patch the held project instead of
-// recompiling it. See packages/song/docs/alternatives.md.
+// recompiling it. See apps/k7-daw-frontend/packages/song/docs/alternatives.md.
 
 import { stub } from "@studio/song/editStub";
 

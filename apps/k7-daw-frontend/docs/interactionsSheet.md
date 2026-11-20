@@ -27,7 +27,7 @@ generated from it, one way only: neither is edited by hand, and nothing flows ba
 
 ## Refreshing
 
-1. Export the Sheet's four sheets as CSV into `apps/k7/frontend/docs/interactions/` (`interactions.csv`,
+1. Export the Sheet's four sheets as CSV into `apps/k7-daw-frontend/docs/interactions/` (`interactions.csv`,
    `screens.csv`, `areas.csv`, `gaps.csv`): the Sheet's page downloads each sheet as CSV, and an agent with the
    Claude Docs connector reads the cells (`readCells`) and writes the same files. The connector has no export
    call for a Sheet.

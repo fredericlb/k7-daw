@@ -11,7 +11,7 @@ writes it: every caller, the file service, the commands and the stage scripts, g
   full `Preferences` is exact, accented text, `#`, colons and numeric-looking labels included, and a
   test holds it.
 - **Whoever edits the file by hand edits `preferences.k7x`.** The syntax is k7x's
-  (`packages/k7x/docs/language.md`), not YAML's.
+  (`apps/k7-daw-frontend/packages/k7x/docs/language.md`), not YAML's.
 - **Every write is atomic.** `savePreferences` writes through the crate's atomic write, so a reader, native or
   not, sees the old file or the new one and never half of one. A symlinked k7x is written through,
   so a dotfiles setup keeps its link; a link to nothing is refused.

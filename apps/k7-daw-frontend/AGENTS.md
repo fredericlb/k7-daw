@@ -3,23 +3,25 @@
 A **text-based DAW**. Your song is a folder of k7x files; the terminal or a web editor
 is your studio.
 
-**This directory is the web editor, and only that.** The engine (`engine/k7-runtime`), its
-supervisor (`engine/k7-supervisor`) and the brain packages (`packages/*`, all `@studio/*`) sit beside it
-rather than inside it, because they serve every audio app in the repo — the repo-root
-`AGENTS.md` holds the map of the whole audio side. One workspace and the Rust backend live here:
+**This directory is the web editor, and its TypeScript.** The engine (`apps/k7-daw-engine/k7-runtime`) and its
+supervisor (`apps/k7-daw-engine/k7-supervisor`) sit beside it, because they serve every audio app in the repo — the
+repo-root `AGENTS.md` holds the map of the whole audio side. The brain packages (`packages/*`, all `@studio/*`) are
+inside it, and one workspace and the Rust backend are around it:
 
 | Package | Role |
 |---|---|
-| `frontend` (`k7-frontend`) | React + Vite + Tailwind v4 + `@studio/ui`. The visual editor: k7x code editor (CodeMirror), timeline, chains graph. |
-| `backend-rs` | k7's backend in Rust, the front: the session, the account's preferences, the engine registry, the file service of the device's local account and the built page (`backend-rs/docs/`). It is no npm workspace. |
+| `.` (`k7-frontend`) | React + Vite + Tailwind v4 + `@studio/ui`. The visual editor: k7x code editor (CodeMirror), timeline, chains graph. |
+| `packages/` | the `@studio/*` packages, consumed as raw TypeScript; their Rust halves are `apps/k7-daw-wasm` and `apps/k7-daw-backend/packages/waveform`. |
+| `user-docs/` | the documentation the app ships and renders at `/docs`. |
+| `apps/k7-daw-backend` | k7's backend in Rust, the front: the session, the account's preferences, the engine registry, the file service of the device's local account and the built page (`apps/k7-daw-backend/docs/`). It is no npm workspace. |
 
 Dev ports: **frontend 5223, front 8789**, the dev session a device on loopback at
 `http://127.0.0.1:5223`; the documentation site is built apart, for `k7.rocks/docs`
-(`frontend/docs/docsSite.md`, `docs/site.md` at the root).
+(`docs/docsSite.md`, `docs/site.md` at the root).
 
 ## The browser talks to THREE servers
 
-| | the front | the file service (`backend-rs`'s `k7-file-service`) | `engine/k7-runtime` |
+| | the front | the file service (`apps/k7-daw-backend`'s `k7-file-service`) | `apps/k7-daw-engine/k7-runtime` |
 |---|---|---|---|
 | runs on | the device | the device, inside the Rust front, the local account | the engine's machine (the device's own) |
 | owns | with its Rust front: `/auth/*` for the whole origin, the preferences, the engine registry and the file hub (the device's files) | the account's workspaces — every file op | audio playback |
@@ -27,32 +29,32 @@ Dev ports: **frontend 5223, front 8789**, the dev session a device on loopback a
 | auth | the install's token, cookie `k7.sid` | a ticket the hub mints from the session | engine token echoed on `whoami` |
 
 **The front has no `store.ts`.** Every file operation lives in
-`apps/k7/backend-rs/crates/k7-file-service/src/workspaces/mod.rs`. Don't look for `tree`/`read`/`write`/`fmt`
+`apps/k7-daw-backend/packages/k7-file-service/src/workspaces/mod.rs`. Don't look for `tree`/`read`/`write`/`fmt`
 here.
 
 The file service does **not** see the session cookie, or any header a page chose: the hub turns the
 session into a ticket and stamps the user itself
-(`apps/k7/backend-rs/docs/files/hub.md`).
+(`apps/k7-daw-backend/docs/files/hub.md`).
 
 `AuthGate` → `EngineGate` → `ProjectGate` → editor, when the address names a project.
 When it names none, `main.tsx` mounts `AuthGate` → `Home` instead — the projects page, which
-needs the account and neither an engine nor a project (`frontend/docs/projects.md`). One address
+needs the account and neither an engine nor a project (`docs/projects.md`). One address
 short-circuits both: `/external` (kept until the app's second-device rework, `docs/inventaire.md`), the menu of surfaces a second device can drive — every surface
 of the project the ENGINE is holding, which `GET /engine/served` answers and which is not the same
 question as each workspace's active-project marker. It is `AuthGate` → `ExternalIndex` and probes
-for a machine without claiming one (`frontend/docs/external.md`). It is read BEFORE `parseLaunch`, since a single segment is
+for a machine without claiming one (`docs/external.md`). It is read BEFORE `parseLaunch`, since a single segment is
 otherwise a workspace — so `external` is a reserved short name. The engine
 picker is unreachable until the page holds the token either way.
 
-**`/auth/*` is k7's**, answered by its Rust front (`apps/k7/backend-rs/docs/routes.md`): `/auth/me` alone, which hands the
-page the install's token as the cookie `k7.sid` (`apps/k7/backend-rs/docs/sessions.md`). The front has no identity provider: the session is the device's local user.
+**`/auth/*` is k7's**, answered by its Rust front (`apps/k7-daw-backend/docs/routes.md`): `/auth/me` alone, which hands the
+page the install's token as the cookie `k7.sid` (`apps/k7-daw-backend/docs/sessions.md`). The front has no identity provider: the session is the device's local user.
 
 Spell this app's auth calls BARE (`/auth/me`), never under `BASE` — here the two coincide, for
 every other app they do not.
 
 ## Frontend architecture
 
-The long-form rationale lives in `frontend/docs/`, one page per area — read the one that
+The long-form rationale lives in `docs/`, one page per area — read the one that
 matches before changing it:
 
 | page | covers |
@@ -108,7 +110,7 @@ never empty: with nothing chosen it is the project's home page, the timeline whe
 otherwise the first pane the project does declare. The project bar's pane buttons pick the page and
 light the one on screen; the one way to see a second view at the same time is the footer's bottom
 panel (`event`, `graph`, `mix`, `logs`). The EDITOR is never the home page — it is shown deliberately (`ui editor`)
-or arrives as a popin when a command sends it to a file (`frontend/docs/shell.md`). Every pane is
+or arrives as a popin when a command sends it to a file (`docs/shell.md`). Every pane is
 **mounted exactly once and never unmounted**; `hidden` takes it off screen, which is what lets the
 editor be restyled into a popin without losing its undo history, and what keeps the viewport's GL
 context alive while you are looking elsewhere.
@@ -117,7 +119,7 @@ context alive while you are looking elsewhere.
 field, and both schemas are `.strict()`, so a file still holding one refuses to load. A note is a
 node of the built-in `@meta/doc`: one input, no output, one field (`content`), drawn as written
 on the graph and wired from whatever it is about. Off by default; the note button sits in the
-footer beside the mixer. Read `packages/song/docs/docModules.md`.
+footer beside the mixer. Read `apps/k7-daw-frontend/packages/song/docs/docModules.md`.
 
 **A project declares its SURFACES.** A `surfaces/` folder, one file per special view — `type`,
 `layout`, and a `mapping` saying which module each of its components moves. Four types, and the
@@ -127,8 +129,8 @@ PAIR is validated:
 |---|---|---|
 | `timeline` | `split` | the arrangement — a pane, and the reason a song draws one at all |
 | `viewport` | `floating` | the frame: the song's video lanes composited by `@studio/ui-eyes`, in a window over the pages |
-| `turntables` | `split` | the DJ desk, from `packages/k7-plugins/src/turntables` — what makes a project a SET |
-| `mastering` | `split` | the master strip: ONE `quick-master` node drawn as its three parts (`frontend/docs/mastering.md`) |
+| `turntables` | `split` | the DJ desk, from `apps/k7-daw-frontend/packages/k7-plugins/src/turntables` — what makes a project a SET |
+| `mastering` | `split` | the master strip: ONE `quick-master` node drawn as its three parts (`docs/mastering.md`) |
 
 **Every `split` surface is a PANE**, in the layout and in the pane ring. The viewport is the
 exception: a WINDOW over whichever page is up, moved and sized by hand, its place kept per browser
@@ -146,10 +148,10 @@ which is the ordinary pane invariant (`hidden`, never unmounted). A desk's docum
 songs, the crossfader, the six EQ knobs — is not its screen, and a set does not stop existing
 because you went to look at the graph. Being a pane is what spares `SurfaceTab` a split of its
 own between the hooks and the screen. Get it wrong and the crossfader re-centres on every round
-trip while the sound stays where you put it — see `packages/k7-plugins/docs/turntables/deckSet.md`.
+trip while the sound stays where you put it — see `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/deckSet.md`.
 
 A component with no mapping is reported on the surface itself, not by refusing the project.
-Read `packages/song/docs/surfaces.md`.
+Read `apps/k7-daw-frontend/packages/song/docs/surfaces.md`.
 
 **There is ONE layout, and nobody chooses it either.** Which panes it holds is what the open
 project DECLARES: `viewPanes` in `src/routes.ts` takes the surface flags and answers with the
@@ -159,7 +161,7 @@ timeline, and the transport and the minimap go with it.
 
 `project.k7x` has no `project_type` and there is no `View` type: `surfaces/` answers the same
 question and is the only thing that answers it, so two sources cannot contradict. Read
-`packages/song/docs/surfaces.md` before touching any of it.
+`apps/k7-daw-frontend/packages/song/docs/surfaces.md` before touching any of it.
 
 The vocabulary is two words, and `src/routes.ts` is where they are declared —
 read it before changing layout. A **pane** is one of five (`editor | timeline | turntables |
@@ -168,12 +170,12 @@ mastering | chains`) and is what `full` fullscreens; three of them — `timeline
 the bottom of the window shows, under the page, opening on half its height; `mix` is the graph with
 every mixer strip lined up on one rank. While a panel is open the timeline's lanes are folded and
 Expand is dead. A clip's CONTENTS are the `event` panel's, opened by a double-click on it. Both are URL state (`src/useViewRoute.ts`); see
-`frontend/docs/shellRouting.md`.
+`docs/shellRouting.md`.
 
 ### Commands are the CLI's, verbatim
 
 The command bar calls `/complete` and `/command` on the **file service**
-(`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/routes.rs`), which dispatch through `@studio/commands`.
+(`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/routes.rs`), which dispatch through `@studio/commands`.
 That package owns the SID → handler mapping and is the only place a verb is defined. Add a
 feature there, not here. Web-local commands (`LOCAL_COMMANDS` in `palette.ts`) are what only
 a browser can do: the shell's view state under `ui`, plus the bare-named ones that write
@@ -182,7 +184,7 @@ k7 publish, the undo journal.
 
 **Every action on screen is one of them.** No button, menu entry or toggle in this shell is
 unreachable from the command bar; where a button and a command would be two copies of one
-behaviour, the button dispatches the command. `frontend/docs/shell.md` has the table, and
+behaviour, the button dispatches the command. `docs/shell.md` has the table, and
 what is deliberately left out (disclosure, a dialog's own buttons, continuous gestures).
 
 ### Every shortcut names a command (`src/keys.ts`)
@@ -202,7 +204,7 @@ interpolate conditions into command names (`f` → `{focus_pane}`).
   Ctrl+S mean "now", not "at all" — they flush the timer and cannot overrule the rule.
 - **Modules** — `@studio/ui-module-builder`, drawn in the EDITOR's
   place beside the file tree, the editor fullscreened for it — so the next module is one click
-  away (`frontend/docs/moduleBuilder.md`). A module row in the tree opens it on the panel, and so
+  away (`docs/moduleBuilder.md`). A module row in the tree opens it on the panel, and so
   do the **Builder** button on a module file's toolbar and `ui builder <module>`.
   `src/api.ts`'s `moduleStore` is the seam — see that package's `docs/store.md`, in particular
   why a save can come back saying it landed somewhere else — an `@engine` ref materialising into
@@ -215,7 +217,7 @@ interpolate conditions into command names (`f` → `{focus_pane}`).
 
   The other is the **Commands settings page**, and for a different reason: what it edits is one
   account-wide document held at the root of the app, so a write-through was a round trip *and* a
-  re-render of the whole shell per keystroke (`frontend/docs/shell.md`).
+  re-render of the whole shell per keystroke (`docs/shell.md`).
 
   The file tree has a **second tab, Libraries**, listing every level a module can live at —
   `@workspace`, each of the origin's libraries (`@k7-core`, `@drums`…), `@engine` — nearest first,
@@ -228,14 +230,14 @@ interpolate conditions into command names (`f` → `{focus_pane}`).
   service refuses a library write. A library changes with an app update, not by an edit. One
   store and one path space: the file hub keeps ONE folder of each
   library for the device, seeded from `k7-core`, and the file service answers it at
-  the virtual `_libraries/<name>/…` in every workspace (`packages/song/docs/sharedFolders.md`,
-  `apps/k7/backend-rs/docs/files/hub.md`). `frontend/docs/sharedModules.md` is the page to read; a
+  the virtual `_libraries/<name>/…` in every workspace (`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`,
+  `apps/k7-daw-backend/docs/files/hub.md`). `docs/sharedModules.md` is the page to read; a
   chain's bench, `/@banc/<chain>/live.k7`, is a live RIG that edits no origin library: `chain save`
-  writes it into the account's own (`frontend/docs/frozenChains.md`).
+  writes it into the account's own (`docs/frozenChains.md`).
 
   **k7 will not open a project without a library.** The device has ONE list, read-only on the
   **Libraries** page, `/libraries`, linked from the home page's sidebar: the seed's libraries
-  are all there is. `ProjectGate` refuses before it opens anything. See `frontend/docs/projects.md` and `packages/project-shell/docs/launch.md`.
+  are all there is. `ProjectGate` refuses before it opens anything. See `docs/projects.md` and `apps/k7-daw-frontend/packages/project-shell/docs/launch.md`.
 - **Chains** — dagre (`@studio/ui-chains`) for layout, `@studio/ui-chains-react`'s
   `DomChains.tsx` for drawing: HTML nodes over a canvas of signal cables, with an SVG layer
   between them for the labels, the automation arrows and the hit paths. **Never hand-roll
@@ -249,14 +251,14 @@ interpolate conditions into command names (`f` → `{focus_pane}`).
   for the zoom stack, `m`/`s` for mute/solo. Neither is a session flag: `m` rewrites the
   lane's BYPASS in `graph.k7x` — a lane is a module, and its mute is that module's bypass —
   and `s` toggles the lane in project.k7x's root `soloed:` list, several at once, resolved by
-  the ENGINE (`packages/song/docs/trackModules.md`). Selection
+  the ENGINE (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`). Selection
   and zoom are a stack; the innermost entry describes the view. Unlike chains, this one
   stays k7-only.
 
 ## The front in detail
 
 **The front is the one process**: the session it reads, the preferences, the built SPA, the file hub, the
-registry and AI organize (`backend-rs/docs/`). It owns SIGTERM and SIGINT: the stop drains the requests in flight.
+registry and AI organize (`apps/k7-daw-backend/docs/`). It owns SIGTERM and SIGINT: the stop drains the requests in flight.
 - The Vite dev server proxies BOTH `/api` and `/auth` to the front (`proxyPaths`), which is
   what makes the dev server usable when visited directly on its port. No other dev server in this
   repository proxies `/auth`; an app developed elsewhere that shares the origin points its own
@@ -265,7 +267,7 @@ registry and AI organize (`backend-rs/docs/`). It owns SIGTERM and SIGINT: the s
   a per-engine lease **across users**, not per-workspace across tabs.
 
 **The prefs schema is the GATE, not a description.** A zod-style object strips what it does not
-declare, so a field the frontend saves and the front's schema (`crates/k7-front/src/prefs_schema.rs`) does not name would be
+declare, so a field the frontend saves and the front's schema (`apps/k7-daw-backend/packages/k7-front/src/prefs_schema.rs`) does not name would be
 accepted, answered `{ok:true}`, and dropped. The route refuses such a write out loud, but
 the rule to remember is that widening `K7Prefs` in the browser is only half of adding a
 preference.
@@ -278,20 +280,20 @@ in from.
 A workspace is one folder and holds **several projects**. The editor's tree is the whole
 workspace, and the ▶ on a project row is what hands that one to the engine — `POST /open`, which
 writes its active-project marker and switches the session, with no navigation and no remount
-(`apps/k7/backend-rs/docs/file-projects.md`). The address may still name a project, and that
+(`apps/k7-daw-backend/docs/file-projects.md`). The address may still name a project, and that
 is what it opens ON; a bare `/@local/<workspace>` opens the one last played.
 
 **A workspace is no git repository until it is connected, and starts EMPTY.** **New workspace** on the home page creates one
 with no project; opening it draws the first-project wizard, since the archetype decides what the
 screen shows and that is a question better asked where the answer will be looked at. There is
-nothing to publish or import: a workspace is a folder on the device, moved between devices through git (`apps/k7/backend-rs/docs/files/git.md`).
+nothing to publish or import: a workspace is a folder on the device, moved between devices through git (`apps/k7-daw-backend/docs/files/git.md`).
 
 ## the HOME page is where a workspace is chosen
 
 **This app does not own workspaces**, and never will: the device's file service
-holds every working copy, and nothing keeps a register of them elsewhere (`apps/k7/backend-rs/docs/projects.md`). What
+holds every working copy, and nothing keeps a register of them elsewhere (`apps/k7-daw-backend/docs/projects.md`). What
 this app owns is the SCREEN above a project, at `/` with nothing after it — the workspaces, the
-projects inside them and the libraries. `frontend/docs/projects.md` is the
+projects inside them and the libraries. `docs/projects.md` is the
 page that says why.
 
 A project is named by an ADDRESS — the workspace, then the project folder inside it:
@@ -306,12 +308,12 @@ keeps the folder there. Arriving with no project in the address is the home page
 than an error to redirect away from, and `main.tsx` branches on `parseLaunch` before mounting
 anything. There is deliberately no SECOND picker.
 
-**The project is the router's `basename`** (`projectBasename`, read by `src/address.ts`; the router is keyed by it in `appMain.tsx`, so entering or leaving a project loads no page — `frontend/docs/shell.md`), which is why
+**The project is the router's `basename`** (`projectBasename`, read by `src/address.ts`; the router is keyed by it in `appMain.tsx`, so entering or leaving a project loads no page — `docs/shell.md`), which is why
 there is no storage anywhere near it: React Router only writes below its basename, so
 `routes.ts` cannot rewrite the project away, and a reload or a pasted link simply re-reads the
 address. Hold it in a query string and a session instead, and a tab handed a project that does
 not exist can never get out of it. Read
-`packages/project-shell/docs/launch.md` before touching any of this.
+`apps/k7-daw-frontend/packages/project-shell/docs/launch.md` before touching any of this.
 
 The gate itself is that package's too; `components/ProjectGate.tsx`
 is a wrapper holding this app's wording and what to render once the project is open.
@@ -320,7 +322,7 @@ is a wrapper holding this app's wording and what to render once the project is o
 `<state>/workspace/<you>/` is the wrong level to offer a choice at. The home page lists
 WORKSPACES, which belong to a person, and the gate resolves an address INTO one.
 
-Identity is the local user, which names the engine SESSION rather than a folder — the workspaces are `<state>/workspace/<workspace>` with nobody underneath (`packages/engine-client/docs/paths.md`) — and the active
+Identity is the local user, which names the engine SESSION rather than a folder — the workspaces are `<state>/workspace/<workspace>` with nobody underneath (`apps/k7-daw-frontend/packages/engine-client/docs/paths.md`) — and the active
 project is remembered per-workspace in an active-project marker. There is **no global session
 file**; the workspace is the scope.
 
@@ -362,7 +364,7 @@ file:
   exist, without warning. The app still builds and the design-system components render
   unstyled. A path that is simply MISSING from the list fails the same way, and worse: every
   class that package alone uses is dropped while the layout classes it shares with the app
-  (`flex`, `w-16`) are generated anyway. Leave out `packages/k7-plugins/src` and the desk's
+  (`flex`, `w-16`) are generated anyway. Leave out `apps/k7-daw-frontend/packages/k7-plugins/src` and the desk's
   strip stands in the right place, correctly spaced, with `fill-muted` and `stroke-foreground`
   undefined — SVG knobs with no fill and no stroke. Present, positioned and invisible, which
   reads as "the control is gone" and sends you looking at the component. **Check the list

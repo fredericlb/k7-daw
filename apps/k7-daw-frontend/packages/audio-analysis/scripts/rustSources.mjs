@@ -5,7 +5,16 @@ import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
-const RUST = join(import.meta.dirname, "..", "rust");
+const RUST = join(
+  import.meta.dirname,
+  "..",
+  "..",
+  "..",
+  "..",
+  "k7-daw-backend",
+  "packages",
+  "waveform",
+);
 
 function files(dir) {
   return readdirSync(dir)

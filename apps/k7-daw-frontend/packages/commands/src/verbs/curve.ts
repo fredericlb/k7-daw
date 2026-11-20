@@ -1,6 +1,6 @@
 // curve.ts — `curve set <name> <json>`: a curve written WHOLE, created or replaced, from the fields a
 // person set in the curve editor (`ui curve`). One command, so one save is one undo; the file is the
-// curve's, and the editor holds every field of it. See packages/song/docs/curves.md.
+// curve's, and the editor holds every field of it. See apps/k7-daw-frontend/packages/song/docs/curves.md.
 
 import { writeCurveFile } from "@studio/song/curves";
 import type { CommandHost, SidHandler } from "../commands.ts";

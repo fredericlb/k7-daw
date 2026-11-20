@@ -1,4 +1,4 @@
-//! dev_frontend.rs — in the dev tray, the page comes from a running Vite instead of `frontend/dist`: each request the
+//! dev_frontend.rs — in the dev tray, the page comes from a running Vite instead of `apps/k7-daw-frontend/dist`: each request the
 //! built page would answer is streamed there and back, so 127.0.0.1:18789 gets HMR on its own origin
 //! (`docs/dev.md`). What a reader gets wrong: only `K7_DEV_FRONTEND` turns it on.
 

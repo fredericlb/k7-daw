@@ -1,7 +1,7 @@
 // EngineSyncFailedDialog.tsx — the blocking dialog when the project's files did not all reach the
 // engine's machine. FATAL by design: the project is held back rather than played with silent
 // clips, and the only way out is to reload it, which copies again. Not dismissable.
-// See apps/k7/backend-rs/docs/file-engine.md.
+// See apps/k7-daw-backend/docs/file-engine.md.
 
 import { Button } from "@studio/ui/button";
 import {

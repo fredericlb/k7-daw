@@ -2,7 +2,7 @@
 // folder picker, kept as a security-scoped bookmark (the page holds it as its `id`), then each file written into it
 // from the chunks the page sends over StudioBridge. The folder's scope stays open for the life of the app, which is
 // also what lets the front write a background film to its `path`. The thing a reader would get wrong: the bookmark
-// is the folder's identity, not the path, which a moved folder changes. See engine/k7-runtime/docs/ios.md.
+// is the folder's identity, not the path, which a moved folder changes. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import UIKit
 import UniformTypeIdentifiers

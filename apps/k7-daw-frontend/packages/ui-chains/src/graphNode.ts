@@ -26,15 +26,15 @@ const CARRIED = [
   // …and which MIDI DEVICE a midi-in node records from, the same way — @studio/song's docs/midiIn.md.
   "device",
   "tap",
-  // The module's other attribute sets, and which is on — see packages/song/docs/alternatives.md.
+  // The module's other attribute sets, and which is on — see apps/k7-daw-frontend/packages/song/docs/alternatives.md.
   "alternatives",
   "alternative",
-  // …and its engines, and which runs — see packages/song/docs/engines.md.
+  // …and its engines, and which runs — see apps/k7-daw-frontend/packages/song/docs/engines.md.
   "engines",
   "engine",
   // A rack's loaded sounds: `rackUI` draws the pads and the renderer reads the row back.
   "rack",
-  // …and whether they are an SFZ kit's, fixed and played as notes — packages/song/docs/racks.md.
+  // …and whether they are an SFZ kit's, fixed and played as notes — apps/k7-daw-frontend/packages/song/docs/racks.md.
   "rackKit",
   // What the module ANNOUNCES — its note-on, drawn as one socket per name.
   "events",
@@ -124,9 +124,9 @@ export interface GraphNode extends Carried, Flags {
   dim: boolean; // bypassed (module or whole chain)
   module?: string; // the module node name (for the nativePluginUI open)
   bypassed?: boolean; // the chain step is `enabled: false` — passes its input through
-  /** BAKED into a render — not `dim`, which is one click from audible. See packages/song/docs/freeze.md. */
+  /** BAKED into a render — not `dim`, which is one click from audible. See apps/k7-daw-frontend/packages/song/docs/freeze.md. */
   frozen?: "at" | "inside";
-  /** Baked into an AUTOMATIC VST freeze — the VST module whose render holds it; touching a control thaws it (packages/song/docs/autoFreeze.md). */
+  /** Baked into an AUTOMATIC VST freeze — the VST module whose render holds it; touching a control thaws it (apps/k7-daw-frontend/packages/song/docs/autoFreeze.md). */
   autoFrozen?: string;
   // A node that does not exist yet: the module being created, drawn where it will land.
   pending?: boolean;
@@ -256,7 +256,7 @@ export interface TrackControlValues {
   mute: number;
   solo: number;
   arm: number;
-  /** Heard 10 dB up from the mixer's highlight button — packages/song/docs/highlight.md. */
+  /** Heard 10 dB up from the mixer's highlight button — apps/k7-daw-frontend/packages/song/docs/highlight.md. */
   highlight?: number;
 }
 

@@ -16,7 +16,7 @@ use super::routes::Stream;
 use super::{Who, body, workspace};
 use crate::routes::files::json_answer;
 
-/// `MAX_UPLOAD_BYTES` (`packages/web-protocol/workspaceTypes.ts`).
+/// `MAX_UPLOAD_BYTES` (`apps/k7-daw-frontend/packages/web-protocol/workspaceTypes.ts`).
 const MAX_UPLOAD: u64 = 512 * 1024 * 1024;
 
 fn error(status: u16, message: &str) -> Response {

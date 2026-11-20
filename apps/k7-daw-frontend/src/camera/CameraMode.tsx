@@ -1,7 +1,7 @@
 // CameraMode.tsx — the home page turned into a camera: the whole screen shows what the lens sees,
 // and the same picture is offered to the account's projects as `remote:<name>` (./cameraLink.ts).
 // It keeps the screen awake, since a phone on a stand that dims is a camera that stops.
-// See packages/web-protocol/docs/cameras.md.
+// See apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md.
 
 import { SwitchCamera, X } from "@studio/ui/icons";
 import { useEffect, useRef, useState } from "react";

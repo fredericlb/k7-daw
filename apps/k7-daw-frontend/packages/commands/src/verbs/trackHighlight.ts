@@ -1,7 +1,7 @@
 // trackHighlight.ts — `track highlight <track>`: the mixer's highlight button. The lane joins or leaves
 // `highlighted:` at project.k7x's root, and the compile plays it 10 dB up on its strip's output stage,
 // its fader untouched — so switching it off returns the mix exactly as it was. Several at once, like
-// solo. See packages/song/docs/highlight.md.
+// solo. See apps/k7-daw-frontend/packages/song/docs/highlight.md.
 
 import { join } from "node:path";
 import { loadProjectRoot } from "@studio/song/loader";

@@ -2,7 +2,7 @@
 // no engine needed: the same sawtooth through the same model, rendered at the model's own rate and
 // at another, and the amp's harmonic profile compared between the two.
 //
-//   npx tsx engine/k7-runtime/scripts/nam-rate.ts <model.nam> [otherRate=44100]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/nam-rate.ts <model.nam> [otherRate=44100]
 //
 // A model is a recurrent filter clocked per SAMPLE, so run at the wrong rate it is another amp: its
 // harmonics come out at different levels. Resampled to its own rate they should match to within the
@@ -11,7 +11,7 @@
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 import { channelOf, readWav as readAnyWav, wavFile } from "./wav.ts";
 
 export const F0 = 110;

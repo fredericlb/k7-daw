@@ -203,7 +203,7 @@ import { createStatusLine } from "./statusLine";
 import { stepSentence } from "./stepSentence";
 import { eventIdOf, takesEventOf } from "./takes";
 import { pageVerbs } from "./verbs/pageHost";
-// The shell's BROWSER composition point: k7's builtin plugins register their pane drawers here (packages/k7-sdk/docs/sdk.md).
+// The shell's BROWSER composition point: k7's builtin plugins register their pane drawers here (apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md).
 import "./plugins";
 import { cfg } from "@studio/project-shell/fileApi";
 import { GraphSlotPane } from "./components/GraphSlotPane";
@@ -287,7 +287,7 @@ const ModuleBuilder = lazy(() =>
   })),
 );
 
-/** The shot a new video project is scaffolded with (packages/song/src/scaffold.ts) — a picture holding only it is untouched. */
+/** The shot a new video project is scaffolded with (apps/k7-daw-frontend/packages/song/src/scaffold.ts) — a picture holding only it is untouched. */
 const SCAFFOLD_SAMPLE = /(^|\/)clips\/sample\.mp4$/;
 
 /** How long a second Ctrl+Z has, once the text pane's own history is spent, to reach the project journal. */
@@ -466,7 +466,7 @@ export default function App({
   const [engineLoad, setEngineLoad] = useState<
     EngineLoadPhase | null | undefined
   >(undefined);
-  // The engine's plugin scan this load waits for, or the one it went on without (apps/k7/backend-rs/docs/file-engine.md).
+  // The engine's plugin scan this load waits for, or the one it went on without (apps/k7-daw-backend/docs/file-engine.md).
   const [engineScan, setEngineScan] = useState<EngineScanState | null>(null);
 
   // The song's own name in the tab, over the folder `appMain` named it from (docs/tabs.md).
@@ -1286,14 +1286,14 @@ export default function App({
   // …and the NOTES' half, since nothing meters MIDI either: when each lane's notes sound, and how hard (noteSpans.ts).
   const noteLanes = useMemo(() => noteSpans(projectDoc), [projectDoc]);
 
-  /** A PROJECT setting off a card — the RENDER node's frame shape, written to project.k7x (packages/song-video/docs/picture.md). */
+  /** A PROJECT setting off a card — the RENDER node's frame shape, written to project.k7x (apps/k7-daw-frontend/packages/song-video/docs/picture.md). */
   const onProjectField = useCallback(
     (field: string, value: string) =>
       void runCommandRef.current(`project ${field} ${value}`),
     [],
   );
 
-  // The lenses this browser can see — the camera cards' dropdown, packages/song/docs/camera.md.
+  // The lenses this browser can see — the camera cards' dropdown, apps/k7-daw-frontend/packages/song/docs/camera.md.
   const cameras = useCameras();
 
   // The interface's inputs and the act that regroups them, asked once per connection.
@@ -1354,7 +1354,7 @@ export default function App({
     [shellGraph],
   );
   midiLanesRef.current = midiLanes;
-  // The armed lane's MIDI device: the midi-in node wired to it, read off the graph — packages/song/docs/midiIn.md.
+  // The armed lane's MIDI device: the midi-in node wired to it, read off the graph — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
   const midiInAny = useMemo(
     () =>
       !!shellGraph &&
@@ -1363,7 +1363,7 @@ export default function App({
         .some((st) => st.device !== undefined),
     [shellGraph],
   );
-  // The instruments a keyboard is wired straight into, played live with no lane armed (packages/song/docs/midiIn.md).
+  // The instruments a keyboard is wired straight into, played live with no lane armed (apps/k7-daw-frontend/packages/song/docs/midiIn.md).
   const midiPlayed = useMemo(
     () => (shellGraph ? midiInPlayed(shellGraph) : []),
     [shellGraph],
@@ -1442,7 +1442,7 @@ export default function App({
       bumpReload();
     },
   });
-  // A project with a midi-in node asks for MIDI access at once, and again on each press of a dropdown — packages/song/docs/midiIn.md.
+  // A project with a midi-in node asks for MIDI access at once, and again on each press of a dropdown — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
   useEffect(() => {
     if (!midiIn.any) return;
     void openMidiInputs();
@@ -1834,7 +1834,7 @@ export default function App({
     () => void runCommand("ui close"),
     [runCommand],
   );
-  // A node's preset dropdown: the list, the save and the update, each a `node preset` verb — packages/song/docs/userPresets.md.
+  // A node's preset dropdown: the list, the save and the update, each a `node preset` verb — apps/k7-daw-frontend/packages/song/docs/userPresets.md.
   const {
     presetNames,
     openPresets,
@@ -1966,7 +1966,7 @@ export default function App({
   const openInEditorRef = useLatest(openInEditor);
   const focusRowInPanes = useCallback(
     (target: RowTarget) => {
-      // Named, not fuzzy-matched: a lane lives in `nodes/`, or in a chain project's `tracks/` (packages/song/docs/chainFiles.md).
+      // Named, not fuzzy-matched: a lane lives in `nodes/`, or in a chain project's `tracks/` (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
       const files = editorRef.current?.files() ?? [];
       const file =
         entityFile(files, "nodes", target.id) ??
@@ -2395,7 +2395,7 @@ export default function App({
     const bars = (4 * recInfo.beatsPerBar * 60) / Math.max(1, recInfo.tempo);
     e.loop(start, start + bars, true);
   }, [loopState?.on, caret?.selection, store, recInfo, engineRef]);
-  // An engine just ready may hold nothing yet: the request that binds it is what answers whether a load began (apps/k7/backend-rs/docs/file-engine.md).
+  // An engine just ready may hold nothing yet: the request that binds it is what answers whether a load began (apps/k7-daw-backend/docs/file-engine.md).
   const [askingLoad, setAskingLoad] = useState(false);
   useEffect(() => {
     if (!engineReady) return;

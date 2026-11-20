@@ -1,14 +1,14 @@
 # Naming things
 
-The rationale behind `packages/song-schema/src/instanceName.ts` — how a thing this project makes
-is named after what it came from. `packages/song/docs/trackKind.md` covers the other naming rule,
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/instanceName.ts` — how a thing this project makes
+is named after what it came from. `apps/k7-daw-frontend/packages/song/docs/trackKind.md` covers the other naming rule,
 a track's `[position.][prefix.]label`.
 
 ## `<owner>_<what>_<n>`
 
 `moduleFork`'s copy of a shared module (`bs_lead_tape-delay_1`) and a node dropped on the canvas are
 the same question — "what do I call this use of that" — so there is ONE rule and both go through it.
-A rule spelled in two places is two answers (`packages/song/docs/nodes.md`).
+A rule spelled in two places is two answers (`apps/k7-daw-frontend/packages/song/docs/nodes.md`).
 
 `namePart` keeps one segment of the module vocabulary: `createNode` and `createModuleFile` both
 refuse anything else, and a lane is called `vo.jo`, so it is not cosmetic. A name that survives as

@@ -27,7 +27,7 @@
 
 It also:
 
-- **Excluded paths**: `k7-core`, `engine/k7-runtime`, every `node_modules`, `dist`,
+- **Excluded paths**: `k7-core`, `apps/k7-daw-engine/k7-runtime`, every `node_modules`, `dist`,
   `out`, `storybook-static`, `*.css`, `*.json`, `*.jsonc`, `*.min.js`, `*.tsbuildinfo`,
   `package-lock.json`, and `.tmp-*` (throwaway codemod scripts, also gitignored).
 - `correctness/noUndeclaredVariables` as an error, with `Terminal` and `FitAddon` declared as globals
@@ -49,15 +49,13 @@ literal byte.
 `scripts/check-doc-links.mjs` scans every tracked and untracked-but-not-ignored `md`, `ts`, `tsx`,
 `mts`, `mjs`, `cjs`, `js`, `jsx`, `cpp`, `h`, `hpp`, `kt`, `rs`, `k7x`, `glsl`, `yaml`, `yml`, `sh` and
 `py` file, outside build output. Any text that looks like a path into one of the
-three top-level code folders (`packages/`, `apps/`, `engine/`), ending in a file extension,
+top-level code folder `apps/` (or a `packages/` folder written from a page's own place), ending in a file extension,
 must name a file that exists, either from the repository root or relative to the file containing it.
 
-A few patterns are allowed without existing: engine-relative paths that do not start with one of
-the engine's real subfolders, and
-anything under a `dist/` folder. A path that names a deleted file on purpose can be listed in the
+A few patterns are allowed without existing: anything under a `dist/` folder. A path that names a deleted file on purpose can be listed in the
 script's `TOMBSTONES` set.
 
-This applies to this guide too: every `packages/…`, `apps/…` or `engine/…` file path written here
+This applies to this guide too: every `apps/…` file path written here
 must exist.
 
 ## `lint:comments`: comment size and language
@@ -83,7 +81,7 @@ the start of its own comment.
 
 - test and bench files are entry points through the Vitest plugin;
 - per-workspace entries cover scripts and generated files knip cannot reach by imports (root
-  `scripts/**/*.mjs`, `engine/k7-runtime/scripts`, `packages/song/scripts`,
+  `scripts/**/*.mjs`, `apps/k7-daw-engine/k7-runtime/scripts`, `apps/k7-daw-frontend/packages/song/scripts`,
   `packages/dsp/modules/**/jsdsp.ts` and others);
 - binaries used from scripts (`cmake`, `ctest`, `ffmpeg`, `tilt`, `where.exe`, `osascript`) and a few
   tool dependencies (`tsx`, `concurrently`, Vite plugins, `esbuild`, `yaml`) are ignored.
@@ -95,8 +93,8 @@ looks exactly like dead code.
 
 | Script | Checks |
 |---|---|
-| `lint:panels` (`packages/song/scripts/checkPanelBinds.ts`) | Every control a library panel binds against the parameters its plugin really exposes. Built-in plugins are read from the generated parameter list; an external plugin is instantiated by the engine's `--dump-params-ext`, so this only runs where that plugin is installed. Options: `[library root] [--only <filter>] [--json]`. |
-| `lint:layouts` (`packages/ui-module-builder/scripts/checkLayouts.ts`) | Every library module's panel against the two-layout rules and the AI brief's checks, and against the committed version: a reworked panel must keep every control it had. Default target: all of `k7-core`. Exits 1 on any issue. |
+| `lint:panels` (`apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts`) | Every control a library panel binds against the parameters its plugin really exposes. Built-in plugins are read from the generated parameter list; an external plugin is instantiated by the engine's `--dump-params-ext`, so this only runs where that plugin is installed. Options: `[library root] [--only <filter>] [--json]`. |
+| `lint:layouts` (`apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkLayouts.ts`) | Every library module's panel against the two-layout rules and the AI brief's checks, and against the committed version: a reworked panel must keep every control it had. Default target: all of `k7-core`. Exits 1 on any issue. |
 
 ## Coding conventions
 
@@ -105,7 +103,7 @@ These follow from the configuration and the checks above.
 | Convention | Enforced by |
 |---|---|
 | Formatting: 2 spaces, 80 columns, double quotes, LF line endings | Biome, `.gitattributes` |
-| Icons come from `@studio/ui/icons`, never `lucide-react` directly. A component that resolves an icon by name at runtime uses `@studio/ui/icons/all`, which is loaded as its own chunk (see `apps/k7/frontend/src/lucideIcons.ts`). | Biome `noRestrictedImports` |
+| Icons come from `@studio/ui/icons`, never `lucide-react` directly. A component that resolves an icon by name at runtime uses `@studio/ui/icons/all`, which is loaded as its own chunk (see `apps/k7-daw-frontend/src/lucideIcons.ts`). | Biome `noRestrictedImports` |
 | File header of at most 10 lines: what the file does, and what a reader would get wrong | `lint:comments` |
 | One-line comments in the body; longer rationale goes to a documentation page | `lint:comments` |
 | Comments and documentation in English | `lint:comments` |

@@ -23,7 +23,7 @@ its maximum, one holding only *dry* at its minimum (`holdOwnMix`). A live set of
 refused with a warning. The names are the ones `ownMixSide` reads in `@studio/song-schema`, so the
 compile and the engine agree on which params these are.
 
-WHICH modules own their blend is the compile's decision (the song crate's `stage_of`, `packages/song/rust/src/`): an EFFECT
+WHICH modules own their blend is the compile's decision (the song crate's `stage_of`, `apps/k7-daw-wasm/song/src/`): an EFFECT
 (`audio/`) with at most one declared input. The compile always sends such a module's `@mix` — its
 `mix:`, else 1 — and `@mix` arriving at all is what tells the engine to hold. Two exceptions, both
 decided by what a module IS rather than by a list of names:
@@ -54,7 +54,7 @@ because a plugin's neutral is where its author put it: the auto-wah's `Output` r
 
 On a LANE, `@output-volume` is the mixer fader rather than this stage. On a module's card the three
 are drawn by k7 on the second line of the card's header, never on the panel
-(`packages/ui-chains-react/docs/nodeCard.md`).
+(`apps/k7-daw-frontend/packages/ui-chains-react/docs/nodeCard.md`).
 
 ## A split and a blend, found in the plugin list by what they name
 
@@ -91,7 +91,7 @@ in between. Tracktion's own dry/wet does not do this.
 
 - **Equal power**: wet × sin(m·π/2) + dry × cos(m·π/2), the power constant across the sweep for a
   dry and a wet signal that differ, which is what an effect makes. The same curve as the crossfade
-  knob (`packages/ui-chains-react/docs/widgets.md`).
+  knob (`apps/k7-daw-frontend/packages/ui-chains-react/docs/widgets.md`).
 - **A ramp per block** from the gains the last block ended on, so turning the knob does not step.
 - **A bypassed module is left alone**: what came through it IS the dry signal, and blending it with
   itself would add 3 dB.

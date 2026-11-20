@@ -3,7 +3,7 @@
 The decisions of how a host calls the compiler: [rustCompiler.md](rustCompiler.md) keeps the output rules and the stage gate; the earlier decisions are in
 [rustCompilerClips.md](rustCompilerClips.md), [rustCompilerCurves.md](rustCompilerCurves.md) and [rustCompilerLanes.md](rustCompilerLanes.md). The native file
 service is the host: one cache per workspace behind it, roots and a rig it computes, a bundle the browser replays, a compare of two compiles, and the seal on the shared version.
-A row marked DEPARTS differs from the spec's row or from the TypeScript's old answer. Paths are relative to `packages/song`; `crates/` is `apps/k7/backend-rs/crates/`.
+A row marked DEPARTS differs from the spec's row or from the TypeScript's old answer. Paths are relative to `apps/k7-daw-frontend/packages/song`; `crates/` is `apps/k7-daw-backend/packages/`.
 
 ## What the host decides (2l)
 
@@ -80,12 +80,12 @@ Numbered from 700; 790 on are host mechanics, which change nothing the compile a
 
 | # | decision | why |
 |---|---|---|
-| 755 | `CRATES` gains `packages/song/rust` and `packages/k7x/rust`, after the facade and `song-schema`, and `rustSourceHash` adds `packages/song/rust/Cargo.lock` to the facade's lock and every file a crate compiles in with `include_str!` (`packages/song-schema/src/builtinParams.generated.json`) | the spec's one hash over the compiler and its path dependencies, and over what it embeds: a table that changes alone changes what the module answers |
+| 755 | `CRATES` gains `apps/k7-daw-wasm/song` and `apps/k7-daw-wasm/k7x`, after the facade and `song-schema`, and `rustSourceHash` adds `apps/k7-daw-wasm/song/Cargo.lock` to the facade's lock and every file a crate compiles in with `include_str!` (`apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json`) | the spec's one hash over the compiler and its path dependencies, and over what it embeds: a table that changes alone changes what the module answers |
 | 756 | `buildWasm.mjs` computes the hash first and builds with `K7_WASM_SOURCES` in the environment; the facade's `version` op answers `option_env!("K7_WASM_SOURCES")`, else `"dev"`. `build.test.ts` holds `version` equal to `SOURCES`, and a test on a copied tree that one changed byte in `song` changes the hash | not circular, and the module proves what it was built from |
-| 757 | `crates/k7-compile/build.rs` reads the `SOURCES` line of `packages/k7-wasm/src/k7Wasm.generated.ts` (the first ten lines only), `rerun-if-changed`, and writes `$OUT_DIR/sources.rs`; `SONG_SOURCES` is that constant. A missing file or line fails the build with a sentence. The `song.version` op and a test compare it with the file again | "read that one value and compute no other"; `OUT_DIR` rather than an env var so sccache sees the content |
+| 757 | `crates/k7-compile/build.rs` reads the `SOURCES` line of `apps/k7-daw-frontend/packages/k7-wasm/src/k7Wasm.generated.ts` (the first ten lines only), `rerun-if-changed`, and writes `$OUT_DIR/sources.rs`; `SONG_SOURCES` is that constant. A missing file or line fails the build with a sentence. The `song.version` op and a test compare it with the file again | "read that one value and compute no other"; `OUT_DIR` rather than an env var so sccache sees the content |
 | 758 | DEPARTS, additive. With `on` and only then, the compile routes the actor answers carry the header `x-k7-compiler: <SONG_SOURCES>`: `/project-doc`, `/project-errors`, `/engine-doc`, `/graph`, `/surfaces`, `/io-ports`, `/module-catalogue`, `/base-modules` and `/hints`. `/workspace`, which the live service answers, does not (decision 807) | a key in the bodies would change a contract; the frontend reads the routes' shapes |
 | 759 | No frontend reader at 2l. Spec correction | nothing in the browser compiles yet; it lands with the first browser operation, on these same three values |
-| 760 | `packages/k7-wasm/src/k7Wasm.generated.ts merge=rebuilt` in `.gitattributes`, `rebuild:generated` also runs `npm run build:wasm -w @studio/k7-wasm`, one row in `docs/agents.md` | every branch touching the compiler now changes that file's `SOURCES` line |
+| 760 | `apps/k7-daw-frontend/packages/k7-wasm/src/k7Wasm.generated.ts merge=rebuilt` in `.gitattributes`, `rebuild:generated` also runs `npm run build:wasm -w @studio/k7-wasm`, one row in `docs/agents.md` | every branch touching the compiler now changes that file's `SOURCES` line |
 
 ### Measures and the suites
 

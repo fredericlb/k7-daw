@@ -2,7 +2,7 @@
 
 `src/key.ts` is the **reference** detector: the engine's C++ analysis pass mirrors it, and the
 tests here are what says whether either is right. The plan, the measurements and what is still
-unknown live in the root's [key-detection-plan.md](../../../docs/key-detection-plan.md).
+unknown live in the root's [key-detection-plan.md](../../../../../docs/key-detection-plan.md).
 
 ## Three steps, and only the middle one has an opinion
 

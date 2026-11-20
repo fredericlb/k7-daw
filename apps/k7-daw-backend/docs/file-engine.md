@@ -58,7 +58,7 @@ This page holds the choices and what forced them; the numbered rows (2200 to 229
 
 ## On disk and on the wire
 
-The engine's wire is unchanged (`engine/k7-runtime/docs/protocol.md`, `packages/engine-protocol`): the same frames,
+The engine's wire is unchanged (`apps/k7-daw-engine/k7-runtime/docs/protocol.md`, `apps/k7-daw-frontend/packages/engine-protocol`): the same frames,
 the same session ids, the same stamps. The catalogue copy a finished scan writes is the TypeScript's own shape and
 bytes, left alone when it says the same, since its mtime is in every project's revision token.
 
@@ -81,7 +81,7 @@ bytes, left alone when it says the same, since its mtime is in every project's r
 | 2213, 2214, 2217 | `wire.rs`: the session filter, the outbox bounds, `state` kept natively | `engine_wire` and the hostile frames |
 | 2220 to 2225 | the five machines, replayed from `engine.json` | `engine_load`, `engine_scan`, `engine_sync`, `engine_reconcile` |
 | 2224 | `sync.rs` states only paths inside the roots; `collect` walks a document once with a set | a hundred thousand paths and a 64 KiB one are walked inside the backstop; a quadratic walk fails that test |
-| 2230 | `packages/song/rust/src/send_refs.rs` and `clips/audition.rs` | `send_refs`: the small cases and the audition replay in the unit run, the 177 projects in the ignored gate |
+| 2230 | `apps/k7-daw-wasm/song/src/send_refs.rs` and `clips/audition.rs` | `send_refs`: the small cases and the audition replay in the unit run, the 177 projects in the ignored gate |
 | 2231, 2232 | `docs.rs`: the group fold, the take hole and the audition applied to a document the typed reader takes, a document it refuses sent with the fold alone | `engine_vectors` over the golden corpus |
 | 2210, 2211, 2250 | `k7-front/.../native/engine/mod.rs`: one `EngineLink` per account (sessions, the binding, the copies), its state under std mutexes taken for a decision and never across an await, a compile, a dial or a stat; `bind` keeps the hosted rules | `tests_link`' binding test (the same URL with a link open keeps the link; another drops it, no `drop-session`; none clears the jobs path and the identity) |
 | 2212 | `jobs.rs`: the `sync` job over the bound path through `request_job`, which now takes a channel trait the tunnel's `Link` and a socket both implement | `tests_hostile`: a job never answered ends on its bound, a refused port and a refusal are failures with the machine's words |

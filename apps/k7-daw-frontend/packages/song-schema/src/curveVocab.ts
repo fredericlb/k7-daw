@@ -1,5 +1,5 @@
 // curveVocab.ts — the curve vocabulary as plain values: the oscillator shapes, the cuts and an envelope's default level.
-// A reader would get wrong why these are not generated: ts-rs emits types, not values (packages/song-schema/docs/wasmBoundary.md).
+// A reader would get wrong why these are not generated: ts-rs emits types, not values (apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md).
 
 import type { CurveCut, LfoShape } from "@studio/graph-model";
 

@@ -387,7 +387,7 @@ function Drawn({
   timelineRef: React.RefObject<TimelineHandle | null>;
 }) {
   // The DEVICE registry answers which component draws this type out here; a type with no
-  // device drawer draws in k7's window, and the card says so (packages/k7-sdk/docs/sdk.md).
+  // device drawer draws in k7's window, and the card says so (apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md).
   const drawer = deviceSurfaceDrawer(surface.surface.type);
   if (!drawer)
     return (

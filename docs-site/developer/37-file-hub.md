@@ -1,12 +1,12 @@
 # The file hub: workspaces and libraries
 
-The file hub is k7's Rust front's (`apps/k7/backend-rs/docs/files.md`), and the only place workspaces
+The file hub is k7's Rust front's (`apps/k7-daw-backend/docs/files.md`), and the only place workspaces
 live. It hands each account to its own [file-service](./36-file-service.md) runtime, held in the
 front, and owns what is shared between accounts or devices: the libraries.
 
-The routes are `apps/k7/backend-rs/crates/k7-front/src/routes/files/` (the hub's routes in `hub/`); tickets, the environment allow-list and
-the engine bindings are `apps/k7/backend-rs/crates/k7-hub`, the history rooms
-`crates/k7-sync`, the libraries `crates/k7-libraries`.
+The routes are `apps/k7-daw-backend/packages/k7-front/src/routes/files/` (the hub's routes in `hub/`); tickets, the environment allow-list and
+the engine bindings are `apps/k7-daw-backend/packages/k7-hub`, the history rooms
+`apps/k7-daw-backend/packages/k7-sync`, the libraries `apps/k7-daw-backend/packages/k7-libraries`.
 
 ## STUDIO_FILES_ROOT
 
@@ -23,10 +23,10 @@ $STUDIO_FILES_ROOT/
     .history/  .renders/  models/ undo journals, automatic renders, downloaded models
 ```
 
-The account slug is `accountKey(email)` (`apps/k7/backend-rs/crates/k7-hub/src/account.rs`): a slug of the email plus
+The account slug is `accountKey(email)` (`apps/k7-daw-backend/packages/k7-hub/src/account.rs`): a slug of the email plus
 ten hex characters of its sha256, so two emails that slug alike stay apart.
 
-Housekeeping: `apps/k7/backend-rs/crates/k7-hub/src/stale.rs` purges `.renders` and `.history` entries unused for 30 days;
+Housekeeping: `apps/k7-daw-backend/packages/k7-hub/src/stale.rs` purges `.renders` and `.history` entries unused for 30 days;
 
 ## One runtime per account, in the front
 
@@ -34,14 +34,14 @@ The hub starts no process. An account's runtime is made lazily on its first requ
 warm-up at sign-in) and let go after the idle time once nothing holds it. One runtime per account, never one shared,
 keeps an account's state apart and lets an idle one cost memory only.
 
-- **Environment:** an allow-list of the front's (`crates/k7-hub/src/env.rs`) overlaid by the host's
+- **Environment:** an allow-list of the front's (`apps/k7-daw-backend/packages/k7-hub/src/env.rs`) overlaid by the host's
   settings, plus the account's own `STUDIO_HOME=<root>/<slug>`, `STUDIO_LIBRARIES_HOME=<root>/libraries`,
   `STUDIO_RENDER_JOBS_URL`
   when renders are on, and the shares' `STUDIO_MEDIATEK` (the instance's data folder).
   The front's secrets are not on the list.
 - **Crash:** nothing to restart; a runtime is memory in the front.
 
-**Routing** (`crates/k7-front/src/routes/files/hub/proxy.rs`): the user comes from a signed ticket
+**Routing** (`apps/k7-daw-backend/packages/k7-front/src/routes/files/hub/proxy.rs`): the user comes from a signed ticket
 (`x-studio-engine-token` or `?token=`; HMAC over `{u, exp, a?}`, 12 h, minted by `GET /api/files-hub`)
 or from the session. `/account/libraries…` goes to the libraries; everything else to the account's
 runtime. A ticket may carry `~<engineId>` to bind that engine to the account first.
@@ -57,7 +57,7 @@ runtime. A ticket may carry `~<engineId>` to bind that engine to the account fir
 
 ## Libraries
 
-`crates/k7-libraries` (`apps/k7/backend-rs/docs/libraries.md`):
+`apps/k7-daw-backend/packages/k7-libraries` (`apps/k7-daw-backend/docs/libraries.md`):
 
 - A library is a folder of **versions**: `1/`, `2/`… frozen, each with a `library.k7x`
   (`{ name, version, requires, notes? }`). A version is never rewritten.
@@ -84,6 +84,6 @@ nothing is fetched.
 
 ## Tests
 
-The Rust crates hold their own tests (`apps/k7/backend-rs/crates/k7-front/tests/files_hub.rs`, `all/files_sync.rs`, `k7-hub/tests/`, `k7-sync/tests/`,
-`k7-libraries/tests/`), checked against the committed vectors in `apps/k7/backend-rs/fixtures/`; the
+The Rust crates hold their own tests (`apps/k7-daw-backend/packages/k7-front/tests/files_hub.rs`, `all/files_sync.rs`, `k7-hub/tests/`, `k7-sync/tests/`,
+`k7-libraries/tests/`), checked against the committed vectors in `apps/k7-daw-backend/fixtures/`; the
 conformance specs (`e2e/specs/conformance/files*`, `sync*`) drive the whole family through the front.

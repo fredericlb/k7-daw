@@ -1,7 +1,7 @@
 // Busy.kt — whether the app is at work, and what that holds: EngineService in the foreground, and the screen on.
 // Two sources: the supervisor's snapshot says when a session of the engine PLAYS, whoever drives it; the views say,
 // as `busy` messages (StudioBridge), what only a page knows — a track armed, a take rolling, a rig sounding
-// (apps/k7/frontend/src/androidBusy.ts), a microphone or a wake lock held (assets/media-session.js).
+// (apps/k7-daw-frontend/src/androidBusy.ts), a microphone or a wake lock held (assets/media-session.js).
 // A page that never reports is not busy, so nothing here outlives it. See docs/android.md.
 
 package se.frediver.k7

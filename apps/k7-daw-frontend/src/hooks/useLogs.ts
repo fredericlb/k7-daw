@@ -1,5 +1,5 @@
 // useLogs.ts — the Logs panel's line buffer plus two tails: the engine machine's merged process
-// log (`.studio.log`) and the file service's own lines (apps/k7/backend-rs/docs/file-runtime.md),
+// log (`.studio.log`) and the file service's own lines (apps/k7-daw-backend/docs/file-runtime.md),
 // polled only while that panel is OPEN (nothing else reads it). The cost of not tailing
 // while closed is that lines written in between are skipped rather than backfilled — the
 // right trade for a live log you open to watch what happens NEXT.

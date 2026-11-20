@@ -18,13 +18,13 @@ the map; the following pages go package by package.
 
 ```text
 project folder (project, picture lanes in nodes/ or tracks/, clips/, graph or chains/, modules)
-   │  loadVideoProject()                 packages/song-video/src/videoProject.ts
+   │  loadVideoProject()                 apps/k7-daw-frontend/packages/song-video/src/videoProject.ts
    ▼
 VideoProjectDoc   (seconds, absolute paths, GLSL inlined, warnings)
-   │  webVideoProjectOf()                packages/song-video/src/webVideo.ts (the Worker's `videoDoc`)
+   │  webVideoProjectOf()                apps/k7-daw-frontend/packages/song-video/src/webVideo.ts (the Worker's `videoDoc`)
    ▼
-WebVideoProject                          packages/web-protocol/timelineTypes.ts
-   │  sceneFrom() / sceneOf()            packages/song-video/src/sceneFrom.ts
+WebVideoProject                          apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts
+   │  sceneFrom() / sceneOf()            apps/k7-daw-frontend/packages/song-video/src/sceneFrom.ts
    ▼
 VideoScene        (plain structural type, media URLs, mute/solo/lens already folded)
    │
@@ -65,7 +65,7 @@ and carries the source in the document: the browser cannot open a module folder.
 and its arm state is per browser. The engine never hears about a camera.
 
 **Files are edited surgically.** Lane files carry comments; every writer in
-`packages/song-schema/src/yaml/videoTrackFile.ts` changes values in place rather than
+`apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts` changes values in place rather than
 re-serialising the file, and rounds times to the millisecond so a drag and a verb leave the same
 bytes.
 
@@ -73,24 +73,24 @@ bytes.
 
 | path | role |
 |---|---|
-| `packages/song-schema/src/yaml/entitySchemas.ts` | `VideoClipSchema`, `CaptionClipSchema` |
-| `packages/song-schema/src/yaml/placementSchema.ts` | `PlacementSchema` (one event, a sound event or a shot), `FadeSchema`, `SHOT_KEYS` |
-| `packages/song/src/pictureLanes.ts` | which lanes are picture lanes (`@meta/picture-track`), and each one's file |
-| `packages/song-schema/src/yaml/projectSchema.ts` | `viewport` (draw order is `trackOrder`'s picture rows, top in front), the `video` and `live-video` archetypes |
-| `packages/song-schema/src/yaml/moduleSchema.ts` | the picture module fields: `shader`, `shape`, `font`, `align`, `background`, `shadow`, `camera`, `frame`, `lut`, `video_source` |
-| `packages/song-schema/src/moduleTypes.ts` | `RENDER`, `VIDEO_OUT`, `CAM`, the `shaders` / `shapes` / `video_transitions` / `video_effects` categories, `SHADER_PARAMS`, `DISSOLVE`, `OVER` |
-| `packages/song-schema/src/keyframes.ts` | the `animate` schema and its evaluation |
-| `packages/song-schema/src/yaml/videoTrackFile.ts`, `packages/song-schema/src/yaml/videoKeys.ts` | surgical writers for lane files |
-| `packages/song-schema/src/aspect.ts` | the `16:9` / `9:16` shapes |
-| `packages/song-video/` | the picture compile and OTIO/EDL |
-| `packages/song/src/videoOutputs.ts` | writing the `RENDER → VIDEO_OUT` run into a project that lacks it |
-| `packages/song/src/videoSound.ts` | a picture lane's sound clips derived from its shots — its own `#audio` half, or a chain project's `video_source:` lane |
-| `packages/song/src/surfaces.ts` | `isVideoProject`, `hasPicture` |
-| `packages/song/src/scaffold.ts`, `packages/song/src/scaffoldLive.ts` | the `video` and `live-video` archetypes' files |
-| `packages/ui-eyes/` | the WebGL compositor, realtime and export |
-| `packages/video-prep/` | ffprobe / ffmpeg: optimized copies and proxies |
-| `packages/k7-plugins/src/video/` | the viewport surface, the scene adapter, picture mute/solo/lens rules, the camera relay |
-| `packages/commands/src/verbs/picture*.ts` | the `picture …` verbs |
-| `apps/k7/backend-rs/crates/k7-picture/src/lib.rs` | the server render |
-| `apps/k7/frontend/src/` | the timeline's picture lanes, drops, camera recording, `project export video` |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/entitySchemas.ts` | `VideoClipSchema`, `CaptionClipSchema` |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` | `PlacementSchema` (one event, a sound event or a shot), `FadeSchema`, `SHOT_KEYS` |
+| `apps/k7-daw-frontend/packages/song/src/pictureLanes.ts` | which lanes are picture lanes (`@meta/picture-track`), and each one's file |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/projectSchema.ts` | `viewport` (draw order is `trackOrder`'s picture rows, top in front), the `video` and `live-video` archetypes |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` | the picture module fields: `shader`, `shape`, `font`, `align`, `background`, `shadow`, `camera`, `frame`, `lut`, `video_source` |
+| `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` | `RENDER`, `VIDEO_OUT`, `CAM`, the `shaders` / `shapes` / `video_transitions` / `video_effects` categories, `SHADER_PARAMS`, `DISSOLVE`, `OVER` |
+| `apps/k7-daw-frontend/packages/song-schema/src/keyframes.ts` | the `animate` schema and its evaluation |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackFile.ts`, `apps/k7-daw-frontend/packages/song-schema/src/yaml/videoKeys.ts` | surgical writers for lane files |
+| `apps/k7-daw-frontend/packages/song-schema/src/aspect.ts` | the `16:9` / `9:16` shapes |
+| `apps/k7-daw-frontend/packages/song-video/` | the picture compile and OTIO/EDL |
+| `apps/k7-daw-frontend/packages/song/src/videoOutputs.ts` | writing the `RENDER → VIDEO_OUT` run into a project that lacks it |
+| `apps/k7-daw-frontend/packages/song/src/videoSound.ts` | a picture lane's sound clips derived from its shots — its own `#audio` half, or a chain project's `video_source:` lane |
+| `apps/k7-daw-frontend/packages/song/src/surfaces.ts` | `isVideoProject`, `hasPicture` |
+| `apps/k7-daw-frontend/packages/song/src/scaffold.ts`, `apps/k7-daw-frontend/packages/song/src/scaffoldLive.ts` | the `video` and `live-video` archetypes' files |
+| `apps/k7-daw-frontend/packages/ui-eyes/` | the WebGL compositor, realtime and export |
+| `apps/k7-daw-frontend/packages/video-prep/` | ffprobe / ffmpeg: optimized copies and proxies |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/video/` | the viewport surface, the scene adapter, picture mute/solo/lens rules, the camera relay |
+| `apps/k7-daw-frontend/packages/commands/src/verbs/picture*.ts` | the `picture …` verbs |
+| `apps/k7-daw-backend/packages/k7-picture/src/lib.rs` | the server render |
+| `apps/k7-daw-frontend/src/` | the timeline's picture lanes, drops, camera recording, `project export video` |
 

@@ -22,7 +22,7 @@ for t in tasks:
 local_resource(
     "k7-front",
     serve_cmd="node scripts/dev-front.mjs",
-    serve_dir="apps/k7/backend-rs",
+    serve_dir="apps/k7-daw-backend",
     labels=["apps"],
     allow_parallel=True,
 )

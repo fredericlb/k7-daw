@@ -36,7 +36,7 @@ to clear.
 
 **A basename is fixed for a router's life, not for the page's.** A host may cross to another project
 without a page load by mounting a new router keyed by the new basename — k7 does
-(`apps/k7/frontend/docs/shell.md`). The gate's own departures then have to be the host's too:
+(`apps/k7-daw-frontend/docs/shell.md`). The gate's own departures then have to be the host's too:
 `goToAddress` is a page load unless the host installs its own with `setAddressNavigator`. And such a
 host owes what the load used to do for free: `resetFileApi` between two projects, and a fresh
 `configureFileApi` for the next (`fileApi.md`).
@@ -45,7 +45,7 @@ host owes what the load used to do for free: `resetFileApi` between two projects
 nothing has to answer before a project can open, and a machine with no server is not a degraded
 one: an imported repository and a project made locally are the same thing, a folder with an
 `origin` if it has one. What that gives up is portability between accounts — a link pasted to
-somebody names a folder in yours (`apps/k7/frontend/docs/projects.md`).
+somebody names a folder in yours (`apps/k7-daw-frontend/docs/projects.md`).
 
 ## Where the project ends, and the app's route begins
 
@@ -60,7 +60,7 @@ which the MACHINE settles rather than the address:
 - the workspace's own folder is a project (`hiver.k7/` cloned as itself), so `.` names it;
 - it is not, and the workspace holds several projects. Then `.` names none of them, and
   `POST /open` resolves it: the active-project marker first, then the first project on disk,
-  then nothing at all — see `apps/k7/backend-rs/docs/file-workspaces.md`.
+  then nothing at all — see `apps/k7-daw-backend/docs/file-workspaces.md`.
 
 That last case is what a bare `/@local/band` is, and it is why the address may name a project
 without being the only thing that can choose one. A workspace holds several, the editor draws all
@@ -71,7 +71,7 @@ is where you ARRIVE, not a running account of where you are.
 ## A workspace with nothing in it
 
 `POST /open` answering `activeProject: null` is not a failure — a workspace is CREATED empty
-(`apps/k7/backend-rs/docs/file-workspaces.md`), so this is the first thing a new one does. The gate
+(`apps/k7-daw-backend/docs/file-workspaces.md`), so this is the first thing a new one does. The gate
 has a phase of its own for it and hands it to the host app through **`renderEmpty`**, because
 what a first project IS — which archetypes exist, which suffix ends it — is the app's vocabulary
 and not the gate's. k7 draws its wizard there; an app that passes nothing gets a sentence and
@@ -105,14 +105,14 @@ there — never through the gate.
 (the file hub answers it): every `@<library>/…` ref resolves against one of them, so without
 any the rig opens with every shared module missing, which reads as a broken rig rather than as an
 account nobody finished setting up — hence a screen of its own and no Retry, the answer staying the
-answer until an admin sets it in k7's Libraries page (`apps/k7/frontend/docs/projects.md`). A workspace
+answer until an admin sets it in k7's Libraries page (`apps/k7-daw-frontend/docs/projects.md`). A workspace
 on this machine is what a NEW account has — `Examples`, seeded with the demos — and a new account
 has no library: refusing it would put the demos behind the one piece of setup they exist to
 precede, and a song that needs a library says so itself, as an unresolved reference.
 
 `POST /open` asks the file hub to bring the origin's libraries to their latest on the way — waiting
 only for one not cloned yet — brings an admin's own clones of them to their remote, and takes out whatever `_libraries` submodule the workspace holds
-(`apps/k7/backend-rs/docs/libraries.md`). Nothing about the libraries rides on the request:
+(`apps/k7-daw-backend/docs/libraries.md`). Nothing about the libraries rides on the request:
 they are the server's, and it knows them.
 
 The bench is a `.k7` project, matched on the app as well as the name. Its wait is
@@ -124,7 +124,7 @@ along with it, since the machine is the side that says which address the bench a
 happens to start with `@`: the project part still ends at the last segment claiming the app's
 suffix, which is why `@local` puts the workspace name in front of an ordinary project path. The
 only rule either adds is a reader — `isBenchProject`, `localTarget` — and both live in
-`packages/web-protocol/projects.ts`, beside the address they read.
+`apps/k7-daw-frontend/packages/web-protocol/projects.ts`, beside the address they read.
 
 Two failures get a screen of their own rather than a diagnosis, because in both the machine
 answered and nothing is broken: an **address naming no workspace**, and a **project that is not in
@@ -133,7 +133,7 @@ action is to go and pick again, so that is the one button, and the file service'
 
 Arriving with **no** project in the address is not a failure to redirect away from — for k7 it
 IS the home page, `main.tsx` branching on `parseLaunch` before any gate is mounted (see
-`apps/k7/frontend/docs/projects.md`). For every OTHER app that mounts this gate, it is a
+`apps/k7-daw-frontend/docs/projects.md`). For every OTHER app that mounts this gate, it is a
 redirect there, through `projectsUrl`.
 
 There is deliberately no *second* picker: one list, in one app, is the whole point. Another app
@@ -220,7 +220,7 @@ which is a fresh open and therefore a fresh takeover.
 
 The screen is for an app that has nothing to show without its engine. k7 does not use it: it keeps
 the project open under a banner whose "take it back" is that deliberate reopen
-(`apps/k7/frontend/docs/shell.md`, "When somebody else takes the engine").
+(`apps/k7-daw-frontend/docs/shell.md`, "When somebody else takes the engine").
 
 ### Resolve the address, then claim
 
@@ -229,7 +229,7 @@ found and opening — and learns the phase from `onPhase`. A claim displaces who
 project or that engine, so one made for an address still resolving, or naming nothing, takes a
 machine from somebody for a project that does not exist, and its refusal can then stand in front of
 the "not in the workspace" screen. Claiming after the open costs nothing: the relay holds a driving
-socket's first frames until the claim lands (`apps/k7/backend-rs/docs/engine/proxy.md`).
+socket's first frames until the claim lands (`apps/k7-daw-backend/docs/engine/proxy.md`).
 
 ## Why this is a package and not two copies
 

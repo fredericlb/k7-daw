@@ -9,7 +9,7 @@ pub const SET_FILES: &[(&str, &str)] = &[
 // There is no arrangement, and nothing here says so: a project draws what it DECLARES,
 // and this one declares no `surfaces/timeline.k7x`. What makes it a set rather than a
 // bare rig is the `turntables` surface in `surfaces/` — and the PLAYLIST that surface
-// names, which is where the songs come from. See packages/song/docs/setProject.md.
+// names, which is where the songs come from. See apps/k7-daw-frontend/packages/song/docs/setProject.md.
 project({
   name: "@@NAME@@",
   // The rate the decks are played at. No tempo and no time signature: a set has no bars.
@@ -26,7 +26,7 @@ project({
 //
 // It does NOT say which songs the set plays: that is the playlist `surfaces/desk.k7x`
 // names, a file in `_playlists/` at the root of the repository, written in k7 under the
-// cog. See packages/song/docs/playlists.md.
+// cog. See apps/k7-daw-frontend/packages/song/docs/playlists.md.
 //
 // What is left here is the half a playlist has no place for. A cue belongs to the DESK
 // that plays a song, not to a list other sets read: two bands covering the same track
@@ -56,7 +56,7 @@ cues([])
 // while that track also reaches an audible output. A deck feeding nothing but a
 // crossfade would therefore be heard BESIDE it, raw, with nothing able to take it back:
 // not a mute, not a disconnect, not a routing — all four were measured, see
-// engine/k7-runtime/docs/sidechain.md. One input each, and the blend at the mixer.
+// apps/k7-daw-engine/k7-runtime/docs/sidechain.md. One input each, and the blend at the mixer.
 //
 // Each fade's `Level` IS its lane's gain, so its panel reads true on its own: 0 silent, 1
 // full. The desk drives the two in MIRROR — one control, deck A inverted — which is said
@@ -90,13 +90,13 @@ cues([])
 // means. Neither the channel fader nor the crossfader may take a deck out of your ears.
 //
 // Nothing about two is fixed. A third deck is a third lane, a third tempo and a second
-// meeting point; the desk reads whatever is here. See packages/song/docs/ports.md.
+// meeting point; the desk reads whatever is here. See apps/k7-daw-frontend/packages/song/docs/ports.md.
 //
 // EACH DECK IS FIVE LANES: the record, and one per separated stem. Only one side plays —
 // a separated song leaves the record's lane empty and the four parts SUM back to it; an
 // unseparated one is the other way round. How loud each part plays is its PLATTER's own
 // gain: 0 drops the instrument, 1 is as it was cut, 2 doubles it.
-// See packages/song-schema/docs/stems.md.
+// See apps/k7-daw-frontend/packages/song-schema/docs/stems.md.
 //
 // Five feeders is what makes `trim*` a MEETING POINT, and a meeting point breaks a run:
 // the trim, the EQ, the filter and the fade become a chain of their own — a bus — and
@@ -154,7 +154,7 @@ bypassed(["deckA", "stemDrumsA", "stemBassA", "stemOtherA", "stemVocalsA", "deck
 // The strips, for the SAME reason and NOT the same word: each one now feeds two buses (the
 // fade and the cue), so its own dry path would reach the master unfaded. `bypassed` cannot say
 // this — it would ALSO turn the EQ off, the chain being named after its first module. See
-// packages/song/docs/busOnly.md.
+// apps/k7-daw-frontend/packages/song/docs/busOnly.md.
 bus_only(["trimA", "trimB"])
 "#,
     ),
@@ -164,7 +164,7 @@ bus_only(["trimA", "trimB"])
 //
 // This file changes NOTHING about the sound: it says which of the graph's nodes are one
 // box and nothing else. Its plugs and its knobs come from the template it names, which
-// lives in the account's library — see packages/song/docs/assemblies.md.
+// lives in the account's library — see apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 uses("@k7-core/turntable")
 members({
   deck: "deckA",
@@ -194,7 +194,7 @@ members({
 //
 // This file changes NOTHING about the sound: it says which of the graph's nodes are one
 // box and nothing else. Its plugs and its knobs come from the template it names, which
-// lives in the account's library — see packages/song/docs/assemblies.md.
+// lives in the account's library — see apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 uses("@k7-core/turntable")
 members({
   deck: "deckB",
@@ -222,7 +222,7 @@ members({
         "surfaces/desk.k7x",
         r#"// The DESK, and what each of its controls drives.
 //
-// A surface: a special view the project asks its editor to draw (packages/song/docs/surfaces.md).
+// A surface: a special view the project asks its editor to draw (apps/k7-daw-frontend/packages/song/docs/surfaces.md).
 // `split` means a PANE — a slot in the layout, over the graph, the way the arrangement sits
 // in a song. Press its number, or fullscreen it, exactly as you would any other pane.
 //
@@ -239,12 +239,12 @@ members({
 // `param` is spelled as the module's ui.k7x binds it, so this file, the panel and a MIDI
 // map line up key for key.
 //
-// The control ids: see packages/k7-plugins/docs/turntables/controls.md for the list.
+// The control ids: see apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/controls.md for the list.
 //
 // `playlist` is what the song browser lists — the twelve songs to hand tonight rather
 // than the two hundred and seventy-nine on the volume. A NAME under `_playlists/` at the
 // root of the repository, not a path: the folder is fixed. Write the playlists themselves
-// in k7, under the cog. See packages/song/docs/playlists.md.
+// in k7, under the cog. See apps/k7-daw-frontend/packages/song/docs/playlists.md.
 //
 // Left commented because a new set has no set list yet — the desk says so on its browser
 // until this line names one, which is a sentence you can act on.

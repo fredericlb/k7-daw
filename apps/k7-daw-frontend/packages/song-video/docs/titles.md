@@ -8,7 +8,7 @@ Two kinds of text reach the picture, for two different jobs:
 - **captions** are a subtitle FILE, `.srt` or `.vtt`, placed on a picture lane as a clip, with
   every cue showing at its own time.
 
-Both are set by one function (`packages/ui-eyes/src/text.ts`), so a line wraps, aligns and sits in
+Both are set by one function (`apps/k7-daw-frontend/packages/ui-eyes/src/text.ts`), so a line wraps, aligns and sits in
 its box the same way whichever made it.
 
 ## A title is a block, not a line
@@ -69,7 +69,7 @@ dropped without a word. Markup in a cue is stripped, a cue being drawn as plain 
 ## How a cue reaches the frame
 
 A cue is static while it is on, so it is drawn ONCE into a viewport-sized canvas and uploaded the
-way a still is (`packages/ui-eyes/src/captionFrames.ts`): no video element, no decoder, and between
+way a still is (`apps/k7-daw-frontend/packages/ui-eyes/src/captionFrames.ts`): no video element, no decoder, and between
 two cues the lane carries nothing. The export draws the same frames.
 
 ## What a caption does not do, and where it does not go

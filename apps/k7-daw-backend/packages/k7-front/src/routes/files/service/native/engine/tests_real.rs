@@ -56,7 +56,7 @@ async fn make(tag: &str, lane: bool) -> Account {
             "modules({ gtr: [\"@workspace/io/IN:in-1\"], \"@workspace/io/IN:in-1\": [\"MIX\"] })\n",
         )
         .unwrap();
-        let core = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../../../k7-core");
+        let core = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../../k7-core");
         std::fs::create_dir_all(dir.join("libraries")).unwrap();
         #[cfg(unix)]
         std::os::unix::fs::symlink(core, dir.join("libraries/k7-core")).unwrap();
@@ -79,7 +79,7 @@ async fn make(tag: &str, lane: bool) -> Account {
     .into_iter()
     .map(|(k, v)| (k.to_string(), v))
     .collect();
-    let code_root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
+    let code_root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let files_root = slashed(&dir.join("home/workspace"));
     let acct = crate::routes::files::service::Acct::make(
         env.clone(),

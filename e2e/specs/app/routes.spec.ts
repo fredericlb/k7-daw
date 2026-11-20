@@ -58,11 +58,11 @@ test("/settings draws every section with its controls, a tab at a time", async (
         page.getByRole("heading", { level: 2, name, exact: true }),
       ).toBeVisible();
   };
-  // General opens first: the language and the AI key; the separation chains are the tray engine page's (apps/k7/frontend/docs/settings.md).
+  // General opens first: the language and the AI key; the separation chains are the tray engine page's (apps/k7-daw-frontend/docs/settings.md).
   await sections(["Language", "AI"]);
   await expect(page.getByRole("button", { name: "Français" })).toBeEnabled();
   await expect(page.getByRole("textbox", { name: "sk-ant-…" })).toBeVisible();
-  // Devices: this device's paired devices (apps/k7/frontend/docs/settings.md).
+  // Devices: this device's paired devices (apps/k7-daw-frontend/docs/settings.md).
   await page.getByRole("tab", { name: "Devices" }).click();
   await sections(["Paired devices"]);
   await expect(page).toHaveURL(/[?&]tab=devices/);

@@ -14,7 +14,7 @@ const TargetSchema = z
   })
   .strict();
 
-/** What one control drives: a target, and at most one SECOND — see packages/song/docs/setProject.md. */
+/** What one control drives: a target, and at most one SECOND — see apps/k7-daw-frontend/packages/song/docs/setProject.md. */
 const ViewBindingSchema = TargetSchema.extend({
   also: TargetSchema.optional(),
 }).strict();

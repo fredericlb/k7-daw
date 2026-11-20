@@ -56,7 +56,7 @@ export const TRACK_UI: WebModuleUI = {
 };
 
 /** …and the MAIN OUTPUT's: the song's output level on an ORDINARY bind. See @studio/song's docs/masterVolume.md. */
-/** The bind prefix a PROJECT setting carries: `@project:aspect` FIRES `project aspect <value>` (apps/k7/frontend/docs/picture.md). */
+/** The bind prefix a PROJECT setting carries: `@project:aspect` FIRES `project aspect <value>` (apps/k7-daw-frontend/docs/picture.md). */
 export const PROJECT_BIND = "@project:";
 
 /** The project setting a bind names, or null for any other bind. */
@@ -66,7 +66,7 @@ export const projectBindField = (bind: string | undefined): string | null => {
   return field.length ? field : null;
 };
 
-/** What the RENDER card carries: the FRAME's shape, song-schema's `ASPECTS` spelled again (apps/k7/frontend/docs/picture.md). */
+/** What the RENDER card carries: the FRAME's shape, song-schema's `ASPECTS` spelled again (apps/k7-daw-frontend/docs/picture.md). */
 export const RENDER_UI: WebModuleUI = {
   cols: 2,
   rows: 1,
@@ -139,7 +139,7 @@ export const PADS_UP = 3;
 /** The rack's first note with nothing on it yet — song-edit's rackTaps.ts starts there too. */
 const FIRST_RACK_NOTE = 36;
 
-/** An SFZ kit's level, the SFZ player's own trim, and its range in dB — engine/k7-runtime/engine/SfzPlugin.cpp. */
+/** An SFZ kit's level, the SFZ player's own trim, and its range in dB — apps/k7-daw-engine/k7-runtime/engine/SfzPlugin.cpp. */
 const KIT_VOLUME = { bind: "Volume", min: -40, max: 12 } as const;
 /** …and one pad's, the player's gain on that pad's KEY, in whole dB — the same file. */
 const KIT_PAD_GAIN = { min: -24, max: 12, step: 1 } as const;

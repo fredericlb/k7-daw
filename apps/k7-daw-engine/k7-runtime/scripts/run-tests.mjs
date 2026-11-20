@@ -6,7 +6,7 @@
 // and a network — so an unconfigured tree SKIPS, loudly, with the command to fix it. That makes this
 // a non-blocking check in the sense docs/dev.md already uses for lint:dead.
 //
-// Why the `^studio_` filter is load-bearing, and what the skip costs: ../../../docs/tests.md.
+// Why the `^studio_` filter is load-bearing, and what the skip costs: ../../../../docs/tests.md.
 
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
@@ -34,7 +34,7 @@ function readCache() {
 
 const cache = readCache();
 if (cache === null) {
-  console.log(`\n  SKIPPED — engine/k7-runtime has no build/${PRESET}.`);
+  console.log(`\n  SKIPPED — apps/k7-daw-engine/k7-runtime has no build/${PRESET}.`);
   console.log("  The C++ tests need a configured tree; configuring fetches Tracktion.");
   console.log(`\n    cmake --preset ${PRESET}\n`);
   console.log("  Then `npm run test --workspace k7-runtime` runs them. See docs/tests.md.\n");

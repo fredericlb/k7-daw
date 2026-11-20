@@ -7,7 +7,7 @@ import { join } from "node:path";
 import { CRATES, rustSourceHash, typesHash } from "./rustSources.mjs";
 
 const PKG = join(import.meta.dirname, "..");
-const ROOT = join(PKG, "..", "..");
+const ROOT = join(PKG, "..", "..", "..", "..");
 const RUST = join(ROOT, CRATES[0]);
 const TARGET = "wasm32-unknown-unknown";
 const TYPES = join(PKG, "src", "types");

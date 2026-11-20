@@ -163,7 +163,7 @@ export function useTimelineDrop(
         // A length the browser could not read: the next one starts a still's worth later rather than on top.
         at += length ?? STILL_SECONDS;
       }
-      // 4. …and a shot's SOUND, which the engine plays from an audio lane (packages/song/docs/videoSound.md).
+      // 4. …and a shot's SOUND, which the engine plays from an audio lane (apps/k7-daw-frontend/packages/song/docs/videoSound.md).
       const pictured = plan.place
         .filter((p) => kindOf.get(p.id) === "video")
         .map((p) => p.lane);

@@ -3,7 +3,7 @@
 // What this file adds to the graph beside it: the named plugs a cable may reach, and the params
 // promoted onto the box's own face. Everything else about the appliance — why the trim heads the
 // strip, why the echo comes after the fader, why the fade is per deck rather than one crossfade —
-// is in packages/song/docs/setProject.md, which describes the same shape written out by hand.
+// is in apps/k7-daw-frontend/packages/song/docs/setProject.md, which describes the same shape written out by hand.
 label("Turntable")
 // No input: a turntable is a SOURCE. Its records arrive on its platters, not down a cable.
 inputs([])

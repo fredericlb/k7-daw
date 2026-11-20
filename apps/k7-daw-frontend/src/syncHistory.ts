@@ -88,7 +88,7 @@ export interface HistoryClient {
 
 const ws = (workspace: string) => encodeURIComponent(workspace);
 
-/** The device's routes, on the open project's file service (`/history/*`, apps/k7/backend-rs/docs/files/history.md). */
+/** The device's routes, on the open project's file service (`/history/*`, apps/k7-daw-backend/docs/files/history.md). */
 function deviceCall<T>(path: string, body?: unknown): Promise<T> {
   const t = projectTransport();
   if (!t) return Promise.reject(new HistoryError("no file service", 0, ""));

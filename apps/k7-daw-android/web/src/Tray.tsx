@@ -1,6 +1,6 @@
 // Tray.tsx — this page's one screen, seen while k7 does not cover it: the supervisor's snapshot
 // and the few commands a phone needs — pair a LAN device, trust a private CA, quit.
-// With k7 open, its settings draw the same (apps/k7/frontend/src/settings/AndroidEngineSection.tsx).
+// With k7 open, its settings draw the same (apps/k7-daw-frontend/src/settings/AndroidEngineSection.tsx).
 // The forms are collapsed: the phone's own backend needs none of them, and the first screen is the engine's state.
 
 import { Capacitor } from "@capacitor/core";
@@ -10,7 +10,7 @@ import { type ReactNode, useEffect, useState } from "react";
 import { K7Runtime, type SupervisorState } from "./native";
 import { Pairing } from "./Pairing";
 
-/** The iOS app's engine trusts a CA set it ships, not the system's (engine/k7-runtime/docs/ios.md). */
+/** The iOS app's engine trusts a CA set it ships, not the system's (apps/k7-daw-engine/k7-runtime/docs/ios.md). */
 const ON_IOS = Capacitor.getPlatform() === "ios";
 const SYSTEM_CAS = ON_IOS ? "The built-in CAs" : "Android's CAs";
 const SYSTEM_CAS_INLINE = ON_IOS ? "the built-in CAs" : "Android's CAs";

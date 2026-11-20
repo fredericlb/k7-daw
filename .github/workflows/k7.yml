@@ -1,4 +1,4 @@
-# k7 CI — lint, typecheck and the tests of apps/k7, the shared tier and the native supervisor.
+# k7 CI — lint, typecheck and the tests of the frontend and its packages and the native supervisor.
 #
 # It runs on every push to main and every `vX.Y.Z` tag, with no path filter. Its JOBS stay narrow:
 # not the whole repo's 62 test tasks, and no C++ engine.
@@ -31,14 +31,14 @@ jobs:
       - uses: ./.github/actions/node
 
 
-      # Only apps/k7 and packages are named, so `engine/k7-runtime`'s C++ test script never runs here.
+      # Only the frontend folder (its packages too) is named, so `apps/k7-daw-engine/k7-runtime`'s C++ test script never runs here.
       - name: test
-        run: npm run test --workspace=apps/k7 --workspace=packages --if-present
+        run: npm run test --workspace=apps/k7-daw-frontend --if-present
 
       # `build` is `tsc --noEmit` for every package; for web/frontend it is a real
       # `vite build && tsc --noEmit`, which is a stronger gate and worth the minute.
       - name: typecheck + build
-        run: npm run build --workspace=apps/k7 --workspace=packages --if-present
+        run: npm run build --workspace=apps/k7-daw-frontend --if-present
 
   supervisor:
     name: supervisor (native)
@@ -48,19 +48,19 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ninja-build
 
       - name: build
-        working-directory: engine/k7-supervisor
+        working-directory: apps/k7-daw-engine/k7-supervisor
         run: |
           cmake --preset dev-gcc
           cmake --build --preset dev-gcc
 
       - name: unit tests
-        run: engine/k7-supervisor/build/dev-gcc/k7_supervisor_tests
+        run: apps/k7-daw-engine/k7-supervisor/build/dev-gcc/k7_supervisor_tests
 
       - uses: ./.github/actions/node
 
       # The suites find the built `tunnel_harness` and run every case against it as well as the Node agent.
       - name: tunnel conformance
-        working-directory: packages/engine-tunnel
+        working-directory: apps/k7-daw-frontend/packages/engine-tunnel
         run: npx vitest run
 
   lint:

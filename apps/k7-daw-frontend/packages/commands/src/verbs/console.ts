@@ -1,7 +1,7 @@
 // console.ts — `project console`: which summing CONSOLE runs over the whole mix, written to
 // `project.console`. A system is named whole, never its two halves, so they cannot be mismatched;
 // `none` takes the key out. Always a reload, since every lane gains or loses a plugin.
-// See packages/song/docs/console.md.
+// See apps/k7-daw-frontend/packages/song/docs/console.md.
 
 import { join } from "node:path";
 import { consoleSystems } from "@studio/song/console";

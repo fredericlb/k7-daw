@@ -119,7 +119,7 @@ export interface VideoLayer {
   /** A LIVE picture fills this layer: the camera's LABEL, or "" for whichever is default.
    *
    * A label rather than a deviceId because an id is salted per browser and per origin — the
-   * runtime matches this against what it enumerates. See packages/song/docs/camera.md. */
+   * runtime matches this against what it enumerates. See apps/k7-daw-frontend/packages/song/docs/camera.md. */
   camera?: string;
   x: number;
   y: number;

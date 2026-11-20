@@ -2,7 +2,7 @@
 name = "song"
 version = "0.1.0"
 edition = "2024"
-description = "The song compiler in Rust: the Source it reads through, its cache, the file readers, the compile to the engine's ProjectDoc, the views, the session a host calls, after ../src/ and song-schema's yaml readers."
+description = "The song compiler in Rust: the Source it reads through, its cache, the file readers, the compile to the engine's ProjectDoc, the views, the session a host calls, after ../../k7-daw-frontend/packages/song/src/ and song-schema's yaml readers."
 publish = false
 
 [lib]
@@ -10,8 +10,8 @@ path = "src/lib.rs"
 crate-type = ["rlib"]
 
 [dependencies]
-song-schema = { path = "../../song-schema/rust" }
-k7x = { path = "../../k7x/rust" }
+song-schema = { path = "../song-schema" }
+k7x = { path = "../k7x" }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
 indexmap = { version = "2", features = ["serde"] }

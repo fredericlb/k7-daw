@@ -1,6 +1,6 @@
 // boards.mjs — writes one static "Interactions · <screen>" board (Ix<nn>.dc.html) per drawn screen,
 // plus entries.json (each board's place on the canvas), from the Sheet's CSV export.
-// Publishing them to the design canvas is a manual Artifact step: apps/k7/frontend/docs/interactionsSheet.md.
+// Publishing them to the design canvas is a manual Artifact step: apps/k7-daw-frontend/docs/interactionsSheet.md.
 // Usage: node scripts/interactions/boards.mjs <out dir> [csv dir]
 
 import { mkdirSync, writeFileSync } from "node:fs";

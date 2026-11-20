@@ -6,8 +6,8 @@ key and no libraries pointer: all three belong to the machine that holds the wor
 | question | who answers |
 |---|---|
 | which projects does this account have | the file service, from the workspaces on its machine — a project is a folder there |
-| how is a project addressed | `/@local/<espace de travail>/<projet>`, naming that folder (`packages/project-shell/docs/launch.md`) |
-| the device's libraries | the file hub's libraries' service: `GET /account/libraries`, one list beside the account folders, frozen to the bundled seed (`apps/k7/backend-rs/docs/libraries.md`) |
+| how is a project addressed | `/@local/<espace de travail>/<projet>`, naming that folder (`apps/k7-daw-frontend/packages/project-shell/docs/launch.md`) |
+| the device's libraries | the file hub's libraries' service: `GET /account/libraries`, one list beside the account folders, frozen to the bundled seed (`apps/k7-daw-backend/docs/libraries.md`) |
 
 ## Why the file service, and not the backend
 
@@ -15,7 +15,7 @@ A register here would have to be consulted before a project could open, would gi
 only resolves while a server answers, and would send a private key between two services to make
 either work. With the machine holding all of it, a machine with no server is not a degraded one: an
 imported repository is the same thing as a project made locally — a folder, with an `origin` if it
-has one. `apps/k7/frontend/docs/projects.md` is the page for the screen that lists them.
+has one. `apps/k7-daw-frontend/docs/projects.md` is the page for the screen that lists them.
 
 ## The account's service starts before its first list
 

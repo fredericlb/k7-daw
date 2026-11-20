@@ -1,6 +1,6 @@
 // CertTrust.swift — whether a certificate may issue others, read from its DER: iOS has no public API for a
 // certificate's extensions. TrustedCas keeps Android's rule with it: an imported CA signs for any host its
-// leaves name, an imported NON-CA is trusted as that exact certificate only. See engine/k7-runtime/docs/ios.md.
+// leaves name, an imported NON-CA is trusted as that exact certificate only. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Foundation
 

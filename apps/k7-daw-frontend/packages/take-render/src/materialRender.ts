@@ -1,7 +1,7 @@
 // materialRender.ts — the AUDIO half of `selection consolidate`. The sequence half is pure text
 // and lives in @studio/song-edit's materialCut.ts; audio has to be RENDERED, so it lives here
 // beside the bounce, which already owns "write new material through the engine". An audio
-// `event split` renders nothing and is materialCut.ts's. See packages/song/docs/materialCut.md.
+// `event split` renders nothing and is materialCut.ts's. See apps/k7-daw-frontend/packages/song/docs/materialCut.md.
 
 import { join } from "node:path";
 import { clipDoc, emptyDoc, trackDoc } from "@studio/engine-protocol/build";

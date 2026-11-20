@@ -1,7 +1,7 @@
 # The module file
 
-The rationale behind `packages/song-schema/src/yaml/moduleSchema.ts` and
-`packages/song-schema/src/yaml/moduleFile.ts` — a `module.k7x`'s shape, the panel and the
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts` and
+`apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleFile.ts` — a `module.k7x`'s shape, the panel and the
 controller beside it, and the reader/writer pair over the lot.
 
 ## What the schema does not check
@@ -14,7 +14,7 @@ the project and live in TS instead — `graph.ts`'s `validate()` and `nodeProjec
 `mandatory` is an INPUT's business — an output is offered, never required — and defaults to true
 where it is read, so a port a module bothered to name has to be fed unless it says otherwise. A
 crossfade's second input is exactly the case for `mandatory: false`: wiring one side and leaving the
-other silent is a legitimate state, not a half-built chain (`packages/song/docs/ports.md`).
+other silent is a legitimate state, not a half-built chain (`apps/k7-daw-frontend/packages/song/docs/ports.md`).
 
 `inputs:` / `outputs:` are declared on the module because the folder says what a module IS, not how
 many wires it takes: a crossfade is an audio effect like any other and needs two audio inputs, which
@@ -28,16 +28,16 @@ is the point — a fader you cannot make tall is a slider stood on its end.
 
 A `filepicker` picks a FILE the module carries for a file-valued param (`bind: model`). Its own type
 rather than a flavour of dropdown: it lists a folder tree with a search field, not a set of values
-the panel author wrote down (`packages/song/docs/filePicker.md`). A file picker with nothing to pick
+the panel author wrote down (`apps/k7-daw-frontend/packages/song/docs/filePicker.md`). A file picker with nothing to pick
 FOR is a button that cannot say what it would write — the param it binds is where the chosen file
 lands, and there is no default worth guessing — so `bind` is required on one.
 
 A knob may carry `pair`: the DRY param of a crossfade knob, whose `bind` is the wet one — one
-control for a module with dry and wet levels and no mix (`packages/ui-chains-react/docs/widgets.md`).
+control for a module with dry and wet levels and no mix (`apps/k7-daw-frontend/packages/ui-chains-react/docs/widgets.md`).
 Only a knob takes it, and never equal to its own `bind`.
 
 `mix:` (0..1) is an EFFECT's dry/wet, made by the engine around its plugin and absent for all wet
-(`engine/k7-runtime/docs/mix.md`); a panel binds it as `@mix`. `input_volume:` and `output_volume:`
+(`apps/k7-daw-engine/k7-runtime/docs/mix.md`); a panel binds it as `@mix`. `input_volume:` and `output_volume:`
 (dB, −60..+12, absent for 0) are the levels into an audio module and out of anything with audio
 out, on the same stage; a panel binds them as `@input-volume` / `@output-volume`, and the plugin's
 own `Input`/`Output`-like params are refused in `params:` just as its own dry/wet is. An effect with one input whose
@@ -50,12 +50,12 @@ A panel may have **tabs**: `tabs:`, an ordered list beside `widgets`, each a `na
 type — so no row of the grid is given up to it, and a tab's widgets use the grid from row 0. A
 widget id is unique across the panel, every tab included. The bind lookups above read every tab
 (`panelWidgets` in `@studio/graph-model/panel`), since a control on a closed tab is still the
-module's. A one-page panel writes no `tabs:` (`packages/ui-module-builder/docs/pages.md`).
+module's. A one-page panel writes no `tabs:` (`apps/k7-daw-frontend/packages/ui-module-builder/docs/pages.md`).
 
 The panel is the HORIZONTAL layout, at most 4 rows. An optional **`vertical:`** block is the same
 panel at most 4 columns wide — `cols`, `rows`, `widgets` and `tabs`, the tabs the panel's by name
 and in order, which `UISchema` refuses otherwise. It is omitted when the panel fits both limits.
-What each page must offer in both is `packages/ui-module-builder/docs/layouts.md`.
+What each page must offer in both is `apps/k7-daw-frontend/packages/ui-module-builder/docs/layouts.md`.
 
 A `group` is a coloured frame — `color` (`#rgb`, `#rrggbb` or `#rrggbbaa`) and an optional `label`
 — drawn UNDER the widgets that lie wholly inside its box: a DRY/WET pair, an envelope's four
@@ -64,7 +64,7 @@ panel's widget map, because every lookup of a widget by its `bind` — MIDI cont
 arrow's target, a folder-backed dropdown's options — reads the panel's widget maps and nothing
 nested in a widget; nesting them in the group would hide them from all of it. A widget sits wholly inside a group or wholly outside it,
 and two groups never overlap: that is the one exception to "widgets never overlap", and the
-builder's checks enforce it (`packages/ui-module-builder/docs/builder.md`).
+builder's checks enforce it (`apps/k7-daw-frontend/packages/ui-module-builder/docs/builder.md`).
 
 A group MAY `bind` an on/off param — the section's own enable, a chorus's `On`, a filter's
 `Bypass`. The panel then draws the switch at the group's top-left corner and greys the section
@@ -87,12 +87,12 @@ module without touching hand-drawn work. It says nothing about WHICH module it d
 sits in does (`uiLibrary.ts`).
 
 A module's named settings are NOT in its folder: a preset is a file of its own, under a presets
-tree keyed by the module's ref (`../src/presets.ts`, `packages/song/docs/userPresets.md`). A
+tree keyed by the module's ref (`../src/presets.ts`, `apps/k7-daw-frontend/packages/song/docs/userPresets.md`). A
 `presets.k7x` left in a module folder is a reserved name that nothing reads.
 
 `controller.k7x` says which MIDI control moves which of the module's params. The key is the param —
 one control per param, because two controls fighting over one value is a bug rather than a feature
-(`packages/song/docs/controller.md`). Its channel is 1..16 as a musician counts them, not 0..15 as
+(`apps/k7-daw-frontend/packages/song/docs/controller.md`). Its channel is 1..16 as a musician counts them, not 0..15 as
 the wire does: this file is read by people.
 
 ## Automations
@@ -107,7 +107,7 @@ synth follows that synth's notes.
 An ALTERNATIVE is a module partial: the same fields, minus the two that say where a module comes
 from. `MODULE_FIELDS` is written once and spread into both schemas, so a field added to a module is a
 field an alternative can set, without anyone remembering to
-(`packages/song/docs/alternatives.md`).
+(`apps/k7-daw-frontend/packages/song/docs/alternatives.md`).
 
 `plugin:` is deliberately open — a plugin's shape is the ENGINE's business, matched as strings
 against its scan cache.
@@ -136,7 +136,7 @@ thing is steered by, and this decides which program is COMPILED. The four knobs 
 a folder the module carries, so a value with a separator in it is refused here rather than resolved
 into somebody else's module. Absent is a real state — a shader node with nothing picked passes its
 picture through untouched, which is what a node you have just added should do
-(`packages/song-video/docs/shaders.md`).
+(`apps/k7-daw-frontend/packages/song-video/docs/shaders.md`).
 
 ## `params:`, and the few that are files
 
@@ -145,7 +145,7 @@ model — a `.nam`, or an AIDA-X / Proteus `.json` — in this module's own `ass
 plugin's controls shown in the panel beside Input and Output; a top-level field of its own would be
 a second kind of thing to find, edit and merge. Only the file-valued ones are strings
 (`moduleTypes.FILE_PARAMS`), and `nodeProject` lifts them out before the wire, which stays numeric
-(`packages/song/docs/moduleAssets.md`).
+(`apps/k7-daw-frontend/packages/song/docs/moduleAssets.md`).
 
 ## `cold:`
 
@@ -154,7 +154,7 @@ before it can produce any of it. Normalisation is the plain case — the gain de
 sample, which may be the last one. Not "expensive": a cold module run live would not be slow, it
 would be wrong, since the answer does not exist yet. It is a property of the MODULE, so it is
 inherited by every use of it — deliberately not in `moduleResolve`'s `OWN_ONLY`, since a node of a
-cold module is cold (`packages/song/docs/coldModules.md`).
+cold module is cold (`apps/k7-daw-frontend/packages/song/docs/coldModules.md`).
 
 ## The io fields
 
@@ -169,7 +169,7 @@ Project-relative, and named `source` for the same reason a clip's audio is: it i
 overwritten by it.) It may be ABSENT, and that is the useful case
 rather than an oversight: a chain template's input names none, because the template is generic and
 whoever applies it supplies the audio — a song hands over its master
-(`packages/song/docs/fileInput.md`).
+(`apps/k7-daw-frontend/packages/song/docs/fileInput.md`).
 
 `monitor:` is whether you hear the input while it plays. A BOOLEAN is the everyday answer —
 `monitor: true` is what a person writing this file means — and the three-state spelling is there
@@ -189,7 +189,7 @@ named numbers. The base is the opaque state under them — UNDER, and that order
 design: the engine loads the base and then applies `params:` on top (`applyPluginParams` in
 `EditBuilder`, "text params override the preset"). So a base decides only what the module could not
 have said in text, and every value the module DID author still wins. Picking a different base never
-silently moves a param somebody set (`packages/song/docs/userPresets.md`).
+silently moves a param somebody set (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`).
 
 ## `content:` — a note on the graph
 
@@ -197,7 +197,7 @@ Multiline free text, shown as it is written on the node itself. A note is a THIN
 wired from what it is about, and read where you are already looking rather than in a panel you have
 to go to. It belongs to a NODE in practice — every note is a node of `@meta/doc` — but it is
 declared on the module like any other setting, because that is what makes a node able to override it
-(`packages/song/docs/docModules.md`). There is no `docs:` and no `todos:`, here or on a lane, and
+(`apps/k7-daw-frontend/packages/song/docs/docModules.md`). There is no `docs:` and no `todos:`, here or on a lane, and
 `.strict()` refuses a file that still carries either.
 
 ## A lane's own fields
@@ -206,7 +206,7 @@ They are accepted on any module and meaningful only on one that extends a `@meta
 schema deliberately does not police that: it validates ONE file, and which module a name extends is
 a question about the whole project. `graph.ts`'s `validate()` reports an `events:` on a reverb,
 exactly as it reports a `channel:` on something that is not an input — same rule, same place
-(`packages/song/docs/trackModules.md`).
+(`apps/k7-daw-frontend/packages/song/docs/trackModules.md`).
 
 `events:` and not `clips:`, because a CLIP is the material — `clips/<id>.k7x`, a source and a
 window into it — and one clip is placed on a lane any number of times. Calling both of them clips
@@ -226,7 +226,7 @@ a project-relative path. Its presence IS the frozen state — there is no second
 it. It sits on a module rather than on a lane because a freeze is a POINT IN THE GRAPH: what it
 replaces is everything whose signal reaches here. It is in `MODULE_FIELDS` so an alternative may
 carry its own: two sets of settings are two sounds, and a render of one is not a render of the other
-(`packages/song/docs/freeze.md`).
+(`apps/k7-daw-frontend/packages/song/docs/freeze.md`).
 
 ## Writing the file back
 
@@ -268,11 +268,11 @@ The binding goes **where the resolved node reads it**. A set that names another 
 makes the node that module, keeping only its identity — a list on the node's own fields is not
 read at all, so the binding goes in the set that is on. A patch set inherits the node's list, since
 `mergeAuthored` replaces `automations` whole rather than merging it, so a binding goes on the node
-unless that set already holds a list of its own, which would hide it (`packages/song/docs/alternatives.md`).
+unless that set already holds a list of its own, which would hide it (`apps/k7-daw-frontend/packages/song/docs/alternatives.md`).
 
 ## A placement
 
-`packages/song-schema/src/yaml/placementSchema.ts` is its own file because a placement is not a
+`apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` is its own file because a placement is not a
 track's alone: a lane is a module, so `moduleSchema` is what carries `events:` and this is what it
 imports.
 
@@ -289,7 +289,7 @@ sample or into the notes, shared by every placement of it — and a placement ma
 words for ITSELF. The effective window is the most restrictive pair: the larger `from`, the smaller
 `to`. An event can therefore only narrow what the material already plays, never reach outside it —
 and `event resize` writes THESE, which is what makes a resize one event's edit instead of every
-placement's (`packages/song/docs/clipResize.md`).
+placement's (`apps/k7-daw-frontend/packages/song/docs/clipResize.md`).
 
 A placement has no `length` and no `offset`: its extent is derived, `loop` × the effective
 window, and there is no second place for it to disagree with the material. `disabled` silences THIS
@@ -299,7 +299,7 @@ position, length and fades survive being switched off and back on.
 `warp` says whether THIS event plays the material's stretch map, absent meaning yes. `warp: false` is
 the only value that says anything; `true` is the default written out. The polarity is that way round
 because a warp belongs to the CLIP — one map, shared by every placement of it
-(`packages/song/docs/warp.md`) — and this is a placement declining it. A `noWarp: true` would name
+(`apps/k7-daw-frontend/packages/song/docs/warp.md`) — and this is a placement declining it. A `noWarp: true` would name
 the same fact as a double negative, and a reader would have to work out which way `noWarp: false`
 pointed. What it is for: one map fits the song the clip was warped INTO, and a second use of that
 clip somewhere else wants the sample at its own rate, without a copy of the file.
@@ -307,7 +307,7 @@ clip somewhere else wants the sample at its own rate, without a copy of the file
 `TIMECODE_KEYS` is what every writer in the repo quotes through. It carries the window's two words —
 on a material file AND on a placement, the same trap for the same reason, and a NUMBER under those
 keys is untouched since it is seconds — plus a curve point's `time`, which is not a placement's key
-but is the same trap on the same kind of value (`packages/song/docs/curves.md`).
+but is the same trap on the same kind of value (`apps/k7-daw-frontend/packages/song/docs/curves.md`).
 
 ## Alternatives
 
@@ -320,12 +320,12 @@ is known by its position, which is what makes trying a second set of settings co
 The module's own fields are the first alternative and are not repeated in `alternatives:`; those are
 the ones after it. `alternative` picks one, by name or by 1-based position, and absent means the
 first — which is why a project that never uses this keeps exactly the file it had
-(`packages/song/docs/alternatives.md`).
+(`apps/k7-daw-frontend/packages/song/docs/alternatives.md`).
 
 `status:` is here and not in `MODULE_FIELDS`, which is what an ALTERNATIVE may restate: a module's
 attribute sets are ways of playing the same block, and "this way of playing it is hidden from the
 palette" is not a thing anybody means. It is one fact about the module, said once
-(`packages/song/docs/moduleStatus.md`).
+(`apps/k7-daw-frontend/packages/song/docs/moduleStatus.md`).
 
 A module has no display name of its own: what a picker, a card or the file tree shows is its file
 name — the ref's last segment — so there is one name to keep right, the one on disk.

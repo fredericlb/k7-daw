@@ -32,7 +32,7 @@ Two things follow, and only the first is obvious:
   buffering in both directions. It is several times an ASIO driver's, and that difference
   is the whole of the complaint.
 * **`bufferSize` reads the same either way.** The engine's quality band (`audioTiming` →
-  `packages/web-protocol/quality.ts`) is computed from buffer and rate, and both are
+  `apps/k7-daw-frontend/packages/web-protocol/quality.ts`) is computed from buffer and rate, and both are
   identical on the two devices, so the badge shows the block arithmetic while the truth is
   several times that. The buffer size is not the latency, and nothing on the wire carries what JUCE does
   know (`getInputLatencyInSamples`, `getOutputLatencyInSamples`) — a gap listed below.
@@ -64,12 +64,12 @@ A ranked interface (`audioPriority`, below) still moves the engine afterwards.
 
 `set-audio-device` switches the RUNNING engine and is forgotten the moment it exits — in dev
 the engine exits on every native rebuild, so a pick made that way lasts minutes. The first row is
-what survives it: the field in `preferences.k7x` (`packages/song/src/preferences.ts`) is replayed
+what survives it: the field in `preferences.k7x` (`apps/k7-daw-frontend/packages/song/src/preferences.ts`) is replayed
 by `engineLink` on every connect.
 
 That second row is an ordered LIST, best first, and no longer a pick plus a fallback: the
 engine goes to the highest-ranked interface actually plugged in
-(`engine/k7-supervisor/docs/supervisorPolicy.md`).
+(`apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`).
 
 It does not cover for the first: its setting is written on the
 engine's own machine, so a hosted browser cannot reach it.
@@ -165,7 +165,7 @@ looking for one. Three things about it are load-bearing.
 Pairing **destroys** the two mono devices: their names merge, and a device is identified by its
 name (`"wavein_" + hash(name)`). A module still saying `channel: [2]` after 1+2 are paired matches
 no device and goes quiet with no error. The surface that offers the act says so before it does it;
-see `packages/ui-module-builder/docs/inputChannels.md`.
+see `apps/k7-daw-frontend/packages/ui-module-builder/docs/inputChannels.md`.
 
 ### …and it is remembered exactly where the device choice is
 
@@ -198,7 +198,7 @@ stays as inert as `Settings.xml`.
 least two Oboe bursts instead, and grows on underruns — `docs/android.md`), and it decides the
 engine's quality band — which decides what you can DO here. A browser reads `2 × buffer / rate` as
 the audio half of the link's latency (a block in, a block out) and adds its measured round trip;
-under 20 ms is playable, see `packages/web-protocol/docs/quality.md`. At 48 kHz, 256 frames is
+under 20 ms is playable, see `apps/k7-daw-frontend/packages/web-protocol/docs/quality.md`. At 48 kHz, 256 frames is
 10.7 ms and leaves room for the network, while the 480 a Windows endpoint hands out by default is
 20 ms on its own and lands the machine in front of you in Q2.
 
@@ -368,7 +368,7 @@ plugged in mid-song is seen at the next stop — the price of a song that keeps 
 
 Tracktion opens every MIDI input it finds and enables, and enables a new one by default. k7 never
 reads one there: a keyboard is read by the BROWSER, which records it and sends what is played as
-`midi-live` (`packages/song/docs/midiIn.md`). On Windows a MIDI input has one owner, so an engine
+`midi-live` (`apps/k7-daw-frontend/packages/song/docs/midiIn.md`). On Windows a MIDI input has one owner, so an engine
 holding the keyboard leaves the page listing it and receiving nothing from it. The engine therefore
 disables every physical MIDI input each time Tracktion applies a device list (`closePhysicalMidiInputs`
 in `engine/EngineHost.cpp`), which covers the first scan, a rescan and a keyboard plugged in later.
@@ -387,7 +387,7 @@ The device's true input and output latency is not on the wire. Until it is, the 
 badge cannot tell a shared-mode endpoint from an ASIO driver, and the number it shows will
 keep agreeing with a device that is four times slower. The fix is a field on `whoami`
 (`audioTiming` already reads the open device) plus the two consumers in
-`packages/web-protocol/quality.ts` — not done here.
+`apps/k7-daw-frontend/packages/web-protocol/quality.ts` — not done here.
 
 ## A test bed plays to no speaker
 

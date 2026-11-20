@@ -1,7 +1,7 @@
 # Export routes: the folder picker and the file written into it
 
 `/api/local/export/*` is the desktop app's seam to its folder dialog; the page's side is
-`apps/k7/frontend/docs/export.md`. The routes are a device's own, like `/api/local` (`local.md`), and sit behind the session.
+`apps/k7-daw-frontend/docs/export.md`. The routes are a device's own, like `/api/local` (`local.md`), and sit behind the session.
 
 | choice | why |
 |---|---|

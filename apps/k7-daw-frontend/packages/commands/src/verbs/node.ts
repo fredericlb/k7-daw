@@ -255,7 +255,7 @@ export const NODE_VERBS: Record<string, SidHandler> = {
   },
   "node.alt.create": (a, h) => moduleAltAdd(a, h, false),
   "node.alt.copy": (a, h) => moduleAltAdd(a, h, true),
-  /** Freeze at a module — a TOGGLE; everything upstream is bounced to one wav, packages/song/docs/freeze.md. */
+  /** Freeze at a module — a TOGGLE; everything upstream is bounced to one wav, apps/k7-daw-frontend/packages/song/docs/freeze.md. */
   "node.freeze": async (a, h) => {
     const module = splitWords(a)[0];
     if (!module) {
@@ -268,7 +268,7 @@ export const NODE_VERBS: Record<string, SidHandler> = {
     if (typeof current === "string" && current) {
       // Unfreeze: the attribute goes and so does the render it pointed at.
       setModuleFrozen(h.songPath, module, null);
-      // Only a render INSIDE the project is deleted: `frozen:` is text a file holds (packages/song/docs/confine.md).
+      // Only a render INSIDE the project is deleted: `frozen:` is text a file holds (apps/k7-daw-frontend/packages/song/docs/confine.md).
       const render = confineTo([h.songPath], join(h.songPath, current));
       if (render) rmSync(render, { force: true });
       h.log([

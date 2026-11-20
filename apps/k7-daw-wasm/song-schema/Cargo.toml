@@ -2,7 +2,7 @@
 name = "song-schema"
 version = "0.1.0"
 edition = "2024"
-description = "A song's value vocabulary in Rust: the timecode, and a curve resolved against a time signature, after ../src/timecode.ts and ../src/curveMath.ts."
+description = "A song's value vocabulary in Rust: the timecode, and a curve resolved against a time signature, after ../../k7-daw-frontend/packages/song-schema/src/timecode.ts and ../src/curveMath.ts."
 publish = false
 
 [lib]

@@ -1,7 +1,7 @@
 // sccache.mjs — finds sccache and gives the environment that sends a build's rustc through it.
 // Never required: a machine without sccache builds uncached and says so once.
 // The trap: a server keeps the folder and size it was started with, so each use has its own port (docs/rust-builds.md).
-// `node engine/scripts/sccache.mjs <use>` prints the variables as KEY=VALUE lines, for the .cmd steps and the sh loops that read lines.
+// `node apps/k7-daw-engine/scripts/sccache.mjs <use>` prints the variables as KEY=VALUE lines, for the .cmd steps and the sh loops that read lines.
 // `--export` prints `export KEY='VALUE'` instead, for `eval`: a bare KEY=VALUE through eval sets shell variables cargo never sees.
 
 import { spawnSync } from "node:child_process";

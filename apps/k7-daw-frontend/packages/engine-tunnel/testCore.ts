@@ -1,6 +1,6 @@
 // testCore.ts — where the tunnel and registry suites find the hub they test: the Rust testbed ENGINE_CORE_BIN
 // names (`k7-engine-testbed`), a fresh process of it per test, driven over its routes and its `/__engine-test`
-// hooks (apps/k7/backend-rs/docs/engine.md). Without it the suites skip, unless ENGINE_CORE_REQUIRED=1 (CI).
+// hooks (apps/k7-daw-backend/docs/engine.md). Without it the suites skip, unless ENGINE_CORE_REQUIRED=1 (CI).
 // The one thing a reader would get wrong: a hook reaches the core directly, and stands for nothing a page can do.
 
 import { type ChildProcess, spawn } from "node:child_process";

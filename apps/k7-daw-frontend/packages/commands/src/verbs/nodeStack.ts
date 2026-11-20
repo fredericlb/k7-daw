@@ -1,6 +1,6 @@
 // nodeStack.ts — `node stack <node> <new node>`: the bottom `+` under a card, in a chain project. The
 // new node goes right under the one above, both in a subchain run in that one's place — or into the
-// subchain it already sits in. See packages/song/docs/chainFiles.md, "Subchains".
+// subchain it already sits in. See apps/k7-daw-frontend/packages/song/docs/chainFiles.md, "Subchains".
 
 import { chainNodeName } from "@studio/song/chainGraphEdit";
 import { isChainProject } from "@studio/song/chainProject";
@@ -22,7 +22,7 @@ async function stackNode(arg: string, h: CommandHost): Promise<void> {
   }
   if (!isChainProject(h.songPath)) {
     h.refuse([
-      "node stack: a stack is a subchain, and only a chain project has them (packages/song/docs/chainFiles.md)",
+      "node stack: a stack is a subchain, and only a chain project has them (apps/k7-daw-frontend/packages/song/docs/chainFiles.md)",
     ]);
     return;
   }

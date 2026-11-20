@@ -1,4 +1,4 @@
-//! seam.rs — what the engine routes ask of this front over the internal seam's file half (`apps/k7/backend-rs/docs/engine/reach.md`):
+//! seam.rs — what the engine routes ask of this front over the internal seam's file half (`apps/k7-daw-backend/docs/engine/reach.md`):
 //! a job of the account's file service.
 
 use std::time::Duration;

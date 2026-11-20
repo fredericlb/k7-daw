@@ -5,7 +5,7 @@ home page's `camera mode` command. Its screen shows what its lens sees, and the 
 offered to every project of the same account on the same server, where a camera node names it
 `remote:<device name>`. `cameras.ts` is the contract both halves read: the paths, the frames, and
 which camera a label names. The Rust front's hub keeps a copy of its helpers, held to these by shared
-vectors (`apps/k7/backend-rs/docs/routes.md`).
+vectors (`apps/k7-daw-backend/docs/routes.md`).
 
 ## A remote camera is an ordinary camera node
 
@@ -19,7 +19,7 @@ camera("remote:Stage left")
 
 So everything a camera already is applies unchanged: it feeds a picture lane or draws a layer of its
 own, `monitor:` opens and shuts it, an armed lane records it, `validate()` refuses the same cables
-(`packages/song/docs/camera.md`). A second `io` type would have meant teaching the schema, the
+(`apps/k7-daw-frontend/packages/song/docs/camera.md`). A second `io` type would have meant teaching the schema, the
 compiler, the graph and the recorder a word that means the same thing as the one they know.
 
 The label is resolved by the browser drawing the lane, like a local one: `VideoCanvas` hands a
@@ -42,7 +42,7 @@ phone is called something else still draws a picture.
 ## The server carries signalling, never the picture
 
 The picture goes **peer to peer**, device to browser, over WebRTC. k7's Rust front only relays the
-offer, the answer and the candidates (`apps/k7/backend-rs/docs/cameras.md`). A video stream through
+offer, the answer and the candidates (`apps/k7-daw-backend/docs/cameras.md`). A video stream through
 the server would be its bandwidth for every viewer of every account, for a link that both ends can
 usually make themselves.
 
@@ -51,8 +51,8 @@ TURN server when no direct path exists. The repository ships none and calls no p
 `K7_CAMERA_ICE_SERVERS` is how a deployment names its own, and the backend hands them to both ends
 with the ticket. Unset, a camera reaches a viewer on the same network.
 
-Each end of this handshake is one file — `packages/k7-plugins/src/video/camera/receive.ts` for the
-viewer, `apps/k7/frontend/src/camera/offer.ts` for the host — and an `sdp` on this socket is a plain
+Each end of this handshake is one file — `apps/k7-daw-frontend/packages/k7-plugins/src/video/camera/receive.ts` for the
+viewer, `apps/k7-daw-frontend/src/camera/offer.ts` for the host — and an `sdp` on this socket is a plain
 `{ type, sdp }`, which each caller writes itself.
 
 ## One account, one server
@@ -90,7 +90,7 @@ is replaced in place) and **Stop**. It holds a screen wake lock: a phone on a st
 camera that stops. It needs a secure context, as any camera does; over plain http on a LAN the
 command says so.
 
-**Every wait is named and bounded** (`apps/k7/frontend/src/camera/cameraLink.ts`). The status line
+**Every wait is named and bounded** (`apps/k7-daw-frontend/src/camera/cameraLink.ts`). The status line
 says which step it is on: the lens opening (a permission prompt nobody answered stays there, and it
 is not the server's fault), then the server. Each server step has ten seconds: the ticket, then the
 socket's `hello`. A step that times out is retried like a dropped socket, with its reason on the

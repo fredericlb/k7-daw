@@ -6,7 +6,7 @@
 // niveau, et un niveau se lit en décibels.
 //
 // Le bas de la course est le SILENCE et non −∞ : un fader a un bas, et −60 dB est déjà inaudible
-// sous n'importe quelle musique. Voir packages/k7-plugins/docs/turntables/mix.md.
+// sous n'importe quelle musique. Voir apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/mix.md.
 //
 // Sa DSP est décrite dans dsp.k7x à côté, pas compilée dans le moteur.
 plugin({ type: "dsp", name: "Gain" })
@@ -19,4 +19,4 @@ params({
 // avant le fondu, c'est le fader de voie — ce avec quoi se font la plupart des transitions, le
 // crossfader ne servant qu'aux coupes franches.
 //
-// (La description d'un module est son en-tête, ici — voir packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)

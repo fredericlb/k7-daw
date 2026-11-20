@@ -95,7 +95,7 @@ definitions reach that one translation unit, and `SurgePlugin.cpp` includes a pl
 ## Choices inside the plugin
 
 **A patch is a BASE**, `base: Pads/Bell Pad`, a file under the module's `base/` beside any
-`.vstpreset` (`packages/song/docs/userPresets.md`). That is k7's place for a plugin whose state is not
+`.vstpreset` (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`). That is k7's place for a plugin whose state is not
 its parameters, and a patch is exactly that: its routing, wavetables and step shapes are no knob. So it
 gets what every base gets — chosen per node, the node's own values applied over it — and a preset keeps the base it was taken on. The library's preset shelf holds a
 FACTORY preset per patch, `<Category> - <Patch>`, generated beside the panel: a base and nothing else,
@@ -104,7 +104,7 @@ is picked, so the panel carries no base dropdown: two pickers for one choice, on
 old patch's values and one of which dropped them, would be two answers to the same click. The compile sends a `.fxp` base as
 `surgePatch` rather than as the `.vstpreset` path, an absolute path — which is what lets a remote engine
 have it: the tunnel copies every file a document names under a shared root
-(`packages/engine-tunnel/docs/tunnel.md`).
+(`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`).
 
 **A new patch is a new synth.** It is built and loaded on the message thread and swapped in under a
 lock the audio thread only tries, as SfzPlugin swaps instruments. Loading into the live synth would
@@ -165,7 +165,7 @@ engine the first time Surge renamed one; the generator refuses a bind the engine
 Run it after a Surge bump. The oscillator and effect types that need an audio input are left out of
 the pickers — this instrument takes none — and a patch that uses one still loads.
 
-**Every page is laid out twice, from ONE list of sections** (`packages/ui-module-builder/docs/layouts.md`):
+**Every page is laid out twice, from ONE list of sections** (`apps/k7-daw-frontend/packages/ui-module-builder/docs/layouts.md`):
 across 4 rows for the panel, stacked in 4 columns for `vertical:`. A section names each control's box in
 both shapes, and the generator refuses one that lacks either, so a control cannot exist in one shape only.
 Four rows hold a section two knobs high, which is why a scene's page is split where Surge's is not: the

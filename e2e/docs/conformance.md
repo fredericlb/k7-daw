@@ -1,7 +1,7 @@
 # The backend conformance suite
 
 `specs/conformance/` is k7's backend contract, black box and without a browser: the specs run
-against the Rust front (`apps/k7/backend-rs/docs/front.md`).
+against the Rust front (`apps/k7-daw-backend/docs/front.md`).
 
 ```
 E2E_BASE_URL=http://127.0.0.1:8789 npm run e2e:conformance --workspace=@studio/e2e
@@ -14,7 +14,7 @@ service's specs pass against both.
 The front's compiler is the native one, so every bed script runs the suite with `CONFORMANCE_SONG_NATIVE=on`: `serviceDocs` then drops the sentence of the compiler's error and keeps its status and the file it names, and
 holds that the compile routes answer `x-k7-compiler` equal to `SOURCES`, which they answer in no other mode. `serviceGolden` runs in every mode, nothing held out: it names the file each broken fixture's error locates by this variable too.
 
-`serviceGolden` and the engine: `CONFORMANCE_ENGINE_BIN` names the `k7-runtime` it renders with, else `<repo>/dist/k7-runtime/k7-runtime` (`.exe` on Windows). A binary that is not there fails the render tests with a sentence; nothing is skipped. `engine/scripts/ci/e2e-macos.sh` passes both variables.
+`serviceGolden` and the engine: `CONFORMANCE_ENGINE_BIN` names the `k7-runtime` it renders with, else `<repo>/dist/k7-runtime/k7-runtime` (`.exe` on Windows). A binary that is not there fails the render tests with a sentence; nothing is skipped. `apps/k7-daw-engine/scripts/ci/e2e-macos.sh` passes both variables.
 
 Files run side by side, four workers by default (`CONFORMANCE_WORKERS`, or Playwright's `--workers`;
 `--workers=1` is the serial run). A file's tests stay in order in one worker. The files that share a
@@ -88,15 +88,15 @@ what it shares is made its own:
 | the history spec writes `journal.json` and its `blobs/` by hand for a project the service never opened, then opens it | a service restarted, or another implementation, finds the journal on disk exactly so; no route restarts an account's service on a server, and a process step needs an engine to bounce |
 | a read, an open, a make, a removal and a whole-file write are asked again when the hub answers `file service: …` with a 5xx; any other call is not | the dev session's hub stops every file service when a source of the Windows checkout changes, which other sessions' merges do several times an hour; asking those twice changes nothing |
 | renders, waveforms and the audition need the engine binary, which the test bed has | a mixdown and a sidecar are files a port writes |
-| the golden spec reads no committed fixture: a project must compile, render with exit 0 and, for the archetypes and demos, sound as its table row says; a fixture only counts toward the floors | a byte comparison pins the compiler that wrote the bytes, a render pins what the song reaches (`packages/song/docs/rustCompilerHost.md`, 900 to 910) |
+| the golden spec reads no committed fixture: a project must compile, render with exit 0 and, for the archetypes and demos, sound as its table row says; a fixture only counts toward the floors | a byte comparison pins the compiler that wrote the bytes, a render pins what the song reaches (`apps/k7-daw-frontend/packages/song/docs/rustCompilerHost.md`, 900 to 910) |
 | a film with sound is made by the runner's ffmpeg (`testsrc` and a sine, mpeg4 and AAC); without ffmpeg those specs skip. `CONFORMANCE_MEDIA_COPY` names a folder where the spec keeps the rendered picture and the extracted sound | no fixture film carries sound, and a committed one would be bytes to keep; two implementations' copies are compared byte for byte by whoever runs both |
-| the engine link's spec plays the engine itself (`src/standInEngine.ts`): a WebSocket server answering `list-sessions`, listed by a heartbeat, behind the reference tunnel agent (`@studio/engine-tunnel/agent`), claimed by an account of its own (`conformance-engine`); its renders are the instance's engine binary | a second live engine beside a person's own replays Tracktion's saved audio device, which an ASIO driver serves to one process (`engine/k7-runtime/docs/audioDevice.md`); a take and a served project are the session's memory, which other specs read empty |
+| the engine link's spec plays the engine itself (`src/standInEngine.ts`): a WebSocket server answering `list-sessions`, listed by a heartbeat, behind the reference tunnel agent (`@studio/engine-tunnel/agent`), claimed by an account of its own (`conformance-engine`); its renders are the instance's engine binary | a second live engine beside a person's own replays Tracktion's saved audio device, which an ASIO driver serves to one process (`apps/k7-daw-engine/k7-runtime/docs/audioDevice.md`); a take and a served project are the session's memory, which other specs read empty |
 | the engine spec counts the node file services `/api/ready` reports before and after, and finds none more | a binding held on a node process would start one for every request naming an engine; the count is the one thing a client can read of the processes behind the hub |
 | what needs a real engine's plugins, a second backend is not covered: auto-freeze (a VST and its scan), a process step kept on an engine, the prefetch, `.dawproject` and `.als` imports, the 1000-step ring, a conflict set aside and settled through the service | they need a VST scan, a second machine or a second replica writing the same value |
 | what needs a second machine is not covered: the hub's 503 while a service starts or is held off after a crash | a server refuses the one, and the others need a file service that fails or a second backend |
 | every bed runs the front as a device (`STUDIO_LOCAL_USER`), so the specs that edit a workspace (`service*`, `files*`, `workspace-ui`) run | a device's account is the only runtime (`e2e.md`, "The beds are devices") |
 | `auth.spec.ts` (the session and the tokens), `cameras.spec.ts`, `settings.spec.ts`, the engines' (`engines.spec.ts`), the local engine's (`localEngine.spec.ts`) and the file hub's (`files*`, `sync*`, `ready`, `service*`) run against the front only | the backend has no copy of those routes left to compare with: their reference is the front and the committed vectors |
-| the local engine's specs run against a machine's own backend only (`/api/local` answering), and send no command that changes the engine; the internal seam takes `CONFORMANCE_INTERNAL_SECRET` | a throwaway local-user backend is the test bed (`apps/k7/backend-rs/docs/local.md`); against the person's desktop app, a rescan or a slot would be theirs |
+| the local engine's specs run against a machine's own backend only (`/api/local` answering), and send no command that changes the engine; the internal seam takes `CONFORMANCE_INTERNAL_SECRET` | a throwaway local-user backend is the test bed (`apps/k7-daw-backend/docs/local.md`); against the person's desktop app, a rescan or a slot would be theirs |
 | on a phone, the forwarded ports are NOT 18789 (`adb forward tcp:28789 tcp:18789`) | 18789 on a computer running the desktop app is that desktop app's own backend: a forward onto it fails, and the specs then test the computer |
 | on a phone, the release upload's refusal fails | a device (`STUDIO_LOCAL_USER`) turns every session into its local user and answers no app release. Compare a run with the previous one, not with a pass |
 

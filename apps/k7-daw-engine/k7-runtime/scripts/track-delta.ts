@@ -3,7 +3,7 @@
 // for a track the session has, and WARNED for one it does not.
 //
 // Its own session id, so running it disturbs nothing that is playing.
-// Usage: npx tsx engine/k7-runtime/scripts/track-delta.ts [ws://host:port]   (default :8833)
+// Usage: npx tsx apps/k7-daw-engine/k7-runtime/scripts/track-delta.ts [ws://host:port]   (default :8833)
 
 import type { ProjectDoc } from "@studio/engine-protocol/project";
 import WebSocket from "ws";

@@ -1,12 +1,12 @@
 # k7's front on the user's own machine
 
 Three apps run the front on the user's device rather than on a server: the desktop app on a computer
-(`apps/k7-desktop/docs/app.md`), the phone (`engine/k7-runtime/docs/android.md`) and the iPhone
-(`engine/k7-runtime/docs/ios.md`). All three start it from the **same table**, so they cannot drift apart.
+(`apps/k7-daw-desktop/docs/app.md`), the phone (`apps/k7-daw-engine/k7-runtime/docs/android.md`) and the iPhone
+(`apps/k7-daw-engine/k7-runtime/docs/ios.md`). All three start it from the **same table**, so they cannot drift apart.
 
 ## The table: `standalone.json`
 
-The port, the environment and the state folders, read by the desktop app (`apps/k7-desktop/src-tauri/src/backend.rs`), by
+The port, the environment and the state folders, read by the desktop app (`apps/k7-daw-desktop/src-tauri/src/backend.rs`), by
 `BackendHost.kt` (the phone's, through a `BuildConfig` constant for the port and the copy inside its
 `backend.zip` for the rest) and by `BackendHost.swift`. What each host adds is only what is its own: the state
 root, `$STUDIO_ENGINE` where an engine binary exists, and the page's folder.
@@ -32,7 +32,7 @@ gates the workspaces, and neither a person nor a test reaches "create a workspac
 
 | case | what happens |
 |---|---|
-| the copy fails | the libraries' service logs why; creating a workspace answers 503 with that reason, not the admin message (`crates/k7-libraries/src/lib.rs`, `libraryRefusal`). Everything that needs no new workspace still works |
+| the copy fails | the libraries' service logs why; creating a workspace answers 503 with that reason, not the admin message (`packages/k7-libraries/src/lib.rs`, `libraryRefusal`). Everything that needs no new workspace still works |
 | the copy is still running after 45 s | the gate opens anyway, under the hosts' own 60 s for a first answer; a workspace asked for meanwhile WAITS, since its request queues behind the copy in the libraries' service |
 
 ## It answers its own machine only
@@ -46,16 +46,16 @@ person at the machine — a venue's Wi-Fi is full of strangers. Two locks, each 
 | the loopback lock (`src/web.rs`) on every route: the peer address AND the `Host` header must be loopback | DNS rebinding: a page whose name resolves to `127.0.0.1` reaches the port from the user's own browser, and only its `Host` gives it away |
 
 Nothing on another device needs this front. A device on the network drives the **engine**, on
-the engine's own port and once paired (`engine/k7-runtime/docs/pairing.md`). The QR codes the page
-draws rebase onto `lanUrls`, which a machine's own front leaves empty (`apps/k7/frontend/src/App.tsx`), so they show no code rather than
-a link into this port (`apps/k7/frontend/docs/shell.md`); serving k7's pages to a tablet from here
+the engine's own port and once paired (`apps/k7-daw-engine/k7-runtime/docs/pairing.md`). The QR codes the page
+draws rebase onto `lanUrls`, which a machine's own front leaves empty (`apps/k7-daw-frontend/src/App.tsx`), so they show no code rather than
+a link into this port (`apps/k7-daw-frontend/docs/shell.md`); serving k7's pages to a tablet from here
 would mean lifting both locks, and a login of its own for the tablet. The supervisor, the file
 services and the page all reach the front on `127.0.0.1`. The locks cover HTTP routes; a
 WebSocket upgrade is answered by its own listener and is that listener's to check.
 
 ## The bundle: `scripts/stageBundle.mjs`
 
-What a device's front reads beside itself: the built frontend at its repo path (`apps/k7/frontend/dist`, named to the front as
+What a device's front reads beside itself: the built frontend at its repo path (`apps/k7-daw-frontend/dist`, named to the front as
 `K7_FRONTEND_DIST`) and the `k7-core` archive. The front's code root (the song's `meta/`, `commands.yaml`, the demos and the
 video sample) is `scripts/stageCodeRoot.mjs`'s, staged beside it.
 

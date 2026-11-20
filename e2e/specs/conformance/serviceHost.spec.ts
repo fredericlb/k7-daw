@@ -10,7 +10,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { expect, test } from "@playwright/test";
 // @ts-expect-error the build script is plain JavaScript
-import { bundleRuntime } from "../../../packages/commands/scripts/bundleRuntime.mjs";
+import { bundleRuntime } from "../../../apps/k7-daw-frontend/packages/commands/scripts/bundleRuntime.mjs";
 import { base } from "../../src/instance.ts";
 import { putTree, REPO } from "../../src/projectTree.ts";
 import { Service } from "../../src/service.ts";

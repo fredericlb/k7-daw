@@ -1,4 +1,4 @@
------ engine/k7-runtime/LICENSE -----
+----- apps/k7-daw-engine/k7-runtime/LICENSE -----
 
 The eurorack modules (engine/eurorack/) compile the DSP of Mutable Instruments'
 STM32 firmware (https://github.com/pichenettes/eurorack) and stmlib

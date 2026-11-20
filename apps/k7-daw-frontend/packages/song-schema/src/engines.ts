@@ -1,7 +1,7 @@
 // engines.ts — a module's ENGINES: the other modules it can run as, one sub-folder each under its
 // `engines/`, and which one is on. Pure struct work with no filesystem, so a browser may ask; the
 // walk that FINDS them is @studio/song's. One thing a reader gets wrong: an engine is not an
-// alternative — the module declares engines, a node picks one. See packages/song/docs/engines.md.
+// alternative — the module declares engines, a node picks one. See apps/k7-daw-frontend/packages/song/docs/engines.md.
 
 /** The folder beside `module.k7x` that holds one sub-folder per engine. */
 export const ENGINES_DIR = "engines";

@@ -2,6 +2,6 @@
 //
 // Delete this file and the song still compiles and still plays; you simply have no lanes
 // on screen. `split` puts it in the layout, sharing the window with the graph beneath —
-// the only layout a timeline draws in. See packages/song/docs/surfaces.md.
+// the only layout a timeline draws in. See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
 type("timeline")
 layout("split")

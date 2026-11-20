@@ -1,8 +1,8 @@
 # The playlist file
 
-The rationale behind `packages/song-schema/src/playlist.ts` — where a workspace keeps its playlists,
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/playlist.ts` — where a workspace keeps its playlists,
 what one says, and how a line is added to one AS TEXT. What a playlist is FOR lives in
-`packages/song/docs/playlists.md`; this page is the file's own rules.
+`apps/k7-daw-frontend/packages/song/docs/playlists.md`; this page is the file's own rules.
 
 ## `_playlists/`, at the workspace root
 
@@ -35,7 +35,7 @@ breaks, which is a screen you can read, unlike a project that refuses to open.
 ## Reading one
 
 `song` is kept VERBATIM: resolving it means holding the workspace's file listing, and this file
-deliberately holds nothing (see `packages/song/docs/playlists.md`, "the refs are not checked here").
+deliberately holds nothing (see `apps/k7-daw-frontend/packages/song/docs/playlists.md`, "the refs are not checked here").
 
 `parsePlaylist` returns null and not an empty playlist when the text is not one, because the two are
 different facts and a surface says so differently: a file that does not parse is one to go and fix,

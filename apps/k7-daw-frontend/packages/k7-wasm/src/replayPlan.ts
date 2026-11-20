@@ -15,7 +15,7 @@ const pathm = createRequire(import.meta.url)(
 ) as typeof import("node:path");
 
 const REPO = real.realpathSync(
-  pathm.join(import.meta.dirname, "..", "..", ".."),
+  pathm.join(import.meta.dirname, "..", "..", "..", "..", ".."),
 );
 
 /** The folder of plan files the native replays wrote (`npm run test:edit-replay` makes one); none, no replay. */

@@ -70,7 +70,7 @@ export function GraphPanel({
 }: {
   /** Play one note through a lane, as the piano roll's click does — what an SFZ kit's pad sounds through. */
   onPreviewNote?: (track: string, key: number, vel: number) => void;
-  /** The lenses this browser can see — a camera card's dropdown, packages/song/docs/camera.md. */
+  /** The lenses this browser can see — a camera card's dropdown, apps/k7-daw-frontend/packages/song/docs/camera.md. */
   cameras?: readonly string[];
   /** The interface's inputs as the engine groups them — what an audio input's "in" dropdown offers. */
   inputDevices?: readonly { name: string; channels: number[] }[];
@@ -100,7 +100,7 @@ export function GraphPanel({
   onAlternative?: (module: string, name: string | null) => void;
   /** A file-valued param's browser: the same cards are drawn here, so the same button has to open. */
   onAssetBrowse?: (module: string, kind: string, x: number, y: number) => void;
-  /** A rack tap's edit — the shell runs its `node tap` command (packages/song/docs/racks.md). */
+  /** A rack tap's edit — the shell runs its `node tap` command (apps/k7-daw-frontend/packages/song/docs/racks.md). */
   onTapEdit?: (module: string, action: TapAction) => void;
   /** …and the waveform widget's subscription, for the same reason — it draws nothing unwatched. */
   onWatchWaveform?: (

@@ -1,14 +1,14 @@
 // key-truth.ts — the key detector against records whose key is KNOWN, and a sweep of the ideas
 // that might make it better.
 //
-//   npx tsx packages/audio-probe/scripts/key-truth.ts [--verbose]
+//   npx tsx apps/k7-daw-frontend/packages/audio-probe/scripts/key-truth.ts [--verbose]
 //
 // The médiathèque carries no `TKEY` on any of its 302 files, so the labels below were given by
 // hand. They are the only ground truth there is; without them the detector could only be measured
 // against synthetic chords, which it already passes and which prove far less.
 //
 // In `scripts/` and not `src/`: this needs node:fs and ffmpeg, and the package is browser-safe.
-// Same arrangement as ui-turntables' put-on.ts. See ../../../docs/key-detection-plan.md.
+// Same arrangement as ui-turntables' put-on.ts. See ../../../../../docs/key-detection-plan.md.
 
 import { execFileSync } from "node:child_process";
 import {

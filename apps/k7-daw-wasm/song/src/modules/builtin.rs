@@ -8,7 +8,7 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::OnceLock;
 
-const TABLE: &str = include_str!("../../../../song-schema/src/builtinParams.generated.json");
+const TABLE: &str = include_str!("../../../../k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json");
 
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 #[serde(deny_unknown_fields)]

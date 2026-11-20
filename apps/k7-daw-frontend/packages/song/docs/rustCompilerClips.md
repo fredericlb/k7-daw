@@ -2,7 +2,7 @@
 
 Sub-step 2f of `rustCompiler.md`: one event of a lane read into the `ClipDoc` the engine plays, a comped event cut into its
 pieces, a timeline placed as one event expanded into what it holds, and a pattern lane's plugin. Nothing here is wired to a
-compile: 2h calls `song::clips::…`. Paths below are relative to `packages/song`.
+compile: 2h calls `song::clips::…`. Paths below are relative to `apps/k7-daw-frontend/packages/song`.
 
 ## Corrections to the 2f row of `rustCompiler.md`
 

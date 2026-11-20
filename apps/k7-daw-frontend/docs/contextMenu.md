@@ -19,7 +19,7 @@ is about the lane. The click had answered one argument of a command that was not
 under it.
 
 So a command may say where it belongs: `menu:` in `commands.yaml`, a list of the entities in
-`MENU_ENTITIES` (`packages/commands/src/commandSpec.ts`, mirrored on the wire). It names **what
+`MENU_ENTITIES` (`apps/k7-daw-frontend/packages/commands/src/commandSpec.ts`, mirrored on the wire). It names **what
 is under the pointer, not what the verb acts on** — `event add` takes a track and belongs on a
 TRACK's menu, `event remove` takes the same track and belongs on the event's.
 
@@ -113,7 +113,7 @@ Matching on the class does not work, and the failures are not subtle:
 A menu built on `kind` would offer `module new <category>/<name>` on every module in the
 graph, and `sequence note new` on an audio clip. `provider` separates them, so the wire carries
 it — `ArgProvider` in `@studio/web-protocol`, mirrored from the `PROVIDERS` keys in
-`packages/commands/src/commandSpec.ts`, with a test that fails if the two drift.
+`apps/k7-daw-frontend/packages/commands/src/commandSpec.ts`, with a test that fails if the two drift.
 
 ### The one case where even that is not enough
 
@@ -247,7 +247,7 @@ other lanes too — `clip process` in that menu reads as "process this event" wh
 every placement of the file. The event menu offers the `event …` family plus `ui file`; the
 material's own verbs stay reachable from the bar and from the clip's editor, where the clip
 itself is what you are looking at. Processing is still in that menu, as `event process`, which
-treats the clicked placement alone (`packages/audio-passes/docs/processChain.md`). (It is also why the menu has no MIDI/audio split:
+treats the clicked placement alone (`apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`). (It is also why the menu has no MIDI/audio split:
 `clipTargets` lists no MIDI, and without that family the ctx has no need to say which kind
 the clip is.)
 

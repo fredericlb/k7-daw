@@ -40,8 +40,8 @@ gets its own node.
 | 4 | the blend, then the lane's run | the cut, then the lane's own character |
 
 Effect before motion, so a vignette is part of the picture and moves with it. Lane run after the
-blend, so a lane's effect sees the picture the lane shows (`packages/ui-eyes/docs/passes.md`). The
-first three are one slot's journey, in `packages/ui-eyes/src/slots.ts`, each step into a target of
+blend, so a lane's effect sees the picture the lane shows (`apps/k7-daw-frontend/packages/ui-eyes/docs/passes.md`). The
+first three are one slot's journey, in `apps/k7-daw-frontend/packages/ui-eyes/src/slots.ts`, each step into a target of
 that slot's own and allocated only when a shot needs it.
 
 A shot naming no run landing on its lane plays as it is, and the picture's `warnings` say so. An
@@ -61,7 +61,7 @@ knobs because a shader has four (`uP1`..`uP4`); a finer grade is two nodes in a 
 `@k7-core/shaders/look` lays a 3D LUT over the picture, `P1` its strength. The FILE is named by the
 node (`lut:`, project-relative) and not by the module, so one look module serves every LUT a song
 uses, and a LUT a colourist sends is dropped into the project without touching the library. Only
-3D LUTs are read, and a malformed file is refused by name (`packages/ui-eyes/docs/luts.md`). Until
+3D LUTs are read, and a malformed file is refused by name (`apps/k7-daw-frontend/packages/ui-eyes/docs/luts.md`). Until
 the file is on the GPU the pass lets its picture through, and an export waits for it.
 
 Both run on a lane's run, a frame run or a shot's effect alike: where a shader sits is the graph's

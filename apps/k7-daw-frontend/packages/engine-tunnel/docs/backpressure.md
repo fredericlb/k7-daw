@@ -1,20 +1,20 @@
 # Backpressure — a peer that stops reading
 
 Every relay forwards frames between two sockets: the engine relay and a loopback client with its
-tunnel channel, in the front's hub (`apps/k7/backend-rs/crates/k7-engine/src/relay/`,
-`apps/k7/backend-rs/crates/k7-engine/src/tunnel/local.rs`), and a WebRTC data channel with the engine,
+tunnel channel, in the front's hub (`apps/k7-daw-backend/packages/k7-engine/src/relay/`,
+`apps/k7-daw-backend/packages/k7-engine/src/tunnel/local.rs`), and a WebRTC data channel with the engine,
 in the agent (`../rtc.ts`). A socket never refuses a send: when the far end stops reading, the bytes
 queue in the server's memory, without bound. A tab left in the background, a phone on a dying
 network, a stuck supervisor would each grow the server until it fell over.
 
 So every forwarded frame goes through one rule — `sendBounded` (`../backpressure.ts`) in the agent,
-`admit` (`apps/k7/backend-rs/crates/k7-engine/src/tunnel/backpressure.rs`) in the hub — which reads the
+`admit` (`apps/k7-daw-backend/packages/k7-engine/src/tunnel/backpressure.rs`) in the hub — which reads the
 peer's unsent bytes (`bufferedAmount`) and decides:
 
 - below **8 MiB**, it is sent;
 - past it, a frame a newer one **replaces** is dropped: an audio broadcast frame (the `LSTR`
-  binary of `packages/engine-protocol/stream.ts`), and the text pushes `state`, `io-levels` and
-  `plugin-params-live` (`engine/k7-runtime/docs/protocol.md`). The engine already skips a state
+  binary of `apps/k7-daw-frontend/packages/engine-protocol/stream.ts`), and the text pushes `state`, `io-levels` and
+  `plugin-params-live` (`apps/k7-daw-engine/k7-runtime/docs/protocol.md`). The engine already skips a state
   frame for a socket behind; this is the same rule one hop further. The frame is classified only
   then, so a healthy socket pays no parse;
 - anything else — a reply, a document, a command — is still queued, since dropping it would
@@ -37,5 +37,5 @@ the tunnel and its other channels stay up. File chunks (a `get`) keep their own 
 
 Frames a client sends before its peer is connected — the relay's dial, a channel not yet `opened`,
 the engine socket of a data channel — are held in a `HeldFrames`: 256 frames or 8 MiB, the same
-bounds as the relay's claim gate (`apps/k7/backend-rs/crates/k7-engine/src/relay/gate/`), and the
+bounds as the relay's claim gate (`apps/k7-daw-backend/packages/k7-engine/src/relay/gate/`), and the
 client is closed past them.

@@ -220,7 +220,7 @@ async fn an_open_warms_the_opened_projects_waveforms() {
     ]
     .into_iter()
     .collect();
-    let code = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
+    let code = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let config = super::media::Config::of(&env, &code);
     let media = Arc::new(super::media::Media::new(config, Arc::new(|| ())));
     let acct = crate::routes::files::service::Acct::make(env.clone(), super::tests_account::HEAP);

@@ -1,11 +1,11 @@
 # The supervisor ⇄ app contract
 
-`engine/k7-supervisor/schema/hostProtocol.schema.json` is the one definition of what moves
+`apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json` is the one definition of what moves
 between the supervisor and the app that drives it — every frame, every object closed. The C++
 writer, `src/HostProtocol.cpp`, is written by hand and held to it through fixtures:
 `HostProtocol_test.cpp` compares `stateFrame()` byte for byte with `schema/fixtures/`, and the Rust
-host reads the same frames (`apps/k7/backend-rs/crates/k7-local/src/protocol.rs`). Why the writer is not generated, and why the phones
-decode no typed frame, is in `apps/k7/backend-rs/docs/supervisorHost.md`.
+host reads the same frames (`apps/k7-daw-backend/packages/k7-local/src/protocol.rs`). Why the writer is not generated, and why the phones
+decode no typed frame, is in `apps/k7-daw-backend/docs/supervisorHost.md`.
 
 It is NDJSON on stdio — one JSON object per line, supervisor→app on stdout, app→supervisor on
 stdin — and the rule that heads this page follows from that: *stdout IS the protocol, one stray
@@ -47,7 +47,7 @@ frame. `instruments.download <name>` and `instruments.remove <name>` are the two
 on it; the second is refused, with a reason, for the instrument being fetched right now.
 
 `pairRequests` and `pairedDevices` are the engine's LAN pairing lists, relayed verbatim
-(`engine/k7-runtime/docs/pairing.md`). They are POLLED every second rather than taken from the
+(`apps/k7-daw-engine/k7-runtime/docs/pairing.md`). They are POLLED every second rather than taken from the
 engine's own pushes: the musician must see a request within the two minutes it lives, and the
 engine drops an expired one without saying so, so only asking again shows it gone. The two lists are
 a handful of rows that move only when a device asks, is answered or reconnects, so the second-long
@@ -79,7 +79,7 @@ for one: `slot.save` names a staged FILE the app wrote, which the supervisor sto
 
 `{"t":"engine","action":"start","id","token","port","host","origins","safeMode"}` and `{"t":"engine","action":"stop"}`.
 On Android the engine is a library in the app that spawned the supervisor, so `EngineProcess.cpp`
-cannot start or kill it and asks the app instead (`engine/k7-runtime/docs/android.md`). No other
+cannot start or kill it and asks the app instead (`apps/k7-daw-engine/k7-runtime/docs/android.md`). No other
 build emits it, which is why `k7-local` has no reader for it.
 
 ## Why stdio and not a localhost socket

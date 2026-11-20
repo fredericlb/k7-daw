@@ -1,6 +1,6 @@
 // Turntables.tsx — the desk AS A SURFACE: what a host mounts for `type: turntables`. It checks
 // the mapping first and draws the missing wiring instead of a desk whose knobs go nowhere.
-// See packages/song/docs/surfaces.md and ../../docs/hosting.md.
+// See apps/k7-daw-frontend/packages/song/docs/surfaces.md and ../../docs/hosting.md.
 
 import type { MixView as Mapping } from "@studio/song-schema/yaml/mixViewSchema";
 import { Unplug } from "@studio/ui/icons";

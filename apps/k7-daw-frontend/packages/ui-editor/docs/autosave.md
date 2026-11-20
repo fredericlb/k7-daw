@@ -132,7 +132,7 @@ front of everybody.
 
 **One caller: the module builder** (`@studio/ui-module-builder`). A module is four files
 describing one thing, and on a shared one a save is a *publish* — see
-`apps/k7/frontend/docs/sharedModules.md` for why that earns a button.
+`apps/k7-daw-frontend/docs/sharedModules.md` for why that earns a button.
 
 ## Paused, and flushed for someone else
 

@@ -1,6 +1,6 @@
 // `project record save` and the ARGUMENTS it is given: the engine's take, an absolute path off a state frame,
 // JSON-quoted because on Windows it is full of backslashes, then the page's picture beside it, or `none` for a
-// picture alone. See packages/song/docs/outputRecording.md.
+// picture alone. See apps/k7-daw-frontend/packages/song/docs/outputRecording.md.
 
 import { describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";

@@ -1,5 +1,5 @@
 // `node tap note|sample|add|remove` — a rack NODE's kit, written into the node and never the module,
-// its samples checked against the libraries' `samples/` (packages/song/docs/racks.md).
+// its samples checked against the libraries' `samples/` (apps/k7-daw-frontend/packages/song/docs/racks.md).
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

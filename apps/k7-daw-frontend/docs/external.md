@@ -29,7 +29,7 @@ name, and it cannot be a surface id either — `createSurfaceFile` accepts only 
 and `-`. Collision is impossible on both sides.
 
 `EXTERNAL_SEGMENT`, `externalUrl` and `parseExternal` live in
-[`@studio/web-protocol/projects`](../../../../packages/web-protocol/projects.ts), beside `launchUrl`
+[`@studio/web-protocol/projects`](../packages/web-protocol/projects.ts), beside `launchUrl`
 and `shareUrl`, because this is an **address contract**: one side writes it, the other reads it, and
 an address only one of them understands is a 404 nobody can attribute.
 
@@ -49,7 +49,7 @@ It is **not** the shell with things hidden. The shell with nothing in it is stil
 panels and its bar all belong to a screen this device does not show. `ExternalSurface` mounts what a
 surface needs — the engine link, the desk, the video document, the command runner — then hands over
 to the component the type names. No logic is duplicated: those hooks exist precisely so a host can
-wire a surface (`../../../../packages/k7-plugins/docs/turntables/hosting.md`).
+wire a surface (`../packages/k7-plugins/docs/turntables/hosting.md`).
 
 Three things are not the surface and are there anyway, at the head and the foot: the **transport**, a
 **command line**, and the **keyboard**. They do not come from the same reasoning as the panels —
@@ -211,7 +211,7 @@ holding. The crossing is the app's.
 
 This menu does not list the whole machine: a line from another project would **move** the engine,
 because an engine holds one project per session
-(`packages/engine-protocol/docs/sessions.md`). Following a random line from a tablet would be a way
+(`apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`). Following a random line from a tablet would be a way
 of interrupting yourself across the room, and would drown the one useful line — the open project's —
 among the others.
 
@@ -219,7 +219,7 @@ The filter is `/engine/served`, not the `active` flag each line carries. The two
 questions: `active` is a **workspace**'s active-project marker, one per workspace, written by
 whoever opened last — a machine with three markers is still one engine holding one song. `served` is
 the file service's note on what it has **sent**, one per session, so one project for the whole
-account (`apps/k7/backend-rs/docs/file-projects.md`).
+account (`apps/k7-daw-backend/docs/file-projects.md`).
 
 It is a belief about another process, like every read of `served`: the engine may have restarted.
 It is not asked here — `prewarmEngineForActive` already asks, with its throttle, and a menu naming a
@@ -240,7 +240,7 @@ playing. Following a line does claim — through the gates, which are the place 
 And that claim does not evict the editor. One account on one engine is one session and one loaded
 project: the "one engine per project" rule exempts this case, and without that exemption opening a
 surface would send the laptop back to *"this project was opened elsewhere"*. See
-`apps/k7/backend-rs/docs/engine/claim.md`.
+`apps/k7-daw-backend/docs/engine/claim.md`.
 
 ### `external`, a plain word
 
@@ -325,7 +325,7 @@ without that it would hold only until the first notification.
 
 Lost in the clear: over plain HTTP the tablet may not open a camera, and a
 lane naming the machine's lens draws nothing there. A `remote:` camera, a device of the account in
-camera mode, still draws, since it arrives over a peer connection — see `packages/song/docs/camera.md`.
+camera mode, still draws, since it arrives over a peer connection — see `apps/k7-daw-frontend/packages/song/docs/camera.md`.
 
 ## What this is not
 

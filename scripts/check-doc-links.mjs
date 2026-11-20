@@ -10,14 +10,12 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, normalize } from "node:path";
 
-/** What counts as "a path into this repo" — the three TOP folders only (../docs/lints.md). */
+/** What counts as "a path into this repo": `apps/` from the root, `packages/` or a sibling app from a page (../docs/lints.md). */
 const REF =
-  /(?<![\w.-])(?:\.\.\/)*(?:packages|apps|engine)\/[\w./-]*\.\w{1,5}\b/g;
+  /(?<![\w.\-/])(?:\.\.\/)*(?:apps|packages)\/[\w./-]*\.\w{1,5}\b|(?<![\w.-])(?:\.\.\/)+k7-daw-[\w-]+\/[\w./-]*\.\w{1,5}\b/g;
 
 /** Paths a page may name although this checkout has not got them — kept short (../docs/lints.md). */
 const ALLOW = [
-  // Written relative to engine/k7-runtime, whose own docs are the only ones that do it.
-  /^engine\/(?!k7-runtime\/|k7-supervisor\/|k7-android\/|scripts\/|docker\/)/,
   // A build output, which a checkout has only once it has built.
   /\/(dist|target)\//,
 ];
@@ -69,6 +67,8 @@ for (const file of files) {
   const text = readFileSync(file, "utf8");
   const lines = text.split("\n");
   for (const [i, line] of lines.entries()) {
+    // A Rust test names its fixtures from the crate's own folder (CARGO_MANIFEST_DIR), not the file's.
+    if (line.includes("CARGO_MANIFEST_DIR")) continue;
     for (const hit of line.matchAll(REF)) {
       const ref = hit[0];
       cited += 1;

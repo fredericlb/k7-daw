@@ -127,7 +127,7 @@ describe("fromLocation", () => {
 
 describe("viewPanes", () => {
   it("gives the layout its timeline only when the project declares one", () => {
-    // The timeline is a `split` surface, so the layout is a function of what the PROJECT says (packages/song/docs/surfaces.md).
+    // The timeline is a `split` surface, so the layout is a function of what the PROJECT says (apps/k7-daw-frontend/packages/song/docs/surfaces.md).
     expect(viewPanes({ timeline: true })).toEqual({
       ring: ["timeline", "chains"],
       fullscreen: ["editor", "timeline", "chains"],

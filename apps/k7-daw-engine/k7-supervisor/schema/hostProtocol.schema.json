@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://k7.rocks/schema/supervisor-host-protocol.json",
   "title": "HostLine",
-  "description": "One NDJSON line between engine/k7-supervisor and the app that runs it. The single source of that wire: engine/k7-supervisor/docs/hostProtocol.md. Every object is closed, so a field one side adds goes into this file first.",
+  "description": "One NDJSON line between apps/k7-daw-engine/k7-supervisor and the app that runs it. The single source of that wire: apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md. Every object is closed, so a field one side adds goes into this file first.",
   "oneOf": [
     { "$ref": "#/definitions/StateFrame" },
     { "$ref": "#/definitions/NotifyFrame" },
@@ -80,7 +80,7 @@
         "slots": { "type": "array", "items": { "$ref": "#/definitions/Slot" } },
         "enabledSlot": {
           "type": ["string", "null"],
-          "description": "The slot the engine plays with nobody attached, null for none (engine/k7-supervisor/docs/slots.md)."
+          "description": "The slot the engine plays with nobody attached, null for none (apps/k7-daw-engine/k7-supervisor/docs/slots.md)."
         }
       }
     },
@@ -206,7 +206,7 @@
       }
     },
     "Download": {
-      "description": "One instrument being fetched for the engine: engine/k7-supervisor/docs/instruments.md.",
+      "description": "One instrument being fetched for the engine: apps/k7-daw-engine/k7-supervisor/docs/instruments.md.",
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "label", "received", "total", "phase"],

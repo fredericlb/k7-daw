@@ -176,7 +176,7 @@ struct ProjectDoc {
     int timeSigDenominator = 4;
     // The song's OUTPUT level in dB on the master fader, 0 == unity, written on every build; +6 is the top (docs/protocol.md).
     float masterVolume = 0.0f;
-    // The MASTER CHAIN — plugins over the summed mix, MIX to OUT, ahead of the meter and the tap; empty is one wire (packages/song/docs/masterChain.md).
+    // The MASTER CHAIN — plugins over the summed mix, MIX to OUT, ahead of the meter and the tap; empty is one wire (apps/k7-daw-frontend/packages/song/docs/masterChain.md).
     std::vector<PluginDoc> masterPlugins;
     // The absolute directory a live recording writes into (the brain's <project>/clips) — the one location the engine is told; empty refuses arming.
     std::string recordDir;

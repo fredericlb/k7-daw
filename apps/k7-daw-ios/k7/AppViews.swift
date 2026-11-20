@@ -2,7 +2,7 @@
 // status-bar strip painted the colour of k7's own header. It loads from this phone's own backend, never from this
 // app: the page is same-origin with its backend (`/api`, `/auth`, cookie sessions). The view is made the first time it
 // is shown and then only hidden, so k7 keeps its state while the shell page is on screen.
-// The same plugin, methods and events as AppViewsPlugin.kt on Android. See engine/k7-runtime/docs/ios.md.
+// The same plugin, methods and events as AppViewsPlugin.kt on Android. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Capacitor
 import UIKit

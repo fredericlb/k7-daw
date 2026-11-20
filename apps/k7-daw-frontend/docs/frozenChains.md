@@ -1,7 +1,7 @@
 # Frozen chains — `/libraries/chains`
 
 A frozen chain is a chain built once and reused: to process a track, a clip or an event
-(`clip process <clip> @account/<name>`, `packages/audio-passes/docs/processChain.md`), or saved
+(`clip process <clip> @account/<name>`, `apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`), or saved
 into an engine's slot, which plays it with nobody attached (`slots.md`). The page
 lists the account's own and the libraries' **cold** chains beside them, read-only, to duplicate
 from. A cold chain is one of them, not a kind apart: it is a frozen chain whose one step separates
@@ -10,7 +10,7 @@ a file.
 ## Built and edited on the bench
 
 **New chain** opens the bare bench, and **Edit** opens the bench on the chain
-(`apps/k7/backend-rs/docs/banc.md`). The bench is a project with an engine, so a chain is edited
+(`apps/k7-daw-backend/docs/banc.md`). The bench is a project with an engine, so a chain is edited
 with the graph every project has: the modules' real panels and parameters, bypass, presets, the
 plugin's own window, and the sound. The project bar's Save button runs `chain save`, which writes
 the run between the input and the fader back as the chain. A page of its own with a form for steps
@@ -23,7 +23,7 @@ a name of the account's (`POST /account/frozen-chains/<name>/copy`).
 ## Kept in the account's library, as an ordinary chain
 
 A saved chain is `@account/chains/<name>.k7x`, the account's own library
-(`packages/song/docs/sharedFolders.md`): always the account's to write, synced like the rest of it,
+(`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`): always the account's to write, synced like the rest of it,
 and walked FIRST by every chain reader. So nothing had to learn about frozen chains: the process
 verbs, the recorder's live list and the bench find one the moment it is written. An origin library
 stays an admin's to write, which is why the libraries' chains are copied rather than edited.

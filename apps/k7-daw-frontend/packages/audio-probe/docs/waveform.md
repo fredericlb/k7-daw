@@ -21,7 +21,7 @@ degrade to a plain envelope rather than to a blank one.
 
 `regionWaveform` resamples them like `peak`, taking the max per column, and drops all three
 unless all three cover `peak`'s buckets. A half-banded region would colour some columns from
-data that is not there. The drawing side is `packages/ui-waveform/docs/spectrum.md`.
+data that is not there. The drawing side is `apps/k7-daw-frontend/packages/ui-waveform/docs/spectrum.md`.
 
 ## `detectTransients` runs once per file, in the analysis
 

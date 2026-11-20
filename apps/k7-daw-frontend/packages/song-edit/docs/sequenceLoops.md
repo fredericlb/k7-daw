@@ -1,7 +1,7 @@
 # Doubling a sequence that is LOOPED
 
 `sequence double` makes a sequence twice as long and plays its notes twice
-(`packages/song-schema/docs/noteEdits.md` holds that half). This page is the other half: what
+(`apps/k7-daw-frontend/packages/song-schema/docs/noteEdits.md` holds that half). This page is the other half: what
 happens to the placements, which is where the arrangement is.
 
 A placement states `loop: N` — how many times the material's window is played, back to back — and

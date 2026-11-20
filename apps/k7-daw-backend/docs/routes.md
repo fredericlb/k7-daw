@@ -42,9 +42,9 @@ The hub (`src/routes/cameras/`) and its rules, its limits, its frames and its pi
 | axum's `ws` feature (tokio-tungstenite) for the socket | it is the server half of the crate already serving; its frame cap and auto-answered pings are what the hub needs |
 | a socket is admitted, named and counted before the 101 goes out, and released if the upgrade fails | the caps hold under concurrent upgrades, and the `hello` is the first frame the socket carries |
 | the hub's state is behind one lock never held across an await; each socket's task writes only its own socket, and others reach it through a queue | a frame for another socket never waits on this one's network |
-| shared vectors, `fixtures/camera-vectors.json`, written by the TypeScript helpers (`makeCameraVectors.ts`) | the browser keeps `@studio/web-protocol/cameras`; its test (`packages/web-protocol/cameraVectors.test.ts`) fails when the helpers change, the Rust one when Rust disagrees: name cleaning, uniqueness, matching and frame reading; `K7_CAMERA_ICE_SERVERS`' cases are kept as committed, the TypeScript hub being gone |
+| shared vectors, `fixtures/camera-vectors.json`, written by the TypeScript helpers (`makeCameraVectors.ts`) | the browser keeps `@studio/web-protocol/cameras`; its test (`apps/k7-daw-frontend/packages/web-protocol/cameraVectors.test.ts`) fails when the helpers change, the Rust one when Rust disagrees: name cleaning, uniqueness, matching and frame reading; `K7_CAMERA_ICE_SERVERS`' cases are kept as committed, the TypeScript hub being gone |
 
-Regenerate those vectors only on purpose: `npx tsx apps/k7/backend-rs/fixtures/makeCameraVectors.ts`.
+Regenerate those vectors only on purpose: `npx tsx apps/k7-daw-backend/fixtures/makeCameraVectors.ts`.
 
 ## The leaves
 

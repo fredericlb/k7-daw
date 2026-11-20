@@ -200,7 +200,7 @@ export function computeFlow(
   for (const [id, f] of seeds) {
     seed(`${TRACK_NODE_PREFIX}${id}`, f);
     // A run that MATERIALISED its own track is drawn as its MODULES: there is no lane card to
-    // start at, and the track wears the chain's name — packages/song/docs/graphModel.md.
+    // start at, and the track wears the chain's name — apps/k7-daw-frontend/packages/song/docs/graphModel.md.
     seed(`${MODULE_NODE_PREFIX}${id}`, f);
     const box = foldedAt.get(id);
     if (box) seed(box, f);

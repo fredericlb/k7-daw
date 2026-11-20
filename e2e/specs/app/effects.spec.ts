@@ -1,5 +1,5 @@
 // effects.spec.ts — library effects, note transformers and a cold pass reach the engine as the plugins they compile to, and one of them plays.
-// The engine document is the proof a module was sent; a cold module's measuring pass runs only under `clip process` (packages/song/docs/coldModules.md).
+// The engine document is the proof a module was sent; a cold module's measuring pass runs only under `clip process` (apps/k7-daw-frontend/packages/song/docs/coldModules.md).
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, type K7, TARGET, test } from "../../src/target.ts";
 import { engineUp, play, rolls } from "../../src/transport.ts";
@@ -140,7 +140,7 @@ test.describe("cold normalize", () => {
   test("clip process measures the tone and bakes it at Target", async ({
     k7,
   }) => {
-    // The phone has no ffmpeg, so its file service cannot measure a clip (engine/k7-runtime/docs/android.md).
+    // The phone has no ffmpeg, so its file service cannot measure a clip (apps/k7-daw-engine/k7-runtime/docs/android.md).
     test.skip(TARGET === "android", "no ffprobe on a phone");
     const files = await k7.files();
     await files.open(FIXTURES_WORKSPACE, PROJECT);

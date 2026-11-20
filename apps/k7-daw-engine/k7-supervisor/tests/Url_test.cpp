@@ -1,4 +1,4 @@
-// Url_test.cpp — the cases of packages/web-protocol/services.test.ts, replayed: the supervisor and
+// Url_test.cpp — the cases of apps/k7-daw-frontend/packages/web-protocol/services.test.ts, replayed: the supervisor and
 // the web apps must derive the same registry from the same text.
 
 #include "EngineProcess.h"

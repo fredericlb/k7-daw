@@ -1,16 +1,16 @@
 // Renders icon/k7.svg into every platform's app icon (web, Android, iOS, the engine's window), and icon/k7-splash.svg into each startup splash.
 
-/** The cassette's width on EVERY layer that shows it — Android's launch screen in dp, iOS's in pt, the two pages in CSS px, which are the same size on each. See apps/k7/frontend/docs/icons.md. */
+/** The cassette's width on EVERY layer that shows it — Android's launch screen in dp, iOS's in pt, the two pages in CSS px, which are the same size on each. See apps/k7-daw-frontend/docs/icons.md. */
 const SPLASH_WIDTH = 280;
 
-// Run by hand after changing the SVG: node apps/k7/frontend/scripts/icons.mjs (apps/k7/frontend/docs/icons.md).
+// Run by hand after changing the SVG: node apps/k7-daw-frontend/scripts/icons.mjs (apps/k7-daw-frontend/docs/icons.md).
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
 
 const frontend = join(dirname(fileURLToPath(import.meta.url)), "..");
-const repo = join(frontend, "..", "..", "..");
+const repo = join(frontend, "..", "..");
 const svg = readFileSync(join(frontend, "icon", "k7.svg"), "utf8").replace(
   /^<\?xml[^>]*>\s*/,
   "",
@@ -25,58 +25,58 @@ const SHAPES = {
 
 const TARGETS = [
   {
-    out: "apps/k7/frontend/public/icon-512.png",
+    out: "apps/k7-daw-frontend/public/icon-512.png",
     size: 512,
     shape: "tile",
     width: 0.78,
   },
   {
-    out: "apps/k7/frontend/public/icon-192.png",
+    out: "apps/k7-daw-frontend/public/icon-192.png",
     size: 192,
     shape: "tile",
     width: 0.78,
   },
-  // The desktop app: the cassette alone on transparency, which `tauri icon` turns into its .ico (apps/k7-desktop/docs/app.md).
+  // The desktop app: the cassette alone on transparency, which `tauri icon` turns into its .ico (apps/k7-daw-desktop/docs/app.md).
   {
-    out: "apps/k7-desktop/src-tauri/icons/icon.png",
+    out: "apps/k7-daw-desktop/src-tauri/icons/icon.png",
     size: 1024,
     shape: "none",
     width: 0.92,
   },
   {
-    out: "engine/k7-runtime/engine/resources/studio_icon.png",
+    out: "apps/k7-daw-engine/k7-runtime/engine/resources/studio_icon.png",
     size: 192,
     shape: "none",
     width: 0.92,
   },
   // Maskable: the cassette's diagonal stays inside the 80% circle every mask keeps.
   {
-    out: "apps/k7/frontend/public/icon-512-maskable.png",
+    out: "apps/k7-daw-frontend/public/icon-512-maskable.png",
     size: 512,
     shape: "bleed",
     width: 0.6,
   },
   {
-    out: "apps/k7/frontend/public/icon-192-maskable.png",
+    out: "apps/k7-daw-frontend/public/icon-192-maskable.png",
     size: 192,
     shape: "bleed",
     width: 0.6,
   },
   {
-    out: "apps/k7/frontend/public/apple-touch-icon.png",
+    out: "apps/k7-daw-frontend/public/apple-touch-icon.png",
     size: 180,
     shape: "bleed",
     width: 0.78,
   },
   {
-    out: "engine/k7-ios/k7/Assets.xcassets/AppIcon.appiconset/icon-1024.png",
+    out: "apps/k7-daw-ios/k7/Assets.xcassets/AppIcon.appiconset/icon-1024.png",
     size: 1024,
     shape: "bleed",
     width: 0.78,
   },
   // Adaptive foreground: 108dp canvas, the cassette inside the 72dp circle; ic_launcher.xml paints the #07031F.
   {
-    out: "engine/k7-android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+    out: "apps/k7-daw-android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
     size: 432,
     shape: "none",
     width: 0.5,
@@ -85,34 +85,34 @@ const TARGETS = [
 
 const FAVICON_SIZES = [16, 32, 48];
 
-// The startup splash, drawn transparent: each platform paints #07031F behind it (apps/k7/frontend/docs/icons.md).
+// The startup splash, drawn transparent: each platform paints #07031F behind it (apps/k7-daw-frontend/docs/icons.md).
 const splashSvg = readFileSync(
   join(frontend, "icon", "k7-splash.svg"),
   "utf8",
 ).replace(/^<\?xml[^>]*>\s*/, "");
 const SPLASH_TARGETS = [
   {
-    out: "engine/k7-android/app/src/main/res/drawable-nodpi/splash_art.png",
+    out: "apps/k7-daw-android/app/src/main/res/drawable-nodpi/splash_art.png",
     width: 960,
   },
   {
-    out: "engine/k7-ios/k7/Assets.xcassets/Splash.imageset/splash@2x.png",
+    out: "apps/k7-daw-ios/k7/Assets.xcassets/Splash.imageset/splash@2x.png",
     width: SPLASH_WIDTH * 2,
   },
   {
-    out: "engine/k7-ios/k7/Assets.xcassets/Splash.imageset/splash@3x.png",
+    out: "apps/k7-daw-ios/k7/Assets.xcassets/Splash.imageset/splash@3x.png",
     width: SPLASH_WIDTH * 3,
   },
 ];
 // The Android launch screen draws the art at the one width; the layer-list is what says so, so it is written here.
-const SPLASH_LAYER = "engine/k7-android/app/src/main/res/drawable/splash.xml";
+const SPLASH_LAYER = "apps/k7-daw-android/app/src/main/res/drawable/splash.xml";
 
 /** The Android launch screen's layer-list: the art centred at the one width, its height the drawing's own ratio. */
 function splashLayer() {
   const box = /viewBox="0 0 ([\d.]+) ([\d.]+)"/.exec(splashSvg);
   const height = Math.round((SPLASH_WIDTH * Number(box[2])) / Number(box[1]));
   return `<?xml version="1.0" encoding="utf-8"?>
-<!-- The startup splash: the cassette (scripts/icons.mjs renders splash_art.png) centred on #07031F (apps/k7/frontend/docs/icons.md). -->
+<!-- The startup splash: the cassette (scripts/icons.mjs renders splash_art.png) centred on #07031F (apps/k7-daw-frontend/docs/icons.md). -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/splash_background" />
     <item
@@ -188,7 +188,7 @@ try {
   for (const size of FAVICON_SIZES)
     favicons.push({ size, png: await render(browser, size, "none", 1) });
   writeFileSync(join(frontend, "public", "favicon.ico"), ico(favicons));
-  console.log("apps/k7/frontend/public/favicon.ico");
+  console.log("apps/k7-daw-frontend/public/favicon.ico");
   for (const { out, width } of SPLASH_TARGETS) {
     mkdirSync(dirname(join(repo, out)), { recursive: true });
     writeFileSync(join(repo, out), await renderSplash(browser, width));

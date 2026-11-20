@@ -1,7 +1,7 @@
 // preset.ts — `node preset`: a node's presets, files in a `presets/` tree keyed by the module it
 // extends. Apply writes the values into the NODE's file and reaches the engine as a values-only
 // diff when it can; save and update write the preset file and touch no project. See
-// packages/song/docs/userPresets.md.
+// apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
 import {
   applyPresetToNode,

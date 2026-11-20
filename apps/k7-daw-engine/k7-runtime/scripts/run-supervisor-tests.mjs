@@ -1,4 +1,4 @@
-// run-supervisor-tests.mjs — the native supervisor's C++ suite (engine/k7-supervisor), run after run-tests.mjs by `npm test`.
+// run-supervisor-tests.mjs — the native supervisor's C++ suite (apps/k7-daw-engine/k7-supervisor), run after run-tests.mjs by `npm test`.
 // What a reader gets wrong: like run-tests.mjs it SKIPS an unconfigured tree rather than configure one; the suite itself takes under a second.
 
 import { spawnSync } from "node:child_process";
@@ -13,7 +13,7 @@ const PRESET =
 const buildDir = join(import.meta.dirname, "..", "..", "k7-supervisor", "build", PRESET);
 
 if (!existsSync(join(buildDir, "CMakeCache.txt"))) {
-  console.log(`\n  SKIPPED — engine/k7-supervisor has no build/${PRESET}: cmake --preset ${PRESET}\n`);
+  console.log(`\n  SKIPPED — apps/k7-daw-engine/k7-supervisor has no build/${PRESET}: cmake --preset ${PRESET}\n`);
   process.exit(0);
 }
 

@@ -4,7 +4,7 @@
 WebM, FLAC or 16-bit WAV — a stream copy of a FLAC, a render's stems, a transcription's input. It is the same WebAssembly module as the
 decoder ([analysis.md](analysis.md)), built with the crate's `encode` feature, and services run it
 on the pool's workers (`transcodeOffThread`), each job with a deadline its caller sets. The Rust front runs
-the module in Wasmtime (`apps/k7/backend-rs/crates/k7-mediatek/src/transcode.rs`).
+the module in Wasmtime (`apps/k7-daw-backend/packages/k7-mediatek/src/transcode.rs`).
 
 ## One queue, in front of the workers
 
@@ -20,7 +20,7 @@ ffmpeg is a 100 MB dependency of the hosted image that a crafted upload talks to
 can hang where the shared backend cannot reach it. The WebAssembly build is one path on every host —
 the server, the desktop, the phone — reads only the file it is handed, through the host's reads,
 and runs on a worker the pool terminates past its deadline. What ffmpeg still does here is what no
-Rust crate does well: video, and an mp3 (`packages/take-render/docs/rendering.md`).
+Rust crate does well: video, and an mp3 (`apps/k7-daw-frontend/packages/take-render/docs/rendering.md`).
 
 ## The crates, and what each is for
 

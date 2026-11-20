@@ -23,7 +23,7 @@ Two compiles over one folder say the same thing structurally, and say it where a
 it. The split is by META REF, not by folder: a picture lane is a lane node like a sound lane —
 muted, soloed, ordered and renamed as every lane is — and `extends("@meta/picture-track")` is what
 sends it to this compile. `lanesOf` answers the sound lanes only, `pictureLanesOf` the rest
-(`packages/song/src/trackModule.ts`).
+(`apps/k7-daw-frontend/packages/song/src/trackModule.ts`).
 
 A sound lane is not typed by what it carries, but a picture lane must be: an EMPTY one — what
 `picture lane new` makes — would otherwise read as an empty sound lane, and the rows, the graph
@@ -36,7 +36,7 @@ seconds depends on the tempo, which the author is free to change. A placement's 
 **wall-clock**: `start: 4` is four seconds, and no setting anywhere moves it.
 
 Both are drawn on the one timeline, and its ruler reads either — bars, or minutes and seconds
-(`apps/k7/frontend/docs/picture.md`). The conversion is exact and reversible in both directions
+(`apps/k7-daw-frontend/docs/picture.md`). The conversion is exact and reversible in both directions
 because there is **one `tempo:` and no tempo map**: a shot at 4.5s sits at beat 9 at 120 bpm,
 which is a fact about the drawing rather than about the file.
 
@@ -84,7 +84,7 @@ picture will not compile" stay two different answers.
 
 ### Making a lane writes the lane AND the rows
 
-`createPictureLaneFile` (`packages/song/src/projectFiles.ts`) writes the lane file **and** states
+`createPictureLaneFile` (`apps/k7-daw-frontend/packages/song/src/projectFiles.ts`) writes the lane file **and** states
 `trackOrder` with the new lane above the picture lanes there are, and the verb behind it —
 `picture lane new` — is what k7's timeline calls. Above, so it draws in FRONT, where you can see
 what you just made; stated, because with no `trackOrder` the order is a sort of the names, which
@@ -115,7 +115,7 @@ a map names a kind. Overlapping two shots and fading the later one in is a cross
 its own start — [animation.md](animation.md).
 
 The rect is also what the VIEWPORT drags: selecting a layer there and moving or resizing it runs
-`picture rect`, which writes the `frame` (`apps/k7/frontend/docs/picture.md`).
+`picture rect`, which writes the `frame` (`apps/k7-daw-frontend/docs/picture.md`).
 
 **A lane stating no `frame` fills the frame**, as a camera layer does. The hazard is a default of
 `0`: a 0x0 quad in FRONT of the full-frame lane, drawing nothing — which reads as "the reorder did
@@ -137,7 +137,7 @@ not a field of the lane file.
 Each compile filters it to its own lanes, so soloing a shot silences nothing and soloing a guitar
 hides nothing; any picture solo hides every un-soloed picture lane, which is the mixer-wide rule
 audio already keeps. The fold is the browser's, since the browser is what composites
-(`packages/song-video/src/pictureMix.ts`) — the engine resolves the audio half and is told about no
+(`apps/k7-daw-frontend/packages/song-video/src/pictureMix.ts`) — the engine resolves the audio half and is told about no
 lane of picture at all.
 
 Sound and picture lanes share one name space — they are all lane nodes — so a name in `soloed:`
@@ -165,7 +165,7 @@ A picture lane draws its placements. Wire an `io: camera` node to it in `graph.k
 it draws a live picture instead — the same lane, the same rect, the same `mute`, the same passes
 over it. That is the one thing in the picture model that comes off `graph.k7x`'s SOURCES rather
 than out of the lane's events, and it is why it costs no new road: everything a live layer needs, a
-lane already had. See [packages/song/docs/camera.md](../../song/docs/camera.md).
+lane already had. See [apps/k7-daw-frontend/packages/song/docs/camera.md](../../song/docs/camera.md).
 
 An export leaves such a layer out: a lens has no frame at *t*, and a render walks a timeline.
 

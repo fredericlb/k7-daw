@@ -1,7 +1,7 @@
 // useProjectTasks.ts — the OPEN project's tasks, read off the workspace's TODOS.md and read again
 // whenever the workspace's revision moves, for the timeline's ruler to draw at their timecode.
 // A task pinned to another song is not this one's, so only an anchor naming `project` is kept.
-// See apps/k7/frontend/docs/tasks.md.
+// See apps/k7-daw-frontend/docs/tasks.md.
 
 import { parseTasks, TASKS_FILE, type Task } from "@studio/song-schema/tasks";
 import { useEffect, useState } from "react";

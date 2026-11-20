@@ -71,7 +71,7 @@ fn resources(app: &AppHandle) -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("resources")
 }
 
-/// What the front reads beside itself (apps/k7/backend-rs/scripts/stageBundle.mjs): `$K7_BACKEND_BUNDLE`, else the staged one.
+/// What the front reads beside itself (apps/k7-daw-backend/scripts/stageBundle.mjs): `$K7_BACKEND_BUNDLE`, else the staged one.
 pub fn backend_bundle(app: &AppHandle) -> Option<PathBuf> {
     let dir = std::env::var("K7_BACKEND_BUNDLE")
         .map(PathBuf::from)
@@ -82,18 +82,18 @@ pub fn backend_bundle(app: &AppHandle) -> Option<PathBuf> {
 /// The Rust front's code root (scripts/stage.mjs's `code`): the staged one; in a checkout the front finds the checkout.
 pub fn code_root(app: &AppHandle) -> Option<PathBuf> {
     let dir = resources(app).join("code");
-    dir.join("packages/commands/commands.yaml")
+    dir.join("apps/k7-daw-frontend/packages/commands/commands.yaml")
         .is_file()
         .then_some(dir)
 }
 
-/// The backend's table of ports, environment and folders, shared with the phone (apps/k7/backend-rs/standalone.json).
+/// The backend's table of ports, environment and folders, shared with the phone (apps/k7-daw-backend/standalone.json).
 pub fn standalone_json(app: &AppHandle) -> Option<PathBuf> {
     let staged = resources(app).join("standalone.json");
     if staged.is_file() {
         return Some(staged);
     }
-    let repo = repo_root()?.join("apps/k7/backend-rs/standalone.json");
+    let repo = repo_root()?.join("apps/k7-daw-backend/standalone.json");
     repo.is_file().then_some(repo)
 }
 
@@ -121,7 +121,7 @@ pub fn engine_beside(supervisor: &Path) -> Option<PathBuf> {
     newest_build("k7-runtime", ENGINE)
 }
 
-/// The monorepo root of a checkout run: `$STUDIO_REPO_ROOT`, else up from this crate to the dir holding `engine/k7-runtime`.
+/// The monorepo root of a checkout run: `$STUDIO_REPO_ROOT`, else up from this crate to the dir holding `apps/k7-daw-engine/k7-runtime`.
 fn repo_root() -> Option<PathBuf> {
     if let Ok(root) = std::env::var("STUDIO_REPO_ROOT") {
         let p = PathBuf::from(root);
@@ -131,7 +131,7 @@ fn repo_root() -> Option<PathBuf> {
     }
     let mut dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     loop {
-        if dir.join("engine/k7-runtime").is_dir() {
+        if dir.join("apps/k7-daw-engine/k7-runtime").is_dir() {
             return Some(dir);
         }
         if !dir.pop() {

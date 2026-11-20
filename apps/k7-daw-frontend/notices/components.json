@@ -25,7 +25,7 @@
     {
       "name": "Tracktion Engine",
       "version": "3.2.0",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "GPL-3.0-or-later",
       "url": "https://github.com/Tracktion/tracktion_engine",
       "where": ["engine"],
@@ -36,7 +36,7 @@
     {
       "name": "JUCE",
       "version": "19edd538429c93d277bf95b55aaa7e3eb545f951",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "AGPL-3.0-only",
       "url": "https://github.com/juce-framework/JUCE",
       "where": ["engine"],
@@ -60,7 +60,7 @@
     {
       "name": "NeuralAmpModelerCore",
       "version": "v0.5.4",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "MIT",
       "url": "https://github.com/sdatkinson/NeuralAmpModelerCore",
       "where": ["engine"],
@@ -71,7 +71,7 @@
     {
       "name": "Eigen",
       "version": "87300c93cae6a8afd9a4f8aa8d9d5c5324cf02e1",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "MPL-2.0",
       "url": "https://gitlab.com/libeigen/eigen",
       "where": ["engine"],
@@ -86,7 +86,7 @@
     {
       "name": "RTNeural",
       "version": "95c3c0f987a6fe903e7eec71e797405dbed7caf7",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "BSD-3-Clause",
       "url": "https://github.com/jatinchowdhury18/RTNeural",
       "where": ["engine"],
@@ -97,7 +97,7 @@
     {
       "name": "sfizz",
       "version": "1.2.3",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "BSD-2-Clause AND Apache-2.0 AND MIT AND BSL-1.0 AND Zlib",
       "url": "https://github.com/sfztools/sfizz",
       "where": ["engine"],
@@ -119,7 +119,7 @@
     {
       "name": "Surge XT",
       "version": "baa97f7cad09d3dcde472137ed030829ff55d202",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "GPL-3.0-or-later AND MIT AND BSL-1.0 AND BSD-3-Clause",
       "url": "https://github.com/surge-synthesizer/surge",
       "where": ["engine"],
@@ -142,7 +142,7 @@
     {
       "name": "QuickJS-ng",
       "version": "v0.17.0",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "MIT",
       "url": "https://github.com/quickjs-ng/quickjs",
       "where": ["engine"],
@@ -153,18 +153,18 @@
     {
       "name": "Mutable Instruments eurorack and stmlib",
       "version": "08460a69a7e1f7a81c5a2abcc7189c9a6b7208d4",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "MIT",
       "url": "https://github.com/pichenettes/eurorack",
       "where": ["engine"],
       "fetchContent": ["eurorack", "stmlib"],
       "text": "mutable-instruments.txt",
-      "vendor": ["repo:engine/k7-runtime/LICENSE#L12-L38"]
+      "vendor": ["repo:apps/k7-daw-engine/k7-runtime/LICENSE#L12-L38"]
     },
     {
       "name": "IXWebSocket",
       "version": "v12.0.1",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "BSD-3-Clause",
       "url": "https://github.com/machinezone/IXWebSocket",
       "where": ["engine"],
@@ -175,7 +175,7 @@
     {
       "name": "JSON for Modern C++",
       "version": "3.11.3",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "MIT",
       "url": "https://github.com/nlohmann/json",
       "where": ["engine"],
@@ -186,7 +186,7 @@
     {
       "name": "Steinberg ASIO SDK",
       "version": "2.3.4",
-      "source": "engine/k7-runtime/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
       "license": "GPL-3.0-only",
       "url": "https://www.steinberg.net/developers/",
       "where": ["engine"],
@@ -196,7 +196,7 @@
     {
       "name": "Mbed TLS",
       "version": "3.6.5",
-      "source": "engine/k7-supervisor/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
       "license": "Apache-2.0 OR GPL-2.0-or-later",
       "url": "https://github.com/Mbed-TLS/mbedtls",
       "where": ["engine"],
@@ -206,7 +206,7 @@
     {
       "name": "miniz",
       "version": "3.0.2",
-      "source": "engine/k7-supervisor/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
       "license": "MIT",
       "url": "https://github.com/richgel999/miniz",
       "where": ["engine"],
@@ -217,7 +217,7 @@
     {
       "name": "libdatachannel",
       "version": "v0.24.5",
-      "source": "engine/k7-supervisor/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
       "license": "MPL-2.0 AND MIT AND BSD-3-Clause",
       "url": "https://github.com/paullouisageneau/libdatachannel",
       "where": ["engine"],
@@ -233,7 +233,7 @@
     {
       "name": "ONNX Runtime",
       "version": "1.30.0",
-      "source": "engine/k7-supervisor/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
       "license": "MIT",
       "url": "https://github.com/microsoft/onnxruntime",
       "where": ["engine"],
@@ -248,7 +248,7 @@
     {
       "name": "Microsoft DirectML",
       "version": "1.15.4",
-      "source": "engine/k7-supervisor/CMakeLists.txt",
+      "source": "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
       "license": "LicenseRef-Microsoft-DirectML",
       "url": "https://www.nuget.org/packages/Microsoft.AI.DirectML",
       "where": ["engine"],
@@ -259,7 +259,7 @@
     {
       "name": "Sonivox sound font",
       "version": "2.10",
-      "source": "apps/k7/frontend/public/score/SONIVOX-README.md",
+      "source": "apps/k7-daw-frontend/public/score/SONIVOX-README.md",
       "license": "Apache-2.0",
       "url": "https://musical-artifacts.com/artifacts/1517",
       "where": ["web"],

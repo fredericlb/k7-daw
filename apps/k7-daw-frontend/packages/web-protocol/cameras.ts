@@ -1,7 +1,7 @@
 // cameras.ts — remote cameras: a device in camera mode offers its lens to the SAME account on the
 // same server, and a project's camera node names it as `remote:<device name>`. Both halves are here
 // because the backend's hub and the browser must agree on the paths, the frames and which camera a
-// label names. A name is a label a person reads, never an id. See packages/web-protocol/docs/cameras.md.
+// label names. A name is a label a person reads, never an id. See apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md.
 
 /** The account's cameras: `GET` lists them, `POST <path>/ticket` mints what opens the socket. */
 export const CAMERAS_ROUTE = "/api/cameras";

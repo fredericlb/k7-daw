@@ -1,11 +1,11 @@
 // sheet.mjs — reads the Sheet's CSV export (interactions, screens, areas, gaps) into one model.
-// The CSVs are a copy of the Sheet, never edited by hand: ../../apps/k7/frontend/docs/interactionsSheet.md.
+// The CSVs are a copy of the Sheet, never edited by hand: ../../apps/k7-daw-frontend/docs/interactionsSheet.md.
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 export const SHEET_URL = "https://claude.ai/artifact/GWymnBJpibPCE4b32ZR1gz";
-export const CSV_DIR = "apps/k7/frontend/docs/interactions";
+export const CSV_DIR = "apps/k7-daw-frontend/docs/interactions";
 
 /** RFC 4180: quoted fields may hold commas, doubled quotes and line breaks. */
 export function parseCsv(text) {

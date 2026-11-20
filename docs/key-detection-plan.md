@@ -2,8 +2,8 @@
 
 **No key is detected.** KEY holds the pitch without saying which one, so there is no harmonic
 mixing and no Camelot wheel. The other two points of the desk audit are done — the playlist
-pre-warms ([prewarm.md](../packages/k7-plugins/docs/turntables/prewarm.md)) and the grid is correctable
-([grid.md](../packages/k7-plugins/docs/turntables/grid.md)). This one is different in kind: it is not a
+pre-warms ([prewarm.md](../apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/prewarm.md)) and the grid is correctable
+([grid.md](../apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/grid.md)). This one is different in kind: it is not a
 missing button, it is a **measurement**, and it belongs to the analysis pass.
 
 ## Where it would live
@@ -28,7 +28,7 @@ semitone, so the pass gains a chromagram by importing it rather than by taking a
 /** v2 added `transients` + `sensitivity`, v3 `bpm`, v4 the three bands. */
 ```
 
-`readSidecar` requires `MIN_CACHE_VERSION = 4` (`apps/k7/backend-rs/crates/k7-mediatek/src/sidecar.rs`). Going to v5 **invalidates every existing
+`readSidecar` requires `MIN_CACHE_VERSION = 4` (`apps/k7-daw-backend/packages/k7-mediatek/src/sidecar.rs`). Going to v5 **invalidates every existing
 sidecar**: every song is re-analysed on first opening. Pre-warming absorbs that — it walks the
 playlist by itself as soon as the surface has its list — so the invalidation is paid in the
 background rather than on the first record put on.
@@ -68,7 +68,7 @@ rests on.
 
 What remains available without them is SYNTHETIC material, whose key is known because it was
 written. That does not measure accuracy on real material, and
-`packages/audio-probe/src/key.test.ts` says so in its header rather than letting anyone believe
+`apps/k7-daw-frontend/packages/audio-probe/src/key.test.ts` says so in its header rather than letting anyone believe
 otherwise. It measures what breaks silently: a mis-mapped pitch class, a profile turned the wrong
 way, a wheel whose neighbours are not neighbours.
 
@@ -104,7 +104,7 @@ The low bound is C3 (7.8 Hz), the lowest semitone this frame separates.
 
 ### The leads have been tried. None works.
 
-`packages/audio-probe/scripts/key-truth.ts` replays the seventeen songs against four variants:
+`apps/k7-daw-frontend/packages/audio-probe/scripts/key-truth.ts` replays the seventeen songs against four variants:
 
 | variant | exact (Temperley) | exact (Krumhansl) | Camelot |
 |---|---|---|---|

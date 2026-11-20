@@ -1,8 +1,8 @@
 # The app icon
 
-k7's icon is ONE drawing, `apps/k7/frontend/icon/k7.svg` — a cassette — and every platform's
-icon is a render of it by `apps/k7/frontend/scripts/icons.mjs`. Nobody edits a PNG by hand: change
-the SVG, run `node apps/k7/frontend/scripts/icons.mjs`, commit what it wrote. The startup splash
+k7's icon is ONE drawing, `apps/k7-daw-frontend/icon/k7.svg` — a cassette — and every platform's
+icon is a render of it by `apps/k7-daw-frontend/scripts/icons.mjs`. Nobody edits a PNG by hand: change
+the SVG, run `node apps/k7-daw-frontend/scripts/icons.mjs`, commit what it wrote. The startup splash
 below is drawn the same way.
 
 ## Where each platform reads it
@@ -13,14 +13,14 @@ below is drawn the same way.
 | PWA, maskable | `public/icon-*-maskable.png` | #07031F to the edges, the cassette inside the 80% circle a mask keeps |
 | browser tab | `public/favicon.ico` (16, 32, 48) | the cassette alone, as large as it fits |
 | iPhone home screen (web) | `public/apple-touch-icon.png` | #07031F to the edges: iOS rounds it |
-| the desktop app's installer and app bundle | `apps/k7-desktop/src-tauri/icons/` | the cassette alone, on transparency |
-| Android | `engine/k7-android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png` | the cassette alone, inside the 72dp circle; `ic_launcher.xml` paints the #07031F (`res/values/colors.xml`) |
-| iOS | `engine/k7-ios/k7/Assets.xcassets/AppIcon.appiconset/icon-1024.png` | #07031F to the edges: iOS masks it |
-| a plugin's window, opened by the engine | `engine/k7-runtime/engine/resources/studio_icon.png` | the cassette alone, on transparency (`public/icon-desktop.png`'s drawing) |
+| the desktop app's installer and app bundle | `apps/k7-daw-desktop/src-tauri/icons/` | the cassette alone, on transparency |
+| Android | `apps/k7-daw-android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png` | the cassette alone, inside the 72dp circle; `ic_launcher.xml` paints the #07031F (`res/values/colors.xml`) |
+| iOS | `apps/k7-daw-ios/k7/Assets.xcassets/AppIcon.appiconset/icon-1024.png` | #07031F to the edges: iOS masks it |
+| a plugin's window, opened by the engine | `apps/k7-daw-engine/k7-runtime/engine/resources/studio_icon.png` | the cassette alone, on transparency (`public/icon-desktop.png`'s drawing) |
 
 ## The startup splash
 
-Every app starts on ONE other drawing, `apps/k7/frontend/icon/k7-splash.svg` — the cassette, full
+Every app starts on ONE other drawing, `apps/k7-daw-frontend/icon/k7-splash.svg` — the cassette, full
 size — centred on **#07031F**, and the same script renders it for the platforms that cannot read an
 SVG. That colour is painted by every layer that can show before the page does, so nothing between
 the system's launch screen and k7's first render flashes another colour.
@@ -29,7 +29,7 @@ the system's launch screen and k7's first render flashes another colour.
 |---|---|---|
 | web, PWA | `index.html`'s `#k7-splash`, over the startup waits until the first screen; an installed PWA's launch screen | the SVG itself; `background_color` in both manifests |
 | `k7.rocks` | the front page of the static site (`site/index.html`, `docs/site.md`) | `icon/k7-splash.svg`, copied beside the page by `scripts/buildSite.mjs` |
-| Android | the window's background (`res/drawable/splash.xml`, `AppTheme.Launch`), then the shell page while the phone's k7 starts (`engine/k7-android/web/src/Backend.tsx`) | `res/drawable-nodpi/splash_art.png`; the SVG in the shell page |
+| Android | the window's background (`res/drawable/splash.xml`, `AppTheme.Launch`), then the shell page while the phone's k7 starts (`apps/k7-daw-android/web/src/Backend.tsx`) | `res/drawable-nodpi/splash_art.png`; the SVG in the shell page |
 | iOS | `UILaunchScreen` (`Info.plist`), then the same shell page | `Assets.xcassets/Splash.imageset`, on `LaunchBackground` |
 
 - **One screen, whatever the platform has started**: the cassette, then a **ring**, then the step's
@@ -54,7 +54,7 @@ the system's launch screen and k7's first render flashes another colour.
 - **It stays until the first screen, not the first render.** The gates' waits have nothing behind
   them, and a black window with a line at its foot between the cassette and the page reads as a
   crash. So the splash sits beside `#root`, where React's render leaves it, and every `GateWait`
-  holds it (`packages/project-shell/docs/launch.md`).
+  holds it (`apps/k7-daw-frontend/packages/project-shell/docs/launch.md`).
 - **Only the start draws it.** Once the first screen is up, a wait inside the running app is the bar
   at the bottom, and the lazy screens' `Booting` never brings the cassette back.
 - **Android 12 and later draw their own splash first**, the launcher icon on a colour: that colour

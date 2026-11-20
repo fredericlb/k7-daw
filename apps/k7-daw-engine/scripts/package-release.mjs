@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // package-release.mjs — one release file per kind, for the platform that produced it, into dist/release/:
-// `engine` archives dist/k7-runtime/ (build-engine.mjs); `desktop` renames the installers apps/k7-desktop built (desktopRelease.mjs).
+// `engine` archives dist/k7-runtime/ (build-engine.mjs); `desktop` renames the installers apps/k7-daw-desktop built (desktopRelease.mjs).
 // Named for the root package.json's version. See docs/release.md.
 
 import { existsSync, mkdirSync, readFileSync, rmSync, statSync } from "node:fs";
@@ -10,7 +10,7 @@ import { parseArgs } from "node:util";
 import { distDir, run, windowsTar } from "./buildTools.mjs";
 import { packageDesktop } from "./desktopRelease.mjs";
 
-const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const RELEASE = join(distDir(repo), "release");
 
 function fail(message) {
@@ -35,7 +35,9 @@ mkdirSync(RELEASE, { recursive: true });
 if (kind === "engine") {
   const staged = join(distDir(repo), "k7-runtime");
   if (!existsSync(staged))
-    fail(`${staged} is missing — run engine/scripts/build-engine.mjs first.`);
+    fail(
+      `${staged} is missing — run apps/k7-daw-engine/scripts/build-engine.mjs first.`,
+    );
   const name = `k7-runtime_${version}_${platform}-${arch}`;
   // tar.gz outside Windows: the binaries are only useful with their executable bit.
   const archive = `${name}.${platform === "windows" ? "zip" : "tar.gz"}`;
@@ -57,7 +59,7 @@ if (kind === "engine") {
     bundle: join(
       repo,
       "apps",
-      "k7-desktop",
+      "k7-daw-desktop",
       "src-tauri",
       "target",
       "release",

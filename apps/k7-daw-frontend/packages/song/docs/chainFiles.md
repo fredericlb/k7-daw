@@ -130,7 +130,7 @@ subchains([
 ```
 
 A subchain of a picture lane's chain that nothing links and that links nowhere is a **stretch**: the
-run a fade puts a shot through (`packages/song-video/docs/transitions.md`). The file is its scope,
+run a fade puts a shot through (`apps/k7-daw-frontend/packages/song-video/docs/transitions.md`). The file is its scope,
 which is the scope a stretch needs — a fade on `main` can name only `main`'s — and it is named by its
 id, so a fade reads `chain: iris` rather than a node's uuid. In the segments it is the cable from
 its last node INTO the lane, the shape a graph project writes it in; written back, a run of picture
@@ -142,7 +142,7 @@ out first, the lane would be absorbed into the run feeding it, and its chain wou
 
 `input({ channel: [1, 2], monitor: "off" })` — the channel a preferences label too — is a library
 TEMPLATE's: the interface input a bench opened on it feeds its IN from, and whether that IN is heard
-(`apps/k7/frontend/docs/frozenChains.md`). Monitoring belongs to the chain for the same reason the
+(`apps/k7-daw-frontend/docs/frozenChains.md`). Monitoring belongs to the chain for the same reason the
 channel does: a chain kept silent for recording through is a different chain from one played live. It names a socket,
 which a project's own chains get from their input nodes, so a project's compile reads nothing of it.
 
@@ -254,4 +254,4 @@ text transforms; only where the text comes from changes (`chainItemEdit.ts`, `ch
 `rust/src/templates/` reads a library chain as a template (`read_template`: a file chain by `decode_chain`, a folder chain by its
 graph and node files) and resolves a step against the vocabulary (`facts_of`: offline, cold, outputs, the model). It refuses
 what the TypeScript's `readTemplate` throws on and what it will not word itself, so the host declines and the TypeScript answers
-(`apps/k7/backend-rs/docs/file-chains.md`). A step's `params` are numbers or strings: any other type refuses the chain.
+(`apps/k7-daw-backend/docs/file-chains.md`). A step's `params` are numbers or strings: any other type refuses the chain.

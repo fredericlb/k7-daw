@@ -42,7 +42,7 @@ export function VideoCanvas({
   children,
 }: {
   scene: VideoScene;
-  /** Draw even out of sight — the output's recording, which nobody watches (packages/song/docs/outputRecording.md). */
+  /** Draw even out of sight — the output's recording, which nobody watches (apps/k7-daw-frontend/packages/song/docs/outputRecording.md). */
   alwaysDraw?: boolean;
   /** The driver once built, and null when it goes: what a recording captures the frame from. */
   onDriver?: (driver: RealtimeDriver | null) => void;

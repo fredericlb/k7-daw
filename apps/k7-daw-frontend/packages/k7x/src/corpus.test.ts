@@ -9,7 +9,7 @@ import { parse, parseDocument } from "./edit.ts";
 import { nativeData, nativeReady } from "./native.ts";
 import { stringify } from "./print.ts";
 
-const ROOT = join(import.meta.dirname, "..", "..", "..");
+const ROOT = join(import.meta.dirname, "..", "..", "..", "..", "..");
 const CORPORA = ["demos", "k7-core"]
   .map((d) => join(ROOT, d))
   .filter((d) => existsSync(d));

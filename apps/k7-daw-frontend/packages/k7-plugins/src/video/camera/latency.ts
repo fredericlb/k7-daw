@@ -1,7 +1,7 @@
 // latency.ts — how late a remote camera's picture is, read from WebRTC's own stats, and the jitter
 // buffer each one is given so that every remote camera this browser draws is equally late. A
 // picture cannot be made EARLIER: aligning means holding the quicker ones back to the slowest.
-// The arithmetic is pure, so it is tested without a peer connection. See packages/web-protocol/docs/cameras.md.
+// The arithmetic is pure, so it is tested without a peer connection. See apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md.
 
 /** What one remote lens's stats said: the part a jitter buffer adds, and the part it cannot touch. */
 export interface LatencySample {

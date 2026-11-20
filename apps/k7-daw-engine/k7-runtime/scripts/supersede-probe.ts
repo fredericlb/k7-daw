@@ -1,7 +1,7 @@
 // supersede-probe.ts — a burst of parameter writes and of documents still ends on the LAST one sent,
 // and a fence between documents keeps its place. Point it at a running engine (docs/supersede.md).
 //
-//   npx tsx engine/k7-runtime/scripts/supersede-probe.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/supersede-probe.ts [ws://127.0.0.1:8765]
 //
 // The bench is mix-probe's: a synth into a Volume & Pan at 0, so the level heard is the dry signal
 // the @mix blend puts back — 0 is all of it, 0.5 is 3 dB under, 1 is silence. Count the

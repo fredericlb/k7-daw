@@ -2,7 +2,7 @@
 // it is a flat FileList, and a dropped directory arrives in it as an unreadable entry (or
 // not at all). The directory structure is only reachable through `webkitGetAsEntry`, whose
 // two traps are documented below because both fail silently.
-// See packages/ui/docs/file-tree.md.
+// See apps/k7-daw-frontend/packages/ui/docs/file-tree.md.
 
 /** One dropped file and where it sat, relative to what was dropped ("audio/reverb/module.yaml"). */
 export interface DroppedFile {

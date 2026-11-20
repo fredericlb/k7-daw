@@ -1,6 +1,6 @@
 //! envelope.rs — the JavaScript half of a sidecar's arithmetic: the band followers' coefficients, the
 //! onsets (`detectTransients`), the tempo picked from the module's correlations (`detectBpm`); the page's
-//! `packages/audio-probe/src/waveform.ts` reads the same shapes.
+//! `apps/k7-daw-frontend/packages/audio-probe/src/waveform.ts` reads the same shapes.
 //! What a reader gets wrong: `Math.exp` and `Math.log2` are V8's own (`k7_js::math`), never the platform's libm.
 
 use k7_js::math::{exp, log2};

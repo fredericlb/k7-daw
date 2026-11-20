@@ -2,7 +2,7 @@
 // transport, the platter's own `Rate` for a deck), so this predicts from local time and the
 // only unknown it estimates is the OFFSET between the two clocks. A frame that disagrees is a
 // measurement, not a drift — except past the seek threshold, where it is a jump and the estimate
-// is rolled back. Pure: no React, no DOM, no clock of its own. See apps/k7/frontend/docs/playhead.md.
+// is rolled back. Pure: no React, no DOM, no clock of its own. See apps/k7-daw-frontend/docs/playhead.md.
 
 /** A frame contradicting the estimate by more than this is a SEEK, not latency. */
 export const SEEK_EPS = 0.3; // seconds — the same figure ui-eyes' EngineClock uses

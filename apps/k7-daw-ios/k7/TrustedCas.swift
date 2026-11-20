@@ -1,7 +1,7 @@
 // TrustedCas.swift — the CAs the user tells this app to trust, beyond the set it ships: a studio behind a
 // private CA is refused otherwise, and the supervisor's TLS stack cannot read what a user installed in
 // Settings. Kept as one PEM file the supervisor is handed as STUDIO_EXTRA_CA_CERTS; the views ask it too,
-// through iOS's own trust evaluation, so iOS's TLS rules still apply. See engine/k7-runtime/docs/ios.md.
+// through iOS's own trust evaluation, so iOS's TLS rules still apply. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Foundation
 import Security

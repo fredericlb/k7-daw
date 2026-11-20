@@ -1,5 +1,5 @@
 // LaneMeter.tsx — one lane's meters in its header: the output level, and the input when armed.
-// See packages/engine-browser/docs/meters.md.
+// See apps/k7-daw-frontend/packages/engine-browser/docs/meters.md.
 
 import { useEngineState } from "@studio/engine-browser/store";
 import { usePaneVisible } from "../../paneVisible";

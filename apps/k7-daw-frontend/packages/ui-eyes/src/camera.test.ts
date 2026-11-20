@@ -1,6 +1,6 @@
 // Which lens a label opens. The rule that matters is the one about NOT refusing: a project
 // travels, and a camera that is not on this machine has to draw something and say why.
-// See packages/song/docs/camera.md.
+// See apps/k7-daw-frontend/packages/song/docs/camera.md.
 
 import { describe, expect, it } from "vitest";
 import { type CameraDevice, cameraConstraint, matchCamera } from "./camera";

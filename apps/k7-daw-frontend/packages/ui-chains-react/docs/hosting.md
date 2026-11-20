@@ -54,7 +54,7 @@ package draws in more than one app and has no catalogue, so a host that reads in
 hands in its translation, whole or in part — a label it leaves out is the enclosing graph's, else
 the English one. It travels by context like `icons`, for the same reason. Two pieces take it as a
 prop instead (`Cables`, `PresetButton`): `a11y.test.tsx` calls them as plain functions, where no
-context can be read. k7's is `apps/k7/frontend/src/chainsLabels.ts`.
+context can be read. k7's is `apps/k7-daw-frontend/src/chainsLabels.ts`.
 
 **`runCommand`** (the `command` prop) — a `@studio/commands` SID line. Every app that can
 edit a graph has one.
@@ -110,7 +110,7 @@ picture reads, so the card shows those and the host writes the node itself. Its 
 a target of its own (`offline` with `shader: true`) whatever `moduleParams` says, and only
 `onShaderParam` makes it writable. Folding it into `onModuleParam` would have made writability one
 answer for both, and a deck's tempo, which the graph only borrows, would have turned against
-nothing (packages/song/docs/videoMixer.md).
+nothing (apps/k7-daw-frontend/packages/song/docs/videoMixer.md).
 
 `trackInputs` is a plain record for the same reason, like `engineWarnings` beside it: it is what
 the HOST knows about a live input and the graph does not. The chip is drawn only where
@@ -129,7 +129,7 @@ pads drawn but silent, which is the right degradation for a surface with no engi
 
 `onRecorder` hands the host BOTH names of the node: `pluginId`, which is what the engine keys a
 recorder by, and `module`, which is what a verb names. The host needs both because record and
-clear go down the socket while save is a command (`engine/k7-runtime/docs/recorder.md`).
+clear go down the socket while save is a command (`apps/k7-daw-engine/k7-runtime/docs/recorder.md`).
 
 `onModuleField` is separate from `command` for `onBypassModule`'s reason — it must reload — and
 one more: a module's own field has no optimistic value, so the reload is the only feedback the
@@ -142,7 +142,7 @@ pressing it reports the node, a viewport point and — when the module runs as m
 the host gave `onEngine` — the engines and which is on, and the host draws the list there: the
 presets, and a left bar of the engines whose pick is the host's `node engine`. The list is
 the host's because what a preset is, where it is kept and how saving one is written are all
-file-service matters (`packages/song/docs/userPresets.md`), and because its header — save the node
+file-service matters (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`), and because its header — save the node
 as a new preset, update the one loaded — is the host's commands. Same split as `onAssetBrowse`.
 
 `presetNames` is what the button wears: the preset each node last loaded, by node, which only the
@@ -184,7 +184,7 @@ having no tempo to turn the engine's seconds into beats. k7's shell sets it, fro
 
 Named so it is one thing, rather than a `useRef<{x,y,k}|null>(null)` per surface with a
 near-identical comment above each. The graph is torn down with its pane, so the pan and zoom have
-to be held by something that outlives it (`apps/k7/frontend/docs/chainsGraph.md`). A host that
+to be held by something that outlives it (`apps/k7-daw-frontend/docs/chainsGraph.md`). A host that
 omits it gets a fresh frame on every reopen, which is a choice, but rarely the intended one.
 `Cam` itself lives in `camera.ts` with everything else that moves it, and is re-exported from
 `DomChains.tsx` because a host imports it from the package entry.
@@ -291,7 +291,7 @@ where it does not (a `filepicker`'s button is enabled whenever the node has a mo
 opens is the host's popup and only the host knows whether it has one). k7 draws a graph in three
 places — the chains pane, the editor column's panel and a lane's own row — and each one is a separate
 prop list; a callback added to one and not the others is a card that works in one view and not in the
-next, which reads as a broken app rather than as a view that offers less. `apps/k7/frontend/docs/shell.md`
+next, which reads as a broken app rather than as a view that offers less. `apps/k7-daw-frontend/docs/shell.md`
 lists what a lane's row deliberately leaves out, and why those are not the same kind of omission.
 
 `onEdgeInsert` follows the same rule as the sockets below it: **no handler, no `+`**. The

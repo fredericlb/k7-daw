@@ -19,7 +19,7 @@ import { writeDoc } from "./testSupport";
 // A path a song file names may not leave the project's roots: other accounts' files sit beside it.
 
 const here = dirname(fileURLToPath(import.meta.url));
-const SONG = join(here, "..", "..", "..", "demos", "node-demo.k7");
+const SONG = join(here, "..", "..", "..", "..", "..", "demos", "node-demo.k7");
 
 let base: string;
 let home: string;

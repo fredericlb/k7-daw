@@ -8,13 +8,13 @@ the picture range.
 
 ## The renderer seam
 
-`packages/take-render/src/renderer.ts` defines `Renderer`: a function that takes a compiled document
+`apps/k7-daw-frontend/packages/take-render/src/renderer.ts` defines `Renderer`: a function that takes a compiled document
 and an output folder and resolves to a `RenderManifest` (`parseManifest` reads the engine's stdout).
 `localRenderer(bin, timeout)` runs the engine binary as a one-shot process with `--render`;
 `renderToWav` is the common wrapper.
 
-Which renderer a verb gets is the file service's decision (`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/jobs/render.rs`; `localRenderer` in
-`packages/take-render/src/renderer.ts` for the engine scripts), tried in order:
+Which renderer a verb gets is the file service's decision (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/jobs/render.rs`; `localRenderer` in
+`apps/k7-daw-frontend/packages/take-render/src/renderer.ts` for the engine scripts), tried in order:
 
 1. the engine binary on the service's own machine, as a separate process;
 2. otherwise the engine machine the workspace is bound to, over the tunnel;
@@ -27,20 +27,20 @@ and refuses by name when there is none ("no engine to render with — …"). Tha
 
 ## The mixdown
 
-`project export audio wav|mp3` is a shell-local verb (`apps/k7/frontend/src/exportArgs.ts` parses it;
-`apps/k7/frontend/src/hooks/useShare.ts` runs it). It calls `GET /export?format=` on the file service
-(`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/routes.rs`), which exports through `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/shares/export.rs`: render the cached compiled document into a temporary folder,
+`project export audio wav|mp3` is a shell-local verb (`apps/k7-daw-frontend/src/exportArgs.ts` parses it;
+`apps/k7-daw-frontend/src/hooks/useShare.ts` runs it). It calls `GET /export?format=` on the file service
+(`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/routes.rs`), which exports through `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/shares/export.rs`: render the cached compiled document into a temporary folder,
 transcode to MP3 with the account's ffmpeg when asked
-(`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/shares/encode.rs`), stream it back as an attachment, and clean up. The browser
+(`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/shares/encode.rs`), stream it back as an attachment, and clean up. The browser
 saves the blob (`downloadBlob.ts`); nothing lands in the project. The old bare `project export wav`
 is refused on purpose — the first word says which half of the project leaves.
 
 ## Splitting and consolidating material
 
-`packages/take-render/src/materialRender.ts` holds `consolidateAudioMaterial`: render a range on one
+`apps/k7-daw-frontend/packages/take-render/src/materialRender.ts` holds `consolidateAudioMaterial`: render a range on one
 lane (gaps kept as silence) into one new file, write its `clips/<id>.k7x`, and replace the
 placements. An audio split renders nothing: it places the same file twice, windowed either side of
-the cut (`splitAudioPlacement` in `packages/song-edit/src/materialCut.ts`, where the sequence split
+the cut (`splitAudioPlacement` in `apps/k7-daw-frontend/packages/song-edit/src/materialCut.ts`, where the sequence split
 and consolidate are text edits too). The material a consolidate or a sequence split replaced is left
 on disk, since another lane may still play it. A split refuses a looped event — the cut position has
 as many answers as there are passes.
@@ -48,7 +48,7 @@ as many answers as there are passes.
 ## Bouncing through a chain
 
 `track process`, `clip process` and `event process` all end in `processWithChain`
-(`packages/audio-passes/src/processChain.ts`):
+(`apps/k7-daw-frontend/packages/audio-passes/src/processChain.ts`):
 
 1. `resolveChain` finds the chain — a project chain, or `@library/path` — and refuses one that has
    no treatment (only the lane's strip), steps the machine cannot load, or both separates and
@@ -69,7 +69,7 @@ The verb host measures the source's peak first when a step declares a
 cannot run in real time, such as stem separation — which write into `stems/` beside the source
 instead of replacing it.
 
-`event process` (`packages/commands/src/verbs/eventProcess.ts`) is `clip process` for one event: when
+`event process` (`apps/k7-daw-frontend/packages/commands/src/verbs/eventProcess.ts`) is `clip process` for one event: when
 anything else plays the same material, it first gives the event its own copy of the clip
 (`clips/<ref>-N.k7x`) and rewrites only that placement, so a right-click on one event never changes
 the others; a bounce that writes nothing undoes the copy.
@@ -77,7 +77,7 @@ the others; a bounce that writes nothing undoes the copy.
 ## Freezing
 
 `node freeze` (the lane's alternative badge, or the chains graph) bakes everything upstream of a node
-into one render with `freezeUpstreamRender` (`packages/take-render/src/renderer.ts`) and marks the
+into one render with `freezeUpstreamRender` (`apps/k7-daw-frontend/packages/take-render/src/renderer.ts`) and marks the
 module `frozen:`. The timeline then draws the lane's block as a render: it cannot be moved, and a
 double-click opens the authored notes under it (`openFrozenNotes` in `TimelineTab.tsx`).
 

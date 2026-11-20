@@ -59,7 +59,7 @@ second consumer is machinery that nothing tests.
 - **Server** — `installServerPlugins(BUILTIN_PLUGINS)`, called once at the file-service boot,
   before anything reads a catalogue or compiles a song. The plugin list is
   `@studio/k7-plugins/server`'s to hold; the file-service does not name plugins.
-- **Browser** — the shell's composition point (`apps/k7/frontend`) imports
+- **Browser** — the shell's composition point (`apps/k7-daw-frontend`) imports
   `@studio/k7-plugins/browser` and registers each plugin's drawers through its pane registry.
 
 A plugin is two files along the same line: `server.ts` (commands, surface types) and a browser

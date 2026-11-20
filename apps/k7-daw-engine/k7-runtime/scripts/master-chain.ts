@@ -4,11 +4,11 @@
 // measures the peak of each. No TypeScript test can see this: the compiler's own suite proves the
 // document, and the C++ suite proves the diff, but neither proves the plugin ended up on the
 // master bus, nor that an offline render applies the OUT node's level at all.
-//   npx tsx engine/k7-runtime/scripts/master-chain.ts
-// See packages/song/docs/masterChain.md and docs/masterVolume.md.
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/master-chain.ts
+// See apps/k7-daw-frontend/packages/song/docs/masterChain.md and docs/masterVolume.md.
 
-import { findEngineBinary } from "../../../packages/engine-client/src/engineBinary.ts";
-import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { findEngineBinary } from "../../../k7-daw-frontend/packages/engine-client/src/engineBinary.ts";
+import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 import { peakOf } from "./wav.ts";
 
 /** Two seconds of a 4OSC note — loud, and identical in both renders. */

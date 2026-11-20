@@ -1,8 +1,8 @@
 # One registry, and it is the origin's
 
 An engine heartbeats to **one** registry per studio family, answered by k7's front
-(`crates/k7-engine/src/registry/`, routed by `crates/k7-front/src/routes/engine/`) on k7's origin — `engineRegistryUrl` in
-`packages/web-protocol/services.ts`.
+(`packages/k7-engine/src/registry/`, routed by `packages/k7-front/src/routes/engine/`) on k7's origin — `engineRegistryUrl` in
+`apps/k7-daw-frontend/packages/web-protocol/services.ts`.
 The editor and the other apps that drive an engine list their engines from it.
 
 ## The problem it solves
@@ -25,12 +25,12 @@ k7's own and calls it same-origin, the relay included; a credentialed call from 
 
 `GET /api/registry/hello` answers `{ service: "k7-registry" }`, open like the heartbeat. It is how the
 supervisor tells a registry from any other website before it sends one the engine's token
-(`engine/k7-supervisor/docs/supervisorPolicy.md`); it says nothing else.
+(`apps/k7-daw-engine/k7-supervisor/docs/supervisorPolicy.md`); it says nothing else.
 
 ## What this costs
 
 The registry is down whenever k7's front is, and so is everything else: every page, the workspaces
-included (`apps/k7/backend-rs/docs/files/hub.md`), goes through it, so the front down is the studio
+included (`apps/k7-daw-backend/docs/files/hub.md`), goes through it, so the front down is the studio
 down. A registry that is down is absent from every picker, which is right: the
 engines cannot be listed.
 
@@ -39,11 +39,11 @@ preferences document on k7's server (`engineId`, the command preferences, the pl
 destination), so a machine picked in one is picked in the other.
 
 An engine is still listed once and driven by several apps at once, through separate sessions
-(`packages/engine-protocol/docs/sessions.md`).
+(`apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`).
 
 ## Which routes are open
 
-The registry's routes are the front's, listed in one place (`crates/k7-front/src/routes/engine/mod.rs`).
+The registry's routes are the front's, listed in one place (`packages/k7-front/src/routes/engine/mod.rs`).
 The ones an ENGINE calls — `heartbeat`, `deregister`, `hello`, the tunnel — are open, since a machine
 proves itself with its tunnel secret and holds no session; every one a BROWSER calls checks the session
 first. One list draws that line, so it is one place to read rather than a rule every mount must keep: a

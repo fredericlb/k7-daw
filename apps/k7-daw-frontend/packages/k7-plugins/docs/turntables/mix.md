@@ -200,7 +200,7 @@ towards deck A does not remove it. Every setting sounds the same.
 
 It works because Tracktion's mute node **deliberately** lets clips through to sends and sidechains:
 the crossfade keeps its second signal, the master stops having a duplicate. See
-`engine/k7-runtime/docs/sidechain.md`.
+`apps/k7-daw-engine/k7-runtime/docs/sidechain.md`.
 
 Measured on `example.k7`'s compiled document, two 20 s tracks, rendering deck A alone as the
 reference:
@@ -242,7 +242,7 @@ See [bpm.md](bpm.md).
 ## One transport, and no button left for it
 
 The engine has **one** transport, and **none of the music is on it**: each deck is a platter
-carrying its own position (`engine/k7-runtime/docs/turntable.md`), and this timeline's only inhabitant
+carrying its own position (`apps/k7-daw-engine/k7-runtime/docs/turntable.md`), and this timeline's only inhabitant
 is the metronome clip ([metronome.md](metronome.md)).
 
 Hence: **the desk has no transport button.** Not in k7's project bar either, which drops its
@@ -299,4 +299,4 @@ the record if reversed — is in [loop.md](loop.md).
 `ChainsPanel` and `deckGraph` — a deck's effect chain, drawn — are mounted by nothing. Kept because
 they work, they are tested, and options come back; the deck they draw is a **parameter**, so a panel
 opened on deck B does not label its effects deck A. See the entry in
-[docs/inventaire.md](../../../../docs/inventaire.md).
+[docs/inventaire.md](../../../../../../docs/inventaire.md).

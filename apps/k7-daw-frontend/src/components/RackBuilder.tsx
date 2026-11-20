@@ -2,7 +2,7 @@
 // it, name each pad (its tap) and the kit, choose where the samples go — this project's samples/
 // or a library's — then CREATE: the samples are uploaded there, and the kit becomes a NODE of the
 // library's `k7-rack` on its `samples` engine, placed with its taps. Notes run 36 upward, bottom-left first —
-// the drum-machine reading rackBuilder.ts pins. Opened by `module create rack` (packages/song/docs/racks.md).
+// the drum-machine reading rackBuilder.ts pins. Opened by `module create rack` (apps/k7-daw-frontend/packages/song/docs/racks.md).
 
 import { showToast } from "@studio/project-shell/toast";
 import { FIXED_NAMESPACES } from "@studio/song-schema/moduleTypes";
@@ -208,7 +208,7 @@ export function RackBuilder({
         want: [],
       });
       if (made.refused) throw new Error(made.output.join(" · "));
-      // A chain project names the node by a uuid, inside a chain file: the one name that just appeared (packages/song/docs/chainFiles.md).
+      // A chain project names the node by a uuid, inside a chain file: the one name that just appeared (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
       const fresh = (await api.hints()).modules.filter(
         (n) => !taken.includes(n),
       );

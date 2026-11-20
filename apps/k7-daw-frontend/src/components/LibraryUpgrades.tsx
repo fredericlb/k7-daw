@@ -2,7 +2,7 @@
 // newer version of, with the button that does it, and one per library whose pinned version needs a
 // newer ENGINE than the one playing. The button runs `library upgrade`, the palette's verb, so the
 // refusal of a version too new for this k7 is the verb's, said once. See
-// ../../../../../docs/library-versions-plan.md.
+// ../../../../docs/library-versions-plan.md.
 
 import { Button } from "@studio/ui/button";
 import { Loader2, TriangleAlert } from "@studio/ui/icons";

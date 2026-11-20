@@ -17,7 +17,7 @@ export const CROSS = /^(android|ios)-/;
 
 /** The newest build of a CMake target under engine/<project>/build/<preset>/[<config>/], Debug last, or null. */
 export function findBuild(repo, project, name) {
-  const build = join(repo, "engine", project, "build");
+  const build = join(repo, "apps", "k7-daw-engine", project, "build");
   const found = [];
   if (existsSync(build))
     // A multi-config generator (Visual Studio) puts the binary one level down; a phone's preset is never staged.
@@ -40,7 +40,7 @@ function newestBuild(repo, project, name) {
   const path = findBuild(repo, project, name);
   if (!path)
     throw new Error(
-      `no build of ${name} under ${join(repo, "engine", project, "build")} — build it first`,
+      `no build of ${name} under ${join(repo, "apps", "k7-daw-engine", project, "build")} — build it first`,
     );
   return path;
 }

@@ -1,6 +1,6 @@
 // engineBinary.ts — locate the built k7-runtime binary, in three tiers:
 // $STUDIO_ENGINE, the copy vendored beside the bundle (a packaged app), then the CMake
-// preset output dirs under engine/k7-runtime/build, newest first but Debug last. The repo tier
+// preset output dirs under apps/k7-daw-engine/k7-runtime/build, newest first but Debug last. The repo tier
 // resolves relative to THIS file, so it works wherever linked — see docs/engineBinary.md.
 
 import { existsSync, readdirSync, statSync } from "node:fs";
@@ -8,7 +8,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
- * `packages/engine-client/src`, or null once this file has been bundled to CJS — `import.meta`
+ * `apps/k7-daw-frontend/packages/engine-client/src`, or null once this file has been bundled to CJS — `import.meta`
  * is empty there, and reading it must not throw at module load. The repo tier it feeds is a
  * DEV convenience; a packaged app answers from `sidecar` before ever reaching it.
  */
@@ -47,12 +47,12 @@ export function findEngineBinary(
     }
   }
 
-  // src → engine-client → packages → the repo root; `repo` is for a caller that was BUNDLED,
+  // src, engine-client, packages, the frontend, apps, then the repo root; `repo` is for a caller that was BUNDLED,
   // where this file's own path is gone and the walk has nothing to start from.
   const here = sourceDir();
-  const root = repo ?? (here ? join(here, "..", "..", "..") : null);
+  const root = repo ?? (here ? join(here, "..", "..", "..", "..", "..") : null);
   if (!root) return null;
-  const build = join(root, "engine", "k7-runtime", "build");
+  const build = join(root, "apps", "k7-daw-engine", "k7-runtime", "build");
   if (!existsSync(build)) return null;
 
   const names = ["k7-runtime.exe", "k7-runtime"];

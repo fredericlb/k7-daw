@@ -193,7 +193,7 @@ else()
 endif()
 
 # --- the audio decoder: the media library's Rust crate, wherever there is stem separation ----------
-# packages/audio-analysis/rust behind rust/include/k7_audio.h, built by cargo into this build tree, so a cut needs no ffmpeg.
+# apps/k7-daw-backend/packages/waveform behind rust/include/k7_audio.h, built by cargo into this build tree, so a cut needs no ffmpeg.
 if(K7_ORT_URL)
     find_program(K7_CARGO cargo HINTS "$ENV{CARGO_HOME}/bin" "$ENV{HOME}/.cargo/bin" "$ENV{USERPROFILE}/.cargo/bin")
     if(NOT K7_CARGO)
@@ -324,7 +324,7 @@ target_link_libraries(k7-supervisor PRIVATE k7_supervisor_core)
 k7_beside_runtime(k7-supervisor)
 
 # iOS runs no program of an app's own: the supervisor is a framework there, k7supervisor.framework, which
-# the app embeds and calls on a thread of its own; the linker folds every archive above into it (engine/k7-runtime/docs/ios.md).
+# the app embeds and calls on a thread of its own; the linker folds every archive above into it (apps/k7-daw-engine/k7-runtime/docs/ios.md).
 if(IOS)
     add_library(k7-supervisor-embedded SHARED src/Embedded.cpp)
     target_link_libraries(k7-supervisor-embedded PRIVATE k7_supervisor_core)
@@ -371,7 +371,7 @@ target_compile_definitions(k7_supervisor_tests PRIVATE
 k7_beside_runtime(k7_supervisor_tests)
 add_test(NAME k7_supervisor_tests COMMAND k7_supervisor_tests)
 
-# The agent alone, for packages/engine-tunnel's suites to run against the real TypeScript hub.
+# The agent alone, for apps/k7-daw-frontend/packages/engine-tunnel's suites to run against the real TypeScript hub.
 add_executable(tunnel_harness tests/tunnel_harness.cpp)
 target_link_libraries(tunnel_harness PRIVATE k7_supervisor_core)
 k7_beside_runtime(tunnel_harness)

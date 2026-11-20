@@ -10,16 +10,16 @@ const git = (...args) =>
   }).trim();
 const BOTH = "backend browser";
 // What makes every area run: the checks' own scripts and the build's configuration.
-const ALL = ["engine/scripts/sccache.mjs", "rust-toolchain"];
+const ALL = ["apps/k7-daw-engine/scripts/sccache.mjs", "rust-toolchain"];
 const BROWSER = [
-  "packages/song/rust/",
-  "packages/song-schema/rust/",
-  "packages/k7-wasm/rust/",
-  "packages/k7x/rust/",
-  "packages/song-edit/rust/",
+  "apps/k7-daw-wasm/song/",
+  "apps/k7-daw-wasm/song-schema/",
+  "apps/k7-daw-wasm/k7-wasm/",
+  "apps/k7-daw-wasm/k7x/",
+  "apps/k7-daw-wasm/song-edit/",
 ];
 // The backend links the song crate, so a browser change also runs the backend.
-const BACKEND = ["apps/k7/backend-rs/", "package-lock.json", ...BROWSER];
+const BACKEND = ["apps/k7-daw-backend/", "package-lock.json", ...BROWSER];
 
 function changed() {
   try {

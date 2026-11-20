@@ -203,8 +203,8 @@ describe("this repository's notices", () => {
 
   it("accounts for every library the engine and its supervisor fetch", () => {
     const fetched = [
-      "engine/k7-runtime/CMakeLists.txt",
-      "engine/k7-supervisor/CMakeLists.txt",
+      "apps/k7-daw-engine/k7-runtime/CMakeLists.txt",
+      "apps/k7-daw-engine/k7-supervisor/CMakeLists.txt",
     ].flatMap((f) =>
       [...read(f).matchAll(/FetchContent_Declare\((\w+)/g)].map(
         (m) => m[1] ?? "",

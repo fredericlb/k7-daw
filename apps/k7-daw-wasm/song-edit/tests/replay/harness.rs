@@ -36,7 +36,7 @@ pub fn repo() -> String {
 }
 
 pub fn vectors_dir() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../apps/k7/backend-rs/tests/vectors/song-edit")
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../k7-daw-backend/tests/vectors/song-edit")
 }
 
 pub fn uuid(n: usize) -> String {

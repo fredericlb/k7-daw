@@ -2,7 +2,7 @@
 
 Every file of a workspace is a `.k7x` file: data written in a syntax that reads like Strudel and is
 never evaluated. The language and why it is shaped that way:
-[packages/k7x/docs/language.md](../packages/k7x/docs/language.md).
+[apps/k7-daw-frontend/packages/k7x/docs/language.md](../apps/k7-daw-frontend/packages/k7x/docs/language.md).
 
 ## What "every text file" covers
 
@@ -29,22 +29,22 @@ each for its own reason:
 
 1. **The core** — `@studio/k7x`: grammar, span-carrying tree, canonical printer, a document whose
    edits keep every other byte. Proven on the whole corpus against the Rust reader, a print/parse
-   round trip and the comment lines every edit must keep (`packages/k7x/src/corpus.test.ts`). Done.
-2. **One door for reading and writing a file** — `packages/song/src/yaml/workspaceDoc.ts`: a file is
+   round trip and the comment lines every edit must keep (`apps/k7-daw-frontend/packages/k7x/src/corpus.test.ts`). Done.
+2. **One door for reading and writing a file** — `apps/k7-daw-frontend/packages/song/src/yaml/workspaceDoc.ts`: a file is
    read as k7x text or data, edited as a k7x document by key path, or written whole from data. A
    writer takes a document scope and changes values in it, so a knob drag is a one-line diff and an
-   author's comments stay (`packages/song/docs/k7xFiles.md`). Done.
+   author's comments stay (`apps/k7-daw-frontend/packages/song/docs/k7xFiles.md`). Done.
 3. **Reading `.k7x` only** — wherever a kind is looked up by name, the name is `.k7x`; a folder
    listing, the revision token and the browser's path rules know no other. The file service refuses
    to save a YAML name into a workspace. Every demo
-   compiles and takes a run of commands (`packages/commands/src/k7xFiles.test.ts`). Done.
+   compiles and takes a run of commands (`apps/k7-daw-frontend/packages/commands/src/k7xFiles.test.ts`). Done.
 4. **history over k7x** — a change is a `k7x` op: the same key paths and natural list keys
-   (`apps/k7/backend-rs/crates/k7-sync/src/k7x/locate.rs`), diffed on the k7x tree, replayed byte for byte, checked
+   (`apps/k7-daw-backend/packages/k7-sync/src/k7x/locate.rs`), diffed on the k7x tree, replayed byte for byte, checked
    and set aside by the room when it does not replay. A replica
    on an older protocol is refused at hello and told to update. Done.
-5. **The editor** — a `.k7x` file has its own colours (`packages/ui-editor/src/k7x/language.ts`),
-   completion from the zod-derived vocabulary (`packages/ui-editor/docs/completion.md`), entity links
-   and the preview gutter on the k7x tree (`packages/ui-editor/docs/k7xTree.md`), and the same check
+5. **The editor** — a `.k7x` file has its own colours (`apps/k7-daw-frontend/packages/ui-editor/src/k7x/language.ts`),
+   completion from the zod-derived vocabulary (`apps/k7-daw-frontend/packages/ui-editor/docs/completion.md`), entity links
+   and the preview gutter on the k7x tree (`apps/k7-daw-frontend/packages/ui-editor/docs/k7xTree.md`), and the same check
    before autosave, its findings placed on the k7x text's own lines. Done.
 6. **Every stored workspace is k7x** — `demos/` and `k7-core/` are `.k7x`, and so is every workspace
    the server and the devices hold: a build reads no other format, so none is left to convert at
@@ -57,7 +57,7 @@ each for its own reason:
 8. **Sugar, kind by kind** — `notes("c4 d4 ~ e4")` for a sequence's notes, `runs([[…]])` for a
    graph's segments (a chain cannot repeat `.to(…)`, a key being unique in a map). Expanded before
    any reader sees the file; kept through an edit that leaves its expansion alone, written as the full
-   data by one that changes it (`packages/song-schema/docs/sugar.md`). Done.
+   data by one that changes it (`apps/k7-daw-frontend/packages/song-schema/docs/sugar.md`). Done.
 
 ## The hazards
 

@@ -3,7 +3,7 @@ import { stub } from "@studio/song/editStub";
 // overlap by its length, and each fades over that overlap. The overlap comes from material the two do
 // not play yet — B's start pulled earlier first, then A's end later — so a crossfade never changes
 // what either plays outside it. No key of its own: the compiler tells it by its shape (compClips.ts).
-// See packages/song/docs/takes.md.
+// See apps/k7-daw-frontend/packages/song/docs/takes.md.
 
 /** One of the two events, as the compile resolved it: beats on the song, seconds in its file. */
 export interface CrossfadeSide {

@@ -2,14 +2,14 @@
 //
 // 1. Does a MUTED bus still feed its aux sends? What is measured elsewhere is that a mute lets
 //    CLIPS through to sends; a bus has no clips, it has an AuxReturn. The answer decides where a
-//    desk's headphone tap can be taken from — see packages/k7-plugins/docs/turntables/cue.md.
+//    desk's headphone tap can be taken from — see apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/cue.md.
 // 2. Does `outputChannels` really take a track OFF the mixer's sum? An offline render opens no
 //    interface, so a cue bus must come out SILENT rather than folded into the master.
-//   npx tsx engine/k7-runtime/scripts/cue-bus.ts
-// See packages/song/docs/cue.md.
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/cue-bus.ts
+// See apps/k7-daw-frontend/packages/song/docs/cue.md.
 
-import { findEngineBinary } from "../../../packages/engine-client/src/engineBinary.ts";
-import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { findEngineBinary } from "../../../k7-daw-frontend/packages/engine-client/src/engineBinary.ts";
+import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 import { peakOf } from "./wav.ts";
 
 const base = {

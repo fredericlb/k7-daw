@@ -1,4 +1,4 @@
-// workerBuild.ts — the verbs' Worker as files: packages/commands' own bundle plus stand-ins for the node builtins song still imports.
+// workerBuild.ts — the verbs' Worker as files: apps/k7-daw-frontend/packages/commands' own bundle plus stand-ins for the node builtins song still imports.
 // What a reader gets wrong: the bundle is the artefact the runner tests prove; only the two leftover `node:` specifiers are rewritten.
 
 import { createHash } from "node:crypto";
@@ -8,7 +8,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 // @ts-expect-error the build script is plain JavaScript
-import { bundleRuntime } from "../../../../packages/commands/scripts/bundleRuntime.mjs";
+import { bundleRuntime } from "../packages/commands/scripts/bundleRuntime.mjs";
 
 const SHIMS = fileURLToPath(new URL("./shims/", import.meta.url));
 const STAND_INS = {

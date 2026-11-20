@@ -2,7 +2,7 @@
 // first, and under them the WORKSPACE's sync history (syncHistory.ts) — checkpoints and edits.
 // A step reads as its command's sentence (stepSentence.ts), the raw line staying its tooltip.
 // Hovering a journal row lights what it touched (historyMarks.ts); the journal changes nothing.
-// Restoring is the one write here, and it is a sync edit like any other: apps/k7/backend-rs/docs/files/history.md.
+// Restoring is the one write here, and it is a sync edit like any other: apps/k7-daw-backend/docs/files/history.md.
 
 import { askConfirm, askText } from "@studio/project-shell/ask";
 import { cfg } from "@studio/project-shell/fileApi";

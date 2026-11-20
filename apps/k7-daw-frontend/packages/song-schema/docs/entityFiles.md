@@ -1,6 +1,6 @@
 # Clips, sequences, curves and video tracks
 
-The rationale behind `packages/song-schema/src/yaml/entitySchemas.ts` — the per-entity shapes. Each
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/entitySchemas.ts` — the per-entity shapes. Each
 is a FLAT file keyed by its own filename (`clips/kick.k7x` has no `id:`, the name is the id), which
 also rules out one file declaring several ids.
 
@@ -31,7 +31,7 @@ Distinct from a placement's `start`, which is musical and says where on the TIME
 Trimming the sample is a property of the material; where it lands is a property of the arrangement —
 and the extent is derived, so a placement has no length of its own to disagree with. A placement MAY
 carry its own `from`/`to`, and then the most restrictive pair wins: an event can narrow this window,
-never widen it (`packages/song/docs/clipResize.md`).
+never widen it (`apps/k7-daw-frontend/packages/song/docs/clipResize.md`).
 
 A backwards window would compile to a clip that plays nothing, which reads as a broken file rather
 than a bad number — so it is refused where the line can be named. Only checked when both edges are
@@ -63,7 +63,7 @@ and what lets a clip file say only `source:`.
 `t`/`d`/`k`/`v` are single letters because every note carries all four and a pattern is hundreds of
 them on one line. `repeat` and `skip` are spelled out instead, deliberately: they appear on the few
 pads that have an effect, so they cost nothing in width, and a letter apiece would be two more things
-to learn from a file that does not explain itself (`packages/song/docs/padEffects.md`).
+to learn from a file that does not explain itself (`apps/k7-daw-frontend/packages/song/docs/padEffects.md`).
 
 `repeat` retriggers: play the note that many times inside its OWN duration, which on a pad is the
 step it was drawn on. Absent means once. `skip` falls silent on every n-th pass of the pattern: 2

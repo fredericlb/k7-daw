@@ -8,14 +8,14 @@ It is deliberately its own app rather than part of k7: it serves every audio app
 the repo. Three drive it — k7, the médiathèque's module previews and the DJ desk —
 over the same protocol, on the same binary, and it cannot tell them apart: it only ever sees
 a compiled `ProjectDoc`. They stay out of each other's way by naming a **session**; see
-`docs/protocol.md` and `packages/engine-protocol/docs/sessions.md`.
+`docs/protocol.md` and `apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`.
 
 This workspace declares **no `build` script**, so `npm run build --workspaces --if-present`
 can never try to compile C++. Use the `build:*` / `test:*` scripts below.
 
 It declares no `dev`: the dev session rebuilds this engine from the desktop app's task (`scripts/dev-desktop.mjs`) —
 watch the sources, rebuild, restart. It stops the **desktop app** and its supervisor first, because they are
-what holds the running engine open and no relink can happen until they let go. See [docs/dev.md](../../docs/dev.md).
+what holds the running engine open and no relink can happen until they let go. See [docs/dev.md](../../../docs/dev.md).
 
 ## Architecture
 
@@ -162,7 +162,7 @@ scripts/               Node harnesses that drive a running engine, not build ste
                          the script PatternPlugin runs. A GENERATOR, output committed: run it after
                          touching events.ts or engineEntry.ts. `npm run gen:strudel-bundle --workspace k7-runtime`.
   gen-builtin-params.mjs ask a real instance of every built-in what its parameters are, and write
-                         packages/song-schema/src/builtinParams.generated.json. A GENERATOR, like the one
+                         apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json. A GENERATOR, like the one
                          above: run it after bumping Tracktion or adding a built-in, and commit
                          its output. `npm run gen:builtin-params --workspace k7-runtime`. docs/builtinParams.md.
   gen-surge-panel.mjs    write the Surge XT module's panel (ui.k7x + widgets.js in k7-core) from
@@ -172,7 +172,7 @@ scripts/               Node harnesses that drive a running engine, not build ste
   gen-surge-widgets.mjs  …its widgets.js, the screens' draw functions, as a template the panel generator fills
   sfz-to-rack.ts         turn an SFZ drum kit into a RACK kit: each piece rendered through the SFZ player at one
                          velocity, mics mixed, trimmed, written into a library's samples/ with a rack preset —
-                         what the library's naked_drums samples are (packages/song/docs/racks.md)
+                         what the library's naked_drums samples are (apps/k7-daw-frontend/packages/song/docs/racks.md)
   warp-points.ts         a clip's INTERIOR warp points move the sound — rendered and measured,
                          since this is timing no TypeScript test can see (docs/warp.md)
   pad-effects.ts         a sequencer pad's `repeat` and `skip` reach the sound — same kind of
@@ -230,7 +230,7 @@ scripts/               Node harnesses that drive a running engine, not build ste
 Long-form rationale is in `docs/`: `design.md` (pipeline + threading), `engineHost.md`,
 `protocol.md` (the wire), `sessions.md` (this side: who may create one, what the registry's
 lock protects, when a session is reaped) with its TypeScript half in
-`packages/engine-protocol/docs/sessions.md`, `multiEdit.md`, `broadcast.md`, `cliModes.md`,
+`apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`, `multiEdit.md`, `broadcast.md`, `cliModes.md`,
 `supersede.md` (which queued jobs a newer message skips, and what fences them),
 `audit-stabilite.md` (the standing audit of this engine's own stability and speed — read it
 before touching the audio callback, `applyFull`, or the build flags),
@@ -378,12 +378,12 @@ often locked while the engine is running — stop it before rebuilding.
 ≥ 3.24, C++20, and the JUCE Linux dev deps.
 
 **Android** — `npm run build:android --workspace k7-runtime` with `ANDROID_NDK_HOME` set to an NDK
-r28+, or let the app build it: `./gradlew assembleDebug` in `engine/k7-android`, which passes the
+r28+, or let the app build it: `./gradlew assembleDebug` in `apps/k7-daw-android`, which passes the
 SDK's own NDK — it builds the supervisor's `android-arm64` preset too. The engine's makes
 `libk7runtime.so`, a library the app loads, with no `main()`, no VST3/LADSPA and no tests. What differs there and why: [docs/android.md](docs/android.md).
 
 **iOS** — `npm run build:ios --workspace k7-runtime` (`ios-arm64`; `ios-sim-arm64` through `scripts/build.mjs`
-for the simulator), with a full Xcode, or `node engine/k7-ios/scripts/stage.mjs`, which builds it with the
+for the simulator), with a full Xcode, or `node apps/k7-daw-ios/scripts/stage.mjs`, which builds it with the
 supervisor's matching preset. It makes `k7runtime.framework`, the same cuts as Android's. What differs and why:
 [docs/ios.md](docs/ios.md).
 

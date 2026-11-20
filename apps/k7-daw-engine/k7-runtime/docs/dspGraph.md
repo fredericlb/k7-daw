@@ -1,10 +1,10 @@
 # The DSP graph — a module's DSP described as data
 
-`engine/k7-runtime/engine/DspGraph.{h,cpp}` is the interpreter; `GraphDspPlugin` exposes it as an audio
+`apps/k7-daw-engine/k7-runtime/engine/DspGraph.{h,cpp}` is the interpreter; `GraphDspPlugin` exposes it as an audio
 plugin and `MidiGraphPlugin` as a MIDI one. What the graph receives is the JSON `@studio/dsp` emits.
 
 **The describing side has its own page and it is not repeated here**:
-[`docs/dsp-literal-plan.md`](../../../docs/dsp-literal-plan.md) holds the vocabulary of a module's `dsp.k7x`
+[`docs/dsp-literal-plan.md`](../../../../docs/dsp-literal-plan.md) holds the vocabulary of a module's `dsp.k7x`
 and what it refuses. This page holds what the **engine** does with the description once it has it.
 
 ## The experiment
@@ -167,7 +167,7 @@ The dry snapshot is taken **before** any audio node, for the same reason. Whethe
 
 ## The input ports
 
-`ain` names a **module port** (`packages/song/docs/ports.md`). Port n is the stereo pair of channels
+`ain` names a **module port** (`apps/k7-daw-frontend/packages/song/docs/ports.md`). Port n is the stereo pair of channels
 2n / 2n+1: the chain's stream is 0/1, the first side input 2/3. Absent, the port is the first; a
 port past the fourth is read as the fourth, since the sample phase indexes eight channels at most.
 

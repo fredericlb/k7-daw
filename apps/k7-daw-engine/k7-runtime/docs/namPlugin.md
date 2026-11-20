@@ -13,7 +13,7 @@ guitar -> nam (the amp) -> impulse-response (the cabinet) -> OUT
 ```
 
 The model file is named by the module's `model:` param: one it carries in its `assets/`, or one
-of a library's shared `models/` as `@<library>/<path>` (`packages/song/docs/libraryFiles.md`). `EditBuilder` calls `loadModel()` when it builds the plugin.
+of a library's shared `models/` as `@<library>/<path>` (`apps/k7-daw-frontend/packages/song/docs/libraryFiles.md`). `EditBuilder` calls `loadModel()` when it builds the plugin.
 
 ## Levels: `Normalize`, `Input`, `Output`
 
@@ -87,7 +87,7 @@ needs the load to finish before the graph is built, or a graph rebuild when the 
 
 A NAM capture is often the amp alone, and an amp without a cabinet is a fizz no speaker ever made.
 So the module convolves an IR after its model when the document names one (`irFile`, from the
-module's `ir:` param — a file in a library's `irs/`, `packages/song/docs/libraryFiles.md`), the
+module's `ir:` param — a file in a library's `irs/`, `apps/k7-daw-frontend/packages/song/docs/libraryFiles.md`), the
 way the official NAM plugin does. It runs at the ENGINE's rate, after the rate bridge: JUCE's
 `Convolution` resamples the IR to that rate when it loads, so a 44.1 kHz IR and a 48 kHz model mix
 without either being told.
@@ -155,7 +155,7 @@ NAM, any other JSON tried as RTNeural, which tells AIDA-X (`in_shape` + `layers`
 `Knob 1`, `Knob 2`, `Knob 3`, 0..1, default 0.5. Generic names, because what a knob does is the
 model's: one is trained with gain, another with gain and tone. ONE module serves every model: its
 panel carries the three knobs and its `widgets.js` hides those the loaded model lacks, from the
-count the file service reads off the file (`packages/ui-chains-react/docs/lcdScreen.md`). A module forked per model is only for naming its
+count the file service reads off the file (`apps/k7-daw-frontend/packages/ui-chains-react/docs/lcdScreen.md`). A module forked per model is only for naming its
 knobs, which neither format declares. They are fixed
 because a Tracktion plugin's parameters are fixed when it is created; a model reads the first
 `inputs − 1` of them, in the order it was trained with, and a `.nam` or a knobless model ignores all

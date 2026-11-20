@@ -2,8 +2,8 @@
 
 Tabs belong to the PANEL, not to a widget: `ui.k7x` carries an ordered `tabs([…])` list beside its
 `widgets`, each a `name` and the widgets drawn while it is open. The top-level `widgets` are drawn on
-every tab. The format is `UISchema` in `@studio/song-schema` (`packages/song-schema/docs/moduleFile.md`);
-the card draws two or more tabs as a column down its left (`packages/ui-chains-react/docs/nodeCard.md`).
+every tab. The format is `UISchema` in `@studio/song-schema` (`apps/k7-daw-frontend/packages/song-schema/docs/moduleFile.md`);
+the card draws two or more tabs as a column down its left (`apps/k7-daw-frontend/packages/ui-chains-react/docs/nodeCard.md`).
 
 ## Why the panel's and not a widget
 

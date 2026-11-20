@@ -1,6 +1,6 @@
 //! settings.rs — the one edit a host makes to the supervisor's `engine-host.json` before each start: this backend
 //! first among the registries, every other loopback one dropped, the rest of the file the supervisor's;
-//! the reasons are in `apps/k7/backend-rs/docs/localEngine.md`.
+//! the reasons are in `apps/k7-daw-backend/docs/localEngine.md`.
 
 use std::path::Path;
 

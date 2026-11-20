@@ -1,7 +1,7 @@
 // MicAccess.swift — the microphone, asked at the first launch before the engine starts, so a grant opens its inputs
 // at once; later, whatever needs it (a page's getUserMedia, a track armed) asks again if still undecided. A grant
 // that comes after the engine started reaches it at the NEXT start, since inputs are opened once with the device.
-// A refusal iOS remembers is not asked again: the app's Settings are offered. See engine/k7-runtime/docs/ios.md.
+// A refusal iOS remembers is not asked again: the app's Settings are offered. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import AVFAudio
 import UIKit

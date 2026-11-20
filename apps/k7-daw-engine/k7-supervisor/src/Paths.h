@@ -1,5 +1,5 @@
 // Paths.h — the state directory's layout as the supervisor reads and writes it: `~/.k7`, or
-// `$STUDIO_HOME`. The C++ twin of packages/engine-client/src/paths.ts, and the two must spell every
+// `$STUDIO_HOME`. The C++ twin of apps/k7-daw-frontend/packages/engine-client/src/paths.ts, and the two must spell every
 // name the same way — a wrong path does not throw, it reads as an empty file. See docs/supervisor.md.
 
 #pragma once

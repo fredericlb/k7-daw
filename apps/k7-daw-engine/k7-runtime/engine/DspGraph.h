@@ -5,7 +5,7 @@
 // so reordering the list changes the sound.
 //
 // The four phases, why the primitives stay small, what a sample-phase node costs a graph, and the three places
-// the audio thread is kept from allocating: engine/k7-runtime/docs/dspGraph.md. The vocabulary of the describing side
+// the audio thread is kept from allocating: apps/k7-daw-engine/k7-runtime/docs/dspGraph.md. The vocabulary of the describing side
 // and what it refuses: docs/dsp-literal-plan.md.
 
 #pragma once

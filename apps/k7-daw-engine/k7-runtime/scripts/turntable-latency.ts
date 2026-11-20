@@ -1,6 +1,6 @@
 // turntable-latency.ts — how long after a HAND moves does the audio? Point it at a running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/turntable-latency.ts [ws://127.0.0.1:8765] [--n=12]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/turntable-latency.ts [ws://127.0.0.1:8765] [--n=12]
 //
 // It steps the rate at a known moment and finds where the tone changed. It includes the socket, the
 // queue, the block boundary and the 6 ms glide, and excludes the device's own output buffer; the

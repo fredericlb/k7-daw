@@ -1,13 +1,13 @@
 # Rust builds — the compiler cache, the debug info and the test runner
 
-The two Cargo workspaces, `apps/k7/backend-rs` and the desktop app's `apps/k7-desktop/src-tauri`, are the
+The two Cargo workspaces, `apps/k7-daw-backend` and the desktop app's `apps/k7-daw-desktop/src-tauri`, are the
 slowest builds after the engine's C++: Wasmtime, Cranelift, QuickJS and SQLite compile from source,
 and every new worktree or target folder compiles them again. Three choices make that
 cheaper. The linker is the platform's own: it is not one of them.
 
 ## sccache in front of rustc, wherever it is found
 
-`engine/scripts/sccache.mjs` finds sccache (the `PATH`, WinGet's package folder, Homebrew's and
+`apps/k7-daw-engine/scripts/sccache.mjs` finds sccache (the `PATH`, WinGet's package folder, Homebrew's and
 cargo's bins) and returns `RUSTC_WRAPPER` with the cache's settings. Every cargo build a script of
 ours starts goes through it: the dev session's `k7-front` and desktop app (`dev-front.mjs`,
 `dev-desktop.mjs`), Android's `buildFront`, the Rust checks and the macOS gate's engine testbed.
@@ -18,7 +18,7 @@ ours starts goes through it: the dev session's `k7-front` and desktop app (`dev-
 | set by the scripts, not by a repo-wide `.cargo/config.toml` | a `rustc-wrapper` there would break every machine without sccache |
 | a `RUSTC_WRAPPER` already in the environment wins, `RUSTC_WRAPPER=` turns the cache off | a developer's own setting is not replaced by the dev default |
 | one server on sccache's default port (4226) and folder, for the dev session and the agents | a server keeps the folder and the size it was started with, so every use asks for the same |
-| outside Windows the port moved by `100 × (uid % 100)` (`userPort` in `engine/scripts/sccache.mjs`), a `SCCACHE_SERVER_PORT` already set kept | a server writes its outputs as the user who started it: one account's builds through another's server fail on `Permission denied` |
+| outside Windows the port moved by `100 × (uid % 100)` (`userPort` in `apps/k7-daw-engine/scripts/sccache.mjs`), a `SCCACHE_SERVER_PORT` already set kept | a server writes its outputs as the user who started it: one account's builds through another's server fail on `Permission denied` |
 | 10 GB for the cache | the disk is shared with the engine's build folders |
 | a target folder named with `--target-dir`, never `CARGO_TARGET_DIR` | sccache puts every `CARGO_*` variable in its key: a per-branch `CARGO_TARGET_DIR` would make each branch miss what the others compiled |
 
@@ -40,7 +40,7 @@ everything once. A fresh `cargo build -p k7-front` on Windows leaves a 3.2 GB ta
 
 ## An agent's builds
 
-An agent runs `eval "$(node engine/scripts/sccache.mjs agent --export)"` before cargo, where a person's script uses `dev`.
+An agent runs `eval "$(node apps/k7-daw-engine/scripts/sccache.mjs agent --export)"` before cargo, where a person's script uses `dev`.
 
 | choice | why |
 |---|---|
@@ -48,7 +48,7 @@ An agent runs `eval "$(node engine/scripts/sccache.mjs agent --export)"` before 
 | the cap fixed, never lowered while something else runs | sccache keys a compile on every `CARGO_` variable: a cap that moves makes the agents miss each other's cache |
 | `CARGO_PROFILE_DEV_DEBUG=line-tables-only` | an agent never opens a debugger; the links are shorter and a worktree's target folder, 7 to 20 GB, smaller |
 | `dev`'s cache, not a cache of its own | the agents' compiles hit each other's entries, since they all spell the same variables |
-| while the e2e bed runs its suites, this user's compilers and the sccache server run at nice 15 (`engine/scripts/ci/e2e-macos.sh`) | a render is timed; the compiles run in the sccache server, so only renicing that server slows them, and a user cannot lower a niceness again: the server keeps it until its idle stop |
+| while the e2e bed runs its suites, this user's compilers and the sccache server run at nice 15 (`apps/k7-daw-engine/scripts/ci/e2e-macos.sh`) | a render is timed; the compiles run in the sccache server, so only renicing that server slows them, and a user cannot lower a niceness again: the server keeps it until its idle stop |
 
 ## Builds run at background priority on the Mac
 
@@ -63,7 +63,7 @@ process, all of them at once, where `cargo test` runs the test binaries one afte
 | choice | why |
 |---|---|
 | nextest, not `cargo test` | on macOS 70 s against 107 s for the 527 tests, on Windows about 290 s against 430 s: the slow binaries no longer wait for each other |
-| one nextest setting, `apps/k7/backend-rs/.config/nextest.toml`: the tests named `hostile` or `thousand` run one at a time (`file-churn`); otherwise no test relies on sharing a process with another | those tests make folders of up to 20,000 files; five at once took five cores and woke the Mac's file-event and security agents until the load passed 60, and their time bounds assume they run alone |
+| one nextest setting, `apps/k7-daw-backend/.config/nextest.toml`: the tests named `hostile` or `thousand` run one at a time (`file-churn`); otherwise no test relies on sharing a process with another | those tests make folders of up to 20,000 files; five at once took five cores and woke the Mac's file-event and security agents until the load passed 60, and their time bounds assume they run alone |
 | the milestone gate (`mac-checks.sh --narrow`) runs a piece's file-churn tests only when that piece, or a piece that needs it, changed (`scripts/agent/affected-tests.mjs`); every other test always runs, and the merge gate and `ci:local` run them all; `K7_TESTS=all` forces the whole run at a milestone | the serial `file-churn` group is the slow chain of a gate; a piece's own change cannot break another piece's churn tests unless that piece needs it. The table is fail-closed: a core file (`mod.rs` beyond its `mod` lines, the hubs), an unclaimed or new file, `k7-compile` or a workspace file runs everything, since a skipped test is only found at the merge |
 | `file-churn` stays at one thread until two at a time is measured over three runs | the churn tests' time bounds assume they run alone |
 | `NEXTEST_TEST_THREADS` equal to `CARGO_BUILD_JOBS` (4 on Windows, 5 on macOS) | the agents are shared with the developer and the release builds |
@@ -92,7 +92,7 @@ code): that one still needs a Windows machine.
 
 | choice | why |
 |---|---|
-| an area the branch did not touch since `main` is skipped: `backend` (`apps/k7/backend-rs`, the lockfile) and `browser` (the three crates under `packages/*/rust`); a browser change runs both, since `k7-compile` links the song crate (`engine/scripts/ci/areas.mjs`) | a branch in one area paid for the other's clippy and tests on every round |
+| an area the branch did not touch since `main` is skipped: `backend` (`apps/k7-daw-backend`, the lockfile) and `browser` (the crates of `apps/k7-daw-wasm`); a browser change runs both, since `k7-compile` links the song crate (`apps/k7-daw-engine/scripts/ci/areas.mjs`) | a branch in one area paid for the other's clippy and tests on every round |
 | a change to the checks' own scripts or the workflows run everything, and so does a base that cannot be fetched | a skip on a doubt would pass a branch nothing checked |
 | nextest for the browser crates too | it spreads the test binaries over the cores; none of the three crates holds a doctest, which nextest does not run |
 | no incremental build in the native checks (`CARGO_INCREMENTAL=0`), and no folder copied for a new branch | the incremental caches were most of a target folder's writes and sccache caches no crate built that way; sccache brings back the dependencies a copy would, writing only what a build reads |
@@ -102,7 +102,7 @@ code): that one still needs a Windows machine.
 
 | choice | why |
 |---|---|
-| each crate of `apps/k7/backend-rs` with more than one test file has one binary, `tests/all/main.rs`, each former `tests/<name>.rs` a module of the same name and the support folders declared once there; a crate with one file keeps it as it is | every test binary links the whole crate and its dependencies, so each one is a link to wait for and a copy of them on disk: the twelve crates' 82 binaries are 16, the workspace's test executables 105 to 39 and 3.4 GB to 1.1 GB; a test build after touching `k7-js` relinks in 7 to 11 s instead of 10 s, `k7-front` in 4 to 10 s instead of 7 s, within the noise of a Mac loaded to 20-30 by other agents |
+| each crate of `apps/k7-daw-backend` with more than one test file has one binary, `tests/all/main.rs`, each former `tests/<name>.rs` a module of the same name and the support folders declared once there; a crate with one file keeps it as it is | every test binary links the whole crate and its dependencies, so each one is a link to wait for and a copy of them on disk: the twelve crates' 82 binaries are 16, the workspace's test executables 105 to 39 and 3.4 GB to 1.1 GB; a test build after touching `k7-js` relinks in 7 to 11 s instead of 10 s, `k7-front` in 4 to 10 s instead of 7 s, within the noise of a Mac loaded to 20-30 by other agents |
 | a hostile test over a wide folder counts operations at two sizes (n against 4n, a thousand files and four thousand) rather than writing 20,000; a full-size variant is `#[ignore = "scale: ..."]`, named `*_at_scale`, and runs by hand with `--run-ignored ignored-only`, in no gate | a quadratic walk shows in the ratio of two small sizes, and 200,000 files written on every gate run flooded the Mac's file-event and security agents |
 | the media tests share one compiled waveform module through a folder under the temp dir (`k7-stream-cache`, keyed by the module's hash and the engine's build), and a test that waits on a timer shortens the bound through the settings it is given (the stop grace, the render timeout, the decode deadline) | a debug build compiles the module in 8 to 25 s, once per test process, and a 10-s timeout around that compile failed under load; a production bound of 5 or 6 s made every such test wait it out |
 | a single test is `--test all <name>::`, an ignored one `--test all -- --ignored <name>::` | the module path is the filter, as in the song crate |

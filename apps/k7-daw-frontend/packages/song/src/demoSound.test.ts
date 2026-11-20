@@ -4,7 +4,14 @@ import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-const REPO = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const REPO = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "..",
+  "..",
+  "..",
+);
 const DEMOS = join(REPO, "demos");
 
 function wavs(dir: string): string[] {

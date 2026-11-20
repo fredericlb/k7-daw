@@ -6,7 +6,7 @@
 // while that track also reaches an audible output. A deck feeding nothing but a
 // crossfade would therefore be heard BESIDE it, raw, with nothing able to take it back:
 // not a mute, not a disconnect, not a routing — all four were measured, see
-// engine/k7-runtime/docs/sidechain.md. One input each, and the blend at the mixer.
+// apps/k7-daw-engine/k7-runtime/docs/sidechain.md. One input each, and the blend at the mixer.
 //
 // Each fade's `Level` IS its lane's gain, so its panel reads true on its own: 0 silent, 1
 // full. The desk drives the two in MIRROR — one control, deck A inverted — which is said
@@ -40,13 +40,13 @@
 // means. Neither the channel fader nor the crossfader may take a deck out of your ears.
 //
 // Nothing about two is fixed. A third deck is a third lane, a third tempo and a second
-// meeting point; the desk reads whatever is here. See packages/song/docs/ports.md.
+// meeting point; the desk reads whatever is here. See apps/k7-daw-frontend/packages/song/docs/ports.md.
 //
 // EACH DECK IS FIVE LANES: the record, and one per separated stem. Only one side plays —
 // a separated song leaves the record's lane empty and the four parts SUM back to it; an
 // unseparated one is the other way round. How loud each part plays is its PLATTER's own
 // gain: 0 drops the instrument, 1 is as it was cut, 2 doubles it.
-// See packages/song-schema/docs/stems.md.
+// See apps/k7-daw-frontend/packages/song-schema/docs/stems.md.
 //
 // Five feeders is what makes `trim*` a MEETING POINT, and a meeting point breaks a run:
 // the trim, the EQ, the filter and the fade become a chain of their own — a bus — and
@@ -104,5 +104,5 @@ bypassed(["deckA", "stemDrumsA", "stemBassA", "stemOtherA", "stemVocalsA", "deck
 // The strips, for the SAME reason and NOT the same word: each one now feeds two buses (the
 // fade and the cue), so its own dry path would reach the master unfaded. `bypassed` cannot say
 // this — it would ALSO turn the EQ off, the chain being named after its first module. See
-// packages/song/docs/busOnly.md.
+// apps/k7-daw-frontend/packages/song/docs/busOnly.md.
 bus_only(["trimA", "trimB"])

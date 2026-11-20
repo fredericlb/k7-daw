@@ -7,10 +7,10 @@ commands in this page, when one is needed.
 
 | File | Built from | Platforms |
 |---|---|---|
-| `k7-runtime_<version>_<platform>-<arch>.tar.gz` (`.zip` on Windows) | `engine/scripts/build-engine.mjs` + `engine/scripts/package-release.mjs --kind engine` | `windows-x64`, `macos-arm64`, `linux-x64` |
-| `k7-android_<version>_arm64.apk` | `./gradlew assembleRelease` in `engine/k7-android` | Android arm64 |
+| `k7-runtime_<version>_<platform>-<arch>.tar.gz` (`.zip` on Windows) | `apps/k7-daw-engine/scripts/build-engine.mjs` + `apps/k7-daw-engine/scripts/package-release.mjs --kind engine` | `windows-x64`, `macos-arm64`, `linux-x64` |
+| `k7-android_<version>_arm64.apk` | `./gradlew assembleRelease` in `apps/k7-daw-android` | Android arm64 |
 | `k7-daw_<version>_<platform>-<arch>.<exe/AppImage/deb/dmg>` (K7 DAW) | `npm run build --workspace k7-desktop` + `package-release.mjs --kind desktop` | `windows-x64`, `linux-x64`, `macos-arm64` |
-| the iPhone and iPad app | Xcode, after `engine/k7-ios/scripts/stage.mjs` | iOS |
+| the iPhone and iPad app | Xcode, after `apps/k7-daw-ios/scripts/stage.mjs` | iOS |
 
 ### The version
 
@@ -28,15 +28,15 @@ front page sends people; the phone apps go through the stores.
 
 ## The command-line engine
 
-`npm run engine:build` (`engine/scripts/build-engine.mjs`):
+`npm run engine:build` (`apps/k7-daw-engine/scripts/build-engine.mjs`):
 
-1. builds the engine with `engine/k7-runtime/scripts/build.mjs <preset>` (preset from the platform, or
+1. builds the engine with `apps/k7-daw-engine/k7-runtime/scripts/build.mjs <preset>` (preset from the platform, or
    `$STUDIO_ENGINE_PRESET`);
-2. builds the supervisor (`engine/scripts/supervisorBuild.mjs`, preset overridable with
+2. builds the supervisor (`apps/k7-daw-engine/scripts/supervisorBuild.mjs`, preset overridable with
    `$STUDIO_SUPERVISOR_PRESET`);
-3. stages both into `dist/k7-runtime/` with `stageEngine` (`engine/scripts/stageEngine.mjs`), which copies
+3. stages both into `dist/k7-runtime/` with `stageEngine` (`apps/k7-daw-engine/scripts/stageEngine.mjs`), which copies
    the newest build of each together with what they load at run time;
-4. copies `engine/k7-supervisor/engine.example.json` there as `engine.json`.
+4. copies `apps/k7-daw-engine/k7-supervisor/engine.example.json` there as `engine.json`.
 
 It prints the command to run the result: `dist/k7-runtime/k7-supervisor --config dist/k7-runtime/engine.json`.
 `package-release.mjs --kind engine` then archives that folder into `dist/release/`, as `.tar.gz`
@@ -51,11 +51,11 @@ Environment variables the build reads:
 | `STUDIO_COMPILER_LAUNCHER` | Compiler launcher read by the presets (`sccache` or `ccache`). |
 | `CMAKE_BUILD_PARALLEL_LEVEL` | Compiler parallelism; the build scripts default to cores minus two. |
 
-## K7 DAW (`apps/k7-desktop`)
+## K7 DAW (`apps/k7-daw-desktop`)
 
-`npm run stage --workspace k7-desktop` (`apps/k7-desktop/scripts/stage.mjs`) fills
-`apps/k7-desktop/src-tauri/resources/`: the page and the `k7-core` library bundled by
-`apps/k7/backend-rs/scripts/stageBundle.mjs` (the same bundle the phone runs), the front's code root, and the engine binaries via `stageEngine`; on a Mac, `stage` also signs every binary of the resources (`apps/k7-desktop/docs/macos.md`).
+`npm run stage --workspace k7-desktop` (`apps/k7-daw-desktop/scripts/stage.mjs`) fills
+`apps/k7-daw-desktop/src-tauri/resources/`: the page and the `k7-core` library bundled by
+`apps/k7-daw-backend/scripts/stageBundle.mjs` (the same bundle the phone runs), the front's code root, and the engine binaries via `stageEngine`; on a Mac, `stage` also signs every binary of the resources (`apps/k7-daw-desktop/docs/macos.md`).
 `npm run build --workspace k7-desktop` then runs `tauri build`: an NSIS installer on Windows,
 a `dmg` on macOS, an AppImage and a `.deb` on Linux.
 
@@ -68,12 +68,12 @@ to `dist/release/` under its release name.
 ## The Android APK
 
 Gradle builds everything: the engine as `libk7runtime.so` in the `android-arm64` preset, the
-supervisor, and the Capacitor page from the `engine/k7-android/web` workspace (which is why `npm ci` runs
-at the root first). The versions it needs are pinned in `engine/k7-android/app/build.gradle.kts`:
+supervisor, and the Capacitor page from the `apps/k7-daw-android/web` workspace (which is why `npm ci` runs
+at the root first). The versions it needs are pinned in `apps/k7-daw-android/app/build.gradle.kts`:
 compile SDK 36 and NDK 29.0.14206865, on JDK 21.
 
 ```bash
 npm ci
-cd engine/k7-android && ./gradlew assembleDebug
+cd apps/k7-daw-android && ./gradlew assembleDebug
 # app/build/outputs/apk/debug/app-debug.apk
 ```

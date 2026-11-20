@@ -88,7 +88,7 @@
     {
       "name": "android-arm64",
       "displayName": "Android (NDK, arm64-v8a)",
-      "description": "Cross-compiles the engine as a SHARED library for the Android app (engine/k7-android): JUCE's Oboe backend reaches Java, so on Android the engine is loaded into an app process rather than spawned. Needs ANDROID_NDK_HOME pointing at an NDK r28+ (16 KB page alignment). API 29 is the floor: JUCE's Android font code calls AFontMatcher, which is 29+. No VST3/LADSPA hosting, and no tests — they are host programs. docs/android.md.",
+      "description": "Cross-compiles the engine as a SHARED library for the Android app (apps/k7-daw-android): JUCE's Oboe backend reaches Java, so on Android the engine is loaded into an app process rather than spawned. Needs ANDROID_NDK_HOME pointing at an NDK r28+ (16 KB page alignment). API 29 is the floor: JUCE's Android font code calls AFontMatcher, which is 29+. No VST3/LADSPA hosting, and no tests — they are host programs. docs/android.md.",
       "inherits": "base",
       "toolchainFile": "$env{ANDROID_NDK_HOME}/build/cmake/android.toolchain.cmake",
       "cacheVariables": {
@@ -102,7 +102,7 @@
     {
       "name": "ios-arm64",
       "displayName": "iOS (arm64 device)",
-      "description": "Cross-compiles the engine as a FRAMEWORK, k7runtime.framework, for the iOS app (engine/k7-ios): no iOS app may run a program of its own, so the engine lives in the app's process and serves on a thread whose run loop is JUCE's message loop. Needs a full Xcode. 17.0 is the floor the app sets. No Surge, no VST3/LADSPA hosting, and no tests — they are host programs. The audio session is exclusive (JUCE_DISABLE_AUDIO_MIXING_WITH_OTHER_APPS: no MixWithOthers), which Now Playing needs. docs/ios.md.",
+      "description": "Cross-compiles the engine as a FRAMEWORK, k7runtime.framework, for the iOS app (apps/k7-daw-ios): no iOS app may run a program of its own, so the engine lives in the app's process and serves on a thread whose run loop is JUCE's message loop. Needs a full Xcode. 17.0 is the floor the app sets. No Surge, no VST3/LADSPA hosting, and no tests — they are host programs. The audio session is exclusive (JUCE_DISABLE_AUDIO_MIXING_WITH_OTHER_APPS: no MixWithOthers), which Now Playing needs. docs/ios.md.",
       "inherits": "base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",

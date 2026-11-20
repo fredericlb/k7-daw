@@ -1,6 +1,6 @@
 // `node preset` — what the graph's preset dropdown runs. A preset is a FILE under a presets tree,
 // keyed by the module the node extends; through the dispatcher and asserting the files, for the
-// reason bypass.test.ts gives. See packages/song/docs/userPresets.md.
+// reason bypass.test.ts gives. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
 import {
   existsSync,

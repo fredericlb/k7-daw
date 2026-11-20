@@ -1,5 +1,5 @@
 //! engine_jobs.rs — the session routes that hand an engine's machine a job: its slots, set by its owner
-//! (`apps/k7/backend-rs/docs/engine/slots.md`).
+//! (`apps/k7-daw-backend/docs/engine/slots.md`).
 
 use std::sync::Arc;
 use std::time::Duration;

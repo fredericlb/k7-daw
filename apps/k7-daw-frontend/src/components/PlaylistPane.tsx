@@ -357,7 +357,7 @@ export function PlaylistPane({
 
                   // biome-ignore lint/suspicious/noArrayIndexKey: see above
                   key={i}
-                  // Draggable onto a DECK — the record's path travels, see packages/k7-plugins/docs/turntables/setList.md.
+                  // Draggable onto a DECK — the record's path travels, see apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/setList.md.
                   draggable={!problem && !missing}
                   onDragStart={(e) => {
                     if (!r.path) return;

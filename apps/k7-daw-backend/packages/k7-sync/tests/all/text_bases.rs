@@ -1,5 +1,5 @@
 //! text_bases.rs — the room's kept versions of a text, replayed against node's trace in `settle-vectors.json`
-//! (apps/k7/backend-rs/docs/parity.md, "The settle"). What a reader gets wrong: sizes are UTF-16 units, as `text.length` is.
+//! (apps/k7-daw-backend/docs/parity.md, "The settle"). What a reader gets wrong: sizes are UTF-16 units, as `text.length` is.
 
 use std::sync::OnceLock;
 

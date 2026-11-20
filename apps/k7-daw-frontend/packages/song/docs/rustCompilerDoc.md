@@ -4,7 +4,7 @@ Sub-step 2h of [rustCompiler.md](rustCompiler.md), whose decisions 1 to 120, out
 decisions are in [rustCompilerLanes.md](rustCompilerLanes.md), [rustCompilerClips.md](rustCompilerClips.md) and [rustCompilerCurves.md](rustCompilerCurves.md).
 It joins what they answer into the document the engine plays: the plugins and sends of each track, the clips on its halves, the baked automations, the
 frozen points and the automatic freezes, the colours and the order, the console and the recorder, and the whole `compile` with its gate. Nothing here is
-wired to a route (300). Paths are relative to `packages/song`.
+wired to a route (300). Paths are relative to `apps/k7-daw-frontend/packages/song`.
 
 ## Corrections to the 2h row of `rustCompiler.md`
 

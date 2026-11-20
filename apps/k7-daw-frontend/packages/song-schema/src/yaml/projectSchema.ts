@@ -23,7 +23,7 @@ export const ProjectSettingsSchema = z
       .optional(),
     // The song's OUTPUT level in dB, absent meaning UNITY — a fact about the MIX (docs/masterVolume.md).
     masterVolume: z.number().min(MASTER_MIN_DB).max(MASTER_MAX_DB).optional(),
-    // The summing CONSOLE over the mix: a system folder of a library's `console/` (packages/song/docs/console.md).
+    // The summing CONSOLE over the mix: a system folder of a library's `console/` (apps/k7-daw-frontend/packages/song/docs/console.md).
     console: z
       .string()
       .regex(

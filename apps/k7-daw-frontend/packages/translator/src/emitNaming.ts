@@ -140,7 +140,7 @@ export interface EmitCtx {
   assets: Record<string, Uint8Array>;
   /** Track id -> its unique slug (the track id, chain entry name and send target). */
   slugOf: Map<string, string>;
-  /** A flat node shares ONE namespace with the lanes and the modules — packages/song/docs/nodes.md. */
+  /** A flat node shares ONE namespace with the lanes and the modules — apps/k7-daw-frontend/packages/song/docs/nodes.md. */
   usedNodeNames: Set<string>;
   usedChainNames: Set<string>;
   usedClipIds: Set<string>;

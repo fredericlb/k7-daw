@@ -8,7 +8,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const frontend = join(root, "apps/k7/frontend");
+const frontend = join(root, "apps/k7-daw-frontend");
 const bundle = join(frontend, "dist-docs");
 const out = resolve(process.argv[2] ?? join(root, "dist-site"));
 

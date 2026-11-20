@@ -11,7 +11,7 @@ component can carry one line per decision. Its state lives in three hooks — th
 A module is **four documents on disk** — `module.k7x` (what it is), `ui.k7x` (how it is drawn),
 and, when it has them, its own DSP source (a `jsdsp` or `dsp` module) and the `widgets.js` that
 draws its screens. Its PRESETS are not among them: a preset is a file of the presets tree, kept
-apart from the module and chosen on a graph node (`packages/song/docs/userPresets.md`).
+apart from the module and chosen on a graph node (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`).
 
 They get four autosaves rather than one save that walks them in order, and the whole point of the
 rule is that a file is written when IT is readable: a half-typed widget in the panel must not stop
@@ -84,7 +84,7 @@ project's, and cannot know whose it is or what writing to it costs.
 
 The **Preset** menu holds the plugin's FACTORY banks only, read-only or not: those load into the
 plugin and write nothing. A module's own named settings are not this screen's — they are files of
-the presets tree, applied to one node from the graph (`packages/song/docs/userPresets.md`).
+the presets tree, applied to one node from the graph (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`).
 
 ## What is a prop, and why
 
@@ -103,7 +103,7 @@ props because they are questions only a MACHINE can answer, over a socket:
 - **`renderPreview`** — the module drawn as the graph node it will be in a chain. This component
   owns the box and its height; the host owns what goes in it, because the graph renderer needs the
   app's own icons and command line and a shared package cannot invent either
-  (`packages/ui-chains-react/docs/hosting.md`). Absent, the grid keeps the whole column.
+  (`apps/k7-daw-frontend/packages/ui-chains-react/docs/hosting.md`). Absent, the grid keeps the whole column.
 
 **Optional means the button is not drawn, rather than drawn and dead.** That is the rule for
 `onScanParams`, `onOpenNativeUi`, the regroup call and the base snapshot alike.
@@ -308,9 +308,9 @@ file it CONTAINS nothing: the controls it frames are ordinary widgets of the sam
 wholly inside its own. Every lookup of a widget by its `bind` — MIDI control, the automation arrow's
 landing point, a folder-backed dropdown's options — reads the panel's top level and nothing deeper,
 so a group holding its controls would hide them from all of it
-(`packages/song-schema/docs/moduleFile.md`).
+(`apps/k7-daw-frontend/packages/song-schema/docs/moduleFile.md`).
 
-What the grid does about it, in `packages/panel-rules/src/groupGeometry.ts` (the one rule, shared with AI organize's
+What the grid does about it, in `apps/k7-daw-frontend/packages/panel-rules/src/groupGeometry.ts` (the one rule, shared with AI organize's
 check) and `src/WidgetGridEditor.tsx`:
 
 - **Moving a group carries what it framed when the drag started**, so a section moves as one
@@ -345,7 +345,7 @@ the alpha, which only the text beside it sets.
 
 ## Smaller decisions worth not rediscovering
 
-- **The engine's stage is offered by what the module can take** (`engine/k7-runtime/docs/mix.md`):
+- **The engine's stage is offered by what the module can take** (`apps/k7-daw-engine/k7-runtime/docs/mix.md`):
   `@mix` and `@input-volume` on an EFFECT only — a module filed under `audio/` — since an instrument
   or a MIDI module has no audio input to blend or trim; `@output-volume` on every module, being a
   lane's fader as well as the level out of anything with audio out. Both volumes range −60..+12 dB.
@@ -375,7 +375,7 @@ the alpha, which only the text beside it sets.
   each value is CALLED on screen differs from the file's word: `favorite` is drawn "first", because
   what the setting does is put the module at the top of the completions and a person choosing wants
   to read the effect rather than the sentiment. The FILE keeps the three schema words — this is a
-  label, not a second spelling. See `packages/song/docs/moduleStatus.md`.
+  label, not a second spelling. See `apps/k7-daw-frontend/packages/song/docs/moduleStatus.md`.
 - **One table maps a plugin type to its DSP source filename**, because the tab, the fetch and the
   stub the host writes all have to agree on it. The names come from `@studio/engine-protocol`,
   where the compiler already reads them — a lookup, not a second spelling.
@@ -440,7 +440,7 @@ the alpha, which only the text beside it sets.
 
 ## The ASSEMBLY builder — a second screen, and why it is second
 
-`AssemblyBuilder.tsx` edits an assembly TEMPLATE (`packages/song/docs/assemblies.md`). Its own
+`AssemblyBuilder.tsx` edits an assembly TEMPLATE (`apps/k7-daw-frontend/packages/song/docs/assemblies.md`). Its own
 component rather than a pane on the one above, because it edits a different thing: a template is a
 graph of members, and a module is one plugin's face. Nothing about the widget grid, the DSP source or the plugin scan applies to it.
 
@@ -460,4 +460,4 @@ wears one by that word: the key IS the knob, so two of them would be one knob wr
 **The Save button, for the reason the module builder has one**: a template is in a library, so a
 save writes files somebody will publish together. `useAutosave`'s `manual` mode keeps the validation and the
 held-back buffer and turns the timer off. It opens read-only behind the same confirmation a shared
-module opens behind (`apps/k7/frontend/docs/sharedModules.md`).
+module opens behind (`apps/k7-daw-frontend/docs/sharedModules.md`).

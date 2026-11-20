@@ -88,7 +88,7 @@ the next `track new`.
 - **`track new`** writes it with the lane (`stripNewLane`), as do a timeline lane's copy and a
   picture's sound lane. A strip that cannot be wired is *said* rather than thrown, and a project
   with no `graph.k7x` yet is given one, the lane and its strip arriving together.
-- **The importer** writes one per lane it emits (`packages/translator/docs/import.md`), as a NODE
+- **The importer** writes one per lane it emits (`apps/k7-daw-frontend/packages/translator/docs/import.md`), as a NODE
   on k7's own `@meta/audio/mixer` — it does not go through this file, a foreign
   project's chain being built from scratch with nothing to splice into.
 

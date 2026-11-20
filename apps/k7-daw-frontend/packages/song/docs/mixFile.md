@@ -55,7 +55,7 @@ note for module refs.
 The list has no running order. The argument is about a SET LIST — which records you brought, not
 the order you will play them in, the order being a live decision — and it holds for the playlist
 too, whose lines are sorted for display
-([setList.md](../../../packages/k7-plugins/docs/turntables/setList.md)).
+([setList.md](../../k7-plugins/docs/turntables/setList.md)).
 
 Here it means something smaller: the order cues are written in is the order they were dropped in,
 and nothing reads it.
@@ -119,6 +119,6 @@ until somebody drops a cue — and a list of bare refs reads as it is, with no m
 of refs pointing at almost nothing would make every entry look as though something were missing.
 
 `markers` are the desk's eight cue points, positional, in seconds within the FILE:
-[packages/k7-plugins/docs/turntables/cues.md](../../../packages/k7-plugins/docs/turntables/cues.md). The file is written by the desk,
+[apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/cues.md](../../k7-plugins/docs/turntables/cues.md). The file is written by the desk,
 mid-set, and `withMarkers` edits it **in its text** — the scaffold's comments are the only worked
 example a reader gets, and a desk that ate them on the first cue dropped would not be forgiven.

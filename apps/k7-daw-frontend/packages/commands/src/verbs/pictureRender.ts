@@ -2,7 +2,7 @@
 // rendered on the SERVER, with no browser left open — in the background, since it takes as long
 // as the song or longer, and into the folder `into=` names. The words are the browser export's own, read by the
 // one parser both use. The scene is built HERE, as the browser's export builds it, and posted to the host.
-// See apps/k7/backend-rs/docs/file-engine-jobs.md.
+// See apps/k7-daw-backend/docs/file-engine-jobs.md.
 
 import { hasPicture } from "@studio/song/surfaces";
 import {

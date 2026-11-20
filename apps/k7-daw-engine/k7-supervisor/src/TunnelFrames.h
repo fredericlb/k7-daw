@@ -1,4 +1,4 @@
-// TunnelFrames.h — the tunnel's wire, the C++ twin of packages/engine-tunnel/frames.ts: JSON control
+// TunnelFrames.h — the tunnel's wire, the C++ twin of apps/k7-daw-frontend/packages/engine-tunnel/frames.ts: JSON control
 // messages as TEXT frames, and anything carrying bytes as a BINARY frame whose first four bytes give,
 // big-endian, the length of a JSON header, the payload following. Two spellings of one wire, so the
 // conformance suite in engine-tunnel runs against both agents.
@@ -18,13 +18,13 @@ inline const std::string kPath = "/api/engine-tunnel";
 inline const std::string kTokenHeader = "x-studio-engine-token";
 /** The machine's tunnel secret, the credential the registry binds the id to; never the engine's, never a browser's. */
 inline const std::string kSecretHeader = "x-studio-tunnel-secret";
-/** The engine wire's version this supervisor speaks; a hub refuses one below its minimum with a 426 (packages/engine-protocol/docs/version.md). */
+/** The engine wire's version this supervisor speaks; a hub refuses one below its minimum with a 426 (apps/k7-daw-frontend/packages/engine-protocol/docs/version.md). */
 inline const std::string kProtocolHeader = "x-studio-engine-protocol";
 /** File chunks are cut to this, so one large take never holds the socket for long. */
 constexpr size_t kChunkBytes = 256 * 1024;
-/** Past this many unsent bytes an upload waits; small, since every other channel's frames queue behind it (packages/engine-tunnel/docs/tunnel.md). */
+/** Past this many unsent bytes an upload waits; small, since every other channel's frames queue behind it (apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md). */
 constexpr size_t kHighWaterBytes = 1024 * 1024;
-/** How long a channel's close waits for the frames queued ahead of it to be delivered (packages/engine-tunnel/docs/tunnel.md). */
+/** How long a channel's close waits for the frames queued ahead of it to be delivered (apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md). */
 constexpr int kCloseDrainMs = 3000;
 
 /** A binary frame: the header, then the payload. */

@@ -16,7 +16,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const DEMO = join(here, "..", "..", "..", "demos", "video-demo.k7");
+const DEMO = join(here, "..", "..", "..", "..", "..", "demos", "video-demo.k7");
 
 let song: string;
 const logs: string[] = [];

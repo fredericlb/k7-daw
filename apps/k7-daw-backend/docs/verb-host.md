@@ -2,8 +2,8 @@
 
 `/verb-host/…`: what a verb run in the browser's Worker asks the server for when it needs the machine (a render, a probe, a
 separation). The code is
-`crates/k7-file-service/src/verb_host/` (the job table, the gates), the front's `native/verb_host/` (the table of routes, the
-frame) and the Worker's `packages/commands/src/runtime/members/`. The routes belong to the `journal` piece and have no fallback.
+`packages/k7-file-service/src/verb_host/` (the job table, the gates), the front's `native/verb_host/` (the table of routes, the
+frame) and the Worker's `apps/k7-daw-frontend/packages/commands/src/runtime/members/`. The routes belong to the `journal` piece and have no fallback.
 
 ## Choices
 

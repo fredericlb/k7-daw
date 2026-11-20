@@ -26,7 +26,7 @@ run(
       : ["--target-dir", join(tmpdir(), "k7-edit-replay-target")]),
     ...process.argv.slice(2),
   ],
-  join(PKG, "../song-edit/rust"),
+  join(PKG, "..", "..", "..", "k7-daw-wasm", "song-edit"),
 );
 run("npx", ["vitest", "run", "src/edit.replay.test.ts"], PKG);
 run(
@@ -44,5 +44,5 @@ run(
 run(
   "npx",
   ["vitest", "run", "verbs/editReplay.test.ts"],
-  join(PKG, "../../apps/k7/frontend"),
+  join(PKG, "..", ".."),
 );

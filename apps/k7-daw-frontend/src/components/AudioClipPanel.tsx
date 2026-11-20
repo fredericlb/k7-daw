@@ -791,7 +791,7 @@ export function AudioClipPanel({
                 placedAt={placedAt}
                 act={act}
                 tempo={tempo}
-                // k7's one waveform, the desk's: the PEAK as height and the three bands as colour (packages/ui-waveform/docs/spectrum.md).
+                // k7's one waveform, the desk's: the PEAK as height and the three bands as colour (apps/k7-daw-frontend/packages/ui-waveform/docs/spectrum.md).
                 envelope={{
                   intervalMs: wf.intervalMs,
                   samples: wf.rms,
@@ -880,7 +880,7 @@ export function AudioClipPanel({
                 }
                 // The EVENT's window, lit as ground with its edges picked out, and passed only when it actually cuts something.
                 sourceWindow={framed ? act : null}
-                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (packages/song/docs/materialCut.md). */
+                /** …and its two edges DRAG, which is how an event's window is set — an `event …` verb, only where there is one to address (apps/k7-daw-frontend/packages/song/docs/materialCut.md). */
                 onWindowMove={
                   piece && takes
                     ? (w) => {

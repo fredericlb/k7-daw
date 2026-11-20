@@ -1,6 +1,6 @@
 //! ticket.rs — the relay ticket, as `/engines` mints it: `<b64url payload>.<b64url hmac>`, the payload
 //! `{"id","h","exp"}`, signed by a secret drawn per PROCESS and never configured. A ticket names one engine
-//! and one account for a minute (`apps/k7/backend-rs/docs/engine/proxy.md`, "The ticket").
+//! and one account for a minute (`apps/k7-daw-backend/docs/engine/proxy.md`, "The ticket").
 
 use base64::Engine as _;
 use base64::engine::general_purpose::URL_SAFE_NO_PAD;

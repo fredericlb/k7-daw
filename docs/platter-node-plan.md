@@ -10,7 +10,7 @@ the desk's `withDecks` invents no plugin. What that buys:
   visible thing is the tempo, and nothing draws what makes the sound;
 - **the censor can become a binding.** It is `Rate = −1` on a plugin — exactly the shape of a
   binding — and you cannot bind a parameter of a plugin the project does not declare
-  ([fx.md](../packages/k7-plugins/docs/turntables/fx.md));
+  ([fx.md](../apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/fx.md));
 - **`deckDoc` loses a reason to exist.** It is a second set of tracks built in code, with no trim,
   no level, no echo, no cue and no stems.
 
@@ -18,9 +18,9 @@ the desk's `withDecks` invents no plugin. What that buys:
 
 | | where | what it gives |
 |---|---|---|
-| `PluginDoc.deckFile` | `packages/engine-protocol/project.ts` | already a first-class field, commented "TURNTABLE modules only — the record the platter OWNS" |
-| loading the record | `engine/k7-runtime/engine/EditBuilder.cpp` | `dynamic_cast<studio::TurntablePlugin*>` on whatever the plugin is — generic, like `namFile` and `irFile` just above |
-| naming a built-in | the song crate's compile (`packages/song/rust/src/doc/plugin.rs`) | `plugin: { type: internal, name: … }` is already how the EQ's `tracktion` engine names Tracktion's equaliser |
+| `PluginDoc.deckFile` | `apps/k7-daw-frontend/packages/engine-protocol/project.ts` | already a first-class field, commented "TURNTABLE modules only — the record the platter OWNS" |
+| loading the record | `apps/k7-daw-engine/k7-runtime/engine/EditBuilder.cpp` | `dynamic_cast<studio::TurntablePlugin*>` on whatever the plugin is — generic, like `namFile` and `irFile` just above |
+| naming a built-in | the song crate's compile (`apps/k7-daw-wasm/song/src/doc/plugin.rs`) | `plugin: { type: internal, name: … }` is already how the EQ's `tracktion` engine names Tracktion's equaliser |
 
 The engine does not ask where the plugin came from. It builds one from `p.type`, and if it happens
 to be a platter, it puts its record on. A platter compiled from a module takes exactly the same
@@ -28,7 +28,7 @@ path as an injected one.
 
 ## Three things measured, and what they settled
 
-`engine/k7-runtime/scripts/platter-node-probe.ts` replays the last two against a running engine; the
+`apps/k7-daw-engine/k7-runtime/scripts/platter-node-probe.ts` replays the last two against a running engine; the
 first is read in the source.
 
 **`role: ""` has no consequence.** `deck.ts` sets `role: "instrument"`; `nodeProject.ts`'s generic
@@ -63,7 +63,7 @@ and C++ for 1 % of the gesture: no.
 ## What it does not solve
 
 **Five platters per deck.** A separated record plays through its four parts, which share a
-position, a `Rate` and a `Key` ([stems.md](../packages/k7-plugins/docs/turntables/stems.md)). That is **ten
+position, a `Rate` and a `Key` ([stems.md](../apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md)). That is **ten
 nodes** for a two-deck set, and a desk control drives **at most one** parameter, so "deck A's five
 platters" is not expressible as a binding. `plattersOf()` — the code deriving the five identifiers
 — stays.
@@ -72,7 +72,7 @@ The metronome stays too: a whole track built in code, and another subject.
 
 ## The nodes
 
-The `@meta/audio/turntable` module, shipped with k7 (`packages/song/docs/metaModules.md`) — `module.k7x` and `ui.k7x`, no jsdsp: the engine
+The `@meta/audio/turntable` module, shipped with k7 (`apps/k7-daw-frontend/packages/song/docs/metaModules.md`) — `module.k7x` and `ui.k7x`, no jsdsp: the engine
 already hosts the platter, and `type: internal` names it the way the EQ's `tracktion` engine names the equaliser. The
 ranges come from `TurntablePlugin.cpp`:
 
@@ -115,7 +115,7 @@ remains the last place in that file that fabricates a plugin.
 ## Two things worth knowing
 
 **The platter is CATALOGUED.** `builtInPlugins()` lists it as `Turntable`, so a project's needs
-find it and its engine is not reported as missing it (`engine/k7-runtime/docs/turntable.md`).
+find it and its engine is not reported as missing it (`apps/k7-daw-engine/k7-runtime/docs/turntable.md`).
 `enginePlugin` passes an `internal`'s name **as is** without consulting the catalogue either way.
 `BUILTIN_PLUGINS` holds its parameters once `gen:builtin-params` is re-run against a built engine.
 
@@ -144,7 +144,7 @@ prepared first.
 A running engine, then:
 
 ```bash
-npx tsx engine/k7-runtime/scripts/platter-node-probe.ts   # [ws://127.0.0.1:8765]
+npx tsx apps/k7-daw-engine/k7-runtime/scripts/platter-node-probe.ts   # [ws://127.0.0.1:8765]
 ```
 
 Its own session, `Rate: 0` everywhere: it makes no noise and does not touch the loaded project.

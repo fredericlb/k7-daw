@@ -24,7 +24,7 @@ import { isBuiltinOutput, OUT_NODE } from "@studio/song-schema/moduleTypes";
 import type { SidHandler } from "../commands.ts";
 import { runCarriesInput, splitWords, takeSpawnAt } from "./shared.ts";
 
-/** The pair the graph DRAWS whether or not graph.k7x states it: a sum straight to its device — packages/song/docs/masterChain.md. */
+/** The pair the graph DRAWS whether or not graph.k7x states it: a sum straight to its device — apps/k7-daw-frontend/packages/song/docs/masterChain.md. */
 /** Does this name a node of THIS graph? The five built-in outputs count — they simply have no folder. */
 function namesANode(g: ReturnType<typeof loadGraph>, name: string): boolean {
   return (
@@ -32,7 +32,7 @@ function namesANode(g: ReturnType<typeof loadGraph>, name: string): boolean {
     name in g.modules ||
     name in g.moduleRefs ||
     name in g.tracks ||
-    // A PICTURE lane is a card too, and `videoTracks` is its own key (packages/song/docs/camera.md).
+    // A PICTURE lane is a card too, and `videoTracks` is its own key (apps/k7-daw-frontend/packages/song/docs/camera.md).
     name in g.videoTracks
   );
 }
@@ -247,7 +247,7 @@ export const GRAPH_VERBS: Record<string, SidHandler> = {
       h.refuse([`graph move failed: ${(e as Error).message}`]);
     }
   },
-  /** graph chain connect <from> <to> — the patch-cable gesture; either end may carry `#port` (packages/song/docs/ports.md). */
+  /** graph chain connect <from> <to> — the patch-cable gesture; either end may carry `#port` (apps/k7-daw-frontend/packages/song/docs/ports.md). */
   "graph.chain.connect": async (a, h) => {
     const usage =
       "usage: graph chain connect <from> <to> — each a node, optionally name#port (e.g. graph chain connect gtr reverb)";

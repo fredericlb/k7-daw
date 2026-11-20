@@ -119,7 +119,7 @@ libgit2 has no LFS, so k7 is its own LFS client, inside its own commit and check
 | added on one side, removed on the other | a conflict | keep, remove |
 
 A conflict's choice is per hunk: a key path for a structured `.k7x` change, a block of lines for a text.
-`k7_sync`'s `diff3` and `k7x` are the relay's merge, proven by `apps/k7/backend-rs/fixtures/` vectors; a second
+`k7_sync`'s `diff3` and `k7x` are the relay's merge, proven by `apps/k7-daw-backend/fixtures/` vectors; a second
 merge would disagree with them on the same edits.
 
 ## Git and the local history
@@ -150,8 +150,8 @@ merge would disagree with them on the same edits.
 | the container `iCloud.se.frediver.k7.daw` is read once, to move out the workspaces an earlier version put there (`k7-roam`'s `container.rs`) | a workspace is moved by rename or by a verified copy, never over a name that is already here, and never while a file is not downloaded; what cannot move stays in the container and is named in the log |
 
 The Swift side and the Rust side meet through one C call added to `K7Embed.h`, `k7_roam_install(list, put)`: Swift hands the
-front a function that lists the store's `ws.` pairs and one that puts or removes a pair. `apps/k7/backend-rs/docs/roam.md`
-holds the mechanism; `engine/k7-runtime/docs/ios.md` the Apple side.
+front a function that lists the store's `ws.` pairs and one that puts or removes a pair. `apps/k7-daw-backend/docs/roam.md`
+holds the mechanism; `apps/k7-daw-engine/k7-runtime/docs/ios.md` the Apple side.
 
 ## Android, Windows, Linux
 
@@ -173,7 +173,7 @@ holds the mechanism; `engine/k7-runtime/docs/ios.md` the Apple side.
 | `dav/failure.rs`'s shape (status, word, sentence) | kept as `k7-git`'s error answer |
 | the reader's 423 refusal and the frontend's locked-workspace plumbing (`useLockedWorkspaces`, `lockedWriters`, `verbWrites`) | kept for the pending merge |
 | W10a's server import (`routes/files/import.rs`, `tree.rs`'s download behind the source trait) | kept with its server source only, while server workspaces can still be brought down |
-| `frontend/src/sharing/` dialogs (`ShareWorkspace`, `OpenShared`, `DavForm`, `SftpFields`, `SftpKey`, `WorkspaceBar`) | removed; `SftpKey`'s key making and pasting reappear in the git connect dialog |
+| `apps/k7-daw-frontend/src/sharing/` dialogs (`ShareWorkspace`, `OpenShared`, `DavForm`, `SftpFields`, `SftpKey`, `WorkspaceBar`) | removed; `SftpKey`'s key making and pasting reappear in the git connect dialog |
 | `e2e/src/davFake.ts` and the dav specs, `docs/dav.md`, `files/dav.md`, `sftp.md`, `webdav-share-plan.md`, `webdav-share-brief.md`, the frontend's `sharing.md` | removed or rewritten as the git pages |
 
 ## Where it lands
@@ -203,7 +203,7 @@ holds the mechanism; `engine/k7-runtime/docs/ios.md` the Apple side.
 | the merge of `.k7x` | vectors: base, mine, theirs, the expected text and conflicts, including the relay's `settle-vectors` cases |
 | the list (encode and decode, the tombstone rules, the sweep that follows the device, the callbacks) and the move out of the container (a move, a refused name, a placeholder, a failed copy, a repeat) | `k7-roam` tests over a fake store and temp folders, CI |
 | the screens | vitest on the state reducers; one e2e spec per bed, against a bare repository the spec makes |
-| the Swift bridge and two devices sharing the list | a signed build on devices, by hand, a checklist in `engine/k7-runtime/docs/ios.md` |
+| the Swift bridge and two devices sharing the list | a signed build on devices, by hand, a checklist in `apps/k7-daw-engine/k7-runtime/docs/ios.md` |
 | libgit2 on the phones | `android-check.sh` and `ios.yml` build it; a clone and a push from a phone are on the device checklist |
 
 ## The user's decisions (taken on 2026-11-17)

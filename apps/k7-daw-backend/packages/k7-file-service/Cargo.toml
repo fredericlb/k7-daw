@@ -6,20 +6,20 @@ edition.workspace = true
 publish.workspace = true
 
 [dependencies]
-# Pins are k7x files; the same parser the bundle reads through (packages/k7x/docs/rust.md).
+# Pins are k7x files; the same parser the bundle reads through (apps/k7-daw-frontend/packages/k7x/docs/rust.md).
 indexmap.workspace = true
-k7x = { path = "../../../../../packages/k7x/rust" }
+k7x = { path = "../../../k7-daw-wasm/k7x" }
 serde_json.workspace = true
 # The store's folder name is a SHA-256 of the project's path (1723); the gate is tokio's RwLock, no runtime (1734).
 sha2.workspace = true
 tokio = { workspace = true, features = ["sync"] }
 # The crate's `Roots`, which `song_ask` builds (1117), the engine row of /module-libraries (1424), and a project's surfaces are song's own decoders; a demo's stamp is a SHA-1 (docs/file-workspaces.md).
-song = { path = "../../../../../packages/song/rust" }
+song = { path = "../../../k7-daw-wasm/song" }
 sha1.workspace = true
 # `String(n)` for a stamp's mtime and `Math.round` for a row's editedAt.
 k7-js.workspace = true
 # The server's own edits of a person's files (3j): the editor is pure and holds no disk, `edits` hands it one.
-song-edit = { path = "../../../../../packages/song-edit/rust" }
+song-edit = { path = "../../../k7-daw-wasm/song-edit" }
 # One watcher for the process (1326): the workspace's own pin, no new crate.
 notify.workspace = true
 # `slotIdOf` folds accents with the full NFD, as `normalize("NFD")` does.

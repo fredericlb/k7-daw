@@ -246,7 +246,7 @@ export function useGatePhase({
           });
         }
 
-        // A bare repository name names no folder, so this refuses rather than guesses — apps/k7/frontend/docs/projects.md.
+        // A bare repository name names no folder, so this refuses rather than guesses — apps/k7-daw-frontend/docs/projects.md.
         return setPhase({
           k: "missing",
           hint: (wording.current.retiredAddress ?? RETIRED_ADDRESS)(repoName),

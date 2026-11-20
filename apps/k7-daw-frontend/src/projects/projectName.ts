@@ -1,6 +1,6 @@
 // projectName.ts — the folder name a new project will carry. Pure, and kept apart, because that
 // name is not a label: the SUFFIX is what decides which application opens it.
-// See packages/web-protocol/projects.ts and ../../docs/projects.md.
+// See apps/k7-daw-frontend/packages/web-protocol/projects.ts and ../../docs/projects.md.
 
 import {
   PROJECT_SUFFIXES,

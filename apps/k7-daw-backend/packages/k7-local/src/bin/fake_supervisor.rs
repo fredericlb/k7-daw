@@ -1,4 +1,4 @@
-//! k7-fake-supervisor — a stand-in for `engine/k7-supervisor` in `k7-local`'s and `k7-front`'s tests: it speaks the
+//! k7-fake-supervisor — a stand-in for `apps/k7-daw-engine/k7-supervisor` in `k7-local`'s and `k7-front`'s tests: it speaks the
 //! host protocol on stdio and obeys a few test commands. Copied under the name `k7-runtime`, it plays the engine.
 //! Never shipped: nothing but `CARGO_BIN_EXE_k7-fake-supervisor` runs it.
 

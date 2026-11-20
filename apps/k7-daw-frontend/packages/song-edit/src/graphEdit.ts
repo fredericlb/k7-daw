@@ -2,7 +2,7 @@
 // the file, or — in a chain project — on its chain files read as segments and written back. The
 // writers are the same in both, which is why a chain project needs no verbs of its own.
 // What would be got wrong: in a chain project a non-lane node is its id, and renaming one is a no-op.
-// See packages/song/docs/chainFiles.md and docs/projectEdit.md.
+// See apps/k7-daw-frontend/packages/song/docs/chainFiles.md and docs/projectEdit.md.
 
 import { stub } from "@studio/song/editStub";
 import type { GraphFile } from "@studio/song-schema/yaml/graphSchema";

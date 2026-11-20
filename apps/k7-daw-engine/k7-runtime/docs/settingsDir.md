@@ -18,7 +18,7 @@ sets `K7_SETTINGS_DIR` and then lists `@engine/` modules finds no cache; set it 
 when the listing must see the scan.
 
 A harness that runs the real engine passes `K7_SETTINGS_DIR` (a scratch folder under the run's own home), as
-`engine/scripts/ci/e2e-*.sh` and `e2e/src/engineRender.ts` do. `scripts/settings-dir-proof.mjs`
+`apps/k7-daw-engine/scripts/ci/e2e-*.sh` and `e2e/src/engineRender.ts` do. `scripts/settings-dir-proof.mjs`
 (`npm run test:settings-dir --workspace k7-runtime`) renders and scans with a scratch folder and checks that the
 user's `Settings.xml` and `exts.json` keep their modification times; the choice of folder is covered by
 `tests/SettingsDir_test.cpp`.

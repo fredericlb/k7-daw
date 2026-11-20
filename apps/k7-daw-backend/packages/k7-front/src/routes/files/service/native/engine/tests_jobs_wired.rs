@@ -9,7 +9,7 @@ use crate::routes::files::service::native::tests::Lines;
 use crate::routes::files::service::native::{Req, Tag, ctx_for};
 
 fn code_root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../../..")
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..")
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]

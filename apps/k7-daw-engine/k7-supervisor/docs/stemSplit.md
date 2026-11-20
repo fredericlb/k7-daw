@@ -2,13 +2,13 @@
 
 A separation runs HT-Demucs over an audio file on an ENGINE's machine and writes four 24-bit
 WAVs — drums, bass, other, vocals — into `stems/` beside it. It is a **job to poll**, not a call
-that answers with audio. The cut is the native supervisor's (`engine/k7-supervisor/src/Separation.cpp`
+that answers with audio. The cut is the native supervisor's (`apps/k7-daw-engine/k7-supervisor/src/Separation.cpp`
 and its neighbours); the engine's tunnel hands it a job.
 
 ## Why it is a module, and why it cannot be a plugin
 
 A stem separator is the second **cold** module (`@studio/song`'s
-[coldModules.md](../../../packages/song/docs/coldModules.md)), and it is cold for both reasons that
+[coldModules.md](../../../k7-daw-frontend/packages/song/docs/coldModules.md)), and it is cold for both reasons that
 word covers at once: the answer needs the whole input, and the analysis is affordable once
 over a file and hopeless per block.
 
@@ -27,7 +27,7 @@ module vanishes from a compile with no warning at all.
 
 The wiring is real: `graph.k7x` can key a module by its output
 (`stemsplit#vocals: [ reverb ]`), the derivation carries that port along the edge, and
-the graph draws a jack per stem. See `@studio/song`'s [ports.md](../../../packages/song/docs/ports.md).
+the graph draws a jack per stem. See `@studio/song`'s [ports.md](../../../k7-daw-frontend/packages/song/docs/ports.md).
 
 ## Why a job, when a render is not one
 
@@ -51,7 +51,7 @@ The job registry (`k7-file-service`, `jobs/separations.rs`) makes two choices of
 
 The format is decided by the **consumer**, and the consumer is a PLATTER: the desk's four
 knobs make a stem something a deck opens
-([packages/k7-plugins/docs/turntables/stems.md](../../../packages/k7-plugins/docs/turntables/stems.md)). Were another chain the only
+([apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md](../../../k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md)). Were another chain the only
 destination, float32 would be the obvious answer — nothing downstream is ever worse than the
 model's own output, so rounding on the way out is a loss taken for nobody. A deck loads the file
 itself, and that decides it.
@@ -79,7 +79,7 @@ formats that need no proxy, and there 24 bits is simply the small one:
 
 What 24 bits costs is a quantisation floor at −144 dBFS, and even that is not paid in full: a
 part is scaled by its knob, so its own noise enters in proportion to the knob and vanishes with
-it ([song-schema/docs/stems.md](../../../packages/song-schema/docs/stems.md)). It is not
+it ([song-schema/docs/stems.md](../../../k7-daw-frontend/packages/song-schema/docs/stems.md)). It is not
 dithered, for the same order of magnitude — truncation at 24 bits is under the noise of any
 converter this will come out of, and dither would put a floor there on purpose instead.
 
@@ -98,7 +98,7 @@ own rate and `writeStem()` resamples on the way out when it differs; the rate go
 
 That matters — four parts a few milliseconds apart are a flam on every hit — but it is not
 *critical*, because the desk **plays the four parts** and never subtracts them from the record
-([song-schema/docs/stems.md](../../../packages/song-schema/docs/stems.md) has the reasons and the numbers): a
+([song-schema/docs/stems.md](../../../k7-daw-frontend/packages/song-schema/docs/stems.md) has the reasons and the numbers): a
 subtraction would cancel only while the two signals stay aligned to the sample, which a
 pitch-preserving stretch breaks as soon as the tempo moves.
 
@@ -146,8 +146,8 @@ differs.
 **The chain is the ENGINE's answer, and the account's only where no engine is asked.** Which module
 separates and which model it wants depends on the machine that runs it — its CPU, its GPU, the models it
 has downloaded — so the statement lives in that machine's own settings: `stems` and `instrumental` in
-`engine-host.json` (`engine/k7-supervisor/docs/supervisor.md`), reported on its heartbeat, named on
-that machine's own engine page (`apps/k7/frontend/docs/settings.md`), and picked from the engine the
+`engine-host.json` (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`), reported on its heartbeat, named on
+that machine's own engine page (`apps/k7-daw-frontend/docs/settings.md`), and picked from the engine the
 account bound. One machine separating with Demucs and another with
 something smaller is a normal estate, and no account setting could say that.
 
@@ -164,7 +164,7 @@ A separation runs its model on the machine an ENGINE runs on — its CPU, its GP
 models — and never on the server that hosts the workspaces. The server-hosted file service still
 starts and polls jobs through `startSeparate` / `separateJob`, but it installs a **runner**
 (`setSeparationRunner`) that sends each one over the jobs channel of the engine it is bound to
-(`packages/engine-tunnel/docs/jobs.md`), and the supervisor there runs it. The mix and the model
+(`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`), and the supervisor there runs it. The mix and the model
 travel to that machine before the run, the stems back before the reply — so every caller works in
 the server's paths.
 
@@ -205,7 +205,7 @@ than the very recording it is switched against — the desk swaps one for the ot
 on a single element — so the overshoot is clamped and SAID in the job's lines rather than mixed away.
 
 **Where it lives** is the one place this departs from
-[moduleAssets.md](../../../packages/song/docs/moduleAssets.md). That page argues a module carries its
+[moduleAssets.md](../../../k7-daw-frontend/packages/song/docs/moduleAssets.md). That page argues a module carries its
 material — and the argument inverts past a few hundred megabytes, where the file would be
 committed into a shared module's git repository and cloned whole by every machine that opens
 it. So the module **declares** the model as an ordinary file-valued param (`onnx:`, exactly as
@@ -348,14 +348,14 @@ look at their audio.
 
 ONNX Runtime is a prebuilt shared library, hash-pinned by the supervisor's CMake and **loaded** at
 the first separation rather than linked, so a machine missing it still runs its engine and only the
-cut says what is missing (`engine/k7-supervisor/docs/supervisor.md`).
+cut says what is missing (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`).
 
 **macOS is not covered by signing.** Nothing in this repo signs a third-party `.dylib`, so a
 notarised `.app` carrying `libonnxruntime.dylib` is unsolved.
 
 The decode needs no ffmpeg: it is `@studio/audio-analysis`'s Rust decoder, built into the supervisor, which
 reads Opus in WebM and AAC in m4a, among others, where the engine's JUCE does not
-(`engine/k7-supervisor/docs/supervisor.md` has the choice). It resamples to 44.1 kHz and makes a mono
+(`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md` has the choice). It resamples to 44.1 kHz and makes a mono
 file stereo because the model's input length is fixed — arriving at 48 kHz is not a quality
 question, it is the wrong number of samples. The way back OUT goes through the same resampler, for
 the opposite reason — the section on rates above.
@@ -367,7 +367,7 @@ the opposite reason — the section on rates above.
 `coldPass.ts` says which model and whether this machine has it, and `processWithChain` runs the
 pass in place of the bounce — no render, no repoint, four files under `stems/`. The rules that
 follow (a chain separates or treats, never both; the pass runs before the engine check) are in
-`@studio/commands`' [processChain.md](../../../packages/audio-passes/docs/processChain.md).
+`@studio/commands`' [processChain.md](../../../k7-daw-frontend/packages/audio-passes/docs/processChain.md).
 
 The running arrives **as a function**: the seam is `CommandHost.runColdStep`, and the file
 service's implementation is the one place that knows what "run it" means — `startSeparate` + poll,
@@ -382,6 +382,6 @@ be a different verb.
 
 **And a whole set at once** is `playlist stems <playlist> <chain>`, which runs this over every
 record a set list names, as the workspace holds it. It is the preparation half of cutting
-a stem live on a deck (`packages/song-schema/docs/stems.md`): a separated record is played as its four
+a stem live on a deck (`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`): a separated record is played as its four
 parts rather than as itself, so the files have to be there before it goes on. Sequential, skipping what is
 already done, and leaning on the id hashing the work so an interrupted evening resumes for free.

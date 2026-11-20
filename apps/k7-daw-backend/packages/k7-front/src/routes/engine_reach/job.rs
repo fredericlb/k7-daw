@@ -1,5 +1,5 @@
 //! job.rs — asking an engine's machine to do something over a jobs channel, as `requestJob` in
-//! `packages/engine-tunnel/jobsClient.ts` does: one request with an id of its own, its replies as they come, the
+//! `apps/k7-daw-frontend/packages/engine-tunnel/jobsClient.ts` does: one request with an id of its own, its replies as they come, the
 //! last one settling it. What a reader gets wrong: a reply naming another id, or no object at all, is not a reply.
 
 use std::time::Duration;

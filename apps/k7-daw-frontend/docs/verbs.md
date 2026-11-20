@@ -1,13 +1,13 @@
 # The verbs in the browser
 
-The page runs the command bar's verbs in a Worker, over the files the server hands it (`packages/commands/docs/runtime.md`
-is the runtime, `apps/k7/backend-rs/docs/file-changes.md` the server's half). This page holds the choices of the page's side.
+The page runs the command bar's verbs in a Worker, over the files the server hands it (`apps/k7-daw-frontend/packages/commands/docs/runtime.md`
+is the runtime, `apps/k7-daw-backend/docs/file-changes.md` the server's half). This page holds the choices of the page's side.
 
 ## Choices
 
 | choice | why |
 |---|---|
-| the Worker is `packages/commands/scripts/bundleRuntime.mjs`'s esbuild output, served by `verbs/vitePlugin.ts`: from memory in dev, an emitted hashed asset under `assets/verbs/` in a build | the finder, `runner.test.ts` and the measures prove THAT artefact; Vite's own worker pipeline would ship a second, unproven one |
+| the Worker is `apps/k7-daw-frontend/packages/commands/scripts/bundleRuntime.mjs`'s esbuild output, served by `verbs/vitePlugin.ts`: from memory in dev, an emitted hashed asset under `assets/verbs/` in a build | the finder, `runner.test.ts` and the measures prove THAT artefact; Vite's own worker pipeline would ship a second, unproven one |
 | the three `node:` builtins song still imports (`crypto`, `util`, `worker_threads`) are rewritten to stand-ins in `verbs/shims/`, built beside the Worker | a browser cannot resolve a `node:` specifier, and one static import fails the whole module; the digests are checked against node's at every padding boundary |
 | `process` is installed by `prelude.ts`, the Worker's first import | song reads `process.env` while its modules load, before any `init` |
 | the asset is left out of the service worker's precache | 3.3 MB gzipped, fetched on first use and kept by the HTTP cache, its names being hashes |

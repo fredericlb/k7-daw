@@ -6,7 +6,7 @@
 - **A file header is at most 10 lines.** What the file does, and the one thing a reader would get wrong.
 - **A comment inside the body is exactly one line.** No exceptions, no wrapped sentences, no JSDoc paragraphs.
 - Long rationale goes to the zone's `docs/` page, and the code points at it.
-- **Icons come from `@studio/ui/icons`**, never an emoji or a direct `lucide-react` import — `packages/ui/docs/icons.md`.
+- **Icons come from `@studio/ui/icons`**, never an emoji or a direct `lucide-react` import — `apps/k7-daw-frontend/packages/ui/docs/icons.md`.
 - **Documentation is in English**, like the comments — including the pages in every `docs/`.
 - **A page carries CHOICES, not mechanism.** What was decided and what forced it. Not a
   walkthrough of what happens when: the code is what says how a thing works, and prose that
@@ -15,32 +15,32 @@
   a change replaced, no migration narrative. Where a past failure is what justifies a decision,
   state the hazard in the present tense and drop the story.
 - **Whenever you edit a js/ts file, make sure it passes biome's lint**
-- **`apps/k7/frontend/docs/INTERACTIONS.md` is generated from the interactions Sheet**: change the Sheet, never the md — `apps/k7/frontend/docs/interactionsSheet.md`.
+- **`apps/k7-daw-frontend/docs/INTERACTIONS.md` is generated from the interactions Sheet**: change the Sheet, never the md — `apps/k7-daw-frontend/docs/interactionsSheet.md`.
 
 These rules hold in every language here — TypeScript and C++. The code keeps the **why** short;
 the zone's `docs/` directory is where the justification belongs:
 
 | zone | pages live in |
 |---|---|
-| a shared package (the UI kit, i18n, env, vite-config and tsconfig included) | `packages/<pkg>/docs/` |
-| the k7 frontend | `apps/k7/frontend/docs/` |
-| the engine reach | `apps/k7/backend-rs/docs/engine/` (the routes) |
-| the DJ desk | `packages/k7-plugins/docs/turntables/` |
-| the project shell | `packages/project-shell/docs/` |
-| the C++ engine | `engine/k7-runtime/docs/` |
-| the native supervisor | `engine/k7-supervisor/docs/` |
-| the Android app | `engine/k7-runtime/docs/android.md` |
-| the iOS app | `engine/k7-runtime/docs/ios.md` |
-| K7 DAW, the desktop app (Windows, Linux, macOS) | `apps/k7-desktop/docs/` |
-| k7's backend in Rust (the front, the session cookie, the embed) | `apps/k7/backend-rs/docs/` |
-| the machine's supervisor run by k7's front | `apps/k7/backend-rs/docs/local.md` |
-| the engine's build scripts | `engine/scripts/docs/` |
-| the plugin contract | `packages/k7-sdk/docs/` |
-| k7's builtin plugins | `packages/k7-plugins/docs/` |
+| a shared package (the UI kit, i18n, env, vite-config and tsconfig included) | `apps/k7-daw-frontend/packages/<pkg>/docs/` |
+| the k7 frontend | `apps/k7-daw-frontend/docs/` |
+| the engine reach | `apps/k7-daw-backend/docs/engine/` (the routes) |
+| the DJ desk | `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/` |
+| the project shell | `apps/k7-daw-frontend/packages/project-shell/docs/` |
+| the C++ engine | `apps/k7-daw-engine/k7-runtime/docs/` |
+| the native supervisor | `apps/k7-daw-engine/k7-supervisor/docs/` |
+| the Android app | `apps/k7-daw-engine/k7-runtime/docs/android.md` |
+| the iOS app | `apps/k7-daw-engine/k7-runtime/docs/ios.md` |
+| K7 DAW, the desktop app (Windows, Linux, macOS) | `apps/k7-daw-desktop/docs/` |
+| k7's backend in Rust (the front, the session cookie, the embed) | `apps/k7-daw-backend/docs/` |
+| the machine's supervisor run by k7's front | `apps/k7-daw-backend/docs/local.md` |
+| the engine's build scripts | `apps/k7-daw-engine/scripts/docs/` |
+| the plugin contract | `apps/k7-daw-frontend/packages/k7-sdk/docs/` |
+| k7's builtin plugins | `apps/k7-daw-frontend/packages/k7-plugins/docs/` |
 | the functional suite (Playwright, against a running instance or the Android app) | `e2e/docs/` |
 | CI and deployment, which belong to no single app | `docs/` |
 
-(Those are notes for developers. `apps/k7/docs/` is the exception: it is the
+(Those are notes for developers. `apps/k7-daw-frontend/user-docs/` is the exception: it is the
 user-facing documentation the app ships and renders at `/docs`.)
 
 **Never** turn a multi-line comment into a one-liner by joining its lines: that
@@ -60,14 +60,14 @@ the production image, and the repo-wide pages in `docs/`. The short map:
 
 | dir | what it is |
 |---|---|
-| `engine/k7-runtime` | C++ audio engine: receives a compiled `ProjectDoc` over WebSocket, plays it; never parses song files (its own `AGENTS.md`) |
-| `engine/k7-supervisor` | C++ supervisor of the engine machine: starts and watches the engine, holds the tunnel, runs the jobs its backend asks (its own `AGENTS.md`) |
-| `engine/k7-android`, `engine/k7-ios` | the engine and supervisor on a phone, with k7's backend bundled (`engine/k7-runtime/docs/android.md`, `ios.md`) |
-| `engine/scripts` | builds the engine and supervisor, packages the CLI archive and the desktop app's release files |
-| `apps/k7` | the text-first DAW — frontend (React/Vite) + `backend-rs`, its Rust front; k7 runs on devices only, no hosted app (its own `AGENTS.md`) |
-| `apps/k7/backend-rs` | k7's backend in Rust: one process answering the session, the preferences, the file hub, AI organize, the engine registry and the built page (`docs/rust-backend-plan.md`) |
-| `apps/k7-desktop` | K7 DAW, k7 on Windows, Linux and macOS (Apple silicon): a Tauri app with one window that runs k7's backend on `127.0.0.1:18789`, which runs the machine's supervisor and engine; k7 shows in its window, or in the browser from the desktop app's menu. Built locally on each OS (`apps/k7-desktop/docs/`) |
-| `packages/` | `@studio/*`, consumed as raw TypeScript through `exports` subpaths (a bare deep import fails on purpose); all private to the tree. Most serve the page or the verbs' Worker; `engine-client`, `engine-tunnel`, `env`, `song-strudel`, `tsconfig` and `vite-config` serve only scripts, tests and builds; the `rust/` crates of `song`, `song-edit` and `k7x` are built into the backend, `audio-analysis`'s into the supervisor, `k7-wasm`'s into the page as WebAssembly |
+| `apps/k7-daw-engine/k7-runtime` | C++ audio engine: receives a compiled `ProjectDoc` over WebSocket, plays it; never parses song files (its own `AGENTS.md`) |
+| `apps/k7-daw-engine/k7-supervisor` | C++ supervisor of the engine machine: starts and watches the engine, holds the tunnel, runs the jobs its backend asks (its own `AGENTS.md`) |
+| `apps/k7-daw-engine/scripts` | builds the engine and supervisor, packages the CLI archive and the desktop app's release files |
+| `apps/k7-daw-android`, `apps/k7-daw-ios` | the engine and supervisor on a phone, with k7's backend bundled (`apps/k7-daw-engine/k7-runtime/docs/android.md`, `ios.md`) |
+| `apps/k7-daw-frontend` | the text-first DAW's page — React/Vite, the one place k7's TypeScript lives: its own source, its `packages/` (`@studio/*`, consumed as raw TypeScript through `exports` subpaths: a bare deep import fails on purpose; most serve the page or the verbs' Worker, and `engine-client`, `engine-tunnel`, `env`, `song-strudel`, `tsconfig` and `vite-config` serve only scripts, tests and builds) and `user-docs/`, the documentation rendered at `/docs`; k7 runs on devices only, no hosted app (its own `AGENTS.md`) |
+| `apps/k7-daw-backend` | k7's backend in Rust: one process answering the session, the preferences, the file hub, AI organize, the engine registry and the built page; its crates are its `packages/`, `waveform` (the measure, decoders and encoders, built into the backend, the supervisor and, as WebAssembly, the page's `waveform.wasm`) among them (`docs/rust-backend-plan.md`) |
+| `apps/k7-daw-wasm` | the Rust crates that build for the browser as WebAssembly, `k7-wasm`'s one module, and are linked by the backend too: `song`, `song-schema`, `song-edit`, `k7x`, `k7-wasm` (the TypeScript halves are the frontend's `packages/`) |
+| `apps/k7-daw-desktop` | K7 DAW, k7 on Windows, Linux and macOS (Apple silicon): a Tauri app with one window that runs k7's backend on `127.0.0.1:18789`, which runs the machine's supervisor and engine; k7 shows in its window, or in the browser from the desktop app's menu. Built locally on each OS (`apps/k7-daw-desktop/docs/`) |
 | `k7-core/` | the `@k7-core` modules library, the seed every library folder is copied from |
 | `e2e/` | the Playwright functional suite (`e2e/docs/`) |
 | `docs/` | repo-wide notes: CI, deployment, the dev session, plans, audits |
@@ -82,7 +82,7 @@ engine registry, the relay or a gate, `docs/audit-moteur.md`. The repo's own che
 - `npm run lint:docs` — blocking: refuses a `.md` or source comment naming a file that is not there.
 - `npm run lint:bytes` — blocking: refuses a NUL byte in a tracked source file (ripgrep skips it whole).
 - `npm run lint:dead` — knip, non-blocking: dead and duplicated code; build-only entries go in `knip.json`.
-- `npm run lint:panels` — a panel's `bind:` against its plugin's real parameters; needs the plugins installed, not in `npm run lint` (`packages/song/docs/panelBinds.md`).
+- `npm run lint:panels` — a panel's `bind:` against its plugin's real parameters; needs the plugins installed, not in `npm run lint` (`apps/k7-daw-frontend/packages/song/docs/panelBinds.md`).
 
 # Merging a branch
 
@@ -97,14 +97,14 @@ How a build stays fast and where a branch is checked — `docs/rust-builds.md`, 
 
 - **A target folder is named with `--target-dir`, never `CARGO_TARGET_DIR`**: sccache hashes every `CARGO_*`
   variable, so the environment variable makes every compile miss. Our scripts set `RUSTC_WRAPPER` themselves
-  (`engine/scripts/sccache.mjs`); an ad-hoc cargo script adds `eval "$(node engine/scripts/sccache.mjs dev --export)"`, an agent's
-  `eval "$(node engine/scripts/sccache.mjs agent --export)"` (four jobs, line tables only).
+  (`apps/k7-daw-engine/scripts/sccache.mjs`); an ad-hoc cargo script adds `eval "$(node apps/k7-daw-engine/scripts/sccache.mjs dev --export)"`, an agent's
+  `eval "$(node apps/k7-daw-engine/scripts/sccache.mjs agent --export)"` (four jobs, line tables only).
   Never `sccache --stop-server`: the servers are shared.
 - **A branch is checked on the Mac**: no CI job releases, and Windows is set aside until the user brings it back
   (`docs/agent-playbook.md`). A milestone ends with `bash scripts/agent/gate.sh --milestone` (the quick
   checks, `check:changed`, `mac-checks.sh`); before a merge, `gate.sh` adds `win-clippy.sh` and `android-check.sh`, and
   `npm run ci:local` runs on `main` after merges. Never push `main`.
-- **The web and conformance suites run on the Mac's own e2e beds, never in CI**, two at once (`engine/scripts/ci/e2e-macos.sh`, `e2e/docs/e2e.md`).
+- **The web and conformance suites run on the Mac's own e2e beds, never in CI**, two at once (`apps/k7-daw-engine/scripts/ci/e2e-macos.sh`, `e2e/docs/e2e.md`).
 - **A test server listens on `127.0.0.1`**, never on every interface: on macOS another process's loopback bind
   shadows it.
 
@@ -112,9 +112,9 @@ How a build stays fast and where a branch is checked — `docs/rust-builds.md`, 
 
 `bash scripts/agent/android-check.sh` builds the Rust front for the phone, the bundled backend and the app's Kotlin (JDK 21
 as `JAVA_HOME`, the SDK with NDK `29.0.14206865` as `ANDROID_HOME`; Gradle refuses a newer JDK). It never compiles
-the C++ engine: that is `./gradlew :app:assembleE2e` from `engine/k7-android`, as `engine/k7-runtime/docs/android.md` says.
+the C++ engine: that is `./gradlew :app:assembleE2e` from `apps/k7-daw-android`, as `apps/k7-daw-engine/k7-runtime/docs/android.md` says.
 A new test must hold on Windows too: no file symlink without Developer Mode (`EPERM`), no POSIX mode (a file reads
-`0o666`) — guard those with `process.platform === "win32"`, as `packages/engine-tunnel/hubConfinement.test.ts` does.
+`0o666`) — guard those with `process.platform === "win32"`, as `apps/k7-daw-frontend/packages/engine-tunnel/hubConfinement.test.ts` does.
 
 ## iOS
 

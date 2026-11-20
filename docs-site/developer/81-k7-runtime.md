@@ -1,4 +1,4 @@
-# The C++ engine (`engine/k7-runtime`)
+# The C++ engine (`apps/k7-daw-engine/k7-runtime`)
 
 The engine is a headless C++20 program built on Tracktion Engine (and so on JUCE). It receives a compiled `ProjectDoc` over a WebSocket, turns it into a live Tracktion `Edit`, plays it on the audio device, and pushes transport, meters and other state back about twenty times a second. It never reads a song file.
 
@@ -8,23 +8,23 @@ Read [Engine architecture](./80-engine-architecture.md) first for where it sits.
 
 | Path | What lives there |
 |---|---|
-| `engine/k7-runtime/server/main.cpp` | The executable: one-shot CLI modes, else `serve()`. Includes no JUCE header. |
-| `engine/k7-runtime/server/Serve.cpp` | The WebSocket server: socket lifecycle, trust screening, dispatch to the handler table. No JUCE header. |
-| `engine/k7-runtime/server/ServeProject.cpp` | Handlers acting on one project: `project`, `tracks`, `flush`, `transport`, `preview`, `note-preview`, `midi-live`, `arm`, `recorder`, `record-enable` |
-| `engine/k7-runtime/server/ServePlugins.cpp` | Plugin handlers: catalogue, params, presets, native UI, waveform taps |
-| `engine/k7-runtime/server/ServeMachine.cpp` | Machine handlers: `whoami`, sessions, audio devices, input levels, broadcast, instrument status |
-| `engine/k7-runtime/server/ServePairing.cpp`, `engine/k7-runtime/server/Pairing.cpp` | LAN pairing: who is trusted, pending requests, `paired-devices.json` |
-| `engine/k7-runtime/server/DocJson.cpp` | JSON ↔ `ProjectDoc`, with the wire's bounds |
-| `engine/k7-runtime/server/Outbox.h` | One writer thread for every JSON push |
-| `engine/k7-runtime/server/AudioSender.cpp` | The audio broadcast's sender thread |
-| `engine/k7-runtime/server/android/EngineJni.cpp` | The Android library's two JNI entry points |
-| `engine/k7-runtime/engine/` | The `studio_engine` static library: everything that touches Tracktion/JUCE |
-| `engine/k7-runtime/engine/eurorack/` | Ports of Mutable Instruments modules as built-in plugins, in a JUCE-free library |
-| `engine/k7-runtime/engine/surge/` | Surge XT as a built-in synth (desktop only) |
-| `engine/k7-runtime/engine/strudel/` | The committed Strudel bundle and the CMake script that embeds it |
-| `engine/k7-runtime/engine/patches/` | Patch scripts applied to fetched dependencies |
-| `engine/k7-runtime/tests/` | Fast, JUCE-free unit tests |
-| `engine/k7-runtime/scripts/` | The build and test runners, code generators, and TypeScript probes that drive a running engine |
+| `apps/k7-daw-engine/k7-runtime/server/main.cpp` | The executable: one-shot CLI modes, else `serve()`. Includes no JUCE header. |
+| `apps/k7-daw-engine/k7-runtime/server/Serve.cpp` | The WebSocket server: socket lifecycle, trust screening, dispatch to the handler table. No JUCE header. |
+| `apps/k7-daw-engine/k7-runtime/server/ServeProject.cpp` | Handlers acting on one project: `project`, `tracks`, `flush`, `transport`, `preview`, `note-preview`, `midi-live`, `arm`, `recorder`, `record-enable` |
+| `apps/k7-daw-engine/k7-runtime/server/ServePlugins.cpp` | Plugin handlers: catalogue, params, presets, native UI, waveform taps |
+| `apps/k7-daw-engine/k7-runtime/server/ServeMachine.cpp` | Machine handlers: `whoami`, sessions, audio devices, input levels, broadcast, instrument status |
+| `apps/k7-daw-engine/k7-runtime/server/ServePairing.cpp`, `apps/k7-daw-engine/k7-runtime/server/Pairing.cpp` | LAN pairing: who is trusted, pending requests, `paired-devices.json` |
+| `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp` | JSON ↔ `ProjectDoc`, with the wire's bounds |
+| `apps/k7-daw-engine/k7-runtime/server/Outbox.h` | One writer thread for every JSON push |
+| `apps/k7-daw-engine/k7-runtime/server/AudioSender.cpp` | The audio broadcast's sender thread |
+| `apps/k7-daw-engine/k7-runtime/server/android/EngineJni.cpp` | The Android library's two JNI entry points |
+| `apps/k7-daw-engine/k7-runtime/engine/` | The `studio_engine` static library: everything that touches Tracktion/JUCE |
+| `apps/k7-daw-engine/k7-runtime/engine/eurorack/` | Ports of Mutable Instruments modules as built-in plugins, in a JUCE-free library |
+| `apps/k7-daw-engine/k7-runtime/engine/surge/` | Surge XT as a built-in synth (desktop only) |
+| `apps/k7-daw-engine/k7-runtime/engine/strudel/` | The committed Strudel bundle and the CMake script that embeds it |
+| `apps/k7-daw-engine/k7-runtime/engine/patches/` | Patch scripts applied to fetched dependencies |
+| `apps/k7-daw-engine/k7-runtime/tests/` | Fast, JUCE-free unit tests |
+| `apps/k7-daw-engine/k7-runtime/scripts/` | The build and test runners, code generators, and TypeScript probes that drive a running engine |
 
 The boundary that matters: **public headers of `studio_engine` include no JUCE.** `EngineHost.h` forward-declares Tracktion types and exposes plain structs (`PluginInfo`, `AudioDeviceInfo`). The server compiles against that API only, and all JUCE threading sits behind `EngineHost::post()`. Tracktion is linked `PRIVATE`.
 
@@ -62,7 +62,7 @@ Before any of these, `main()` compares the `ProjectDoc` layout as seen by three 
 
 ### Path roots
 
-A document off the wire names files: samples, models, IRs, presets, take destinations. `engine/k7-runtime/engine/PathRoots.h` confines them. `serve()` calls `setPathRoots(defaultPathRoots(stateDir))` before the first document is read: writes are allowed under the state folder and `$STUDIO_ENGINE_ROOTS`; reads under those plus the temp directory. Paths are checked after resolving symlinks, and UNC paths (`\\host\share`, `//host/share`, `\\?\…`) are always refused so a document cannot make the engine dial a network share. Pattern sound names must be plain child names (`safeSoundName`). With no roots set, as in the one-shot CLI modes, everything but UNC passes. Code that opens a document-named file calls `readAllowed()` or `writeAllowed()`; `engine/k7-runtime/tests/PathRoots_test.cpp` covers the rules. DocJson also bounds the wire's numbers before they reach the model.
+A document off the wire names files: samples, models, IRs, presets, take destinations. `apps/k7-daw-engine/k7-runtime/engine/PathRoots.h` confines them. `serve()` calls `setPathRoots(defaultPathRoots(stateDir))` before the first document is read: writes are allowed under the state folder and `$STUDIO_ENGINE_ROOTS`; reads under those plus the temp directory. Paths are checked after resolving symlinks, and UNC paths (`\\host\share`, `//host/share`, `\\?\…`) are always refused so a document cannot make the engine dial a network share. Pattern sound names must be plain child names (`safeSoundName`). With no roots set, as in the one-shot CLI modes, everything but UNC passes. Code that opens a document-named file calls `readAllowed()` or `writeAllowed()`; `apps/k7-daw-engine/k7-runtime/tests/PathRoots_test.cpp` covers the rules. DocJson also bounds the wire's numbers before they reach the model.
 
 ## Inside `serve()`
 
@@ -78,11 +78,11 @@ A socket's handshake first passes `screenOrigin`: a browser `Origin` that is not
 
 ## Sessions
 
-One engine plays several projects at once, one per **session**, keyed by the message's `session` field (absent means `""`). Each session owns its own Tracktion `Edit`, plugins, meters, taps and recorders, in `SessionRegistry<T>` (`engine/k7-runtime/engine/SessionRegistry.h`), a map behind a lock that covers the map and never a session's contents. Limits: 64 sessions (`EngineHost::kMaxSessions`), and a session id of at most 256 bytes. Naming an unknown session creates it, except from a probe query, which only creates one when it says `"role": "driver"`. The first message on a socket binds it to that session for state pushes, except the verbs that name another session on purpose (`drop-session`, `show-native-plugin-ui`, `show-native-plugin-ui-of`). The session id rules are in `packages/engine-protocol/sessions.ts`.
+One engine plays several projects at once, one per **session**, keyed by the message's `session` field (absent means `""`). Each session owns its own Tracktion `Edit`, plugins, meters, taps and recorders, in `SessionRegistry<T>` (`apps/k7-daw-engine/k7-runtime/engine/SessionRegistry.h`), a map behind a lock that covers the map and never a session's contents. Limits: 64 sessions (`EngineHost::kMaxSessions`), and a session id of at most 256 bytes. Naming an unknown session creates it, except from a probe query, which only creates one when it says `"role": "driver"`. The first message on a socket binds it to that session for state pushes, except the verbs that name another session on purpose (`drop-session`, `show-native-plugin-ui`, `show-native-plugin-ui-of`). The session id rules are in `apps/k7-daw-frontend/packages/engine-protocol/sessions.ts`.
 
 ## Applying a project: the diff
 
-`project` posts `EngineHost::apply(session, doc)` to the message thread, wrapped in `busy: true` / `busy: false` broadcasts. `apply` compares the incoming doc with the session's current one using `ProjectDiff` (`engine/k7-runtime/engine/ProjectDiff.h`) and returns the ordered change list, which is broadcast as `applied` and logged (first 12 lines).
+`project` posts `EngineHost::apply(session, doc)` to the message thread, wrapped in `busy: true` / `busy: false` broadcasts. `apply` compares the incoming doc with the session's current one using `ProjectDiff` (`apps/k7-daw-engine/k7-runtime/engine/ProjectDiff.h`) and returns the ordered change list, which is broadcast as `applied` and logged (first 12 lines).
 
 The diff depends on **stable identity**: tracks, clips and plugins match by `id`, so a rename is "same id, new name". Removals come before additions and tracks before their contents. Change kinds:
 
@@ -94,19 +94,19 @@ The diff depends on **stable identity**: tracks, clips and plugins match by `id`
 | `PluginAdded`, `PluginRemoved`, `PluginParamChanged`, `PluginEnabledChanged`, `PluginReloaded`, `PatternChanged`, `AutomationChanged` | `SendsRewired` |
 | `SendLevelChanged` | |
 
-Applying in place is what keeps a reverb tail ringing and a held note held while you edit. `needsFullRebuild()` decides; a full rebuild goes through `EditBuilder` (`engine/k7-runtime/engine/EditBuilder.cpp`), which also builds the offline render's edit. Sends are planned once for the whole song in `SendPlan.h`, shared by the builder and the diff.
+Applying in place is what keeps a reverb tail ringing and a held note held while you edit. `needsFullRebuild()` decides; a full rebuild goes through `EditBuilder` (`apps/k7-daw-engine/k7-runtime/engine/EditBuilder.cpp`), which also builds the offline render's edit. Sends are planned once for the whole song in `SendPlan.h`, shared by the builder and the diff.
 
-To add a field to `ProjectDoc`: add it to `engine/k7-runtime/engine/ProjectDoc.h`, parse it in `engine/k7-runtime/server/DocJson.cpp`, compare it in `engine/k7-runtime/engine/ProjectDiff.cpp` (choosing in place or rebuild), apply it in `EngineHost`/`EditBuilder`, mirror it in `packages/engine-protocol/project.ts`, and produce it in the compiler (`packages/song`). Add a case to `engine/k7-runtime/tests/ProjectDiff_test.cpp`.
+To add a field to `ProjectDoc`: add it to `apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h`, parse it in `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp`, compare it in `apps/k7-daw-engine/k7-runtime/engine/ProjectDiff.cpp` (choosing in place or rebuild), apply it in `EngineHost`/`EditBuilder`, mirror it in `apps/k7-daw-frontend/packages/engine-protocol/project.ts`, and produce it in the compiler (`apps/k7-daw-frontend/packages/song`). Add a case to `apps/k7-daw-engine/k7-runtime/tests/ProjectDiff_test.cpp`.
 
 ## Hosted plugins
 
 **Third-party:** VST3 and LADSPA, from each format's default search locations, on every platform except Android. Discovery runs out of process (`--scan-plugin` per plugin), so a crashing plugin cannot take the scan down; results are cached in `<state>/exts.json`, which the TypeScript side reads for `@engine/…` modules. A rescan is incremental.
 
-**Built-in** (`engine/k7-runtime/engine/*Plugin.cpp`, registered by `xmlTypeName`):
+**Built-in** (`apps/k7-daw-engine/k7-runtime/engine/*Plugin.cpp`, registered by `xmlTypeName`):
 
 | Group | Plugins |
 |---|---|
-| Instruments | SFZ Player (sfizz), Surge XT (desktop only), the eurorack ports in `engine/k7-runtime/engine/eurorack/` (`mu-plaits`, `mu-braids`, `mu-rings`, `mu-elements`, `mu-clouds`, `mu-warps`, `mu-peaks`, `mu-tides`) |
+| Instruments | SFZ Player (sfizz), Surge XT (desktop only), the eurorack ports in `apps/k7-daw-engine/k7-runtime/engine/eurorack/` (`mu-plaits`, `mu-braids`, `mu-rings`, `mu-elements`, `mu-clouds`, `mu-warps`, `mu-peaks`, `mu-tides`) |
 | DSP | Neural Amp Modeler (NAM core, plus RTNeural models), DSP Graph (the JavaScript DSP interpreter), MIDI Graph, Arpeggiator, Pattern (Strudel) |
 | Mixing | Mixer, Master gain, Quick Master, Mix Split / Mix Blend |
 | Taps and decks | Waveform Tap, Broadcast Tap, Recorder, Turntable |
@@ -124,23 +124,23 @@ Time-stretching uses Tracktion's SoundTouch backend (`TRACKTION_ENABLE_TIMESTRET
 
 Pattern lanes are Strudel code. The engine runs them itself in QuickJS: `PatternPlugin` heads the lane's chain, a worker queries the pattern ahead into `PatternSchedule`'s ring and loads samples, and the audio thread only reads the ring. `StrudelHost` owns one QuickJS runtime and must never be called from the audio thread.
 
-The JavaScript comes from `packages/song-strudel/src/engineEntry.ts`, bundled by `engine/k7-runtime/scripts/gen-strudel-bundle.mjs` (esbuild, IIFE, ES2020, minified) into `engine/k7-runtime/engine/strudel/strudel.bundle.js`. The bundle is **committed**, so building the engine needs no Node; CMake turns it into a byte array at build time. Regenerate it after changing `song-strudel` or bumping `@strudel/*`:
+The JavaScript comes from `apps/k7-daw-frontend/packages/song-strudel/src/engineEntry.ts`, bundled by `apps/k7-daw-engine/k7-runtime/scripts/gen-strudel-bundle.mjs` (esbuild, IIFE, ES2020, minified) into `apps/k7-daw-engine/k7-runtime/engine/strudel/strudel.bundle.js`. The bundle is **committed**, so building the engine needs no Node; CMake turns it into a byte array at build time. Regenerate it after changing `song-strudel` or bumping `@strudel/*`:
 
 ```sh
 npm run gen:strudel-bundle --workspace k7-runtime
 ```
 
-Other generators in the same workspace: `gen:builtin-params` (writes `packages/song-schema/src/builtinParams.generated.json` from `--dump-builtin-params`) and `gen:surge-panel`.
+Other generators in the same workspace: `gen:builtin-params` (writes `apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json` from `--dump-builtin-params`) and `gen:surge-panel`.
 
 ## Tests
 
-`engine/k7-runtime/tests/CMakeLists.txt` builds small binaries that compile the JUCE-free sources directly, so they build in seconds and need no audio device: `studio_engine_tests` (the diff), `studio_docjson_tests`, `studio_pairing_tests`, `studio_session_tests`, and suites for the turntable loop, warp markers, recorder tap, arpeggiator, dither, acceleration limiter, note clock, watchdog, MIDI graph, DSP graph, pattern schedule, sample banks, Strudel host, eurorack and amp models.
+`apps/k7-daw-engine/k7-runtime/tests/CMakeLists.txt` builds small binaries that compile the JUCE-free sources directly, so they build in seconds and need no audio device: `studio_engine_tests` (the diff), `studio_docjson_tests`, `studio_pairing_tests`, `studio_session_tests`, and suites for the turntable loop, warp markers, recorder tap, arpeggiator, dither, acceleration limiter, note clock, watchdog, MIDI graph, DSP graph, pattern schedule, sample banks, Strudel host, eurorack and amp models.
 
 ```sh
 npm test --workspace k7-runtime        # builds the studio_* targets in the platform's preset, runs them
 npm run test:all --workspace k7-runtime
 ```
 
-`engine/k7-runtime/scripts/run-tests.mjs` never configures a preset (configuring fetches everything). An unconfigured tree **skips** loudly with the command to fix it. Set `STUDIO_MOTEUR_PRESET` to choose the preset.
+`apps/k7-daw-engine/k7-runtime/scripts/run-tests.mjs` never configures a preset (configuring fetches everything). An unconfigured tree **skips** loudly with the command to fix it. Set `STUDIO_MOTEUR_PRESET` to choose the preset.
 
-The TypeScript probes in `engine/k7-runtime/scripts/` (`render-once.ts`, `load-probe.ts`, `two-sessions.ts`, `turntable-latency.ts` and others) drive a **running** engine or the render path from `npx tsx`; they are measuring tools, not tests.
+The TypeScript probes in `apps/k7-daw-engine/k7-runtime/scripts/` (`render-once.ts`, `load-probe.ts`, `two-sessions.ts`, `turntable-latency.ts` and others) drive a **running** engine or the render path from `npx tsx`; they are measuring tools, not tests.

@@ -96,7 +96,7 @@ kit({ Kick: 36, Snare: 38, HatClosed: 42 })
 
 ### A kit from an SFZ drum kit
 
-`engine/k7-runtime/scripts/sfz-to-rack.ts` makes a rack kit out of a sampled one: each piece RENDERED
+`apps/k7-daw-engine/k7-runtime/scripts/sfz-to-rack.ts` makes a rack kit out of a sampled one: each piece RENDERED
 through the engine's SFZ player at one velocity, its silent tail trimmed, one file per piece under a
 library's `samples/`, and a preset mapping each to its note. Rendered rather than copied, because a
 sampled kit plays several microphones per hit — a close mic and the overheads at least — and the
@@ -130,15 +130,15 @@ subchains([
   run of its own to be fed, and is refused. A route to anything else is refused by name, at the
   command and at the compile, rather than swallowing the tap.
 - **A real output, not a copy.** The engine runs the instrument in a rack of its own and returns
-  the tap's pair on the subchain's track (`engine/k7-runtime/docs/tapOutputs.md`): the routed tap
+  the tap's pair on the subchain's track (`apps/k7-daw-engine/k7-runtime/docs/tapOutputs.md`): the routed tap
   leaves the main output, and the kit stays one instrument, its hi-hat choke included. Pairs are
   numbered in the order of the taps' names (`src/tapOuts.ts`), so a rebuild lands every tap where it was.
 - **Drawn as a jack.** The node grows an output named after the tap, with a cable to the subchain
-  (`packages/ui-chains/src/graph.ts`).
+  (`apps/k7-daw-frontend/packages/ui-chains/src/graph.ts`).
 - **Edited from the tap.** A pad's **Edit chain…** opens a popin on its chain (k7's `docs/shell.md`),
   whose buttons are `node tap chain add|move|remove`: the first module makes the subchain and routes
   the tap, and the last one removed takes both away — a tap-fed subchain with no node feeds nothing,
-  and the next graph edit would drop it and leave the route dangling (`packages/song-edit/src/tapChain.ts`).
+  and the next graph edit would drop it and leave the route dangling (`apps/k7-daw-frontend/packages/song-edit/src/tapChain.ts`).
 
 ## The node draws a TAP per sound
 
@@ -150,7 +150,7 @@ widget only ASKS: every edit is a `node tap` command the host runs, so the card 
 the command bar can do everything it can.
 
 A rack is drawn by octave, a tab each, its twelve notes as a 4×3 grid with the lowest at the bottom
-left (`packages/ui-chains/docs/graphBuild.md`). A pad sits AT its note, the place a part plays it
+left (`apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md`). A pad sits AT its note, the place a part plays it
 from, and an empty cell is an add tap on that note (`node tap at`). A rack with NO sounds still
 draws one octave of add taps, because a kit node is born empty and that is how it gets its first sound.
 
@@ -206,13 +206,13 @@ plugin listing — so playing it in place would mean a new protocol message and 
 audition route exists, end to end, and answers "which sound is this?", which is what a pad is for.
 
 Every k7 pane that draws a kit — the chains pane, the graph panel, a lane's module row — plays it,
-through one hook (`apps/k7/frontend/src/hooks/useRackTrigger.ts`): a pad that sounds in one and is
+through one hook (`apps/k7-daw-frontend/src/hooks/useRackTrigger.ts`): a pad that sounds in one and is
 silent in another reads as a broken card. What it plays is whatever material the tap has — a library
 sample, resolved onto a file by the loader, a clip, or a slice window — so an older kit's pads play
 too.
 
 **A right-click is the pad's menu**: change note, change sample, rename, remove, add one before, add
-one after, each a `node tap …` command (`packages/commands/docs/verbs.md`). An entry still owing a
+one after, each a `node tap …` command (`apps/k7-daw-frontend/packages/commands/docs/verbs.md`). An entry still owing a
 value — a note, a sample, a name — is handed to the command bar with the line written, where a sample
 completes from the libraries' `samples/`.
 
@@ -225,7 +225,7 @@ read-only, never clickable-and-silent.
 And it is **derived, not observed**. The engine reports no notes: its live frame is
 `{ playing, playhead, levels, inputLevels, armed, recordEnabled, waveform }` and nothing about a
 sampler's voices. But the browser holds the arrangement and the playhead at the same time, so it
-can answer the question itself — `apps/k7/frontend/src/rackLit.ts` turns the lane feeding a rack's
+can answer the question itself — `apps/k7-daw-frontend/src/rackLit.ts` turns the lane feeding a rack's
 chain into a list of `{ from, to, key }` in arrangement beats, and each frame asks which of them
 contain the playhead.
 

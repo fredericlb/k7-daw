@@ -1,7 +1,7 @@
 // volume-probe.ts — does the engine's stage set a module's INPUT and OUTPUT level? Point it at a
 // running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/volume-probe.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/volume-probe.ts [ws://127.0.0.1:8765]
 //
 // A synth into a Volume & Pan: the synth's @output-volume at -6 dB (an instrument: no input, an
 // output stage alone), then the effect's @input-volume at -12 dB, then its @output-volume at +6

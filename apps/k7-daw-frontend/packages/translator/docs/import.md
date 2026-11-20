@@ -14,7 +14,7 @@ reason a second format is one file rather than a second pipeline.
 
 ## Two ways in, one translation
 
-The importer runs in the verbs' browser Worker (`packages/commands/src/runtime/importer.ts`), over the translator's
+The importer runs in the verbs' browser Worker (`apps/k7-daw-frontend/packages/commands/src/runtime/importer.ts`), over the translator's
 `@studio/translator/import`, which holds what needs no I/O: the mapper picked by extension, the folder's name, the log.
 Two entry points differ only in where the bytes come from and who names the folder:
 
@@ -44,7 +44,7 @@ tree, where it sits with its folder, and the refusal says so.
   A foreign project makes a new folder and shared modules, which no project's verb may write.
 - **The samples go first, through `/upload`, into the folder the texts then create** with one `/changes` set. A
   body cannot carry audio, and a set that fails after the uploads takes the folder away with them
-  (`apps/k7/backend-rs/docs/file-changes.md`). The emitter hands its binaries to a sink, so it writes no byte itself.
+  (`apps/k7-daw-backend/docs/file-changes.md`). The emitter hands its binaries to a sink, so it writes no byte itself.
 - **A name is checked against the workspace's listing before the first upload**, so a taken name costs no audio.
 - **A `.als` from the tree is parsed twice**: once to learn which samples it names, then with those samples fetched from
   the workspace, since a parse reads them synchronously. A reference that climbs out of the workspace is counted in the
@@ -254,7 +254,7 @@ through Live's *Collect All and Save*; what is always there is an absolute path 
 whatever machine wrote it. Following those would let a crafted `.als` read any file on the
 engine's machine, so the importer resolves **only** the relative path, a path that climbs out of
 the workspace is counted and never fetched, and the file service's `/media` is what a read goes through
-(see `packages/commands/src/runtime/importer.ts`).
+(see `apps/k7-daw-frontend/packages/commands/src/runtime/importer.ts`).
 
 The consequence is deliberate and must stay visible: an uncollected set imports its whole
 structure and **no audio**. The import log says so in its own line, naming the fix, because
@@ -292,7 +292,7 @@ Those params matter only for a plugin whose blob would not decode at all.
 
 One use of a plugin needs no node file: the module IS the node, and the chain names it bare. The
 exception is the collision `graph.k7x`'s one name space makes: a lane wins a bare name there
-(`packages/song/docs/trackModules.md`), so a step folded onto a name a chain already has reads as
+(`apps/k7-daw-frontend/packages/song/docs/trackModules.md`), so a step folded onto a name a chain already has reads as
 the chain naming ITSELF. The step then disappears from the segment, and on an instrument track the
 lane's midi lands on the next module's audio input — "port 'in' expects audio but source is midi",
 about a chain whose instrument is nowhere to be seen.
@@ -304,17 +304,17 @@ It is the default a DAW writes: a track called after the device on it. So the fo
 
 An k7 lane has a strip of its own, last in its run — a node on the library's mixer, and the
 gutter fader, the card and the Mixer view are three drawings of it
-(`packages/song/docs/trackMixer.md`). A lane without one plays at unity with nowhere to put a
+(`apps/k7-daw-frontend/packages/song/docs/trackMixer.md`). A lane without one plays at unity with nowhere to put a
 level.
 
 So each emitted lane gets `nodes/mix-<lane>.k7x`, a last step naming it, and nothing else: the node
 extends **`@meta/audio/mixer`** — `SHARED_STRIP`, k7's own module that every mixer node in every
-project is a use of (`packages/song/docs/metaModules.md`).
+project is a use of (`apps/k7-daw-frontend/packages/song/docs/metaModules.md`).
 
 **No project module is written for it**, and that is the point rather than a saving. A project-owned
 copy of a library module compiles to the same audio and draws **a card with no controls on it**: a
 card draws the `ui.k7x` beside the module it resolves to, and the library's `mixer/` is what
-carries one (`packages/song/docs/liveProject.md`). Writing the plugin inline here would also mean
+carries one (`apps/k7-daw-frontend/packages/song/docs/liveProject.md`). Writing the plugin inline here would also mean
 the import deciding what a strip IS, in a project whose library already says.
 
 A return bus and the master chain get none: neither is a lane, and a strip on them would be a
@@ -322,14 +322,14 @@ second level in the path with nothing drawing it.
 
 The strip runs into **`MIX`**, and `MIX` into the master run — or straight to `OUT` when the source
 project's master track carries no plugins. That is the notation every k7 project uses
-(`packages/song/docs/masterChain.md`): not an audible difference, since every track feeds the
+(`apps/k7-daw-frontend/packages/song/docs/masterChain.md`): not an audible difference, since every track feeds the
 master bus whatever it names, but the shape the rest of the app reads. A lane that ended at `OUT`
 is one `planLaneStrip` refuses to touch — "does not run into MIX, wire its strip by hand" — so an
 imported project could not be repaired by the tool that repairs every other one.
 
 ## The surface, so the song can be looked at
 
-A project draws what it DECLARES (`packages/song/docs/surfaces.md`): no `surfaces/timeline.k7x`,
+A project draws what it DECLARES (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`): no `surfaces/timeline.k7x`,
 no lanes on screen, no transport and no minimap — the song still compiles and still plays, which is
 what makes the absence read as a broken editor rather than as a missing file.
 
@@ -362,7 +362,7 @@ Nodes are **flat**, and a chain step names one by its filename alone — never
 exactly once keeps its settings in `module.k7x` and gets no node file at all.
 
 No schema file: a project is validated in process against the loader's own schemas
-(`packages/song/src/yaml/`), so there is nothing to ship alongside it.
+(`apps/k7-daw-frontend/packages/song/src/yaml/`), so there is nothing to ship alongside it.
 
 ### What the emitter decides, and why
 
@@ -414,7 +414,7 @@ sole use that stayed in `module.k7x`.
 **A plugin the cache does not know gets NO module of its own.** Every use of it is written as a
 node on `@meta/not-supported`, the built-in placeholder, carrying the plugin's real name as
 `plugin.name` and the params the export held. The chain routes through it and the graph draws it amber.
-`packages/song/docs/notSupported.md` argues the shape — chiefly why a stub MODULE per unloadable
+`apps/k7-daw-frontend/packages/song/docs/notSupported.md` argues the shape — chiefly why a stub MODULE per unloadable
 plugin was the wrong answer, and why the ref is `@meta` rather than `@k7-core`.
 
 The scan it checks against is read through `scannedPlugins()` and never by opening a path of its
@@ -527,4 +527,4 @@ warped" — one marker cannot define a stretch.
   first then audio FX, then the lane's own strip, into MIX;
 - effect/return tracks become bus subbranch chains (no `from`), targeted by enabled
   sends (a source's terminal fans out to MIX + its send buses);
-- the master track's plugins become the run between MIX and OUT (`packages/song/docs/masterChain.md`); with none, the two are a single wire.
+- the master track's plugins become the run between MIX and OUT (`apps/k7-daw-frontend/packages/song/docs/masterChain.md`); with none, the two are a single wire.

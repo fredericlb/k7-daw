@@ -1,7 +1,7 @@
 // a11y.ts — what an editor tells assistive technology: its accessible name, and the vim mode it is in.
 // The one thing a reader would get wrong: the mode is read from vim's own "vim-mode-change" event, so
 // this must sit AFTER vim() in the extension list — before it, there is no vim yet to listen to.
-// See packages/ui-editor/docs/a11y.md.
+// See apps/k7-daw-frontend/packages/ui-editor/docs/a11y.md.
 
 import type { Extension } from "@codemirror/state";
 import { EditorView, type Panel, showPanel } from "@codemirror/view";

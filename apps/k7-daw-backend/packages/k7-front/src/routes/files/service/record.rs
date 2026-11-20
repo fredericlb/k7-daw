@@ -1,5 +1,5 @@
 //! record.rs — `GET /record/envelope`: a desk record's envelope, transients and tempo, read off a workspace audio file
-//! as `/media` resolves it, from its sidecar or decoded once (packages/k7-plugins/docs/turntables/setList.md).
+//! as `/media` resolves it, from its sidecar or decoded once (apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/setList.md).
 //! What a reader gets wrong: the workspace is the request's header, the file the query's `path`, as every JSON route.
 
 use axum::extract::Request;

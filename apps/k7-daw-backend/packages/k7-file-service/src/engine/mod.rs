@@ -1,6 +1,6 @@
 //! The engine link's machines, sans I/O (2201): events and a clock in, effects out, nothing dialled, slept or read.
 //! What a reader gets wrong: an Effect only SAYS what to do; the front runs it and answers with an Event.
-//! The model and its rows: apps/k7/backend-rs/docs/file-engine.md.
+//! The model and its rows: apps/k7-daw-backend/docs/file-engine.md.
 
 pub mod docs;
 pub mod load;

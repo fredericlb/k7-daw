@@ -2,8 +2,8 @@
 
 One directory holds everything k7 keeps on a musician's machine: the engine's identity, the
 supervisor's settings, the plugin scan cache, the SSH keys, the merged log
-and the **workspaces**. `packages/engine-client/src/paths.ts` is the TypeScript definition of what
-is in it, for the entries a TypeScript process reads; `packages/song/src/studioHome.ts` is where it is.
+and the **workspaces**. `apps/k7-daw-frontend/packages/engine-client/src/paths.ts` is the TypeScript definition of what
+is in it, for the entries a TypeScript process reads; `apps/k7-daw-frontend/packages/song/src/studioHome.ts` is where it is.
 
 Throughout the docs it is written `<state>`.
 
@@ -15,8 +15,8 @@ gets a directory of its own.
 ## One path, because two languages compute it
 
 The per-platform location each OS prefers would be the tidier answer if one program owned this
-directory. Three do, in two languages: `packages/song/src/studioHome.ts`,
-`engine/k7-supervisor/src/Paths.cpp`, and `engine/k7-runtime/engine/PluginScan.cpp`.
+directory. Three do, in two languages: `apps/k7-daw-frontend/packages/song/src/studioHome.ts`,
+`apps/k7-daw-engine/k7-supervisor/src/Paths.cpp`, and `apps/k7-daw-engine/k7-runtime/engine/PluginScan.cpp`.
 
 Each language's idea of "where application data goes" is subtly its own, and they do not line up:
 JUCE's `userApplicationDataDirectory` is `~/Library` on macOS where node's equivalent is
@@ -35,7 +35,7 @@ account would cost more than it buys:
   being listed with no error anywhere to say so.
 - **The owner is told, never read out of a path.** The file service builds the engine session id
   from `noteOwner`, fed by the header every request carries, and both halves go through
-  `sessionFor` (`packages/engine-protocol/docs/sessions.md`), so they cannot spell it differently.
+  `sessionFor` (`apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`), so they cannot spell it differently.
 
 `slugify` still has users, none of them a directory here: an account's folder name on the server
 (`accountKey`) and the engine session.
@@ -51,7 +51,7 @@ misses `%APPDATA%` and `$XDG_CONFIG_HOME` entirely.
 ## The settings file has one name
 
 `<state>/engine-host.json`, pairing with `engine-host.pid`, written by the supervisor
-(`engine/k7-supervisor/src/Settings.h`), which reads that name and no other: a
+(`apps/k7-daw-engine/k7-supervisor/src/Settings.h`), which reads that name and no other: a
 second name carried for ever costs a branch in every reader plus a test that has to keep asserting
 it. A settings file under any other name is not read, so the machine starts from defaults — ports
 8765/8770, an empty audio priority, no paired server. That is a deliberate trade: the file is small,

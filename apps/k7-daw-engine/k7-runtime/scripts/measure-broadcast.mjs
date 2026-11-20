@@ -2,7 +2,7 @@
 // running engine, subscribe, and read off the four numbers that decide the real design —
 // jitter spread, drift, sender-caused gaps, and whether audio actually flows.
 //
-// Usage: node engine/k7-runtime/scripts/measure-broadcast.mjs [ws://127.0.0.1:8765] [seconds]
+// Usage: node apps/k7-daw-engine/k7-runtime/scripts/measure-broadcast.mjs [ws://127.0.0.1:8765] [seconds]
 
 import { decodeStreamFrame, seqGap } from "@studio/engine-protocol/stream";
 import WebSocket from "ws";

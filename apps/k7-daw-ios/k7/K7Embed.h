@@ -1,6 +1,6 @@
-// K7Embed.h — the C calls of the Rust front's library (apps/k7/backend-rs/crates/k7-embed), linked as libk7_embed.a.
-// A start answers the port once it is bound, or a negative code (apps/k7/backend-rs/docs/embed.md).
-// The roaming list's store is two callbacks installed before the start (apps/k7/backend-rs/docs/roam.md).
+// K7Embed.h — the C calls of the Rust front's library (apps/k7-daw-backend/packages/k7-embed), linked as libk7_embed.a.
+// A start answers the port once it is bound, or a negative code (apps/k7-daw-backend/docs/embed.md).
+// The roaming list's store is two callbacks installed before the start (apps/k7-daw-backend/docs/roam.md).
 
 #include <stdint.h>
 

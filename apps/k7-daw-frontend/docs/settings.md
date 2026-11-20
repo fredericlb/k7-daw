@@ -7,7 +7,7 @@ set while you look at the song they affect; these are not.
 
 It holds what a **browser** may change. Everything about a machine — which audio interface the
 engine opens, whether the engine is running — is set on that machine:
-in the command-line engine's config file (`engine/k7-supervisor/engine.example.json`), or on the
+in the command-line engine's config file (`apps/k7-daw-engine/k7-supervisor/engine.example.json`), or on the
 engine page of the backend that runs it (below). Not because moving it here would be hard: those settings need a process
 on that machine, and this page is served to any machine that asks.
 
@@ -17,13 +17,13 @@ sit at the other: they are the machine's, so they are drawn on its engine page a
 
 ## On the phone, the machine IS this page's
 
-Inside the Android app (`engine/k7-runtime/docs/android.md`) the line above moves, and for the
+Inside the Android app (`apps/k7-daw-engine/k7-runtime/docs/android.md`) the line above moves, and for the
 reason it was drawn: the process on the machine is the app k7 is running in, and the phone has no
 config file to hand its user. So the Engine page (below) opens on **this phone's engine** —
 `settings/AndroidEngineSection.tsx`: the engine's state and Quit, full screen (Android only, a
 setting of the device rather than the account), the instruments it downloads, the private CA. The Downloads section is the
 computer's engine page's own (`settings/InstrumentsSection.tsx`), since what a phone keeps is chosen the same
-way (`engine/k7-supervisor/docs/instruments.md`). The hint that sends a browser to the engine's machine is not drawn there, since
+way (`apps/k7-daw-engine/k7-supervisor/docs/instruments.md`). The hint that sends a browser to the engine's machine is not drawn there, since
 that machine is this one.
 
 They are drawn only when `window.k7Android` is there (`settings/androidEngine.ts`), which the app
@@ -58,7 +58,7 @@ again, which is the honest consequence of storing it where it is stored rather t
 what language you read in is a property of where you are sitting, not of who you are.
 
 **English unless you say otherwise.** The shared setup
-(`packages/i18n/src/vite.ts`) puts `preferredLanguage` between the stored choice and the
+(`apps/k7-daw-frontend/packages/i18n/src/vite.ts`) puts `preferredLanguage` between the stored choice and the
 base locale, so a browser asking for French gets French; k7 drops that middle strategy in its own
 `vite.config.ts`. The reason is that this app is written in English — the commands, the file
 syntax, the module names — and half of it is deliberately not translated at all (`i18n.ts` lists
@@ -124,14 +124,14 @@ because the file is read where the code is.
 
 One package draws inside k7 alone and so carries a catalogue of its own, compiled by this app's
 `vite.config.ts` with the same strategy chain: `k7-plugins`, the desk and the viewport
-(`packages/k7-plugins/docs/i18n.md`).
+(`apps/k7-daw-frontend/packages/k7-plugins/docs/i18n.md`).
 
 ## Separation chains — the engine's own setting
 
 `ChainsSection.tsx`, the engine page's Chains tab. WHICH chain separates a record into stems, and which
 one gives it without its voice (`system instrumental`). A section of the **engine's** page
 and not of `/settings`, because the answer is the machine's: `stems` and `instrumental` in its
-`engine-host.json`, written by that machine's supervisor (`apps/k7/backend-rs/docs/engine/chains.md`),
+`engine-host.json`, written by that machine's supervisor (`apps/k7-daw-backend/docs/engine/chains.md`),
 and read back from the machine rather than kept here — two machines of one account may answer
 differently, and a saved value that only lived on the server would be a lie about what runs.
 
@@ -139,7 +139,7 @@ Only this machine's engine has the tab: another engine's chains are named on ITS
 whoever owns it.
 
 **Only the library's COLD chains are offered** — a chain whose steps are all offline modules, the
-only kind that can separate (`packages/song/docs/coldModules.md`); one that processes, or both
+only kind that can separate (`apps/k7-daw-frontend/packages/song/docs/coldModules.md`); one that processes, or both
 separates and processes, is not one. The file service lists them (`GET /account/cold-chains`),
 against the bundled library the device reads. The instrumental picker narrows further, to the chains
 whose offline step declares an `instrumental` output.
@@ -163,7 +163,7 @@ chain the library no longer holds still shows, so a renamed chain does not read 
 ## AI — the device's Claude key
 
 `AiSection.tsx`. The key and model the module builder's AI organize runs on
-(`packages/ui-module-builder/docs/aiOrganize.md`). It is here, on the settings page and not in
+(`apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md`). It is here, on the settings page and not in
 the editor's panel, because it belongs to the DEVICE: the same key serves every project on it, and it is kept by this device's backend and
 reaches no other: a second device is given its own key, never the first one's.
 
@@ -179,7 +179,7 @@ section the one place the feature can be found, and its row says so.
 `git/IdentitySection.tsx`, in General. With no account to say who the person is, the device's identity
 is what they typed here: the author of every git commit and the user menu's heading
 (`userMenu.md`). It is stored once, in the backend's identity file
-(`apps/k7/backend-rs/docs/files/git.md`), and `git/identity.ts` mirrors it for every reader, so
+(`apps/k7-daw-backend/docs/files/git.md`), and `git/identity.ts` mirrors it for every reader, so
 the commit dialog, which asks for it the first time a commit has none, and this section stay in sync.
 
 **There is no fallback author.** An empty identity is a commit the backend refuses (`no-identity`) and the
@@ -203,13 +203,13 @@ changed.
 The user menu offers **Engine** right after Settings, and it is not a tab
 of this page. What this page holds is the account's; an engine is a machine's. Under one roof, a phone's engine — the reason its user opens the menu — sits behind a
 tab. It stays under the `settings/` prefix, so it takes no workspace name
-(`packages/web-protocol/docs/addresses.md`).
+(`apps/k7-daw-frontend/packages/web-protocol/docs/addresses.md`).
 
 **Engine**, `/settings/engine` (`settings/EnginePage.tsx`), is the same entry everywhere, and what it
 holds follows the machine. Served by the desktop app's backend — `GET /api/local` says this backend runs the
 engine (`localApp.md`) — it is this machine's engine: its state, its audio interface ranking, its
 plugins and its instruments, reached through k7's front, which runs the supervisor
-(`apps/k7/backend-rs/docs/localEngine.md`), since the supervisor opens no socket. Inside the phone's
+(`apps/k7-daw-backend/docs/localEngine.md`), since the supervisor opens no socket. Inside the phone's
 app it opens on the phone's engine. Anywhere else it carries the sentence saying a computer's engine is
 set on that computer. No page lists or chooses among engines: the app drives the one on this device.
 

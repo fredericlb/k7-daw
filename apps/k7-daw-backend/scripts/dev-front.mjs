@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 // dev-front.mjs — the dev session's Rust front (the Tiltfile's `k7-front`): on 8789, given env.yaml's `k7-front`
-// section (apps/k7/backend-rs/docs/front.md, docs/dev.md).
+// section (apps/k7-daw-backend/docs/front.md, docs/dev.md).
 
 import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadServiceEnv } from "@studio/env";
-import { sccacheEnv } from "../../../../engine/scripts/sccache.mjs";
+import { sccacheEnv } from "../../k7-daw-engine/scripts/sccache.mjs";
 
 const backendRs = join(dirname(fileURLToPath(import.meta.url)), "..");
 const service = loadServiceEnv("k7-front");
 const env = {
   ...process.env,
   ...service,
-  // A second session on the machine, the macOS agent's e2e bed, names other ports (engine/scripts/ci/e2e-macos.sh).
+  // A second session on the machine, the macOS agent's e2e bed, names other ports (apps/k7-daw-engine/scripts/ci/e2e-macos.sh).
   K7_FRONT_LISTEN: process.env.K7_FRONT_LISTEN || "127.0.0.1:8789",
   // The dev session's own, which the e2e specs behind the internal seam name too.
   K7_FRONT_SECRET: "k7-dev-front",
@@ -41,7 +41,7 @@ const cargo = (args) =>
 const child = cargo(["run", "--release", "-p", "k7-front"]);
 for (const signal of ["SIGINT", "SIGTERM"])
   process.on(signal, () => child.kill(signal));
-/** What an exit code says on Windows, where a crash leaves no line of its own (apps/k7/backend-rs/docs/front.md). */
+/** What an exit code says on Windows, where a crash leaves no line of its own (apps/k7-daw-backend/docs/front.md). */
 const WINDOWS_CODES = {
   3: "abort() from C",
   3221225477: "an access violation",

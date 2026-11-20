@@ -13,7 +13,7 @@ a module.
 
 That module is **cold**, `plugin: {type: offline}`: it compiles into no engine plugin. What it
 brings is the DECLARATION that this deck has a tempo — which is what lets a desk control name it.
-See `packages/song/docs/coldModules.md`.
+See `apps/k7-daw-frontend/packages/song/docs/coldModules.md`.
 
 Concretely: the binding gives not a `pluginId` (there is none) but the **track** whose material the
 module treats, and it is that track's platter that changes speed. Re-point `deckA.tempo` at `tempoB`
@@ -30,7 +30,7 @@ Rate = target / natural
 
 That is all. `platterRate` writes that number, the plugin turns it into a sample step per output
 sample, and `Key` decides whether a stretcher holds pitch meanwhile
-(`engine/k7-runtime/docs/turntable.md`). A platter has nothing to place: it is where it is.
+(`apps/k7-daw-engine/k7-runtime/docs/turntable.md`). A platter has nothing to place: it is where it is.
 
 ## KEY — pitch follows tempo unless stopped
 
@@ -41,14 +41,14 @@ other way round.
 
 KEY is **a plugin parameter**, `Key`, and nothing else changes: same platter, same position, same
 gestures. The engine puts its stretcher in the path or takes it out, internally, at the cost of one
-branch (`engine/k7-runtime/docs/turntable.md`).
+branch (`apps/k7-daw-engine/k7-runtime/docs/turntable.md`).
 
 A separated record is no exception: its four parts are four platters, each with its stretcher.
 Measured, the eight of a full desk cost **3 points of CPU** — the price is not there.
 
 **The default is not just taste.** A constant-pitch stretcher is non-linear: it picks its frames
 from the signal, so four parts stretched separately no longer sum as the record would. That is what
-broke the subtracting version of `stemcut` (`packages/song-schema/docs/stems.md`), and it stays true
+broke the subtracting version of `stemcut` (`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`), and it stays true
 of the sum, more discreetly: with keylock on, the four parts glue back together less well.
 Resampling is linear — the same combination of samples for all four files — and costs nothing on
 that side.

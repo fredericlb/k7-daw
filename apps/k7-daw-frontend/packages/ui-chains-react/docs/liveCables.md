@@ -113,7 +113,7 @@ list below.
 The engine measures sound and knows nothing of the frame, so the levels are silent about a
 video lane, so every cable on the picture side of the graph would stay still through a playing song.
 What the browser has instead is the shots and the playhead, which is the same bargain k7 already
-strikes for a rack's lit pads (`apps/k7/frontend/src/rackLit.ts`).
+strikes for a rack's lit pads (`apps/k7-daw-frontend/src/rackLit.ts`).
 
 A host passes `videoSpans`: when each video lane is showing a picture, in seconds. A **prop**
 rather than a subscription, and the split is what each thing does — the meters move twenty times

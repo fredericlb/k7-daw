@@ -57,7 +57,7 @@ async fn a_library_module_is_not_moved_from_here_and_nothing_is_told() {
 /// A `/module` call whose context carries the code root, as a docs-bearing route's does.
 fn module_call(dir: &std::path::Path, tag: Tag, body: Value, shared: &Lines) -> routes::Call {
     let mut c = request(dir, tag, body, shared);
-    let code = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
+    let code = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     if let Some(n) = c.native.as_mut() {
         n.docs = Some(super::docs::Docs::of_env(&code, &Default::default()));
     }

@@ -1,7 +1,7 @@
 // sequenceRecord.ts — `sequence record <track> <notesJSON>`: a MIDI take on a lane that holds no
 // sequence yet. One new sequence sized to whole bars around the notes, the notes in it, and its
 // placement on the lane — one command, so the take is one undo. Notes arrive in SONG beats, the
-// file stores them clip-local. See packages/commands/docs/verbs.md.
+// file stores them clip-local. See apps/k7-daw-frontend/packages/commands/docs/verbs.md.
 
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";

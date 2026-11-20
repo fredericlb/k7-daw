@@ -1,6 +1,6 @@
 // `node engine` — what the graph's engine dropdown runs — and `node param` on a module with engines,
 // which must land in THAT engine's params. Through the dispatcher and asserting the FILE, for the
-// reason bypass.test.ts gives. See packages/song/docs/engines.md.
+// reason bypass.test.ts gives. See apps/k7-daw-frontend/packages/song/docs/engines.md.
 
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

@@ -11,11 +11,11 @@ names.
 `AccountWorkspace`, from the folders it actually holds. A `RepoProject` in it carries what the home
 page's row draws beyond the name — its surface types, whether it is the active one, when it last
 changed — all optional, since an older service sends none of them and the row then draws less
-rather than guessing (`apps/k7/backend-rs/docs/file-workspaces.md`). Nothing else does: a second answer from
+rather than guessing (`apps/k7-daw-backend/docs/file-workspaces.md`). Nothing else does: a second answer from
 another service would be a copy of what the folders already say, and a worse one. No service keeps
-a register of workspaces either (`apps/k7/backend-rs/docs/projects.md`). A workspace is
-addressed by its folder name, under `@local` (`packages/web-protocol/docs/addresses.md`). See
-`apps/k7/frontend/docs/projects.md`.
+a register of workspaces either (`apps/k7-daw-backend/docs/projects.md`). A workspace is
+addressed by its folder name, under `@local` (`apps/k7-daw-frontend/packages/web-protocol/docs/addresses.md`). See
+`apps/k7-daw-frontend/docs/projects.md`.
 
 ## `active` is not the same as `served`
 
@@ -27,12 +27,12 @@ lives in is a detail of the address. `path` is workspace-relative, `.` for a wor
 `active` is the workspace's active-project marker — the project this workspace currently has
 open. One per workspace at a time, which is why it is a flag and not a filter: a caller that wants
 only the live ones can say so, and one showing a menu wants to know which row is already up. See
-`apps/k7/frontend/docs/external.md`.
+`apps/k7-daw-frontend/docs/external.md`.
 
 `ServedProject` (GET `/engine/served`) answers a different question, and the difference is the
 point. `active` is a per-workspace marker written by whoever opened last; this is the file
 service's note of what it SENT, one project for the whole account, because a session is per
-service and per person (`packages/engine-protocol/docs/sessions.md`). A machine with three markers
+service and per person (`apps/k7-daw-frontend/packages/engine-protocol/docs/sessions.md`). A machine with three markers
 is still an engine holding one song. `workspace` + `path` rather than an absolute path: those are
 the two strings every address on this side is built from, and the engine's disk layout is nobody
 else's business.
@@ -66,7 +66,7 @@ of the two is fixed by adding a module.
 `readOnly` is true for `@engine` and only for it. A scanned plugin is a module the engine merely
 REPORTS: it has no folder, so there is nothing to write into and nothing to open — the rows are a
 vocabulary you can name in a chain, not files. Giving one a folder is `module own <ref>`, which is
-a different act; see `packages/song/docs/moduleFork.md`.
+a different act; see `apps/k7-daw-frontend/packages/song/docs/moduleFork.md`.
 
 ## Reaching an engine, and staying reached
 
@@ -82,8 +82,8 @@ users.
 it spends `ENGINE_REACH_BUDGET_MS` once; the relay dials them in SEQUENCE, so without a shared
 deadline it spends that budget PER address and is called unreachable while the engine answers.
 Both stop at the same wall clock, and `ENGINE_DIAL_TIMEOUT_MS` caps what one address may eat
-of it so a first dead address cannot spend the lot. See `apps/k7/backend-rs/docs/engine/proxy.md`
-and `packages/engine-browser/docs/access.md`.
+of it so a first dead address cannot spend the lot. See `apps/k7-daw-backend/docs/engine/proxy.md`
+and `apps/k7-daw-frontend/packages/engine-browser/docs/access.md`.
 
 **A half-open socket never fires `close`.** A wedged relay, a lapsed NAT, a laptop back from sleep
 — nothing reconnects and sends go nowhere. The engine has no server-side ping (IXWebSocket ships
@@ -98,7 +98,7 @@ burst of stale transport verbs delivered all at once on reconnect. `ENGINE_OUTBO
 oldest sent first, and `ENGINE_OUTBOX_TTL_MS` drops what nobody is waiting for any more.
 
 **The registry** is where an engine registers itself, via the supervisor, with the addresses of
-`EngineAddresses`. The browser MEASURES them all at once (`packages/engine-browser/src/probe.ts`)
+`EngineAddresses`. The browser MEASURES them all at once (`apps/k7-daw-frontend/packages/engine-browser/src/probe.ts`)
 and picks the fastest of the unassigned ones.
 
 `PublicEngine` never carries the engine token nor the tunnel secret. It carries
@@ -106,10 +106,10 @@ and picks the fastest of the unassigned ones.
 only: anyone else reads `assigned` — "in use" — and learns no email and no project name, since the
 list goes to every signed-in account. It does carry the LAN addresses, which a browser needs to
 probe its own machines directly. `legacy` marks an engine whose supervisor sends no tunnel secret
-(`apps/k7/backend-rs/docs/engine/token.md`). `proxyTicket` is a short-lived pass for the relay at
+(`apps/k7-daw-backend/docs/engine/token.md`). `proxyTicket` is a short-lived pass for the relay at
 `<base>/api/engine/<id>/ws`, bound to the account it was minted for, which is how a browser reaches
 an engine it may not dial directly (an HTTPS page and a `ws://` LAN address); it is optional because
-the REGISTRY does not mint it — the `/engines` route does, being the authenticated one. See `apps/k7/backend-rs/docs/engine/proxy.md`.
+the REGISTRY does not mint it — the `/engines` route does, being the authenticated one. See `apps/k7-daw-backend/docs/engine/proxy.md`.
 
 How good a link is — Q1/Q2/Q3, off a measured latency — is `./quality.md`. Measured, and not a
 locality tier, which would rank a gigabit LAN below a laptop running at 2048 frames. How capable

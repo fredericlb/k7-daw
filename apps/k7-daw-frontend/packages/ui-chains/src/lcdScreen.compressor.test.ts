@@ -10,7 +10,7 @@ import {
 
 // The demo compressor's screen, run the way the sandbox runs it, against a canvas that records.
 const SOURCE = readFileSync(
-  join(__dirname, "../../../demos/_modules/audio/compressor/widgets.js"),
+  join(__dirname, "../../../../../demos/_modules/audio/compressor/widgets.js"),
   "utf8",
 );
 

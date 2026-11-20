@@ -13,7 +13,7 @@ the app's identity on Windows and Linux, and it names the folder the front keeps
 folder: `~/Library/Application Support/<identifier>` on a Mac), so a new identifier reads as a first launch.
 
 Neither may `<state>` (`~/.k7`) move, nor what is under it, nor the `STUDIO_*` variables
-(`packages/engine-client/docs/paths.md`).
+(`apps/k7-daw-frontend/packages/engine-client/docs/paths.md`).
 
 ## k7 in a window, and in the browser
 
@@ -31,24 +31,24 @@ in the person's browser, where k7 installs as a web app.
 
 The page tells it is served by a machine's own front from that front (`GET /api/local`), and that it is in
 K7 DAW's window from `window.k7Desktop`, which the host sets before the page's own code: the bundle is the same one
-every host serves (`apps/k7/frontend/docs/localApp.md`).
+every host serves (`apps/k7-daw-frontend/docs/localApp.md`).
 
 ## One process, and the front runs the supervisor
 
 The desktop app runs k7's front in its own process, on a thread, on the table's port. The front runs the
 supervisor over stdio, holds the engine registry, the relay and the tunnel hub, and answers the
 file hub and the page (`K7_LOCAL_ENGINE`, `K7_ENGINE_CORE` and `K7_FILES` set to `front`,
-`apps/k7/backend-rs/docs/local.md`, `engine.md` and `files.md`); the engine settings page reaches it through same-origin routes behind the session.
+`apps/k7-daw-backend/docs/local.md`, `engine.md` and `files.md`); the engine settings page reaches it through same-origin routes behind the session.
 
 | choice | why |
 |---|---|
-| the front hosts the supervisor, not the desktop app's own code | the supervisor listens on no port by design (a loopback port is one any page in the browser can `fetch()`, `engine/k7-supervisor/docs/hostProtocol.md`); routes of the front inherit its loopback guard, CORS policy and session |
+| the front hosts the supervisor, not the desktop app's own code | the supervisor listens on no port by design (a loopback port is one any page in the browser can `fetch()`, `apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`); routes of the front inherit its loopback guard, CORS policy and session |
 | the front in the desktop app's process, not a second program | nothing more to stage, sign or kill; it ends with the desktop app whatever ends it |
 | no node anywhere: the bundle holds the page and the library the front seeds | the front holds the file hub and every account's file service itself |
-| the front's code root staged as `resources/code` (`apps/k7/backend-rs/scripts/stageCodeRoot.mjs`, some 700 KB) and named to it as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video at its root, and the desktop app runs from no checkout (`apps/k7/backend-rs/docs/service.md`) |
-| the desktop app sets no file-service variable: every account's file routes and the libraries' runtime are the front's own (`apps/k7/backend-rs/docs/service.md`, `libraries.md`), the heap budget the embedded front's | a desktop app holds the local user and the account it is paired with |
-| the page from the bundle's `apps/k7/frontend/dist` (`K7_FRONTEND_DIST`), or the dev desktop app's Vite when `K7_DEV_FRONTEND` is set | the last routes serve it (`apps/k7/backend-rs/docs/last.md`) |
-| ready once the front's own `/api/health` answers on the page's port | the page and the registry are the same process; the library's first install gates only the paths that create workspaces (`apps/k7/backend-rs/docs/standalone.md`) |
+| the front's code root staged as `resources/code` (`apps/k7-daw-backend/scripts/stageCodeRoot.mjs`, some 700 KB) and named to it as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video at its root, and the desktop app runs from no checkout (`apps/k7-daw-backend/docs/service.md`) |
+| the desktop app sets no file-service variable: every account's file routes and the libraries' runtime are the front's own (`apps/k7-daw-backend/docs/service.md`, `libraries.md`), the heap budget the embedded front's | a desktop app holds the local user and the account it is paired with |
+| the page from the bundle's `apps/k7-daw-frontend/dist` (`K7_FRONTEND_DIST`), or the dev desktop app's Vite when `K7_DEV_FRONTEND` is set | the last routes serve it (`apps/k7-daw-backend/docs/last.md`) |
+| ready once the front's own `/api/health` answers on the page's port | the page and the registry are the same process; the library's first install gates only the paths that create workspaces (`apps/k7-daw-backend/docs/standalone.md`) |
 | said down after three missed health checks, and watched still | a front that stops answering with the desktop app alive is shown, with Restart as the way out |
 | `~/.k7` and the supervisor's own port (8765) | the desktop app's engine is the machine's engine, the one the command-line engine would be; servers list it, and it is what `k7.rocks` plays on through the tunnel |
 | the front pinned first in `engine-host.json` | `$STUDIO_REGISTRY_URL` is only a fallback once the person lists another server, and the page needs this engine in its own registry |
@@ -73,7 +73,7 @@ K7 DAW does not update itself: a new build is downloaded from the GitHub release
 | choice | why |
 |---|---|
 | no updater plugin, no signing key, no feed check | a self-replacing binary needs a signing key held in CI and a server for the feed; the release page needs neither, and a person who wants a newer build looks there |
-| the release files are named `k7-daw_<version>_<os>-<arch>.<ext>` (`engine/scripts/desktopRelease.mjs`) | one name per build and platform on the release page; the version is the root package.json's |
+| the release files are named `k7-daw_<version>_<os>-<arch>.<ext>` (`apps/k7-daw-engine/scripts/desktopRelease.mjs`) | one name per build and platform on the release page; the version is the root package.json's |
 
 ## Quitting
 
@@ -84,8 +84,8 @@ launch. SIGTERM and SIGINT quit the same way: a logout ends it with SIGTERM.
 
 The backstop kills only what the pidfile **proves** is the engine: the pid on its first line, then the
 `start=` and `exe=` the supervisor writes beside it, checked against what the OS says of that pid now — the
-verdict of `engine/k7-supervisor/src/PidFile.cpp`, which the desktop app reads through `k7-local`'s copy
-(`apps/k7/backend-rs/crates/k7-local/src/pidfile.rs`, `apps/k7/backend-rs/docs/supervisorHost.md`). A pid is a
+verdict of `apps/k7-daw-engine/k7-supervisor/src/PidFile.cpp`, which the desktop app reads through `k7-local`'s copy
+(`apps/k7-daw-backend/packages/k7-local/src/pidfile.rs`, `apps/k7-daw-backend/docs/supervisorHost.md`). A pid is a
 number the OS reuses, and a kill of the wrong tree is worse than an orphan. A file it cannot prove (a bare pid,
 an OS that would not say) is left in place with its process, for the supervisor's next start to judge; a file
 whose process is gone, or is not the engine, is removed.

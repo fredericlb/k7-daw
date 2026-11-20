@@ -2,7 +2,7 @@
 // a breadcrumb and (when there's room) a file tree. ONE instance serves both layouts — a
 // second would fork the open file, its unsaved text and the undo history. There is no Save
 // button: the buffer is written as soon as it is a document the compiler could read
-// (packages/ui-editor/docs/autosave.md). Saving does NOT format either — the writers edit k7x
+// (apps/k7-daw-frontend/packages/ui-editor/docs/autosave.md). Saving does NOT format either — the writers edit k7x
 // value by value, and reflowing a hand-edited file is what this format was chosen to avoid.
 
 import { redo, redoDepth, undo, undoDepth } from "@codemirror/commands";
@@ -765,7 +765,7 @@ function EditorTabView({
           newName,
         );
         await afterLibraryChange();
-        // A module's ref is its path: the songs naming it were repointed too (packages/song/docs/moduleMove.md).
+        // A module's ref is its path: the songs naming it were repointed too (apps/k7-daw-frontend/packages/song/docs/moduleMove.md).
         if (repointed?.length) {
           await refresh();
           onChanged();

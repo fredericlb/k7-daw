@@ -2,9 +2,9 @@
 @import "tw-animate-css";
 @import "@studio/ui/theme.css";
 
-/* @studio/ui is consumed as source from packages/ui: Tailwind scans only what it is
+/* @studio/ui is consumed as source from apps/k7-daw-frontend/packages/ui: Tailwind scans only what it is
    told to, and a wrong path drops every design-system class WITHOUT a warning (see pl8's index.css). */
-@source "../../../../packages/ui/src";
+@source "../../../k7-daw-frontend/packages/ui/src";
 
 /* The WebView draws edge to edge (Android 15 enforces it): the page pads itself by the system
    bars. Capacitor also sets --safe-area-inset-* for WebViews whose env() is still zero. */

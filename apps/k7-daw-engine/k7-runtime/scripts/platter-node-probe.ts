@@ -1,6 +1,6 @@
 // Throwaway: the two RUNTIME unknowns of docs/platter-node-plan.md, against the running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/platter-node-probe.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/platter-node-probe.ts [ws://127.0.0.1:8765]
 //
 // M2 — a platter DECLARED but holding no record: does it construct, does it warn, does it error?
 // M3 — what a document re-send costs, split into the part `set-plugin-file` would remove and the

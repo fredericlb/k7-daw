@@ -16,7 +16,7 @@
 
 namespace k7::slots {
 
-/** The engine session a slot plays in, the engine's `EngineHost::kSlotSession` (engine/k7-runtime/docs/sessions.md). */
+/** The engine session a slot plays in, the engine's `EngineHost::kSlotSession` (apps/k7-daw-engine/k7-runtime/docs/sessions.md). */
 constexpr const char* kSession = "slot";
 
 /** One slot as the app lists it: never its document, which is the engine's to read. */

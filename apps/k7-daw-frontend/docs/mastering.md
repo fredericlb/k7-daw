@@ -34,15 +34,15 @@ Three files, and they are the whole surface:
 
 Everything else `surfaces/` declares draws something the PROJECT *is*: its lanes, its picture, its
 decks. This draws one module's parameters — and a module's NAME is the project's to choose
-(`packages/song/docs/nodes.md`), so nothing but the file can say which node this strip is a
+(`apps/k7-daw-frontend/packages/song/docs/nodes.md`), so nothing but the file can say which node this strip is a
 picture of. That is the same reason the desk has a mapping, arrived at from the other end.
 
 It is also why the gate asks for **all ten** — `unmappedControls` filters the required controls,
 which are the ten sliders every quick-master has always had. Three more are OFFERED rather than
 required, so a surface written before they existed still draws: `comp.lowCut`, `limiter.hfLimit`
-and `limiter.output`, the low cut, HF limit and word length (`engine/k7-runtime/docs/quickMaster.md`).
+and `limiter.output`, the low cut, HF limit and word length (`apps/k7-daw-engine/k7-runtime/docs/quickMaster.md`).
 The word length is a dropdown, being a choice and not a range. The desk's gate
-filters a `REQUIRED_CONTROLS` subset in the same way. The desk (`packages/k7-plugins/src/turntables`) requires its faders and
+filters a `REQUIRED_CONTROLS` subset in the same way. The desk (`apps/k7-daw-frontend/packages/k7-plugins/src/turntables`) requires its faders and
 merely offers its stem cuts, because a desk with no stem cuts is still a complete desk. There is
 no smaller mastering strip: every control names the same node, so a missing
 line is not a reduced strip, it is the same strip with a knob that does nothing. A knob that does
@@ -52,7 +52,7 @@ instead of drawing itself.
 ## No normalisation, anywhere
 
 This is the one place the surface deliberately departs from
-[viewBindings.md](../../../../packages/song/docs/viewBindings.md).
+[viewBindings.md](../packages/song/docs/viewBindings.md).
 
 There, a control declares a range of its own, the position is normalised to 0..1 by it, and the
 widget's `min`/`max` expand it again. That is right for a desk: a crossfader is a *gesture*, and
@@ -70,7 +70,7 @@ covers — the adaptation happens by *reading* the target, not by rescaling into
 ## Where the value comes from
 
 The order is `held ?? live ?? home`, and it is the same rule the desk follows
-(`../../../../packages/k7-plugins/docs/turntables/deckSet.md`):
+(`../packages/k7-plugins/docs/turntables/deckSet.md`):
 
 - **held** — the hand's value while a gesture is in flight. Optimistic, and dropped as soon as
   `engineAgrees`. An override that never yields is a control that has stopped listening: the
@@ -151,5 +151,5 @@ you flip to mid-take.
   A node with no surface is drawn perfectly well — its panel is on the graph, where every other
   module's is. This strip is a convenience, not a missing half.
 
-See `packages/song/docs/surfaces.md` for the format and `engine/k7-runtime/docs/quickMaster.md` for
+See `apps/k7-daw-frontend/packages/song/docs/surfaces.md` for the format and `apps/k7-daw-engine/k7-runtime/docs/quickMaster.md` for
 what the node actually does to the sound.

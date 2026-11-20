@@ -12,10 +12,10 @@ sound. And for a module the project inherits it would not work at all, since res
 by construction only holds a project's own NODES, so a shared one comes back "couldn't resolve".
 
 k7 is the builder's only host, because a parameter list is a fact about a LOADED plugin and only
-a project loads one (`apps/k7/frontend/docs/moduleBuilder.md`). What answers the "a module is a
+a project loads one (`apps/k7-daw-frontend/docs/moduleBuilder.md`). What answers the "a module is a
 workspace thing" objection is not where the builder lives but **which tree you opened it from**:
 the file tree's Libraries tab lists the shared libraries as themselves, so a shared module is
-opened as shared and says so (`apps/k7/frontend/docs/sharedModules.md`).
+opened as shared and says so (`apps/k7-daw-frontend/docs/sharedModules.md`).
 
 ## What is listed
 
@@ -23,7 +23,7 @@ opened as shared and says so (`apps/k7/frontend/docs/sharedModules.md`).
 
 Each row carries `panel`, the grid size of the module's panel when it has one, and so does
 `listBaseModuleRefs`: the picker draws the card of a node being created before that node exists,
-and a card is as big as its grid (`apps/k7/frontend/docs/chainsGraph.md`).
+and a card is as big as its grid (`apps/k7-daw-frontend/docs/chainsGraph.md`).
 
 Generics only. A node (`IN:in-2`, a channel; a preset variant) has no face of its own — `loadModules`
 takes a widget grid whole from the generic, so a `ui:` written on a node is ignored — and a builder aimed
@@ -41,7 +41,7 @@ builder, the same as any other file k7 saves, no lock and no confirmation: it is
 repository with no publish step.
 
 `@k7-core`, like every library, is written only by an admin, into their own clone of it, and published
-only by their commit and push onto a repository other songs read (`apps/k7/frontend/docs/sharedModules.md`) — a decision
+only by their commit and push onto a repository other songs read (`apps/k7-daw-frontend/docs/sharedModules.md`) — a decision
 worth a gesture of its own, unlike a workspace save which costs nobody else anything they did not
 already agree to by sharing the workspace.
 

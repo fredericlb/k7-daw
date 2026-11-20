@@ -1,7 +1,7 @@
 # Editing a curve file
 
-The rationale behind `packages/song-schema/src/yaml/curveFile.ts`. What a curve IS and how it is
-baked lives in `packages/song/docs/curves.md`; this page is about editing
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/curveFile.ts`. What a curve IS and how it is
+baked lives in `apps/k7-daw-frontend/packages/song/docs/curves.md`; this page is about editing
 `curves/<id>.k7x` in place.
 
 Only a `custom` curve has anything positioned in song time (`points[].time`). An LFO is periodic and

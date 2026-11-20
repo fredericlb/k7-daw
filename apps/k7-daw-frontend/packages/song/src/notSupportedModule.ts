@@ -18,7 +18,7 @@ function notSupportedModule(): LoadedModule {
     outputs: [{ name: "out", type: "audio" }],
     category: NOT_SUPPORTED_CATEGORY,
     file: "not-supported",
-    // The marker the graph reads to draw the node amber — apps/k7/backend-rs/docs/file-docs.md.
+    // The marker the graph reads to draw the node amber — apps/k7-daw-backend/docs/file-docs.md.
     plugin: { type: NOT_SUPPORTED_TYPE },
   };
 }

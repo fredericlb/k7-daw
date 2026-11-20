@@ -3,7 +3,7 @@
 // itself carries no licence or credit, so the panel credits where it comes from.
 //
 // The samples (~80 MB) are an instrument the engine's machine keeps itself, fetched by its supervisor once chosen
-// in the tray's Downloads tab (engine/k7-supervisor/docs/instruments.md).
+// in the tray's Downloads tab (apps/k7-daw-engine/k7-supervisor/docs/instruments.md).
 extends("@engine/sfz-player")
 params({ sfz: "@instruments/nbo-stereo-rhodes/rhodes.sfz" })
 // A sampled stereo Rhodes, five velocity layers, from the No Budget Orchestra archive (bandshed.net, CC BY-SA). Its samples, about 80 MB, download from the k7 tray's Downloads tab.

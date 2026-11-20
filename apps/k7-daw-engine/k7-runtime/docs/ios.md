@@ -1,14 +1,14 @@
 # The engine on iOS
 
 The same engine, the same supervisor and the same Rust front as on Android (`docs/android.md`), run by the app in
-`engine/k7-ios`. The architecture is Android's, part for part. The phone runs its own studio and needs no
+`apps/k7-daw-ios`. The architecture is Android's, part for part. The phone runs its own studio and needs no
 server, the supervisor lists the phone at the studios it is connected to, the engine serves the same WebSocket
 protocol on port 8765, and the screen is k7, full screen, in a view of its own. What differs is what iOS forbids.
 
 | Android | iOS | what forces it |
 |---|---|---|
-| the supervisor, a program the app runs (`libk7supervisor.so`) | `k7supervisor.framework`, run on a thread of the app (`engine/k7-supervisor/src/Embedded.cpp`) | no iOS app may run a program of its own |
-| the Rust front, `libk7_embed.so`, in front of node | the Rust front alone, `libk7_embed.a` linked into the app, no node (`apps/k7/backend-rs/docs/embed.md`) | no iOS app may run a program of its own, and a JIT-less node has no WebAssembly |
+| the supervisor, a program the app runs (`libk7supervisor.so`) | `k7supervisor.framework`, run on a thread of the app (`apps/k7-daw-engine/k7-supervisor/src/Embedded.cpp`) | no iOS app may run a program of its own |
+| the Rust front, `libk7_embed.so`, in front of node | the Rust front alone, `libk7_embed.a` linked into the app, no node (`apps/k7-daw-backend/docs/embed.md`) | no iOS app may run a program of its own, and a JIT-less node has no WebAssembly |
 | the file hub starts each account's file service on node | every account's files and the libraries are answered by the front itself (`K7_FILES` on `front`) | no iOS app may start a process |
 | the engine, `libk7runtime.so`, on a thread whose Looper is JUCE's | `k7runtime.framework`, on a thread whose run loop is JUCE's | the engine is a library on both phones |
 | the waveform measures as WebAssembly, run by Wasmtime's JIT | the same module, run by Wasmtime's Pulley interpreter (`k7-mediatek`'s `waveform.rs`) | Apple allows no executable memory to an app |
@@ -60,18 +60,18 @@ under `STUDIO_HOME`, so a `[host]` line written earlier (the test hooks') would 
 
 ## The views
 
-The shell page is Android's own (`engine/k7-android/web`), built by the same workspace. Its two plugins,
+The shell page is Android's own (`apps/k7-daw-android/web`), built by the same workspace. Its two plugins,
 `K7Runtime` and `AppViews`, are registered by the Swift half with the same methods and events
 (`EnginePlugin.swift`, `AppViews.swift`). k7 gets `window.k7Ios` (`StudioBridge.swift`), the protocol of
-Android's `window.k7Android` under the platform's name. `apps/k7/frontend/src/settings/androidEngine.ts` takes
-whichever is there, and the three page scripts both apps inject accept either (`engine/k7-android/app/src/main/assets`).
+Android's `window.k7Android` under the platform's name. `apps/k7-daw-frontend/src/settings/androidEngine.ts` takes
+whichever is there, and the three page scripts both apps inject accept either (`apps/k7-daw-android/app/src/main/assets`).
 The page calls the engine, checked by origin on every message, with Android's short list of commands.
 
 Where iOS does a thing itself, the app lets it:
 
 | Android | iOS |
 |---|---|
-| an export goes to a folder picked with the system folder picker, kept as a security-scoped bookmark (`ExportFolders.swift`, `apps/k7/frontend/docs/export.md`) | the person says where it lands; Files shows any folder they grant, and the grant outlives the launch |
+| an export goes to a folder picked with the system folder picker, kept as a security-scoped bookmark (`ExportFolders.swift`, `apps/k7-daw-frontend/docs/export.md`) | the person says where it lands; Files shows any folder they grant, and the grant outlives the launch |
 | `download.js` fetching blobs in 512 KiB chunks | `WKDownload`, which takes a `blob:`, `data:` or same-origin URL with the session's cookies; the file lands in Documents/Downloads, which the Files app shows under k7 |
 | `back.js` and the Back button | the edge swipe, over the view's own history |
 | `CertTrust.kt` checking the leaf's name and dates | iOS's own trust evaluation with the imported CAs as anchors (`TrustedCas.swift`): a wrong name, an expired date or a certificate iOS's TLS rules refuse is refused here too. Android's rule stands: an imported non-CA is trusted as that exact leaf and never as an issuer, read from its DER since iOS has no public API for extensions (`CertTrust.swift`) |
@@ -117,8 +117,8 @@ heartbeat while suspended.
 ## Building
 
 ```
-node engine/k7-ios/scripts/stage.mjs           # a device; --sim for the simulator on an Apple Silicon Mac
-open engine/k7-ios/k7.xcodeproj                 # pick a team under Signing, then Run
+node apps/k7-daw-ios/scripts/stage.mjs           # a device; --sim for the simulator on an Apple Silicon Mac
+open apps/k7-daw-ios/k7.xcodeproj                 # pick a team under Signing, then Run
 ```
 
 `stage.mjs` builds the engine's `ios-arm64` preset and the supervisor's, each as an xcframework, builds the front
@@ -138,18 +138,18 @@ root (`stageCodeRoot.mjs`).
 
 ## On a phone
 
-The kit is `engine/k7-ios/scripts/device.sh`: a build signed by the developer's own team and reinstalled from the Mac (a free
+The kit is `apps/k7-daw-ios/scripts/device.sh`: a build signed by the developer's own team and reinstalled from the Mac (a free
 Personal Team signs for 7 days but cannot carry iCloud's entitlements, which the project now holds, so the team is a paid one). The
 increased-memory-limit entitlement is one no team here carries, so a cut runs under the default limit. The test ports are the engine's 18765 and the studio's 18799, never 8765.
 The shell page is handed the app's own studio port at document start (`MainViewController.swift`), so the k7 view opens the studio the app
 runs, whatever `K7_STUDIO_PORT` set, and never the computer's tray on 18789.
 
 ```
-node engine/k7-ios/scripts/stage.mjs                       # a device build, no --sim
+node apps/k7-daw-ios/scripts/stage.mjs                       # a device build, no --sim
 export K7_IOS_TEAM=<team id>                               # Xcode > Settings > Accounts, or security find-identity
-engine/k7-ios/scripts/device.sh all                        # build, install, launch (phone attached, unlocked, trusted)
-engine/k7-ios/scripts/device.sh forward                    # iproxy: needs `brew install libimobiledevice`
-engine/k7-ios/scripts/device.sh logs                       # the system log to ~/.cache/k7-ios-device/
+apps/k7-daw-ios/scripts/device.sh all                        # build, install, launch (phone attached, unlocked, trusted)
+apps/k7-daw-ios/scripts/device.sh forward                    # iproxy: needs `brew install libimobiledevice`
+apps/k7-daw-ios/scripts/device.sh logs                       # the system log to ~/.cache/k7-ios-device/
 E2E_IOS_ATTACH=1 npm run test:e2e:ios                      # the suite against the phone, from the repo's e2e folder
 ```
 
@@ -202,11 +202,11 @@ and never runs a program the host happens to have. `e2e/specs/app/noPrograms.spe
 | transcribe | the job fails: "no whisper on this device: an iOS app cannot start a program" | whisper is a program |
 | the MP3 share and export | `GET /export?format=mp3` answers 400 "mp3 needs ffmpeg, and an iOS app cannot start a program: use Export WAV"; a share's release carries FLAC | the encoder is ffmpeg |
 | the engine's `--decode` | never started: the waveform module decodes, and a call that names the engine fails with the same sentence | the engine is a library here, with no binary to run |
-| stem cut | runs in the supervisor (`engine/k7-supervisor/docs/supervisor.md`) | ONNX Runtime is linked in |
+| stem cut | runs in the supervisor (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`) | ONNX Runtime is linked in |
 
 ## Git on a phone
 
-libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7/backend-rs/docs/git.md`), device and simulator slices alike. The secrets are in iOS's protected keychain. The checklist, on a phone with a repository host and a second machine:
+libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7-daw-backend/docs/git.md`), device and simulator slices alike. The secrets are in iOS's protected keychain. The checklist, on a phone with a repository host and a second machine:
 
 | check | do | look for |
 |---|---|---|
@@ -232,7 +232,7 @@ libgit2 is linked into `libk7_embed.a` with its own transports (`apps/k7/backend
 - **No release signing.** No CI job builds the iPhone app: a developer builds it in Xcode, signed by the
   developer's own team.
 - **No updates**: a new build is installed from Xcode.
-- **Stem separation is on the CPU**, ONNX Runtime linked statically (`engine/k7-supervisor/docs/supervisor.md`, "A cut on a phone"); a cut's time and memory on a phone are not measured.
+- **Stem separation is on the CPU**, ONNX Runtime linked statically (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`, "A cut on a phone"); a cut's time and memory on a phone are not measured.
 - **No picture render, `ffmpeg`, whisper or `--decode`**: no app may start a process; each member that needs one says so (above).
 
 ## What was measured
@@ -256,7 +256,7 @@ On the iOS 26.5 simulator (iPhone 17) on an Apple Silicon Mac, with the real fro
 | a library's published versions are not watched, only its `draft/` | a version never changes (`docs/library-versions-plan.md`), so watching it only costs descriptors and scans |
 | a missed event is a delay, never a wrong answer | callers walk anyway past a ceiling (`modwatch.rs`), so polling's lateness degrades speed alone |
 
-`apps/k7/backend-rs/crates/k7-file-service/src/watcher.rs` is the one place a watcher is made. The app holds about 130 descriptors
+`apps/k7-daw-backend/packages/k7-file-service/src/watcher.rs` is the one place a watcher is made. The app holds about 130 descriptors
 after the suite, against about 13,000 with kqueue.
 
 ## iCloud holds the key and the list

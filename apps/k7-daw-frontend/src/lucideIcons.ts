@@ -3,7 +3,7 @@
 // Through `@studio/ui/icons/all`, a module of its own, so the whole set is a chunk loaded on
 // demand while the static `@studio/ui/icons` imports keep only the icons the code draws.
 // Reading the `@studio/ui/icons` namespace here instead would put every icon on the first
-// screen. See docs/shell.md and packages/ui/docs/icons.md.
+// screen. See docs/shell.md and apps/k7-daw-frontend/packages/ui/docs/icons.md.
 
 import type { ComponentType } from "react";
 import { useEffect, useState } from "react";

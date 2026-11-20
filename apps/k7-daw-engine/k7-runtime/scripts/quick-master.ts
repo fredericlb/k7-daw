@@ -3,10 +3,10 @@
 // Three claims no TypeScript test can see, because the plugin needs a live te::Edit and the
 // four C++ suites build none (see AGENTS.md): the ceiling really is a ceiling, a width of 0
 // really collapses the image, and the three bands really sum back to the signal that went in.
-//   npx tsx engine/k7-runtime/scripts/quick-master.ts
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/quick-master.ts
 
 import { statSync } from "node:fs";
-import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 import { readWav } from "./wav.ts";
 
 /** The knobs a run overrides, on top of the plugin's own neutral defaults. */

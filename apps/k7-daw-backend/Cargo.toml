@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
-members = ["crates/k7-front", "crates/k7-embed", "crates/k7-local", "crates/k7-engine", "crates/k7-js", "crates/k7-mediatek", "crates/k7-hub", "crates/k7-sync", "crates/k7-picture", "crates/k7-file-service", "crates/k7-replica", "crates/k7-capture", "crates/k7-libraries", "crates/k7-git", "crates/k7-roam"]
+members = ["packages/k7-front", "packages/k7-embed", "packages/k7-local", "packages/k7-engine", "packages/k7-js", "packages/k7-mediatek", "packages/k7-hub", "packages/k7-sync", "packages/k7-picture", "packages/k7-file-service", "packages/k7-replica", "packages/k7-capture", "packages/k7-libraries", "packages/k7-git", "packages/k7-roam"]
+exclude = ["packages/waveform"]
 
 [workspace.package]
 version = "0.1.0"
@@ -8,20 +9,20 @@ edition = "2024"
 publish = false
 
 [workspace.dependencies]
-k7-front = { path = "crates/k7-front" }
-k7-local = { path = "crates/k7-local" }
-k7-engine = { path = "crates/k7-engine" }
-k7-js = { path = "crates/k7-js" }
-k7-mediatek = { path = "crates/k7-mediatek" }
-k7-hub = { path = "crates/k7-hub" }
-k7-sync = { path = "crates/k7-sync" }
-k7-picture = { path = "crates/k7-picture" }
-k7-file-service = { path = "crates/k7-file-service" }
-k7-replica = { path = "crates/k7-replica" }
-k7-capture = { path = "crates/k7-capture" }
-k7-libraries = { path = "crates/k7-libraries" }
-k7-git = { path = "crates/k7-git" }
-k7-roam = { path = "crates/k7-roam" }
+k7-front = { path = "packages/k7-front" }
+k7-local = { path = "packages/k7-local" }
+k7-engine = { path = "packages/k7-engine" }
+k7-js = { path = "packages/k7-js" }
+k7-mediatek = { path = "packages/k7-mediatek" }
+k7-hub = { path = "packages/k7-hub" }
+k7-sync = { path = "packages/k7-sync" }
+k7-picture = { path = "packages/k7-picture" }
+k7-file-service = { path = "packages/k7-file-service" }
+k7-replica = { path = "packages/k7-replica" }
+k7-capture = { path = "packages/k7-capture" }
+k7-libraries = { path = "packages/k7-libraries" }
+k7-git = { path = "packages/k7-git" }
+k7-roam = { path = "packages/k7-roam" }
 # libgit2 with no https and no ssh feature: those bring OpenSSL and libssh2, k7 has its own transports (docs/git.md).
 git2 = { version = "0.21", default-features = false }
 # The device's keychain, for a git token or key: Keychain, Credential Manager and the Secret Service over zbus, no C build (docs/git.md).
@@ -69,7 +70,7 @@ webpki-roots = "1"
 tokio-tungstenite = "0.29"
 # The dev session's watch of the file service's source, which the hub stops the services on (docs/files.md).
 notify = "8"
-# axum's own, named for `oneshot`: a door hands a rewritten request to the shares' routes (crates/k7-front/src/routes/shares).
+# axum's own, named for `oneshot`: a door hands a rewritten request to the shares' routes (packages/k7-front/src/routes/shares).
 tower = { version = "0.5", default-features = false, features = ["util"] }
 tower-http = { version = "0.6", default-features = false, features = ["fs"] }
 tokio = { version = "1", features = ["rt-multi-thread", "net", "macros", "signal", "sync", "io-util"] }

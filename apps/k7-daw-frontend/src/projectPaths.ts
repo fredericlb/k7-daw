@@ -35,7 +35,7 @@ export const rackKeyOf = (path: string): string | null => {
   const p = norm(path);
   if (isRackModuleFile(p))
     return p.replace(MODULE_TAIL, "").split("/").pop() ?? null;
-  // A chain project's file holds many nodes, keyed by uuid, so its path names none (packages/song/docs/chainFiles.md).
+  // A chain project's file holds many nodes, keyed by uuid, so its path names none (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
   const m = NODE_FILE.exec(p);
   return m ? m[2] : null;
 };
@@ -85,7 +85,7 @@ export function toProjectRelative(
 /**
  * Is this path inside the project the ENGINE holds? The tree is the whole WORKSPACE now, so a
  * clip or a lane may belong to a project that is not playing — and every rule above matches on
- * `(^|/)`, which cannot tell them apart. See apps/k7/backend-rs/docs/file-projects.md.
+ * `(^|/)`, which cannot tell them apart. See apps/k7-daw-backend/docs/file-projects.md.
  */
 export function inActiveProject(
   path: string,

@@ -78,7 +78,7 @@ fn every_archetype_is_written_as_scaffolds_json_holds_it() {
         env!("CARGO_MANIFEST_DIR")
     );
     let want: Value = serde_json::from_str(&std::fs::read_to_string(manifest).unwrap()).unwrap();
-    let code = format!("{}/../../../../..", env!("CARGO_MANIFEST_DIR"));
+    let code = format!("{}/../../../..", env!("CARGO_MANIFEST_DIR"));
     // One workspace for all five, as the spec's: what an earlier shape wrote beside its folder is not a later one's.
     let s = Scratch::new("sc-all");
     let ws = s.dir("ws");

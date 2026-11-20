@@ -29,7 +29,7 @@ the dissolve B stays where it is and the next transition loads C on the element 
 first frame after the scrub blends the right shot with a stale one.
 
 The element is muted (a shot's sound is the ENGINE's, on an audio lane —
-`packages/song/docs/videoSound.md` — and muted is also what lets it autoplay), parked 1px and invisible but NOT `display:none` — a `display:none` element
+`apps/k7-daw-frontend/packages/song/docs/videoSound.md` — and muted is also what lets it autoplay), parked 1px and invisible but NOT `display:none` — a `display:none` element
 is allowed to skip decoding.
 
 ## An edit is a `setScene`, never a new driver
@@ -66,7 +66,7 @@ A shot whose clip is an IMAGE is decoded once per source into an `<img>` and upl
 as any frame is. It claims no `<video>` and has no clock to chase, so a lane of stills costs no
 decoder. Until the image has decoded the slot carries nothing, which shows the lane beneath rather
 than a blank. Export decodes the same file once into an `ImageBitmap`
-(`packages/song-video/docs/media.md`).
+(`apps/k7-daw-frontend/packages/song-video/docs/media.md`).
 
 ## A retimed shot: the rate is the shot's, or the element is stepped
 
@@ -74,7 +74,7 @@ A shot running at `speed` plays its element at that `playbackRate`, and the drif
 works around it rather than around 1. A browser plays forwards only, and only between 1/16 and
 16. So a freeze, a reverse, or anything outside that range is shown by PARKING the element and
 seeking it whenever it is half a frame off. Every frame is the right one, but a reverse previews
-choppier than export renders it (`packages/song-video/docs/speed.md`). A reverse reaching its
+choppier than export renders it (`apps/k7-daw-frontend/packages/song-video/docs/speed.md`). A reverse reaching its
 source's first frame is parked like a shot past its last.
 
 ## Two-speed drift correction

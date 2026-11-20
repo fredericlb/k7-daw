@@ -1,7 +1,7 @@
 // modelDownload.ts — following a model download to its end, for the two places that start one: a
 // project node's right-click ("Download model") and a cold chain in the settings. The file service
 // runs the download as a job (a model is 166 MB); this polls it and says how far it is.
-// See packages/song/docs/moduleAssets.md.
+// See apps/k7-daw-frontend/packages/song/docs/moduleAssets.md.
 
 import { trackDownload } from "@studio/http-client/downloads";
 import type { ModelDownloadJob } from "@studio/web-protocol";
@@ -31,7 +31,7 @@ export async function followDownload(
   poll: (id: string) => Promise<ModelDownloadJob>,
   onUpdate: (j: ModelDownloadJob) => void,
 ): Promise<ModelDownloadJob> {
-  // The sidebar's download manager follows it too (packages/http-client/docs/downloads.md).
+  // The sidebar's download manager follows it too (apps/k7-daw-frontend/packages/http-client/docs/downloads.md).
   const tracked = trackDownload({
     key: `model:${job.id}`,
     kind: "engine",

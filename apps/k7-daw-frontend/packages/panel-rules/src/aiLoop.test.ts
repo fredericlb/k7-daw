@@ -20,7 +20,7 @@ const vectors = JSON.parse(
   readFileSync(
     join(
       import.meta.dirname,
-      "../../../apps/k7/backend-rs/fixtures/organize-vectors.json",
+      "../../../../k7-daw-backend/fixtures/organize-vectors.json",
     ),
     "utf8",
   ),

@@ -1,10 +1,10 @@
 // native.ts — the two plugins this app's Kotlin half registers (MainActivity.kt): K7Runtime, the
 // supervisor's channel (EnginePlugin.kt), and AppViews, the full-screen WebViews the studio apps
 // load in over this page (AppViewsPlugin.kt). The iOS app's Swift half registers the same two, with the
-// same methods and events (engine/k7-ios/k7/EnginePlugin.swift, AppViews.swift). Typed here once; nothing else calls registerPlugin.
+// same methods and events (apps/k7-daw-ios/k7/EnginePlugin.swift, AppViews.swift). Typed here once; nothing else calls registerPlugin.
 
 import { type PluginListenerHandle, registerPlugin } from "@capacitor/core";
-import standalone from "../../../../apps/k7/backend-rs/standalone.json";
+import standalone from "../../../k7-daw-backend/standalone.json";
 
 /** The phone's own backend's ports, as BackendHost.kt starts it: the desktop app's, from the table both share. */
 export const LOCAL_PORTS = `k7=${standalone.port}`;

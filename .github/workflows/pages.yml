@@ -10,9 +10,10 @@ on:
       - "docs-site/**"
       - "site/**"
       - "scripts/buildSite.mjs"
-      - "apps/k7/frontend/docs-entry/**"
-      - "apps/k7/frontend/vite.docs.config.ts"
-      - "apps/k7/frontend/src/docs/**"
+      - "apps/k7-daw-frontend/docs-entry/**"
+      - "apps/k7-daw-frontend/user-docs/**"
+      - "apps/k7-daw-frontend/vite.docs.config.ts"
+      - "apps/k7-daw-frontend/src/docs/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 

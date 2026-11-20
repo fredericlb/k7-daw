@@ -19,7 +19,7 @@ import type { K7 } from "./target.ts";
 
 export const ANDROID_PACKAGE = "se.frediver.k7.daw.e2e";
 
-/** The e2e build's backend port, `E2E_PORT` in engine/k7-android/app/build.gradle.kts. */
+/** The e2e build's backend port, `E2E_PORT` in apps/k7-daw-android/app/build.gradle.kts. */
 const PHONE_PORT = 18799;
 export const PHONE_ORIGIN = `http://127.0.0.1:${PHONE_PORT}`;
 

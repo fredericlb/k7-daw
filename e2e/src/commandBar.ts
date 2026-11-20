@@ -1,5 +1,5 @@
 // commandBar.ts — running a line from k7's command bar the way a person does: type it, pick its row.
-// The bar is a combobox named "Command", floating once summoned (apps/k7/frontend/docs/commandBar.md).
+// The bar is a combobox named "Command", floating once summoned (apps/k7-daw-frontend/docs/commandBar.md).
 import { expect, type Locator, type Page } from "@playwright/test";
 import { folded, navControl } from "./nav.ts";
 

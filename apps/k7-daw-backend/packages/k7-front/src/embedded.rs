@@ -1,5 +1,5 @@
 //! embedded.rs — the front inside a host's own process, on a thread of its own with a small runtime: the
-//! tray links this directly, the phones through `k7-embed`'s C and JNI calls (`apps/k7/backend-rs/docs/embed.md`).
+//! tray links this directly, the phones through `k7-embed`'s C and JNI calls (`apps/k7-daw-backend/docs/embed.md`).
 //! One front per process: a second start while one runs is refused, not stacked.
 
 use std::sync::Mutex;

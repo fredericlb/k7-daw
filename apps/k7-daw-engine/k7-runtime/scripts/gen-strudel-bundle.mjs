@@ -7,7 +7,7 @@ import { build } from "esbuild";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const moteur = join(here, "..");
-const entry = join(moteur, "..", "..", "packages", "song-strudel", "src", "engineEntry.ts");
+const entry = join(moteur, "..", "..", "k7-daw-frontend", "packages", "song-strudel", "src", "engineEntry.ts");
 const out = join(moteur, "engine", "strudel", "strudel.bundle.js");
 
 const result = await build({

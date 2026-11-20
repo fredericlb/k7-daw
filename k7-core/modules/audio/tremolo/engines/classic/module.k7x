@@ -9,7 +9,7 @@
 //
 // CE QU'IL N'EST PAS : il ne suit pas le tempo du projet. `Rate` est en hertz, posé à la main,
 // pour la raison qui vaut pour l'écho — la liaison n'existe pas encore. Voir
-// packages/k7-plugins/docs/turntables/fx.md.
+// apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/fx.md.
 //
 // Sa DSP est décrite dans dsp.k7x à côté, pas compilée dans le moteur.
 plugin({ type: "dsp", name: "Tremolo" })
@@ -23,4 +23,4 @@ params({
 // En un paragraphe : fait monter et descendre le volume, en boucle. `Rate` est la vitesse en hertz,
 // `Depth` l'ampleur — à 0 le module ne fait rien du tout, à 1 le son coupe à chaque creux.
 //
-// (La description d'un module est son en-tête, ici — voir packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)

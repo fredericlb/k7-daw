@@ -1,6 +1,6 @@
 // useSurfaces.ts — the project's `surfaces/` folder, refetched on reloadKey and kept through a failed read. A surface is a
 // special view the PROJECT asks for, so the shell cannot know its list until the project is
-// open. See packages/song/docs/surfaces.md.
+// open. See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
 
 import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
 import { useMemo } from "react";

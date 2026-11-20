@@ -86,7 +86,7 @@ The k7x half is a stateless native unit shared by the relay and every account's 
 
 ## The watcher
 
-The process's `notify` watcher of the revision (`crates/k7-file-service/src/watch.rs`) gains pinned roots: a captured
+The process's `notify` watcher of the revision (`packages/k7-file-service/src/watch.rs`) gains pinned roots: a captured
 workspace is watched for as long as it is captured, never evicted by the revision's limit of 64 roots nor its
 15-minute idle rule, and its events are delivered as paths to its worker besides moving the root's generation. A
 pinned root is unwatched before its folder is renamed or removed, by `unpin`, which drops only the pin made with the

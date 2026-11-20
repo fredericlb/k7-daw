@@ -6,8 +6,8 @@ import { dirname, join, relative, resolve } from "node:path";
 import { branchBase, branchFiles, run, wideFiles } from "./branch-files.mjs";
 
 const FRONT =
-  "apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/";
-const FS = "apps/k7/backend-rs/crates/k7-file-service/";
+  "apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/";
+const FS = "apps/k7-daw-backend/packages/k7-file-service/";
 
 // What each piece needs, from `Switch::parse` (native/mod.rs); `reads` is core, not a piece.
 export const NEEDS = {
@@ -170,7 +170,7 @@ function main() {
     run(
       "cargo",
       ["metadata", "--format-version", "1", "--no-deps"],
-      resolve(root, "apps/k7/backend-rs"),
+      resolve(root, "apps/k7-daw-backend"),
       { CARGO_TARGET_DIR: join(homedir(), ".cache", "k7-cargo-metadata") },
     ),
   );

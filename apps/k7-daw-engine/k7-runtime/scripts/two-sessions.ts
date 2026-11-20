@@ -3,7 +3,7 @@
 // half. Two projects, two sessions: both apply, only one plays, and the idle one must not see
 // the other's transport. Plus two RAW sockets, which is the only way to see what was actually
 // SENT rather than what a client kept — see `wire` below.
-// Usage: npx tsx engine/k7-runtime/scripts/two-sessions.ts [ws://host:port]   (default :8833; the
+// Usage: npx tsx apps/k7-daw-engine/k7-runtime/scripts/two-sessions.ts [ws://host:port]   (default :8833; the
 // dev session's engine is on :8765)
 
 import { EngineClient } from "@studio/engine-client/engineClient";

@@ -54,7 +54,7 @@ pub(super) fn fixture(dir: &Path, pins: bool, extra: &[(&str, &str)]) {
 }
 
 pub(super) fn with_docs(mut c: Ctx, acct: &Arc<Acct>, dir: &Path) -> Ctx {
-    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let _ = dir;
     c.docs = Some(Docs::of(acct, &root));
     c

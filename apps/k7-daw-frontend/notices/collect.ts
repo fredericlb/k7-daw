@@ -9,11 +9,11 @@ import type { NoticeEntry, Notices, Where } from "./types.ts";
 
 /** The shipped apps, as workspace folders whose `dependencies` reach a user, and where each ships. */
 const NPM_ROOTS: { dir: string; where: Where }[] = [
-  { dir: "apps/k7/frontend", where: "web" },
-  { dir: "apps/k7/frontend", where: "desktop" },
-  { dir: "engine/k7-android/web", where: "android" },
-  // Bundled into the engine binary as strudel.bundle.js (engine/k7-runtime/docs/patternPlugin.md).
-  { dir: "packages/song-strudel", where: "engine" },
+  { dir: "apps/k7-daw-frontend", where: "web" },
+  { dir: "apps/k7-daw-frontend", where: "desktop" },
+  { dir: "apps/k7-daw-android/web", where: "android" },
+  // Bundled into the engine binary as strudel.bundle.js (apps/k7-daw-engine/k7-runtime/docs/patternPlugin.md).
+  { dir: "apps/k7-daw-frontend/packages/song-strudel", where: "engine" },
 ];
 
 /** Licences a GPLv3 program cannot take in, or must not without a reading of its own. */
@@ -208,7 +208,7 @@ function resolveVersion(root: string, from: string): string | null {
 /** The dataset the About page loads, from the repo at `root` and the notices folder at `here`. */
 export function collect(
   root: string,
-  { here = join(root, "apps/k7/frontend/notices"), roots = NPM_ROOTS } = {},
+  { here = join(root, "apps/k7-daw-frontend/notices"), roots = NPM_ROOTS } = {},
 ): Collected {
   const errors: string[] = [];
   const warnings: string[] = [];

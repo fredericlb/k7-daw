@@ -2,7 +2,7 @@
 // A reader would get wrong that this REPLACES the root config: the disk timeout is repeated.
 
 import { defineConfig } from "vitest/config";
-import { scaled } from "../../scripts/vitestScale.ts";
+import { scaled } from "../../../../scripts/vitestScale.ts";
 
 export default defineConfig({
   test: {

@@ -25,7 +25,7 @@ pub struct World {
 }
 
 pub fn repo() -> String {
-    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
+    let at = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     std::fs::canonicalize(at)
         .expect("the repository")
         .to_string_lossy()
@@ -62,7 +62,7 @@ impl World {
             workspace: Some(s.path("studio/workspace/Banc")),
             confine: Some(s.path("studio/workspace")),
             libraries,
-            meta: Some(format!("{repo}/packages/song/meta")),
+            meta: Some(format!("{repo}/apps/k7-daw-frontend/packages/song/meta")),
             models: Some(s.path("models")),
             ..Roots::default()
         };

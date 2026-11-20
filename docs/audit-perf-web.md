@@ -1,6 +1,6 @@
 # Audit — speed on the web side
 
-The counterpart to [engine/k7-runtime/docs/audit-stabilite.md](../engine/k7-runtime/docs/audit-stabilite.md)
+The counterpart to [apps/k7-daw-engine/k7-runtime/docs/audit-stabilite.md](../apps/k7-daw-engine/k7-runtime/docs/audit-stabilite.md)
 for everything that is not C++: the file service, the compiler, the surfaces — plus the WIRE, where
 the two meet. What belongs to C++ alone (the audio callback, `applyFull`, the compile flags) stays
 there.
@@ -85,9 +85,9 @@ worth what it protects — a 295 ms read — so the remedy is not to remove it b
 ### It cannot make fewer syscalls, so it makes them in parallel
 
 Measured on the reference song: **329 `readdir` = 11.7 ms, 419 `stat` = 11.9 ms**, half and half,
-when they are issued one at a time. `packages/song/src/stampWalk.ts` issues them all at once on a
+when they are issued one at a time. `apps/k7-daw-frontend/packages/song/src/stampWalk.ts` issues them all at once on a
 worker thread the caller blocks on: **44 ms → 12 ms** over `k7-core/` on Windows. Why a worker and
-not `async`, and what it costs an idle account: `packages/song/docs/moduleCache.md`. None of the
+not `async`, and what it costs an idle account: `apps/k7-daw-frontend/packages/song/docs/moduleCache.md`. None of the
 bullets below changes with it — they are why the COUNT of syscalls stays where it is.
 
 - `readdirSync(recursive: true)` gains nothing (23.6 ms against 23.5): it stats internally to decide
@@ -120,7 +120,7 @@ A scope goes no further than one derivation, and six routes are six requests: ge
 walks per reload means holding the stamp BETWEEN requests. `@studio/song` has a one-line seam for
 that — `useFoldersStill(fn)`, a boolean — and nothing else: no watcher, no clock, no dependency.
 `false` means "walk", and that is what everything installing nothing gets: the tests, a script. The
-watcher is in the front's file service (`crates/k7-file-service/src/modwatch.rs`), the only process living long enough to hold handles, with a
+watcher is in the front's file service (`apps/k7-daw-backend/packages/k7-file-service/src/modwatch.rs`), the only process living long enough to hold handles, with a
 ten-second ceiling because file watchers lose events — without a ceiling, one lost event would leave
 the vocabulary stale FOR GOOD.
 
@@ -152,7 +152,7 @@ watcher-backed cache: both sources must be wired, not one or the other.
   conditional.
 - **`loadModules`'s clone costs 0.21 ms**, not 19 (above).
 - **The five large React components follow the leaf rule** of
-  [timeline.md](../apps/k7/frontend/docs/timeline.md): each 20 Hz reader is its own component, and
+  [timeline.md](../apps/k7-daw-frontend/docs/timeline.md): each 20 Hz reader is its own component, and
   `Grid`, `RulerTicks`, `ClipContent`, `Node`, `Widget` are memoised on primitive props. The rule
   has a limit: "a leaf" is the right remedy when something is DRAWN, not when a value is merely
   handed to imperative code — there, the right number of components is zero, and the reader

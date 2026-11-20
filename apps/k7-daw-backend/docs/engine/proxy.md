@@ -31,14 +31,14 @@ browser, each application holding its own.
 ## The way out
 
 The browser composes no LAN address at all. It opens a `wss://` towards **the registry's own backend** — k7's front,
-the page's own origin — and the front composes towards the engine (`crates/k7-engine/src/relay/`):
+the page's own origin — and the front composes towards the engine (`packages/k7-engine/src/relay/`):
 
 ```
 browser ──wss://app.priv.k7.rocks/api/engine/<id>/ws──▶ k7's front ──tunnel, or ws://<address>:8765──▶ engine
 ```
 
 The front is not a secure context: it calls whom it likes, which is why it calls only one place
-(`hosts_for`, `crates/k7-engine/src/registry/mod.rs`): the address the engine's **heartbeat came from** — loopback when the engine shares the
+(`hosts_for`, `packages/k7-engine/src/registry/mod.rs`): the address the engine's **heartbeat came from** — loopback when the engine shares the
 backend's machine, its LAN address when it shares its network. Never an address the heartbeat
 NAMES: the heartbeat is open, and dialling what it names would let anyone aim this server at any
 host it can reach. An engine whose heartbeat arrives over IPv6 or through a NAT is reached through
@@ -47,20 +47,20 @@ its tunnel alone.
 No mixed content, no local network permission, no port to open in a firewall.
 
 **The engine's own tunnel comes first.** An engine whose supervisor dialled in
-(`packages/engine-tunnel/docs/tunnel.md`) is reached through that socket, whatever network it is
+(`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`) is reached through that socket, whatever network it is
 on; the addresses above are the fallback, and they only answer when the server shares the
 engine's network.
 
 ## Sockets only
 
 The relay is an upgrade the front accepts outside its route chain, like every socket of the core
-(`crates/k7-front/src/routes/engine/upgrade.rs`), and its credential is a **ticket**, not the
+(`packages/k7-front/src/routes/engine/upgrade.rs`), and its credential is a **ticket**, not the
 cookie: a page of another origin dials it too (below). There is no file half: files are the server's own
-(`apps/k7/backend-rs/docs/files/hub.md`), so nothing plain-HTTP crosses to the engine's machine here.
+(`apps/k7-daw-backend/docs/files/hub.md`), so nothing plain-HTTP crosses to the engine's machine here.
 
 The upgrade is checked before any session, for anyone who sends one: an engine id that is not
 valid percent-encoding is a 400, and nothing read off the request or either socket reaches a panic
-(`packages/engine-tunnel/docs/tunnel.md`, "Nothing on a tunnel is trusted for shape").
+(`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`, "Nothing on a tunnel is trusted for shape").
 
 The front is the one process that holds a registry (see [shared.md](shared.md)); every page of the
 origin relays through it.
@@ -72,7 +72,7 @@ already the authenticated one, and already returns every engine. A ticket asked 
 would have cost a round trip per engine, before a single one had been measured.
 
 It lives a minute, HMAC-signed by a secret drawn at the startup of the **process that verifies
-it** (`crates/k7-engine/src/registry/ticket.rs`): nothing to share between machines, no secret to wire into each backend. A restart
+it** (`packages/k7-engine/src/registry/ticket.rs`): nothing to share between machines, no secret to wire into each backend. A restart
 invalidates those in flight, which costs the browser a reload of a list it polls anyway.
 
 The engine's `id` is **in the path**, and the ticket is verified against it: a ticket cannot be
@@ -90,7 +90,7 @@ got no ticket.
 
 The engine trusts the relay's socket as it trusts its own machine (`token.md`): whatever crosses it
 can load a document, drop a session, approve a pairing. So a ticket is not enough to drive.
-The gate (`crates/k7-engine/src/relay/gate/`) asks whether the ticket's account holds a live claim on the engine (`claim.md`) on
+The gate (`packages/k7-engine/src/relay/gate/`) asks whether the ticket's account holds a live claim on the engine (`claim.md`) on
 every frame the browser sends, and on the engine's frames at most every 250 ms (`CLAIM_REUSE_MS`):
 the engine streams audio far faster than a claim changes, and asking for each frame is a registry
 walk per audio block. A claim found missing is asked again on the next frame.
@@ -114,11 +114,11 @@ the engine sends the loser stops within `CLAIM_REUSE_MS`.
 
 What this gate does not cover: a browser that reaches the engine DIRECTLY — loopback on its own
 machine, or a LAN address once paired — talks to the engine with nobody in between; the engine's
-own origin check and pairing are what guard that path (`engine/k7-runtime/docs/pairing.md`).
+own origin check and pairing are what guard that path (`apps/k7-daw-engine/k7-runtime/docs/pairing.md`).
 
 ## What the probe does with it
 
-`candidatesFor` (`packages/engine-browser/src/probe.ts`) builds loopback, each LAN address, then
+`candidatesFor` (`apps/k7-daw-frontend/packages/engine-browser/src/probe.ts`) builds loopback, each LAN address, then
 the relay. The order is documentary only: `rank` launches them **all in parallel** and keeps the
 fastest. The relay pays one hop more, so it loses on its own wherever the direct link is allowed.
 
@@ -130,17 +130,17 @@ upstream is open. Losing it would time out every probe: the relay would be "reac
 nothing, which is worse than unreachable.
 
 That queue is bounded like the claim gate's (256 frames, 8 MiB — `HeldFrames` in
-`crates/k7-engine/src/tunnel/backpressure.rs`): a client that sends more before the engine answers is
+`packages/k7-engine/src/tunnel/backpressure.rs`): a client that sends more before the engine answers is
 closed with 1013. Once both ends are up, every frame goes through the same file's `admit`, so
 a browser that stops reading costs the server at most a bounded backlog
-(`packages/engine-tunnel/docs/backpressure.md`).
+(`apps/k7-daw-frontend/packages/engine-tunnel/docs/backpressure.md`).
 
 ## Both ends are pinged
 
 A phone that drops off the network sends no FIN, and the relay pair, the engine session behind it
 and the gate's timer would live until TCP gives up, hours later. The browser's socket, and the
 upstream when it is a socket the server dialled, are pinged every 30 s (`HEARTBEAT_MS`,
-`packages/engine-tunnel/docs/upgrade.md`): one unanswered ping and the socket is terminated, which
+`apps/k7-daw-frontend/packages/engine-tunnel/docs/upgrade.md`): one unanswered ping and the socket is terminated, which
 closes its pair. A tunnel channel
 needs none of its own: the tunnel is pinged by the hub, and its channels end with it.
 

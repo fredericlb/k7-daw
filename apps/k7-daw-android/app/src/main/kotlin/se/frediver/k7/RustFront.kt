@@ -1,5 +1,5 @@
-// RustFront.kt — the Rust front (apps/k7/backend-rs) inside this process: libk7_embed.so on the studio's own
-// port, the one every view loads, with its seams' secret drawn per launch (apps/k7/backend-rs/docs/embed.md).
+// RustFront.kt — the Rust front (apps/k7-daw-backend) inside this process: libk7_embed.so on the studio's own
+// port, the one every view loads, with its seams' secret drawn per launch (apps/k7-daw-backend/docs/embed.md).
 
 package se.frediver.k7
 

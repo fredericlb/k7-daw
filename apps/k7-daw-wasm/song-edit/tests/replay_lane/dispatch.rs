@@ -26,7 +26,7 @@ pub fn call(
         e.models_root = format!("{}/home/models", root());
         e
     } else {
-        Env::at(&format!("{}/home", tmp()), &format!("{}/packages/song/meta", repo()))
+        Env::at(&format!("{}/home", tmp()), &format!("{}/apps/k7-daw-frontend/packages/song/meta", repo()))
     };
     if names_tmp(a) {
         return Outcome::Skip("a folder the harvest scrubbed to $TMP");

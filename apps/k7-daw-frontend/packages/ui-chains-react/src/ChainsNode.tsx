@@ -127,7 +127,7 @@ function NodeInner({
       : empty
         ? l.emptyStep
         : (n.place ?? n.label);
-  // What the node is CALLED where a person reads it: an unnamed node's place, never its uuid (packages/song/docs/chainFiles.md).
+  // What the node is CALLED where a person reads it: an unnamed node's place, never its uuid (apps/k7-daw-frontend/packages/song/docs/chainFiles.md).
   const ownName = n.place ?? n.label;
   // The node's own name goes under the header only when the header says something else.
   const ownNameUnder = !trackFace && headName !== ownName;
@@ -234,7 +234,7 @@ function NodeInner({
   // The module on its way: a spinner, and the sockets its host wired it by — none are interactive.
   if (n.pending) return pendingCard({ n, cls, l });
 
-  // An OPEN assembly: a frame around its members, drawn BEFORE them — packages/song/docs/assemblies.md.
+  // An OPEN assembly: a frame around its members, drawn BEFORE them — apps/k7-daw-frontend/packages/song/docs/assemblies.md.
   if (n.assemblyOf?.open)
     return assemblyFrame({ n, onHeaderDrag, onContext, onToggleAssembly, l });
 

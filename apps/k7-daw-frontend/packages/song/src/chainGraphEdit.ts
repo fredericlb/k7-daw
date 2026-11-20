@@ -56,7 +56,7 @@ export function chainGraphText(dir: string): string {
   return stringify(toSegments(cp, readLayout(dir)).graph);
 }
 
-/** The graph file a folder holds — a project's, or a library CHAIN's, which is the same file; packages/song-edit/docs/projectEdit.md. */
+/** The graph file a folder holds — a project's, or a library CHAIN's, which is the same file; apps/k7-daw-frontend/packages/song-edit/docs/projectEdit.md. */
 function graphFileOf(dir: string): string {
   const file = entityFileFor(dir, "", GRAPH_BASE);
   if (!file) throw new Error(`${dir}: no ${GRAPH_FILE}`);

@@ -2,7 +2,7 @@
 
 A song file is text, and the text names files: a clip's `source:`, a rack tap's `clip:`, a module's `frozen:` render, a chain item's `vstpreset:`. On the server **every
 account's file service runs as the same OS user over one data root** (`$STUDIO_FILES_ROOT`, one
-folder per account — `apps/k7/backend-rs/docs/files/hub.md`). The operating system therefore stops
+folder per account — `apps/k7-daw-backend/docs/files/hub.md`). The operating system therefore stops
 nothing: a `../../bob/workspace/…` in Alice's clip file is Bob's recording, and whatever reads,
 copies, decodes or deletes it does so for Alice. So every such path goes through ONE check,
 `confineTo(roots, path)`, before anything touches it.
@@ -12,7 +12,7 @@ copies, decodes or deletes it does so for Alice. So every such path goes through
 - The path is resolved to an absolute one; a NUL byte refuses it outright.
 - It must be a root itself or lie under one, by whole segment (`/a/song-evil` is not under `/a/song`).
   That lexical test is `isWithin`, shared with every other confinement in the tree
-  (`packages/web-protocol/docs/paths.md`).
+  (`apps/k7-daw-frontend/packages/web-protocol/docs/paths.md`).
 - The nearest part of it that exists on disk is followed through its symlinks, and its real path
   must again lie under a root. A link planted inside the project that points out of it is refused,
   and so is a dangling link, since a write would follow it out. A link from one allowed root into
@@ -48,4 +48,4 @@ holds every account's tokens and shares.
 - **The file service** confines a clip's source again before a preview or a waveform decodes it,
   since a waveform's sidecar is written beside the audio.
 - **A share** copies into itself only a FILE named by a typed path field of the document, and
-  only from the account's library, renders and models (`apps/k7/backend-rs/docs/file-shares.md`).
+  only from the account's library, renders and models (`apps/k7-daw-backend/docs/file-shares.md`).

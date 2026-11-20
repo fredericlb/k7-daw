@@ -1,9 +1,9 @@
 # The libraries in the front
 
 The libraries — `libraries.json`, the library folders, `/account/libraries*` and `/libraries/sync` — are the crate
-`crates/k7-libraries`. No relay carries them and nothing is fetched: a device holds the seed its app bundles. The
+`packages/k7-libraries`. No relay carries them and nothing is fetched: a device holds the seed its app bundles. The
 front answers them itself
-(`crates/k7-front/src/routes/files/service/libraries.rs`) once the code root is found (`service.md`).
+(`packages/k7-front/src/routes/files/service/libraries.rs`) once the code root is found (`service.md`).
 
 ## The switch
 
@@ -69,7 +69,7 @@ front answers them itself
 
 | gate | result |
 |---|---|
-| `crates/k7-libraries/tests/vectors/libraries.json` replayed (`tests/all/goldens.rs`): the store's cases and the routes; each answer and the tree left behind compared whole | frozen: the goldens are edited as data, never regenerated |
+| `packages/k7-libraries/tests/vectors/libraries.json` replayed (`tests/all/goldens.rs`): the store's cases and the routes; each answer and the tree left behind compared whole | frozen: the goldens are edited as data, never regenerated |
 | `tests/all/hostile.rs`: a forged or missing secret, a body over the limit, a seed with a link | each case seen red under its mutation |
 | `tests/all/seeds.rs`: the seed is added once, the husks are swept and a version holding a file is kept | over fixture folders |
-| `crates/k7-front/src/routes/files/service/libraries.rs`: the secret gate, every refusal keeps its sentence | unit tests |
+| `packages/k7-front/src/routes/files/service/libraries.rs`: the secret gate, every refusal keeps its sentence | unit tests |

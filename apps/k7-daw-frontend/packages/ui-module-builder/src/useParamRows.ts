@@ -52,7 +52,7 @@ export const stageFor = (path: string, io: string | null): string[] =>
         ? ["@output-volume"]
         : [];
 
-// The engine's blend around the effect: 0 all dry, 1 all wet — see engine/k7-runtime/docs/mix.md.
+// The engine's blend around the effect: 0 all dry, 1 all wet — see apps/k7-daw-engine/k7-runtime/docs/mix.md.
 const MIX_BIND: { name: string; meta: ParamMeta } = {
   name: "@mix",
   meta: { min: 0, max: 1, def: 1 },

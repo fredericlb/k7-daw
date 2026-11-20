@@ -1,7 +1,7 @@
 // trackInput.ts — `track input <track> audio|midi`: an input node feeding a lane, what the per-track
 // view's two buttons run. In a chain project it is a step of the lane's own chain, just ahead of the
 // lane; in a graph.k7x project, a node with a cable onto it. A lane something already feeds is refused,
-// the input's signal being the one thing a lane takes. See packages/commands/docs/verbs.md.
+// the input's signal being the one thing a lane takes. See apps/k7-daw-frontend/packages/commands/docs/verbs.md.
 
 import { stringify } from "@studio/k7x/print";
 import { insertChainInput } from "@studio/song/chainCreate";

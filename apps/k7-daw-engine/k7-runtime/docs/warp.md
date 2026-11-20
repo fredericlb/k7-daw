@@ -2,7 +2,7 @@
 
 A clip carries a **warp map**: a list of `[timeline beat, source second]` markers saying where
 each moment of the file should land. `@studio/song` compiles it into `ClipDoc::warp`
-(`packages/song/docs/warp.md` is the authoring half), `server/DocJson.cpp` parses it, and
+(`apps/k7-daw-frontend/packages/song/docs/warp.md` is the authoring half), `server/DocJson.cpp` parses it, and
 `EditBuilder::applyClipWarp` is what turns it into Tracktion state.
 
 The map does **two** things at once, and Tracktion realises them through two different
@@ -29,7 +29,7 @@ Two reasons this is worth a branch rather than an option somewhere.
 **It is linear, and stretching is not.** A pitch-preserving stretcher decides its frames from the
 signal, so stretching four separated parts independently does not give what stretching their sum
 would. Resampling is the same combination of input samples whatever the input, so parts stay
-summable. `packages/song-schema/docs/stems.md` has the measurements, and the DJ desk's default is this
+summable. `apps/k7-daw-frontend/packages/song-schema/docs/stems.md` has the measurements, and the DJ desk's default is this
 one for that reason.
 
 **Interior markers are refused by construction.** A constant speed cannot express a piecewise map,
@@ -142,7 +142,7 @@ of a block yet (`audio-cost` on a song of warped stems would).
 timing you cannot check from TypeScript.
 
 ```
-npx tsx engine/k7-runtime/scripts/warp-points.ts
+npx tsx apps/k7-daw-engine/k7-runtime/scripts/warp-points.ts
 ```
 
 It writes a source of 1 kHz tone bursts at known seconds, renders it under two maps — one whose

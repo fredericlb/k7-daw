@@ -1,7 +1,7 @@
 // The three assembly verbs, and the two writes that keep a box's member list honest when a node
 // underneath it is renamed or deleted. What `new` has to get right is that instancing lands an
 // ORDINARY graph: renamed nodes, renamed wiring, and one record beside it.
-// See packages/song/docs/assemblies.md.
+// See apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import {
   existsSync,

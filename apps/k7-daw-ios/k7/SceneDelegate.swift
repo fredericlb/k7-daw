@@ -1,6 +1,6 @@
 // SceneDelegate.swift — the app's one window: the scene iOS connects at launch gets the window and the shell page's
 // controller (MainViewController). The process's parts start in AppDelegate, once, before any scene; a scene that
-// disconnects and comes back gets a new window over the same backend, supervisor and engine. See engine/k7-runtime/docs/ios.md.
+// disconnects and comes back gets a new window over the same backend, supervisor and engine. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import UIKit
 

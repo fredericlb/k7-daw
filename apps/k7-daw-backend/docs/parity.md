@@ -35,13 +35,13 @@ Rust disagrees. A vector file is regenerated on purpose, never as a side effect 
 ## Keeping the vectors in step
 
 The settle's and diff3's vectors are frozen: no generator is kept, and the committed vectors are the referee.
-Regenerate the others on purpose (`npx tsx apps/k7/backend-rs/fixtures/make…Vectors.ts`).
+Regenerate the others on purpose (`npx tsx apps/k7-daw-backend/fixtures/make…Vectors.ts`).
 
 ## The settle
 
 The merge of one op against a room's text is native: `k7-sync`'s `settle.rs` decides a whole text, a
 removal and the diff3 merge ("The text merge", below), and its `k7x` module (`locate`, `diff`, `apply`) decides a
-k7x op on `packages/k7x`'s document editor.  the committed
+k7x op on `apps/k7-daw-frontend/packages/k7x`'s document editor.  the committed
 vectors, which node's TypeScript wrote (`settleFileOp`, `applyFileOp`, `fileOpFor`), are the referee.
 
 ### The choices
@@ -113,7 +113,7 @@ A whole text whose file moved, merged against its base (`mergeTexts`), is `k7_sy
 
 | proof | what |
 |---|---|
-| `crates/k7-sync/tests/all/diff3.rs` | every one of the 241 non-k7x settles of `settle-vectors.json` (82 with a base) answered by the native settle as node's `settleFileOp` and `applyFileOp` answered, with a `Js` that panics if asked |
+| `packages/k7-sync/tests/all/diff3.rs` | every one of the 241 non-k7x settles of `settle-vectors.json` (82 with a base) answered by the native settle as node's `settleFileOp` and `applyFileOp` answered, with a `Js` that panics if asked |
 
 ### Measured costs
 
@@ -136,11 +136,11 @@ would take over an hour.
 
 ## The replica
 
-What is left of the replica (`crates/k7-replica`, `files/replica.md`) is native for whole texts, removals, hashes and
+What is left of the replica (`packages/k7-replica`, `files/replica.md`) is native for whole texts, removals, hashes and
 blob refs, with the k7x diff and replay native in `k7-sync` (step 4).
 
 | proof | what it holds |
 |---|---|
-| `fixtures/settle-vectors.json`' 1,048 `fileOpFor` vectors | `crates/k7-replica/tests/all/file_op.rs`: the native `file_op_for` against node's, key order included |
+| `fixtures/settle-vectors.json`' 1,048 `fileOpFor` vectors | `packages/k7-replica/tests/all/file_op.rs`: the native `file_op_for` against node's, key order included |
 
 

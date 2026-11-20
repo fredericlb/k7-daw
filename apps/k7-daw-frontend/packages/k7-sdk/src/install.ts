@@ -1,7 +1,7 @@
 // install.ts — the SERVER half of plugin installation: commands and surface types, contributed
 // to the registries that already exist. Runs wherever the command layer runs (the file-service
 // boot today), ONCE, before anything reads a catalogue or compiles a song. The BROWSER half —
-// pane drawers into the shell's ring — is the shell's composition point (apps/k7/frontend),
+// pane drawers into the shell's ring — is the shell's composition point (apps/k7-daw-frontend),
 // which imports `@studio/k7-plugins/browser` and registers through its own registry: the
 // drawer types are the shell's, and the SDK does not know them (docs/sdk.md).
 

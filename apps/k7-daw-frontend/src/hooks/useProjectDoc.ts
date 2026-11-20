@@ -27,7 +27,7 @@ export interface DocTrack {
   pan: number;
   mute: boolean;
   solo: boolean;
-  /** Heard 10 dB up from the mixer (packages/song/docs/highlight.md). */
+  /** Heard 10 dB up from the mixer (apps/k7-daw-frontend/packages/song/docs/highlight.md). */
   highlight: boolean;
   /** The mixer NODE the level and pan live on — empty when the track has no strip, which is not 'at unity' but nowhere to put a level. */
   mixer: string;

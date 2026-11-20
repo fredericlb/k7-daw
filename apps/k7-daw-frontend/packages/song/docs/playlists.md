@@ -26,7 +26,7 @@ there with the project.
 
 **The records themselves stay put.** The file that names is ours, the bytes named are the
 workspace's, and a record's stems are the `stems/` folder beside it
-(`packages/k7-plugins/docs/turntables/stems.md`). A playlist is prepared once for the night with
+(`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md`). A playlist is prepared once for the night with
 `playlist stems <playlist>`, which cuts record by record.
 
 ## `_playlists`, beside `_modules`
@@ -40,7 +40,7 @@ which is exactly what a playlist is not.
 
 And hence its being a **separate route** (`GET /playlists`) rather than a corner of `/tree`: that
 tree is rooted on the active project, deliberately
-(`apps/k7/backend-rs/docs/file-projects.md`), so no walk of the open song can reach this
+(`apps/k7-daw-backend/docs/file-projects.md`), so no walk of the open song can reach this
 folder. Same reason as `/module-libraries`.
 
 ## The file IS the entry
@@ -76,7 +76,7 @@ list, and this file opens nothing — not even `node:fs`: that is what lets the 
 browser go by exactly the same rules.
 
 So it is the job of whoever holds both lists — k7's playlist pane
-(`apps/k7/frontend/docs/playlists.md`) and the desk (`packages/k7-plugins/docs/turntables/setList.md`),
+(`apps/k7-daw-frontend/docs/playlists.md`) and the desk (`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/setList.md`),
 each with the playlist on one side and the files on the other. They share the resolution itself
 rather than each having a copy: `resolveRecords` in `@studio/song-schema/records`, since two
 copies would diverge at the first case learned on one side only.

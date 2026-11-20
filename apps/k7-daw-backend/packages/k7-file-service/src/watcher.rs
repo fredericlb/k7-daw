@@ -1,6 +1,6 @@
 //! watcher.rs — the one place a folder watcher is made, and what it watches: the OS's own, or polling where the OS
 //! has none that scales (iOS, whose kqueue holds a descriptor per file), and there a library's published versions,
-//! which never change, are left out (`docs/library-versions-plan.md`, `engine/k7-runtime/docs/ios.md`).
+//! which never change, are left out (`docs/library-versions-plan.md`, `apps/k7-daw-engine/k7-runtime/docs/ios.md`).
 //! What a reader gets wrong: a polled watcher scans on a timer, so an event is up to `POLL` late and each one has a thread.
 
 use std::path::{Path, PathBuf};

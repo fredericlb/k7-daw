@@ -2,7 +2,7 @@
 
 A third-party plugin runs inside the engine's process. One that crashes in `prepareToPlay` or on the
 audio thread takes the engine down after its load returned, so LoadGuard's quarantine never pins it
-(`engine/k7-runtime/docs/crashes.md`). The supervisor relaunches the engine, the client sends the
+(`apps/k7-daw-engine/k7-runtime/docs/crashes.md`). The supervisor relaunches the engine, the client sends the
 same project back, and the same plugin crashes it again. `src/CrashLoop.h` is what stops that
 from going on for ever.
 
@@ -61,7 +61,7 @@ the phones host no external plugin, so there it changes nothing.
 
 A process that stays up is no crash, so nothing above sees an engine whose message thread is wedged:
 it answers `whoami` from its socket thread while nothing else moves. The engine leaves by itself
-after 60 s of silence (`engine/k7-runtime/docs/hangWatch.md`), but not where it runs inside an app.
+after 60 s of silence (`apps/k7-daw-engine/k7-runtime/docs/hangWatch.md`), but not where it runs inside an app.
 So `hangWatch` asks `whoami` every 10 s and, past `kWedgedMs` (90 s) of `messageThreadMs`, stops an
 engine it owns — on a phone that is the stop request the app is sent. The death is then counted like
 any other: relaunched with the backoff above, and in safe mode at the third quick one. An adopted

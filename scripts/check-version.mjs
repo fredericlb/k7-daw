@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..");
-const PBXPROJ = "engine/k7-ios/k7.xcodeproj/project.pbxproj";
+const PBXPROJ = "apps/k7-daw-ios/k7.xcodeproj/project.pbxproj";
 const SEMVER = /^\d+\.\d+\.\d+$/;
 
 const { values: args } = parseArgs({

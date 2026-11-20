@@ -25,7 +25,7 @@ import { emitFolder } from "@studio/translator/emit";                  // Song  
 ```
 
 Every mapper returns the same `Translation`, so only the first step knows a format.
-The verbs' Worker is the caller (`packages/commands/src/runtime/importer.ts`, over `@studio/translator/import`): it
+The verbs' Worker is the caller (`apps/k7-daw-frontend/packages/commands/src/runtime/importer.ts`, over `@studio/translator/import`): it
 dispatches on the file extension and is reached from k7 by clicking the file in the tree or dropping it on the home page.
 
 `parseAls` likewise takes a `readSample` callback: a `.als` does not embed its audio, and
@@ -49,7 +49,7 @@ outDir/
 ```
 
 No schema ships with it: a project is validated in process against the loader's own
-schemas (`packages/song/src/yaml/`).
+schemas (`apps/k7-daw-frontend/packages/song/src/yaml/`).
 
 ## What it maps
 

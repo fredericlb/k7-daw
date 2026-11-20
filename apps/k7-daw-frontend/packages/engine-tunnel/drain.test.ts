@@ -27,7 +27,10 @@ describe("drained", () => {
 
   it("is the supervisor's kHighWaterBytes too, so both ends stop at one megabyte", () => {
     const header = readFileSync(
-      new URL("../../engine/k7-supervisor/src/TunnelFrames.h", import.meta.url),
+      new URL(
+        "../../../k7-daw-engine/k7-supervisor/src/TunnelFrames.h",
+        import.meta.url,
+      ),
       "utf8",
     );
     const m = /kHighWaterBytes\s*=\s*([\d\s*]+);/.exec(header);

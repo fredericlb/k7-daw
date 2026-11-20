@@ -14,8 +14,8 @@ import {
 
 // A step may name an INHERITED module by its ref, with no local module standing in for it.
 
-const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
-const DEMOS = join(here, "..", "..", "..", "demos");
+const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
+const DEMOS = join(here, "..", "..", "..", "..", "..", "demos");
 const SONG = join(DEMOS, "synth-demo.k7");
 const REF = "@workspace/audio/shared-delay";
 

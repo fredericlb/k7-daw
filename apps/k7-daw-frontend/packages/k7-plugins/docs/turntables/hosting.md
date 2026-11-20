@@ -1,7 +1,7 @@
 # What a host owes the desk
 
 Two turntables meeting at a crossfade, their channel strips, the waveforms, the cues and the
-set list. k7 draws it as a `surfaces/` view (`packages/song/docs/surfaces.md`).
+set list. k7 draws it as a `surfaces/` view (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`).
 
 ## The seam is the ENGINE, and only the engine
 
@@ -12,7 +12,7 @@ type — which is what keeps the desk independent of the app around it.
 
 So a host supplies a `Deck` and the desk asks nothing else. k7 does it with an adapter over the
 link its shell already holds, since it has an engine before it has a surface
-(`apps/k7/frontend/src/hooks/useTurntableDeck.ts`).
+(`apps/k7-daw-frontend/src/hooks/useTurntableDeck.ts`).
 
 ### A deck's position is its platter's needle, handed over RAW
 
@@ -23,7 +23,7 @@ smooths nothing there. The steering a 60 fps picture needs is the desk's own
 run at — a host sees frames, not tempo faders.
 
 `playhead` and `drawNow` are the TRANSPORT's position, raw and steered
-(`apps/k7/frontend/docs/playhead.md`). The transport is no deck's clock, and the desk reads
+(`apps/k7-daw-frontend/docs/playhead.md`). The transport is no deck's clock, and the desk reads
 neither.
 
 ### `sendProject` is part of the seam, and it is not optional
@@ -34,7 +34,7 @@ writer to that engine. So `sendDecks` takes `Deck.sendProject` rather than an `E
 k7 posts to its service.
 
 Getting this wrong is not subtle and it is not loud either: two writers push documents that are
-each correct, and the last one wins. See `packages/song/docs/surfaces.md` for the ordering rule
+each correct, and the last one wins. See `apps/k7-daw-frontend/packages/song/docs/surfaces.md` for the ordering rule
 the file service owns.
 
 `engine` stays on the seam for everything that is NOT a document — the transport, a seek, a param.
@@ -114,13 +114,13 @@ record on a deck that already holds one — the one gesture whose cost is paid i
 audience (`docs/platter-plan.md`).
 
 ```
-npx tsx packages/k7-plugins/scripts/turntables/put-on.ts [ws://127.0.0.1:8765]
+npx tsx apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts [ws://127.0.0.1:8765]
 ```
 
 Three others lived here and went with the clip they measured (`tempo-drag.ts`, `metronome.ts`,
 `scratch-drag.ts`). What they established is kept where it belongs — `docs/bpm.md` for the fader,
 `docs/metronome.md` for the click, `docs/scratch.md` for the hand. The platter's own numbers are
-measured from the engine side now, in `engine/k7-runtime/scripts/`.
+measured from the engine side now, in `apps/k7-daw-engine/k7-runtime/scripts/`.
 
 It lives here rather than in a host, beside the maths it exercises and the pages that explain it.
 

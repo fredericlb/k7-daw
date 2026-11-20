@@ -446,14 +446,14 @@ function TimelineTabView({
     id: string,
     control: "mute" | "solo" | "arm" | "highlight",
   ) => void;
-  /** What the graph knows about each lane's NODE, by lane id — the same maps the chains pane draws from (packages/song/docs/alternatives.md). */
+  /** What the graph knows about each lane's NODE, by lane id — the same maps the chains pane draws from (apps/k7-daw-frontend/packages/song/docs/alternatives.md). */
   laneNodes?: {
     alternatives?: Record<
       string,
       { alternatives: string[]; alternative: string }
     >;
     frozen?: Record<string, "at" | "inside">;
-    /** A lane inside an automatic VST freeze, → the VST: the engine lacks it and plays the render (packages/song/docs/autoFreeze.md). */
+    /** A lane inside an automatic VST freeze, → the VST: the engine lacks it and plays the render (apps/k7-daw-frontend/packages/song/docs/autoFreeze.md). */
     autoFrozen?: Record<string, string>;
     /** …the same, with no render made yet: the lane plays without the VST until one is. */
     autoFreezeWaiting?: Record<string, string>;
@@ -1178,7 +1178,7 @@ function TimelineTabView({
         trackId: track.id,
         clipId: c.id,
       };
-      // No MOVE on a generated, frozen or read-only lane — there is a clip to look at and nothing to write (packages/song/docs/freeze.md).
+      // No MOVE on a generated, frozen or read-only lane — there is a clip to look at and nothing to write (apps/k7-daw-frontend/packages/song/docs/freeze.md).
       if (readOnly || track.generated || c.frozen) return;
       setSel(null);
       setMove({
@@ -1275,7 +1275,7 @@ function TimelineTabView({
         snapMode(e),
       );
       const lane = laneAtPoint(e.clientX, e.clientY);
-      // Where the event may LAND: a lane takes it when its matching output is wired, which `contentType` says in one word (packages/song/docs/trackModules.md).
+      // Where the event may LAND: a lane takes it when its matching output is wired, which `contentType` says in one word (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
       const src = projRef.current?.tracks.find((t) => t.id === m.trackId);
       const takes =
         src?.clips.find((c) => c.id === m.clipId)?.type === "midi"
@@ -3203,7 +3203,7 @@ function TimelineTabView({
                           onOpen={(at) =>
                             onNodeMenu(
                               {
-                                // A lane IS a module node, so it is addressable as one (packages/song/docs/trackModules.md).
+                                // A lane IS a module node, so it is addressable as one (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
                                 module: t.id,
                                 alternatives: alt.alternatives,
                                 alternative: alt.alternative,

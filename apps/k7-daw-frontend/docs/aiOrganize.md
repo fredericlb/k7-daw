@@ -1,9 +1,9 @@
 # AI organize in k7: the conversation is the page's, one turn is the server's
 
-The module builder's **AI organize** (`packages/ui-module-builder/docs/aiOrganize.md` says what it does and
+The module builder's **AI organize** (`apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md` says what it does and
 how the answer is judged) needs a host for two things the builder cannot do: spend an account's Claude key,
 and keep that key from every page. k7 splits the work on that line. The page runs the conversation and every
-check (`apps/k7/frontend/src/api.ts` calls `organizeLoop` of `@studio/panel-rules/ai-organize-loop`); the
+check (`apps/k7-daw-frontend/src/api.ts` calls `organizeLoop` of `@studio/panel-rules/ai-organize-loop`); the
 front's `POST /api/ai/organize/turn` makes **one** model turn with the account's key.
 
 ## The choices
@@ -28,5 +28,5 @@ The two halves are held by:
 
 | proof | covers |
 |---|---|
-| `packages/panel-rules/src/aiLoop.test.ts` | sixteen cases: the same model replies draw the same turns (prompt, schema, repair message) and end the same way; a model's junk, a broken `widgets.js` and a request that is no request |
-| `apps/k7/backend-rs/crates/k7-front/tests/all/ai_turn.rs` | the guards in their order (session, key, size, shape), and that only the account's key and model reach Claude |
+| `apps/k7-daw-frontend/packages/panel-rules/src/aiLoop.test.ts` | sixteen cases: the same model replies draw the same turns (prompt, schema, repair message) and end the same way; a model's junk, a broken `widgets.js` and a request that is no request |
+| `apps/k7-daw-backend/packages/k7-front/tests/all/ai_turn.rs` | the guards in their order (session, key, size, shape), and that only the account's key and model reach Claude |

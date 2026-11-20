@@ -1,4 +1,4 @@
-//! waveform.rs — `packages/audio-analysis`'s WebAssembly module, the very one TypeScript runs, in Wasmtime: compiled
+//! waveform.rs — `apps/k7-daw-frontend/packages/audio-analysis`'s WebAssembly module, the very one TypeScript runs, in Wasmtime: compiled
 //! once per front and shared (`Shared`), an instance per file whose host calls read and write `Files` (`transcode.rs`, `analyse.rs`).
 //! What a reader gets wrong: it is not the Rust crate linked natively, whose SIMD kernels and libm write other bytes.
 

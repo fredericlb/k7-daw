@@ -24,7 +24,7 @@ namespaced ref. Writing there changes the module for every project beside it, wh
 for what lives on ONE desk rather than in one song — an input's `channel:` describes the rig,
 and so does whether that input is audible. `@k7-core` is the one exception the file service still
 gates behind an explicit Edit confirmation before it takes a write at all
-(`apps/k7/frontend/docs/sharedModules.md`); `@workspace` takes this write directly, the same
+(`apps/k7-daw-frontend/docs/sharedModules.md`); `@workspace` takes this write directly, the same
 as any other file.
 
 ## Attribute sets (alternatives)
@@ -43,7 +43,7 @@ re-read, and a name that resolves to nothing simply is not a lane. Deciding it h
 in the document editor is deliberate: the question is what this module extends, and the
 vocabulary to answer it lives on this side.
 
-See `packages/song/docs/alternatives.md` for the format.
+See `apps/k7-daw-frontend/packages/song/docs/alternatives.md` for the format.
 
 ## Fields that are not params
 
@@ -58,12 +58,12 @@ something, which is why the caller reloads instead of patching.
 | `gain` | the interface trim in dB, 0 being unity | same three-field family as the two above |
 | `base` | which named `.vstpreset` the module starts from | a preset is loaded when the plugin is CREATED, so the engine relearns it by rebuilding |
 | `shader` | which shader folder this node runs | the four knobs steer a program already running; this decides which program is compiled |
-| `frozen` | the render this module plays instead of its inputs | see `packages/song/docs/freeze.md` |
+| `frozen` | the render this module plays instead of its inputs | see `apps/k7-daw-frontend/packages/song/docs/freeze.md` |
 
 `channel` is one number for mono, two for a stereo pair, and the two-element form only ever
 means a pair the interface actually groups: `findWaveInput` matches a device on its exact
 channel list, so a set the rig does not offer resolves to nothing and plays as silence (see
-`engine/k7-runtime/docs/audioDevice.md`). Whether such a pair exists is the ENGINE's business and
+`apps/k7-daw-engine/k7-runtime/docs/audioDevice.md`). Whether such a pair exists is the ENGINE's business and
 not checkable from here — the writer writes what it is told, and the surface offering the
 choice is the one that only offers real ones. `gain` is unclamped for the same reason:
 Tracktion does not clamp it either, and what is USEFUL (±24 dB, the range the builder's binds
@@ -73,7 +73,7 @@ declare) is a judgement for the surface, not for a writer taking a number someon
 two nodes of the same module can sit on two different bases, which is the point of choosing at
 all. And it cannot disturb what the module already said — the engine loads the base and then
 applies `params:` over it, so every authored value still wins and a base only decides what text
-could not have said (`packages/song/docs/userPresets.md`).
+could not have said (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`).
 
 `shader` is deliberately NOT checked against the folder, the same posture `base` takes. Which
 shaders exist is a fact about a disk this may not be on; the dropdown offers only what
@@ -153,7 +153,7 @@ halfway, and a rename touches a file, a preset and every chain step that spells 
 Two shapes answer to a name on the graph: a NODE — `nodes/<name>.k7x`, one use of a module — and a
 MODULE used directly, whose `module.k7x` is the only file there is. The second is not an import's
 oddity: k7 writes it itself for every lane's strip (`mix-<lane>`,
-`packages/song/docs/trackMixer.md`), and the importer writes it for a plugin used once. So the
+`apps/k7-daw-frontend/packages/song/docs/trackMixer.md`), and the importer writes it for a plugin used once. So the
 verbs have to know it, rather than answering "no node 'x'" about something plainly on the graph.
 
 - **delete** takes it off the graph and leaves the MODULE where it is. The module is a definition
@@ -164,7 +164,7 @@ verbs have to know it, rather than answering "no node 'x'" about something plain
 - **replace** repoints the MODULE, which is the paragraph above and stays right: that shape means
   the module is used once — collapsing an insert is what produces it — so repointing it is
   repointing the node, and its position, panel and alternatives survive. A module two chains DO
-  name is one plugin shared on purpose (`apps/k7/docs/24-syntax-chains.md`), and changing it
+  name is one plugin shared on purpose (`apps/k7-daw-frontend/user-docs/24-syntax-chains.md`), and changing it
   changes the thing they share.
 
 `unlinkChainNode` takes a node out of the SIGNAL PATH, joining what fed it to what it fed, and
@@ -173,7 +173,7 @@ canvas: unlinking is "take it out of the run", not "get rid of it". Putting it b
 insert`; removing it altogether is `node delete`. A node may be named as a step or only ever as
 somebody's destination — the last module in a run has no entry of its own, and it is still in
 the chain and still unlinkable. A LANE is not refused: it is a module like any other
-(`packages/song/docs/trackModules.md`), so the splice is well defined there too.
+(`apps/k7-daw-frontend/packages/song/docs/trackModules.md`), so the splice is well defined there too.
 
 `renameChainNode` and `deleteChainNode` share a footprint — a node is `nodes/<name>.k7x` plus,
 when it has one, `nodes/<name>.vstpreset` — and an ORDER that is load-bearing. The FILES go

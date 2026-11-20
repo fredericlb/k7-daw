@@ -7,7 +7,7 @@ wrote it; hard left it disappears, right it goes up to double.
 What it really does is a **sum**: a separated song is no longer played by its own lane, it is
 played by its four parts and each knob doses one. That is what every commercial stem deck does.
 The reasoning is in
-[`packages/song-schema/docs/stems.md`](../../../song-schema/docs/stems.md). At rest the output is
+[`apps/k7-daw-frontend/packages/song-schema/docs/stems.md`](../../../song-schema/docs/stems.md). At rest the output is
 the record to within **34 dB** — the model's reconstruction residue, measured and stable.
 
 ## The block, and why it is not mirrored
@@ -98,7 +98,7 @@ So a set is prepared the night before, with `playlist stems <playlist>` — the 
 `StemsBar` runs the same command — which cuts record by record into `stems/` beside each file and
 skips the ones already cut. Which module separates and which model it wants is one answer for the
 machine, written once by `system stems` into `<state>/preferences.k7x`; see
-[engine/k7-supervisor/docs/stemSplit.md](../../../../engine/k7-supervisor/docs/stemSplit.md).
+[apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md](../../../../../k7-daw-engine/k7-supervisor/docs/stemSplit.md).
 
 A surface may still carry a `stems:` line: the parser accepts it and **ignores** it, so a file
 written for an earlier desk keeps reading. The scaffold does not offer it.
@@ -116,7 +116,7 @@ written for an earlier desk keeps reading. The scaffold does not offer it.
 - **The four parts are four PLATTERS**, as an unseparated record is one. They share a position, a
   rate and a `Key`; `plattersOf` names them, and one gesture — cue, scrub, scratch — reaches them
   all. That is what makes a separated record scratchable. The cost is measured:
-  `packages/k7-plugins/scripts/turntables/put-on.ts`, and 157 ms more to put on a 4-minute song.
+  `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts`, and 157 ms more to put on a 4-minute song.
 - **The tempo does not get in the way.** A sum requires no cancellation, so each part stretches on
   its own, keylock on or off ([bpm.md](bpm.md)).
 - **An unseparated song leaves its lanes EMPTY**, and its own lane plays it. Placing four clips on
@@ -127,4 +127,4 @@ written for an earlier desk keeps reading. The scaffold does not offer it.
   decodes everything else into a proxy before playing, which would be paid at the precise moment
   a record is put on — five decodes, the mix and its four stems. The full reasoning and the size
   table are in
-  [engine/k7-supervisor/docs/stemSplit.md](../../../../engine/k7-supervisor/docs/stemSplit.md).
+  [apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md](../../../../../k7-daw-engine/k7-supervisor/docs/stemSplit.md).

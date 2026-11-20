@@ -163,7 +163,7 @@ sits on a page with the timeline's layer count.
 | `Minimap` | `MinimapPlayhead` |
 | `PianoRoll` | `RollPlayhead` |
 | `AudioClipPanel` | `LiveWaveform` — the clip panel's own line, on the FILE's axis; see below |
-| `WaveformView` | `ClipWaveform` — through `Waveform`'s `setTime` handle, which moves a CSS clip and a line and redraws no canvas (`packages/ui-waveform/docs/layers.md`) |
+| `WaveformView` | `ClipWaveform` — through `Waveform`'s `setTime` handle, which moves a CSS clip and a line and redraws no canvas (`apps/k7-daw-frontend/packages/ui-waveform/docs/layers.md`) |
 | `TakesView` | `TakesPlayhead` — ONE line across every row, a transform and not `left`: one per row would cost a layout invalidation and an animation callback per row per frame; the view itself renders on gestures only |
 
 ### The clip panel converts before it draws
@@ -221,7 +221,7 @@ A deck's clock is not the transport but its platter's needle, which runs at the 
 frames still understate (overstate, running backwards) by their transit, so the least-delayed one
 is still the best. A new rate re-bases the offset so the drawn position does not move
 (`retimePlayhead`). How the desk feeds it — the rate it knows, the loops it folds, the stalls it
-refuses to extrapolate — is `packages/k7-plugins/docs/turntables/needleClock.md`. What the desk
+refuses to extrapolate — is `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/needleClock.md`. What the desk
 STORES, a cue, stays the raw needle.
 
 `ui-eyes`' two clocks read `performance.now()` rather than `Date.now()`. The wall clock can step

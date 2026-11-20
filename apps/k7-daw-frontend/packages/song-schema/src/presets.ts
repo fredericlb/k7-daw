@@ -1,7 +1,7 @@
 // presets.ts — a module's named settings, one FILE each, in a `presets/` tree beside the modules
 // rather than in the module's folder: `<presets>/<ns>/<module path>/<name>.k7x`. The tree's root is
 // where it is KEPT (the workspace or a library); the path is which module it is FOR. No node:fs here,
-// so the browser shares the vocabulary. See packages/song/docs/userPresets.md.
+// so the browser shares the vocabulary. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
 import { stringify } from "@studio/k7x/print";
 import { z } from "zod";
@@ -60,7 +60,7 @@ const PresetTapSchema = z
 export const PresetFileSchema = z
   .object({
     engine: z.string().min(1).optional(),
-    // The named base the values were taken on — a whole state they only make sense over (packages/song/docs/userPresets.md).
+    // The named base the values were taken on — a whole state they only make sense over (apps/k7-daw-frontend/packages/song/docs/userPresets.md).
     base: z.string().min(1).optional(),
     params: z.record(z.string().min(1), z.number()).optional(),
     rack: z.record(z.string().min(1), PresetTapSchema).optional(),

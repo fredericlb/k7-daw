@@ -16,7 +16,7 @@ use crate::routes::files::service::native::jobs::Jobs;
 pub fn script(env: &dyn Fn(&str) -> Option<String>, code_root: &Path) -> PathBuf {
     match env("K7_RENDER_PAGE").filter(|v| !v.is_empty()) {
         Some(p) => PathBuf::from(p),
-        None => code_root.join("apps/k7/backend-rs/crates/k7-picture/page/renderPage.js"),
+        None => code_root.join("apps/k7-daw-backend/packages/k7-picture/page/renderPage.js"),
     }
 }
 

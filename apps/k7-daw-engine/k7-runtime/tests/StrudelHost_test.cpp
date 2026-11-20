@@ -1,4 +1,4 @@
-// The embedded Strudel bundle, run in QuickJS: the same lane events packages/song-strudel/src/engineEntry.test.ts asserts
+// The embedded Strudel bundle, run in QuickJS: the same lane events apps/k7-daw-frontend/packages/song-strudel/src/engineEntry.test.ts asserts
 // under Node, so the two runtimes are held to one answer. JUCE-free, linked against studio_strudel only.
 //
 // What would be wrong SILENTLY: a bad save that silences the lane (the previous pattern must keep playing), and a

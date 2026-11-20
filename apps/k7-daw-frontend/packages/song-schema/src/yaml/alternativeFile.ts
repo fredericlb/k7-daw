@@ -78,7 +78,7 @@ const setPath = (doc: K7Scope): (string | number)[] => {
   return at === 0 ? [] : ["alternatives", at - 1];
 };
 
-/** Set one param on the set that is ON, under `engines.<engine>` when the module runs one; `null` removes it (packages/song/docs/engines.md). */
+/** Set one param on the set that is ON, under `engines.<engine>` when the module runs one; `null` removes it (apps/k7-daw-frontend/packages/song/docs/engines.md). */
 export function setAlternativeParam(
   doc: K7Scope,
   name: string,
@@ -105,7 +105,7 @@ export function clearAlternativeParams(doc: K7Scope, engine?: string): void {
   if (!Object.keys(doc.getIn(path) as Data).length) doc.deleteIn(path);
 }
 
-/** Set one FIELD on the set that is ON — `engine:` being the one that needs it (packages/song/docs/engines.md). */
+/** Set one FIELD on the set that is ON — `engine:` being the one that needs it (apps/k7-daw-frontend/packages/song/docs/engines.md). */
 export function setAlternativeField(
   doc: K7Scope,
   field: string,

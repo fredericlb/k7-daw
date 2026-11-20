@@ -2,7 +2,7 @@
 // event on another lane. What a reader gets wrong: its lanes are not the project's lanes — they
 // have no module, no plugin, no routing; what they hold plays through the lane the timeline is
 // placed on, and its `pictures:` draw on the song's picture lane of their name
-// (packages/song/docs/timelines.md).
+// (apps/k7-daw-frontend/packages/song/docs/timelines.md).
 
 import { z } from "zod";
 import { PlacementSchema, TIMECODE } from "./placementSchema";

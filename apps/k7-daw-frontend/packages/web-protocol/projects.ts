@@ -2,7 +2,7 @@
 // (`mysong.k7` in k7), and the ADDRESS that names one:
 // `/<repo>/<project>`. Both are contracts between the side that WRITES an address — k7's home
 // page — and the apps that read one back, so they are stated here, browser-safe, and nowhere
-// else. See apps/k7/frontend/docs/projects.md and packages/project-shell/docs/launch.md.
+// else. See apps/k7-daw-frontend/docs/projects.md and apps/k7-daw-frontend/packages/project-shell/docs/launch.md.
 
 import { isDotSegment } from "./paths.ts";
 import { type StudioService, serviceUrl } from "./services.ts";
@@ -116,7 +116,7 @@ export function projectBasename(
  * The foreign project files a DROP may carry: the self-contained ones. A `.dawproject` has its
  * audio inside it, and a `.zip` is an Ableton project folder with its samples. A lone `.als` is
  * not: it reads its samples off the disk beside it, so it is imported from the tree, where it sits
- * with its folder. See packages/translator/docs/import.md.
+ * with its folder. See apps/k7-daw-frontend/packages/translator/docs/import.md.
  */
 export const DROPPABLE_PROJECTS = [".dawproject", ".zip"] as const;
 
@@ -136,7 +136,7 @@ export function isBench(repo: string): boolean {
 
 const K7 = PROJECT_SUFFIXES.k7;
 
-/** The bench's ONE project — a live rig thrown away and rebuilt on every open, apps/k7/backend-rs/docs/banc.md. */
+/** The bench's ONE project — a live rig thrown away and rebuilt on every open, apps/k7-daw-backend/docs/banc.md. */
 export const BENCH_PROJECT = `live${K7}`;
 
 /** The library chain a `@banc` address seeds the rig with (`<ref>/live.k7`), `null` for the bare rig, `undefined` for no bench — docs/addresses.md. */

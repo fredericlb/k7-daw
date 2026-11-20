@@ -1,6 +1,6 @@
 // engineRender.ts — an engine document rendered offline by the command-line engine, and its peak read back.
 // `--render` bounces the whole edit; `--decode` hands the frames back, so no WAV parser lands in the suite.
-// The one thing a reader gets wrong: a missing binary FAILS with a sentence, it never skips (packages/song/docs/rustCompilerHost.md, 908).
+// The one thing a reader gets wrong: a missing binary FAILS with a sentence, it never skips (apps/k7-daw-frontend/packages/song/docs/rustCompilerHost.md, 908).
 import { execFile } from "node:child_process";
 import {
   existsSync,
@@ -41,7 +41,7 @@ export function engineBinary(path?: string): string {
     );
   if (!existsSync(bin) || !statSync(bin).isFile())
     throw new Error(
-      `engine binary not found at '${bin}': build it with 'node engine/scripts/build-engine.mjs' or set CONFORMANCE_ENGINE_BIN`,
+      `engine binary not found at '${bin}': build it with 'node apps/k7-daw-engine/scripts/build-engine.mjs' or set CONFORMANCE_ENGINE_BIN`,
     );
   return bin;
 }

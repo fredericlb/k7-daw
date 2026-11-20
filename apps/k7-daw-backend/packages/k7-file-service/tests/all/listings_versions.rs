@@ -128,13 +128,13 @@ fn a_levels_row_carries_its_version_in_the_literals_order() {
 
 /// A file of the repository, by its path from the root.
 fn ts(rel: &str) -> String {
-    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     std::fs::read_to_string(root.join(rel)).unwrap()
 }
 
 #[test]
 fn the_constants_are_the_typescripts() {
-    let versions = ts("packages/song-schema/src/libraryVersions.ts");
+    let versions = ts("apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts");
     assert!(versions.contains(&format!("export const LIBRARY_LEVEL = {LIBRARY_LEVEL};")));
     assert!(versions.contains("export const UNPINNED_VERSION = 1;"));
     assert!(versions.contains("export const LIBRARY_MANIFEST = \"library.k7x\";"));

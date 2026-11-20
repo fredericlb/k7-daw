@@ -1,4 +1,4 @@
-// Tests for the segment guard: the same cases as engine/k7-supervisor/tests/PathMap_test.cpp, so the
+// Tests for the segment guard: the same cases as apps/k7-daw-engine/k7-supervisor/tests/PathMap_test.cpp, so the
 // TypeScript agent refuses what the native one refuses.
 
 import { describe, expect, it } from "vitest";

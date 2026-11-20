@@ -1,7 +1,7 @@
 // The two writers the builder commits through. What is pinned here is the thing a document
 // writer exists for: promoting a param must change the `params` block and leave every comment,
 // every key order and every other line of the file exactly where they were.
-// See packages/song/docs/assemblies.md.
+// See apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import { K7Document, type K7Scope } from "@studio/k7x/document";
 import { describe, expect, it } from "vitest";

@@ -1,14 +1,14 @@
 // tap-outputs.ts — does a routed tap really LEAVE its instrument? A unit test cannot hear a RackType, so this renders.
 // One pad played at a time, on a lane whose instrument routes one pad to pair 1 and a track fed by that pair: a routed
 // pad must go silent when its track is muted, and an unrouted one must not. Both instruments: the sampler and an SFZ kit.
-//   npx tsx engine/k7-runtime/scripts/tap-outputs.ts
-// See engine/k7-runtime/docs/tapOutputs.md.
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/tap-outputs.ts
+// See apps/k7-daw-engine/k7-runtime/docs/tapOutputs.md.
 
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
-import { findEngineBinary } from "../../../packages/engine-client/src/engineBinary.ts";
-import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { findEngineBinary } from "../../../k7-daw-frontend/packages/engine-client/src/engineBinary.ts";
+import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 import { peakOf, wavFile } from "./wav.ts";
 
 const base = {

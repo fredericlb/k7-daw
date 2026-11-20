@@ -1,6 +1,6 @@
 # song-video: the picture compile
 
-`@studio/song-video` (`packages/song-video/`) turns a project folder into a `VideoProjectDoc`. It
+`@studio/song-video` (`apps/k7-daw-frontend/packages/song-video/`) turns a project folder into a `VideoProjectDoc`. It
 is Node-only (it reads files) and depends on `@studio/song` (the loader, the graph) and
 `@studio/song-schema`. Consumed as raw TypeScript through its `exports` subpaths:
 

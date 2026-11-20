@@ -21,7 +21,7 @@ const q = (s: string) => JSON.stringify(s);
 export const LIVE_INPUT = AUDIO_IN_NODE;
 export const LIVE_FADER = "fader";
 
-/** The shared strip every mixer node names, this scaffold's and an import's alike (`packages/translator/docs/import.md`). */
+/** The shared strip every mixer node names, this scaffold's and an import's alike (`apps/k7-daw-frontend/packages/translator/docs/import.md`). */
 export const SHARED_STRIP = "@meta/audio/mixer";
 
 /** The lens, owned the way the input is: a built-in io name, so the graph can say it bare. */
@@ -36,10 +36,10 @@ function liveProjectText(name: string, picture: boolean): string {
     (picture
       ? `// It declares ONE surface, the viewport, and only because a picture has nowhere else to\n` +
         `// go: an arrangement left undrawn is still on disk, a frame nothing composites is not\n` +
-        `// shown at all. No timeline and no desk. See packages/song/docs/liveProject.md.\n`
+        `// shown at all. No timeline and no desk. See apps/k7-daw-frontend/packages/song/docs/liveProject.md.\n`
       : `// It declares no \`surfaces/\` — no timeline, no viewport, no desk — and that is the whole\n` +
         `// of what makes it this shape rather than another. A project draws what it DECLARES, so\n` +
-        `// this one opens on its graph and nothing else. See packages/song/docs/liveProject.md.\n`) +
+        `// this one opens on its graph and nothing else. See apps/k7-daw-frontend/packages/song/docs/liveProject.md.\n`) +
     `//\n` +
     `// It holds no material either: no \`clips/\`, no \`sequences/\`. Nothing is arranged, so\n` +
     `// nothing warns about an arrangement that is not drawn.\n` +
@@ -65,7 +65,7 @@ function liveGraph(picture: boolean): string {
     `//\n` +
     `// There is NO LANE here, and no \`nodes/\` track file: a run carrying a live input and\n` +
     `// landing on no lane materialises its own track, the way a bus does. So this is the whole\n` +
-    `// rig — input, fader, out. See packages/song/docs/liveProject.md.\n` +
+    `// rig — input, fader, out. See apps/k7-daw-frontend/packages/song/docs/liveProject.md.\n` +
     `//\n` +
     `// Put a module between the two and you have an effects chain, which is what this shape is\n` +
     `// for: \`${LIVE_INPUT}: ["amp"]\`, \`amp: ["${LIVE_FADER}"]\`.\n` +
@@ -77,12 +77,12 @@ function liveGraph(picture: boolean): string {
     `  // DRAW a bypass of the master run below that does not exist.\n` +
     `  ${LIVE_FADER}: ["MIX"],\n` +
     `  // The master run, which every project has: what the bar's record button captures is\n` +
-    `  // what reaches OUT, the whole mix (packages/song/docs/outputRecording.md).\n` +
+    `  // what reaches OUT, the whole mix (apps/k7-daw-frontend/packages/song/docs/outputRecording.md).\n` +
     `  MIX: ["OUT"],\n` +
     (picture
       ? `  // …and the picture's half: the lens composites into the frame, as the fader lands on\n` +
         `  // the sum. It needs NO video lane — a camera reaching none draws a layer of its own,\n` +
-        `  // the whole frame (packages/song/docs/camera.md).\n` +
+        `  // the whole frame (apps/k7-daw-frontend/packages/song/docs/camera.md).\n` +
         `  ${LIVE_CAMERA}: [${q(RENDER_NODE)}],\n` +
         `  ${RENDER_NODE}: [${q(VIDEO_OUT_NODE)}],\n`
       : "") +

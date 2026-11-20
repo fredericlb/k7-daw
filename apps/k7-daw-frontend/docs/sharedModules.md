@@ -15,7 +15,7 @@ So a shared module is edited from inside a project, against the engine already p
 | **Libraries** | one row per LEVEL — `@workspace`, `@engine` — with the modules under it, and one per LIBRARY of the origin (`@k7-core`, `@drums`…), each a folder with its `modules`, `chains` and `assemblies` |
 
 **They are two different answers, and the difference is worth writing down.** `/tree` walks the
-workspace (`apps/k7/backend-rs/docs/file-projects.md`), and the libraries are not in the
+workspace (`apps/k7-daw-backend/docs/file-projects.md`), and the libraries are not in the
 workspace at all — the file hub holds one folder of each for the origin and the file service
 answers them at the virtual `_libraries/<name>/…` — so no walk of the workspace can find them, nor
 say which level wins when two hold the same name.
@@ -54,7 +54,7 @@ a preset saved into it — is refused by the file service unless the account is 
 admins. The refusal says so; the tab still offers the entries, since the service is the gate. What
 forced it: a library is ONE folder on the server that every account reads, so a write into it is
 everybody's at once. An admin's file service writes into its `draft/`, never a published version
-(`apps/k7/backend-rs/docs/libraries.md`), from whichever project is open.
+(`apps/k7-daw-backend/docs/libraries.md`), from whichever project is open.
 
 That is what lets the song that names a module be the place to hear an edit — there is no special
 place to go to, and no second copy of a library to keep in step with the one everyone reads.
@@ -78,7 +78,7 @@ Absent from the SUGGESTIONS, not forbidden: a chain step may still name `@engine
 typing it works — a completion list is an offer, never a validator. And the
 one question where the engine's catalogue *is* the right answer keeps it: `extends:`, and the
 `module new` / `node replace` / `module own` arguments that ask what to inherit from. `isEngineRef`
-in `packages/song-schema/src/moduleTypes.ts` is the predicate, and it is a function rather than a
+in `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` is the predicate, and it is a function rather than a
 `startsWith` at each call site so that a library called `@engineering` is not swallowed with it.
 
 Two things about it are synthesised, and it is worth knowing which:
@@ -89,7 +89,7 @@ Two things about it are synthesised, and it is worth knowing which:
 - **The level's own row.** It has no folder, so its label stands in for a path.
 
 Giving a scanned plugin a folder is a different act, and a deliberate one: `module own <ref>`
-(`packages/song/docs/moduleFork.md`). A plugin has no panel until it has somewhere to
+(`apps/k7-daw-frontend/packages/song/docs/moduleFork.md`). A plugin has no panel until it has somewhere to
 keep one, and this tab does not pretend otherwise.
 
 An `@engine` with nothing in it is not drawn: a machine that has never scanned has no
@@ -112,7 +112,7 @@ no type folder — `audio/reverb` is the shortest thing the loader will key.
 
 `@engine` gets neither: `rootOf` refuses a read-only level, so the menu does not open there at
 all rather than opening with everything greyed out. A scanned plugin has no folder, so there is
-nothing to make one in (`packages/song/docs/moduleNamespaces.md`).
+nothing to make one in (`apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md`).
 
 Note the two shapes: a workspace library holds its type folders **directly**, where each of the
 origin's libraries holds three FAMILIES and `modules` is one of them. That difference is why the
@@ -170,7 +170,7 @@ a library belongs with that library rather than with whichever project was open.
 
 A rename changes a module's REF, and a folder's rename changes the ref of every module inside it.
 So it repoints them as a move does, in the library and in this workspace's projects; other
-workspaces keep the old ref (`packages/song/docs/moduleMove.md`). An engine's folder cannot be
+workspaces keep the old ref (`apps/k7-daw-frontend/packages/song/docs/moduleMove.md`). An engine's folder cannot be
 renamed: nodes pick an engine by that name.
 
 ## Moving a module — drag it
@@ -180,7 +180,7 @@ category below it. Only module rows drag; a folder, a chain and anything at the 
 `@engine` level do not. Unlike a rename, a move **takes its refs with it**: every `extends:` naming
 the old ref, in the library and in this workspace's projects, is repointed; the library's part is
 live at once. What the move cannot reach is any other workspace. The rules and the reasons are in
-`packages/song/docs/moduleMove.md`.
+`apps/k7-daw-frontend/packages/song/docs/moduleMove.md`.
 
 ## Editable at once — Save writes, and the write is the publication
 
@@ -193,11 +193,11 @@ A module somebody opened to read costs nothing: closing it unsaved leaves the li
 So Save on a library module is worth knowing for what it is: the library's copy is the only copy,
 nothing forks, and every song of every account that names this module sounds different the next
 time it is opened. Its history is the library's k7fs log, which the file hub keeps
-(`apps/k7/backend-rs/docs/files/hub.md`).
+(`apps/k7-daw-backend/docs/files/hub.md`).
 
 A module's presets are not in its folder at all: they are files of a presets tree, saved from a
 graph node into the workspace or into a library, so keeping one never edits the module every song
-reads (`packages/song/docs/userPresets.md`). The `@engine` level stays read-only, since a scanned
+reads (`apps/k7-daw-frontend/packages/song/docs/userPresets.md`). The `@engine` level stays read-only, since a scanned
 plugin has no folder to write into.
 
 ## The loaded plugin comes free
@@ -231,7 +231,7 @@ a library's            _libraries/k7/modules/audio/reverb/module.k7x
 Both are workspace paths, both served by the file service, both written by the same route — the
 second one lands in the server's folder of `k7`, since `_libraries/<name>/` is a VIRTUAL folder
 the file service maps to that library's root and confines there
-(`apps/k7/backend-rs/docs/file-workspaces.md`). The builder gets `moduleStore` either way, and what
+(`apps/k7-daw-backend/docs/file-workspaces.md`). The builder gets `moduleStore` either way, and what
 tells them apart is a folder name rather than which tab you clicked — `isLibraryPath` reads it off
 the path, so `ui builder <path>` behaves exactly as a click in the Libraries tab does.
 
@@ -252,15 +252,15 @@ Every text pane in k7 writes as you type. This one does not, and the reason is w
 So Save writes all four files. Ctrl+S and vim's `:w` are that button — all four files, not the
 pane you happen to be looking at. The machinery underneath is the ordinary one: `useAutosave`'s
 `manual` mode keeps the validation and the held-back buffers and only turns the timer off
-(`packages/ui-editor/docs/autosave.md`). A Save writes with `PUT /file`, the route a project file
+(`apps/k7-daw-frontend/packages/ui-editor/docs/autosave.md`). A Save writes with `PUT /file`, the route a project file
 takes, and nothing else: nothing in the song changes, since the version a song hears is its
-workspace's pin, not a field of the song (`packages/song/docs/sharedFolders.md`).
+workspace's pin, not a field of the song (`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`).
 
 ## The bench is not where a library is edited
 
 `/@banc/<chain>/live.k7` opens a live rig seeded with a COPY of a library chain, which anyone may
 open and which edits no origin library; `chain save` keeps it as one of the account's own chains
-(`apps/k7/backend-rs/docs/banc.md`). To hear a library module no song you
+(`apps/k7-daw-backend/docs/banc.md`). To hear a library module no song you
 have open names, wire it into the song you have open, or into the bare rig `/@banc/live.k7`. A bare library
 such as `/@banc/@k7-core/live.k7`, and every other address under `@banc` is refused with a sentence
 saying where a library is edited.

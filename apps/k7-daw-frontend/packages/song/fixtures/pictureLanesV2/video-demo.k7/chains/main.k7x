@@ -3,7 +3,7 @@
 //
 // `iris` is a SUBCHAIN that nothing links and that links nowhere: a fade's STRETCH. The second shot
 // on main names it (`fade_in: { over: 1, chain: iris }`) and runs through it on its way in.
-// See packages/song-video/docs/transitions.md and packages/song/docs/chainFiles.md.
+// See apps/k7-daw-frontend/packages/song-video/docs/transitions.md and apps/k7-daw-frontend/packages/song/docs/chainFiles.md.
 start(true)
 steps([id("e236ac58-39aa-4710-8afd-dd3e145f5514").video_track("main"), to([chain("glow")])])
 subchains([

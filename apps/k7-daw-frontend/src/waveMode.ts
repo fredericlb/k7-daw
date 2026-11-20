@@ -2,7 +2,7 @@
 // every gesture; what they lacked was a way in from the keyboard. Unlike the timeline, the mode
 // and the "tool" are ONE thing here on purpose: the marks you can touch are the marks you can see,
 // so a second axis would let the picture and the pointer disagree.
-// See apps/k7/frontend/docs/clipEditors.md.
+// See apps/k7-daw-frontend/docs/clipEditors.md.
 
 /** What the picture is FOR — and therefore what a press on it does. */
 export const WAVE_MODES = ["standard", "onsets", "warp", "takes"] as const;

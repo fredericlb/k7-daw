@@ -25,7 +25,7 @@ reader of every channel is woken 20·N times a second for nothing.
 `usePluginParamsOf(store, keys)` returns a map shaped like the whole one but holding only `keys`,
 subscribed through the per-plugin channel and re-rendering only when one of those values moves
 (`pickParams` hands back the previous object otherwise). The DJ desk's `useDeckSet`
-(`packages/k7-plugins/src/turntables/useDeckSet.ts`) reads its bound controls through it: it is the
+(`apps/k7-daw-frontend/packages/k7-plugins/src/turntables/useDeckSet.ts`) reads its bound controls through it: it is the
 root of the whole desk, and a whole-map subscription would re-render both decks, the mixer and the
 waveforms' parents on any watched plugin's frame.
 
@@ -70,7 +70,7 @@ Only for **externals**. What the engine ships is answered from `@studio/song`'s 
 with nothing running at all, which is faster and available with no engine at hand.
 
 `show-native-plugin-ui-of` is the companion, sent by the file service (`showNativePluginUIOf` in
-`apps/k7/backend-rs/crates/k7-file-service/src/engine/mod.rs`) rather than by this client, and slow for the same
+`apps/k7-daw-backend/packages/k7-file-service/src/engine/mod.rs`) rather than by this client, and slow for the same
 reason — it loads the same binary — but where the first answers with a list of names, this opens what the plugin itself
 draws. It is for the module being authored against a plugin the open project does not load, where
 a list of names is not enough to know what a knob does. The instance is an **orphan**: the engine
@@ -93,4 +93,4 @@ in the wrong panel.
 
 At the leaf that displays the number, not at the root that owns the tree — the same rule the
 chains renderer's `InputMeterBar` and `FaderMeter` already follow for meter levels. See
-`packages/ui-chains-react/docs/hosting.md`.
+`apps/k7-daw-frontend/packages/ui-chains-react/docs/hosting.md`.

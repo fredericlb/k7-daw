@@ -2,7 +2,7 @@
 // signal chain, because it must not share its effect instances with the lane it came from; the
 // empty form leaves the events behind. A rename moves the FILE, whose name is the whole lane name
 // — position and instrument prefix included — and every reference to it follows.
-// See packages/song/docs/nodes.md; a chain project is copied by trackChain.ts (docs/chainFiles.md).
+// See apps/k7-daw-frontend/packages/song/docs/nodes.md; a chain project is copied by trackChain.ts (docs/chainFiles.md).
 
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";

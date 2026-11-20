@@ -1,7 +1,7 @@
 // MediaPlayback.swift — what a page plays, shown to the system: Now Playing and the lock screen's and a headset's
 // buttons, from the page's own Media Session (media-session.js, `media`), each button sent back as `media-action`.
 // The bar may play through the ENGINE, which WebKit knows nothing of, so the app relays what the page says rather
-// than leaving it to WebKit's own media. See engine/k7-runtime/docs/ios.md.
+// than leaving it to WebKit's own media. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import MediaPlayer
 import WebKit

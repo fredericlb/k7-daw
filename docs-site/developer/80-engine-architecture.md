@@ -4,18 +4,18 @@ This section covers everything that links a k7 page to sound: the C++ engine, it
 
 | Page | Covers |
 |---|---|
-| [81 — The C++ engine](./81-k7-runtime.md) | `engine/k7-runtime`: layout, CLI modes, the server, the diff, sessions, hosted plugins, the Strudel bundle, tests |
-| [82 — The supervisor](./82-k7-supervisor.md) | `engine/k7-supervisor`: run modes, the host protocol, settings, registry, tunnel agent, machine jobs |
-| [83 — The engine protocol](./83-engine-protocol.md) | `packages/engine-protocol` and the C++ handlers: every message, the state frame, the ProjectDoc, sessions, the audio stream |
-| [84 — Engine clients](./84-engine-clients.md) | `packages/engine-client` (Node) and `packages/engine-browser` (browser): access, probe, choice, lease, store, pairing, WebRTC |
-| [85 — Registry and tunnel](./85-registry-and-tunnel.md) | `k7-engine` (the Rust registry, relay and hub) and `packages/engine-tunnel`: heartbeats, claims, the relay, the hub and agent, jobs |
-| [86 — The desktop app and the phone apps](./86-desktop-and-android.md) | `k7-local`, `apps/k7-desktop`, `engine/k7-android` |
-| [87 — Building and shipping engines](./87-engine-build-and-shipping.md) | `engine/scripts`, CMake presets, release archives |
+| [81 — The C++ engine](./81-k7-runtime.md) | `apps/k7-daw-engine/k7-runtime`: layout, CLI modes, the server, the diff, sessions, hosted plugins, the Strudel bundle, tests |
+| [82 — The supervisor](./82-k7-supervisor.md) | `apps/k7-daw-engine/k7-supervisor`: run modes, the host protocol, settings, registry, tunnel agent, machine jobs |
+| [83 — The engine protocol](./83-engine-protocol.md) | `apps/k7-daw-frontend/packages/engine-protocol` and the C++ handlers: every message, the state frame, the ProjectDoc, sessions, the audio stream |
+| [84 — Engine clients](./84-engine-clients.md) | `apps/k7-daw-frontend/packages/engine-client` (Node) and `apps/k7-daw-frontend/packages/engine-browser` (browser): access, probe, choice, lease, store, pairing, WebRTC |
+| [85 — Registry and tunnel](./85-registry-and-tunnel.md) | `k7-engine` (the Rust registry, relay and hub) and `apps/k7-daw-frontend/packages/engine-tunnel`: heartbeats, claims, the relay, the hub and agent, jobs |
+| [86 — The desktop app and the phone apps](./86-desktop-and-android.md) | `k7-local`, `apps/k7-daw-desktop`, `apps/k7-daw-android` |
+| [87 — Building and shipping engines](./87-engine-build-and-shipping.md) | `apps/k7-daw-engine/scripts`, CMake presets, release archives |
 
 ## The processes
 
 ```text
- browser (k7 page)                       k7 front (apps/k7/backend-rs)
+ browser (k7 page)                       k7 front (apps/k7-daw-backend)
  ├─ @studio/engine-browser  ── HTTPS ──► ├─ engine registry  (/api/registry/*, /api/engines, /api/engine/*)
  │      │                                ├─ engine relay     (/api/engine/<id>/ws)
  │      │                                ├─ tunnel hub       (/api/engine-tunnel)
@@ -55,12 +55,12 @@ Anyone may run an engine and heartbeat it to an open registry, so trust is layer
 
 | Layer | Rule | Code |
 |---|---|---|
-| Identity | `engine-id.json` holds an id, a token (handed to the engine, echoed on `whoami`, readable by browsers) and a **tunnel secret** the supervisor alone sends. The registry binds an id to the first secret it sees, on disk; the token alone never takes a bound id back. | `engine/k7-supervisor/src/Identity.cpp`, `apps/k7/backend-rs/crates/k7-engine/src/registry/bindings.rs` |
-| Registry admission | At most 1000 engines listed, 30 new ids per source address per minute | `apps/k7/backend-rs/crates/k7-engine/src/registry/mod.rs` |
-| Browser page | Origin allow-list | `engine/k7-runtime/server/Pairing.cpp` (`originAllowed`) |
-| LAN device | Pairing | `engine/k7-runtime/server/ServePairing.cpp` |
-| Relay | Ticket bound to account; claim required beyond probing | `apps/k7/backend-rs/crates/k7-engine/src/registry/ticket.rs`, `apps/k7/backend-rs/crates/k7-engine/src/relay/gate/` |
-| Auto-pick | Only the account's remembered engine, one reached directly, or the server's own engine is taken without a click | `packages/engine-browser/src/choose.ts` (`mayAutoPick`) |
+| Identity | `engine-id.json` holds an id, a token (handed to the engine, echoed on `whoami`, readable by browsers) and a **tunnel secret** the supervisor alone sends. The registry binds an id to the first secret it sees, on disk; the token alone never takes a bound id back. | `apps/k7-daw-engine/k7-supervisor/src/Identity.cpp`, `apps/k7-daw-backend/packages/k7-engine/src/registry/bindings.rs` |
+| Registry admission | At most 1000 engines listed, 30 new ids per source address per minute | `apps/k7-daw-backend/packages/k7-engine/src/registry/mod.rs` |
+| Browser page | Origin allow-list | `apps/k7-daw-engine/k7-runtime/server/Pairing.cpp` (`originAllowed`) |
+| LAN device | Pairing | `apps/k7-daw-engine/k7-runtime/server/ServePairing.cpp` |
+| Relay | Ticket bound to account; claim required beyond probing | `apps/k7-daw-backend/packages/k7-engine/src/registry/ticket.rs`, `apps/k7-daw-backend/packages/k7-engine/src/relay/gate/` |
+| Auto-pick | Only the account's remembered engine, one reached directly, or the server's own engine is taken without a click | `apps/k7-daw-frontend/packages/engine-browser/src/choose.ts` (`mayAutoPick`) |
 
 ## Where a project's audio files come from
 
@@ -70,18 +70,18 @@ The account's files live on the server. When a project opens on an engine, the f
 
 | Path | What |
 |---|---|
-| `engine/k7-runtime/` | The engine (C++20, JUCE via Tracktion Engine, IXWebSocket) |
-| `engine/k7-supervisor/` | The supervisor (C++20, IXWebSocket + mbedTLS, libdatachannel, ONNX Runtime, miniz) |
-| `engine/k7-android/` | The Android app (Kotlin, Capacitor) |
-| `engine/scripts/` | Build and packaging scripts for the engine and supervisor |
-| `packages/engine-protocol/` | Wire types, ProjectDoc types, sessions, the binary audio frame |
-| `packages/engine-client/` | The Node client and `~/.k7` path helpers |
-| `packages/engine-browser/` | The browser client, React stores, access/probe/choose/lease, pairing, WebRTC socket, audio stream player |
-| `apps/k7/backend-rs/crates/k7-engine/` | The registry, the relay, the tunnel hub (routed by `k7-front`'s `routes/engine/`) |
+| `apps/k7-daw-engine/k7-runtime/` | The engine (C++20, JUCE via Tracktion Engine, IXWebSocket) |
+| `apps/k7-daw-engine/k7-supervisor/` | The supervisor (C++20, IXWebSocket + mbedTLS, libdatachannel, ONNX Runtime, miniz) |
+| `apps/k7-daw-android/` | The Android app (Kotlin, Capacitor) |
+| `apps/k7-daw-engine/scripts/` | Build and packaging scripts for the engine and supervisor |
+| `apps/k7-daw-frontend/packages/engine-protocol/` | Wire types, ProjectDoc types, sessions, the binary audio frame |
+| `apps/k7-daw-frontend/packages/engine-client/` | The Node client and `~/.k7` path helpers |
+| `apps/k7-daw-frontend/packages/engine-browser/` | The browser client, React stores, access/probe/choose/lease, pairing, WebRTC socket, audio stream player |
+| `apps/k7-daw-backend/packages/k7-engine/` | The registry, the relay, the tunnel hub (routed by `k7-front`'s `routes/engine/`) |
 | `packages/engine-registry/` | The internal seam's paths and client, through which TypeScript reaches the registry and the hub |
-| `packages/engine-tunnel/` | The tunnel's wire, the TypeScript reference agent, jobs client, WebRTC answerer |
-| `apps/k7/backend-rs/crates/k7-local/` | Running the supervisor as a child of k7's Rust front under the desktop app |
-| `apps/k7-desktop/` | The desktop app (Tauri), k7 on a computer |
+| `apps/k7-daw-frontend/packages/engine-tunnel/` | The tunnel's wire, the TypeScript reference agent, jobs client, WebRTC answerer |
+| `apps/k7-daw-backend/packages/k7-local/` | Running the supervisor as a child of k7's Rust front under the desktop app |
+| `apps/k7-daw-desktop/` | The desktop app (Tauri), k7 on a computer |
 
 ## Two implementations, one wire
 
@@ -89,12 +89,12 @@ Several contracts have a C++ side and a TypeScript side kept equal by hand:
 
 | Contract | C++ | TypeScript |
 |---|---|---|
-| ProjectDoc | `engine/k7-runtime/engine/ProjectDoc.h`, `engine/k7-runtime/server/DocJson.cpp` | `packages/engine-protocol/project.ts` |
-| Host protocol (supervisor ↔ app) | `engine/k7-supervisor/src/HostProtocol.h` | the Rust `apps/k7/backend-rs/crates/k7-local/src/protocol.rs`, the Kotlin in `engine/k7-android` |
-| `~/.k7` layout | `engine/k7-supervisor/src/Paths.cpp` | `packages/engine-client/src/paths.ts` |
-| URL rules (registry, family, cache key) | `engine/k7-supervisor/src/Url.cpp` | `packages/web-protocol/services.ts` |
-| Tunnel agent | `engine/k7-supervisor/src/TunnelAgent.cpp` | `packages/engine-tunnel/agent.ts` |
-| WebRTC fragments | `engine/k7-supervisor/src/RtcFrames.cpp` | `packages/web-protocol/rtcFrames.ts` |
-| Performance score | `engine/k7-supervisor/src/Performance.cpp` | `packages/web-protocol/performance.ts` |
+| ProjectDoc | `apps/k7-daw-engine/k7-runtime/engine/ProjectDoc.h`, `apps/k7-daw-engine/k7-runtime/server/DocJson.cpp` | `apps/k7-daw-frontend/packages/engine-protocol/project.ts` |
+| Host protocol (supervisor ↔ app) | `apps/k7-daw-engine/k7-supervisor/src/HostProtocol.h` | the Rust `apps/k7-daw-backend/packages/k7-local/src/protocol.rs`, the Kotlin in `apps/k7-daw-android` |
+| `~/.k7` layout | `apps/k7-daw-engine/k7-supervisor/src/Paths.cpp` | `apps/k7-daw-frontend/packages/engine-client/src/paths.ts` |
+| URL rules (registry, family, cache key) | `apps/k7-daw-engine/k7-supervisor/src/Url.cpp` | `apps/k7-daw-frontend/packages/web-protocol/services.ts` |
+| Tunnel agent | `apps/k7-daw-engine/k7-supervisor/src/TunnelAgent.cpp` | `apps/k7-daw-frontend/packages/engine-tunnel/agent.ts` |
+| WebRTC fragments | `apps/k7-daw-engine/k7-supervisor/src/RtcFrames.cpp` | `apps/k7-daw-frontend/packages/web-protocol/rtcFrames.ts` |
+| Performance score | `apps/k7-daw-engine/k7-supervisor/src/Performance.cpp` | `apps/k7-daw-frontend/packages/web-protocol/performance.ts` |
 
-TypeScript cannot check a wire change against C++. When you change one side, change the other in the same commit and verify by running the engine. The tunnel is the exception that has a shared test: `packages/engine-tunnel` runs its suites against both agents (see [85](./85-registry-and-tunnel.md#tests)).
+TypeScript cannot check a wire change against C++. When you change one side, change the other in the same commit and verify by running the engine. The tunnel is the exception that has a shared test: `apps/k7-daw-frontend/packages/engine-tunnel` runs its suites against both agents (see [85](./85-registry-and-tunnel.md#tests)).

@@ -41,7 +41,7 @@ struct Result {
 };
 
 /** Announce to every registry in parallel, with the id's token and tunnel secret. Never throws: a payload that will not serialise is an outcome too. */
-/** What proves this machine to a studio that lists paired machines only (apps/k7/backend-rs/docs/engine/heartbeat.md). */
+/** What proves this machine to a studio that lists paired machines only (apps/k7-daw-backend/docs/engine/heartbeat.md). */
 struct Credentials {
     /** By registry URL, as the settings keep them. */
     std::map<std::string, std::string> deviceTokens;

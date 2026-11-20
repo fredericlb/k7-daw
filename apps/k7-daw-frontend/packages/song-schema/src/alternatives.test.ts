@@ -1,6 +1,6 @@
 // What a module's alternatives ARE: the list it offers and which one a name selects. Pure
 // struct work — APPLYING one is @studio/song's, and its own test lives beside it there.
-// See packages/song/docs/alternatives.md.
+// See apps/k7-daw-frontend/packages/song/docs/alternatives.md.
 
 import { describe, expect, it } from "vitest";
 import { alternativesOf, pickAlternative } from "./alternatives";

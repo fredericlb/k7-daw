@@ -82,7 +82,10 @@ const files = execFileSync(
   .filter(Boolean)
   // Generated, and nobody reads it.
   .filter(
-    (f) => !/\.generated\.|paraglide\/|packages\/k7-wasm\/src\/types\//.test(f),
+    (f) =>
+      !/\.generated\.|paraglide\/|apps\/k7-daw-frontend\/packages\/k7-wasm\/src\/types\//.test(
+        f,
+      ),
   )
   // A file deleted in the working tree is still in the index until the commit.
   .filter((f) => existsSync(f));

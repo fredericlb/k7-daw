@@ -1,5 +1,5 @@
 //! settle_vectors.rs — the native k7x half held to node: every `settle` and `apply` vector of `settle-vectors.json`
-//! (k7x and not), answered as `settleReferee.ts` answered it, envelope for envelope (apps/k7/backend-rs/docs/parity.md, "The settle").
+//! (k7x and not), answered as `settleReferee.ts` answered it, envelope for envelope (apps/k7-daw-backend/docs/parity.md, "The settle").
 //! What a reader gets wrong: an engine's TypeError matches by its class, since V8's words are not Rust's.
 
 use std::sync::OnceLock;

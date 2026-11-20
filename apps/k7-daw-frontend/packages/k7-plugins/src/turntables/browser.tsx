@@ -11,7 +11,7 @@ import { useDeckSet } from "./useDeckSet";
 import { Turntables } from "./views/Turntables";
 
 /** The props the drawer takes — a structural SUBSET of both mounts' ctx (the ring slot's and a
- *  device's), which is what makes one drawer legal in both (packages/k7-plugins/docs/plugins.md). */
+ *  device's), which is what makes one drawer legal in both (apps/k7-daw-frontend/packages/k7-plugins/docs/plugins.md). */
 export interface TurntablesPaneProps {
   surface: ProjectSurface;
   deck: Deck;

@@ -1,6 +1,6 @@
 # Editing a sequence's notes
 
-The rationale behind `packages/song-schema/src/yaml/sequenceFile.ts` — the writers behind the piano
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/sequenceFile.ts` — the writers behind the piano
 roll and `note add`. One note per line (a flow mapping), which is the shape a
 recorded sequence shares with a hand-entered one.
 
@@ -65,7 +65,7 @@ refuses anything under 2 precisely so that state cannot be written down.
 Both follow the rule `alternative:` follows when it goes back to the first set. `appendNotes` writes
 a pad's effects only when there is one, so a pad with no effect does not gain two keys saying so.
 `NoteIn` carries them so a note that is COPIED brings them along
-(`packages/song/docs/padEffects.md`).
+(`apps/k7-daw-frontend/packages/song/docs/padEffects.md`).
 
 ## …and one writer for a RECTANGLE
 
@@ -79,7 +79,7 @@ then undo a fifth of the way back, which is worse than either doing it or refusi
 document pass also means one parse and one serialise, where N calls re-read the file N times.
 
 A note is in when it **starts** inside, the rule the roll's rectangle already copies by
-(`apps/k7/frontend/src/clipboard.ts`). Taking them by overlap would put the same note in two
+(`apps/k7-daw-frontend/src/clipboard.ts`). Taking them by overlap would put the same note in two
 adjacent boxes. `repeat` and `skip` are never touched, so a pad crossed by a transposition keeps
 its effects, and a line the parse cannot read as a note is left alone rather than rewritten.
 
@@ -100,7 +100,7 @@ source, and a start before the sequence. Nothing is written when any of it refus
 
 ## Twice as long, playing twice
 
-`doubleSequence` is the ×2 in a note grid's header (`apps/k7/frontend/docs/clipEditors.md`), and
+`doubleSequence` is the ×2 in a note grid's header (`apps/k7-daw-frontend/docs/clipEditors.md`), and
 almost all of it is one question: **what a sequence's LENGTH is**. It is the WINDOW, and a sequence
 states one in either of two ways — a `from`/`to` pair of timecodes, or nothing at all, in which
 case the length is the notes' extent **rounded up to the bar**. That second rule is the compiler's
@@ -124,7 +124,7 @@ Three decisions follow from it:
 A LOOPED placement of the sequence needs the other half of the act — the window doubled and the
 passes halved, or four bars of a one-bar pattern become eight. That is `halveSequenceLoops` in
 `trackFile.ts`, walked across the project by `@studio/song-edit`, and
-`packages/song-edit/docs/sequenceLoops.md` is where it is reasoned out.
+`apps/k7-daw-frontend/packages/song-edit/docs/sequenceLoops.md` is where it is reasoned out.
 
 An empty sequence and a window holding nothing are both **refused by name**. Doubling nothing is a
 sequence that got longer with no more in it — the shape of a command that reports success and does
@@ -138,7 +138,7 @@ nothing, which is the one failure this codebase says everywhere else it will not
   difference is that a paste is new material and a transpose is notes that exist: losing one
   silently would leave the rest moved and no way to say what went. The engine's own `transpose`
   node clamps for a harder reason still — a dropped note leaves its note-off behind and hangs the
-  voice (`engine/k7-runtime/engine/DspGraph.cpp`).
+  voice (`apps/k7-daw-engine/k7-runtime/engine/DspGraph.cpp`).
 - **velocity is absolute, and 1 clears the field**, exactly as the singular verb does: a region set
   to full leaves a file that never mentions velocity, which is what an untouched sequence looks
   like. A relative factor would be a fifth verb, not a flag on this one.

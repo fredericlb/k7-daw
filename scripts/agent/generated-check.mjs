@@ -15,9 +15,19 @@ const constant = (text, name) =>
 
 async function wasm(file, pkg, withTypes, sources = "SOURCES") {
   const mod = await import(
-    pathToFileURL(join(root, "packages", pkg, "scripts", "rustSources.mjs"))
+    pathToFileURL(
+      join(
+        root,
+        "apps",
+        "k7-daw-frontend",
+        "packages",
+        pkg,
+        "scripts",
+        "rustSources.mjs",
+      ),
+    )
   );
-  const path = join("packages", pkg, "src", file);
+  const path = join("apps", "k7-daw-frontend", "packages", pkg, "src", file);
   const text = readFileSync(join(root, path), "utf8");
   const bad =
     constant(text, sources) !== mod.rustSourceHash() ||
@@ -30,24 +40,40 @@ await wasm("k7WasmSong.generated.ts", "k7-wasm", false, "SONG_SOURCES");
 {
   const mod = await import(
     pathToFileURL(
-      join(root, "packages", "audio-analysis", "scripts", "rustSources.mjs"),
+      join(
+        root,
+        "apps",
+        "k7-daw-frontend",
+        "packages",
+        "audio-analysis",
+        "scripts",
+        "rustSources.mjs",
+      ),
     )
   );
   const stamp = readFileSync(
-    join(root, "packages", "audio-analysis", "waveform.wasm.sources"),
+    join(
+      root,
+      "apps",
+      "k7-daw-frontend",
+      "packages",
+      "audio-analysis",
+      "waveform.wasm.sources",
+    ),
     "utf8",
   ).trim();
   if (stamp !== mod.rustSourceHash())
-    stale.push("packages/audio-analysis/waveform.wasm");
+    stale.push("apps/k7-daw-frontend/packages/audio-analysis/waveform.wasm");
 }
 {
-  const script = "packages/song-schema/scripts/genModuleTypes.mts";
+  const script =
+    "apps/k7-daw-frontend/packages/song-schema/scripts/genModuleTypes.mts";
   const r = spawnSync("npx", ["tsx", script, "--check"], {
     cwd: root,
     encoding: "utf8",
   });
   if (r.status !== 0)
-    stale.push("packages/song/rust/src/modules/types_generated.rs");
+    stale.push("apps/k7-daw-wasm/song/src/modules/types_generated.rs");
 }
 if (stale.length > 0) {
   console.error(`generated-check: stale:\n  ${stale.join("\n  ")}`);

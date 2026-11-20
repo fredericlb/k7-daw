@@ -1,7 +1,7 @@
 // SupervisorHost.swift — the app's half of the supervisor's NDJSON channel: what k7-local's host.rs
 // is on desktop. No iOS app may run a program of its own, so the supervisor is k7supervisor.framework, run on a
 // thread of its own over two pipes; and the engine is a library here too, so the supervisor's `engine` requests
-// are this app's to carry out. See engine/k7-runtime/docs/ios.md.
+// are this app's to carry out. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Foundation
 import os
@@ -274,7 +274,7 @@ final class SupervisorHost {
     }
 
     private static let engineStop: TimeInterval = 3
-    // The desktop host's bounds (apps/k7/backend-rs/crates/k7-local/src/host.rs).
+    // The desktop host's bounds (apps/k7-daw-backend/packages/k7-local/src/host.rs).
     private static let relaunchFirst: TimeInterval = 1
     private static let relaunchMax: TimeInterval = 30
     private static let healthy: TimeInterval = 20

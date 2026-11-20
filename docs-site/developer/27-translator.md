@@ -1,6 +1,6 @@
 # The translator: importing other DAWs' projects
 
-`packages/translator` turns another DAW's project into a k7 project folder. It is a library with no
+`apps/k7-daw-frontend/packages/translator` turns another DAW's project into a k7 project folder. It is a library with no
 routes and no UI; the file service is its only caller.
 
 ## Shape
@@ -13,12 +13,12 @@ routes and no UI; the file service is its only caller.
 
 | File | Role |
 |---|---|
-| `packages/translator/src/model.ts` | The neutral `Song` every importer produces: tracks with role, content type, colour, linear volume, 0..1 pan, mute, plugins, sends and clips; clips with start/length in beats, offset, fades, MIDI loop points, notes, disabled, warp markers. Deliberately no foreign format's model, so the emitter is format-blind. |
-| `packages/translator/src/dawproject.ts` | Unzips in memory, parses `project.xml` (fast-xml-parser), maps it onto the model. No disk I/O: it returns the song plus every asset to write. |
-| `packages/translator/src/ableton.ts` | The same for a gzipped `.als`, with a `readSample` callback so the caller decides which sample paths may be read. |
-| `packages/translator/src/abletonZip.ts` | A zipped "Collect All and Save" folder: picks the one set outside `Backup/` (the shallowest), resolves samples inside the archive, then calls `parseAls`. |
-| `packages/translator/src/inflate.ts` | Every unzip and gunzip goes through it, with a ceiling of 1 GiB on what an archive may inflate to, checked against the sizes the archive declares — an import is a file a stranger may upload. |
-| `packages/translator/src/emit.ts` | Writes the folder: `project.k7x`, the graph as segments (who feeds whom, which is how sends survive), one module per distinct plugin, nodes where a plugin's settings differ, clips, sequences, and a mixer strip per lane. |
+| `apps/k7-daw-frontend/packages/translator/src/model.ts` | The neutral `Song` every importer produces: tracks with role, content type, colour, linear volume, 0..1 pan, mute, plugins, sends and clips; clips with start/length in beats, offset, fades, MIDI loop points, notes, disabled, warp markers. Deliberately no foreign format's model, so the emitter is format-blind. |
+| `apps/k7-daw-frontend/packages/translator/src/dawproject.ts` | Unzips in memory, parses `project.xml` (fast-xml-parser), maps it onto the model. No disk I/O: it returns the song plus every asset to write. |
+| `apps/k7-daw-frontend/packages/translator/src/ableton.ts` | The same for a gzipped `.als`, with a `readSample` callback so the caller decides which sample paths may be read. |
+| `apps/k7-daw-frontend/packages/translator/src/abletonZip.ts` | A zipped "Collect All and Save" folder: picks the one set outside `Backup/` (the shallowest), resolves samples inside the archive, then calls `parseAls`. |
+| `apps/k7-daw-frontend/packages/translator/src/inflate.ts` | Every unzip and gunzip goes through it, with a ceiling of 1 GiB on what an archive may inflate to, checked against the sizes the archive declares — an import is a file a stranger may upload. |
+| `apps/k7-daw-frontend/packages/translator/src/emit.ts` | Writes the folder: `project.k7x`, the graph as segments (who feeds whom, which is how sends survive), one module per distinct plugin, nodes where a plugin's settings differ, clips, sequences, and a mixer strip per lane. |
 
 Choices worth knowing before changing it:
 
@@ -40,10 +40,10 @@ Choices worth knowing before changing it:
 
 ## The caller
 
-`packages/commands/src/runtime/importer.ts`:
+`apps/k7-daw-frontend/packages/commands/src/runtime/importer.ts`:
 
 - `IMPORTABLE` (`.dawproject`, `.als`, `.zip`) — what the file tree may import;
-  `DROPPABLE` (`DROPPABLE_PROJECTS` in `packages/web-protocol/projects.ts`: `.dawproject`, `.zip`) —
+  `DROPPABLE` (`DROPPABLE_PROJECTS` in `apps/k7-daw-frontend/packages/web-protocol/projects.ts`: `.dawproject`, `.zip`) —
   what may be dropped, since a lone `.als` names its samples by path and must sit beside them.
 - `translateInto` parses, picks a fresh top-level folder (the file's stem, `-2`, `-3`… when taken; a
   name somebody typed is refused if occupied rather than changed), emits, and
@@ -54,16 +54,16 @@ workspace, `importFile` for a dropped file's bytes, which are translated and nev
 are uploaded first and the texts land in one change set that creates the project's folder.
 
 In the editor, a click on such a file in the tree (`EditorTab.tsx`'s `open`) or `project import <path>`
-opens the two-phase dialog of `apps/k7/frontend/src/hooks/useProjectDialogs.ts` and
-`apps/k7/frontend/src/components/ImportDialog.tsx`: confirm runs the import and shows the log; **Open project** then
+opens the two-phase dialog of `apps/k7-daw-frontend/src/hooks/useProjectDialogs.ts` and
+`apps/k7-daw-frontend/src/components/ImportDialog.tsx`: confirm runs the import and shows the log; **Open project** then
 activates the result. The drop on a workspace row belongs to the home page
-(`apps/k7/frontend/src/projects/`).
+(`apps/k7-daw-frontend/src/projects/`).
 
 ## Tests
 
-`packages/translator/src/dawproject.test.ts`, `ableton.test.ts`, `abletonZip.test.ts` and
+`apps/k7-daw-frontend/packages/translator/src/dawproject.test.ts`, `ableton.test.ts`, `abletonZip.test.ts` and
 `emitNodes.test.ts` build small projects in memory and assert on the model and on the emitted files;
-`packages/commands/src/runtime/importer.vfs.test.ts` covers the Worker's import: the order of its uploads and its set, the folder a failed set takes away, the names and the hostile inputs.
+`apps/k7-daw-frontend/packages/commands/src/runtime/importer.vfs.test.ts` covers the Worker's import: the order of its uploads and its set, the folder a failed set takes away, the names and the hostile inputs.
 
 ## See also
 

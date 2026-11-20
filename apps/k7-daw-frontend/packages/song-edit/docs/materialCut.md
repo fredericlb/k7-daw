@@ -3,7 +3,7 @@
 `materialCut.ts` writes material, where `trackMix.ts` moves and resizes placements. `event split`
 writes two sequences; `selection consolidate` writes one over a range. Sequences only — notes are
 text this package reads and writes, while the same verbs on audio need a render and live with the
-bounce. The vocabulary and the user-facing rules are `packages/song/docs/materialCut.md`; this
+bounce. The vocabulary and the user-facing rules are `apps/k7-daw-frontend/packages/song/docs/materialCut.md`; this
 page holds the decisions behind the code.
 
 ## Names climb, and nothing is overwritten

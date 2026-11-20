@@ -1,5 +1,5 @@
 //! hub.rs — the file hub of the front: the hello's ticket, `/api/files` answered by a device's account runtime behind it (410 on a
-//! server), the libraries, the cut's context (`k7-hub`). The runtimes call back on `/api/files-hub/internal` with their secret. Choices: `apps/k7/backend-rs/docs/files.md`.
+//! server), the libraries, the cut's context (`k7-hub`). The runtimes call back on `/api/files-hub/internal` with their secret. Choices: `apps/k7-daw-backend/docs/files.md`.
 //! What a reader gets wrong: `/api/files` has no session guard; the ticket is its gate, the session its fallback.
 
 mod answers;

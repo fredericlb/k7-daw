@@ -2,7 +2,7 @@
 //! McIlroy's LCS, `diffIndices`, `diff3MergeRegions`, the false-conflict rule. Held by the merge tests below and the settle vectors.
 //! What a reader gets wrong: this is not "a" diff3. Another LCS finds other matches among repeated lines, so other
 //! conflict boundaries; only the candidate search is faster (a gallop where node scans), its answer the same.
-//! Choices and the work budget: apps/k7/backend-rs/docs/parity.md, "The text merge".
+//! Choices and the work budget: apps/k7-daw-backend/docs/parity.md, "The text merge".
 
 use std::collections::HashMap;
 

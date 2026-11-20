@@ -6,7 +6,7 @@ listed a moment ago stays in a browser's cached list, whose next `select` then f
 
 ## Only three fields can refuse one
 
-`read_heartbeat` (`crates/k7-engine/src/registry/heartbeat.rs`) requires what there is no entry without: the **id** (at most 128 characters of
+`read_heartbeat` (`packages/k7-engine/src/registry/heartbeat.rs`) requires what there is no entry without: the **id** (at most 128 characters of
 `[A-Za-z0-9._-]`, since it travels in paths and log lines), the **token** (at most 256), and
 **`addresses.port`**, where the engine answers. `tunnelSecret` is optional, for a supervisor older
 than it, but a malformed one refuses the heartbeat rather than being cleaned away: dropping it would
@@ -23,7 +23,7 @@ Everything else is CLEANED, and each cleaning is said:
 | `addresses.lanIps` | an entry not IPv4 | the others |
 | `performance` | any figure out of its bounds | no performance at all — the picker shows no rating |
 | `libraryLevel` | anything but an integer from 1 | no level — read as 1, what a supervisor older than the field runs |
-| `protocol` | anything but an integer from 1 | no version — read as 1, what a supervisor older than the field speaks (`packages/engine-protocol/docs/version.md`) |
+| `protocol` | anything but an integer from 1 | no version — read as 1, what a supervisor older than the field speaks (`apps/k7-daw-frontend/packages/engine-protocol/docs/version.md`) |
 | `build` | not 1 to 64 of `[A-Za-z0-9._-]` | no stamp |
 | `safeMode` | not a boolean | not in safe mode |
 | `chains` | not an object, or a name that is not a string | that chain left out; no chains, as an older supervisor sends |
@@ -45,7 +45,7 @@ come from loopback is the device's to use (`ownership.md`).
 ## What is logged here
 
 `[registry] …` on the front's stderr, at most once a minute per engine and per complaint
-(`crates/k7-engine/src/log.rs`), since a refused machine retries every 5 s:
+(`packages/k7-engine/src/log.rs`), since a refused machine retries every 5 s:
 
 - a heartbeat refused, and why;
 - a heartbeat taken with fields cleaned, and which;

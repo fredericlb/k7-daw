@@ -219,7 +219,7 @@ pub fn splice_chain(
     );
     let header = [
         format!("The bench, with the library chain \"{ref_}\" COPIED between the input and the fader."),
-        "Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7/backend-rs/docs/banc.md.".to_owned(),
+        "Nothing here is saved by itself: `chain save <name>` writes the run into your chains. See apps/k7-daw-backend/docs/banc.md.".to_owned(),
     ];
     ws_write_text(fs, &graph, &format_chains(&modules, &bypassed, &header)?)?;
     Ok(Spliced {

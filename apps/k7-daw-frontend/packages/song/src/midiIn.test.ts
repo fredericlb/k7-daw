@@ -14,7 +14,7 @@ import { setDoc, writeNode } from "./testSupport";
 import { wsData } from "./yaml/workspaceDoc";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const DEMOS = join(here, "..", "..", "..", "demos");
+const DEMOS = join(here, "..", "..", "..", "..", "..", "demos");
 
 describe("a MIDI device wired to a lane", () => {
   let ws: string;

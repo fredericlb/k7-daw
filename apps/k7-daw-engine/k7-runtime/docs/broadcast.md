@@ -4,7 +4,7 @@ The engine sends its master bus over the same WebSocket, which is what lets a br
 Three things govern the design and each has a number below: end-to-end latency, the CPU cost
 on the audio thread, and what happens when a listener drops.
 
-This is the engine half. The browser half is `packages/engine-browser/docs/streaming.md`,
+This is the engine half. The browser half is `apps/k7-daw-frontend/packages/engine-browser/docs/streaming.md`,
 which holds the wire-format reasoning; this page is about what happens inside the engine.
 
 ## Where the tap goes, and why there
@@ -128,7 +128,7 @@ because the two can disagree and only the stored one cannot strand a tap.
 The sender's per-session bookkeeping — the sequence counters and the "no sample rate yet" latch —
 is pruned against the sessions the **engine** still holds, never against who is listening right
 now. A counter reset under a listener who came back would read as a four-billion-frame hole:
-`seqGap` in `packages/engine-protocol/stream.ts` is unsigned.
+`seqGap` in `apps/k7-daw-frontend/packages/engine-protocol/stream.ts` is unsigned.
 
 The listener set is keyed by raw socket pointer, matched against `server.getClients()`. The
 sender prunes entries that are no longer connected on every pass, so an address the
@@ -147,7 +147,7 @@ destroy a joinable `std::thread` and turn a clean error exit into `std::terminat
 below mean anything. Four things about how it is built:
 
 - **It bundles the real modules**, fed to esbuild through stdin with `resolveDir` set to the repo
-  rather than written to a temp file. The whole point is to exercise `packages/engine-browser` as
+  rather than written to a temp file. The whole point is to exercise `apps/k7-daw-frontend/packages/engine-browser` as
   shipped; a hand-written copy in the page would prove only that the copy works. The `resolveDir`
   matters because esbuild resolves bare specifiers relative to the importing FILE, so an entry
   sitting in `%TEMP%` cannot see `node_modules` and every `@studio/*` comes back unresolved.
@@ -166,7 +166,7 @@ steadily one way is two clocks disagreeing, and that is what a fixed cushion eve
 
 ## The numbers
 
-`node engine/k7-runtime/scripts/measure-broadcast.mjs ws://HOST:PORT [seconds]` subscribes,
+`node apps/k7-daw-engine/k7-runtime/scripts/measure-broadcast.mjs ws://HOST:PORT [seconds]` subscribes,
 decodes with the same `@studio/engine-protocol/stream` the browser uses, and prints the
 numbers. It sends its own project first — a 4OSC holding a long note, so there is real
 signal; an empty track proves only that silence is silent, since "the tap sees the master"
@@ -219,7 +219,7 @@ It also moves a number. The sender's jitter is 2.2 ms measured from Node; throug
 it is 22 ms over 30 s and 66 ms over 110 s, because what is being measured there is the
 listener's *main thread*. One underrun, ring down to 64 frames. That is why the default
 cushion is 150 ms rather than 50 — the full reasoning is in
-`packages/engine-browser/docs/streaming.md`.
+`apps/k7-daw-frontend/packages/engine-browser/docs/streaming.md`.
 
 ### Still unmeasured
 
@@ -253,7 +253,7 @@ again once the last one unsubscribes, closes, or is swept as gone.
   little-endian int16, half the bytes (about 1.5 Mbit/s) for a sixteen-bit floor no listening
   room hears. The engine encodes each codec once per frame and only when some listener holds it,
   so float32 listeners pay nothing. The default stays float32 because a decoder that does not
-  know codec 2 rejects the frame; k7's pages know it (`packages/engine-protocol/stream.ts`) and ask
+  know codec 2 rejects the frame; k7's pages know it (`apps/k7-daw-frontend/packages/engine-protocol/stream.ts`) and ask
   for it.
 * **No drift correction**, for the reason in the browser doc: which fix is right depends on
   how much drift there is, and that is measurement 5.

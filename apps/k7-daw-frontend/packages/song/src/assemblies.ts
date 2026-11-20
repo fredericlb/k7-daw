@@ -204,7 +204,7 @@ export function assemblyIssues(dir: string): Diagnostic[] {
         severity: "warning",
         message:
           `assembly '${id}' uses '${assembly.uses}', which no library this project can see holds — ` +
-          `its box draws its members with no plugs and no knobs (packages/song/docs/assemblies.md)`,
+          `its box draws its members with no plugs and no knobs (apps/k7-daw-frontend/packages/song/docs/assemblies.md)`,
       });
       continue;
     }

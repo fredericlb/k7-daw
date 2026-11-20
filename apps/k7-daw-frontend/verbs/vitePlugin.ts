@@ -9,9 +9,7 @@ const ID = "virtual:k7-verbs-worker";
 const RESOLVED = `\0${ID}`;
 const DEV_DIR = "/verbs-worker/";
 const BUILD_DIR = "assets/verbs/";
-const PACKAGES = fileURLToPath(
-  new URL("../../../../packages/", import.meta.url),
-);
+const PACKAGES = fileURLToPath(new URL("../../../packages/", import.meta.url));
 
 export function verbsWorkerPlugin(): Plugin {
   let building = false;

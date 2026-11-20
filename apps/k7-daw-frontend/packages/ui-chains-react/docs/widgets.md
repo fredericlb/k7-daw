@@ -35,7 +35,7 @@ changes as fast as the playhead moves, and a prop would re-render every node in 
 frame. The pad holds its own subscription and reads a BOOLEAN, so React's own `Object.is` ends
 the render there. The graph does not know how the answer is arrived at — k7 derives it from the
 arrangement and the playhead, which is why it lights for a SEQUENCE and not for live MIDI or a
-strudel lane, whose notes the browser never sees (`packages/song/docs/racks.md`).
+strudel lane, whose notes the browser never sees (`apps/k7-daw-frontend/packages/song/docs/racks.md`).
 
 A pad also draws BARE. The grid is the picture, and sixteen three-letter symbols in a card this
 size is a wall of text where a drum machine's face should be. The symbol is still the widget's
@@ -64,7 +64,7 @@ an escape hatch — a shader node with nothing picked passes its picture through
 ## The value chain, and the identity trick under it
 
 The value a widget shows is **override, else engine, else authored, else declared default, else
-nothing** (`apps/k7/frontend/docs/chainsGraph.md`). An override is optimistic: it outranks the
+nothing** (`apps/k7-daw-frontend/docs/chainsGraph.md`). An override is optimistic: it outranks the
 incoming frame until that frame catches up.
 
 **A param nobody set plays at its default, so the widget shows that default.** The engine does not
@@ -191,10 +191,10 @@ name needs is visibly the name's. Turned rather than stacked letter
 by letter, because a word stays a word: stacked capitals spell themselves out one at a time and
 take a letter's full height each. The group is inert: `pointer-events: none`, so a click on its bare part
 falls through to the card as a click on empty grid does. It draws none of the controls it frames.
-They are the panel's own widgets, laid on top of it (`packages/song-schema/docs/moduleFile.md`).
+They are the panel's own widgets, laid on top of it (`apps/k7-daw-frontend/packages/song-schema/docs/moduleFile.md`).
 
 A widget in a named or switched group's FIRST column is drawn 12 px in from its left edge
-(`packages/ui-chains/src/groupEdge.ts`), so the name and the dot have that strip to themselves.
+(`apps/k7-daw-frontend/packages/ui-chains/src/groupEdge.ts`), so the name and the dot have that strip to themselves.
 Its box narrows from the left; its cells do not move. The grid is shared by every section on the
 panel, so the room comes out of the widget's own drawing rather than out of a column, which would
 put one section's columns out of line with the next. A knob barely shrinks — its size is bound
@@ -217,7 +217,7 @@ would be a lie the next frame corrects.
 ## The MIX knob, `@mix`
 
 A knob bound to `@mix` is the ENGINE's dry/wet around the module, the same on every effect
-(`engine/k7-runtime/docs/mix.md`). It is an `@` bind that is set LIVE: `widgetTarget` makes it a
+(`apps/k7-daw-engine/k7-runtime/docs/mix.md`). It is an `@` bind that is set LIVE: `widgetTarget` makes it a
 plugin target, so a drag reaches the engine at once through `set-plugin-param` and the release
 commits `node param <node> "@mix" <v>`, which writes the module's `mix:`. Every other `@` bind is
 a module field, heard only at the next build. It reads as a percentage like the crossfade knob
@@ -373,5 +373,5 @@ the same browsing popup the `+` on an arrow uses.
 
 `dropdown` + `library` is the older spelling of the same widget, from when the files came from a
 shared library instead of the module's own `assets/`. It is read as a filepicker so every panel
-already written keeps working — `packages/song/docs/filePicker.md`. Either way the param is the
+already written keeps working — `apps/k7-daw-frontend/packages/song/docs/filePicker.md`. Either way the param is the
 widget's BIND: an older panel's `library:` names a folder (`nam`), not a param.

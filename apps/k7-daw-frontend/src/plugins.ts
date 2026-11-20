@@ -1,7 +1,7 @@
 // plugins.ts — the shell's BROWSER composition point: the browser half of k7's builtin
 // plugins, registered into the pane registry. Imported by App for its side effect, so the
 // registration lands in the App chunk (the registry's seed imports the same components the
-// shell already pulls) and never in the eager appMain chunk. See packages/k7-sdk/docs/sdk.md.
+// shell already pulls) and never in the eager appMain chunk. See apps/k7-daw-frontend/packages/k7-sdk/docs/sdk.md.
 
 import { builtinBrowserPlugins } from "@studio/k7-plugins/browser";
 import type { PaneDrawerContribution } from "@studio/k7-sdk/plugin";

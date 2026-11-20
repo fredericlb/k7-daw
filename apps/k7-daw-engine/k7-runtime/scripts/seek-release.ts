@@ -1,7 +1,7 @@
 // seek-release.ts — does a SEEK while playing end what was sounding, notes and tails, on every
 // non-VST instrument and tail effect? Point it at a running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/seek-release.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/seek-release.ts [ws://127.0.0.1:8765]
 //
 // Each case plays one note far longer than the run, seeks into empty timeline, and reads the level
 // after. A tail case is also stopped instead, which KEEPS the tail: that is what proves the case has

@@ -27,9 +27,9 @@ export interface WebWidget {
     | "filepicker"
     // A screen the panel's `widgets.js` draws under this widget's id — ui-chains-react's lcdScreen.md.
     | "lcdscreen"
-    // One sound of a rack: a pad, its note and its library sample — packages/song/docs/racks.md.
+    // One sound of a rack: a pad, its note and its library sample — apps/k7-daw-frontend/packages/song/docs/racks.md.
     | "tap"
-    // A coloured frame under the widgets inside its box — packages/song-schema/docs/moduleFile.md.
+    // A coloured frame under the widgets inside its box — apps/k7-daw-frontend/packages/song-schema/docs/moduleFile.md.
     | "group";
   col: number;
   row: number;
@@ -120,7 +120,7 @@ export interface WebChainStep {
   notSupported?: boolean; // plugin.type is "not_supported" — k7 can't load it; bypassed
   unknownPlugin?: boolean; // plugin.type is an UNKNOWN format (typo / unimported) — bypassed
   hasNativePluginUI?: boolean; // an external plugin with a native editor the engine can open
-  /** A lane's STRIP (the internal `Mixer`): it cannot be bypassed and has no alternatives — packages/song/docs/trackMixer.md. */
+  /** A lane's STRIP (the internal `Mixer`): it cannot be bypassed and has no alternatives — apps/k7-daw-frontend/packages/song/docs/trackMixer.md. */
   strip?: boolean;
   /** The model this module names and the machine has not got, when its `model_url` says where to fetch it — the right-click's "Download model". */
   modelDownload?: { file: string; url: string };
@@ -136,10 +136,10 @@ export interface WebChainStep {
   defaults?: Record<string, number>;
   // The engine's PluginDoc id (`chain:module`) — what set-plugin-param addresses. Only for a real plugin.
   pluginId?: string;
-  /** The module's other attribute SETS, sent only when there is a CHOICE — packages/song/docs/alternatives.md. */
+  /** The module's other attribute SETS, sent only when there is a CHOICE — apps/k7-daw-frontend/packages/song/docs/alternatives.md. */
   alternatives?: string[];
   alternative?: string;
-  /** The modules it can run AS, and which it does, sent only when there is a CHOICE — packages/song/docs/engines.md. */
+  /** The modules it can run AS, and which it does, sent only when there is a CHOICE — apps/k7-daw-frontend/packages/song/docs/engines.md. */
   engines?: string[];
   engine?: string;
   // io "in" only: whether the interface signal is audible. A module FIELD, not a param — see docs/graph.md.
@@ -188,7 +188,7 @@ export interface WebCurve {
   shape?: "sine" | "triangle" | "saw" | "square"; // lfo only
   /** A `custom` curve's POINTS verbatim, absent for every other type — the definition, not the bake; docs/graph.md. */
   points?: { time: string; value: number }[];
-  /** …and the WHOLE definition, defaults filled: what the curve editor opens on (packages/song/docs/curves.md). */
+  /** …and the WHOLE definition, defaults filled: what the curve editor opens on (apps/k7-daw-frontend/packages/song/docs/curves.md). */
   spec?: CurveSpec;
 }
 
@@ -196,14 +196,14 @@ export interface WebCurve {
 export type LfoShape = "sine" | "triangle" | "saw" | "square";
 export type CurvePolarity = "unipolar" | "bipolar";
 
-/** One of WHEN a curve runs — a curve runs while ANY of its conditions holds; `retrigger` restarts it the moment this one comes true (packages/song/docs/curves.md). */
+/** One of WHEN a curve runs — a curve runs while ANY of its conditions holds; `retrigger` restarts it the moment this one comes true (apps/k7-daw-frontend/packages/song/docs/curves.md). */
 export type CurveCondition =
   | { type: "start"; at: string; retrigger?: boolean }
   | { type: "end"; at: string; retrigger?: boolean }
   | { type: "between"; start: string; end: string; retrigger?: boolean }
   | { type: "event"; event: string; retrigger?: boolean };
 
-/** Which half of its output a curve keeps: all of it, only what is above 0, or only what is below (packages/song/docs/curves.md). */
+/** Which half of its output a curve keeps: all of it, only what is above 0, or only what is below (apps/k7-daw-frontend/packages/song/docs/curves.md). */
 export type CurveCut = "none" | "positive" | "negative";
 
 /** One curve, every field resolved — the model a file is read into, the bake samples, and the editor writes. */
@@ -309,7 +309,7 @@ interface WebPlug {
   mandatory?: boolean;
 }
 
-/** One ASSEMBLY as the browser receives it, named apart from the `WebAssembly` global — packages/song/docs/assemblies.md. */
+/** One ASSEMBLY as the browser receives it, named apart from the `WebAssembly` global — apps/k7-daw-frontend/packages/song/docs/assemblies.md. */
 export interface WebNodeAssembly {
   uses: string; // the template ref (`@k7-core/turntable`)
   label: string; // the template's `label:`, else the instance's own name
@@ -344,11 +344,11 @@ export interface WebGraph {
     string,
     { alternatives: string[]; alternative: string }
   >;
-  /** What is BAKED, by node name: `"at"` the point, `"inside"` what it contains — packages/song/docs/freeze.md. */
-  // A rack node's taps routed to subchains: the tap, and the first node of the run it feeds (packages/song/docs/racks.md).
+  /** What is BAKED, by node name: `"at"` the point, `"inside"` what it contains — apps/k7-daw-frontend/packages/song/docs/freeze.md. */
+  // A rack node's taps routed to subchains: the tap, and the first node of the run it feeds (apps/k7-daw-frontend/packages/song/docs/racks.md).
   tapFeeds?: { node: string; tap: string; to: string }[];
   frozen?: Record<string, "at" | "inside">;
-  /** What an AUTOMATIC freeze bakes, node → VST module; apart from `frozen`, a touch thaws it (packages/song/docs/autoFreeze.md). */
+  /** What an AUTOMATIC freeze bakes, node → VST module; apart from `frozen`, a touch thaws it (apps/k7-daw-frontend/packages/song/docs/autoFreeze.md). */
   autoFrozen?: Record<string, string>;
   /** What an automatic freeze WOULD bake, node → VST module: the engine lacks the VST and no render is made yet. */
   autoFreezeWaiting?: Record<string, string>;

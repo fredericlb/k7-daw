@@ -1,5 +1,5 @@
 // `node param <node> ir <file>` — a cabinet IR picked from the libraries' `irs/`, through the same verb an
-// amp `model` is, and checked against the same list the panel's picker offers (packages/song/docs/libraryFiles.md).
+// amp `model` is, and checked against the same list the panel's picker offers (apps/k7-daw-frontend/packages/song/docs/libraryFiles.md).
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

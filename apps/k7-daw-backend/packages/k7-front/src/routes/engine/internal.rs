@@ -1,4 +1,4 @@
-//! internal.rs — the engine half of the internal seam (`apps/k7/backend-rs/docs/engine/reach.md`), which the
+//! internal.rs — the engine half of the internal seam (`apps/k7-daw-backend/docs/engine/reach.md`), which the
 //! hub's own services call over loopback: views of the registry, the render machine, and loopback bindings.
 //! Gated by a loopback peer AND the shared secret; outside the web chain.
 

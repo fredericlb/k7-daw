@@ -1,7 +1,7 @@
 // CompStrip.tsx — a comped event as the waveform panel shows it: one strip across the event, each
 // piece in its take's colour with its waveform, and each a button — the piece clicked is the one the
 // wave below shows and edits. The colours are the takes view's (`takeColor`), so the two agree on
-// which take is which. See docs/clipEditors.md and packages/song/docs/takes.md.
+// which take is which. See docs/clipEditors.md and apps/k7-daw-frontend/packages/song/docs/takes.md.
 
 import { cn } from "@studio/ui/lib/utils";
 import type { EnvelopeProject } from "../clipEnvelope";

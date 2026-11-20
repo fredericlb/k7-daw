@@ -1,5 +1,5 @@
 // capacity.ts — the song crate's capacity project (cap128), written to a folder: 128 lanes of 200 events, 16 plugins a lane, 16 buses, 3,072 automations.
-// What a reader gets wrong: it is a port of `capacity_files()` in packages/song/rust/tests/all/doc_support/world.rs; change them together.
+// What a reader gets wrong: it is a port of `capacity_files()` in apps/k7-daw-wasm/song/tests/all/doc_support/world.rs; change them together.
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

@@ -9,7 +9,7 @@ namespace k7 {
 
 namespace {
 
-// The audio stream's magic, "LSTR" as a little-endian u32 (engine/k7-runtime/server/AudioSender.cpp).
+// The audio stream's magic, "LSTR" as a little-endian u32 (apps/k7-daw-engine/k7-runtime/server/AudioSender.cpp).
 constexpr char kStreamMagic[4] = {'R', 'T', 'S', 'L'};
 
 }  // namespace

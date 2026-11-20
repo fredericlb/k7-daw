@@ -1,6 +1,6 @@
 //! local — the machine's own engine, run by the front when a device's host turns it on (`K7_LOCAL_ENGINE=front`):
 //! `/api/local/engine*` answered here, the supervisor started once the front listens and its registry answers, and
-//! stopped before the front stops. Choices: `apps/k7/backend-rs/docs/local.md`.
+//! stopped before the front stops. Choices: `apps/k7-daw-backend/docs/local.md`.
 //! What a reader gets wrong: `/api/local` is a device's whether or not it runs the engine.
 
 pub mod export;

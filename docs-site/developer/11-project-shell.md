@@ -1,18 +1,18 @@
 # project-shell: what an app needs before it can draw
 
-`packages/project-shell` (`@studio/project-shell`) is what any app that opens a project needs before drawing anything: the launch address, the file-service transport, the gate that opens the project, idle handling, undo, and the app's own confirm and toast. k7 mounts it.
+`apps/k7-daw-frontend/packages/project-shell` (`@studio/project-shell`) is what any app that opens a project needs before drawing anything: the launch address, the file-service transport, the gate that opens the project, idle handling, undo, and the app's own confirm and toast. k7 mounts it.
 
 ## Exports
 
 | Subpath | File | Holds |
 |---|---|---|
-| `./launch` | `packages/project-shell/src/launch.ts` | Re-exports of the address parsing in `packages/web-protocol/projects.ts` (`parseLaunch`, `parseExternal`, `externalUrl`, `isExternalIndex`, `projectBasename`, `launchUrl`…) plus `projectsUrl`. The parsing lives in web-protocol because k7's home page writes these addresses and both editors read them. |
-| `./fileApi` | `packages/project-shell/src/fileApi.ts` | The transport to the file service: `configureFileApi`, `fget`, `fsend`, `fileHeaders`, `mediaUrl`. |
-| `./files` | `packages/project-shell/src/files.ts` | Routes that need no compiled view: open, bench, tree, read, write, fmt, folder, rename, move, delete, sync state, engine unload. |
-| `./project` | `packages/project-shell/src/project.ts` | `projectApi`: the shared routes plus the compiled-project ones (commands, completion, undo/redo, preferences, vim). k7's `api.ts` spreads it. |
-| `./gate` | `packages/project-shell/src/ProjectGate.tsx` | The gate component. |
-| `./idle` | `packages/project-shell/src/idle.ts` | Idle detection and the sleep rule. |
-| `./undo` | `packages/project-shell/src/undo.ts` | `runUndo` / `runRedo`. |
+| `./launch` | `apps/k7-daw-frontend/packages/project-shell/src/launch.ts` | Re-exports of the address parsing in `apps/k7-daw-frontend/packages/web-protocol/projects.ts` (`parseLaunch`, `parseExternal`, `externalUrl`, `isExternalIndex`, `projectBasename`, `launchUrl`…) plus `projectsUrl`. The parsing lives in web-protocol because k7's home page writes these addresses and both editors read them. |
+| `./fileApi` | `apps/k7-daw-frontend/packages/project-shell/src/fileApi.ts` | The transport to the file service: `configureFileApi`, `fget`, `fsend`, `fileHeaders`, `mediaUrl`. |
+| `./files` | `apps/k7-daw-frontend/packages/project-shell/src/files.ts` | Routes that need no compiled view: open, bench, tree, read, write, fmt, folder, rename, move, delete, sync state, engine unload. |
+| `./project` | `apps/k7-daw-frontend/packages/project-shell/src/project.ts` | `projectApi`: the shared routes plus the compiled-project ones (commands, completion, undo/redo, preferences, vim). k7's `api.ts` spreads it. |
+| `./gate` | `apps/k7-daw-frontend/packages/project-shell/src/ProjectGate.tsx` | The gate component. |
+| `./idle` | `apps/k7-daw-frontend/packages/project-shell/src/idle.ts` | Idle detection and the sleep rule. |
+| `./undo` | `apps/k7-daw-frontend/packages/project-shell/src/undo.ts` | `runUndo` / `runRedo`. |
 | `./ask`, `./toast` | `src/ask.tsx`, `src/toast.tsx` | The app's own confirm/prompt (replacing the OS box, which ignored the Escape ladder) and toasts. |
 | `./profiling` | `src/profiling.ts` | `PROFILING`, on with `?profile=1` or `studio.profile` in localStorage. |
 
@@ -52,4 +52,4 @@ Only `@local/<workspace>/<project>` and `@banc` addresses resolve; an older two-
 
 ## Tests
 
-`npm run test` in `packages/project-shell`: launch parsing, the transport's retry and sharing, idle, command and completion routes.
+`npm run test` in `apps/k7-daw-frontend/packages/project-shell`: launch parsing, the transport's retry and sharing, idle, command and completion routes.

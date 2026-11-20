@@ -2,7 +2,7 @@
 //! Wasmtime, the analysis and its sidecar, the decodes and transcodes through ffmpeg, the video probe, the whisper
 //! command lines and the `JSON.stringify` and ECMAScript coercions the answers are spelt with. No HTTP here.
 //! What a reader gets wrong: everything is synchronous and for a blocking thread; the front owns the scheduling.
-//! The choices and their proofs: apps/k7/backend-rs/docs/file-media.md.
+//! The choices and their proofs: apps/k7-daw-backend/docs/file-media.md.
 
 pub mod analyse;
 pub mod decode;

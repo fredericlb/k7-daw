@@ -31,7 +31,7 @@ export const GraphFileSchema = z
     bypassed: z.array(z.string().min(1)).optional(),
     // BUSES heard through their destinations only, their dry path to the sum removed — docs/busOnly.md.
     bus_only: z.array(z.string().min(1)).optional(),
-    // Runs FED by one tap of a rack node rather than by a link: the tap, and the first node of the run (packages/song/docs/racks.md).
+    // Runs FED by one tap of a rack node rather than by a link: the tap, and the first node of the run (apps/k7-daw-frontend/packages/song/docs/racks.md).
     tap_feeds: z
       .array(
         z

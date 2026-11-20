@@ -21,9 +21,9 @@ ts = ["dep:ts-rs", "song-schema/ts"]
 song = ["dep:song", "dep:song-edit"]
 
 [dependencies]
-song-schema = { path = "../../song-schema/rust" }
-song = { path = "../../song/rust", default-features = false, optional = true }
-song-edit = { path = "../../song-edit/rust", optional = true }
+song-schema = { path = "../song-schema" }
+song = { path = "../song", default-features = false, optional = true }
+song-edit = { path = "../song-edit", optional = true }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["float_roundtrip"] }
 ts-rs = { version = "11", optional = true }

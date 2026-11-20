@@ -4,7 +4,7 @@ Sub-step 2e of [rustCompiler.md](rustCompiler.md), whose decisions 1 to 120, out
 decisions are in [rustCompilerClips.md](rustCompilerClips.md) and [rustCompilerCurves.md](rustCompilerCurves.md). It joins what 2d, 2f and 2g
 answer: it reads a project's compile inputs together, names which nodes are lanes and which engine track each chain's steps land on, says what each
 input plays against this machine's rig, reads the assemblies (a drawing, nothing to do with sound), resolves the console and reports every
-reference that points at nothing. It builds no `ProjectDoc`, and nothing here is wired to a route. Paths are relative to `packages/song`.
+reference that points at nothing. It builds no `ProjectDoc`, and nothing here is wired to a route. Paths are relative to `apps/k7-daw-frontend/packages/song`.
 
 ## Corrections to the 2e row of `rustCompiler.md`
 

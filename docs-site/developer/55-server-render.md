@@ -15,12 +15,12 @@ a server has no GPU, so WebGL runs on SwiftShader (`--use-angle=swiftshader
 
 | file | role |
 |---|---|
-| `packages/commands/src/verbs/pictureRender.ts` | parses `[webm\|mp4] [wav\|none] [settings]` (settings through `parseVideoSettings`), starts the work under the background tag `picture render` |
-| `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/verb_host/picture.rs` | the `picture` member the verb calls on the server |
-| `apps/k7/backend-rs/crates/k7-picture/src/lib.rs` | the render: scene, mixdown, Chromium over the DevTools protocol, `find_chromium` (`apps/k7/backend-rs/crates/k7-file-service/src/shares/picture.rs`) |
-| `packages/song-video/src/sceneFrom.ts` | builds the scene, `use: "export"`, with the job's own media URLs |
-| `packages/ui-eyes/src/renderPage.ts` | the page Chromium loads: fetches the job, decodes the mixdown, calls `exportScene`, posts the result |
-| `packages/song-schema/src/renderSettings.ts` | the one parser of `size=`, `quality=`, `from=`, `to=`, shared with `project export video` |
+| `apps/k7-daw-frontend/packages/commands/src/verbs/pictureRender.ts` | parses `[webm\|mp4] [wav\|none] [settings]` (settings through `parseVideoSettings`), starts the work under the background tag `picture render` |
+| `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/verb_host/picture.rs` | the `picture` member the verb calls on the server |
+| `apps/k7-daw-backend/packages/k7-picture/src/lib.rs` | the render: scene, mixdown, Chromium over the DevTools protocol, `find_chromium` (`apps/k7-daw-backend/packages/k7-file-service/src/shares/picture.rs`) |
+| `apps/k7-daw-frontend/packages/song-video/src/sceneFrom.ts` | builds the scene, `use: "export"`, with the job's own media URLs |
+| `apps/k7-daw-frontend/packages/ui-eyes/src/renderPage.ts` | the page Chromium loads: fetches the job, decodes the mixdown, calls `exportScene`, posts the result |
+| `apps/k7-daw-frontend/packages/song-schema/src/renderSettings.ts` | the one parser of `size=`, `quality=`, `from=`, `to=`, shared with `project export video` |
 
 ## The job
 
@@ -60,5 +60,5 @@ while one runs is refused. The result is visible as the new file in `exports/`; 
 the file service's log. Install Chromium (or Chrome) on the file
 service's machine or set `STUDIO_CHROMIUM`.
 
-The behaviour is pinned by `packages/commands/src/pictureRender.test.ts`, which checks the verb's
+The behaviour is pinned by `apps/k7-daw-frontend/packages/commands/src/pictureRender.test.ts`, which checks the verb's
 parsing, background tagging and refusals against a fake host rather than launching a browser.

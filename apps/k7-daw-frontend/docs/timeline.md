@@ -20,7 +20,7 @@ Three states existed and already excluded one another — a clip in hand, a rect
 neither — and each already made `hjkl` mean something different. `timelineMode.ts` gives them one
 name, and **derives it rather than storing it**: naming a state must not add a fourth source of
 truth that can come to disagree with the three it reads. That is the rule
-`packages/song/docs/surfaces.md` states for `surfaces/` against a `project_type`, applied here.
+`apps/k7-daw-frontend/packages/song/docs/surfaces.md` states for `surfaces/` against a `project_type`, applied here.
 
 | mode | what the keys do |
 |---|---|
@@ -60,7 +60,7 @@ Each tool stands on **one verb**, so a press stays one command and one Ctrl+Z:
 
 **The tools are the same on both kinds of lane**, so the blade means the same thing wherever it
 lands. Both splits write two placements of one source and render nothing — audio by its window,
-picture by `from` (`packages/commands/docs/picture.md`). The picture
+picture by `from` (`apps/k7-daw-frontend/packages/commands/docs/picture.md`). The picture
 column is `pictureToolLine`, beside `toolLine`, and a press on a shot goes through the same guard
 at the top of its own drag.
 
@@ -176,7 +176,7 @@ to the caret**. You aim, then you send the transport there — not the other way
 
 `,` and `.` (`transport step prev | next`) move the playhead to the drawn tick before or after
 it: the same grid every drag and every cut lands on, in whichever unit the ruler is reading.
-Zoomed in on a song with a picture that is ONE FRAME (`packages/ui-timeline/docs/ticks.md`), and
+Zoomed in on a song with a picture that is ONE FRAME (`apps/k7-daw-frontend/packages/ui-timeline/docs/ticks.md`), and
 it is the same step on an audio lane as on a picture lane. The step is not a second grid with a
 setting of its own: a step that landed between the lines you can see would be a position no drag
 can reach.
@@ -295,7 +295,7 @@ Dragging an event snaps to **the ruler's current unit**, not to whole beats. Sna
 every zoom makes the gesture and the grid disagree in both directions: zoomed past the beat, the
 lines offer eighths the drag cannot land on; zoomed out to bars, it still moves in beats you
 cannot see. The zoom is the resolution control everywhere else here
-(`packages/ui-timeline/docs/ticks.md`), and the drag obeys it.
+(`apps/k7-daw-frontend/packages/ui-timeline/docs/ticks.md`), and the drag obeys it.
 
 Three details, each of which could have gone the other way:
 
@@ -415,7 +415,7 @@ the notes it was made from. Expanded, the block draws them over its waveform, ea
 its own place and in a colour the waveform does not use. A double-click on the block opens the piano
 roll on the authored clip under the pointer, or the first one when the press falls between two: the
 render has no notes of its own to open, and the waveform panel would show nothing the lane does not.
-`packages/song/docs/freeze.md` says where those clips come from.
+`apps/k7-daw-frontend/packages/song/docs/freeze.md` says where those clips come from.
 
 ## A lane's alternatives
 
@@ -426,7 +426,7 @@ something about its sound, and `shrink-0` beside a truncating label means a narr
 the name and never the badge.
 
 Alternatives belong to the MODULE a lane is, so the pair comes from
-`packages/song/docs/alternatives.md` and not from a field of the lane's own.
+`apps/k7-daw-frontend/packages/song/docs/alternatives.md` and not from a field of the lane's own.
 
 Two things about it:
 
@@ -554,7 +554,7 @@ The piano roll and the waveform take the same hook, so they behave the same — 
 vocabulary across the panes that draw time, which matters more than any one of them. The chains
 graph draws the same line in its own camera and holds its own copy of the three signals: it
 translates rather than scrolls, and neither package may depend on the other
-(`packages/ui-chains-react/docs/camera.md`, and `docs/inventaire.md` records the duplication —
+(`apps/k7-daw-frontend/packages/ui-chains-react/docs/camera.md`, and `docs/inventaire.md` records the duplication —
 both sides are tested, so it cannot drift in silence).
 
 ## Fit to pane, not scroll
@@ -711,7 +711,7 @@ of material it no longer plays.
 The key folds everything `regionWaveform` reads: the window (`offset`, `sourceFrom`,
 `sourceTo`), the placement (`start`, `length`), the fact of a warp, the project's tempo and
 time signature, and the bucket count. It is deliberately a **mirror of the file service's own
-`wfSig`** (`apps/k7/backend-rs/crates/k7-file-service/src/media/mod.rs`) — the two answer the same question one
+`wfSig`** (`apps/k7-daw-backend/packages/k7-file-service/src/media/mod.rs`) — the two answer the same question one
 layer apart, and the service's version carries a comment about this exact failure: a cache in
 front of a correctly-keyed one puts the bug back on its own.
 
@@ -915,7 +915,7 @@ front, so dragging a lane to the top row puts it in front — see
 taken, and the verb counts. It has to be that way round: this view CLUSTERS its rows — a group's
 members follow its header, wherever they sit in the compiled list — so a position counted here
 could name a different lane in the file. Naming the lane is the one spelling both sides read the
-same. `packages/song/docs/trackKind.md` has the file's side.
+same. `apps/k7-daw-frontend/packages/song/docs/trackKind.md` has the file's side.
 
 Three rows are deliberately not draggable and not droppable:
 
@@ -948,7 +948,7 @@ picture drag already uses.
 
 Making a picture lane is **two writes**: the lane file, and `trackOrder`, stated with the new lane
 above the other picture lanes so it draws in front, where you can see what you just made
-([packages/song-video/docs/picture.md](../../../../packages/song-video/docs/picture.md)).
+([apps/k7-daw-frontend/packages/song-video/docs/picture.md](../packages/song-video/docs/picture.md)).
 
 ### The camcorder is the picture lane's mark
 
@@ -969,7 +969,7 @@ each **placed** — `event add` on an audio lane, `picture add` on a picture one
 
 A drop onto a picture lane then runs **`picture sound <lane>`**, once per lane, so the footage
 arrives with its sound, which the engine plays on the picture lane's own `#audio` half
-(`packages/song/docs/videoSound.md`). It is a fourth round trip rather than part of the placement
+(`apps/k7-daw-frontend/packages/song/docs/videoSound.md`). It is a fourth round trip rather than part of the placement
 because it can take a while, extracting a long file's sound, and because it is safe to repeat: what
 is already extracted is kept.
 
@@ -988,7 +988,7 @@ that silence.
 
 A dropped `Prise été n°3.wav` lands as `clips/Prise-ete-n-3.wav` and declares itself in
 `clips/Prise-ete-n-3.k7x`, holding `source:` and nothing else — no window, so the clip is the
-whole file, which is what an untrimmed recording is (`apps/k7/docs/22-syntax-material.md`).
+whole file, which is what an untrimmed recording is (`apps/k7-daw-frontend/user-docs/22-syntax-material.md`).
 Accents are folded and everything else a path would argue about becomes one dash.
 
 **An existing declaration is never overwritten.** `clips/kick.k7x` may already carry a trim, a
@@ -1045,7 +1045,7 @@ cannot express.
 `parseDuration`. The same number spelled as a POSITION is several bars, both spellings are legal
 timecodes, and nothing between here and the engine can tell them apart — which is why the wedge
 and the command are tested against each other end to end rather than each on its own
-(`packages/song-edit/src/eventFade.test.ts`).
+(`apps/k7-daw-frontend/packages/song-edit/src/eventFade.test.ts`).
 
 The wedge follows the cursor while a drag is in hand rather than waiting for the round trip, the
 same courtesy a moved clip gets — the gesture in hand is read before the clip's own value.
@@ -1089,12 +1089,12 @@ The engine plays a comped event as several clips; every surface sees ONE (`foldC
 service): the event's id and start, spanning its pieces, carrying them for drawing. The block wears a
 layers icon, draws each piece's activity and waveform where it plays, and opens in its clip panel
 with the comp drawn piece by piece (`docs/clipEditors.md`). Move, copy, mute and fade address the EVENT; resize, window, trim and split refuse it,
-since they would rewrite one take's window (`packages/song/docs/takes.md`).
+since they would rewrite one take's window (`apps/k7-daw-frontend/packages/song/docs/takes.md`).
 
 ## Another timeline in the pane
 
 The bar above the lanes (`TimelineSwitch.tsx`) names what the pane draws: **Main**, the song's own
-timeline, or one of the project's `timelines/` (`packages/song/docs/timelines.md`). It is drawn only
+timeline, or one of the project's `timelines/` (`apps/k7-daw-frontend/packages/song/docs/timelines.md`). It is drawn only
 once there is another timeline: a song with one has nothing to switch between, and a bar of one tab
 is height taken from every song for nothing. Opening one puts its lanes in place of the song's
 tracks (`timelineView.ts`), so every gesture — move, resize, drop, paste — addresses
@@ -1118,7 +1118,7 @@ edited here like the song's, by the same drag and the same `picture` verbs, at `
 gutter has no mute, solo or arm, since what they draw on is the song lane of their name, and those three
 are its. On that song lane the shots a placed timeline puts there are dashed `PlacedShot` blocks that no
 drag or menu reaches: the drag writes the lane's file BY INDEX, and they are not in it. A double-click
-opens their timeline, as it does a timeline event (`packages/song/docs/timelines.md`).
+opens their timeline, as it does a timeline event (`apps/k7-daw-frontend/packages/song/docs/timelines.md`).
 
 A timeline EVENT on a song lane is one dashed block of its fixed length, its clips' activity drawn
 where each plays. It has no edge or fade handles — its length is its timeline's — and a
@@ -1241,7 +1241,7 @@ work, so the status line names the group instead and the redirect shows.
 
 Neither `m` nor `s` writes a flag on the lane itself. `m` is the lane's module BYPASS, one
 name in `graph.k7x`'s `bypassed:`; `s` bypasses every OTHER lane, and nothing on disk says
-"soloed" (`packages/song/docs/trackModules.md`).
+"soloed" (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`).
 
 How a lane *reads* is not the same as the flag on it: a track is dimmed if it is muted, if
 its group is, or if something else is soloed and it is not — mirroring `withGroupMix` plus
@@ -1276,5 +1276,5 @@ and zooming it out smears the numbers, while the same zoom on the timeline behav
 The pair is one statement and that is why they are together: a line under a ruler has to be a
 line the ruler drew, at the weight the ruler gave it. Anything with a ruler gets both —
 [clipEditors.md](clipEditors.md) has the roll's side, and the waveform canvas answers the same
-question a different way (`subdivideGrid`, in `packages/ui-timeline/docs/ticks.md`) because its
+question a different way (`subdivideGrid`, in `apps/k7-daw-frontend/packages/ui-timeline/docs/ticks.md`) because its
 ticks arrive as a list off the wire rather than as a unit it can compute.

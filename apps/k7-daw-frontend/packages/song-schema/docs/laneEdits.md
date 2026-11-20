@@ -1,9 +1,9 @@
 # Editing the placements on a lane
 
-The rationale behind `packages/song-schema/src/yaml/trackFile.ts` — the app's most frequent edit,
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/trackFile.ts` — the app's most frequent edit,
 since every clip drag writes a placement's `start`. Reading and validating the file is
 `moduleFile.ts`'s job, a lane being an ordinary module
-(`packages/song/docs/trackModules.md`); what is here is the clip list, and WHICH list.
+(`apps/k7-daw-frontend/packages/song/docs/trackModules.md`); what is here is the clip list, and WHICH list.
 
 ## Which list an edit means
 
@@ -19,7 +19,7 @@ two questions:
 
 That fork is what makes two sets two documents. Writing `["events"]` flat would mean dragging a clip
 while on take 2 rewrites take 1 — the arrangement you are not looking at
-(`packages/song/docs/alternatives.md`).
+(`apps/k7-daw-frontend/packages/song/docs/alternatives.md`).
 
 The fork uses `clone()` rather than a rebuild from plain values, because it is a deep copy that
 brings each placement's own comments with it. An empty set is opened out into a block map rather
@@ -78,11 +78,11 @@ doubled, so a placement that plays it four times must play it twice, or the arra
 an edit that was about the notes. It walks `everyEventList` for the reason `spliceTime` does — a
 placement in a take or an alternative is a placement — and deletes the key rather than writing
 `loop: 1`, one pass being the default. What it deliberately does not touch, and why, is
-`packages/song-edit/docs/sequenceLoops.md`.
+`apps/k7-daw-frontend/packages/song-edit/docs/sequenceLoops.md`.
 
 ## A placement's id
 
-`packages/song-schema/src/placementId.ts` holds it in two functions with no imports, so a BROWSER can
+`apps/k7-daw-frontend/packages/song-schema/src/placementId.ts` holds it in two functions with no imports, so a BROWSER can
 have the rule: it is written by the compiler, logged by the engine, carried on `/waveform`, and read
 back by every surface that has to find the file behind a clip. It is kept out of `nodeProject.ts`,
 which reaches for `node:fs` and `node:child_process`, for the reason `graph-model` is its own tier.
@@ -110,7 +110,7 @@ The rule for an event straddling the cut is the house one: **by its `start`**. A
 is at or after the point moves; one already playing across it stays where it is and plays over the
 inserted silence. That is what `moveTrackPlacementsInRange` and `selection consolidate` both already
 do, and the alternative — cutting at the point — would make inserting time a verb that writes new
-material and renders audio (`packages/song/docs/materialCut.md` on why there is no free, reversible
+material and renders audio (`apps/k7-daw-frontend/packages/song/docs/materialCut.md` on why there is no free, reversible
 cut).
 
 Deleting removes the events that START inside the span and shifts the rest back, so insert-then-

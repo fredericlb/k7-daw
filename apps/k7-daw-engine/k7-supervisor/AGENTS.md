@@ -21,10 +21,10 @@ The first configure fetches mbedTLS, IXWebSocket, libdatachannel and ONNX Runtim
 build is seconds. `npm run dev` rebuilds it on save and restarts it, with the desktop app that runs it (`scripts/dev-desktop.mjs`).
 
 The unit tests need no device, no network and no engine. The tunnel is tested by
-`packages/engine-tunnel`'s suites, which pick up the built `tunnel_harness` and run every case
+`apps/k7-daw-frontend/packages/engine-tunnel`'s suites, which pick up the built `tunnel_harness` and run every case
 against it: after touching the tunnel code, run `npx vitest run` there. A change to
 a frame is a change to `schema/hostProtocol.schema.json` and its fixtures too: `HostProtocol_test.cpp`
-compares the writer's output with them, and the Rust host (`apps/k7/backend-rs/crates/k7-local`) reads
+compares the writer's output with them, and the Rust host (`apps/k7-daw-backend/packages/k7-local`) reads
 the same frames (`docs/hostProtocol.md`).
 
 ## Rules this code keeps

@@ -19,7 +19,7 @@ modules({ "main#audio": ["dialog-eq"], "dialog-eq": ["MIX"] })
 A picture lane offers two outputs: `video`, what it draws, and `audio`, what its shots sound.
 `src/videoSound.ts` turns the shots into the engine clips of that second half at compile time, and
 `nodeProject.ts` plays them as the engine track `main#audio`. `picture sound`
-(`packages/commands/src/verbs/pictureSound.ts`) extracts what the shots need and makes nothing else.
+(`apps/k7-daw-frontend/packages/commands/src/verbs/pictureSound.ts`) extracts what the shots need and makes nothing else.
 
 ## One lane, two halves
 
@@ -52,7 +52,7 @@ heard twice.
 
 ## The ENGINE plays it, not the `<video>`
 
-The picture's `<video>` elements are muted and stay muted (`packages/ui-eyes/docs/realtime.md`).
+The picture's `<video>` elements are muted and stay muted (`apps/k7-daw-frontend/packages/ui-eyes/docs/realtime.md`).
 A shot's sound goes through the engine like every other sound in the song, for three reasons:
 
 - **One clock.** The engine's transport is the authority the picture already chases. A second
@@ -60,7 +60,7 @@ A shot's sound goes through the engine like every other sound in the song, for t
   long before a picture's is visible.
 - **The mixer.** A dialogue needs a fader, an EQ, a send. A sound half has them all; a `<video>`'s
   volume is one number outside the graph.
-- **The render.** The export muxes the ENGINE's mixdown (`packages/ui-eyes/src/export.ts`) when
+- **The render.** The export muxes the ENGINE's mixdown (`apps/k7-daw-frontend/packages/ui-eyes/src/export.ts`) when
   the mix feeds RENDER's sound input ([videoOutputs.md](videoOutputs.md)), so sound the engine never
   played would be missing from every file the song produces.
 
@@ -76,7 +76,7 @@ handed. `@studio/audio-analysis`'s `extractSound` does it with **k7's WebAssembl
 first**, which reads the sound of a camera's mp4 or .mov and of a browser's WebM on every host —
 neither CoreAudio nor Media Foundation reads WebM, and Linux reads no container at all. ffmpeg
 is asked only for a file the module cannot open, and the engine's `--decode` after it, for a
-desktop with neither (`packages/audio-analysis/docs/analysis.md`).
+desktop with neither (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`).
 
 ## `sound:` is written on the clip, not derived from its name
 
@@ -108,7 +108,7 @@ earlier shot through it would be sound with no picture.
 
 ## Heard where it is seen
 
-The sound follows the picture's own rule (`packages/ui-eyes/src/timeline.ts`), not a separate
+The sound follows the picture's own rule (`apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts`), not a separate
 audio rule:
 
 - A shot ends at its `length`, else at the next shot's `start`, else at the end of its file.
@@ -123,7 +123,7 @@ A dissolve's `with:` and `chain:` change only the picture. The sound has one way
 ## Seconds in the file, beats on the wire
 
 The engine's clips are in beats, and the shots are in seconds against one `tempo:` with no tempo
-map (`packages/song-video/docs/picture.md`). The conversion happens in the compile, every time, so
+map (`apps/k7-daw-frontend/packages/song-video/docs/picture.md`). The conversion happens in the compile, every time, so
 re-typing `tempo:` leaves the sound under its shot. A sounding clip of a shot at its own pace carries
 no warp map: the material answers to the clock, not to the tempo.
 

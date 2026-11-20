@@ -1,4 +1,4 @@
-//! jobs — what the account asks of its engine beyond playing, held natively (sub-step 1k; `apps/k7/backend-rs/docs/file-engine-jobs.md`).
+//! jobs — what the account asks of its engine beyond playing, held natively (sub-step 1k; `apps/k7-daw-backend/docs/file-engine-jobs.md`).
 //! What a reader gets wrong: the production `Jobs` is made with `Jobs::new(Some(real_driver))` and nowhere else; a `Jobs` with
 //! no driver answers what the TypeScript answers when no machine is bound, and only tests make one.
 

@@ -1,6 +1,6 @@
 // graphWarnings.ts — validate()'s warnings as codes with their names, and the English sentence of
 // each. The sentence is what a log or the CLI prints; a screen reads the code and words it in its
-// own language (apps/k7/frontend/src/graphWarnings.ts). See docs/graphModel.md.
+// own language (apps/k7-daw-frontend/src/graphWarnings.ts). See docs/graphModel.md.
 
 import type { GraphIssue, GraphWarningCode } from "@studio/graph-model";
 

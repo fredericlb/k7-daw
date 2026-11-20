@@ -1,6 +1,6 @@
 // seqWindow.ts — the window a sequence states, read from its own k7x TEXT rather than from a compiled
 // clip: the note grids are handed the document, not a ClipDoc. Timecodes only and POSITIONS, as
-// SeqEdge defines them. See apps/k7/docs/22-syntax-material.md.
+// SeqEdge defines them. See apps/k7-daw-frontend/user-docs/22-syntax-material.md.
 
 import { parse } from "@studio/k7x/document";
 import { parsePosition } from "./timecode";

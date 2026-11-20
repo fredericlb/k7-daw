@@ -47,7 +47,7 @@ sound lane, and the rows, the graph card and both compiles need its kind before 
 It is still a lane node, muted by its bypass, soloed, ordered and renamed with the others; that
 mute and solo are its picture's, and its `#audio` half has its own.
 `lanesOf` answers the sound lanes only, `pictureLanesOf` the picture ones
-(`packages/song-video/docs/picture.md`).
+(`apps/k7-daw-frontend/packages/song-video/docs/picture.md`).
 
 ## Two outputs
 
@@ -268,7 +268,7 @@ And for a project whose lanes are still files in `tracks/`:
 - [alternatives.md](alternatives.md) — a module's other sets of attributes, not a lane's other clip
   lists. The timeline gutter names the set a lane is playing, and clicking it opens a menu of the
   lane node's sets — the same `node alternative` verbs the graph's badges run
-  (`apps/k7/frontend/docs/timeline.md`).
+  (`apps/k7-daw-frontend/docs/timeline.md`).
 - [freeze.md](freeze.md) — a render standing in for everything UPSTREAM of a module, that module
   included, rather than for one lane and its own modules. It needs no neutralisation pass: gain and
   pan are a module, so where they sit relative to the freeze point already says whether they bake

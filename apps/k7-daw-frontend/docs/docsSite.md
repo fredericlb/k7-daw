@@ -26,7 +26,7 @@ link opens, and a mistyped one lands on the app's own "No page here".
 
 ## Not the in-app help
 
-The `help` command opens `HelpPage`, which renders `apps/k7/docs/` — the commands, the file
+The `help` command opens `HelpPage`, which renders `apps/k7-daw-frontend/user-docs/` — the commands, the file
 formats, the generated command reference — beside an open project. The site serves the
 guides instead: they cover the whole of k7 for a reader who is not inside it yet, and the in-app
 page's command reference comes from a file service the site has none of.

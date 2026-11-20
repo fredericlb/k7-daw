@@ -1,7 +1,7 @@
-// BackendHost.swift — k7's backend on the phone: the Rust front (apps/k7/backend-rs) linked into the app as
+// BackendHost.swift — k7's backend on the phone: the Rust front (apps/k7-daw-backend) linked into the app as
 // k7-embed, answering the studio's own port by itself, with no node behind it. Port, environment and folders are
-// the desktop's, from apps/k7/backend-rs/standalone.json. One front per PROCESS, like the supervisor and the engine:
-// it is started once, and a start that failed is the one thing a retry redoes. See engine/k7-runtime/docs/ios.md.
+// the desktop's, from apps/k7-daw-backend/standalone.json. One front per PROCESS, like the supervisor and the engine:
+// it is started once, and a start that failed is the one thing a retry redoes. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Foundation
 import os
@@ -21,7 +21,7 @@ final class BackendHost {
     static var origin: String { "http://127.0.0.1:\(port)" }
     /// What every part that derives a loopback address is told — the front, the supervisor, the pages.
     static var portsSpec: String { "k7=\(port)" }
-    /// k7's first page: the page asks `/auth/me` for its token itself (apps/k7/backend-rs/docs/sessions.md).
+    /// k7's first page: the page asks `/auth/me` for its token itself (apps/k7-daw-backend/docs/sessions.md).
     static var home: String { "\(origin)/" }
 
     /// What the shell page shows: `starting` with a step (`launching`), `ready`, or `failed` with why.
@@ -167,7 +167,7 @@ final class BackendHost {
         return base.appendingPathComponent("standalone", isDirectory: true)
     }
 
-    /// The workspaces and médiathèque, which the engine must be allowed to open (engine/k7-runtime/docs/ios.md).
+    /// The workspaces and médiathèque, which the engine must be allowed to open (apps/k7-daw-engine/k7-runtime/docs/ios.md).
     static var engineRoots: [URL] {
         let dirs = table["dirs"] as? [String: String] ?? [:]
         let roots = ["STUDIO_FILES_ROOT", "STUDIO_MEDIATEK"].compactMap { dirs[$0] }.map { shared.root.appendingPathComponent($0) }

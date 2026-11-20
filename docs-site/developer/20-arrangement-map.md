@@ -10,33 +10,33 @@ is the one after.
 
 | Concern | Where |
 |---|---|
-| Timeline pane | `apps/k7/frontend/src/components/TimelineTab.tsx` |
-| Its pure helpers | `apps/k7/frontend/src/rows.ts` (row model), `snap.ts`, `timelineTools.ts`, `timelineMode.ts`, `clipboard.ts`, `pendingEdits.ts`, `timelineDrop.ts`, `fileDrop.ts`, `clipLoop.ts`, `clipInstances.ts`, `historyMarks.ts` — all under `apps/k7/frontend/src/` |
-| Ruler, grid, ticks | `apps/k7/frontend/src/components/Ruler.tsx`, `packages/ui-timeline/src/ticks.ts` |
-| Zoom, pan, drag, lane geometry | `packages/ui-timeline/src/panZoom.ts`, `drag.ts`, `lanes.ts` |
-| Minimap | `apps/k7/frontend/src/components/Minimap.tsx` |
-| What a clip block draws | `apps/k7/frontend/src/components/ClipActivity.tsx`, `ClipContent.tsx` |
-| Audio clip panel | `apps/k7/frontend/src/components/AudioClipPanel.tsx`, `EventGainSlider.tsx`, `LoopBrace.tsx`, with `clipWarp.ts`, `clipOps.ts`, `barWindow.ts`, `waveMode.ts` |
-| Waveform drawing | `packages/ui-waveform/src/Waveform.tsx`, `spectrum.ts`, `ticks.ts` |
-| Waveform data | `packages/audio-probe/src/waveform.ts` (envelope slicing, beat grid), `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/media/waveform.rs` (serving it) |
-| Trim gate | `packages/audio-probe/src/trimGate.ts` |
-| Note views | `apps/k7/frontend/src/components/PianoRoll.tsx`, `apps/k7/frontend/src/hooks/useRollGestures.ts`, `rollDrag.ts`, `rollMode.ts`; grid caret in `apps/k7/frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
-| Curve editor | `apps/k7/frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveKnob.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
-| MIDI | `apps/k7/frontend/src/webmidi.ts`, `midiIn.ts`, `midiControl.ts`, `midiActivity.ts`, `apps/k7/frontend/src/hooks/useMidiRecording.ts`, `apps/k7/frontend/src/hooks/useMidiControl.ts`, `apps/k7/frontend/src/components/MidiTakeRoll.tsx` |
-| Takes | `apps/k7/frontend/src/takes.ts`, `takeCounter.ts`, `apps/k7/frontend/src/hooks/useTakeRecording.ts`, `apps/k7/frontend/src/components/TakesView.tsx`, `TakeRow.tsx`, `CompStrip.tsx`; server side `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/engine/queue.rs` (the arm) |
-| Mixer state | `apps/k7/frontend/src/hooks/useTrackControls.ts`, `mixerStrips.ts`; strips drawn by `packages/ui-chains-react/src/DomChains.tsx` |
-| Master meter | `apps/k7/frontend/src/components/MasterMeter.tsx`, `gainTrim.ts`, `packages/engine-browser/src/meter.ts` |
-| Mastering surface | `apps/k7/frontend/src/components/MasteringTab.tsx`, `apps/k7/frontend/src/mastering/controls.ts`, `apps/k7/frontend/src/mastering/bindings.ts` |
-| Export | `apps/k7/frontend/src/exportArgs.ts`, `apps/k7/frontend/src/hooks/useShare.ts`, `apps/k7/frontend/src/components/SharePanel.tsx`; `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/shares/export.rs` |
-| Offline renders | `packages/take-render/src/` (renderer, material split/consolidate, recorded takes) |
-| Bouncing through a chain | `packages/audio-passes/src/processChain.ts`, `peakPass.ts`, `coldPass.ts` |
-| Import | `packages/translator/src/` (`dawproject.ts`, `ableton.ts`, `abletonZip.ts`, `emit.ts`, `params.ts`), run in the verbs Worker (`packages/commands/src/runtime/importer.ts`) |
-| Undo journal | `apps/k7/backend-rs/crates/k7-file-service/src/journal/` (server), `packages/project-shell/src/undo.ts` (client), `apps/k7/frontend/src/components/HistoryPanel.tsx` |
-| The verbs | `packages/commands/commands.yaml` (names, args, menus), `packages/commands/src/commands.ts` and `packages/commands/src/verbs/` (handlers) |
-| The writes | `packages/song-edit/src/` — `trackMix.ts` (placements), `materialCut.ts`, `insertTime.ts`, `crossfade.ts`, `eventLoop.ts`, `eventGain.ts`, `onsets.ts`, `takeEdit.ts`, `projectEdit.ts` (module params, warp, bindings) |
-| Key bindings | `apps/k7/frontend/src/keys.ts` |
-| Shell-local verbs | `apps/k7/frontend/src/palette.ts` (`LOCAL_COMMANDS`), `localCommands.ts`, and `runLocalCommand` in `apps/k7/frontend/src/App.tsx` |
-| Right-click menus | `apps/k7/frontend/src/contextMenu.ts` |
+| Timeline pane | `apps/k7-daw-frontend/src/components/TimelineTab.tsx` |
+| Its pure helpers | `apps/k7-daw-frontend/src/rows.ts` (row model), `snap.ts`, `timelineTools.ts`, `timelineMode.ts`, `clipboard.ts`, `pendingEdits.ts`, `timelineDrop.ts`, `fileDrop.ts`, `clipLoop.ts`, `clipInstances.ts`, `historyMarks.ts` — all under `apps/k7-daw-frontend/src/` |
+| Ruler, grid, ticks | `apps/k7-daw-frontend/src/components/Ruler.tsx`, `apps/k7-daw-frontend/packages/ui-timeline/src/ticks.ts` |
+| Zoom, pan, drag, lane geometry | `apps/k7-daw-frontend/packages/ui-timeline/src/panZoom.ts`, `drag.ts`, `lanes.ts` |
+| Minimap | `apps/k7-daw-frontend/src/components/Minimap.tsx` |
+| What a clip block draws | `apps/k7-daw-frontend/src/components/ClipActivity.tsx`, `ClipContent.tsx` |
+| Audio clip panel | `apps/k7-daw-frontend/src/components/AudioClipPanel.tsx`, `EventGainSlider.tsx`, `LoopBrace.tsx`, with `clipWarp.ts`, `clipOps.ts`, `barWindow.ts`, `waveMode.ts` |
+| Waveform drawing | `apps/k7-daw-frontend/packages/ui-waveform/src/Waveform.tsx`, `spectrum.ts`, `ticks.ts` |
+| Waveform data | `apps/k7-daw-frontend/packages/audio-probe/src/waveform.ts` (envelope slicing, beat grid), `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/waveform.rs` (serving it) |
+| Trim gate | `apps/k7-daw-frontend/packages/audio-probe/src/trimGate.ts` |
+| Note views | `apps/k7-daw-frontend/src/components/PianoRoll.tsx`, `apps/k7-daw-frontend/src/hooks/useRollGestures.ts`, `rollDrag.ts`, `rollMode.ts`; grid caret in `apps/k7-daw-frontend/src/hooks/useGridCaret.ts` + `gridCaret.ts` |
+| Curve editor | `apps/k7-daw-frontend/src/components/CurveEditor.tsx`, `CurvePlot.tsx`, `CurveKnob.tsx`, `CurveConditions.tsx`, `curveDraft.ts` |
+| MIDI | `apps/k7-daw-frontend/src/webmidi.ts`, `midiIn.ts`, `midiControl.ts`, `midiActivity.ts`, `apps/k7-daw-frontend/src/hooks/useMidiRecording.ts`, `apps/k7-daw-frontend/src/hooks/useMidiControl.ts`, `apps/k7-daw-frontend/src/components/MidiTakeRoll.tsx` |
+| Takes | `apps/k7-daw-frontend/src/takes.ts`, `takeCounter.ts`, `apps/k7-daw-frontend/src/hooks/useTakeRecording.ts`, `apps/k7-daw-frontend/src/components/TakesView.tsx`, `TakeRow.tsx`, `CompStrip.tsx`; server side `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/engine/queue.rs` (the arm) |
+| Mixer state | `apps/k7-daw-frontend/src/hooks/useTrackControls.ts`, `mixerStrips.ts`; strips drawn by `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx` |
+| Master meter | `apps/k7-daw-frontend/src/components/MasterMeter.tsx`, `gainTrim.ts`, `apps/k7-daw-frontend/packages/engine-browser/src/meter.ts` |
+| Mastering surface | `apps/k7-daw-frontend/src/components/MasteringTab.tsx`, `apps/k7-daw-frontend/src/mastering/controls.ts`, `apps/k7-daw-frontend/src/mastering/bindings.ts` |
+| Export | `apps/k7-daw-frontend/src/exportArgs.ts`, `apps/k7-daw-frontend/src/hooks/useShare.ts`, `apps/k7-daw-frontend/src/components/SharePanel.tsx`; `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/shares/export.rs` |
+| Offline renders | `apps/k7-daw-frontend/packages/take-render/src/` (renderer, material split/consolidate, recorded takes) |
+| Bouncing through a chain | `apps/k7-daw-frontend/packages/audio-passes/src/processChain.ts`, `peakPass.ts`, `coldPass.ts` |
+| Import | `apps/k7-daw-frontend/packages/translator/src/` (`dawproject.ts`, `ableton.ts`, `abletonZip.ts`, `emit.ts`, `params.ts`), run in the verbs Worker (`apps/k7-daw-frontend/packages/commands/src/runtime/importer.ts`) |
+| Undo journal | `apps/k7-daw-backend/packages/k7-file-service/src/journal/` (server), `apps/k7-daw-frontend/packages/project-shell/src/undo.ts` (client), `apps/k7-daw-frontend/src/components/HistoryPanel.tsx` |
+| The verbs | `apps/k7-daw-frontend/packages/commands/commands.yaml` (names, args, menus), `apps/k7-daw-frontend/packages/commands/src/commands.ts` and `apps/k7-daw-frontend/packages/commands/src/verbs/` (handlers) |
+| The writes | `apps/k7-daw-frontend/packages/song-edit/src/` — `trackMix.ts` (placements), `materialCut.ts`, `insertTime.ts`, `crossfade.ts`, `eventLoop.ts`, `eventGain.ts`, `onsets.ts`, `takeEdit.ts`, `projectEdit.ts` (module params, warp, bindings) |
+| Key bindings | `apps/k7-daw-frontend/src/keys.ts` |
+| Shell-local verbs | `apps/k7-daw-frontend/src/palette.ts` (`LOCAL_COMMANDS`), `localCommands.ts`, and `runLocalCommand` in `apps/k7-daw-frontend/src/App.tsx` |
+| Right-click menus | `apps/k7-daw-frontend/src/contextMenu.ts` |
 
 ## Three rules that shape all of it
 

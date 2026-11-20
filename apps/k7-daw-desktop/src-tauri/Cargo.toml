@@ -27,10 +27,10 @@ dirs = "5"
 getrandom = "0.3"
 # The unix SIGTERM/SIGINT handler, on the runtime Tauri already brings.
 tokio = { version = "1", features = ["macros", "signal"] }
-# k7's Rust front, run in this process on the page's port, in front of node (apps/k7/backend-rs/docs/embed.md).
-k7-front = { path = "../../k7/backend-rs/crates/k7-front" }
-# The pidfile proof the quit's backstop kills by, shared with the Rust supervisor host (apps/k7/backend-rs/docs/local.md).
-k7-local = { path = "../../k7/backend-rs/crates/k7-local" }
+# k7's Rust front, run in this process on the page's port, in front of node (apps/k7-daw-backend/docs/embed.md).
+k7-front = { path = "../../k7-daw-backend/packages/k7-front" }
+# The pidfile proof the quit's backstop kills by, shared with the Rust supervisor host (apps/k7-daw-backend/docs/local.md).
+k7-local = { path = "../../k7-daw-backend/packages/k7-local" }
 
 # Windows Job Object (kill-on-close): the backend and everything it starts die with the app, however it ends.
 [target.'cfg(windows)'.dependencies]
@@ -49,7 +49,7 @@ webkit2gtk = { version = "=2.0.2", features = ["v2_38"] }
 [profile.dev]
 debug = "line-tables-only"
 
-# The linked front's Wasmtime crawls at opt-level 0 (apps/k7/backend-rs/docs/front.md).
+# The linked front's Wasmtime crawls at opt-level 0 (apps/k7-daw-backend/docs/front.md).
 [profile.dev.package."*"]
 opt-level = 2
 

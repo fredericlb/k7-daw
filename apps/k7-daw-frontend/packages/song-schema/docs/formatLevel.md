@@ -24,7 +24,7 @@ Absent means level 1, and a new project is written without the key.
 |---|---|---|
 | 1 | — | — |
 | 2 | an event `start` written in SECONDS, a number where level 1 takes only a timecode ([timecode.md](timecode.md)) | `@studio/song`'s `formatStamp.ts`: a lane or timeline written through the file service, `events add`, and every project open |
-| 3 | a picture lane as a `@meta/picture-track` node, where level 2 looks for `video_tracks/` and `layers:` ([docs/picture-lanes-plan.md](../../../docs/picture-lanes-plan.md)) | the picture lane verbs, once a project holds none of the older shape |
+| 3 | a picture lane as a `@meta/picture-track` node, where level 2 looks for `video_tracks/` and `layers:` ([docs/picture-lanes-plan.md](../../../../../docs/picture-lanes-plan.md)) | the picture lane verbs, once a project holds none of the older shape |
 | 4 | a picture lane SOUNDING on its own `#audio` half, where level 3 plays a shot's sound only through a `video_source:` lane ([videoSound.md](../../song/docs/videoSound.md)) | `picture sound` |
 | 5 | a video's sound being what feeds `RENDER#audio`, where level 4 exports the mix whatever is wired — a narrowed meaning: unwired is silent ([videoOutputs.md](../../song/docs/videoOutputs.md)) | `@studio/song`'s `videoOutputs.ts` (`ensureRenderSound`) at open and at `project surface new viewport`, once it has wired the mix in, and the `video` scaffold |
 

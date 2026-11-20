@@ -39,7 +39,7 @@ Gradle refuses a shallow clone rather than count one commit.
 
 | app | SPA | render site |
 |---|---|---|
-| k7 | `k7-frontend` | `apps/k7/frontend/src/projects/HomeSidebar.tsx` — tooltip on the sidebar's title, on every home page |
+| k7 | `k7-frontend` | `apps/k7-daw-frontend/src/projects/HomeSidebar.tsx` — tooltip on the sidebar's title, on every home page |
 
 `VERSION` is read at module scope so it constant-folds into the bundle. In k7's home sidebar the version is a
 tooltip on the app's name and never visible text: nobody needs it in the moment, and it is one hover
@@ -47,7 +47,7 @@ away for whoever asks which build this is.
 
 ## The shell is asked again on every load, its assets never
 
-The front serves the built `frontend/dist` (`apps/k7/backend-rs/docs/last.md`), with two
+The front serves the built `apps/k7-daw-frontend/dist` (`apps/k7-daw-backend/docs/last.md`), with two
 cache rules. `index.html` — and every other file outside `assets/`, the manifest and the icons —
 goes out `no-cache`: a browser may keep it, but asks the server before each use, so the first load
 after an update is the new build. Files under `assets/` go out `immutable` for a year: Vite names
@@ -59,6 +59,6 @@ re-check every chunk on every load for nothing.
 browsers serve a stale `max-age=0` copy and a `no-cache` one is not served unchecked.
 
 A **service worker** is the other cache, and it ignores these headers for what it precached. k7
-registers one (`apps/k7/frontend/src/appMain.tsx`, `packages/vite-config/docs/pwa.md` for how
+registers one (`apps/k7-daw-frontend/src/appMain.tsx`, `apps/k7-daw-frontend/packages/vite-config/docs/pwa.md` for how
 an update reaches an open tab). An app on an iPhone's home screen can still be RESUMED
 from memory without any request at all; closing it in the app switcher is what makes it load.

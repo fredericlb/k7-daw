@@ -2,7 +2,7 @@
 // the import LOG, because a translation is lossy and what was lost has to be read before the
 // project opens. The name is asked BEFORE the upload: the bytes are big and the folder is what a
 // person will look for afterwards.
-// See packages/translator/docs/import.md and ../../docs/projects.md.
+// See apps/k7-daw-frontend/packages/translator/docs/import.md and ../../docs/projects.md.
 
 import { Button } from "@studio/ui/button";
 import {

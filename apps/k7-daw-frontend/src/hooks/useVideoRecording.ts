@@ -1,7 +1,7 @@
 // useVideoRecording.ts — a picture lane's own recording. Armed lane + record + play opens the
 // lane's INPUT (a webcam, the only one there is for now) and captures it; on stop the take lands in
 // `clips/` and is placed where the playhead was. Browser-side, top to bottom, for the reason the
-// lens itself is: the engine never hears about a camera (packages/song/docs/camera.md).
+// lens itself is: the engine never hears about a camera (apps/k7-daw-frontend/packages/song/docs/camera.md).
 // The MIDI capture beside it is the same shape — see useMidiRecording.ts.
 
 import type { EngineStore } from "@studio/engine-browser/store";

@@ -51,7 +51,7 @@ edit path in [The edit path](./21-edit-path.md).
 
 - [The song pipeline](./30-song-pipeline.md)
 - [song-schema: the file format](./31-song-schema.md)
-- [The compiler: packages/song](./32-song-compiler.md)
+- [The compiler: apps/k7-daw-frontend/packages/song](./32-song-compiler.md)
 - [song-edit: surgical writes](./33-song-edit.md)
 - [k7x: the text format](./34-k7x.md)
 - [song-strudel: pattern lanes](./35-song-strudel.md)
@@ -95,8 +95,8 @@ edit path in [The edit path](./21-edit-path.md).
 ## Engines
 
 - [Engine architecture](./80-engine-architecture.md)
-- [The C++ engine (`engine/k7-runtime`)](./81-k7-runtime.md)
-- [The supervisor (`engine/k7-supervisor`)](./82-k7-supervisor.md)
+- [The C++ engine (`apps/k7-daw-engine/k7-runtime`)](./81-k7-runtime.md)
+- [The supervisor (`apps/k7-daw-engine/k7-supervisor`)](./82-k7-supervisor.md)
 - [The engine protocol](./83-engine-protocol.md)
 - [Engine clients](./84-engine-clients.md)
 - [Registry and tunnel](./85-registry-and-tunnel.md)

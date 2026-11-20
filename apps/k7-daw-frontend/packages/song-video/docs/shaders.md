@@ -106,7 +106,7 @@ the list of compiled tracks.
 
 ```
 EngineState.levels[i]          the engine, ~20 Hz
- -> levelsForPasses()          packages/k7-plugins/src/video/shaderAudio.ts — the index comes from trackOrder
+ -> levelsForPasses()          apps/k7-daw-frontend/packages/k7-plugins/src/video/shaderAudio.ts — the index comes from trackOrder
  -> levelToUnit()              -60..0 dB -> 0..1
  -> smoothLevels()             fast attack, slow release
  -> RealtimeDriver.setAudio()  @studio/ui-eyes
@@ -200,7 +200,7 @@ wiring error port checking already reports.
 | derived | `src/chainsGraph.ts`: a video track is a track, so `main: [ glow ]` is a run |
 | compiled | `src/videoChains.ts` -> `VideoPluginDoc`, the GLSL **inline** |
 | the wire | `@studio/web-protocol`'s `WebVideoPlugin` |
-| offered | `apps/k7/backend-rs/crates/k7-file-service/src/engine/docs.rs` — `shader` + `shaders` on the step |
+| offered | `apps/k7-daw-backend/packages/k7-file-service/src/engine/docs.rs` — `shader` + `shaders` on the step |
 | drawn | the menu and the four knobs, `@studio/ui-chains`' `stepUI` |
 | written back | `@studio/commands`' intrinsic `@shader` -> `setModuleShader` |
 | executed | `@studio/ui-eyes`' `src/passes.ts` + `src/compositor.ts` |
@@ -212,9 +212,9 @@ more route would mean the picture can draw before its programs have arrived.
 ## Checking it
 
 ```bash
-npx vitest run packages/song-video/src/shaders.test.ts packages/song-video/src/videoChains.test.ts
-npx vitest run packages/ui-eyes/src/passes.test.ts
-npx vitest run packages/k7-plugins/src/video/shaderAudio.test.ts
+npx vitest run apps/k7-daw-frontend/packages/song-video/src/shaders.test.ts apps/k7-daw-frontend/packages/song-video/src/videoChains.test.ts
+npx vitest run apps/k7-daw-frontend/packages/ui-eyes/src/passes.test.ts
+npx vitest run apps/k7-daw-frontend/packages/k7-plugins/src/video/shaderAudio.test.ts
 ```
 
 These prove the document, the pass order and the level conversion. **None proves a pixel changed** —

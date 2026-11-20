@@ -14,7 +14,7 @@ use symphonia::core::formats::{FormatReader, SeekMode, SeekTo};
 use symphonia::core::io::{MediaSource, MediaSourceStream};
 use symphonia::core::units::Time;
 
-// The engine's bounds on a header (engine/k7-runtime/engine/Decode.cpp): past them it is a corrupt file.
+// The engine's bounds on a header (apps/k7-daw-engine/k7-runtime/engine/Decode.cpp): past them it is a corrupt file.
 const MAX_CHANNELS: usize = 32;
 const MAX_SAMPLE_RATE: u32 = 768_000;
 

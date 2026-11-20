@@ -458,7 +458,7 @@ fn the_node_table_is_the_engines_set() {
     let cpp = std::fs::read_to_string(
         std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("../../..")
-            .join("engine/k7-runtime/engine/DspGraph.cpp"),
+            .join("apps/k7-daw-engine/k7-runtime/engine/DspGraph.cpp"),
     )
     .expect("DspGraph.cpp");
     let mut found = std::collections::BTreeSet::new();

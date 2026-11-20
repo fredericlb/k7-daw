@@ -23,7 +23,7 @@ file is a module to an editor and a function body to the page.
 
 ## What a draw function gets
 
-`LcdFrame` in `packages/ui-chains/src/lcdScreen.ts` is the contract: a cleared 2D context in CSS
+`LcdFrame` in `apps/k7-daw-frontend/packages/ui-chains/src/lcdScreen.ts` is the contract: a cleared 2D context in CSS
 pixels, the module's params by name, the peak history of both audio taps (`input`, `output`,
 oldest first, ending now), a `state` object kept between draws, the screen's palette, and the time.
 
@@ -36,7 +36,7 @@ module names, decoded mono at its own length, or `null` until it has loaded (or
 with a host that loads none). The host decodes (`LcdSounds`, handed to `DomChains` as `sounds`, or provided once ABOVE every
 graph through `LcdSoundsContext` — k7 does the latter, since it mounts graphs in five places and a
 host passing it to four leaves the fifth's screens loading for ever);
-k7's reads the WAV itself (`apps/k7/frontend/src/lcdSounds.ts`), because the browser's
+k7's reads the WAV itself (`apps/k7-daw-frontend/src/lcdSounds.ts`), because the browser's
 `decodeAudioData` resamples to the context's rate and a 2048-sample frame would stop being one. A
 file landing repaints every screen, so a draw only has to handle the `null` it starts with.
 
@@ -107,7 +107,7 @@ graph or selects the node. **A screen takes no wheel**: the wheel is the graph's
 that took it — even only over its points — made zooming over a card depend on where on the card the
 pointer happened to be. Whatever a wheel would set is a drag or a knob instead.
 
-**AI organize makes one only when asked** (`packages/ui-module-builder/docs/aiOrganize.md`): a
+**AI organize makes one only when asked** (`apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md`): a
 screen that takes the pointer takes it from the graph too.
 
 **The script is a sibling file, not a k7x value.** A picture is code; squeezing it into `ui.k7x`
@@ -140,17 +140,17 @@ again until the script text changes: a throw per frame is a frozen tab.
 
 **Taps are counted.** A screen and a waveform widget on one module share the engine's tap; the
 client counts subscriptions so the first to unmount does not remove it from the other
-(`packages/engine-browser/src/engine.ts`).
+(`apps/k7-daw-frontend/packages/engine-browser/src/engine.ts`).
 
 ## Where the script runs
 
 Every `widgets.js` — its draws, its pointer handlers, its `visible` rule — runs in ONE hidden
 `<iframe sandbox="allow-scripts" srcdoc=…>` per page, in a worker that iframe starts, and nowhere
-else. The page half is `packages/ui-chains/src/widgetSandbox.ts`, the half inside is
-`packages/ui-chains/src/widgetRuntime.ts`, and `src/widgetScript.ts` here is React's reading of it.
+else. The page half is `apps/k7-daw-frontend/packages/ui-chains/src/widgetSandbox.ts`, the half inside is
+`apps/k7-daw-frontend/packages/ui-chains/src/widgetRuntime.ts`, and `src/widgetScript.ts` here is React's reading of it.
 
 **Why not the page.** A library is ORIGIN-WIDE: every account reads it, and an admin edits it live
-(`packages/song/docs/sharedFolders.md`); AI organize writes these scripts too. Code run in the page
+(`apps/k7-daw-frontend/packages/song/docs/sharedFolders.md`); AI organize writes these scripts too. Code run in the page
 runs with the page's session: it can call every API as the user and read the engine pairing kept in
 `localStorage`. One compromised admin, or one untrusted seed, would be code in every user's
 session. In the sandbox the script has an opaque origin: no cookie, no storage, no reach into the
@@ -195,6 +195,6 @@ goes in is params, taps and sounds, never a secret.
 ## In the builder
 
 A panel that draws a screen earns a `widgets.js` tab beside the others, through the store's
-`widgetsScript` call (`packages/ui-module-builder/docs/store.md`), saved with the rest by Save.
+`widgetsScript` call (`apps/k7-daw-frontend/packages/ui-module-builder/docs/store.md`), saved with the rest by Save.
 The preview card draws the script as typed. It has no live plugin behind it in k7, so its taps
 are empty and it draws from params alone.

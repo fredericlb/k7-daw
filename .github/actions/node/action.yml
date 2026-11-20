@@ -17,10 +17,8 @@ runs:
         path: |
           node_modules
           apps/*/node_modules
-          apps/k7/*/node_modules
-          packages/*/node_modules
-          engine/*/node_modules
-          engine/k7-android/*/node_modules
+          apps/*/*/node_modules
+          apps/*/packages/*/node_modules
         # Exact key only: a tree restored from an older lock would be wrong in ways npm ci never checks.
         key: node-modules-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.nvmrc', 'package-lock.json') }}
     - if: steps.modules.outputs.cache-hit != 'true'
@@ -33,8 +31,6 @@ runs:
         path: |
           node_modules
           apps/*/node_modules
-          apps/k7/*/node_modules
-          packages/*/node_modules
-          engine/*/node_modules
-          engine/k7-android/*/node_modules
+          apps/*/*/node_modules
+          apps/*/packages/*/node_modules
         key: ${{ steps.modules.outputs.cache-primary-key }}

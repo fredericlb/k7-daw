@@ -1,6 +1,6 @@
 //! cameras — `/api/cameras`: the account's cameras that are on, the ticket that opens the signalling socket,
 //! and that socket, as `apps/k7/backend/src/cameras/` answers them. The three move together: the hub's state
-//! lives in this process, and a ticket only this front minted opens it (`apps/k7/backend-rs/docs/routes.md`).
+//! lives in this process, and a ticket only this front minted opens it (`apps/k7-daw-backend/docs/routes.md`).
 
 mod hub;
 mod names;

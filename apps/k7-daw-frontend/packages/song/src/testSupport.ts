@@ -14,7 +14,14 @@ import {
 import { GRAPH_FILE } from "@studio/song-schema/yaml/graphSchema";
 import { wsText, wsWriteData, wsWriteText } from "./yaml/workspaceDoc";
 
-const REPO = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const REPO = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "..",
+  "..",
+  "..",
+);
 
 /** A repository fixture as it was BEFORE its picture lanes were nodes — `fixtures/pictureLanesV2`, its media borrowed from the fixture today. */
 export function copyOldPictureFixture(rel: string, to: string): void {

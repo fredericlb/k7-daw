@@ -1,14 +1,14 @@
 # instruments.md — the sampled instruments a machine downloads
 
-The engine plays SFZ instruments (`engine/k7-runtime/docs/sfzPlugin.md`) whose samples run from
+The engine plays SFZ instruments (`apps/k7-daw-engine/k7-runtime/docs/sfzPlugin.md`) whose samples run from
 8 MB to 750 MB. `src/Instruments.cpp` lists them and installs them under `<state>/instruments/<name>/`,
 and a module names one as `@instruments/<name>/<file>.sfz`.
 
 ## The machine keeps what its musician chose
 
 **Nothing is downloaded until it is asked for**, on k7's engine settings page under the desktop app
-(`apps/k7/frontend/docs/localApp.md`), in the Downloads section of k7's settings inside the Android
-app (`engine/k7-runtime/docs/android.md`), or in `instruments` in the command-line engine's config file —
+(`apps/k7-daw-frontend/docs/localApp.md`), in the Downloads section of k7's settings inside the Android
+app (`apps/k7-daw-engine/k7-runtime/docs/android.md`), or in `instruments` in the command-line engine's config file —
 `["all"]` keeps every one (`docs/supervisor.md`). The list runs to gigabytes — the piano alone is 750 MB, the drum
 kits more — and a machine that never plays a piano should not pay for one. What is chosen is
 remembered in `engine-host.json` as `instruments`, the names this machine keeps:
@@ -32,7 +32,7 @@ beside it, so a removal that stops halfway reads as not installed, never as a wh
 An engine still playing it keeps what it already loaded until its next load.
 
 **k7 asks the ENGINE, not the supervisor**, whether an instrument is here
-(`engine/k7-runtime/docs/protocol.md`, `instrument-status`): the engine is the one a browser
+(`apps/k7-daw-engine/k7-runtime/docs/protocol.md`, `instrument-status`): the engine is the one a browser
 already talks to, and the files are where the engine reads them.
 
 **The supervisor, not a server.** The files come from their origin straight onto the machine that

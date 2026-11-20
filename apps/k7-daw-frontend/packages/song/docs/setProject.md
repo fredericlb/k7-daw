@@ -124,11 +124,11 @@ bus_only(["trimA", "trimB"]) // …and the strip's HEAD loses its dry path
 **The platters are the source, and there is one per lane that plays a file** — the record, and
 one per stem. A platter reads ONE record (`loadRecord(File)`), so five files need five of them;
 the desk writes only the record and the two live numbers onto each. See
-[docs/platter-node-plan.md](../../../docs/platter-node-plan.md).
+[docs/platter-node-plan.md](../../../../../docs/platter-node-plan.md).
 
 Three of the others are the **channel strip** rather than the crossfade, and they have their own
-page in the desk that draws them: [mix.md](../../../packages/k7-plugins/docs/turntables/mix.md) for the trim and the
-channel fader, [fx.md](../../../packages/k7-plugins/docs/turntables/fx.md) for the echo. The two rules worth knowing
+page in the desk that draws them: [mix.md](../../k7-plugins/docs/turntables/mix.md) for the trim and the
+channel fader, [fx.md](../../k7-plugins/docs/turntables/fx.md) for the echo. The two rules worth knowing
 here are that the trim is FIRST because a deck is five lanes and only the bus head reaches all of
 them, and that the echo is LAST because an echo-out cuts a delay's input and not its output.
 
@@ -141,7 +141,7 @@ only while that track also reaches an audible output. So a deck feeding nothing 
 is heard **beside** it, raw, at full level, with the fader unable to take it away — and every way
 of removing it from the master removes it from the crossfade too (five mechanisms, five
 measurements, one result:
-[engine/k7-runtime/docs/sidechain.md](../../../engine/k7-runtime/docs/sidechain.md)).
+[apps/k7-daw-engine/k7-runtime/docs/sidechain.md](../../../../k7-daw-engine/k7-runtime/docs/sidechain.md)).
 
 So each deck keeps its own fade, its own track and its own ordinary output, and the blend happens
 where sums belong — at the mixer. Nothing has to be hidden from the master, which is what makes
@@ -164,7 +164,7 @@ The arithmetic lives there rather than in the modules because a panel a reader h
 through a second parameter will be misread: one `Level` sent unchanged to both, with a `Side` on
 each module deciding which way its gain runs, sounds identical and makes `fadeA` read `Level 100`
 while deck A is silent. It is `Level` and not `Mix` because it is a gain: a name holding *mix* would
-be read as a dry/wet and held at full by the engine (`engine/k7-runtime/docs/mix.md`).
+be read as a dry/wet and held at full by the engine (`apps/k7-daw-engine/k7-runtime/docs/mix.md`).
 
 `@k7-core/audio/utility/crossfade` is not wrong: on a chain where both its inputs already live on one
 track, it is the right module. It is a desk, where they do not, that it cannot serve.
@@ -179,7 +179,7 @@ own — there is no fan-out in the document and no plugin with four inputs (agai
 [ports.md](ports.md)). Only one side ever plays: a separated song leaves the record's lane empty
 and its four parts SUM back to it, an unseparated one is the other way round. How loud each part
 plays is its PLATTER's own `Gain` — 0 drops the instrument, 1 is as it was cut, 2 doubles it. The
-reasoning is `packages/song-schema/docs/stems.md`.
+reasoning is `apps/k7-daw-frontend/packages/song-schema/docs/stems.md`.
 
 Five feeders is also what makes `trimA` a **bus**: a run breaks where two signals meet, so the
 trim, the EQ and the filter become a chain with no `from`, which `nodeProject` materialises as a
@@ -198,7 +198,7 @@ would add its inverted copy straight to the master.
 **What `bypassed:` means for such a lane is not a mute.** A muted track processes nothing at all,
 so lanes feeding their bus with silence give a set no sound. The engine reads "muted, and exactly
 one send" as **route the track's output to that bus** — off the master by having somewhere else
-to go, rather than by being silenced. The measurement is in `engine/k7-runtime/docs/editBuilder.md`;
+to go, rather than by being silenced. The measurement is in `apps/k7-daw-engine/k7-runtime/docs/editBuilder.md`;
 the word in this file still says the right thing to a reader of the graph: this lane is heard
 through its bus only.
 
@@ -210,7 +210,7 @@ an open gap rather than a bug in this file: a run consumed by a port has no way,
 heard only there.
 
 The four files come from `playlist stems` (`@studio/commands`), run beforehand: the desk never
-separates a record. What it does with them is `packages/k7-plugins/docs/turntables/stems.md`.
+separates a record. What it does with them is `apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md`.
 
 **A set with one lane a deck** draws no stem column at all — the designed answer to an unwired
 mapping, not a fault. Wiring the stems in by hand means the eight lanes, the sixteen nodes, the

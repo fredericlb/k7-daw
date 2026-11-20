@@ -1,4 +1,4 @@
-// gitApi.ts — the calls to `/api/files/git/*` (apps/k7/backend-rs/docs/files/git.md): one transport, and a
+// gitApi.ts — the calls to `/api/files/git/*` (apps/k7-daw-backend/docs/files/git.md): one transport, and a
 // refusal that keeps its status, its code and what else the answer said, so a screen branches on the code.
 
 import { HttpError } from "@studio/http-client/call";

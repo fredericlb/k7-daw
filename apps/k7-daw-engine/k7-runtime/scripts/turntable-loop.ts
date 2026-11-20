@@ -1,7 +1,7 @@
 // turntable-loop.ts — does the platter really LOOP, and does a roll really hand the record back?
 // Point it at a running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/turntable-loop.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/turntable-loop.ts [ws://127.0.0.1:8765]
 //
 // `TurntableLoop_test.cpp` covers the arithmetic and nothing else: it cannot say whether
 // `applyToBuffer` is wired to it. This can, because the source is built so that AMPLITUDE READS

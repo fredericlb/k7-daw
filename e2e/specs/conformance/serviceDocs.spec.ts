@@ -199,7 +199,10 @@ test("a project that will not compile answers the compiler's error, and its grap
 test("the compile routes name the compiler only when the native one answers", async () => {
   const sources = /export const SOURCES = "([0-9a-f]{16})"/.exec(
     readFileSync(
-      join(REPO, "packages/k7-wasm/src/k7Wasm.generated.ts"),
+      join(
+        REPO,
+        "apps/k7-daw-frontend/packages/k7-wasm/src/k7Wasm.generated.ts",
+      ),
       "utf8",
     ).slice(0, 2000),
   )?.[1];

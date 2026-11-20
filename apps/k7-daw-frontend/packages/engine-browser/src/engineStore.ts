@@ -36,7 +36,7 @@ export class EngineStore {
 
   getSnapshot = (): EngineState => this.state;
 
-  /** The `performance.now()` of the last stop pressed here, or null since a play — what the drawn playhead freezes on (apps/k7/frontend/docs/playhead.md). */
+  /** The `performance.now()` of the last stop pressed here, or null since a play — what the drawn playhead freezes on (apps/k7-daw-frontend/docs/playhead.md). */
   haltedAt = (): number | null => this.halt;
 
   /** A transport press in this page, told to the subscribers before the engine's frame can be. */

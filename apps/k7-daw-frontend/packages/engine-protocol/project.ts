@@ -41,7 +41,7 @@ export interface WarpDoc {
   markers: [number, number][]; // [timeline beat, source second]
 }
 
-/** A placement's OWN words as AUTHORED, unmerged, for the surface that writes them back out — see apps/k7/frontend/docs/clipEditors.md. */
+/** A placement's OWN words as AUTHORED, unmerged, for the surface that writes them back out — see apps/k7-daw-frontend/docs/clipEditors.md. */
 export interface EventDoc {
   from?: number | string; // seconds into a clip's file, or a timecode into a sequence's notes
   to?: number | string;
@@ -188,7 +188,7 @@ export interface TrackDoc {
   highlight?: boolean;
   disabled: boolean;
   inputChannels: number[]; // 1-based physical channels; a label is resolved against ~/.k7 first, so the engine only ever sees numbers
-  // Where this track LEAVES by. Empty is the mixer's sum, which is every track but a CUE bus — packages/song/docs/cue.md.
+  // Where this track LEAVES by. Empty is the mixer's sum, which is every track but a CUE bus — apps/k7-daw-frontend/packages/song/docs/cue.md.
   outputChannels: number[]; // 1-based physical channels, resolved the same way and for the same reason
   monitor: string; // Tracktion's "off" | "auto" (armed) | "on"; ignored when inputChannels is empty
   inputGain: number; // interface input trim in dB, 0 == unity; ignored when inputChannels is empty
@@ -211,7 +211,7 @@ export interface GroupDoc {
   solo: boolean;
 }
 
-// PICTURE IS NOT HERE: it is a SECOND compile of the same song folder, which keeps the frame off this wire — packages/song-video/docs/picture.md.
+// PICTURE IS NOT HERE: it is a SECOND compile of the same song folder, which keeps the frame off this wire — apps/k7-daw-frontend/packages/song-video/docs/picture.md.
 
 export interface ProjectDoc {
   uuid?: string; // stable song id, generated on first `k7 export`; absent until then

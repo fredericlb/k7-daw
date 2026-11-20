@@ -2,7 +2,7 @@
 // What a reader gets wrong: it asserts only that the Worker answers; the figures are printed (and kept as annotations) for the Z2 report.
 /// <reference lib="dom" />
 import { expect, test } from "@playwright/test";
-import { capacityFiles } from "../../../packages/commands/src/runtime/testing/capacity.ts";
+import { capacityFiles } from "../../../apps/k7-daw-frontend/packages/commands/src/runtime/testing/capacity.ts";
 import { base as origin } from "../../src/instance.ts";
 import { Service } from "../../src/service.ts";
 import { freshWorkspace } from "../../src/sync.ts";

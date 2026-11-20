@@ -298,7 +298,7 @@ export const SEQUENCE_NOTE_VERBS: Record<string, SidHandler> = {
       h.refuse([`no sequence file: sequences/${seqId}.k7x`]);
       return;
     }
-    // A pad's effects come through a PASTE, so they are checked rather than trusted — packages/song/docs/padEffects.md.
+    // A pad's effects come through a PASTE, so they are checked rather than trusted — apps/k7-daw-frontend/packages/song/docs/padEffects.md.
     const effect = (v: unknown): number | undefined =>
       typeof v === "number" && Number.isInteger(v) && v >= 2 ? v : undefined;
     const playable = notes.filter(isPlayableNote).map((n) => ({

@@ -3,7 +3,7 @@
 
 use std::path::PathBuf;
 
-const MODULE: &str = "../../../../../packages/k7-wasm/src/k7Wasm.generated.ts";
+const MODULE: &str = "../../../k7-daw-frontend/packages/k7-wasm/src/k7Wasm.generated.ts";
 
 fn main() {
     println!("cargo:rerun-if-changed={MODULE}");

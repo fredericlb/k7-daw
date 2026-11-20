@@ -183,7 +183,7 @@ describe("graph unlink", () => {
   });
 
   it("unlinks a LANE now, and leaves its file on disk", async () => {
-    // A lane is a module, so one name unlinks either (packages/song/docs/trackModules.md).
+    // A lane is a module, so one name unlinks either (apps/k7-daw-frontend/packages/song/docs/trackModules.md).
     await runCommand("graph unlink gtr", host(), "cli");
     expect(graph().gtr).toEqual([]);
     expect(existsSync(join(dir, "nodes", "gtr.k7x"))).toBe(true);

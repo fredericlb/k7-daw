@@ -29,12 +29,12 @@ export const OUT_NODE = "OUT";
 export const RENDER_NODE = "RENDER";
 export const VIDEO_OUT_NODE = "VIDEO_OUT";
 
-/** RENDER's second input: the sound the picture leaves with, the export's audio — packages/song/docs/videoOutputs.md. */
+/** RENDER's second input: the sound the picture leaves with, the export's audio — apps/k7-daw-frontend/packages/song/docs/videoOutputs.md. */
 export const RENDER_AUDIO_PORT = TRACK_OUT_AUDIO;
 /** …as an arrow names it, `MIX: ["OUT", "RENDER#audio"]`. */
 export const RENDER_AUDIO_IN = `${RENDER_NODE}#${RENDER_AUDIO_PORT}`;
 
-/** The recorder a project with no timeline gets on its master run, by plugin id: what its record button drives — packages/song/docs/outputRecording.md. */
+/** The recorder a project with no timeline gets on its master run, by plugin id: what its record button drives — apps/k7-daw-frontend/packages/song/docs/outputRecording.md. */
 export const OUTPUT_RECORDER_ID = `${MIX_NODE}:@record`;
 
 /** A compiled plugin's id, `<chain>:<module>`; a module name may hold a colon, so the FIRST one splits. */
@@ -46,7 +46,7 @@ export const pluginModule = (id: string): string =>
 /** The chain half of a compiled plugin id. */
 export const pluginChain = (id: string): string => id.split(":")[0];
 
-/** The HEADPHONE bus — the one built-in output that leaves the mixer's sum entirely, see packages/song/docs/cue.md. */
+/** The HEADPHONE bus — the one built-in output that leaves the mixer's sum entirely, see apps/k7-daw-frontend/packages/song/docs/cue.md. */
 export const CUE_NODE = "CUE";
 
 /** The five built-in outputs — the two sums, and the three devices they leave by. */
@@ -64,10 +64,10 @@ export const isBuiltinOutput = (id: string): boolean =>
 /** The owner a master chain's plugins are filed under while the document is built — a name, not a flag, see docs/moduleTypes.md. */
 export const MASTER_OWNER = "@master";
 
-/** The type folder COLD modules are filed in — never offered by the picker, packages/song/docs/coldModules.md. */
+/** The type folder COLD modules are filed in — never offered by the picker, apps/k7-daw-frontend/packages/song/docs/coldModules.md. */
 export const COLD_TYPE = "cold";
 
-/** The type folder a CONSOLE's halves live in — placed by the compile, never offered as a module (packages/song/docs/console.md). */
+/** The type folder a CONSOLE's halves live in — placed by the compile, never offered as a module (apps/k7-daw-frontend/packages/song/docs/console.md). */
 export const CONSOLE_TYPE = "console";
 
 /** The type folder a LANE belongs to — one category, and NOT one signal, see docs/moduleTypes.md. */
@@ -108,7 +108,7 @@ export const TRANSITION_CATEGORY = "video_transitions";
 /** The TYPE FOLDER a SHAPE module lives in — a drawn primitive, wired to a picture lane like a lens. */
 export const SHAPE_CATEGORY = "shapes";
 
-/** What a shape module DRAWS, named by its `shape:` field — see packages/song-video/docs/shapes.md. */
+/** What a shape module DRAWS, named by its `shape:` field — see apps/k7-daw-frontend/packages/song-video/docs/shapes.md. */
 export const SHAPE_KINDS = ["square", "circle", "text"] as const;
 
 /** The type folders whose modules ARE their behaviour (GLSL, a shape's params), so an empty `plugin:` is no hole. */
@@ -132,7 +132,7 @@ export const DISSOLVE = "dissolve";
 /** …and the kind a fade naming a `chain` and no `with` means: the shot's own alpha, laid over what is under it. */
 export const OVER = "over";
 
-/** The four knobs every shader gets, numbered rather than named and 0..1 — see packages/song-video/docs/shaders.md. */
+/** The four knobs every shader gets, numbered rather than named and 0..1 — see apps/k7-daw-frontend/packages/song-video/docs/shaders.md. */
 export const SHADER_PARAMS = ["P1", "P2", "P3", "P4"] as const;
 
 /** The uniform each of them lands on — one rule, so a panel and a shader cannot disagree. */
@@ -168,7 +168,7 @@ export interface PortDef {
   mandatory?: boolean;
 }
 
-/** RENDER's two inputs: the composited picture, and the sound the export leaves with — packages/song/docs/videoOutputs.md. */
+/** RENDER's two inputs: the composited picture, and the sound the export leaves with — apps/k7-daw-frontend/packages/song/docs/videoOutputs.md. */
 export const RENDER_INPUTS: PortDef[] = [
   { name: "in", type: "video" },
   { name: RENDER_AUDIO_PORT, type: "audio" },
@@ -219,7 +219,7 @@ export const MODULE_TYPES: Record<
     inputs: [{ name: "in", type: "video" }],
     outputs: [{ name: "out", type: "video" }],
   },
-  // A SHADER: picture in, picture out, and an audio SIDE input allowed to be empty (packages/song-video/docs/shaders.md).
+  // A SHADER: picture in, picture out, and an audio SIDE input allowed to be empty (apps/k7-daw-frontend/packages/song-video/docs/shaders.md).
   shaders: {
     kind: "plugin",
     inputs: [
@@ -239,13 +239,13 @@ export const MODULE_TYPES: Record<
     inputs: [{ name: "midi", type: "midi" }],
     outputs: [{ name: "out", type: "midi" }],
   },
-  // A COLD module: audio in, audio out, run over a whole file before playback (packages/song/docs/coldModules.md).
+  // A COLD module: audio in, audio out, run over a whole file before playback (apps/k7-daw-frontend/packages/song/docs/coldModules.md).
   cold: {
     kind: "plugin",
     inputs: [{ name: "in", type: "audio" }],
     outputs: [{ name: "out", type: "audio" }],
   },
-  // One HALF of a summing console: placed by the compile from `project.console`, never wired by hand (packages/song/docs/console.md).
+  // One HALF of a summing console: placed by the compile from `project.console`, never wired by hand (apps/k7-daw-frontend/packages/song/docs/console.md).
   console: {
     kind: "plugin",
     inputs: [{ name: "in", type: "audio" }],
@@ -306,7 +306,7 @@ export function completionOrder<T>(
   return [...favorite, ...listed];
 }
 
-/** The intrinsic a module's engine-side dry/wet is bound and sent by — engine/k7-runtime/docs/mix.md. */
+/** The intrinsic a module's engine-side dry/wet is bound and sent by — apps/k7-daw-engine/k7-runtime/docs/mix.md. */
 export const MIX_PARAM = "@mix";
 
 /** …and the two LEVELS on the same engine stage, in dB: into an audio module, and out of anything with audio out. */
@@ -444,10 +444,10 @@ export const LIBRARIES_DIR = "_libraries";
 /** Where the file service clones them, under the machine's state (`<studioHome>/libraries/<name>`). */
 export const LIBRARIES_HOME_DIR = "libraries";
 
-/** Where automatic VST renders are cached, under the machine's state (`<studioHome>/.renders`) — never in a workspace (packages/song/docs/autoFreeze.md). */
+/** Where automatic VST renders are cached, under the machine's state (`<studioHome>/.renders`) — never in a workspace (apps/k7-daw-frontend/packages/song/docs/autoFreeze.md). */
 export const AUTO_RENDERS_HOME_DIR = ".renders";
 
-/** Where every project's undo journal is kept, under the machine's state (`<studioHome>/.history`) — never in a workspace (apps/k7/backend-rs/docs/files/history.md). */
+/** Where every project's undo journal is kept, under the machine's state (`<studioHome>/.history`) — never in a workspace (apps/k7-daw-backend/docs/files/history.md). */
 export const HISTORY_HOME_DIR = ".history";
 
 /** The folder a WORKSPACE's own shared library sits in, at the workspace root — the `@workspace` level. */

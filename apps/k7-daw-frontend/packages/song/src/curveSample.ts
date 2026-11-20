@@ -1,6 +1,6 @@
 // curveSample.ts — the compiler's curve sampling: a curve's value at a song beat, in TypeScript until the compiler is ported.
-// A reader would get wrong that it is not the browser's preview: that one is Rust (packages/song-schema/docs/wasmBoundary.md).
-// A UNIT value is 0..1 before amplitude and polarity. See packages/song/docs/curves.md.
+// A reader would get wrong that it is not the browser's preview: that one is Rust (apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md).
+// A UNIT value is 0..1 before amplitude and polarity. See apps/k7-daw-frontend/packages/song/docs/curves.md.
 
 import type {
   CurveCut,

@@ -1,6 +1,6 @@
 //! backpressure.rs — what a relay does with a frame for a peer that stopped reading, as `backpressure.ts`
 //! decides it: past 8 MiB unsent a frame a newer one replaces is dropped, past 64 MiB of what may not be
-//! dropped the peer is closed, a reply is never dropped (`packages/engine-tunnel/docs/backpressure.md`).
+//! dropped the peer is closed, a reply is never dropped (`apps/k7-daw-frontend/packages/engine-tunnel/docs/backpressure.md`).
 
 use std::collections::VecDeque;
 
@@ -12,7 +12,7 @@ pub const HARD_LIMIT_BYTES: usize = 64 * 1024 * 1024;
 pub const OVERLOAD_CLOSE: u16 = 1013;
 /// The engine's text pushes that a newer one of the same kind replaces.
 const DROPPABLE_TYPES: [&str; 3] = ["state", "io-levels", "plugin-params-live"];
-/// `STREAM_MAGIC` of `packages/engine-protocol/stream.ts`, little-endian at the frame's start.
+/// `STREAM_MAGIC` of `apps/k7-daw-frontend/packages/engine-protocol/stream.ts`, little-endian at the frame's start.
 const STREAM_MAGIC: u32 = 0x4c53_5452;
 /// Frames held before the far end is connected, and their bytes.
 pub const MAX_HELD_FRAMES: usize = 256;

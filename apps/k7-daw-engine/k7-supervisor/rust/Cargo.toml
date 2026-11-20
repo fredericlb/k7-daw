@@ -2,7 +2,7 @@
 name = "k7-audio"
 version = "0.1.0"
 edition = "2024"
-description = "The media library's decoder and resampler (packages/audio-analysis/rust) behind a C ABI, for the supervisor's stem cut: no ffmpeg on the engine's machine."
+description = "The media library's decoder and resampler (apps/k7-daw-backend/packages/waveform) behind a C ABI, for the supervisor's stem cut: no ffmpeg on the engine's machine."
 publish = false
 
 [lib]
@@ -16,4 +16,4 @@ codegen-units = 1
 panic = "unwind"
 
 [dependencies]
-waveform = { path = "../../../packages/audio-analysis/rust", features = ["encode"] }
+waveform = { path = "../../../k7-daw-backend/packages/waveform", features = ["encode"] }

@@ -1,7 +1,7 @@
 // trackHide.ts — `track hide` / `track unhide`: `hidden: true` on the lane's chain sets the whole chain
 // aside — no timeline row, no graph card, nothing compiled or played — and its files stay as written.
 // The one thing a reader would get wrong: a hidden lane is also taken out of `soloed`, since a solo
-// nobody can see would silence every other lane. See packages/song/docs/chainFiles.md, "Hidden chains".
+// nobody can see would silence every other lane. See apps/k7-daw-frontend/packages/song/docs/chainFiles.md, "Hidden chains".
 
 import { relative } from "node:path";
 import {

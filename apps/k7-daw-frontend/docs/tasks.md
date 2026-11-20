@@ -34,7 +34,7 @@ the tasks survive the app, and the app adds a heading only to a file it creates.
 
 Every action on it is a `task` command — `task add <text>`, `task mark <timecode> <text>` (the same,
 pinned to the open project), `task done <n>` (ticks or unticks), `task remove <n>` —
-(`packages/commands/src/verbs/tasks.ts`), as every action in this shell is. A task is addressed by its
+(`apps/k7-daw-frontend/packages/commands/src/verbs/tasks.ts`), as every action in this shell is. A task is addressed by its
 NUMBER, its place in the list as the panel shows it, which is also what a person reading the panel
 would type. After each one the panel reads the file again rather than patching its own list: the file
 is the truth, and it re-reads on the workspace's revision too, so an edit made elsewhere shows up.
@@ -53,7 +53,7 @@ flag says where something is to be done, and the place is what a click on the ru
 
 The panel's top row holds the OPEN project's tags, `project.tags` in its project.k7x, which the home
 page shows beside the project. They are written by `project tag <tag>` and `project untag <tag>`
-(`packages/commands/src/verbs/projectTags.ts`), never by the panel, for the same reason as the tasks.
+(`apps/k7-daw-frontend/packages/commands/src/verbs/projectTags.ts`), never by the panel, for the same reason as the tasks.
 They sit here because this panel is where a project gets organised, and a tag sorts projects much as a
 task list sorts work. The project's own file holds them, not TODOS.md, because a tag belongs to one song
 and travels with it when the song is copied. With no project open the row is not drawn.

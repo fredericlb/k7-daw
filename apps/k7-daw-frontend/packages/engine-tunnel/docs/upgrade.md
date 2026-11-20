@@ -3,7 +3,7 @@
 Every WebSocket the TypeScript backend accepts — a share's visitor, a sync replica — completes its
 upgrade through `acceptSocket` (`../upgrade.ts`). The front's sockets (a browser on the engine relay,
 a supervisor's tunnel, a loopback client of a tunnel channel) keep the same two rules in Rust
-(`apps/k7/backend-rs/crates/k7-engine/src/ws.rs`), where a peer's fault ends its socket and nothing
+(`apps/k7-daw-backend/packages/k7-engine/src/ws.rs`), where a peer's fault ends its socket and nothing
 else.
 
 ## An error listener first, always
@@ -27,4 +27,4 @@ server keeps for such a peer holds whatever it pins: an engine session, a share'
 relay pair. `heartbeat(ws)` pings every 30 s and terminates a socket that left the previous ping
 unanswered, so a dead peer is gone within a minute. The sync relay runs the same rule over its whole
 server in one loop; a share's visitor, served alone, calls `heartbeat` on itself, and the front's
-relay pings both its ends on the same 30 s (`HEARTBEAT_MS`, `apps/k7/backend-rs/crates/k7-engine/src/relay/mod.rs`).
+relay pings both its ends on the same 30 s (`HEARTBEAT_MS`, `apps/k7-daw-backend/packages/k7-engine/src/relay/mod.rs`).

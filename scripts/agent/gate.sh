@@ -57,7 +57,7 @@ if [ -n "$js" ]; then
 fi
 # A generated file is checked only when something it is built from changed.
 step "generated files"
-if [ -n "$(changed 'packages/*')" ]; then
+if [ -n "$(changed 'apps/k7-daw-frontend/packages/*' 'apps/k7-daw-wasm/*' 'apps/k7-daw-backend/packages/waveform/*')" ]; then
   node scripts/agent/generated-check.mjs
 fi
 mode="${1:-merge}"
@@ -67,7 +67,7 @@ last="$(cat "$mark" 2> /dev/null || true)"
 if [ -n "$last" ] && git merge-base --is-ancestor "$last" HEAD 2> /dev/null; then export K7_CRATES_BASE="$last"; fi
 if [ "$mode" = "--quick" ]; then
   # An in-tree target folder means a --target-dir slipped after `--` (docs/agent-playbook.md "Local builds").
-  if [ -d apps/k7/backend-rs/target ]; then echo "gate: apps/k7/backend-rs/target exists in $root: a cargo run built in the tree; delete it and pass --target-dir before any --" >&2; exit 1; fi
+  if [ -d apps/k7-daw-backend/target ]; then echo "gate: apps/k7-daw-backend/target exists in $root: a cargo run built in the tree; delete it and pass --target-dir before any --" >&2; exit 1; fi
   if [ -n "$(changed '*.rs')" ]; then
     step "clippy on the affected crates"
     bash scripts/agent/mac-checks.sh --narrow --clippy
@@ -83,7 +83,7 @@ gate_lock_take "$(git symbolic-ref -q --short HEAD || echo detached)"
 step "check:changed"
 if [ "$K7_GATE_BASE" = main ]; then npm run --silent check:changed; else npm run --silent check:changed -- --base "$K7_GATE_BASE"; fi
 # The module answers what the native replays do (k7-wasm/docs/edit.md): run when the crate, the module or the stubs changed.
-if [ -n "$(changed 'packages/song-edit/*' 'packages/k7-wasm/*' 'packages/song/src/*')" ]; then
+if [ -n "$(changed 'apps/k7-daw-frontend/packages/song-edit/*' 'apps/k7-daw-frontend/packages/k7-wasm/*' 'apps/k7-daw-frontend/packages/song/src/*')" ]; then
   step "edit replay"
   npm run --silent test:edit-replay -w @studio/k7-wasm -- --target-dir "$HOME/.cache/k7-$(basename "$root")"
 fi

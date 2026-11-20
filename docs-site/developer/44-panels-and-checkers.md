@@ -6,26 +6,26 @@ Panels page of the user guide.
 
 ## The format
 
-The schema is `UISchema` / `UiFileSchema` in `packages/song-schema/src/yaml/moduleSchema.ts`
+The schema is `UISchema` / `UiFileSchema` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts`
 (strict: an unknown key is an error). `WIDGET_TYPES` lists the fourteen widget kinds. The rules
 that cross widgets live elsewhere:
 
 | Rule | Where |
 |---|---|
 | Tab names 1 to 10 characters, unique; `vertical.tabs` match `tabs` by name and order | the schema |
-| Horizontal layout at most 4 rows; `vertical` at most 4 columns, required past 4 columns; both layouts offer the same binds per page | `twinIssues`, `packages/panel-rules/src/layoutTwins.ts` |
-| In bounds, no overlap except a group framing a widget | `gridIssues`, same file, and `packages/panel-rules/src/groupGeometry.ts` |
-| No knob, slider, fader or number on an `@` parameter; EQ bands as faders; no lone group | `atControlIssues`, `eqBandIssues`, `loneGroupIssues` in `packages/panel-rules/src/aiOrganize.ts` |
+| Horizontal layout at most 4 rows; `vertical` at most 4 columns, required past 4 columns; both layouts offer the same binds per page | `twinIssues`, `apps/k7-daw-frontend/packages/panel-rules/src/layoutTwins.ts` |
+| In bounds, no overlap except a group framing a widget | `gridIssues`, same file, and `apps/k7-daw-frontend/packages/panel-rules/src/groupGeometry.ts` |
+| No knob, slider, fader or number on an `@` parameter; EQ bands as faders; no lone group | `atControlIssues`, `eqBandIssues`, `loneGroupIssues` in `apps/k7-daw-frontend/packages/panel-rules/src/aiOrganize.ts` |
 
 Panels inherited through `extends` merge their top-level `widgets` per id
-(`packages/song/src/moduleResolve.ts`); widgets marked `hidden` are dropped when the panel is
+(`apps/k7-daw-frontend/packages/song/src/moduleResolve.ts`); widgets marked `hidden` are dropped when the panel is
 resolved.
 
-On the wire, a panel is `WebModuleUI` with `WebWidget`s (`packages/graph-model/types.ts`). The
-renderer draws it in `packages/ui-chains-react/src/DomChains.tsx`, folding wide grids with
-`packages/ui-chains/src/gridFit.ts`. `widgets.js` runs in the widget sandbox
-(`packages/ui-chains/src/widgetSandbox.ts`, `packages/ui-chains/src/widgetRuntime.ts`) against the
-contract in `packages/ui-chains/src/lcdScreen.ts`.
+On the wire, a panel is `WebModuleUI` with `WebWidget`s (`apps/k7-daw-frontend/packages/graph-model/types.ts`). The
+renderer draws it in `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx`, folding wide grids with
+`apps/k7-daw-frontend/packages/ui-chains/src/gridFit.ts`. `widgets.js` runs in the widget sandbox
+(`apps/k7-daw-frontend/packages/ui-chains/src/widgetSandbox.ts`, `apps/k7-daw-frontend/packages/ui-chains/src/widgetRuntime.ts`) against the
+contract in `apps/k7-daw-frontend/packages/ui-chains/src/lcdScreen.ts`.
 
 ## Binds
 
@@ -35,9 +35,9 @@ as a control that moves and does nothing. That is what `lint:panels` exists for.
 
 Where parameter names come from:
 
-- **Built-in plugins**: `packages/song-schema/src/builtinParams.generated.json`, generated from real
-  instances by `engine/k7-runtime/scripts/gen-builtin-params.mjs`, and read through
-  `packages/song-schema/src/builtinParams.ts` (`builtinPluginFor`). Re-run the script when the
+- **Built-in plugins**: `apps/k7-daw-frontend/packages/song-schema/src/builtinParams.generated.json`, generated from real
+  instances by `apps/k7-daw-engine/k7-runtime/scripts/gen-builtin-params.mjs`, and read through
+  `apps/k7-daw-frontend/packages/song-schema/src/builtinParams.ts` (`builtinPluginFor`). Re-run the script when the
   engine's built-ins change.
 - **External plugins**: only a loaded instance knows. The engine binary answers
   `--dump-params-ext <format> <id> <state>`.
@@ -45,11 +45,11 @@ Where parameter names come from:
 
 ## `npm run lint:panels`
 
-Runs `packages/song/scripts/checkPanelBinds.ts`.
+Runs `apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts`.
 
 ```bash
 npm run lint:panels
-npx tsx packages/song/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
+npx tsx apps/k7-daw-frontend/packages/song/scripts/checkPanelBinds.ts [library root] [--only <name filter>] [--json]
 ```
 
 For every module folder with a panel under the library root (default `k7-core`), it collects each
@@ -66,11 +66,11 @@ it is not part of `npm run lint` or of CI.
 
 ## `npm run lint:layouts`
 
-Runs `packages/ui-module-builder/scripts/checkLayouts.ts`.
+Runs `apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkLayouts.ts`.
 
 ```bash
 npm run lint:layouts
-npx tsx packages/ui-module-builder/scripts/checkLayouts.ts [module dirs...]
+npx tsx apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkLayouts.ts [module dirs...]
 ```
 
 With no argument it checks every `ui.k7x` under `k7-core`. For each panel:
@@ -90,11 +90,11 @@ library panels, and after an AI organize run over many modules.
 ## Adding a widget kind
 
 1. Add it to `WIDGET_TYPES` and its fields to the widget schema in
-   `packages/song-schema/src/yaml/moduleSchema.ts`, and to `WebWidget` in
-   `packages/graph-model/types.ts`.
-2. Draw it in `packages/ui-chains-react/src/DomChains.tsx` and size it if needed in
-   `packages/ui-chains/src/graph.ts`.
-3. Offer it in the builder: `packages/ui-module-builder/src/widgetKinds.ts` and the inspector's
-   fields in `packages/ui-module-builder/src/WidgetInspector.tsx`.
-4. Describe it in `WIDGET_DOCS` in `packages/panel-rules/src/aiPrompt.ts`, so AI organize
+   `apps/k7-daw-frontend/packages/song-schema/src/yaml/moduleSchema.ts`, and to `WebWidget` in
+   `apps/k7-daw-frontend/packages/graph-model/types.ts`.
+2. Draw it in `apps/k7-daw-frontend/packages/ui-chains-react/src/DomChains.tsx` and size it if needed in
+   `apps/k7-daw-frontend/packages/ui-chains/src/graph.ts`.
+3. Offer it in the builder: `apps/k7-daw-frontend/packages/ui-module-builder/src/widgetKinds.ts` and the inspector's
+   fields in `apps/k7-daw-frontend/packages/ui-module-builder/src/WidgetInspector.tsx`.
+4. Describe it in `WIDGET_DOCS` in `apps/k7-daw-frontend/packages/panel-rules/src/aiPrompt.ts`, so AI organize
    knows it, and extend `checkAiResult` if it has rules.

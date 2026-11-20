@@ -307,7 +307,7 @@ function windowOf(
   den: number,
 ): { from: number; to: number } {
   const bar = (num * 4) / den;
-  // The notes' extent rounded UP TO THE BAR, which is what a sequence stating no `to` is long — packages/song/docs/graphModel.md.
+  // The notes' extent rounded UP TO THE BAR, which is what a sequence stating no `to` is long — apps/k7-daw-frontend/packages/song/docs/graphModel.md.
   const extent =
     Math.ceil(notes.reduce((m, n) => Math.max(m, n.t + n.d), 0) / bar) * bar;
   const raw = (key: string): number | null => {

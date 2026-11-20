@@ -1,13 +1,13 @@
 # k7 frontend architecture
 
-`apps/k7/frontend` is the browser app: React 19, Vite, Tailwind v4 and `@studio/ui`, consumed with every `@studio/*` package as raw TypeScript source. It is the only app that opens a project. This page is the map of its shell; the timeline, the chains graph, the desk and the picture have their own sections.
+`apps/k7-daw-frontend` is the browser app: React 19, Vite, Tailwind v4 and `@studio/ui`, consumed with every `@studio/*` package as raw TypeScript source. It is the only app that opens a project. This page is the map of its shell; the timeline, the chains graph, the desk and the picture have their own sections.
 
 ## Boot: one address, one branch
 
 | File | Role |
 |---|---|
-| `apps/k7/frontend/src/main.tsx` | Dynamically imports **either** the documentation site (`src/docs/mountSite`, on the docs host) or the app (`src/appMain.tsx`). Both arms are dynamic so neither pays for the other. A chunk that fails to load reloads the page once (`src/chunkReload.ts`). |
-| `apps/k7/frontend/src/appMain.tsx` | Decides what the address is, **from the address alone**, and mounts the matching stack under one `BrowserRouter` and the `LocaleProvider`. |
+| `apps/k7-daw-frontend/src/main.tsx` | Dynamically imports **either** the documentation site (`src/docs/mountSite`, on the docs host) or the app (`src/appMain.tsx`). Both arms are dynamic so neither pays for the other. A chunk that fails to load reloads the page once (`src/chunkReload.ts`). |
+| `apps/k7-daw-frontend/src/appMain.tsx` | Decides what the address is, **from the address alone**, and mounts the matching stack under one `BrowserRouter` and the `LocaleProvider`. |
 
 `appMain.tsx` recognises, in order:
 
@@ -23,7 +23,7 @@ The project is the router's **basename** (`projectBasename`), so the router can 
 
 ## `App.tsx`: the shell
 
-`apps/k7/frontend/src/App.tsx` is the editor shell. It is over 5000 lines; it holds the wiring between panes and is the first candidate for splitting. Most of its logic already lives in pure modules beside it, each with a test:
+`apps/k7-daw-frontend/src/App.tsx` is the editor shell. It is over 5000 lines; it holds the wiring between panes and is the first candidate for splitting. Most of its logic already lives in pure modules beside it, each with a test:
 
 | Concern | Module |
 |---|---|
@@ -80,7 +80,7 @@ The engine's live state (playhead at ~20 Hz, meters, plugin params) lives in ext
 
 ## The three servers
 
-The browser talks to three servers, through `apps/k7/frontend/src/api.ts`:
+The browser talks to three servers, through `apps/k7-daw-frontend/src/api.ts`:
 
 | Destination | How | For |
 |---|---|---|
@@ -92,4 +92,4 @@ See [Frontend and backend boundary](./19-frontend-backend-boundary.md).
 
 ## Tests
 
-`npm run test` in `apps/k7/frontend` runs vitest over the pure modules (keys, routes, palette, command form, context menu, local commands, message catalogues…). Nothing mounts a component: a change to what is drawn or how a gesture feels has to be checked in the running app (`npm run dev` at the root). `npm run typecheck` compiles the paraglide catalogues first.
+`npm run test` in `apps/k7-daw-frontend` runs vitest over the pure modules (keys, routes, palette, command form, context menu, local commands, message catalogues…). Nothing mounts a component: a change to what is drawn or how a gesture feels has to be checked in the running app (`npm run dev` at the root). `npm run typecheck` compiles the paraglide catalogues first.

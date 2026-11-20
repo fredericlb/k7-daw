@@ -20,4 +20,4 @@ facts from the file's own headers (decision 3f-6).
 Known limits: a fragmented ISO file states no duration or rate in its `moov`, so both read 0; an edit list does not
 shorten the duration; a Matroska rotation is not read (ffprobe states none for the usual cameras).
 
-Third-party notices: `apps/k7/frontend/notices/components.json` lists both crates.
+Third-party notices: `apps/k7-daw-frontend/notices/components.json` lists both crates.

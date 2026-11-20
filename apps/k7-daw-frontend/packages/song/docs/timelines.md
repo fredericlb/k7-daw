@@ -2,7 +2,7 @@
 
 `timelines/<id>.k7x` is a material, like `clips/` and `sequences/`: lanes of events, placed on a song
 lane by `ref` as one event. The schema is `@studio/song-schema`'s `yaml/timelineSchema.ts`, the
-compile `src/compile/timelines.ts`, the user's page `apps/k7/docs/22-syntax-material.md`.
+compile `src/compile/timelines.ts`, the user's page `apps/k7-daw-frontend/user-docs/22-syntax-material.md`.
 
 ## Its sound goes through the lane it is placed on
 
@@ -14,7 +14,7 @@ effects, exactly as if it had been placed there event by event. A lane inside a 
 material apart while it is written; `disabled` silences it wherever the timeline is placed.
 
 The engine never hears of a timeline. Every event inside one compiles to an ordinary clip on the
-host lane, so nothing in `engine/k7-runtime` changed for it, and overlapping clips on one engine
+host lane, so nothing in `apps/k7-daw-engine/k7-runtime` changed for it, and overlapping clips on one engine
 track already sum.
 
 ## Expanded before routing, because a lane has two halves

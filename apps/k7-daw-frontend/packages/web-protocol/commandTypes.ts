@@ -1,7 +1,7 @@
 // commandTypes.ts — the palette's catalogue as GET /commands serves it, mirroring
-// packages/commands/src/commandSpec.ts. Re-exported by types.ts.
+// apps/k7-daw-frontend/packages/commands/src/commandSpec.ts. Re-exported by types.ts.
 
-// GET /commands — the palette's catalogue; mirrors ARG_CLASSES in packages/commands/src/commandSpec.ts.
+// GET /commands — the palette's catalogue; mirrors ARG_CLASSES in apps/k7-daw-frontend/packages/commands/src/commandSpec.ts.
 export type ArgClass =
   | "track"
   | "module"
@@ -14,7 +14,7 @@ export type ArgClass =
   | "text";
 // The PRECISE type of thing an argument names, where `kind` is only its colour — see docs/document.md.
 export type ArgProvider =
-  // A BOX this project declares — `assemblies/<name>.k7x`, see packages/song/docs/assemblies.md.
+  // A BOX this project declares — `assemblies/<name>.k7x`, see apps/k7-daw-frontend/packages/song/docs/assemblies.md.
   | "assemblies"
   // …and a TEMPLATE the library holds, which is what a new one is made from.
   | "assemblyTemplates"
@@ -33,13 +33,13 @@ export type ArgProvider =
   | "modules"
   | "moduleAlternatives"
   | "moduleEngines"
-  // One of this project's USES of a module, which is what the `node …` verbs address — packages/song/docs/nodes.md.
+  // One of this project's USES of a module, which is what the `node …` verbs address — apps/k7-daw-frontend/packages/song/docs/nodes.md.
   | "nodes"
   // A PICTURE lane of this song — a `@meta/picture-track` node, read off the lane files rather than the compile.
   | "pictureLanes"
   // A set list of the REPOSITORY — with `libraries`, a provider that reads nothing of the open project.
   | "playlists"
-  // A sample a rack tap may play — a library's or this project's `samples/`, packages/song/docs/libraryFiles.md.
+  // A sample a rack tap may play — a library's or this project's `samples/`, apps/k7-daw-frontend/packages/song/docs/libraryFiles.md.
   | "samples"
   | "sequenceFiles"
   | "timelines"
@@ -58,7 +58,7 @@ export interface CommandArg {
   // TRAILING args only: the line runs without it, so a form knows when it has collected enough.
   optional?: boolean;
 }
-// What a right-click can be ON, as commands.yaml `menu:` names it — mirrors MENU_ENTITIES in packages/commands/src/commandSpec.ts.
+// What a right-click can be ON, as commands.yaml `menu:` names it — mirrors MENU_ENTITIES in apps/k7-daw-frontend/packages/commands/src/commandSpec.ts.
 export const MENU_ENTITIES = [
   "track",
   "group",
@@ -93,7 +93,7 @@ export interface CommandInfo {
   // One sentence per language on what the command DOES; the NAME is never translated — see docs/document.md.
   readable?: { en: string; fr: string };
   args: CommandArg[];
-  // Where a right-click may offer it. Absent ⇒ wherever its leading arguments fit — k7's frontend/docs/contextMenu.md.
+  // Where a right-click may offer it. Absent ⇒ wherever its leading arguments fit — k7's apps/k7-daw-frontend/docs/contextMenu.md.
   menu?: MenuEntity[];
   // The menu asks before running it — the one exception to "nothing here asks twice", same page.
   confirm?: boolean;

@@ -20,7 +20,7 @@ const FORMATS = new Set(["vst3", "vst", "au", "clap", "lv2"]);
 const pluginName = (name: string, type: string): string =>
   FORMATS.has(type.toLowerCase()) && name ? name : type;
 
-// Each wording the engine uses (engine/k7-runtime/server/DocJson.cpp, engine/EditBuilder.cpp).
+// Each wording the engine uses (apps/k7-daw-engine/k7-runtime/server/DocJson.cpp, engine/EditBuilder.cpp).
 const RULES: [RegExp, (g: string[]) => MissingItem][] = [
   [
     /^(.+?) '(.+)' is outside the folders this engine reads/,

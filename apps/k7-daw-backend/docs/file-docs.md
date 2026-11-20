@@ -4,8 +4,8 @@ What a page loads to draw a project, answered by Rust from the song crate's shar
 the errors, the graph, the hints, the surfaces, the I/O ports, the module catalogue and the base modules (`GET /project-doc`,
 `/engine-doc`, `/project-errors`, `/graph` without `?at=`, `/hints`, `/surfaces`, `/io-ports`, `/module-catalogue`,
 `/base-modules`). It stands on [file-native.md](file-native.md): the path model is 1a's.
-The front's half is `crates/k7-front/src/routes/files/service/native/`
-(`docs.rs`, `stack.rs`), the roots and the rig are `crates/k7-file-service` (`song_ask.rs`, `rig.rs`).
+The front's half is `packages/k7-front/src/routes/files/service/native/`
+(`docs.rs`, `stack.rs`), the roots and the rig are `packages/k7-file-service` (`song_ask.rs`, `rig.rs`).
 
 ## What it decides
 

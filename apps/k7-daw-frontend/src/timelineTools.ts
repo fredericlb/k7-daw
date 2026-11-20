@@ -2,7 +2,7 @@
 // the keyboard is (timelineMode.ts). Every tool stands on ONE verb, so a gesture stays one command
 // and one Ctrl+Z — which is why there is no pencil here: `event add` places a clip that already
 // exists, so drawing one would be `sequence new` and then `event add`, two entries for one gesture.
-// See apps/k7/frontend/docs/timeline.md.
+// See apps/k7-daw-frontend/docs/timeline.md.
 
 import { m } from "./paraglide/messages.js";
 

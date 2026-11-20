@@ -26,7 +26,7 @@ export interface ProbeTarget {
   };
   /** Minted per engine by `/engines`. Absent simply means no relay candidate is offered. */
   proxyTicket?: string;
-  /** Its supervisor holds a tunnel, so a WebRTC candidate is offered too — packages/engine-tunnel/docs/rtc.md. */
+  /** Its supervisor holds a tunnel, so a WebRTC candidate is offered too — apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md. */
   rtc?: boolean;
 }
 
@@ -222,7 +222,7 @@ export function candidatesFor(
   if (!e.proxyTicket) return direct;
   const relay = relayUrls(relayBase, e.id, e.proxyTicket, location.href);
   const relayed: Candidate[] = [{ url: relay.ws, direct: false }];
-  // Only a claimant gets a data channel, and it carries no files — they are the server's (packages/engine-tunnel/docs/rtc.md).
+  // Only a claimant gets a data channel, and it carries no files — they are the server's (apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md).
   if (e.rtc && opts.claim) relayed.push({ url: relay.rtc, direct: false });
   return [...direct, ...relayed];
 }
@@ -297,7 +297,7 @@ async function rank<E extends ProbeTarget>(
     wsUrl: best.c.url,
     // The files are the server's hub's, set by `engineAccess` when it hosts them — never the engine machine's.
     fileBase: null,
-    // No token until paired, nor through a relay that withheld it (`apps/k7/backend-rs/docs/engine/claim.md`): every chooser filters on it.
+    // No token until paired, nor through a relay that withheld it (`apps/k7-daw-backend/docs/engine/claim.md`): every chooser filters on it.
     token: best.reply.needsPairing ? null : best.reply.token || null,
     needsPairing: best.reply.needsPairing,
   };

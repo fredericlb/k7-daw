@@ -1,7 +1,7 @@
 # The list of workspaces
 
 What roams between a person's Apple devices besides git: the list of the workspaces they added. The decisions of what travels how are
-`docs/project-sync-plan.md`; the Apple side is `engine/k7-runtime/docs/ios.md`. The crate is `k7-roam`, the route is
+`docs/project-sync-plan.md`; the Apple side is `apps/k7-daw-engine/k7-runtime/docs/ios.md`. The crate is `k7-roam`, the route is
 `routes/files/service/native/git_roam.rs`.
 
 ## Choices

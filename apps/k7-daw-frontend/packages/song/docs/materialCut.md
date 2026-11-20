@@ -39,7 +39,7 @@ A PICTURE lane's split is virtual too, and for a stronger reason: a shot has no 
 to process, warp or replace. Its effects are the lane's, and its sound is another lane's
 (`videoSound.md`). Two placements of one clip lose nothing there, and re-encoding
 video to cut it would cost a render and a generation of quality for nothing
-(`packages/commands/docs/picture.md`).
+(`apps/k7-daw-frontend/packages/commands/docs/picture.md`).
 
 ## The one contract
 
@@ -116,7 +116,7 @@ falls back to drawing **one bar**, so a three-bar consolidated render would draw
 playing all of it.
 
 That is answered on the side that HAS the audio. The file service measures the source and fills
-the length in on its way to the browser — `naturalBeats` in `apps/k7/backend-rs/crates/k7-file-service/src/workspaces/mod.rs`,
+the length in on its way to the browser — `naturalBeats` in `apps/k7-daw-backend/packages/k7-file-service/src/workspaces/mod.rs`,
 memoised on each file's size and mtime, from the in-point. The compiled document the engine
 receives still says 0, because 0 is what is true there. Nothing is written into the song at all.
 

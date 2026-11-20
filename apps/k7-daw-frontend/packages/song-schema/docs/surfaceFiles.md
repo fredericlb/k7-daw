@@ -1,8 +1,8 @@
 # A surface file
 
-The rationale behind `packages/song-schema/src/yaml/surfaceSchema.ts` and
-`packages/song-schema/src/yaml/surfaceFile.ts` — `surfaces/<name>.k7x`, the special VIEW a project
-asks its editor to draw. What a surface IS lives in `packages/song/docs/surfaces.md`; this page is
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts` and
+`apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceFile.ts` — `surfaces/<name>.k7x`, the special VIEW a project
+asks its editor to draw. What a surface IS lives in `apps/k7-daw-frontend/packages/song/docs/surfaces.md`; this page is
 about the file's shape and what the schema refuses.
 
 ## Why `type` is an enum
@@ -89,7 +89,7 @@ itself (rather than a record built the same way) is what keeps `module` meaning 
 file uses" in both places. Two shapes built alike would drift the first time one of them grew:
 `null` — a component named and not wired, which is what a scaffolded desk is made of — has to be
 legal in both, or the file `project surface new` writes will not load in the other. See
-`packages/song/docs/viewBindings.md` for why a binding cannot live in the module's own
+`apps/k7-daw-frontend/packages/song/docs/viewBindings.md` for why a binding cannot live in the module's own
 `controller.k7x`.
 
 It is OPTIONAL, and an absent one is not an error in the schema. Which components a given type needs
@@ -107,7 +107,7 @@ than the two hundred and seventy-nine on the volume.
 with a screen (k7's cog opens it), it can be shared between sets, and it is the thing a person has
 already written. What `songs.k7x` holds is the half a playlist has no place for: this set's CUE
 points on a song, which belong to the desk that plays it rather than to a list other sets read
-(`packages/song/docs/setProject.md`).
+(`apps/k7-daw-frontend/packages/song/docs/setProject.md`).
 
 Optional, and an absent one is not an error: a desk with no playlist draws, and says on the browser
 that it names none, which is a sentence you can act on.
@@ -121,7 +121,7 @@ would be asking it a question that has nothing to do with it. What a SET decides
 of arithmetic may start because somebody put a record on — and that is
 worth deciding per set, because a rehearsal rig and a stage rig answer it differently. Absent is
 false, and false is a state rather than a fault: the desk draws, plays, and says on its greyed knobs
-that this record was never separated (`packages/k7-plugins/docs/turntables/stems.md`).
+that this record was never separated (`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md`).
 
 ## What the pair refinements refuse
 

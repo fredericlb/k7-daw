@@ -21,7 +21,7 @@ make that host's build produce the C library beside it, for nothing.
 |---|---|
 | on Android the front's panics and its stop are written to logcat under `k7-front` (`src/logcat.rs`); a host that links the front gives `exit::watch` its own sink, as the desktop app does | the app's stderr is not kept, and the front runs in the app's process (`front.md`, "Every end leaves a line") |
 | on Android the process's stdout and stderr are pipes whose lines go to logcat under `k7-front`, stdout at INFO and stderr at WARN, from the front's first start | the app's stdout and stderr are not kept, and every crate of the front prints its lines there (`files |`, `sync |`, `[registry]`): the lines are the binary's, one entry each, no more |
-| the engine's start takes stderr for its own pipe (`k7-runtime`, `engine/k7-runtime/docs/android.md`), the front's stderr lines with it; a stdout or stderr that is already a pipe when the front starts is left to its reader | stderr is the process's, and the engine runs in the same one; `adb logcat -s k7-front k7-runtime` reads both |
+| the engine's start takes stderr for its own pipe (`k7-runtime`, `apps/k7-daw-engine/k7-runtime/docs/android.md`), the front's stderr lines with it; a stdout or stderr that is already a pipe when the front starts is left to its reader | stderr is the process's, and the engine runs in the same one; `adb logcat -s k7-front k7-runtime` reads both |
 | a panic is written to logcat directly, then again by the default hook through stderr | the direct line is written before the process can end; the pipe's thread may not get to its copy |
 | JSON config, the same fields as the environment (`front.md`) | one shape for every host, and a C ABI needs no struct layout agreed across languages |
 | the port is returned only once the socket is bound | a host can hand the address to its views at once, and `listen: 127.0.0.1:0` works |
@@ -47,10 +47,10 @@ port, is what the conformance suite passes through over `adb forward` (`e2e/docs
 
 Every build ships `libk7_embed.so`, built by Gradle's `buildFront` through cargo with the NDK's clang at the
 app's `minSdk`, and `RustFront.kt` runs it on the studio's port, in front of node, with a secret drawn per
-launch (`engine/k7-runtime/docs/android.md`). A release build therefore needs Rust's `aarch64-linux-android`
+launch (`apps/k7-daw-engine/k7-runtime/docs/android.md`). A release build therefore needs Rust's `aarch64-linux-android`
 target on every machine that builds one: GitHub's android job adds it.
 
 ## In the iOS app
 
-`engine/k7-ios/scripts/stage.mjs` builds `libk7_embed.a` through cargo, and `BackendHost.swift` starts it on the studio's port
-with no node behind it (`engine/k7-runtime/docs/ios.md`); a developer builds the app in Xcode.
+`apps/k7-daw-ios/scripts/stage.mjs` builds `libk7_embed.a` through cargo, and `BackendHost.swift` starts it on the studio's port
+with no node behind it (`apps/k7-daw-engine/k7-runtime/docs/ios.md`); a developer builds the app in Xcode.

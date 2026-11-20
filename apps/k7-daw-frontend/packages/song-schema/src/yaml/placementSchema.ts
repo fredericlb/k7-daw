@@ -78,13 +78,13 @@ export const PlacementSchema = z
     fadeOut: Fade.optional(),
     // How many times the window is played, back to back. 1 (the default) is one pass.
     loop: z.number().int().min(1).optional(),
-    // AUDIO events only: this event's own trim in dB, ±6 — 0 (the default) is unity (packages/song-edit/docs/eventGain.md).
+    // AUDIO events only: this event's own trim in dB, ±6 — 0 (the default) is unity (apps/k7-daw-frontend/packages/song-edit/docs/eventGain.md).
     gain: z.number().min(-6).max(6).optional(),
     // Silences THIS placement without removing it — the event-level counterpart of bypassing the lane.
     disabled: z.boolean().optional(),
     // Whether THIS event plays the material's stretch map, absent meaning yes (docs/moduleFile.md).
     warp: z.boolean().optional(),
-    // Other performances of this event, each a material and the song position it starts at (packages/song/docs/takes.md).
+    // Other performances of this event, each a material and the song position it starts at (apps/k7-daw-frontend/packages/song/docs/takes.md).
     takes: z
       .array(z.object({ ref: z.string().min(1), start: Timecode }).strict())
       .optional(),
@@ -108,7 +108,7 @@ export const PlacementSchema = z
     speed: z.number().finite().optional(),
     // …the head node of a run fed by nothing landing on its lane, run on it alone — song-video docs/effects.md.
     effect: z.string().min(1).optional(),
-    // …and its SOUND is not played, its picture still is — packages/song/docs/videoSound.md.
+    // …and its SOUND is not played, its picture still is — apps/k7-daw-frontend/packages/song/docs/videoSound.md.
     silent: z.boolean().optional(),
     // …and how its sound follows a `speed`: resampled like `tape` (the default), or stretched to `keep` its pitch.
     pitch: z.enum(["tape", "keep"]).optional(),

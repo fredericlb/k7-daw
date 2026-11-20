@@ -1,6 +1,6 @@
 // argOptions.ts — a list field's options: the value a pick INSERTS, and the label the list shows
 // when that value is unreadable (a node's uuid). Ranked by the better of the two, so typing what
-// you read finds what is inserted. See packages/commands/docs/completions.md.
+// you read finds what is inserted. See apps/k7-daw-frontend/packages/commands/docs/completions.md.
 
 import type { Completion } from "@studio/project-shell/project";
 import { fuzzyScore } from "./fuzzy";

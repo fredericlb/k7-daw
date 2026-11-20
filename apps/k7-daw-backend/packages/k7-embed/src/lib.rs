@@ -1,5 +1,5 @@
 //! k7-embed — the front as a C library for the phones: `k7_front_start(config JSON)`, `k7_front_stop()` and
-//! `k7_roam_install(list, put)` over `k7_front::embedded`, plus the JNI names Android looks up (`apps/k7/backend-rs/docs/embed.md`).
+//! `k7_roam_install(list, put)` over `k7_front::embedded`, plus the JNI names Android looks up (`apps/k7-daw-backend/docs/embed.md`).
 //! A Rust host (the tray) links `k7-front` itself and never builds this crate's C outputs.
 
 #[cfg(target_os = "android")]
@@ -41,7 +41,7 @@ pub extern "C" fn k7_front_stop() -> i32 {
     if k7_front::embedded::stop() { 0 } else { -1 }
 }
 
-/// Installs the host's list store as two callbacks, before `k7_front_start` (`apps/k7/backend-rs/docs/roam.md`).
+/// Installs the host's list store as two callbacks, before `k7_front_start` (`apps/k7-daw-backend/docs/roam.md`).
 #[unsafe(no_mangle)]
 pub extern "C" fn k7_roam_install(list: k7_roam::ffi::List, put: k7_roam::ffi::Put) {
     k7_roam::ffi::install_callbacks(list, put);

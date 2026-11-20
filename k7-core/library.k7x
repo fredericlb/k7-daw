@@ -1,4 +1,4 @@
 name("k7-core")
-version(7)
+version(8)
 requires(2)
 notes("The 21 DSP modules are written as data, a dsp.k7x each, decoded by the compiler; needs level 2.")

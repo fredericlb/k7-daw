@@ -1,37 +1,37 @@
 # The DJ desk: architecture
 
-The DJ desk is the drawer of the `turntables` surface type. It is a builtin **plugin** in `packages/k7-plugins`, mounted by k7's shell. This page covers where its code lives, how a host gives it an engine, and how a gesture becomes sound. The control vocabulary and bindings are in [Desk controls and bindings](./61-turntables-bindings.md); tempo, grids, loops and cues in [Desk timing](./62-turntables-timing.md).
+The DJ desk is the drawer of the `turntables` surface type. It is a builtin **plugin** in `apps/k7-daw-frontend/packages/k7-plugins`, mounted by k7's shell. This page covers where its code lives, how a host gives it an engine, and how a gesture becomes sound. The control vocabulary and bindings are in [Desk controls and bindings](./61-turntables-bindings.md); tempo, grids, loops and cues in [Desk timing](./62-turntables-timing.md).
 
 ## Where the code lives
 
 | Path | Role |
 |---|---|
-| `packages/k7-plugins/src/turntables/index.ts` | `turntablesPlugin`: a `definePlugin` with one pane contribution of type `turntables`. No commands, no server half. |
-| `packages/k7-plugins/src/browser.ts` | The browser composition list (`BROWSER_PLUGINS`) the shell registers. |
-| `packages/k7-plugins/src/turntables/browser.tsx` | `TurntablesPane`, the drawer: fetches the compiled graph, reads `surface.mapping` and `playlist`, calls `useDeckSet` and renders `Turntables`. |
-| `packages/k7-plugins/src/turntables/engine.ts` | The `Deck` seam: what the desk needs from an engine (types only). Exported as `@studio/k7-plugins/turntables/engine`. |
-| `packages/k7-plugins/src/turntables/useDeckSet.ts` | The two decks as one state machine: loads, tempos, sync, cues, every gesture. |
-| `packages/k7-plugins/src/turntables/useDeckLoops.ts` | The loop section, a hook of its own. |
-| `packages/k7-plugins/src/turntables/deck.ts` | Building the `ProjectDoc` the engine plays: `withDecks`, platter params, sync arithmetic. |
-| `packages/k7-plugins/src/turntables/deckVocabulary.ts` | Deck ids, `DeckLoad`, `DeckTempo`, and every control's range. |
-| `packages/k7-plugins/src/turntables/controls.ts`, `mapping.ts`, `mixBindings.ts` | Control ids, required controls, binding resolution. |
-| `packages/k7-plugins/src/turntables/beats.ts`, `grid.ts`, `loop.ts`, `metronome.ts`, `waveform.ts`, `shuttle.ts`, `dial.ts`, `deskLayout.ts` | Pure arithmetic, each with a test. |
-| `packages/k7-plugins/src/turntables/setList.ts`, `prewarm.ts`, `service.ts`, `mixView.ts` | Data: the playlist resolved against the workspace's audio files, background analysis, the file-service calls, reading/writing `mix.k7x`. |
-| `packages/k7-plugins/src/turntables/views/` | React components: `Turntables` (the mapping gate), `MixView` (the desk), `DeckSide`, `DeckButtons`, `ChannelStrip`, `MixerColumn`, `BpmFader`, `CueButtons`, `LoopRow`, `Vinyl`, `Waveform`, `SongBrowser`, `inSight.ts`. |
-| `packages/k7-plugins/scripts/turntables/put-on.ts` | A measurement script against a running engine; see [Desk tests](./65-dj-tests.md). |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/index.ts` | `turntablesPlugin`: a `definePlugin` with one pane contribution of type `turntables`. No commands, no server half. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/browser.ts` | The browser composition list (`BROWSER_PLUGINS`) the shell registers. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/browser.tsx` | `TurntablesPane`, the drawer: fetches the compiled graph, reads `surface.mapping` and `playlist`, calls `useDeckSet` and renders `Turntables`. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/engine.ts` | The `Deck` seam: what the desk needs from an engine (types only). Exported as `@studio/k7-plugins/turntables/engine`. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/useDeckSet.ts` | The two decks as one state machine: loads, tempos, sync, cues, every gesture. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/useDeckLoops.ts` | The loop section, a hook of its own. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/deck.ts` | Building the `ProjectDoc` the engine plays: `withDecks`, platter params, sync arithmetic. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/deckVocabulary.ts` | Deck ids, `DeckLoad`, `DeckTempo`, and every control's range. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/controls.ts`, `mapping.ts`, `mixBindings.ts` | Control ids, required controls, binding resolution. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/beats.ts`, `grid.ts`, `loop.ts`, `metronome.ts`, `waveform.ts`, `shuttle.ts`, `dial.ts`, `deskLayout.ts` | Pure arithmetic, each with a test. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/setList.ts`, `prewarm.ts`, `service.ts`, `mixView.ts` | Data: the playlist resolved against the workspace's audio files, background analysis, the file-service calls, reading/writing `mix.k7x`. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/views/` | React components: `Turntables` (the mapping gate), `MixView` (the desk), `DeckSide`, `DeckButtons`, `ChannelStrip`, `MixerColumn`, `BpmFader`, `CueButtons`, `LoopRow`, `Vinyl`, `Waveform`, `SongBrowser`, `inSight.ts`. |
+| `apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` | A measurement script against a running engine; see [Desk tests](./65-dj-tests.md). |
 
 On k7's side:
 
 | Path | Role |
 |---|---|
-| `apps/k7/frontend/src/plugins.ts` | Registers `builtinBrowserPlugins()` into the shell's surface drawers. |
-| `apps/k7/frontend/src/surfacePanes.ts` | The registry of surface drawers, with the two mount shapes (`ShellPaneProps` for the pane ring, `DeviceSurfaceCtx` for a second device). |
-| `apps/k7/frontend/src/hooks/useTurntableDeck.ts` | k7's implementation of the `Deck` seam over its engine link. |
-| `apps/k7/frontend/src/components/ExternalSurface.tsx` | The same drawer mounted alone on a second device. |
-| `apps/k7/frontend/src/routes.ts` | `viewPanes`: a `turntables` pane exists in the ring only when the project declares the surface. |
-| `apps/k7/frontend/src/keys.ts` | `4` is `ui turntables`. |
+| `apps/k7-daw-frontend/src/plugins.ts` | Registers `builtinBrowserPlugins()` into the shell's surface drawers. |
+| `apps/k7-daw-frontend/src/surfacePanes.ts` | The registry of surface drawers, with the two mount shapes (`ShellPaneProps` for the pane ring, `DeviceSurfaceCtx` for a second device). |
+| `apps/k7-daw-frontend/src/hooks/useTurntableDeck.ts` | k7's implementation of the `Deck` seam over its engine link. |
+| `apps/k7-daw-frontend/src/components/ExternalSurface.tsx` | The same drawer mounted alone on a second device. |
+| `apps/k7-daw-frontend/src/routes.ts` | `viewPanes`: a `turntables` pane exists in the ring only when the project declares the surface. |
+| `apps/k7-daw-frontend/src/keys.ts` | `4` is `ui turntables`. |
 
-The surface type itself is a builtin of the schema (`packages/song-schema/src/yaml/surfaceSchema.ts`), so the plugin registers no type, only its drawing.
+The surface type itself is a builtin of the schema (`apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`), so the plugin registers no type, only its drawing.
 
 ## The `Deck` seam
 
@@ -98,6 +98,6 @@ File-service calls carry `fileHeaders()`. Errors surface the server's own senten
 
 ## Extending
 
-- **A new desk control**: add it to `MIX_CONTROLS` in `controls.ts` (and to `REQUIRED_CONTROLS` in `mapping.ts` only if a desk is unusable without it), add its row to `SURFACE_MAPPING_SKELETON.turntables` in `packages/song-schema/src/yaml/surfaceSchema.ts`, wire it in `scaffoldSet.ts`, and expose `xOf`/`xLive`/`turnX` from `useDeckSet`. `mapping.test.ts` holds the schema skeleton and the control list together.
-- **A third deck**: `DECKS` in `deckVocabulary.ts` and the Rust set scaffold (`packages/song-edit/rust/src/scaffold_set.rs`); control ids, stem names and required controls derive from it. The views still mount two `DeckSide`s explicitly.
+- **A new desk control**: add it to `MIX_CONTROLS` in `controls.ts` (and to `REQUIRED_CONTROLS` in `mapping.ts` only if a desk is unusable without it), add its row to `SURFACE_MAPPING_SKELETON.turntables` in `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`, wire it in `scaffoldSet.ts`, and expose `xOf`/`xLive`/`turnX` from `useDeckSet`. `mapping.test.ts` holds the schema skeleton and the control list together.
+- **A third deck**: `DECKS` in `deckVocabulary.ts` and the Rust set scaffold (`apps/k7-daw-wasm/song-edit/src/scaffold_set.rs`); control ids, stem names and required controls derive from it. The views still mount two `DeckSide`s explicitly.
 - **Another host**: implement `Deck`, mount `TurntablesPane` with a `ProjectSurface`, a project path and a revision token.

@@ -1,5 +1,5 @@
 // `node tap out` — a rack node's tap sent to a subchain of its chain file, written on the node's item there,
-// refused toward anything that is not one of that file's subchains (packages/song/docs/racks.md).
+// refused toward anything that is not one of that file's subchains (apps/k7-daw-frontend/packages/song/docs/racks.md).
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

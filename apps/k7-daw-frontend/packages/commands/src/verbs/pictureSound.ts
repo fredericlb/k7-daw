@@ -3,7 +3,7 @@
 // lane's own `#audio` half then plays it — in a chain project, which spells no port, an audio lane
 // saying `video_source: <lane>` does. Run again it does only what is missing.
 // Removing a clip from that sound SILENCES its shot, as `picture silence` does: the picture stays.
-// See packages/song/docs/videoSound.md.
+// See apps/k7-daw-frontend/packages/song/docs/videoSound.md.
 
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
@@ -57,7 +57,7 @@ async function soundClip(
   if (!clip || !VIDEO_SOURCE.test(source))
     return silent(`${ref}: not a video clip — nothing to hear`);
   const want = clip.sound || soundPathOf(source);
-  // Both are text a clip file holds: read from the project's roots, written only in its workspace (packages/song/docs/confine.md).
+  // Both are text a clip file holds: read from the project's roots, written only in its workspace (apps/k7-daw-frontend/packages/song/docs/confine.md).
   const video = confineToProject(h.songPath, source);
   const abs = confineTo(
     [h.songPath, workspaceDirOf(h.songPath)],
@@ -143,7 +143,7 @@ export function shotSoundingAt(
     RawClip
   >;
   const lane = wsData(found.abs) as RawVideoTrack;
-  // The compile's own rule, so the piece found is the one the timeline drew (packages/song/docs/videoSound.md).
+  // The compile's own rule, so the piece found is the one the timeline drew (apps/k7-daw-frontend/packages/song/docs/videoSound.md).
   const piece = videoSoundPieces(
     h.songPath,
     lane,

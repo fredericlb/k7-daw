@@ -20,31 +20,31 @@ describe("derived module fields", () => {
       // …and which primitive a shape module draws, and the family a `text` one is set in.
       "shape",
       "font",
-      // …and how a text shape's lines are set — packages/song-video/docs/titles.md.
+      // …and how a text shape's lines are set — apps/k7-daw-frontend/packages/song-video/docs/titles.md.
       "align",
       "background",
       "shadow",
       "params",
       "rack",
-      // An SFZ drum kit's pads, name → note, drawn as a rack's taps — packages/song/docs/racks.md.
+      // An SFZ drum kit's pads, name → note, drawn as a rack's taps — apps/k7-daw-frontend/packages/song/docs/racks.md.
       "tap_outs",
       "kit",
       // A COLD module works only on audio already on disk — see docs/coldModules.md.
       "cold",
-      // …and where the model a file-valued param names can be downloaded from — packages/song/docs/moduleAssets.md.
+      // …and where the model a file-valued param names can be downloaded from — apps/k7-daw-frontend/packages/song/docs/moduleAssets.md.
       "model_url",
       // `ir`, `nam` and `jsdsp` carry no field of their own, so there is nothing to complete against (docs/fields.md).
       "channel",
       // …and WHICH lens an io "camera" opens, plus where in the viewport it draws — docs/camera.md.
       "camera",
-      // …and WHICH MIDI device an io "midi" records from — packages/song/docs/midiIn.md.
+      // …and WHICH MIDI device an io "midi" records from — apps/k7-daw-frontend/packages/song/docs/midiIn.md.
       "device",
       "frame",
       // No `track`: where an input LANDS is the chain's business (docs/fields.md).
       "source", // …and the OTHER kind of source: an io "file" reads audio off disk
       "monitor",
       "gain", // the other thing an input does to its signal, beside whether you hear it
-      "mix", // the engine's dry/wet around an effect — engine/k7-runtime/docs/mix.md
+      "mix", // the engine's dry/wet around an effect — apps/k7-daw-engine/k7-runtime/docs/mix.md
       "input_volume", // …and its levels on the same stage
       "output_volume",
       // The named .vstpreset a module starts from, out of its own `base/` — see docs/userPresets.md.
@@ -59,9 +59,9 @@ describe("derived module fields", () => {
       "disabled",
       "tracks",
       "strudel",
-      // The PICTURE lane a lane plays the sound of — packages/song/docs/videoSound.md.
+      // The PICTURE lane a lane plays the sound of — apps/k7-daw-frontend/packages/song/docs/videoSound.md.
       "video_source",
-      // A shader's 3D LUT — packages/song-video/docs/effects.md.
+      // A shader's 3D LUT — apps/k7-daw-frontend/packages/song-video/docs/effects.md.
       "lut",
       // FROZEN at this module: the render standing in for everything upstream of it — see docs/freeze.md.
       "frozen",
@@ -133,7 +133,7 @@ describe("derived lane fields", () => {
     expect(inside).toContain("name");
     expect(inside).toContain("params");
     expect(inside).toContain("events");
-    // A set may name a module of its own — it is then another module entirely (packages/song/docs/alternatives.md).
+    // A set may name a module of its own — it is then another module entirely (apps/k7-daw-frontend/packages/song/docs/alternatives.md).
     expect(inside).toContain("extends");
     expect(inside).not.toContain("alternatives");
     // The list itself has no field vocabulary — its entries are positions, not names.
@@ -207,7 +207,7 @@ describe("derived values", () => {
 
 describe("chain fields", () => {
   it("offers the file's five sections, and nothing inside them", () => {
-    // `bus_only:` is NOT a synonym of `bypassed:` — see packages/song/docs/busOnly.md.
+    // `bus_only:` is NOT a synonym of `bypassed:` — see apps/k7-daw-frontend/packages/song/docs/busOnly.md.
     expect(fieldsAt("chains", [])).toEqual([
       "modules",
       "bypassed",

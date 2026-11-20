@@ -1,6 +1,6 @@
 // ChainsSection.tsx — WHICH chains this ENGINE separates a record with and makes an instrumental with, a tab of
 // this machine's engine page: the setting lives in that machine's own file, so the studio only names it
-// (`apps/k7/backend-rs/docs/engine/chains.md`). The choice is from the library's COLD chains only — a chain that
+// (`apps/k7-daw-backend/docs/engine/chains.md`). The choice is from the library's COLD chains only — a chain that
 // does not separate could never answer either question. See ../../docs/settings.md.
 
 import type { ColdChainsReply } from "@studio/web-protocol";

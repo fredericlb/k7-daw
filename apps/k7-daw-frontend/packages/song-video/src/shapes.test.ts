@@ -1,7 +1,7 @@
 // A SHAPE is a module that draws a primitive and takes no picture in — the other source a video
 // lane can be fed by. Pinned here: which lane a shape lands on, what its `params:` compile to, and
 // what a shape wired nowhere says out loud, since a lane drawing nothing looks like a lane.
-// See packages/song-video/docs/shapes.md.
+// See apps/k7-daw-frontend/packages/song-video/docs/shapes.md.
 
 import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

@@ -42,7 +42,7 @@ fn made_with(fx: &Fx, models: String) -> Value {
             root: lib.trim_end_matches('/').to_string(),
             editable: false,
         }],
-        meta: Some(fx.s.path("code/packages/song/meta")),
+        meta: Some(fx.s.path("code/apps/k7-daw-frontend/packages/song/meta")),
         scan: Some(fx.s.path("studio/exts.json")),
         models: Some(models),
         sample_banks: vec!["/srv/banks".into()],

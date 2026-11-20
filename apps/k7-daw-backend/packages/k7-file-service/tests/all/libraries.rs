@@ -22,7 +22,7 @@ fn ts(rel: &str) -> String {
 
 #[test]
 fn knows_the_names_and_versions_the_typescript_does() {
-    let types = ts("packages/song-schema/src/moduleTypes.ts");
+    let types = ts("apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts");
     assert!(
         types.contains(&format!("const LIBRARY_NAME = /{NAME_PATTERN}/;")),
         "the name rule"
@@ -34,7 +34,7 @@ fn knows_the_names_and_versions_the_typescript_does() {
             && types.contains("\"mediatek\", // an older name of the default library")
     );
     assert!(
-        ts("packages/song-schema/src/metaRefs.ts").contains("export const META_NS = \"@meta\";")
+        ts("apps/k7-daw-frontend/packages/song-schema/src/metaRefs.ts").contains("export const META_NS = \"@meta\";")
     );
     let reserved: Vec<&str> = RESERVED.to_vec();
     assert_eq!(
@@ -48,7 +48,7 @@ fn knows_the_names_and_versions_the_typescript_does() {
             "mediatek"
         ]
     );
-    let versions = ts("packages/song-schema/src/libraryVersions.ts");
+    let versions = ts("apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts");
     assert!(
         versions.contains(&format!("const VERSION_DIR = /{VERSION_PATTERN}/;")),
         "the version rule"

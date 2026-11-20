@@ -185,4 +185,4 @@ so every host is a media player without doing anything — and the system's butt
 The browser shows these controls only for a page that is itself making sound — a reference
 track playing in the tab. Playing on the engine, the page is silent, and
 only the Android app, which relays the session itself, shows them then
-(`engine/k7-runtime/docs/android.md`).
+(`apps/k7-daw-engine/k7-runtime/docs/android.md`).

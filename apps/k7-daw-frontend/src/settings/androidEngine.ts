@@ -1,7 +1,7 @@
 // androidEngine.ts — the phone's engine, when k7 runs inside the Android app or the iOS one: `window.k7Android`
-// (engine/k7-android/app/src/main/kotlin/se/frediver/k7/StudioBridge.kt) or `window.k7Ios` (engine/k7-ios/k7/StudioBridge.swift),
+// (apps/k7-daw-android/app/src/main/kotlin/se/frediver/k7/StudioBridge.kt) or `window.k7Ios` (apps/k7-daw-ios/k7/StudioBridge.swift),
 // one protocol, answered for k7's origin only. Absent in a browser, so everything here is null there and the section is not drawn.
-// See engine/k7-runtime/docs/android.md and docs/ios.md.
+// See apps/k7-daw-engine/k7-runtime/docs/android.md and docs/ios.md.
 
 import { useEffect, useState } from "react";
 import type { DesktopEngineSnapshot } from "./desktopEngine";

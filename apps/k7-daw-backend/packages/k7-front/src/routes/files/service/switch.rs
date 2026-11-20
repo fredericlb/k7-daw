@@ -13,8 +13,8 @@ fn setting(env: &BTreeMap<String, String>, key: &str) -> Option<String> {
 
 /// What a code root must hold: the files the native pieces read at its root (`scripts/stageCodeRoot.mjs` lists them all).
 const MARKS: [&str; 3] = [
-    "packages/commands/commands.yaml",
-    "packages/song/meta",
+    "apps/k7-daw-frontend/packages/commands/commands.yaml",
+    "apps/k7-daw-frontend/packages/song/meta",
     "demos",
 ];
 
@@ -58,12 +58,12 @@ mod tests {
     fn a_named_code_root_wins_when_it_holds_the_pieces_files() {
         let dir = std::env::temp_dir().join(format!("k7-code-root-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
-        std::fs::create_dir_all(dir.join("packages/commands")).unwrap();
+        std::fs::create_dir_all(dir.join("apps/k7-daw-frontend/packages/commands")).unwrap();
         let env = BTreeMap::from([("K7_CODE_ROOT".to_string(), dir.display().to_string())]);
         assert!(!is_code_root(&dir));
         assert_ne!(code_root(&env).as_deref(), Some(dir.as_path()));
-        std::fs::write(dir.join("packages/commands/commands.yaml"), "").unwrap();
-        std::fs::create_dir_all(dir.join("packages/song/meta")).unwrap();
+        std::fs::write(dir.join("apps/k7-daw-frontend/packages/commands/commands.yaml"), "").unwrap();
+        std::fs::create_dir_all(dir.join("apps/k7-daw-frontend/packages/song/meta")).unwrap();
         std::fs::create_dir_all(dir.join("demos")).unwrap();
         assert_eq!(code_root(&env).as_deref(), Some(dir.as_path()));
         std::fs::remove_dir_all(&dir).unwrap();
@@ -71,7 +71,7 @@ mod tests {
 
     #[test]
     fn the_checkout_is_a_code_root() {
-        let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
+        let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
         assert!(is_code_root(&repo));
     }
 }

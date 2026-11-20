@@ -47,15 +47,15 @@ export interface WorkspaceInfo {
   projects: string[]; // workspace-relative project dirs
   // The clip the recorder wrote most recently: only the file service learns the id, and it stays set until the next take.
   lastTake?: { clip: string; track: string } | null;
-  // The project's files being copied to the engine's machine before it plays — apps/k7/backend-rs/docs/file-engine.md.
+  // The project's files being copied to the engine's machine before it plays — apps/k7-daw-backend/docs/file-engine.md.
   engineSync?: EngineSyncState | null;
-  // Where the opened project stands on its way to playable; null once it is — apps/k7/backend-rs/docs/file-engine.md.
+  // Where the opened project stands on its way to playable; null once it is — apps/k7-daw-backend/docs/file-engine.md.
   engineLoad?: EngineLoadPhase | null;
   // The engine's plugin scan while a project naming an external plugin waits for it, or the scan it gave up on — docs/engineLoad.md there.
   engineScan?: EngineScanState | null;
-  // What the account's file service is busy with: a command past a second, a verb's background work — apps/k7/backend-rs/docs/file-runtime.md.
+  // What the account's file service is busy with: a command past a second, a verb's background work — apps/k7-daw-backend/docs/file-runtime.md.
   processes?: ServiceProcess[];
-  // The open project is a bundled demo, which the next start of the service overwrites — apps/k7/backend-rs/crates/k7-file-service/src/workspaces/demos.rs.
+  // The open project is a bundled demo, which the next start of the service overwrites — apps/k7-daw-backend/packages/k7-file-service/src/workspaces/demos.rs.
   activeIsDemo?: boolean;
   // The change token as of this answer, set by `/open` alone: the page's views start from it rather than fetching twice.
   rev?: string;

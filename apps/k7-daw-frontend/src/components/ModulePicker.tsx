@@ -32,7 +32,7 @@ export interface ModulePick {
   name: string; // "adt" — the module's own name
   /** Its panel grid, when the listing said — the placeholder card's size. */
   panel?: PanelSize;
-  /** A camera node born naming this lens — `remote:` for the account's remote cameras (packages/web-protocol/docs/cameras.md). */
+  /** A camera node born naming this lens — `remote:` for the account's remote cameras (apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md). */
   camera?: string;
 }
 

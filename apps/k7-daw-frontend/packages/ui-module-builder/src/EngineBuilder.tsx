@@ -1,7 +1,7 @@
 // EngineBuilder.tsx — the module builder for a module with ENGINES: a strip of them above the
 // screen, and the screen re-mounted on the one picked, since each engine is a module folder with
 // its own panel, widgets and presets. "module" edits the module's own file, which names the
-// default. A module without engines gets the plain screen. See packages/song/docs/engines.md.
+// default. A module without engines gets the plain screen. See apps/k7-daw-frontend/packages/song/docs/engines.md.
 
 import { cn } from "@studio/ui/lib/utils";
 import { type ComponentProps, useCallback, useEffect, useState } from "react";

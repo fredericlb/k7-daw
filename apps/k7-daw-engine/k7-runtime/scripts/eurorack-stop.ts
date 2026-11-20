@@ -1,7 +1,7 @@
 // eurorack-stop.ts — does a Mutable Instruments module let go of its notes on a STOP, and on a
 // PANIC? Point it at a running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/eurorack-stop.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/eurorack-stop.ts [ws://127.0.0.1:8765]
 //
 // One MIDI lane plays mu-tides with a note far longer than the run, so no note-off ever arrives.
 // The level is read while it plays, then a second after a stop, then a second after a panic that

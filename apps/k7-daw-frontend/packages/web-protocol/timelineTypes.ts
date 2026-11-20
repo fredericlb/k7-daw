@@ -12,7 +12,7 @@ export interface WebNote {
   key: number; // MIDI note number
   // 0..1 as the file states it (NoteSchema's `v`); ABSENT means the schema's default of 1, and dragging back to full clears the field.
   vel?: number;
-  // A pad's two effects UNREALISED, drawn as an icon and expanded by the engine — see packages/song/docs/padEffects.md.
+  // A pad's two effects UNREALISED, drawn as an icon and expanded by the engine — see apps/k7-daw-frontend/packages/song/docs/padEffects.md.
   repeat?: number;
   skip?: number;
 }
@@ -40,7 +40,7 @@ export interface WebClip {
   /** How long this event fades in and out, IN BEATS; absent means no fade — see docs/document.md. */
   fadeIn?: number;
   fadeOut?: number;
-  /** This clip is a RENDER standing in for a frozen lane, and cannot be edited — see packages/song/docs/freeze.md. */
+  /** This clip is a RENDER standing in for a frozen lane, and cannot be edited — see apps/k7-daw-frontend/packages/song/docs/freeze.md. */
   frozen?: boolean;
   /** What the PLACEMENT itself said, unmerged — read by clipboard.ts and the takes view; see docs/document.md. */
   event?: WebEvent;
@@ -151,11 +151,11 @@ export interface WebTrack {
   mixer?: WebMixer;
   mute: boolean;
   solo: boolean;
-  /** Highlighted from the mixer: heard 10 dB up, its fader untouched (packages/song/docs/highlight.md). */
+  /** Highlighted from the mixer: heard 10 dB up, its fader untouched (apps/k7-daw-frontend/packages/song/docs/highlight.md). */
   highlight?: boolean;
   disabled?: boolean; // true ⇒ track is ignored (filtered by the brain); absent when false
   clips: WebClip[];
-  /** A FROZEN lane's authored clips, drawn over its render and opened from it — see packages/song/docs/freeze.md. */
+  /** A FROZEN lane's authored clips, drawn over its render and opened from it — see apps/k7-daw-frontend/packages/song/docs/freeze.md. */
   frozenMaterial?: WebClip[];
   plugins: WebPlugin[];
   // `docs`/`todos`, `frozen`, `alternatives` and `alternative` all left this type — see docs/document.md.
@@ -168,7 +168,7 @@ export interface WebGroup {
   mute: boolean;
   solo: boolean;
 }
-// A video clip: every time here is SECONDS, picture being cut against the wall clock — apps/k7/frontend/docs/picture.md.
+// A video clip: every time here is SECONDS, picture being cut against the wall clock — apps/k7-daw-frontend/docs/picture.md.
 export interface WebVideoClip {
   id: string;
   name: string;
@@ -230,7 +230,7 @@ export interface WebVideoTransition {
   fragment: string;
   params: Record<string, number>;
 }
-/** A shape module (mirrors ShapeDoc), geometry in px; `id` is the NODE that draws it — packages/song-video/docs/shapes.md. */
+/** A shape module (mirrors ShapeDoc), geometry in px; `id` is the NODE that draws it — apps/k7-daw-frontend/packages/song-video/docs/shapes.md. */
 export type WebShape =
   | {
       id: string;
@@ -284,7 +284,7 @@ export interface WebVideoTrack {
   name: string;
   color: string;
   mute: boolean;
-  /** Soloed, off `project.k7x`'s `soloed:` — the same list audio reads (packages/song-video/docs/picture.md). */
+  /** Soloed, off `project.k7x`'s `soloed:` — the same list audio reads (apps/k7-daw-frontend/packages/song-video/docs/picture.md). */
   solo: boolean;
   x: number;
   y: number;
@@ -294,7 +294,7 @@ export interface WebVideoTrack {
   shapes: WebShape[];
   // This lane's own run, applied to the layer BEFORE it is composited; absent on a lane no run starts at.
   plugins?: WebVideoPlugin[];
-  /** The camera LABEL feeding this lane instead of its placements, "" for the machine's default — packages/song/docs/camera.md. */
+  /** The camera LABEL feeding this lane instead of its placements, "" for the machine's default — apps/k7-daw-frontend/packages/song/docs/camera.md. */
   camera?: string;
   /** …and WHEN that lens opens: `off` never, `auto` while the lane is armed, `on` always. */
   cameraMonitor?: "off" | "auto" | "on";
@@ -312,7 +312,7 @@ export interface WebProject {
   tempo: number;
   timeSigNumerator: number;
   timeSigDenominator: number;
-  // The song's OUTPUT level in dB, 0 unity and +6 the top of the fader — packages/song/docs/masterVolume.md.
+  // The song's OUTPUT level in dB, 0 unity and +6 the top of the fader — apps/k7-daw-frontend/packages/song/docs/masterVolume.md.
   masterVolume: number;
   tracks: WebTrack[];
   groups: WebGroup[];

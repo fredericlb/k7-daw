@@ -1,4 +1,4 @@
-// checkLayouts.ts — every library module's panel against the two-layout rules (packages/panel-rules/src/layoutTwins.ts) and the
+// checkLayouts.ts — every library module's panel against the two-layout rules (apps/k7-daw-frontend/packages/panel-rules/src/layoutTwins.ts) and the
 // AI brief's checks, and against what it offered BEFORE: a migrated panel must keep every control the
 // committed one had, wherever it moved. Usage: tsx scripts/checkLayouts.ts [module dirs…] (default: all of
 // k7-core). Exits 1 on any issue. See docs/layouts.md.
@@ -19,7 +19,7 @@ import {
   loneGroupIssues,
 } from "../src/aiOrganize";
 
-const LIBRARY = resolve(import.meta.dirname, "../../../k7-core");
+const LIBRARY = resolve(import.meta.dirname, "../../../../../k7-core");
 
 /** Every ui.k7x under the library, or the ones of the module folders named. */
 function targets(args: string[]): string[] {

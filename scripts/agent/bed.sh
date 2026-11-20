@@ -20,8 +20,8 @@ case "$suite" in web | conformance | both) ;; *) echo "E2E_SUITE: web, conforman
 
 if [ "$dry" = 1 ]; then
   echo "bed.sh (dry run): suite $suite, filter '${E2E_FILTER:-}'"
-  echo "  would run, from $tree: K7_CI_WORKSPACE=$dest bash engine/scripts/ci/e2e-macos.sh"
-  echo "  Playwright flags: '$(bash engine/scripts/ci/bed-retries.sh)' (empty: no retries, the load is low)"
+  echo "  would run, from $tree: K7_CI_WORKSPACE=$dest bash apps/k7-daw-engine/scripts/ci/e2e-macos.sh"
+  echo "  Playwright flags: '$(bash apps/k7-daw-engine/scripts/ci/bed-retries.sh)' (empty: no retries, the load is low)"
   exit 0
 fi
 
@@ -29,6 +29,6 @@ echo "=== bed.sh: mac, suite $suite, filter '${E2E_FILTER:-}' ==="
 mkdir -p "$dest"
 status=0
 K7_CI_WORKSPACE="$dest" STUDIO_FETCHCONTENT_DIR="${STUDIO_FETCHCONTENT_DIR:-$HOME/k7-trees/deps-macos}" \
-  bash engine/scripts/ci/e2e-macos.sh || status=1
+  bash apps/k7-daw-engine/scripts/ci/e2e-macos.sh || status=1
 echo "bed.sh: results in $dest"
 exit $status

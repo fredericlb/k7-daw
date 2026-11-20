@@ -119,7 +119,7 @@ export function useNodeActions({
   // biome-ignore lint/correctness/useExhaustiveDependencies: the inputs are refs and setters DomChains hands in, stable for its lifetime.
   const contextParam = useCallback(
     (n: GraphNode, w: WebWidget, x: number, y: number): void => {
-      // A PAD's menu is its kit's — the node and the sound — rather than a param's (packages/song/docs/racks.md).
+      // A PAD's menu is its kit's — the node and the sound — rather than a param's (apps/k7-daw-frontend/packages/song/docs/racks.md).
       const symbol = rackBindSymbol(w.bind);
       if (symbol && n.module) {
         cb.current.onContextMenu?.({ kind: "tap", id: n.module, symbol }, x, y);

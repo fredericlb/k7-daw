@@ -3,9 +3,9 @@
 A module's DSP graph is a `dsp.k7x` beside its `module.k7x`: k7x data, parsed and never run,
 decoded by the `song` crate into exactly the graph JSON `@studio/dsp`'s builder prints from a
 `jsdsp.ts`. Nothing evaluates it, so nothing needs a sandbox: QuickJS's jsdsp context, oxc,
-`k7-jsdsp`, `dsp-exec` and the node jail are gone. The decoder is `packages/song/rust/src/dsp_literal/`;
+`k7-jsdsp`, `dsp-exec` and the node jail are gone. The decoder is `apps/k7-daw-wasm/song/src/dsp_literal/`;
 every module of k7-core, the demos and the e2e fixtures is written as data beside its `module.k7x`, and
-`packages/song/rust/tests/all/dsp_vectors.json`, which `makeVectors.mts` prints from the builder, holds each
+`apps/k7-daw-wasm/song/tests/all/dsp_vectors.json`, which `makeVectors.mts` prints from the builder, holds each
 `dsp.k7x` to its graph byte for byte. The type is `dsp`, a `dsp.k7x` is one of a module folder's own files
 (never a node), and the compile decodes it on every build.
 
@@ -72,7 +72,7 @@ The modules use every word but `velocity`, `channel`, the `notch` biquad and the
 | a param spec is written `name, min, max, default, labels`, whatever order the file has | every module writes that order; a k7x map keeps file order, a spec does not need it |
 | numbers print as JavaScript prints them (`js_number`), two-space indents, one item per line, a trailing newline | `JSON.stringify(graph, null, 2)` and the newline the jail adds |
 
-`packages/song/rust/tests/all/dsp_literal.rs` holds every `dsp.k7x`, 23 of them, to the vector the builder printed
+`apps/k7-daw-wasm/song/tests/all/dsp_literal.rs` holds every `dsp.k7x`, 23 of them, to the vector the builder printed
 from its `jsdsp.ts`, which covers every word the modules use.
 
 ### Computed values
@@ -100,7 +100,7 @@ comments survive every edit, and a module reads the same on every host with no b
 | step | what | state |
 |---|---|---|
 | 1 | every module written as data: 21 in k7-core, the demos' and the e2e fixtures' crossfade; a test holding each `dsp.k7x` to the builder's graph; k7-core's version raised | done: version 4, which requires library level 2 |
-| 2 | the compiler reads `dsp.k7x`: `plugin.type: dsp` (decision 1901), decoded on every compile with no cache, its error one finding on the module; the TypeScript compiler in node, which has no decoder, reads the `jsdsp.json` beside it, held equal by `k7coreJsDsp.test.ts`, and the QuickJS bundle asks the host's decoder (`packages/song/docs/graphModel.md`) | done |
+| 2 | the compiler reads `dsp.k7x`: `plugin.type: dsp` (decision 1901), decoded on every compile with no cache, its error one finding on the module; the TypeScript compiler in node, which has no decoder, reads the `jsdsp.json` beside it, held equal by `k7coreJsDsp.test.ts`, and the QuickJS bundle asks the host's decoder (`apps/k7-daw-frontend/packages/song/docs/graphModel.md`) | done |
 | 3 | the file service and the editor: a file kind for `dsp.k7x` in `song`'s views, with the vocabulary as completion; the module builder's template | the file is a module folder's own and no schema reads it; completion and the `FileKind` are open |
 | 4 | the browser: nothing to add. The decoder is in the `song` crate the browser's module is built from; a live DSP preview calls it | 71 KB of WebAssembly once something calls it, 24 KB gzipped |
 | 5 | the accounts' own `jsdsp.ts` modules: a printer from a committed `jsdsp.json` to `dsp.k7x`, names `n0`…, byte-identical by construction, run over each library once (decision 1904) | open: until it runs, such a module plays its committed `jsdsp.json` and is never rebuilt |

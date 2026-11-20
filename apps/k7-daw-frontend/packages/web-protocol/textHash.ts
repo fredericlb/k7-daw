@@ -1,6 +1,6 @@
 // textHash.ts — a short fingerprint of a text, the same in the browser and in Node: what a write
 // sends as the base its buffer was edited from. Not cryptographic, and needs no secure context
-// (crypto.subtle is absent on a plain-http LAN page). See apps/k7/backend-rs/docs/file-native.md.
+// (crypto.subtle is absent on a plain-http LAN page). See apps/k7-daw-backend/docs/file-native.md.
 
 /** cyrb53 over UTF-16 code units, as 14 hex digits: two texts that differ almost never share one. */
 export function textHash(text: string): string {

@@ -37,7 +37,7 @@ The keys you need in dev:
 
 Machine state that is not configuration (the engine's identity, plugin cache, downloaded
 instruments, project copies) lives in `~/.k7`, or in `$STUDIO_HOME` when set
-(`packages/song/src/studioHome.ts`).
+(`apps/k7-daw-frontend/packages/song/src/studioHome.ts`).
 
 ## `npm run dev`
 
@@ -47,7 +47,7 @@ instruments, project copies) lives in `~/.k7`, or in `$STUDIO_HOME` when set
    every dev port; the message points at the running session's Tilt UI;
 2. runs `tilt up --port 10350`, passing any extra arguments through;
 3. on `SIGINT`/`SIGTERM` or Tilt's exit, kills Tilt and then stops any engine still running
-   (`stopAll()` from `engine/scripts/devEngine.mjs`), since Tilt may end the desktop app resource too abruptly
+   (`stopAll()` from `apps/k7-daw-engine/scripts/devEngine.mjs`), since Tilt may end the desktop app resource too abruptly
    for it to stop its own engine.
 
 The Tilt UI is at `http://localhost:10350`. Each dev server is its own resource that you can
@@ -66,9 +66,8 @@ tilt get uiresources                 # status of every resource
 The `Tiltfile` asks `scripts/tilt-tasks.mjs` for the task list. That script walks the workspace globs
 of the root `package.json` and takes every workspace that has a `dev` script, except:
 
-- **aggregators**, whose `dev` starts with `concurrently` (`apps/k7` would start the frontend and
-  backend a second time);
-- **typecheck watchers**, whose `dev` runs `tsc --watch` (most `packages/*` have one).
+- **aggregators**, whose `dev` starts with `concurrently` (none is left: `apps/k7-daw-frontend` runs the frontend alone);
+- **typecheck watchers**, whose `dev` runs `tsc --watch` (most of `apps/k7-daw-frontend/packages/*` have one).
 
 Each remaining workspace becomes a `local_resource` that runs `npm run dev` in its folder, labelled by
 its top-level folder (`apps` or `engine`). The resource is named after the package. A new app joins the session by having a `dev` script; nothing in the
@@ -76,9 +75,9 @@ its top-level folder (`apps` or `engine`). The resource is named after the packa
 
 | Resource | Workspace | Runs |
 |---|---|---|
-| `k7-frontend` | `apps/k7/frontend` | `vite` |
-| `k7-desktop` | `apps/k7-desktop` | `scripts/dev-desktop.mjs` |
-| `studio-k7-android-shell` | `engine/k7-android/web` | `vite` for the Android app's page |
+| `k7-frontend` | `apps/k7-daw-frontend` | `vite` |
+| `k7-desktop` | `apps/k7-daw-desktop` | `scripts/dev-desktop.mjs` |
+| `studio-k7-android-shell` | `apps/k7-daw-android/web` | `vite` for the Android app's page |
 
 ### Ports and hosts
 
@@ -99,13 +98,13 @@ k7's backend bundle and the desktop app, runs the desktop app on those builds, t
   holds port 18789, and its single-instance guard would swallow the dev one). It builds k7's frontend
   and the backend bundle into the desktop app workspace's gitignored `.dev` folder every time, then the engine, the supervisor and the
   desktop app if a binary is missing or older than its newest watched source. A failed bundle ends the task.
-- The desktop app runs from `apps/k7-desktop/src-tauri/target/debug`, pointed at the bundle
+- The desktop app runs from `apps/k7-daw-desktop/src-tauri/target/debug`, pointed at the bundle
   (`K7_BACKEND_BUNDLE`) and the supervisor build (`STUDIO_ENGINE_HOST_CMD`). k7 answers at
   `http://127.0.0.1:18789`; the desktop app's front runs the supervisor on `~/.k7`. The machine's engine
   is the desktop app's: a loopback address such as `http://localhost:8789` would be the desktop app's own backend to
   the supervisor, and is dropped.
-- It watches `engine/k7-runtime/engine`, `engine/k7-runtime/server` (C++ sources), the
-  `CMakeLists.txt`/`CMakePresets.json` of both projects, `engine/k7-supervisor/src`, and the desktop app's
+- It watches `apps/k7-daw-engine/k7-runtime/engine`, `apps/k7-daw-engine/k7-runtime/server` (C++ sources), the
+  `CMakeLists.txt`/`CMakePresets.json` of both projects, `apps/k7-daw-engine/k7-supervisor/src`, and the desktop app's
   `src-tauri/src`, `Cargo.toml` and `tauri.conf.json`. Tests are not watched, nor is the bundle's
   source: frontend and backend work belongs to their own resources, and Tilt's restart rebuilds the
   bundle.
@@ -120,7 +119,7 @@ k7's backend bundle and the desktop app, runs the desktop app on those builds, t
   alone, and recursive file watching is unavailable, so there is no auto-rebuild.
 
 The engine build scripts take a lock on the build folder and cap the number of compilers
-(`engine/k7-runtime/scripts/buildLock.mjs`). `npm run test --workspace k7-runtime` takes the same
+(`apps/k7-daw-engine/k7-runtime/scripts/buildLock.mjs`). `npm run test --workspace k7-runtime` takes the same
 lock, so it waits for the watcher rather than corrupting the build folder. Never start another
 `cmake --build` of the same tree by hand while `k7-desktop` is running.
 
@@ -129,7 +128,7 @@ lock, so it waits for the watcher rather than corrupting the build folder. Never
 | Command | What it starts |
 |---|---|
 | `npm run stage --workspace k7-desktop`, then `npm run tauri dev --workspace k7-desktop` | The desktop app from source (`tauri dev`), on the staged backend bundle and engine. |
-| `npm run storybook` | Storybook on port 6006, with stories from `packages/*/src` and `apps/*/frontend/src`. |
+| `npm run storybook` | Storybook on port 6006, with stories from `apps/k7-daw-frontend/packages/*/src` and `apps/k7-daw-frontend/src`. |
 
 ## Windows
 
@@ -137,7 +136,7 @@ The scripts run on native Windows (Node, MSVC, Git Bash). What they do different
 
 - **No POSIX env prefixes in npm scripts.** npm hands scripts to `cmd.exe`, which cannot read
   `VAR=1 tool`. Set a variable through a script that spawns the tool with `env`, with no shell involved
-  (`apps/k7/backend-rs/scripts/dev-front.mjs`).
+  (`apps/k7-daw-backend/scripts/dev-front.mjs`).
 - **`npm` is a `.cmd` shim**, so scripts that spawn it pass `shell: true` on `win32`.
 - **A running executable cannot be relinked**, which is why `dev-desktop.mjs` stops the tree before
   every rebuild and why a build that "succeeds" without updating the binary is reported as an error.

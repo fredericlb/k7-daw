@@ -2,7 +2,7 @@
 // as the first output line and written nowhere; the app saves it where the person chooses. OTIO carries every lane;
 // an EDL carries one, the bottom lane unless one is named. The camera ORIGINALS are what it
 // names, relative to the export, so a project folder copied whole relinks as it is.
-// See packages/song-video/docs/interchange.md.
+// See apps/k7-daw-frontend/packages/song-video/docs/interchange.md.
 
 import { basename, relative, resolve, sep } from "node:path";
 import { loadProjectRoot } from "@studio/song/loader";

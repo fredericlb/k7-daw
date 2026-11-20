@@ -298,7 +298,7 @@ const CSS = `
 .dgx-minimap-bar button svg { width:13px; height:13px; }
 .dgx-minimap-bar button:hover { color:var(--text); border-color:var(--sand); }
 .dgx-minimap-bar button.on { color:var(--ground); background:var(--sand); border-color:var(--sand); }
-/* A rack TAP: the pad over its note and its sample; the × shows on hover. See packages/song/docs/racks.md. */
+/* A rack TAP: the pad over its note and its sample; the × shows on hover. See apps/k7-daw-frontend/packages/song/docs/racks.md. */
 .dgx-tap { padding:3px; gap:3px; justify-content:stretch; }
 .dgx-tap-pad { flex:1; min-height:0; width:100%; border-radius:5px; border:1px solid var(--line);
   background:#15151a; color:var(--dim); font:600 10px ui-monospace,monospace; cursor:pointer; }

@@ -5,10 +5,10 @@
 | Code | Runner | Where the tests are |
 |---|---|---|
 | TypeScript (packages, apps) | [Vitest](https://vitest.dev) 4 | `*.test.ts` / `*.test.tsx` next to the code they test; `*.bench.ts` for benchmarks |
-| C++ engine | CTest over CMake targets named `studio_*` | `engine/k7-runtime/tests` |
-| C++ supervisor | Its own test binary, `k7_supervisor_tests` | `engine/k7-supervisor/tests` |
-| Supervisor tunnel wire | Vitest, run against both the TypeScript agent and the native `tunnel_harness` | `packages/engine-tunnel` |
-| Engine behaviour that needs a running engine | Node harness scripts, run by hand | `engine/k7-runtime/scripts` |
+| C++ engine | CTest over CMake targets named `studio_*` | `apps/k7-daw-engine/k7-runtime/tests` |
+| C++ supervisor | Its own test binary, `k7_supervisor_tests` | `apps/k7-daw-engine/k7-supervisor/tests` |
+| Supervisor tunnel wire | Vitest, run against both the TypeScript agent and the native `tunnel_harness` | `apps/k7-daw-frontend/packages/engine-tunnel` |
+| Engine behaviour that needs a running engine | Node harness scripts, run by hand | `apps/k7-daw-engine/k7-runtime/scripts` |
 
 Every workspace that has tests declares `"test": "vitest run"`. A few packages also declare `"bench": "vitest bench --run"`
 (`@studio/song`, `@studio/ui-chains`).
@@ -19,8 +19,8 @@ Every workspace that has tests declares `"test": "vitest run"`. A few packages a
 npm run test                        # every workspace's `test`, one at a time
 npm run test -- --jobs 4            # four workspaces at once
 npm run test --workspace @studio/song          # one package
-cd packages/song && npx vitest run src/loader.test.ts   # one file
-cd packages/song && npx vitest                  # watch mode
+cd apps/k7-daw-frontend/packages/song && npx vitest run src/loader.test.ts   # one file
+cd apps/k7-daw-frontend/packages/song && npx vitest                  # watch mode
 ```
 
 `npm run test` and `npm run typecheck` go through `scripts/workspaces.mjs <script> [--jobs N]`. It
@@ -38,7 +38,7 @@ not blocked by a missing C++ toolchain.
 ## Vitest configuration
 
 The root `vitest.config.ts` applies when Vitest is started from the repository root. It keeps
-Vitest's default excludes and adds `engine/k7-runtime/build/**`, `engine/k7-runtime/build-*/**`
+Vitest's default excludes and adds `apps/k7-daw-engine/k7-runtime/build/**`, `apps/k7-daw-engine/k7-runtime/build-*/**`
 (CMake vendors JUCE there, whose demo apps contain `App.test.js` files) and `.claude/worktrees/**`.
 It sets `testTimeout` and `hookTimeout` to 30 seconds.
 
@@ -48,8 +48,8 @@ the developer's real data:
 
 | Package config | Pins | Also |
 |---|---|---|
-| `packages/song/vitest.config.ts` | `STUDIO_MEDIATEK`, `STUDIO_HOME` | 30 s timeouts |
-| `packages/commands/vitest.config.ts` | `STUDIO_MEDIATEK`, `STUDIO_HOME` | 30 s timeouts |
+| `apps/k7-daw-frontend/packages/song/vitest.config.ts` | `STUDIO_MEDIATEK`, `STUDIO_HOME` | 30 s timeouts |
+| `apps/k7-daw-frontend/packages/commands/vitest.config.ts` | `STUDIO_MEDIATEK`, `STUDIO_HOME` | 30 s timeouts |
 
 Other packages with a config of their own: `audio-passes`, `song-edit`, `song-video`, `translator`.
 
@@ -69,7 +69,7 @@ Other packages with a config of their own: `audio-passes`, `song-edit`, `song-vi
 
 ## C++ engine tests
 
-`npm run test --workspace k7-runtime` runs `engine/k7-runtime/scripts/run-tests.mjs`:
+`npm run test --workspace k7-runtime` runs `apps/k7-daw-engine/k7-runtime/scripts/run-tests.mjs`:
 
 1. Picks the preset from the platform (`windows-msvc`, `macos-clang`, otherwise `dev-gcc`), or
    `$STUDIO_MOTEUR_PRESET`.
@@ -77,7 +77,7 @@ Other packages with a config of their own: `audio-passes`, `song-edit`, `song-vi
    exits 0. It never configures on its own, because that downloads Tracktion and JUCE.
 3. Asks CTest for the registered tests matching `^studio_`, excluding the `slow` label unless
    `--all` is passed (`npm run test:all --workspace k7-runtime`). Adding a target to
-   `engine/k7-runtime/tests/CMakeLists.txt` is enough for it to be picked up.
+   `apps/k7-daw-engine/k7-runtime/tests/CMakeLists.txt` is enough for it to be picked up.
 4. Builds those targets under the build-folder lock shared with the dev watcher, then runs CTest
    with `--output-on-failure`.
 
@@ -87,22 +87,22 @@ noticed when its target is built: run the tests after touching the engine's data
 ## Supervisor tests
 
 The supervisor is built with its `dev-gcc` preset in CI and its unit tests run as
-`engine/k7-supervisor/build/dev-gcc/k7_supervisor_tests`. The same build produces `tunnel_harness`;
-`packages/engine-tunnel/testAgents.ts` finds the newest one under `engine/k7-supervisor/build` and
+`apps/k7-daw-engine/k7-supervisor/build/dev-gcc/k7_supervisor_tests`. The same build produces `tunnel_harness`;
+`apps/k7-daw-frontend/packages/engine-tunnel/testAgents.ts` finds the newest one under `apps/k7-daw-engine/k7-supervisor/build` and
 runs every tunnel suite against it as well as against the TypeScript agent. Without a native build,
 the native cases are skipped.
 
 ```bash
-cd engine/k7-supervisor
+cd apps/k7-daw-engine/k7-supervisor
 cmake --preset dev-gcc && cmake --build --preset dev-gcc
 ./build/dev-gcc/k7_supervisor_tests
-cd ../../packages/engine-tunnel && npx vitest run
+cd apps/k7-daw-frontend/packages/engine-tunnel && npx vitest run
 ```
 
 ## Where tests run automatically
 
 | Where | What |
 |---|---|
-| GitHub `k7` workflow | `npm run test --workspace=apps/k7 --workspace=packages --if-present`, the supervisor tests and the tunnel conformance suites |
+| GitHub `k7` workflow | `npm run test --workspace=apps/k7-daw-frontend --if-present`, the supervisor tests and the tunnel conformance suites |
 
 See [CI](./07-ci.md).

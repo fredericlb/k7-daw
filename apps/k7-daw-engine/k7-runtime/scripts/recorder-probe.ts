@@ -3,7 +3,7 @@
 // stops, and checks the take is not damaged and its wav holds what the clock said (docs/recorder.md).
 // A rebuild swaps the graph, so the take is SHORTER than the wall clock: no audio flows meanwhile.
 //
-//   npx tsx engine/k7-runtime/scripts/recorder-probe.ts [ws://127.0.0.1:8765] [--dir <recordDir>]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/recorder-probe.ts [ws://127.0.0.1:8765] [--dir <recordDir>]
 //
 // `--dir` must be a folder the engine may WRITE (its state dir, or STUDIO_ENGINE_ROOTS).
 

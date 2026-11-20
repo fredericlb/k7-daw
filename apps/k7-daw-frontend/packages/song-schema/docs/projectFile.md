@@ -1,6 +1,6 @@
 # project.k7x
 
-The rationale behind `packages/song-schema/src/yaml/projectSchema.ts` — the file's two tiers, the
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/projectSchema.ts` — the file's two tiers, the
 fields that are dead and still accepted, and the archetypes.
 
 The root `format` key, the level a newer k7 is refused at, is [formatLevel.md](formatLevel.md).
@@ -23,7 +23,7 @@ own parameter is wider still (to +24), so widening this again is a one-line chan
 `project.k7x` and not in `settings.k7x` beside the metronome: it moves playback, `--render` and a
 freeze together, and it travels in a share. A monitoring level that only changed what you hear in
 this room would be a different field in a different file. Absent means UNITY, and unity is never
-written. See `packages/song/docs/masterVolume.md`.
+written. See `apps/k7-daw-frontend/packages/song/docs/masterVolume.md`.
 
 ## The fields that are DEAD and still accepted
 
@@ -52,7 +52,7 @@ k7, which moves its picture lanes (`formatLevel.md`). `viewport` sits in the SHA
 because one schema validates every dialect (the loader has no type to branch on when it reads the
 header), and a song is where it belongs:
 `loadVideoProject` is a second compile of the same folder, not a second kind of project
-(`packages/song-video/docs/picture.md`).
+(`apps/k7-daw-frontend/packages/song-video/docs/picture.md`).
 
 ## The archetypes
 
@@ -64,12 +64,12 @@ The fourth is named after what it IS, being the one that opens on none:
 | `arrangement` | `timeline` — a lane, a synth, a pattern |
 | `mix` | `turntables` — two decks meeting at a crossfade, an empty `songs.k7x` |
 | `video` | `timeline` + `viewport` — the arrangement, plus a lane of picture |
-| `live` | **none** — an input, the lane it lands on, and the master run (`packages/song/docs/liveProject.md`) |
+| `live` | **none** — an input, the lane it lands on, and the master run (`apps/k7-daw-frontend/packages/song/docs/liveProject.md`) |
 
 There is ONE list, and it names archetypes rather than kinds of folder: every project is an `.k7`
 folder that opens in k7, and what differs is the screen it asks for. Closing the layout down when
 there is no timeline, and silencing the warning about one, are `surfaces/` questions answered there:
-a project draws what it DECLARES (`packages/song/docs/surfaces.md`). A second field saying almost the
+a project draws what it DECLARES (`apps/k7-daw-frontend/packages/song/docs/surfaces.md`). A second field saying almost the
 same thing could only drift from it — a folder declaring a timeline while calling itself `live` would
 be a legal state nothing could resolve.
 
@@ -80,7 +80,7 @@ disagree with it.
 
 **`mix` writes a SET**, and that pair of names is the one mismatch here. `mix` is what you ASK for,
 named like its two neighbours; a set is what lands on disk — `songs.k7x`, decks, a desk — and
-`packages/song/docs/setProject.md` is its page. One word cannot be right for both audiences.
+`apps/k7-daw-frontend/packages/song/docs/setProject.md` is its page. One word cannot be right for both audiences.
 
 ## Marker keys
 

@@ -4,10 +4,10 @@ import tailwindcss from "@tailwindcss/vite";
 // studio's Storybook: the components of this repo, @studio/ui's included.
 const config: StorybookConfig = {
   stories: [
-    "../packages/*/src/**/*.mdx",
-    "../packages/*/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../apps/*/frontend/src/**/*.mdx",
-    "../apps/*/frontend/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../apps/k7-daw-frontend/packages/*/src/**/*.mdx",
+    "../apps/k7-daw-frontend/packages/*/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../apps/k7-daw-frontend/src/**/*.mdx",
+    "../apps/k7-daw-frontend/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
     "@chromatic-com/storybook",

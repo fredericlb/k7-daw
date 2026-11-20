@@ -1,5 +1,5 @@
 // param-cost.mjs — what one set-plugin-param really costs, against a RUNNING engine.
-//   node engine/k7-runtime/scripts/param-cost.mjs [pluginId]
+//   node apps/k7-daw-engine/k7-runtime/scripts/param-cost.mjs [pluginId]
 // Total wall clock to push N sets AND see the engine past them: emission + drain, against a
 // control that stops at the map miss. Real sets re-send each param's CURRENT value, so the
 // whole path runs and the sound never moves.

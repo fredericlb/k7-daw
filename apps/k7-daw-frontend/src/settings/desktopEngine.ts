@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import { useLocalApp } from "../localApp";
 
-/** What this page draws of the supervisor's snapshot (engine/k7-supervisor/schema/hostProtocol.schema.json). */
+/** What this page draws of the supervisor's snapshot (apps/k7-daw-engine/k7-supervisor/schema/hostProtocol.schema.json). */
 export interface DesktopEngineSnapshot {
   status: "stopped" | "running" | "error";
   error?: string;
@@ -116,7 +116,7 @@ export function useOnDesktopEngine(): boolean | undefined {
   return app === undefined ? undefined : !!app?.engine;
 }
 
-/** Ask the supervisor; the backend takes only the commands its allow-list names (backend-rs/crates/k7-front/src/routes/local/routes.rs). */
+/** Ask the supervisor; the backend takes only the commands its allow-list names (apps/k7-daw-backend/packages/k7-front/src/routes/local/routes.rs). */
 export function engineCommand(cmd: string, arg?: string): void {
   void fetch("/api/local/engine/cmd", {
     method: "POST",
@@ -183,7 +183,7 @@ export function moveDevice(
   return out;
 }
 
-/** An ASIO driver the engine is NOT on while it plays through another backend — on Windows, the shared endpoint of the same interface, two channels a side (engine/k7-runtime/docs/audioDevice.md). */
+/** An ASIO driver the engine is NOT on while it plays through another backend — on Windows, the shared endpoint of the same interface, two channels a side (apps/k7-daw-engine/k7-runtime/docs/audioDevice.md). */
 export function idleAsioDriver(s: DesktopEngineSnapshot): string | null {
   const devices = s.audioDevices ?? [];
   const isAsio = (t: string) => /asio/i.test(t);

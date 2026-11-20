@@ -1,7 +1,7 @@
 // A CAMERA is an io source that emits picture, wired in `graph.k7x` and landing on a video lane —
 // the same shape a live audio input has against an audio lane. What is pinned here is the pair of
 // halves that could each be silently wrong: which lane the lens lands on, and what `validate()`
-// says about a cable that cannot mean anything. See packages/song/docs/camera.md.
+// says about a cable that cannot mean anything. See apps/k7-daw-frontend/packages/song/docs/camera.md.
 
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -104,7 +104,7 @@ describe("what validate() refuses", () => {
 describe("a camera with no lane at all", () => {
   it("draws a layer of its own, the whole frame, out of nothing but the node", () => {
     // No lane file and no `trackOrder` entry for `cam`: the document authors no lane of it, which is the
-    // whole point of the shape. See packages/song/docs/camera.md.
+    // whole point of the shape. See apps/k7-daw-frontend/packages/song/docs/camera.md.
     const dir2 = project({ modules: { cam: [], RENDER: ["VIDEO_OUT"] } });
     const layers = loadVideoProject(dir2).videoTracks;
     const lens = layers.find((t) => t.id === "cam");

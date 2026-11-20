@@ -80,7 +80,7 @@ describe("graph move", () => {
   });
 
   it("a node CREATED with a trailing x,y is born there — pinned in the same undo step", async () => {
-    // `node new` takes the click, so one command creates and pins (packages/song/docs/nodes.md).
+    // `node new` takes the click, so one command creates and pins (apps/k7-daw-frontend/packages/song/docs/nodes.md).
     await runCommand("module new audio/verb2", host(), "cli");
     await runCommand("node new audio/verb2 verb2n 120,80", host(), "cli");
     expect(graph().modules.verb2n).toEqual([]);

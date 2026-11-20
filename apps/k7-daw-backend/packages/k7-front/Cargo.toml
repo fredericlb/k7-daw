@@ -47,7 +47,7 @@ k7-picture.workspace = true
 # The file service's native pieces (docs/file-native.md).
 k7-file-service.workspace = true
 # The compile's `Ask`, `View` and `Roots`, which the docs routes build and read (decision 1113).
-song = { path = "../../../../../packages/song/rust" }
+song = { path = "../../../k7-daw-wasm/song" }
 # The relay's and the hub's sockets, served over the upgrades the front accepts itself.
 tokio-tungstenite.workspace = true
 tower.workspace = true

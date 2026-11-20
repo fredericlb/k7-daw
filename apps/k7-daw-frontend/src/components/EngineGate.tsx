@@ -173,7 +173,7 @@ export function EngineGate({
 
   // The files are the chosen engine's way in when it has one, else the hub's own with no engine bound.
   const gateEngine = useMemo<GateEngine | null>(() => {
-    // A session open past its twelve-hour ticket asks for a new one rather than failing every read — packages/project-shell/docs/fileApi.md.
+    // A session open past its twelve-hour ticket asks for a new one rather than failing every read — apps/k7-daw-frontend/packages/project-shell/docs/fileApi.md.
     const renewTicket = () => engines.freshTicket();
     if (chosen?.fileBase)
       return chosen.filesHosted ? { ...chosen, renewTicket } : chosen;

@@ -47,7 +47,7 @@ pub struct Settings {
     pub files_root: Option<PathBuf>,
     /// The volumes `/api/ready` probes, as `volumesFromEnv` names them.
     pub ready_volumes: Vec<String>,
-    /// The built page, `K7_FRONTEND_DIST`; None looks for `apps/k7/frontend/dist` above the front.
+    /// The built page, `K7_FRONTEND_DIST`; None looks for `apps/k7-daw-frontend/dist` above the front.
     pub frontend_dist: Option<PathBuf>,
     /// `K7_DEV_FRONTEND`: a running Vite that serves the page in its place, as the dev tray asks.
     pub dev_frontend: Option<String>,

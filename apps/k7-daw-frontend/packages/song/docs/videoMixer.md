@@ -8,7 +8,7 @@ pins to its right edge.
 ## What was decided
 
 - **It is a shader, shipped with k7.** `@meta/shaders/video-mixer` (`PICTURE_STRIP`), in
-  `packages/song/meta/` like the audio strip ([metaModules.md](metaModules.md)): every lane depends
+  `apps/k7-daw-frontend/packages/song/meta/` like the audio strip ([metaModules.md](metaModules.md)): every lane depends
   on it, so no library may remove or change it. Being a shader, its knobs are the four every
   shader has, `P1`..`P4`, each 0..1 ([../../song-video/docs/shaders.md](../../song-video/docs/shaders.md)).
 - **Neutral as made.** Red, green and blue at 1 (each channel as shot), transparency at 0 (opaque).
@@ -38,7 +38,7 @@ pins to its right edge.
 `node param <strip> P1..P4 <0..1>` writes the node's file, clamped, and the picture is rebuilt from
 it: no engine holds a shader. On a card, a shader's knob is its own target (`shader: true`), and the
 shell's `onShaderParam` writes it a few times a drag, the last value always landing
-(`apps/k7/frontend/src/hooks/useShaderParam.ts`).
+(`apps/k7-daw-frontend/src/hooks/useShaderParam.ts`).
 
 A drag is SEEN before it is saved. The write is a quiet command, which reloads nothing, so the
 knob is also pushed to every viewport on the page (`pictureLive.ts`) and set on the compositor's

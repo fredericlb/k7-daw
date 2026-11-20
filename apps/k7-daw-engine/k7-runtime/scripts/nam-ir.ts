@@ -2,7 +2,7 @@
 // no engine needed: the same sawtooth through the same model, with and without an IR, and the change
 // at every harmonic compared to the IR's own frequency response at that harmonic.
 //
-//   npx tsx engine/k7-runtime/scripts/nam-ir.ts <model.nam> <cabinet.wav>
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/nam-ir.ts <model.nam> <cabinet.wav>
 //
 // Convolution multiplies each frequency by the IR's response there, so after the amp the difference
 // between the two renders, harmonic by harmonic, IS that response — relative to the fundamental,

@@ -1,4 +1,4 @@
-// The Android shell around k7-runtime: one app module, the engine itself built by CMake from ../k7-runtime
+// The Android shell around k7-runtime: one app module, the engine itself built by CMake from ../k7-daw-engine/k7-runtime
 // (app/build.gradle.kts), and Capacitor's runtime for the page in web/. See docs/android.md.
 
 pluginManagement {

@@ -1,7 +1,7 @@
 // SerialQueue.h — tasks run one at a time, in order, on a thread of their own: the C++ form of a
 // promise chain. Closing it drops what is still queued and lets the thread end by itself, since the
 // closer may be the very thread a queued task is waiting on — a join there would deadlock.
-// Draining it runs what is queued first, within a bound (packages/engine-tunnel/docs/tunnel.md).
+// Draining it runs what is queued first, within a bound (apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md).
 
 #pragma once
 

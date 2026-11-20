@@ -1,6 +1,6 @@
 # The editor's field vocabulary
 
-The rationale behind `packages/song-schema/src/yaml/fields.ts` and its test — the completions the
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/fields.ts` and its test — the completions the
 k7x editor offers, DERIVED from the Zod schemas rather than hand-kept.
 
 ## Why it is derived
@@ -15,7 +15,7 @@ which a single flat table cannot do. Every object gets its own fields, `project:
 
 `modules/audio/cab/module.k7x` is a module whatever it is called, and so is `nodes/melody.k7x` — a
 node is an ordinary module that happens to live in `nodes/`, LANES INCLUDED
-(`packages/song/docs/trackModules.md`). There is no `tracks/` kind for exactly that reason: a chain
+(`apps/k7-daw-frontend/packages/song/docs/trackModules.md`). There is no `tracks/` kind for exactly that reason: a chain
 project's `tracks/<lane>.k7x` is a module file too, and `validate.ts` reads the folder the same way.
 
 A chain project's `chains/<name>.k7x` is a kind of its own, `chain` — not `chains`, which is the
@@ -24,7 +24,7 @@ chain folder (`chains/<name>/graph.k7x`). Its keys are positional the way the ed
 is: the file's own at the top; under `steps` a node's (a module's fields plus `id`, `bypass`,
 `vstpreset`, `mapping`), a lane item's `track` and an end step's `to`; under `steps.to` a link's;
 and below a node's field, that module field's own vocabulary
-(`packages/song/docs/chainFiles.md`).
+(`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`).
 
 There is no per-kind narrowing for a lane either. A lane is a node, so which of `events:` /
 `tracks:` / `strudel:` it may write is decided by what it extends — a question about the project,
@@ -75,7 +75,7 @@ the editor offers it because the completion is DERIVED from the schema.
 - `track` beside `channel`: where an input lands is the chain's business, and a shared `io/IN`
   module has one node per physical input and no project to name a track in.
 - `docs` and `todos`: a note is a doc module on the graph, and `content` is its text
-  (`packages/song/docs/docModules.md`).
+  (`apps/k7-daw-frontend/packages/song/docs/docModules.md`).
 - `tracks:` at the top of a `chains.k7x` — a lane is a module and lives in `modules:`.
   `positions:` is the pins: where dragged nodes sit, cosmetic and hand-editable like the rest.
 
@@ -84,4 +84,4 @@ the editor offers it because the completion is DERIVED from the schema.
 `alternatives` and `alternative` come last because they are the one pair that is ABOUT the fields
 above rather than one of them. `status` comes after them, outside `MODULE_FIELDS`, so an alternative
 cannot restate it — it is the one field that says nothing about what the module does or how it
-sounds, only how the completions treat it (`packages/song/docs/moduleStatus.md`).
+sounds, only how the completions treat it (`apps/k7-daw-frontend/packages/song/docs/moduleStatus.md`).

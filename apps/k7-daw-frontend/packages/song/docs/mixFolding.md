@@ -25,4 +25,4 @@ A video track holds no sound — the file's own audio is dropped by design, and 
 sound in a song comes from Tracktion — so the engine has nothing to do with one and is
 told nothing about it. That is a property of the document rather than a transform: a
 `ProjectDoc` has no picture field, and the picture compiles to its own `VideoProjectDoc`
-(`packages/song-video/docs/picture.md`).
+(`apps/k7-daw-frontend/packages/song-video/docs/picture.md`).

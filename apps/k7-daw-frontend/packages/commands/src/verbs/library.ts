@@ -1,7 +1,7 @@
 // library.ts — the `library …` verbs: which version of each library the WORKSPACE plays, and moving
 // that pin. They act on `repoDir`, since `_library-pins.k7x` is the workspace's, and need no project.
 // A version this k7 cannot run, or this machine lacks, is refused by name: a library changes with an app update.
-// See ../../../../docs/library-versions-plan.md.
+// See ../../../../../../docs/library-versions-plan.md.
 
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";

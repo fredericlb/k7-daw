@@ -149,7 +149,7 @@ pub fn create_project(
 
 /// The bundled sample the `video` archetype copies in.
 fn sample_video(code_root: &str) -> Result<Vec<u8>, EntryError> {
-    let at = format!("{code_root}/packages/song/samples/video/sample.mp4");
+    let at = format!("{code_root}/apps/k7-daw-frontend/packages/song/samples/video/sample.mp4");
     std::fs::read(&at).map_err(|_| {
         refused(format!(
             "bundled sample video missing ({at}) — the @studio/song package is incomplete"

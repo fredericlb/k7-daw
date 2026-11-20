@@ -4,7 +4,7 @@
 frame loop. The rules
 below are about **feel**, and the framing rules — `fitKey`, `fitted` vs `userMoved`, the camera
 that survives an unmount — are a separate set, in
-[k7's chainsGraph.md](../../../apps/k7/frontend/docs/chainsGraph.md).
+[k7's chainsGraph.md](../../../docs/chainsGraph.md).
 
 ## The camera is not React state
 

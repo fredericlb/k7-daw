@@ -1,7 +1,7 @@
 // eventProcess.ts — `event process <track> <at> <chain>`: bounce ONE event's material through a chain.
 // `clip process` repoints every clip playing the file; this one gives the event a copy of its clip
 // first whenever anything else plays that material, so only what was right-clicked changes.
-// See packages/audio-passes/docs/processChain.md.
+// See apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md.
 
 import { dirname, join } from "node:path";
 import { processWithChain } from "@studio/audio-passes/processChain";

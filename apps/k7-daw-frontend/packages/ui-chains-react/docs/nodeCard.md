@@ -22,7 +22,7 @@ LODs answering differently would be two cards.
 A lane's strip wears its LANE's name, spelt without its instrument code, which the glyph beside it
 already says; the TRACK node keeps its id, being addressed by it. A step with no module and no plugin
 plays nothing and says so — "empty step" — its place kept for the tooltip
-(`packages/song/docs/chainFiles.md`).
+(`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`).
 
 **A curve card draws the curve editor's picture, and only that**: the same samples, split the same way
 (one `CurveHandle` per spec from `@studio/k7-wasm`, at the editor's resolution), on the same -1..1 frame with 0 dashed and the same beat and bar lines, an
@@ -131,7 +131,7 @@ the plugin failed to load, first because a fault outranks a state; the snowflake
 and its cost are in the bottom bar's centre. A card with no bottom bar — a strip — keeps them beside
 its name, each a set width (`FREEZE_TAG_W` for both discs) counted in the width `headerNameW` leaves
 the name, and the cost on the header's bottom border. The second line is what the ENGINE does with the node — ONE dropdown (`PresetButton`) saying what it
-runs as (`packages/song/docs/engines.md`) and with which preset, opening one list the host draws: the
+runs as (`apps/k7-daw-frontend/packages/song/docs/engines.md`) and with which preset, opening one list the host draws: the
 presets, and a left bar of the engines when there is a choice. Two dropdowns side by side were two
 places to look for "how is this module set up", and the engine bar beside the presets keeps the pick
 and what it changes in one popup. The button's LEAST width is set, `presetButtonW` — the preset's
@@ -153,7 +153,7 @@ text inside them shrinks, so nothing reflows around it.
 
 ## A tabbed panel's column
 
-A panel with two or more tabs (`packages/ui-module-builder/docs/pages.md`) draws them as a column
+A panel with two or more tabs (`apps/k7-daw-frontend/packages/ui-module-builder/docs/pages.md`) draws them as a column
 down the card's LEFT, under the header — `TAB_COL_W` wide, one `TAB_H` row per name, the open one lit
 by a sand rule on its left edge. The card is widened by the column rather than the grid narrowed,
 and `widgetRect` takes the column's width as its left offset, so a tab's widgets sit exactly where
@@ -173,7 +173,7 @@ A single tab draws no column: one tab is no tab, and the builder never writes on
 
 **In the vertical layout, and only there, the tabs are a MENU across the top** (`tabsAs: "dropdown"`, a `<select>`
 of class `dgx-tabmenu`, `TAB_MENU_H` tall). That layout is at most 4 columns wide
-(`packages/ui-module-builder/docs/layouts.md`), so a column at its left would take a third of the
+(`apps/k7-daw-frontend/packages/ui-module-builder/docs/layouts.md`), so a column at its left would take a third of the
 card's width for names. `menuH` pushes the grid down by the menu as `columnW` pushes it right by
 the column; one of the two is always 0.
 
@@ -189,7 +189,7 @@ a window on — and, for the same reason, no on/off block in its header. Its fre
 
 ## The alternatives are badges, not a bubble
 
-A module's attribute sets (`packages/song/docs/alternatives.md`) are drawn as a row of badges at the
+A module's attribute sets (`apps/k7-daw-frontend/packages/song/docs/alternatives.md`) are drawn as a row of badges at the
 right of the card's bottom bar: one per set, the one playing lit, and a `+` last. Out of the header,
 they take no width from the name. They
 are not in `cornerButtons`, because they are not one control each module might have — they are a
@@ -228,7 +228,7 @@ would go wrong.
 A module card ends in a BAR (`.dgx-foot`, `FOOTER_H` tall, which `nodeSize` adds under the panel so
 it covers none of it). A strip draws none: it has neither a stage nor attribute sets.
 
-Its LEFT holds the engine's stage (`engine/k7-runtime/docs/mix.md`) — the up to three values the engine
+Its LEFT holds the engine's stage (`apps/k7-daw-engine/k7-runtime/docs/mix.md`) — the up to three values the engine
 wraps a plugin in, carried on the step as `stage` (the song crate) — as small knobs
 (`FOOT_KNOB_PX`) in signal order: IN, MIX, OUT, each only when the stage has it, its name the tooltip.
 They are ordinary widgets (a drag, a typed value, a MIDI map). Its CENTRE holds the node's badges —
@@ -246,7 +246,7 @@ A card whose plugin costs something says so in a small badge: `3%`, or `3% · 45
 plugins holding a big buffer. On a module card it is one of the bottom bar's centred badges; on a card
 with no bar it sits ON the header's bottom border at the right, absolute, so it takes no width from
 the name, which is already sized to the last pixel. The figures
-are the engine's (`engine/k7-runtime/docs/load.md`), shaped in `src/nodeLoad.ts`:
+are the engine's (`apps/k7-daw-engine/k7-runtime/docs/load.md`), shaped in `src/nodeLoad.ts`:
 
 - **Silent under 1 % and under 1 MB.** Most nodes cost nearly nothing, and a graph where every card
   says "0%" teaches the eye to skip the one that says 40.
@@ -293,7 +293,7 @@ wins over this ground: a state beats an identity, which is the right order — k
 render matters more than recognising it as an edge.
 
 **An automatically frozen node is frosted too, and gives way.** `n.autoFrozen` (a VST's automatic
-render, `packages/song/docs/autoFreeze.md`) takes the same wash and snowflake, but where `frozen`
+render, `apps/k7-daw-frontend/packages/song/docs/autoFreeze.md`) takes the same wash and snowflake, but where `frozen`
 refuses a drag and hides the plugin bubble and the on/off block, `autoFrozen` keeps them: a drag or the
 plugin bubble first calls the host's `onThawAutoFreeze` with the VST the render was taken at, so the
 edit reaches a live plugin.

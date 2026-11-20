@@ -8,13 +8,13 @@ the per-account file service that serves them.
 | Page | Package(s) |
 |---|---|
 | [The pipeline](./30-song-pipeline.md) | overview |
-| [song-schema](./31-song-schema.md) | `packages/song-schema` — the file format, browser-safe |
-| [The compiler](./32-song-compiler.md) | `packages/song` — loader, inheritance, compile |
-| [song-edit](./33-song-edit.md) | `packages/song-edit` — surgical writes |
-| [k7x](./34-k7x.md) | `packages/k7x` — the parser, the printer, the document every writer edits |
-| [song-strudel](./35-song-strudel.md) | `packages/song-strudel` — pattern lanes |
-| [file-service](./36-file-service.md) | `apps/k7/backend-rs/crates/k7-file-service` — the per-account file service and its HTTP API |
-| [file-hub](./37-file-hub.md) | `apps/k7/backend-rs/crates/k7-hub` — the account's runtime, libraries, device pairing |
+| [song-schema](./31-song-schema.md) | `apps/k7-daw-frontend/packages/song-schema` — the file format, browser-safe |
+| [The compiler](./32-song-compiler.md) | `apps/k7-daw-frontend/packages/song` — loader, inheritance, compile |
+| [song-edit](./33-song-edit.md) | `apps/k7-daw-frontend/packages/song-edit` — surgical writes |
+| [k7x](./34-k7x.md) | `apps/k7-daw-frontend/packages/k7x` — the parser, the printer, the document every writer edits |
+| [song-strudel](./35-song-strudel.md) | `apps/k7-daw-frontend/packages/song-strudel` — pattern lanes |
+| [file-service](./36-file-service.md) | `apps/k7-daw-backend/packages/k7-file-service` — the per-account file service and its HTTP API |
+| [file-hub](./37-file-hub.md) | `apps/k7-daw-backend/packages/k7-hub` — the account's runtime, libraries, device pairing |
 | [Adding a field or a file kind](./39-adding-a-field.md) | end-to-end recipe |
 
 ## Data flow
@@ -35,7 +35,7 @@ the per-account file service that serves them.
 ```
 
 - **The engine never parses song files.** It receives a compiled `ProjectDoc`
-  (`packages/engine-protocol/project.ts`) with absolute paths, diffs it against what it holds, and
+  (`apps/k7-daw-frontend/packages/engine-protocol/project.ts`) with absolute paths, diffs it against what it holds, and
   plays. Everything about folders, inheritance and k7x lives in TypeScript.
 - **The browser validates what the compiler would read**, with the same zod schemas, before the
   buffer is written. That is why `@studio/song-schema` has no `node:` import, and why

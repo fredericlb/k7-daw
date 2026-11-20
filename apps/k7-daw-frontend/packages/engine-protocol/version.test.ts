@@ -12,7 +12,10 @@ import {
   MIN_ENGINE_PROTOCOL,
 } from "./version.ts";
 
-const engine = join(dirname(fileURLToPath(import.meta.url)), "../../engine");
+const engine = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../../k7-daw-engine",
+);
 
 describe("ENGINE_PROTOCOL", () => {
   for (const file of [

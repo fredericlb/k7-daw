@@ -2,7 +2,7 @@
 // answers `visible` rules, and draws each screen on an OffscreenCanvas of its own, sent back as a bitmap.
 // `widgetRuntime` is shipped as its own source text (Function.prototype.toString), so it must stay
 // self-contained: no import, no class, no async, nothing a bundler would lower into a helper.
-// The page side is widgetSandbox.ts; the rationale is packages/ui-chains-react/docs/lcdScreen.md.
+// The page side is widgetSandbox.ts; the rationale is apps/k7-daw-frontend/packages/ui-chains-react/docs/lcdScreen.md.
 
 /** A script's shape as the sandbox compiled it — the page never holds the functions themselves. */
 export interface ScriptInfo {

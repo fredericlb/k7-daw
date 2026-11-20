@@ -24,7 +24,7 @@ import {
 import { collectPluginModules, mapPlugins } from "./node.ts";
 import { splitWords } from "./shared.ts";
 
-/** A shader's knob, P1..P4 and 0..1: written to its node, and the picture rebuilt from the files (packages/song-video/docs/shaders.md). */
+/** A shader's knob, P1..P4 and 0..1: written to its node, and the picture rebuilt from the files (apps/k7-daw-frontend/packages/song-video/docs/shaders.md). */
 async function setShaderParam(
   h: CommandHost,
   module: string,
@@ -66,7 +66,7 @@ export const NODE_PARAM_VERBS: Record<string, SidHandler> = {
     const param = unquote(rawParam);
     // Unquoted for EVERY branch below, not just the file one: `Number('"5"')` is NaN.
     const rawValue = unquote(quotedValue);
-    // An INTRINSIC — the module's own field rather than a plugin's parameter; packages/song/docs/intrinsics.md.
+    // An INTRINSIC — the module's own field rather than a plugin's parameter; apps/k7-daw-frontend/packages/song/docs/intrinsics.md.
     if (param.startsWith("@")) {
       await setIntrinsic(h, module, param.slice(1), rawValue);
       return;

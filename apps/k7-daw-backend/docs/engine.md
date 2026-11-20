@@ -1,11 +1,11 @@
 # The engine core in Rust
 
 The registry, the relay and its gate, and the tunnel hub — the server's engine core — answered by the
-front (`crates/k7-engine`, routed by `crates/k7-front/src/routes/engine/`). What it decides is in
+front (`packages/k7-engine`, routed by `packages/k7-front/src/routes/engine/`). What it decides is in
 `engine/`: who has which project (`engine/claim.md`), a heartbeat read (`engine/heartbeat.md`), which
 engines the device's account may use (`engine/ownership.md`), the relay (`engine/proxy.md`), one registry per origin
 (`engine/shared.md`) and an engine's credentials (`engine/token.md`); the tunnel's pages are
-`packages/engine-tunnel/docs/`. This page is how the front holds it.
+`apps/k7-daw-frontend/packages/engine-tunnel/docs/`. This page is how the front holds it.
 
 ## The switch
 
@@ -31,14 +31,14 @@ needs the auth folder, as every session route does (`front.md`), and stays off w
 |---|---|
 | a crate of its own, `k7-engine`, with no HTTP framework in it | the trust decisions are tested alone, by their own unit tests and vectors; the front only reads requests and writes answers |
 | `tokio-tungstenite` over upgrades the front accepts itself, not axum's `ws` | one message type for the sockets the hub and the relay accept and the one the relay dials to an engine; the frame cap is `MAX_FRAME_BYTES` (16 MiB) on all of them |
-| every socket has a reader task and a writer task, the writer's queue counted in bytes | backpressure reads a peer's unsent bytes (`bufferedAmount`); a tunnel counts each channel's apart, so a stalled reader's channel closes alone (`packages/engine-tunnel/docs/backpressure.md`) |
+| every socket has a reader task and a writer task, the writer's queue counted in bytes | backpressure reads a peer's unsent bytes (`bufferedAmount`); a tunnel counts each channel's apart, so a stalled reader's channel closes alone (`apps/k7-daw-frontend/packages/engine-tunnel/docs/backpressure.md`) |
 | the registry's state behind one lock, never held across an await | the claims and the bindings change together; nothing in them waits on a socket |
 | `indexmap` for every map whose order shows (a crate serde_json already brought) | the listing's order and the bytes of `engine-bindings.json` are insertion order, as the previous release reads and writes them |
 
 ## The testbed
 
-The suites of `packages/engine-tunnel` — the relay's, the hub's, the two-agent suite — run against the core
-when `ENGINE_CORE_BIN` names `k7-engine-testbed` (`packages/engine-tunnel/testCore.ts`): one process per test, its
+The suites of `apps/k7-daw-frontend/packages/engine-tunnel` — the relay's, the hub's, the two-agent suite — run against the core
+when `ENGINE_CORE_BIN` names `k7-engine-testbed` (`apps/k7-daw-frontend/packages/engine-tunnel/testCore.ts`): one process per test, its
 routes and sockets the front's own. Without it they skip; `ENGINE_CORE_REQUIRED=1`, as CI sets it, makes
 them fail instead.
 

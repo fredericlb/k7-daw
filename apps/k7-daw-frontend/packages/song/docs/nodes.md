@@ -230,7 +230,7 @@ that menu is derived from this catalogue, so the entry exists because the comman
 argument names a module and for no other reason. It survives on a **dangling** node too, where
 it is the actual repair: a step naming a module that does not exist has no file to open and no
 param to set, but removing it and closing the gap needs no module to exist. That last part the
-catalogue cannot say, and k7 lists it (`apps/k7/frontend/docs/contextMenu.md`).
+catalogue cannot say, and k7 lists it (`apps/k7-daw-frontend/docs/contextMenu.md`).
 
 ## Not covered by this
 

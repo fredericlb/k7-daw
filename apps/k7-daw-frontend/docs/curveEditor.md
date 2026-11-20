@@ -7,14 +7,14 @@ made without writing its k7x: a name, a shape, an amplitude, and what the shape 
 |---|---|
 | name | the curve's id, which is its file name — a uuid by default for a new curve, editable before the first save, fixed after it (renaming is not this popin's) |
 | shape | the four oscillators (sine, triangle, saw, square), an ADSR envelope, a custom curve you draw, or an on/off one for a switch |
-| amplitude | 0..1, how far the curve moves what it drives (`packages/song/docs/curves.md`) |
+| amplitude | 0..1, how far the curve moves what it drives (`apps/k7-daw-frontend/packages/song/docs/curves.md`) |
 | polarity | bipolar or unipolar, two radio buttons on cut's row — unipolar sweeps from 0, bipolar rides around where the knob sits; only bipolar is written, unipolar being the default |
 | cut | none, positive or negative — the half of the output kept; not offered for an on/off curve |
 | phase, cycles / bar | an oscillator's — where in its cycle it starts, and how fast it runs |
 | duration | an oscillator's length, beside its cycles: a length like `2:0`, `0` for ever |
 | A, D, S, R | an envelope's four stages, as knobs, in ms — S is a HOLD, as the file says (`docs/22-syntax-material.md`) |
 | the curve | the preview, and for a drawn curve the points themselves: click to add one, drag to move it, double-click to remove it |
-| conditions | when it runs — a list, the curve running while ANY holds and always when it is empty; each is start at, end at, between, or on an event of its node (`Note On`, for now), with its own `retrigger`, which restarts the curve each time that condition comes true (`packages/song/docs/curves.md`, "Conditions") |
+| conditions | when it runs — a list, the curve running while ANY holds and always when it is empty; each is start at, end at, between, or on an event of its node (`Note On`, for now), with its own `retrigger`, which restarts the curve each time that condition comes true (`apps/k7-daw-frontend/packages/song/docs/curves.md`, "Conditions") |
 
 ## From a control: `ui automate`
 
@@ -53,10 +53,10 @@ Ctrl+Z. Switching the shape keeps the other shapes' fields in the draft, so tryi
 coming back to the sine loses nothing — only what is picked is written.
 
 **The preview is one call into Rust, and the graph's curve card draws the same picture** — `draftPreview`
-in `apps/k7/frontend/src/curveDraft.ts` asks `@studio/k7-wasm` for the span, the lines and the grid at once.
-The module is `packages/song-schema/rust`, a port of the arithmetic `@studio/song` still bakes the
-engine's breakpoints with in `packages/song/src/curveSample.ts`; a sweep holds the two together
-(`packages/song-schema/docs/wasmBoundary.md`). A drawn curve is drawn over its bars (four, or past the last point), an oscillator over
+in `apps/k7-daw-frontend/src/curveDraft.ts` asks `@studio/k7-wasm` for the span, the lines and the grid at once.
+The module is `apps/k7-daw-wasm/song-schema`, a port of the arithmetic `@studio/song` still bakes the
+engine's breakpoints with in `apps/k7-daw-frontend/packages/song/src/curveSample.ts`; a sweep holds the two together
+(`apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md`). A drawn curve is drawn over its bars (four, or past the last point), an oscillator over
 one cycle or its duration (below); an envelope has no song time, so it is drawn over its own length
 from the trigger.
 

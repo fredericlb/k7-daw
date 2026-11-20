@@ -4,7 +4,7 @@
 
 ## Why they exist
 
-`apps/k7/frontend/docs/picture.md` had a section called **"Not a command, and why"**, and it was
+`apps/k7-daw-frontend/docs/picture.md` had a section called **"Not a command, and why"**, and it was
 an accurate description of a gap rather than an argument for one. Every audio edit in the shell is
 a verb; a picture placement was dragged, and `App.applyVideoEdit` wrote the lane directly. The page
 listed what that cost:
@@ -25,7 +25,7 @@ in the frame; before them, both took a text editor.
 | `picture length <lane> <at> <seconds>` | `length` | the right-edge drag |
 | `picture head <lane> <at> <to>` | `start`, `from` **and** `length` | the left-edge drag |
 | `picture delete <lane> <at>` | — | (none — the drag has no delete) |
-| `picture add <lane> <ref> <at> …` | a new entry | dropping a video file on a picture lane (`apps/k7/frontend/docs/timeline.md`) |
+| `picture add <lane> <ref> <at> …` | a new entry | dropping a video file on a picture lane (`apps/k7-daw-frontend/docs/timeline.md`) |
 | `picture lane new [name]` | a new LANE, and `trackOrder` | the timeline's `＋ piste` menu |
 | `picture rect <lane> <x> <y> <w> <h>` | `frame([x, y, w, h])` | selecting a layer in the VIEWPORT and dragging it |
 | `picture split <lane> <at> <where>` | a second placement of the same clip, right after the first | the cut tool on a shot, and `Ctrl+B` at the playhead |
@@ -34,21 +34,21 @@ in the frame; before them, both took a text editor.
 | `picture prepare <lane>` | each clip's `optimized:` / `proxy:`, once its copy is written | run by the timeline after a video drop, beside `picture sound` |
 | `picture interchange <otio\|edl> [lane]` | nothing: the cut is the first output line, for another editor | `project export timeline`, which saves it in the folder the person chooses |
 | `picture import <file> [prefix]` | a new picture lane per video track, and a clip per new medium | (none — the file is put in the project first) |
-| `picture render [webm\|mp4] [wav\|none] [settings] into=<folder>` | `<project>.<ext>` in the folder named, rendered on the server in the background (`apps/k7/backend-rs/docs/file-engine-jobs.md`) | `project export video`, which renders in the browser |
+| `picture render [webm\|mp4] [wav\|none] [settings] into=<folder>` | `<project>.<ext>` in the folder named, rendered on the server in the background (`apps/k7-daw-backend/docs/file-engine-jobs.md`) | `project export video`, which renders in the browser |
 | `picture key` / `picture unkey <lane> <at> <prop> <when> …` | one key of `animate:` | (none — keys are set at the playhead) |
 
 `picture split` is VIRTUAL, as an audio `event split` is: two placements of one clip, the head
 ending at the cut and the tail starting there with `from` moved on by the head's length,
-so the frames played do not change (`packages/song/docs/materialCut.md` says why a sequence is the
+so the frames played do not change (`apps/k7-daw-frontend/packages/song/docs/materialCut.md` says why a sequence is the
 other way). The tail is inserted RIGHT AFTER the head and not appended, because file order
-decides which shot covers which (`packages/song-video/docs/transitions.md`), and an appended tail
+decides which shot covers which (`apps/k7-daw-frontend/packages/song-video/docs/transitions.md`), and an appended tail
 would cover every shot placed between the two. The head keeps the `fadeIn` and the tail takes
 the `fadeOut`, so a shot still arrives and leaves the way it did, with a plain cut between the
 halves.
 
 `picture sound` is the one that is not a gesture's twin: it makes the shots audible through the
 engine, extracting what is missing, so running it twice changes nothing
-(`packages/song/docs/videoSound.md`). In a node project it makes no lane, the picture lane's own
+(`apps/k7-daw-frontend/packages/song/docs/videoSound.md`). In a node project it makes no lane, the picture lane's own
 `#audio` half playing the sound; in a chain project, which spells no port, it makes the
 `video_source:` lane once, or reuses the one already there. It lives in `src/verbs/pictureSound.ts`,
 beside the verbs it borrows `laneFile` from.
@@ -103,7 +103,7 @@ only the compiler can measure, so pinning a number here would invent one.
 
 Every other one is about time — where a shot starts, how long it runs, which lane draws first. This
 one says where in the frame a lane draws, in viewport px, and it is what the viewport's selection
-box writes on release (`apps/k7/frontend/docs/picture.md`).
+box writes on release (`apps/k7-daw-frontend/docs/picture.md`).
 
 It writes **all four** numbers of `frame`, always. A lane stating three of them and inheriting the fourth is a
 rect nobody can read, and the fourth would come from the viewport default that exists precisely so
@@ -127,7 +127,7 @@ verb does the counting.
 Every other verb here rewrites one lane. This one writes the lane file — `nodes/<id>.k7x`, or
 `tracks/<id>.k7x` in a chain project, extending `@meta/picture-track` — **and** states
 `trackOrder` with the new lane above the picture lanes there are, so it draws in front, where you
-can see what you just made (`createPictureLaneFile`, `packages/song/src/projectFiles.ts`). The
+can see what you just made (`createPictureLaneFile`, `apps/k7-daw-frontend/packages/song/src/projectFiles.ts`). The
 other rows keep the order they drew in. A song with no `project.k7x` gets the lane alone: the file
 is what makes a lane exist, the order only places it. Named nothing, it picks `layer-N` off the
 lane folder.

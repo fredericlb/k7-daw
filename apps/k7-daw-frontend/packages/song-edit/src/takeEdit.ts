@@ -1,6 +1,6 @@
 // takeEdit.ts — an event's takes on disk: a comp span picked, a take dropped, a take added, and a
 // MIDI take written as a sequence of its own. The event is addressed by where it STARTS, as every
-// event verb addresses one; the file half is song-schema's takeFile.ts. See packages/song/docs/takes.md.
+// event verb addresses one; the file half is song-schema's takeFile.ts. See apps/k7-daw-frontend/packages/song/docs/takes.md.
 
 import { stub } from "@studio/song/editStub";
 

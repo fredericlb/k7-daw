@@ -1,5 +1,5 @@
 //! k7-hub — the file hub's pieces (phase 5a, `docs/rust-phase5-plan.md`): the tickets, the account's names and
-//! environment, the engine bindings, the seam to the tunnel hub and the cache sweep. Choices: `apps/k7/backend-rs/docs/files.md`.
+//! environment, the engine bindings, the seam to the tunnel hub and the cache sweep. Choices: `apps/k7-daw-backend/docs/files.md`.
 //! What a reader gets wrong: no process starts here; every account's files are the front's own runtime.
 
 pub mod account;

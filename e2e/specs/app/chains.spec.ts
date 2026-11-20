@@ -68,7 +68,7 @@ async function pickOnCable(
   const plus = cablePlus(page, "MIX", "OUT");
   const picker = page.getByRole("menu");
   const search = picker.getByRole("textbox", { name: "search modules…" });
-  // Before the module catalogue lands the `+` pre-writes the command instead (apps/k7/frontend/src/shell/useGraphActions.ts): put it away and press again.
+  // Before the module catalogue lands the `+` pre-writes the command instead (apps/k7-daw-frontend/src/shell/useGraphActions.ts): put it away and press again.
   await expect(async () => {
     await closeCommandBar(page);
     await plus.focus();

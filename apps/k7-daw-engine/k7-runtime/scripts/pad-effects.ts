@@ -2,10 +2,10 @@
 // counting hits. `repeat` retriggers a pad inside its own step; `skip` silences it on every nth
 // pass of the pattern. Both are realised by the engine (EditBuilder's insertMidiClip), so a render
 // is the only thing that can say whether they happened.
-//   npx tsx engine/k7-runtime/scripts/pad-effects.ts
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/pad-effects.ts
 
 import { rmSync } from "node:fs";
-import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 import { channelOf, readWav } from "./wav.ts";
 
 const RATE = 48000;

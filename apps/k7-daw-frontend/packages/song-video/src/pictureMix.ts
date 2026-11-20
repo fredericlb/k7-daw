@@ -1,7 +1,7 @@
 // pictureMix.ts — which picture lanes are ON SCREEN. Two rules: the mute/solo fold, which is the
 // mixer-wide one audio already keeps, and when a LENS opens. Pure, and in one place because the
 // frame and the timeline both draw the answer and must not come to disagree.
-// See apps/k7/frontend/docs/picture.md.
+// See apps/k7-daw-frontend/docs/picture.md.
 
 import type { CameraMonitor } from "@studio/song-video/videoDoc";
 

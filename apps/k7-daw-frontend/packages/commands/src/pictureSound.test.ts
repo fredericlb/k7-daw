@@ -25,7 +25,7 @@ import { compileDisk, compileReady } from "./runtime/testing/compileDisk";
 beforeAll(compileReady);
 
 const here = dirname(fileURLToPath(import.meta.url));
-const SONG = join(here, "..", "..", "..", "demos", "node-demo.k7");
+const SONG = join(here, "..", "..", "..", "..", "..", "demos", "node-demo.k7");
 
 let song: string;
 const logs: string[] = [];
@@ -158,9 +158,13 @@ describe("picture sound", () => {
 
   it("still makes a sounding lane in a chain project, which spells no port", async () => {
     rmSync(song, { recursive: true, force: true });
-    cpSync(join(here, "..", "..", "..", "demos", "video-demo.k7"), song, {
-      recursive: true,
-    });
+    cpSync(
+      join(here, "..", "..", "..", "..", "..", "demos", "video-demo.k7"),
+      song,
+      {
+        recursive: true,
+      },
+    );
     writeDoc(join(song, "clips", "bars.k7x"), {
       source: "clips/bars.mp4",
       sound: "clips/bars.wav",

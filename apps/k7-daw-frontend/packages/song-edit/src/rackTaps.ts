@@ -1,6 +1,6 @@
 // rackTaps.ts — editing a rack NODE's taps: the note each sound answers to and the library sample
 // it plays. They are written into the node's own file, never the module's: a rack module is the
-// sampler, and each node of it is a kit (packages/song/docs/racks.md). On an alternative other than
+// sampler, and each node of it is a kit (apps/k7-daw-frontend/packages/song/docs/racks.md). On an alternative other than
 // the first, into that set — a knob and a tap follow the same rule.
 
 import { stub } from "@studio/song/editStub";

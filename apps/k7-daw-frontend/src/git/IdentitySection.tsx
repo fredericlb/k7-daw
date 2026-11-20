@@ -1,5 +1,5 @@
 // IdentitySection.tsx — who this device is: the name and email that sign its commits and head the user menu (Settings).
-// One identity per device, shared with the commit dialog through ./identity (apps/k7/backend-rs/docs/files/git.md).
+// One identity per device, shared with the commit dialog through ./identity (apps/k7-daw-backend/docs/files/git.md).
 
 import { Button } from "@studio/ui/button";
 import { Input } from "@studio/ui/input";

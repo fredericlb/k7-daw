@@ -1,6 +1,6 @@
 // A library laid out as versions resolves at the version the WORKSPACE pins, the draft only for a
 // pin or an admin's overlay, and a library still in one folder as its own version 1 — see
-// ../../../docs/library-versions-plan.md.
+// ../../../../../docs/library-versions-plan.md.
 
 import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

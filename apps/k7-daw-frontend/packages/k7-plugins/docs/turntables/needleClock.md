@@ -1,7 +1,7 @@
 # The drawn needle — a deck's position between two engine frames
 
 A deck's clock is its platter's needle, reported in seconds of the record about **20 times a
-second** (`Deck.platters`, `engine/k7-runtime/docs/turntable.md`), each frame landing after a different
+second** (`Deck.platters`, `apps/k7-daw-engine/k7-runtime/docs/turntable.md`), each frame landing after a different
 transit. The band and the record's wedge redraw at 60 fps. Drawn verbatim, the needle moves on one
 frame in three and the band steps with the network's jitter.
 
@@ -13,7 +13,7 @@ stable identities: `rawNeedle` and `drawnNeedle`.
 ## It is the transport's clock, given a rate
 
 The estimator is `@studio/engine-browser/playhead-clock`, the one k7's timeline draws its playhead
-with (`apps/k7/frontend/docs/playhead.md`): the rate is KNOWN, so the only unknown is the offset
+with (`apps/k7-daw-frontend/docs/playhead.md`): the rate is KNOWN, so the only unknown is the offset
 between the engine's clock and this one, and the least-delayed frame of a recent window is the
 best measure of it. The transport runs at one second per second; a platter runs at the `Rate` the
 desk sent it (`platterRate`: the deck's tempo over its record's own, 0 when stopped). The clock

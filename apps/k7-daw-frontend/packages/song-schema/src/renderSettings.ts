@@ -1,7 +1,7 @@
 // renderSettings.ts — the words that set a picture render, read in ONE place: the browser's
 // `project export video` and the server's `picture render` take the same line, so they must read
 // it alike. Here and not in ui-eyes so the command layer reads them without a WebGL package.
-// See apps/k7/backend-rs/docs/file-engine-jobs.md.
+// See apps/k7-daw-backend/docs/file-engine-jobs.md.
 
 /** The quality presets an export may ask for, lowest first; `max` is mediabunny's "very high". */
 export const EXPORT_QUALITIES = ["low", "medium", "high", "max"] as const;

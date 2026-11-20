@@ -1,6 +1,6 @@
 // The FileTree's action menu: the list of offered actions, and the inline prompt or confirm
 // one of them turns it into. Mounted fresh per opening, so no answer leaks into the next.
-// The tree decides WHERE and FOR WHAT; see packages/ui/docs/file-tree.md.
+// The tree decides WHERE and FOR WHAT; see apps/k7-daw-frontend/packages/ui/docs/file-tree.md.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { TreeAction, TreeNode, TreeTarget } from "./file-tree";

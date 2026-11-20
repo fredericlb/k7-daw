@@ -8,7 +8,7 @@ proxy("clips/interview.proxy.mp4") // 720p — the preview alone
 sound("clips/interview.sound.wav") // the shot's sound, the engine's (../../song/docs/videoSound.md)
 ```
 
-`picture prepare <lane>` makes the copies (`packages/commands/src/verbs/pictureMedia.ts`), and
+`picture prepare <lane>` makes the copies (`apps/k7-daw-frontend/packages/commands/src/verbs/pictureMedia.ts`), and
 `@studio/video-prep` decides which ones a file needs ([../../video-prep/docs/videoPrep.md](../../video-prep/docs/videoPrep.md)).
 
 ## Two copies for two different problems
@@ -38,7 +38,7 @@ stream copy into mp4 rather than a re-encode: seconds rather than minutes, and n
 | an export | `optimized`, else `source` — never `proxy` |
 | a shot's sound | `source`, through its own extraction |
 
-The choice is made where the scene is built (`sceneOf` in `packages/k7-plugins/src/video/scene.ts`),
+The choice is made where the scene is built (`sceneOf` in `apps/k7-daw-frontend/packages/k7-plugins/src/video/scene.ts`),
 so nothing downstream knows that copies exist. The clip names its copies, rather than a naming
 convention implying them, for the reason `sound:` is named: a copy replaced by hand is one line to
 change, and a clip that names none simply reads its source.
@@ -68,7 +68,7 @@ above has already explained.
 ## The export refuses what it cannot decode, before it starts
 
 The export asks every video source whether it decodes here (`assertDecodable` in
-`packages/ui-eyes/src/export.ts`), and refuses naming the file and the verb that fixes it. The
+`apps/k7-daw-frontend/packages/ui-eyes/src/export.ts`), and refuses naming the file and the verb that fixes it. The
 alternative is a render failing at that shot's first frame, minutes in, with every frame before
 it lost. A still and a subtitle clip are not asked: neither is a container, and handing one to the
 reader fails the whole export as an unrecognised format.

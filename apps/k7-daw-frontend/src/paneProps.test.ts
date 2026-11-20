@@ -57,7 +57,7 @@ describe("the panes themselves", () => {
     EditorTab: "components/EditorTab.tsx",
     SurfaceTab: "components/SurfaceTab.tsx",
     MasteringTab: "components/MasteringTab.tsx",
-    ViewportTab: "../../../../packages/k7-plugins/src/video/index.ts",
+    ViewportTab: "../packages/k7-plugins/src/video/index.ts",
   };
   for (const [name, file] of Object.entries(files)) {
     it(`${name} is exported memoised`, () => {

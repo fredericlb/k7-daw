@@ -9,7 +9,7 @@ publish.workspace = true
 # `String(number)` and `textHash`, and the settle's error type (docs/files.md).
 k7-js.workspace = true
 # The k7x reader and document editor the settle's k7x ops are located, diffed and replayed with (docs/parity.md).
-k7x = { path = "../../../../../packages/k7x/rust" }
+k7x = { path = "../../../k7-daw-wasm/k7x" }
 getrandom.workspace = true
 serde_json.workspace = true
 sha2.workspace = true

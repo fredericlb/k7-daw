@@ -1,7 +1,7 @@
 // clipInstances.ts — which materials the song places more than once, and where each one FIRST
 // plays. The timeline draws a ghost on every later placement and lights the siblings of the one
 // under the caret; both read this. Pure, so "the first is the earliest" can be pinned without a
-// pane. See apps/k7/frontend/docs/timeline.md.
+// pane. See apps/k7-daw-frontend/docs/timeline.md.
 
 import type { WebClip, WebTrack } from "./types";
 

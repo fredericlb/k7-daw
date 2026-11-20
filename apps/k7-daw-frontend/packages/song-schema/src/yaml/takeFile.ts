@@ -1,6 +1,6 @@
 // takeFile.ts — writing an event's TAKES and its COMP into a lane file: a take added and comped in, one comp span laid over the rest,
 // a take dropped with every span it played. The arithmetic is takes.ts'; what is here is where it lands, in the events list trackFile edits.
-// Every writer edits a K7Scope at the lane file's root. See packages/song/docs/takes.md.
+// Every writer edits a K7Scope at the lane file's root. See apps/k7-daw-frontend/packages/song/docs/takes.md.
 
 import type { K7Path } from "@studio/k7x/ast";
 import type { K7Scope } from "@studio/k7x/document";

@@ -4,18 +4,18 @@ A desk control moves a module parameter that the **project** names. Nothing abou
 
 ## The surface file
 
-Schema: `packages/song-schema/src/yaml/surfaceSchema.ts`; reader: `packages/song-schema/src/yaml/surfaceFile.ts`; project-side listing and creation: `packages/song/src/surfaces.ts`.
+Schema: `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceSchema.ts`; reader: `apps/k7-daw-frontend/packages/song-schema/src/yaml/surfaceFile.ts`; project-side listing and creation: `apps/k7-daw-frontend/packages/song/src/surfaces.ts`.
 
 - `type: turntables` must have `layout: split` (`SURFACE_LAYOUTS_BY_TYPE`).
 - `playlist` is refused on any other type (`superRefine`), rather than ignored.
-- `mapping` is `MixViewSchema` itself (`packages/song-schema/src/yaml/mixViewSchema.ts`): a record of control id to `{ module, param, invert?, also? }` or `null`. Reusing the schema keeps the desk's older `views/mix.k7x` and the surface from drifting.
-- `SURFACE_MAPPING_SKELETON.turntables` is what `project surface new turntables` writes, every control as `null` with a comment. It is a copy of the control list kept honest by `packages/k7-plugins/src/turntables/mapping.test.ts`.
+- `mapping` is `MixViewSchema` itself (`apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts`): a record of control id to `{ module, param, invert?, also? }` or `null`. Reusing the schema keeps the desk's older `views/mix.k7x` and the surface from drifting.
+- `SURFACE_MAPPING_SKELETON.turntables` is what `project surface new turntables` writes, every control as `null` with a comment. It is a copy of the control list kept honest by `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/mapping.test.ts`.
 
-`packages/song` validates the mapping's **shape** and deliberately not its ids; the desk owns its vocabulary.
+`apps/k7-daw-frontend/packages/song` validates the mapping's **shape** and deliberately not its ids; the desk owns its vocabulary.
 
 ## Control vocabulary
 
-`packages/k7-plugins/src/turntables/controls.ts` defines `MIX_CONTROLS`, derived from `DECKS` so a third deck is not unbindable:
+`apps/k7-daw-frontend/packages/k7-plugins/src/turntables/controls.ts` defines `MIX_CONTROLS`, derived from `DECKS` so a third deck is not unbindable:
 
 | Id | Kind | Range (from `deckVocabulary.ts`) | Home | `wants` |
 |---|---|---|---|---|
@@ -50,7 +50,7 @@ Ranges are the **modules' own** knob ranges (their `ui.k7x`), so a binding canno
 
 ## The mix project scaffold
 
-`packages/song-edit/rust/src/scaffold_set.rs` writes a new set (`set_project_files`, `scaffold_set`); `apps/k7/backend-rs/crates/k7-file-service/src/edits/project_create.rs` maps the `mix` archetype to it. It is hand-authored like the other scaffolds because its `#` comments ship to disk as the worked example.
+`apps/k7-daw-wasm/song-edit/src/scaffold_set.rs` writes a new set (`set_project_files`, `scaffold_set`); `apps/k7-daw-backend/packages/k7-file-service/src/edits/project_create.rs` maps the `mix` archetype to it. It is hand-authored like the other scaffolds because its `#` comments ship to disk as the worked example.
 
 Per deck (`DECKS = ["deckA", "deckB"]`), `graphForDeck` writes:
 
@@ -71,7 +71,7 @@ Choices it encodes:
 - **Stem levels are the platter's own `Gain`** (`STEM_PARAM`), not a separate gain module.
 - `assemblyFiles` writes `assemblies/turntable{A,B}.k7x` using `TURNTABLE_REF = "@k7-core/turntable"`; they draw a deck's nodes as one box and change nothing in the compiled document.
 
-Node and control names are spelled once in `packages/song-schema/src/stems.ts` (`stemLane`, `stemPlatter`, `deckPlatter`, `stemControl`, `turntableMembers`), because the scaffold and the desk must agree and the desk cannot import a scaffold.
+Node and control names are spelled once in `apps/k7-daw-frontend/packages/song-schema/src/stems.ts` (`stemLane`, `stemPlatter`, `deckPlatter`, `stemControl`, `turntableMembers`), because the scaffold and the desk must agree and the desk cannot import a scaffold.
 
 ## Adding a control, end to end
 

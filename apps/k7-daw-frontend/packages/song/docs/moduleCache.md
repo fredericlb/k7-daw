@@ -66,7 +66,7 @@ Walking the stamp **once per turn of the event loop** — memoise it, clear it o
 — looks safe and is not. The reasoning behind it ("nothing can land between two synchronous
 reads") forgets that this process is itself a writer: `node param` writes a module file and
 reloads the project in the same synchronous stretch, so the second read would be answered from
-a stamp taken before the write. `packages/song`'s suite catches it — 13 failures in
+a stamp taken before the write. `apps/k7-daw-frontend/packages/song`'s suite catches it — 13 failures in
 `presets.test.ts` and its neighbours, all of the shape "module 'synth' has no params". The
 walk is 20 ms; pay it per call.
 
@@ -138,7 +138,7 @@ Measured here — 3000 same-size rewrites, as fast as Node can issue them:
 
 A cache keyed on that serves the previous content — for a clip file, the edit you just made
 silently not happening. It is the same class of mistake as the tick memo above, and it is found
-the same way, by trying to break it rather than by a green suite: `packages/song` passes with the
+the same way, by trying to break it rather than by a green suite: `apps/k7-daw-frontend/packages/song` passes with the
 unsafe key.
 
 The fix is not a finer key but a narrower one. An mtime is trusted only once it is **older than
@@ -193,7 +193,7 @@ one stamp are consistent with each other, and the danger is only in letting them
 derivation that asked. That is what keeps a compile from reading the médiathèque three times in the
 two seconds after a save.
 
-The native workspace's text image (`apps/k7/backend-rs/crates/k7-file-service/src/workspaces/mod.rs`) keys its per-file text image on `(size, mtime)` and
+The native workspace's text image (`apps/k7-daw-backend/packages/k7-file-service/src/workspaces/mod.rs`) keys its per-file text image on `(size, mtime)` and
 therefore follows the same rule — which matters more there than anywhere: that image is what an
 undo entry is diffed against, so a same-size rewrite inside one tick (`v1` → `v2`, a knob from
 `0.5` to `0.7`) was journalling nothing at all. `SETTLE_MS` is exported from `moduleCache.ts` and
@@ -255,7 +255,7 @@ Nothing here installs one. The file service does, in its `listen` callback, beca
 handles is a property of being a long-lived server — a CLI run, a test and a script walk instead,
 and none of them pays for a watcher they would immediately close. The
 implementation, the platform quirks and the ceiling that heals a missed event live over there:
-`apps/k7/backend-rs/docs/file-native.md`.
+`apps/k7-daw-backend/docs/file-native.md`.
 
 ### What this package writes, it forgets
 
@@ -274,7 +274,7 @@ host with a fixed heap carries less, and four vocabularies of a project built on
 take most of it. `shedModuleReads()` therefore lets go of every project's reads but the one read
 last, and `clearYamlCache()` of every parse. Both only cost the next read its walk and its
 parses. Node never calls them. The file service's Rust actor calls them when its heap has grown
-past half its limit (`apps/k7/backend-rs/docs/service.md`).
+past half its limit (`apps/k7-daw-backend/docs/service.md`).
 
 ## Where the time ends up
 

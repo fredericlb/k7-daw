@@ -1,8 +1,8 @@
 # The file service's native entries (piece `entries`)
 
 The five routes that change a workspace's entries, in Rust: `POST /folder`, `/rename`, `/move`, `/entry/delete`, and the two
-halves of `POST /upload`, whose bytes the front already streams. The crate is `crates/k7-file-service` (`rel`, `entries/`);
-the front's half is `crates/k7-front/src/routes/files/service/native/` (`entries.rs`, `locks.rs`). The pieces it stands on are
+halves of `POST /upload`, whose bytes the front already streams. The crate is `packages/k7-file-service` (`rel`, `entries/`);
+the front's half is `packages/k7-front/src/routes/files/service/native/` (`entries.rs`, `locks.rs`). The pieces it stands on are
 the path model's guards and the workspace's write lock. `/library/move` is answered natively too (1213); `/project/*` and
 `/open` are `file-projects.md`. These routes are not journalled and stay so.
 

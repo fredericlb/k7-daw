@@ -2,7 +2,7 @@
 //
 // Il MANGE ce qu'on lui donne et joue ses propres notes, et c'est un GRAPHE quand même : la phase
 // MIDI a deux nœuds pour ça, `mhold` qui prend les touches et `mstrike` qui les rejoue sur une
-// horloge. Voir engine/k7-runtime/docs/midiGraph.md — c'est ce qui fait qu'un module MIDI s'écrit
+// horloge. Voir apps/k7-daw-engine/k7-runtime/docs/midiGraph.md — c'est ce qui fait qu'un module MIDI s'écrit
 // ici et pas en C++.
 //
 // CE QU'IL N'EST PAS un arpégiateur : un accord tenu n'est pas égrené, il est refrappé ENTIER à
@@ -29,4 +29,4 @@ params({
 // se lit "Count × Division" — 1 × 1/8 refrappe toutes les croches, 2 × 1/8 toutes les noires.
 // `Gate` dit à quel moment du pas la répétition se relâche. Un accord est refrappé en entier.
 //
-// (La description d'un module est son en-tête, ici — voir packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)

@@ -16,7 +16,7 @@ import { current, setVfs, withVfs } from "./shims/current.ts";
 import { type FakeServer, fakeServer } from "./testing/fakeServer.ts";
 import { Vfs } from "./vfs.ts";
 
-const repo = join(import.meta.dirname, "../../../..");
+const repo = join(import.meta.dirname, "../../../../../..");
 const root = "/ws";
 const BINARY = /\.(wav|mp4|png|jpg|webm|onnx)$/i;
 

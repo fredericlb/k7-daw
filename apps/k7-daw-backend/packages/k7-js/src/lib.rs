@@ -1,6 +1,6 @@
 //! k7-js — the few JavaScript number formats a file holds, reproduced natively (`number`, `math`, `bases`), and an error
 //! type the settle still names; no JavaScript runs here.
-//! The choices and the proofs: apps/k7/backend-rs/docs/parity.md.
+//! The choices and the proofs: apps/k7-daw-backend/docs/parity.md.
 
 pub mod bases;
 pub mod math;

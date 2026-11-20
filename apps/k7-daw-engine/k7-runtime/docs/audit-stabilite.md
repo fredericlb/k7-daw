@@ -1,6 +1,6 @@
 # Audit — stability and speed of the engine
 
-A standing audit of `engine/k7-runtime` itself. `docs/audit-moteur.md` at the repository root owns
+A standing audit of `apps/k7-daw-engine/k7-runtime` itself. `docs/audit-moteur.md` at the repository root owns
 the other half — everything that links a *surface* to this engine, over registries, relays and
 gates. This page is about what happens once a message has arrived: the threads, the audio
 callback, and the cost of loading a project.

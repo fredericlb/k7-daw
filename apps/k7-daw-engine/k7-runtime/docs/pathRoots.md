@@ -15,7 +15,7 @@ preset, the project cannot record.
 | **read** — every other path a document names, `preview`'s `file`, `set-preset`'s `path` | the write roots, and the system's temp directory |
 
 `<state>` covers what the engine is actually sent. A server-owned file is played from the
-supervisor's copy under `<state>/remote/<server>/<root>` (`packages/engine-tunnel/docs/tunnel.md`) —
+supervisor's copy under `<state>/remote/<server>/<root>` (`apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md`) —
 the account's workspace, the libraries, the models — and an `@instruments/`
 instrument resolves under `<state>/instruments`. A take and a saved preset land in that same copy,
 which is what the tunnel uploads back.
@@ -23,7 +23,7 @@ which is what the tunnel uploads back.
 `$STUDIO_ENGINE_ROOTS` is a path list (`;` on Windows, `:` elsewhere) for a machine whose documents
 name local files elsewhere — a project driven straight from a checkout. It is read once, at start. k7's front
 under the desktop app sets it to its own workspaces and data folder, whose files its engine is sent by their own paths
-(`apps/k7/backend-rs/docs/localEngine.md`), and so do the phone apps (`android.md`, `ios.md`).
+(`apps/k7-daw-backend/docs/localEngine.md`), and so do the phone apps (`android.md`, `ios.md`).
 
 The temp directory is READ-only, and only because the harnesses in `scripts/` write their test
 sources there and drive a running engine with them. Reading a file there plays it; it never writes
@@ -56,4 +56,4 @@ runs the binary — a person, or the supervisor's render job on a document the t
 Only a UNC path is refused there.
 
 The supervisor holds its own jobs to the same copies, by its own test
-(`engine/k7-supervisor/src/MachineJobs.cpp`): a job is answered by that process, not by this one.
+(`apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp`): a job is answered by that process, not by this one.

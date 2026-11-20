@@ -1,7 +1,7 @@
 // chainSave.ts — `chain save [name]`: the bench's run, input to fader, written as one of the account's
 // frozen chains (`@account/chains/<name>.k7x`), where the process verbs and the recorder find it. The
 // writing is the host's, since only the file service knows the bench and the account's library.
-// See apps/k7/backend-rs/docs/libraries.md and apps/k7/frontend/docs/frozenChains.md.
+// See apps/k7-daw-backend/docs/libraries.md and apps/k7-daw-frontend/docs/frozenChains.md.
 
 import type { SidHandler } from "../commands.ts";
 import { splitWords } from "./shared.ts";

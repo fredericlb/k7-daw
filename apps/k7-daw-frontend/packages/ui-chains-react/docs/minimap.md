@@ -42,4 +42,4 @@ re-frames it, as it did before anybody touched it.
 `graph organize` is a command that rewrites `positions:` and bumps the shell's `organizeKey`, so
 it has to go through the host's reloading command path — the renderer's `command` prop is the QUIET
 one, which reloads nothing. The button therefore exists only when the host passes `onOrganize`; k7
-runs `graph organize` through `runCommand` (`apps/k7/frontend/docs/chainsGraph.md`).
+runs `graph organize` through `runCommand` (`apps/k7-daw-frontend/docs/chainsGraph.md`).

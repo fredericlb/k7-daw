@@ -1,9 +1,9 @@
 # The desk's two files
 
-The rationale behind `packages/song-schema/src/yaml/mixSchema.ts`,
-`packages/song-schema/src/yaml/mixFile.ts`, `packages/song-schema/src/yaml/mixViewSchema.ts` and
-`packages/song-schema/src/yaml/mixViewFile.ts`. What a set project IS lives in
-`packages/song/docs/mixFile.md` and `packages/song/docs/viewBindings.md`; this page is the file
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixSchema.ts`,
+`apps/k7-daw-frontend/packages/song-schema/src/yaml/mixFile.ts`, `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewSchema.ts` and
+`apps/k7-daw-frontend/packages/song-schema/src/yaml/mixViewFile.ts`. What a set project IS lives in
+`apps/k7-daw-frontend/packages/song/docs/mixFile.md` and `apps/k7-daw-frontend/packages/song/docs/viewBindings.md`; this page is the file
 shapes and the reader/writer rules.
 
 Both readers are browser-safe (no `fs`), because the app that DRAWS a desk is the one that needs

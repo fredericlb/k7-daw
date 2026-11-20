@@ -1,4 +1,4 @@
-// engineEntry.ts — what the ENGINE calls: bundled by engine/k7-runtime/scripts/gen-strudel-bundle.mjs and run in QuickJS.
+// engineEntry.ts — what the ENGINE calls: bundled by apps/k7-daw-engine/k7-runtime/scripts/gen-strudel-bundle.mjs and run in QuickJS.
 // Whether an event is a SAMPLE is the engine's to say — it holds the banks — so `s` and `n` travel with every event.
 
 import * as core from "@strudel/core";

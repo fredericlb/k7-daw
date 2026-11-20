@@ -1,6 +1,6 @@
 //! registry.rs — the registry's routes: the engines' open heartbeat, deregister and
 //! hello; the browser's list (each usable entry with a relay ticket), select, release and WebRTC offer, behind
-//! the session, with the statuses, bodies and log lines of `apps/k7/backend-rs/docs/engine/heartbeat.md`.
+//! the session, with the statuses, bodies and log lines of `apps/k7-daw-backend/docs/engine/heartbeat.md`.
 
 use std::net::SocketAddr;
 use std::sync::Arc;

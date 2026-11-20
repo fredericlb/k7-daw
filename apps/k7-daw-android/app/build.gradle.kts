@@ -12,8 +12,8 @@ plugins {
 // npm is a .cmd on Windows, which an Exec task does not resolve from the bare name.
 val npm = if (System.getProperty("os.name").startsWith("Windows")) "npm.cmd" else "npm"
 
-// The table the desktop app starts its backend with too (apps/k7/backend-rs/docs/standalone.md): its port is a constant here.
-val standalone = groovy.json.JsonSlurper().parse(rootDir.resolve("../../apps/k7/backend-rs/standalone.json")) as Map<*, *>
+// The table the desktop app starts its backend with too (apps/k7-daw-backend/docs/standalone.md): its port is a constant here.
+val standalone = groovy.json.JsonSlurper().parse(rootDir.resolve("../k7-daw-backend/standalone.json")) as Map<*, *>
 
 // The e2e build's backend port: the shipped app holds standalone.json's on the same loopback, and e2e/src/android.ts dials this one.
 val E2E_PORT = 18799
@@ -117,8 +117,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 }
 
-val engineDir = rootDir.resolve("../k7-runtime")
-val supervisorDir = rootDir.resolve("../k7-supervisor")
+val engineDir = rootDir.resolve("../k7-daw-engine/k7-runtime")
+val supervisorDir = rootDir.resolve("../k7-daw-engine/k7-supervisor")
 
 // The preset, with this SDK's NDK, through the same script as build:mac and build:win.
 val buildEngine by tasks.registering(Exec::class) {
@@ -127,14 +127,14 @@ val buildEngine by tasks.registering(Exec::class) {
     commandLine("node", "scripts/build.mjs", "android-arm64")
 }
 
-// The supervisor through engine/scripts/supervisorBuild.mjs, the desktop build's own entry, told which preset to use.
+// The supervisor through apps/k7-daw-engine/scripts/supervisorBuild.mjs, the desktop build's own entry, told which preset to use.
 val buildSupervisor by tasks.registering(Exec::class) {
     workingDir = rootDir.resolve("../..")
     environment("ANDROID_NDK_HOME", android.ndkDirectory.absolutePath)
     environment("STUDIO_SUPERVISOR_PRESET", "android-arm64")
     commandLine(
         "node", "-e",
-        "import('./engine/scripts/supervisorBuild.mjs').then((m) => m.buildSupervisor(process.cwd()))",
+        "import('./apps/k7-daw-engine/scripts/supervisorBuild.mjs').then((m) => m.buildSupervisor(process.cwd()))",
     )
 }
 
@@ -183,7 +183,7 @@ val backendTree = layout.buildDirectory.dir("backend-tree")
 val bundleBackend by tasks.registering(Exec::class) {
     dependsOn(buildFrontend)
     workingDir = repoDir
-    commandLine("node", repoDir.resolve("apps/k7/backend-rs/scripts/stageBundle.mjs").absolutePath, backendTree.get().asFile.absolutePath)
+    commandLine("node", repoDir.resolve("apps/k7-daw-backend/scripts/stageBundle.mjs").absolutePath, backendTree.get().asFile.absolutePath)
 }
 
 // The files the Rust front's actor reads at its code root, unpacked as `code/` and named K7_CODE_ROOT (docs/android.md).
@@ -191,7 +191,7 @@ val codeRootTree = layout.buildDirectory.dir("code-root")
 
 val stageCodeRoot by tasks.registering(Exec::class) {
     workingDir = repoDir
-    commandLine("node", repoDir.resolve("apps/k7/backend-rs/scripts/stageCodeRoot.mjs").absolutePath, codeRootTree.get().asFile.absolutePath)
+    commandLine("node", repoDir.resolve("apps/k7-daw-backend/scripts/stageCodeRoot.mjs").absolutePath, codeRootTree.get().asFile.absolutePath)
 }
 
 val backendAssets = layout.buildDirectory.dir("backend-assets")
@@ -200,7 +200,7 @@ val stageBackend by tasks.registering(Zip::class) {
     dependsOn(bundleBackend, stageCodeRoot)
     from(backendTree)
     from(codeRootTree) { into("code") }
-    from(repoDir.resolve("apps/k7/backend-rs/standalone.json"))
+    from(repoDir.resolve("apps/k7-daw-backend/standalone.json"))
     archiveFileName.set("backend.zip")
     destinationDirectory.set(backendAssets)
 }
@@ -211,11 +211,11 @@ android.androidResources.noCompress += "zip"
 
 tasks.named("preBuild") { dependsOn(stageEngine, stageShell, stageBackend) }
 
-// The Rust front as libk7_embed.so, cargo linking with this SDK's NDK at the app's minSdk (apps/k7/backend-rs/docs/embed.md).
-val frontDir = repoDir.resolve("apps/k7/backend-rs")
+// The Rust front as libk7_embed.so, cargo linking with this SDK's NDK at the app's minSdk (apps/k7-daw-backend/docs/embed.md).
+val frontDir = repoDir.resolve("apps/k7-daw-backend")
 val frontJni = layout.buildDirectory.dir("front-jni")
 
-// The front's cargo target lives outside the tree, so an APK build leaves no backend-rs/target behind (docs/rust-builds.md).
+// The front's cargo target lives outside the tree, so an APK build leaves no apps/k7-daw-backend/target behind (docs/rust-builds.md).
 val frontTarget = File(System.getProperty("user.home"), ".cache/k7-android-front")
 
 val buildFront by tasks.registering(Exec::class) {
@@ -233,7 +233,7 @@ val buildFront by tasks.registering(Exec::class) {
     environment("CC_aarch64_linux_android", clang.absolutePath)
     environment("AR_aarch64_linux_android", android.ndkDirectory.resolve("toolchains/llvm/prebuilt/$host/bin/llvm-ar${if (os.contains("windows")) ".exe" else ""}").absolutePath)
     // rustc through sccache when the machine has it, unless RUSTC_WRAPPER is set already (docs/rust-builds.md).
-    providers.exec { commandLine("node", repoDir.resolve("engine/scripts/sccache.mjs").absolutePath, "dev") }
+    providers.exec { commandLine("node", repoDir.resolve("apps/k7-daw-engine/scripts/sccache.mjs").absolutePath, "dev") }
         .standardOutput.asText.get().lines().filter { it.contains('=') }
         .forEach { environment(it.substringBefore('='), it.substringAfter('=')) }
     commandLine("cargo", "build", "--release", "--target-dir", frontTarget.absolutePath, "-p", "k7-embed", "--target", "aarch64-linux-android")

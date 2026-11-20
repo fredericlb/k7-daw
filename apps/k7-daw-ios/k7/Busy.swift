@@ -2,7 +2,7 @@
 // screen on. iOS keeps a background-audio app running for as long as its device runs, so the hold is the default
 // and its RELEASE is the decision: idle in the background, the engine closes its device and iOS may suspend the
 // app. Two sources, as on Android: the supervisor's snapshot says when a session PLAYS, whoever drives it; the views
-// say what only a page knows (`busy`, apps/k7/frontend/src/androidBusy.ts and media-session.js). See engine/k7-runtime/docs/ios.md.
+// say what only a page knows (`busy`, apps/k7-daw-frontend/src/androidBusy.ts and media-session.js). See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import os
 import UIKit

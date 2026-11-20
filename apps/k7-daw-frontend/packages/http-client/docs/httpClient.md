@@ -1,6 +1,6 @@
 # @studio/http-client
 
-The browser's half of a call to a studio service. k7's home page uses it (`apps/k7/frontend/src/projects/api.ts`), and the editor's calls and downloads. It is a package
+The browser's half of a call to a studio service. k7's home page uses it (`apps/k7-daw-frontend/src/projects/api.ts`), and the editor's calls and downloads. It is a package
 of its own because `@studio/web-protocol` is not the place for it: that is the wire's vocabulary, published to apps outside this repository.
 
 ## A refusal carries the server's sentence, and its status

@@ -21,7 +21,7 @@ browser-safe candidate, but the tunnel and `live-sync` do not and should not pul
   `startsWith(root)` that forgot the separator was this bug.
 - **Lexical only.** Both sides are taken as already resolved; nothing reads the disk. A symlink
   inside the root may still lead out, so a check that must hold against links is song's
-  `confineTo` (`packages/song/docs/confine.md`), which runs this test on the resolved path and again
+  `confineTo` (`apps/k7-daw-frontend/packages/song/docs/confine.md`), which runs this test on the resolved path and again
   on the real path of its nearest existing ancestor.
 - **The root decides the platform.** A root spelt with a drive letter or as a UNC share is a Windows
   path: both separators count, and case is folded, as NTFS folds it. Any other root is POSIX: only
@@ -35,7 +35,7 @@ browser-safe candidate, but the tunnel and `live-sync` do not and should not pul
 
 ## What stays elsewhere
 
-- The tunnel's `safeSegment` (`packages/engine-tunnel/segments.ts`) builds on `isPlainSegment` and
+- The tunnel's `safeSegment` (`apps/k7-daw-frontend/packages/engine-tunnel/segments.ts`) builds on `isPlainSegment` and
   is stricter on purpose: it refuses what Windows would open as a device or trim to a dot, since a
   segment it passes becomes a file name on the engine's machine.
 - `live-sync`'s `syncPathError` keeps its own reasons — a backslash, a drive letter — since a

@@ -1,4 +1,4 @@
-// abi.rs — the C ABI the browser calls: the ONLY file with `extern "C"`, and the buffers it owns (packages/song-schema/docs/wasmBoundary.md).
+// abi.rs — the C ABI the browser calls: the ONLY file with `extern "C"`, and the buffers it owns (apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md).
 // A reader would get wrong that JS never frees or holds a pointer across a call: any call may grow the memory.
 
 use crate::curve_ops::Head;

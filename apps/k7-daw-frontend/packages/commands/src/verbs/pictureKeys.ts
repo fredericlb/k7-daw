@@ -1,7 +1,7 @@
 // pictureKeys.ts — `picture key` and `picture unkey`: one keyframe of a shot's animation at a
 // time. The time is a TIMELINE time like every `picture …` verb's, so a key is set where the
 // playhead is; the file stores it from the shot's own start, which is what lets it travel with
-// the shot. See packages/song-video/docs/animation.md.
+// the shot. See apps/k7-daw-frontend/packages/song-video/docs/animation.md.
 
 import type { K7Scope } from "@studio/k7x/document";
 import {

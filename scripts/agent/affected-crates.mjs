@@ -15,7 +15,7 @@ const testOnly = (name, rest) =>
 
 function main() {
   const root = run("git", ["rev-parse", "--show-toplevel"]).trim();
-  const ws = resolve(root, "apps/k7/backend-rs");
+  const ws = resolve(root, "apps/k7-daw-backend");
   const files = branchFiles(root);
   if (wideFiles(files).length > 0) return WIDE;
   // cargo metadata writes target/.rustc_info.json; keep it out of the tree (gate.sh refuses one).

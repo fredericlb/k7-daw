@@ -34,7 +34,7 @@ pub trait Js: Send + Sync {
     fn apply(&self, current: Option<String>, op: Value) -> Result<Option<String>, JsError>;
 }
 
-/// The native k7x half: the editor of `packages/k7x`, no thread and no state, so one is shared by every room.
+/// The native k7x half: the editor of `apps/k7-daw-frontend/packages/k7x`, no thread and no state, so one is shared by every room.
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Native;
 

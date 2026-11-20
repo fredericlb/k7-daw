@@ -1,10 +1,10 @@
 # The engine protocol
 
-Every client talks to the engine over one WebSocket: JSON text messages both ways, plus binary messages for the audio broadcast. The TypeScript shapes live in `packages/engine-protocol`; the engine's handlers in `engine/k7-runtime/server/` are the authority on the full set, since each client implements only the subset it needs.
+Every client talks to the engine over one WebSocket: JSON text messages both ways, plus binary messages for the audio broadcast. The TypeScript shapes live in `apps/k7-daw-frontend/packages/engine-protocol`; the engine's handlers in `apps/k7-daw-engine/k7-runtime/server/` are the authority on the full set, since each client implements only the subset it needs.
 
 ## The package
 
-`packages/engine-protocol` Its subpaths:
+`apps/k7-daw-frontend/packages/engine-protocol` Its subpaths:
 
 | Subpath | File | Content | Emits code |
 |---|---|---|---|
@@ -80,7 +80,7 @@ Replies listed in `ENGINE_GLOBAL_REPLIES` (`plugins`, `audio-devices`, `sessions
 
 ## Pairing
 
-Trust is decided per socket in `engine/k7-runtime/server/ServePairing.cpp`:
+Trust is decided per socket in `apps/k7-daw-engine/k7-runtime/server/ServePairing.cpp`:
 
 - At the handshake, a browser page whose `Origin` is not allowed (see [81](./81-k7-runtime.md#inside-serve)) is closed before any message is read.
 - A **loopback** peer is trusted and "local". Traffic relayed through the tunnel or WebRTC arrives from the supervisor on loopback, already authenticated by the server.
@@ -98,9 +98,9 @@ A socket that sends `broadcast {on: true}` receives the session's master output 
 ## Adding a message
 
 1. Add a handler with `t.add({"my-verb"}, …)` in the `Serve*.cpp` file for its concern. Do engine work inside `host.post(...)`, never on the socket's thread, and reply with `broadcastTo(session, …)` for per-session news or `ws.send` for the asker alone.
-2. If it is a read-only probe that clients poll, add it to `probeQueries` in `engine/k7-runtime/server/Serve.cpp` so it neither logs a connection nor creates a session.
-3. Put any shared payload type in `packages/engine-protocol/types.ts`.
-4. Add the sender to `packages/engine-browser/src/engine.ts` and, if a Node service needs it, `packages/engine-client/src/engineControl.ts`. Methods that do not need a `ProjectDoc` belong in `EngineControl`, so they do not drag the compiler in.
-5. If the reply is machine-wide, add it to `ENGINE_GLOBAL_REPLIES` in `packages/engine-protocol/sessions.ts`.
+2. If it is a read-only probe that clients poll, add it to `probeQueries` in `apps/k7-daw-engine/k7-runtime/server/Serve.cpp` so it neither logs a connection nor creates a session.
+3. Put any shared payload type in `apps/k7-daw-frontend/packages/engine-protocol/types.ts`.
+4. Add the sender to `apps/k7-daw-frontend/packages/engine-browser/src/engine.ts` and, if a Node service needs it, `apps/k7-daw-frontend/packages/engine-client/src/engineControl.ts`. Methods that do not need a `ProjectDoc` belong in `EngineControl`, so they do not drag the compiler in.
+5. If the reply is machine-wide, add it to `ENGINE_GLOBAL_REPLIES` in `apps/k7-daw-frontend/packages/engine-protocol/sessions.ts`.
 
 Nothing type-checks across the C++ boundary: run the engine and exercise the verb.

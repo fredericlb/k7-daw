@@ -1,8 +1,8 @@
 # graph.k7x — the shape, and the edits
 
-The rationale behind `packages/song-schema/src/yaml/graphSchema.ts`,
-`packages/song-schema/src/yaml/graphFile.ts` and their test. The compile side lives in
-`packages/song/docs/graphFile.md`; this page is about the FILE — what it declares, and what each
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/yaml/graphSchema.ts`,
+`apps/k7-daw-frontend/packages/song-schema/src/yaml/graphFile.ts` and their test. The compile side lives in
+`apps/k7-daw-frontend/packages/song/docs/graphFile.md`; this page is about the FILE — what it declares, and what each
 edit has to preserve.
 
 ## The name, and the one map
@@ -13,7 +13,7 @@ feeds what, which are silenced, and where each one sits. Chains are DERIVED from
 name of its own output. Positions live here for the same reason: where a node sits is a fact about
 the graph, not about the node. It is `.k7x` like every other file in a project.
 
-There is ONE map, because a lane is a module too (`packages/song/docs/trackModules.md`): every node
+There is ONE map, because a lane is a module too (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`): every node
 is declared in `modules:` and nowhere else, so `hasNode` is one question with one answer and no edit
 has to carry a section around. Two halves would mean a lane's destinations could be written into the
 wrong one and unwire it silently.
@@ -43,7 +43,7 @@ which is why it is a sibling of `modules:` rather than a field inside it.
 
 A destination may name a PORT on its target: `crossfade#b` feeds the input called `b`. Bare, it
 feeds the FIRST input, which is what every chains file written so far says and what a one-input
-module means (`packages/song/docs/ports.md`). The port is not validated in the schema — it knows
+module means (`apps/k7-daw-frontend/packages/song/docs/ports.md`). The port is not validated in the schema — it knows
 nothing about modules, and whether `b` exists is a question for `validate()`, which has the module
 map. What IS refused is a ref that is all separator (`#b`, `x#`): those are typos with no reading,
 and letting them through would make the node name empty.
@@ -107,7 +107,7 @@ would go quiet with nothing to point at. The module's own destinations take its 
 branches that both rejoined through it must not leave the survivor listed twice.
 
 `unlinkNode` takes a module out of the signal path and LEAVES IT IN THE GRAPH. Every node is in the
-graph (`packages/song/docs/nodes.md`): a node with no entry in this file is loaded and drawn nowhere,
+graph (`apps/k7-daw-frontend/packages/song/docs/nodes.md`): a node with no entry in this file is loaded and drawn nowhere,
 and a node vanishing from the canvas reads as a delete, which unlinking is not. Its cables go, its
 entry stays as `modules: { <node>: [] }`, and so does its pin: a node that jumped to
 wherever the layout put it would have moved for a reason nobody asked for. Its `bypassed:` flag stays

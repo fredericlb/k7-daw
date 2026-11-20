@@ -76,7 +76,7 @@ bool ownedChild(int pid, bool& alive)
 
 const std::vector<std::string> kNames = {"k7-runtime.exe", "k7-runtime"};
 
-/** The checkout this executable was built in, found by walking up to `engine/k7-runtime`. */
+/** The checkout this executable was built in, found by walking up to `apps/k7-daw-engine/k7-runtime`. */
 std::optional<fs::path> repoRoot()
 {
     const auto exe = process::executablePath();

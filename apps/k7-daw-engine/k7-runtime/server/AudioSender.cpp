@@ -1,4 +1,4 @@
-// AudioSender.cpp — see AudioSender.h. The frame is the other half of packages/engine-protocol/stream.ts,
+// AudioSender.cpp — see AudioSender.h. The frame is the other half of apps/k7-daw-frontend/packages/engine-protocol/stream.ts,
 // byte for byte: only a listener checks, and a disagreement plays as noise.
 
 #include "AudioSender.h"

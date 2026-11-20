@@ -1,6 +1,6 @@
 // engine.ts — `node engine`: run a module as another of its ENGINES. One write to the node's
 // file (`engine:` on the attribute set that is on) and a reload, never a values-only push: another
-// engine is another plugin. See packages/song/docs/engines.md.
+// engine is another plugin. See apps/k7-daw-frontend/packages/song/docs/engines.md.
 
 import {
   moduleEngines,

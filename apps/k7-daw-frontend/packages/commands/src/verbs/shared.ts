@@ -61,7 +61,7 @@ export function runCarriesInput(
   const bare = (s: string) => s.split("#")[0];
   const isLive = (name: string): boolean => {
     const b = g.modules[name];
-    // A MIDI device lands on a lane too, its notes being what recording there captures (packages/song/docs/midiIn.md).
+    // A MIDI device lands on a lane too, its notes being what recording there captures (apps/k7-daw-frontend/packages/song/docs/midiIn.md).
     return !!b && (isInputModule(g, b) || isMidiInModule(b));
   };
   // Who feeds whom: a chain is a linear run, and its `out` is how one chain reaches another.
@@ -90,7 +90,7 @@ export function runCarriesInput(
   return false;
 }
 
-/** The first argument, JSON-quoted or bare, and the rest: JSON is what a Windows path survives — packages/song/docs/outputRecording.md. */
+/** The first argument, JSON-quoted or bare, and the rest: JSON is what a Windows path survives — apps/k7-daw-frontend/packages/song/docs/outputRecording.md. */
 export function firstArg(a: string): { head: string; rest: string } | null {
   const quoted = /^"(?:[^"\\]|\\.)*"/.exec(a);
   if (quoted) {

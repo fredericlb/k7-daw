@@ -8,7 +8,10 @@ import { basename, join } from "node:path";
 /** This build's LIBRARY_LEVEL, read off the source that declares it. */
 function buildLevel(repo) {
   const src = readFileSync(
-    join(repo, "packages/song-schema/src/libraryVersions.ts"),
+    join(
+      repo,
+      "apps/k7-daw-frontend/packages/song-schema/src/libraryVersions.ts",
+    ),
     "utf8",
   );
   const m = /export const LIBRARY_LEVEL = (\d+);/.exec(src);

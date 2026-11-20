@@ -39,8 +39,8 @@ Scaling. Not an oversight — the two surfaces disagree, deliberately:
   point is precisely to read them against a meter. Its range IS the widget's, with no conversion.
 
 Pushing either one down here would make the other wrong. See
-[mastering.md](../../../apps/k7/frontend/docs/mastering.md) and
-[controls.md](../../../packages/k7-plugins/docs/turntables/controls.md).
+[mastering.md](../../../docs/mastering.md) and
+[controls.md](../../k7-plugins/docs/turntables/controls.md).
 
 ## The "no plugin" policy
 
@@ -62,7 +62,7 @@ rather than a boolean, and why the test pins both sides.
 
 > Not to be confused with `hasPlugin()`, which asks a neighbouring question of another document:
 > the graph describes what is DRAWN, the compiled document what PLAYS. See
-> [controls.md](../../../packages/k7-plugins/docs/turntables/controls.md).
+> [controls.md](../../k7-plugins/docs/turntables/controls.md).
 
 ## A line that does not resolve is SAID
 

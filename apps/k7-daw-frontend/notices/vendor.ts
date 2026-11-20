@@ -1,6 +1,6 @@
 // vendor.ts — refreshes texts/ for the hand-listed components that carry a `vendor` list, from the
 // licence files CMake fetched into an engine build's `_deps`. Run after bumping a pinned dependency:
-//   npx tsx apps/k7/frontend/notices/vendor.ts [checkout whose engine builds to read]
+//   npx tsx apps/k7-daw-frontend/notices/vendor.ts [checkout whose engine builds to read]
 // It needs a configured engine build; nothing at build or test time runs it (../docs/about.md).
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";

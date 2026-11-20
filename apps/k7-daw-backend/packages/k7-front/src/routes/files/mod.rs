@@ -1,6 +1,6 @@
 //! files — the file hub answered by the front under `K7_FILES=front` (`docs/files.md`): the accounts' file
 //! services and their proxy, the libraries, devices and pairing, the device door's files, `/api/ready` and the
-//! seam's file half. Choices: `apps/k7/backend-rs/docs/files.md`.
+//! seam's file half. Choices: `apps/k7-daw-backend/docs/files.md`.
 //! What a reader gets wrong: without the switch the family's paths are declined, since nothing else runs a hub.
 
 pub mod hub;

@@ -1,7 +1,7 @@
 // libraryForks.ts — the FORKS of a library: the `_modules` and `@account` modules that `extends` one of
 // its modules, and which of them would inherit something new on an upgrade, since the module they
 // extend differs between the two versions. A fork keeps its own changes whatever happens; this only
-// says which ones to listen to again. See ../../../docs/library-versions-plan.md.
+// says which ones to listen to again. See ../../../../../docs/library-versions-plan.md.
 
 import type { LibraryVersion } from "@studio/song-schema/libraryVersions";
 import { stub } from "./editStub";

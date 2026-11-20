@@ -1,5 +1,5 @@
 // paneVisible.ts — whether the pane a component sits in is ON SCREEN. A pane is hidden with CSS
-// and never unmounted (apps/k7/AGENTS.md), so without this its per-frame work keeps running for
+// and never unmounted (apps/k7-daw-frontend/AGENTS.md), so without this its per-frame work keeps running for
 // nobody: the playhead's animation loops and the lane meters' renders. Default true, so a
 // component outside any pane behaves as before. See docs/audit.md.
 

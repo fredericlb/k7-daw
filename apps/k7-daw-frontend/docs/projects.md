@@ -9,10 +9,10 @@ start, and where you come back to on leaving a song.
 **k7's pages draw; the file service and the server's stores hold.** The workspaces are the
 account's file service's; the libraries are bundled with the app, one list
 and one folder each. Both answer on this origin, from k7's own backend. No store keeps a register of workspaces —
-[apps/k7/backend-rs/docs/projects.md](../../backend/docs/projects.md) says why.
+[apps/k7-daw-backend/docs/projects.md](../../backend/docs/projects.md) says why.
 
 **The SOURCE of the list is the file service.** What lists the projects is the account's file
-service on the server, over its workspaces (`apps/k7/backend-rs/docs/files/hub.md`). A separate index
+service on the server, over its workspaces (`apps/k7-daw-backend/docs/files/hub.md`). A separate index
 would be a second copy of what that service already holds, and a worse one: always one change
 behind the folders it describes.
 
@@ -64,7 +64,7 @@ project carries no user menu of its own either: it is the header's there, as her
 ## The home bar
 
 **Every home page has the same bar at its foot, always** (`HomeFrame.tsx`), under the sidebar and the
-page alike, so it spans the window. It is the mini player's DOCK (`packages/ui-mini-player/docs/miniPlayer.md`):
+page alike, so it spans the window. It is the mini player's DOCK (`apps/k7-daw-frontend/packages/ui-mini-player/docs/miniPlayer.md`):
 no home page mounts a player, so it is the standby bar holding the home's own controls. The row never comes and goes, so the way back
 to a folded sidebar at its left edge is always there.
 
@@ -90,7 +90,7 @@ is the page a SECOND device opens, independent of this one, with a header of its
 (`external.md`).
 
 `/auth/*` follows the root: the IdP knows only one `redirect_uri`, on k7's origin, so those
-routes can only be served by k7 (`packages/web-protocol/docs/addresses.md`).
+routes can only be served by k7 (`apps/k7-daw-frontend/packages/web-protocol/docs/addresses.md`).
 
 ## What the address says, and what it does not
 
@@ -110,7 +110,7 @@ routes can only be served by k7 (`packages/web-protocol/docs/addresses.md`).
 FIRST segment is a sentinel — `@local`, `@banc` — so a plain word like `external` is
 free for the app's own pages. The unfolded workspace travels in the **query**,
 which is exactly what a SPA router owns — the argument of
-[packages/project-shell/docs/launch.md](../../../../packages/project-shell/docs/launch.md) taken
+[apps/k7-daw-frontend/packages/project-shell/docs/launch.md](../packages/project-shell/docs/launch.md) taken
 the other way — and it bookmarks, copies, and answers the back button.
 
 `?ws=` is set with `replace`: browsing three workspaces to see what is in them is not a navigation
@@ -155,7 +155,7 @@ nothing can be set until there is one.
 
 The page is served before the account's file service exists: the app's backend starts k7's front,
 and the front's service for that account comes up a few seconds LATER
-(`engine/k7-runtime/docs/android.md`). So the first answer on a cold start is a refusal that means
+(`apps/k7-daw-engine/k7-runtime/docs/android.md`). So the first answer on a cold start is a refusal that means
 "not yet" — and reading it as "no file service" is a sentence the page contradicts the moment the
 page is left and reopened.
 
@@ -164,26 +164,26 @@ loader meanwhile (`RepoList`'s `lookingForFiles`) instead of the refusal. Past t
 refusal is the right sentence: nothing answered in fifteen seconds.
 
 Holding the page until the backend is ready would be the other fix, and it belongs to the app
-(`engine/k7-android`): a page that gives up on a service a second late is wrong wherever it is
+(`apps/k7-daw-android`): a page that gives up on a service a second late is wrong wherever it is
 opened, so it asks again either way.
 
 
 ### The engine's plugin scan is a bar, never a wait
 
 The engine scans its plugins at every start, and a project naming an external plugin waits for
-that scan before it goes to the engine (`apps/k7/backend-rs/docs/file-engine.md`). The home page
+that scan before it goes to the engine (`apps/k7-daw-backend/docs/file-engine.md`). The home page
 says it is running — "Scanning plugins… N / M", a thin bar above the command bar
 (`projects/PluginScanBar.tsx`) — so that a project opened just then does not seem slow for no
 reason. Which engine: the one the policy would play the account's projects on, else the one the
 account remembers, else the only one that answered; under the desktop app that is the machine's own. With
 none, or one that reports no scan, there is no bar. It is asked after the list, beside it, and
 never in front of it, for the reason above: the list needs no engine. The page listens on a
-socket that claims nothing (`packages/engine-browser/docs/access.md`), since it plays nothing.
+socket that claims nothing (`apps/k7-daw-frontend/packages/engine-browser/docs/access.md`), since it plays nothing.
 
 ## The rule that holds everything
 
 **The folder's suffix makes it a project.** `mysong.k7` opens in k7, and
-`packages/web-protocol/projects.ts` is the whole rule. A folder with no suffix is not a project,
+`apps/k7-daw-frontend/packages/web-protocol/projects.ts` is the whole rule. A folder with no suffix is not a project,
 even if it contains a `project.k7x`.
 
 This page keeps `launchUrl` on each row rather than building its own addresses: the address is a
@@ -191,14 +191,14 @@ contract with the gate that reads it back, and one builder is one encoding.
 
 Everything an k7 project can BE is in the **surfaces** it declares inside the `.k7`, rather than
 in some kind of folder: a `viewport` and video lanes for picture
-(`packages/song-video/docs/picture.md`), a `turntables` surface and the playlist it names for a set
-(`packages/song/docs/setProject.md`). That is why the three archetypes in the creation menu are
+(`apps/k7-daw-frontend/packages/song-video/docs/picture.md`), a `turntables` surface and the playlist it names for a set
+(`apps/k7-daw-frontend/packages/song/docs/setProject.md`). That is why the three archetypes in the creation menu are
 named after their surface.
 
 ## This screen's command bar
 
 At the bottom, full width, exactly as in the editor and for the same reason: it is where you type,
-so it is always there, never summoned. `frontend/docs/commandBar.md` describes the component; what
+so it is always there, never summoned. `apps/k7-daw-frontend/docs/commandBar.md` describes the component; what
 follows is what sets it apart here.
 
 **Its vocabulary is its own** (`src/projects/homeCommands.ts`), and not `LOCAL_COMMANDS`. This
@@ -217,7 +217,7 @@ list of things you cannot do, and the half that comes from the file service woul
 
 **`camera mode` is hidden.** Its verb and screen (`src/camera/CameraMode.tsx`) are kept, and
 `CAMERA_MODE_LISTED` in `homeCommands.ts` shows it again once cameras return as an app feature. What it
-is and how the picture travels: `packages/web-protocol/docs/cameras.md`.
+is and how the picture travels: `apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md`.
 
 **Deleting is two verbs, and that is the confirmation.** A palette can fire a destructive line on
 an Enter landing on a fuzzy match; the bar has no dialog to ask a second question with, so it asks
@@ -249,7 +249,7 @@ app**: a library changes with an app update and nothing on this screen edits one
 entry links to — reserved like `/external`, and read before `parseLaunch`. It lists each library
 by name with the versions it holds, says so plainly, and flags a library whose folder is missing or
 whose version needs a newer k7 level. A device user is never an admin, and the backend answers 403 to
-a write or a publish anyway ([apps/k7/backend-rs/docs/files/hub.md](../../backend-rs/docs/files/hub.md)).
+a write or a publish anyway ([apps/k7-daw-backend/docs/files/hub.md](../../k7-daw-backend/docs/files/hub.md)).
 
 Without a library k7 refuses to open anything — not on principle, but because no `@k7-core/…`
 reference would resolve, and a song opened with all its shared modules missing reads as a broken
@@ -258,7 +258,7 @@ come with the app.
 
 **A list of NAMES, one folder each.** The name is the level its refs use — `@drums/audio/kick` — and
 the first library is called `k7`, which is what every `@k7-core/…` means
-([packages/song/docs/sharedFolders.md](../../../../packages/song/docs/sharedFolders.md)). A row whose
+([apps/k7-daw-frontend/packages/song/docs/sharedFolders.md](../packages/song/docs/sharedFolders.md)). A row whose
 folder is not there says *not on the server yet*; the bundled seed is the only source of a library's
 content ([sharedModules.md](sharedModules.md)).
 
@@ -274,7 +274,7 @@ song rather than unfinished account" reading the card exists to prevent.
 
 `createProjectIn` therefore answers a `missing[]` beside the `project`: the `@k7-core/…` refs the
 scaffold has just written and the workspace does not resolve
-(the scaffold's needs, `apps/k7/backend-rs/crates/k7-file-service/src/edits/project_create.rs`). Three things worth noting:
+(the scaffold's needs, `apps/k7-daw-backend/packages/k7-file-service/src/edits/project_create.rs`). Three things worth noting:
 
 - **The list is read out of the text the scaffold writes**, not kept beside it. An archetype whose
   nodes change module cannot make the list lie.
@@ -310,7 +310,7 @@ it beside the project it produced would put every sample in the workspace twice.
 
 What comes back is the **import log** — what was read, and every warning the mapper raised — shown
 in the popin before anything opens, because a translation is lossy and finding that out inside the
-song is finding it out too late (`packages/translator/docs/import.md`). Then a button opens the
+song is finding it out too late (`apps/k7-daw-frontend/packages/translator/docs/import.md`). Then a button opens the
 project, in this tab like every other project link here.
 
 Only `.dawproject` and a zipped Ableton project are taken, and the importer refuses anything else on its own side. A `.als`
@@ -326,7 +326,7 @@ rather than by a highlight that never appeared.
 
 A chain is something you HEAR: what it does cannot be read in its file, and its parameters only
 exist inside a project with the plugin loaded. The bench is that project — a live rig written again
-on every open and saved nowhere ([apps/k7/backend-rs/docs/banc.md](../../backend/docs/banc.md)).
+on every open and saved nowhere ([apps/k7-daw-backend/docs/banc.md](../../backend/docs/banc.md)).
 
 **This page has no bench card.** The bench is reached from the Frozen chains page
 (`frozenChains.md`), where it builds and edits the account's chains. `/@banc/<chain>/live.k7` seeds the rig with a copy of a library
@@ -345,11 +345,11 @@ session. The way back is the **unfold** at the left of the editor's project bar,
 page's sidebar over the project, and the project's name, which links here too (`projectsUrl`, the same address both gates use when they send
 you back). The browser's own Back works as well: each crossing is a history entry.
 Leaving with an edit the autosave is still holding back asks first (`hasUnsavedWork`,
-`packages/ui-editor/src/unsaved.ts`), whichever way you leave.
+`apps/k7-daw-frontend/packages/ui-editor/src/unsaved.ts`), whichever way you leave.
 
 None of it is a page load, and none of it is a `<Link>` either: the project is the router's
 `basename`, so a router cannot route outside it — the crossing is `appNav`'s, which swaps the router
-for the next scope's (`shell.md`, `packages/project-shell/docs/launch.md`).
+for the next scope's (`shell.md`, `apps/k7-daw-frontend/packages/project-shell/docs/launch.md`).
 
 `RepoList` and `RepoTree` receive a `projectHref`, not an `onOpenProject`. **An address and not an
 action** — the page computes where the row leads, the view makes it a link. That is what keeps
@@ -418,7 +418,7 @@ where there is one address both ends compute it alike, which is the failure
 [external.md](external.md) spends a section warning about.
 
 **It is also the starting point.** A workspace is created HERE, as a plain folder on this device
-(`apps/k7/backend-rs/docs/file-workspaces.md`); its address does not
+(`apps/k7-daw-backend/docs/file-workspaces.md`); its address does not
 change, and it reaches another device only through git or by being downloaded.
 
 **`@local` does NOT require a library.** The bench raises `no-libraries` first,
@@ -467,7 +467,7 @@ projet", which opens the workspace; the editor puts the assistant there (`FirstP
 is also the only way in while the workspace is empty, since rows link PROJECTS and there are none:
 `workspaceHref` builds the workspace's own address — `/@local/hiver` — and the project there is
 `.`, which the machine resolves
-(`apps/k7/backend-rs/docs/file-workspaces.md`).
+(`apps/k7-daw-backend/docs/file-workspaces.md`).
 
 **A workspace's row carries a ⋮** (`WorkspaceMenu.tsx`) holding the one act on the whole
 workspace: **Delete**, in red. It sits behind a button for the reason a project's acts do: it is
@@ -477,7 +477,7 @@ workspace fits in.
 
 Clicking a project goes straight into its application, in this tab, at
 `/@local/<workspace>/<dossier>` — an ADDRESS, naming the folder on the machine, which the gate
-opens without asking anybody ([launch.md](../../../../packages/project-shell/docs/launch.md)). That
+opens without asking anybody ([launch.md](../packages/project-shell/docs/launch.md)). That
 gate is `@studio/project-shell`, and an app outside this repository that mounts it comes back
 here too on leaving a project: a second picker on its side would be the second thing to keep in
 step that this package exists to avoid.
@@ -522,7 +522,7 @@ one, and how long ago it changed.
 The archetype is read back from the surfaces the project declares (`projectKind.ts`), the same
 question the editor answers to choose its panes, so a project whose surfaces were edited by hand is
 drawn as what it now is. All of it comes from the listing the page already polls
-(`apps/k7/backend-rs/docs/file-workspaces.md`), whose 5-second window is also why a tag added in the
+(`apps/k7-daw-backend/docs/file-workspaces.md`), whose 5-second window is also why a tag added in the
 editor can take up to five seconds to appear here.
 
 There is **no app badge**: every project this page lists is opened by k7, and a label that is the
@@ -585,7 +585,7 @@ stay the archetypes', since the command bar (`project new <type>`) and the file 
 
 Everything is a `.k7` folder opened by the same k7, so "what kind of project" has no answers to
 tell apart — what differs is the surface the project DECLARES
-(`packages/song/docs/surfaces.md`). There is no "the graph alone, no surface" archetype: an entry
+(`apps/k7-daw-frontend/packages/song/docs/surfaces.md`). There is no "the graph alone, no surface" archetype: an entry
 whose whole description would be "none of the three" is not a choice made on purpose, and a
 hand-written rig opens anyway. The `live` MODE is something else: it is what `mix` declares.
 
@@ -625,7 +625,7 @@ gives, and this is the one act on the page that cannot be undone.
 ### Demos
 
 The `Examples` workspace holds the bundled demos, which the file service mirrors on every start —
-an edit to one is overwritten, a deleted one comes back (`apps/k7/backend-rs/crates/k7-file-service/src/workspaces/demos.rs`).
+an edit to one is overwritten, a deleted one comes back (`apps/k7-daw-backend/packages/k7-file-service/src/workspaces/demos.rs`).
 Mirroring is what keeps them working across versions, so it stays; what changes is that it is SAID.
 The listing marks a managed demo `demo: true`, and its row wears an amber "demo — resets" badge; the
 workspace poll says `activeIsDemo` for the open project, and the editor draws a line under its
@@ -634,7 +634,7 @@ header with "Copy to my workspace" (`components/DemoBanner.tsx`), which opens th
 anything else put there is the person's own and is never touched.
 
 `Examples` takes **no new project** — not created, imported, dropped or copied into: the file
-service refuses all four by name (`refuseInExamples`, `apps/k7/backend-rs/crates/k7-file-service/src/edits/project_create.rs`),
+service refuses all four by name (`refuseInExamples`, `apps/k7-daw-backend/packages/k7-file-service/src/edits/project_create.rs`),
 and the home page offers none of them on its row. A demo is copied OUT to be worked on, and a
 person's project sitting among folders the bundle rewrites on every start reads as one of them.
 The workspace comes **last**, after the person's own, and is **not listed** once there is a
@@ -662,7 +662,7 @@ Three things it does not do, each for its own reason:
   click. What the project's marker does after is the one place the two acts differ — below.
 - **It does not chase the address.** A link to the old one stops answering, and the dialog says so
   before the click rather than after. That is the honest cost of a name being an address
-  (`packages/project-shell/docs/launch.md`), and the alternative — a redirect table on the machine
+  (`apps/k7-daw-frontend/packages/project-shell/docs/launch.md`), and the alternative — a redirect table on the machine
   — would be a second place where a project's name lives.
 
 **The active project FOLLOWS the rename.** A delete clears the marker, because the project has

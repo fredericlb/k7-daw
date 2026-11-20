@@ -4,21 +4,21 @@ Two packages speak the [engine protocol](./83-engine-protocol.md): `@studio/engi
 
 ## `@studio/engine-client` (Node)
 
-`packages/engine-client/src/`, consumed as source through its `exports`:
+`apps/k7-daw-frontend/packages/engine-client/src/`, consumed as source through its `exports`:
 
 | Subpath | What |
 |---|---|
 | `./engineControl` | `EngineControl`: the WebSocket link minus the project. Connect, send a command, emit the reply as an event. Messages sent before the socket opens are buffered (at most `ENGINE_OUTBOX_MAX` = 200, each dropped after `ENGINE_OUTBOX_TTL_MS` = 30 s). Methods: `transport`, `preview`, `arm`, `setRecordEnabled`, `flush`, `listPlugins`, `rescanPlugins`, `listPluginParams`, `snapshotPluginBase`, `listEditPlugins`, `showNativePluginUI`, `showNativePluginUIOf`, `watchPluginParams`, `listSessions`, `dropSession`, `listAudioDevices`, `setAudioDevice`, `ioLevels`, `setInputStereo`, `close`. |
 | `./engineClient` | `EngineClient extends EngineControl` adding `sendProject(doc)`, which folds groups onto their members (`withGroupMix`) before sending. It imports `@studio/song` (the compiler, a few MB), which is why it is a separate subpath: a process that only asks questions imports `engineControl` and carries none of it. |
-| `./engineBinary` | `findEngineBinary()`: `$STUDIO_ENGINE`, then a copy beside a packaged bundle, then the newest build under `engine/k7-runtime/build/*/` (Debug last) |
+| `./engineBinary` | `findEngineBinary()`: `$STUDIO_ENGINE`, then a copy beside a packaged bundle, then the newest build under `apps/k7-daw-engine/k7-runtime/build/*/` (Debug last) |
 | `./paths` | The `~/.k7` layout (twin of the supervisor's `Paths.cpp`): `studioDir`, `rootDir`, `mediatekDir`, `webEndpointsDir`, `slugify` |
 | `./pluginCache` | Reading `exts.json` |
 
-The main consumers are the account's engine link in the Rust front (`apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/engine/`), plus `packages/commands`' test host, and `packages/audio-passes`.
+The main consumers are the account's engine link in the Rust front (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/engine/`), plus `apps/k7-daw-frontend/packages/commands`' test host, and `apps/k7-daw-frontend/packages/audio-passes`.
 
 ## `@studio/engine-browser` (browser)
 
-`packages/engine-browser/src/`, with React as a peer dependency.
+`apps/k7-daw-frontend/packages/engine-browser/src/`, with React as a peer dependency.
 
 | Subpath | File | What |
 |---|---|---|
@@ -62,7 +62,7 @@ A 20 Hz frame held in React state re-rendered the whole tree on every frame. `En
 | `wsUrlFor(id)`, `linkUrl(chosen)` | A fresh address for one engine |
 | `hostedFiles()`, `freshTicket()` | The server's file hub address and ticket (`FILE_HUB_HELLO`), cached six hours |
 
-**Probe** (`probe.ts`): for each engine, every candidate is tried at once (loopback; LAN IPs only on an `http:` page; the relay `wss://…/api/engine/<id>/ws?ticket=…`; `rtc:…/api/engine/<id>/rtc` when the registry says the engine has a tunnel), and the fastest `whoami` that **matches the expected id** wins, so a lookalike listener cannot pass. Timeout: 3 s. The latency is the round trip plus twice the reported buffer period (`engineLatency` in `packages/web-protocol/quality.ts`), banded Q1 (< 20 ms), Q2 (< 50 ms), Q3. A reply with `needsPairing` marks the row as reachable but unusable until paired.
+**Probe** (`probe.ts`): for each engine, every candidate is tried at once (loopback; LAN IPs only on an `http:` page; the relay `wss://…/api/engine/<id>/ws?ticket=…`; `rtc:…/api/engine/<id>/rtc` when the registry says the engine has a tunnel), and the fastest `whoami` that **matches the expected id** wins, so a lookalike listener cannot pass. Timeout: 3 s. The latency is the round trip plus twice the reported buffer period (`engineLatency` in `apps/k7-daw-frontend/packages/web-protocol/quality.ts`), banded Q1 (< 20 ms), Q2 (< 50 ms), Q3. A reply with `needsPairing` marks the row as reachable but unusable until paired.
 
 **Policy** (`choose.ts`): anyone may register an engine, so only a **trusted** engine is ever taken without a click. `mayAutoPick(r, remembered)` is true for the account's remembered engine, and for one `reachedDirectly` (answered on a plain `ws:` socket to one of its own loopback or private LAN addresses, never the relay or WebRTC). `chooseEngine` takes the remembered engine if it answered, else the only reachable one if it may be auto-picked, else reports `ambiguous`. `bestEngine`, which k7's `EngineGate` uses, sorts candidates (reachable, with a token, not `assigned`, and `mayAutoPick`) by compatibility with the project, then the remembered id, then "on this machine" (answered over loopback), then quality band, then performance score, then milliseconds.
 
@@ -70,7 +70,7 @@ A 20 Hz frame held in React state re-rendered the whole tree on every frame. `En
 
 ### WebRTC socket
 
-`rtcSocket.ts` gives a WebSocket-shaped object over an `RTCPeerConnection` data channel (ordered, label `engine`), created with `iceServers: []`. It gathers candidates for up to 1.5 s, posts the offer to the registry's `/engine/<id>/rtc`, and applies the SDP answer the supervisor returns through its tunnel. Messages are cut into fragments (`packages/web-protocol/rtcFrames.ts`) since data channel messages have a size limit. `openSocket(url)` returns this for `rtc:` URLs and a plain `WebSocket` otherwise, so the rest of the client does not know the difference.
+`rtcSocket.ts` gives a WebSocket-shaped object over an `RTCPeerConnection` data channel (ordered, label `engine`), created with `iceServers: []`. It gathers candidates for up to 1.5 s, posts the offer to the registry's `/engine/<id>/rtc`, and applies the SDP answer the supervisor returns through its tunnel. Messages are cut into fragments (`apps/k7-daw-frontend/packages/web-protocol/rtcFrames.ts`) since data channel messages have a size limit. `openSocket(url)` returns this for `rtc:` URLs and a plain `WebSocket` otherwise, so the rest of the client does not know the difference.
 
 ### Hearing an engine through the page
 

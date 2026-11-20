@@ -103,7 +103,7 @@ missing engine is, and the values land on the base that is on.
 old state means nothing over the new one, and a cutoff kept from the last patch would follow the
 musician from patch to patch. So a preset that is ONLY a base (`base:` and no `params:`) is that
 base exactly, which is what a factory preset is: the Surge XT module's library shelf holds one per
-patch, written by `engine/k7-runtime/scripts/gen-surge-panel.mjs`.
+patch, written by `apps/k7-daw-engine/k7-runtime/scripts/gen-surge-panel.mjs`.
 
 The dropdown shows which preset was last loaded on each node. That is the shell's SESSION state:
 a node file says what its values are, not where they came from, and after a knob moves the two
@@ -158,7 +158,7 @@ directory would be two rules over one namespace.
 state its parameters do not hold. A base may sit in a subfolder and is then named by its path,
 `base: Pads/Bell Pad`, because six hundred patches in one flat list is no choice at all; a name that
 would climb out of `base/` resolves to nothing. The compile sends an `.fxp` to the synth as its patch
-rather than as a `.vstpreset` (`engine/k7-runtime/docs/surgePlugin.md`).
+rather than as a `.vstpreset` (`apps/k7-daw-engine/k7-runtime/docs/surgePlugin.md`).
 
 ## Choosing one — `base:`, and what it may not disturb
 

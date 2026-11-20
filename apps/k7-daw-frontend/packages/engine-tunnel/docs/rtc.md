@@ -1,10 +1,10 @@
 # The WebRTC path — a browser straight to an engine on another machine
 
-An HTTPS page cannot open `ws://` to a LAN address (`apps/k7/backend-rs/docs/engine/proxy.md`), so
+An HTTPS page cannot open `ws://` to a LAN address (`apps/k7-daw-backend/docs/engine/proxy.md`), so
 a phone on the stage, or a laptop across the room, reaches the engine through the server's relay:
 every play press and every meter frame goes out to the server and back. A WebRTC data channel is
 the one direct path such a page is allowed, and it is **offered beside the relay, never instead
-of it**: the probe races both and keeps the faster (`packages/engine-browser/docs/access.md`).
+of it**: the probe races both and keeps the faster (`apps/k7-daw-frontend/packages/engine-browser/docs/access.md`).
 
 ## Who answers the offer
 
@@ -15,8 +15,8 @@ learns WebRTC exists. An engine is offered this path only when its supervisor ho
 (`PublicEngine.rtc`), since that is what carries the offer.
 
 The offer is answered only for an account that **holds a claim** on that engine
-(`apps/k7/backend-rs/docs/engine/claim.md`); anyone else gets a 403. The channel reaches the engine as
-a socket of its own machine, past the relay's gate (`apps/k7/backend-rs/docs/engine/proxy.md`), so the
+(`apps/k7-daw-backend/docs/engine/claim.md`); anyone else gets a 403. The channel reaches the engine as
+a socket of its own machine, past the relay's gate (`apps/k7-daw-backend/docs/engine/proxy.md`), so the
 gate is here, once, before it opens. A picker's first probe, made before its claim, therefore
 measures the relay alone; the probes after the claim race WebRTC too.
 
@@ -25,7 +25,7 @@ Signalling is **one request and one answer**, candidates included — no trickle
 
 ## libdatachannel
 
-The supervisor answers with **libdatachannel** (`engine/k7-supervisor/src/Rtc.cpp`), the
+The supervisor answers with **libdatachannel** (`apps/k7-daw-engine/k7-supervisor/src/Rtc.cpp`), the
 established stack for the encryption and SCTP a data channel needs, on native threads of its own.
 The TypeScript reference agent answers with node-datachannel, which wraps the same library: an
 optional dependency, loaded on first use, so the server's tests run where its binary is missing

@@ -442,7 +442,7 @@ export const EVENT_VERBS: Record<string, SidHandler> = {
       h.refuse([`no event on '${track.id}' at ${atTc}`]);
       return;
     }
-    // A sounding lane's clip IS a shot's sound: removing it silences that shot (packages/song/docs/videoSound.md).
+    // A sounding lane's clip IS a shot's sound: removing it silences that shot (apps/k7-daw-frontend/packages/song/docs/videoSound.md).
     const picture = soundingPicture(h.songPath, track.id);
     if (picture) return silenceSoundAt(h, track.id, picture, atBeats);
     try {

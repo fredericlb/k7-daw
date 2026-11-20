@@ -99,7 +99,7 @@ const NO_SAMPLES: CableGeom["samples"] = [];
 
 // The palette and the stylesheet, scoped to `.dgx`, are `chainsCss.ts`; the hook that injects it too.
 
-// `Cam` lives in camera.ts, a rack tap's edit is packages/song/docs/racks.md — docs/hosting.md.
+// `Cam` lives in camera.ts, a rack tap's edit is apps/k7-daw-frontend/packages/song/docs/racks.md — docs/hosting.md.
 export type { Cam, NodeEngines, TapAction };
 
 /** What every AUTOMATION cable wears — a curve into its knob, and a node's event into the curve it fires. */

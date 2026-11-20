@@ -1,22 +1,22 @@
 # Audit — the services and the engine
 
-Everything that links a surface to `engine/k7-runtime`: what is shared, what is copied, and where the
+Everything that links a surface to `apps/k7-daw-engine/k7-runtime`: what is shared, what is copied, and where the
 reliability of the connections gives way. Written to be executed in batches — the plan is at the
 end of the page.
 
 > **The other half is elsewhere.** This page stops at the socket. What happens once the message
 > has arrived — the threads, the audio callback, the cost of loading a project, and the first-play
 > freeze — is in
-> [engine/k7-runtime/docs/audit-stabilite.md](../engine/k7-runtime/docs/audit-stabilite.md).
+> [apps/k7-daw-engine/k7-runtime/docs/audit-stabilite.md](../apps/k7-daw-engine/k7-runtime/docs/audit-stabilite.md).
 
 ## Scope
 
 Two services really talk to the engine: **k7's editor** (the `pl8` session), by its two halves (browser +
-backend), plus the **supervisor** (`engine/k7-supervisor`), which announces it to the registries.
+backend), plus the **supervisor** (`apps/k7-daw-engine/k7-supervisor`), which announces it to the registries.
 
 Volume: ~4,300 lines of TypeScript, tests excluded, in three engine packages (`engine-protocol` 809,
-`engine-client` 470, `engine-browser` 3,047) beside the Rust core (`crates/k7-engine`), 183 C++ files under
-`engine/k7-runtime`, and 62 app files that import `@studio/engine-*`. The most churned files were the supervisor's loop and
+`engine-client` 470, `engine-browser` 3,047) beside the Rust core (`apps/k7-daw-backend/packages/k7-engine`), 183 C++ files under
+`apps/k7-daw-engine/k7-runtime`, and 62 app files that import `@studio/engine-*`. The most churned files were the supervisor's loop and
 `engine-browser/src/engine.ts` — reliability is decided there.
 
 ## What works, and must not be undone
@@ -25,7 +25,7 @@ Volume: ~4,300 lines of TypeScript, tests excluded, in three engine packages (`e
 exception. The package removes a whole class of bug — the `base` passed twice, the unguarded list
 that produces an eternal spinner.
 
-**`packages/project-shell`** is the repo's one clean decoupling: it does not depend on
+**`apps/k7-daw-frontend/packages/project-shell`** is the repo's one clean decoupling: it does not depend on
 `engine-browser`, it declares `GateEngine { fileBase; token }` structurally, and the apps mount the
 same `ProjectGate`. This is the pattern to reproduce.
 
@@ -39,7 +39,7 @@ stays local to the surface that suffered** as long as no package carries it.
 
 ## B. Security — to be decided, not mechanically corrected
 
-**Settled for the LAN by pairing** (`engine/k7-runtime/docs/pairing.md`): a LAN peer drives, and
+**Settled for the LAN by pairing** (`apps/k7-daw-engine/k7-runtime/docs/pairing.md`): a LAN peer drives, and
 reads the token, only once the musician has paired it; the machine and the server's relay need
 nothing. What follows is the situation pairing answered, kept for the reasoning.
 
@@ -51,20 +51,20 @@ binds `0.0.0.0` — obtains in one message enough to claim the lease and deregis
 token has no expiry, and revoking it means deleting `engine-id.json`, which also changes the `id`
 and breaks the remembered preference. There is no file route on that machine to reach with it:
 workspaces are served by the server's file hub, which takes a session ticket and never this token
-(`apps/k7/backend-rs/docs/files/hub.md`).
+(`apps/k7-daw-backend/docs/files/hub.md`).
 
 This is not a bug to patch: it is a trust model to settle. The options run from "accept it and
 write it down" to "the engine no longer emits its token on `whoami`", which requires another proof
 of identity for the probe. What the token proves today is written in
-`apps/k7/backend-rs/docs/engine/token.md`.
+`apps/k7-daw-backend/docs/engine/token.md`.
 
 ## C. Duplication — what a package would save
 
 ### C3 — one predicate for "reachable"
 
-k7's `apps/k7/frontend/src/components/EngineGate.tsx` tests `wsUrl`, `fileBase` and the token by
+k7's `apps/k7-daw-frontend/src/components/EngineGate.tsx` tests `wsUrl`, `fileBase` and the token by
 hand, where the package's `isReachable()` says the same thing and only
-`apps/k7/frontend/src/settings/PairedDevicesSection.tsx` calls it — the token-less filtering
+`apps/k7-daw-frontend/src/settings/PairedDevicesSection.tsx` calls it — the token-less filtering
 `access.md:37` describes is guarded in `choose.ts`, not in a picker that filters for itself.
 
 ### C4 — the shapes of the wire, declared once
@@ -75,7 +75,7 @@ The reply shapes both clients read, the decoders that fill a frame's absent fiel
 `engineEvents.ts`, `engineLink.ts`) both import: a field one of them drops is a field both drop.
 
 `ENGINE_PROXY_PATH` is defined once, in `web-protocol/engineAccess.ts`, and mirrored by the Rust relay
-(`apps/k7/backend-rs/crates/k7-front/src/routes/engine/`) and read by the probe
+(`apps/k7-daw-backend/packages/k7-front/src/routes/engine/`) and read by the probe
 (`engine-browser/src/probe.ts`).
 
 What remains: the "latency or out of reach" formatting, a one-line function copied per picker
@@ -122,8 +122,8 @@ presents it. The WebSocket half of the relay (`relaySocket.test.ts`): either end
 re-registering elsewhere, an engine gone from the registry, the frame cap, and frame order through the
 dial and the claim. The tunnel hub (`engine-tunnel/hubLifecycle.test.ts`): a drop and the agent's redial,
 two tunnels for one engine, a refused newcomer, and the local paths' 503 and 403. What each pins is
-listed in `apps/k7/backend-rs/docs/engine/proxy.md`, `packages/engine-tunnel/docs/tunnel.md` and
-`packages/engine-browser/docs/lease.md`, including the engine's frames held to the relay's cap and a
+listed in `apps/k7-daw-backend/docs/engine/proxy.md`, `apps/k7-daw-frontend/packages/engine-tunnel/docs/tunnel.md` and
+`apps/k7-daw-frontend/packages/engine-browser/docs/lease.md`, including the engine's frames held to the relay's cap and a
 claim granted after `holdEngine`'s goodbye released at once.
 
 Covered by no test: reconnection (no client), subscription replay — the only resynchronisation that

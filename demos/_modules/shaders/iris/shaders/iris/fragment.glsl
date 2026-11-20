@@ -1,7 +1,7 @@
 #version 300 es
 // "iris" — the shot inside a circle whose radius follows `uPresence`: closed at 0, the whole
 // frame at 1. Only the ALPHA changes, which is what lets the built-in `over` mix it with the shot
-// underneath — see packages/song-video/docs/transitions.md.
+// underneath — see apps/k7-daw-frontend/packages/song-video/docs/transitions.md.
 precision mediump float;
 
 in vec2 vUV;

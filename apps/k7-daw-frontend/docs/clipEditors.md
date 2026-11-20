@@ -30,12 +30,12 @@ On a clip that LOOPS, it halves the passes as it doubles the window: four passes
 become two of two, so the same span plays and the two halves can now differ — which is the whole
 reason to press it on a loop. A placement it cannot follow (an odd number of passes, or a window
 of its own) is left alone and NAMED in the status line, because that one just got twice as long.
-`packages/song-edit/docs/sequenceLoops.md` is the page.
+`apps/k7-daw-frontend/packages/song-edit/docs/sequenceLoops.md` is the page.
 
 It is **the one edit in this header that is about the sequence** rather than about a note, which
 is why it sits apart from the precisions. What a "length"
 is — the stated window, else the notes' extent rounded up to the bar — is decided in the writer,
-and `packages/song-schema/docs/noteEdits.md` is where that reasoning lives.
+and `apps/k7-daw-frontend/packages/song-schema/docs/noteEdits.md` is where that reasoning lives.
 
 The roll draws it only when the roll can be EDITED (`onCreateNote`, the same signal its "drag to
 draw" hint follows): a locked workspace draws the notes and takes none, and a ×2 there would be a
@@ -76,7 +76,7 @@ Three things fall out of sharing it, and all three are the point:
   same line at the same weight, because one function drew them.
 - **The zoom is the resolution control here too.** A click on the arrangement ruler snaps to a
   tick that was drawn, so opening the view up is how a finer position is reached — the rule
-  `packages/ui-timeline/docs/ticks.md` states for every ruler.
+  `apps/k7-daw-frontend/packages/ui-timeline/docs/ticks.md` states for every ruler.
 - **The window's origin is respected for free.** The ladder counts from the coordinate's origin
   rather than the view's left edge, so a clip windowed to open at bar 3 says 3, without the
   surface arranging for it.
@@ -256,7 +256,7 @@ A cell of the roll is a pitch (top-down like the keys, `row = 127 − key`) by o
 **ruler's current unit**.
 
 The roll's column following the zoom is the point rather than a side effect: the ladder is the
-resolution control everywhere else here (`packages/ui-timeline/docs/ticks.md`), so a finer caret
+resolution control everywhere else here (`apps/k7-daw-frontend/packages/ui-timeline/docs/ticks.md`), so a finer caret
 is reached by opening the view, not by a second setting nobody would find. It is also why the
 caret resets when the unit changes — column 12 is a different MOMENT once the step halves, and
 that is not where you put it.
@@ -423,7 +423,7 @@ re-plays on every row it crosses, which is what makes a transposition judgeable 
 128-lane grid.
 
 It is `{ type: "note-preview", track, key, vel }`, straight down the engine's socket rather than
-through the file service (`engine/k7-runtime/docs/protocol.md`). Two things follow from the choice:
+through the file service (`apps/k7-daw-engine/k7-runtime/docs/protocol.md`). Two things follow from the choice:
 
 - **It goes through the TRACK's own chain**, so what you hear is the instrument you are writing
   for — unlike `preview`, which loads a file into a hidden sampler and bypasses everything.
@@ -455,7 +455,7 @@ Four rules worth knowing, each of which could reasonably have gone the other way
   onto it. The status line says how many were left.
 - **A paste is ONE command**, so it is one journal entry and one Ctrl+Z whatever it contained. The
   pane hands the shell a command *line* rather than writing; `events add` exists for this, the
-  bulk counterpart of `sequence note add` (`packages/commands/docs/`).
+  bulk counterpart of `sequence note add` (`apps/k7-daw-frontend/packages/commands/docs/`).
 - **An event is copied WHOLE** — its window, its fades, its passes, its `disabled` and its
   `warp: false`, not just its `ref` and where it sat. See below for why that took a wire change.
 
@@ -589,7 +589,7 @@ outside `whole` mode) spans the placed length and draws the marks in violet
 windows) — as a tinted band with its two edges picked out and a fainter line per repeat.
 
 **The two axes have different origins, and the compiler states the loop in whichever space its own
-material lives in** (`packages/song/docs/alternatives.md` is not this; the fields are set in
+material lives in** (`apps/k7-daw-frontend/packages/song/docs/alternatives.md` is not this; the fields are set in
 `nodeProject.ts`). That difference is the whole reason this is a module and not two inline sums:
 
 | | what `loopStart`/`loopEnd` mean | where the window is drawn |
@@ -618,7 +618,7 @@ dispatched rather than doubled, and a panel showing no placement (a sequence fil
 comp) draws no switch. On, the switch's colour is the loop marks' violet.
 
 While it is on, **the loop's two points are a brace in the ruler**, and they drag. The points are
-the event's window — there is no loop range apart from it (`packages/song-edit/docs/eventLoop.md`)
+the event's window — there is no loop range apart from it (`apps/k7-daw-frontend/packages/song-edit/docs/eventLoop.md`)
 — so the brace sits on the ruler drawn in the window's own unit:
 
 | panel | ruler | unit | snaps |
@@ -634,7 +634,7 @@ verb while the event loops, rather than `event window`, which keeps the passes a
 The audio clip panel's header carries the event's **gain** beside the switch: a slider from −6 to
 +6 dB (`src/components/EventGainSlider.tsx`), committed once on release as `event gain`, and put
 back to unity by a double-click. The roll has none: a MIDI event has no level of its own
-(`packages/song-edit/docs/eventGain.md`).
+(`apps/k7-daw-frontend/packages/song-edit/docs/eventGain.md`).
 
 `src/components/LoopBrace.tsx` is both halves, unit-free: each panel hands it its own mapping to
 pixels, and the bounds the event cannot leave (the material's).
@@ -738,7 +738,7 @@ What acting "only on it" means, verb by verb:
 
 **What a trim WRITES is this EVENT's window**, so there is no caveat to carry about the other
 placements of the same clip: a clip file describes the bytes and a placement describes the use
-(`packages/song/docs/materialCut.md`), and trimming one event leaves the others alone by
+(`apps/k7-daw-frontend/packages/song/docs/materialCut.md`), and trimming one event leaves the others alone by
 construction. The verb says it — `event trim` names the placement it acts on, like every other
 `event …`.
 
@@ -889,7 +889,7 @@ then written again.
 
 `takes` is the fourth mode of the waveform and of the roll (`TakesView.tsx`): the open EVENT's takes
 stacked, its own material first, on one song-time axis — the format and the recording path are
-`packages/song/docs/takes.md`. It is a mode and not a third panel because it is a view of the same
+`apps/k7-daw-frontend/packages/song/docs/takes.md`. It is a mode and not a third panel because it is a view of the same
 event the panel is open on, and a mode is how both panels already switch what a press means.
 
 - **The event, not the clicked clip.** A comped event is several clips on the timeline; whichever

@@ -1,6 +1,6 @@
 // EngineOps.swift — what the tray does beyond a supervisor command, for its two callers: the shell page's tray
 // (EnginePlugin.swift), shown while no studio is connected, and k7's settings panel (StudioBridge.swift).
-// A CA change restarts the supervisor, which adopts the running engine. See engine/k7-runtime/docs/ios.md.
+// A CA change restarts the supervisor, which adopts the running engine. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Foundation
 

@@ -38,7 +38,7 @@ whole point of that archetype.
 `markActive()` is the door, and it is deliberately stupid: an exported function that sets the
 timestamp, with no React state to lift from the bottom of the application. k7 beats it from the
 engine's state frame, at most every ten seconds, whenever the engine is SOUNDING — the transport
-playing, the master above the noise floor, or signal on an input (`apps/k7/frontend/src/sounding.ts`) —
+playing, the master above the noise floor, or signal on an input (`apps/k7-daw-frontend/src/sounding.ts`) —
 and on every MIDI message played into a lane. The meters are the only witness that does not depend
 on which archetype is open. Anything that happens untouched and must count goes through it.
 

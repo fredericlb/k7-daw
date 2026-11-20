@@ -1,7 +1,7 @@
 // clipEnvelope.ts — the key a clip's drawn envelope is cached under in the browser. It folds
 // everything about the placement that decides WHICH audio the picture shows, so an edit that
 // moves the window misses the cache instead of reusing the old picture. Pure, and deliberately
-// a mirror of the file service's own `wfSig` (apps/k7/backend-rs/crates/k7-file-service/src/media/mod.rs): the
+// a mirror of the file service's own `wfSig` (apps/k7-daw-backend/packages/k7-file-service/src/media/mod.rs): the
 // two answer the same question one layer apart. docs/timeline.md ("Activity runs through the
 // blocks") holds the rationale.
 

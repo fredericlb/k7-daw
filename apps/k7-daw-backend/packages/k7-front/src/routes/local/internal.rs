@@ -1,4 +1,4 @@
-//! internal.rs — the local engine's half of the internal seam (`apps/k7/backend-rs/docs/local.md`):
+//! internal.rs — the local engine's half of the internal seam (`apps/k7-daw-backend/docs/local.md`):
 //! `GET /api/internal/engine/local`, which tells whether the supervisor the front runs has answered. Gated as the engine half is: a loopback peer AND the front's secret.
 
 use std::net::SocketAddr;

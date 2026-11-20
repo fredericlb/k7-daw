@@ -2,7 +2,7 @@
 
 `components/ResourcesPanel.tsx`, opened by its footer tab or `ui resources`, lists the open
 project's imported audio and video and lets them be previewed and dragged onto a lane. The listing
-is the file service's `GET /resources` (`apps/k7/backend-rs/docs/file-runtime.md`).
+is the file service's `GET /resources` (`apps/k7-daw-backend/docs/file-runtime.md`).
 
 ## The unit is the clip, not the file
 

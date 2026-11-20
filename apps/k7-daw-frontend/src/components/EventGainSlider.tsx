@@ -1,6 +1,6 @@
 // EventGainSlider.tsx — an audio event's own trim, ±6 dB, in the clip panel's header beside the loop switch.
 // The thumb moves locally and the value COMMITS once, on release — one `event gain`, one write, one reload —
-// and a double-click puts it back to unity. See packages/song-edit/docs/eventGain.md.
+// and a double-click puts it back to unity. See apps/k7-daw-frontend/packages/song-edit/docs/eventGain.md.
 
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";

@@ -6,7 +6,7 @@ edition.workspace = true
 publish.workspace = true
 
 [features]
-# The testbed's clock and stubs (apps/k7/backend-rs/docs/engine.md); never in a shipped build.
+# The testbed's clock and stubs (apps/k7-daw-backend/docs/engine.md); never in a shipped build.
 test-hooks = []
 
 [dependencies]

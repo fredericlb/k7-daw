@@ -13,7 +13,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadVideoProject } from "./videoProject";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const LIBRARY = join(here, "..", "..", "..", "k7-core");
+const LIBRARY = join(here, "..", "..", "..", "..", "..", "k7-core");
 
 let root: string;
 let dir: string;

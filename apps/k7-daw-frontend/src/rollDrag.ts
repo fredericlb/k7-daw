@@ -3,7 +3,7 @@
 // commits, so a note lands exactly where the drag showed it. The one thing a reader would get
 // wrong: a press that never leaves its cell is a note ONE GRID STEP long, not the command's own
 // default of a whole beat — on a 1/16 grid those two differ by sixteen cells.
-// See apps/k7/frontend/docs/clipEditors.md.
+// See apps/k7-daw-frontend/docs/clipEditors.md.
 
 import { roundBeat } from "@studio/song-schema/timecode";
 

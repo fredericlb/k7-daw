@@ -173,7 +173,7 @@ export function writeModules(ctx: EmitCtx, extsFile?: string): ModuleStats {
     for (const ins of b.inserts) {
       if (ins.node) {
         const params = paramsOf(ins.params);
-        // A node is a flat file naming what it extends — packages/song/docs/nodes.md.
+        // A node is a flat file naming what it extends — apps/k7-daw-frontend/packages/song/docs/nodes.md.
         writeDoc(
           join(ctx.outDir, `nodes/${ins.node}.k7x`),
           {

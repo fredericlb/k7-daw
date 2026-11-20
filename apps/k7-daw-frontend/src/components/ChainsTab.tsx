@@ -51,7 +51,7 @@ import type { WebGraph, WebProject } from "../types";
 import { useIsMobile } from "../useIsMobile";
 import { MidiFeedback } from "./MidiFeedback";
 
-// A card with no authored vertical layout is folded to the same 4 columns (packages/ui-chains/docs/graphBuild.md).
+// A card with no authored vertical layout is folded to the same 4 columns (apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md).
 const GRAPH_FIT: GridFit = { axis: "cols", max: 4 };
 
 const chainCount = (n: number) =>
@@ -127,9 +127,9 @@ function ChainsTabView({
   onProjectField?: (field: string, value: string) => void;
   /** A node's alternative badge: switch to a set, or copy the one on (null) — straight through, the command being the SHELL's. */
   onAlternative?: (module: string, name: string | null) => void;
-  /** A node's engine dropdown — straight through, the command being the SHELL's (packages/song/docs/engines.md). */
+  /** A node's engine dropdown — straight through, the command being the SHELL's (apps/k7-daw-frontend/packages/song/docs/engines.md). */
   onEngine?: (module: string, name: string) => void;
-  /** A node's preset dropdown — the shell draws the list (packages/song/docs/userPresets.md). */
+  /** A node's preset dropdown — the shell draws the list (apps/k7-daw-frontend/packages/song/docs/userPresets.md). */
   /** The arrows beside a node's preset dropdown: load its previous (-1) or next (+1) preset. */
   onPresetStep?: (module: string, step: -1 | 1) => void;
   onPresets?: (
@@ -144,7 +144,7 @@ function ChainsTabView({
   engineWarnings?: Record<string, string>;
   /** Open the library browser for a module's asset field, at viewport coords. */
   onAssetBrowse?: (module: string, kind: string, x: number, y: number) => void;
-  /** A rack tap's edit — the shell runs its `node tap` command (packages/song/docs/racks.md). */
+  /** A rack tap's edit — the shell runs its `node tap` command (apps/k7-daw-frontend/packages/song/docs/racks.md). */
   onTapEdit?: (module: string, action: TapAction) => void;
   /** Place/remove the engine's waveform tap while a waveform widget is on screen. */
   onWatchWaveform?: (
@@ -203,7 +203,7 @@ function ChainsTabView({
   onFocused?: (chains: number) => void;
   // How the machine's interface groups its inputs, for a live input's socket dropdown — empty with no engine, which is the honest picture.
   inputDevices?: readonly { name: string; channels: number[] }[];
-  /** The lenses this BROWSER can see, by label — see packages/song/docs/camera.md. */
+  /** The lenses this BROWSER can see, by label — see apps/k7-daw-frontend/packages/song/docs/camera.md. */
   cameras?: readonly string[];
   /** The MIDI inputs this browser sees, by name — what a midi-in node's dropdown offers. */
   midiDevices?: readonly string[];
@@ -312,7 +312,7 @@ function ChainsTabView({
   // Which of this project's rack sounds are firing right now — derived from the arrangement and the playhead (rackLit.ts).
   const rackLit = useLiveRackLit(project, graph);
 
-  // Which boxes are OPEN: session state, never written — packages/song/docs/assemblies.md.
+  // Which boxes are OPEN: session state, never written — apps/k7-daw-frontend/packages/song/docs/assemblies.md.
   const [openAssemblies, setOpenAssemblies] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
@@ -338,7 +338,7 @@ function ChainsTabView({
     () => ({
       alternatives: graph?.trackAlternatives,
       frozen: graph?.frozen,
-      // A lane the engine cannot host a VST of: played from its render, or waiting for one (packages/song/docs/autoFreeze.md).
+      // A lane the engine cannot host a VST of: played from its render, or waiting for one (apps/k7-daw-frontend/packages/song/docs/autoFreeze.md).
       autoFrozen: graph?.autoFrozen,
       autoFreezeWaiting: graph?.autoFreezeWaiting,
       // …and each lane's AUTOMATION, by the same road: `automationLanes` is the one place the binding and the curve are joined.
@@ -385,7 +385,7 @@ function ChainsTabView({
       layout: "vertical",
       fit: GRAPH_FIT,
     });
-    // …then the assemblies are folded in: a box instead of its members, unless it is open — packages/song/docs/assemblies.md.
+    // …then the assemblies are folded in: a box instead of its members, unless it is open — apps/k7-daw-frontend/packages/song/docs/assemblies.md.
     const { nodes, edges } = foldAssemblies(drawn, built, openAssemblies);
     // The STACK view is an arrangement too, but a whole one: no pins, no held positions, no dagre.
     if (stack) return stackLayout(nodes, edges, drawn, trackOrder);

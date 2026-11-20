@@ -1,7 +1,7 @@
 // Screen for the note repeater: the rhythm as spokes round a centre, one per step of the cycle,
 // step 1 at twelve o'clock. A hit is a long spoke, an accented one the brightest; a rest is short.
 // Drag up/down for the density, left/right to rotate it, shift-drag left/right for its length.
-// The maths is the engine's (engine/k7-runtime/engine/NoteSteps.h), so the picture is what plays.
+// The maths is the engine's (apps/k7-daw-engine/k7-runtime/engine/NoteSteps.h), so the picture is what plays.
 
 const MODES = ["EVERY STEP", "BURST", "EUCLID"];
 const EUCLID = 2;

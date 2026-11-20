@@ -161,7 +161,7 @@ then the engine observing what leaves.
    offline render runs that and nothing of `EngineHost.cpp` (see `populateMasterChain`). It is held
    in the session so `MasterVolumeChanged` has something to set without walking the list again, and
    `applyFull` sets it from `doc` — because that is where `doc` is the truth. See
-   `packages/song/docs/masterVolume.md`.
+   `apps/k7-daw-frontend/packages/song/docs/masterVolume.md`.
 2. **The master level meter**, which MUST sit after that gain: Fix writes this very param, and a
    Fix the meter could not see would leave the clip light lit and offer itself again on the next
    pass, taking another 6 dB each time. An output DEVICE carries no measurer in Tracktion — only
@@ -450,7 +450,7 @@ computes the count-in duration from the punch-in `SyncPoint` and mutes at the en
 the mute is session state applied at capture — `Session::punchMuted`, the clips it muted and only
 those — and undone by `restorePunchMute` at every end of the roll: stop, record off, panic;
 it never reaches a file — the brain's writer places only the new clip and does no overlap
-arithmetic (`packages/take-render/docs/rendering.md`).
+arithmetic (`apps/k7-daw-frontend/packages/take-render/docs/rendering.md`).
 
 That mute is a TIMER, and a timer outlives the roll it was set for: stopped during the count-in, the
 roll is over before the mute fires, and an unguarded one silences the armed track through the next
@@ -471,7 +471,7 @@ and arming one again while still rolling punched a fresh, stray take in on the s
 
 **Except a TAKE of an event** (`ProjectDoc::recordMute` false): the brain has already cut the punch
 out of the lane it sent, so the old performance is heard around the punch and the track is NOT
-muted — muting it would silence what the punch was chosen to keep (`packages/song/docs/takes.md`).
+muted — muting it would silence what the punch was chosen to keep (`apps/k7-daw-frontend/packages/song/docs/takes.md`).
 
 Track inputs are pointed at their live interface input by a step that needs an allocated
 playback context — the input instances live on it — so it runs **after**

@@ -131,11 +131,11 @@ describe("import: every lane ends on a fader", () => {
       {},
     );
     const g = loadGraph(dir);
-    // Last, because `trackMixer` reads the LAST mixer in a run — packages/song/docs/trackMixer.md.
+    // Last, because `trackMixer` reads the LAST mixer in a run — apps/k7-daw-frontend/packages/song/docs/trackMixer.md.
     expect(g.chains.vox.use.at(-1)?.module).toBe("mix-vox");
     expect(g.chains.drums.use.at(-1)?.module).toBe("mix-drums");
     // A NODE on the LIBRARY's strip — its own instance per lane, and no project module: a copy of
-    // a library module draws a card with no controls (packages/song/docs/liveProject.md).
+    // a library module draws a card with no controls (apps/k7-daw-frontend/packages/song/docs/liveProject.md).
     expect(data("nodes/mix-vox.k7x").extends).toBe("@meta/audio/mixer");
     expect(data("nodes/mix-drums.k7x").extends).toBe("@meta/audio/mixer");
     expect(existsWs("audio/mix-vox")).toBe(false);
@@ -307,7 +307,7 @@ describe("import: one module per plugin, one node per use", () => {
     expect(dataWs("audio/reverb/module.k7x")).toEqual({
       plugin: { type: "vst3", name: "Reverb" },
     });
-    // Flat in `nodes/`, each naming what it extends — see packages/song/docs/nodes.md.
+    // Flat in `nodes/`, each naming what it extends — see apps/k7-daw-frontend/packages/song/docs/nodes.md.
     expect(data("nodes/reverb_vox.k7x")).toEqual({
       extends: "@workspace/audio/reverb",
       params: { mix: 0.2 },

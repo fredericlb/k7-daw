@@ -3,7 +3,7 @@
 The text format of a workspace's files, `.k7x`. It reads like a Strudel pattern and holds exactly
 what a workspace file holds: maps with string keys, lists, strings, numbers, booleans and null. The grammar is
 `src/parse.ts`; this page is why it is shaped the way it is. The plan it belongs to is
-[k7x-plan.md](../../../docs/k7x-plan.md).
+[k7x-plan.md](../../../../../docs/k7x-plan.md).
 
 ```js
 // nodes/synth-pad.k7x
@@ -22,13 +22,13 @@ things force that, and each would break the day a file could compute:
 
 - **The UI writes these files.** A knob drag sets one literal at one key path and leaves every other
   byte alone (`src/edit.ts`). A value that comes out of an expression has no literal to set.
-- **The history replays edits as values at key paths** (`apps/k7/backend-rs/crates/k7-sync/src/k7x/`). An
+- **The history replays edits as values at key paths** (`apps/k7-daw-backend/packages/k7-sync/src/k7x/`). An
   expression has no path to replay into.
 - **The server reads files other accounts wrote** — libraries, shares. Reading data is safe;
   running it is not.
 
 What computes stays where it already is: a `.strudel` pattern, which the engine evaluates
-(`engine/k7-runtime/docs/patternPlugin.md`). k7x borrows Strudel's look, not its semantics.
+(`apps/k7-daw-engine/k7-runtime/docs/patternPlugin.md`). k7x borrows Strudel's look, not its semantics.
 
 ## A call is an entry, a chain is a map
 
@@ -60,7 +60,7 @@ the file already uses.
 
 The language itself has none. A kind of file may: a sequence may write its notes as mini-notation,
 a graph its segments as runs — read by that kind's reader into the same data
-(`packages/song-schema/docs/sugar.md`). They are an authoring aid, not a second way to store data.
+(`apps/k7-daw-frontend/packages/song-schema/docs/sugar.md`). They are an authoring aid, not a second way to store data.
 
 ## Comments
 

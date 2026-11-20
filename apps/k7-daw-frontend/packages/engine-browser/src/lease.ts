@@ -1,7 +1,7 @@
 // lease.ts — hold the claim on an engine, for one project, for as long as a tab drives it. No
 // React and no fetching: the caller passes its own two backend calls, because each service
 // reaches its own backend under its own path. See docs/lease.md for why a single select is not
-// enough, and apps/k7/backend-rs/docs/engine/claim.md for what the project on it changed.
+// enough, and apps/k7-daw-backend/docs/engine/claim.md for what the project on it changed.
 
 import { ENGINE_ASSIGN_RENEW_MS } from "@studio/web-protocol";
 import {

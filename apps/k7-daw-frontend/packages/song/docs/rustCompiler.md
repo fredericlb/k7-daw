@@ -4,13 +4,13 @@ The compiler (and the `@studio/song-schema` readers it stands on) is one Rust cr
 compiled to WebAssembly for the browser. The engine's `ProjectDoc`, the file service's
 routes and answers, and the frontend's calls and types are its contract; the legacy syntaxes are not.
 
-Paths below without a top folder are relative to `packages/song` (`rust/src/source.rs` is the crate's).
+Paths below without a top folder are relative to `apps/k7-daw-frontend/packages/song` (`rust/src/source.rs` is the crate's).
 
 ## What stays a contract
 
 | contract | why |
 |---|---|
-| the `ProjectDoc` of `packages/engine-protocol/project.ts`, field for field | the C++ engine plays it; the Rust type is its twin and a test holds them equal |
+| the `ProjectDoc` of `apps/k7-daw-frontend/packages/engine-protocol/project.ts`, field for field | the C++ engine plays it; the Rust type is its twin and a test holds them equal |
 | every compile route's answer (`/project-doc`, `/graph`, `/hints`, `/project-errors`, `/surfaces`, `/io-ports`, `/module-catalogue`, `/base-modules`, `/engine-doc`) in the shapes of `@studio/web-protocol` and `@studio/graph-model` | the frontend reads them; a difference is listed under "Where it answers differently", or it is a bug |
 | the frontend's types stay the hand-written TypeScript while the routes answer them; ts-rs derives the Rust side's twins behind the `ts` feature, and a type test holds each assignable | the browser wiring lands later; until then no frontend import changes |
 | the native file service calls the crate directly, with no host function between | one compiler, one cache per workspace, no copy of a request in a runtime's string |
@@ -19,7 +19,7 @@ Paths below without a top folder are relative to `packages/song` (`rust/src/sour
 
 | choice | why |
 |---|---|
-| ONE crate, `song`, in `packages/song/rust`, its own Cargo workspace and lock, `rlib` only | the backend links it natively and the browser facade `@studio/k7-wasm` links it into the one module (`packages/song-schema/docs/wasmBoundary.md`); one source is the point of the port |
+| ONE crate, `song`, in `apps/k7-daw-wasm/song`, its own Cargo workspace and lock, `rlib` only | the backend links it natively and the browser facade `@studio/k7-wasm` links it into the one module (`apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md`); one source is the point of the port |
 | it holds the readers of the file formats too (`rust/src/files/`), though their TypeScript is song-schema's | every change to a crate the facade links forces the checked-in module to be rebuilt; song-schema's crate stays the value vocabulary the facade already serves (the timecode, the curves), and `song` depends on it |
 | no FFI: no `extern "C"`, no `#[unsafe(no_mangle)]`, no `thread_local!` buffer | the wasmBoundary rule: the facade owns the ABI, the native file service calls the crate as a library |
 | features: `disk` (default) holds the disk `Source`; `ts` derives the TypeScript twins | the browser build takes `default-features = false` and so compiles no file system code; the native backend never compiles ts-rs |
@@ -72,7 +72,7 @@ Every input the TypeScript compile takes, read off its code (`src/compile/inputs
 | the libraries: which ones, at which version, and which an admin overlays | `librariesHome`, `workspacePins`, `setLibraryOverlays`, `libraryRoot` (pins and manifests) | `Roots::libraries`, a list of `{name, root, editable}` the HOST resolves; the crate never reads a pin or a manifest |
 | each library's families (`modules`, `chains`, `assemblies`, `console`, `samples`, `irs`, `wavetables`, `models`) | `libraryFamilyRoots` | through the Source, under each library's root |
 | the account's own library, `@account` | `accountLibraryHome` | the first entry of `Roots::libraries` |
-| k7's own modules, `@meta` | `META_MODULES_ROOT` (`packages/song/meta`, by `import.meta.url`) | `Roots::meta`, a path the host gives (the code root on a phone) |
+| k7's own modules, `@meta` | `META_MODULES_ROOT` (`apps/k7-daw-frontend/packages/song/meta`, by `import.meta.url`) | `Roots::meta`, a path the host gives (the code root on a phone) |
 | the engine's plugin scan | `<studioHome>/exts.json`, `builtinScan()` | `Roots::scan`, a file mount read through the Source; the builtin list is the crate's, read from song-schema's generated table (`include_str!`) until the facade wires the compiler |
 | the rig: channel labels, stereo pairs, the cue pair | `loadPreferences()`, `preferences.k7x` | `Request::rig`, JSON the host gives |
 | the automatic freezes' renders | `<studioHome>/.renders`, a stat per render, an atime touched | `Roots::renders`, stats through the Source; the renders used are in the answer, and the HOST touches them |
@@ -106,7 +106,7 @@ The crate's `Cache` is one value per workspace, owned by the host, passed to eve
 | a compile records every stat, listing and read it made; reuse re-stats that set and nothing else | the read set is exactly what the answer depends on, where a revision token walks a fixed list of folders and the module stamp another |
 | the cache holds owned, immutable values handed out as `Arc` | the two rules of `docs/moduleCache.md` (a cached read never leaves the loader mutable) hold by the type |
 | bounded: four answers per workspace, the least recently used dropped; the parse cache dropped whole when it passes 64 MB | a long-lived process would otherwise grow with every project opened |
-| no disk cache | the native parse is fast enough that a restart re-reads (`packages/k7x/docs/rust.md`'s measurements), and a disk cache is a write |
+| no disk cache | the native parse is fast enough that a restart re-reads (`apps/k7-daw-frontend/packages/k7x/docs/rust.md`'s measurements), and a disk cache is a write |
 
 ## The API
 
@@ -138,7 +138,7 @@ let answer = compile(&source, &mut cache, &Request { roots, rig, vsts, want });
 
 | choice | why |
 |---|---|
-| the file service holds the `Cache` per workspace (`SongSessions`, `apps/k7/backend-rs/crates/k7-file-service/src/song_ask.rs`) and calls the crate in-process | one cache per workspace, dropped with it |
+| the file service holds the `Cache` per workspace (`SongSessions`, `apps/k7-daw-backend/packages/k7-file-service/src/song_ask.rs`) and calls the crate in-process | one cache per workspace, dropped with it |
 | the file service computes `roots` and `rig` | they are its facts: where a library lives, what a workspace pins, which rig the preferences name |
 
 ### The bundle, for the browser
@@ -152,7 +152,7 @@ listing of the parent of every `NotFound` probe, or the browser cannot tell an a
 |---|---|
 | exactly the files the server's compile read, binaries as their length alone | the browser compiles what the server compiled, and downloads no audio |
 | a draft is a path and a text laid over the bundle; a draft that makes the compile read beyond it answers `needs_files` | a new module ref is the one edit that widens the read set, and it is rare |
-| `song.open {bundle}` gives a handle, `song.compile {handle, drafts, want}`, `song.close`; handles as the curves' (`packages/song-schema/docs/wasmBoundary.md`) | the bundle crosses once; a keystroke sends its draft |
+| `song.open {bundle}` gives a handle, `song.compile {handle, drafts, want}`, `song.close`; handles as the curves' (`apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md`) | the bundle crosses once; a keystroke sends its draft |
 
 ## The compare
 
@@ -174,7 +174,7 @@ The crate's `compare.rs` judges two compiles of one project; the departures are 
 
 | choice | why |
 |---|---|
-| the compiler's version is ONE hash over the `song` crate (manifest and `src/`), its path dependencies' (the same) and their `Cargo.lock` entries, computed by `packages/k7-wasm/scripts/rustSources.mjs` and checked in as `SOURCES` in `src/k7Wasm.generated.ts`; `build.test.ts`, the facade and the backend read that one value and compute no other | the checked-in module is proven to match its sources by the same number a server reports; a second hash would drift from it |
+| the compiler's version is ONE hash over the `song` crate (manifest and `src/`), its path dependencies' (the same) and their `Cargo.lock` entries, computed by `apps/k7-daw-frontend/packages/k7-wasm/scripts/rustSources.mjs` and checked in as `SOURCES` in `src/k7Wasm.generated.ts`; `build.test.ts`, the facade and the backend read that one value and compute no other | the checked-in module is proven to match its sources by the same number a server reports; a second hash would drift from it |
 | the facade answers it through a `version` operation, and the backend reports the same value with every compile answer | a tab or an installed app can keep an older frontend, and its older module, while the server updates |
 | the frontend compares the two when it connects and on any answer that carries a different hash; a mismatch reloads the app or asks the person to, and the browser's module compiles nothing meanwhile | two compilers that disagree would show different errors and graphs for one file |
 | the module is requested at a URL keyed by the hash (`k7_<hash>.wasm`) | an installed app keeps the module it was built with, and a new one never replaces it under the same name |
@@ -210,9 +210,9 @@ wired to a route: what lands before it changes no answer. Sizes are the Rust and
 | 2g | curve files (the pilot's `CurveSpec`, on-off, cut and duration included, plus conditions), baked into automation | `src/curves.ts`, `src/curveBake.ts`, `src/curveConditions.ts`, `src/compile/plugins.ts`' `bakeAutomations`, song-schema's `CurveSchema`, `CurveConditionSchema`; `curveSample.ts` is the pilot's | 2,500 | 1 |
 | 2h | the `ProjectDoc`: plugins, racks, sends, levels, freezes and automatic freezes, the highlight, the output recorder, jsdsp graphs validated; the whole compile | `src/nodeProject.ts`, `src/compile/plugins.ts`, `src/compile/freeze.ts`, `src/freeze.ts`, `src/autoFreeze.ts`, `src/compile/jsDspGraph.ts`, `src/highlight.ts`, `src/outputRecorder.ts`, `project.ts`, `ownMix`, `withConsole`, `trackKind`, `trackColor`, `surfaces`' head | 9,500 | 4 |
 | 2i | a picture lane's sound, and a timeline's pictures | `src/videoSound.ts`, `src/timelinePictures.ts`' `timelineShots`, `nodeProject.ts`' picture lines; `loadTimelinePictures` is `song-video`'s, step 4 | 2,200 | 0.5 |
-| 2j | the views: the errors, `WebProject` with the WAV lengths, surfaces, I/O ports, the catalogue, the base modules, hints and the field vocabulary | `apps/k7/backend-rs/crates/k7-file-service/src/engine/docs.rs`, `webProject.ts`, `webTracks.ts`, `webComp.ts`, `webNest.ts`; `src/surfaces.ts`, `src/ioPorts.ts`, `src/moduleCatalogue.ts`, `src/hints.ts`, `src/diagnostics.ts`, `src/deadAutomations.ts`, `compileError.ts`, `wavLength`, song-schema's `fields.ts`, the surface schema and view-binding files; the picture half of `workspaceDocs.ts` and `webTracks.ts` is step 4's | 6,000 | 2 |
-| 2k | the module graph the Chains tab draws, its validation and warnings, a library chain's graph | `src/graph.ts`, `src/graphTypes.ts`, `src/graphValidate.ts`, `src/graphWarnings.ts`, `apps/k7/backend-rs/crates/k7-file-service/src/engine/docs.rs`, `graphChoices.ts`, `src/laneStrip.ts`' strip finder, `nodePlace`, `moduleAssetChoices`, `listFiles`, `libraryFiles`, `ampModel`, `missingModel`, `stageOf`, `panelWidgets` | 7,000 | 2 |
-| 2l | the host function, the cache per workspace, the jsdsp refresh before a native compile, the renders touched, the shared version stamp | `apps/k7/backend-rs/crates/k7-file-service/src/workspaces/mod.rs`' compile half, `src/sharedFolders.ts`' roots | 1,200 | 1.5 |
+| 2j | the views: the errors, `WebProject` with the WAV lengths, surfaces, I/O ports, the catalogue, the base modules, hints and the field vocabulary | `apps/k7-daw-backend/packages/k7-file-service/src/engine/docs.rs`, `webProject.ts`, `webTracks.ts`, `webComp.ts`, `webNest.ts`; `src/surfaces.ts`, `src/ioPorts.ts`, `src/moduleCatalogue.ts`, `src/hints.ts`, `src/diagnostics.ts`, `src/deadAutomations.ts`, `compileError.ts`, `wavLength`, song-schema's `fields.ts`, the surface schema and view-binding files; the picture half of `workspaceDocs.ts` and `webTracks.ts` is step 4's | 6,000 | 2 |
+| 2k | the module graph the Chains tab draws, its validation and warnings, a library chain's graph | `src/graph.ts`, `src/graphTypes.ts`, `src/graphValidate.ts`, `src/graphWarnings.ts`, `apps/k7-daw-backend/packages/k7-file-service/src/engine/docs.rs`, `graphChoices.ts`, `src/laneStrip.ts`' strip finder, `nodePlace`, `moduleAssetChoices`, `listFiles`, `libraryFiles`, `ampModel`, `missingModel`, `stageOf`, `panelWidgets` | 7,000 | 2 |
+| 2l | the host function, the cache per workspace, the jsdsp refresh before a native compile, the renders touched, the shared version stamp | `apps/k7-daw-backend/packages/k7-file-service/src/workspaces/mod.rs`' compile half, `src/sharedFolders.ts`' roots | 1,200 | 1.5 |
 | 2m | the golden corpus made a smoke test, the conformance and web suites, the step's merge | `e2e/specs/conformance/serviceGolden.spec.ts` | 600 | 1 |
 
 | choice | why |
@@ -238,7 +238,7 @@ The golden corpus is a smoke test: `serviceGolden` and the file service's `golde
 
 | choice | why |
 |---|---|
-| from 2a, `mac-checks.sh` adds `wasm32-unknown-unknown` and runs `cargo build --locked --target wasm32-unknown-unknown --no-default-features` and its clippy in `packages/song/rust`, whenever the song crate changes | the browser's build must be clean before the browser uses it; macOS's present wasm build runs only where the target happens to be installed |
+| from 2a, `mac-checks.sh` adds `wasm32-unknown-unknown` and runs `cargo build --locked --target wasm32-unknown-unknown --no-default-features` and its clippy in `apps/k7-daw-wasm/song`, whenever the song crate changes | the browser's build must be clean before the browser uses it; macOS's present wasm build runs only where the target happens to be installed |
 | the facade links `song` only when the first browser operation lands | every change to a linked crate forces the checked-in module's rebuild (`SOURCES`); an rlib built for wasm32 proves the same cleanness |
 | `scripts/check-cargo-locks.mjs` and `docs/lints.md` hold the crate's lock | as the pilot's two crates |
 

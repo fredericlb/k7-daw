@@ -12,8 +12,8 @@ import {
 
 // A module needn't extend anything, so the schema, the ref-check and the build loop must all allow it.
 
-const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
-const DEMOS = join(here, "..", "..", "..", "demos");
+const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
+const DEMOS = join(here, "..", "..", "..", "..", "..", "demos");
 const SONG = join(DEMOS, "synth-demo.k7");
 
 // Found by the PREFIX "synth", since the song names a NODE there, and a miss throws loudly.

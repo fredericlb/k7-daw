@@ -5,7 +5,7 @@ The pieces exist separately: `registry.ts` (the routes), `probe.ts` (measuring),
 
 ## The registry's address is given once, to the constructor
 
-`base` is where the registry answers — k7's backend, the one registry (`apps/k7/backend-rs/docs/engine/shared.md`):
+`base` is where the registry answers — k7's backend, the one registry (`apps/k7-daw-backend/docs/engine/shared.md`):
 `serviceUrl(…)`, which is k7's origin, where its preferences are too. It decides both the registry's routes
 and what the probe composes.
 Passed separately to two functions it is two places for one fact, and nothing would force an app
@@ -32,9 +32,9 @@ somebody changes engine from a neighbouring header.
 
 ## Who is taken unasked
 
-Registration is open — a machine registers with no account (`apps/k7/backend-rs/docs/engine/heartbeat.md`).
+Registration is open — a machine registers with no account (`apps/k7-daw-backend/docs/engine/heartbeat.md`).
 The list holds the engines this account may use (those of this device) and the
-UNOWNED ones (`apps/k7/backend-rs/docs/engine/ownership.md`) — and an unowned engine is anybody's
+UNOWNED ones (`apps/k7-daw-backend/docs/engine/ownership.md`) — and an unowned engine is anybody's
 machine until somebody opens it directly, with any performance score it likes to claim. Taking one without a click would bind the account's workspaces to a stranger's
 tunnel. So `chooseEngine` and `bestEngine` only ever take an engine that passes `mayAutoPick`
 (`choose.ts`), and offer every other one in the picker:
@@ -51,7 +51,7 @@ A first open from an HTTPS page on a machine with no local engine therefore land
 until the user clicks one, which remembers it. The server repeats the check on its side: `select`
 refuses an engine that is another account's (`ClaimLost`, reason `refused`, which the lease does not
 retry), and a route that reaches an engine for an account requires that account to hold a claim on
-it (`apps/k7/backend-rs/docs/engine/claim.md`).
+it (`apps/k7-daw-backend/docs/engine/claim.md`).
 
 An unowned engine comes with no relay ticket, so only a direct probe can reach it, and the relay
 strips the token from a `whoami` for an account that may not use the engine. A reply without a
@@ -88,12 +88,12 @@ merely longer.
 An HTTPS page does not open `ws://` to a LAN address. Listing them anyway works — the browser
 discards them — but each discarded attempt counts as **mixed content**, and that is what makes a
 page non-installable. The surfaces menu could then not be added to a home screen, which is the
-device it exists for (`apps/k7/frontend/docs/external.md`).
+device it exists for (`apps/k7-daw-frontend/docs/external.md`).
 
 `candidatesFor` therefore offers loopback — potentially trustworthy by definition, dialable from
 HTTPS — and the relay. LAN addresses stay listed over plain HTTP, where they work. An engine whose
 supervisor holds a tunnel can add a fourth, `rtc:`, a WebRTC data channel straight to its machine
-(`packages/engine-tunnel/docs/rtc.md`); `openSocket` makes it a WebSocket to everything above it, and
+(`apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md`); `openSocket` makes it a WebSocket to everything above it, and
 it is raced like the others rather than preferred. The server answers an offer only for an account
 holding a claim on the engine, so the candidate is offered to a claimant alone: a listing's probe
 offers none, and the probes a page makes for an engine it DRIVES — `wsUrlFor`, on every reconnect —
@@ -114,7 +114,7 @@ thread reads the reply, and a page still mounting easily delays one answer more 
 
 ## Hosted files are opt-in, per app
 
-When the registry's server hosts the workspaces (`apps/k7/backend-rs/docs/files/hub.md`), an app
+When the registry's server hosts the workspaces (`apps/k7-daw-backend/docs/files/hub.md`), an app
 built with `hostedFiles: true` sends every file call there instead of to the engine's machine:
 `fileBase` becomes the hub, and `fileToken` a ticket the hub minted from the session, with the
 chosen engine's id after a `~`. The ticket rides in the header the file service's gate already
@@ -132,7 +132,7 @@ engine a document of its own does not: the server's files would name paths the e
 `watchPluginScan` (`scanWatch.ts`) holds one socket to one engine and hears its `plugin-scan`
 frames: it asks once, then listens to what the engine broadcasts while a scan runs. It sends no
 session and no claim, so the relay passes it as it passes a probe (`plugin-scan` is among the
-probe's verbs and answers, `apps/k7/backend-rs/crates/k7-engine/src/relay/gate/`), and a page that drives nothing
+probe's verbs and answers, `apps/k7-daw-backend/packages/k7-engine/src/relay/gate/`), and a page that drives nothing
 — k7's home page — can say a scan is running without taking the engine from whoever plays on it.
 Its URL is asked on every dial, since a relayed one carries a ticket that ages.
 
@@ -143,8 +143,8 @@ Its URL is asked on every dial, since a relayed one carries a ticket that ages.
   `@studio/engine-protocol/docs/sessions.md`.
 - **The file service**: `fileBase` goes from the probe into `@studio/project-shell/fileApi`, and
   **travels with the address that answered**. A relayed socket beside a direct `http://` rebuilds
-  the mixed-content wall on the other half (`apps/k7/backend-rs/docs/engine/proxy.md`).
+  the mixed-content wall on the other half (`apps/k7-daw-backend/docs/engine/proxy.md`).
 - **`bestEngine`** (`choose.ts`) ranks the trusted candidates by compatibility with the project
   (`compat.ts`), then the engine the account last chose, then the one on THIS machine
   (`onThisMachine`), then the latency class and the performance score. k7 does not use it: its
-  gate takes the engine on this machine and offers no choice (`apps/k7/frontend/docs/shell.md`).
+  gate takes the engine on this machine and offers no choice (`apps/k7-daw-frontend/docs/shell.md`).

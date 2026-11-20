@@ -1,7 +1,7 @@
 // served-render.ts — the serving engine's `render` command against `--render`: the same mix sample for sample,
 // two stems that differ, an mp3 source (the proxy timer), one render at a time, the roots, and the playing
 // stream's realtime ratio and the message thread's pulse while renders run. Starts its own engine, silent.
-//   npx tsx engine/k7-runtime/scripts/served-render.ts        (docs/cliModes.md, "Rendered inside the engine")
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/served-render.ts        (docs/cliModes.md, "Rendered inside the engine")
 
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
@@ -10,9 +10,9 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import WebSocket from "ws";
-import { clipDoc, emptyDoc, pluginDoc, trackDoc } from "../../../packages/engine-protocol/build.ts";
-import type { ProjectDoc } from "../../../packages/engine-protocol/project.ts";
-import { findEngineBinary } from "../../../packages/engine-client/src/engineBinary.ts";
+import { clipDoc, emptyDoc, pluginDoc, trackDoc } from "../../../k7-daw-frontend/packages/engine-protocol/build.ts";
+import type { ProjectDoc } from "../../../k7-daw-frontend/packages/engine-protocol/project.ts";
+import { findEngineBinary } from "../../../k7-daw-frontend/packages/engine-client/src/engineBinary.ts";
 import { readWav, wavFile } from "./wav.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));

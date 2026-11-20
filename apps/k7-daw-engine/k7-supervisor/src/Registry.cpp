@@ -1,5 +1,5 @@
 // Registry.cpp — see Registry.h. The hello's path and answer are REGISTRY_HELLO_PATH and
-// REGISTRY_SERVICE in packages/web-protocol/services.ts.
+// REGISTRY_SERVICE in apps/k7-daw-frontend/packages/web-protocol/services.ts.
 
 #include "Registry.h"
 
@@ -149,7 +149,7 @@ Result heartbeat(const std::vector<std::string>& urls, const EngineIdentity& id,
     nlohmann::json body = presence;
     body["id"] = id.id;
     body["token"] = id.token;
-    // Only to an address `probe` proved is a registry; the registry binds the id to it (apps/k7/backend-rs/docs/engine/token.md).
+    // Only to an address `probe` proved is a registry; the registry binds the id to it (apps/k7-daw-backend/docs/engine/token.md).
     if (!id.tunnelSecret.empty()) body["tunnelSecret"] = id.tunnelSecret;
     return all(urls, "/api/registry/heartbeat", body, cred);
 }

@@ -1,7 +1,7 @@
 # Playlists — a set list and the files it names
 
 The format, and why a playlist lives in the workspace, are in
-[`packages/song/docs/playlists.md`](../../../../packages/song/docs/playlists.md). This page is the
+[`apps/k7-daw-frontend/packages/song/docs/playlists.md`](../packages/song/docs/playlists.md). This page is the
 screen.
 
 ```
@@ -41,7 +41,7 @@ Those buttons are not writes: they go up to `PlaylistEditor` exactly as the sear
 the BUFFER that changes. A panel writing the file while the text half holds an unsaved version of it
 would make two truths of one document. The verbs `playlist song remove` and `playlist song move` do
 write the file: they serve the CLI and the command bar, where no buffer is open
-(`packages/commands/docs/playlist.md`).
+(`apps/k7-daw-frontend/packages/commands/docs/playlist.md`).
 
 A shape the text cannot reorder — an inline `items: [a, b]` — disables the three buttons with the
 reason in a tooltip, rather than reformatting somebody's file.
@@ -53,7 +53,7 @@ autosave, same resolved list. Two components would be two documents to keep in s
 ## Its own panel, not a settings tab, not a pane
 
 This shell's panes are the **open song** — editor, timeline, graph, viewport — and what they draw is
-what the project DECLARES (`docs/shell.md`, `packages/song/docs/surfaces.md`). A playlist is
+what the project DECLARES (`docs/shell.md`, `apps/k7-daw-frontend/packages/song/docs/surfaces.md`). A playlist is
 declared by no project and belongs to none: it is at the root of the workspace and it is the same
 whichever song you are working on. So it is not a pane, even now that it has a column — and it is
 not in the URL either.
@@ -132,7 +132,7 @@ what is shown is behind the text.
 There is no Save button: the file is written as soon as the buffer **reads as a playlist**. A
 half-typed line elsewhere in the file therefore holds the addition back too — that is the point, the
 file is written whole or not at all. See
-[autosave.md](../../../../packages/ui-editor/docs/autosave.md).
+[autosave.md](../packages/ui-editor/docs/autosave.md).
 
 ## Where a line meets the files
 
@@ -167,7 +167,7 @@ A record arrives in the workspace the way any file does, in the file tree; this 
 The second button, and the only one that costs hours. Each record is split into drums / bass /
 other / vocals into the `stems/` folder beside it, so that one can be **removed** on the desk
 during the set
-([../../../../packages/k7-plugins/docs/turntables/stems.md](../../../../packages/k7-plugins/docs/turntables/stems.md)).
+([../packages/k7-plugins/docs/turntables/stems.md](../packages/k7-plugins/docs/turntables/stems.md)).
 
 It is here and not on the desk because it is a question of **set list** and not of record: the
 desk never separates, this screen prepares the twelve you are going to drop. The button opens a
@@ -208,7 +208,7 @@ typo would be a playlist you cannot listen to while you fix it. The row says wha
 not stop the evening.
 
 A row is also **draggable** onto a deck of an open `turntables` surface: what travels is the
-record's path, under our own MIME type (`packages/k7-plugins/docs/turntables/setList.md`).
+record's path, under our own MIME type (`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/setList.md`).
 
 ## What a playlist is for, once written
 
@@ -229,4 +229,4 @@ Two consequences, and the second is the one that matters:
   ahead of the set, because the engine opens file paths and the venue has no wifi.
 
 That is also what gives this screen its stakes: the playlist filled in here is the one that gets
-played. See `../../../../packages/k7-plugins/docs/turntables/setList.md`.
+played. See `../packages/k7-plugins/docs/turntables/setList.md`.

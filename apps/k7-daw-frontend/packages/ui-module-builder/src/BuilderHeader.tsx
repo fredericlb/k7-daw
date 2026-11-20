@@ -38,7 +38,7 @@ import {
 import type { AutosaveStatus, loudest } from "@studio/ui-editor/autosave";
 import type { PresetInfo } from "@studio/web-protocol";
 
-/** What each `status:` is CALLED on screen — a label, not a second spelling; packages/song/docs/moduleStatus.md. */
+/** What each `status:` is CALLED on screen — a label, not a second spelling; apps/k7-daw-frontend/packages/song/docs/moduleStatus.md. */
 const STATUS_LABEL: Record<ModuleStatus, string> = {
   listed: "listed",
   favorite: "first",
@@ -122,7 +122,7 @@ export function BuilderHeader({
         </div>
       </div>
       <div className="ml-auto flex items-center gap-2">
-        {/* The plugin's FACTORY presets; a node's own are the graph's dropdown — packages/song/docs/userPresets.md. */}
+        {/* The plugin's FACTORY presets; a node's own are the graph's dropdown — apps/k7-daw-frontend/packages/song/docs/userPresets.md. */}
         {presets.length > 0 && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

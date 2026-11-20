@@ -1,8 +1,8 @@
 # The four stems, and what a set calls them
 
-The rationale behind `packages/song-schema/src/stems.ts`. How a separation is RUN is
-`engine/k7-supervisor/docs/stemSplit.md`; what the desk draws is
-`packages/k7-plugins/docs/turntables/stems.md`.
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/stems.ts`. How a separation is RUN is
+`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`; what the desk draws is
+`apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md`.
 
 ## The order is the knowledge
 
@@ -25,7 +25,7 @@ through a graph.
 ## The names a SET uses
 
 A deck that can fade one instrument out is five lanes, not one: there is no fan-out in the document
-and no plugin with four inputs (`packages/song/docs/ports.md`), so a stem you can move on its own has
+and no plugin with four inputs (`apps/k7-daw-frontend/packages/song/docs/ports.md`), so a stem you can move on its own has
 to be a track of its own. `stemLane`, `stemPlatter` and `stemControl` are the vocabulary, and they
 are here rather than in `scaffoldSet` because the desk has to recognise the lanes the scaffold wrote
 — and a browser package cannot import a scaffold that writes files.
@@ -125,7 +125,7 @@ would be two linear gains in series, and eight compiled DSP graphs per set for n
 - **They sum BEFORE the EQ**, because a deck's strip equalises what it sends to the fader, not each
   instrument apart.
 - **A new record resets the four gains.** `deckFile` is part of a plugin's identity
-  (`engine/k7-runtime/docs/projectDiff.md`), so putting a song on re-creates the platter and its `Gain`
+  (`apps/k7-daw-engine/k7-runtime/docs/projectDiff.md`), so putting a song on re-creates the platter and its `Gain`
   goes back to the declared 1. The desk clears its own knobs in `putOn` to match — without that it
   would draw a cut that is not applied, and nothing would say so.
 - **The test that decides**: all four at unity, render, compare with the record — it must stay about

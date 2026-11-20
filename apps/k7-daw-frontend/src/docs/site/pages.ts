@@ -3,7 +3,7 @@
 // its folder (`user/00-index.md` → `/user`). Pages keep linking each other with relative `.md` links, so
 // they read the same on GitHub; `resolveLink` is what turns those into routes (../../../docs/docsSite.md).
 
-const FILES = import.meta.glob("../../../../../../docs-site/**/*.md", {
+const FILES = import.meta.glob("../../../../../docs-site/**/*.md", {
   query: "?raw",
   import: "default",
   eager: true,

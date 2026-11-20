@@ -30,7 +30,7 @@ async fn front(tag: &str) -> Front {
         ),
     ]);
     let engine = a.engine.clone().unwrap();
-    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../../..");
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     engine.hold_jobs(&env, &root);
     let account = k7_hub::account::Account {
         user: "a@b.c".into(),

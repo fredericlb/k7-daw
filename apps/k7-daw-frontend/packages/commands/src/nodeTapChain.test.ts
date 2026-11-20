@@ -1,5 +1,5 @@
 // `node tap chain add|remove|move` — a tap's own chain edited from the tap: the first module makes the subchain and
-// routes the tap, the last one removed takes both away, and the compiled song follows (packages/song/docs/racks.md).
+// routes the tap, the last one removed takes both away, and the compiled song follows (apps/k7-daw-frontend/packages/song/docs/racks.md).
 
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

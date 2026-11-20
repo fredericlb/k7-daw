@@ -66,4 +66,4 @@ Moving the box itself is animating the LANE, which this format does not yet expr
 An activation can animate as well, and on a lane of shapes that moves every shape it draws.
 
 `picture key` and `picture unkey` set and remove one key at a TIMELINE time, so a key goes where
-the playhead is. The file stores it from the shot's start (`packages/commands/src/verbs/pictureKeys.ts`).
+the playhead is. The file stores it from the shot's start (`apps/k7-daw-frontend/packages/commands/src/verbs/pictureKeys.ts`).

@@ -5,11 +5,11 @@ and each is a separate package so that a lower layer never drags in a higher one
 
 | Layer | Where | Role |
 |---|---|---|
-| Wire types | `packages/graph-model` | `WebGraph` and its parts, as the browser receives them. Types only, plus the few values both ends must agree on. |
-| Compile | `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/docs.rs` (route `GET /graph`, `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/routes.rs`) | Reads the project folder through `@studio/song` and answers a `WebGraph`. |
-| Layout | `packages/ui-chains` | Pure TypeScript: `WebGraph` to positioned nodes and edges, via dagre. No React, no DOM. |
-| Rendering | `packages/ui-chains-react` | `DomChains`: HTML cards over a canvas of cables, with an SVG layer for labels and hit paths. |
-| Host | `apps/k7/frontend/src/components/ChainsTab.tsx` and siblings | Fetches the graph, runs the layout, mounts `DomChains`, turns gestures into commands. |
+| Wire types | `apps/k7-daw-frontend/packages/graph-model` | `WebGraph` and its parts, as the browser receives them. Types only, plus the few values both ends must agree on. |
+| Compile | `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/docs.rs` (route `GET /graph`, `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/routes.rs`) | Reads the project folder through `@studio/song` and answers a `WebGraph`. |
+| Layout | `apps/k7-daw-frontend/packages/ui-chains` | Pure TypeScript: `WebGraph` to positioned nodes and edges, via dagre. No React, no DOM. |
+| Rendering | `apps/k7-daw-frontend/packages/ui-chains-react` | `DomChains`: HTML cards over a canvas of cables, with an SVG layer for labels and hit paths. |
+| Host | `apps/k7-daw-frontend/src/components/ChainsTab.tsx` and siblings | Fetches the graph, runs the layout, mounts `DomChains`, turns gestures into commands. |
 
 ## Data flow
 
@@ -29,7 +29,7 @@ DomChains  ── gestures ──► callbacks ──► command lines ──►
 ```
 
 `GET /graph` takes `?at=<rel>` to compile a folder other than the open project; the Libraries
-tab's chain editor (`apps/k7/frontend/src/components/ChainsBuilder.tsx`) uses it to draw a library
+tab's chain editor (`apps/k7-daw-frontend/src/components/ChainsBuilder.tsx`) uses it to draw a library
 chain with the same pipeline.
 
 Live values do not travel through `WebGraph`. Plugin parameter values come from
@@ -45,9 +45,9 @@ store; `DomChains` subscribes per widget, so a parameter frame re-renders a knob
   `onMoveNode(module, x, y)`...). The host turns it into a line of the command catalogue
   (`graph chain connect`, `graph move`...) and sends it to the file service. The graph on screen
   is then re-read. There is no second write path, so the command bar, the context menu and a
-  gesture cannot disagree. The verbs live in `packages/commands`; see the commands section of the
+  gesture cannot disagree. The verbs live in `apps/k7-daw-frontend/packages/commands`; see the commands section of the
   developer guide.
-- **The renderer is a library with several hosts.** In `apps/k7/frontend/src/components`:
+- **The renderer is a library with several hosts.** In `apps/k7-daw-frontend/src/components`:
   `ChainsTab.tsx` (the full pane), `GraphPanel.tsx` (one lane's path in the bottom panel),
   `TrackModulesPane.tsx` (one lane's modules side by side), `ChainsBuilder.tsx` (library chains),
   and the module builder's preview through `@studio/ui-chains-react/module-preview`. Every
@@ -81,21 +81,21 @@ which assembly boxes are open, and the pending bypasses. `App.tsx` provides the 
 | Card dropped after a header drag | `onMoveNode` | `graph move <module> <x> <y>` |
 | Minimap Organize | `onOrganize` | `graph organize` |
 
-The line builders are in `apps/k7/frontend/src/nodeInsert.ts`; the placeholder card drawn while
-the commands run is `apps/k7/frontend/src/pendingNode.ts`. The module picker is
-`apps/k7/frontend/src/components/ModulePicker.tsx`; it falls back to pre-writing the command in
+The line builders are in `apps/k7-daw-frontend/src/nodeInsert.ts`; the placeholder card drawn while
+the commands run is `apps/k7-daw-frontend/src/pendingNode.ts`. The module picker is
+`apps/k7-daw-frontend/src/components/ModulePicker.tsx`; it falls back to pre-writing the command in
 the bar when the catalogue (`GET /module-catalogue`) has not answered.
 
-Right-click menus are derived from the catalogue: `apps/k7/frontend/src/contextMenu.ts` maps the
+Right-click menus are derived from the catalogue: `apps/k7-daw-frontend/src/contextMenu.ts` maps the
 `GraphMenuCtx` the renderer reports to every command whose `menu:` lists that entity (`node`,
 `param`, `tap`, `assembly`, `curve`...).
 
 ## Tests
 
-- `packages/ui-chains`: `npm test -w @studio/ui-chains` (vitest). `graph.test.ts` covers the build
+- `apps/k7-daw-frontend/packages/ui-chains`: `npm test -w @studio/ui-chains` (vitest). `graph.test.ts` covers the build
   and the layout; most modules have a sibling test. `npm run bench -w @studio/ui-chains` runs
   `graph.bench.ts`.
-- `packages/ui-chains-react`: `npm test -w @studio/ui-chains-react` covers the pure helpers
+- `apps/k7-daw-frontend/packages/ui-chains-react`: `npm test -w @studio/ui-chains-react` covers the pure helpers
   (camera, minimap, node motion, module fields). `DomChains.stories.tsx` renders the component in
   Storybook (`npm run storybook` at the root).
 - The k7 frontend's tests cover pure logic (`nodeInsert`, `contextMenu`, `ModulePicker`); nothing

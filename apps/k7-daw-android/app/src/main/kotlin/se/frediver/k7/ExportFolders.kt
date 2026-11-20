@@ -2,7 +2,7 @@
 // document-tree picker (ACTION_OPEN_DOCUMENT_TREE), kept as a persisted grant, then each file created in it through
 // DocumentsContract. The page sends the bytes in chunks over StudioBridge; the front never sees the folder.
 // The thing a reader would get wrong: the folder is a content URI, not a path, so only this app can write it.
-// See docs/android.md and apps/k7/frontend/docs/export.md.
+// See docs/android.md and apps/k7-daw-frontend/docs/export.md.
 
 package se.frediver.k7
 

@@ -34,10 +34,10 @@ because a grid that kept its first read would write that stale snapshot back ove
 cell edit. Never under a hand, though: not while a write is in flight, and not within a second of
 an edit. And its writes go one at a time, since two whole-file writes in flight can land the older
 one last. The clip pane's piano roll is a different roll — React, over the document, not the
-file: see `apps/k7/frontend/docs/clipEditors.md`.
+file: see `apps/k7-daw-frontend/docs/clipEditors.md`.
 
 The fullscreen editor pane has neither, on purpose: it is the text editor, and a grid
-wants the room the main view has. See `apps/k7/frontend/docs/shell.md`.
+wants the room the main view has. See `apps/k7-daw-frontend/docs/shell.md`.
 
 ## `RollGrid.ts` — the piano roll
 
@@ -84,7 +84,7 @@ Three things about how it gets there:
 ## A pad's effects survive a grid edit
 
 `notes.ts`'s own `Note` is `{ t, d, k, v? }`. A sequence's schema has two fields more —
-`repeat` and `skip`, a pad's effects (`packages/song/docs/padEffects.md`) — and since these
+`repeat` and `skip`, a pad's effects (`apps/k7-daw-frontend/packages/song/docs/padEffects.md`) — and since these
 grids call back with the WHOLE list, a write that took the list as given would strip them from
 every pad on the first click.
 

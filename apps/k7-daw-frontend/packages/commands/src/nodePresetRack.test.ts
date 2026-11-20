@@ -1,6 +1,6 @@
 // `node preset` on a RACK: a kit kept as a preset and loaded onto another kit node, refused when a
 // pad plays a sound only one project has. Through the dispatcher and asserting the files, for the
-// reason bypass.test.ts gives. See packages/song/docs/userPresets.md.
+// reason bypass.test.ts gives. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
 import {
   existsSync,

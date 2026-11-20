@@ -1,8 +1,8 @@
 // StudioBridge.swift — what k7's page in AppViews' view may ask of this app, over one script message handler
 // that `window.k7Ios` wraps in the protocol Android's `k7Android` speaks: the page reports its top colour, who
 // is signed in, what it plays and what keeps it busy, and reaches the engine
-// (apps/k7/frontend/src/settings/androidEngine.ts) and the folder its exports go to (ExportFolders.swift). The handler is offered to every origin, so each message is
-// checked for k7's own instead. See engine/k7-runtime/docs/ios.md.
+// (apps/k7-daw-frontend/src/settings/androidEngine.ts) and the folder its exports go to (ExportFolders.swift). The handler is offered to every origin, so each message is
+// checked for k7's own instead. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import UIKit
 import UniformTypeIdentifiers
@@ -189,7 +189,7 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
         NSError(domain: "k7", code: 4, userInfo: [NSLocalizedDescriptionKey: why])
     }
 
-    /// The commands the tray's pages may send too (apps/k7/backend-rs/crates/k7-front/src/routes/local/routes.rs).
+    /// The commands the tray's pages may send too (apps/k7-daw-backend/packages/k7-front/src/routes/local/routes.rs).
     private static let allowed: Set<String> = [
         "engine.start", "engine.stop", "engine.restart", "audio.priority", "lan.open",
         "plugins.rescan", "instruments.download", "instruments.remove",

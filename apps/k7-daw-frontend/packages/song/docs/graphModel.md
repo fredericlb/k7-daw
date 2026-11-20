@@ -65,7 +65,7 @@ the graph needs the folder itself to pick an icon.
 `base` and `shader` are FIELDS rather than params for the same reason: a preset is loaded when
 the plugin is BUILT and the params above are applied over it, and a shader field picks which
 program is compiled while its knobs steer it. See `userPresets.md` and
-`packages/song-video/docs/shaders.md`.
+`apps/k7-daw-frontend/packages/song-video/docs/shaders.md`.
 
 `rack` is resolved here beside `ui` and `cc` because it is the same kind of fact — what the
 module IS, rather than how it is wired — and a surface drawing a pad per sound should not have to
@@ -181,7 +181,7 @@ engine's model needs a strip. `inputChains` in `compile/ownership.ts` is the who
 arm added to `ownerOf` beside `busChains`.
 
 So `validate()` does not demand a lane. What it checks is a lane that IS named and is disabled or
-absent. See packages/song/docs/liveProject.md.
+absent. See apps/k7-daw-frontend/packages/song/docs/liveProject.md.
 
 An input is therefore wired by the RUN it sits in, which is why `validate()` walks the chains
 rather than the modules for this. `channel` anywhere else is silently ignored, which looks like it
@@ -253,7 +253,7 @@ packaged file service bundles this one as a library.
 
 ## Compiling a placement into a clip
 
-`placementId` and its inverse live in `packages/song-schema/src/placementId.ts` — two lines of rule
+`placementId` and its inverse live in `apps/k7-daw-frontend/packages/song-schema/src/placementId.ts` — two lines of rule
 with no imports, so the BROWSER can hold them too (the context menu hands the editor a placement
 id). `nodeProject.ts`
 re-exports them because that is where every existing importer looks, and IMPORTS them as well:
@@ -293,7 +293,7 @@ clip's end at the window regardless. Repeating is the one case the engine cannot
 it has no count, so a loop needs a `to` — the clip's or the event's own, since the window is the
 two intersected; the compiler refuses a looped audio clip with neither rather than play the first
 pass and drop the rest. The clip panels' loop switch writes the event's `to` itself when neither
-states one (`packages/song-edit/docs/eventLoop.md`).
+states one (`apps/k7-daw-frontend/packages/song-edit/docs/eventLoop.md`).
 
 A sequence's `from`/`to` are POSITIONS in the notes, read like the `start:` on the placement.
 Unwritten, the window is everything the notes cover, rounded UP TO THE BAR — not the bare extent,
@@ -317,7 +317,7 @@ parser does not already bound (64 copies of a `repeat`, 1,024 nodes, 64 nested c
 A broken DSP is neither fatal nor silent. One broken effect must not take a song down, and it must
 not sound like a working one either. A `dsp.k7x` that does not decode (a syntax error, a name that names
 nothing, a missing file) keeps its node, and the compile sends a graph with no node, which both hosts
-pass through (`src/compile/jsDspGraph.ts`, `packages/song/rust/src/jsdsp`). It never sends NO graph: a host given
+pass through (`src/compile/jsDspGraph.ts`, `apps/k7-daw-wasm/song/src/jsdsp`). It never sends NO graph: a host given
 none plays its built-in default (an auto-wah, a zero transposition), something nobody wrote, with nothing to
 tell it from a working module. The node stays rather than being dropped, so its panel and its automations keep
 their target.

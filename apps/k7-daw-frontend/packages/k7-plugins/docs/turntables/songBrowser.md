@@ -12,7 +12,7 @@ files when the set holds twelve is searching the wrong list.
 
 That is a parameter of `surfaces/<desk>.k7x` — `playlist: ete-2026`, a name under `_playlists/`
 in the workspace — and the playlists themselves are written in k7, in the playlist pane. See
-[setList.md](setList.md) for the why, and `packages/song/docs/playlists.md` for the format.
+[setList.md](setList.md) for the why, and `apps/k7-daw-frontend/packages/song/docs/playlists.md` for the format.
 
 The desk does not write them: from here you **load** a record, you do not build the setlist. The
 two gestures happen at different moments — one at home, one in the booth — and an "add" button

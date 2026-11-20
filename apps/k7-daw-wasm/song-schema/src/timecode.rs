@@ -1,4 +1,4 @@
-// timecode.rs — "bar:beat:eighth:sixteenth.ticks" timecodes <-> beats (quarter notes), after ../../src/timecode.ts.
+// timecode.rs — "bar:beat:eighth:sixteenth.ticks" timecodes <-> beats (quarter notes), after ../../../k7-daw-frontend/packages/song-schema/src/timecode.ts.
 // A reader would get wrong that the JS quirks are kept on purpose: trim strips U+FEFF, `\d` is ASCII, a field is an f64.
 // The event-start helpers (startBeats, startAs…) stay in TypeScript until the verbs move.
 

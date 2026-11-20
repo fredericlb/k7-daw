@@ -30,7 +30,7 @@ const BOOT_MS = 180_000;
 /** The app's engine port in a test run: 8765 is the user's own engine, and the simulator shares the Mac's loopback. */
 const ENGINE_PORT = 18765;
 
-/** `E2E_IOS_ATTACH=1`: the app is already running on a phone behind a USB port forward (engine/k7-ios/scripts/device.sh). */
+/** `E2E_IOS_ATTACH=1`: the app is already running on a phone behind a USB port forward (apps/k7-daw-ios/scripts/device.sh). */
 const ATTACH = process.env.E2E_IOS_ATTACH === "1";
 
 const DERIVED = join(homedir(), ".cache", "k7-ios-dd");

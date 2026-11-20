@@ -1,6 +1,6 @@
 [package]
 name = "k7-js"
-description = "JavaScript's number formats where a file holds them, reproduced natively (apps/k7/backend-rs/docs/parity.md)."
+description = "JavaScript's number formats where a file holds them, reproduced natively (apps/k7-daw-backend/docs/parity.md)."
 version.workspace = true
 edition.workspace = true
 publish.workspace = true

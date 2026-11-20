@@ -24,7 +24,7 @@ export const ClipContent = memo(function ClipContent({
   spanBeats: number;
   // Tempo and time signature decide how much of the source the region shows, so they are part of the envelope's identity.
   project: EnvelopeProject;
-  // A frozen lane's authored clips, whose notes are drawn over the render they became (packages/song/docs/freeze.md).
+  // A frozen lane's authored clips, whose notes are drawn over the render they became (apps/k7-daw-frontend/packages/song/docs/freeze.md).
   overlay?: WebClip[];
 }) {
   if (overlay?.length && clip.type === "audio")

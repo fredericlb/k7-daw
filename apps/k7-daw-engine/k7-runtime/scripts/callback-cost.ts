@@ -1,5 +1,5 @@
 // callback-cost.ts — what the AUDIO CALLBACK costs, at rest and under a driven scratch.
-//   npx tsx engine/k7-runtime/scripts/callback-cost.ts [setsPerSecond] [seconds]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/callback-cost.ts [setsPerSecond] [seconds]
 // Needs the engine's `audio-cost` verb and a session with PLATTERS loaded: it drives Rate on
 // deck A's four, the way a hand would, and reads Tracktion's own per-block measurement either
 // side. The max is the column that matters — the block that came closest to the deadline.
@@ -9,7 +9,7 @@
 // the names belong to `@studio/song-schema/stems`, which the desk and the scaffold both read. It
 // used to spell `stemDrumsA:platter` by hand, and when the rename landed it went on measuring —
 // driving four addresses the engine did not have, reporting a scratch that never happened.
-// See ../../../docs/platter-node-plan.md.
+// See ../../../../docs/platter-node-plan.md.
 
 import { STEMS, stemLane, stemPlatter } from "@studio/song-schema/stems";
 import WebSocket from "ws";
@@ -116,7 +116,7 @@ ws.on("open", async () => {
       "    inconnue est jeté sans erreur, et la mesure ressemble alors à une bonne nouvelle.",
     );
     console.log(
-      `  Vérifiez avec : npx tsx engine/k7-runtime/scripts/list-sessions.ts 8765 --peek`,
+      `  Vérifiez avec : npx tsx apps/k7-daw-engine/k7-runtime/scripts/list-sessions.ts 8765 --peek`,
     );
   }
 

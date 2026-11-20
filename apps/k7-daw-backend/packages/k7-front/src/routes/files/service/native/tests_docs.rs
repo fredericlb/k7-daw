@@ -30,7 +30,7 @@ pub(super) const ROUTES: [(H, Tag); 9] = [
 ];
 
 pub(super) fn code_root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../../..")
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..")
 }
 
 pub(super) fn env_of(dir: &Path) -> BTreeMap<String, String> {

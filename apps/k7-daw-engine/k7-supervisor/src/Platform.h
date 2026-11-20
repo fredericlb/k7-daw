@@ -1,6 +1,6 @@
 // Platform.h — the two phone platforms named once. On both the engine is a library inside the app's
 // process rather than a program this supervisor spawns; on iOS no program of the app's own may run
-// at all, so the supervisor itself is a library there too (engine/k7-runtime/docs/ios.md).
+// at all, so the supervisor itself is a library there too (apps/k7-daw-engine/k7-runtime/docs/ios.md).
 
 #pragma once
 

@@ -12,7 +12,7 @@ export const HARD_LIMIT_BYTES = 64 * 1024 * 1024;
 /** The close code an overrun peer gets — 1013, "try again later". */
 export const OVERLOAD_CLOSE = 1013;
 
-/** The engine's text pushes that a newer one of the same kind replaces (engine/k7-runtime/docs/protocol.md). */
+/** The engine's text pushes that a newer one of the same kind replaces (apps/k7-daw-engine/k7-runtime/docs/protocol.md). */
 export const DROPPABLE_TYPES: ReadonlySet<string> = new Set([
   "state",
   "io-levels",

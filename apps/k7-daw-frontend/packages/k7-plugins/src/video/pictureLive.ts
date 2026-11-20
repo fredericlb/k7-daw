@@ -1,7 +1,7 @@
 // pictureLive.ts — an edit of the picture made by hand, handed to every viewport drawn on this page at
 // once, so the picture moves with the hand: a shader knob turned on a card, a lane dragged on the frame.
 // ONE channel for the page, like midiActivity: the hand and the viewport sit in panes that share no
-// props. The file is still what decides, read back after the write (packages/song/docs/videoMixer.md).
+// props. The file is still what decides, read back after the write (apps/k7-daw-frontend/packages/song/docs/videoMixer.md).
 
 type Rect = { x: number; y: number; w: number; h: number };
 

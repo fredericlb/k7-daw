@@ -17,7 +17,7 @@ starts from this page and reads nothing else it was not pointed at.
 
 - **Read-only.** It edits no tracked file and commits nothing. It works in a detached worktree of its own,
   at the commit under review.
-- **Builds with `--target-dir $HOME/.cache/k7-<worktree name>` before any `--`**, after `eval "$(node engine/scripts/sccache.mjs agent --export)"`:
+- **Builds with `--target-dir $HOME/.cache/k7-<worktree name>` before any `--`**, after `eval "$(node apps/k7-daw-engine/scripts/sccache.mjs agent --export)"`:
   `cargo test --target-dir … -p <crate> -- <filter>`, never `cargo test -p <crate> -- --target-dir …`, which builds in the tree.
 - **Checks the claims, never trusts them.** Each number the builder reported is reproduced; each "fails without" is seen by
   reverting the fix alone in the working tree (restoring it with a touch, not a copy) and running the test failing; a

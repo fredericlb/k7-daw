@@ -168,7 +168,7 @@ No new route, and the same road the chains builder takes.
 
 A promotion lives on the **template**, so two turntables cannot drift apart. A save writes into a
 library, which only an admin may do and only their push publishes, so it is a button and never a
-timer — the rule a shared module already follows (`apps/k7/frontend/docs/sharedModules.md`).
+timer — the rule a shared module already follows (`apps/k7-daw-frontend/docs/sharedModules.md`).
 
 ## Not covered
 
@@ -189,14 +189,14 @@ the cards keep their spacing.
 None of it is written down, and that is what gives the position back: closing the box stops the
 push. The one way to break that is to record a shoved position, so a moved card carries `pushed` —
 where it belongs — and k7's session memory and its auto-pin both read that instead of where the
-card is drawn. See `packages/ui-chains/docs/graphBuild.md`.
+card is drawn. See `apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md`.
 
 ## Its own cables, and the traffic crossing it
 
 With a box open, a cable whose **both ends** are members is drawn at full strength; every other one
 — the feeds in, the ways out, and anything that merely spans the frame — is drawn at half. Nothing
 fades while every box is shut. They are not clipped: a crossing cable runs right over the box and
-stays followable end to end. See `packages/ui-chains/docs/graphBuild.md`.
+stays followable end to end. See `apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md`.
 
 ## Two things a box has to keep working
 
@@ -207,4 +207,4 @@ and the lanes, or it refuses the very thing the drag just addressed.
 
 **Its cables come alive.** Liveness walks forward from the metered lanes' own cards, and a closed
 box has swallowed them — so a folded set rippled nowhere until the box learned to say which lanes
-it holds. See `packages/ui-chains/docs/graphBuild.md`.
+it holds. See `apps/k7-daw-frontend/packages/ui-chains/docs/graphBuild.md`.

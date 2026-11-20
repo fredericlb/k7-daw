@@ -2,7 +2,7 @@
 //
 // Both take a node that EXISTS — one drops it in the graph wired to NOTHING, the other splices
 // it into an arrow — and neither creates anything: creating is `module new`'s
-// (packages/song/docs/nodes.md), so the picker writes two lines and these are the second.
+// (apps/k7-daw-frontend/packages/song/docs/nodes.md), so the picker writes two lines and these are the second.
 //
 // The failure worth guarding against is still the quiet one: naming in graph.k7x something
 // that has no file, which is exactly what the compiler refuses to load.
@@ -163,7 +163,7 @@ describe("node insert", () => {
   });
 });
 
-// The master run is the arrow `MIX: [ OUT ]` — packages/song/docs/masterChain.md, and the `+` on it.
+// The master run is the arrow `MIX: [ OUT ]` — apps/k7-daw-frontend/packages/song/docs/masterChain.md, and the `+` on it.
 describe("node insert, onto the master run", () => {
   it("splices into the empty run every template writes", async () => {
     writeGraph({ modules: { gtr: ["MIX"], MIX: ["OUT"] } });

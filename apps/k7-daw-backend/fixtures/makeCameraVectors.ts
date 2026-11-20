@@ -1,5 +1,5 @@
 // makeCameraVectors.ts — writes camera-vectors.json from the TypeScript helpers the browser runs; `ice` is kept as committed.
-// Run with `npx tsx apps/k7/backend-rs/fixtures/makeCameraVectors.ts`; both sides' tests then check it (apps/k7/backend-rs/docs/routes.md).
+// Run with `npx tsx apps/k7-daw-backend/fixtures/makeCameraVectors.ts`; both sides' tests then check it (apps/k7-daw-backend/docs/routes.md).
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {

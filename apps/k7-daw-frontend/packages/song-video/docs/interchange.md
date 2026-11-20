@@ -2,8 +2,8 @@
 
 `picture interchange otio` says every picture lane as an OpenTimelineIO timeline;
 `picture interchange edl [lane]` says one lane as a CMX 3600 EDL. The cut is the verb's first output line
-and the verb writes no file (`packages/commands/src/verbs/pictureInterchange.ts`); `project export timeline`
-saves it in the folder the person chooses (`apps/k7/frontend/docs/export.md`). The writers are `src/interchange/`.
+and the verb writes no file (`apps/k7-daw-frontend/packages/commands/src/verbs/pictureInterchange.ts`); `project export timeline`
+saves it in the folder the person chooses (`apps/k7-daw-frontend/docs/export.md`). The writers are `src/interchange/`.
 
 ## OpenTimelineIO first, an EDL beside it, and no FCPXML writer
 
@@ -45,7 +45,7 @@ measured.
 writes each video track as a NEW picture lane (`import-1`, `import-2`… bottom first), on top of
 whatever the song already has. It never rewrites a lane the song already has: a cut from
 elsewhere is something to compare and take from, not a replacement for the one here
-(`packages/commands/src/verbs/pictureImport.ts`, readers in `src/interchange/fromOtio.ts` and
+(`apps/k7-daw-frontend/packages/commands/src/verbs/pictureImport.ts`, readers in `src/interchange/fromOtio.ts` and
 `fromEdl.ts`).
 
 **A transition is turned into this app's.** Another editor's dissolve straddles its cut, half

@@ -1,13 +1,13 @@
 // stage.mjs — lay out src-tauri/resources for `tauri build` (and `tauri dev`): the front's bundle (the built page and
 // the library it seeds), standalone.json, the code root, the engine and the supervisor.
-// The engine comes from the repo's builds, or `$STUDIO_PREBUILT_BIN` in CI (engine/scripts/docs/buildEngine.md).
+// The engine comes from the repo's builds, or `$STUDIO_PREBUILT_BIN` in CI (apps/k7-daw-engine/scripts/docs/buildEngine.md).
 
 import { copyFileSync, mkdirSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { run } from "../../../engine/scripts/buildTools.mjs";
-import { stageEngine } from "../../../engine/scripts/stageEngine.mjs";
-import { stageCodeRoot } from "../../k7/backend-rs/scripts/stageCodeRoot.mjs";
+import { stageCodeRoot } from "../../k7-daw-backend/scripts/stageCodeRoot.mjs";
+import { run } from "../../k7-daw-engine/scripts/buildTools.mjs";
+import { stageEngine } from "../../k7-daw-engine/scripts/stageEngine.mjs";
 import { signStaged } from "./macSign.mjs";
 
 const app = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -24,13 +24,13 @@ console.log("· page and library");
 run(
   "node",
   [
-    join(repo, "apps", "k7", "backend-rs", "scripts", "stageBundle.mjs"),
+    join(repo, "apps", "k7-daw-backend", "scripts", "stageBundle.mjs"),
     join(out, "backend"),
   ],
   repo,
 );
 copyFileSync(
-  join(repo, "apps", "k7", "backend-rs", "standalone.json"),
+  join(repo, "apps", "k7-daw-backend", "standalone.json"),
   join(out, "standalone.json"),
 );
 

@@ -10,7 +10,7 @@ report a debt. Each guards a property the ordinary tooling has no opinion about.
 | `scripts/check-cargo-locks.mjs` | `lint:locks` | yes | a Rust workspace's `Cargo.lock` that no longer pins its manifests |
 | `scripts/lint-rustfmt.sh` | `lint:rustfmt`, in `ci:local` | yes | a Rust workspace not as `cargo fmt --all` prints it; `gate.sh` checks only a branch's changed files, so the rest drifted unseen until a branch touching one file had to reformat it whole |
 | `scripts/agent/generated-check.mjs` | `lint:generated`; `gate.sh`, when a source of a generated file changed | yes | a WebAssembly module (`k7Wasm.generated.ts`, `waveform.wasm`), or the song crate's `types_generated.rs` not what its sources build (the tables are written first, since the wasm compiles them); it names the file and `npm run rebuild:generated` |
-| `scripts/check-vectors.sh` | `ci:local` | yes | the k7x editor's committed vectors differing from what `packages/k7x/scripts/makeEditVectors.mts` writes, a corpus file edited under `demos/` or `k7-core/` included; it then replays the file service's frozen `tests/vectors/` (`k7-file-service`'s `vectors` and `rig::` tests: no generator) and `song-edit`'s frozen vectors and goldens through the crate and the WebAssembly module (`npm run test:edit-replay -w @studio/k7-wasm`); it names the files and restores them with `git checkout HEAD -- <files>`, so it refuses to run while a merge is in progress, whose staged vectors that restore would discard |
+| `scripts/check-vectors.sh` | `ci:local` | yes | the k7x editor's committed vectors differing from what `apps/k7-daw-frontend/packages/k7x/scripts/makeEditVectors.mts` writes, a corpus file edited under `demos/` or `k7-core/` included; it then replays the file service's frozen `tests/vectors/` (`k7-file-service`'s `vectors` and `rig::` tests: no generator) and `song-edit`'s frozen vectors and goldens through the crate and the WebAssembly module (`npm run test:edit-replay -w @studio/k7-wasm`); it names the files and restores them with `git checkout HEAD -- <files>`, so it refuses to run while a merge is in progress, whose staged vectors that restore would discard |
 | `scripts/check-comments.mjs` | `lint:comments` | no | long headers, multi-line body comments, French where English is expected |
 | knip | `lint:dead` | no | dead and duplicated code on the audio axis |
 
@@ -21,9 +21,9 @@ whole, so such a file stops existing for every sweep anyone runs afterwards.
 
 ## `lint:locks` — the desktop app's lock behind the backend's manifests
 
-The desktop app (`apps/k7-desktop/src-tauri`) links the backend's crates by path, so it is a second Rust
+The desktop app (`apps/k7-daw-desktop/src-tauri`) links the backend's crates by path, so it is a second Rust
 workspace with its own `Cargo.lock` over the same dependencies. A crate added to
-`apps/k7/backend-rs` updates that workspace's lock, which every build there writes, and leaves the
+`apps/k7-daw-backend` updates that workspace's lock, which every build there writes, and leaves the
 desktop app's behind: the desktop app's next build resolves the new crate afresh, so a release ships versions no lock
 chose, and the Windows checkout is left with a `Cargo.lock` nobody committed. `cargo metadata --locked`
 resolves without compiling, so it needs neither tauri's system libraries nor a build: `check:changed` runs
@@ -35,9 +35,9 @@ whatever depends on it. An entry carries `enabled`, so a list can name a crate b
 flips it by changing one constant, and `scripts/check-cargo-locks.test.mjs` proves an enabled entry refuses a
 lock that pins it (`scripts/fixtures/locks/`). `ci:local` runs it beside `lint:docs`.
 
-The browser's crates, `packages/song-schema/rust`, `packages/k7-wasm/rust` and the compiler's `packages/song/rust`,
-are held the same way, each its own workspace with its own lock (`packages/song-schema/docs/wasmBoundary.md`,
-`packages/song/docs/rustCompiler.md`).
+The browser's crates, `apps/k7-daw-wasm/song-schema`, `apps/k7-daw-wasm/k7-wasm` and the compiler's `apps/k7-daw-wasm/song`,
+are held the same way, each its own workspace with its own lock (`apps/k7-daw-frontend/packages/song-schema/docs/wasmBoundary.md`,
+`apps/k7-daw-frontend/packages/song/docs/rustCompiler.md`).
 
 ## `lint:docs` — a page that points at nothing
 
@@ -50,20 +50,20 @@ and JavaScript, C++, Kotlin, `.k7x`, GLSL, YAML, shell and Python (`SCANNED`). I
 tracks and what it merely knows about, never what is ignored and never a build or install output
 (`dist/`, `node_modules/`, `build/`…), and only paths that look like ours.
 
-**What counts as "a path into this repo"** is anchored on the three TOP folders — `packages`,
-`apps`, `engine` — and deliberately NOT on `docs/` or `scripts/`. Those two are written
+**What counts as "a path into this repo"** is anchored on `apps/` from the repo root, and on `packages/` or a sibling app (`../k7-daw-…`)
+written from a page, and deliberately NOT on `docs/` or `scripts/`. Those two are written
 relative to the zone a page is talking about: `architecture.md` says `docs/picture.md` meaning
 k7's, and moteur's `protocol.md` says `scripts/two-sessions.ts` meaning its own. A check anchored
 on them would report a hundred sentences that are perfectly clear to a reader.
 
-The pattern's lookbehind is what keeps `[stems.md](../packages/k7-plugins/docs/turntables/stems.md)` from being
-read as a reference to `docs/stems.md`: a match may open on `../`, never in the middle of a path. A
+The pattern's lookbehind is what keeps `[stems.md](../apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/stems.md)` from being
+read as a reference to `docs/stems.md`: a match may open on `../`, never in the middle of a path (a Rust test's `CARGO_MANIFEST_DIR` lines are skipped: they name the crate's folder, not the file's). A
 reference is resolved from the repo root first — how nearly every page writes one — then relative
 to the page, which is how a `../../packages/song/src/…` written inside a package's own `docs/`
 resolves. (Spelling a whole example path here would make this sentence a broken link itself.)
 
 **Two lists soften it, and both are meant to stay short.** `ALLOW` covers paths a page may
-legitimately name although this checkout has not got them: a page inside `engine/k7-runtime` writes
+legitimately name although this checkout has not got them: a page inside `apps/k7-daw-engine/k7-runtime` writes
 `engine/EditBuilder.cpp` relative to its own app — a path under one of `engine/`'s real folders is
 still checked — and a path under `dist/` or a Rust `target/` names a build output a checkout has only once built.
 A growing list there is the check going soft. Beyond it, a missing path that git IGNORES passes too: an

@@ -1,5 +1,5 @@
 //! pidfile.rs — the supervisor's `engine.pid` read as an IDENTITY before anything is killed: a pid line, then the
-//! `start=` and `exe=` `engine/k7-supervisor/src/PidFile.cpp` writes. Only a process the OS describes the same way,
+//! `start=` and `exe=` `apps/k7-daw-engine/k7-supervisor/src/PidFile.cpp` writes. Only a process the OS describes the same way,
 //! with an executable named `k7-runtime`, may be killed: a bare pid is a number the OS may have handed to anything.
 
 use std::path::Path;

@@ -45,7 +45,7 @@ export interface TimelineDropEvent {
   /** The lane under the pointer — `lanes` is every lane from the top, so the drop can walk down. */
   lane: string;
   lanes: DropLane[];
-  /** A timecode for `event add`, seconds for `picture add`: the two verbs' dialects (packages/commands/docs/picture.md). */
+  /** A timecode for `event add`, seconds for `picture add`: the two verbs' dialects (apps/k7-daw-frontend/packages/commands/docs/picture.md). */
   tc: string;
   seconds: number;
   files: File[];
@@ -95,7 +95,7 @@ export function droppedClip(name: string): DroppedClip | null {
   return { id, upload: `${id}${ext}`, kind };
 }
 
-/** The declaration a dropped file gets: `source` and nothing else, the window being the whole file (apps/k7/docs/22-syntax-material.md). */
+/** The declaration a dropped file gets: `source` and nothing else, the window being the whole file (apps/k7-daw-frontend/user-docs/22-syntax-material.md). */
 export const clipDecl = (upload: string): string =>
   stringify({ source: `clips/${upload}` });
 

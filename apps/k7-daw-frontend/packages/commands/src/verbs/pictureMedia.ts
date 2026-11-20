@@ -1,7 +1,7 @@
 // pictureMedia.ts — `picture prepare <lane>`: each shot's video made fit for the picture. A probe
 // says what it needs — nothing, a stream copy, a full-resolution optimized copy, a small proxy —
 // and the host makes the copies, in the BACKGROUND where it can, since a transcode takes minutes.
-// Each copy lands beside its source and is named on the clip. See packages/song-video/docs/media.md.
+// Each copy lands beside its source and is named on the clip. See apps/k7-daw-frontend/packages/song-video/docs/media.md.
 
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";

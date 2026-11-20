@@ -1,8 +1,8 @@
 # The stretch map's points
 
-The rationale behind `packages/song-schema/src/warpPoints.ts` — placing, moving and removing the
+The rationale behind `apps/k7-daw-frontend/packages/song-schema/src/warpPoints.ts` — placing, moving and removing the
 points of a clip's stretch map. What warping IS, and what the engine does with a map, is
-`packages/song/docs/warp.md`; this page is about the array work.
+`apps/k7-daw-frontend/packages/song/docs/warp.md`; this page is about the array work.
 
 ## `readClipWarp`, and why it exists
 

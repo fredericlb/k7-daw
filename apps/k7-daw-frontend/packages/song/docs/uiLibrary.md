@@ -25,7 +25,7 @@ balance is the wrong way round.
   copied by hand keeps the original's `ref:` and its panel silently lands on the module it was copied from.
 - **Two places to look.** "Where is this module's face" has no answer you can reach by looking at the module.
 - **Two writers for one save.** A module's four files are edited together and saved together
-  (`apps/k7/frontend/docs/sharedModules.md`); a parallel tree would split that write across two
+  (`apps/k7-daw-frontend/docs/sharedModules.md`); a parallel tree would split that write across two
   roots, and a crash between them leaves a panel that answers to nothing, or a module with none.
 
 Beside the module, the **folder is the key**. Nothing inside `ui.k7x` says which module it draws, because
@@ -70,7 +70,7 @@ nothing.
 the same as any other file k7 saves; drawing a knob for a plugin every song in the workspace reaches for
 changes the panel every one of them sees, which is exactly "authored once for the plugin" rather than a
 mistake to guard against. `@k7-core` is the one level still gated — behind the Edit-then-publish confirmation in
-the builder (`apps/k7/frontend/docs/sharedModules.md`), not by anything in this file.
+the builder (`apps/k7-daw-frontend/docs/sharedModules.md`), not by anything in this file.
 
 The consequence is real and worth stating: editing a panel from one project changes what every project sees.
 That is the same trade `module populate` makes, and it is what "authored once for the plugin" means.
@@ -118,7 +118,7 @@ Nodes share their generic's ref, so a panel drawn once shows on every node — t
 
 A `widgets.js` in the same folder rides on the panel as `ui.script`, as text: it draws the panel's lcdscreen
 widgets in the browser, and it is read with the panel rather than on its own so the two can never come from
-different folders (`packages/ui-chains-react/docs/lcdScreen.md`).
+different folders (`apps/k7-daw-frontend/packages/ui-chains-react/docs/lcdScreen.md`).
 
 A [module fork](moduleFork.md) copies the whole folder, so the panel comes along by itself. It is rewritten
 anyway, with a header naming the copy: a `ui.k7x` whose comment still points at `@engine/…` reads as the fork

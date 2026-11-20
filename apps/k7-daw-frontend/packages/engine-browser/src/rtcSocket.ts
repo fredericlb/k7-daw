@@ -2,7 +2,7 @@
 // supervisor: the one direct path an HTTPS page has to an engine on another machine. The offer
 // goes to the registry's `/engine/<id>/rtc`, and the frames are cut into fragments both ways
 // (@studio/web-protocol/rtc-frames). An address `rtc:<signal url>` is how a caller asks for one.
-// See packages/engine-tunnel/docs/rtc.md.
+// See apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md.
 
 import { ENGINE_CONNECT_DEADLINE_MS } from "@studio/web-protocol";
 import { FragmentJoiner, toFragments } from "@studio/web-protocol/rtc-frames";

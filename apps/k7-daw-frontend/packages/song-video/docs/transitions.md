@@ -148,7 +148,7 @@ stretch is drawn on the graph as cards with knobs, can be bypassed step by step,
 kind of file.
 
 In a CHAIN project — the main layout — a stretch is a **subchain of the lane's chain file**, and a
-fade names it by its id: `chain: iris` (`packages/song/docs/chainFiles.md`). The file is the scope,
+fade names it by its id: `chain: iris` (`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`). The file is the scope,
 so a fade can reach only its own lane's stretches. Read into segments, that subchain IS the cable
 from its last node into the lane, so everything downstream sees the same graph either way, and the
 compile turns the id into the node the run starts at.
@@ -247,7 +247,7 @@ rather than being silently ignored.
 ## The render, in one function
 
 Everything the compositor, the realtime driver and the export need fits in `layerFrameAt`
-(`packages/ui-eyes/src/timeline.ts`): pure, no GL and no DOM, so it is **the only place the rule
+(`apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts`): pure, no GL and no DOM, so it is **the only place the rule
 lives** and realtime and frame-by-frame rendering cannot read it two ways.
 
 It returns at most two shots, and the **last in file order wins**. Without that a cross-dissolve
@@ -283,25 +283,25 @@ to **the layer below**.
 | | |
 |---|---|
 | written | `fadeIn` / `fadeOut` on an event of a picture lane (`nodes/<lane>.k7x`, `tracks/` in a chain project), `modules/video_transitions/<name>/`, and a stretch's run in `graph.k7x` |
-| declared | `packages/song-schema/src/moduleTypes.ts` — `TRANSITION_CATEGORY`, `DISSOLVE`, `OVER`, `isPicturePass` |
-| validated | `packages/song-schema/src/yaml/placementSchema.ts` — `FadeSchema` and the widening; `src/videoTracks.ts` — the refusal of an endless `fadeOut` |
-| guarded | `packages/song/src/entities.ts` — `loadVideoTracks` goes through the module schema; `packages/song/src/graph.ts` — `isStretch`, and a stretch's head counted as fed in `checkChainInputs` |
+| declared | `apps/k7-daw-frontend/packages/song-schema/src/moduleTypes.ts` — `TRANSITION_CATEGORY`, `DISSOLVE`, `OVER`, `isPicturePass` |
+| validated | `apps/k7-daw-frontend/packages/song-schema/src/yaml/placementSchema.ts` — `FadeSchema` and the widening; `src/videoTracks.ts` — the refusal of an endless `fadeOut` |
+| guarded | `apps/k7-daw-frontend/packages/song/src/entities.ts` — `loadVideoTracks` goes through the module schema; `apps/k7-daw-frontend/packages/song/src/graph.ts` — `isStretch`, and a stretch's head counted as fed in `checkChainInputs` |
 | read | `src/videoTransitions.ts` — the ancestry from `src/shaders.ts`, and `resolveStretches`; `src/videoChains.ts` — the stretches |
 | compiled | `src/videoTracks.ts` -> `VideoClipDoc.fadeIn`, and `src/videoProject.ts` -> `VideoProjectDoc.transitions` and `.stretches`, the GLSL **inline** |
-| on the wire | `packages/web-protocol/timelineTypes.ts` — `WebVideoFade`, `WebVideoTransition`, `WebVideoProject.stretches` |
-| served | `packages/song-video/src/webVideo.ts` — `toWebVideoTracks`, `webVideoProjectOf`, read by the Worker's `videoDoc` |
-| adapted | `packages/k7-plugins/src/video/scene.ts` -> `packages/ui-eyes/src/scene.ts` |
-| decided | `packages/ui-eyes/src/timeline.ts` — `layerFrameAt`, the only rule |
-| decoded | `packages/ui-eyes/src/realtime.ts` and `packages/ui-eyes/src/export.ts` |
-| drawn | `packages/ui-eyes/src/compositor.ts` + `packages/ui-eyes/src/passes.ts` + `packages/ui-eyes/src/stretches.ts`, the built-in `dissolve` and `over` in `packages/ui-eyes/src/transitions.ts` |
-| completed | `packages/song-schema/src/yaml/fields.ts` — the two words of a fade's map |
+| on the wire | `apps/k7-daw-frontend/packages/web-protocol/timelineTypes.ts` — `WebVideoFade`, `WebVideoTransition`, `WebVideoProject.stretches` |
+| served | `apps/k7-daw-frontend/packages/song-video/src/webVideo.ts` — `toWebVideoTracks`, `webVideoProjectOf`, read by the Worker's `videoDoc` |
+| adapted | `apps/k7-daw-frontend/packages/k7-plugins/src/video/scene.ts` -> `apps/k7-daw-frontend/packages/ui-eyes/src/scene.ts` |
+| decided | `apps/k7-daw-frontend/packages/ui-eyes/src/timeline.ts` — `layerFrameAt`, the only rule |
+| decoded | `apps/k7-daw-frontend/packages/ui-eyes/src/realtime.ts` and `apps/k7-daw-frontend/packages/ui-eyes/src/export.ts` |
+| drawn | `apps/k7-daw-frontend/packages/ui-eyes/src/compositor.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/passes.ts` + `apps/k7-daw-frontend/packages/ui-eyes/src/stretches.ts`, the built-in `dissolve` and `over` in `apps/k7-daw-frontend/packages/ui-eyes/src/transitions.ts` |
+| completed | `apps/k7-daw-frontend/packages/song-schema/src/yaml/fields.ts` — the two words of a fade's map |
 
 ## Checking it
 
 ```bash
-npx vitest run packages/song-video/src/videoTransitions.test.ts packages/song-video/src/videoStretches.test.ts
-npx vitest run packages/song-schema/src/yaml/videoTrackYaml.test.ts
-npx vitest run packages/ui-eyes/src/timeline.test.ts packages/ui-eyes/src/compositor.test.ts
+npx vitest run apps/k7-daw-frontend/packages/song-video/src/videoTransitions.test.ts apps/k7-daw-frontend/packages/song-video/src/videoStretches.test.ts
+npx vitest run apps/k7-daw-frontend/packages/song-schema/src/yaml/videoTrackYaml.test.ts
+npx vitest run apps/k7-daw-frontend/packages/ui-eyes/src/timeline.test.ts apps/k7-daw-frontend/packages/ui-eyes/src/compositor.test.ts
 ```
 
 The first proves the folder read, the ancestry, the two refusals and the knob clamping, then that the

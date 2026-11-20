@@ -21,7 +21,7 @@ whole command bar down with it, and the command itself already has the refusal i
 ## `modules` and `nodes` are not the same list
 
 `nodes` is this project's **uses** of modules, by the name the chains call them — off the compiled
-project, so a name it offers is one the chains actually hold (`packages/song/docs/nodes.md`).
+project, so a name it offers is one the chains actually hold (`apps/k7-daw-frontend/packages/song/docs/nodes.md`).
 
 `modules` is that same list **plus the inherited modules by ref**, because those are nameable
 before any chain has used one and therefore cannot come off the project. The two providers exist
@@ -33,21 +33,21 @@ file every other project reads.
 scan, so its size is a fact about the MACHINE rather than about the song: a rig with four hundred
 plugins puts four hundred entries in front of the dozen modules a project has. It is browsed
 instead, in the file tree's Libraries tab. `baseModules` leaves it out as well: a scanned plugin is
-what a LIBRARY's module extends to give it a face (`packages/song/docs/moduleNamespaces.md`), and a
+what a LIBRARY's module extends to give it a face (`apps/k7-daw-frontend/packages/song/docs/moduleNamespaces.md`), and a
 node pointed at the raw `@engine` ref instead gets no panel, whatever the library draws for it.
 `module own` is the one verb that takes an engine ref, and it asks `engineModules`, which holds
 nothing else. The filter is on the vocabulary half only: a ref the project
 already USES arrives through `collectPluginModules` and stays completable, because a node that
 exists is a node its verbs have to be able to name.
 
-Both are ranked by each module's `status:` (`packages/song/docs/moduleStatus.md`). The ranking
+Both are ranked by each module's `status:` (`apps/k7-daw-frontend/packages/song/docs/moduleStatus.md`). The ranking
 reads the **ref map** and not the compiled project — `status` is an authoring fact that never
 reaches the engine, so it only ever lives on the files. A lookup rather than a list, so one read
 answers for every name a provider offers.
 
 A value is what is INSERTED, and in a chain project a node's is its uuid. So a provider may also
 give a LABEL for the values a person cannot read — `PROVIDER_LABELS`, which `nodes` alone fills,
-with the module and the place (`packages/song/docs/chainFiles.md`). `completionItems` carries it;
+with the module and the place (`apps/k7-daw-frontend/packages/song/docs/chainFiles.md`). `completionItems` carries it;
 `completions` is the same list as bare lines, for a caller that has nowhere to show a label.
 
 ### The label on the wire
@@ -63,7 +63,7 @@ browser outliving the file service it was built against, or the reverse:
   provider look exactly as they did, and a newer frontend meeting an older service — which ignores
   `labels=1` — reads the same list, since it already takes a bare string as an item with no label.
 
-`projectApi.complete` (`packages/project-shell/src/project.ts`) asks with `labels=1` and hands
+`projectApi.complete` (`apps/k7-daw-frontend/packages/project-shell/src/project.ts`) asks with `labels=1` and hands
 back items. k7's command bar LISTS a labelled value by its label, matches what is typed against
 the label as well as the value (`auto-wah` finds the node), and INSERTS the value: the field holds
 the uuid, and names the label beside it.
@@ -89,7 +89,7 @@ the uuid, and names the label beside it.
   because it reaches into `PROVIDERS` for `audioFiles`: inferring it would need the map's own
   type, which is what is being inferred.
 - **`chains`** puts the project's own and the library's `@k7-core/` ones in one list, because the
-  command takes either (`packages/audio-passes/docs/processChain.md`).
+  command takes either (`apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`).
 - **`curves`** reads off disk rather than off the compiled project: a curve nothing binds yet is
   exactly the one you are about to bind, and the document only carries the bound ones' baked
   points.
@@ -169,7 +169,7 @@ another today, so the rule is guarded rather than exercised.
 
 ## The wire carries the same two lists
 
-`packages/web-protocol/commandTypes.ts` writes `ArgClass` and `ArgProvider` out for the browser, which
+`apps/k7-daw-frontend/packages/web-protocol/commandTypes.ts` writes `ArgClass` and `ArgProvider` out for the browser, which
 cannot import this module — it reads `commands.yaml` off disk. A test compares both unions to the
 sources here, because the two failures are silent:
 

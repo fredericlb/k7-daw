@@ -176,7 +176,7 @@ function laneCard(b: Build, lane: string, withClips: boolean) {
         ]
       : TRACK_OUTPUTS.map((o) => ({ ...o })),
     color: graph.trackColors?.[lane],
-    // A lane is a module node, so it is addressable like one — packages/song/docs/alternatives.md.
+    // A lane is a module node, so it is addressable like one — apps/k7-daw-frontend/packages/song/docs/alternatives.md.
     module: lane,
     ...(graph.trackAlternatives?.[lane] ?? {}),
     ...(graph.frozen?.[lane] ? { frozen: graph.frozen[lane] } : {}),

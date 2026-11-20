@@ -1,4 +1,4 @@
-// supervisorBuild.mjs — building and finding the native supervisor (engine/k7-supervisor).
+// supervisorBuild.mjs — building and finding the native supervisor (apps/k7-daw-engine/k7-supervisor).
 // Shared by build-engine.mjs and the dev session, so "which binary is the supervisor" has one answer. See docs/buildEngine.md.
 
 import { existsSync, readdirSync } from "node:fs";
@@ -17,7 +17,7 @@ function supervisorPreset() {
 
 /** Configure (once) and build the supervisor with CMake; exits on failure, like every step here. */
 export function buildSupervisor(repo) {
-  const dir = join(repo, "engine", "k7-supervisor");
+  const dir = join(repo, "apps", "k7-daw-engine", "k7-supervisor");
   const preset = supervisorPreset();
   const out = join(dir, "build", preset);
   // A configure that failed leaves the cache without a build system, which only another configure repairs.

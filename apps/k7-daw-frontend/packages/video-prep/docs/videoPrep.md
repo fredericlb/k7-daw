@@ -6,10 +6,10 @@ file where there is none, `plan.ts` decides, and `transcode.ts` runs ffmpeg.
 
 ## ffmpeg makes every copy
 
-Unlike a shot's sound (`packages/audio-analysis/docs/analysis.md`), a video copy has no engine
+Unlike a shot's sound (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`), a video copy has no engine
 fallback: the engine decodes audio only. Without ffmpeg there is nothing to make, and the verb says
 so rather than guessing. A desktop needs it
-installed. The phone has none (`engine/k7-runtime/docs/android.md`).
+installed. The phone has none (`apps/k7-daw-engine/k7-runtime/docs/android.md`).
 
 ## Without ffmpeg, an mp4, a .mov, a WebM or an mkv is still read
 

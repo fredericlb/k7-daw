@@ -15,7 +15,7 @@ export const WORKSPACE_HEADER = "x-studio-workspace";
 export const ENGINE_TOKEN_HEADER = "x-studio-engine-token";
 /** Which engine the caller drives — how a SERVER-hosted file service learns where to send the song. */
 export const ENGINE_ID_HEADER = "x-studio-engine-id";
-/** The file hub's secret, the ONLY gate of a server-hosted file service — apps/k7/backend-rs/docs/files/hub.md. */
+/** The file hub's secret, the ONLY gate of a server-hosted file service — apps/k7-daw-backend/docs/files/hub.md. */
 export const HUB_SECRET_HEADER = "x-studio-hub-secret";
 /** Where a server that HOSTS workspaces says so; a 404 means it does not. */
 export const FILE_HUB_HELLO = "/api/files-hub";
@@ -95,7 +95,7 @@ export const ENGINE_OUTBOX_TTL_MS = 30000;
 
 // ── The engine registry ──────────────────────────────────────────────────────
 
-// An engine registers these addresses; the browser measures them all (packages/engine-browser/src/probe.ts).
+// An engine registers these addresses; the browser measures them all (apps/k7-daw-frontend/packages/engine-browser/src/probe.ts).
 
 /** Every address a browser may try. All are probed at once; the fastest to answer is the one used. */
 export interface EngineAddresses {
@@ -113,13 +113,13 @@ export interface PublicEngine {
   performance?: EnginePerformance;
   /** The library level its machine runs — docs/library-versions-plan.md; absent from an older supervisor, which runs level 1. */
   libraryLevel?: number;
-  /** The engine wire's version its machine speaks — packages/engine-protocol/docs/version.md; absent from an older registry. */
+  /** The engine wire's version its machine speaks — apps/k7-daw-frontend/packages/engine-protocol/docs/version.md; absent from an older registry. */
   protocol?: number;
   /** Below the oldest version this server serves: its tunnel is refused, and the picker says to update k7 on that machine. */
   outdated?: boolean;
   /** The release stamp its machine was built from, `dev` for a local build. */
   build?: string;
-  /** It runs without external plugins after crashing again and again — engine/k7-supervisor/docs/crashLoop.md. */
+  /** It runs without external plugins after crashing again and again — apps/k7-daw-engine/k7-supervisor/docs/crashLoop.md. */
   safeMode?: boolean;
   assigned: boolean; // already selected by someone; hidden from the pick list
   /** Who holds it and what they opened — named only to that same account, anyone else sees `assigned` alone; docs/machine.md. */
@@ -127,18 +127,18 @@ export interface PublicEngine {
   heldProject?: string;
   /** The ASKING account's claims on it — its bench sits beside its song, docs/claim.md; another account's are never listed. */
   heldProjects?: { holder: string; project: string }[];
-  /** Its supervisor sends no tunnel secret, so nothing stops another machine taking its id — apps/k7/backend-rs/docs/engine/token.md. */
+  /** Its supervisor sends no tunnel secret, so nothing stops another machine taking its id — apps/k7-daw-backend/docs/engine/token.md. */
   legacy?: boolean;
   // This engine's heartbeat arrived from the browser's own public IP — a same-LAN hint, not authoritative.
   sameSourceIp: boolean;
-  /** A short-lived pass for the relay, minted by `/engines` and not by the registry — apps/k7/backend-rs/docs/engine/proxy.md. */
+  /** A short-lived pass for the relay, minted by `/engines` and not by the registry — apps/k7-daw-backend/docs/engine/proxy.md. */
   proxyTicket?: string;
-  /** Its supervisor holds a tunnel, so a WebRTC offer can reach it — packages/engine-tunnel/docs/rtc.md. */
+  /** Its supervisor holds a tunnel, so a WebRTC offer can reach it — apps/k7-daw-frontend/packages/engine-tunnel/docs/rtc.md. */
   rtc?: boolean;
   /** The chains THIS MACHINE separates with, by `want` (`stems`, `instrumental`) — its own settings, from its
-      `engine-host.json`; a cut of a library song with no chain named uses them (engine/k7-supervisor/docs/stemSplit.md). */
+      `engine-host.json`; a cut of a library song with no chain named uses them (apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md). */
   chains?: { stems?: string; instrumental?: string };
-  /** Whether this device's account may use it — apps/k7/backend-rs/docs/engine/ownership.md; absent from an older registry. */
+  /** Whether this device's account may use it — apps/k7-daw-backend/docs/engine/ownership.md; absent from an older registry. */
   access?: EngineAccessRole;
 }
 

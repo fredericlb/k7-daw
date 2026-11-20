@@ -45,12 +45,12 @@ describe("the WebAssembly module", () => {
 
   it("holds the compiler and its reader among the crates, and their lock", () => {
     expect(CRATES).toEqual(
-      expect.arrayContaining(["packages/song/rust", "packages/k7x/rust"]),
+      expect.arrayContaining(["apps/k7-daw-wasm/song", "apps/k7-daw-wasm/k7x"]),
     );
   });
 
   it("changes its hash when one byte of the compiler's source changes", () => {
-    const root = join(import.meta.dirname, "..", "..", "..");
+    const root = join(import.meta.dirname, "..", "..", "..", "..", "..");
     const copy = mkdtempSync(join(tmpdir(), "k7-wasm-sources-"));
     try {
       for (const crate of CRATES)
@@ -60,14 +60,14 @@ describe("the WebAssembly module", () => {
           });
       for (const file of [
         ...INCLUDED,
-        "packages/k7-wasm/rust/Cargo.lock",
-        "packages/song/rust/Cargo.lock",
+        "apps/k7-daw-wasm/k7-wasm/Cargo.lock",
+        "apps/k7-daw-wasm/song/Cargo.lock",
       ]) {
         mkdirSync(dirname(join(copy, file)), { recursive: true });
         cpSync(join(root, file), join(copy, file));
       }
       expect(rustSourceHash(copy)).toBe(rustSourceHash());
-      const lib = join(copy, "packages/song/rust/src/lib.rs");
+      const lib = join(copy, "apps/k7-daw-wasm/song/src/lib.rs");
       writeFileSync(lib, `${readFileSync(lib, "utf8")} `);
       expect(rustSourceHash(copy)).not.toBe(rustSourceHash());
     } finally {
@@ -76,7 +76,7 @@ describe("the WebAssembly module", () => {
   });
 
   it("changes its hash when the table the compiler includes changes", () => {
-    const root = join(import.meta.dirname, "..", "..", "..");
+    const root = join(import.meta.dirname, "..", "..", "..", "..", "..");
     const copy = mkdtempSync(join(tmpdir(), "k7-wasm-included-"));
     try {
       for (const crate of CRATES)
@@ -86,8 +86,8 @@ describe("the WebAssembly module", () => {
           });
       for (const file of [
         ...INCLUDED,
-        "packages/k7-wasm/rust/Cargo.lock",
-        "packages/song/rust/Cargo.lock",
+        "apps/k7-daw-wasm/k7-wasm/Cargo.lock",
+        "apps/k7-daw-wasm/song/Cargo.lock",
       ]) {
         mkdirSync(dirname(join(copy, file)), { recursive: true });
         cpSync(join(root, file), join(copy, file));

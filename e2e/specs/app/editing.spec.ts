@@ -1,5 +1,5 @@
 // editing.spec.ts — a value typed in the k7x editor reaches the screen and the disk, and the undo journal takes it back.
-// The edit is the tempo of edit-undo.k7: one line of project.k7x, read as "<n> bpm" in the footer, or the Info popover on a phone (packages/song-edit/docs).
+// The edit is the tempo of edit-undo.k7: one line of project.k7x, read as "<n> bpm" in the footer, or the Info popover on a phone (apps/k7-daw-frontend/packages/song-edit/docs).
 import type { Locator, Page } from "@playwright/test";
 import { commandBar, expectStatus, runCommand } from "../../src/commandBar.ts";
 import { expectFile, readFile, restoreProject } from "../../src/disk.ts";

@@ -164,7 +164,7 @@ describe("resolving a chain of the project", () => {
     ]);
     const c = resolveChain(dir, project, "gtr");
     expect(c.plugins.map((p) => p.name)).toEqual(["amp"]);
-    // The engine's own stage travels beside the plugin's params — engine/k7-runtime/docs/mix.md.
+    // The engine's own stage travels beside the plugin's params — apps/k7-daw-engine/k7-runtime/docs/mix.md.
     expect(c.plugins[0].params).toEqual({
       Depth: 3,
       "@mix": 1,

@@ -61,7 +61,7 @@ headphone feed, and a desk that refused to draw itself there would be wrong.
 The pair is a fact about the **machine**, not about the set: `system cue 3+4`, filed in
 `<state>/preferences.k7x`. A machine that names none plays the cue bus **nowhere** — never
 folded back onto the master, which would put the headphone feed into the room. Three doors close
-that case, and they are measured: `packages/song/docs/cue.md`.
+that case, and they are measured: `apps/k7-daw-frontend/packages/song/docs/cue.md`.
 
 ## What it does not do
 

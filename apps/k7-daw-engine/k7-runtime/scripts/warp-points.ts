@@ -1,12 +1,12 @@
 // warp-points.ts — proves a clip's INTERIOR warp points move the sound, by rendering and
 // measuring. Two cases: a map whose ends are identity (only the middle can move anything), and
 // one that also compresses overall, which is what a real recording's map does.
-//   npx tsx engine/k7-runtime/scripts/warp-points.ts
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/warp-points.ts
 
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { renderProject } from "../../../packages/take-render/src/renderProject.ts";
+import { renderProject } from "../../../k7-daw-frontend/packages/take-render/src/renderProject.ts";
 import { channelOf, readWav, wavFile } from "./wav.ts";
 
 const RATE = 48000;

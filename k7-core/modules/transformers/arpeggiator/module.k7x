@@ -7,7 +7,7 @@
 // donc un plugin compilé, `studio_arpeggiator`, comme `quick-master` l'est pour le bus master.
 //
 // Le pourquoi de chaque choix — d'où vient le tempo, pourquoi la note dure la moitié de son pas,
-// ce qui se passe quand on lâche l'accord — est dans engine/k7-runtime/docs/arpeggiator.md.
+// ce qui se passe quand on lâche l'accord — est dans apps/k7-daw-engine/k7-runtime/docs/arpeggiator.md.
 extends("@engine/arpeggiator")
 params({
   // 1/16 : c'est ce que le mot veut dire. Plus lent, on entend un arpège joué à la main ; c'est joli
@@ -23,4 +23,4 @@ params({
 // En un paragraphe : tient l'accord qu'on joue et le fait sonner note par note, sur la grille du
 // morceau. La cadence, le nombre d'octaves, le sens — ou un motif dessiné sur la grille (Custom) :
 // ce qui sort suit le tempo du projet, et la première note part au moment où le doigt tombe.
-// (La description d'un module est son en-tête, ici — voir packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)

@@ -1,5 +1,5 @@
 // surge.spec.ts — a Surge XT node on its library default patch reaches the engine with that patch, and plays.
-// The clock rolling is all a spec sees of the sound; the engine document is what proves the patch was sent (engine/k7-runtime/docs/surgePlugin.md).
+// The clock rolling is all a spec sees of the sound; the engine document is what proves the patch was sent (apps/k7-daw-engine/k7-runtime/docs/surgePlugin.md).
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, test } from "../../src/target.ts";
 import { engineUp, play, rolls } from "../../src/transport.ts";

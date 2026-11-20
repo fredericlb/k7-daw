@@ -89,7 +89,10 @@ describe("the stamped/unstamped sets", () => {
 
 // The engine's handlers are where a reply is stamped or not; this reads them, so a new verb cannot ship unclassified.
 describe("the engine's own send sites", () => {
-  const dir = join(import.meta.dirname, "../../engine/k7-runtime/server");
+  const dir = join(
+    import.meta.dirname,
+    "../../../k7-daw-engine/k7-runtime/server",
+  );
   const source = readdirSync(dir)
     .filter((f) => /\.(cpp|h)$/.test(f))
     .map((f) => readFileSync(join(dir, f), "utf8"))

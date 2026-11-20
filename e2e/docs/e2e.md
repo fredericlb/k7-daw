@@ -14,7 +14,7 @@ npm run test:e2e                              # every spec, on the web
 npm run test:e2e -- specs/app/transport.spec.ts
 
 npm run test:e2e:android
-npm run test:e2e:ios                          # the app built in ~/.cache/k7-ios-dd (engine/k7-runtime/docs/ios.md)
+npm run test:e2e:ios                          # the app built in ~/.cache/k7-ios-dd (apps/k7-daw-engine/k7-runtime/docs/ios.md)
 ```
 
 Neither is part of `npm run test`, whose workspaces run vitest: both need an engine, which a unit run
@@ -50,7 +50,7 @@ the studio, the engine and the supervisor are the app's own, the screen is not. 
 | `E2E_BASE_URL` is the app's origin | the verb runner is node's and takes a whole URL |
 | a spec that reads a phone's popover clicks the editor again before its next shortcut (`editing.spec.ts`) | WebKit focuses no button it clicks, so the keys land on the page's body, and Ctrl+Z and Ctrl+Y off the editor are the project journal's |
 
-Specs that skip here, each with its reason in the spec (`engine/k7-runtime/docs/ios.md`): the simulator has no camera, so
+Specs that skip here, each with its reason in the spec (`apps/k7-daw-engine/k7-runtime/docs/ios.md`): the simulator has no camera, so
 the picture lane's take skips. A member that needs a program is not a skip but an answer: `noPrograms.spec.ts` asserts what
 each one says on iOS, since the phone starts no ffmpeg, whisper or browser.
 
@@ -64,7 +64,7 @@ outside those copies and the front's cut answer lists no models root there. Its 
 
 `flows.spec.ts` drives the app's native flows (a download, a private CA, the microphone's refusal, a killed page) through
 debug-only hooks, `K7_TEST_HOOKS=1` handed at launch, and reads each result from the app's `[host]` log line
-(`engine/k7-runtime/docs/ios.md`, "Proven on the simulator"). It relaunches the app itself for the microphone and the killed page, and
+(`apps/k7-daw-engine/k7-runtime/docs/ios.md`, "Proven on the simulator"). It relaunches the app itself for the microphone and the killed page, and
 revokes the simulator's microphone grant, which it restores.
 
 ## The web target signs in without the identity provider
@@ -83,7 +83,7 @@ A device has no admin: a spec that reaches for a library write checks that it is
 The run drives the app's WebView, and Playwright's `_android` reaches only a DEBUGGABLE app's: Capacitor
 turns WebView debugging on for exactly those builds. The APK CI ships is the release type, and a
 debuggable build of the same id cannot replace it without an uninstall, which deletes the phone's
-workspaces. So the run builds `e2e`, a build type of its own in `engine/k7-android/app/build.gradle.kts`:
+workspaces. So the run builds `e2e`, a build type of its own in `apps/k7-daw-android/app/build.gradle.kts`:
 
 | what differs | why |
 |---|---|
@@ -126,7 +126,7 @@ recording, the frozen chains and their bench, and the surfaces each archetype op
 
 `git-sync.spec.ts` connects a workspace to a bare repository the spec makes with the `git` binary, commits and pushes, clones into a second
 workspace, edits the same key on both sides and resolves the conflict. The remote is a folder on this machine, so the spec is the web
-target's alone and needs the front started with `K7_GIT_ALLOW_FILE` (`apps/k7/backend-rs/docs/git.md`).
+target's alone and needs the front started with `K7_GIT_ALLOW_FILE` (`apps/k7-daw-backend/docs/git.md`).
 
 A spec runs on both targets unless what it checks exists on one only, and then it says so in its
 `test.skip`: a signed-out visitor or Chromium's fake microphone is the web's.
@@ -150,7 +150,7 @@ only needs the clock to move shares `transport.spec.ts`, `effects.spec.ts` (the 
 "engine connected" shows before the project has reached the engine: the files still cross the tunnel,
 and the engine replaces its edit when they land, which drops a transport already rolling. The project bar
 therefore names the button "loading the project", disabled, until the file service says the project
-is playable (`apps/k7/frontend/docs/shell.md`). `src/transport.ts` waits for the button called Play
+is playable (`apps/k7-daw-frontend/docs/shell.md`). `src/transport.ts` waits for the button called Play
 and presses it once: a Play that is lost again is a failure, not something to press through.
 
 ## A spec waits for the thing it waits for
@@ -172,7 +172,7 @@ absence has no event to wait on.
 - **On the Windows machine, a run is Windows'**: from the verify worktree under Git Bash, with
   `E2E_ENV_FILE` naming the checkout's `env.yaml`. WSL's Chromium lacks the system libraries it
   loads, and the phone's APK builds only from a Visual Studio prompt, so the phone run takes
-  `E2E_ANDROID_BUILD=0` after `gradlew :app:installE2e` there (`engine/k7-runtime/docs/android.md`).
+  `E2E_ANDROID_BUILD=0` after `gradlew :app:installE2e` there (`apps/k7-daw-engine/k7-runtime/docs/android.md`).
 
 - **The dev session up** (`npm run dev`).
 - **An engine listed at the instance.** On a project, the picker lists only what the registry knows,
@@ -192,7 +192,7 @@ configured for the TLS proxy) and a page reports "WebSocket closed without opene
 - **The engine runs on a real device, and the speakers stay quiet on the macOS bed.** The transport spec
   plays a few seconds of `synth-demo` through the engine's output device. `e2e-macos.sh` starts its engines
   with `STUDIO_ENGINE_SILENT=1`, which writes silence after every meter and tap
-  (`engine/k7-runtime/docs/audioDevice.md`); `K7_BED_SOUND=1` lets a run be heard. Chromium runs with
+  (`apps/k7-daw-engine/k7-runtime/docs/audioDevice.md`); `K7_BED_SOUND=1` lets a run be heard. Chromium runs with
   `--mute-audio`. A run against the dev session plays through that session's own engine, with sound.
 - **No camera and no microphone.** Chromium runs with fake media devices, granted without a prompt
   (`--use-fake-ui-for-media-stream --use-fake-device-for-media-stream`, in `playwright.config.ts`),
@@ -209,7 +209,7 @@ one account at a time.
 
 ## The Mac's bed
 
-`engine/scripts/ci/e2e-macos.sh` runs the web suite, the conformance suite or both on the Mac, against a dev session
+`apps/k7-daw-engine/scripts/ci/e2e-macos.sh` runs the web suite, the conformance suite or both on the Mac, against a dev session
 of its own; an agent starts it through `scripts/agent/bed.sh` (below). Its results are the HTML reports, Playwright's
 JSON, the failed specs' traces, every process's log and `summary.txt` (the counts) with `timings.txt`. A red run is a
 failed spec or a bed that did not come up. With the builds warm, both suites take about seven minutes, the web
@@ -219,7 +219,7 @@ suite's length, since they run side by side; a cold tree first compiles the engi
 |---|---|
 | a session of its own, not the Windows one | a suite no longer waits for another agent's run, a Tilt restart or a merge rebuilding the session it drives |
 | the front and Vite started as `npm run dev` starts them (`dev-front.mjs`), on ports 28789 and 25223, all on `127.0.0.1` | the same session as Windows', so a difference is the platform's; the Mac may run a dev session or a desktop app of its own on the usual ports, and its application firewall drops a LAN connection to an unsigned binary |
-| the command-line engine (`k7-supervisor --config`), listed at the bed's front over loopback, on 28765 | an engine heartbeating from loopback is every local account's (`apps/k7/backend-rs/docs/engine/ownership.md`); a desktop app would hold 18789 and `~/.k7`, the Mac's own |
+| the command-line engine (`k7-supervisor --config`), listed at the bed's front over loopback, on 28765 | an engine heartbeating from loopback is every local account's (`apps/k7-daw-backend/docs/engine/ownership.md`); a desktop app would hold 18789 and `~/.k7`, the Mac's own |
 | `HOME` under `~/k7-trees/e2e-macos-bed`, wiped at every run, an env.yaml with a new secret, no instrument downloaded | nothing of the Mac's own `~/.k7` or `~/.studio` is read or written, and the bed is paired with no server: the specs that publish or sync stay away from production |
 | the release front built into `~/.cache/k7-macbed-<tree name>` (`--target-dir`, handed to `dev-front.mjs` as `K7_FRONT_TARGET_DIR`) | a `target` inside the worktree makes `gate.sh` refuse the tree, and two worktrees must not share one build folder |
 | `STUDIO_HOME` given to the engine, `STUDIO_PORTS=k7=28789` to every process | macOS gives the engine the account's home whatever `HOME` says, and the supervisor reads any loopback registry as k7's port, 8789 unless that names another. Tracktion's `~/Library/Studio/Settings.xml` (the audio device) stays the Mac's, shared with any other engine there |

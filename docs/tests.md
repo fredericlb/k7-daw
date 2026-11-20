@@ -25,8 +25,8 @@ Two had opted out by accident:
 
 | package | test files | tests | why |
 |---|---|---|---|
-| `packages/ui-eyes` | 3 | 37 | no `test` script, no `vitest` devDependency |
-| `engine/k7-runtime` | 6 (C++) | — | only `test:mac`; nothing ran on Windows or Linux |
+| `apps/k7-daw-frontend/packages/ui-eyes` | 3 | 37 | no `test` script, no `vitest` devDependency |
+| `apps/k7-daw-engine/k7-runtime` | 6 (C++) | — | only `test:mac`; nothing ran on Windows or Linux |
 
 Both are fixed, and both were green the moment they were wired in — tests that had been
 written, committed, and then protected nothing. `ui-eyes` is the one that stings: `compositor.test.ts`
@@ -38,7 +38,7 @@ shipped them.
 A package with `*.test.ts` files and no `test` script is the whole bug, and it is one command:
 
 ```bash
-for f in packages/*/package.json apps/*/*/package.json; do
+for f in apps/*/package.json apps/*/packages/*/package.json; do
   d=$(dirname "$f")
   node -e "process.exit(require('./$f').scripts?.test?0:1)" && continue
   n=$(git ls-files "$d" | grep -cE '\.(test|spec)\.tsx?$')
@@ -48,14 +48,14 @@ done
 
 ## The C++ suite: two tiers, and a skip that says so
 
-`engine/k7-runtime` has `"test": "node scripts/run-tests.mjs && node scripts/run-supervisor-tests.mjs"` (the second runs `engine/k7-supervisor`'s one test binary, under a second, and skips the same way when its `build/<preset>` is not configured), so
+`apps/k7-daw-engine/k7-runtime` has `"test": "node scripts/run-tests.mjs && node scripts/run-supervisor-tests.mjs"` (the second runs `apps/k7-daw-engine/k7-supervisor`'s one test binary, under a second, and skips the same way when its `build/<preset>` is not configured), so
 `npm run test` compiles and runs it like any other workspace. Three
 things that script does, each because the obvious version is wrong:
 
 **It filters on `^studio_`.** `ctest -N` in this build tree lists **ten** tests, and two of them
 are not ours: Tracktion vendors its own `Benchmarks` and `TestRunner` examples, and CMake registers
 them into our project. They are not even built, so a bare `ctest` fails on a missing executable
-with exit 8. Exactly the same leak the root `vitest.config.ts` excludes `engine/k7-runtime/build/**`
+with exit 8. Exactly the same leak the root `vitest.config.ts` excludes `apps/k7-daw-engine/k7-runtime/build/**`
 for — a vendored dependency's own tests turning up as ours.
 
 **It splits fast from slow on a ctest label.** Six of the eight targets are JUCE-free by design —
@@ -74,7 +74,7 @@ the script, so a new test is fast unless it says otherwise, and the script's tar
 network. A tree with no `build/<preset>/CMakeCache.txt` therefore prints what to run and exits 0:
 
 ```
-  SKIPPED — engine/k7-runtime has no build/dev-gcc.
+  SKIPPED — apps/k7-daw-engine/k7-runtime has no build/dev-gcc.
   The C++ tests need a configured tree; configuring fetches Tracktion.
 
     cmake --preset dev-gcc
@@ -121,7 +121,7 @@ A package-level `vitest.config.ts` **replaces** the root one; it does not merge 
 packages carry their own (to pin `$STUDIO_MEDIATEK` away from the developer's real data folder),
 so those four repeat the two timeouts:
 
-`packages/{song,song-edit,song-video}/vitest.config.ts`
+`apps/k7-daw-frontend/packages/{song,song-edit,song-video}/vitest.config.ts`
 
 Every other package inherits the root `vitest.config.ts`, because vitest walks up from the
 package directory when it finds no config of its own. That is also why the root file's `exclude`
@@ -132,11 +132,11 @@ list is load-bearing for packages that never read it.
 Running `vitest run` from the repository root is the obvious thing to do, and without a guard it
 walks into code that is not a vitest suite:
 
-- `engine/k7-runtime/build/**` — CMake vendors Tracktion and JUCE there, and JUCE ships React demo
+- `apps/k7-daw-engine/k7-runtime/build/**` — CMake vendors Tracktion and JUCE there, and JUCE ships React demo
   apps whose `App.test.js` get collected as ours;
 - `.claude/worktrees/**` — every branch ever worked on is checked out here. A bare root run once
   reported 667 failures that belonged to other branches;
-- `engine/scripts/**/*.test.mjs` — `node:test` files too, which k7-desktop's `test` runs: the build
+- `apps/k7-daw-engine/scripts/**/*.test.mjs` — `node:test` files too, which k7-desktop's `test` runs: the build
   scripts are no workspace, and the desktop app is what they release.
 
 All four are excluded alongside `defaultExclude`, never instead of it: dropping `**/node_modules/**`
@@ -162,7 +162,7 @@ like. It costs a process start per file.
 
 ## The Rust suite runs under cargo-nextest on the Mac
 
-`mac-checks.sh` runs `apps/k7/backend-rs`'s tests with `cargo nextest run`:
+`mac-checks.sh` runs `apps/k7-daw-backend`'s tests with `cargo nextest run`:
 each test in its own process, so a test that leans on another's process-wide state — an environment
 variable, a cache filled earlier, a lock meant to serialize — fails there first. `cargo test` stays
 what a developer runs and the fallback on a machine without nextest ([rust-builds.md](rust-builds.md)).

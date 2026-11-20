@@ -37,7 +37,7 @@ modules (`--import tsx`), and the front's crates in a scratch test, a scratch ho
 | choice | why |
 |---|---|
 | the front owns the envelopes' memo, the decodes in flight, the slicing, the prewarm, the model registry, the take's checks and the prefetch's timer | each waits on a decode, a socket or a timer, and the page polls the prewarm every 350 ms; none waits behind a verb |
-| the sidecar's arithmetic and text stay `k7-mediatek`'s | one producer of a sidecar for the file service and this piece; node's own vectors already hold it (`crates/k7-mediatek/tests/analysis.rs`) |
+| the sidecar's arithmetic and text stay `k7-mediatek`'s | one producer of a sidecar for the file service and this piece; node's own vectors already hold it (`packages/k7-mediatek/tests/analysis.rs`) |
 | the `waveform` crate is not linked natively | Wasmtime's 350 ms for ten minutes is not what a person waits on, and a second build of the measure is a second producer to keep byte for byte |
 | `/account/cold-chains/download` is native where chains and media both answer (1p-D16, `file-chains.md`) | the route finds the chain, then starts each model in 1l's registry (the same one `/models/download` feeds); `/models/download` is native too |
 
@@ -112,7 +112,7 @@ The tests run the real waveform module and a shell script that stands in for the
 
 ## The vectors (2403)
 
-`crates/k7-file-service/tests/vectors/media.json`, frozen, harvested once from the TypeScript's own functions
+`packages/k7-file-service/tests/vectors/media.json`, frozen, harvested once from the TypeScript's own functions
 (`regionWaveform`, `beatGrid`, `buildWaveform`, `wfSig`;
 `beatAtSource` and `sourceAtBeat`; `resolveOnsets`; `modelCachePath`; `startModelDownload`'s refusals; `insideDir` and
 `takeHere`; `namedSongFiles` over a fixture workspace; the `/waveform` route's clamps through the real router).

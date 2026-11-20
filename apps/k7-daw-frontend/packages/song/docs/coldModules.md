@@ -103,7 +103,7 @@ A stem separator is the other. It does not produce a number for a graph to use �
 **four audio files**, and it has to, because a chain step compiles to a serial insert on one
 Tracktion track and there is no fan-out in `ProjectDoc` at all. So it says
 `plugin: { type: offline }`: no engine plugin, and a pass writes its outputs before the render.
-See `engine/k7-supervisor/docs/stemSplit.md`.
+See `apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`.
 
 Both are cold for the same reason and obey the same rule — the input has to be knowable in
 full — which is why one word still covers them. What differs is what the pass hands back.
@@ -125,7 +125,7 @@ that is read. The knob cannot express 0, which is the untouched state; the panel
 the floor until the pass measures a tempo or somebody asks for one.
 
 It is what the desk puts on each deck — a deck's source being a file is precisely what makes the
-placement legal. See `packages/song/docs/setProject.md`.
+placement legal. See `apps/k7-daw-frontend/packages/song/docs/setProject.md`.
 
 ### What `offline` actually promises
 
@@ -174,7 +174,7 @@ Two rules come with it, and both are about what a chain can SAY rather than what
 a chain separates or treats and never both (flattened for a render it is a list of names with no
 ports, so a step after a separator has four inputs and no way to name one), and the running is
 handed in through `CommandHost.runColdStep` — a host without one refuses by name. See
-`@studio/commands`' `docs/processChain.md` and `engine/k7-supervisor/docs/stemSplit.md`.
+`@studio/commands`' `docs/processChain.md` and `apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`.
 
 ## What is NOT wired yet
 

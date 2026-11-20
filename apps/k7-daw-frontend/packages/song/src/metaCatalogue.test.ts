@@ -1,6 +1,6 @@
 // metaCatalogue.test.ts — every built-in a `@meta` module names is one the engine CATALOGUES, read
 // from the C++ source: a project's needs are scored against that catalogue, so an uncatalogued one
-// reads as "this engine is missing" on an engine that plays it (engine/k7-runtime/docs/plugins.md).
+// reads as "this engine is missing" on an engine that plays it (apps/k7-daw-engine/k7-runtime/docs/plugins.md).
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const engineSrc = join(here, "../../../engine/k7-runtime/engine");
+const engineSrc = join(here, "../../../../k7-daw-engine/k7-runtime/engine");
 const metaDir = join(here, "../meta");
 
 function* files(dir: string, ext: string): Generator<string> {

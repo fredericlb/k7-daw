@@ -5,7 +5,7 @@
 //
 // Neither reaches the command bar — the name is derived from the arrow clicked. The trailing
 // space `createForGraphCommand` leaves is load-bearing: it is where the name lands, and the bar
-// opens on it when there is no catalogue to pick from. See packages/song/docs/nodes.md.
+// opens on it when there is no catalogue to pick from. See apps/k7-daw-frontend/packages/song/docs/nodes.md.
 
 import type { WebGraph } from "@studio/graph-model";
 import { describe, expect, it } from "vitest";

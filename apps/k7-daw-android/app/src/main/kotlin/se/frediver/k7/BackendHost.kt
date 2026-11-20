@@ -1,6 +1,6 @@
-// BackendHost.kt — k7's backend on the phone: the Rust front (apps/k7/backend-rs) in this process, answering the
+// BackendHost.kt — k7's backend on the phone: the Rust front (apps/k7-daw-backend) in this process, answering the
 // studio's own port by itself. Port, environment and folders are the desktop's, from
-// apps/k7/backend-rs/standalone.json. The page, the library it seeds and the front's code root ride in one zip the
+// apps/k7-daw-backend/standalone.json. The page, the library it seeds and the front's code root ride in one zip the
 // app unpacks. One front per PROCESS, like the supervisor: a start that failed is the one thing a retry redoes. See docs/android.md.
 
 package se.frediver.k7
@@ -20,7 +20,7 @@ object BackendHost {
     const val ORIGIN = "http://127.0.0.1:$PORT"
     /** What every process that derives a loopback address is told — the backend, the supervisor, the pages. */
     const val PORTS_SPEC = "k7=$PORT"
-    /** k7's first page: the page asks `/auth/me` for its token itself (apps/k7/backend-rs/docs/sessions.md). */
+    /** k7's first page: the page asks `/auth/me` for its token itself (apps/k7-daw-backend/docs/sessions.md). */
     const val HOME = "$ORIGIN/"
 
     private var app: Context? = null
@@ -146,7 +146,7 @@ object BackendHost {
     /** Where the backend keeps everything it writes, beside the engine's `.k7`. */
     private fun rootDir(context: Context) = File(context.filesDir, "standalone")
 
-    /** The backend's workspaces and médiathèque, which the engine must be allowed to open (engine/k7-runtime/docs/android.md). */
+    /** The backend's workspaces and médiathèque, which the engine must be allowed to open (apps/k7-daw-engine/k7-runtime/docs/android.md). */
     fun engineRoots(context: Context): List<File> =
         BuildConfig.ENGINE_ROOT_DIRS.split(';').filter { it.isNotEmpty() }.map { File(rootDir(context), it) }
 
@@ -239,10 +239,10 @@ object BackendHost {
         out["K7_FILES"] = "front"
         // The hub copies `k7` from the bundle the first time it has no folder for it.
         out["STUDIO_LIBRARY_SEED"] = "k7-core=" + File(dirs.bundle, dirs.table.getString("library")).absolutePath
-        // The front's code root, unpacked from backend.zip: what its actor reads (apps/k7/backend-rs/docs/service.md).
+        // The front's code root, unpacked from backend.zip: what its actor reads (apps/k7-daw-backend/docs/service.md).
         out["K7_CODE_ROOT"] = File(dirs.bundle, "code").absolutePath
-        // The page, built into the bundle at its repo path (apps/k7/backend-rs/scripts/stageBundle.mjs).
-        out["K7_FRONTEND_DIST"] = File(dirs.bundle, "apps/k7/frontend/dist").absolutePath
+        // The page, built into the bundle at its repo path (apps/k7-daw-backend/scripts/stageBundle.mjs).
+        out["K7_FRONTEND_DIST"] = File(dirs.bundle, "apps/k7-daw-frontend/dist").absolutePath
         // The user's own CAs for the front's outbound calls (a paired server, the hunt) (docs/android.md).
         TrustedCas.file(context).takeIf { it.isFile }?.let { out["K7_EXTRA_CA_CERTS"] = it.absolutePath }
         return out

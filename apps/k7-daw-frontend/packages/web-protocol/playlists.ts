@@ -1,5 +1,5 @@
 // playlists.ts — the reply of a file service's `GET /playlists`: the workspace's `_playlists/` files,
-// one row each. A row with `ok: false` is still listed, being on the disk. See packages/song/docs/playlists.md.
+// one row each. A row with `ok: false` is still listed, being on the disk. See apps/k7-daw-frontend/packages/song/docs/playlists.md.
 
 /** One row of `GET /playlists` — `title` and `count` are parsed service-side. */
 export interface PlaylistInfo {

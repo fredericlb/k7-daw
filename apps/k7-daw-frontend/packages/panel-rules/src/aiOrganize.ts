@@ -2,7 +2,7 @@
 // per-module message the model reads, and the test a proposed panel must pass before it lands
 // in a buffer. Pure and React-free, so the host's server imports it too and both ends agree on
 // what a valid answer is. The answer's JSON is aiAnswer.ts, the prompt's stable half aiPrompt.ts;
-// packages/ui-module-builder/docs/aiOrganize.md.
+// apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md.
 
 import type { ParamMeta } from "@studio/engine-protocol";
 import { parse } from "@studio/k7x/document";
@@ -41,7 +41,7 @@ export interface AiOrganizeRequest {
   /** The panel (`ui.k7x`) and the screens as they are now — sent to the model only on an UPDATE. */
   uiText: string;
   widgetsJs: string;
-  /** `update` changes the panel there is; `reset` designs one from the parameters alone — packages/ui-module-builder/docs/aiOrganize.md. */
+  /** `update` changes the panel there is; `reset` designs one from the parameters alone — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
   mode: AiOrganizeMode;
   /** What the author asked for in their own words: on an update, what to change; on a reset, may be empty. */
   direction: string;
@@ -97,7 +97,7 @@ export function rackSymbols(moduleText: string): string[] {
   }
 }
 
-/** Every bind a proposed panel may carry: the params, and on a rack module its taps — packages/ui-module-builder/docs/aiOrganize.md. */
+/** Every bind a proposed panel may carry: the params, and on a rack module its taps — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
 export function bindableNames(req: {
   params: readonly { name: string }[];
   moduleText: string;
@@ -202,7 +202,7 @@ const DRY = /\bdry\b/i;
 const WET = /\bwet\b/i;
 const MIX = /\bmix\b/i;
 
-/** A module with a dry and a wet level and no mix of its own blends through ONE crossfade knob — packages/ui-module-builder/docs/aiOrganize.md. */
+/** A module with a dry and a wet level and no mix of its own blends through ONE crossfade knob — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
 export function crossfadeIssues(
   widgets: readonly [string, Widget][],
   bindNames: readonly string[],
@@ -228,7 +228,7 @@ export function crossfadeIssues(
   return out;
 }
 
-/** Where the engine offers `@mix`, the blend is THAT knob and the plugin's own mix, dry and wet stay off — packages/ui-module-builder/docs/aiOrganize.md. */
+/** Where the engine offers `@mix`, the blend is THAT knob and the plugin's own mix, dry and wet stay off — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
 export function blendIssues(widgets: readonly [string, Widget][]): string[] {
   const own = (n: string) =>
     !n.startsWith("@") && (MIX.test(n) || DRY.test(n) || WET.test(n));
@@ -241,7 +241,7 @@ export function blendIssues(widgets: readonly [string, Widget][]): string[] {
   return out;
 }
 
-/** Where the engine offers a level, the plugin's own input or output level stays off the panel — packages/ui-module-builder/docs/aiOrganize.md. */
+/** Where the engine offers a level, the plugin's own input or output level stays off the panel — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
 export function levelIssues(
   widgets: readonly [string, Widget][],
   bindNames: readonly string[],
@@ -268,7 +268,7 @@ export function levelIssues(
 const EQ_BAND =
   /^(low|lo|mid|mids|high|hi|bass|treble|presence|presnce|pres)(\s*-?\s*(shelf|peak|band))?(\s+(gain|level|eq))?(\s*\d+)?$/i;
 
-/** An EQ band is a fader, never a knob: side by side, the faders draw the curve — packages/ui-module-builder/docs/aiOrganize.md. */
+/** An EQ band is a fader, never a knob: side by side, the faders draw the curve — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
 export function eqBandIssues(widgets: readonly [string, Widget][]): string[] {
   return widgets
     .filter(
@@ -280,7 +280,7 @@ export function eqBandIssues(widgets: readonly [string, Widget][]): string[] {
     );
 }
 
-/** No control on an `@` param: k7 draws the engine's stage in the card's footer, a lane's on its strip — packages/ui-module-builder/docs/aiOrganize.md. */
+/** No control on an `@` param: k7 draws the engine's stage in the card's footer, a lane's on its strip — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
 export function atControlIssues(
   widgets: readonly [string, Widget][],
 ): string[] {
@@ -300,7 +300,7 @@ export function atControlIssues(
     );
 }
 
-/** A group frames a SECTION: one around a single widget is a tint, not a grouping — packages/ui-module-builder/docs/aiOrganize.md. */
+/** A group frames a SECTION: one around a single widget is a tint, not a grouping — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
 export function loneGroupIssues(
   widgets: readonly [string, Widget][],
 ): string[] {
@@ -338,7 +338,7 @@ function scriptSyntaxError(script: string): string | null {
 // An interactive screen's handler in widgets.js: `pointer(lcd, ev) {` or `pointer: (lcd, ev) =>`.
 const POINTER = /\bpointer\s*(\(|:)/;
 
-/** Does the author's direction ask for a screen you can touch? Words, in English or French — packages/ui-module-builder/docs/aiOrganize.md. */
+/** Does the author's direction ask for a screen you can touch? Words, in English or French — apps/k7-daw-frontend/packages/ui-module-builder/docs/aiOrganize.md. */
 export function asksForInteraction(direction: string): boolean {
   return /interacti|\bdrag|\bclick|\btouch|\bpointer|\bmouse|\bgrab|editable|glisse|clique|souris|déplac|éditable/i.test(
     direction,

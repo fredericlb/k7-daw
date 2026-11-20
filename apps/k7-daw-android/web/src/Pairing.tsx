@@ -1,5 +1,5 @@
 // Pairing.tsx — the LAN devices asking to drive this phone's engine, and those it trusts: the same lists and
-// commands as k7's Paired devices section (apps/k7/frontend/src/settings/PairedDevicesSection.tsx). Approve only when the code
+// commands as k7's Paired devices section (apps/k7-daw-frontend/src/settings/PairedDevicesSection.tsx). Approve only when the code
 // matches the device's screen — anyone on the network can ask under any name.
 
 import { Button } from "@studio/ui/button";

@@ -70,7 +70,7 @@ export const VideoClipSchema = z
     source: z
       .string()
       .refine(isPictureSource, "expected a video or an image file"),
-    // The file's sound, extracted once into an audio file the engine reads on every platform (packages/song/docs/videoSound.md).
+    // The file's sound, extracted once into an audio file the engine reads on every platform (apps/k7-daw-frontend/packages/song/docs/videoSound.md).
     sound: z
       .string()
       .refine((s) => !VIDEO_SOURCE.test(s), "a sound is an audio file")
@@ -135,14 +135,14 @@ export const SequenceSchema = z
   .strict();
 
 const Polarity = z.enum(["unipolar", "bipolar"]);
-// 0..1, scaling every curve's output — the whole range at 1, the default (packages/song/docs/curves.md).
+// 0..1, scaling every curve's output — the whole range at 1, the default (apps/k7-daw-frontend/packages/song/docs/curves.md).
 const Amplitude = z.number().min(0).max(1);
 // Which half of the output a curve keeps — absent is `none`, the whole of it.
 const Cut = z.enum(["none", "positive", "negative"]);
 const ConditionTime = z
   .string()
   .regex(TIMECODE, "expected a timecode like 5:1:1 — a position in the song");
-// WHEN a curve runs: from a moment, until one, between two, or from a node's event — packages/song/docs/curves.md.
+// WHEN a curve runs: from a moment, until one, between two, or from a node's event — apps/k7-daw-frontend/packages/song/docs/curves.md.
 export const CurveConditionSchema = z.discriminatedUnion("type", [
   z
     .object({

@@ -5,7 +5,7 @@ order features migrate off the core (`docs/sdk.md` holds the contract and the ch
 
 - `server.ts` — `BUILTIN_PLUGINS`, installed by the **file-service at boot**, before anything
   reads a command catalogue or compiles a song. Contributes: commands, surface types.
-- `browser.ts` — `BROWSER_PLUGINS`, registered by the **shell** (`apps/k7/frontend`'s
+- `browser.ts` — `BROWSER_PLUGINS`, registered by the **shell** (`apps/k7-daw-frontend`'s
   `plugins.ts`) into its pane registry. Contributes: pane drawers.
 
 The lists are **independent** — a plugin may be server-only (transcription: a verb), browser-only
@@ -32,7 +32,7 @@ types it draws — and the drawer behind it is `lazyDrawer` (`src/lazyDrawer.tsx
 compositor arrive only when a project declares a `turntables` or a `viewport` surface. The shell renders
 `ViewportTab` itself, and gets the lazy one too. The Suspense is the drawer's own, so a drawer arriving
 never hides the panes around it; once mounted it never suspends again, which keeps the pane invariant —
-mounted once, hidden, never unmounted (`apps/k7/AGENTS.md`).
+mounted once, hidden, never unmounted (`apps/k7-daw-frontend/AGENTS.md`).
 
 ## The one surface that stays core
 

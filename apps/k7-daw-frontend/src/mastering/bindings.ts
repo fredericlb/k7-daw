@@ -1,6 +1,6 @@
 // bindings.ts — join a `mastering` surface's mapping to the compiled chains: which control moves
 // which param, on which plugin, over which range. Two of the desk's three joins
-// (packages/song/docs/viewBindings.md); the third — the scale — is deliberately absent here.
+// (apps/k7-daw-frontend/packages/song/docs/viewBindings.md); the third — the scale — is deliberately absent here.
 // See ../../docs/mastering.md.
 
 import type { WebGraph, WebWidget } from "@studio/graph-model";

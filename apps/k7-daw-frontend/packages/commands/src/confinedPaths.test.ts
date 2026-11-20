@@ -21,7 +21,7 @@ import { testHost } from "./testHost";
 beforeAll(compileReady);
 
 const here = dirname(fileURLToPath(import.meta.url));
-const SONG = join(here, "..", "..", "..", "demos", "node-demo.k7");
+const SONG = join(here, "..", "..", "..", "..", "..", "demos", "node-demo.k7");
 
 let root: string;
 let song: string;

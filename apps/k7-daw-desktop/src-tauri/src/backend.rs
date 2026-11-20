@@ -93,12 +93,12 @@ fn host_env(app: &AppHandle, table: &Table) -> Result<Env, String> {
     if let Some(engine) = paths::engine_beside(&supervisor) {
         set("STUDIO_ENGINE", engine.display().to_string());
     }
-    // What the front's actor reads at its root (apps/k7/backend-rs/docs/service.md).
+    // What the front's actor reads at its root (apps/k7-daw-backend/docs/service.md).
     if let Some(code) = paths::code_root(app) {
         set("K7_CODE_ROOT", code.display().to_string());
     }
     // The page from the bundle's dist, or the dev session's Vite (docs/app.md).
-    let dist = bundle.join("apps/k7/frontend/dist");
+    let dist = bundle.join("apps/k7-daw-frontend/dist");
     if dist.join("index.html").is_file() {
         set("K7_FRONTEND_DIST", dist.display().to_string());
     }

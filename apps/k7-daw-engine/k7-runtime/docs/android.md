@@ -1,7 +1,7 @@
 # The engine on Android
 
 The same engine and the same supervisor, built for arm64 Android by their `android-arm64` presets
-and run by the app in `engine/k7-android`, which drives the supervisor as k7's backend does under the desktop app. The supervisor lists the
+and run by the app in `apps/k7-daw-android`, which drives the supervisor as k7's backend does under the desktop app. The supervisor lists the
 phone at the studios it is connected to, exactly as on a computer, and the engine serves the same
 WebSocket protocol on port 8765, bound to loopback unless the LAN is open.
 
@@ -11,44 +11,44 @@ seconds and a blocked main thread is an ANR; the backend gets longer than its ow
 file services are not killed mid-teardown. Its two services, `MediaPlaybackService` and `EngineService`, keep that process in
 front while a page plays or the engine is at work (below), and start nothing of their own.
 
-The iOS app (`docs/ios.md`) is this architecture again. It shares this app's shell page (`engine/k7-android/web`)
+The iOS app (`docs/ios.md`) is this architecture again. It shares this app's shell page (`apps/k7-daw-android/web`)
 and its three page scripts — account, top colour, media session — which accept either app's channel.
 
 ## Standalone: the phone runs its own studio
 
-Like the desktop app on a computer (`apps/k7-desktop/docs/app.md`), the phone needs no server: it runs
+Like the desktop app on a computer (`apps/k7-daw-desktop/docs/app.md`), the phone needs no server: it runs
 **k7's front itself**, and the engine. A studio
 elsewhere is something it can ADD, never something it needs. `BackendHost.kt` is the desktop app's
 `backend.rs` on a phone.
 
 | choice | why |
 |---|---|
-| the desktop app's port, environment and folders, read from `apps/k7/backend-rs/standalone.json` | one table for both, whose values `apps/k7/backend-rs/docs/standalone.md` explains; the port is a `BuildConfig` constant, since the views compare origins before anything is unpacked |
-| k7's view opens on `/` (`BackendHost.HOME`) | the page asks `/auth/me` for its token itself, as on the desktop app's backend (`apps/k7/frontend/docs/localApp.md`); the cookie is `SameSite=Strict`, which a same-origin view sends |
+| the desktop app's port, environment and folders, read from `apps/k7-daw-backend/standalone.json` | one table for both, whose values `apps/k7-daw-backend/docs/standalone.md` explains; the port is a `BuildConfig` constant, since the views compare origins before anything is unpacked |
+| k7's view opens on `/` (`BackendHost.HOME`) | the page asks `/auth/me` for its token itself, as on the desktop app's backend (`apps/k7-daw-frontend/docs/localApp.md`); the cookie is `SameSite=Strict`, which a same-origin view sends |
 | the phone's own studio pinned FIRST in the supervisor's list, before it starts | the supervisor's saved list overrides `$STUDIO_REGISTRY_URL`, so a phone that already listed a studio would never see its own otherwise |
-| the front runs in the app's process, with no node and no child for it | the front holds the file hub and every account's file service itself (`apps/k7/backend-rs/docs/files.md`); the page, the library it seeds and its code root ride in the zip (`apps/k7/backend-rs/scripts/stageBundle.mjs`) |
+| the front runs in the app's process, with no node and no child for it | the front holds the file hub and every account's file service itself (`apps/k7-daw-backend/docs/files.md`); the page, the library it seeds and its code root ride in the zip (`apps/k7-daw-backend/scripts/stageBundle.mjs`) |
 | one `backend.zip` asset, unpacked once per install | the front reads files, not assets; the APK's `lastUpdateTime` marks the copy |
-| the Rust front's code root rides in `backend.zip` as `code/` (`apps/k7/backend-rs/scripts/stageCodeRoot.mjs`, some 700 KB), named to the front as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video there (`apps/k7/backend-rs/docs/service.md`); a folder of its own, beside the page and the library |
+| the Rust front's code root rides in `backend.zip` as `code/` (`apps/k7-daw-backend/scripts/stageCodeRoot.mjs`, some 700 KB), named to the front as `K7_CODE_ROOT` | the front's actor reads `@meta`, `commands.yaml`, the demos and the sample video there (`apps/k7-daw-backend/docs/service.md`); a folder of its own, beside the page and the library |
 | an update writes only the files whose CRC or size changed, and deletes those the new bundle lacks | the bundle is some 20 MB unpacked, and an update rewriting all of it holds the start back; `.entries` keeps each file's CRC and size, the ones Gradle's `Zip` writes in every local header. An entry without them is always written, and the `.installed` marker is removed first and written last, so an unpack cut short is redone |
-| cleartext allowed for `127.0.0.1` only (`engine/k7-android/app/src/main/res/xml/network_security_config.xml`) | the local studio is plain http, as under the desktop app, and every other host stays https |
+| cleartext allowed for `127.0.0.1` only (`apps/k7-daw-android/app/src/main/res/xml/network_security_config.xml`) | the local studio is plain http, as under the desktop app, and every other host stays https |
 | the views wait for the backend before loading it | a first run spends a few seconds unpacking, and a load that fails then would put the error screen up for nothing |
-| the front answers `/api/health` at once, and holds the paths that create workspaces until the bundled library is installed | the start screen hands over on that answer, and a workspace created before the library exists has none; the front owns the wait (`apps/k7/backend-rs/docs/standalone.md`, "Ready means the library is there"), so `BackendHost` and the iPhone's need no probe of their own |
+| the front answers `/api/health` at once, and holds the paths that create workspaces until the bundled library is installed | the start screen hands over on that answer, and a workspace created before the library exists has none; the front owns the wait (`apps/k7-daw-backend/docs/standalone.md`, "Ready means the library is there"), so `BackendHost` and the iPhone's need no probe of their own |
 | the shell page shows the start — "Starting k7…", with the unpack's percentage — and a failed one says why, with a Retry (`web/src/Backend.tsx`) | the phone's own studio is the one a first launch opens, so a start that never ends must not be a blank screen; the percentage is the bytes of `backend.zip` read, which is stored uncompressed in the APK, so its length is known before the unpack |
 | the zip streamed straight out of the APK's assets, never copied to disk first | the extracted tree is the only copy the phone keeps, so there is nothing to delete after it |
 | native libraries extracted at install (`useLegacyPackaging`), and no R8 | the supervisor is EXECUTED, which needs real files; R8 would need keep rules for Capacitor's reflective bridge and the JNI entry points that nobody has written, and a release that breaks at run time costs more than the megabytes |
 
-**The studio's port is the Rust front's** (`RustFront.kt`, `apps/k7/backend-rs/docs/embed.md`): it runs in
+**The studio's port is the Rust front's** (`RustFront.kt`, `apps/k7-daw-backend/docs/embed.md`): it runs in
 the app's process on `STANDALONE_PORT`, the one every view loads.
 
 | choice | why |
 |---|---|
 | the front started once per process | a Retry after a failed start redoes only what failed |
 | the readiness wait asks the studio's port for `/api/health` | the front is the only server there is |
-| the engine core in the front (`K7_ENGINE_CORE=front`, `apps/k7/backend-rs/docs/engine.md`), the machine's engine not (`K7_LOCAL_ENGINE` unset) | the registry, the relay and the tunnel hub are the same Rust on every host; the supervisor is `SupervisorHost.kt`'s, which no front runs here, so there is no local engine for the front to take |
+| the engine core in the front (`K7_ENGINE_CORE=front`, `apps/k7-daw-backend/docs/engine.md`), the machine's engine not (`K7_LOCAL_ENGINE` unset) | the registry, the relay and the tunnel hub are the same Rust on every host; the supervisor is `SupervisorHost.kt`'s, which no front runs here, so there is no local engine for the front to take |
 | a front that cannot start fails the start, with its reason | without it no view loads anything, and a start screen waiting forever says nothing |
 | the compiled modules in `front-cache` beside the front's state (`K7_FRONT_CACHE`) | the same Rust as the desktop app's; the app's process runs from no folder the front could search up from, and a compiled module is machine code, so its folder is the app's own; a cold one costs the first scan some 20 s |
 | `BackendHost.kt` sets no file-service variable: the front runs all fifteen native pieces answering, within the embedded 192 MB heap; `engine`, `media` and `runtime` degrade as the front does with no engine bound, and none is proved on a device yet (5-13) | the pieces are the only file service there is |
-| the file hub in the front (`K7_FILES=front`, `apps/k7/backend-rs/docs/files.md`): every account's file service and the libraries' are the front's own | one hub, the same Rust as the desktop app's |
+| the file hub in the front (`K7_FILES=front`, `apps/k7-daw-backend/docs/files.md`): every account's file service and the libraries' are the front's own | one hub, the same Rust as the desktop app's |
 | the front given the table's environment, its folders, the page's folder (`K7_FRONTEND_DIST`) and the switches | it answers every route and reads the settings those routes read |
 
 **A start that fails is given up on, and the user's retry redoes it.** A front that cannot start — a full disk,
@@ -69,7 +69,7 @@ on — is reported to the shell page as one status (`AppViews.backend()` and its
 the front's is `filesDir/standalone`, whose files it sends the engine by their own paths, not as
 copies. The engine refuses any file outside its roots (`pathRoots.md`), so `EngineBridge.start` sets
 `$STUDIO_ENGINE_ROOTS` to those two folders, named at build time from
-`apps/k7/backend-rs/standalone.json` (`BackendHost.engineRoots`). Without them a project plays with
+`apps/k7-daw-backend/standalone.json` (`BackendHost.engineRoots`). Without them a project plays with
 every clip, sample, patch and model dropped.
 
 ## The app is k7, full screen
@@ -95,14 +95,14 @@ pads them.
 
 **This phone's engine is set in k7's settings** (the home page's cog), because on the phone
 k7 is the only screen there is: the engine's state, the private CA,
-Quit (`apps/k7/frontend/docs/settings.md`). The page bundled in the APK, `engine/k7-android/web`,
+Quit (`apps/k7-daw-frontend/docs/settings.md`). The page bundled in the APK, `apps/k7-daw-android/web`,
 is only seen while the phone's own k7 is **still starting or failed to**, or while k7 **fails to load** — then no app is on screen to reach settings in,
 so it draws the same tray with a Retry. Its private CA form is
 collapsed, since the phone's own k7 needs none.
 
 The activity's theme is `AppTheme.Launch` (`res/values/themes.xml`), Capacitor's `AppTheme.NoActionBar`
 with the startup splash as the window's background, so the phone shows the cassette from the first
-frame (`apps/k7/frontend/docs/icons.md`). It stays a dark theme rather than a DayNight one. Every
+frame (`apps/k7-daw-frontend/docs/icons.md`). It stays a dark theme rather than a DayNight one. Every
 studio page is dark-only (`@studio/ui/theme.css`, and k7's `color-scheme: dark`), so the
 `prefers-color-scheme` a light theme would give the views changes nothing in them; what it would
 change is the window behind a loading page and the native dialogs, a white flash and white boxes
@@ -120,12 +120,12 @@ Two ways from the page to the native half:
   the shell page is on screen.
 - **k7's page** gets `window.k7Android` (`StudioBridge.kt`), an androidx.webkit
   WebMessageListener. It posts its top colour on it and **calls the engine, checked by origin on
-  every message** (`apps/k7/frontend/src/settings/androidEngine.ts`): the object is offered to every
+  every message** (`apps/k7-daw-frontend/src/settings/androidEngine.ts`): the object is offered to every
   origin, since a listener's origin rules are fixed when it is added, and a page the view
   wandered off to gets no answer. A script on k7's page is still not trusted with the
   supervisor: `command` takes the eight the engine page sends on a computer (`engine.start|stop|restart`,
   `audio.priority`, `lan.open`, `plugins.rescan`, `instruments.download|remove`, as the desktop app's front allows,
-  `apps/k7/backend-rs/docs/localEngine.md`) and anything else is refused —
+  `apps/k7-daw-backend/docs/localEngine.md`) and anything else is refused —
   `shutdown`, `session.drop`, `registry.deregister`, `weburi.*` and pairing included, which the panel never sends.
 
 **k7 loads from the phone's own backend, never from the shell page.** The page is same-origin with its backend
@@ -152,12 +152,12 @@ What k7's view does that a browser would do on its own:
   the page's host in its subjectAltName (a DNS name, one leftmost `*` label at most, or the IP);
   a wrong name, an expired or not-yet-valid date, or any fault besides the unknown issuer is never
   forgiven.
-- **An export goes to the folder the person picks** (`ExportFolders.kt`, `apps/k7/frontend/docs/export.md`), not to
+- **An export goes to the folder the person picks** (`ExportFolders.kt`, `apps/k7-daw-frontend/docs/export.md`), not to
   Downloads: the Storage Access Framework's document-tree picker, a persisted URI grant, and each file created in it
   from the page's chunks over `k7Android`.
 - **A download is saved to the phone's Downloads.** The WebView's own download hands a URL to
   a listener that can neither read a `blob:` URL nor send the session's cookie, and the exports are
-  blobs (`apps/k7/frontend/src/downloadBlob.ts`, a release's files). So the
+  blobs (`apps/k7-daw-frontend/src/downloadBlob.ts`, a release's files). So the
   PAGE fetches the file: `assets/download.js`, a document-start script for the app's origin only,
   takes an `<a download>` click on a `blob:`, `data:` or same-origin URL — before the page revokes
   the blob, which `downloadBlob` does a second later — and the download listener runs the same
@@ -203,7 +203,7 @@ behind, the backend the song streams from with it. The app makes that connection
 standard's shape where they are missing, wraps `navigator.mediaSession` and posts what the page sets to `StudioBridge` (`media`); `MediaPlayback.kt` holds a platform
 `MediaSession` and its notification from those messages, and sends each system button back as
 `media-action`, which the script hands to the page's own handler. The page code is the standard
-API (`packages/ui-mini-player/docs/miniPlayer.md`) and knows nothing of Android.
+API (`apps/k7-daw-frontend/packages/ui-mini-player/docs/miniPlayer.md`) and knows nothing of Android.
 
 | choice | why |
 |---|---|
@@ -230,7 +230,7 @@ notification, for as long as the app is **busy**, and the screen is kept on for 
 | choice | why |
 |---|---|
 | a session PLAYING, read off the supervisor's snapshot (`sessions[].playing`) | it is the engine's own word, true whoever drives it — a browser on the LAN included; it holds the service and not the screen, since nobody is looking at the phone |
-| armed, recording and a rig sounding come from k7's page (`apps/k7/frontend/src/androidBusy.ts`, a `busy` message) | the engine reports none of them to the supervisor; the page has them on every frame. A rig counts as live for 30 s after its meters last moved, so a pause between songs does not drop it |
+| armed, recording and a rig sounding come from k7's page (`apps/k7-daw-frontend/src/androidBusy.ts`, a `busy` message) | the engine reports none of them to the supervisor; the page has them on every frame. A rig counts as live for 30 s after its meters last moved, so a pause between songs does not drop it |
 | a microphone and a wake lock the page holds, from `assets/media-session.js` | `getUserMedia` and `navigator.wakeLock` are watched where every page runs, so the `/external` surfaces need no code for the app |
 | the Wake Lock API stood in for when the WebView has none | `useStayAwake` asks for it first; the stand-in has its shape, is released on every hide as a browser's is, and keeps the window flag on |
 | the screen on while a page reports anything, never for the whole activity | an idle app left open must let the phone sleep |
@@ -378,7 +378,7 @@ The supervisor needs no Java — no JUCE, no audio — and is built to be a chil
 stdio, so it stays exactly that. The app packages it as `libk7supervisor.so`: only files named like
 a library reach the native library directory, the one place Android lets an app execute its own
 binary, and `useLegacyPackaging` has the installer extract them as real files. `SupervisorHost.kt`
-is then what `k7-local`'s host (`apps/k7/backend-rs/docs/supervisorHost.md`) is to the desktop app's front — it starts the program, reads its frames, sends its commands,
+is then what `k7-local`'s host (`apps/k7-daw-backend/docs/supervisorHost.md`) is to the desktop app's front — it starts the program, reads its frames, sends its commands,
 and closes stdin to quit it.
 
 Only the ENGINE changes hands. On a computer the supervisor spawns it and kills its process tree; here
@@ -403,7 +403,7 @@ app restarts; the engine keeps serving through the gap and the new supervisor ad
 gives up: unlike the backend, nothing on the phone would retry it.
 
 **No instrument is downloaded until the user asks**, in the Downloads section of k7's settings —
-the engine page's own section, through this app's bridge (`engine/k7-supervisor/docs/instruments.md`).
+the engine page's own section, through this app's bridge (`apps/k7-daw-engine/k7-supervisor/docs/instruments.md`).
 Every instrument together is close to 3 GB, the piano alone 750 MB, and a phone is often on a
 metered network: a first launch that fetched them all would spend a data plan on instruments
 nobody chose.
@@ -429,7 +429,7 @@ out of an app's reach. So the app takes the CA itself, through the document pick
 one or a bundle, parsed by the platform's X.509 factory so a file that is not a certificate is
 refused rather than stored — and keeps them as one PEM file handed to the supervisor as
 `STUDIO_EXTRA_CA_CERTS`, and to the front as `K7_EXTRA_CA_CERTS` (its pairing, the shares: every
-outbound call, `apps/k7/backend-rs/docs/front.md`), which reads it once, at its start, as the next app start does.
+outbound call, `apps/k7-daw-backend/docs/front.md`), which reads it once, at its start, as the next app start does.
 The supervisor reads its roots once, at start, so a change restarts it:
 the running engine is adopted, never stopped, and only the CURRENT supervisor's `engine` requests
 are obeyed, since the old one's last words — stop the engine — may still be in its pipe.
@@ -469,7 +469,7 @@ To check on a phone: `adb logcat -s k7-runtime` shows the buffer at open and eve
 
 | choice | why |
 |---|---|
-| The presets build, Gradle stages | AGP's `externalNativeBuild` would configure second CMake trees and fetch Tracktion into one. `app/build.gradle.kts` runs the engine's `scripts/build.mjs android-arm64` and `engine/scripts/supervisorBuild.mjs` with `STUDIO_SUPERVISOR_PRESET=android-arm64`, against the SDK's NDK, and copies both in. |
+| The presets build, Gradle stages | AGP's `externalNativeBuild` would configure second CMake trees and fetch Tracktion into one. `app/build.gradle.kts` runs the engine's `scripts/build.mjs android-arm64` and `apps/k7-daw-engine/scripts/supervisorBuild.mjs` with `STUDIO_SUPERVISOR_PRESET=android-arm64`, against the SDK's NDK, and copies both in. |
 | API 29 | JUCE's Android font code calls `AFontMatcher`, which is 29+. AAudio, which Oboe prefers, only needs 26. |
 | arm64-v8a only | every phone worth playing on; a second ABI doubles a 35 MB library for nothing. |
 | No VST3 / LADSPA | there is nothing to host and no window for an editor. `loadVstPreset` answers false, as it does for a built-in. |
@@ -501,12 +501,12 @@ also catches the GL driver's chatter, which is noise.
 
 The Rust front's lines (`files |`, `sync |`, `tunnel |`, `[registry]`, its panics) are under `k7-front`: `k7-embed`
 pipes the process's stdout and stderr into logcat when the front starts, and the engine's pipe takes stderr once it
-serves, so the front's stderr lines are `k7-runtime`'s from then on (`apps/k7/backend-rs/docs/embed.md`).
+serves, so the front's stderr lines are `k7-runtime`'s from then on (`apps/k7-daw-backend/docs/embed.md`).
 `adb logcat -s k7-front k7-runtime k7-backend` reads the backend's side.
 
 ## Git on a phone
 
-libgit2 and zlib are compiled into `libk7_embed.so` by the NDK's clang (`buildFront`), with k7's own transports and no OpenSSL or libssh2 (`apps/k7/backend-rs/docs/git.md`). The secrets are kept in a private file of the app, since Android has no keychain the front reaches. The checklist, on a phone with a repository host and a second machine:
+libgit2 and zlib are compiled into `libk7_embed.so` by the NDK's clang (`buildFront`), with k7's own transports and no OpenSSL or libssh2 (`apps/k7-daw-backend/docs/git.md`). The secrets are kept in a private file of the app, since Android has no keychain the front reaches. The checklist, on a phone with a repository host and a second machine:
 
 | check | do | look for |
 |---|---|---|
@@ -524,7 +524,7 @@ libgit2 and zlib are compiled into `libk7_embed.so` by the NDK's clang (`buildFr
   were run on the emulator as an app, with `BackendHost.kt`'s layout and environment (below); the
   APK itself, and the view on the local studio are still to drive.
 - **No ffmpeg on the phone**: waveforms are decoded by WebAssembly instead, and an mp4 or a .mov is probed from its boxes
-  (`packages/audio-analysis/docs/analysis.md`); what else needs them — transcoding — answers as it does on a machine without them.
+  (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`); what else needs them — transcoding — answers as it does on a machine without them.
 - **The tunnel and WebRTC are untested on a phone.** They are the code a computer runs, built unchanged; no
   studio has driven a phone through them yet.
 - **No external plugins, no plugin scan.** An offline render or freeze is the engine's own, asked by the supervisor's `render` job over the engine's socket (`protocol.md`), and `Busy.kt` counts it as busy.

@@ -6,7 +6,7 @@
 // only one carrying ranges: a knob drawn 0..1 for want of meta writes the wrong number.
 //
 // The table is GENERATED JSON (`builtinParams.generated.json`); this file is its type and lookups.
-// See engine/k7-runtime/docs/builtinParams.md.
+// See apps/k7-daw-engine/k7-runtime/docs/builtinParams.md.
 
 import table from "./builtinParams.generated.json" with { type: "json" };
 import { ENGINE_NS, slugifyPluginName } from "./moduleTypes";

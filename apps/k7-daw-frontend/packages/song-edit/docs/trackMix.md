@@ -9,7 +9,7 @@ is named after it.
 
 ## What a lane's own file carries
 
-`color` and `disabled`, and nothing else (`packages/song/docs/trackModules.md`). Its mute is its
+`color` and `disabled`, and nothing else (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`). Its mute is its
 module's bypass, written to `graph.k7x`'s `bypassed:` — one state in one place — and solo is
 derived by the surface; `volume` and `pan` belong to the `Mixer` module; `frozen` is a point in
 the graph rather than a lane's field.
@@ -46,7 +46,7 @@ a paste reproduces the event it copied, window, fades and passes included.
 
 Adding lands on the set the lane is PLAYING: `addPlacement` resolves that per document, so a
 lane running an alternative gets it where it can be heard
-(`packages/song/docs/alternatives.md`). And it writes a REFERENCE — the clip is not moved,
+(`apps/k7-daw-frontend/packages/song/docs/alternatives.md`). And it writes a REFERENCE — the clip is not moved,
 copied or altered, and nothing stops the same material sitting on two lanes. Removing is the
 same asymmetry: deleting the last placement of a clip just leaves it unplaced.
 
@@ -72,7 +72,7 @@ agree or a fade lands a bar out.
 
 `setTrackPlacementWindow` writes the placement's `from`/`to` in SECONDS, which is where an
 event's window lives: a clip file describes the bytes, a placement describes the use
-(`packages/song/docs/materialCut.md`). It is what the clip panel's two edge handles commit and
+(`apps/k7-daw-frontend/packages/song/docs/materialCut.md`). It is what the clip panel's two edge handles commit and
 what `event window` writes.
 
 Seconds and not a timecode, because that is the axis the gesture happened on — a waveform is a
@@ -95,7 +95,7 @@ otherwise its own `from`/`to`. The material's window is read but never written �
 the most restrictive pair winning, so the event's window is clamped inside it and an edge that
 only restates the material's own is cleared rather than copied. The placement then says nothing,
 which is what "no further restriction" should look like in a file. See
-`packages/song/docs/clipResize.md`.
+`apps/k7-daw-frontend/packages/song/docs/clipResize.md`.
 
 Windows are read AS AUTHORED: a timecode window is parsed the way the compiler parses it, so a
 resize of a file spelled that way lands on the same numbers rather than a beat off. The

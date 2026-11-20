@@ -3,7 +3,7 @@
 This is a **mockup, not a design**: it exists to measure end-to-end latency, the CPU cost on
 the audio thread, and what happens when a listener drops. Everything below is the browser half
 and the reasoning behind every number in it. The engine half is
-`engine/k7-runtime/docs/broadcast.md`.
+`apps/k7-daw-engine/k7-runtime/docs/broadcast.md`.
 
 ## Who listens
 
@@ -52,7 +52,7 @@ a flag day: an old client goes quiet instead of playing compressed data as PCM.
 ## The frame
 
 32 bytes of header then interleaved float32
-(`packages/engine-protocol/stream.ts`). Two constraints shaped it:
+(`apps/k7-daw-frontend/packages/engine-protocol/stream.ts`). Two constraints shaped it:
 
 * **32 is a multiple of 4**, so the payload can be read as a zero-copy `Float32Array` view
   over the same buffer. Had the header been 30 bytes, everything would still decode in the
@@ -154,7 +154,7 @@ only appears with time.
 
 ## What the measurements say
 
-`node engine/k7-runtime/scripts/listen-headless.mjs ws://HOST:PORT [seconds]` bundles *these*
+`node apps/k7-daw-engine/k7-runtime/scripts/listen-headless.mjs ws://HOST:PORT [seconds]` bundles *these*
 modules with esbuild, serves them, and drives headless Chrome over CDP — so the worklet
 below really renders, with nobody in the room. Against a live engine on loopback:
 

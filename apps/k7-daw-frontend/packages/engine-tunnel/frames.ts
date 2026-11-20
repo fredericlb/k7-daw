@@ -8,7 +8,7 @@ export { ENGINE_PROTOCOL_HEADER as TUNNEL_PROTOCOL_HEADER } from "@studio/engine
 export const TUNNEL_PATH = "/api/engine-tunnel";
 /** The engine's token rides in a header, never the query, so no access log keeps it. */
 export const TUNNEL_TOKEN_HEADER = "x-studio-engine-token";
-/** The supervisor's tunnel secret, the one credential no browser ever sees — apps/k7/backend-rs/docs/engine/token.md. */
+/** The supervisor's tunnel secret, the one credential no browser ever sees — apps/k7-daw-backend/docs/engine/token.md. */
 export const TUNNEL_SECRET_HEADER = "x-studio-tunnel-secret";
 
 /** The server's render machine proves itself with this header: a key the deployment shares, never the engine's token — docs/jobs.md. */

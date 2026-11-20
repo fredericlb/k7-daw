@@ -1,5 +1,5 @@
 //! engines.rs — how the engine jobs reach an engine: the registry's view of it and a
-//! channel through the hub, from `k7-engine` in-process (`apps/k7/backend-rs/docs/engine/reach.md`).
+//! channel through the hub, from `k7-engine` in-process (`apps/k7-daw-backend/docs/engine/reach.md`).
 //! What a reader gets wrong: an in-process channel drops what is sent before the engine answers, so a `Link` holds it.
 
 use std::sync::Arc;

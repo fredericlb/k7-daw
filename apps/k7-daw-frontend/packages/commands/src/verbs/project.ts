@@ -50,7 +50,7 @@ function writeMetronomeLevel(songPath: string, level: number): void {
   setFileValue(join(songPath, "settings.k7x"), ["metronome_level"], level);
 }
 
-/** `project add|remove <at> <length>` — a POSITION then a DURATION; docs/verbs.md, packages/song/docs/insertTime.md. */
+/** `project add|remove <at> <length>` — a POSITION then a DURATION; docs/verbs.md, apps/k7-daw-frontend/packages/song/docs/insertTime.md. */
 async function projectTimeCommand(
   a: string,
   h: CommandHost,
@@ -270,7 +270,7 @@ export const PROJECT_VERBS: Record<string, SidHandler> = {
       h.refuse([`metronome volume failed: ${(e as Error).message}`]);
     }
   },
-  /** `project aspect <ratio>` — the frame's SHAPE, written as `project.viewport`'s size — packages/song-video/docs/picture.md. */
+  /** `project aspect <ratio>` — the frame's SHAPE, written as `project.viewport`'s size — apps/k7-daw-frontend/packages/song-video/docs/picture.md. */
   "project.aspect": async (a, h) => {
     const want = aspectSize(a.trim());
     if (!want) {

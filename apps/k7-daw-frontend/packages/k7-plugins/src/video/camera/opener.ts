@@ -1,6 +1,6 @@
 // opener.ts — which lens a camera label opens, the one choice the viewport and the recorder share.
 // What reads wrong: a `remote:` label is the account's camera on another device, opened over a peer
-// connection whichever browser draws it; any other label is this browser's own (packages/song/docs/camera.md).
+// connection whichever browser draws it; any other label is this browser's own (apps/k7-daw-frontend/packages/song/docs/camera.md).
 
 import { type LensOpener, localLens } from "@studio/ui-eyes/camera";
 import { isRemoteLabel } from "@studio/web-protocol/cameras";

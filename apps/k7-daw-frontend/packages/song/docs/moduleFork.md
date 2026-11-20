@@ -4,7 +4,7 @@ A `@workspace` or `@k7-core` module already has a folder: `module.k7x`, and whic
 and a `jsdsp.ts` it carries. Editing one is writing that folder directly — no
 special handling here, no redirect. `@workspace` takes the write immediately, like any other file
 k7 saves; `@k7-core` goes through the Edit-then-publish gate instead, since a save there commits and
-pushes a repository other songs read (`apps/k7/frontend/docs/sharedModules.md`). Neither needs
+pushes a repository other songs read (`apps/k7-daw-frontend/docs/sharedModules.md`). Neither needs
 this file: it is about the module that has no folder at all.
 
 ## The other way in: a module with no folder at all

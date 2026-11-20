@@ -27,7 +27,7 @@ export interface SurfaceTarget {
 }
 
 export interface SurfaceBinding extends SurfaceTarget {
-  /** A SECOND param this control drives. At most one — see packages/song/docs/setProject.md. */
+  /** A SECOND param this control drives. At most one — see apps/k7-daw-frontend/packages/song/docs/setProject.md. */
   also?: SurfaceTarget;
 }
 

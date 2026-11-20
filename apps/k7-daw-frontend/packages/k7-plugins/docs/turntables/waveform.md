@@ -2,7 +2,7 @@
 
 Under each record, a band that **scrolls beneath the playhead**: the track slides, the head
 stays in the middle. The LOOK is the one every k7 waveform wears, painted by the same function
-(`packages/ui-waveform/docs/spectrum.md`); the SCROLL is this band's alone. `@studio/ui-waveform`
+(`apps/k7-daw-frontend/packages/ui-waveform/docs/spectrum.md`); the SCROLL is this band's alone. `@studio/ui-waveform`
 draws a **whole** track into a given width, head crossing it; here a window of fixed duration,
 and the audio moves. Two different questions — "what does this track look like" against "what
 arrives in four seconds".
@@ -77,7 +77,7 @@ transport is no deck's clock.
 
 The band scrolls under a fixed head, so from one frame to the next the picture is the same
 picture moved. The spectrum is therefore rasterised once per track and size into tiles
-(`SpectrumStrip`, `packages/ui-waveform/docs/spectrum.md`) and each frame blits the one or two
+(`SpectrumStrip`, `apps/k7-daw-frontend/packages/ui-waveform/docs/spectrum.md`) and each frame blits the one or two
 tiles in view at an offset; only the grid, the loop, the head and the two times are drawn per
 frame. Painting every column every frame would cost an allocation, a colour string and a
 `fillStyle` parse per pixel column, per deck, 60 times a second.
@@ -139,7 +139,7 @@ show.
 
 The colouring is not this band's own: it lives in `@studio/ui-waveform`, which every k7 waveform
 paints through, and its choices (the additive mix, normalising by the loudest band) are argued in
-`packages/ui-waveform/docs/spectrum.md`.
+`apps/k7-daw-frontend/packages/ui-waveform/docs/spectrum.md`.
 
 ### What it costs
 

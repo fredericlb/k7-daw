@@ -1,7 +1,7 @@
 // The ARRANGEMENT — the timeline, and the transport that rolls through it.
 //
 // A project draws one because it says so here: the timeline is a SURFACE
-// (packages/song/docs/surfaces.md), not something the editor hands out for free. Take this
+// (apps/k7-daw-frontend/packages/song/docs/surfaces.md), not something the editor hands out for free. Take this
 // file away and the song still compiles and still plays — you simply have no lanes on screen.
 //
 // `split` is what puts it in the layout, sharing the window with the graph underneath, and is

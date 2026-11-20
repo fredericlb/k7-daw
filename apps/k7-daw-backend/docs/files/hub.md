@@ -77,7 +77,7 @@ the account has a runtime and re-established when the tunnel hub restarts.
 
 A device's bound engine sees exactly five roots of the account: its `workspace/` folder, writable, so a take
 comes back; its render cache `.renders/`, writable, so an automatic VST render comes back
-(`packages/song/docs/autoFreeze.md`); its undo cache `.history/`, writable, since the machine KEEPS
+(`apps/k7-daw-frontend/packages/song/docs/autoFreeze.md`); its undo cache `.history/`, writable, since the machine KEEPS
 an undo's audio and sends it back up for an undo (`files/history.md`); its
 `models/`, read-only; and the instance's data folder, read-only.
 **Never the rest of `$STUDIO_HOME`**, which holds the
@@ -85,7 +85,7 @@ account's own state: an engine's machine may be a shared studio box.
 
 A binding is two loopback paths to the same machine: the engine's, and its **jobs** — where every
 separation the account asks for runs, since cutting stems belongs to the engine's machine
-(`engine/k7-supervisor/docs/stemSplit.md`). The account's `models/` is shared too, read-only,
+(`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md`). The account's `models/` is shared too, read-only,
 so a model downloaded once here reaches that machine once. A cut also shares the folder of the model it resolved when no root holds it
 (`$STUDIO_MODELS` moves it off `models/`), read-only: the machine refuses a path outside its copies.
 
@@ -93,7 +93,7 @@ The engine's plugin list is fetched over the tunnel at binding time and written 
 `<home>/exts.json`, the scan file's own shape, so everything that reads the engine's catalogue
 works unchanged. When the engine answers that its scan is still running — it scans at every
 start — the hub keeps the channel open, for fifteen minutes at most, and writes the list again
-from the one the scan ends on (`engine/k7-runtime/docs/plugins.md`). A rescan asked later reaches
+from the one the scan ends on (`apps/k7-daw-engine/k7-runtime/docs/plugins.md`). A rescan asked later reaches
 the server at the next binding, or through the account's runtime when a project waits for it. Both writers leave a copy that already says the same
 untouched, since its mtime is in every project's revision token.
 
@@ -112,4 +112,4 @@ loads — an amp's model, its samples — live in one, and no workspace holds a 
 
 What drives or needs the machine's own hardware, for every account alike: its audio devices, its
 plugins, the separations its CPU runs, and playing a song on its speakers. No file runtime runs
-there: the server asks for that work as jobs over the tunnel (`packages/engine-tunnel/docs/jobs.md`).
+there: the server asks for that work as jobs over the tunnel (`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`).

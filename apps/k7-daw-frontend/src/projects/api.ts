@@ -275,7 +275,7 @@ export const accountFiles = {
 
   /**
    * A foreign project DROPPED on a workspace row: the verbs' Worker translates it, uploads its samples and lands the
-   * texts under the folder the popin named — nothing is left in the workspace but the project (packages/translator/docs/import.md).
+   * texts under the folder the popin named — nothing is left in the workspace but the project (apps/k7-daw-frontend/packages/translator/docs/import.md).
    */
   importProjectFile: async (
     m: AccountFiles,

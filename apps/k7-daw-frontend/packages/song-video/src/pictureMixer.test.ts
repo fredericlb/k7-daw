@@ -24,7 +24,14 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { compileVideoChains } from "./videoChains";
 import { loadVideoProject } from "./videoProject";
 
-const REPO = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const REPO = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "..",
+  "..",
+  "..",
+);
 let ws: string;
 let dir: string;
 beforeEach(() => {

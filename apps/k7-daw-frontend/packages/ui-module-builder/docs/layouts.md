@@ -25,7 +25,7 @@ vertical({
 
 ## One panel, two shapes
 
-The two are the same panel, so `packages/panel-rules/src/layoutTwins.ts` checks:
+The two are the same panel, so `apps/k7-daw-frontend/packages/panel-rules/src/layoutTwins.ts` checks:
 
 - **every page offers the same controls in both** — the same binds, counted, on the same tab. A knob
   missing from one shape is a control that disappears when the phone is turned. Frames (`group`) and
@@ -42,7 +42,7 @@ panel wider than 4 columns without one is reported.
 
 ## Designing the vertical layout
 
-The design brief that governs the panel (`packages/panel-rules/src/aiPrompt.ts`, `aiOrganize.md`) governs this shape too:
+The design brief that governs the panel (`apps/k7-daw-frontend/packages/panel-rules/src/aiPrompt.ts`, `aiOrganize.md`) governs this shape too:
 sections in signal-flow order, each framed by a tinted `group`, knobs 2×2, faders only for bands,
 screens only where a picture says more, no `@` controls. What changes is the direction: sections are
 STACKED, top to bottom in the order the signal meets them, each as wide as the 4 columns allow. A 2×2
@@ -58,6 +58,6 @@ one.
 
 ## Checking the library
 
-`npm run lint:layouts` (`npx tsx packages/ui-module-builder/scripts/checkLayouts.ts [module dirs…]`) checks every library panel
+`npm run lint:layouts` (`npx tsx apps/k7-daw-frontend/packages/ui-module-builder/scripts/checkLayouts.ts [module dirs…]`) checks every library panel
 (or those named) against these rules and the brief's structural ones, and against the panel as the
 library last committed it: every control the committed panel offered must still be offered somewhere.

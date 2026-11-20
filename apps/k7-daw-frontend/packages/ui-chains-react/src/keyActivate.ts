@@ -1,6 +1,6 @@
 // keyActivate.ts — Enter on a focused card or corner button does what its click does.
 // The one thing a reader would get wrong: Space is NOT handled — a host's Space is its transport,
-// wherever focus is (apps/k7/frontend/docs/shell.md), and a card that ate it would stop the music.
+// wherever focus is (apps/k7-daw-frontend/docs/shell.md), and a card that ate it would stop the music.
 
 import type { KeyboardEvent } from "react";
 

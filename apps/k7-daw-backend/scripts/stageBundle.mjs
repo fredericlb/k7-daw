@@ -23,7 +23,7 @@ rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
 if (!noFrontend) {
-  const dist = "apps/k7/frontend/dist";
+  const dist = "apps/k7-daw-frontend/dist";
   if (!existsSync(join(repo, dist)))
     throw new Error(`${dist} is missing — build the frontend first`);
   cpSync(join(repo, dist), join(out, dist), { recursive: true });

@@ -1,4 +1,4 @@
-// tunnel_harness.cpp — the native tunnel agent alone, for packages/engine-tunnel's suites to drive
+// tunnel_harness.cpp — the native tunnel agent alone, for apps/k7-daw-frontend/packages/engine-tunnel's suites to drive
 // against the real TypeScript hub: `tunnel_harness <registryUrl> <id> <token> <enginePort> <cacheDir>`.
 // It answers the same two test jobs the TypeScript suite gives its own agent, and exits when stdin
 // closes — the test's way of stopping it.

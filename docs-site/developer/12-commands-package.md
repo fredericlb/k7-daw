@@ -1,17 +1,17 @@
 # The commands package
 
-`packages/commands` (`@studio/commands`) is k7's one verb list. Every action a person can take on a song — from the command bar, a key, a button, a right-click — is a line dispatched through it. The web editor has no file operations of its own: the verbs run in a browser Worker over a virtual file system and land their writes as one change set on the file service (`packages/commands/docs/runtime.md`).
+`apps/k7-daw-frontend/packages/commands` (`@studio/commands`) is k7's one verb list. Every action a person can take on a song — from the command bar, a key, a button, a right-click — is a line dispatched through it. The web editor has no file operations of its own: the verbs run in a browser Worker over a virtual file system and land their writes as one change set on the file service (`apps/k7-daw-frontend/packages/commands/docs/runtime.md`).
 
 ## Pieces
 
 | File | Role |
 |---|---|
-| `packages/commands/commands.yaml` | The **catalogue**: what you type, mapped to a feature SID, with its description, arguments and menus. Declarative. |
-| `packages/commands/src/commandSpec.ts` | Loads the catalogue, validates argument shapes, completes, dispatches (`runCommand`), and registers plugin verbs. |
-| `packages/commands/src/providers.ts` | The completion **providers**, and each one's label, display class and hint. |
-| `packages/commands/src/commands.ts` | `SID_HANDLERS`: SID → handler, built from the `verbs/` tables, and the `CommandHost` interface. |
-| `packages/commands/src/verbs/` | Handler families (`TRACK_VERBS`, `PICTURE_VERBS`, `SYSTEM_VERBS`…), spread into `SID_HANDLERS`. |
-| `packages/commands/src/testHost.ts` | A host for tests. |
+| `apps/k7-daw-frontend/packages/commands/commands.yaml` | The **catalogue**: what you type, mapped to a feature SID, with its description, arguments and menus. Declarative. |
+| `apps/k7-daw-frontend/packages/commands/src/commandSpec.ts` | Loads the catalogue, validates argument shapes, completes, dispatches (`runCommand`), and registers plugin verbs. |
+| `apps/k7-daw-frontend/packages/commands/src/providers.ts` | The completion **providers**, and each one's label, display class and hint. |
+| `apps/k7-daw-frontend/packages/commands/src/commands.ts` | `SID_HANDLERS`: SID → handler, built from the `verbs/` tables, and the `CommandHost` interface. |
+| `apps/k7-daw-frontend/packages/commands/src/verbs/` | Handler families (`TRACK_VERBS`, `PICTURE_VERBS`, `SYSTEM_VERBS`…), spread into `SID_HANDLERS`. |
+| `apps/k7-daw-frontend/packages/commands/src/testHost.ts` | A host for tests. |
 
 The work a verb does lives in other packages: `@studio/song-edit` changes project files, `@studio/take-render` writes audio, `@studio/audio-passes` runs offline chains. A handler parses its arguments, calls them, and reports.
 
@@ -66,19 +66,19 @@ A handler **refuses** through `host.refuse(lines)` and returns: a refusal is not
 
 `CommandHost` (in `commands.ts`) is everything a verb may touch: the song path and compiled `ProjectDoc`, `log` / `refuse`, `reload`, the transport, `arm`, applying the project to the engine, plugin listing and scanning, and optional capabilities (`getAudioDevices`, `clipEnvelope`, `runColdStep`, `onnxProviders`, `saveTake`, `render`, `peak`, `seconds`, `probe`, `extractSound`, `prepare`, `playlistStems`, `transcribe`, `snapshot` for undo backups, `repoDir` for workspace-wide files…). Optional members are absent on hosts that cannot provide them, and the verb refuses with the reason.
 
-The production host is the Worker's (`packages/commands/src/runtime/host.ts`); members that need the machine are requests to the server's `/verb-host/*` routes. The run's writes land as one change set, so it is one undo step, and the answer carries the revision and the files written. Verbs that need no active project (`system channel`, `playlist`, `library`) are listed in `GLOBAL_COMMAND`; every other one is refused without an open project.
+The production host is the Worker's (`apps/k7-daw-frontend/packages/commands/src/runtime/host.ts`); members that need the machine are requests to the server's `/verb-host/*` routes. The run's writes land as one change set, so it is one undo step, and the answer carries the revision and the files written. Verbs that need no active project (`system channel`, `playlist`, `library`) are listed in `GLOBAL_COMMAND`; every other one is refused without an open project.
 
-The file service exposes what a run reads and commits: `GET /verb-bundle`, `GET /verb-bundle/library`, `POST /changes` and the `/verb-host/*` members (`apps/k7/backend-rs/docs/file-changes.md`, `verb-host.md`). The palette's catalogue (command, help, readable, menu, confirm, each argument's class, provider and hint) and `completionItems` are the runtime's, not routes.
+The file service exposes what a run reads and commits: `GET /verb-bundle`, `GET /verb-bundle/library`, `POST /changes` and the `/verb-host/*` members (`apps/k7-daw-backend/docs/file-changes.md`, `verb-host.md`). The palette's catalogue (command, help, readable, menu, confirm, each argument's class, provider and hint) and `completionItems` are the runtime's, not routes.
 
 ## Plugins add verbs
 
-A plugin (`packages/k7-sdk`) contributes a command as a spec **and** a handler together: `registerVerb` in `commandSpec.ts` calls `registerCommandSpec` and `registerCommand`, and both refuse a word or SID already taken. `installServerSide` in `packages/k7-sdk/src/install.ts` records which plugin owns which SID. The file service installs the builtin plugins at boot (`installBuiltinPlugins` from `packages/k7-plugins/src/server.ts`); today that is the transcription plugin's `track transcribe` (`packages/k7-plugins/src/transcription/index.ts`). Registered specs are merged into every read of the catalogue, so palette, menus and dispatch see them like YAML rows.
+A plugin (`apps/k7-daw-frontend/packages/k7-sdk`) contributes a command as a spec **and** a handler together: `registerVerb` in `commandSpec.ts` calls `registerCommandSpec` and `registerCommand`, and both refuse a word or SID already taken. `installServerSide` in `apps/k7-daw-frontend/packages/k7-sdk/src/install.ts` records which plugin owns which SID. The file service installs the builtin plugins at boot (`installBuiltinPlugins` from `apps/k7-daw-frontend/packages/k7-plugins/src/server.ts`); today that is the transcription plugin's `track transcribe` (`apps/k7-daw-frontend/packages/k7-plugins/src/transcription/index.ts`). Registered specs are merged into every read of the catalogue, so palette, menus and dispatch see them like YAML rows.
 
 ## Web-local commands
 
-Some lines are answered by the page itself, not the verbs Worker, because what they do only exists there. They are listed in `apps/k7/frontend/src/palette.ts` (`LOCAL_COMMANDS`, with `LOCAL_READABLE` and `LOCAL_ARGS`) and dispatched by `runLocalCommand` in `App.tsx`:
+Some lines are answered by the page itself, not the verbs Worker, because what they do only exists there. They are listed in `apps/k7-daw-frontend/src/palette.ts` (`LOCAL_COMMANDS`, with `LOCAL_READABLE` and `LOCAL_ARGS`) and dispatched by `runLocalCommand` in `App.tsx`:
 
-- **`ui …`** — view state only: never the project, never the transport. `apps/k7/frontend/src/localCommands.ts` holds the exact names (`UI_EXACT`) and heads (`UI_HEADS`); the prefix is enforced both ways (`uiVerdict`). An unprefixed line that the server's catalogue names goes to the server even if it shares a word with a `ui` head (`curve set` is not `ui curve set`).
+- **`ui …`** — view state only: never the project, never the transport. `apps/k7-daw-frontend/src/localCommands.ts` holds the exact names (`UI_EXACT`) and heads (`UI_HEADS`); the prefix is enforced both ways (`uiVerdict`). An unprefixed line that the server's catalogue names goes to the server even if it shares a word with a `ui` head (`curve set` is not `ui curve set`).
 - **The bare transport verbs** (`BARE_TRANSPORT`: play, stop, toggle, rewind, panic) go straight down the engine socket for latency, falling through to the Worker when the socket is down or busy. `transport replay`, `locate`, `loop`, `record`, `step next/prev` are browser-only.
 - **The selection verbs** (`selection copy/paste/delete/split`) read the clipboard and the rectangle, which are the browser's, and emit catalogue lines (`events add`, `events remove`, `event split`…).
 - **Writes through a route rather than a verb**: `project undo/redo`, `project export`, `project import`, `project master fix`, the file tree's `fs file …` / `fs folder new`, `module create rack`, `sequence edit roll/tracker`.
@@ -87,4 +87,4 @@ Some lines are answered by the page itself, not the verbs Worker, because what t
 
 ## Tests
 
-`npm run test` in `packages/commands`. `commandSpec.test.ts` checks the catalogue itself: every provider exists, every typed argument is a known single-token shape, every class and menu word is mirrored on the wire, every argument has a hint, and `readable` exists in both languages, is a sentence rather than the name, fits 60 characters, has no full stop, and is unique. Each verb family has its own test file over `testHost.ts`.
+`npm run test` in `apps/k7-daw-frontend/packages/commands`. `commandSpec.test.ts` checks the catalogue itself: every provider exists, every typed argument is a known single-token shape, every class and menu word is mirrored on the wire, every argument has a hint, and `readable` exists in both languages, is a sentence rather than the name, fits 60 characters, has no full stop, and is unique. Each verb family has its own test file over `testHost.ts`.

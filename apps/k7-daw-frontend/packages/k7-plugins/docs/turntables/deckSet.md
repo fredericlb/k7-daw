@@ -21,7 +21,7 @@ envelopes and the track picker — things that do not survive the tab because th
 
 On the k7 side, `SurfaceTab` keeps the halves apart: hooks above a line, screen below, and the
 component stays mounted as long as the project declares the surface. The rule in
-`packages/song/docs/surfaces.md` about `view` surfaces ("drawn only while it is open") therefore
+`apps/k7-daw-frontend/packages/song/docs/surfaces.md` about `view` surfaces ("drawn only while it is open") therefore
 speaks about the DRAWING only.
 
 ## The two routes to the engine, always

@@ -2,7 +2,7 @@
 name = "k7x"
 version = "0.1.0"
 edition = "2024"
-description = "k7x, parsed in Rust: the same grammar and spans as packages/k7x/src/parse.ts, the tree in a bumpalo arena."
+description = "k7x, parsed in Rust: the same grammar and spans as apps/k7-daw-frontend/packages/k7x/src/parse.ts, the tree in a bumpalo arena."
 publish = false
 
 [workspace]

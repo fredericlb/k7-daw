@@ -1,5 +1,5 @@
 // makeEditVectors.mts — writes rust/tests/vectors/edit.json from the TypeScript editor and printer (docs/wasm-step3a-brief.md).
-// Run: npx tsx packages/k7x/scripts/makeEditVectors.mts. What reads wrong: the corpus ops are generated twice, here and in rust/tests/corpus.rs.
+// Run: npx tsx apps/k7-daw-frontend/packages/k7x/scripts/makeEditVectors.mts. What reads wrong: the corpus ops are generated twice, here and in rust/tests/corpus.rs.
 
 import { createHash } from "node:crypto";
 import {
@@ -17,8 +17,17 @@ import { stringify } from "../src/print.ts";
 import { applySugared } from "../src/sugared.ts";
 
 const PKG = join(import.meta.dirname, "..");
-const ROOT = join(PKG, "..", "..");
-const OUT = join(PKG, "rust", "tests", "vectors");
+const ROOT = join(PKG, "..", "..", "..", "..");
+const OUT = join(
+  PKG,
+  "..",
+  "..",
+  "..",
+  "k7-daw-wasm",
+  "k7x",
+  "tests",
+  "vectors",
+);
 
 type Path = (string | number)[];
 type Op = { op: string; path?: Path; [k: string]: unknown };

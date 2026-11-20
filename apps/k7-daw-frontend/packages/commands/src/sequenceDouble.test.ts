@@ -2,7 +2,7 @@
 //
 // Through the DISPATCHER and asserting the FILE, like the other note verbs: what is pinned here is
 // what a LENGTH is when the file states no window, and that the copies land inside the journal's
-// one entry. The writer's own rules are packages/song-schema's doubleSequence.test.ts.
+// one entry. The writer's own rules are apps/k7-daw-frontend/packages/song-schema's doubleSequence.test.ts.
 
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

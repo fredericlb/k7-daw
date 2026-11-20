@@ -219,7 +219,7 @@ describe("uiVerdict — a `ui` head never swallows a server command", () => {
       readFileSync(
         join(
           dirname(fileURLToPath(import.meta.url)),
-          "../../../../packages/commands/commands.yaml",
+          "../packages/commands/commands.yaml",
         ),
         "utf8",
       ),

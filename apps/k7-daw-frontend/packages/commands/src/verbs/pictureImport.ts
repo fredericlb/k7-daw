@@ -2,7 +2,7 @@
 // written as this project's own picture lanes, one per video track, appended on top of what is
 // there. Each shot's media is found the way a conform finds it — by the path the file gives, then
 // by its name in `clips/` — and a clip already on that file is reused. What cannot be found is
-// still placed, and named. See packages/song-video/docs/interchange.md.
+// still placed, and named. See apps/k7-daw-frontend/packages/song-video/docs/interchange.md.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, relative, resolve, sep } from "node:path";

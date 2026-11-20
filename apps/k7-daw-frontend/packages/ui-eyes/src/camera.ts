@@ -1,7 +1,7 @@
 // camera.ts — opening a LIVE lens for a layer that names one. The matching is a pure function and
 // is the half worth testing: a project says which camera by the LABEL a person reads, because a
 // deviceId is salted per browser and per origin and one written into a committed file names
-// nothing on the next machine. See packages/song/docs/camera.md.
+// nothing on the next machine. See apps/k7-daw-frontend/packages/song/docs/camera.md.
 
 /** The little of a `MediaDeviceInfo` this needs — declared structurally, so a test needs no DOM. */
 export interface CameraDevice {
@@ -74,7 +74,7 @@ export function releaseLens(lens: Pick<Lens, "stream" | "close">): void {
 
 /** How a live lane gets its picture. Injected, because the browser that DRAWS a surface is not
  *  always the one that may open a camera: over the LAN a tablet has no secure context, so its
- *  lens arrives over a peer connection instead. See packages/song/docs/camera.md. */
+ *  lens arrives over a peer connection instead. See apps/k7-daw-frontend/packages/song/docs/camera.md. */
 export type LensOpener = (label: string) => Promise<Lens>;
 
 /** This browser's own camera — the ordinary opener, and the only one on the machine itself. */

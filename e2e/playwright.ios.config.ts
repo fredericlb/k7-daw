@@ -1,5 +1,5 @@
 // playwright.ios.config.ts — the same specs, against the app on the iOS simulator: its studio, driven in the host's WebKit.
-// The app must be built (engine/k7-runtime/docs/ios.md); the target relaunches it on its own port (docs/e2e.md).
+// The app must be built (apps/k7-daw-engine/k7-runtime/docs/ios.md); the target relaunches it on its own port (docs/e2e.md).
 import { defineConfig } from "@playwright/test";
 import { IOS_ORIGIN } from "./src/ios.ts";
 

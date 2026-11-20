@@ -2,7 +2,7 @@
 
 `select` does not mark an engine busy. It **renews** a lease that expires on its own.
 
-The registry (`apps/k7/backend-rs/crates/k7-engine/src/registry/`) stores when each holder was last
+The registry (`apps/k7-daw-backend/packages/k7-engine/src/registry/`) stores when each holder was last
 `seen`, and reads an engine as assigned only while `now - seen < ENGINE_ASSIGN_TTL_MS`. That is deliberate: the
 holder is a browser tab, and a tab can be closed, crash, or be put to sleep. Nothing can be
 relied on to say goodbye, so the registry forgets by itself and the holder has to keep saying
@@ -24,7 +24,7 @@ rather than in any of them.
 
 `holdEngine` takes the two calls rather than making them, because the registry's address is the
 caller's to know — k7's backend, which each app derives from its own origin (see
-`apps/k7/backend-rs/docs/engine/shared.md`). The loop is the shared part; the address is not.
+`apps/k7-daw-backend/docs/engine/shared.md`). The loop is the shared part; the address is not.
 
 `release` is typed as returning nothing and is called fire-and-forget. Use `navigator.sendBeacon`
 for it, not `fetch`: a fetch issued during `pagehide` is cancelled with the page, which is
@@ -39,7 +39,7 @@ an unreleased lease simply expires, which is the behaviour it was built for.
 
 ## An expiry recovers; a theft does not
 
-The three refusals to renew (`apps/k7/backend-rs/docs/engine/claim.md`) are not equivalent, and
+The three refusals to renew (`apps/k7-daw-backend/docs/engine/claim.md`) are not equivalent, and
 the loop reports only two of them.
 
 - `project` and `engine` — **somebody** took the project, or the machine. Terminal: `onLost`

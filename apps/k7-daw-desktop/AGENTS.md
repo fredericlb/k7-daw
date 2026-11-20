@@ -1,12 +1,12 @@
 # AGENTS.md — the desktop app
 
 **K7 DAW, k7 on a computer** (Windows, Linux, macOS on Apple silicon). A Tauri app with one window.
-It runs k7's Rust front in its own process on `127.0.0.1:<standalone.json port>`, and starts nothing else. The front runs the machine's supervisor (`engine/k7-supervisor`) and so its engine, and
+It runs k7's Rust front in its own process on `127.0.0.1:<standalone.json port>`, and starts nothing else. The front runs the machine's supervisor (`apps/k7-daw-engine/k7-supervisor`) and so its engine, and
 holds the engine registry. The window shows k7 at that address, on the system's webview; the app menu's "Open in Browser"
 shows it in the person's browser.
 
 The page has no IPC and no native power: every setting of the engine is a page of k7 (`/settings/engine`), which
-reaches the supervisor through k7's front (`apps/k7/backend-rs/docs/localEngine.md`). The host only decides what the
+reaches the supervisor through k7's front (`apps/k7-daw-backend/docs/localEngine.md`). The host only decides what the
 window may navigate to, download and ask for (`src/handlers.rs`).
 
 All Rust lives under `src-tauri/src/`. `docs/app.md` says what was decided and why; `docs/desktop.md` is the window,
@@ -48,12 +48,12 @@ would run.
 - `npm run dev` (Tilt) or `npm run dev:desktop` (alone) — builds the engine, the supervisor, the page and library bundle and
   the app, runs it on them, and rebuilds and restarts on save. `cargo build` in `src-tauri` alone is enough
   to run `target/debug/k7-desktop.exe` on staged resources.
-- `npm run desktop:build --workspace k7-desktop` — the installers; `node engine/scripts/package-release.mjs --kind desktop`
+- `npm run desktop:build --workspace k7-desktop` — the installers; `node apps/k7-daw-engine/scripts/package-release.mjs --kind desktop`
   renames them for a release.
 
 ## Verify
 
-`cargo test` in `src-tauri`; the front's side is `cargo test -p k7-local` in `apps/k7/backend-rs`.
+`cargo test` in `src-tauri`; the front's side is `cargo test -p k7-local` in `apps/k7-daw-backend`.
 Behavioural check: start the app, let the window reach k7, open a project and play it; close the window and bring it back (a Mac's Dock icon; elsewhere closing quits); then quit and confirm the
 engine stops. Force-kill the app and confirm nothing survives: no `k7-supervisor.exe` or
 `k7-runtime.exe` of its tree, and the k7 port and the engine's free.

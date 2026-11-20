@@ -118,7 +118,7 @@ echo "=== the engine and the supervisor (macos-clang) ==="
 until lock "$deps_lock"; do sleep 10; done
 export CMAKE_BUILD_PARALLEL_LEVEL=8 CARGO_BUILD_JOBS=8
 built=0
-STUDIO_ENGINE_PRESET=macos-clang STUDIO_SUPERVISOR_PRESET=macos-clang node engine/scripts/build-engine.mjs > "$logs/build-engine.log" 2>&1 || built=1
+STUDIO_ENGINE_PRESET=macos-clang STUDIO_SUPERVISOR_PRESET=macos-clang node apps/k7-daw-engine/scripts/build-engine.mjs > "$logs/build-engine.log" 2>&1 || built=1
 unlock "$deps_lock"
 [ "$built" = 0 ] || { tail -60 "$logs/build-engine.log"; exit 1; }
 lap "engine build"
@@ -127,7 +127,7 @@ echo "=== the Rust front (release) ==="
 # One package per build, as dev-front.mjs builds them: together their features unify and its own builds start over.
 # The build folder is under ~/.cache, one per tree: a target inside the worktree makes gate.sh refuse it.
 export K7_FRONT_TARGET_DIR="$HOME/.cache/k7-macbed-$(basename "$tree")"
-(cd apps/k7/backend-rs && cargo build --locked --release -p k7-front --target-dir "$K7_FRONT_TARGET_DIR") > "$logs/build-front.log" 2>&1 ||
+(cd apps/k7-daw-backend && cargo build --locked --release -p k7-front --target-dir "$K7_FRONT_TARGET_DIR") > "$logs/build-front.log" 2>&1 ||
   { tail -60 "$logs/build-front.log"; exit 1; }
 lap "front build"
 
@@ -135,14 +135,14 @@ lap "front build"
 echo "=== Playwright's Chromium, kept for this tree, and the render page ==="
 export PLAYWRIGHT_BROWSERS_PATH="$HOME/k7-trees/e2e-macos-browsers"
 npm run e2e:install --workspace @studio/e2e > "$logs/chromium.log" 2>&1 || { tail -30 "$logs/chromium.log"; exit 1; }
-node apps/k7/backend-rs/crates/k7-picture/page.mjs >> "$logs/chromium.log" 2>&1 || { tail -30 "$logs/chromium.log"; exit 1; }
+node apps/k7-daw-backend/packages/k7-picture/page.mjs >> "$logs/chromium.log" 2>&1 || { tail -30 "$logs/chromium.log"; exit 1; }
 lap "chromium"
 
 echo "=== a fresh bed ==="
 # The dev env.yaml e2e/docs/e2e.md asks for, a DEVICE's front (STUDIO_LOCAL_USER, as the desktop app sets it), its token new at each run; the suites read it at the tree's root.
 # It holds what every bed shares: a key it names beats the environment, so each bed's folders reach its processes as variables instead.
 cat > env.yaml << EOF
-# Written by engine/scripts/ci/e2e-macos.sh for the macOS e2e bed; rewritten at every run.
+# Written by apps/k7-daw-engine/scripts/ci/e2e-macos.sh for the macOS e2e bed; rewritten at every run.
 common:
   K7_SESSION_TOKEN: "$(openssl rand -hex 32)"
 k7-front:
@@ -160,7 +160,7 @@ start() {
     STUDIO_MEDIATEK="$mediatek" STUDIO_FILES_ROOT="$files" K7_FRONT_CACHE="$bed/front-cache" "$@") > "$blogs/$name.log" 2>&1 &
   echo $! > "$bed/$name.pgid"
 }
-# The engines this run starts play to no speaker; set K7_BED_SOUND=1 to hear them (engine/k7-runtime/docs/audioDevice.md).
+# The engines this run starts play to no speaker; set K7_BED_SOUND=1 to hear them (apps/k7-daw-engine/k7-runtime/docs/audioDevice.md).
 [ "${K7_BED_SOUND:-0}" = 1 ] || export STUDIO_ENGINE_SILENT=1
 
 # Up when the port answers anything at all, or failed when its process is gone.
@@ -193,14 +193,14 @@ bring_up() {
   bed_of "$n"
   rm -rf "$home"
   mkdir -p "$files" "$mediatek" "$home/.studio/k7"
-  # The command-line engine, listed at the bed's front alone, downloading no instrument (engine/k7-supervisor/docs/supervisor.md).
+  # The command-line engine, listed at the bed's front alone, downloading no instrument (apps/k7-daw-engine/k7-supervisor/docs/supervisor.md).
   cat > "$bed/engine.json" << EOF
 { "registryUrls": ["http://127.0.0.1:$front"], "port": $engine, "instruments": [], "machineName": "e2e-macos$([ "$n" = 1 ] || echo "-$n")" }
 EOF
   set -m
-  start front apps/k7/backend-rs env K7_GIT_ALLOW_FILE=1 K7_FRONT_LISTEN="127.0.0.1:$front" node scripts/dev-front.mjs
+  start front apps/k7-daw-backend env K7_GIT_ALLOW_FILE=1 K7_FRONT_LISTEN="127.0.0.1:$front" node scripts/dev-front.mjs
   if [ "$serves" = web ]; then
-    start frontend apps/k7/frontend env STUDIO_WEB_PORT=$web STUDIO_BACKEND_URL="http://127.0.0.1:$front" npx vite --host 127.0.0.1 --strictPort
+    start frontend apps/k7-daw-frontend env STUDIO_WEB_PORT=$web STUDIO_BACKEND_URL="http://127.0.0.1:$front" npx vite --host 127.0.0.1 --strictPort
   fi
   # STUDIO_HOME and K7_SETTINGS_DIR: the engine finds its home through macOS, not HOME, and would share the Mac's ~/.k7 and Library/Studio.
   start engine "$tree" env STUDIO_HOME="$home/.k7" K7_SETTINGS_DIR="$home/settings" dist/k7-runtime/k7-supervisor --config "$bed/engine.json"
@@ -248,7 +248,7 @@ count() {
 }
 
 status=0
-retries=$(bash "$tree/engine/scripts/ci/bed-retries.sh")
+retries=$(bash "$tree/apps/k7-daw-engine/scripts/ci/bed-retries.sh")
 # A broken branch stops at its tenth failure rather than waiting out every test's timeout (e2e/docs/e2e.md).
 max_failures=${E2E_MAX_FAILURES:-10}
 [ "$max_failures" = 0 ] || retries="$retries --max-failures=$max_failures"

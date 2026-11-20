@@ -1,12 +1,12 @@
-// build.mjs — writes apps/k7/frontend/docs/INTERACTIONS.md from the Sheet's CSV export.
-// The md is an output: a change goes to the Sheet, then here (apps/k7/frontend/docs/interactionsSheet.md).
+// build.mjs — writes apps/k7-daw-frontend/docs/INTERACTIONS.md from the Sheet's CSV export.
+// The md is an output: a change goes to the Sheet, then here (apps/k7-daw-frontend/docs/interactionsSheet.md).
 // Usage: node scripts/interactions/build.mjs [csv dir] [out file]
 
 import { writeFileSync } from "node:fs";
 import { CSV_DIR, loadSheet, SHEET_URL } from "./sheet.mjs";
 
 const dir = process.argv[2] ?? CSV_DIR;
-const outFile = process.argv[3] ?? "apps/k7/frontend/docs/INTERACTIONS.md";
+const outFile = process.argv[3] ?? "apps/k7-daw-frontend/docs/INTERACTIONS.md";
 const { screens, areas, gaps } = loadSheet(dir);
 
 const HEAD = [

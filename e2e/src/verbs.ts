@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 // @ts-expect-error the build script is plain JavaScript
-import { bundleRuntime } from "../../packages/commands/scripts/bundleRuntime.mjs";
+import { bundleRuntime } from "../../apps/k7-daw-frontend/packages/commands/scripts/bundleRuntime.mjs";
 
 /** What a run answers, the route's shape: the lines, the token either side, what it wrote, and the graph when asked. */
 export interface VerbAnswer {

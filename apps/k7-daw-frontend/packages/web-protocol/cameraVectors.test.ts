@@ -9,10 +9,10 @@ import {
   uniqueCameraName,
 } from "./cameras.ts";
 
-// What the Rust front's camera hub must answer as the browser's helpers do (apps/k7/backend-rs/docs/routes.md).
+// What the Rust front's camera hub must answer as the browser's helpers do (apps/k7-daw-backend/docs/routes.md).
 const file = join(
   import.meta.dirname,
-  "../../apps/k7/backend-rs/fixtures/camera-vectors.json",
+  "../../../k7-daw-backend/fixtures/camera-vectors.json",
 );
 const v: {
   clean: { raw: string; fallback?: string; out: string }[];

@@ -4,7 +4,7 @@
 /** The params whose value is a FILE the plugin loads, not a number — three tiers need the same list, docs/moduleTypes.md. */
 export const FILE_PARAMS = ["model", "onnx"] as const;
 
-/** An amp model is a NAM file or an RTNeural JSON (AIDA-X, Proteus) — engine/k7-runtime/docs/namPlugin.md. */
+/** An amp model is a NAM file or an RTNeural JSON (AIDA-X, Proteus) — apps/k7-daw-engine/k7-runtime/docs/namPlugin.md. */
 const PARAM_EXTS: Record<string, readonly string[]> = {
   model: [".nam", ".json"],
 };
@@ -34,7 +34,7 @@ export function assetsForParam(
 }
 export type FileParam = (typeof FILE_PARAMS)[number];
 
-/** File-valued params whose file is in a LIBRARY's shared folder, named `@<library>/<path>` — packages/song/docs/libraryFiles.md. */
+/** File-valued params whose file is in a LIBRARY's shared folder, named `@<library>/<path>` — apps/k7-daw-frontend/packages/song/docs/libraryFiles.md. */
 export const LIBRARY_FILE_PARAMS = { ir: "irs" } as const;
 export type LibraryFileParam = keyof typeof LIBRARY_FILE_PARAMS;
 export const isLibraryFileParam = (name: string): name is LibraryFileParam =>
@@ -45,7 +45,7 @@ const LIBRARY_AUDIO_EXTS = [".wav", ".aif", ".aiff", ".flac"] as const;
 const isLibraryAudio = (path: string): boolean =>
   LIBRARY_AUDIO_EXTS.some((e) => path.toLowerCase().endsWith(e));
 
-/** File params a module may fill from its own `assets/` OR from a library's shared folder — packages/song/docs/libraryFiles.md. */
+/** File params a module may fill from its own `assets/` OR from a library's shared folder — apps/k7-daw-frontend/packages/song/docs/libraryFiles.md. */
 export const SHARED_FILE_PARAMS = { model: "models" } as const;
 export type SharedFileFamily =
   (typeof SHARED_FILE_PARAMS)[keyof typeof SHARED_FILE_PARAMS];

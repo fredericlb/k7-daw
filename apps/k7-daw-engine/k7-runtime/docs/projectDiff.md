@@ -88,7 +88,7 @@ bus's shape is a decision taken between passes. The SAME run with a knob or a by
 not: those are the per-plugin `PluginParamChanged` / `PluginEnabledChanged` a track emits, with an
 empty `trackId`, applied in place — the master modules are in `pluginsById` like any other, and a
 rebuild for a turned knob costs seconds and every tail. The song side is
-`packages/song/docs/masterChain.md`.
+`apps/k7-daw-frontend/packages/song/docs/masterChain.md`.
 
 ## Sends are planned for the whole song at once
 

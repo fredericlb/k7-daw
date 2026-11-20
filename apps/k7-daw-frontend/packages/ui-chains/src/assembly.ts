@@ -2,7 +2,7 @@
 // members when it is closed, a titled frame around them when it is open. A POST-PASS over
 // `buildGraph`'s output, in the family of `alignModuleRank` and `masterRunAside` — the model it
 // reads is a drawing fact, so nothing here may change a cable's meaning, only where it lands.
-// Full rationale: docs/graphBuild.md, and packages/song/docs/assemblies.md.
+// Full rationale: docs/graphBuild.md, and apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import type {
   WebGraph,

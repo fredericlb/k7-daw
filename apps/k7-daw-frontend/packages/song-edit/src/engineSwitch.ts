@@ -1,7 +1,7 @@
 // engineSwitch.ts — running a module as another of its ENGINES, by writing `engine:` on the
 // attribute set that is on. The names are asked of the RESOLVED module: a node lists no engines
 // of its own, it inherits them from the module whose folder holds them. Always a reload, since
-// another engine is another plugin. See packages/song/docs/engines.md.
+// another engine is another plugin. See apps/k7-daw-frontend/packages/song/docs/engines.md.
 
 import { stub } from "@studio/song/editStub";
 

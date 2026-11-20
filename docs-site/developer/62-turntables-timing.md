@@ -1,6 +1,6 @@
 # Desk timing: analysis, tempo, sync, loops, cues
 
-Everything the desk knows about *when* comes from one analysis of the file, plus a correction the desk may hold for the session. The arithmetic lives in small pure modules under `packages/k7-plugins/src/turntables/`, each with a test, so the parts that decide what you hear and see are testable without React or an engine.
+Everything the desk knows about *when* comes from one analysis of the file, plus a correction the desk may hold for the session. The arithmetic lives in small pure modules under `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/`, each with a test, so the parts that decide what you hear and see are testable without React or an engine.
 
 ## Analysis
 
@@ -8,10 +8,10 @@ A record's waveform, onsets and tempo come from the account's file service and a
 
 | Path | Role |
 |---|---|
-| `apps/k7/backend-rs/crates/k7-mediatek/src/` | The analysis: `decode.rs` (the engine's `--decode`, ffmpeg otherwise), `envelope.rs` (peak/RMS, three bands split at 200 Hz and 4 kHz, onsets and tempo), `sidecar.rs` and `fingerprint.rs` (the sidecar's JSON, and the content fingerprint, FNV-1a/64 over size, first and last 64 KB, checked on every read), `analyse.rs` (decode, measure, stamp, write). The only producer of a sidecar: a constant changed here needs a `CACHE_VERSION` bump. |
-| `packages/audio-probe/src/waveform.ts` | Onset detection and the `FileEnvelope` shape; browser-safe. |
-| `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/native/media/envelopes.rs` | the envelope: memo, matching sidecar, else decode; concurrent asks for one file share one decode. |
-| `apps/k7/backend-rs/crates/k7-front/src/routes/files/service/record.rs` | `GET /record/envelope?path=` for a workspace audio file: 404 when the file is absent, 503 without an engine binary. |
+| `apps/k7-daw-backend/packages/k7-mediatek/src/` | The analysis: `decode.rs` (the engine's `--decode`, ffmpeg otherwise), `envelope.rs` (peak/RMS, three bands split at 200 Hz and 4 kHz, onsets and tempo), `sidecar.rs` and `fingerprint.rs` (the sidecar's JSON, and the content fingerprint, FNV-1a/64 over size, first and last 64 KB, checked on every read), `analyse.rs` (decode, measure, stamp, write). The only producer of a sidecar: a constant changed here needs a `CACHE_VERSION` bump. |
+| `apps/k7-daw-frontend/packages/audio-probe/src/waveform.ts` | Onset detection and the `FileEnvelope` shape; browser-safe. |
+| `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/media/envelopes.rs` | the envelope: memo, matching sidecar, else decode; concurrent asks for one file share one decode. |
+| `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/record.rs` | `GET /record/envelope?path=` for a workspace audio file: 404 when the file is absent, 503 without an engine binary. |
 
 The desk's view of it is `Envelope` in `waveform.ts`: 8192 peak buckets per file whatever its length, `rms`, optional `low`/`mid`/`high`, `transients` in file seconds, and `bpm` (0 for none). The tempo is a starting point, not an authority.
 
@@ -62,7 +62,7 @@ Two buttons, one choice: `master` is the leading deck or null.
 
 ## Cues
 
-Cues live in the project's `mix.k7x` (schema `packages/song-schema/src/yaml/mixSchema.ts`, reader/editor `packages/song-schema/src/yaml/mixFile.ts`): `cues:` entries keyed by the record's workspace path, `markers` positional (`MARKER_SLOTS = 8`) in **source seconds**.
+Cues live in the project's `mix.k7x` (schema `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixSchema.ts`, reader/editor `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixFile.ts`): `cues:` entries keyed by the record's workspace path, `markers` positional (`MARKER_SLOTS = 8`) in **source seconds**.
 
 - `CueButtons.tsx`: a press captures the needle on `pointerdown`; after `HOLD_MS = 1000` it sets the cue at that captured position, otherwise a release jumps.
 - `useDeckSet.setCue` edits the **text** with `withMarkers` and writes it back, so the file's comments survive. It refuses to write a sheet it has not read for this project (`mixReadFor`), so a failed read cannot erase it.

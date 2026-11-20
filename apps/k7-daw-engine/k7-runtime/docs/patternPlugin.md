@@ -25,7 +25,7 @@ p99 — and **28 ms worst case**, a GC pause QuickJS offers no bound on.
 
 ## One mapping, two runtimes
 
-`packages/song-strudel/src/events.ts` is the hap → event mapping, the pitch rules and `labelKey`;
+`apps/k7-daw-frontend/packages/song-strudel/src/events.ts` is the hap → event mapping, the pitch rules and `labelKey`;
 `engineEntry.ts` is the API this side calls. Both are bundled into `engine/strudel/strudel.bundle.js`
 (`scripts/gen-strudel-bundle.mjs`), which is generated AND committed so the engine build needs no
 Node, then embedded as a byte array at build time. `engineEntry.test.ts` (Node) and
@@ -107,7 +107,7 @@ sized. Every entry re-applies the calling thread's budget. `aRecursivePatternIsA
 the check, on a thread with the default stack.
 
 **A query's window is snapped to an exact fraction before Strudel sees it** (`onGrid` in
-`packages/song-strudel/src/events.ts`, a 1/2²⁰-cycle grid). The worker's windows are
+`apps/k7-daw-frontend/packages/song-strudel/src/events.ts`, a 1/2²⁰-cycle grid). The worker's windows are
 `playhead / secondsPerCycle`, arbitrary doubles, and Strudel's `TimeSpan` hands a double to
 Fraction.js, which runs a Farey search for a fraction close to it and then carries that huge
 denominator through every comparison. Under QuickJS that cost a 0.1-cycle query up to 250 ms, so

@@ -1,7 +1,7 @@
 // eventsRemove.ts — `events remove <json>`: several placements off their tracks in ONE command, so a
 // rectangle cleared with Backspace is one Ctrl+Z. The events are NAMED, `{ track, start }`, rather than
 // found by a range: the timeline already knows which ones its rectangle holds. See docs/verbs.md.
-// One on a lane sounding a picture is not removed but its shot SILENCED (packages/song/docs/videoSound.md).
+// One on a lane sounding a picture is not removed but its shot SILENCED (apps/k7-daw-frontend/packages/song/docs/videoSound.md).
 
 import { stubBatch } from "@studio/song/editStub";
 import {

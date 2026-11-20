@@ -1,5 +1,5 @@
 // RtcFrames.h — the engine's frames over a WebRTC data channel, the C++ twin of
-// packages/web-protocol/rtcFrames.ts: a browser refuses a message past its channel's size limit and
+// apps/k7-daw-frontend/packages/web-protocol/rtcFrames.ts: a browser refuses a message past its channel's size limit and
 // a project document passes it, so every frame is cut into FRAGMENTS, each opening with one byte
 // saying text or binary and whether more follow.
 

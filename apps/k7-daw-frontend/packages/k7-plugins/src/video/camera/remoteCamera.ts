@@ -2,7 +2,7 @@
 // through k7's backend, which only carries the signalling — the picture comes peer to peer. A layer
 // names one as `remote:<device name>`, and it is opened, drawn and recorded like a local lens.
 // Every remote lens this page holds is sampled, and their jitter buffers evened out (./latency.ts).
-// See packages/web-protocol/docs/cameras.md.
+// See apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md.
 
 import type { LensOpener } from "@studio/ui-eyes/camera";
 import {

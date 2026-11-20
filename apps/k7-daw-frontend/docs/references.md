@@ -31,7 +31,7 @@ you are comparing tone, not timing.
 ## Two views, and the bar is the one that outlives everything
 
 `ReferencesPanel` is a listing — it plays nothing. `ReferenceBar` holds the element. That split
-is the mini player's, for its reason ([packages/ui-mini-player/docs/miniPlayer.md](../../../../packages/ui-mini-player/docs/miniPlayer.md)): a
+is the mini player's, for its reason ([apps/k7-daw-frontend/packages/ui-mini-player/docs/miniPlayer.md](../packages/ui-mini-player/docs/miniPlayer.md)): a
 transport owned by a panel dies when the panel closes, and closing the list of references is
 exactly what you do before listening.
 
@@ -47,7 +47,7 @@ again) is the bar, sitting where you can reach it with the list closed.
 
 ## The row is `@studio/ui-mini-player`
 
-See `packages/ui-mini-player/docs/miniPlayer.md`.
+See `apps/k7-daw-frontend/packages/ui-mini-player/docs/miniPlayer.md`.
 It owns no transport, which is what lets one component serve an app playing over several
 destinations and an app playing one file in a tab.
 

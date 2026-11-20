@@ -26,7 +26,7 @@ no family takes ends in the last routes (`last.md`), never in another process. T
 |---|---|
 | every outbound TLS call (Claude, the git listings) is built from one root store, `k7_front::trust` | a self-hosted server under the person's own CA is reached by all of them, or by none |
 | Mozilla's roots (`webpki-roots`), plus the PEM file the host names in `K7_EXTRA_CA_CERTS` | a self-hosted server under the person's own CA is trusted by every outbound call; a file is a dependency nothing else is: `rustls-pki-types`' PEM reader is already rustls' |
-| no OS store | the OS store needs `rustls-native-certs`, a crate not taken. The supervisor reads the OS store on a desktop for the engine's own calls (`engine/k7-supervisor`) |
+| no OS store | the OS store needs `rustls-native-certs`, a crate not taken. The supervisor reads the OS store on a desktop for the engine's own calls (`apps/k7-daw-engine/k7-supervisor`) |
 | read once, at the front's start, before any client is built; an unreadable file is said and leaves Mozilla's roots | a trust store that moves under running clients would be two answers for one server |
 
 ## Every end leaves a line
@@ -61,7 +61,7 @@ way it ends is said, by the front where it still can, by whoever started it wher
 | `K7_FRONT_SECRET` | drawn per process | the front's own seams' secret; the dev session and the beds name one so the conformance specs behind the internal seam can send it |
 | `K7_ENGINE_CORE` | unset | `front` answers the engine registry, the relay, the tunnel hub and the seam's engine half here (`engine.md`) |
 | `K7_LOCAL_ENGINE` | unset | `front` on a device runs the machine's supervisor here (`local.md`) |
-| `K7_FRONTEND_DIST` | `apps/k7/frontend/dist` above the front | the built page the last routes serve |
+| `K7_FRONTEND_DIST` | `apps/k7-daw-frontend/dist` above the front | the built page the last routes serve |
 | `K7_DEV_FRONTEND` | unset | a running Vite the last routes stream the page from, as the dev desktop app asks |
 | `K7_EXTRA_CA_CERTS` | unset | a PEM file of certificate authorities every outbound TLS call trusts beside Mozilla's roots, read once at start |
 | `K7_FRONT_TRUST_HOPS` | `0` | proxies before the front whose `X-Forwarded-*` is believed: `1` behind Traefik or the dev Caddy |
@@ -76,6 +76,6 @@ object for those settings: an embedded front cannot be handed an environment of 
 | host | the front |
 |---|---|
 | the dev session | the Tiltfile's `k7-front`, on 127.0.0.1:8789, one trusted hop (Vite) — `docs/dev.md` |
-| the desktop app | linked into the desktop app, on 18789 — `apps/k7-desktop/docs/desktop.md` |
-| Android | `libk7_embed.so` in the app's process, on the studio's port — `engine/k7-runtime/docs/android.md` |
-| iOS | `k7-embed` linked into the app — `engine/k7-runtime/docs/ios.md` |
+| the desktop app | linked into the desktop app, on 18789 — `apps/k7-daw-desktop/docs/desktop.md` |
+| Android | `libk7_embed.so` in the app's process, on the studio's port — `apps/k7-daw-engine/k7-runtime/docs/android.md` |
+| iOS | `k7-embed` linked into the app — `apps/k7-daw-engine/k7-runtime/docs/ios.md` |

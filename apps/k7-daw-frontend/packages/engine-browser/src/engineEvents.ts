@@ -55,7 +55,7 @@ export interface PairRequest {
   code: string;
   since: number;
 }
-/** The engine runs without external plugins after quick crashes; the file it names is the likeliest culprit — engine/k7-supervisor/docs/crashLoop.md. */
+/** The engine runs without external plugins after quick crashes; the file it names is the likeliest culprit — apps/k7-daw-engine/k7-supervisor/docs/crashLoop.md. */
 export interface EngineSafeMode {
   crashes: number;
   /** The plugin it died loading, which is certain. */
@@ -63,7 +63,7 @@ export interface EngineSafeMode {
   /** Else the plugin it loaded last, which is only the likeliest. */
   lastPlugin?: string;
 }
-/** One of the engine's sessions as `list-sessions` answers — engine/k7-runtime/docs/protocol.md. */
+/** One of the engine's sessions as `list-sessions` answers — apps/k7-daw-engine/k7-runtime/docs/protocol.md. */
 export interface EngineSessionInfo {
   id: string;
   /** The loaded project's name, "" until one is. */
@@ -229,7 +229,7 @@ export abstract class EngineEvents extends EngineLink {
     return () => this.warningCbs.delete(cb);
   }
 
-  /** After every apply, the WHOLE set of warnings the project was built with, a no-op apply included — engine/k7-runtime/docs/sessions.md. */
+  /** After every apply, the WHOLE set of warnings the project was built with, a no-op apply included — apps/k7-daw-engine/k7-runtime/docs/sessions.md. */
   onStandingWarnings(cb: (w: EngineWarning[]) => void): () => void {
     this.standingCbs.add(cb);
     return () => this.standingCbs.delete(cb);

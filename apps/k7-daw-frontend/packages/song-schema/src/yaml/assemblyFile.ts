@@ -2,7 +2,7 @@
 // surfaceFile.ts beside it, because the screen that draws a box is the one that resolves it.
 // Every write goes through a k7x document scope: these files are read by people and are in git,
 // so a member rename must change one value and leave every comment where it was.
-// Full rationale: packages/song/docs/assemblies.md.
+// Full rationale: apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import type { K7Scope } from "@studio/k7x/document";
 import { stringify } from "@studio/k7x/print";

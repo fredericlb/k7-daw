@@ -1,5 +1,5 @@
 //! k7-front — k7's backend: the session, the preferences, the file hub, the engine core, the built page.
-//! Choices: `apps/k7/backend-rs/docs/front.md`. The thing a reader would get wrong: a request no family
+//! Choices: `apps/k7-daw-backend/docs/front.md`. The thing a reader would get wrong: a request no family
 //! owns is answered by `routes::last` (the page, else a 404), never handed to another process.
 
 mod atomic;

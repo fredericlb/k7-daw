@@ -29,7 +29,7 @@ The module itself is `@studio/dsp`'s `echo()` function, written in a `jsdsp.ts` 
 
 Two parameters and the blend, of which **one** is a gesture: the desk knob moves the node's
 `mix:`, bound `@mix` — the ENGINE's dry/wet around the delay, whose own `Mix` it holds at full wet
-(`engine/k7-runtime/docs/mix.md`). `Time` and `Feedback` are set once in `nodes/echoA.k7x` and
+(`apps/k7-daw-engine/k7-runtime/docs/mix.md`). `Time` and `Feedback` are set once in `nodes/echoA.k7x` and
 left.
 
 ### What it does not do: follow the tempo
@@ -55,7 +55,7 @@ someone hunting for a module to repair where nothing is broken. It is also why i
 
 Holding the button sends the echo full **and** closes the channel fader. Two parameters — and one
 desk control drives **at most one**
-([viewBindings.md](../../../../packages/song/docs/viewBindings.md)).
+([viewBindings.md](../../../song/docs/viewBindings.md)).
 
 The way out is not to loosen that rule: it is that echo-out need not be a binding at all. It
 **composes two controls the desk already has** — `deckA.echo` and `deckA.level` — exactly as a hand
@@ -76,7 +76,7 @@ No module, no binding, no parameter. The record **runs backwards** while the but
 plays normally again on release.
 
 That is possible because a deck is a **platter** carrying its own transport
-(`engine/k7-runtime/docs/turntable.md`): its `Rate` is a signed number, so −1 already means "backwards
+(`apps/k7-daw-engine/k7-runtime/docs/turntable.md`): its `Rate` is a signed number, so −1 already means "backwards
 at record speed". The desk even has the path — `sendScratch`, the one a hand on the vinyl uses
 ([scratch.md](scratch.md)). The censor is therefore **a scratch the desk performs** instead of
 following.

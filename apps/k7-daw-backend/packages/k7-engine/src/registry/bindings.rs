@@ -1,6 +1,6 @@
 //! bindings.rs — which TUNNEL SECRET each engine id belongs to: the first secret a heartbeat carries binds
 //! the id (trust on first use), and from then on only that secret lists or tunnels under it. Kept as
-//! id → sha256(secret) in `engine-bindings.json`, the file the previous release reads too (`apps/k7/backend-rs/docs/engine/token.md`).
+//! id → sha256(secret) in `engine-bindings.json`, the file the previous release reads too (`apps/k7-daw-backend/docs/engine/token.md`).
 
 use std::path::PathBuf;
 

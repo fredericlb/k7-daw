@@ -110,7 +110,7 @@ impl Feed for Still {
 #[ignore = "capacity: run by hand, it copies the repository's k7-core eight times"]
 fn module_libraries_over_eight_copies_of_k7_core() {
     let s = Scratch::new("capacity-levels");
-    let repo = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../../k7-core");
+    let repo = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../k7-core");
     let mut pins = String::new();
     for n in 0..8 {
         let name = if n == 0 {

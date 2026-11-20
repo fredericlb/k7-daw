@@ -1,7 +1,7 @@
 //! last — what no family answers: the site page, the `/api` guard, the built page with its fallback, and the
 //! 404 page.
 //! What a reader gets wrong: every request no family takes ends here, so nothing is ever handed to another
-//! process (`apps/k7/backend-rs/docs/last.md`).
+//! process (`apps/k7-daw-backend/docs/last.md`).
 
 mod api;
 mod dev_frontend;

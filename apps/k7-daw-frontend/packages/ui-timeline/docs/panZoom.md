@@ -75,7 +75,7 @@ it is the one people MEET: past it the wheel simply stops, with nothing on scree
 Derived, the ceiling is about 13 000× on a laptop pane, which is one 64th of a beat filling the
 screen on a five-minute song. Nobody meets that either; what they meet is the material.
 
-The tick layers window themselves to the pane (`apps/k7/frontend/src/components/Ruler.tsx`'s
+The tick layers window themselves to the pane (`apps/k7-daw-frontend/src/components/Ruler.tsx`'s
 `useVisibleBeats`), which is what makes this number the only ceiling left: a whole-song list
 saturates at 64 nodes per beat, and that would be the real one.
 
@@ -134,9 +134,9 @@ stopping the event, so child clicks still work.
 
 ## Written twice, on purpose
 
-The chains graph holds the same three signals in `packages/ui-chains-react/src/camera.ts`. It
+The chains graph holds the same three signals in `apps/k7-daw-frontend/packages/ui-chains-react/src/camera.ts`. It
 answers the wheel-vs-trackpad question the same way, and keeps its own zoom factor in
-`packages/ui-chains/src/zoomGesture.ts` because its NOTCH branch differs — it scales by the delta
+`apps/k7-daw-frontend/packages/ui-chains/src/zoomGesture.ts` because its NOTCH branch differs — it scales by the delta
 where this one takes a step — and an arrangement package importing the graph's would be the wrong
 way round.
 

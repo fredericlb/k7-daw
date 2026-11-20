@@ -5,7 +5,7 @@ lies wholly inside its box (`src/groupGeometry.ts`), the horizontal and vertical
 same controls (`src/layoutTwins.ts`) — the one way a panel is printed as `ui.k7x`, a widget a line
 (`src/panelText.ts`), and AI organize's wire, answer, check and system prompt built on them
 (`src/aiOrganize.ts`, `src/aiAnswer.ts`, `src/aiPrompt.ts`). What the rules ARE is the builder's to explain:
-`packages/ui-module-builder/docs/builder.md`, `layouts.md` and `aiOrganize.md` there.
+`apps/k7-daw-frontend/packages/ui-module-builder/docs/builder.md`, `layouts.md` and `aiOrganize.md` there.
 
 ## Why a package of its own
 
@@ -23,7 +23,7 @@ editing gestures care about stays in the builder.
 
 ## The loop
 
-`src/aiLoop.ts` is AI organize's conversation, run in the page (`apps/k7/frontend/docs/aiOrganize.md`): it checks
+`src/aiLoop.ts` is AI organize's conversation, run in the page (`apps/k7-daw-frontend/docs/aiOrganize.md`): it checks
 the request (`src/aiRequest.ts`), asks the host for a turn, reads the answer (`readAiAnswer`), checks it
 (`checkAiResult`) and hands the mistakes back once. The host's turn is a function the loop is given, so the
 vectors of `organize-vectors.json` drive it in a test (`src/aiLoop.test.ts`) with no server. A model's junk (text that

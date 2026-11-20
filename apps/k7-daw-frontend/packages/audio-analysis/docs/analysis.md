@@ -30,7 +30,7 @@ reported.
 over interleaved float32 frames at the file's own rate, every channel. On wav and flac the three
 produce identical sidecars, measured. On mp3 they do not: ffmpeg trims the encoder delay and JUCE
 does not, so the engine's decode is longer by it — 1105 samples, 25 ms, on the file measured in
-`engine/k7-supervisor/docs/stemSplit.md` — and its onsets sit that much later. The fingerprint
+`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md` — and its onsets sit that much later. The fingerprint
 cannot tell the two apart, so a sidecar from either is read as fresh by the other.
 
 `--decode` prints one JSON line — `{"sampleRate":…,"channels":…,"frames":…}` — then the frames as
@@ -201,7 +201,7 @@ with itself at two zoom levels.
 ## The true peak is its own measurement
 
 `measureFilePeak` answers the loudest sample on ANY channel, which is what a COLD module's `Peak` is
-set from (`packages/audio-passes/docs/peakPass.md`). The sidecar cannot answer it: its envelope is
+set from (`apps/k7-daw-frontend/packages/audio-passes/docs/peakPass.md`). The sidecar cannot answer it: its envelope is
 the mono sum, so a peak living on one channel of a pair reads 6 dB low there, and two channels in
 anti-phase read as **silence**. It is also stored at four decimals. Right for drawing, useless for
 setting a gain.
@@ -215,7 +215,7 @@ that belongs to the module.
 
 `extractSound` (`src/extract.ts`) writes a file's first audio stream to a 32-bit float WAV at its
 own rate and channel count, for the engine to play a shot's sound from
-(`packages/song/docs/videoSound.md`). It decodes as every other reader here does — the
+(`apps/k7-daw-frontend/packages/song/docs/videoSound.md`). It decodes as every other reader here does — the
 WebAssembly module, then ffmpeg for a file it cannot open — but asks the engine LAST, never first,
 because what it reads is video: the engine opens a container only through the platform's decoder,
 which reads no WebM on any platform and nothing at all on Linux. The engine is the fallback for a
@@ -260,4 +260,4 @@ addon; without one, as on iOS, 3,418 ms in JS against 92 ms through the addon. T
 in those numbers, and on a phone it is the engine's.
 
 The Rust side writes a sidecar new beside the source and renames it over, and runs the engine's `--decode` under the account's
-environment with a watchdog that kills it at the deadline or the stop (`apps/k7/backend-rs/docs/file-media.md`, 2414 and 2416).
+environment with a watchdog that kills it at the deadline or the stop (`apps/k7-daw-backend/docs/file-media.md`, 2414 and 2416).

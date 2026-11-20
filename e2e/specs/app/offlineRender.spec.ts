@@ -1,5 +1,5 @@
 // offlineRender.spec.ts — an offline render (a freeze, a mixdown export) is made by the engine, on a phone too.
-// The one thing a reader would get wrong: on a phone no program starts, so the supervisor asks the running engine (engine/k7-supervisor/docs/supervisor.md).
+// The one thing a reader would get wrong: on a phone no program starts, so the supervisor asks the running engine (apps/k7-daw-engine/k7-supervisor/docs/supervisor.md).
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { expect, type K7, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";

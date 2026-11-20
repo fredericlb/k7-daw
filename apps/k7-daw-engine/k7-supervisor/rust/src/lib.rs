@@ -1,4 +1,4 @@
-// lib.rs — the media library's decoder and resampler (packages/audio-analysis/rust) behind include/k7_audio.h, for the stem cut.
+// lib.rs — the media library's decoder and resampler (apps/k7-daw-backend/packages/waveform) behind include/k7_audio.h, for the stem cut.
 // A reader would get wrong what a panic does: every export catches it and hands it back as an error, never unwinding into C++.
 
 use std::any::Any;

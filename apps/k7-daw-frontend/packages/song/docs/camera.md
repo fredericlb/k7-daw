@@ -132,7 +132,7 @@ one paragraph up, applied to a lane that is simply not being watched.
 ## Recording it is the browser's too
 
 Arming a picture lane and rolling the transport captures a lens into a clip on that lane —
-`MediaRecorder`, in `apps/k7/frontend/docs/picture.md`. It follows from the line above rather than
+`MediaRecorder`, in `apps/k7-daw-frontend/docs/picture.md`. It follows from the line above rather than
 adding anything to this model: the engine has no camera to record, so the half that holds one is
 the half that records it. The label is matched by `matchCamera`, so a take records the lens the
 lane names and falls back the same way.
@@ -163,7 +163,7 @@ time a field becomes settable is a vocabulary that will be one field behind
 
 `camera("remote:Stage left")` names a device of the same account in camera mode, reached peer to
 peer rather than opened by this browser. It is still `@meta/CAM`: lanes, `monitor:`, recording and
-`validate()` are this page's, unchanged — `packages/web-protocol/docs/cameras.md` is why, and how
+`validate()` are this page's, unchanged — `apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md` is why, and how
 its latency is corrected.
 
 ## The browser that opens it is not always the one that draws
@@ -175,7 +175,7 @@ nothing and the opener says why; the label is not re-read as a camera of the tab
 `"Logitech BRIO"` keeps naming the machine's lens whichever screen is drawing.
 
 So the opener is **injected**. `RealtimeDriver.create` takes a `LensOpener`
-(`packages/k7-plugins/src/video/camera/opener.ts`): a `remote:` label opens the account's camera
+(`apps/k7-daw-frontend/packages/k7-plugins/src/video/camera/opener.ts`): a `remote:` label opens the account's camera
 over a peer connection, any other this browser's own.
 
 **A lens is held only while something draws from it.** A received lens carries its own `close`,

@@ -9,9 +9,9 @@ about a gesture's feel or a drawing. Exercise those in the running app.
 
 ```bash
 npm test                                   # every workspace, from the repo root
-cd apps/k7/frontend && npx vitest run      # the frontend's pure modules
-cd packages/commands && npx vitest run     # the verbs
-cd packages/song-edit && npx vitest run    # the k7x writers
+cd apps/k7-daw-frontend && npx vitest run      # the frontend's pure modules
+cd apps/k7-daw-frontend/packages/commands && npx vitest run     # the verbs
+cd apps/k7-daw-frontend/packages/song-edit && npx vitest run    # the k7x writers
 npx vitest run src/snap.test.ts            # one file, from inside its package
 ```
 
@@ -20,7 +20,7 @@ source comment or a Markdown page naming a file that is not there.
 
 ## What covers what
 
-### Frontend (`apps/k7/frontend/src/`)
+### Frontend (`apps/k7-daw-frontend/src/`)
 
 | Test | Pins |
 |---|---|
@@ -37,9 +37,9 @@ source comment or a Markdown page naming a file that is not there.
 | `clipLoop.test.ts`, `clipInstances.test.ts`, `clipEnvelope.test.ts`, `barWindow.test.ts`, `clipWarp.test.ts`, `clipOps.test.ts` | Loop marks, repeated material, the activity envelope, the waveform's bar window, file/beat conversion for warp points, process lines. |
 | `rollDrag.test.ts`, `gridCaret.test.ts`, `curveDraft.test.ts` | Note gestures, the grid caret, curve drafts. |
 | `takes.test.ts`, `takeCounter.test.ts`, `midiTake.test.ts`, `midiIn.test.ts`, `webmidi.test.ts`, `laneInput.test.ts`, `transportPanic.test.ts` | Comp lines and spans, the take counter, MIDI take trimming, device matching, inputs, the double-stop panic. |
-| `exportArgs.test.ts`, `gainTrim.test.ts`, `mixerStrips.test.ts`, `apps/k7/frontend/src/mastering/controls.test.ts` | Export syntax, the Fix trim, strip order, the mastering control list. |
+| `exportArgs.test.ts`, `gainTrim.test.ts`, `mixerStrips.test.ts`, `apps/k7-daw-frontend/src/mastering/controls.test.ts` | Export syntax, the Fix trim, strip order, the mastering control list. |
 
-### Verbs (`packages/commands/src/`)
+### Verbs (`apps/k7-daw-frontend/packages/commands/src/`)
 
 `eventsMove.test.ts`, `eventsRemove.test.ts`, `eventStatus.test.ts`, `eventLoop.test.ts`,
 `eventGain.test.ts`, `eventTakes.test.ts`, `eventProcess.test.ts`, `crossfade.test.ts`,
@@ -48,10 +48,10 @@ source comment or a Markdown page naming a file that is not there.
 `trackHighlight.test.ts`, `trackOrder.test.ts`, `trackGroup.test.ts`, `trackInput.test.ts`,
 `projectMaster.test.ts`, `projectConsole.test.ts`, `refusal.test.ts`, and `commandSpec.test.ts`, which
 holds the catalogue itself to its rules (both languages present, readable sentences at most 60
-characters, known completion providers). `packages/commands/src/testHost.ts` is the fake
+characters, known completion providers). `apps/k7-daw-frontend/packages/commands/src/testHost.ts` is the fake
 `CommandHost` they run against.
 
-### Writers (`packages/song-edit/src/`)
+### Writers (`apps/k7-daw-frontend/packages/song-edit/src/`)
 
 `moveEvent.test.ts`, `clipResize.test.ts`, `eventWindow.test.ts`, `eventFade.test.ts`,
 `eventLoop.test.ts`, `eventWarp.test.ts`, `loopWindow.test.ts`, `crossfade.test.ts`,
@@ -64,19 +64,19 @@ property the whole write path is built to keep.
 
 | Package | Tests |
 |---|---|
-| `packages/ui-timeline/src/` | `panZoom.test.ts` (which wheel zooms, the factor, the ceiling), `ticks.test.ts`, `drag.test.ts` |
-| `packages/ui-waveform/src/` | `ticks.test.ts`, `spectrum.test.ts`, `spectrumColour.test.ts` |
-| `packages/audio-probe/src/` | `trimGate.test.ts`, `waveform.test.ts`, `key.test.ts` |
-| `packages/take-render/src/` | `recordTake.test.ts`, `materialRender.test.ts` |
-| `packages/audio-passes/src/` | `processChain.test.ts`, `peakPass.test.ts`, `coldPass.test.ts` |
-| `packages/translator/src/` | `dawproject.test.ts`, `ableton.test.ts`, `abletonZip.test.ts`, `emitNodes.test.ts` |
-| `packages/engine-browser/src/` | `meter.test.ts` (meter fill, clip latch, peak hold) |
-| `apps/k7/backend-rs/crates/k7-file-service/` | the journal, the arm, the renders and the change set, as Rust tests beside their sources and in `tests/` |
+| `apps/k7-daw-frontend/packages/ui-timeline/src/` | `panZoom.test.ts` (which wheel zooms, the factor, the ceiling), `ticks.test.ts`, `drag.test.ts` |
+| `apps/k7-daw-frontend/packages/ui-waveform/src/` | `ticks.test.ts`, `spectrum.test.ts`, `spectrumColour.test.ts` |
+| `apps/k7-daw-frontend/packages/audio-probe/src/` | `trimGate.test.ts`, `waveform.test.ts`, `key.test.ts` |
+| `apps/k7-daw-frontend/packages/take-render/src/` | `recordTake.test.ts`, `materialRender.test.ts` |
+| `apps/k7-daw-frontend/packages/audio-passes/src/` | `processChain.test.ts`, `peakPass.test.ts`, `coldPass.test.ts` |
+| `apps/k7-daw-frontend/packages/translator/src/` | `dawproject.test.ts`, `ableton.test.ts`, `abletonZip.test.ts`, `emitNodes.test.ts` |
+| `apps/k7-daw-frontend/packages/engine-browser/src/` | `meter.test.ts` (meter fill, clip latch, peak hold) |
+| `apps/k7-daw-backend/packages/k7-file-service/` | the journal, the arm, the renders and the change set, as Rust tests beside their sources and in `tests/` |
 
 ## Not covered
 
 No test mounts `TimelineTab`, `AudioClipPanel`, `PianoRoll`, `MasterMeter`, `MasteringTab` or
-`HistoryPanel`; `apps/k7/frontend/src/hooks/useShare.ts`, `apps/k7/frontend/src/hooks/useTrackControls.ts` and the `/export` route have no test
+`HistoryPanel`; `apps/k7-daw-frontend/src/hooks/useShare.ts`, `apps/k7-daw-frontend/src/hooks/useTrackControls.ts` and the `/export` route have no test
 either. When a change touches one of them, move the decision you are changing into a pure module
 first and test it there.
 

@@ -95,7 +95,7 @@ deletes the copy, so a failed run leaves no stray clip behind.
 
 Freezing is reversible and leaves the material alone: it bounces everything upstream of a module,
 plays that instead, and deletes the render when you unfreeze (`node freeze`, and
-`packages/song/docs/freeze.md`). This rewrites what the clips play, which is what you want when the
+`apps/k7-daw-frontend/packages/song/docs/freeze.md`). This rewrites what the clips play, which is what you want when the
 treatment IS the sound and you no longer want to carry the plugins that made it.
 
 The two overlap in one place, and `track process` says so: applying a lane's **own** chain to
@@ -155,7 +155,7 @@ about that file says so afterwards.
 ## Offline, always
 
 `--render`, never the transport: it opens no audio device, so a bounce runs while the live
-engine is playing (see `apps/k7/backend-rs/docs/file-engine-jobs.md`). Each source is rendered
+engine is playing (see `apps/k7-daw-backend/docs/file-engine-jobs.md`). Each source is rendered
 through a separate short-lived engine, from a one-track document holding the file at position 0
 with its natural length and the chain as the plugins on it — the same shape for every source.
 
@@ -197,7 +197,7 @@ there is no serial insert that can be, so it declares `plugin: { type: offline }
 plugin at all (`@studio/song`'s [coldModules.md](../../song/docs/coldModules.md)).
 
 `mediatekChain` diverts those steps instead of resolving them to a plugin — the line
-`engine/k7-supervisor/docs/stemSplit.md` points at. What follows from it:
+`apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md` points at. What follows from it:
 
 - **The chain either separates or treats, never both.** Flattened for a render (`chainSteps`) a
   chain is a list of module names with no ports on it, so a step *after* a separator would have
@@ -248,7 +248,7 @@ interrupted pass costs nothing twice), and an unreadable record costs its own li
 other twenty-nine.
 
 What a deck then DOES with the four files — subtract one from the mix, and why that rather than
-summing the stems — is `packages/song-schema/docs/stems.md`.
+summing the stems — is `apps/k7-daw-frontend/packages/song-schema/docs/stems.md`.
 
 The file service's implementation awaits the **job registry** rather than calling the worker: the
 id hashes the work, so a retry or a second tab joins the run in flight instead of starting another

@@ -2,7 +2,7 @@
 // chain, from the lane item on, every item under a FRESH id, links and levels kept. A linked chain fed
 // by this one alone is copied too, as the segment version copies a node with one feeder.
 // What would be got wrong: a copy never shares an id, nor a preset only its original names.
-// See packages/song/docs/chainFiles.md, "Writing to a chain project".
+// See apps/k7-daw-frontend/packages/song/docs/chainFiles.md, "Writing to a chain project".
 
 import { copyFileSync } from "node:fs";
 import { join } from "node:path";

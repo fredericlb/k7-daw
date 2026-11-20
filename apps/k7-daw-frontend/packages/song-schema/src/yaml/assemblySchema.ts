@@ -2,7 +2,7 @@
 // the plugs and the params promoted onto the box (`assembly.k7x`, beside an ordinary `graph.k7x`
 // and `nodes/`); a project's `assemblies/<name>.k7x` says which of its nodes are that box.
 // An assembly is a DRAWING and AUTHORING fact: nothing here reaches the compiler or the engine.
-// Full rationale: packages/song/docs/assemblies.md.
+// Full rationale: apps/k7-daw-frontend/packages/song/docs/assemblies.md.
 
 import { z } from "zod";
 

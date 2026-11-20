@@ -29,7 +29,7 @@ endif()
 # -----------------------------------------------------------------------------
 # Shared dependencies (fetched once here, consumed by the packages below)
 #
-# The apps that drive the engine are Node apps (apps/k7), so there's no C++ UI or YAML
+# The apps that drive the engine are Node apps (apps/k7-daw-frontend), so there's no C++ UI or YAML
 # dependency here — just the audio engine and the WebSocket transport.
 # Tracktion is HEAVY (bundles JUCE, hundreds of MB, long first build).
 # -----------------------------------------------------------------------------

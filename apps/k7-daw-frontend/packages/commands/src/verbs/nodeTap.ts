@@ -78,7 +78,7 @@ export const NODE_TAP_VERBS: Record<string, SidHandler> = {
       h.refuse([`node tap add: ${(e as Error).message}`]);
     }
   },
-  // An empty cell of the octave grid: a tap on THAT note (packages/song/docs/racks.md).
+  // An empty cell of the octave grid: a tap on THAT note (apps/k7-daw-frontend/packages/song/docs/racks.md).
   "node.tap.at": async (a, h) => {
     const [node, at, symbol] = splitArgs(a);
     const note = Number(at);

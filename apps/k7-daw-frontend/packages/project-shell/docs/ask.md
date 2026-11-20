@@ -46,7 +46,7 @@ without its host threading a callback down to it.
 **No external UI library**, for the reason this whole package has none: it draws the gates that run
 before an app is set up, and `toast.tsx` already hand-rolls its `cx` rather than import one. The
 classes are Tailwind's over the design system's variables, which are global — so anything mounting
-this needs `packages/project-shell/src` in its `@source` list, and k7 already has it.
+this needs `apps/k7-daw-frontend/packages/project-shell/src` in its `@source` list, and k7 already has it.
 
 ## Two rules worth keeping
 
@@ -85,7 +85,7 @@ don't run, and the text ones return null.
 
 ## Why it is not `@studio/ui/ask`
 
-`packages/ui/src/ask.tsx` is the same design with the same `AskConfirm`/`AskText` shapes,
+`apps/k7-daw-frontend/packages/ui/src/ask.tsx` is the same design with the same `AskConfirm`/`AskText` shapes,
 and this file is a superset of it: `askChoice`, `askTextAction`, the `tool`, a host that
 takes its labels, and English rather than French when it has none.
 

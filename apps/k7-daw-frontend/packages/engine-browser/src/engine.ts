@@ -98,7 +98,7 @@ export class EngineClient extends EngineQueries {
       vel: Math.max(0, Math.min(1, vel)),
     });
   }
-  /** A keyboard PLAYED into a track's chain: one channel message, held until its own note-off — engine/k7-runtime/docs/protocol.md. */
+  /** A keyboard PLAYED into a track's chain: one channel message, held until its own note-off — apps/k7-daw-engine/k7-runtime/docs/protocol.md. */
   liveMidi(track: string, data: readonly number[]): void {
     const msg = { type: "midi-live", track, data: [...data] };
     // Played notes are for now and are dropped while the link is down; what ENDS a note is kept, or it would hang.
@@ -110,7 +110,7 @@ export class EngineClient extends EngineQueries {
    * what makes this usable in a rig that never presses play. `on` omitted TOGGLES that node —
    * and that node only. `save` is not here: the engine's job ends at a wav on disk, and sending
    * it anywhere is the file service's, which runs on the machine the file is on.
-   * See engine/k7-runtime/docs/recorder.md.
+   * See apps/k7-daw-engine/k7-runtime/docs/recorder.md.
    */
   recorder(node: string, action: "record" | "clear", on?: boolean): void {
     const msg = {

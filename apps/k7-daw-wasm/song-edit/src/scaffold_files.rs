@@ -87,7 +87,7 @@ stack(
 //
 // Delete this file and the song still compiles and still plays; you simply have no lanes
 // on screen. `split` puts it in the layout, sharing the window with the graph beneath —
-// the only layout a timeline draws in. See packages/song/docs/surfaces.md.
+// the only layout a timeline draws in. See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
 type("timeline")
 layout("split")
 "####,
@@ -147,7 +147,7 @@ pub const VIDEO_EXTRA: &[(&str, &str)] = &[
 // it keeps its GL context and its <video> per layer, so showing it again costs nothing.
 //
 // Delete this file and the lanes still compile and still draw on the timeline — nothing
-// composites them. See packages/song/docs/surfaces.md.
+// composites them. See apps/k7-daw-frontend/packages/song/docs/surfaces.md.
 type("viewport")
 layout("floating")
 "####,

@@ -1,7 +1,7 @@
 # gen_fixtures.py — tiny AIDA-X and Proteus models with random weights, and what they must output.
 # The reference is written here from the cell equations (PyTorch's and Keras's), independently of RTNeural,
 # so AmpModel_test.cpp checks the loading AND the arithmetic. Python stdlib only; rerun after a change:
-#   python3 engine/k7-runtime/tests/data/ampmodel/gen_fixtures.py
+#   python3 apps/k7-daw-engine/k7-runtime/tests/data/ampmodel/gen_fixtures.py
 import json, math, os, random
 
 HERE = os.path.dirname(os.path.abspath(__file__))

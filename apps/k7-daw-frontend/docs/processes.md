@@ -11,7 +11,7 @@ or an alert, so its end is seen. With nothing to list there is no button.
 `src/processes.ts` merges them by start time:
 
 - **The file service's**, mirrored from the `processes` field of the `/workspace` answer
-  (`apps/k7/backend-rs/crates/k7-file-service/src/runtime/list.rs`, `apps/k7/backend-rs/docs/file-runtime.md`). That poll
+  (`apps/k7-daw-backend/packages/k7-file-service/src/runtime/list.rs`, `apps/k7-daw-backend/docs/file-runtime.md`). That poll
   already runs every two seconds for the take and the engine's load, so the list costs no request of
   its own, and every tab of the account sees the same processes.
 - **This page's own**, `trackProcess`: what runs in the browser or behind a route rather than a

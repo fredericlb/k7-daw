@@ -245,7 +245,7 @@ describe("the bench's address", () => {
   });
 
   it("survives the round trip k7's home page makes it take", () => {
-    // The bench card builds an address; the file service takes it apart again — apps/k7/backend-rs/docs/banc.md.
+    // The bench card builds an address; the file service takes it apart again — apps/k7-daw-backend/docs/banc.md.
     const url = launchUrl(
       "https://studio.example",
       BENCH_REPO,

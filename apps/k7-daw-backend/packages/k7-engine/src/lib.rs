@@ -1,6 +1,6 @@
 //! k7-engine — engine trust for k7's Rust backend: the registry and its two stores, the relay and its gate,
 //! the tunnel hub. HTTP is the front's (`k7-front`'s `routes/engine`); this crate decides who is let in and
-//! moves the frames. Its choices and its security review: `apps/k7/backend-rs/docs/engine.md`.
+//! moves the frames. Its choices and its security review: `apps/k7-daw-backend/docs/engine.md`.
 
 pub mod clock;
 pub mod frame;

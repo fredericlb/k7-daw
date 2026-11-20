@@ -17,8 +17,8 @@ import { wsData } from "./yaml/workspaceDoc";
 
 // A node is one USE of a module, filed FLAT in `nodes/`, naming what it uses by `extends` alone.
 
-const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
-const DEMOS = join(here, "..", "..", "..", "demos");
+const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
+const DEMOS = join(here, "..", "..", "..", "..", "..", "demos");
 const SONG = join(DEMOS, "synth-demo.k7");
 
 describe("splitModuleKey", () => {

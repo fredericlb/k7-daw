@@ -1,7 +1,7 @@
 # The verbs' runtime
 
 The verbs are TypeScript and run where the files are: in a browser Worker, or in node for the CLI and the conformance specs. The
-code is `src/runtime/`; the server half is `apps/k7/backend-rs/docs/file-changes.md`.
+code is `src/runtime/`; the server half is `apps/k7-daw-backend/docs/file-changes.md`.
 
 ## Choices
 
@@ -21,9 +21,9 @@ code is `src/runtime/`; the server half is `apps/k7/backend-rs/docs/file-changes
 | a binary is its length and, for a WAV, its seconds, which the compile reads from the bundle | a walk bundle holds no header bytes; the song crate's `Source` answers `known_seconds` |
 | a library is fetched by its hash once per page and mounted at its root | 1.8 MB per k7-core version is the largest thing a project open moves, and it is shared by every project |
 | commands.yaml is handed in (`provideCommandsYaml`) | a bundled Worker has no file beside it to read |
-| a host member (a render, a probe, a picture, the engine, the plugin list…) is a request to `/verb-host/*` in `src/runtime/members/` and marks the run `hostCalled`; a long one is a job polled each second, its files adopted into the Vfs | nothing in the browser pretends to succeed, a 409 after a server call is said, never rerun, and the files a job made reach the project in the one change set (`apps/k7/backend-rs/docs/verb-host.md`) |
+| a host member (a render, a probe, a picture, the engine, the plugin list…) is a request to `/verb-host/*` in `src/runtime/members/` and marks the run `hostCalled`; a long one is a job polled each second, its files adopted into the Vfs | nothing in the browser pretends to succeed, a 409 after a server call is said, never rerun, and the files a job made reach the project in the one change set (`apps/k7-daw-backend/docs/verb-host.md`) |
 | an import (`importer.ts`) is not a verb: it opens the workspace alone (`at` empty) in a Vfs of its own and runs the translator's emitter over it | a foreign project makes a new folder and shared modules, which no project's verb may write, and it has bytes (samples) a verb never holds |
-| the emitter's binaries go to a sink and are uploaded one by one through `/upload` into the folder the set then creates; its texts land as one `/changes` set with `create` | a body cannot carry audio, and a set that fails after the uploads takes the folder (and so the samples) away: apps/k7/backend-rs/docs/file-changes.md |
+| the emitter's binaries go to a sink and are uploaded one by one through `/upload` into the folder the set then creates; its texts land as one `/changes` set with `create` | a body cannot carry audio, and a set that fails after the uploads takes the folder (and so the samples) away: apps/k7-daw-backend/docs/file-changes.md |
 | the folder's name is checked against the workspace listing before the first upload | a name that is taken must cost no byte of audio; the server refuses a folder that holds a project all the same |
 | a `.als` from the tree is parsed twice: once to learn which samples it names, then with those samples fetched | a parse reads its samples synchronously and the Worker's fetch is not; a path that climbs out of the workspace is counted and never fetched |
 | the plugin list comes from the `plugins` member, and an engine-less server's 503 reads as "unknown" | the emitter checks plugin names against a scan only when there is one; the engine's parameter dump (a process of the machine) is not asked for, so a plugin's state stays a `.vstpreset` |

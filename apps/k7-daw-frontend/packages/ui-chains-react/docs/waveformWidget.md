@@ -53,7 +53,7 @@ screen-rate loop by accident.
 
 ## One loop for every live canvas
 
-The three rules and the cap live once, in `startPaintLoop` (`packages/ui-chains-react/src/paintLoop.ts`),
+The three rules and the cap live once, in `startPaintLoop` (`apps/k7-daw-frontend/packages/ui-chains-react/src/paintLoop.ts`),
 which the waveform and the LCD screen both start inside their own effect. It is a function and not
 a hook because each widget's effect owns other things beside the loop — the LCD attaches its screen
 to the sandbox and subscribes to the zoom — and those must start and stop with it. The LCD adds

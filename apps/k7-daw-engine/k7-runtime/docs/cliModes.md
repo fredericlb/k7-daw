@@ -10,7 +10,7 @@ measures the same files with no engine at all and one implementation is all ther
 The file's samples, for `@studio/audio-analysis`: one JSON line,
 `{"sampleRate":…,"channels":…,"frames":…}`, then every frame as interleaved float32,
 little-endian, every channel, at the file's own rate. The waveform sidecar and a cold module's
-true peak are both built from it (`packages/audio-analysis/docs/analysis.md`).
+true peak are both built from it (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`).
 
 It is here because the engine is what a musician's machine HAS: any format JUCE reads, no ffmpeg
 to install. It decides nothing about the samples — no mono sum, no resampling — since anything
@@ -124,7 +124,7 @@ anything when no time is left, so a pump of 0 never fires the proxy timer and an
 Normalising is a TREATMENT, and a treatment in this system is a chain. `track process` /
 `clip process` bounce material through one, and the module library ships a `normalize` module —
 measured by `@studio/audio-analysis` off `--decode` above and rendered through `--render` like every other treatment. See
-`packages/audio-passes/docs/processChain.md`.
+`apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`.
 
 What a dedicated mode could say and a chain cannot is **one gain across a SET of files**, so a
 track's clips keep their relative levels. A chain renders each source on its own, so a track

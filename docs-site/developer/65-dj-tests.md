@@ -16,7 +16,7 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 
 ## What is covered
 
-### `packages/k7-plugins/src/turntables/`
+### `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/`
 
 | Test | Holds |
 |---|---|
@@ -42,27 +42,27 @@ From the root, `npm run test` runs `scripts/workspaces.mjs test`, which runs the
 
 | Test | Holds |
 |---|---|
-| `packages/song-schema/src/playlist.test.ts` | Parsing and the text edits (append, remove, move), every refused shape. |
-| `packages/song-schema/src/reference.test.ts` | Reference file rules and paths. |
-| `packages/song-schema/src/stems.test.ts` | Stem names and node naming. |
-| `packages/song-schema/src/yaml/mixMarkers.test.ts`, `mixYaml.test.ts` | The cue sheet: reading, and writing markers into the text. |
-| `packages/song/src/scaffoldLive.test.ts` | The mix and live scaffolds compile and wire what they say. |
-| `packages/song/src/turntableAssembly.test.ts`, `migrateSet*.test.ts` | The deck assembly; migrations giving old sets a new set's files. |
-| `packages/commands/src/playlist.test.ts`, `playlistStems.test.ts`, `systemOnnx.test.ts` | The verbs. |
-| `packages/k7-plugins/src/transcription/trackTranscribe.test.ts` | `track transcribe`'s refusals and writes. |
-| The tests in `packages/audio-analysis/src/` | Decode through a stand-in engine, envelope arithmetic on a synthetic click track, the sidecar. |
+| `apps/k7-daw-frontend/packages/song-schema/src/playlist.test.ts` | Parsing and the text edits (append, remove, move), every refused shape. |
+| `apps/k7-daw-frontend/packages/song-schema/src/reference.test.ts` | Reference file rules and paths. |
+| `apps/k7-daw-frontend/packages/song-schema/src/stems.test.ts` | Stem names and node naming. |
+| `apps/k7-daw-frontend/packages/song-schema/src/yaml/mixMarkers.test.ts`, `mixYaml.test.ts` | The cue sheet: reading, and writing markers into the text. |
+| `apps/k7-daw-frontend/packages/song/src/scaffoldLive.test.ts` | The mix and live scaffolds compile and wire what they say. |
+| `apps/k7-daw-frontend/packages/song/src/turntableAssembly.test.ts`, `migrateSet*.test.ts` | The deck assembly; migrations giving old sets a new set's files. |
+| `apps/k7-daw-frontend/packages/commands/src/playlist.test.ts`, `playlistStems.test.ts`, `systemOnnx.test.ts` | The verbs. |
+| `apps/k7-daw-frontend/packages/k7-plugins/src/transcription/trackTranscribe.test.ts` | `track transcribe`'s refusals and writes. |
+| The tests in `apps/k7-daw-frontend/packages/audio-analysis/src/` | Decode through a stand-in engine, envelope arithmetic on a synthetic click track, the sidecar. |
 
 ## Measuring against an engine: `put-on.ts`
 
-`packages/k7-plugins/scripts/turntables/put-on.ts` measures what putting a record on an already loaded deck costs: it writes test WAVs, sends the documents `withDecks` builds to a running engine, and times the `applied` answer.
+`apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts` measures what putting a record on an already loaded deck costs: it writes test WAVs, sends the documents `withDecks` builds to a running engine, and times the `applied` answer.
 
 ```bash
-npx tsx packages/k7-plugins/scripts/turntables/put-on.ts [ws://127.0.0.1:8765] [--minutes=2] [--runs=6]
-npx tsx packages/k7-plugins/scripts/turntables/put-on.ts --hold=30 [--key]
+npx tsx apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts [ws://127.0.0.1:8765] [--minutes=2] [--runs=6]
+npx tsx apps/k7-daw-frontend/packages/k7-plugins/scripts/turntables/put-on.ts --hold=30 [--key]
 ```
 
 `--hold` loads two separated decks, starts them and holds, so the CPU of eight running platters (with or without keylock, `--key`) can be read from outside. The script's comments are in French.
 
-As written, it imports `../src/deck`, which resolves to a folder under `scripts/` that does not exist (the module is `packages/k7-plugins/src/turntables/deck.ts`); the import needs fixing before the script runs.
+As written, it imports `../src/deck`, which resolves to a folder under `scripts/` that does not exist (the module is `apps/k7-daw-frontend/packages/k7-plugins/src/turntables/deck.ts`); the import needs fixing before the script runs.
 
 Never run it against an engine you are building at the same time.

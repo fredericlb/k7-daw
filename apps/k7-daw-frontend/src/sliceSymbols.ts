@@ -1,7 +1,7 @@
 // sliceSymbols.ts — a slice-rack file's symbols as the EDITOR knows them: where each one's `from`/`to` numbers and
 // name sit in the buffer, the colour each slice wears everywhere (the dock's windows, the names in the text), and
 // the CodeMirror extension that paints those names. The docked source waveform is THE slicer, one picture for every
-// symbol, and its handles write through the same buffer a keystroke does (packages/ui-editor/docs/k7xTree.md).
+// symbol, and its handles write through the same buffer a keystroke does (apps/k7-daw-frontend/packages/ui-editor/docs/k7xTree.md).
 
 import {
   type EditorState,

@@ -8,7 +8,7 @@ The state frame carries a `load` object on one frame in four:
 ```
 
 A card shows its plugin's figure on the header's border, and k7's header shows `process` beside
-the master meter (`packages/ui-chains-react/docs/nodeCard.md`). `scripts/load-probe.ts` checks the
+the master meter (`apps/k7-daw-frontend/packages/ui-chains-react/docs/nodeCard.md`). `scripts/load-probe.ts` checks the
 report against a running engine.
 
 ## CPU is measured per plugin, and is audio-thread time only
@@ -49,5 +49,5 @@ The report rides the state frame rather than a message of its own, because every
 watches that frame and a client needs nothing new to read it. It is sampled every 250 ms per
 session, TIMED rather than counted: an idle session emits one tick in five, and a count of ticks
 could never land on its emission. A frame without `load` means "unchanged"; the browser's store
-keeps the last one (`packages/engine-browser/src/engineStore.ts`). Per frame it would be twenty
+keeps the last one (`apps/k7-daw-frontend/packages/engine-browser/src/engineStore.ts`). Per frame it would be twenty
 entries of text twenty times a second for figures nobody reads faster than a few times a second.

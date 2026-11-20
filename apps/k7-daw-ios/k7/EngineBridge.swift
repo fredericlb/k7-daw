@@ -1,7 +1,7 @@
 // EngineBridge.swift — the engine in this process: k7runtime.framework, serving on a thread of its own whose
 // run loop becomes JUCE's message loop. The SUPERVISOR decides when, and with which identity, exactly as it
 // spawns the engine on desktop. Once per PROCESS: JUCE stays bound to that thread, so a stopped engine is
-// restarted by a new process (engine/k7-runtime/docs/ios.md).
+// restarted by a new process (apps/k7-daw-engine/k7-runtime/docs/ios.md).
 
 import AVFAudio
 import Foundation

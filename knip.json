@@ -30,17 +30,17 @@
         "scripts/**/*.mjs",
         "demos/_modules/**/widgets.js",
         "k7-core/modules/**/widgets.js",
-        "apps/k7/backend-rs/scripts/*.mjs",
-        "engine/k7-android/app/src/main/assets/*.js"
+        "apps/k7-daw-backend/scripts/*.mjs",
+        "apps/k7-daw-android/app/src/main/assets/*.js"
       ]
     },
-    "engine/k7-runtime": {
+    "apps/k7-daw-engine/k7-runtime": {
       "entry": ["scripts/*.{ts,mjs}", "engine/strudel/strudel.bundle.js"]
     },
-    "apps/k7/frontend": {
+    "apps/k7-daw-frontend": {
       "entry": ["src/docs/examples.ts", "notices/vendor.ts", "scripts/icons.mjs"]
     },
-    "apps/k7-desktop": {
+    "apps/k7-daw-desktop": {
       "entry": ["scripts/*.mjs"]
     },
     "e2e": {
@@ -51,27 +51,27 @@
       ],
       "ignoreUnresolved": ["./gradlew"]
     },
-    "engine/k7-android/web": {
+    "apps/k7-daw-android/web": {
       "ignoreDependencies": ["@capacitor/android"]
     },
-    "packages/song": {
+    "apps/k7-daw-frontend/packages/song": {
       "entry": ["scripts/*.ts"]
     },
-    "packages/audio-probe": {
+    "apps/k7-daw-frontend/packages/audio-probe": {
       "entry": ["scripts/*.ts"]
     },
-    "packages/k7-plugins": {
+    "apps/k7-daw-frontend/packages/k7-plugins": {
       "entry": ["scripts/turntables/*.ts"]
     },
-    "packages/audio-analysis": {
+    "apps/k7-daw-frontend/packages/audio-analysis": {
       "entry": ["scripts/*.mjs"]
     },
-    "packages/k7x": {
+    "apps/k7-daw-frontend/packages/k7x": {
       "entry": ["bench/*.{ts,mjs}", "scripts/*.mjs"]
     },
-    "packages/k7-wasm": {
+    "apps/k7-daw-frontend/packages/k7-wasm": {
       "entry": ["scripts/*.mjs"]
     },
-    "packages/ui-chains-react": {}
+    "apps/k7-daw-frontend/packages/ui-chains-react": {}
   }
 }

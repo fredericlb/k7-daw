@@ -24,16 +24,16 @@ export const InputSchema = z.union([
 /** One rack sound — a TAP: the note it answers to, plus a library `sample`, or the older clip or [from,to) window. */
 export const RackSoundSchema = z.object({
   note: z.number().int().min(0).max(127),
-  // `@<library>/<path>` under a library's `samples/` — where every sample lives (packages/song/docs/libraryFiles.md).
+  // `@<library>/<path>` under a library's `samples/` — where every sample lives (apps/k7-daw-frontend/packages/song/docs/libraryFiles.md).
   sample: z.string().min(1).optional(),
   clip: z.string().min(1).optional(),
   from: z.number().min(0).optional(),
   to: z.number().positive().optional(),
-  // Silenced: kept on the kit and drawn, never handed to the sampler (packages/song/docs/racks.md).
+  // Silenced: kept on the kit and drawn, never handed to the sampler (apps/k7-daw-frontend/packages/song/docs/racks.md).
   mute: z.boolean().optional(),
 });
 
-// A key that is no rack field, most often a pad written outside `symbols:`, is an error and never an empty kit (packages/song/docs/racks.md).
+// A key that is no rack field, most often a pad written outside `symbols:`, is an error and never an empty kit (apps/k7-daw-frontend/packages/song/docs/racks.md).
 const notARackField = {
   error: (i: { code: string; keys?: string[] }) =>
     i.code === "unrecognized_keys"
@@ -109,13 +109,13 @@ export const WIDGET_TYPES = [
   "filepicker",
   // A screen the module's WIDGETS_SCRIPT draws, looked up by the widget's id; it binds nothing.
   "lcdscreen",
-  // One sound of a rack — a pad, its note and its library sample — bound `@rack:<symbol>` (packages/song/docs/racks.md).
+  // One sound of a rack — a pad, its note and its library sample — bound `@rack:<symbol>` (apps/k7-daw-frontend/packages/song/docs/racks.md).
   "tap",
   // A coloured frame under the widgets that lie wholly inside it, optionally switched by an on/off `bind` (docs/moduleFile.md).
   "group",
 ] as const;
 
-/** The bind prefix a rack pad carries: `@rack:BD` fires the sound `BD` (packages/song/docs/racks.md). */
+/** The bind prefix a rack pad carries: `@rack:BD` fires the sound `BD` (apps/k7-daw-frontend/packages/song/docs/racks.md). */
 export const RACK_BIND = "@rack:";
 
 /** The bind of a rack's LAST tap, which adds a sound rather than playing one. */
@@ -361,7 +361,7 @@ const MODULE_FIELDS = {
   shadow: z.boolean().optional(),
   // A param is a NUMBER, except the few the plugin steers with a file it loads — see docs/moduleAssets.md.
   params: z.record(z.string(), z.union([z.number(), z.string()])).optional(),
-  // An empty `rack:` or `symbols:` is a kit stating no pads of its own — packages/song/docs/racks.md.
+  // An empty `rack:` or `symbols:` is a kit stating no pads of its own — apps/k7-daw-frontend/packages/song/docs/racks.md.
   rack: z
     .preprocess((v) => {
       const r = (v ?? {}) as Record<string, unknown>;
@@ -374,7 +374,7 @@ const MODULE_FIELDS = {
       };
     }, RackSchema)
     .optional(),
-  // Taps that leave by an output of their own, each feeding a SUBCHAIN of the node's chain file: tap → subchain id (packages/song/docs/racks.md).
+  // Taps that leave by an output of their own, each feeding a SUBCHAIN of the node's chain file: tap → subchain id (apps/k7-daw-frontend/packages/song/docs/racks.md).
   tap_outs: z
     .record(
       z
@@ -386,7 +386,7 @@ const MODULE_FIELDS = {
       z.string().min(1),
     )
     .optional(),
-  // An SFZ drum kit's PADS, each a name and the note the kit plays it on — drawn as taps (packages/song/docs/racks.md).
+  // An SFZ drum kit's PADS, each a name and the note the kit plays it on — drawn as taps (apps/k7-daw-frontend/packages/song/docs/racks.md).
   kit: z
     .record(
       z
@@ -400,7 +400,7 @@ const MODULE_FIELDS = {
     .optional(),
   // A COLD module needs the whole of its input before it can produce any of it — see docs/coldModules.md.
   cold: z.boolean().optional(),
-  // A URL the MODEL a file-valued param names can be downloaded from — packages/song/docs/moduleAssets.md.
+  // A URL the MODEL a file-valued param names can be downloaded from — apps/k7-daw-frontend/packages/song/docs/moduleAssets.md.
   model_url: z
     .string()
     .regex(/^https?:\/\/\S+$/, "model_url is an http(s) URL")
@@ -419,7 +419,7 @@ const MODULE_FIELDS = {
   monitor: MonitorSchema.optional(),
   // Input trim in dB, applied at the interface before anything else sees the signal — see docs/moduleFile.md.
   gain: z.number().optional(),
-  // The ENGINE's dry/wet around this effect, 0 all dry .. 1 all wet; absent is all wet (engine/k7-runtime/docs/mix.md).
+  // The ENGINE's dry/wet around this effect, 0 all dry .. 1 all wet; absent is all wet (apps/k7-daw-engine/k7-runtime/docs/mix.md).
   mix: z.number().min(0).max(1).optional(),
   // …and the engine's level into the module (an audio one) and out of it (anything with audio out), in dB.
   input_volume: z.number().min(-60).max(12).optional(),
@@ -446,7 +446,7 @@ const MODULE_FIELDS = {
     .string()
     .regex(/^algo\/.+\.strudel$/, "expected algo/<name>.strudel")
     .optional(),
-  // A lane that PLAYS a picture lane's sound, its events derived from that lane's shots — packages/song/docs/videoSound.md.
+  // A lane that PLAYS a picture lane's sound, its events derived from that lane's shots — apps/k7-daw-frontend/packages/song/docs/videoSound.md.
   video_source: z.string().min(1).optional(),
   // A shader's 3D LUT, a `.cube` file, project-relative — the look a `uLut` pass reads (song-video docs/effects.md).
   lut: z
@@ -456,7 +456,7 @@ const MODULE_FIELDS = {
   // FROZEN at this module: the render standing in for everything UPSTREAM of it — see docs/freeze.md.
   frozen: z.string().min(1).optional(),
 
-  // Which of the module's `engines/` sub-folders it runs as — packages/song/docs/engines.md.
+  // Which of the module's `engines/` sub-folders it runs as — apps/k7-daw-frontend/packages/song/docs/engines.md.
   engine: z
     .string()
     .regex(ENGINE_NAME, "an engine is a folder name in the module's engines/")
@@ -480,7 +480,7 @@ const MODULE_FIELDS = {
 export const AlternativeSchema = z
   .object({
     name: z.string().min(1).optional(),
-    // A set naming its OWN module is another module entirely, not a patch over the node's (packages/song/docs/alternatives.md).
+    // A set naming its OWN module is another module entirely, not a patch over the node's (apps/k7-daw-frontend/packages/song/docs/alternatives.md).
     extends: z.string().min(1).optional(),
     ...MODULE_FIELDS,
   })

@@ -21,7 +21,7 @@ unusable and you would stop pressing it.
 
 **The gesture is the UI's, the action is the engine's.** `panic` is a `TransportAction` on the wire
 like any other, so a CLI, a second device or the DJ desk can send it. What decides that a second
-press *means* it is `apps/k7/frontend/src/transportPanic.ts`: a stop within `PANIC_WINDOW_MS` of
+press *means* it is `apps/k7-daw-frontend/src/transportPanic.ts`: a stop within `PANIC_WINDOW_MS` of
 the last one is promoted. It sits at the app's single transport callback rather than on the stop
 BUTTON, because the button, the key and the command bar are one gesture to a musician and a rule on
 one of them would be a rule a third of the time.

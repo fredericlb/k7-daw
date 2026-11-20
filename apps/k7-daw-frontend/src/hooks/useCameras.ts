@@ -1,6 +1,6 @@
 // useCameras.ts — the lenses this BROWSER can see, by label, and the account's remote cameras that
 // are on, as `remote:<device name>`. The list belongs to the browser and the account, not to the
-// document: a project says which camera by a name a person reads. See packages/song/docs/camera.md.
+// document: a project says which camera by a name a person reads. See apps/k7-daw-frontend/packages/song/docs/camera.md.
 
 import { listRemoteCameras } from "@studio/k7-plugins/video/camera/remoteCamera";
 import { remoteLabel } from "@studio/web-protocol/cameras";

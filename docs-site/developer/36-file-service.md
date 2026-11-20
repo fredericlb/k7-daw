@@ -1,19 +1,19 @@
 # The file service: an account's files, in the front
 
-`apps/k7/backend-rs/crates/k7-file-service` is the only code that touches a workspace's files. k7's
+`apps/k7-daw-backend/packages/k7-file-service` is the only code that touches a workspace's files. k7's
 Node backend has no file operation of its own: the Rust front answers `/api/files/*` itself, one
 runtime per account held in memory ([file-hub](./37-file-hub.md)). An engine's machine runs no file
 service; what the server needs from that machine is a job its supervisor runs over the tunnel.
 
 The crate is plain functions over a workspace's folder, with no HTTP and no runtime of its own. The
-front's half (`crates/k7-front/src/routes/files/service/`) is the routes, the account's state, the
-live capture and the engine link. The choices are in `apps/k7/backend-rs/docs/service.md` and
+front's half (`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/`) is the routes, the account's state, the
+live capture and the engine link. The choices are in `apps/k7-daw-backend/docs/service.md` and
 `file-native.md`; this page is the map.
 
 An account is a `Held` made on its first request: its workspaces, engine link, caches, undo journal
 and capture live there, and an idle account costs memory only. No process, thread or
 JavaScript runtime exists per account. A route no piece answers is refused with a sentence
-(`apps/k7/backend-rs/docs/declines.md`), and nothing falls back to anything.
+(`apps/k7-daw-backend/docs/declines.md`), and nothing falls back to anything.
 
 ## Where each concern lives
 
@@ -29,14 +29,14 @@ JavaScript runtime exists per account. A route no piece answers is refused with 
 | The engine link and its load, sync and reconcile | `engine/` |
 | Engine jobs: auto-freeze, previews, separations, plugin queries | `jobs/` |
 | Waveforms, media, model downloads | `media/` |
-| Shares, export, picture render | `shares/`, `crates/k7-picture` |
+| Shares, export, picture render | `shares/`, `apps/k7-daw-backend/packages/k7-picture` |
 | Logs, background registry | `runtime/` |
 
 ## Authentication
 
 The front authenticates the user and stamps the account; there is no second process to trust.
 `x-studio-user` (the email), `x-studio-workspace` (resolved to a workspace, 404 if unknown) carry the request's identity; their names are in
-`packages/web-protocol/engineAccess.ts`. An account's workspaces are held to the one recorded owner
+`apps/k7-daw-frontend/packages/web-protocol/engineAccess.ts`. An account's workspaces are held to the one recorded owner
 (`service/owner.rs`).
 
 ## HTTP API
@@ -71,7 +71,7 @@ socket.
 | Files | `GET /file`, `PUT /file` `{ path, content }` (a `.yaml` path is refused: every workspace document is `.k7x`), `POST /upload`, `POST /folder`, `POST /rename`, `POST /move`, `POST /entry/delete` (to the recycle bin), `POST /fmt` |
 | Projects | `POST /project/create` `{ shape, name }`, `POST /open` `{ path }`, `POST /project/delete`, `POST /project/rename` |
 | Modules | `POST /module`, `POST /module/clone`, `POST /node`, `POST /library/move`, `GET /module-libraries`, `GET /module-catalogue`, `GET /base-modules`, `GET /module-ui`, `GET /module-engines`, `GET /module-base`, `POST /module-base/snapshot`, `GET /presets`, `GET /consoles`, `GET /io-ports`, `GET /library-chains`, `GET /library-assemblies` |
-| Verbs | `POST /changes` (the browser's verbs commit one change set, whole or not at all), `GET /verb-bundle`, `GET /verb-bundle/library` (what a verb reads), `/verb-host/*` (what a verb asks of the machine: a render, a probe, a separation). The server runs no verb; the Worker does (`packages/commands/docs/runtime.md`) |
+| Verbs | `POST /changes` (the browser's verbs commit one change set, whole or not at all), `GET /verb-bundle`, `GET /verb-bundle/library` (what a verb reads), `/verb-host/*` (what a verb asks of the machine: a render, a probe, a separation). The server runs no verb; the Worker does (`apps/k7-daw-frontend/packages/commands/docs/runtime.md`) |
 | History | `GET /history`, `GET /history/entries`, `POST /undo`, `POST /redo` |
 | Engine | `POST /engine/project` (a browser-built doc), `POST /engine/unload`, `POST /engine/sync/retry`, `POST /auto-freeze/thaw`, `GET /project-plugins`, `GET /project-compat`, `POST /models/download` |
 | Audio views | `GET /waveform`, `POST /waveforms/prewarm`, `GET /waveforms/status`, `POST /waveforms/cancel`, `POST /preview` |
@@ -108,13 +108,13 @@ Module folders are watched separately (`modwatch.rs`) to invalidate the module c
 
 ## The capture inside the service
 
-The capture and the ledger are native (`crates/k7-capture`, `crates/k7-replica`'s ops). Capture watches the
+The capture and the ledger are native (`apps/k7-daw-backend/packages/k7-capture`, `apps/k7-daw-backend/packages/k7-replica`'s ops). Capture watches the
 workspace (100 ms quiet window, 5 s sweep) and turns changes into batches of file operations; writes
-it lands itself are recorded first so they are not echoed. The choices are in `apps/k7/backend-rs/docs/file-capture.md`.
+it lands itself are recorded first so they are not echoed. The choices are in `apps/k7-daw-backend/docs/file-capture.md`.
 
 ## Tests
 
-The crate's tests sit beside its sources and in `crates/k7-file-service/tests/`; the front's in
-`crates/k7-front/src/routes/files/service/native/tests_*.rs`. Frozen vectors are replayed, never
+The crate's tests sit beside its sources and in `apps/k7-daw-backend/packages/k7-file-service/tests/`; the front's in
+`apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/tests_*.rs`. Frozen vectors are replayed, never
 regenerated. The conformance specs (`e2e/specs/conformance/files*`) drive the routes through the
 front.

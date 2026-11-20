@@ -58,15 +58,15 @@ only judged absent against a cache that has something in it.
 **While the scan cannot say, the built-ins stand in for it.** Every engine has them, so
 `engineModules()` offers the generated table (`@studio/song-schema/builtinParams`) as the scan
 would list them — `internal`, by display name and role — whenever the cache is empty. An account's
-file service has no cache until an engine is bound to it (`apps/k7/backend-rs/crates/k7-hub/src/binding.rs` writes it
+file service has no cache until an engine is bound to it (`apps/k7-daw-backend/packages/k7-hub/src/binding.rs` writes it
 then), and a project compiled before that — an open through the API, a fresh install on a computer — would
 otherwise lose every `@engine/…` node, a Surge synth sent no patch. A scan that says something
 replaces the table rather than adding to it: it is what THIS engine has, and a build without Surge
 must not be sent one. Externals have no table, so they stay unknown until the scan lands.
 
 **An account's copy is written by one function**, `writeScanCopy`: the hub on a binding, and again
-when the scan running at the binding ends (`apps/k7/backend-rs/docs/files/hub.md`), and the account's
-file service when a project held for the scan is released (`apps/k7/backend-rs/docs/file-engine.md`).
+when the scan running at the binding ends (`apps/k7-daw-backend/docs/files/hub.md`), and the account's
+file service when a project held for the scan is released (`apps/k7-daw-backend/docs/file-engine.md`).
 It writes the engine's `plugins` reply in the scan file's own shape, atomically, and leaves a copy
 that already says the same alone: its mtime is in every project's revision token, and a rewrite
 throws away the compile an open just made.

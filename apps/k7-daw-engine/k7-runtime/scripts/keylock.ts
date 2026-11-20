@@ -1,6 +1,6 @@
 // keylock.ts — KEY holds the PITCH while the tempo moves. Point it at a running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/keylock.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/keylock.ts [ws://127.0.0.1:8765]
 //
 // A tone alone cannot answer this: it has a pitch and no tempo, so a stretcher leaves it untouched
 // and the bench would pass by doing nothing. The source is therefore a tone that is CHOPPED — 1 kHz

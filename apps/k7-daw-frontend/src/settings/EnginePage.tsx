@@ -25,7 +25,7 @@ import { Action, Row, Section } from "./Section";
 import { SettingsTabs } from "./SettingsTabs";
 import { SlotsSection } from "./SlotsSection";
 
-/** U+001F joins the names `audio.priority` takes (engine/k7-supervisor/docs/hostProtocol.md). */
+/** U+001F joins the names `audio.priority` takes (apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md). */
 const SEP = "\u001f";
 
 /** The interface the engine is on, said where the eye lands: beside its name, with the channels it actually opened. */

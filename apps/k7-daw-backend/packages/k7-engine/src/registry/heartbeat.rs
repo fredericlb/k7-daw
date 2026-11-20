@@ -1,6 +1,6 @@
 //! heartbeat.rs — reading an engine's heartbeat: only the id, the token and the
 //! port can refuse one, a malformed tunnel secret too; every other odd field is CLEANED and the cleaning
-//! said (`apps/k7/backend-rs/docs/engine/heartbeat.md`). The committed vectors hold the words.
+//! said (`apps/k7-daw-backend/docs/engine/heartbeat.md`). The committed vectors hold the words.
 
 use serde_json::{Map, Value, json};
 

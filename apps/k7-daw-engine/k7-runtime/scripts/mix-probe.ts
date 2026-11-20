@@ -1,7 +1,7 @@
 // mix-probe.ts — does the engine's @mix blend the DRY signal back around an effect? Point it at a
 // running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/mix-probe.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/mix-probe.ts [ws://127.0.0.1:8765]
 //
 // A synth plays into a Volume & Pan at 0: all wet is silence, so the level that comes out is the
 // dry signal alone. Measured with no @mix, then at 0 (all dry), 0.5 (-3 dB) and 1 applied LIVE, as a

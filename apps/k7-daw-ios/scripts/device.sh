@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # device.sh — puts k7 on a USB-attached iPhone with a free Personal Team, and drives the suite and the log from the Mac.
-# Usage: K7_IOS_TEAM=<team id> device.sh [all|build|install|forward|logs|devices] [--dry-run]  (docs: engine/k7-runtime/docs/ios.md, "On a phone").
+# Usage: K7_IOS_TEAM=<team id> device.sh [all|build|install|forward|logs|devices] [--dry-run]  (docs: apps/k7-daw-engine/k7-runtime/docs/ios.md, "On a phone").
 # What a reader gets wrong: the phone's engine runs on 18765 and its studio on 18799, never 8765, which is the user's own engine.
 set -euo pipefail
 
@@ -76,12 +76,12 @@ do_build() {
   if [ -z "${K7_IOS_TEAM:-}" ]; then
     if [ "$dry" = 1 ]; then team_help; say "(dry run goes on with a placeholder team)"; K7_IOS_TEAM="<TEAM>"; else team_help; exit 2; fi
   fi
-  [ -d "$root/engine/k7-ios/build/staged/frameworks/k7runtime.xcframework" ] || say "no staged frameworks: run node engine/k7-ios/scripts/stage.mjs first (a device build, no --sim)"
+  [ -d "$root/apps/k7-daw-ios/build/staged/frameworks/k7runtime.xcframework" ] || say "no staged frameworks: run node apps/k7-daw-ios/scripts/stage.mjs first (a device build, no --sim)"
   # Automatic signing, and no entitlements file: the project has none, and a Personal Team refuses push, iCloud and the memory entitlements.
   # The attached phone by its hardware UDID: a free team's profile names each device, and Xcode registers only the one it builds for.
   udid="$(phone_id udid)"
   if [ -n "$udid" ]; then dest="id=$udid"; else dest="generic/platform=iOS"; fi
-  run xcodebuild -project "$root/engine/k7-ios/k7.xcodeproj" -scheme k7 -configuration Debug \
+  run xcodebuild -project "$root/apps/k7-daw-ios/k7.xcodeproj" -scheme k7 -configuration Debug \
     -destination "$dest" -derivedDataPath "$dd" \
     -allowProvisioningUpdates -allowProvisioningDeviceRegistration DEVELOPMENT_TEAM="$K7_IOS_TEAM" CODE_SIGN_STYLE=Automatic \
     PRODUCT_BUNDLE_IDENTIFIER="$bundle" build

@@ -160,7 +160,7 @@ export const SYSTEM_VERBS: Record<string, SidHandler> = {
     h.log([`the instrumental comes from ${ref}${checked}`]);
   },
 
-  /** What this machine SEPARATES on — engine/k7-supervisor/docs/stemSplit.md. */
+  /** What this machine SEPARATES on — apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md. */
   "system.onnx": async (a, h) => {
     const NO_MACHINE =
       "system onnx: no engine is chosen — the setting lives on its machine";
@@ -195,13 +195,13 @@ export const SYSTEM_VERBS: Record<string, SidHandler> = {
       ...(eps.includes("dml")
         ? [
             "note: `dml` HANGS on some rigs — un-interruptible, and only the job's hour ends it. " +
-              "Measure a song before trusting it (engine/k7-supervisor/docs/stemSplit.md).",
+              "Measure a song before trusting it (apps/k7-daw-engine/k7-supervisor/docs/stemSplit.md).",
           ]
         : []),
     ]);
   },
 
-  /** Which interface pair the `CUE` bus leaves by — a MACHINE's answer, see packages/song/docs/cue.md. */
+  /** Which interface pair the `CUE` bus leaves by — a MACHINE's answer, see apps/k7-daw-frontend/packages/song/docs/cue.md. */
   "system.cue": (a, h) => {
     const spec = a.trim();
     const prefs = loadPreferences();

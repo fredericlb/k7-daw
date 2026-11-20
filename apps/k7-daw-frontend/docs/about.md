@@ -4,12 +4,12 @@
 version, its licence with the full text, the link to its source, and every third-party notice.
 It is reached from the user menu, the row under Settings, because that menu is where every page
 of the origin keeps the things you visit on purpose and rarely. The word is reserved in
-`packages/web-protocol/projects.ts`, so a reload or a pasted link lands on it.
+`apps/k7-daw-frontend/packages/web-protocol/projects.ts`, so a reload or a pasted link lands on it.
 
 ## The version
 
 The page reads `src/version.ts` and nothing else. That module is the frontend's one version
-source, whatever the build feeds it (`../../../../docs/versioning.md`); a second reading of a
+source, whatever the build feeds it (`../../../docs/versioning.md`); a second reading of a
 `package.json` here would be a second answer the day the two differ. Under the desktop app the
 release of the desktop app is shown beside it, as on the settings page (`GET /api/local`, `localApp.md`).
 
@@ -30,7 +30,7 @@ A manifest that names no licence is read by hand and written into `npmOverrides`
 
 The npm half is the `dependencies` closure (optional and peer dependencies included, dev
 dependencies not) of every app that ships: the frontend, k7's backend (which the desktop app ships, with the frontend inside it), the
-Android shell, and `packages/song-strudel`, which is bundled into the engine. It is walked on
+Android shell, and `apps/k7-daw-frontend/packages/song-strudel`, which is bundled into the engine. It is walked on
 disk rather than read from the lockfile because the licence TEXT is a file in the package, and
 because a platform's binaries are then the ones that platform actually installed. Workspace
 packages are ours and are walked through, never listed. The list over-approximates what the

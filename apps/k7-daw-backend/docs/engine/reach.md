@@ -1,19 +1,19 @@
 # What the front asks of an engine
 
-The studio's **one** engine registry is k7's Rust front's (`apps/k7/backend-rs/docs/engine/shared.md`):
+The studio's **one** engine registry is k7's Rust front's (`apps/k7-daw-backend/docs/engine/shared.md`):
 the editor lists its engines from it, and every installed supervisor heartbeats to it. The engine slots
-(`crates/k7-front/src/routes/engine_reach/`) live in the same front.
+(`packages/k7-front/src/routes/engine_reach/`) live in the same front.
 
 ## What it asks of a machine: a slot
 
-A machine's slots are jobs sent through the tunnel (`packages/engine-tunnel/docs/jobs.md`): there is no
+A machine's slots are jobs sent through the tunnel (`apps/k7-daw-frontend/packages/engine-tunnel/docs/jobs.md`): there is no
 file service on that machine for a browser to call, and a page on HTTPS could not call one there anyway
 ([slots.md](slots.md)).
 
 ## What it does NOT ask: an analysis
 
 A `{file}.cache` sidecar is written by **the front**, out of its own decoder, because the front
-holds the bytes (`packages/audio-analysis/docs/analysis.md`). Asking a machine for it would mean
+holds the bytes (`apps/k7-daw-frontend/packages/audio-analysis/docs/analysis.md`). Asking a machine for it would mean
 downloading the master to that machine first and posting the sidecar back, to compute something the host
 already has everything for. That is also why an engine may be absent without anything degrading
 except playback on it.
@@ -38,7 +38,7 @@ except playback on it.
 
 ## Proofs
 
-`fixtures/engine-jobs-vectors.json`, node's answers kept as committed; `crates/k7-front/src/engine_jobs_vectors.rs`
+`fixtures/engine-jobs-vectors.json`, node's answers kept as committed; `packages/k7-front/src/engine_jobs_vectors.rs`
 checks Rust: zod's verdict on the slot bodies.
 `engines_tests.rs` drives a `Link` and a job through a real hub against a fake supervisor on an in-memory socket.
 The conformance spec `engineJobs` (`e2e/docs/conformance.md`) drives the routes through HTTP.

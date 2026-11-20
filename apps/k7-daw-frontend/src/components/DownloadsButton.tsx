@@ -1,6 +1,6 @@
 // DownloadsButton.tsx — the sidebar's download manager: an icon with "done/total" on it while anything comes
 // down (library songs, the engine's models and instruments) or a moment goes up, and the list in a popover.
-// Nothing at all while the list is empty. The list is @studio/http-client's (packages/http-client/docs/downloads.md);
+// Nothing at all while the list is empty. The list is @studio/http-client's (apps/k7-daw-frontend/packages/http-client/docs/downloads.md);
 // the backend's song update checks are mirrored in by SongSyncDownloads.tsx.
 
 import {

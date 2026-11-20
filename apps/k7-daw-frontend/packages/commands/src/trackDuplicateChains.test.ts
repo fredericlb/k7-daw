@@ -1,6 +1,6 @@
 // `track duplicate` in a chain project — the new lane is a tracks/ file and a `start: true` chain of
 // copies under fresh ids; a chain fed by the lane alone is copied too, a shared one stays shared.
-// See packages/song/docs/chainFiles.md, "Writing to a chain project".
+// See apps/k7-daw-frontend/packages/song/docs/chainFiles.md, "Writing to a chain project".
 
 import {
   existsSync,

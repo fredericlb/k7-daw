@@ -1,5 +1,5 @@
 // testAgents.ts — the agents the tunnel suites run against: this package's own, and the native
-// supervisor's (engine/k7-supervisor), whose `tunnel_harness` answers the same test jobs. Two
+// supervisor's (apps/k7-daw-engine/k7-supervisor), whose `tunnel_harness` answers the same test jobs. Two
 // implementations of one wire, held to one set of tests. The native one is skipped until built.
 
 import { type ChildProcess, spawn } from "node:child_process";
@@ -18,7 +18,7 @@ export interface AgentKind {
   make(opts: TunnelAgentOptions): AgentHandle;
 }
 
-/** The newest built harness under engine/k7-supervisor/build, or null. */
+/** The newest built harness under apps/k7-daw-engine/k7-supervisor/build, or null. */
 function harness(): string | null {
   const build = join(
     dirname(fileURLToPath(import.meta.url)),

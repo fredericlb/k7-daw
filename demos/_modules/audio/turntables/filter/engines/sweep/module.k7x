@@ -2,7 +2,7 @@
 // gauche, passe-haut vers la droite, transparent au milieu.
 //
 // Un seul paramètre, et ce n'est pas cosmétique : un contrôle du pupitre en pilote au plus un
-// (packages/song/docs/viewBindings.md), donc « passe-bas ou passe-haut » ne peut pas être un
+// (apps/k7-daw-frontend/packages/song/docs/viewBindings.md), donc « passe-bas ou passe-haut » ne peut pas être un
 // second réglage qu'on bascule. Les deux filtres sont donc TOUJOURS dans la chaîne et ce qui
 // bouge est l'endroit où chacun se place — ce qui est aussi le fonctionnement du matériel que
 // ça imite.

@@ -1,4 +1,4 @@
-//! diff3.rs — every non-k7x settle of `fixtures/settle-vectors.json` answered without node's `settleFileOp` and `applyFileOp` (apps/k7/backend-rs/docs/parity.md).
+//! diff3.rs — every non-k7x settle of `fixtures/settle-vectors.json` answered without node's `settleFileOp` and `applyFileOp` (apps/k7-daw-backend/docs/parity.md).
 //! What a reader gets wrong: the settle check runs with a `Js` that panics, so no answer can come from a host.
 
 use std::sync::OnceLock;

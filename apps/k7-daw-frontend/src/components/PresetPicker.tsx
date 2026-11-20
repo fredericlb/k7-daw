@@ -1,7 +1,7 @@
 // PresetPicker.tsx — "which preset?", asked by a node's one dropdown on the graph. The same popup as
 // the module and asset pickers, with a header of its own — SAVE the node as a new preset, kept in the
 // workspace or a library, and UPDATE the one last loaded — and, for a module with several engines, a
-// left bar to pick the ENGINE. Every action is a verb the caller runs. See packages/song/docs/userPresets.md.
+// left bar to pick the ENGINE. Every action is a verb the caller runs. See apps/k7-daw-frontend/packages/song/docs/userPresets.md.
 
 import {
   type NodePresets,

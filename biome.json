@@ -22,7 +22,7 @@
       "!**/*.css",
       "!**/*.json",
       "!**/*.jsonc",
-      "!engine/k7-runtime",
+      "!apps/k7-daw-engine/k7-runtime",
       "!**/k7WasmSong.generated.ts",
       "!**/hostProtocol.generated.ts"
     ]
@@ -60,7 +60,7 @@
           "level": "warn",
           "options": {
             "paths": {
-              "lucide-react": "Import icons from @studio/ui/icons, the one set every app draws with (packages/ui/docs/icons.md)."
+              "lucide-react": "Import icons from @studio/ui/icons, the one set every app draws with (apps/k7-daw-frontend/packages/ui/docs/icons.md)."
             }
           }
         }

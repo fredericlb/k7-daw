@@ -53,7 +53,7 @@ export function emitFolder(
   // Master → OUT (or a master chain if it carries plugins).
   const master = song.tracks.find((t) => t.role === "master");
   const masterPlugins = orderPlugins(master?.plugins ?? []);
-  // Where a lane ends: the mixer's SUM, like every k7 project (packages/song/docs/masterChain.md).
+  // Where a lane ends: the mixer's SUM, like every k7 project (apps/k7-daw-frontend/packages/song/docs/masterChain.md).
   const masterSink = MIX_NODE;
   /** The master chain's own name, when the master track carries plugins — what `MIX` runs into. */
   const masterChain =
@@ -131,7 +131,7 @@ export function emitFolder(
     },
   });
 
-  // The surface an imported project needs to be LOOKED at — an arrangement (packages/song/docs/surfaces.md).
+  // The surface an imported project needs to be LOOKED at — an arrangement (apps/k7-daw-frontend/packages/song/docs/surfaces.md).
   writeDoc(
     join(outDir, "surfaces/timeline.k7x"),
     { type: "timeline", layout: "split" },

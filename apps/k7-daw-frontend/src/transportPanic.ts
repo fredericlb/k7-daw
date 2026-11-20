@@ -3,7 +3,7 @@
 // Every stop in this app goes through one callback (useEngineLink), which is why the rule lives at
 // that seam rather than on the button: the key, the command bar and the button are the same gesture
 // to a musician, and a rule on one of them would be a rule two thirds of the time.
-// See engine/k7-runtime/docs/panic.md for what each of the two actually does.
+// See apps/k7-daw-engine/k7-runtime/docs/panic.md for what each of the two actually does.
 
 /**
  * How long a stop stays "the last stop". Short enough that two presses minutes apart are two stops,

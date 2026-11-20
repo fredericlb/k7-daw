@@ -3,7 +3,7 @@
 
 import { marked } from "marked";
 import { describe, expect, it } from "vitest";
-import { scaled } from "../../../../../../scripts/vitestScale.ts";
+import { scaled } from "../../../../../scripts/vitestScale.ts";
 import { findPage, GUIDES, guideNav, resolveLink, SITE_PAGES } from "./pages";
 import { slugify } from "./SiteMarkdown";
 

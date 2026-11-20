@@ -9,8 +9,8 @@ import { setDoc, writeDoc, writeNode } from "./testSupport";
 
 // An input's track is named by the CHAIN, not by a field: a shared io/IN node cannot name one.
 
-const here = dirname(fileURLToPath(import.meta.url)); // packages/song/src
-const DEMOS = join(here, "..", "..", "..", "demos");
+const here = dirname(fileURLToPath(import.meta.url)); // apps/k7-daw-frontend/packages/song/src
+const DEMOS = join(here, "..", "..", "..", "..", "..", "demos");
 const SONG = join(DEMOS, "synth-demo.k7");
 const IN = "@workspace/io/IN:in-1";
 

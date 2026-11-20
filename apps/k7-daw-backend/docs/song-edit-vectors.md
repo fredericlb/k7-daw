@@ -1,9 +1,9 @@
 # song-edit vectors
 
-The Rust `song-edit` crate is `song-edit`: the TypeScript under `packages/song-edit/src` and song's write side are stubs that call it.
-Its proof is a frozen set of vectors, each a folder in and a folder out, in `apps/k7/backend-rs/tests/vectors/song-edit/` (one
+The Rust `song-edit` crate is `song-edit`: the TypeScript under `apps/k7-daw-frontend/packages/song-edit/src` and song's write side are stubs that call it.
+Its proof is a frozen set of vectors, each a folder in and a folder out, in `apps/k7-daw-backend/tests/vectors/song-edit/` (one
 file per module; `index.json` counts them and lists the exported functions no vector reaches) and the goldens in
-`packages/song-edit/rust/tests/goldens/`. They were harvested from the TypeScript implementation before the stubs replaced it, and
+`apps/k7-daw-wasm/song-edit/tests/goldens/`. They were harvested from the TypeScript implementation before the stubs replaced it, and
 nothing regenerates them: no generator is kept, so the set cannot drift to follow the crate.
 
 ## Choices
@@ -24,6 +24,6 @@ nothing regenerates them: no generator is kept, so the set cannot drift to follo
 
 ## Who replays them
 
-`packages/song-edit/rust/tests/replay` and `replay_lane` replay them natively. `npm run test:edit-replay -w @studio/k7-wasm` has those
+`apps/k7-daw-wasm/song-edit/tests/replay` and `replay_lane` replay them natively. `npm run test:edit-replay -w @studio/k7-wasm` has those
 replays write the calls they screened, then runs each through `edit.call` over a temp folder, over the Vfs shims and in the built
-Worker inside Chromium; `scripts/check-vectors.sh` and `gate.sh` run it (`packages/k7-wasm/docs/edit.md`).
+Worker inside Chromium; `scripts/check-vectors.sh` and `gate.sh` run it (`apps/k7-daw-frontend/packages/k7-wasm/docs/edit.md`).

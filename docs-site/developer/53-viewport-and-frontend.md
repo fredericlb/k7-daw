@@ -1,6 +1,6 @@
 # The viewport plugin and the frontend's picture code
 
-## The video plugin — `packages/k7-plugins/src/video/`
+## The video plugin — `apps/k7-daw-frontend/packages/k7-plugins/src/video/`
 
 The builtin plugin that owns the frame: it contributes the drawer for a `viewport` surface, in the
 shell's floating window and on a second device, and exports `sceneOf` and `ViewportTab` for the
@@ -27,9 +27,9 @@ drawn by anything.
 A second device that loads the page over plain HTTP on the LAN is not a secure context, so it has no
 `getUserMedia`: a lane naming one of the machine's lenses draws nothing there, and the local opener
 says why. What such a device can draw is a `remote:` camera, a device of the account in camera mode,
-reached peer to peer (`packages/web-protocol/docs/cameras.md`).
+reached peer to peer (`apps/k7-daw-frontend/packages/web-protocol/docs/cameras.md`).
 
-## The frontend — `apps/k7/frontend/src/`
+## The frontend — `apps/k7-daw-frontend/src/`
 
 | file | role |
 |---|---|

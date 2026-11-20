@@ -2,7 +2,7 @@
 // external plugin, then the project copied to the engine's machine, applied, and dry-run, each step
 // said in words and the copy measured in files and megabytes. It
 // ends when the file service stops reporting a load; a failed copy ends it too, and the app's own
-// dialog takes over. See apps/k7/backend-rs/docs/file-engine.md.
+// dialog takes over. See apps/k7-daw-backend/docs/file-engine.md.
 
 import { HardDriveDownload } from "@studio/ui/icons";
 import type {

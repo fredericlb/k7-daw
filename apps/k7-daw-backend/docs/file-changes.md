@@ -1,7 +1,7 @@
 # The change set and the verb bundle (step 3d)
 
 `POST /changes`, `GET /verb-bundle` and `GET /verb-bundle/library`: what the browser's verbs commit to and read from, native in
-the Rust file service. The code is `crates/k7-file-service/src/changes/`
+the Rust file service. The code is `packages/k7-file-service/src/changes/`
 and `verb_bundle.rs`, and the front's `native/changes.rs` and `native/verb_bundle.rs`. The routes belong to the `journal` piece and
 have no fallback: a front that does not answer the journal says 503.
 
@@ -57,4 +57,4 @@ the models cache are not in the bundle: a verb that reads them asks for them.
 
 ## Worker runtime
 
-A browser Worker runs the verbs over a virtual file system and sends this route's change sets: see `packages/commands/docs/runtime.md`.
+A browser Worker runs the verbs over a virtual file system and sends this route's change sets: see `apps/k7-daw-frontend/packages/commands/docs/runtime.md`.

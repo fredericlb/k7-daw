@@ -2,7 +2,7 @@
 // engine's machine, so what the command-line engine keeps in its config file — the
 // instruments it downloads, a private CA — and quitting belong on this panel. The app shows its own tray only while no studio is open.
 // Full screen is the device's too, and Android's alone: the iOS app answers no such call.
-// See ../../docs/settings.md, engine/k7-runtime/docs/android.md and docs/ios.md.
+// See ../../docs/settings.md, apps/k7-daw-engine/k7-runtime/docs/android.md and docs/ios.md.
 
 import { Switch } from "@studio/ui/switch";
 import { useEffect, useState } from "react";

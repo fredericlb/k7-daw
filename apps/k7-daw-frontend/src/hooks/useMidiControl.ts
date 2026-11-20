@@ -144,7 +144,7 @@ export function useMidiControl({
       if (!m) return;
       const v = widgetDenorm(m.widget, t);
       setParamRef.current(m, v);
-      // A crossfade knob's dry half rides the same CC — packages/ui-chains-react/docs/widgets.md.
+      // A crossfade knob's dry half rides the same CC — apps/k7-daw-frontend/packages/ui-chains-react/docs/widgets.md.
       if (m.widget.pair)
         setParamRef.current(
           { ...m, param: m.widget.pair },

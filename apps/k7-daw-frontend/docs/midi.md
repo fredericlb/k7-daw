@@ -2,7 +2,7 @@
 
 Right-click any knob, slider, fader or number on a module in the chains graph and the menu
 answers for **that param**: assign a control to it, or take one away. The map itself is a file —
-`controller.k7x` in the module's folder, see `packages/song/docs/controller.md` — so what this
+`controller.k7x` in the module's folder, see `apps/k7-daw-frontend/packages/song/docs/controller.md` — so what this
 side owns is only the listening and the sending.
 
 ## The split
@@ -72,13 +72,13 @@ hand and one moved by a controller are indistinguishable downstream.
 ## What is deliberately not bindable
 
 - **A lane's mixer control** (`@output-volume` on a lane's node) — a lane is a module
-  (`packages/song/docs/trackModules.md`), but a flat node has no module FOLDER, so
+  (`apps/k7-daw-frontend/packages/song/docs/trackModules.md`), but a flat node has no module FOLDER, so
   there is nowhere to record the binding. The right-click falls through to the node's own menu.
 - **A module FIELD** (`@monitor`) — a word rather than a number; a control change has nothing to
   sweep.
 - **Notes.** A CC is what a knob sends. Pads and keys are the recorder's business (`webmidi.ts`),
   which is a different feature with a different destination: it records from the device a midi-in
-  node names, wired to the armed lane (`packages/song/docs/midiIn.md`), where this listens to every
+  node names, wired to the armed lane (`apps/k7-daw-frontend/packages/song/docs/midiIn.md`), where this listens to every
   device there is.
 
 A binding whose param has **no widget** in this project is not played: without min/max there is

@@ -4,7 +4,7 @@
 // Every call is a request answered over postMessage, so every answer is ASYNC: a caller shows
 // its last known answer until the new one lands. A request unanswered in time means a hung
 // script: the iframe is thrown away and rebuilt, and that script text is never run again.
-// The other half is widgetRuntime.ts; the rationale is packages/ui-chains-react/docs/lcdScreen.md.
+// The other half is widgetRuntime.ts; the rationale is apps/k7-daw-frontend/packages/ui-chains-react/docs/lcdScreen.md.
 
 import {
   type DrawData,

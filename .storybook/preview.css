@@ -5,7 +5,7 @@
 @import "tw-animate-css";
 @import "@studio/ui/theme.css";
 
-@source "../packages/ui/src";
-@source "../packages/ui-waveform/src";
-@source "../packages/recorder/src";
-@source "../apps/k7/frontend/src";
+@source "../apps/k7-daw-frontend/packages/ui/src";
+@source "../apps/k7-daw-frontend/packages/ui-waveform/src";
+@source "../apps/k7-daw-frontend/packages/recorder/src";
+@source "../apps/k7-daw-frontend/src";

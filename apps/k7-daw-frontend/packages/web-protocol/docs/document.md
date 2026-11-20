@@ -13,7 +13,7 @@ the clip file's own window in seconds (absent meaning the file's start, or its e
 
 They are on the wire because the browser **caches** a clip's envelope. Without them, a trim moves
 the window while the picture stays: same id, so the cached envelope is reused and the block goes
-on showing material the clip does not play. `apps/k7/frontend/src/clipEnvelope.ts` is the only
+on showing material the clip does not play. `apps/k7-daw-frontend/src/clipEnvelope.ts` is the only
 thing that reads them.
 
 All three are optional, including `offset` — which is required on `ClipDoc` and cannot be here.
@@ -36,7 +36,7 @@ is over in `loopStart`/`loopEnd`, and the repeat count is multiplied into `lengt
 can DRAW an event from the rest of the object and cannot WRITE one back — without `event` a
 copy/paste on the timeline drops the trim, the fades and the passes.
 
-`apps/k7/frontend/src/clipboard.ts` reads it, and nothing else does. It is deliberately *beside*
+`apps/k7-daw-frontend/src/clipboard.ts` reads it, and nothing else does. It is deliberately *beside*
 the resolved numbers rather than instead of them: those stay the drawing's single source.
 
 ## The fades
@@ -54,7 +54,7 @@ every other time on this document — a surface measures in the unit it draws in
 `WebClip.frozen` says this clip is a RENDER, not a placement: the lane is frozen and this stands
 in for it. That matters to anything that would edit it. There is no `clips:` entry for a move to
 rewrite, and a bar-1 render sitting over a real placement at bar 1 means a drag would move
-material the lane is not even showing. See `packages/song/docs/freeze.md`.
+material the lane is not even showing. See `apps/k7-daw-frontend/packages/song/docs/freeze.md`.
 
 `warpOff` is the same kind of distinction one level down: `warped` alone cannot tell "never
 stretched" from "stretched, switched off here", so both are sent and the timeline draws the second
@@ -86,7 +86,7 @@ applied — every surface reads that one and therefore agrees. `detected` and `o
 list before corrections and the corrections themselves, in FILE seconds as the clip stores them;
 only an onset editor needs them, to tell a detected onset from a hand-placed one and to name a
 removal by the time the DETECTOR gave it rather than by wherever the pointer was. See
-`packages/song-edit/src/onsets.ts`.
+`apps/k7-daw-frontend/packages/song-edit/src/onsets.ts`.
 
 ## `ChangedFile`: what a command touched
 
@@ -96,7 +96,7 @@ it costs nothing.
 
 What it is FOR is the reload behind a command: a client that knows a marker moved inside one clip
 file can skip the routes that answer about files and names, which cannot have changed. See
-`apps/k7/frontend/src/reloadScope.ts`.
+`apps/k7-daw-frontend/src/reloadScope.ts`.
 
 Its paths are PROJECT-relative (`clips/x.k7x`) — the vocabulary `Hints.paths` speaks, and the one
 an anchored test can trust. The journal's own `files` stay workspace-relative.
@@ -118,9 +118,9 @@ level, which is a thing to say rather than a dead fader to draw.
 Three other groups left `WebTrack` outright and did not come back:
 
 - `docs` / `todos`, for the Docs panel, gone with it — a note is a doc module on the graph now
-  (`@meta/doc`); see `packages/song/docs/docModules.md`.
+  (`@meta/doc`); see `apps/k7-daw-frontend/packages/song/docs/docModules.md`.
 - `frozen`, `alternatives` and `alternative`, for the lane header, gone with the fields they came
-  from; see `packages/song/docs/trackModules.md`.
+  from; see `apps/k7-daw-frontend/packages/song/docs/trackModules.md`.
 
 Both are facts about the module a lane *is*, so the timeline's gutter reads them off `WebGraph`
 (`trackAlternatives`, `frozen`) rather than off a second copy on this document. Putting them back
@@ -132,20 +132,20 @@ memoised per revision and this route is not.
 `WebVideoProject` is a separate document and not a section of `WebProject`. Nothing on it is a
 beat — a shot is cut against the wall clock — and keeping it apart is what keeps the frame out of
 what the C++ engine is handed, without anything having to strip it on the way. One timeline draws
-both and its ruler reads either; see `apps/k7/frontend/docs/picture.md` and
-`packages/song-video/docs/picture.md`.
+both and its ruler reads either; see `apps/k7-daw-frontend/docs/picture.md` and
+`apps/k7-daw-frontend/packages/song-video/docs/picture.md`.
 
 `WebVideoPlugin` is one pass over the picture, a video chain's step compiled. A `shader` carries
 its GLSL **inline**: the browser cannot open the module's `shaders/` folder, and a page of text is
 smaller than the route that would serve it; absent when the node has nothing picked, which draws
 as a pass that lets its picture through. `audioFrom` names a LANE rather than carrying a number,
 because the number moves — the engine pushes levels at ~20 Hz and the surface holding that stream
-is the one that can look one up. See `packages/song-video/docs/shaders.md`.
+is the one that can look one up. See `apps/k7-daw-frontend/packages/song-video/docs/shaders.md`.
 
 ## The command catalogue
 
 `ArgClass` mirrors `ARG_CLASSES` and `ArgProvider` the `PROVIDERS` keys, both in
-`packages/commands/src/commandSpec.ts`, where a test fails if they drift.
+`apps/k7-daw-frontend/packages/commands/src/commandSpec.ts`, where a test fails if they drift.
 
 `kind` is only the colour an argument is drawn in; `provider` is the PRECISE type of thing it
 names — `file` is a clip AND a sequence AND a module asset, and `module` is also a category. Three
@@ -153,7 +153,7 @@ providers are worth a word:
 
 - **`nodes`** is one of this project's *uses* of a module, which is what the `node …` verbs
   address. Separate from `modules` because a `@ref` names a shared definition, and those are
-  edited in the builder rather than by a verb — see `packages/song/docs/nodes.md`.
+  edited in the builder rather than by a verb — see `apps/k7-daw-frontend/packages/song/docs/nodes.md`.
 - **`playlists`** is a set list of the REPOSITORY, `_playlists/<name>.k7x` with subfolders kept.
   The one provider that reads nothing of the open project.
 - **`surfaceTypes`** is a closed set of words rather than something read off the project: the file

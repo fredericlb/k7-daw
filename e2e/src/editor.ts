@@ -1,5 +1,5 @@
 // editor.ts — the k7x editor's textbox and its vim mode, as assistive technology reads them.
-// The textbox is named after its file, `<path> — editor`; vim mode adds a status named "vim" (packages/ui-editor/docs/a11y.md).
+// The textbox is named after its file, `<path> — editor`; vim mode adds a status named "vim" (apps/k7-daw-frontend/packages/ui-editor/docs/a11y.md).
 import type { Locator, Page } from "@playwright/test";
 
 const escaped = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

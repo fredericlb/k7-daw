@@ -25,13 +25,13 @@ request is rare and long, so a pooled socket would buy nothing and would have to
 machine's restarts.
 
 What a machine does is registered by type; the supervisor's list is
-`engine/k7-supervisor/src/MachineJobs.cpp` (`TunnelAgentOptions.jobs` for the TypeScript reference
+`apps/k7-daw-engine/k7-supervisor/src/MachineJobs.cpp` (`TunnelAgentOptions.jobs` for the TypeScript reference
 agent the server's tests run on). A type it does not know is refused by name.
 
 Some types are **settings, not work**: `onnx-providers` and `chains` answer in one frame
-and write the machine's own file on the way (`engine/k7-supervisor/docs/supervisor.md`), so the studio's
+and write the machine's own file on the way (`apps/k7-daw-engine/k7-supervisor/docs/supervisor.md`), so the studio's
 card changes what that machine separates with instead of keeping a copy of its answer
-(`apps/k7/backend-rs/docs/engine/chains.md`). They go through one accessor for the same reason every
+(`apps/k7-daw-backend/docs/engine/chains.md`). They go through one accessor for the same reason every
 settings write does: the supervisor's loop is the file's single writer.
 
 `render` bounces a whole ProjectDoc, sent inline, with the machine's own `k7-runtime --render`. Its
@@ -39,15 +39,15 @@ clip paths are strings under a shared root like any other, so they are downloade
 runs. It comes in two shapes:
 
 - `{ doc, out }`, the mix alone to one server path, answered `{ type: "rendered", file: out }`. The
-  automatic VST freeze sends it (`packages/song/docs/autoFreeze.md`), since only that machine has
+  automatic VST freeze sends it (`apps/k7-daw-frontend/packages/song/docs/autoFreeze.md`), since only that machine has
   the plugins.
 - `{ doc, outDir, stems }`, every file of the manifest into a server folder, answered
   `{ type: "rendered", mix, stems: [{ name, file }] }` with every file named whole. Any render a
-  file service cannot make itself sends this one (`apps/k7/backend-rs/docs/file-engine-jobs.md`).
+  file service cannot make itself sends this one (`apps/k7-daw-backend/docs/file-engine-jobs.md`).
 
 In both, the paths answered are under a writable root, so naming them is what uploads them.
 
-`prefetch` and `send-up` are how the machine KEEPS an undo's audio (`apps/k7/backend-rs/docs/files/history.md`):
+`prefetch` and `send-up` are how the machine KEEPS an undo's audio (`apps/k7-daw-backend/docs/files/history.md`):
 `prefetch` names files the channel brings down before it answers, with how many are there; `send-up`
 names one the server no longer has, and the machine answers `{ type: "sent", file }` naming its own
 copy, freshly stamped — the stamp is what makes the channel upload a file it last brought down.
@@ -64,13 +64,13 @@ The path map only knows a server path in the tunnel's spelling: a root as the se
 then `/` between the segments below it. A Windows server — the desktop app's own backend — joins
 its paths with `\`, and such a path would cross unmapped and be refused by the handler. So a request
 reaching a jobs channel through the hub's loopback path has every path under a root respelt first
-(`apps/k7/backend-rs/crates/k7-engine/src/tunnel/spelling.rs`), as does a stem cut, which opens its
+(`apps/k7-daw-backend/packages/k7-engine/src/tunnel/spelling.rs`), as does a stem cut, which opens its
 channel itself (`jobSpelling.ts`). On a `/` server that changes
 nothing. An ENGINE channel is left as sent: the desktop app's engine opens its backend's own files.
 
 `sync` is the one request the AGENT answers rather than the machine's list, since copying is the
 tunnel's own business: its files are NOT brought down before it starts, it copies them itself and
-reports each one (`tunnel.md`, `apps/k7/backend-rs/docs/file-engine.md`).
+reports each one (`tunnel.md`, `apps/k7-daw-backend/docs/file-engine.md`).
 
 Two exceptions, both explicit. A request that names too many files to fetch before it starts — a
 set list of thirty songs — brings each down when it gets to it (`JobContext.fetch`), so it can

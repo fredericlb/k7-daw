@@ -1,5 +1,5 @@
 // frozen-chains.spec.ts — the Frozen chains page: a library's cold chain duplicated into the account's and deleted, and the bench.
-// The bench is a project the page opens, saved nowhere, and in no list of workspaces (apps/k7/frontend/docs/frozenChains.md).
+// The bench is a project the page opens, saved nowhere, and in no list of workspaces (apps/k7-daw-frontend/docs/frozenChains.md).
 import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "../../src/target.ts";
 import { engineUp } from "../../src/transport.ts";

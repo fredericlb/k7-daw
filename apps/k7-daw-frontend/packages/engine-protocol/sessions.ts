@@ -1,7 +1,7 @@
 // sessions.ts — the session identifier: which project inside one engine a message is about.
 // A wire value, so it lives here: two PROCESSES have to spell it the same way or they drive
 // two different projects and each sees the other's engine as empty. See docs/sessions.md
-// here for the client rules, and engine/k7-runtime/docs/protocol.md for the wire.
+// here for the client rules, and apps/k7-daw-engine/k7-runtime/docs/protocol.md for the wire.
 
 /** The default session; the engine reads an absent field as `""`, so do NOT give this a name — see docs/sessions.md. */
 export const DEFAULT_SESSION = "";
@@ -14,7 +14,7 @@ export const SESSIONS = {
   bench: "banc",
 } as const;
 
-/** The engine machine's SLOT, a frozen chain its supervisor keeps playing with nobody attached: one per engine, no person in it (engine/k7-supervisor/docs/slots.md). */
+/** The engine machine's SLOT, a frozen chain its supervisor keeps playing with nobody attached: one per engine, no person in it (apps/k7-daw-engine/k7-supervisor/docs/slots.md). */
 export const SLOT_SESSION = "slot";
 
 export type SessionId = string;
@@ -34,12 +34,12 @@ export const ENGINE_GLOBAL_REPLIES = [
   "sessions", // the one question whose answer is about the OTHER sessions
   "edit-plugins", // asked by the supervisor, which drives none; each row names its own session
   "whoami", // the identity of the process
-  "rendered", // a bounce in no project, answered to the asker alone (engine/k7-runtime/docs/cliModes.md)
+  "rendered", // a bounce in no project, answered to the asker alone (apps/k7-daw-engine/k7-runtime/docs/cliModes.md)
   // About a plugin TYPE or its window on the machine, never a project's instance of it.
   "plugin-param-list",
   "native-plugin-ui-opened",
   "plugin-base-saved",
-  // Pairing: about a DEVICE and the machine, never a project — engine/k7-runtime/docs/pairing.md.
+  // Pairing: about a DEVICE and the machine, never a project — apps/k7-daw-engine/k7-runtime/docs/pairing.md.
   "pair-pending",
   "paired",
   "pair-denied",

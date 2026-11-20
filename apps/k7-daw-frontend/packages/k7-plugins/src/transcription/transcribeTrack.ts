@@ -78,7 +78,7 @@ export async function transcribeTrack(
     ]);
     return;
   }
-  // Text a clip file holds, so it may not name a file past the project's roots (packages/song/docs/confine.md).
+  // Text a clip file holds, so it may not name a file past the project's roots (apps/k7-daw-frontend/packages/song/docs/confine.md).
   const videoPath = confineToProject(h.songPath, source);
   if (!videoPath) {
     h.refuse([

@@ -7,7 +7,7 @@ k7 is a set of processes talking over a WebSocket, living inside the `k7-daw`
 monorepo:
 
 ```
- song (k7x folder)  ─► packages/ (Node)                 moteur   (C++)
+ song (k7x folder)  ─► packages/ (TypeScript)               moteur   (C++)
                       ├─ parse + validate (Zod)         ┌──────────────────────────┐
                       ├─ resolve clip paths ──project─► │ diff() vs current        │
                       ├─ compile to ProjectDoc (JSON)   │ apply() → Tracktion Edit │
@@ -22,7 +22,7 @@ monorepo:
   folder to a flat `ProjectDoc`/`GraphDoc`, send it as JSON, watch files for live
   reload, and send transport commands. They have no UI of their own — the web
   backend and the CLI consume them as source.
-- **`engine/k7-runtime`** (C++) is a headless audio server. It never parses project
+- **`apps/k7-daw-engine/k7-runtime`** (C++) is a headless audio server. It never parses project
   files — it receives a compiled project as JSON, keeps the smart
   `diff()`/`apply()` logic, plays audio, and pushes transport/meter state back.
 
@@ -31,10 +31,9 @@ the engine is unchanged — it only speaks the JSON protocol below.
 
 ## Where the pieces live
 
-The engine, its supervisor and the brain packages serve every audio app in the repo, so they
-sit beside `apps/k7` rather than inside it. What lives
-here is the web editor: `frontend` and
-`backend`.
+The engine and its supervisor serve every audio app in the repo, so they sit beside this
+app, in `apps/k7-daw-engine`. What lives here is the web editor, `apps/k7-daw-frontend`; its
+backend is `apps/k7-daw-backend`, the Rust front.
 
 It runs on the device — the desktop app or the phone — each with its own
 backend, files and engine, and there is no hosted instance to sign in to.
@@ -44,33 +43,35 @@ TypeScript source and run via `tsx` — no build step. The engine is a native C+
 binary, built separately.
 
 ```
-engine/k7-runtime/               the C++ project (k7-runtime)             — native, not a workspace
+apps/k7-daw-engine/k7-runtime/               the C++ project (k7-runtime)             — native, not a workspace
   CMakeLists.txt · CMakePresets.json · docs/design.md
   engine/    library studio::engine  (ProjectDoc, ProjectDiff, EngineHost/Tracktion)
   server/    app k7-runtime          (WebSocket audio server, Serve.cpp)
-engine/k7-supervisor/           the supervisor (C++): identity, registry, engine, tunnel, machine jobs
-engine/scripts/                  the native build: engine + supervisor, staged and packaged
-apps/k7-desktop/                   the desktop app (Tauri; runs k7's backend, which drives k7-supervisor)
-apps/k7/                the web editor — frontend / backend
-packages/                  k7-daw's shared tier (consumed as raw TS source):
-  song/                    @studio/song            — song model + compiler + Strudel patterns
-  commands/                @studio/commands        — shared command layer, file edits, timeline, mixing
-  engine-client/           @studio/engine-client   — drives the engine over the WebSocket protocol
-  engine-protocol/         @studio/engine-protocol — the JSON wire shapes shared with the C++ engine
-  ui-chains/               @studio/ui-chains       — routing-graph engine: dagre layout (drawn by the web app as DOM nodes + SVG cables)
-  ui-editor/               @studio/ui-editor       — CodeMirror k7x language + note-grid roll (web UI)
-  translator/              @studio/translator      — DAWproject (.dawproject) → song folder; `k7 import` is its caller
-  web-protocol/            @studio/web-protocol    — the browser↔server wire types
+apps/k7-daw-engine/k7-supervisor/           the supervisor (C++): identity, registry, engine, tunnel, machine jobs
+apps/k7-daw-engine/scripts/                  the native build: engine + supervisor, staged and packaged
+apps/k7-daw-desktop/                   the desktop app (Tauri; runs k7's backend, which drives k7-supervisor)
+apps/k7-daw-backend/                   the Rust backend: `packages/` are its crates (k7-front, k7-file-service, ...)
+apps/k7-daw-wasm/                      the Rust crates built for the browser as WebAssembly (song, song-schema, song-edit, k7x, k7-wasm)
+apps/k7-daw-frontend/                  the web editor (this folder)
+  packages/                k7-daw's shared tier (consumed as raw TS source):
+    song/                    @studio/song            — song model + compiler + Strudel patterns
+    commands/                @studio/commands        — shared command layer, file edits, timeline, mixing
+    engine-client/           @studio/engine-client   — drives the engine over the WebSocket protocol
+    engine-protocol/         @studio/engine-protocol — the JSON wire shapes shared with the C++ engine
+    ui-chains/               @studio/ui-chains       — routing-graph engine: dagre layout (drawn by the web app as DOM nodes + SVG cables)
+    ui-editor/               @studio/ui-editor       — CodeMirror k7x language + note-grid roll (web UI)
+    translator/              @studio/translator      — DAWproject (.dawproject) → song folder; `k7 import` is its caller
+    web-protocol/            @studio/web-protocol    — the browser↔server wire types
 ```
 
 The C++ engine is described in
-[../../engine/k7-runtime/docs/design.md](../../engine/k7-runtime/docs/design.md) (diff-apply strategy and
+[../k7-daw-engine/k7-runtime/docs/design.md](../k7-daw-engine/k7-runtime/docs/design.md) (diff-apply strategy and
 threading rules). Development conventions for future Claude Code sessions are in
 [AGENTS.md](AGENTS.md).
 
 ## The song format — a k7x folder
 
-A song is a **folder of k7x files** (`packages/k7x/docs/language.md`), read in-process and
+A song is a **folder of k7x files** (`apps/k7-daw-frontend/packages/k7x/docs/language.md`), read in-process and
 validated with Zod — no external tooling to install. Any text editor works; the web editor adds
 schema-driven autocompletion derived from the same Zod schemas.
 
@@ -95,7 +96,7 @@ nodes/<name>.k7x       one USE of a module, flat, named by its file — the LANE
   events naming clips and events naming sequences in one list, and each leaves by the one
   its own material fits (`gtr#audio:` / `gtr#midi:` in `graph.k7x` when the two need
   different chains). See
-  [packages/song/docs/trackModules.md](../../packages/song/docs/trackModules.md).
+  [apps/k7-daw-frontend/packages/song/docs/trackModules.md](./packages/song/docs/trackModules.md).
 - **A group holds no material — only membership.** `tracks` lists the member lane
   names. That's all a group is.
 - **Mute is the lane's BYPASS**, one name in `graph.k7x`'s `bypassed:`; solo is derived by
@@ -105,7 +106,7 @@ nodes/<name>.k7x       one USE of a module, flat, named by its file — the LANE
   timeline, whose ruler reads either unit, and a `surfaces/viewport.k7x` composites the
   frame. It is a second COMPILE of the same folder, so the document the engine is handed
   carries no picture at all. See
-  [packages/song-video/docs/picture.md](../../packages/song-video/docs/picture.md).
+  [apps/k7-daw-frontend/packages/song-video/docs/picture.md](./packages/song-video/docs/picture.md).
 - **A strudel lane streams its material from a pattern.** `strudel` links one file
   under `algo/`, and the lane's **name** picks which part of it to receive — the
   pattern's `.label("…")`, matched ignoring case and punctuation.
@@ -145,7 +146,7 @@ nodes/<name>.k7x       one USE of a module, flat, named by its file — the LANE
   library module needs no local folder for it. `node new
   instruments/synth lead` scaffolds one and puts it in the graph, and `demos/synth-demo.k7/nodes/`
   is the worked example — one 4OSC module, a `lead` and a `pad`, each driving its own chain.
-  See `packages/song/docs/nodes.md`.
+  See `apps/k7-daw-frontend/packages/song/docs/nodes.md`.
 - A **chain** (in `graph.k7x`) is a signal path, written as a flat list of nodes: a
   **head**, the modules the signal passes through, and the sink it ends at. `chains` is
   a **list**, not a map — a chain needn't be named.
@@ -189,7 +190,7 @@ Xcode — so the Command Line Tools are enough, no full Xcode.app). It targets m
 ./engine/build/macos-clang/k7-runtime --list-audio-devices   # lists CoreAudio devices, then exits
 ```
 
-On Linux, build with a preset from `engine/k7-runtime/CMakePresets.json` (`dev-gcc`,
+On Linux, build with a preset from `apps/k7-daw-engine/k7-runtime/CMakePresets.json` (`dev-gcc`,
 `dev-clang`, `asan`, `release-gcc`); the first configure fetches JUCE + Tracktion
 (hundreds of MB). Requires CMake ≥ 3.24, a C++20 toolchain, and the JUCE Linux
 dev deps (needed even headless):
@@ -242,7 +243,7 @@ JSON over `ws://127.0.0.1:8765` (default). A sample of the message types:
 
 ## Troubleshooting (C++ engine, Linux)
 
-Run from `engine/k7-runtime/`, in the order you'll hit them.
+Run from `apps/k7-daw-engine/k7-runtime/`, in the order you'll hit them.
 
 **`fatal error: 'X11/extensions/Xrandr.h' file not found`** — JUCE builds its
 `juceaide` helper first, which needs the full X11 + font dev stack even headless.
@@ -269,5 +270,5 @@ natively for real low-latency audio.
 
 ## License
 
-GPLv3 — see [../../engine/k7-runtime/LICENSE](../../engine/k7-runtime/LICENSE). Tracktion Engine is GPLv3 or
+GPLv3 — see [../k7-daw-engine/k7-runtime/LICENSE](../k7-daw-engine/k7-runtime/LICENSE). Tracktion Engine is GPLv3 or
 commercial.

@@ -1,6 +1,6 @@
-// MainViewController.swift — the Capacitor bridge that hosts the shell page (engine/k7-android/web, the same page
+// MainViewController.swift — the Capacitor bridge that hosts the shell page (apps/k7-daw-android/web, the same page
 // Android shows) and registers its two plugins, the page's only way to the native half. Its status bar follows
-// the app on screen: light icons over a dark header, dark over a light one. See engine/k7-runtime/docs/ios.md.
+// the app on screen: light icons over a dark header, dark over a light one. See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Capacitor
 import UIKit

@@ -11,7 +11,14 @@ import { loadVideoProject } from "@studio/song-video/videoProject";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { runCommand } from "./commandSpec";
 
-const REPO = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const REPO = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "..",
+  "..",
+  "..",
+);
 let ws: string;
 let song: string;
 const logs: string[] = [];

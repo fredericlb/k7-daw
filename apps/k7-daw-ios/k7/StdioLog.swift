@@ -2,7 +2,7 @@
 // all write there, as programs of their own would, and an iOS app's streams reach no Console a device shows.
 // Lines keep their own tags (`[host]`, `[engine]`…); each is echoed to the original stderr for Xcode's console.
 // An `[engine]` line is also appended to the machine log, where the Logs panel reads what a child's lines are.
-// See engine/k7-runtime/docs/ios.md.
+// See apps/k7-daw-engine/k7-runtime/docs/ios.md.
 
 import Foundation
 import os

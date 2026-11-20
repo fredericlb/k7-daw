@@ -1,6 +1,6 @@
 //! media — the account's waveforms, downloads, takes and prefetch as pure code (sub-step 1l, 2400 to 2499): the slicing, the
 //! answer and its signature, the onset corrections, the model registry's machine and the names. No I/O, no clock of its own.
-//! What a reader gets wrong: a number is the TypeScript's f64 and a count is the TypeScript's `Math.*`; apps/k7/backend-rs/docs/file-media.md.
+//! What a reader gets wrong: a number is the TypeScript's f64 and a count is the TypeScript's `Math.*`; apps/k7-daw-backend/docs/file-media.md.
 
 use std::time::Duration;
 

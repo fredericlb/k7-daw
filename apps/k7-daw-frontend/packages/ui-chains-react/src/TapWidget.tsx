@@ -1,7 +1,7 @@
 // TapWidget.tsx — one sound of a rack, on its node's card: a pad that auditions it and lights when
 // its note plays, the NOTE it answers to, and the library SAMPLE it fires. The last tap of a grid adds
 // a sound instead. Every edit is only ASKED of the host, which writes the node's file; the card holds
-// nothing of its own. See packages/song/docs/racks.md.
+// nothing of its own. See apps/k7-daw-frontend/packages/song/docs/racks.md.
 
 import type { WebRackSound } from "@studio/graph-model";
 import { Plus, Volume2, VolumeX, X } from "@studio/ui/icons";
@@ -83,7 +83,7 @@ export function TapWidget({
 
   const symbol = rackBindSymbol(bind) ?? "?";
   const sample = sound?.sample;
-  // Anything it can SOUND: a library sample, the clip or slice an older kit names, or a kit's note (packages/song/docs/racks.md).
+  // Anything it can SOUND: a library sample, the clip or slice an older kit names, or a kit's note (apps/k7-daw-frontend/packages/song/docs/racks.md).
   const playable = !!(
     sample ||
     sound?.clip ||

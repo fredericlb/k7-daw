@@ -31,7 +31,7 @@ Two things follow from the cut:
 Nothing else is neutralised. Gain and pan are a `Mixer` MODULE: upstream of the point it belongs
 in the render, downstream it is not in the document at all. The one thing there would otherwise be
 to flatten by hand is the one thing the plan already answers. See
-`packages/song/docs/freeze.md`.
+`apps/k7-daw-frontend/packages/song/docs/freeze.md`.
 
 A plugin id is `<chain>:<module>` and a module name may itself hold a colon (`synth:lead`), so
 `pluginModule` splits on the FIRST one.
@@ -64,7 +64,7 @@ returns beside the take.
 
 A take recorded in the TAKES view goes elsewhere: `addTakeToEvent` declares it the same way, then
 adds it to the event it was armed on and comps it in over what was played, instead of placing it on
-the lane (`packages/song/docs/takes.md`). Nothing is muted for it — the lane was sent with the punch
+the lane (`apps/k7-daw-frontend/packages/song/docs/takes.md`). Nothing is muted for it — the lane was sent with the punch
 already cut out.
 
 The clip is declared BEFORE it is placed: a placement naming no clip fails the compile, so the
@@ -107,7 +107,7 @@ overwrite the first's audio while both definitions still pointed at it.
 A physical split is TWO renders rather than one and a trim, because what has to come out is two
 whole files: the halves are then ordinary material that can be processed, warped or moved apart,
 which is the reason to want a physical split rather than the virtual one. The material it cut is
-left on disk, exactly as the sequence half leaves it (`packages/song/docs/materialCut.md`).
+left on disk, exactly as the sequence half leaves it (`apps/k7-daw-frontend/packages/song/docs/materialCut.md`).
 
 A consolidation renders everything in the rectangle into one file. Every clip is laid on one
 track at its offset from the rectangle's start and the whole thing is bounced, so **gaps come out
@@ -151,7 +151,7 @@ dangling `group` shows as ungrouped — print what the song has.
 ## The offline bounce lives here, not in the file service
 
 `renderProject`, `serviceRenderer` and the bound machine's jobs URL (`boundJobsUrl`) are this
-package's, because the engine's own bench scripts under `engine/k7-runtime/scripts/` bounce
+package's, because the engine's own bench scripts under `apps/k7-daw-engine/k7-runtime/scripts/` bounce
 through them and must keep working without the file service. The file service's `boundMachine.ts`
 keeps the rest of the binding (which engine, `askBoundMachine`) and sets the URL through here, so
 there is one URL for both.

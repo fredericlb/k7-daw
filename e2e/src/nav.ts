@@ -1,8 +1,8 @@
 // nav.ts — a header control by its name, wherever the width put it: in the header, or in k7's Menu on a phone.
-// On a phone the panes become menu items and the header's tools move into the same menu (apps/k7/frontend/src/components/MobileChrome.tsx).
+// On a phone the panes become menu items and the header's tools move into the same menu (apps/k7-daw-frontend/src/components/MobileChrome.tsx).
 import type { Locator, Page } from "@playwright/test";
 
-// useIsMobile's query (apps/k7/frontend/src/useIsMobile.ts); a desktop header has a Menu button too, so the button alone says nothing.
+// useIsMobile's query (apps/k7-daw-frontend/src/useIsMobile.ts); a desktop header has a Menu button too, so the button alone says nothing.
 const MOBILE_QUERY = "(max-width: 820px), (max-height: 520px)";
 
 /** True when the header has folded into the Menu. */

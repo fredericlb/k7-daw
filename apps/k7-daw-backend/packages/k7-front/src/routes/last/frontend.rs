@@ -31,14 +31,14 @@ pub struct Frontend {
 }
 
 impl Frontend {
-    /// `K7_FRONTEND_DIST`, else the first `apps/k7/frontend/dist` with an `index.html` above the front's folder or binary.
+    /// `K7_FRONTEND_DIST`, else the first `apps/k7-daw-frontend/dist` with an `index.html` above the front's folder or binary.
     pub fn find(settings: &Settings) -> Frontend {
         let found = || {
             let starts = [std::env::current_dir().ok(), std::env::current_exe().ok()];
             starts.into_iter().flatten().find_map(|start| {
                 start
                     .ancestors()
-                    .map(|a| a.join("apps").join("k7").join("frontend").join("dist"))
+                    .map(|a| a.join("apps").join("k7-daw-frontend").join("dist"))
                     .find(|d| d.join("index.html").is_file())
             })
         };
@@ -46,7 +46,7 @@ impl Frontend {
         match &dist {
             Some(d) => eprintln!("k7-front: the page is served from {}", d.display()),
             None => eprintln!(
-                "k7-front: no built page (K7_FRONTEND_DIST, or apps/k7/frontend/dist above the front): pages answer 404"
+                "k7-front: no built page (K7_FRONTEND_DIST, or apps/k7-daw-frontend/dist above the front): pages answer 404"
             ),
         }
         Frontend {

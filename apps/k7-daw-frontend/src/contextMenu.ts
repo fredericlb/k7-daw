@@ -51,7 +51,7 @@ export type MenuCtx =
   // A pass-through node — a chain with no modules; nothing is offered on it now, so the id is all it needs to say.
   | { kind: "chain"; id: string }
   | { kind: "sink"; id: string }
-  // A BOX — an assembly instance, plus the template ref, so a row may address either (packages/song/docs/assemblies.md).
+  // A BOX — an assembly instance, plus the template ref, so a row may address either (apps/k7-daw-frontend/packages/song/docs/assemblies.md).
   | { kind: "assembly"; id: string; uses: string }
   // Right-click on the timeline ruler — offer to drop a marker at `tc`, the beat under the pointer snapped to the drawn grid.
   // `loop`: what `transport loop` would do right now — loop the selection, clear the loop, or nothing to offer.

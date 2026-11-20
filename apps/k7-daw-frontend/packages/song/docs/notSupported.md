@@ -35,7 +35,7 @@ That is the whole reason.
 `notSupportedModule.ts`, and every field is a decision:
 
 - **`plugin: { type: not_supported }`** — the marker the graph already reads to draw a node amber
-  (`apps/k7/backend-rs/docs/file-docs.md`). Reusing it rather than inventing a flag means the
+  (`apps/k7-daw-backend/docs/file-docs.md`). Reusing it rather than inventing a flag means the
   UI needed no change at all.
 - **`inputs: []`** — *unconstrained*, and this is the field that matters. An empty input list opts
   the step out of `checkChainInputs` entirely, which is right: the placeholder stands where a

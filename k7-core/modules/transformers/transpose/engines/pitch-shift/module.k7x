@@ -9,7 +9,7 @@
 //
 // Sa description est dans dsp.k7x à côté, pas compilée dans le moteur. Le dossier de type dit que
 // c'est un module de notes, et c'est ce qui lui fait charger l'hôte MIDI plutôt que l'hôte audio —
-// voir packages/song/docs/enginePlugin.md.
+// voir apps/k7-daw-frontend/packages/song/docs/enginePlugin.md.
 plugin({ type: "dsp", name: "Pitch Shift" })
 params({
   // Zéro : un module qu'on pose ne doit pas transposer avant qu'on le lui demande.
@@ -18,4 +18,4 @@ params({
 // En un paragraphe : transpose tout ce qui passe. `Semitones` est le déplacement, en demi-tons,
 // de -24 à +24.
 //
-// (La description d'un module est son en-tête, ici — voir packages/song/docs/docModules.md.)
+// (La description d'un module est son en-tête, ici — voir apps/k7-daw-frontend/packages/song/docs/docModules.md.)

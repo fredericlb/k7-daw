@@ -258,7 +258,7 @@ describe("the live set, upstream of the meter", () => {
 });
 
 // A `live` project authors no lane at all: the run materialises its own track, so there is no
-// `trk:` card to seed at and the track wears the chain's name — packages/song/docs/liveProject.md.
+// `trk:` card to seed at and the track wears the chain's name — apps/k7-daw-frontend/packages/song/docs/liveProject.md.
 describe("the live set on a materialised track", () => {
   const edge = (id: string, source: string, target: string) => ({
     id,
@@ -339,7 +339,7 @@ describe("insertFor", () => {
   });
 
   it("offers one on the empty MASTER RUN, whose two ends are both sinks", () => {
-    // `MIX: [ OUT ]` is written by every template to be dropped on — packages/song/docs/masterChain.md.
+    // `MIX: [ OUT ]` is written by every template to be dropped on — apps/k7-daw-frontend/packages/song/docs/masterChain.md.
     const sink = (name: string): GraphNode => ({
       ...node(`snk:${name}`, "sink"),
       label: name,

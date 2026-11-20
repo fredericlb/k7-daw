@@ -5,11 +5,11 @@
 // INPUT and not its output. Wired before the fader it would be cut along with everything else.
 //
 // `mix` is what the desk's knob moves — the ENGINE's dry/wet around the delay, whose own is
-// held at full wet (engine/k7-runtime/docs/mix.md) — and it rests at 0: an effect you drop
+// held at full wet (apps/k7-daw-engine/k7-runtime/docs/mix.md) — and it rests at 0: an effect you drop
 // into a chain must not be heard before somebody asks for it.
 //
 // `Time` is in MILLISECONDS and follows nothing: the desk knows each deck's BPM, but no
-// binding carries it here yet. See packages/k7-plugins/docs/turntables/fx.md.
+// binding carries it here yet. See apps/k7-daw-frontend/packages/k7-plugins/docs/turntables/fx.md.
 // The delay's ECHO engine: the one of them whose Time is in milliseconds.
 extends("@k7-core/audio/delay")
 engine("echo")

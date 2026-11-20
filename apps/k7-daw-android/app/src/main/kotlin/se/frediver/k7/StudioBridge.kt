@@ -2,7 +2,7 @@
 // (`window.k7Android`). The page reports the colour at the top of it (assets/top-color.js), which paints the status
 // bar above it, who is signed in (assets/account.js), what it plays (assets/media-session.js, to MediaPlayback), what
 // keeps it busy (`busy`, to Busy), the files it saves (assets/download.js, to Downloads), and calls the engine and
-// full screen, and the folder its exports go to (ExportFolders.kt): its settings panel is this phone's tray (apps/k7/frontend/src/settings/androidEngine.ts).
+// full screen, and the folder its exports go to (ExportFolders.kt): its settings panel is this phone's tray (apps/k7-daw-frontend/src/settings/androidEngine.ts).
 // The object is offered to every origin, so each message is checked for k7's own instead. See docs/android.md.
 
 package se.frediver.k7
@@ -141,7 +141,7 @@ class StudioBridge(
         const val NAME = "k7Android"
         private const val TAG = "k7-bridge"
 
-        /** The commands the tray's pages may send too (apps/k7/backend-rs/crates/k7-front/src/routes/local/routes.rs). */
+        /** The commands the tray's pages may send too (apps/k7-daw-backend/packages/k7-front/src/routes/local/routes.rs). */
         private val ALLOWED = setOf(
             "engine.start", "engine.stop", "engine.restart", "audio.priority", "lan.open",
             "plugins.rescan", "instruments.download", "instruments.remove",

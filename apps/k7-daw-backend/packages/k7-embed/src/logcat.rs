@@ -1,5 +1,5 @@
 //! logcat.rs — Android's log under the tag `k7-front`, where the app's stdout and stderr are not kept: the front's
-//! panics and its stop, and every line the front prints, beside BackendHost's own (`apps/k7/backend-rs/docs/embed.md`).
+//! panics and its stop, and every line the front prints, beside BackendHost's own (`apps/k7-daw-backend/docs/embed.md`).
 //! What a reader gets wrong: stderr is the process's, so once the engine serves here its pipe takes it (`k7-runtime`).
 
 use std::ffi::{CString, c_char, c_int};

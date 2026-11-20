@@ -1,7 +1,7 @@
 # The file service's native reads
 
-The file service's reads in Rust. The crate is `crates/k7-file-service` (no HTTP, no runtime of its own); the front's half is
-`crates/k7-front/src/routes/files/service/native/`. `reads` is `GET /file`, `POST /fmt`, `GET /tree` and
+The file service's reads in Rust. The crate is `packages/k7-file-service` (no HTTP, no runtime of its own); the front's half is
+`packages/k7-front/src/routes/files/service/native/`. `reads` is `GET /file`, `POST /fmt`, `GET /tree` and
 `/workspace-tree`, and the path of `GET /media`. Nothing here writes. The compile's nine routes (`docs`) are
 [file-docs.md](file-docs.md). The home page's listings and the acts on a whole
 workspace are the piece `workspaces`: [file-workspaces.md](file-workspaces.md).
@@ -98,7 +98,7 @@ and in the middle, a FIFO, a file one byte past `max_text`, a 100,000-byte pins 
 
 ## The revision
 
-Sub-step 1c of `file-service-rust.md`: `GET /revision`, the change token, in Rust. The walk and the token are `crates/k7-file-service`'s
+Sub-step 1c of `file-service-rust.md`: `GET /revision`, the change token, in Rust. The walk and the token are `packages/k7-file-service`'s
 `revision.rs`, the memo and its epoch `revisions.rs`, the one `notify` watcher `watch.rs`; the front's half is `native/revision.rs`.
 
 ### The token

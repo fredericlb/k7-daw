@@ -1,7 +1,7 @@
 // joinTake.ts — a recorded output's picture and its sound joined into one WebM, in the browser: the picture's packets
 // copied as the MediaRecorder encoded them, the engine's wav encoded to Opus by WebCodecs, the file streamed to
 // `writable` as it is made. No ffmpeg anywhere. What reads wrong: packets and samples are added INTERLEAVED, in time
-// order, or the muxer holds a whole take of one track while it waits for the other. packages/song/docs/outputRecording.md.
+// order, or the muxer holds a whole take of one track while it waits for the other. apps/k7-daw-frontend/packages/song/docs/outputRecording.md.
 
 import {
   AudioSampleSink,

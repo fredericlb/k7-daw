@@ -1,6 +1,6 @@
 // load-probe.ts — does the engine REPORT what its plugins cost? Point it at a running engine.
 //
-//   npx tsx engine/k7-runtime/scripts/load-probe.ts [ws://127.0.0.1:8765]
+//   npx tsx apps/k7-daw-engine/k7-runtime/scripts/load-probe.ts [ws://127.0.0.1:8765]
 //
 // One MIDI lane plays mu-tides; while it plays, the state frames' `load` is read: the plugin's
 // share of the audio block, and the process's memory. A frame carries it one time in four

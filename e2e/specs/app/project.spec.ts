@@ -9,7 +9,7 @@ const EXAMPLES = ["video-demo"];
 
 for (const name of EXAMPLES) {
   test(`${name} opens on the engine`, async ({ k7 }) => {
-    // The home page folds every workspace; the address unfolds the one whose projects are links (apps/k7/frontend/docs/projects.md).
+    // The home page folds every workspace; the address unfolds the one whose projects are links (apps/k7-daw-frontend/docs/projects.md).
     const home = await k7.open("/?ws=Examples");
     // The app cancels the link's navigation and opens a tab instead, so the click must not wait for one.
     // Every row's link reads "Open in k7"; the project is in its address.
