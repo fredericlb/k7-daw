@@ -16,6 +16,7 @@ import {
 import { Sheet, SidePanel } from "@studio/ui/side-panel";
 import type { ReactNode } from "react";
 import { m } from "../paraglide/messages.js";
+import { usePopin } from "../popins";
 import type { Panel } from "../routes";
 import type { RightPanelId } from "../ui/commands/context";
 
@@ -144,8 +145,15 @@ export function PanelFrame({
 }) {
   const def = PANEL_DEFS[id];
   const Frame = phone ? Sheet : SidePanel;
+  // Registered so an Escape pressed outside the panel closes it through the ladder (popins.ts).
+  usePopin(true, onClose);
   return (
     <Frame
+      onEscapeKeyDown={(e) => {
+        // Inside the panel it closes itself; elsewhere the ladder owns the key and picks the front layer.
+        const t = e.target as Element | null;
+        if (!t?.closest?.("[data-slot=panel-frame]")) e.preventDefault();
+      }}
       title={def.title()}
       icon={<def.icon aria-hidden />}
       subtitle={subtitle}

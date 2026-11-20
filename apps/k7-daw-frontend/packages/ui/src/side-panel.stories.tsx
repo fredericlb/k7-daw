@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as React from "react";
 import { Button } from "./button";
 import { Mic, Plus } from "./icons";
 import { RowButton, RowGroup } from "./row-group";
@@ -87,4 +88,27 @@ export const PhoneSheet: Story = {
       </Sheet>
     </div>
   ),
+};
+
+/** Escape and Close both end it; the panes stay clickable while a SidePanel is up. */
+export const Closable: Story = {
+  args: {
+    title: "Resources",
+    closeLabel: "Close",
+    onClose: () => {},
+    children: null,
+  },
+  render: (args) => {
+    const [open, setOpen] = React.useState(true);
+    return (
+      <div className="relative h-[560px] bg-background p-4">
+        <Button onClick={() => setOpen(true)}>Open panel</Button>
+        {open ? (
+          <SidePanel {...args} icon={<Mic />} onClose={() => setOpen(false)}>
+            {rows}
+          </SidePanel>
+        ) : null}
+      </div>
+    );
+  },
 };

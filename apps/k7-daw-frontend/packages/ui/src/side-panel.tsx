@@ -1,6 +1,8 @@
 // side-panel.tsx — the right panel of Pad and Desk (SidePanel) and its phone twin, the full-screen sheet.
 // A panel floats OVER the panes and never pushes them; the host positions the parent (it is `absolute`).
+// Radix Dialog owns the behaviour (docs/side-panel.md); the content renders in place, never in a portal.
 
+import { Dialog } from "radix-ui";
 import type * as React from "react";
 import { Button } from "./button";
 import { X } from "./icons";
@@ -18,7 +20,14 @@ interface PanelProps {
   closeLabel: string;
   children: React.ReactNode;
   className?: string;
+  /** Runs first on Escape; preventDefault leaves the key to the host, otherwise the panel closes and the key goes no further. */
+  onEscapeKeyDown?: (e: KeyboardEvent) => void;
 }
+
+const settle = (host?: (e: KeyboardEvent) => void) => (e: KeyboardEvent) => {
+  host?.(e);
+  if (!e.defaultPrevented) e.stopPropagation();
+};
 
 function Heading({
   title,
@@ -28,7 +37,9 @@ function Heading({
   onClose,
   closeLabel,
   sheet,
-}: Omit<PanelProps, "children" | "className"> & { sheet?: boolean }) {
+}: Omit<PanelProps, "children" | "className" | "onEscapeKeyDown"> & {
+  sheet?: boolean;
+}) {
   return (
     <div className="flex min-h-11 shrink-0 items-center gap-2.5">
       {icon ? (
@@ -37,14 +48,14 @@ function Heading({
         </span>
       ) : null}
       <div className="min-w-0 flex-1">
-        <h2
+        <Dialog.Title
           className={cn(
             "truncate text-foreground",
             sheet ? "type-sheet-title" : "type-headline",
           )}
         >
           {title}
-        </h2>
+        </Dialog.Title>
         {subtitle ? (
           <p className="type-status truncate text-fg-2">{subtitle}</p>
         ) : null}
@@ -66,19 +77,37 @@ function Heading({
   );
 }
 
-/** The 400 px floating panel: right 12, under the header, clear of the bar. */
-export function SidePanel({ children, className, ...head }: PanelProps) {
+/** The 400 px floating panel: right 12, under the header, clear of the bar. A non-modal dialog: the panes stay usable. */
+export function SidePanel({
+  children,
+  className,
+  onEscapeKeyDown,
+  ...head
+}: PanelProps) {
   return (
-    <aside
-      aria-label={head.title}
-      className={cn(
-        "panel absolute right-(--k7-panel-right) bottom-(--k7-panel-bottom) top-[calc(var(--k7-header-h)+var(--k7-panel-gap-top))] z-(--k7-z-panel) flex w-(--k7-panel-w) max-w-[calc(100%-24px)] flex-col gap-2.5 rounded-(--k7-r-panel) p-(--k7-panel-padding) animate-[k7-panel-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
-        className,
-      )}
+    <Dialog.Root
+      open
+      modal={false}
+      onOpenChange={(o) => {
+        if (!o) head.onClose();
+      }}
     >
-      <Heading {...head} />
-      <div className="min-h-0 flex-1 overflow-y-auto pr-2">{children}</div>
-    </aside>
+      <Dialog.Content
+        role="complementary"
+        data-slot="panel-frame"
+        aria-describedby={undefined}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={settle(onEscapeKeyDown)}
+        className={cn(
+          "panel absolute right-(--k7-panel-right) bottom-(--k7-panel-bottom) top-[calc(var(--k7-header-h)+var(--k7-panel-gap-top))] z-(--k7-z-panel) flex w-(--k7-panel-w) max-w-[calc(100%-24px)] flex-col gap-2.5 rounded-(--k7-r-panel) p-(--k7-panel-padding) outline-none animate-[k7-panel-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
+          className,
+        )}
+      >
+        <Heading {...head} />
+        <div className="min-h-0 flex-1 overflow-y-auto pr-2">{children}</div>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }
 
@@ -87,31 +116,33 @@ export function Sheet({
   children,
   className,
   transport,
+  onEscapeKeyDown,
   ...head
 }: PanelProps & { transport?: React.ReactNode }) {
   return (
-    <section
-      role="dialog"
-      aria-modal="true"
-      aria-label={head.title}
-      onKeyDown={(e) => {
-        if (e.key !== "Escape") return;
-        // The sheet owns this Escape: the shell's ladder must not run as well.
-        e.stopPropagation();
-        head.onClose();
+    <Dialog.Root
+      open
+      onOpenChange={(o) => {
+        if (!o) head.onClose();
       }}
-      className={cn(
-        "panel-sheet absolute inset-x-0 bottom-0 top-(--k7-sheet-top) z-(--k7-z-panel) flex flex-col gap-2.5 rounded-t-(--k7-r-sheet) px-4 pt-1.5 pb-[34px] animate-[k7-sheet-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
-        className,
-      )}
     >
-      <span
-        aria-hidden
-        className="mx-auto mb-1 h-[5px] w-9 shrink-0 rounded-full bg-(--k7-grabber)"
-      />
-      <Heading {...head} sheet />
-      {transport}
-      <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
-    </section>
+      <Dialog.Content
+        data-slot="panel-frame"
+        aria-describedby={undefined}
+        onEscapeKeyDown={settle(onEscapeKeyDown)}
+        className={cn(
+          "panel-sheet absolute inset-x-0 bottom-0 top-(--k7-sheet-top) z-(--k7-z-panel) flex flex-col gap-2.5 rounded-t-(--k7-r-sheet) px-4 pt-1.5 pb-[34px] outline-none animate-[k7-sheet-in_var(--k7-dur-panel)_var(--k7-ease-spring)]",
+          className,
+        )}
+      >
+        <span
+          aria-hidden
+          className="mx-auto mb-1 h-[5px] w-9 shrink-0 rounded-full bg-(--k7-grabber)"
+        />
+        <Heading {...head} sheet />
+        {transport}
+        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }
