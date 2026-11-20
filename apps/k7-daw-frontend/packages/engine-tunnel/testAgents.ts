@@ -24,7 +24,8 @@ function harness(): string | null {
     dirname(fileURLToPath(import.meta.url)),
     "..",
     "..",
-    "engine",
+    "..",
+    "k7-daw-engine",
     "k7-supervisor",
     "build",
   );

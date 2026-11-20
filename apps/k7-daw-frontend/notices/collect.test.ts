@@ -20,7 +20,7 @@ import {
 } from "./collect.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const repo = join(here, "../../../..");
+const repo = join(here, "../../..");
 
 /** A package.json, and the files beside it. */
 function pkg(

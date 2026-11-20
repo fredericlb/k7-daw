@@ -98,6 +98,8 @@ describe("the built runtime", () => {
       "..",
       "..",
       "..",
+      "..",
+      "..",
       "demos",
       "node-demo.k7",
     );
@@ -217,6 +219,8 @@ describe("the built runtime", () => {
     cpSync(
       join(
         dirname(fileURLToPath(import.meta.url)),
+        "..",
+        "..",
         "..",
         "..",
         "..",

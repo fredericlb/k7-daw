@@ -17,6 +17,8 @@ const FOLDER = join(
   "..",
   "..",
   "..",
+  "..",
+  "..",
   "k7-core",
   "assemblies",
   "turntable",

@@ -10,7 +10,7 @@ const ID = "virtual:k7-notices";
 const RESOLVED = `\0${ID}`;
 
 export function noticesPlugin(): Plugin {
-  const root = fileURLToPath(new URL("../../../../", import.meta.url));
+  const root = fileURLToPath(new URL("../../../", import.meta.url));
   let build = false;
   return {
     name: "k7-notices",

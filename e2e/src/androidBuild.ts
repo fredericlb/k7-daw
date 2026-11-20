@@ -9,8 +9,8 @@ const ANDROID_DIR = join(
   import.meta.dirname,
   "..",
   "..",
-  "engine",
-  "k7-android",
+  "apps",
+  "k7-daw-android",
 );
 
 export default function buildAndInstall(): void {

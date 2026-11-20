@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import type { ComponentsFile } from "./collect.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, "../../../..");
+const root = join(here, "../../..");
 /** A worktree has no engine build of its own, so the builds may be read from another checkout. */
 const builds = process.argv[2] ?? root;
 
@@ -28,7 +28,8 @@ function locate(spec: string): string {
   if (kind === "repo") return join(root, path);
   const engine = join(
     builds,
-    "engine",
+    "apps",
+    "k7-daw-engine",
     kind === "runtime" ? "k7-runtime" : "k7-supervisor",
     "build",
   );

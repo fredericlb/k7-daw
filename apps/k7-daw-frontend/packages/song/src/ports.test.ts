@@ -204,6 +204,8 @@ describe("the crossfade-demo song", () => {
     "..",
     "..",
     "..",
+    "..",
+    "..",
     "demos",
   );
   let ws: string;

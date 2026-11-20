@@ -17,6 +17,8 @@ const DEMOS = join(
   "..",
   "..",
   "..",
+  "..",
+  "..",
   "demos",
 );
 const SONG = join(DEMOS, "synth-demo.k7");

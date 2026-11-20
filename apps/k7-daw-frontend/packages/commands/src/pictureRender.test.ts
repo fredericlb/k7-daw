@@ -16,6 +16,8 @@ const DEMO = join(
   "..",
   "..",
   "..",
+  "..",
+  "..",
   "demos",
   "video-demo.k7",
 );

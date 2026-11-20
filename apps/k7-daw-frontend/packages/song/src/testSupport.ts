@@ -27,7 +27,16 @@ const REPO = join(
 export function copyOldPictureFixture(rel: string, to: string): void {
   const name = basename(rel);
   cpSync(
-    join(REPO, "packages", "song", "fixtures", "pictureLanesV2", name),
+    join(
+      REPO,
+      "apps",
+      "k7-daw-frontend",
+      "packages",
+      "song",
+      "fixtures",
+      "pictureLanesV2",
+      name,
+    ),
     to,
     {
       recursive: true,

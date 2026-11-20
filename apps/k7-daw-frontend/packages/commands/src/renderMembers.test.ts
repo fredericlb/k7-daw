@@ -23,6 +23,8 @@ const SONG = join(
   "..",
   "..",
   "..",
+  "..",
+  "..",
   "demos",
   "node-demo.k7",
 );
