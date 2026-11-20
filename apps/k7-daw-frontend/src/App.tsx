@@ -3366,6 +3366,9 @@ export default function App({
                         onEditTarget={setEditTargetIfOther}
                         onOpenItem={setOpenItemIfOther}
                         onOpenBuilder={openModuleBuilder}
+                        onBack={
+                          hasTimeline ? () => fullscreen("timeline") : undefined
+                        }
                         onOpenLibraryModule={paneFns.openLibraryModule}
                         // The module builder takes the editor's place BESIDE the file tree, as the chains builder does (docs/moduleBuilder.md).
                         moduleBuilder={moduleBuilderEl}

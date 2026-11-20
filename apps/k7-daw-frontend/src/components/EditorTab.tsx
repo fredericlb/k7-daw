@@ -165,6 +165,7 @@ function EditorTabView({
   onEditTarget,
   onOpenItem,
   onOpenBuilder,
+  onBack,
   onOpenLibraryModule,
   onOpenChain,
   onOpenAssembly,
@@ -195,6 +196,8 @@ function EditorTabView({
   onOpenItem: (item: MinimapItem | null) => void; // the open clip/track, for the minimap
   // Open the shared module builder on the MODULE file of the trio, plus which of the three was clicked.
   onOpenBuilder: (path: string, pane: "module" | "panel") => void;
+  /** The Source banner's way back to the Arrangement; undefined when the song has none. */
+  onBack?: () => void;
   // …and the same builder over a SHARED module, from the Libraries tab — its own callback, the path being in another space (../library.ts).
   onOpenLibraryModule: (moduleFile: string) => void;
   /** A chain row of the Libraries tab was opened — its ref, for the chains builder. */
@@ -1338,8 +1341,17 @@ function EditorTabView({
           className="mx-3 mt-2 flex h-9 shrink-0 items-center gap-2 rounded-full bg-(--k7-warn-fill) px-4 text-[13px] text-(--k7-warn)"
         >
           <span className="min-w-0 flex-1 truncate font-bold">
-            {m["editor.openedByCommand"]({ command: "ui file" })}
+            {m["editor.openedByCommand"]({ command: `ui file ${file.path}` })}
           </span>
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="shrink-0 cursor-pointer rounded-full px-2 py-1 font-bold underline hover:bg-on-fill"
+            >
+              {m["editor.backToArrangement"]()}
+            </button>
+          )}
           <button
             type="button"
             aria-label={m["common.close"]()}
