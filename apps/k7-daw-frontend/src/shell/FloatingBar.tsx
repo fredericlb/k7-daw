@@ -23,6 +23,8 @@ import {
   Spline,
   SquareTerminal,
   VolumeX,
+  ZoomIn,
+  ZoomOut,
 } from "@studio/ui/icons";
 import type { ComponentProps, ReactNode, Ref } from "react";
 import { MetronomeButton } from "../components/MetronomeButton";
@@ -66,6 +68,10 @@ export interface BarLaneViews {
   onLanes: () => void;
   onAutomation: () => void;
   onPicture: () => void;
+  /** The timeline's zoom, the keys z, Shift+Z and 0 as buttons. */
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onZoomFit: () => void;
 }
 
 export interface BarGraphViews {
@@ -228,6 +234,28 @@ export function FloatingBar({
         onClick={lanes.onAutomation}
       >
         <Spline />
+      </CapsuleButton>
+      <CapsuleDivider />
+      <CapsuleButton
+        aria-label={m["shell.lane.zoomOut"]()}
+        title={m["shell.lane.zoomOut"]()}
+        onClick={lanes.onZoomOut}
+      >
+        <ZoomOut />
+      </CapsuleButton>
+      <CapsuleButton
+        aria-label={m["shell.lane.zoomIn"]()}
+        title={m["shell.lane.zoomIn"]()}
+        onClick={lanes.onZoomIn}
+      >
+        <ZoomIn />
+      </CapsuleButton>
+      <CapsuleButton
+        aria-label={m["shell.lane.zoomFit"]()}
+        title={m["shell.lane.zoomFit"]()}
+        onClick={lanes.onZoomFit}
+      >
+        <Maximize />
       </CapsuleButton>
       {lanes.picture !== null && (
         <CapsuleButton

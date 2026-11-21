@@ -213,6 +213,21 @@ export function TakesView({
     { enabled: !!sel, capture: true },
   );
 
+  // The keyboard's span: Shift+arrows grow or shrink it from the event's start, arrows alone slide it, a grid step each.
+  const onSpanKey = (e: React.KeyboardEvent) => {
+    const dir = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+    if (!dir || wholeOnly) return;
+    e.preventDefault();
+    const base = sel ?? { from: ev.start, to: ev.start + GRID };
+    const step = dir * GRID;
+    const next = e.shiftKey
+      ? { from: base.from, to: base.to + step }
+      : { from: base.from + step, to: base.to + step };
+    if (next.from < ev.start - 1e-9 || next.to - next.from < GRID - 1e-9)
+      return;
+    setSel(next);
+  };
+
   const shown = drag ? snapSpan(drag.a, drag.b, GRID) : sel;
   const bar = (num * 4) / den;
   const bars: number[] = [];
@@ -312,7 +327,14 @@ export function TakesView({
         </button>
       </div>
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-        <div className="relative flex flex-1 flex-col gap-px">
+        <div
+          className="relative flex flex-1 flex-col gap-px"
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: the rows take the span keys (onSpanKey)
+          tabIndex={wholeOnly ? undefined : 0}
+          role="group"
+          aria-label={m["takes.spanKeys"]()}
+          onKeyDown={onSpanKey}
+        >
           {ev.rows.map((r, i) => {
             const heard = heardOf.get(r.ref) ?? [];
             const label = r.own
