@@ -45,6 +45,11 @@ top project enables Objective-C and Objective-C++ itself: Surge's path code is a
 language enabled only inside a subdirectory configures fine and then fails to generate
 (`CMAKE_OBJCXX_COMPILE_OBJECT` missing).
 
+**One fix for MSVC 14.52** (Visual Studio 2026), in the same script: sst-filters asks whether a tuning
+provider's `note_to_pitch` and its kin are static with `decltype(T::x)`, which that compiler accepts on a
+non-static member function, so it calls SurgeStorage's as static and fails (C2352). The trait asks
+instead that `&T::x` not be a member function pointer, which every compiler answers alike.
+
 **On the phones too.** `STUDIO_WITH_SURGE` is on everywhere; a build that turns it off gets no
 Surge and no `STUDIO_SURGE`. Surge's SIMD goes through simde on ARM, as on Apple Silicon, and
 Android asked three things of it:

@@ -1,5 +1,5 @@
-# surge.cmake — the four fixes Surge XT's core needs to build INSIDE this engine, applied at fetch time (PATCH_COMMAND).
-# The one thing a reader would get wrong: upstream builds fine, alone; each fix is about being a subproject (docs/surgePlugin.md).
+# surge.cmake — the fixes Surge XT's core needs to build INSIDE this engine, applied at fetch time (PATCH_COMMAND).
+# The one thing a reader would get wrong: upstream builds fine, alone; each fix but MSVC's is about being a subproject (docs/surgePlugin.md).
 
 include("${CMAKE_CURRENT_LIST_DIR}/../eurorack/patches/studio_replace.cmake")
 
@@ -39,3 +39,8 @@ studio_replace("libs/sst/sst-plugininfra/src/misc_linux.cpp"
 studio_replace("src/common/CMakeLists.txt"
     "      pthread\n      -Wl,--no-undefined\n"
     "      $<$<NOT:$<PLATFORM_ID:Android>>:pthread> # studio: no libpthread on Android\n      -Wl,--no-undefined\n")
+
+# MSVC 14.52 accepts decltype(T::f) on a NON-static member function, so the trait reads SurgeStorage's as static and the static call fails (C2352).
+studio_replace("libs/sst/sst-filters/include/sst/filters/FilterCoefficientMaker_Impl.h"
+    "struct has_member_##x<T, std::void_t<decltype(T::x)>>"
+    "struct has_member_##x<T, std::enable_if_t<!std::is_member_function_pointer_v<decltype(&T::x)>>>")
