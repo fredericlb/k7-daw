@@ -107,7 +107,6 @@ export function MergeDialog({
       <DialogContent
         ref={contentRef}
         aria-describedby={undefined}
-        aria-label={m["git.conflictTitle"]()}
         showCloseButton={false}
         // The first conflict takes focus on opening, so a keyboard starts where the work is.
         onOpenAutoFocus={(e) => {
