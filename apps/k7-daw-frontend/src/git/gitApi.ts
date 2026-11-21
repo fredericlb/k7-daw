@@ -4,6 +4,12 @@
 import { HttpError } from "@studio/http-client/call";
 import { m } from "../paraglide/messages.js";
 import type {
+  DeviceCode,
+  GithubRepo,
+  GithubStatus,
+  PollAnswer,
+} from "./githubState";
+import type {
   CommitInfo,
   GitState,
   MergeView,
@@ -48,12 +54,12 @@ export function explain(e: unknown): string {
 async function call<T>(
   t: GitTransport,
   path: string,
-  init: { json?: unknown } = {},
+  init: { json?: unknown; post?: boolean } = {},
 ): Promise<T> {
   const headers = t.headers();
   if (init.json !== undefined) headers["content-type"] = "application/json";
   const res = await fetch(`${t.base}/git/${path}`, {
-    method: init.json === undefined ? "GET" : "POST",
+    method: init.json === undefined && !init.post ? "GET" : "POST",
     headers,
     body: init.json === undefined ? undefined : JSON.stringify(init.json),
   });
@@ -127,6 +133,20 @@ export const git = {
     call<{ ok: boolean; forgotten: boolean }>(t, "forget-host", {
       json: target,
     }),
+  /** Whether the GitHub path exists in this build, and who is signed in on this device. */
+  githubStatus: (t: GitTransport) => call<GithubStatus>(t, "github"),
+  githubStart: (t: GitTransport, scopes: string[]) =>
+    call<DeviceCode>(t, "github/start", { json: { scopes } }),
+  githubPoll: (t: GitTransport) =>
+    call<PollAnswer>(t, "github/poll", { post: true }),
+  githubRepos: (t: GitTransport) =>
+    call<{ repos: GithubRepo[] }>(t, "github/repos"),
+  githubCreate: (t: GitTransport, name: string, isPrivate: boolean) =>
+    call<{ sshUrl: string; fullName: string }>(t, "github/repos", {
+      json: { name, private: isPrivate },
+    }),
+  githubSignout: (t: GitTransport) =>
+    call<{ ok: boolean }>(t, "github/signout", { post: true }),
   /** Says the page is in front (or left), which drives the fetch. */
   focus: (t: GitTransport, workspace: string, front: boolean, opened = false) =>
     call<{ ok: boolean }>(t, "focus", { json: { workspace, front, opened } }),

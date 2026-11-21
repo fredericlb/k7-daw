@@ -23,6 +23,8 @@ use serde_json::{Value, json};
 
 use super::git_connect;
 use super::git_fetch::Fetchers;
+use super::git_github;
+use super::git_github_api::Hub;
 use super::git_keys;
 use super::git_lock;
 use super::git_roam;
@@ -50,6 +52,12 @@ pub enum Kind {
     SetIdentity,
     Focus,
     Roam,
+    GithubStatus,
+    GithubStart,
+    GithubPoll,
+    GithubRepos,
+    GithubCreate,
+    GithubSignout,
 }
 
 impl Kind {
@@ -73,6 +81,12 @@ impl Kind {
             "/git/identity" if post => Some(Kind::SetIdentity),
             "/git/focus" if post => Some(Kind::Focus),
             "/git/roam" if get => Some(Kind::Roam),
+            "/git/github" if get => Some(Kind::GithubStatus),
+            "/git/github/start" if post => Some(Kind::GithubStart),
+            "/git/github/poll" if post => Some(Kind::GithubPoll),
+            "/git/github/repos" if get => Some(Kind::GithubRepos),
+            "/git/github/repos" if post => Some(Kind::GithubCreate),
+            "/git/github/signout" if post => Some(Kind::GithubSignout),
             _ => None,
         }
     }
@@ -284,6 +298,12 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         Kind::ForgetHost => return git_keys::forget_host(ctx, &b),
         Kind::Clone => return clone(ctx, &b).await,
         Kind::Roam => return git_roam::list(ctx).await,
+        Kind::GithubStatus
+        | Kind::GithubStart
+        | Kind::GithubPoll
+        | Kind::GithubRepos
+        | Kind::GithubCreate
+        | Kind::GithubSignout => return git_github_route(ctx, kind, &b).await,
         _ => {}
     }
     let name = if matches!(kind, Kind::State | Kind::Status | Kind::Log | Kind::Merge) {
@@ -341,6 +361,19 @@ async fn dispatch(ctx: &Ctx, kind: Kind, b: Value, query: String) -> Response {
         git_roam::sweep_later(ctx.workspaces.clone(), ctx.account_home.clone());
     }
     done.unwrap_or_else(|e| answer_error(&e))
+}
+
+async fn git_github_route(ctx: &Ctx, kind: Kind, b: &Value) -> Response {
+    let hub = Hub::from_env();
+    let hub = hub.as_ref();
+    match kind {
+        Kind::GithubStatus => git_github::status(ctx, hub),
+        Kind::GithubStart => git_github::start(ctx, hub, b).await,
+        Kind::GithubPoll => git_github::poll(ctx, hub).await,
+        Kind::GithubRepos => git_github::repos(ctx, hub).await,
+        Kind::GithubCreate => git_github::create(ctx, hub, b).await,
+        _ => git_github::signout(ctx),
+    }
 }
 
 pub(super) type Answer = Result<Response, Error>;

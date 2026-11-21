@@ -9,6 +9,7 @@ import { m } from "../paraglide/messages.js";
 import { workspaceFolderName } from "../projects/projectName";
 import { useGitTransport } from "./GitContext";
 import { git } from "./gitApi";
+import { shortName } from "./githubState";
 import { RemoteDialog } from "./RemoteDialog";
 
 /** The clone dialog alone, for a menu item that opens it (the Home "New" menu). */
@@ -33,6 +34,7 @@ export function CloneDialog({
       submit={m["git.cloneSubmit"]()}
       step={m["git.cloning"]()}
       canSubmit={Boolean(folder)}
+      onRepoPicked={(r) => setName(shortName(r.fullName))}
       before={
         <>
           <Input

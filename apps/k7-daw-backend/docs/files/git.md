@@ -1,6 +1,6 @@
 # The git routes (`/api/files/git/*`)
 
-A workspace under git, its remote, its commits and its merges, answered by `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/git.rs` (with `git_sync.rs` and `git_keys.rs`)
+A workspace under git, its remote, its commits and its merges, answered by `apps/k7-daw-backend/packages/k7-front/src/routes/files/service/native/git.rs` (with `git_sync.rs`, `git_keys.rs` and `git_github.rs`)
 over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the repository, the transports, LFS and the merge are on that page; this one is the contract.
 
 ## The routes
@@ -23,6 +23,17 @@ over `apps/k7-daw-backend/packages/k7-git` (`../git.md`). The choices of the rep
 | `POST /git/forget-host` | `{ host, port? }` | `{ ok, forgotten }` |
 | `POST /git/focus` | `{ workspace, front, opened? }` | `{ ok }`: the page says it is in front, which drives the fetch; the page repeats it with each state poll, and a page silent for 10 minutes (two fetch periods) is no longer in front |
 
+### Sign in with GitHub (`git_github.rs`)
+
+| route | body or query | answer |
+|---|---|---|
+| `GET /git/github` | | `{ available, login?, scopes[] }`; `available` is false when the build has no `K7_GITHUB_CLIENT_ID`, and every other route here then answers 404 `github-unavailable`; no network call |
+| `POST /git/github/start` | `{ scopes }` | `{ userCode, verificationUri, interval, expiresIn }`; the device code stays in the front |
+| `POST /git/github/poll` | | `{ state: "pending" \| "slow_down" \| "expired" \| "denied" \| "ok", interval, login?, keyNote? }`; on `ok` the token is kept, the device's key is uploaded and GitHub's ed25519 host key is trusted for `github.com:22` before the answer; `keyNote` is a sentence when the key could not be added (already used on another account) |
+| `GET /git/github/repos` | | `{ repos: [{ fullName, sshUrl, private, pushedAt, k7 }] }`, most recently pushed first, up to ten pages of a hundred; 403 `scope` without `repo`, 401 `github-signout` when GitHub refuses the token (it is dropped) |
+| `POST /git/github/repos` | `{ name, private? }` (private by default) | `{ sshUrl, fullName }`; the repository gets the `k7-workspace` topic; a refusal such as a taken name is 422 `invalid` with GitHub's sentence |
+| `POST /git/github/signout` | | `{ ok }`; the token goes, the uploaded key stays |
+
 A refusal is `{ error, code }` with the codes of `k7-git`'s errors (`ssh-only`, `unauthorized`, `behind`, `uncommitted`, `unknown-host` with `fingerprint`,
 `host-key-changed` with `expected` and `fingerprint`, `no-lfs`, `offline`, `unresolved`, `unparsable`, `merge-moved`, `bad-path`, ...).
 
@@ -35,6 +46,10 @@ A refusal is `{ error, code }` with the codes of `k7-git`'s errors (`ssh-only`, 
 | the routes run libgit2 on a blocking thread through `Net::blocking` | the front's runtime is never held by a clone |
 | a pull with changes and no `message` is `uncommitted` (409); with one it commits first | "mine" is then always a commit |
 | every route answers 403 `device-only` on a server front, a device's own front (`STUDIO_LOCAL_USER`; no médiathèque is needed) only, and a front started with `K7_GIT_ALLOW_FILE`, which is a test bed | a server would keep tokens and keys in a plain file and `connect` could make it call its own loopback services |
+| the token is kept in the device's secrets store under its own entry, never the synced one, with the granted scopes read from `X-OAuth-Scopes`; no route answers it | a token is the person's whole account, so it never leaves the device nor reaches the page |
+| the device flow, the key list and the repositories are called from the front with the front's own HTTPS client; the base addresses are `K7_GITHUB_WEB_URL` and `K7_GITHUB_API_URL` (a test's fake on 127.0.0.1) and `K7_GITHUB_CLIENT_ID` is read at build, or at run where set | the login endpoints have no CORS, and the client id is public; the variables are the tests' seam |
+| only github.com's ed25519 key is trusted, and a different key already listed is never replaced | the trusted list holds one fingerprint per host, the ssh client meets ed25519 first, and `host-key-changed` keeps refusing as for any host |
+| connecting an existing github.com repository adds the `k7-workspace` topic after the connection, on a task of its own, and ignores any failure | a repository the person cannot administer must still connect, and the connect never waits on GitHub's REST API |
 | a connect or a clone that fails puts the trusted hosts back as they were, and a repository it made is removed | a mistyped address must not replace a connection that works |
 | one lock per workspace root is held by connect, clone, commit, push, pull, resolve and abort; a second of them answers 409 `busy` at once, and the background fetch skips its turn without an error or a backoff | two operations over one repository fight over libgit2's ref locks and the merge's landing; the page disables its button, so waiting in line would only queue a double click |
 | a merge that waits makes every write to the workspace answer 423 `merge-pending`, through `merge_refusal` (`native/git.rs`): the file routes, a history restore, a project's rename or recycle, a copy into the workspace and an open's repairs are all covered, and arming a take is refused too; reads, compiles, play and disarming are untouched | the engine plays both sides while the person decides |

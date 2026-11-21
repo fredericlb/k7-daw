@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { Row, Section } from "../settings/Section";
 import { useAccountFiles } from "../settings/useAccountFiles";
+import { GitHubAccount } from "./GitHubAccount";
 import { explain, type GitTransport } from "./gitApi";
 import { saveIdentity, useIdentity } from "./identity";
 import { accountTransport } from "./transports";
@@ -71,33 +72,38 @@ export function IdentitySection() {
   if (!t) return null;
   const ready = known !== null;
   return (
-    <Section title={m["git.identityTitle"]()} hint={m["git.identityHint"]()}>
-      <Row
-        label={m["git.identityName"]()}
-        detail={said?.field === "name" && !said.error ? said.text : undefined}
-        error={said?.field === "name" && said.error ? said.text : undefined}
-      >
-        <Input
-          aria-label={m["git.identityName"]()}
-          value={name}
-          disabled={!ready}
-          onChange={(e) => setName(e.target.value)}
-          onBlur={() => void save()}
-        />
-      </Row>
-      <Row
-        label={m["git.identityEmail"]()}
-        detail={said?.field === "email" && !said.error ? said.text : undefined}
-        error={said?.field === "email" && said.error ? said.text : undefined}
-      >
-        <Input
-          aria-label={m["git.identityEmail"]()}
-          value={email}
-          disabled={!ready}
-          onChange={(e) => setEmail(e.target.value)}
-          onBlur={() => void save()}
-        />
-      </Row>
-    </Section>
+    <>
+      <Section title={m["git.identityTitle"]()} hint={m["git.identityHint"]()}>
+        <Row
+          label={m["git.identityName"]()}
+          detail={said?.field === "name" && !said.error ? said.text : undefined}
+          error={said?.field === "name" && said.error ? said.text : undefined}
+        >
+          <Input
+            aria-label={m["git.identityName"]()}
+            value={name}
+            disabled={!ready}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={() => void save()}
+          />
+        </Row>
+        <Row
+          label={m["git.identityEmail"]()}
+          detail={
+            said?.field === "email" && !said.error ? said.text : undefined
+          }
+          error={said?.field === "email" && said.error ? said.text : undefined}
+        >
+          <Input
+            aria-label={m["git.identityEmail"]()}
+            value={email}
+            disabled={!ready}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => void save()}
+          />
+        </Row>
+      </Section>
+      <GitHubAccount t={t} />
+    </>
   );
 }

@@ -38,6 +38,7 @@ export function ConnectWorkspace({
       submit={m["git.connectSubmit"]()}
       step={m["git.connecting"]()}
       canSubmit={t !== null}
+      createName={workspace}
       onSubmit={async (r) => {
         if (!t) return;
         const done = await git.connect(t, workspace, r);

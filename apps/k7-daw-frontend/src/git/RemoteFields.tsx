@@ -22,6 +22,7 @@ export function RemoteFields({
   busy,
   fail,
   focusAddress = true,
+  hideKey = false,
 }: {
   form: FormFields;
   dispatch: (e: FormEvent) => void;
@@ -29,6 +30,8 @@ export function RemoteFields({
   fail: (message: string) => void;
   /** False when a field sits above the address: that one is first, and takes the focus. */
   focusAddress?: boolean;
+  /** The address came from a GitHub pick: the key is already on the account, so it is not shown. */
+  hideKey?: boolean;
 }) {
   const t = useGitTransport();
   const urlId = useId();
@@ -68,7 +71,7 @@ export function RemoteFields({
           {m["git.sshOnly"]()}
         </p>
       )}
-      {!form.trust && !form.changed && <GitKey fail={fail} />}
+      {!hideKey && !form.trust && !form.changed && <GitKey fail={fail} />}
       {form.trust && (
         <div
           role="alert"

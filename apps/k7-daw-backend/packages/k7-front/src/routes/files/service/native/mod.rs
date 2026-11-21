@@ -17,6 +17,8 @@ pub mod entries;
 pub mod git;
 pub mod git_connect;
 pub mod git_fetch;
+mod git_github;
+mod git_github_api;
 pub mod git_history;
 mod git_keys;
 pub mod git_lock;
@@ -248,6 +250,8 @@ mod tests_entries;
 mod tests_entries_end;
 #[cfg(test)]
 mod tests_git;
+#[cfg(test)]
+mod tests_git_github;
 #[cfg(test)]
 mod tests_git_history;
 #[cfg(test)]

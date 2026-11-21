@@ -1,0 +1,253 @@
+// GitHubPicker.tsx — the person's repositories as a list to pick from: k7 workspaces first, a filter, a way to make one.
+// What a reader gets wrong: listing needs the `repo` permission, asked by the device-flow screen the first time the picker opens.
+
+import { Button } from "@studio/ui/button";
+import { Checkbox } from "@studio/ui/checkbox";
+import { Loader2, Lock, Plus } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
+import { useEffect, useId, useState } from "react";
+import { m } from "../paraglide/messages.js";
+import { DeviceFlow } from "./DeviceFlow";
+import { explain, GitError, type GitTransport, git } from "./gitApi";
+import {
+  type Ago,
+  arrange,
+  type GithubRepo,
+  type GithubStatus,
+  hasRepoScope,
+  pushedAgo,
+  REPO_SCOPES,
+  shortName,
+} from "./githubState";
+
+export interface PickedRepo {
+  sshUrl: string;
+  fullName: string;
+}
+
+const AGO = {
+  now: () => m["git.gh.agoNow"](),
+  minutes: (n: number) => m["git.gh.agoMinutes"]({ n }),
+  hours: (n: number) => m["git.gh.agoHours"]({ n }),
+  days: (n: number) => m["git.gh.agoDays"]({ n }),
+  months: (n: number) => m["git.gh.agoMonths"]({ n }),
+  years: (n: number) => m["git.gh.agoYears"]({ n }),
+};
+
+const agoText = ({ unit, n }: Ago): string => AGO[unit](n);
+
+export function GitHubPicker({
+  t,
+  status,
+  refresh,
+  createName,
+  disabled,
+  onPick,
+  onBack,
+}: {
+  t: GitTransport;
+  status: GithubStatus;
+  refresh: () => Promise<void>;
+  /** The workspace's name, which a new repository takes; absent where a repository cannot be made (Clone). */
+  createName?: string;
+  disabled: boolean;
+  onPick: (r: PickedRepo) => void;
+  onBack: () => void;
+}) {
+  const [repos, setRepos] = useState<GithubRepo[] | null>(null);
+  const [error, setError] = useState("");
+  const [filter, setFilter] = useState("");
+  const [asking, setAsking] = useState(!hasRepoScope(status));
+  const [making, setMaking] = useState(false);
+
+  useEffect(() => {
+    if (asking) return;
+    let live = true;
+    git
+      .githubRepos(t)
+      .then((a) => live && setRepos(a.repos))
+      .catch((e) => {
+        if (!live) return;
+        if (e instanceof GitError && e.code === "scope") setAsking(true);
+        else if (e instanceof GitError && e.code === "github-signout")
+          void refresh();
+        else setError(explain(e));
+      });
+    return () => {
+      live = false;
+    };
+  }, [t, asking, refresh]);
+
+  if (asking)
+    return (
+      <DeviceFlow
+        t={t}
+        scopes={REPO_SCOPES}
+        why={m["git.gh.repoWhy"]()}
+        onDone={() => {
+          void refresh();
+          setAsking(false);
+        }}
+        onCancel={onBack}
+      />
+    );
+  const shown = arrange(repos ?? [], filter);
+  const now = Date.now();
+  const section = (title: string, list: GithubRepo[]) =>
+    list.length > 0 && (
+      <section aria-label={title} className="flex flex-col gap-1">
+        <h3 className="type-caps px-1 text-fg-3">{title}</h3>
+        {list.map((r) => (
+          <button
+            key={r.fullName}
+            type="button"
+            disabled={disabled}
+            onClick={() => onPick({ sshUrl: r.sshUrl, fullName: r.fullName })}
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-left hover:bg-(--k7-row) disabled:opacity-40"
+          >
+            <span className="min-w-0 flex-1 truncate type-body">
+              {r.fullName}
+            </span>
+            {r.private && (
+              <span className="flex items-center gap-1 text-fg-3 type-status">
+                <Lock className="size-3" />
+                {m["git.gh.private"]()}
+              </span>
+            )}
+            <span className="shrink-0 text-fg-3 type-status">
+              {agoText(pushedAgo(r.pushedAt, now))}
+            </span>
+          </button>
+        ))}
+      </section>
+    );
+  return (
+    <div className="flex flex-col gap-3">
+      {making && createName !== undefined ? (
+        <NewRepository
+          t={t}
+          initial={shortName(createName)}
+          disabled={disabled}
+          onMade={onPick}
+          onCancel={() => setMaking(false)}
+        />
+      ) : (
+        <>
+          <div className="flex gap-2">
+            <Input
+              aria-label={m["git.gh.filter"]()}
+              placeholder={m["git.gh.filter"]()}
+              autoComplete="off"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            {createName !== undefined && (
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={disabled}
+                onClick={() => setMaking(true)}
+              >
+                <Plus className="mr-1 size-3" />
+                {m["git.gh.new"]()}
+              </Button>
+            )}
+          </div>
+          {error && (
+            <p role="alert" className="text-error type-secondary">
+              {error}
+            </p>
+          )}
+          <div className="flex max-h-72 flex-col gap-3 overflow-y-auto">
+            {repos === null && !error && (
+              <p className="text-fg-2 type-secondary" role="status">
+                <Loader2 className="mr-1 inline size-3 animate-spin" />
+                {m["git.gh.loading"]()}
+              </p>
+            )}
+            {section(m["git.gh.k7Heading"](), shown.k7)}
+            {section(m["git.gh.allHeading"](), shown.others)}
+            {repos !== null && shown.k7.length + shown.others.length === 0 && (
+              <p className="text-fg-2 type-secondary">{m["git.gh.none"]()}</p>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function NewRepository({
+  t,
+  initial,
+  disabled,
+  onMade,
+  onCancel,
+}: {
+  t: GitTransport;
+  initial: string;
+  disabled: boolean;
+  onMade: (r: PickedRepo) => void;
+  onCancel: () => void;
+}) {
+  const [name, setName] = useState(initial);
+  const [isPrivate, setPrivate] = useState(true);
+  const privateId = useId();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const make = async () => {
+    setBusy(true);
+    setError("");
+    try {
+      onMade(await git.githubCreate(t, name.trim(), isPrivate));
+    } catch (e) {
+      setError(explain(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <div className="flex flex-col gap-3">
+      <Input
+        autoFocus
+        aria-label={m["git.gh.newName"]()}
+        placeholder={m["git.gh.newName"]()}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <div className="flex items-center gap-2">
+        <Checkbox
+          id={privateId}
+          checked={isPrivate}
+          onCheckedChange={(c) => setPrivate(c === true)}
+        />
+        <label htmlFor={privateId} className="type-secondary">
+          {m["git.gh.newPrivate"]()}
+        </label>
+      </div>
+      {error && (
+        <p role="alert" className="text-error type-secondary">
+          {error}
+        </p>
+      )}
+      <div className="flex gap-2">
+        <Button
+          type="button"
+          disabled={!name.trim() || busy || disabled}
+          onClick={() => void make()}
+        >
+          {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+          {busy ? m["git.gh.creating"]() : m["git.gh.create"]()}
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          disabled={busy}
+          onClick={onCancel}
+        >
+          {m["common.cancel"]()}
+        </Button>
+      </div>
+    </div>
+  );
+}

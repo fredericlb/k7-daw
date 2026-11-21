@@ -13,9 +13,19 @@ import {
 import { Loader2 } from "@studio/ui/icons";
 import { type ReactNode, useEffect, useReducer, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { emptyForm, formAfter, ready, request } from "./connectState";
+import {
+  emptyForm,
+  type FormEvent,
+  formAfter,
+  ready,
+  request,
+} from "./connectState";
+import { useGitTransport } from "./GitContext";
+import type { PickedRepo } from "./GitHubPicker";
+import { GitHubWays } from "./GitHubWays";
 import { explain, GitError, type Remote } from "./gitApi";
 import { RemoteFields } from "./RemoteFields";
+import { useGithub } from "./useGithub";
 
 export function RemoteDialog({
   open,
@@ -27,6 +37,8 @@ export function RemoteDialog({
   step,
   canSubmit = true,
   initialUrl,
+  createName,
+  onRepoPicked,
   onSubmit,
 }: {
   open: boolean;
@@ -41,32 +53,51 @@ export function RemoteDialog({
   canSubmit?: boolean;
   /** An address the dialog opens with (a workspace of another device); the person may still change it. */
   initialUrl?: string;
+  /** The workspace's name, which "New repository" takes on GitHub; absent where no repository can be made. */
+  createName?: string;
+  /** Present where picking a GitHub repository only fills the form (Clone), not sends it (Connect). */
+  onRepoPicked?: (r: PickedRepo) => void;
   /** The call; its failure is shown here, and a host-key refusal opens the trust flow. */
   onSubmit: (r: Remote) => Promise<void>;
 }) {
   const [form, dispatch] = useReducer(formAfter, emptyForm);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const t = useGitTransport();
+  const github = useGithub(open ? t : null);
+  // The person's explicit way ("Another host…"); until then GitHub leads where the build offers it and nothing was typed.
+  const [chosen, setChosen] = useState<"other" | null>(null);
+  const [fromGithub, setFromGithub] = useState(false);
+  const offered = github.status?.available === true && t !== null;
+  const ways = offered && !chosen && !initialUrl;
+  // Typing an address is choosing the other way, whenever the status arrived.
+  const edit = (e: FormEvent) => {
+    if (e.type === "edit") setChosen("other");
+    dispatch(e);
+  };
   useEffect(() => {
     if (open && initialUrl) dispatch({ type: "edit", value: initialUrl });
   }, [open, initialUrl]);
   const close = () => {
     dispatch({ type: "closed" });
+    setChosen(null);
+    setFromGithub(false);
     setError("");
     onClose();
   };
   const ok = canSubmit && ready(form);
   const trusted = form.trust?.confirmed === true;
 
-  const go = async () => {
-    if (!ok || busy) return;
+  const go = async (picked?: Remote) => {
+    if (!picked && (!ok || busy)) return;
     setBusy(true);
     setError("");
     try {
-      await onSubmit(request(form));
+      await onSubmit(picked ?? request(form));
       close();
     } catch (e) {
       const said = e instanceof GitError ? e : null;
+      if (picked) setChosen("other");
       if (said?.code === "unknown-host") {
         dispatch({
           type: "unknownHost",
@@ -93,6 +124,15 @@ export function RemoteDialog({
     if (trusted) void go();
   }, [trusted]);
 
+  const pick = (r: PickedRepo) => {
+    dispatch({ type: "edit", value: r.sshUrl });
+    if (onRepoPicked) {
+      onRepoPicked(r);
+      setFromGithub(true);
+      setChosen("other");
+    } else void go({ url: r.sshUrl });
+  };
+
   return (
     <Dialog open={open} onOpenChange={(o) => !busy && !o && close()}>
       <DialogContent className="max-w-lg">
@@ -107,14 +147,36 @@ export function RemoteDialog({
             void go();
           }}
         >
-          {before}
-          <RemoteFields
-            form={form}
-            dispatch={dispatch}
-            busy={busy}
-            fail={setError}
-            focusAddress={!before}
-          />
+          {ways && t && github.status ? (
+            <GitHubWays
+              t={t}
+              status={github.status}
+              refresh={github.refresh}
+              createName={createName}
+              disabled={busy}
+              onPick={pick}
+              onOther={() => setChosen("other")}
+            />
+          ) : null}
+          {ways && busy && (
+            <p role="status" className="text-fg-2 type-secondary">
+              <Loader2 className="mr-1 inline size-3 animate-spin" />
+              {step}
+            </p>
+          )}
+          {ways ? null : (
+            <>
+              {before}
+              <RemoteFields
+                form={form}
+                dispatch={edit}
+                busy={busy}
+                fail={setError}
+                focusAddress={!before}
+                hideKey={fromGithub}
+              />
+            </>
+          )}
           {error && (
             <p
               role="alert"
@@ -132,10 +194,12 @@ export function RemoteDialog({
             >
               {m["common.cancel"]()}
             </Button>
-            <Button type="submit" disabled={!ok || busy}>
-              {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
-              {busy ? step : submit}
-            </Button>
+            {!ways && (
+              <Button type="submit" disabled={!ok || busy}>
+                {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+                {busy ? step : submit}
+              </Button>
+            )}
           </DialogFooter>
         </form>
       </DialogContent>
