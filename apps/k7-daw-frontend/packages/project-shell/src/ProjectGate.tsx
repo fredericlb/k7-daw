@@ -185,6 +185,6 @@ export function ProjectGate({
         />
       );
     default:
-      return <GateSpinner />;
+      return <GateSpinner label={strings.opening ?? OPENING} />;
   }
 }
