@@ -161,7 +161,14 @@ mouse or a finger finds without being told (`shell/FloatingBar.tsx`). The home p
 wrapper, `FloatingCommandBar.tsx`.
 
 **It closes on Escape, on the scrim and on a run — never on losing focus.** Before anything is typed it
-lists the commands run lately, then starters, under a "Recent" heading.
+lists the commands run lately, then starters, under a "Recent" heading. It is on the Escape ladder
+as a popin, so Esc from a pane clicked to answer an argument closes the bar and not the panel behind it,
+and closing gives the key back to what summoned it.
+
+**One hint line, and it follows the step**: the list step and the argument step each say their own keys
+(`commandBar.footer`, `commandBar.footerArgs`), and a touch screen shows none. A query that matches nothing
+says that Enter runs the text as typed. On a touch screen the fields and rows are 44 px and the input is
+16 px, or iOS zooms in on focus. The argument step is a combobox over a listbox, like the command field.
 
 **While a command waits for its answers the scrim lets pointers through.** A gesture in the timeline or
 the graph may be what answers a field, and a scrim in the way would make that impossible; the card

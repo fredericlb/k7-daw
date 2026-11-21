@@ -6,7 +6,10 @@
 import { useEffect, useId } from "react";
 
 // Every CLAIM currently open, by the claiming hook's own id — never by path, since two panes may show one file.
-const claims = new Set<string>();
+const claims = new Map<string, UnsavedKind>();
+
+/** What a claim holds: edits not on disk, or a recording still running. */
+export type UnsavedKind = "edits" | "recording";
 
 const onBeforeUnload = (e: BeforeUnloadEvent) => {
   if (!claims.size) return;
@@ -20,12 +23,22 @@ export function hasUnsavedWork(): boolean {
   return claims.size > 0;
 }
 
+/** "recording" when every claim is a running recording, so the leave question can say so; else "edits". */
+export function unsavedKind(): UnsavedKind {
+  return [...claims.values()].every((k) => k === "recording")
+    ? "recording"
+    : "edits";
+}
+
 /** Hold the tab while `active`. The claim is this hook instance's, so releasing one never releases another's. */
-export function useUnsavedGuard(active: boolean): void {
+export function useUnsavedGuard(
+  active: boolean,
+  kind: UnsavedKind = "edits",
+): void {
   const id = useId();
   useEffect(() => {
     if (!active) return;
-    claims.add(id);
+    claims.set(id, kind);
     if (claims.size === 1)
       window.addEventListener("beforeunload", onBeforeUnload);
     return () => {
@@ -33,5 +46,5 @@ export function useUnsavedGuard(active: boolean): void {
       if (!claims.size)
         window.removeEventListener("beforeunload", onBeforeUnload);
     };
-  }, [active, id]);
+  }, [active, id, kind]);
 }

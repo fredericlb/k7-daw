@@ -994,6 +994,8 @@
   "engineSwitch.noSound": "Pas de son — le moteur ne tourne pas",
   "engineSwitch.noSoundHint": "Le projet est ouvert, mais le moteur audio ne le joue pas. Lancez-le depuis les réglages du moteur.",
   "leave.unsaved": "Certaines modifications ne sont pas encore enregistrées. Quitter ce projet quand même ?",
+  "leave.recording": "Un enregistrement est encore en cours. Quitter ce projet quand même ?",
+  "leave.confirm": "Quitter",
   "engineSwitch.playsOn": "Joue sur",
   "engineSwitch.thisMachine": "Cette machine",
   "engineSwitch.thisMachineHint": "Le mix du moteur est diffusé dans ce navigateur ; ses propres haut-parleurs continuent de jouer",
