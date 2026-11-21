@@ -66,7 +66,7 @@ export function useProgressToast(step: ProgressStep | null): void {
 /** How long the link must stay down before it is said — a reconnect inside it is a blip. */
 const LOST_DELAY_MS = 2000;
 
-/** The link down for more than a blip: an error toast with Retry, gone when the link is back. */
+/** The link down for more than a blip: an error toast with Retry and no close button, gone when the link is back. */
 export function useEngineLostToast(
   connected: boolean,
   onRetry: () => void,
@@ -81,6 +81,8 @@ export function useEngineLostToast(
         message: m["engine.lostStrip"](),
         variant: "error",
         icon: <Unplug />,
+        // Nothing else on screen says the engine is down, so the toast stays while the link does.
+        dismissible: false,
         action: {
           label: m["engine.retryNow"](),
           onClick: () => retry.current(),

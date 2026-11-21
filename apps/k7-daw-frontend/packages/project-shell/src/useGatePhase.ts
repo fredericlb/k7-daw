@@ -109,8 +109,10 @@ export function useGatePhase({
   /** Any other way out (the header's Back link, the browser's Back) unmounts the gate: it stops and unloads too — docs/idle.md. */
   useEffect(
     () => () => {
-      const held = phaseNow.current === "open" || phaseNow.current === "loading";
-      if (released.current || !held || anotherTabActive(IDLE_TIMEOUT_MS)) return;
+      const held =
+        phaseNow.current === "open" || phaseNow.current === "loading";
+      if (released.current || !held || anotherTabActive(IDLE_TIMEOUT_MS))
+        return;
       void fileRoutes.unloadEngine().catch(() => {
         /* engine or file service gone — leaving is still right */
       });
