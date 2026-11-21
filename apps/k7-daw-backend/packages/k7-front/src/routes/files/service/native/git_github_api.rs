@@ -44,13 +44,27 @@ impl Reply {
     }
 }
 
-/// The build's client id wins; a front started with the variable set (the test beds) offers the path too.
+/// k7's registered OAuth App: a client id is public, so every build carries it and nothing is set to get the sign-in.
+const CLIENT_ID: &str = "Ov23liM3s3gY8btYCMSy";
+
+/// The run's variable first (empty turns the path off), then the build's, then k7's own.
+fn client_id_from(run: Option<String>, built: Option<&str>) -> Option<String> {
+    match run {
+        Some(v) => Some(v).filter(|v| !v.is_empty()),
+        None => Some(
+            built
+                .filter(|b| !b.is_empty())
+                .unwrap_or(CLIENT_ID)
+                .to_string(),
+        ),
+    }
+}
+
 fn client_id() -> Option<String> {
-    let built = option_env!("K7_GITHUB_CLIENT_ID").filter(|s| !s.is_empty());
-    let run = std::env::var("K7_GITHUB_CLIENT_ID")
-        .ok()
-        .filter(|s| !s.is_empty());
-    run.or_else(|| built.map(str::to_string))
+    client_id_from(
+        std::env::var("K7_GITHUB_CLIENT_ID").ok(),
+        option_env!("K7_GITHUB_CLIENT_ID"),
+    )
 }
 
 /// Whether an override points at this machine (127.0.0.1, ::1, localhost): the only place a test's fake may be.
@@ -206,7 +220,7 @@ pub(super) fn next_page(link: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use super::is_loopback;
+    use super::{CLIENT_ID, client_id_from, is_loopback};
 
     #[test]
     fn github_base_override_is_taken_only_on_this_machine() {
@@ -229,5 +243,19 @@ mod tests {
         ] {
             assert!(!is_loopback(no), "{no}");
         }
+    }
+
+    #[test]
+    fn github_client_id_is_k7s_unless_the_run_or_the_build_says_otherwise() {
+        assert_eq!(client_id_from(None, None).as_deref(), Some(CLIENT_ID));
+        assert_eq!(
+            client_id_from(None, Some("built")).as_deref(),
+            Some("built")
+        );
+        assert_eq!(
+            client_id_from(Some("run".into()), Some("built")).as_deref(),
+            Some("run")
+        );
+        assert_eq!(client_id_from(Some(String::new()), Some("built")), None);
     }
 }
