@@ -1114,6 +1114,7 @@
   "status.vimOff": "vim mode off",
   "status.vimFailed": "vim mode could not change: {message}",
   "status.noSuchSurface": "this project declares no {surface} surface, so there is no such pane to expand.",
+  "status.cant": "Can't do that:",
   "status.noEditorForBuilder": "this view has no editor, so the module builder cannot open",
   "status.commandFailed": "the command failed: {message}",
   "status.ran": "ran: {line}",

@@ -1114,6 +1114,7 @@
   "status.vimOff": "mode vim désactivé",
   "status.vimFailed": "le mode vim n’a pas pu changer : {message}",
   "status.noSuchSurface": "ce projet ne déclare aucune surface {surface} : il n’y a donc pas de tel panneau à agrandir.",
+  "status.cant": "Impossible :",
   "status.noEditorForBuilder": "cette vue n’a pas d’éditeur : le constructeur de modules ne peut pas s’ouvrir",
   "status.commandFailed": "la commande a échoué : {message}",
   "status.ran": "exécuté : {line}",
