@@ -193,6 +193,14 @@ export const HOME_COMMANDS: HomeCommandSpec[] = [
       },
     ],
   },
+  {
+    canonical: "help",
+    readable: {
+      en: "Open the documentation",
+      fr: "Ouvrir la documentation",
+    },
+    args: [],
+  },
   ...(CAMERA_MODE_LISTED ? [CAMERA_MODE_COMMAND] : []),
   {
     canonical: "system workspace new",
@@ -343,6 +351,8 @@ export interface HomeDeps extends HomeContext {
   armed: { current: ArmedDelete | null };
   /** Turn this device into a camera under that name, null for its own — or the sentence saying why it cannot. */
   cameraMode?: (name: string | null) => string | null;
+  /** Open the documentation over the page. */
+  help?: () => void;
   /** Go to a workspace's files, or to one of its projects. */
   open?: (workspace: string, project?: RepoProject) => void;
 }
@@ -544,6 +554,10 @@ export async function runHomeCommand(
       }
       return true;
     }
+
+    case "help":
+      d.help?.();
+      return true;
 
     case "camera mode": {
       if (!d.cameraMode) return use(d.refuse, msg["hc.cameraUnavailable"]());

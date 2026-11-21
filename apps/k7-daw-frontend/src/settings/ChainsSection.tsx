@@ -122,7 +122,7 @@ export function ChainsSection({ engineId: desktopId }: { engineId: string }) {
     let live = true;
     void engines
       .find()
-      .then(({ chosen }) => live && setDeviceId(chosen?.id ?? null))
+      .then(({ chosen }) => live && setDeviceId(chosen?.engine.id ?? null))
       .catch(() => live && setDeviceId(null));
     return () => {
       live = false;

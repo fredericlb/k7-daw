@@ -11,26 +11,43 @@ import {
   Settings,
 } from "@studio/ui/icons";
 import { TabBar, TabBarItem } from "@studio/ui/tab-bar";
-import type { ReactNode } from "react";
+import { lazy, type ReactNode, Suspense, useMemo, useState } from "react";
 import { useHref, useLocation, useNavigate } from "react-router-dom";
 import { AskHostK7 } from "../AskHostK7";
 import { m } from "../paraglide/messages.js";
 import { LIBRARIES_ROUTE, SETTINGS_ROUTE, TASKS_ROUTE } from "./api";
 import { HomeCommandBar, HomeCommandsButton } from "./HomeCommandBar";
+import { HelpContext } from "./homeHelp";
 import { usePluginScanToast } from "./usePluginScanToast";
+
+/** The documentation page is the project shell's; the home pages fetch it only when someone asks for it. */
+const HelpPage = lazy(() =>
+  import("../components/HelpPage").then((m) => ({ default: m.HelpPage })),
+);
 
 export function HomeFrame({ children }: { children: ReactNode }) {
   usePluginScanToast();
+  const [help, setHelp] = useState(false);
+  const openHelp = useMemo(() => () => setHelp(true), []);
   return (
-    <HomeCommandBar>
-      {/* Without this, `askConfirm` answers NO with no host to draw on and every destructive button silently does nothing. */}
-      <AskHostK7 />
-      <Toaster
-        dismissLabel={m["common.dismiss"]()}
-        regionLabel={m["toast.region"]()}
-      />
-      {children}
-    </HomeCommandBar>
+    <HelpContext.Provider value={openHelp}>
+      <HomeCommandBar>
+        {/* Without this, `askConfirm` answers NO with no host to draw on and every destructive button silently does nothing. */}
+        <AskHostK7 />
+        <Toaster
+          dismissLabel={m["common.dismiss"]()}
+          regionLabel={m["toast.region"]()}
+        />
+        {children}
+        {help && (
+          <div className="fixed inset-0 z-50 bg-background">
+            <Suspense fallback={null}>
+              <HelpPage onBack={() => setHelp(false)} />
+            </Suspense>
+          </div>
+        )}
+      </HomeCommandBar>
+    </HelpContext.Provider>
   );
 }
 

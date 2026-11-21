@@ -10,9 +10,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@studio/ui/dropdown-menu";
-import { Check, Ellipsis } from "@studio/ui/icons";
+import { BookOpen, Check, Ellipsis } from "@studio/ui/icons";
 import { useState } from "react";
 import { m } from "../paraglide/messages.js";
+import { useHomeHelp } from "./homeHelp";
 
 // Per browser, like the sidebar's fold: what a screen shows is a habit, not a setting of the account.
 const SHOW_EXAMPLES_KEY = "k7.showExamples";
@@ -52,6 +53,7 @@ export function ProjectsMenu({
   /** Examples is all there is: it stays shown, and the item says so. */
   pinned?: boolean;
 }) {
+  const openHelp = useHomeHelp();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -82,6 +84,10 @@ export function ProjectsMenu({
             aria-hidden
           />
           {m["repos.showExamples"]()}
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={openHelp}>
+          <BookOpen />
+          {m["home.help"]()}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

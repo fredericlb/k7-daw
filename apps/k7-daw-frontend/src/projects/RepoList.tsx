@@ -17,8 +17,10 @@ import {
   HardDrive,
   Loader2,
   Plus,
+  Search,
   ServerOff,
 } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
 import type { AccountWorkspace, RepoProject } from "@studio/web-protocol";
 import { byPeople, byPeoplePath } from "@studio/web-protocol/tree";
 import { useState } from "react";
@@ -52,6 +54,23 @@ export const pageOrder = (all: AccountWorkspace[]): AccountWorkspace[] =>
 /** …and the same for workspaces, in the heading's summary. */
 const workspacesCount = (n: number): string =>
   (n === 1 ? m["repos.workspaces.one"] : m["repos.workspaces.other"])({ n });
+
+/** The filter field shows from this many projects on. */
+const FILTER_FROM = 6;
+
+/** The workspaces left once `query` has picked: a project by its path, a workspace by its name (then all its projects). */
+export function filterWorkspaces(
+  all: AccountWorkspace[],
+  query: string,
+): AccountWorkspace[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return all;
+  return all.flatMap((w) => {
+    if (w.name.toLowerCase().includes(q)) return [w];
+    const projects = w.projects.filter((p) => p.path.toLowerCase().includes(q));
+    return projects.length ? [{ ...w, projects }] : [];
+  });
+}
 
 export function RepoList({
   workspaces,
@@ -145,7 +164,10 @@ export function RepoList({
     merges.merging(name) ? Promise.reject(new Error(lockSentence())) : null;
   const listed = workspaces.filter((w) => showExamples || !isExamples(w));
   const projectTotal = listed.reduce((n, w) => n + w.projects.length, 0);
-  const ordered = pageOrder(listed);
+  // The filter appears once the list is long enough to need it; a workspace's own name keeps all its projects.
+  const [query, setQuery] = useState("");
+  const filtering = projectTotal >= FILTER_FROM;
+  const ordered = filterWorkspaces(pageOrder(listed), filtering ? query : "");
   const createIn = (
     name: string,
     folder: string,
@@ -285,6 +307,27 @@ export function RepoList({
         <>
           {/* First run: the empty state stays above the demos, which are all there is. */}
           {!hasOwn && emptyState}
+          {filtering && (
+            <div className="relative">
+              <Search
+                className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3.5 size-5 text-fg-3"
+                aria-hidden
+              />
+              <Input
+                type="search"
+                className="pl-11"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={m["repos.filter"]()}
+                aria-label={m["repos.filter"]()}
+              />
+            </div>
+          )}
+          {filtering && query.trim() && ordered.length === 0 && (
+            <p role="status" className="type-secondary text-fg-2">
+              {m["repos.filterNone"]({ query: query.trim() })}
+            </p>
+          )}
           <ProjectsTable
             workspaces={ordered}
             blocked={blocked}
