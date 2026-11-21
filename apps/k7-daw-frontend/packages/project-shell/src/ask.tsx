@@ -28,6 +28,8 @@ export interface AskConfirm extends Common {
   kind: "confirm";
   /** Colour the confirm as destructive: this one does not come back. */
   danger?: boolean;
+  /** Only to be read: one button, no cancel. Set by `askNotice`. */
+  notice?: boolean;
 }
 
 export interface AskText extends Common {
@@ -74,6 +76,13 @@ export function askConfirm(q: Omit<AskConfirm, "kind">): Promise<boolean> {
     if (!listener) return resolve(false);
     listener({ ...q, kind: "confirm", id: nextId++, settle: resolve as never });
   });
+}
+
+/** Something to read and acknowledge: one button, and no question for a Cancel to refuse. */
+export async function askNotice(
+  q: Omit<AskConfirm, "kind" | "notice" | "danger" | "cancelLabel">,
+): Promise<void> {
+  await askConfirm({ ...q, notice: true });
 }
 
 /** One field, answering null when cancelled — never "", which a caller cannot tell from an empty answer. */
@@ -243,9 +252,11 @@ function AskDialog({
               {tool.label}
             </button>
           ) : null}
-          <button type="button" onClick={cancel} className={SECONDARY}>
-            {pending.cancelLabel ?? ENGLISH.cancel}
-          </button>
+          {pending.kind === "confirm" && pending.notice ? null : (
+            <button type="button" onClick={cancel} className={SECONDARY}>
+              {pending.cancelLabel ?? ENGLISH.cancel}
+            </button>
+          )}
           {text?.actions?.map((a) => (
             <button
               key={a.key}

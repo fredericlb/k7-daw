@@ -5,6 +5,7 @@ import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import { File, FileCode, FileText, FileX } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { moveFocus } from "../menuTabs";
 import { m } from "../paraglide/messages.js";
 import { choiceLabel, whereOf } from "./ConflictCard";
 import type { Choice, Conflict } from "./gitTypes";
@@ -45,6 +46,17 @@ export function MergeList({
         role="listbox"
         aria-label={m["git.conflictList"]()}
         className="flex min-h-0 flex-col gap-1 overflow-y-auto"
+        // One tab stop for the list; the arrows, Home and End move the open conflict and the focus with it.
+        onKeyDown={(e) => {
+          const at = conflicts.findIndex((c) => c.id === currentId);
+          const to = moveFocus(e.key, at, n);
+          if (to === null) return;
+          e.preventDefault();
+          onOpen(conflicts[to].id);
+          e.currentTarget
+            .querySelectorAll<HTMLElement>('[role="option"]')
+            [to]?.focus();
+        }}
       >
         {conflicts.map((c) => {
           const { Glyph, name } = KIND[c.kind];
@@ -54,6 +66,7 @@ export function MergeList({
               type="button"
               role="option"
               aria-selected={c.id === currentId}
+              tabIndex={c.id === currentId ? 0 : -1}
               onClick={() => onOpen(c.id)}
               className={cn(
                 "flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-left outline-none focus-visible:shadow-(--k7-focus-ring)",

@@ -36,6 +36,7 @@ export function CloneDialog({
       before={
         <>
           <Input
+            autoFocus
             aria-label={m["git.cloneName"]()}
             placeholder={m["git.cloneName"]()}
             value={name}

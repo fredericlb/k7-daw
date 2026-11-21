@@ -2,6 +2,7 @@
 // What a reader gets wrong: a card draws `offered`, so "both" never shows where the merge would refuse it.
 
 import { cn } from "@studio/ui/lib/utils";
+import { moveFocus } from "../menuTabs";
 import { m } from "../paraglide/messages.js";
 import type { Choice, Conflict } from "./gitTypes";
 import { offered } from "./mergeState";
@@ -99,13 +100,28 @@ export function ConflictCard({
         role="radiogroup"
         aria-label={m["git.choose"]()}
         className="flex flex-col gap-1.5"
+        // One tab stop for the group; the arrows move the choice and the focus together, as a radio group does.
+        onKeyDown={(e) => {
+          const all = offered(c);
+          const at = chosen ? all.indexOf(chosen) : -1;
+          const key =
+            e.key === "ArrowRight" ? "ArrowDown" : e.key === "ArrowLeft" ? "ArrowUp" : e.key;
+          const to = disabled ? null : moveFocus(key, at, all.length);
+          if (to === null) return;
+          e.preventDefault();
+          onPick(all[to]);
+          e.currentTarget
+            .querySelectorAll<HTMLElement>('[role="radio"]')
+            [to]?.focus();
+        }}
       >
-        {offered(c).map((o) => (
+        {offered(c).map((o, i) => (
           <button
             key={o}
             type="button"
             role="radio"
             aria-checked={chosen === o}
+            tabIndex={chosen === o || (!chosen && i === 0) ? 0 : -1}
             disabled={disabled}
             onClick={() => onPick(o)}
             className={cn(

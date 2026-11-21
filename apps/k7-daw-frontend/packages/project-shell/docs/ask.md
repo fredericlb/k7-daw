@@ -16,6 +16,9 @@ if (got === null) return           // cancelled
 if (got.action === "copy") …       // `"confirm"` for the main button and for Enter
 ```
 
+A notice to read and close is `askNotice({ title, body, confirmLabel })`: the confirm's dialog with
+one button, since a Cancel beside it would refuse nothing.
+
 Render `<AskHost/>` once at the app root, beside `<Toaster/>`.
 
 ## Why it exists
