@@ -2948,7 +2948,7 @@ export default function App({
               armForRecord,
               loopOn: !!loopState?.on,
               onLoop: toggleTransportLoop,
-              output: noArrangement ? undefined : (outputRecord ?? undefined),
+              output: outputRecord ?? undefined,
             }
           : null
       }
