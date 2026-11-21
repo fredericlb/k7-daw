@@ -116,8 +116,6 @@ export function ProjectHeader({
         {running > 0 && (
           <button
             type="button"
-            // biome-ignore lint/a11y/useSemanticElements: a link by name for e2e and readers; it opens a panel, with no address of its own.
-            role="link"
             aria-label={m["shell.processes"]({ n: running })}
             title={m["shell.processes"]({ n: running })}
             onClick={onProcesses}
@@ -130,8 +128,6 @@ export function ProjectHeader({
           <Badge asChild variant="warn">
             <button
               type="button"
-              // biome-ignore lint/a11y/useSemanticElements: a link by name for e2e and readers; it opens a panel, with no address of its own.
-              role="link"
               aria-label={m["shell.problems"]({ n: problems })}
               title={m["shell.problems"]({ n: problems })}
               onClick={onProblems}
@@ -168,7 +164,7 @@ export function ProjectHeader({
               ))}
             </Capsule>
             <span className="flex-1" />
-            <Capsule role="toolbar" aria-label={m["shell.panels"]()}>
+            <Capsule role="group" aria-label={m["shell.panels"]()}>
               {panels.map((p) => {
                 const def = PANEL_DEFS[p.id];
                 return (
@@ -181,11 +177,12 @@ export function ProjectHeader({
                     onClick={p.onPress}
                   >
                     <def.icon />
+                    {p.pressed && <span>{def.title()}</span>}
                   </CapsuleButton>
                 );
               })}
             </Capsule>
-            <Capsule role="toolbar" aria-label={m["shell.app"]()}>
+            <Capsule role="group" aria-label={m["shell.app"]()}>
               <CapsuleButton
                 pressed={settingsPressed}
                 aria-label={m["settings.menu"]()}

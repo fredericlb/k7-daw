@@ -1,5 +1,5 @@
 // nav.ts — a header control by its name, wherever the width put it: in the header, or in the phone's overflow menu.
-// The panes are `group "Pane"` buttons and the panels `toolbar "Panels"` buttons; a phone holds both in `dialog "Views and panels"`.
+// The panes are `group "Pane"` buttons and the panels `group "Panels"` buttons; a phone holds both in `dialog "Views and panels"`.
 import type { Locator, Page } from "@playwright/test";
 
 // The shell root says its layout in `data-layout` (phone, pad, desk); a page without one (home, settings) falls back to this query.
@@ -58,12 +58,12 @@ export async function pane(page: Page, name: string): Promise<Locator> {
     .first();
 }
 
-/** A right panel's button: `toolbar "Panels"` → `button`, or a phone's plain button. */
+/** A right panel's button: `group "Panels"` → `button`, or a phone's plain button. */
 export async function panel(page: Page, name: string): Promise<Locator> {
   await openNav(page);
   const exact = { name, exact: true };
   return page
-    .getByRole("toolbar", { name: "Panels", exact: true })
+    .getByRole("group", { name: "Panels", exact: true })
     .getByRole("button", exact)
     .or(
       page
