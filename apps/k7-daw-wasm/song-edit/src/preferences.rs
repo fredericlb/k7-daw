@@ -31,7 +31,7 @@ pub enum CueOutput {
     Channels(Vec<f64>),
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct Preferences {
     pub audio_device: Option<AudioDevicePref>,
     pub channels_in: Vec<ChannelLabel>,
@@ -41,21 +41,6 @@ pub struct Preferences {
     pub stems_chain: Option<String>,
     pub instrumental_chain: Option<String>,
     pub cue_output: Option<CueOutput>,
-}
-
-impl Default for Preferences {
-    fn default() -> Self {
-        Preferences {
-            audio_device: None,
-            channels_in: vec![],
-            channels_out: vec![],
-            input_pairs: vec![],
-            editor_vim: false,
-            stems_chain: None,
-            instrumental_chain: None,
-            cue_output: None,
-        }
-    }
 }
 
 impl Preferences {
