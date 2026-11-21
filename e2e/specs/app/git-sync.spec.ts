@@ -130,8 +130,8 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
     await test.step("pull, choose mine, finish the merge", async () => {
       const ws = await card(page, A);
       await ws.getByRole("button", { name: /^Pull/ }).click();
-      // The Conflict screen is a full screen over the page, a region and no dialog.
-      const dialog = page.getByRole("region", { name: "Conflict" });
+      // The Conflict screen is a full-screen modal dialog.
+      const dialog = page.getByRole("dialog", { name: "Conflict" });
       await expect(dialog).toBeVisible(SLOW);
       await dialog
         .getByRole("listbox", { name: "Conflicts" })
