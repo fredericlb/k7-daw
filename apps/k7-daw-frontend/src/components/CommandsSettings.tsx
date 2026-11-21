@@ -32,6 +32,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { entityName } from "../commandEntityNames";
 import {
   type CommandPref,
   type CommandPrefs,
@@ -47,7 +48,6 @@ import {
   setCommandPref,
   setMenuEntities,
 } from "../commandPrefs";
-import { entityName } from "../commandEntityNames";
 import { useWindowKey } from "../hooks/useWindowKey";
 import { useLocale } from "../i18n";
 import {

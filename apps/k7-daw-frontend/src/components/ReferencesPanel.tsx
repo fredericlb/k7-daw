@@ -2,6 +2,7 @@
 // `_references/`, a ＋ that uploads into it, and a row you click to hear. It plays nothing
 // itself — the player (ReferenceBar) does, drawing its card in this panel's slot (../docs/references.md).
 
+import { askConfirm } from "@studio/project-shell/ask";
 import {
   REFERENCE_ACCEPT,
   REFERENCES_DIR,
@@ -11,7 +12,6 @@ import { Button } from "@studio/ui/button";
 import { EmptyState } from "@studio/ui/empty-state";
 import { Loader2, Music, Pause, Play, Plus, Trash2 } from "@studio/ui/icons";
 import { formatBytes } from "@studio/ui-chains-react/node-load";
-import { askConfirm } from "@studio/project-shell/ask";
 import { byPeoplePath } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api";

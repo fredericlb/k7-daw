@@ -26,9 +26,7 @@ const METER_MAX_DB = 6;
 export function panText(v: number): string {
   const n = Math.round((v * 2 - 1) * 100);
   if (n === 0) return m["mixer.panCenter"]();
-  return n < 0
-    ? m["mixer.panLeft"]({ n: -n })
-    : m["mixer.panRight"]({ n });
+  return n < 0 ? m["mixer.panLeft"]({ n: -n }) : m["mixer.panRight"]({ n });
 }
 
 const ZONE = { ok: "bg-meter-ok", hot: "bg-meter-hot", clip: "bg-meter-clip" };

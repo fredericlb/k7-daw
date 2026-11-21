@@ -53,7 +53,9 @@ export function ConnectWorkspace({
         if (done.lfsWarning)
           void askNotice({
             title: m["git.noLfsTitle"](),
-            body: m["git.noLfsBody"]({ host: remoteName(done.remote || r.url) }),
+            body: m["git.noLfsBody"]({
+              host: remoteName(done.remote || r.url),
+            }),
             confirmLabel: m["common.close"](),
           });
       }}

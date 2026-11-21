@@ -26,7 +26,10 @@ export function ProjectSettingsTab({
   // Null while asking, and left null when there is no project to ask about.
   const [consoles, setConsoles] = useState<Consoles | null>(null);
   /** Why it could not be read: no project open is an answer, anything else is a failure to show. */
-  const [failed, setFailed] = useState<{ noProject: boolean; text: string } | null>(null);
+  const [failed, setFailed] = useState<{
+    noProject: boolean;
+    text: string;
+  } | null>(null);
 
   const load = useCallback(
     () =>

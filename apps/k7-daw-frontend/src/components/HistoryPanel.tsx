@@ -32,7 +32,6 @@ import { type HistoryMark, historyMarks } from "../historyMarks";
 import { historyOffers, restoredKept } from "../historySource";
 import { useQuietWrites, useRevision } from "../hooks/useRevision";
 import { m } from "../paraglide/messages.js";
-import { PanelError } from "./PanelError";
 import { getLocale } from "../paraglide/runtime.js";
 import { usePaneGraph } from "../queries/graph";
 import { useReloadKey } from "../state/shellStore";
@@ -41,6 +40,7 @@ import {
   type SyncChange,
   type SyncHistory,
 } from "../syncHistory";
+import { PanelError } from "./PanelError";
 
 /** The 6 px dot that stands for an edit. */
 const Dot = () => <span className="size-1.5 rounded-full bg-fg-3" />;
@@ -79,8 +79,8 @@ export function HistoryPanel({
   const { graph } = usePaneGraph(useReloadKey());
   const [error, setError] = useState("");
   /** The row whose marks are lit: a tap or the keyboard's focus lights one as a pointer's hover does. */
-  const [lit, setLit] = useState<string | null>(null);
-  const light = (id: string, mark: HistoryMark) => {
+  const [lit, setLit] = useState<number | null>(null);
+  const light = (id: number, mark: HistoryMark) => {
     setLit(id);
     onMark(mark);
   };

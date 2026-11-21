@@ -41,7 +41,11 @@ function Mark({ state }: { state: StepRow["state"] }) {
     );
   if (state === "warn")
     return (
-      <TriangleAlert role="img" aria-label={name} className="size-4 text-warn" />
+      <TriangleAlert
+        role="img"
+        aria-label={name}
+        className="size-4 text-warn"
+      />
     );
   if (state === "error")
     return (

@@ -172,9 +172,9 @@ import { resolveEditorFile } from "./openInEditor";
 import { buildPaletteCommands, commandNameOf, makeListArg } from "./palette";
 import { PaneVisible } from "./paneVisible";
 import { m } from "./paraglide/messages.js";
-import { resourceRows } from "./placeResource";
 import { type PendingEdit, pendingOf } from "./pendingEdits";
 import type { PendingNode } from "./pendingNode";
+import { resourceRows } from "./placeResource";
 import { setServiceProcesses } from "./processes";
 import { ENGINE_SETTINGS_ROUTE } from "./projects/api";
 import {
@@ -3143,7 +3143,6 @@ export default function App({
       </PaneBoundary>
     );
 
-  const closePanelNow = closeAnyPanel;
   // Resources and References, Tasks and History: one panel each, with a segment between the two bodies.
   const segment = (
     id: "resources" | "references" | "tasks" | "history",

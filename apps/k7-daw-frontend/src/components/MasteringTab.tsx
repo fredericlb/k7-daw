@@ -175,16 +175,12 @@ function Part({
       aria-label={PART_LABEL[part]()}
       className="flex min-w-0 flex-col gap-2 rounded-2xl bg-(--k7-row) p-3"
     >
-      <h3 className="type-caps text-fg-2">
-        {PART_LABEL[part]()}
-      </h3>
+      <h3 className="type-caps text-fg-2">{PART_LABEL[part]()}</h3>
       {has ? (
         <div className="flex flex-col gap-2">{children}</div>
       ) : (
         // Every part has a required control, so this is only reachable while the graph has not arrived or will not compile.
-        <p className="type-secondary text-fg-2">
-          {m["mst.noneResolve"]()}
-        </p>
+        <p className="type-secondary text-fg-2">{m["mst.noneResolve"]()}</p>
       )}
     </section>
   );

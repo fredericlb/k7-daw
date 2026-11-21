@@ -203,7 +203,7 @@ function PortRow({
 function portDetail(port: IoPort): string {
   const live = port.channels.length > 0;
   return port.unknownLabel
-    ? m["io.noSuchInput"]({ label: port.label })
+    ? m["io.noSuchInput"]({ label: port.label ?? "" })
     : port.label
       ? `${port.label} (${port.channels.join("+")})`
       : live
@@ -375,10 +375,16 @@ export function IoPanel({
           </div>
         ) : (
           <>
-            {heading(m["io.inputs"](), <ArrowDownToLine className="size-3.5" />)}
+            {heading(
+              m["io.inputs"](),
+              <ArrowDownToLine className="size-3.5" />,
+            )}
             {inputRows.length ? <RowGroup>{inputRows}</RowGroup> : none}
             {/* Every out sink shares one meter: what leaves is the master mix, and Tracktion gives an output DEVICE no measurer. */}
-            {heading(m["io.outputs"](), <ArrowUpFromLine className="size-3.5" />)}
+            {heading(
+              m["io.outputs"](),
+              <ArrowUpFromLine className="size-3.5" />,
+            )}
             {outputs.length ? (
               <RowGroup>
                 {outputs.map((p) => (

@@ -105,7 +105,11 @@ export function ConflictCard({
           const all = offered(c);
           const at = chosen ? all.indexOf(chosen) : -1;
           const key =
-            e.key === "ArrowRight" ? "ArrowDown" : e.key === "ArrowLeft" ? "ArrowUp" : e.key;
+            e.key === "ArrowRight"
+              ? "ArrowDown"
+              : e.key === "ArrowLeft"
+                ? "ArrowUp"
+                : e.key;
           const to = disabled ? null : moveFocus(key, at, all.length);
           if (to === null) return;
           e.preventDefault();
