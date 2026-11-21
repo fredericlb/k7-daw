@@ -23,14 +23,14 @@ host's owner confirms the change, press **Forget the old key**: the next try sho
 
 ## Sign in with GitHub
 
-On GitHub you do not copy a key or type an address. In the connect or clone dialog press **Sign in with GitHub**: k7 shows a short
-code, you type it on github.com (the **Open github.com/login/device** button takes you there), and k7 adds this device's key to
-your GitHub account and trusts GitHub's server key for you. Then pick a repository from your list; the ones marked as k7
-workspaces come first, and in Connect **New repository** makes one (private unless you say otherwise). The first time the list
-opens, GitHub is asked for one more permission, to list and create repositories.
+On GitHub you do not copy a key or type an address. Open **Settings, Services** and press **Sign in with GitHub**: k7 shows a
+short code, you type it on github.com (the **Open github.com/login/device** button takes you there) and allow k7 to use your
+repositories, and k7 adds this device's key to your GitHub account and trusts GitHub's server key for you. From then on the
+connect and clone dialogs open on your list of repositories; the ones marked as k7 workspaces come first, and in Connect
+**New repository** makes one (private unless you say otherwise). Without the sign-in, the dialogs show the address form.
 
 Files still travel over SSH with the device's key; the sign-in only talks to GitHub's website. It stays on this device and is never
-synced. **Settings, General** shows the account and **Sign out**, which removes the sign-in but leaves the key on your GitHub
+synced. **Settings, Services** shows the account and **Sign out**, which removes the sign-in but leaves the key on your GitHub
 account (it is this device's git access; remove it at github.com/settings/keys). **Another host…** in the dialog is the form
 described above, for any other host.
 

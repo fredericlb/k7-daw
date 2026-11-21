@@ -6,6 +6,7 @@
 import { AudioLines, ChevronRight } from "@studio/ui/icons";
 import { Link } from "react-router-dom";
 import { AboutSection } from "../about/AboutSection";
+import { GitHubSection } from "../git/GitHubSection";
 import { IdentitySection } from "../git/IdentitySection";
 import { m } from "../paraglide/messages.js";
 import { ENGINE_SETTINGS_ROUTE } from "../projects/api";
@@ -69,6 +70,11 @@ export function SettingsPage() {
       </>
     ),
   };
+  const services: SettingsTab = {
+    key: "services",
+    label: m["settings.tabServices"](),
+    content: <GitHubSection />,
+  };
   const downloads: SettingsTab = {
     key: "downloads",
     label: m["settings.tabDownloads"](),
@@ -96,7 +102,7 @@ export function SettingsPage() {
       >
         <SettingsTabs
           label={m["settings.title"]()}
-          tabs={[general, devices, downloads, about]}
+          tabs={[general, devices, services, downloads, about]}
         />
       </PageFrame>
     </HomeShell>

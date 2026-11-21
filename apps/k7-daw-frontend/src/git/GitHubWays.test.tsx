@@ -19,13 +19,7 @@ const html = (status: GithubStatus, createName?: string) =>
     />,
   );
 
-describe("the two ways in the connect and clone dialogs", () => {
-  it("offers Sign in with GitHub and Another host when nobody is signed in", () => {
-    const out = html({ available: true, scopes: [] });
-    expect(out).toContain("Sign in with GitHub");
-    expect(out).toContain("Another host…");
-  });
-
+describe("GitHub's picker in the connect and clone dialogs", () => {
   it("goes straight to the picker once signed in, with Another host still there", () => {
     const out = html(
       { available: true, login: "octo", scopes: ["repo"] },
@@ -41,14 +35,5 @@ describe("the two ways in the connect and clone dialogs", () => {
   it("offers no New repository where a repository cannot be made (Clone)", () => {
     const out = html({ available: true, login: "octo", scopes: ["repo"] });
     expect(out).not.toContain("New repository");
-  });
-
-  it("asks for the repo permission, saying why, when the picker opens without it", () => {
-    const out = html(
-      { available: true, login: "octo", scopes: ["read:user"] },
-      "songs",
-    );
-    expect(out).toContain("one more permission");
-    expect(out).not.toContain("Filter repositories");
   });
 });

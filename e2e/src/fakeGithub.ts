@@ -1,10 +1,12 @@
 // fakeGithub.ts — a GitHub that answers the device flow, the keys, /meta and the repository list, on 127.0.0.1.
-// What a reader gets wrong: it grants `repo` at once and approves only when the spec says so, never on its own.
+// What a reader gets wrong: like github.com it grants exactly the scopes the device code asked, and approves only when told.
 import { createServer, type Server } from "node:http";
 
 export interface FakeGithub {
   /** The device flow's answer turns from "pending" to a token. */
   approve(): void;
+  /** The scopes the last device code asked, space-separated as sent. */
+  asked(): string;
   keys: string[];
   close(): Promise<void>;
 }
@@ -15,6 +17,7 @@ export async function fakeGithub(
   repos: { name: string; topics: string[]; sshUrl: string }[],
 ): Promise<FakeGithub> {
   let approved = false;
+  let asked = "";
   const keys: string[] = [];
   const reply = (
     res: import("node:http").ServerResponse,
@@ -34,7 +37,8 @@ export async function fakeGithub(
       const body = chunks.length
         ? JSON.parse(Buffer.concat(chunks).toString())
         : {};
-      if (route === "POST /login/device/code")
+      if (route === "POST /login/device/code") {
+        asked = String(body.scope ?? "");
         return reply(res, {
           device_code: "dc",
           user_code: "ABCD-1234",
@@ -42,6 +46,7 @@ export async function fakeGithub(
           expires_in: 900,
           interval: 1,
         });
+      }
       if (route === "POST /login/oauth/access_token")
         return reply(
           res,
@@ -51,7 +56,7 @@ export async function fakeGithub(
         );
       if (route === "GET /user")
         return reply(res, { login: "octo" }, 200, {
-          "x-oauth-scopes": "read:user, write:public_key, repo",
+          "x-oauth-scopes": asked.split(" ").filter(Boolean).join(", "),
         });
       if (route === "GET /user/keys")
         return reply(
@@ -83,6 +88,7 @@ export async function fakeGithub(
     approve: () => {
       approved = true;
     },
+    asked: () => asked,
     keys,
     close: () => new Promise((ok) => server.close(() => ok())),
   };

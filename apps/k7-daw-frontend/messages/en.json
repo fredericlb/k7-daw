@@ -613,6 +613,7 @@
   "settings.title": "Settings",
   "settings.tabGeneral": "General",
   "settings.tabDevices": "Devices",
+  "settings.tabServices": "Services",
   "settings.tabDownloads": "Downloads",
   "settings.tabAbout": "About",
   "downloads.empty": "Nothing is downloading",
@@ -2073,7 +2074,7 @@
   "extsrf.home": "Home",
   "git.gh.signIn": "Sign in with GitHub",
   "git.gh.other": "Another host…",
-  "git.gh.intro": "Sign in once and k7 adds this device's key to your GitHub account: no key to copy, no address to type.",
+  "git.gh.intro": "Sign in once: k7 adds this device's key to your GitHub account, and Connect to git lists your repositories. No key to copy, no address to type.",
   "git.gh.signedAs": "Signed in as @{login}",
   "git.gh.starting": "Asking GitHub for a code…",
   "git.gh.codeTitle": "Enter this code on GitHub",
@@ -2105,5 +2106,9 @@
   "git.gh.accountLogin": "@{login}",
   "git.gh.signOut": "Sign out",
   "git.gh.signOutNote": "Signing out removes the sign-in from this device. The key k7 added to your GitHub account stays: it is this device's git access.",
-  "git.gh.manageKeys": "Manage keys on GitHub"
+  "git.gh.manageKeys": "Manage keys on GitHub",
+  "git.gh.unavailable": "This build of k7 has no GitHub sign-in.",
+  "git.gh.notSignedIn": "Not signed in",
+  "git.gh.allowRepos": "Allow repositories",
+  "git.gh.signInAgain": "GitHub's repositories need one more permission: allow them in Settings → Services."
 }

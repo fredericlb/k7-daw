@@ -368,7 +368,7 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 22.05,21,Save a chain to this machine's or another engine's slot,"click the chip icon, or pick a target in its menu","Enter, arrows",tap,T M D,FALSE,Home and its pages · Frozen chains,
 22.06,21,Save a bench chain,"click ""Save to chain"" (bench only)",—,tap,T M D,TRUE,Project header and transport,
 23.01,23,Save the commit identity (Settings),type name and email; they save themselves,—,tap,T M D,FALSE,Git screens,
-23.02,23,Switch tab,"click the tab: General, Devices, Downloads, About (kept in `?tab=`)",←/→,tap,T M D,FALSE,Settings · Settings page and engine page,
+23.02,23,Switch tab,"click the tab: General, Devices, Services, Downloads, About (kept in `?tab=`)",←/→,tap,T M D,FALSE,Settings · Settings page and engine page,
 23.03,23,Change the language,click a language button,Enter,tap,T M D,FALSE,Settings · Settings page and engine page,
 23.04,23,Save the Claude API key,"type in the password field, click Save",Enter saves,"tap, type",T M D,FALSE,Settings · Settings page and engine page,
 23.05,23,Remove the Claude API key,click Remove,—,tap,T M D,FALSE,Settings · Settings page and engine page,
@@ -502,13 +502,13 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 23.14,23,"Read k7's licence, open its source, read a third-party notice","About → Read it; Open; search, click a notice",Enter,tap,T M D,FALSE,Settings · Settings page and engine page,
 40.07,40,"Play, stop and read the position on another device's surface",click Play or Stop in the transport capsule; click the position to switch bars and seconds,Space plays and stops,tap,T M D,FALSE,Surfaces,
 40.08,40,Open a pane another device shows (the device that holds the project),click the dimmed pane: a toast says “In use on <device>”,its pane key says the same,tap it,T M D,FALSE,Surfaces,
-41.01,41,Sign in with GitHub,"click ""Sign in with GitHub"": Connect and Clone open on it beside ""Another host…"" where the build offers GitHub → the code screen","Tab, Enter",tap,T M D,FALSE,Git screens,"signed in, the dialog opens on the repository picker (42) instead"
-41.02,41,Choose another host,"click ""Another host…"" (under the two ways, the permission step and the picker) → the ssh address form; typing an address also chooses it","Tab, Enter",tap,T M D,FALSE,Git screens,"the form is the whole dialog where GitHub is off, and when Clone from another device pre-fills the address"
+41.01,41,Sign in with GitHub,"Settings → Services → GitHub: click ""Sign in with GitHub"" (shown while not signed in) → the code screen; the one code asks for the key and the repositories","Tab, Enter",tap,T M D,FALSE,Git screens,"user, 2026-11-21: the sign-in is in Services only; Connect and Clone open on the picker (42) once signed in, and never sign in"
+41.02,41,Choose another host,"click ""Another host…"" (under the picker, shown once signed in with GitHub) → the ssh address form; typing an address also chooses it","Tab, Enter",tap,T M D,FALSE,Git screens,"the form is the whole dialog when the device is not signed in with GitHub, where GitHub is off, and when Clone from another device pre-fills the address"
 41.03,41,Copy the sign-in code,"click ""Copy code"" (the code box selects all)",—,tap Copy code,T M D,FALSE,Git screens,
 41.04,41,Open GitHub's device page,"click ""Open github.com/login/device"" (a new tab) and type the code there; k7 waits, asking while the page is visible",—,tap,T M D,FALSE,Git screens,
 41.05,41,Try the sign-in again,"click ""Try again"" after ""The code expired."", ""Sign-in was cancelled on GitHub."" or a network error",—,tap,T M D,FALSE,Git screens,only the expired state is drawn
-41.06,41,Cancel the sign-in,click Cancel under the code (back to the two ways),—,tap,T M D,FALSE,Git screens,
-41.07,41,Grant the repository permission,"the first picker opens on a second code (""k7 needs one more permission to list and create your repositories.""): copy, open and try again as 41.03–41.05; its Cancel goes to Another host",—,same,T M D,FALSE,Git screens,
+41.06,41,Cancel the sign-in,click Cancel under the code (back to Services' GitHub row),—,tap,T M D,FALSE,Git screens,
+41.07,41,Allow repositories,"Services → GitHub, a sign-in GitHub granted without the repository permission: click ""Allow repositories"" → one more code (copy, open and try again as 41.03–41.05); Connect shows no picker until it is done",—,same,T M D,FALSE,Git screens,
 42.01,42,Filter the repositories,"type in ""Filter repositories"" (matches owner/name)",—,"tap, type",T M D,FALSE,Git screens,
 42.02,42,Pick a repository,"click a row (k7 workspaces first, then Your repositories, each most recently pushed first; a Private badge and the pushed-ago): Connect connects at once; Clone fills the address and the name and waits for Clone","Tab, Enter",tap,T M D,FALSE,Git screens,the Clone picker (no New repository) is not drawn
 42.03,42,Start a new repository (Connect only),"click ""New repository"" → the name prefilled with the workspace's, Private on","Tab, Enter",tap,T M D,FALSE,Git screens,
@@ -516,5 +516,5 @@ ID,Screen,Interaction,Mouse / trackpad,Keyboard,Touch,Devices,Not drawn,Area,Not
 42.05,42,Make the new repository public,"turn ""Private repository"" off",Space,tap,T M D,FALSE,Git screens,
 42.06,42,Create and connect,"click ""Create and connect"" (the repository gets the `k7-workspace` topic)",—,tap,T M D,FALSE,Git screens,
 42.07,42,Cancel the new repository,click Cancel (back to the list),—,tap,T M D,FALSE,Git screens,
-23.15,23,Sign out of GitHub,"General → GitHub (shown once signed in): click ""Sign out"" beside @login; the key k7 added stays on GitHub","Tab, Enter",tap,T M D,FALSE,Settings · Settings page and engine page,"user, 2026-11-21: stays in General; docs fixed"
+23.15,23,Sign out of GitHub,"Services → GitHub (shown once signed in): click ""Sign out"" beside @login; the key k7 added stays on GitHub","Tab, Enter",tap,T M D,FALSE,Settings · Settings page and engine page,"user, 2026-11-21: in Services, with Sign in with GitHub"
 23.16,23,Manage this device's keys on GitHub,"click ""Manage keys on GitHub"" (github.com/settings/keys, a new tab)","Tab, Enter",tap,T M D,FALSE,Settings · Settings page and engine page,

@@ -1,5 +1,5 @@
 // GitHubPicker.tsx — the person's repositories as a list to pick from: k7 workspaces first, a filter, a way to make one.
-// What a reader gets wrong: listing needs the `repo` permission, asked by the device-flow screen the first time the picker opens.
+// What a reader gets wrong: it never signs in nor asks a permission; that is Settings → Services, before it is ever shown.
 
 import { Button } from "@studio/ui/button";
 import { Checkbox } from "@studio/ui/checkbox";
@@ -7,16 +7,12 @@ import { Loader2, Lock, Plus } from "@studio/ui/icons";
 import { Input } from "@studio/ui/input";
 import { useEffect, useId, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { DeviceFlow } from "./DeviceFlow";
 import { explain, GitError, type GitTransport, git } from "./gitApi";
 import {
   type Ago,
   arrange,
   type GithubRepo,
-  type GithubStatus,
-  hasRepoScope,
   pushedAgo,
-  REPO_SCOPES,
   shortName,
 } from "./githubState";
 
@@ -38,37 +34,32 @@ const agoText = ({ unit, n }: Ago): string => AGO[unit](n);
 
 export function GitHubPicker({
   t,
-  status,
   refresh,
   createName,
   disabled,
   onPick,
-  onBack,
 }: {
   t: GitTransport;
-  status: GithubStatus;
   refresh: () => Promise<void>;
   /** The workspace's name, which a new repository takes; absent where a repository cannot be made (Clone). */
   createName?: string;
   disabled: boolean;
   onPick: (r: PickedRepo) => void;
-  onBack: () => void;
 }) {
   const [repos, setRepos] = useState<GithubRepo[] | null>(null);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("");
-  const [asking, setAsking] = useState(!hasRepoScope(status));
   const [making, setMaking] = useState(false);
 
   useEffect(() => {
-    if (asking) return;
     let live = true;
     git
       .githubRepos(t)
       .then((a) => live && setRepos(a.repos))
       .catch((e) => {
         if (!live) return;
-        if (e instanceof GitError && e.code === "scope") setAsking(true);
+        if (e instanceof GitError && e.code === "scope")
+          setError(m["git.gh.signInAgain"]());
         else if (e instanceof GitError && e.code === "github-signout")
           void refresh();
         else setError(explain(e));
@@ -76,21 +67,8 @@ export function GitHubPicker({
     return () => {
       live = false;
     };
-  }, [t, asking, refresh]);
+  }, [t, refresh]);
 
-  if (asking)
-    return (
-      <DeviceFlow
-        t={t}
-        scopes={REPO_SCOPES}
-        why={m["git.gh.repoWhy"]()}
-        onDone={() => {
-          void refresh();
-          setAsking(false);
-        }}
-        onCancel={onBack}
-      />
-    );
   const shown = arrange(repos ?? [], filter);
   const now = Date.now();
   const section = (title: string, list: GithubRepo[]) =>

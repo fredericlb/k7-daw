@@ -31,10 +31,10 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 | a commit asks for a name and an email when the device has none, and keeps them (settings, General) | git needs an author; it is per device because two machines of one person may sign differently |
 | the dialog has an address and no sign-in field: no token, no password, no user name, no pasted key | k7 is ssh only; the address carries the user (`git@host:…`) and the device's own key signs in |
 | an `https://`, `http://` or `git://` address is said at once ("k7 syncs over SSH only") and cannot be sent; any other address goes to the route, whose `ssh-only` answer is the same sentence | the page names the way on from the first keystroke, and the route stays the one judge of what is an ssh address (the e2e bed's `file://` seam passes) |
-| Connect and Clone open on two ways: **Sign in with GitHub** and **Another host…**; where the front says the path is off (or cannot answer `GET /git/github`) the dialog is the plain ssh one | the GitHub path is an addition, never a requirement: the address form stays one click away and is the whole dialog wherever GitHub is off |
-| signed in, the dialog opens on the repository picker with "Another host…" still beside it; typing an address is choosing the other way | a person with a GitHub account rarely wants the form, and one with a self-hosted remote must never lose it |
+| Sign in with GitHub is in Settings → Services only (`settings.md`); Connect and Clone never sign in | a sign-in inside the dialog would chain a second code for `repo` behind the first, which reads as a hang once GitHub has said "success" |
+| Connect and Clone open on GitHub's repository picker, with "Another host…" beside it, only when the device is signed in with `repo` (`canPick`); otherwise, or where the path is off, the dialog is the plain ssh one; typing an address is choosing the other way | the GitHub path is an addition, never a requirement: a person with a GitHub account rarely wants the form, and one with a self-hosted remote must never lose it |
 | the device flow, not a redirect: a code to type on github.com, polled while the screen is open and the page visible | no server, no client secret and no callback address to register, which suits a device app and a webview that cannot receive a redirect |
-| the sign-in asks for the person and the key; the picker asks again for `repo` the first time it opens, saying why | the permission that reads and creates repositories is a bigger ask than a key upload, so it waits until the person wants a list |
+| the sign-in asks for the person, the key and `repo` in one code; the picker never asks a permission, and a `scope` refusal points to Settings → Services | the sign-in exists for the picker, so `repo` is needed the moment it ends; one code is one step for the person |
 | the token never reaches the page and is never synced; git still uses the device's ssh key | the token only calls GitHub's REST API (the key upload, the list, the creation), and a secret in the page or in iCloud would be one more place to lose it |
 | the picker lists the account's repositories most recently pushed first, the `k7-workspace` topic under its own heading, a filter, and a private badge and a pushed-ago on each row | a workspace is a repository the person made for k7, and the account may hold hundreds of others |
 | "New repository" (Connect only) takes the workspace's name, private by default, and marks the repository with the topic; connecting an existing repository adds the topic too, silently on failure | the topic is what puts a repository first in the picker on the person's other devices; a repository the person cannot administer is still connected |
@@ -67,10 +67,11 @@ against the remote. The routes are `apps/k7-daw-backend/docs/files/git.md`, the 
 | the bar | above the project bar in the editor, and above a workspace's tree on the home page |
 | Commit & Push and the Conflict screen | dialogs opened through `gitScreens.tsx` (`openCommitAndPush`, `openConflict`), by the header and the workspace card |
 | Commits | the History panel's second list, shown when the workspace is under git |
-| the commit author, and the GitHub account with its Sign out | settings, General |
+| the commit author | settings, General |
+| Sign in with GitHub, the account, Manage keys and Sign out | settings, Services |
 
 ## Tests
 
 `gitState.test.ts` holds the rules of the bar as data; `connectState.test.ts` (the address, the trust, the refused web addresses), `copyText.test.ts` (the clipboard and its fallback), `mergeState.test.ts`, `commitState.test.ts` and
 `logState.test.ts` hold the reducers and their refusals; `roamState.test.ts` and `OtherDevices.test.tsx` the list's reducer and the section; `gitLock.test.ts` the gate that keeps the editors still, with its wiring
-into `App.tsx`; `GitBar.test.tsx` renders the bar and the cards; `githubState.test.ts` holds the device-flow screen's states and the picker's order, filter and dates, `GitHubWays.test.tsx` the two ways. The functional spec is `e2e/specs/app/git-sync.spec.ts`.
+into `App.tsx`; `GitBar.test.tsx` renders the bar and the cards; `githubState.test.ts` holds the device-flow screen's states and the picker's order, filter and dates, `GitHubWays.test.tsx` the picker's place in the dialogs, `GitHubSection.test.tsx` the Services section's states. The functional spec is `e2e/specs/app/git-sync.spec.ts`.

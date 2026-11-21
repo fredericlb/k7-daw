@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   arrange,
+  canPick,
+  GITHUB_SCOPES,
   type GithubRepo,
   hasRepoScope,
   pushedAgo,
@@ -82,6 +84,23 @@ describe("the status", () => {
     expect(hasRepoScope({ available: true, scopes: ["read:user"] })).toBe(
       false,
     );
+  });
+
+  it("lets Connect show GitHub's picker only to a person signed in with repo", () => {
+    const granted = ["read:user", "write:public_key", "repo"];
+    expect(canPick({ available: true, login: "o", scopes: granted })).toBe(
+      true,
+    );
+    // What real GitHub grants a sign-in that did not ask for repo.
+    expect(
+      canPick({
+        available: true,
+        login: "o",
+        scopes: ["read:user", "write:public_key"],
+      }),
+    ).toBe(false);
+    expect(canPick({ available: true, scopes: [] })).toBe(false);
+    expect(GITHUB_SCOPES).toEqual(granted);
   });
 });
 

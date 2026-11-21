@@ -1,7 +1,7 @@
 Area,Intro
 Global (every screen),"Applies on every screen: the keymap, the Esc ladder, the undo journal, app questions, toasts, engine strips and dialogs, floating windows."
 Home and its pages,"The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Settings) with the round command-bar button: workspace cards with their project rows, Pull and Commit & Push, a filter field once the list is long, the projects ⋮ menu (Show examples, Help). The Library page is read-only and holds the frozen chains."
-Git screens,"The git bar (workspace tree, Home row, project header), the commit dialog, the merge dialog with conflict cards, the remote and clone dialogs with their Sign in with GitHub ways, the device-flow code and the repository picker, the commit list, the identity form."
+Git screens,"The git bar (workspace tree, Home row, project header), the commit dialog, the merge dialog with conflict cards, the remote and clone dialogs with GitHub's repository picker once signed in, the commit list, the identity form; Sign in with GitHub and its device-flow code are in Settings → Services."
 Project header and transport,"The header (Back, the name over its status line, spinner, warning chip, git capsule, the pane switcher, the panel toolbar, Settings; on a phone the status line sits under it and the rest folds into the Views and panels dialog), the floating bar (command bar, tool, transport with Record's chevron, position, overview, tempo, metronome, master volume, the view's capsule) and the editor dock."
 Context menus,"The right-click menu on any entity: tabs per kind of thing, rows, a status line."
 Arrange,"The timeline pane: tool strip, ruler with markers and task flags, timeline tabs, lane headers (M/S/A, alternative badge, meters), lanes with clips, picture lanes with shots, automation rows, reference bar and stems bar. Keys work while the pane is active. Clip, edge and shot drags snap to the grid: ⇧ frees, ⌘/Ctrl keeps whole grid steps from where the item was."
@@ -11,7 +11,7 @@ Source editor and file tree,"The editor pane (CodeMirror with autosave, vim mode
 Resources,The imported clips list.
 Tasks & history,"The task list with project tags, the edit journal, the commit list, the sync history."
 Export,"The share panel: timeline choice, audio exports, video export row."
-Settings,"The `/settings` page (General, Devices, Downloads, About), the engine page (Engine, Instruments, Chains, Plugins; a phone variant), the in-project Settings panel (Editor, I/O, Project) and the full-screen command editor."
+Settings,"The `/settings` page (General, Devices, Services, Downloads, About), the engine page (Engine, Instruments, Chains, Plugins; a phone variant), the in-project Settings panel (Editor, I/O, Project) and the full-screen command editor."
 Piano roll,"The roll: mode strip (select, create, remove, takes), key gutter, note lanes with grid caret, loop braces, song ruler; notes with velocity line, edges and body. Also the simple roll of a sequence file."
 Takes,"The takes view in the audio and roll panels: take rows, record button, span, crossfade tool, comp strip."
 Command bar,The floating command line with its suggestion list and parameter fields.

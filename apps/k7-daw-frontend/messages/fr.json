@@ -613,6 +613,7 @@
   "settings.title": "Réglages",
   "settings.tabGeneral": "Général",
   "settings.tabDevices": "Appareils",
+  "settings.tabServices": "Services",
   "settings.tabDownloads": "Téléchargements",
   "settings.tabAbout": "À propos",
   "downloads.empty": "Aucun téléchargement en cours",
@@ -2073,7 +2074,7 @@
   "extsrf.home": "Accueil",
   "git.gh.signIn": "Se connecter avec GitHub",
   "git.gh.other": "Un autre hébergeur…",
-  "git.gh.intro": "Connectez-vous une fois et k7 ajoute la clé de cet appareil à votre compte GitHub : aucune clé à copier, aucune adresse à saisir.",
+  "git.gh.intro": "Connectez-vous une fois : k7 ajoute la clé de cet appareil à votre compte GitHub, et Connecter à git liste vos dépôts. Aucune clé à copier, aucune adresse à saisir.",
   "git.gh.signedAs": "Connecté en tant que @{login}",
   "git.gh.starting": "Demande d'un code à GitHub…",
   "git.gh.codeTitle": "Saisissez ce code sur GitHub",
@@ -2105,5 +2106,9 @@
   "git.gh.accountLogin": "@{login}",
   "git.gh.signOut": "Se déconnecter",
   "git.gh.signOutNote": "Se déconnecter retire la connexion de cet appareil. La clé ajoutée par k7 à votre compte GitHub reste : c'est l'accès git de cet appareil.",
-  "git.gh.manageKeys": "Gérer les clés sur GitHub"
+  "git.gh.manageKeys": "Gérer les clés sur GitHub",
+  "git.gh.unavailable": "Cette version de k7 n'a pas de connexion GitHub.",
+  "git.gh.notSignedIn": "Non connecté",
+  "git.gh.allowRepos": "Autoriser les dépôts",
+  "git.gh.signInAgain": "Les dépôts GitHub demandent une autorisation de plus : autorisez-les dans Réglages → Services."
 }
