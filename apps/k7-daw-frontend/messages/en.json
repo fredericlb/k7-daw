@@ -31,6 +31,8 @@
   "project.idleTitle": "Session asleep",
   "project.idleBody": "Nothing has happened here for {minutes} minutes, so the project was unloaded from the engine — which is free for somebody else again — and this tab let go of it. Your files have not moved; everything was already saved. Resume to reopen it where you left off.",
   "project.resume": "Resume session",
+  "help.contents": "Contents",
+  "help.menu": "Help",
   "settings.menu": "Settings",
   "settings.editor": "Editor settings",
   "settings.io": "I/O",

@@ -31,6 +31,8 @@
   "project.idleTitle": "Session en veille",
   "project.idleBody": "Rien ne s'est passé ici depuis {minutes} minutes : le projet a été déchargé du moteur, qui est de nouveau libre pour quelqu'un d'autre, et cet onglet s'en est détaché. Vos fichiers n'ont pas bougé — tout était déjà enregistré. Reprenez pour le rouvrir là où vous l'aviez laissé.",
   "project.resume": "Reprendre la session",
+  "help.contents": "Sommaire",
+  "help.menu": "Aide",
   "settings.menu": "Paramètres",
   "settings.editor": "Réglages de l'éditeur",
   "settings.io": "E/S",

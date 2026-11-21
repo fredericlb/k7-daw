@@ -2878,6 +2878,7 @@ export default function App({
           }
           panels={headerPanels}
           onSettings={() => void runCommand("ui settings")}
+          onHelp={openHelp}
           tool={
             full === "timeline" && hasTimeline
               ? {

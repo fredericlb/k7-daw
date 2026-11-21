@@ -4,6 +4,7 @@
 // instance lives in App; both surfaces open it through openContextMenu. Dismisses on Escape, an
 // outside click, a scroll, losing focus or its close button. Rows are split into TABS (menuTabs.ts).
 
+import { useModalFocus } from "@studio/ui/modal-focus";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { type CommandPrefs, labelIn } from "../commandPrefs";
 import type { MenuItem } from "../contextMenu";
@@ -44,6 +45,7 @@ export function ContextMenu({
   // The key each command answers to, read off the person's own table so a row never advertises a key nothing binds.
   const keys = useMemo(() => shortcutsByCommand(prefs), [prefs]);
   const ref = useRef<HTMLDivElement>(null);
+  useModalFocus(ref, { trap: false });
   // Start at the click, then clamp into the viewport once we can measure the menu.
   const [pos, setPos] = useState({ x, y });
   // The rows by tab, and the tab on show: the first, which is the thing you clicked, on every new menu.
