@@ -99,8 +99,8 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
         .click();
       await page.getByRole("menuitem", { name: "Clone from git" }).click();
       const dialog = page.getByRole("dialog", { name: "Clone a repository" });
-      await dialog.getByLabel("Name of the workspace").fill(B);
       await chooseAnotherHost(dialog);
+      await dialog.getByLabel("Name of the workspace").fill(B);
       await dialog.getByLabel("Repository address").fill(url);
       await dialog.getByRole("button", { name: "Clone", exact: true }).click();
       await expect(dialog).toBeHidden(SLOW);
