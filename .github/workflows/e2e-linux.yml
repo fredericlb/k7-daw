@@ -1,0 +1,171 @@
+# e2e linux — the web and conformance suites on a fresh Ubuntu runner, one job per suite.
+#
+# MANUAL ONLY (workflow_dispatch) and no merge gate: nothing requires it, gate.sh never waits for it.
+# The bed itself is apps/k7-daw-engine/scripts/ci/e2e-runner.sh, shared with e2e-windows.yml.
+# What a reader gets wrong: only the web leg saves the caches, and only on main or when save_cache is ticked (docs/e2e-runners.md).
+
+name: e2e linux
+
+on:
+  workflow_dispatch:
+    inputs:
+      filter:
+        description: "Playwright file filters, space-separated (empty: every spec)"
+        default: ""
+      max_failures:
+        description: "Stop a suite at this many failures (0: never)"
+        default: "0"
+      retries:
+        description: "Playwright retries per spec"
+        default: "1"
+      save_cache:
+        description: "Save the build caches from this ref too (main always saves)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: e2e-linux-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  suite:
+    name: ${{ matrix.suite }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [web, conformance]
+    env:
+      E2E_SUITE: ${{ matrix.suite }}
+      E2E_FILTER: ${{ inputs.filter }}
+      E2E_MAX_FAILURES: ${{ inputs.max_failures }}
+      E2E_RETRIES: ${{ inputs.retries }}
+      SAVE: ${{ matrix.suite == 'web' && (github.ref == 'refs/heads/main' || inputs.save_cache) }}
+      STUDIO_ENGINE_PRESET: release-gcc
+      STUDIO_SUPERVISOR_PRESET: release-gcc
+      CMAKE_BUILD_PARALLEL_LEVEL: "4"
+      CARGO_INCREMENTAL: "0"
+      SCCACHE_CACHE_SIZE: 3G
+    steps:
+      # The runner's preinstalled SDKs leave too little disk for the engine's dependencies and two release builds.
+      - name: free disk
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL && df -h /
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ninja-build pkg-config ffmpeg clang \
+            libssl-dev libasound2-dev libjack-jackd2-dev libfreetype-dev libfontconfig1-dev \
+            libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev \
+            libglu1-mesa-dev mesa-common-dev libcurl4-openssl-dev ladspa-sdk \
+            pulseaudio pulseaudio-utils libasound2-plugins
+
+      - name: folders
+        run: |
+          {
+            echo "K7_CI_WORKSPACE=$RUNNER_TEMP/k7"
+            echo "STUDIO_FETCHCONTENT_DIR=$HOME/k7-deps"
+            echo "PLAYWRIGHT_BROWSERS_PATH=$HOME/k7-browsers"
+            echo "K7_FRONT_TARGET_DIR=$HOME/k7-front-target"
+            echo "SCCACHE_DIR=$HOME/k7-sccache"
+            echo "RUSTC_WRAPPER=sccache"
+            echo "STUDIO_COMPILER_LAUNCHER=sccache"
+          } >> "$GITHUB_ENV"
+          # A run's own key, so that caches.yml keeps the newest per ref (the family is the key without its trailing hash).
+          echo "run=$(echo -n "$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" | sha256sum | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+        id: keys
+
+      - uses: ./.github/actions/node
+
+      - uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      - name: rust
+        run: rustup toolchain install stable --profile minimal && rustup default stable
+
+      - name: restore the engine's dependencies
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-deps
+          key: e2e-deps-${{ runner.os }}-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+          restore-keys: e2e-deps-${{ runner.os }}-
+      - name: restore cargo's registry
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: e2e-cargo-${{ runner.os }}-${{ hashFiles('apps/k7-daw-backend/Cargo.lock') }}
+          restore-keys: e2e-cargo-${{ runner.os }}-
+      - name: restore Playwright's Chromium
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-browsers
+          key: e2e-browsers-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: restore sccache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-sccache
+          key: e2e-sccache-${{ runner.os }}-${{ steps.keys.outputs.run }}
+          restore-keys: e2e-sccache-${{ runner.os }}-
+
+      - name: Chromium's system libraries
+        run: npx --workspace @studio/e2e playwright install-deps chromium
+
+      # PulseAudio's null sink, as ALSA's default device: the engine opens a real output even when it writes silence.
+      - name: a null sound device
+        run: |
+          mkdir -p /tmp/k7-pulse
+          pulseaudio --daemonize=yes --disallow-exit --exit-idle-time=-1 --realtime=false --high-priority=false -n \
+            --load="module-null-sink sink_name=k7 rate=48000 channels=2" \
+            --load="module-native-protocol-unix auth-anonymous=1 socket=/tmp/k7-pulse/native" --log-target=file:/tmp/k7-pulse.log
+          echo "PULSE_SERVER=unix:/tmp/k7-pulse/native" >> "$GITHUB_ENV"
+          printf 'pcm.!default {\n  type pulse\n}\nctl.!default {\n  type pulse\n}\n' | sudo tee /etc/asound.conf
+          for _ in $(seq 50); do PULSE_SERVER=unix:/tmp/k7-pulse/native pactl info > /dev/null 2>&1 && break; sleep 0.2; done
+          PULSE_SERVER=unix:/tmp/k7-pulse/native pactl list short sinks
+
+      - name: the bed and the ${{ matrix.suite }} suite
+        run: bash apps/k7-daw-engine/scripts/ci/e2e-runner.sh
+
+      - name: sccache's numbers
+        if: always()
+        run: sccache --show-stats || true
+
+      - name: the bed's output
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: e2e-linux-${{ matrix.suite }}
+          path: ${{ runner.temp }}/k7/e2e-out
+          retention-days: 14
+
+      # Saved whatever the suite said: a red run's build is as warm as a green one's.
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-sccache
+          key: e2e-sccache-${{ runner.os }}-${{ steps.keys.outputs.run }}
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-deps
+          key: e2e-deps-${{ runner.os }}-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: e2e-cargo-${{ runner.os }}-${{ hashFiles('apps/k7-daw-backend/Cargo.lock') }}
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-browsers
+          key: e2e-browsers-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
