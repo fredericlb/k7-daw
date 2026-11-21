@@ -1,0 +1,161 @@
+# e2e android — the app specs on an Android emulator, in the app's e2e build, on a fresh Ubuntu runner.
+#
+# MANUAL ONLY (workflow_dispatch) and no merge gate: nothing requires it, gate.sh never waits for it.
+# The APK is built before the emulator starts; apps/k7-daw-engine/scripts/ci/e2e-android-runner.sh then runs the suite.
+# What a reader gets wrong: the emulator is x86_64 and the app arm64 only, run by Android's ARM translation (docs/e2e-runners.md).
+
+name: e2e android
+
+on:
+  workflow_dispatch:
+    inputs:
+      filter:
+        description: "Playwright file filters, space-separated (empty: every spec)"
+        default: ""
+      max_failures:
+        description: "Stop the suite at this many failures (0: never)"
+        default: "0"
+      retries:
+        description: "Playwright retries per spec"
+        default: "1"
+      save_cache:
+        description: "Save the build caches from this ref too (main always saves)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: e2e-android-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  suite:
+    name: android
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      E2E_FILTER: ${{ inputs.filter }}
+      E2E_MAX_FAILURES: ${{ inputs.max_failures }}
+      E2E_RETRIES: ${{ inputs.retries }}
+      SAVE: ${{ github.ref == 'refs/heads/main' || inputs.save_cache }}
+      NDK_VERSION: 29.0.14206865
+      CMAKE_BUILD_PARALLEL_LEVEL: "4"
+      CARGO_INCREMENTAL: "0"
+      SCCACHE_CACHE_SIZE: 3G
+      # The guest keeps its sound device, the host side plays nowhere: the runner has no sound card.
+      QEMU_AUDIO_DRV: none
+    steps:
+      # The runner's preinstalled SDKs leave too little disk for the engine's dependencies, the NDK and the emulator; the Android SDK stays.
+      - name: free disk
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL && df -h /
+
+      # versionCode is the commit count, which a shallow clone refuses (docs/versioning.md).
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+
+      - name: system packages
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ninja-build
+
+      - name: folders
+        id: keys
+        run: |
+          {
+            echo "K7_CI_WORKSPACE=$RUNNER_TEMP/k7"
+            echo "STUDIO_FETCHCONTENT_DIR=$HOME/k7-deps"
+            echo "SCCACHE_DIR=$HOME/k7-sccache"
+            echo "RUSTC_WRAPPER=sccache"
+            echo "STUDIO_COMPILER_LAUNCHER=sccache"
+          } >> "$GITHUB_ENV"
+          # A run's own key, so that caches.yml keeps the newest per ref (the family is the key without its trailing hash).
+          echo "run=$(echo -n "$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" | sha256sum | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+      - uses: ./.github/actions/node
+
+      - uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      - name: rust
+        run: rustup toolchain install stable --profile minimal --target aarch64-linux-android && rustup default stable
+
+      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
+        with:
+          cache-read-only: ${{ env.SAVE != 'true' }}
+
+      - name: the NDK
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$NDK_VERSION" > /dev/null
+
+      - name: restore the engine's dependencies
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-deps
+          key: e2e-deps-android-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+          restore-keys: e2e-deps-android-
+      - name: restore cargo's registry
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: e2e-cargo-${{ runner.os }}-${{ hashFiles('apps/k7-daw-backend/Cargo.lock') }}
+          restore-keys: e2e-cargo-${{ runner.os }}-
+      - name: restore sccache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-sccache
+          key: e2e-sccache-android-${{ steps.keys.outputs.run }}
+          restore-keys: e2e-sccache-android-
+
+      - name: the e2e APK
+        working-directory: apps/k7-daw-android
+        run: ./gradlew --no-daemon :app:assembleE2e
+
+      # The save comes before the emulator: the build is what is worth keeping, whatever the suite says.
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-sccache
+          key: e2e-sccache-android-${{ steps.keys.outputs.run }}
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/k7-deps
+          key: e2e-deps-android-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+
+      - name: KVM for the emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: the emulator and the suite
+        uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          cores: 4
+          ram-size: 6144M
+          disk-size: 8G
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-boot-anim -camera-back none -camera-front none
+          disable-animations: true
+          script: bash apps/k7-daw-engine/scripts/ci/e2e-android-runner.sh
+
+      - name: sccache's numbers
+        if: always()
+        run: sccache --show-stats || true
+
+      - name: the suite's output
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: e2e-android
+          path: ${{ runner.temp }}/k7/e2e-out
+          retention-days: 14
