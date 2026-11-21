@@ -5,7 +5,10 @@ let unsaved = false;
 vi.mock("@studio/project-shell/ask", () => ({
   askConfirm: (q: unknown) => ask(q),
 }));
-vi.mock("@studio/ui-editor/unsaved", () => ({ hasUnsavedWork: () => unsaved }));
+vi.mock("@studio/ui-editor/unsaved", () => ({
+  hasUnsavedWork: () => unsaved,
+  unsavedKind: () => "edits",
+}));
 vi.mock("./paraglide/messages.js", () => ({
   m: new Proxy({}, { get: (_, k) => () => String(k) }),
 }));
