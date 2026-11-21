@@ -1,10 +1,9 @@
 // address.ts — what an address IS to this page, read out of the path and nothing else: the
-// surfaces menu, the home pages, or a project. Each is a SCOPE, and
+// home pages, another device's surface, or a project. Each is a SCOPE, and
 // the scope's key is what the router is mounted by — so going between two of them remounts it,
 // while moving inside one does not. Pure, so it is tested without a page. See ../docs/shell.md.
 
 import {
-  isExternalIndex,
   type Launch,
   parseExternal,
   parseLaunch,
@@ -18,7 +17,6 @@ import {
 } from "@studio/web-protocol/projects";
 
 export type Scope =
-  | { kind: "external-index"; key: string; basename: string }
   | { kind: "home"; key: string; basename: string }
   /** One surface of another device's project: no gates of the editor, the remote view alone (docs/external.md). */
   | { kind: "lan-surface"; key: string; basename: string; lan: LanSurface }
@@ -33,9 +31,6 @@ export type Scope =
 
 /** The scope `pathname` belongs to, under the app's mount `base` — the same reading appMain made once per page. */
 export function scopeOf(pathname: string, base: string): Scope {
-  // The surfaces menu first: a single segment is a legal project address, so the word is reserved.
-  if (isExternalIndex(pathname, base))
-    return { kind: "external-index", key: "external", basename: base };
   if (isHomePage(pathname, base))
     return { kind: "home", key: "home", basename: base };
   const at = parseLaunch(pathname, "k7", base);

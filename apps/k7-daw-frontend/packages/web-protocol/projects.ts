@@ -310,9 +310,6 @@ export function parseLanSurface(
   return { engineId, ...target, surface };
 }
 
-/** The MENU of those addresses, `/external` — a RESERVED repository short name; see docs/addresses.md. */
-export const EXTERNAL_INDEX = "external";
-
 /** The LIBRARIES page, `/libraries` — the origin's list, and where an admin edits it; reserved like `external`, and a ROUTE of k7's home. */
 export const LIBRARIES_PAGE = "libraries";
 
@@ -336,12 +333,6 @@ function belowMount(pathname: string, base: string): string[] | null {
   return segs.slice(skip.length);
 }
 
-/** Is this address exactly `word`, one segment below the mount? */
-function isReservedPage(pathname: string, base: string, word: string): boolean {
-  const rest = belowMount(pathname, base);
-  return rest?.length === 1 && rest[0] === word;
-}
-
 /** Does this address START with `word` below the mount, whatever follows it? */
 function isReservedPrefix(
   pathname: string,
@@ -361,14 +352,4 @@ export function isHomePage(pathname: string, base: string): boolean {
     isReservedPrefix(pathname, base, SURFACES_PAGE) ||
     isReservedPrefix(pathname, base, MEDIA_PAGE)
   );
-}
-
-/** Is this address that menu? Exactly one segment below the mount, and that word. */
-export function isExternalIndex(pathname: string, base: string): boolean {
-  return isReservedPage(pathname, base, EXTERNAL_INDEX);
-}
-
-/** …and the whole URL of it: a surface cannot use the router, its basename ending at the project. */
-export function externalIndexUrl(origin: string, app: ProjectApp): string {
-  return `${serviceUrl(origin, app)}/${EXTERNAL_INDEX}`;
 }

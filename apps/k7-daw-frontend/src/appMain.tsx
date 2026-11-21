@@ -42,11 +42,6 @@ const LanSurfaceGate = lazy(() =>
     default: m.LanSurfaceGate,
   })),
 );
-const ExternalIndex = lazy(() =>
-  import("./components/ExternalIndex").then((m) => ({
-    default: m.ExternalIndex,
-  })),
-);
 /** The home page and its sibling pages: a project page never loads them. */
 const loadHomeRoutes = () => import("./projects/HomeRoutes");
 const HomeRoutes = lazy(() =>
@@ -190,10 +185,7 @@ function Root() {
       <AuthGate>
         <Scoped scope={scope} ready={ready}>
           <Suspense fallback={<Booting />}>
-            {scope.kind === "external-index" ? (
-              // The second device's front door: every surface this account can drive, holding no engine — a lease would evict the person playing.
-              <ExternalIndex />
-            ) : scope.kind === "lan-surface" ? (
+            {scope.kind === "lan-surface" ? (
               // Another device's surface: its door through this front, no claim and no project of this device's (docs/external.md).
               <LanSurfaceGate lan={scope.lan} />
             ) : scope.kind === "home" ? (

@@ -4,13 +4,10 @@ import {
   BENCH_REPO,
   benchChainOf,
   benchProject,
-  EXTERNAL_INDEX,
   EXTERNAL_SEGMENT,
-  externalIndexUrl,
   externalUrl,
   isBenchProject,
   isDroppableProject,
-  isExternalIndex,
   isHomePage,
   isLocal,
   LAN_REPO,
@@ -169,40 +166,6 @@ describe("a surface's external address", () => {
     expect(parseExternal("/pl8/band/w.k7/@external/desk", "k7", "/sub/")).toBe(
       null,
     );
-  });
-});
-
-describe("the menu of those addresses", () => {
-  const O = "https://st0.priv.frediver.se";
-
-  it("sits at the app's mount, with no project in it", () => {
-    expect(externalIndexUrl(O, "k7")).toBe(
-      "https://st0.priv.frediver.se/external",
-    );
-    expect(isExternalIndex("/external", "/")).toBe(true);
-    expect(isExternalIndex("/external/", "/")).toBe(true);
-  });
-
-  it("follows the base it is given", () => {
-    expect(isExternalIndex("/sub/external", "/sub/")).toBe(true);
-    // …and the same path is NOT the menu for a page mounted elsewhere.
-    expect(isExternalIndex("/sub/external", "/")).toBe(false);
-  });
-
-  it("is exactly one segment, so nothing under it is mistaken for it", () => {
-    for (const p of ["/", "/band", "/band/winter.k7", "/external/winter.k7"])
-      expect(isExternalIndex(p, "/"), p).toBe(false);
-  });
-
-  it("SHADOWS a repository of that name at its root, and only there", () => {
-    // The cost of a plain word instead of an `@` sentinel: `/external` is this page, not that clone.
-    expect(isExternalIndex(`/${EXTERNAL_INDEX}`, "/")).toBe(true);
-    // Every project INSIDE such a repository is untouched: two segments, so the menu does not claim it.
-    expect(parseLaunch("/external/winter.k7", "k7", "/")).toEqual({
-      repo: "external",
-      project: "winter.k7",
-    });
-    expect(isExternalIndex("/external/winter.k7", "/")).toBe(false);
   });
 });
 

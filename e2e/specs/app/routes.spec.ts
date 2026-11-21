@@ -1,5 +1,5 @@
 // routes.spec.ts — the home's side pages and the two hosts no other spec opens: each draws its own content, not just no error.
-// `/external`, `/settings`, `/settings/engine`, `/libraries`, `/about`, `/tasks`, and the docs host.
+// `/surfaces`, `/settings`, `/settings/engine`, `/libraries`, `/about`, `/tasks`, and the docs host.
 import type { Page } from "@playwright/test";
 import { FIXTURES_WORKSPACE } from "../../src/fixtures.ts";
 import { homeTab } from "../../src/home.ts";
@@ -19,30 +19,6 @@ async function routeTo(page: Page, path: string): Promise<void> {
     win.dispatchEvent(new win.PopStateEvent("popstate"));
   }, path);
 }
-
-test("/external lists the surfaces of the project the engine holds", {
-  tag: "@tier4",
-}, async ({ k7 }) => {
-  // The menu lists what the engine already holds, so a project is opened on it first.
-  const project = await k7.open(`/@local/${FIXTURES_WORKSPACE}/clip-lane.k7`);
-  await engineUp(project);
-  const page = await k7.open("/external");
-  const watch = watchPage(page);
-  await expect(
-    page.getByRole("heading", {
-      name: `${FIXTURES_WORKSPACE} / clip-lane.k7`,
-    }),
-  ).toBeVisible({ timeout: 30_000 });
-  await expect(page.getByRole("button", { name: "Refresh" })).toBeVisible();
-  const timeline = page.getByRole("link", { name: /timeline/i });
-  await expect(timeline).toHaveAttribute(
-    "href",
-    new RegExp(
-      `/@local/${FIXTURES_WORKSPACE}/clip-lane\\.k7/@external/timeline$`,
-    ),
-  );
-  watch.assertClean();
-});
 
 test("/settings draws every section with its controls, a tab at a time", async ({
   k7,

@@ -29,10 +29,6 @@ describe("scopeOf", () => {
     expect(scopeOf("/@local/songs/second.k7", B).key).not.toBe(a.key);
   });
 
-  it("reads the surfaces menu before a project, the word being a legal workspace", () => {
-    expect(scopeOf("/external", B).kind).toBe("external-index");
-  });
-
   it("names the surface a project tab draws", () => {
     const s = scopeOf("/@local/songs/first.k7/@external/desk", B);
     expect(s).toMatchObject({ kind: "project", external: "desk" });
@@ -60,8 +56,8 @@ describe("a surface of another device", () => {
 });
 
 describe("isAppAddress", () => {
-  it("takes the home, a project and the surfaces menu", () => {
-    for (const p of ["/", "/libraries", "/@local/songs/first.k7", "/external"])
+  it("takes the home, a project and the surfaces page", () => {
+    for (const p of ["/", "/libraries", "/@local/songs/first.k7", "/surfaces"])
       expect(isAppAddress(url(p), ORIGIN, B)).toBe(true);
   });
 
