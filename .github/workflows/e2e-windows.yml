@@ -1,0 +1,158 @@
+# e2e windows — the web and conformance suites on a fresh Windows runner, one job per suite, under Git Bash.
+#
+# MANUAL ONLY (workflow_dispatch) and no merge gate: nothing requires it, gate.sh never waits for it.
+# The bed itself is apps/k7-daw-engine/scripts/ci/e2e-runner.sh, shared with e2e-linux.yml.
+# What a reader gets wrong: MSVC's folder goes first on PATH, or Git's own link.exe is the linker (docs/e2e-runners.md).
+
+name: e2e windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      filter:
+        description: "Playwright file filters, space-separated (empty: every spec)"
+        default: ""
+      max_failures:
+        description: "Stop a suite at this many failures (0: never)"
+        default: "0"
+      retries:
+        description: "Playwright retries per spec"
+        default: "1"
+      save_cache:
+        description: "Save the build caches from this ref too (main always saves)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: e2e-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  suite:
+    name: ${{ matrix.suite }}
+    runs-on: windows-2025
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [web, conformance]
+    env:
+      E2E_SUITE: ${{ matrix.suite }}
+      E2E_FILTER: ${{ inputs.filter }}
+      E2E_MAX_FAILURES: ${{ inputs.max_failures }}
+      E2E_RETRIES: ${{ inputs.retries }}
+      SAVE: ${{ matrix.suite == 'web' && (github.ref == 'refs/heads/main' || inputs.save_cache) }}
+      STUDIO_ENGINE_PRESET: windows-msvc-ninja
+      STUDIO_SUPERVISOR_PRESET: windows-msvc-ninja
+      CARGO_INCREMENTAL: "0"
+      SCCACHE_CACHE_SIZE: 4G
+      # Short roots: the engine's dependencies nest deep, and Windows refuses a path past 260 characters.
+      STUDIO_FETCHCONTENT_DIR: C:/k7d
+      PLAYWRIGHT_BROWSERS_PATH: C:/k7b
+      K7_FRONT_TARGET_DIR: C:/k7t
+      SCCACHE_DIR: C:/k7s
+      K7_CI_WORKSPACE: C:/k7w
+      RUSTC_WRAPPER: sccache
+      STUDIO_COMPILER_LAUNCHER: sccache
+    steps:
+      - run: git config --global core.longpaths true
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: keys
+        id: keys
+        # A run's own key, so that caches.yml keeps the newest per ref (the family is the key without its trailing hash).
+        run: echo "run=$(echo -n "$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" | sha256sum | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+      - uses: ./.github/actions/node
+
+      - uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      - name: rust
+        run: rustup toolchain install stable --profile minimal && rustup default stable
+
+      - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
+        with:
+          arch: x64
+
+      # The runner has no sound card: a virtual cable gives WASAPI an output to open.
+      - uses: LABSN/sound-ci-helpers@d08c889a7bba7d9b1b059f8f76dac4672ea3a9cf # v1
+
+      - name: restore the engine's dependencies
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: C:/k7d
+          key: e2e-deps-${{ runner.os }}-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+          restore-keys: e2e-deps-${{ runner.os }}-
+      - name: restore cargo's registry
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: e2e-cargo-${{ runner.os }}-${{ hashFiles('apps/k7-daw-backend/Cargo.lock') }}
+          restore-keys: e2e-cargo-${{ runner.os }}-
+      - name: restore Playwright's Chromium
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: C:/k7b
+          key: e2e-browsers-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: restore sccache
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: C:/k7s
+          key: e2e-sccache-${{ runner.os }}-${{ steps.keys.outputs.run }}
+          restore-keys: e2e-sccache-${{ runner.os }}-
+
+      - name: the bed and the ${{ matrix.suite }} suite
+        run: |
+          # cl.exe's folder first: Git Bash's /usr/bin/link.exe would otherwise be the linker cargo and CMake find.
+          msvc=$(dirname "$(cygpath -u "$(where cl.exe | head -1)")")
+          export PATH="$msvc:$PATH"
+          which link cl ninja cmake
+          bash apps/k7-daw-engine/scripts/ci/e2e-runner.sh
+
+      - name: sccache's numbers
+        if: always()
+        run: sccache --show-stats || true
+
+      - name: the bed's output
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: e2e-windows-${{ matrix.suite }}
+          path: C:/k7w/e2e-out
+          retention-days: 14
+
+      # Saved whatever the suite said: a red run's build is as warm as a green one's.
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: C:/k7s
+          key: e2e-sccache-${{ runner.os }}-${{ steps.keys.outputs.run }}
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: C:/k7d
+          key: e2e-deps-${{ runner.os }}-${{ hashFiles('apps/k7-daw-engine/k7-runtime/CMakeLists.txt', 'apps/k7-daw-engine/k7-supervisor/CMakeLists.txt', 'apps/k7-daw-engine/k7-runtime/engine/patches/**') }}
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: e2e-cargo-${{ runner.os }}-${{ hashFiles('apps/k7-daw-backend/Cargo.lock') }}
+      - if: always() && env.SAVE == 'true'
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: C:/k7b
+          key: e2e-browsers-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
