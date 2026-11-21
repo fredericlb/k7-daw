@@ -169,7 +169,7 @@ function ConditionRow({
               id={`${uid}-event`}
               value={c.event}
               onChange={(e) => onPatch({ event: e.target.value })}
-              placeholder="Note On"
+              placeholder={m["curve.eventPlaceholder"]()}
               spellCheck={false}
               className="flex-1 text-xs"
               title={m["curve.eventHint"]()}

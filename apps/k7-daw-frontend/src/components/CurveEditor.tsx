@@ -34,22 +34,24 @@ import { CurveKnob } from "./CurveKnob";
 import { CurvePlot } from "./CurvePlot";
 
 /** What each shape reads as in the select. */
-const SHAPE_LABEL: Record<DraftShape, string> = {
-  sine: "sine",
-  triangle: "triangle",
-  saw: "saw",
-  square: "square",
-  adsr: "ADSR envelope",
-  custom: "custom (drawn)",
-  onoff: "on / off",
-};
+const shapeLabel = (s: DraftShape): string =>
+  ({
+    sine: m["curve.shapeSine"],
+    triangle: m["curve.shapeTriangle"],
+    saw: m["curve.shapeSaw"],
+    square: m["curve.shapeSquare"],
+    adsr: m["curve.shapeAdsr"],
+    custom: m["curve.shapeCustom"],
+    onoff: m["curve.shapeOnoff"],
+  })[s]();
 
 /** What each cut reads as in its select. */
-const CUT_LABEL: Record<CurveCut, string> = {
-  none: "none",
-  positive: "positive — keep 0..1",
-  negative: "negative — keep -1..0",
-};
+const cutLabel = (c: CurveCut): string =>
+  ({
+    none: m["curve.cutNone"],
+    positive: m["curve.cutPositive"],
+    negative: m["curve.cutNegative"],
+  })[c]();
 
 /** The envelope's four knobs, in ms: what each stage spans at most. */
 const ADSR_KNOBS = [
@@ -123,7 +125,7 @@ export function CurveEditor({
     (draft.conditions.some((c) => c.when === "event") &&
     events &&
     !events.length
-      ? "this node announces no event"
+      ? m["curve.noEvent"]()
       : null);
 
   return (
@@ -132,12 +134,14 @@ export function CurveEditor({
       <DialogContent className="max-h-[90vh] max-w-xl grid-cols-[minmax(0,1fr)] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>
-            {isNew ? "New curve" : `Curve ${initialName}`}
+            {isNew
+              ? m["curve.titleNew"]()
+              : m["curve.titleEdit"]({ name: initialName })}
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3">
           <label className={FIELD} htmlFor={`${uid}-name`}>
-            <span className={LABEL}>name</span>
+            <span className={LABEL}>{m["curve.name"]()}</span>
             <Input
               id={`${uid}-name`}
               value={name}
@@ -147,11 +151,11 @@ export function CurveEditor({
               spellCheck={false}
               className="font-mono text-xs"
               aria-invalid={!nameOk}
-              title={nameOk ? undefined : "letters, digits, '_' and '-' only"}
+              title={nameOk ? undefined : m["curve.nameRule"]()}
             />
           </label>
           <label className={FIELD}>
-            <span className={LABEL}>shape</span>
+            <span className={LABEL}>{m["curve.shape"]()}</span>
             <select
               value={draft.shape}
               onChange={(e) => set({ shape: e.target.value as DraftShape })}
@@ -161,7 +165,7 @@ export function CurveEditor({
             >
               {shapes.map((s) => (
                 <option key={s} value={s}>
-                  {SHAPE_LABEL[s]}
+                  {shapeLabel(s)}
                 </option>
               ))}
             </select>
@@ -170,13 +174,13 @@ export function CurveEditor({
           {draft.shape !== "onoff" && (
             <div className={FIELD}>
               <Slider
-                label="amplitude"
+                label={m["curve.amplitude"]()}
                 value={draft.amplitude}
                 onChange={(amplitude) => set({ amplitude })}
               />
               {oscillator && (
                 <Slider
-                  label="phase"
+                  label={m["curve.phase"]()}
                   value={draft.phase}
                   onChange={(phase) => set({ phase })}
                 />
@@ -186,7 +190,7 @@ export function CurveEditor({
           {/* Its sign, then which half of the output it keeps — a switch's 0 and 1 have neither (docs/curveEditor.md). */}
           {draft.shape !== "onoff" && (
             <div className={FIELD}>
-              <span className={LABEL}>polarity</span>
+              <span className={LABEL}>{m["curve.polarity"]()}</span>
               {(["bipolar", "unipolar"] as const).map((p) => (
                 <label key={p} className="flex items-center gap-1 text-xs">
                   <input
@@ -195,11 +199,15 @@ export function CurveEditor({
                     checked={draft.polarity === p}
                     onChange={() => set({ polarity: p })}
                   />
-                  {p}
+                  {p === "bipolar"
+                    ? m["curve.bipolar"]()
+                    : m["curve.unipolar"]()}
                 </label>
               ))}
               <label className="ml-auto flex min-w-0 flex-1 items-center gap-2">
-                <span className="text-xs text-muted-foreground">cut</span>
+                <span className="text-xs text-muted-foreground">
+                  {m["curve.cut"]()}
+                </span>
                 <select
                   value={draft.cut}
                   onChange={(e) => set({ cut: e.target.value as CurveCut })}
@@ -207,7 +215,7 @@ export function CurveEditor({
                 >
                   {CURVE_CUTS.map((c) => (
                     <option key={c} value={c}>
-                      {CUT_LABEL[c]}
+                      {cutLabel(c)}
                     </option>
                   ))}
                 </select>
@@ -217,7 +225,7 @@ export function CurveEditor({
           {oscillator && (
             <div className={FIELD}>
               <label className={LABEL} htmlFor={`${uid}-cycles`}>
-                cycles / bar
+                {m["curve.cycles"]()}
               </label>
               <Input
                 id={`${uid}-cycles`}
@@ -236,7 +244,7 @@ export function CurveEditor({
                 className="ml-2 text-xs text-muted-foreground"
                 htmlFor={`${uid}-duration`}
               >
-                duration
+                {m["curve.duration"]()}
               </label>
               <Input
                 id={`${uid}-duration`}
@@ -278,15 +286,14 @@ export function CurveEditor({
           />
           {isDrawnShape(draft.shape) && (
             <p className="text-xs text-muted-foreground">
-              Click to add a point, drag to move it, double-click to remove it.
-              {draft.shape === "onoff" &&
-                " Each point is off or on, held until the next."}
+              {m["curve.drawHint"]()}
+              {draft.shape === "onoff" && m["curve.onoffHint"]()}
             </p>
           )}
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {m["common.cancel"]()}
           </Button>
           <Button
             disabled={!nameOk || !!problem}
@@ -295,7 +302,7 @@ export function CurveEditor({
               onClose();
             }}
           >
-            {isNew ? "Create" : "Save"}
+            {isNew ? m["common.create"]() : m["common.save"]()}
           </Button>
         </DialogFooter>
       </DialogContent>
