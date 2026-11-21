@@ -41,3 +41,20 @@ export function useShellLayout(): ShellLayout {
   }, []);
   return phone ? "phone" : touch ? "pad" : "desk";
 }
+
+/** Is a finger (no hover) the main pointer? A tablet at any width is, a phone-sized desktop window is not. */
+export function useFingerFirst(): boolean {
+  const [finger, setFinger] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(hover: none)").matches === true,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia?.("(hover: none)");
+    if (!mq) return;
+    const onChange = () => setFinger(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return finger;
+}

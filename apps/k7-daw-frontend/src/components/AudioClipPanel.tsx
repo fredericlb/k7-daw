@@ -37,6 +37,7 @@ import { useReloadKey, useShell, useVerbs } from "../state/shellStore";
 import { barBeat, takeCounter } from "../takeCounter";
 import { pieceEdgeLines } from "../takes";
 import type { WebWaveform } from "../types";
+import { useFingerFirst } from "../useIsMobile";
 import {
   WAVE_MODES,
   WAVE_PRESS,
@@ -147,6 +148,37 @@ export function AudioClipPanel({
   } = useVerbs();
   const [wf, setWf] = useState<WebWaveform | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // True while a Listen sounds, as long as the service says it lasts.
+  const touch = useFingerFirst();
+  const [listening, setListening] = useState(false);
+  const listenTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: unmount only
+  useEffect(() => () => clearTimeout(listenTimer.current), []);
+  const listen = useCallback(
+    (clipName: string) => {
+      clearTimeout(listenTimer.current);
+      setListening(true);
+      api
+        .preview({ kind: "clip", clip: clipName })
+        .then(({ length }) => {
+          // `length: 0` is "to the end of the file", which only the decoded audio knows: no timer then.
+          if (length > 0)
+            listenTimer.current = setTimeout(
+              () => setListening(false),
+              length * 1000,
+            );
+          else setListening(false);
+        })
+        .catch((e: Error) => {
+          setListening(false);
+          setStatus?.(
+            m["status.editor.previewFailed"]({ message: e.message }),
+            "error",
+          );
+        });
+    },
+    [setStatus],
+  );
   // undefined asks for whatever threshold the file was last built with; a number re-detects AND remembers it in the sidecar.
   const [sensitivity, setSensitivity] = useState<number | undefined>(undefined);
   /** The chains this clip can be run through, as `clip process` names them — fetched once when the panel opens. */
@@ -557,11 +589,12 @@ export function AudioClipPanel({
                   size="sm"
                   variant="outline"
                   title={m["wave.listenHint"]()}
-                  onClick={() =>
-                    void api.preview({ kind: "clip", clip }).catch(() => {})
-                  }
+                  aria-busy={listening}
+                  disabled={listening}
+                  onClick={() => listen(clip)}
                 >
-                  <Play className="mr-1 h-3 w-3" /> {m["clip.listen"]()}
+                  <Play className="mr-1 h-3 w-3" />{" "}
+                  {listening ? m["clip.listening"]() : m["clip.listen"]()}
                 </Button>
               )}
             </>
@@ -615,7 +648,9 @@ export function AudioClipPanel({
       )}
       {!rolling && (editingOnsets || editingWarp) && (
         <p className="shrink-0 text-faint text-xs">
-          {editingOnsets ? m["clip.onsetHint"]() : m["clip.warpHint"]()}
+          {editingOnsets
+            ? m[touch ? "clip.onsetHintTouch" : "clip.onsetHint"]()
+            : m[touch ? "clip.warpHintTouch" : "clip.warpHint"]()}
         </p>
       )}
       {/* The take list beside the wave: one row when there is nothing to choose between, two columns after several passes. */}

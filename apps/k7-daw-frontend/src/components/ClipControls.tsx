@@ -102,8 +102,9 @@ export function ClipControls(p: ClipControlsProps) {
           </Button>
         )}
         {p.onDone && (
-          <Button size="sm" onClick={p.onDone} title={m["clip.done"]()}>
+          <Button size="sm" onClick={p.onDone} title={m["clip.doneHint"]()}>
             <Check className="h-3.5 w-3.5" />
+            {m["clip.done"]()}
           </Button>
         )}
         {p.editingOnsets && (

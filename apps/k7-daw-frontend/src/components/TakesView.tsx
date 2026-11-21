@@ -319,8 +319,11 @@ export function TakesView({
               ? m["takes.eventRow"]()
               : m["takes.takeRow"]({ n: takeNumber(ev.rows, i) });
             return (
-              <div key={r.ref} className="flex min-h-10 flex-1 basis-0">
-                <div className="flex w-28 shrink-0 items-center gap-1 px-1 text-xs">
+              <div
+                key={r.ref}
+                className="flex min-h-10 flex-1 basis-0 [@media(pointer:coarse)]:min-h-11"
+              >
+                <div className="flex w-28 shrink-0 items-center gap-1 px-1 text-xs [@media(pointer:coarse)]:w-40 [@media(pointer:coarse)]:gap-2">
                   <span
                     className={
                       heard.length ? "text-foreground" : "text-muted-foreground"
@@ -331,7 +334,7 @@ export function TakesView({
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="ml-auto h-6 w-6 p-0"
+                    className="ml-auto size-7 p-0 [@media(pointer:coarse)]:size-11"
                     onClick={() =>
                       pick(r.ref, { from: r.start, to: rowEnd(r) })
                     }
@@ -346,7 +349,7 @@ export function TakesView({
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="h-6 w-6 p-0"
+                      className="size-7 p-0 [@media(pointer:coarse)]:size-11"
                       onClick={() => {
                         // Gone from the view at once, with every span it played — the writer's own rule.
                         setLocal((l) => ({

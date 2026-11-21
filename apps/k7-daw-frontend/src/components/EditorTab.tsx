@@ -18,6 +18,7 @@ import {
 } from "@studio/song-schema/yaml/videoTrackFile";
 import type { DroppedFile } from "@studio/ui/file-tree";
 import { FolderTree, X } from "@studio/ui/icons";
+import { cn } from "@studio/ui/lib/utils";
 import { Sheet } from "@studio/ui/side-panel";
 import { recallBuffer, useAutosave } from "@studio/ui-editor/autosave";
 import { editK7xText } from "@studio/ui-editor/k7x/bufferEdit";
@@ -1354,9 +1355,9 @@ function EditorTabView({
           )}
           <button
             type="button"
-            aria-label={m["common.close"]()}
+            aria-label={m["common.dismiss"]()}
             onClick={() => setByCommand(false)}
-            className="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-on-fill"
+            className="relative grid size-7 cursor-pointer place-items-center rounded-full after:absolute after:-inset-2 after:content-[''] hover:bg-on-fill"
           >
             <X className="size-4" />
           </button>
@@ -1368,7 +1369,9 @@ function EditorTabView({
           onTake={diskSync.takeDisk}
         />
       )}
-      <div className="relative flex min-h-0 flex-1">
+      <div
+        className={cn("relative flex min-h-0 flex-1", isMobile && "flex-col")}
+      >
         {/* 256px of tree beside a phone's screen leaves nothing to edit in, so it becomes a drawer closed by picking a file. */}
         {showTree && isMobile && (
           <button
@@ -1376,10 +1379,10 @@ function EditorTabView({
             onClick={() => setTreeOpen((o) => !o)}
             aria-expanded={treeOpen}
             aria-label={m["editor.filesLabel"]()}
-            className="absolute left-2 top-2 z-30 flex items-center gap-1 rounded border border-border bg-card/90 px-2 py-1 text-xs shadow"
+            className="glass m-2 flex h-11 shrink-0 cursor-pointer items-center gap-1.5 self-start rounded-full px-4 font-bold text-[13px]"
           >
-            <FolderTree className="h-3.5 w-3.5" />
-            files
+            <FolderTree className="h-4 w-4" />
+            {m["editor.filesLabel"]()}
           </button>
         )}
         {showTree && !isMobile && (
