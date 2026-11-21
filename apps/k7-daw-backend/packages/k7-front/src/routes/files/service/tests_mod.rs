@@ -1,4 +1,4 @@
-//! The service's own helpers: the front's path, a workspace's name and the owner marker.
+//! The service's own helpers: the front's path and a workspace's name (the owner marker is tests_owner.rs').
 
 use super::*;
 
@@ -28,21 +28,6 @@ fn names_a_workspace_as_the_service_does() {
     for bad in ["", ".", "..", ".hidden", "a/b", "a\\b", "é", "-x", " x"] {
         assert!(!workspace_name_ok(bad), "{bad}");
     }
-}
-
-#[test]
-fn records_the_first_owner_and_refuses_another() {
-    let dir = std::env::temp_dir().join(format!("k7-owner-{}", std::process::id()));
-    std::fs::create_dir_all(&dir).unwrap();
-    let _ = std::fs::remove_file(dir.join("owner.json"));
-    assert!(claim_root(&dir, "a@x.org"));
-    assert!(claim_root(&dir, "a@x.org"));
-    assert!(!claim_root(&dir, "b@x.org"));
-    assert_eq!(
-        std::fs::read_to_string(dir.join("owner.json")).unwrap(),
-        "{\n  \"owner\": \"a@x.org\"\n}\n"
-    );
-    std::fs::remove_dir_all(&dir).unwrap();
 }
 
 #[tokio::test]
