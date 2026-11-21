@@ -5,8 +5,8 @@
 // four surface components the declaration names — what the shell adds around a surface is a
 // LAYOUT, and none of that is what a surface is made of.
 //
-// What it DOES add is a footer: the transport, one command line, and the way back.
-// See ../docs/external.md.
+// What it DOES add is a footer: one command line and the way back, and the transport, at the head on its own
+// machine and at the foot, in the bar's capsule, on another device's surface (`lan`). See ../docs/external.md.
 
 import type { EngineClient, EngineUrl } from "@studio/engine-browser";
 import { PluginParamsStore } from "@studio/engine-browser/params";
@@ -17,16 +17,10 @@ import {
 } from "@studio/engine-browser/store";
 import type { TransportAction } from "@studio/engine-protocol";
 import type { Deck } from "@studio/k7-plugins/turntables/engine";
-import { externalIndexUrl } from "@studio/project-shell/launch";
+import { surfacesUrl } from "@studio/project-shell/launch";
 import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
-import {
-  ChevronLeft,
-  Loader2,
-  Maximize,
-  Minimize,
-  Terminal,
-  Unplug,
-} from "@studio/ui/icons";
+import { Button } from "@studio/ui/button";
+import { ChevronLeft, House, Loader2, Unplug } from "@studio/ui/icons";
 import type { WebVideoProject } from "@studio/web-protocol";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api, engines } from "../api";
@@ -37,6 +31,7 @@ import { useEngineLink } from "../hooks/useEngineLink";
 import { useFullscreen } from "../hooks/useFullscreen";
 import { useProjectDoc } from "../hooks/useProjectDoc";
 import { useRevision } from "../hooks/useRevision";
+import { useScreenPresence } from "../hooks/useScreenPresence";
 import { useStayAwake } from "../hooks/useStayAwake";
 import {
   type SurfaceCommands,
@@ -50,9 +45,12 @@ import { type ConditionCtx, effectiveKeys } from "../keys";
 import { BARE_TRANSPORT, isUiLine } from "../localCommands";
 import { m } from "../paraglide/messages.js";
 import { DEVICE_SCOPE } from "../queries/client";
+import { FloatingBar } from "../shell/FloatingBar";
 import { MiniTransport } from "../shellMeta";
 import { deviceSurfaceDrawer } from "../surfacePanes";
 import type { CommandInfo } from "../types";
+import { useShellLayout } from "../useIsMobile";
+import { ExternalFooter } from "./ExternalFooter";
 
 /** No caret and no rectangle until a surface says otherwise — a frozen identity, the key listener taking it as a dependency. */
 const NO_CONDITIONS: ConditionCtx = {};
@@ -74,6 +72,7 @@ export function ExternalSurface({
   project,
   engineUrl,
   userEmail,
+  lan,
 }: {
   /** The surface's id, off the address — `@external/<name>`. */
   name: string;
@@ -81,8 +80,14 @@ export function ExternalSurface({
   project: string;
   engineUrl: EngineUrl;
   userEmail: string;
+  /** Another device's surface: which device it is, and the name this one tells it. Absent on a surface opened on its own machine. */
+  lan?: { engineId: string; device: string };
 }) {
   const store = useRef(new EngineStore()).current;
+  const layout = useShellLayout();
+  // A remote tells the device whose surface it shows, so that device cannot take the same pane (surfaces/presence.ts).
+  useScreenPresence(lan?.engineId ?? "", name, lan?.device ?? "");
+  const [clockSeconds, setClockSeconds] = useState(false);
   const pluginParamsStore = useRef(new PluginParamsStore()).current;
   // A surface is watched and not touched, and this device may be one no lock is offered on.
   useStayAwake(true);
@@ -258,17 +263,48 @@ export function ExternalSurface({
       </Centre>
     );
 
+  const footer = (
+    <ExternalFooter
+      line={line}
+      onLine={setLine}
+      onRun={(l) => void commands.runCommand(l)}
+      lineRef={lineRef}
+      status={status}
+      fullscreen={fullscreen}
+      // The way back, which is not optional: installed as a PWA this screen has no address bar. A remote has the round Home button instead.
+      back={lan ? null : <Back />}
+      className={lan ? "mb-[4.5rem] shrink-0" : "shrink-0"}
+    />
+  );
   return (
     <EngineStoreProvider value={store}>
-      <div className="flex h-full min-h-0 flex-col bg-background text-foreground">
-        {/* Play/pause and the clock — the shell's `MiniTransport`; stop, rewind, record and the metronome stay out (../docs/external.md). */}
-        <MiniTransport
-          playing={playing}
-          waiting={!engineReady}
-          tempo={recInfo.tempo}
-          beatsPerBar={recInfo.beatsPerBar}
-          onToggle={() => void commands.runCommand("transport toggle")}
-        />
+      <div className="relative flex h-full min-h-0 flex-col bg-background text-foreground">
+        {lan ? (
+          // The one way out of a surface that cannot change: a hard navigation, since this app's router ends at the project.
+          <Button
+            asChild
+            variant="glass"
+            size="round"
+            className="absolute top-3 left-3 z-(--k7-z-header)"
+          >
+            <a
+              href={surfacesUrl(window.location.origin, "k7")}
+              aria-label={m["extsrf.home"]()}
+              title={m["extsrf.home"]()}
+            >
+              <House className="size-5" />
+            </a>
+          </Button>
+        ) : (
+          /* Play/pause and the clock — the shell's `MiniTransport`; stop, rewind, record and the metronome stay out (../docs/external.md). */
+          <MiniTransport
+            playing={playing}
+            waiting={!engineReady}
+            tempo={recInfo.tempo}
+            beatsPerBar={recInfo.beatsPerBar}
+            onToggle={() => void commands.runCommand("transport toggle")}
+          />
+        )}
         <div className="flex min-h-0 flex-1 flex-col">
           <Drawn
             surface={surface}
@@ -292,61 +328,44 @@ export function ExternalSurface({
             timelineRef={timelineRef}
           />
         </div>
-        {/* One line of chrome, not a command BAR: completion and the palette are the shell's, and what makes them worth having is a keyboard. */}
-        <form
-          className="flex shrink-0 items-center gap-2 border-t border-border px-3 py-1"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const l = line.trim();
-            if (!l) return;
-            setLine("");
-            void commands.runCommand(l);
-          }}
-        >
-          <Terminal className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <input
-            ref={lineRef}
-            value={line}
-            onChange={(e) => setLine(e.target.value)}
-            placeholder={m["extsrf.commandPlaceholder"]()}
-            spellCheck={false}
-            autoCapitalize="off"
-            autoCorrect="off"
-            className="min-w-0 flex-1 bg-transparent py-0.5 rounded-sm font-mono text-xs outline-none focus-visible:ring-1 focus-visible:ring-ring placeholder:text-muted-foreground"
+        {footer}
+        {lan && (
+          <FloatingBar
+            surfaceOnly
+            layout={layout}
+            onCommandBar={noop}
+            tool={null}
+            onTool={noop}
+            transport={{
+              playing,
+              transportWaiting: !engineReady,
+              recordWithoutArm: false,
+              transport,
+              noArrangement: true,
+              recordEnabled: false,
+              midiArmed: null,
+              openMidiInputs: () => Promise.resolve(false),
+              setStatus: (t) => setStatus(t),
+              engineRef,
+            }}
+            output={null}
+            recInfo={recInfo}
+            clockSeconds={clockSeconds}
+            onClock={() => setClockSeconds((v) => !v)}
+            map={null}
+            meter={null}
+            metronome={null}
+            lanes={null}
+            graph={null}
+            runCommand={(l) => commands.runCommand(l)}
           />
-        </form>
-        {/* The way back, which is not optional: installed as a PWA this screen has no address bar, so without it the menu is a trap door. */}
-        <footer className="flex shrink-0 items-center gap-2 border-t border-border px-3 py-1">
-          <Back />
-          {status ? (
-            <p className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
-              {status}
-            </p>
-          ) : null}
-          {/* The other half of "an app" on a device that could not install one — ../docs/external.md. */}
-          {fullscreen.available ? (
-            <button
-              type="button"
-              onClick={fullscreen.toggle}
-              title={
-                fullscreen.active
-                  ? m["extsrf.exitFullscreen"]()
-                  : m["extsrf.fullscreen"]()
-              }
-              className="ml-auto flex shrink-0 items-center rounded px-1 py-0.5 text-muted-foreground hover:bg-accent"
-            >
-              {fullscreen.active ? (
-                <Minimize className="h-4 w-4" />
-              ) : (
-                <Maximize className="h-4 w-4" />
-              )}
-            </button>
-          ) : null}
-        </footer>
+        )}
       </div>
     </EngineStoreProvider>
   );
 }
+
+const noop = () => {};
 
 /** Which component draws this type — `SurfaceTab`'s switch inverted: out here there is no shell, so each is given what it actually needs. */
 function Drawn({
@@ -422,11 +441,11 @@ function Drawn({
   });
 }
 
-/** Back to `/external`, as a plain link: this app's basename ends at the PROJECT, so there is no route from here to there. */
+/** Back to the Surfaces page, as a plain link: this app's basename ends at the PROJECT, so there is no route from here to there. */
 function Back() {
   return (
     <a
-      href={externalIndexUrl(window.location.origin, "k7")}
+      href={surfacesUrl(window.location.origin, "k7")}
       title={m["extsrf.allSurfaces"]()}
       className="flex shrink-0 items-center gap-1 rounded px-1 py-0.5 text-xs text-muted-foreground hover:bg-accent"
     >

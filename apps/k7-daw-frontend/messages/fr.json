@@ -1802,5 +1802,6 @@
   "surfaces.projectClosedBody": "Rouvrez-le là-bas, puis revenez à cette liste.",
   "surfaces.backToList": "Retour aux surfaces",
   "surfaces.noAddress": "Cet appareil est injoignable sur le réseau.",
-  "surfaces.thisDevice": "cet appareil"
+  "surfaces.thisDevice": "cet appareil",
+  "extsrf.home": "Accueil"
 }

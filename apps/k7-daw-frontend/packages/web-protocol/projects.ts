@@ -262,6 +262,11 @@ export function externalOf(projectUrl: string, surface: string): string {
 /** The SURFACES page, `/surfaces` — the surfaces of every project open on the LAN; reserved and routed like the libraries. */
 export const SURFACES_PAGE = "surfaces";
 
+/** The whole URL of that page: a surface cannot use the router, its basename ending at the project. */
+export function surfacesUrl(origin: string, app: ProjectApp): string {
+  return `${serviceUrl(origin, app)}/${SURFACES_PAGE}`;
+}
+
 /** `@lan` — the reserved repository of a surface that belongs to ANOTHER device: `/@lan/<engineId>/<workspace>/<project>/@external/<surface>`. */
 export const LAN_REPO = "@lan";
 

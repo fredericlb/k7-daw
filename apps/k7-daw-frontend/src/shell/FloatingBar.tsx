@@ -93,6 +93,7 @@ export function FloatingBar({
   lanes,
   graph,
   hidden,
+  surfaceOnly = false,
   runCommand,
   rootRef,
 }: {
@@ -120,10 +121,34 @@ export function FloatingBar({
   graph: BarGraphViews | null;
   /** The bar steps aside (an editor popin over everything). */
   hidden?: boolean;
+  /** A surface of another device: the transport capsule and its clock alone, no tool, no views, no command button. */
+  surfaceOnly?: boolean;
   runCommand: (line: string) => Promise<void>;
 }) {
   if (hidden) return null;
   const phone = layout === "phone";
+  if (surfaceOnly)
+    return (
+      <div
+        ref={rootRef}
+        className={`pointer-events-none absolute inset-x-4 z-(--k7-z-bar) flex justify-center ${phone ? "bottom-7" : "bottom-4"}`}
+      >
+        <div
+          role="group"
+          aria-label={m["transport.region"]()}
+          className="float pointer-events-auto flex h-14 min-w-0 items-center gap-1 rounded-full p-1.5"
+        >
+          {transport && <ShellTransport {...transport} />}
+          <CapsuleDivider />
+          <TransportClock
+            tempo={recInfo.tempo}
+            beatsPerBar={recInfo.beatsPerBar}
+            seconds={clockSeconds}
+            onToggle={onClock}
+          />
+        </div>
+      </div>
+    );
   const label = m["shell.commandBar"]();
   const commandButton = (
     <button

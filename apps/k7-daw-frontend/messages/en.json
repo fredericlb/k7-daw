@@ -1802,5 +1802,6 @@
   "surfaces.projectClosedBody": "Open it again there, then come back to this list.",
   "surfaces.backToList": "Back to the surfaces",
   "surfaces.noAddress": "This device could not be reached on the network.",
-  "surfaces.thisDevice": "this device"
+  "surfaces.thisDevice": "this device",
+  "extsrf.home": "Home"
 }

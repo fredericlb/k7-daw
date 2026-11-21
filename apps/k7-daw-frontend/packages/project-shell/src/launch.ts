@@ -20,6 +20,7 @@ export {
   projectApp,
   projectBasename,
   projectClaimKey,
+  surfacesUrl,
 } from "@studio/web-protocol/projects";
 
 /** Where projects are chosen: k7's home page, ONE address for every app — see docs/launch.md. */
