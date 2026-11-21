@@ -81,7 +81,7 @@ pub async fn live(who: &Who<'_>, path: &str, req: Request) -> Result<Response, R
     if let Err(m) = body::check(&parsed, &[("vim", Field::Bool)]) {
         return Ok(json_answer(400, &json!({ "error": m })));
     }
-    let on = parsed["vim"].as_bool().unwrap_or(true);
+    let on = parsed["vim"].as_bool().unwrap_or(false);
     let log = who.log.clone();
     let done = tokio::task::spawn_blocking(move || {
         k7_file_service::preferences::update(&home, |p| p.editor_vim = on)

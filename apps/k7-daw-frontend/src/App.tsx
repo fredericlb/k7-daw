@@ -614,8 +614,8 @@ export default function App({
   const referenceToggle = useRef<(() => void) | null>(null);
   // The References segment's slot, where the player's card is drawn while that segment is open.
   const [referenceSlot, setReferenceSlot] = useState<HTMLElement | null>(null);
-  // Vim mode is a global user preference (~/.k7/preferences.k7x). Starts ON to match the brain's default.
-  const [vimMode, setVimMode] = useState(true);
+  // Vim mode is a global user preference (~/.k7/preferences.k7x). Starts OFF: a touch keyboard has no hardware keys for it.
+  const [vimMode, setVimMode] = useState(false);
   useEffect(() => {
     void api
       .preferences()

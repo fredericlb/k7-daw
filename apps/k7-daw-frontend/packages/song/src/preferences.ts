@@ -19,7 +19,7 @@ export interface AudioDevicePref {
   name: string;
   type?: string;
 }
-// Editor settings live here, not the browser: they belong to the person. `vim` defaults ON, like the rest of it.
+// Editor settings live here, not the browser: they belong to the person. `vim` defaults OFF: a touch keyboard has no hardware keys for it.
 export interface EditorPref {
   vim: boolean;
 }
@@ -41,7 +41,7 @@ export interface Preferences {
 export const defaultPreferences = (): Preferences => ({
   channels: { in: [], out: [] },
   inputPairs: [],
-  editor: { vim: true },
+  editor: { vim: false },
 });
 // Coerce a parse into a well-formed Preferences; exported so a test need not read the real state dir.
 export function normalizePreferences(v: any): Preferences {

@@ -50,7 +50,7 @@ impl Default for Preferences {
             channels_in: vec![],
             channels_out: vec![],
             input_pairs: vec![],
-            editor_vim: true,
+            editor_vim: false,
             stems_chain: None,
             instrumental_chain: None,
             cue_output: None,
