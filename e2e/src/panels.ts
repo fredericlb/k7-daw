@@ -1,6 +1,6 @@
 // panels.ts — the shell's panels: open one from its button and get the panel itself, the `complementary`
 // of a Pad or Desk or the `dialog` sheet of a phone, both named by the panel's title (apps/k7-daw-frontend/src/shell/panels.tsx).
-// The Events and the Mixer are the bottom dock's occupants: one dock, named by what it holds, its Close button "Close dock".
+// The Events and the Mixer are the bottom dock's occupants: one dock, named by what it holds, its Close button "Close panel".
 import { expect, type Locator, type Page } from "@playwright/test";
 import { folded, panel } from "./nav.ts";
 
@@ -20,9 +20,9 @@ export async function openPanel(page: Page, title: string): Promise<Locator> {
   return body;
 }
 
-/** Closes the panel named `title` with its Close button: a right panel's "Close panel", or the dock's "Close dock". */
+/** Closes the panel named `title` with its Close button: a right panel's "Close panel", or a dock's, also "Close panel". */
 export async function closePanel(page: Page, title: string): Promise<void> {
   const body = await panelBody(page, title);
-  await body.getByRole("button", { name: /^Close (panel|dock)$/ }).click();
+  await body.getByRole("button", { name: /^Close panel$/ }).click();
   await expect(body).toBeHidden();
 }

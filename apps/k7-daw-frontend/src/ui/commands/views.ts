@@ -10,20 +10,20 @@ import type { LocalCommand } from "./context";
 
 const PANE_READABLE: Record<Pane, { en: string; fr: string }> = {
   editor: {
-    en: "Fullscreen the editor",
-    fr: "Passer l'éditeur en plein écran",
+    en: "Fullscreen the Source pane",
+    fr: "Passer le panneau Source en plein écran",
   },
   timeline: {
-    en: "Fullscreen the timeline",
-    fr: "Passer la timeline en plein écran",
+    en: "Fullscreen the Arrangement",
+    fr: "Passer l'Arrangement en plein écran",
   },
   turntables: {
     en: "Fullscreen the DJ desk",
     fr: "Passer le pupitre DJ en plein écran",
   },
   chains: {
-    en: "Fullscreen the chains graph",
-    fr: "Passer le graphe des chaînes en plein écran",
+    en: "Fullscreen the Graph",
+    fr: "Passer le Graphe en plein écran",
   },
 };
 
@@ -113,8 +113,8 @@ export const VIEW_COMMANDS: LocalCommand[] = [
     // `ui editor` is the source pane's, so the dock's toggle has its own name.
     name: "ui expand",
     readable: {
-      en: "Expand the editor dock, or bring it back to its height",
-      fr: "Agrandir le dock d'éditeur, ou le ramener à sa hauteur",
+      en: "Expand the open panel, or bring it back to its height",
+      fr: "Agrandir le panneau ouvert, ou le ramener à sa hauteur",
     },
     run: (ctx) => {
       ctx.toggleDockExpanded();
@@ -137,8 +137,8 @@ export const VIEW_COMMANDS: LocalCommand[] = [
     // Escape and the footer's panel button do exactly this.
     name: "ui slot close",
     readable: {
-      en: "Show the chains graph again",
-      fr: "Réafficher le graphe des chaînes",
+      en: "Show the Graph again",
+      fr: "Réafficher le Graphe",
     },
     run: (ctx) => {
       ctx.closeEvent();
@@ -173,8 +173,8 @@ export const VIEW_COMMANDS: LocalCommand[] = [
     // The master strip is the Mixer panel's Master section, so the old pane's command opens it.
     name: "ui mastering",
     readable: {
-      en: "Show the mixer panel, master section",
-      fr: "Afficher le panneau de mixage, section master",
+      en: "Show the Mixer panel, master section",
+      fr: "Afficher le panneau Mixeur, section master",
     },
     run: (ctx) => {
       ctx.setPanel("mix");
@@ -183,7 +183,7 @@ export const VIEW_COMMANDS: LocalCommand[] = [
   },
   {
     name: "ui mixer",
-    readable: { en: "Show the mix panel", fr: "Afficher le panneau de mixage" },
+    readable: { en: "Show the Mixer panel", fr: "Afficher le panneau Mixeur" },
     run: (ctx) => {
       ctx.toggleMixer();
       return true;
