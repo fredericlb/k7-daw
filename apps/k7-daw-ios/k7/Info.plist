@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!-- The keys below are each a choice of apps/k7-daw-engine/k7-runtime/docs/ios.md: the one scene, background audio, the microphone, the LAN, the loopback studio, Files. -->
+<!-- The keys below are each a choice of apps/k7-daw-engine/k7-runtime/docs/ios.md: the one scene, background audio, the microphone, the LAN, the loopback studio, export compliance, Files. -->
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
@@ -64,6 +64,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>

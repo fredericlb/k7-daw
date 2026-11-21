@@ -54,19 +54,9 @@ enum MicAccess {
         }
     }
 
-    // The engine opened its device without inputs: they arrive with the next start, and quitting is the one restart there is.
+    // The engine opened its device without inputs: they arrive the next time k7 starts, which the person decides.
     private static func afterGrant() {
         guard EngineBridge.startedWithMic == false else { return }
-        if Busy.shared.busy {
-            Dialogs.inform("Microphone", "The engine's inputs open at its next start: quit k7 once nothing is playing or recording.")
-            return
-        }
-        Dialogs.confirm(
-            "Microphone",
-            "The engine's inputs open at its next start. Quit k7 now? Open it again from the home screen.",
-            yes: "Quit", no: "Later"
-        ) { yes in
-            if yes { AppDelegate.quit() }
-        }
+        Dialogs.inform("Microphone", "The microphone opens the next time k7 starts.")
     }
 }

@@ -1,7 +1,7 @@
 // AndroidEngineSection.tsx — this phone's engine, drawn only inside a phone app, Android or iOS: there the app IS the
 // engine's machine, so what the command-line engine keeps in its config file — the
 // instruments it downloads, a private CA — and quitting belong on this panel. The app shows its own tray only while no studio is open.
-// Full screen is the device's too, and Android's alone: the iOS app answers no such call.
+// Full screen and Quit are Android's alone: an iOS app never ends itself (App Store review).
 // See ../../docs/settings.md, apps/k7-daw-engine/k7-runtime/docs/android.md and docs/ios.md.
 
 import { Switch } from "@studio/ui/switch";
@@ -35,9 +35,11 @@ export function AndroidEngineSection() {
     <>
       <Section title={m["android.title"]()} hint={m["android.hint"]()}>
         <Row label={engineLine(snapshot, lan)}>
-          <Action danger onClick={() => void engineCall("quit")}>
-            {m["android.quit"]()}
-          </Action>
+          {!onIos && (
+            <Action danger onClick={() => void engineCall("quit")}>
+              {m["android.quit"]()}
+            </Action>
+          )}
         </Row>
       </Section>
 

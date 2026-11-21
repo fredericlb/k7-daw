@@ -194,6 +194,23 @@ if (wanted("backend")) {
   );
 }
 
+// The build number is the commit count, as Android's versionCode: App Store Connect refuses a number it has seen (docs/versioning.md).
+{
+  const git = (...args) =>
+    execFileSync("git", args, { cwd: repo, encoding: "utf8" }).trim();
+  if (git("rev-parse", "--is-shallow-repository") === "true")
+    throw new Error(
+      "a shallow clone has no history to count for the build number (docs/versioning.md)",
+    );
+  const count = git("rev-list", "--count", "HEAD");
+  mkdirSync(staged, { recursive: true });
+  writeFileSync(
+    join(staged, "version.xcconfig"),
+    `CURRENT_PROJECT_VERSION = ${count}\n`,
+  );
+  console.log(`[stage] build number ${count}`);
+}
+
 console.log(
   `[stage] staged for ${sim ? "the simulator" : "a device"} in ${staged}`,
 );

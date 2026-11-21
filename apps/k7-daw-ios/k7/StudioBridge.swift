@@ -147,9 +147,6 @@ final class StudioBridge: NSObject, WKScriptMessageHandler, SupervisorListener, 
             ExportFolders.shared.end(token: arg["token"] as? String ?? "", cancel: arg["cancel"] as? String == "1", answer)
         case "shareExport":
             ExportFolders.shared.share(where: arg["where"] as? String ?? "", answer)
-        case "quit":
-            answer(.success([:]))
-            AppDelegate.quit()
         default:
             answer(.failure(Self.refusal("no method \(method)")))
         }

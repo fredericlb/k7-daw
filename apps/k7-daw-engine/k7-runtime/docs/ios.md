@@ -82,9 +82,10 @@ The microphone goes to k7's own origin only. It is asked at the first launch, an
 answer (`MicAccess.swift`): inputs open once with the device, so a grant given before the start is the one that
 needs no restart. A recording app without its microphone is not worth the wait it saves, and the wait happens
 once. A run with `K7_TEST_HOOKS` skips that prompt, since nobody answers it. A refusal iOS remembers offers the
-app's Settings when something needs the microphone. A grant that comes after the engine started reaches it at the
-next start, and Quit is the one restart there is. Quitting is the app ending its own process, which an App Store app does not do:
-it is kept because a stopped engine cannot start again in the same process.
+app's Settings when something needs the microphone; iOS ends an app whose privacy setting changes, so a grant
+given there opens the inputs at the launch that follows. A grant that comes after the engine started reaches it at
+the next start, which is the person's to make: the iOS app has no Quit, since App Store review refuses an app that
+ends its own process, and a stopped engine cannot start again in the same one.
 
 **A media player to the system**, as on Android: `media-session.js` relays the page's Media Session, and
 `MediaPlayback.swift` holds Now Playing and the remote commands. The bar may play through the engine, which
@@ -124,7 +125,7 @@ open apps/k7-daw-ios/k7.xcodeproj                 # pick a team under Signing, t
 `stage.mjs` builds the engine's `ios-arm64` preset and the supervisor's, each as an xcframework, builds the front
 (`k7-embed`, a static library) and fetches the CA bundle as pinned. It builds the
 shell page and lays it out as `cap copy` would, and stages what the front reads: the built page, `k7-core`, its code
-root (`stageCodeRoot.mjs`).
+root (`stageCodeRoot.mjs`). Every run writes `build/staged/version.xcconfig`, the build number the target reads.
 `--only=<part,…>` restages some parts.
 
 | choice | why |
@@ -134,7 +135,16 @@ root (`stageCodeRoot.mjs`).
 | the project file written by hand, its sources a folder Xcode keeps in sync | no generator to install, and a new Swift file joins the target by being in `k7/` |
 | the app links `-lz` and `-liconv` beside `-lresolv` | libgit2 inside `libk7_embed.a` takes zlib and iconv from the SDK, which the cargo build never links |
 | signing left to the developer's own team | no team is committed; `CODE_SIGN_STYLE` is automatic |
+| the build number staged as the commit count, never a number in the project file (`docs/versioning.md`) | App Store Connect refuses an upload whose number it has already seen; a fixed `1` would ship once |
 | JUCE's `juceaide` built at the Mac's own deployment target (`engine/patches/tracktion.cmake`) | JUCE builds that tool for the build machine in a nested CMake and hands it the preset's deployment target, which under `ios-arm64` is an iPhone floor no macOS has |
+
+## What the App Store asks of the app
+
+| choice | why |
+|---|---|
+| `k7/PrivacyInfo.xcprivacy`: no tracking, no data collected, a reason for each required-reason API (`UserDefaults`, file timestamps, boot time, disk space) | App Store Connect refuses an upload whose code calls those APIs without a manifest; Swift, the Rust front and the JUCE core call all four, and nothing leaves the device for the developer |
+| no Quit on iOS, in k7's settings or the tray | review refuses an app that ends its own process; an engine starts again when the person closes k7 and opens it |
+| `ITSAppUsesNonExemptEncryption` false | the app uses only standard protocols (TLS, SSH, signatures) through the system and its libraries, which the export rules exempt; without the key every upload asks |
 
 ## On a phone
 
