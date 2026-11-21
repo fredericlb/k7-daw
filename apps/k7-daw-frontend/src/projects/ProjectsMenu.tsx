@@ -73,6 +73,7 @@ export function ProjectsMenu({
           role="menuitemcheckbox"
           aria-checked={showExamples}
           disabled={pinned}
+          disabledReason={pinned ? m["repos.examplesOnly"]() : undefined}
           title={pinned ? m["repos.examplesOnly"]() : undefined}
           onSelect={(e) => {
             e.preventDefault();

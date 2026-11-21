@@ -234,6 +234,7 @@ export function RepoList({
               <DropdownMenuContent align="end" aria-label={m["home.new"]()}>
                 <DropdownMenuItem
                   disabled={Boolean(newBlocked)}
+                  disabledReason={newBlocked || undefined}
                   title={newBlocked || m["ws.newHint"]()}
                   onSelect={() => setMaking(true)}
                 >
@@ -242,6 +243,7 @@ export function RepoList({
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   disabled={Boolean(blocked)}
+                  disabledReason={blocked || undefined}
                   title={blocked || m["git.cloneHint"]()}
                   onSelect={() => setCloning(true)}
                 >

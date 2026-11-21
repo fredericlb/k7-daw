@@ -1,9 +1,12 @@
 // OverflowMenu.tsx — the phone header's one menu: pane, lane views and the panel tiles (300 wide, over a 0.35 scrim).
-// Everything it holds is also a button of the Pad and Desk header: this is the same set, folded.
+// Everything it holds is also a button of the Pad and Desk header: this is the same set, folded. A popover of
+// plain toggle buttons, not role="menu": focus moves in on open and returns to the trigger on close.
+
+import { METRONOME_MIN } from "@studio/engine-protocol/build";
 import { Button } from "@studio/ui/button";
 import { Ellipsis, type LucideIcon, Settings } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
 import { MetronomeIcon } from "../shellMeta";
@@ -66,10 +69,32 @@ export function OverflowMenu({
   /** The timeline tool, which the phone bar does not carry; absent off the Arrangement. */
   tool?: OverflowTool;
   /** The metronome switch, which the phone bar does not carry either. */
-  metronome?: { on: boolean; onPress: () => void };
+  metronome?: {
+    on: boolean;
+    onPress: () => void;
+    /** 0.2 … 1, with the command that commits a new level. */
+    level: number;
+    onLevel: (level: number) => void;
+  };
 }) {
   const [open, setOpen] = useState(false);
+  const [dragging, setDragging] = useState<number | null>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const card = useRef<HTMLDivElement>(null);
   usePopin(open, () => setOpen(false));
+  // Focus goes into the card on open and back to the trigger on close, instead of dropping to the body.
+  useEffect(() => {
+    if (!open) return;
+    const t = trigger.current;
+    card.current?.querySelector<HTMLElement>("button")?.focus();
+    return () => t?.focus();
+  }, [open]);
+  const commitLevel = () => {
+    if (dragging === null || !metronome) return;
+    const v = dragging;
+    setDragging(null);
+    if (Math.abs(v - metronome.level) > 1e-6) metronome.onLevel(v);
+  };
   const run = (fn: () => void) => () => {
     setOpen(false);
     fn();
@@ -77,10 +102,11 @@ export function OverflowMenu({
   return (
     <>
       <Button
+        ref={trigger}
         variant="glass"
         size="round"
         aria-label={m["shell.overflow"]()}
-        aria-haspopup="menu"
+        aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className="shrink-0"
@@ -91,13 +117,14 @@ export function OverflowMenu({
         <>
           <button
             type="button"
-            aria-label={m["common.close"]()}
+            aria-label={m["shell.overflow.close"]()}
             tabIndex={-1}
             onClick={() => setOpen(false)}
             className="scrim-menu fixed inset-0 z-(--k7-z-menu) cursor-default"
           />
           <div
-            role="menu"
+            ref={card}
+            role="dialog"
             aria-label={m["shell.overflow"]()}
             className="menu fixed top-[calc(var(--k7-header-phone-h)+12px)] right-4 z-(--k7-z-menu) flex max-h-[calc(100dvh-80px)] w-[300px] flex-col gap-1 overflow-y-auto rounded-[22px] p-3"
           >
@@ -111,10 +138,9 @@ export function OverflowMenu({
                 <button
                   key={p.id}
                   type="button"
-                  role="menuitemradio"
-                  aria-checked={pane === p.id}
+                  aria-pressed={pane === p.id}
                   onClick={run(() => onPane(p.id))}
-                  className="type-label flex h-9 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-1 text-foreground aria-checked:bg-on-fill aria-checked:text-lavender"
+                  className="type-label flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-1 text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender"
                 >
                   <p.icon className="size-[18px] shrink-0" />
                   <span className="truncate">{p.label}</span>
@@ -129,10 +155,9 @@ export function OverflowMenu({
                     <button
                       key={l.id}
                       type="button"
-                      role={l.action ? "menuitem" : "menuitemcheckbox"}
-                      aria-checked={l.action ? undefined : l.on}
+                      aria-pressed={l.action ? undefined : l.on}
                       onClick={l.onPress}
-                      className="type-label glass flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full text-foreground aria-checked:bg-on-fill aria-checked:text-lavender"
+                      className="type-label glass flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender"
                     >
                       <l.icon className="size-[18px]" />
                       {l.label}
@@ -153,12 +178,11 @@ export function OverflowMenu({
                     <button
                       key={t}
                       type="button"
-                      role="menuitemradio"
-                      aria-checked={tool.current === t}
+                      aria-pressed={tool.current === t}
                       aria-label={TOOL_NAME[t]()}
                       title={TOOL_NAME[t]()}
                       onClick={run(() => tool.onPick(t))}
-                      className="grid h-9 min-w-0 flex-1 place-items-center rounded-full text-foreground aria-checked:bg-on-fill aria-checked:text-lavender [&_svg]:size-[18px]"
+                      className="grid h-11 min-w-0 flex-1 place-items-center rounded-full text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender [&_svg]:size-[18px]"
                     >
                       <ToolGlyph tool={t} />
                     </button>
@@ -167,16 +191,31 @@ export function OverflowMenu({
               </>
             )}
             {metronome && (
-              <button
-                type="button"
-                role="menuitemcheckbox"
-                aria-checked={metronome.on}
-                onClick={run(metronome.onPress)}
-                className="type-label glass mt-1 flex h-11 items-center justify-center gap-1.5 rounded-full text-foreground aria-checked:bg-on-fill aria-checked:text-lavender"
-              >
-                <MetronomeIcon className="size-[18px]" />
-                {m["transport.metronome"]()}
-              </button>
+              <div className="mt-1 flex flex-col gap-1">
+                <button
+                  type="button"
+                  aria-pressed={metronome.on}
+                  onClick={run(metronome.onPress)}
+                  className="type-label glass flex h-11 items-center justify-center gap-1.5 rounded-full text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender"
+                >
+                  <MetronomeIcon className="size-[18px]" />
+                  {m["transport.metronome"]()}
+                </button>
+                {/* The level the bar's right-click gives a Pad: committed on release, one command, one undo. */}
+                <input
+                  type="range"
+                  min={METRONOME_MIN}
+                  max={1}
+                  step={0.05}
+                  value={dragging ?? metronome.level}
+                  onChange={(e) => setDragging(Number(e.target.value))}
+                  onPointerUp={commitLevel}
+                  onKeyUp={commitLevel}
+                  onBlur={commitLevel}
+                  aria-label={m["metro.volumeLabel"]()}
+                  className="mx-3 h-11"
+                />
+              </div>
             )}
             <Heading>{m["shell.overflow.panels"]()}</Heading>
             <div className="grid grid-cols-3 gap-1.5">
@@ -186,7 +225,6 @@ export function OverflowMenu({
                   <button
                     key={p.id}
                     type="button"
-                    role="menuitem"
                     aria-pressed={p.pressed}
                     disabled={p.disabled}
                     onClick={run(p.onPress)}
@@ -202,7 +240,6 @@ export function OverflowMenu({
               })}
               <button
                 type="button"
-                role="menuitem"
                 onClick={run(onSettings)}
                 className="type-secondary flex h-[68px] flex-col items-center justify-center gap-1 rounded-2xl bg-(--k7-row) px-1 text-foreground"
               >

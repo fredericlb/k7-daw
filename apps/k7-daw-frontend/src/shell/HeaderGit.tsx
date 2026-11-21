@@ -93,7 +93,7 @@ export function HeaderGit({
       )}
       <DropdownMenuItem
         disabled={pullDisabled}
-        title={
+        disabledReason={
           v.pullBlocked === "commitFirst" ? m["git.commitFirst"]() : undefined
         }
         onSelect={() => void g.act("pull")}
@@ -155,6 +155,7 @@ export function HeaderGit({
     <Capsule aria-label={m["git.bar"]()} className="shrink-0">
       <CapsuleButton
         aria-label={commitName}
+        title={commitName}
         disabled={!(v.commit || v.push) || !!g.busy}
         onClick={() => openCommitAndPush(workspace)}
         className="px-3.5"

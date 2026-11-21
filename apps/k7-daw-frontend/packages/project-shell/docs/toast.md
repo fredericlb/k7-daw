@@ -7,8 +7,11 @@
 ## Kinds
 
 - **success**, **warning**, **error**: a warning leaves on its own after a longer delay than a
-  success; an error stays until it is dismissed, since one nobody read did not happen. Warning and
-  error are `role="alert"`.
+  success (5 s); an error stays until it is dismissed, since one nobody read did not happen.
+  Warning and error are `role="alert"`. Hovering or focusing a toast holds it, and the region is
+  mounted even when empty.
+- `dismissible: false` takes the close button away from a toast that states a standing condition
+  (the engine link is down): the code dismisses it when the condition ends.
 - **neutral**: no judgement, with an optional `progress` (a 6 px bar, and `34 / 120` in mono when
   there is a total). A neutral toast with progress belongs to the code that runs the work: it has
   no Dismiss and stays until `dismissToast`.
@@ -18,7 +21,8 @@
 
 - **bottom-right** sits above the floating bar, clear of the right panel's bottom edge
   (`--toast-bottom`), and moves left of an open panel through `--toast-right` (428 px).
-- **top-right** is for what must not be missed behind the bar.
+- **top-right** is for what must not be missed behind the bar; the wide top stacks start under the
+  header (`--k7-header-h` plus 8 px), `--toast-top` and `--toast-top-centre` override it.
 - **top-centre** is the plugin-scan toast: above every other layer, sliding down from above, and
   leaving by itself when the code dismisses it.
 

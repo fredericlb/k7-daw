@@ -66,6 +66,7 @@ export function Action({
   title,
   label,
   pressed,
+  disabledReason,
   children,
   danger,
 }: {
@@ -76,6 +77,8 @@ export function Action({
   label?: string;
   /** A choice among several: the chosen one reads as lit, not as unavailable. */
   pressed?: boolean;
+  /** Why it is disabled; a press then shows it in a toast. */
+  disabledReason?: string;
   children: ReactNode;
   danger?: boolean;
 }) {
@@ -85,6 +88,7 @@ export function Action({
       variant={danger ? "destructive" : "glass"}
       onClick={onClick}
       disabled={disabled}
+      disabledReason={disabledReason}
       title={title}
       aria-label={label}
       aria-pressed={pressed}

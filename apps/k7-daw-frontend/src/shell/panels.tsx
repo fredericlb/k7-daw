@@ -215,6 +215,7 @@ export function DockFrame({
     expanded,
     onExpandedChange,
     expandLabel: m["shell.dock.expand"](),
+    collapseLabel: m["shell.dock.collapse"](),
     onClose,
     closeLabel: m["shell.dock.close"](),
     onEscapeKeyDown: (e: KeyboardEvent) => {

@@ -134,7 +134,7 @@ for (const project of BROKEN) {
     await expect(
       page
         .getByText(/\d+ errors?/)
-        .or(page.getByRole("link", { name: /^\d+ problems? reported/ }))
+        .or(page.getByRole("button", { name: /^\d+ problems? reported/ }))
         .first(),
     ).toBeVisible();
     watch.assertClean();

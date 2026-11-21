@@ -112,7 +112,7 @@ export function useOutputRecording(opts: {
   const [recording, setRecording] = useState(false);
   const [filing, setFiling] = useState(false);
   const [drawPicture, setDrawPicture] = useState(false);
-  useUnsavedGuard(recording || filing);
+  useUnsavedGuard(recording || filing, "recording");
   const rec = useRef<{
     media: MediaRecorder | null;
     spool: Spool | null;
