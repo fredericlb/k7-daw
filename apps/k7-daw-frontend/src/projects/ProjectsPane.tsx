@@ -39,6 +39,7 @@ export function ProjectsPane({
   onOpen,
   onChanged,
   libraries,
+  readError = null,
 }: {
   /** The origin's libraries as this account sees them, read by Home; they decide whether a workspace may be made. */
   libraries: AccountLibrary[] | undefined;
@@ -54,6 +55,8 @@ export function ProjectsPane({
   onOpen: (name: string | null) => void;
   /** Call after any write, so the page reloads without waiting for the poll. */
   onChanged: () => void;
+  /** The list's own read failed: said in the one error region, with the writes' errors. */
+  readError?: string | null;
 }) {
   const [error, setError] = useState<string | null>(null);
   // A warning that is not a failure — the library modules a project just created still owes.
@@ -273,7 +276,7 @@ export function ProjectsPane({
           <RepoList
             workspaces={workspaces}
             busy={busy}
-            error={error}
+            error={error ?? readError}
             notice={notice}
             hasFileService={fileService !== null}
             lookingForFiles={lookingForFiles}

@@ -65,6 +65,7 @@ export function Action({
   disabled,
   title,
   label,
+  pressed,
   children,
   danger,
 }: {
@@ -73,6 +74,8 @@ export function Action({
   title?: string;
   /** The accessible name where the visible word repeats, such as "Revoke" on each device. */
   label?: string;
+  /** A choice among several: the chosen one reads as lit, not as unavailable. */
+  pressed?: boolean;
   children: ReactNode;
   danger?: boolean;
 }) {
@@ -84,6 +87,7 @@ export function Action({
       disabled={disabled}
       title={title}
       aria-label={label}
+      aria-pressed={pressed}
     >
       {children}
     </Button>

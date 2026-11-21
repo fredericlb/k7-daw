@@ -1763,6 +1763,7 @@
   "libs.pinnedBy": "Pinned by your workspaces",
   "libs.plays": "@{name} plays v{version}",
   "libs.onNewest": "On the newest version",
+  "libs.pinsUnread": "{workspace}: its pins file could not be read ({reason}), so its pins are not shown.",
   "libs.pinsNote": "A workspace plays the version it pins until you upgrade it; Upgrade only rewrites its pins file, and the songs recompile when opened.",
   "frozen.count": "{mine} yours · {cold} in the libraries",
   "frozen.coldNote": "Read-only, from the libraries: duplicate one to make it yours.",

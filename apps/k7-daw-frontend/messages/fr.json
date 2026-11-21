@@ -1763,6 +1763,7 @@
   "libs.pinnedBy": "Épinglées par vos espaces de travail",
   "libs.plays": "@{name} joue la v{version}",
   "libs.onNewest": "À la dernière version",
+  "libs.pinsUnread": "{workspace} : son fichier de versions n'a pas pu être lu ({reason}), ses versions ne sont donc pas affichées.",
   "libs.pinsNote": "Un espace de travail joue la version qu'il épingle jusqu'à sa mise à jour ; Mettre à jour ne réécrit que son fichier d'épingles, et les morceaux se recompilent à l'ouverture.",
   "frozen.count": "{mine} à vous · {cold} dans les bibliothèques",
   "frozen.coldNote": "Lecture seule, venues des bibliothèques : dupliquez-en une pour en faire la vôtre.",

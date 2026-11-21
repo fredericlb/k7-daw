@@ -118,12 +118,6 @@ export function Home() {
   return (
     <HomeShell>
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
-        {error && (
-          <code className="mx-6 mt-3 overflow-x-auto rounded bg-muted px-2 py-1 text-xs text-red-400">
-            {error}
-          </code>
-        )}
-
         <ProjectsPane
           workspaces={workspaces}
           busy={busy}
@@ -133,6 +127,7 @@ export function Home() {
           onOpen={open}
           onChanged={reread}
           libraries={libraries}
+          readError={error}
         />
       </div>
     </HomeShell>
