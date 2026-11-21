@@ -37,15 +37,21 @@ const UI_FILE = docPattern("ui");
 export type SeqTab = "text" | "roll";
 
 // The two tabs, in the order they read: the file, then its notes.
-const SEQ_TABS = [
-  { id: "text", label: "Text", icon: FileText, title: "the file itself" },
-  {
-    id: "roll",
-    label: "Roll",
-    icon: Piano,
-    title: "its notes as a piano roll",
-  },
-] as const;
+const seqTabList = () =>
+  [
+    {
+      id: "text",
+      label: m["seq.tabText"](),
+      icon: FileText,
+      title: m["seq.tabTextTitle"](),
+    },
+    {
+      id: "roll",
+      label: m["seq.tabRoll"](),
+      icon: Piano,
+      title: m["seq.tabRollTitle"](),
+    },
+  ] as const;
 
 export function EditorToolbar({
   tree,
@@ -106,7 +112,7 @@ export function EditorToolbar({
           aria-label={m["seq.views"]()}
           className="glass flex h-10 items-center gap-0.5 rounded-full p-[3px]"
         >
-          {SEQ_TABS.map((t) => (
+          {seqTabList().map((t) => (
             <button
               key={t.id}
               type="button"

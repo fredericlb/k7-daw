@@ -33,7 +33,7 @@ function Meter({ level, live }: { level: number; live: boolean }) {
   return (
     <div
       className="relative h-1.5 w-28 shrink-0 overflow-hidden rounded-[3px] bg-(--k7-progress-track)"
-      title={live ? undefined : "no device on this channel"}
+      title={live ? undefined : m["io.noDevice"]()}
     >
       <div
         className={cn(
@@ -81,7 +81,7 @@ function Tuner({ hz, clarity }: { hz: number; clarity: number }) {
   if (!note)
     return (
       <div className="flex flex-1 items-center pl-1">
-        <span className="type-status text-fg-3">no note</span>
+        <span className="type-status text-fg-3">{m["io.noNote"]()}</span>
       </div>
     );
   const inTune = Math.abs(note.cents) <= IN_TUNE_CENTS;
@@ -164,14 +164,14 @@ function PortRow({
 function portDetail(port: IoPort): string {
   const live = port.channels.length > 0;
   return port.unknownLabel
-    ? `'${port.label}' — no such input`
+    ? m["io.noSuchInput"]({ label: port.label ?? "" })
     : port.label
       ? `${port.label} (${port.channels.join("+")})`
       : live
-        ? `ch ${port.channels.join("+")}`
+        ? m["io.channel"]({ channels: port.channels.join("+") })
         : port.generic
-          ? "generic"
-          : "no channel";
+          ? m["io.generic"]()
+          : m["io.noChannel"]();
 }
 
 /** A declared port's name, with the catalogue it comes from. */

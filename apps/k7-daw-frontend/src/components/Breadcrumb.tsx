@@ -5,6 +5,7 @@
 
 import { ChevronDown, ChevronRight, Play } from "@studio/ui/icons";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { m } from "../paraglide/messages.js";
 import type { FileNode } from "../types";
 
 // A directory's children ("" is the root), walking by segment: two folders can share a basename.
@@ -102,14 +103,16 @@ export function Breadcrumb({
       })}
       {!path && (
         <span className="ml-2 truncate text-muted-foreground">
-          no file open
+          {m["breadcrumb.noFile"]()}
         </span>
       )}
 
       {menu !== null && (
         <div className="absolute left-0 top-full z-20 mt-1 max-h-72 min-w-48 overflow-auto rounded border border-border bg-popover p-1 shadow-lg">
           {entries.length === 0 && (
-            <div className="px-2 py-1 text-muted-foreground">empty</div>
+            <div className="px-2 py-1 text-muted-foreground">
+              {m["breadcrumb.empty"]()}
+            </div>
           )}
           {entries.map((n) => {
             const isActiveProject = n.project && activeProject === n.path;
@@ -141,8 +144,8 @@ export function Breadcrumb({
                   <button
                     title={
                       isActiveProject
-                        ? "active project"
-                        : "open project — start the engine here"
+                        ? m["breadcrumb.activeProject"]()
+                        : m["breadcrumb.openProject"]()
                     }
                     onClick={() => {
                       onOpenProject(n.path);

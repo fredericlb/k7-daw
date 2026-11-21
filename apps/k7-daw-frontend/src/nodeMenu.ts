@@ -3,6 +3,7 @@
 // See apps/k7-daw-frontend/packages/song/docs/alternatives.md.
 
 import type { MenuItem } from "./contextMenu";
+import { m } from "./paraglide/messages.js";
 
 /** What a lane's gutter badge opens ON: the lane's node, as the timeline holds it. */
 export interface NodeMenuTarget {
@@ -21,26 +22,23 @@ export function nodeMenu(n: NodeMenuTarget): MenuItem[] {
   return [
     // A dot marks the one that is on, and the gap on the other rows is two NON-BREAKING spaces, HTML collapsing ordinary ones.
     ...names.map((name) => ({
-      label: `${name === current ? "• " : "  "}${name === "1" ? "1 (its own settings)" : name}`,
+      label: `${name === current ? "• " : "  "}${name === "1" ? m["node.altOwn"]() : name}`,
       description:
-        name === current
-          ? "The settings this node is playing now"
-          : `Play this node with the "${name}" settings instead`,
+        name === current ? m["node.altOn"]() : m["node.altPlay"]({ name }),
       command: `node alternative select ${module} ${name}`,
       complete: true,
       verb: "node alternative select",
     })),
     {
-      label: "New alternative…",
-      description:
-        "Add another set of settings, starting from the module's own",
+      label: m["node.altNew"](),
+      description: m["node.altNewHelp"](),
       command: `node alternative create ${module} `,
       complete: false,
       verb: "node alternative create",
     },
     {
-      label: "Copy this one…",
-      description: "Add another set of settings, copied from the one on",
+      label: m["node.altCopy"](),
+      description: m["node.altCopyHelp"](),
       command: `node alternative copy ${module} `,
       complete: false,
       verb: "node alternative copy",
@@ -51,13 +49,11 @@ export function nodeMenu(n: NodeMenuTarget): MenuItem[] {
       : [
           {
             label:
-              n.frozen === "at"
-                ? "Unfreeze"
-                : "Freeze (bake everything upstream)",
+              n.frozen === "at" ? m["node.unfreeze"]() : m["node.freeze"](),
             description:
               n.frozen === "at"
-                ? "Go back to playing this node live"
-                : "Render everything upstream to a file, and play that",
+                ? m["node.unfreezeHelp"]()
+                : m["node.freezeHelp"](),
             command: `node freeze ${module}`,
             complete: true,
             verb: "node freeze",

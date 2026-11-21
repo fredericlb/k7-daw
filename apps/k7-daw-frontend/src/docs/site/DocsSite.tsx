@@ -4,6 +4,7 @@
 import { Button } from "@studio/ui/button";
 import { ArrowLeft, ArrowRight, ExternalLink } from "@studio/ui/icons";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { m } from "../../paraglide/messages.js";
 import {
   findPage,
   GUIDES,
@@ -173,11 +174,13 @@ function Page({ page }: { page: SitePage }) {
 function NotFound({ path }: { path: string }) {
   return (
     <>
-      <h1 className="mb-4 text-2xl font-semibold">No page here</h1>
+      <h1 className="mb-4 text-2xl font-semibold">
+        {m["docs.notFoundTitle"]()}
+      </h1>
       <p className="text-sm text-muted-foreground">
-        Nothing in the documentation answers <code>{path}</code>.{" "}
+        {m["docs.notFoundBody"]({ path })}{" "}
         <a href={hrefOf("/")} className="underline decoration-dotted">
-          Back to the documentation's home
+          {m["docs.notFoundHome"]()}
         </a>
         .
       </p>

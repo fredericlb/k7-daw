@@ -13,6 +13,7 @@ import { shortcutsByCommand } from "../keys";
 import { useIcons } from "../lucideIcons";
 import { dangerLast, menuTabs, moveFocus } from "../menuTabs";
 import type { MenuTarget } from "../menuTitle";
+import { m } from "../paraglide/messages.js";
 import { ContextMenuHeader } from "./ContextMenuHeader";
 
 export function ContextMenu({
@@ -151,7 +152,9 @@ export function ContextMenu({
         type="button"
         role="menuitem"
         title={
-          it.complete ? `runs: ${it.command}` : `fills the bar: ${it.command}`
+          it.complete
+            ? m["menu.runs"]({ command: it.command })
+            : m["menu.fills"]({ command: it.command })
         }
         onClick={() => {
           onPick(it);
