@@ -5,6 +5,7 @@
 
 import type { ColdChainsReply } from "@studio/web-protocol";
 import { useEffect, useState } from "react";
+import { engines } from "../api";
 import { parts } from "../i18nParts";
 import { describeDownload, followDownload } from "../modelDownload";
 import { m } from "../paraglide/messages.js";
@@ -111,7 +112,23 @@ function ChainPicker({
   );
 }
 
-export function ChainsSection({ engineId }: { engineId: string }) {
+export function ChainsSection({ engineId: desktopId }: { engineId: string }) {
+  // Without the desktop supervisor, this device's own engine is the one the registry picks; null when none runs.
+  const [deviceId, setDeviceId] = useState<string | null | undefined>(
+    undefined,
+  );
+  useEffect(() => {
+    if (desktopId) return;
+    let live = true;
+    void engines
+      .find()
+      .then(({ chosen }) => live && setDeviceId(chosen?.id ?? null))
+      .catch(() => live && setDeviceId(null));
+    return () => {
+      live = false;
+    };
+  }, [desktopId]);
+  const engineId = desktopId || deviceId || "";
   const [fileService, setFileService] = useState<
     AccountFiles | null | undefined
   >(undefined);
@@ -223,6 +240,11 @@ export function ChainsSection({ engineId }: { engineId: string }) {
               {parts((h) => m["settings.chains.noCold"](h), {
                 dir: <span className="font-mono">chains/</span>,
               })}
+            </p>
+          )}
+          {!engineId && deviceId === null && (
+            <p className="px-3.5 py-2.5 type-status text-fg-3">
+              {m["settings.chains.noEngine"]()}
             </p>
           )}
           {error && (
