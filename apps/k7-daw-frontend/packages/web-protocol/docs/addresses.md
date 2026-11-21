@@ -167,16 +167,15 @@ nothing else — so the two cannot disagree about what a tab is on. It returns n
 project's link (`projectHref`) by the time it wants the surface's. One encoder either way, which is
 the point of it being here rather than a template string at the call site.
 
-### `/external`, the menu
+### A surface of another device
 
-The page a second device opens first and, installed as a PWA, the one it starts on: every surface
-this account can drive, across every project on the machine. It needs no project in the address,
-which is why it sits at the app's mount rather than under one. `isExternalIndex` matches it —
-exactly one segment, `external`, after the mount — and `main.tsx` reads it before `parseLaunch`.
-Since every project address starts with a sentinel, the plain word collides with nothing.
+`/@lan/<engineId>/<workspace>/<project>/@external/<surface>` names a surface of a project open on another device, under the
+reserved repository `@lan` and that device's engine id (`lanSurfaceUrl`, `parseLanSurface`). `parseLaunch` reads it like any
+address — the repository slot is `@lan`, the project part `<engineId>/<workspace>/<project>` — and `parseLanSurface` splits the
+device off, then `localTarget` the workspace. An `@lan` address with no surface after it names nothing, and the home draws.
 
-`/libraries`, `/settings` and `/about` are more such pages — k7's list of the origin's libraries,
-its settings, and its version, licence and third-party notices — reserved for the same reason:
+`/libraries`, `/settings`, `/about`, `/tasks` and `/surfaces` are more such pages — k7's list of the origin's libraries,
+its settings, its version, licence and third-party notices, its tasks, and the surfaces on the network — reserved for the same reason:
 none opens a project. `isHomePage` matches them, and every address BELOW one too —
 `/settings/engine` is a route of the home like `/settings`, and reloading it or following a link
 to it must land there rather than be read as a workspace. Taking the whole prefix costs nothing:
@@ -184,5 +183,4 @@ a project opens only under a sentinel (`@local`, `@banc`), so no bare word below
 mount is a workspace, and `isProjectAddress` already reads the head alone. `isHomePage` is read
 BEFORE `parseLaunch`, which would otherwise take the word for a workspace and the
 router would mount under it. Once loaded they are ROUTES of k7's home, the router's basename
-being the mount, so going between the home and any of them reloads nothing. `/external` stays a
-branch because it swaps the page's manifest before anything mounts.
+being the mount, so going between the home and any of them reloads nothing. 

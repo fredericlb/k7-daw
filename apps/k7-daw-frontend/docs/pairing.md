@@ -7,15 +7,16 @@ is what k7 draws around it.
 
 ## Where the request is made
 
-On the device, in the second-device menu at `/external` (`components/ExternalIndex.tsx`). The card
-(`pairing/PairThisDevice.tsx`) is drawn **only while no engine is usable**. A device that already has
+On a device that dials an engine directly, with the card (`pairing/PairThisDevice.tsx`) drawn **only while no engine is usable**.
+The Surfaces tab does not draw it: a device on the network that has not trusted this one reads "Not trusted" there, since the
+LAN door is opened only by the switch that already lets a private peer drive unpaired (`apps/k7-daw-backend/docs/lan.md`). A device that already has
 an engine to play on is not interrupted by another one asking to be paired with it; a device with none
 is told exactly why, rather than "no engine answers", which would be false.
 
 A revoked device needs nothing of its own: the probe forgets a key the engine refused, so the engine
 reads as unpaired again and the same card comes back.
 
-Once paired, the menu probes again and reads the engine as usable: making the person press anything after having
+Once paired, the page probes again and reads the engine as usable: making the person press anything after having
 just walked to the machine and back is a step with nothing to decide.
 
 ## Where it is answered

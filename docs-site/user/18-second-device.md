@@ -2,55 +2,53 @@
 
 A tablet beside your decks, a phone in your hand on stage: a second device can drive the **same engine, in the same session** as the computer running your project. What you do on one is done on the other.
 
-There are two ways to use a second device:
-
-- open the **whole project** on it, as on the computer, or
-- open **one surface alone** on it: the DJ desk, the timeline, the master strip or the picture frame, full screen, with a small transport.
+A second device opens **one surface alone**: the DJ desk, the timeline, the master strip or the picture frame, full screen, with the transport at the bottom.
 
 ## Surfaces
 
 A project declares its special views — its *surfaces* — in its `surfaces/` folder (see the Song file reference). Each one has a name (its id) and a type: `timeline`, `turntables`, `mastering` or `viewport`. Any of them can be opened alone on another device.
 
-## Getting the address onto the device
+## Opening a surface from another device
 
-### Copy the link
+Both devices run k7 and are on the same network. On the computer that has the project open, turn on **Available on the local network** in the engine settings. On the second device, open the **Surfaces** tab of the home page.
 
-In k7 opened from the [K7 DAW](./82-desktop-app.md), at `127.0.0.1`, the address answers only the computer itself, so a phone could not open it. Driving the computer's engine from a phone is not offered for now.
+The tab lists, for every project open on your network, the surfaces this device can open: the device's name over its project's name, then a row per surface with its type. Tap one to open it. The list refreshes every five seconds.
 
+A row that cannot be opened says why:
 
-`ui external <surface>` copies the surface's link to the clipboard and shows it on the status line. A surface's address is the project's address followed by `/@external/<surface>`, for example:
+- **Not answering**: the device is listed but its engine did not answer.
+- **Not trusted**: turn on **Available on the local network** on that device.
+- **Update k7 on** a device: the two k7 versions do not speak the same protocol.
+- **Drawn in k7's window only**: that surface type has no drawing for a second device.
 
-```text
-/@local/band/winter.k7/@external/desk
-```
+**Also on** a device means another device already shows that surface; two devices may show the same one. If nothing is found, the page says to turn on **Available on the local network** on the device that has the project open.
 
-### The surfaces menu
+The list only offers the project already open on that device: joining it never moves its engine to another project. A device that has no project open, or whose project declares no surface, says so.
 
-On the device, open `/external` on your k7 address. This page lists **every surface of the project the engine is playing right now**, with an icon for its type. Tap one to open it. The list refreshes every five seconds and has a refresh button.
+## Only one device per pane
 
-The menu only offers the project already open on the engine: joining it never moves the engine to another project. If nothing is open, it says so; open the project in the editor first.
-
-You can install `/external` as an app on the device's home screen: it then opens straight on the surfaces menu.
+The computer that has the project open cannot open the pane another device shows. In its header the pane is dimmed and says "In use on" the device's name when you press it. If you open on the second device the pane the computer is on, the second device takes it and the computer moves to the next free pane, with a message. When the second device leaves, the pane is free again within a couple of seconds.
 
 ## A surface on its own
 
-A surface opened alone shows:
+A surface opened on another device shows:
 
-- at the top, **play/pause and the clock**;
-- the surface itself, full screen;
-- at the bottom, one **command line**, a full-screen button and a way back to the surfaces menu.
+- the surface itself, full screen, with no way to change surface;
+- at the bottom, the **transport** (play, stop and the clock);
+- one **command line** and a full-screen button;
+- a round **Home** button at the top left, which goes back to the Surfaces tab.
 
 The screen stays awake while a surface is open.
 
 The keyboard works as in the editor, with your own key bindings: `Space` plays, `Shift+Space` replays, the timeline keys move the caret, zoom and loop, and double-`Shift` focuses the command line. Commands that only make sense in the full editor (opening panels, other pages…) answer with a message instead of acting. Right-click entries that need an argument are pre-written in the command line.
 
-A surface type that cannot be drawn alone on a device says it is drawn in k7's window instead.
+`ui external <surface>` copies a surface's link and shows it on the status line; that link opens the surface alone in a browser on the same computer.
 
 ## Pairing a device on your local network
 
-When the second device reaches the engine directly over your local network (for example an engine at home), the engine only answers devices its machine has approved.
+When a device reaches an engine directly over your local network, the engine only answers devices its machine has approved.
 
-On the device, a card says **This device isn't paired** with the machine's name:
+A card says **This device isn't paired** with the machine's name:
 
 1. Tap **Pair this device**.
 2. The device shows a **code**.

@@ -1458,7 +1458,7 @@ Measured on a build: the icon chunk is ~150 KB gzipped, and the home page carrie
 `@studio/ui-eyes`, `@studio/ui-turntables` — before drawing a single workspace row. The symptom is a page
 that opens and stays blank for seconds, which reads as the app hanging rather than as a bundle being parsed.
 
-The screens that are not the home page are therefore `lazy()`: `App`, `EngineGate`, `ExternalIndex`,
+The screens that are not the home page are therefore `lazy()`: `App`, `EngineGate`, `LanSurfaceGate`,
 and the home's own other pages — the libraries,
 the tasks and both settings pages. One address is ever taken, so one of them is ever fetched. `ProjectGate` loads
 `App` the same way and starts its download as it mounts, so the project gate draws while
