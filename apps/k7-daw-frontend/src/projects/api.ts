@@ -29,6 +29,7 @@ import {
   LIBRARIES_PAGE,
   localProjectUrl,
   SETTINGS_PAGE,
+  SURFACES_PAGE,
   TASKS_PAGE,
 } from "@studio/web-protocol/projects";
 
@@ -63,6 +64,9 @@ export const ABOUT_ROUTE = `/${ABOUT_PAGE}`;
 
 /** …and the ENGINE page beside the settings: this machine's on the desktop app, the engines this account may use everywhere. */
 export const ENGINE_SETTINGS_ROUTE = `/${SETTINGS_PAGE}/engine`;
+
+/** …and the SURFACES page: the surfaces of every project open on the network. */
+export const SURFACES_ROUTE = `/${SURFACES_PAGE}`;
 
 /** …and the TASKS page, the same way. */
 export const TASKS_ROUTE = `/${TASKS_PAGE}`;

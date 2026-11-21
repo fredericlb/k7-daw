@@ -188,7 +188,7 @@ function Root() {
             {scope.kind === "external-index" ? (
               // The second device's front door: every surface this account can drive, holding no engine — a lease would evict the person playing.
               <ExternalIndex />
-            ) : scope.kind === "home" ? (
+            ) : scope.kind === "lan-surface" ? null : scope.kind === "home" ? (
               // The pages with no project are ROUTES of one scope, so going between them remounts nothing; a take outlives them all.
               <HomeRoutes fallback={<Booting />} />
             ) : profiling ? (

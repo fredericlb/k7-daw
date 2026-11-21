@@ -137,7 +137,7 @@ async fn answer_for(state: &AppState, id: &str, headers: &HeaderMap) -> Response
     }
 }
 
-/// `GET /lan/<id>/engine`: the peer's engine socket, carried frame for frame.
+/// `GET /api/lan/<id>/engine`: the peer's engine socket, carried frame for frame.
 pub async fn engine(
     State(state): State<Arc<AppState>>,
     Path(id): Path<String>,

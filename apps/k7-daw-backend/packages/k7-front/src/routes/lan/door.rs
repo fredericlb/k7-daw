@@ -243,7 +243,7 @@ async fn bye(State(state): State<Arc<AppState>>, Path(screen): Path<String>) -> 
     Json(json!({ "ok": true })).into_response()
 }
 
-/// `GET /lan/screens` on this device's own page: the screens other devices show, for the panes it must not open.
+/// `GET /api/lan/screens` on this device's own page: the screens other devices show, for the panes it must not open.
 pub async fn screens_here(State(state): State<Arc<AppState>>, req: Request) -> Response {
     if !crate::session::holds(req.headers(), &state.settings) {
         return error(StatusCode::UNAUTHORIZED, "unauthenticated");

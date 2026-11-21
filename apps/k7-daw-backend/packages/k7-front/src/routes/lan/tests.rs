@@ -302,14 +302,26 @@ async fn hello_has_its_shape_with_a_project_and_without() {
     assert_eq!(full["surfaces"][0]["id"], "desk");
     assert_eq!(full["screens"][0]["device"], "iPad");
     // The main reads the same list on its own loopback, and a bye removes it at once.
-    let own = send(a.addr, "GET", "/lan/screens", &[("cookie", &cookie())], "")
-        .await
-        .json();
+    let own = send(
+        a.addr,
+        "GET",
+        "/api/lan/screens",
+        &[("cookie", &cookie())],
+        "",
+    )
+    .await
+    .json();
     assert_eq!(own["screens"][0]["surface"], "desk");
     send(door, "POST", "/lan/screens/s1/bye", &h, "").await;
-    let own = send(a.addr, "GET", "/lan/screens", &[("cookie", &cookie())], "")
-        .await
-        .json();
+    let own = send(
+        a.addr,
+        "GET",
+        "/api/lan/screens",
+        &[("cookie", &cookie())],
+        "",
+    )
+    .await
+    .json();
     assert!(own["screens"].as_array().unwrap().is_empty());
 }
 
@@ -320,7 +332,7 @@ async fn the_relay_lists_a_peer_and_carries_http_and_the_engine_socket() {
     let signed = [("cookie", cookie())];
     let h: Vec<(&str, &str)> = signed.iter().map(|(k, v)| (*k, v.as_str())).collect();
 
-    let peers = send(b.addr, "GET", "/lan/peers", &h, "").await.json();
+    let peers = send(b.addr, "GET", "/api/lan/peers", &h, "").await.json();
     let one = &peers["peers"][0];
     assert_eq!(one["engineId"], "A1");
     assert!(one["reached"] == true && one["trusted"] == true, "{peers}");
@@ -329,31 +341,33 @@ async fn the_relay_lists_a_peer_and_carries_http_and_the_engine_socket() {
         "the page never holds the peer's token"
     );
 
-    let hello = send(b.addr, "GET", "/lan/A1/hello", &h, "").await;
+    let hello = send(b.addr, "GET", "/api/lan/A1/hello", &h, "").await;
     assert_eq!(hello.status, 200, "{}", hello.body);
     assert_eq!(hello.json()["device"]["engineId"], "A1");
     // A forged token from the page is dropped; the relay's own is what the door sees.
     let mut forged = h.clone();
     forged.push(("x-k7-engine", "forged"));
     assert_eq!(
-        send(b.addr, "GET", "/lan/A1/hello", &forged, "")
+        send(b.addr, "GET", "/api/lan/A1/hello", &forged, "")
             .await
             .status,
         200
     );
 
     assert_eq!(
-        send(b.addr, "GET", "/lan/nobody/hello", &h, "")
+        send(b.addr, "GET", "/api/lan/nobody/hello", &h, "")
             .await
             .status,
         404
     );
     assert_eq!(
-        send(b.addr, "GET", "/lan/A1/hello", &[], "").await.status,
+        send(b.addr, "GET", "/api/lan/A1/hello", &[], "")
+            .await
+            .status,
         401
     );
 
-    let mut req = format!("ws://{}/lan/A1/engine", b.addr)
+    let mut req = format!("ws://{}/api/lan/A1/engine", b.addr)
         .into_client_request()
         .unwrap();
     req.headers_mut()
@@ -382,7 +396,7 @@ async fn a_device_never_lists_itself_and_a_dead_peer_is_listed_unreached() {
     let peers = send(
         b.addr,
         "GET",
-        "/lan/peers",
+        "/api/lan/peers",
         &[("cookie", h[0].1.as_str())],
         "",
     )

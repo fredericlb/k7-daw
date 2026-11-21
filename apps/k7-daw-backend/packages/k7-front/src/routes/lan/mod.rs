@@ -35,9 +35,9 @@ const TICK: Duration = Duration::from_millis(500);
 /// A failed bind is asked again after this long, not every tick.
 const REBIND: Duration = Duration::from_secs(10);
 
-/// Whether `path` is the family's.
+/// Whether `path` is the family's on this device's own front; the door's `/lan/*` is another listener's.
 pub fn is_lan_path(path: &str) -> bool {
-    path == "/lan" || path.starts_with("/lan/")
+    path == "/api/lan" || path.starts_with("/api/lan/")
 }
 
 struct Bound {
@@ -256,11 +256,11 @@ pub(crate) fn now_ms() -> u64 {
 pub fn routes() -> Router<Arc<AppState>> {
     let p = |m: axum::routing::MethodRouter<Arc<AppState>>| m.fallback(crate::declined);
     Router::new()
-        .route("/lan/peers", p(get(peers::list)))
-        .route("/lan/self", p(get(peers::this_device)))
-        .route("/lan/screens", p(get(door::screens_here)))
-        .route("/lan/{id}/hello", any(relay::hello))
-        .route("/lan/{id}/screens/{*rest}", any(relay::screens))
-        .route("/lan/{id}/files/{*rest}", any(relay::files))
-        .route("/lan/{id}/engine", p(get(relay::engine)))
+        .route("/api/lan/peers", p(get(peers::list)))
+        .route("/api/lan/self", p(get(peers::this_device)))
+        .route("/api/lan/screens", p(get(door::screens_here)))
+        .route("/api/lan/{id}/hello", any(relay::hello))
+        .route("/api/lan/{id}/screens/{*rest}", any(relay::screens))
+        .route("/api/lan/{id}/files/{*rest}", any(relay::files))
+        .route("/api/lan/{id}/engine", p(get(relay::engine)))
 }
