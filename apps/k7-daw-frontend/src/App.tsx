@@ -2731,7 +2731,12 @@ export default function App({
         ? dock.open && dock.occupant === "mixer"
         : pressedButton === id,
     disabled: (id === "mixer" && mixerDead) || (id === "export" && share.busy),
-    title: id === "mixer" && mixerDead ? m["footer.mixNone"]() : undefined,
+    title:
+      id === "mixer" && mixerDead
+        ? m["footer.mixNone"]()
+        : id === "export" && share.busy
+          ? m["shell.exportBusy"]()
+          : undefined,
     onPress: () => pressPanel(id),
   }));
   const switcherPanes: HeaderPane[] = [
@@ -2741,6 +2746,7 @@ export default function App({
             id: "timeline",
             label: m["shell.pane.arrangement"](),
             icon: AudioLines,
+            shortcut: "2",
           },
         ]
       : []),
@@ -2750,11 +2756,22 @@ export default function App({
             id: "turntables",
             label: m["shell.pane.turntables"](),
             icon: Disc3,
+            shortcut: "4",
           },
         ]
       : []),
-    { id: "chains", label: m["shell.pane.graph"](), icon: Workflow },
-    { id: "editor", label: m["shell.pane.source"](), icon: FileCode },
+    {
+      id: "chains",
+      label: m["shell.pane.graph"](),
+      icon: Workflow,
+      shortcut: "3",
+    },
+    {
+      id: "editor",
+      label: m["shell.pane.source"](),
+      icon: FileCode,
+      shortcut: "1",
+    },
   ];
   const metronomeIsOn = optMetronome ?? metronomeOn;
   const toggleMetronome = () => {

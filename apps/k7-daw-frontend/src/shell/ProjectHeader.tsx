@@ -27,6 +27,8 @@ export interface HeaderPane {
   id: string;
   label: string;
   icon: LucideIcon;
+  /** The number key that opens it (keys.ts names panes, not ring positions), shown in the tooltip. */
+  shortcut?: string;
 }
 
 export interface HeaderPanel {
@@ -94,72 +96,70 @@ export function ProjectHeader({
             : "relative z-(--k7-z-header) flex h-(--k7-header-h) shrink-0 items-center gap-2 px-4 py-2"
         }
       >
-        <Button asChild variant="glass" size="round" className="shrink-0">
-          <a
-            href={backHref}
-            aria-label={m["shell.back"]()}
-            title={m["shell.back"]()}
-          >
-            <ChevronLeft className="size-5" strokeWidth={2.2} />
-          </a>
-        </Button>
-        <div className="min-w-0 max-w-[160px] shrink">
-          <h1 className="type-headline truncate text-foreground">
-            {name || "…"}
-          </h1>
-          {!phone && (
-            <p className="type-status truncate text-fg-2">
-              <StatusText store={statusStore} />
-            </p>
-          )}
-        </div>
-        {running > 0 && (
-          <button
-            type="button"
-            // biome-ignore lint/a11y/useSemanticElements: a link by name for e2e and readers; it opens a panel, with no address of its own.
-            role="link"
-            aria-label={m["shell.processes"]({ n: running })}
-            title={m["shell.processes"]({ n: running })}
-            onClick={onProcesses}
-            className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full outline-none focus-visible:shadow-(--k7-focus-ring)"
-          >
-            <Spinner />
-          </button>
-        )}
-        {problems > 0 && (
-          <Badge asChild variant="warn">
+        <div className="flex min-w-0 flex-1 basis-0 items-center gap-2">
+          <Button asChild variant="glass" size="round" className="shrink-0">
+            <a
+              href={backHref}
+              aria-label={m["shell.back"]()}
+              title={m["shell.back"]()}
+            >
+              <ChevronLeft className="size-5" strokeWidth={2.2} />
+            </a>
+          </Button>
+          {/* The name takes the free width, and the status line under it (a phone draws it under the header). */}
+          <div className="min-w-0 shrink">
+            <h1 className="type-headline truncate text-foreground" title={name}>
+              {name || "…"}
+            </h1>
+            {!phone && (
+              <p className="type-status truncate text-fg-2">
+                <StatusText store={statusStore} />
+              </p>
+            )}
+          </div>
+          {running > 0 && (
             <button
               type="button"
-              // biome-ignore lint/a11y/useSemanticElements: a link by name for e2e and readers; it opens a panel, with no address of its own.
-              role="link"
-              aria-label={m["shell.problems"]({ n: problems })}
-              title={m["shell.problems"]({ n: problems })}
-              onClick={onProblems}
+              aria-label={m["shell.processes"]({ n: running })}
+              title={m["shell.processes"]({ n: running })}
+              onClick={onProcesses}
+              className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full outline-none focus-visible:shadow-(--k7-focus-ring)"
             >
-              <TriangleAlert className="size-4" />
-              {problems}
+              <Spinner />
             </button>
-          </Badge>
-        )}
-        {extra}
-        {git}
+          )}
+          {problems > 0 && (
+            <Badge asChild variant="warn">
+              <button
+                type="button"
+                aria-label={m["shell.problems"]({ n: problems })}
+                title={m["shell.problems"]({ n: problems })}
+                onClick={onProblems}
+                className={
+                  phone
+                    ? undefined
+                    : "relative before:absolute before:-inset-2 before:content-['']"
+                }
+              >
+                <TriangleAlert className="size-4" />
+                {problems}
+              </button>
+            </Badge>
+          )}
+          {extra}
+          {git}
+        </div>
         {phone ? (
-          <>
-            <span className="flex-1" />
-            {overflow}
-          </>
+          overflow
         ) : (
           <>
-            <Capsule
-              aria-label={m["shell.pane"]()}
-              className="-translate-x-1/2 absolute left-1/2"
-            >
+            <Capsule aria-label={m["shell.pane"]()} className="shrink-0">
               {panes.map((p) => (
                 <CapsuleButton
                   key={p.id}
                   pressed={pane === p.id}
                   aria-label={p.label}
-                  title={p.label}
+                  title={p.shortcut ? `${p.label} (${p.shortcut})` : p.label}
                   onClick={() => onPane(p.id)}
                 >
                   <p.icon />
@@ -167,37 +167,45 @@ export function ProjectHeader({
                 </CapsuleButton>
               ))}
             </Capsule>
-            <span className="flex-1" />
-            <Capsule role="toolbar" aria-label={m["shell.panels"]()}>
-              {panels.map((p) => {
-                const def = PANEL_DEFS[p.id];
-                return (
-                  <CapsuleButton
-                    key={p.id}
-                    pressed={p.pressed}
-                    disabled={p.disabled}
-                    aria-label={def.title()}
-                    title={p.title ?? def.title()}
-                    onClick={p.onPress}
-                  >
-                    <def.icon />
-                  </CapsuleButton>
-                );
-              })}
-            </Capsule>
-            <Capsule role="toolbar" aria-label={m["shell.app"]()}>
-              <CapsuleButton
-                pressed={settingsPressed}
-                aria-label={m["settings.menu"]()}
-                title={m["settings.menu"]()}
-                onClick={onSettings}
-              >
-                <Settings />
-              </CapsuleButton>
-            </Capsule>
+            <div className="flex min-w-max flex-1 basis-0 items-center justify-end gap-2">
+              <Capsule role="toolbar" aria-label={m["shell.panels"]()}>
+                {panels.map((p) => {
+                  const def = PANEL_DEFS[p.id];
+                  return (
+                    <CapsuleButton
+                      key={p.id}
+                      pressed={p.pressed}
+                      disabled={p.disabled}
+                      aria-label={def.title()}
+                      title={p.title ?? def.title()}
+                      onClick={p.onPress}
+                      className={p.pressed ? "gap-1.5" : undefined}
+                    >
+                      <def.icon />
+                      {p.pressed && <span>{def.title()}</span>}
+                    </CapsuleButton>
+                  );
+                })}
+              </Capsule>
+              <Capsule role="toolbar" aria-label={m["shell.app"]()}>
+                <CapsuleButton
+                  pressed={settingsPressed}
+                  aria-label={m["settings.menu"]()}
+                  title={m["settings.menu"]()}
+                  onClick={onSettings}
+                >
+                  <Settings />
+                </CapsuleButton>
+              </Capsule>
+            </div>
           </>
         )}
       </header>
+      {phone && (
+        <p className="type-status mx-4 mb-1 shrink-0 text-fg-2 empty:hidden">
+          <StatusText store={statusStore} />
+        </p>
+      )}
       {lockBanner && (
         <p
           role="status"

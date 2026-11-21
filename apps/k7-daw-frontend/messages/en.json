@@ -1622,6 +1622,7 @@
   "pls.files": "files",
   "shell.header": "Project",
   "shell.back": "Back to projects",
+  "shell.exportBusy": "An export is already running",
   "shell.processes": "{n} background processes running: open Tasks and history",
   "shell.problems": "{n} problems reported: open Logs",
   "shell.pane": "Pane",
