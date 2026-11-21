@@ -1,5 +1,5 @@
-// FrozenChainsPage.tsx — `/libraries/chains`: the account's frozen chains, kept in its own library
-// (`@account/chains/`), and the libraries' cold chains beside them, read-only, to copy from. A chain is
+// FrozenChainsPage.tsx — the Library page's second section: the account's frozen chains, kept in its own
+// library (`@account/chains/`), and the libraries' cold chains beside them, read-only, to copy from. A chain is
 // built and edited on the BENCH, with the engine's panels and sound, and saved back by `chain save`.
 // See ../../docs/frozenChains.md.
 
@@ -18,13 +18,10 @@ import { BENCH_REPO, benchProject } from "@studio/web-protocol/projects";
 import { byPeoplePath } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { findAccountFiles } from "../settings/accountFiles";
 import { useDesktopEngine } from "../settings/desktopEngine";
 import { engineSlots, ownedEngines } from "../settings/engineSlots";
 import type { PublicEngine } from "../types";
 import { type AccountFiles, accountFiles } from "./api";
-import { HomeShell } from "./HomeFrame";
-import { PageFrame } from "./PageFrame";
 import { SlotButton, type SlotTarget } from "./SlotButton";
 
 /** A chain's name as the file service takes it: one path segment. */
@@ -163,11 +160,8 @@ function Row({
   );
 }
 
-export function FrozenChainsPage() {
-  // `undefined` while asked, `null` when no file service answers.
-  const [files, setFiles] = useState<AccountFiles | null | undefined>(
-    undefined,
-  );
+/** The section under the libraries; `files` is the account's file service, `null` when none answers. */
+export function FrozenChainsSection({ files }: { files: AccountFiles | null }) {
   const [chains, setChains] = useState<FrozenChain[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   // This machine's engine, whose slots a chain is saved into; null where none runs here (../../docs/slots.md).
@@ -222,16 +216,8 @@ export function FrozenChainsPage() {
   }, []);
 
   useEffect(() => {
-    let live = true;
-    void findAccountFiles(false).then((f) => {
-      if (!live) return;
-      setFiles(f);
-      if (f) void reload(f);
-    });
-    return () => {
-      live = false;
-    };
-  }, [reload]);
+    if (files) void reload(files);
+  }, [files, reload]);
 
   const mine = (chains ?? []).filter((c) => c.mine);
   const cold = (chains ?? []).filter((c) => !c.mine);
@@ -276,91 +262,92 @@ export function FrozenChainsPage() {
   };
 
   return (
-    <HomeShell>
-      <PageFrame
-        title={m["frozen.title"]()}
-        summary={
-          chains
-            ? m["frozen.count"]({ mine: mine.length, cold: cold.length })
-            : undefined
-        }
-        actions={
-          files ? (
-            <Button onClick={() => openBench(null)}>
-              <Plus className="size-5" /> {m["frozen.new"]()}
-            </Button>
-          ) : null
-        }
-      >
-        {files === undefined || (files && chains === null && !error) ? (
-          <div className="type-secondary flex items-center gap-2 text-fg-2">
-            <Spinner /> {m["libs.reading"]()}
-          </div>
-        ) : files === null ? (
-          <ErrorCard title={m["frozen.noServer"]()} />
-        ) : (
-          <div className="flex flex-col gap-6">
-            <p className="type-secondary text-fg-2">{m["frozen.summary"]()}</p>
-            {error && <ErrorCard title={error} />}
-            <section className="flex flex-col gap-2">
-              <h2 className="type-caps px-1 text-fg-3">{m["frozen.mine"]()}</h2>
-              {mine.length === 0 ? (
-                <EmptyState
-                  glyph={<Snowflake />}
-                  title={m["frozen.mineEmptyTitle"]()}
-                >
-                  {m["frozen.mineEmpty"]()}
-                </EmptyState>
-              ) : (
-                <RowGroup>
-                  {mine.map((c) => (
-                    <Row
-                      key={c.ref}
-                      chain={c}
-                      onEdit={() => openBench(c.ref)}
-                      onCopy={() => void duplicate(c)}
-                      onDelete={() => void remove(c)}
-                      slot={slotOf(c)}
-                      here={!!engine}
-                      remote={remote}
-                      onSlot={(t) => void saveSlot(c, t)}
-                    />
-                  ))}
-                </RowGroup>
-              )}
-              <p className="type-status px-1 text-fg-3">
-                {m["frozen.howToUse"]()}{" "}
-                <code className="type-mono-value">
-                  clip process &lt;clip&gt; @account/&lt;name&gt;
-                </code>
-              </p>
-            </section>
-            <section className="flex flex-col gap-2">
-              <h2 className="type-caps px-1 text-fg-3">{m["frozen.cold"]()}</h2>
-              {cold.length === 0 ? (
-                <p className="type-secondary px-1 text-fg-2">
-                  {m["frozen.coldEmpty"]()}
-                </p>
-              ) : (
-                <RowGroup>
-                  {cold.map((c) => (
-                    <Row
-                      key={c.ref}
-                      chain={c}
-                      onCopy={() => void duplicate(c)}
-                    />
-                  ))}
-                </RowGroup>
-              )}
-              {cold.length > 0 && (
-                <p className="type-status px-1 text-fg-3">
-                  {m["frozen.coldNote"]()}
-                </p>
-              )}
-            </section>
-          </div>
+    <section
+      id="frozen-chains"
+      aria-labelledby="frozen-chains-title"
+      className="flex scroll-mt-6 flex-col gap-4"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <h2 id="frozen-chains-title" className="type-headline">
+            {m["frozen.title"]()}
+          </h2>
+          {chains && (
+            <p className="type-secondary text-fg-2 tabular-nums">
+              {m["frozen.count"]({ mine: mine.length, cold: cold.length })}
+            </p>
+          )}
+        </div>
+        {files && (
+          <Button onClick={() => openBench(null)}>
+            <Plus className="size-5" /> {m["frozen.new"]()}
+          </Button>
         )}
-      </PageFrame>
-    </HomeShell>
+      </div>
+      {files && chains === null && !error ? (
+        <div className="type-secondary flex items-center gap-2 text-fg-2">
+          <Spinner /> {m["libs.reading"]()}
+        </div>
+      ) : files === null ? (
+        <ErrorCard title={m["frozen.noServer"]()} />
+      ) : (
+        <div className="flex flex-col gap-6">
+          <p className="type-secondary text-fg-2">{m["frozen.summary"]()}</p>
+          {error && <ErrorCard title={error} />}
+          <section className="flex flex-col gap-2">
+            <h3 className="type-caps px-1 text-fg-3">{m["frozen.mine"]()}</h3>
+            {mine.length === 0 ? (
+              <EmptyState
+                glyph={<Snowflake />}
+                title={m["frozen.mineEmptyTitle"]()}
+              >
+                {m["frozen.mineEmpty"]()}
+              </EmptyState>
+            ) : (
+              <RowGroup>
+                {mine.map((c) => (
+                  <Row
+                    key={c.ref}
+                    chain={c}
+                    onEdit={() => openBench(c.ref)}
+                    onCopy={() => void duplicate(c)}
+                    onDelete={() => void remove(c)}
+                    slot={slotOf(c)}
+                    here={!!engine}
+                    remote={remote}
+                    onSlot={(t) => void saveSlot(c, t)}
+                  />
+                ))}
+              </RowGroup>
+            )}
+            <p className="type-status px-1 text-fg-3">
+              {m["frozen.howToUse"]()}{" "}
+              <code className="type-mono-value">
+                clip process &lt;clip&gt; @account/&lt;name&gt;
+              </code>
+            </p>
+          </section>
+          <section className="flex flex-col gap-2">
+            <h3 className="type-caps px-1 text-fg-3">{m["frozen.cold"]()}</h3>
+            {cold.length === 0 ? (
+              <p className="type-secondary px-1 text-fg-2">
+                {m["frozen.coldEmpty"]()}
+              </p>
+            ) : (
+              <RowGroup>
+                {cold.map((c) => (
+                  <Row key={c.ref} chain={c} onCopy={() => void duplicate(c)} />
+                ))}
+              </RowGroup>
+            )}
+            {cold.length > 0 && (
+              <p className="type-status px-1 text-fg-3">
+                {m["frozen.coldNote"]()}
+              </p>
+            )}
+          </section>
+        </div>
+      )}
+    </section>
   );
 }

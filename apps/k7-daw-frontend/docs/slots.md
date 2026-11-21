@@ -6,7 +6,7 @@ enabled. The supervisor keeps the slots and the engine's rules are its own
 
 | choice | why |
 |---|---|
-| a chain is saved into a slot from the Frozen chains page, on one of the account's own chains (`../src/projects/FrozenChainsPage.tsx`) | that is where a chain is chosen; the bench is where it is tuned, and saving it into a slot is one more step |
+| a chain is saved into a slot from the Frozen chains section of the Library page, on one of the account's own chains (`../src/projects/FrozenChainsPage.tsx`) | that is where a chain is chosen; the bench is where it is tuned, and saving it into a slot is one more step |
 | offered where this page's backend runs the machine's engine (the desktop app), and for every engine the account OWNS at this origin or through its server (`../src/settings/engineSlots.ts`) | a slot is what a machine plays with nobody attached, so only its owner sets it; a server's page has no engine of its own but may own a Pi |
 | with more than one target, the slot button is a menu of them (`../src/projects/SlotButton.tsx`) | this machine first, then each owned engine by its host name |
 | a remote engine's slot is compiled and sent by the server holding its tunnel (`apps/k7-daw-backend/docs/engine/slots.md`) | the chain and its files are the server's account library; the page only names the chain |

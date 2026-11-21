@@ -39,7 +39,7 @@ If the first thing you want at a front door is your own work, then the page list
 the front door, and putting it behind a prefix you have to know how to type would rank it second.
 
 **The home pages share ONE frame** (`HomeFrame.tsx`): a floating tab bar, a round command-bar button beside it, no
-sidebar and no bottom bar. The tabs are Projects, Tasks, Libraries and Frozen chains, drawn by `@studio/ui/tab-bar`.
+sidebar and no bottom bar. The tabs are Projects, Tasks and Library (the libraries, then the frozen chains), drawn by `@studio/ui/tab-bar`.
 They are LINKS, since each page has its own address: a plain click is a router move, a modified click opens like any
 link, and the current page carries `aria-current`. The settings pages are reached by the cog at the right of every
 page's top bar and light no tab.
@@ -70,8 +70,8 @@ routes can only be served by k7 (`apps/k7-daw-frontend/packages/web-protocol/doc
 /@local/demos/x.k7   a project, by its workspace and its folder — see below
 /@banc/vocals/warm/live.k7  a bench: a live rig seeded with a library chain
 /external             the menu of surfaces a second device drives
-/libraries            the bundled libraries — read-only
-/libraries/chains     the account's frozen chains, and the libraries' cold ones — frozenChains.md
+/libraries            the Library page: the bundled libraries (read-only), then the frozen chains — frozenChains.md
+/libraries/chains     redirects to /libraries#frozen-chains
 /tasks                every workspace's TODOS.md in one list — tasks.md
 /settings             what a browser may change — settings.md
 ```
@@ -95,8 +95,7 @@ switched off:
 |---|---|
 | `/` | `AuthGate` → `Home` — the account, and nothing else |
 | `/external` | `AuthGate` → `ExternalIndex` — probes for a machine without claiming one |
-| `/libraries` | `AuthGate` → `LibrariesPage` — the account's file service, no engine |
-| `/libraries/chains` | `AuthGate` → `FrozenChainsPage` — the account's file service, no engine |
+| `/libraries` | `AuthGate` → `LibrariesPage`, with `FrozenChainsSection` under the libraries — the account's file service, no engine |
 | `/settings` | `AuthGate` → `SettingsPage` — no engine |
 | `/@local/…`, `/@banc/…` | `AuthGate` → `EngineGate` → `ProjectGate` → the editor |
 
@@ -303,7 +302,7 @@ A chain is something you HEAR: what it does cannot be read in its file, and its 
 exist inside a project with the plugin loaded. The bench is that project — a live rig written again
 on every open and saved nowhere ([apps/k7-daw-backend/docs/banc.md](../../backend/docs/banc.md)).
 
-**This page has no bench card.** The bench is reached from the Frozen chains page
+**This page has no bench card.** The bench is reached from the Frozen chains section of the Library page
 (`frozenChains.md`), where it builds and edits the account's chains. `/@banc/<chain>/live.k7` seeds the rig with a copy of a library
 chain, and the bare `/@banc/live.k7` is the rig alone. It edits no bundled library, so a bench that names a bare library is refused.
 
@@ -524,7 +523,7 @@ workspace, Clone from git), **More** (Show examples) and the cog to App settings
 workspace's card, where its destination is already known, so the page has no New project button. The list is capped
 at `max-w-5xl`.
 
-**Every page of the home side shares that frame**: Projects, Tasks, Libraries and Frozen chains sit in the same
+**Every page of the home side shares that frame**: Projects, Tasks and Library sit in the same
 column under the same top bar, a page's own controls in it. A page of narrow rows (settings, libraries) keeps them
 narrow inside the frame so moving between pages never moves where the title starts.
 

@@ -2,7 +2,7 @@
 // What a reader gets wrong: a project opens through a click on its row or its link, and the app cancels the navigation.
 import type { Locator, Page } from "@playwright/test";
 
-/** A tab of the floating bar: a link of `navigation "Home"` (Projects, Tasks, Libraries, Frozen chains). */
+/** A tab of the floating bar: a link of `navigation "Home"` (Projects, Tasks, Library). */
 export const homeTab = (page: Page, name: string): Locator =>
   page
     .getByRole("navigation", { name: "Home", exact: true })

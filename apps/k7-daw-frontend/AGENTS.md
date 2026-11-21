@@ -79,7 +79,7 @@ matches before changing it:
 | `curveEditor.md` | `ui curve` — the popin that creates and edits an automation curve |
 | `moduleBuilder.md` | the shared builder — and why its parameter list comes from the OPEN project |
 | `sharedModules.md` | the file tree's Libraries tab: editing a `@k7-core` module in place |
-| `frozenChains.md` | `/libraries/chains` — the account's chains, built and edited on the bench and saved by `chain save`, and the libraries' cold ones beside them |
+| `frozenChains.md` | the Library page's second section (`/libraries#frozen-chains`) — the account's chains, built and edited on the bench and saved by `chain save`, and the libraries' cold ones beside them |
 | `processes.md` | the project bar's background processes — the file service's commands and jobs, and this page's exports, in one list |
 | `external.md` | `/@external/<surface>` — one surface alone on a second device, and `/external`, the menu it starts from |
 | `pairing.md` | a LAN device asking an engine to trust it — the card on the device, the prompt and the settings section on the machine |

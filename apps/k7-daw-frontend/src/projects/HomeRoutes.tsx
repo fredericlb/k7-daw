@@ -21,11 +21,6 @@ const LibrariesPage = lazy(() =>
     default: m.LibrariesPage,
   })),
 );
-const FrozenChainsPage = lazy(() =>
-  import("./FrozenChainsPage").then((m) => ({
-    default: m.FrozenChainsPage,
-  })),
-);
 const TasksPage = lazy(() =>
   import("./TasksPage").then((m) => ({ default: m.TasksPage })),
 );
@@ -47,7 +42,13 @@ export function HomeRoutes({ fallback }: { fallback: ReactNode }) {
       <Suspense fallback={fallback}>
         <Routes>
           <Route path={LIBRARIES_ROUTE} element={<LibrariesPage />} />
-          <Route path={FROZEN_CHAINS_ROUTE} element={<FrozenChainsPage />} />
+          {/* The frozen chains are the Library page's second section; the old address lands on it. */}
+          <Route
+            path={FROZEN_CHAINS_ROUTE}
+            element={
+              <Navigate to={`${LIBRARIES_ROUTE}#frozen-chains`} replace />
+            }
+          />
           <Route path={SETTINGS_ROUTE} element={<SettingsPage />} />
           <Route path={ENGINE_SETTINGS_ROUTE} element={<EnginePage />} />
           {/* About lives in App settings now; an old address lands there. */}

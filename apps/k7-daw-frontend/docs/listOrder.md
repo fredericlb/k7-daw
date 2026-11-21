@@ -30,7 +30,7 @@ A view sorts only the names; an order it already had on purpose stays first.
 | a base or shader dropdown, on the graph and in the builder | the names | `none` first |
 | the Process menu of chains | the refs, by path | — |
 | the home page's workspaces and their projects | the workspace names; the project paths | Examples last |
-| the Frozen chains page | the refs, by path | the account's own above the libraries' |
+| the Library page's Frozen chains section | the refs, by path | the account's own above the libraries' |
 | the console select, the resources, the references, the playlists, the I/O panel | the names | — |
 
 A search keeps its own order: best match first, the collator only breaking a tie.

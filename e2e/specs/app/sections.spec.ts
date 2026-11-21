@@ -12,12 +12,7 @@ test("every home tab opens cleanly", async ({ k7 }) => {
   await expect(tabs.first()).toBeVisible();
   const names = (await tabs.all()).length;
   expect(names).toBeGreaterThan(3);
-  for (const [i, name] of [
-    "Projects",
-    "Tasks",
-    "Libraries",
-    "Frozen chains",
-  ].entries()) {
+  for (const [i, name] of ["Projects", "Tasks", "Library"].entries()) {
     await test.step(name, async () => {
       const watch = watchPage(page);
       await homeTab(page, name).click();

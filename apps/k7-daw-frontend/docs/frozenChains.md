@@ -1,8 +1,9 @@
-# Frozen chains — `/libraries/chains`
+# Frozen chains — the Library page's second section
 
 A frozen chain is a chain built once and reused: to process a track, a clip or an event
 (`clip process <clip> @account/<name>`, `apps/k7-daw-frontend/packages/audio-passes/docs/processChain.md`), or saved
-into an engine's slot, which plays it with nobody attached (`slots.md`). The page
+into an engine's slot, which plays it with nobody attached (`slots.md`). The section, under the
+bundled libraries on the one Library page (`/libraries#frozen-chains`; the old `/libraries/chains` redirects there),
 lists the account's own and the libraries' **cold** chains beside them, read-only, to duplicate
 from. A cold chain is one of them, not a kind apart: it is a frozen chain whose one step separates
 a file.

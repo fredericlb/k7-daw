@@ -102,7 +102,9 @@ test("/settings/engine opens when loaded by its address", {
 test("/libraries lists the bundled libraries, read-only", async ({ k7 }) => {
   const page = await k7.open("/libraries");
   const watch = watchPage(page);
-  await expect(page.getByRole("heading", { name: "Libraries" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Library", exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByText("@k7-core", { exact: true }).first(),
   ).toBeVisible();

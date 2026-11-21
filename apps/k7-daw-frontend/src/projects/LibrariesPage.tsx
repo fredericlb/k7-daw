@@ -1,12 +1,13 @@
-// LibrariesPage.tsx — `/libraries`: the bundled libraries with their versions, read-only (a library changes with an
-// app update), then what each workspace pins of them, with Upgrade. A page and not a panel: it is visited on purpose,
-// rarely. See ../../docs/projects.md.
+// LibrariesPage.tsx — `/libraries`, titled Library: the bundled libraries with their versions, read-only (a library
+// changes with an app update), what each workspace pins of them, with Upgrade, then the account's frozen chains as a
+// second section of the same page. See ../../docs/projects.md.
 
 import { Spinner } from "@studio/ui/spinner";
 import type { AccountLibrary } from "@studio/web-protocol";
 import { useEffect, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { findAccountFiles } from "../settings/accountFiles";
+import { FrozenChainsSection } from "./FrozenChainsPage";
 import { HomeShell } from "./HomeFrame";
 import { LibrariesCard } from "./LibrariesCard";
 import { LibraryPins } from "./LibraryPins";
@@ -30,7 +31,7 @@ export function LibrariesPage() {
   return (
     <HomeShell>
       <PageFrame
-        title={m["home.libraries"]()}
+        title={m["home.library"]()}
         summary={
           fileService && libraries.length > 0
             ? (libraries.length === 1
@@ -45,16 +46,19 @@ export function LibrariesPage() {
             <Spinner /> {m["libs.reading"]()}
           </div>
         ) : (
-          <>
-            <LibrariesCard
-              fileService={fileService}
-              onLibraries={setLibraries}
-              inPage
-            />
-            {fileService && (
-              <LibraryPins fileService={fileService} libraries={libraries} />
-            )}
-          </>
+          <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-5">
+              <LibrariesCard
+                fileService={fileService}
+                onLibraries={setLibraries}
+                inPage
+              />
+              {fileService && (
+                <LibraryPins fileService={fileService} libraries={libraries} />
+              )}
+            </div>
+            <FrozenChainsSection files={fileService} />
+          </div>
         )}
       </PageFrame>
     </HomeShell>

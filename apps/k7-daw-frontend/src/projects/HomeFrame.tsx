@@ -8,14 +8,13 @@ import {
   LibraryBig,
   ListChecks,
   type LucideIcon,
-  Snowflake,
 } from "@studio/ui/icons";
 import { TabBar, TabBarItem } from "@studio/ui/tab-bar";
 import type { ReactNode } from "react";
 import { useHref, useLocation, useNavigate } from "react-router-dom";
 import { AskHostK7 } from "../AskHostK7";
 import { m } from "../paraglide/messages.js";
-import { FROZEN_CHAINS_ROUTE, LIBRARIES_ROUTE, TASKS_ROUTE } from "./api";
+import { LIBRARIES_ROUTE, TASKS_ROUTE } from "./api";
 import { HomeCommandBar, HomeCommandsButton } from "./HomeCommandBar";
 import { usePluginScanToast } from "./usePluginScanToast";
 
@@ -38,13 +37,10 @@ export function HomeFrame({ children }: { children: ReactNode }) {
 function HomeTab({
   icon: Icon,
   label,
-  name,
   route,
 }: {
   icon: LucideIcon;
   label: ReactNode;
-  /** The accessible name when the label is shortened for the narrow bar. */
-  name?: string;
   route: string;
 }) {
   const href = useHref(route);
@@ -55,7 +51,6 @@ function HomeTab({
       href={href}
       icon={<Icon />}
       label={label}
-      aria-label={name}
       selected={here}
       className="max-sm:w-[68px]"
       onClick={(e) => {
@@ -85,19 +80,8 @@ export function HomeTabs() {
         />
         <HomeTab
           icon={LibraryBig}
-          label={m["home.libraries"]()}
+          label={m["home.library"]()}
           route={LIBRARIES_ROUTE}
-        />
-        <HomeTab
-          icon={Snowflake}
-          label={
-            <>
-              <span className="max-sm:hidden">{m["frozen.title"]()}</span>
-              <span className="sm:hidden">{m["home.frozenShort"]()}</span>
-            </>
-          }
-          name={m["frozen.title"]()}
-          route={FROZEN_CHAINS_ROUTE}
         />
       </TabBar>
     </div>

@@ -1,4 +1,4 @@
-// frozen-chains.spec.ts — the Frozen chains page: a library's cold chain duplicated into the account's and deleted, and the bench.
+// frozen-chains.spec.ts — the Library page's Frozen chains section: a library's cold chain duplicated into the account's and deleted, and the bench.
 // The bench is a project the page opens, saved nowhere, and in no list of workspaces (apps/k7-daw-frontend/docs/frozenChains.md).
 import type { Locator, Page } from "@playwright/test";
 import { homeTab } from "../../src/home.ts";
@@ -41,7 +41,7 @@ test("a cold chain is duplicated into the account's and deleted, and New chain o
   k7,
 }) => {
   test.setTimeout(150_000);
-  let page = await k7.open("/libraries/chains");
+  let page = await k7.open("/libraries");
   await openPage(page);
   // A failed run may have left the copy: start without it.
   if ((await row(page, `@account/${MINE}`).count()) > 0) await deleteMine(page);
@@ -94,7 +94,7 @@ test("a cold chain is duplicated into the account's and deleted, and New chain o
   });
 
   await test.step("delete it", async () => {
-    page = await k7.open("/libraries/chains");
+    page = await k7.open("/libraries");
     await openPage(page);
     await deleteMine(page);
   });
