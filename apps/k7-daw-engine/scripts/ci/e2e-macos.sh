@@ -100,7 +100,7 @@ for n in "${slots[@]}"; do
   mkdir -p "$blogs" "$bed"
   echo "bed slot $n: front $front, backend $backend, web $web, engine $engine"
   # Nothing of the Mac's answers on the bed's ports: a listener there would shadow the bed's loopback bind.
-  for p in $front $backend $web $engine $((front + 2)); do
+  for p in $front $backend $web $engine $((front + 2)) $((front + 3)); do
     if lsof -nP -iTCP:"$p" -sTCP:LISTEN > /dev/null 2>&1; then
       echo "port $p is held on this Mac:"; lsof -nP -iTCP:"$p" -sTCP:LISTEN; exit 1
     fi
@@ -200,7 +200,8 @@ EOF
   set -m
   # The LAN door on the loopback beside the front, the switch on and no discovery: a second front names it below (docs/lan.md).
   start front apps/k7-daw-backend env K7_GIT_ALLOW_FILE=1 K7_FRONT_LISTEN="127.0.0.1:$front" \
-    K7_LAN_OPEN=1 K7_LAN_LISTEN="127.0.0.1:$((front + 2))" K7_LAN_PEERS=none node scripts/dev-front.mjs
+    K7_LAN_OPEN=1 K7_LAN_LISTEN="127.0.0.1:$((front + 2))" K7_LAN_PEERS=none \
+    K7_GITHUB_CLIENT_ID=e2e K7_GITHUB_WEB_URL="http://127.0.0.1:$((front + 3))" K7_GITHUB_API_URL="http://127.0.0.1:$((front + 3))" node scripts/dev-front.mjs
   if [ "$serves" = web ]; then
     start frontend apps/k7-daw-frontend env STUDIO_WEB_PORT=$web STUDIO_BACKEND_URL="http://127.0.0.1:$front" npx vite --host 127.0.0.1 --strictPort
     # A second front with a home of its own and no engine, serving the same page; it lists the first one's door (e2e/specs/app/lanSurfaces.spec.ts).
@@ -271,7 +272,7 @@ run_suite() {
 }
 web_suite() {
   bed_of "${slots[0]}"
-  E2E_BASE_URL="http://127.0.0.1:$web" E2E_PEER_URL="http://127.0.0.1:$backend" run_suite web playwright.config.ts
+  E2E_BASE_URL="http://127.0.0.1:$web" E2E_PEER_URL="http://127.0.0.1:$backend" E2E_GITHUB_PORT=$((front + 3)) run_suite web playwright.config.ts
 }
 conformance_suite() {
   bed_of "${slots[${#slots[@]} - 1]}"

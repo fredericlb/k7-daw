@@ -128,6 +128,8 @@ recording, the frozen chains and their bench, and the surfaces each archetype op
 workspace, edits the same key on both sides and resolves the conflict. The remote is a folder on this machine, so the spec is the web
 target's alone and needs the front started with `K7_GIT_ALLOW_FILE` (`apps/k7-daw-backend/docs/git.md`).
 
+`github-signin.spec.ts` connects through "Sign in with GitHub" against `src/fakeGithub.ts`, a GitHub the spec starts on the port the bed gives it (`E2E_GITHUB_PORT`, the front's port + 3). The bed starts the front with `K7_GITHUB_CLIENT_ID` and both base URLs on that port, so every web spec sees the dialogs open on GitHub and a spec that wants the address form takes **Another host…** (`chooseAnotherHost`).
+
 A spec runs on both targets unless what it checks exists on one only, and then it says so in its
 `test.skip`: a signed-out visitor or Chromium's fake microphone is the web's.
 

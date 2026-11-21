@@ -1,13 +1,17 @@
 //! git_github_api.rs — the few HTTPS calls to GitHub (the device flow, the account's keys, its repositories) on the front's own
 //! client. What a reader gets wrong: a token only ever talks to the REST API; git itself stays SSH, and both base URLs are
-//! overridable (`K7_GITHUB_WEB_URL`, `K7_GITHUB_API_URL`) so a test points them at a fake on 127.0.0.1.
+//! overridable (`K7_GITHUB_WEB_URL`, `K7_GITHUB_API_URL`), honoured on 127.0.0.1, ::1 and localhost only.
 
+use std::sync::Once;
 use std::time::Duration;
 
 use http_body_util::{BodyExt, Full};
 use hyper::body::Bytes;
 use hyper::header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE, USER_AGENT};
 use serde_json::{Value, json};
+
+static WEB_SAID: Once = Once::new();
+static API_SAID: Once = Once::new();
 
 /// The OAuth App's public client id and the two places GitHub answers.
 #[derive(Clone, Debug)]
@@ -49,11 +53,42 @@ fn client_id() -> Option<String> {
     run.or_else(|| built.map(str::to_string))
 }
 
-fn base(var: &str, default: &str) -> String {
+/// Whether an override points at this machine (127.0.0.1, ::1, localhost): the only place a test's fake may be.
+fn is_loopback(url: &str) -> bool {
+    let Some(rest) = url
+        .strip_prefix("http://")
+        .or_else(|| url.strip_prefix("https://"))
+    else {
+        return false;
+    };
+    let authority = rest.split('/').next().unwrap_or("");
+    if authority.contains('@') {
+        return false;
+    }
+    let host = match authority.strip_prefix('[') {
+        Some(v6) => v6.split(']').next().unwrap_or(""),
+        None => authority.split(':').next().unwrap_or(""),
+    };
+    matches!(
+        host.to_ascii_lowercase().as_str(),
+        "127.0.0.1" | "::1" | "localhost"
+    )
+}
+
+/// The override when it stays on this machine, else the default: a stray variable never sends the token elsewhere.
+fn base(var: &str, default: &str, said: &Once) -> String {
     let v = std::env::var(var).ok().filter(|s| !s.is_empty());
-    v.unwrap_or_else(|| default.to_string())
-        .trim_end_matches('/')
-        .to_string()
+    let kept = match v {
+        Some(v) if is_loopback(&v) => v,
+        Some(_) => {
+            said.call_once(|| {
+                eprintln!("[git] {var} ignored: only 127.0.0.1, ::1 and localhost are accepted")
+            });
+            default.to_string()
+        }
+        None => default.to_string(),
+    };
+    kept.trim_end_matches('/').to_string()
 }
 
 impl Hub {
@@ -61,8 +96,8 @@ impl Hub {
     pub fn from_env() -> Option<Hub> {
         Some(Hub {
             client_id: client_id()?,
-            web: base("K7_GITHUB_WEB_URL", "https://github.com"),
-            api: base("K7_GITHUB_API_URL", "https://api.github.com"),
+            web: base("K7_GITHUB_WEB_URL", "https://github.com", &WEB_SAID),
+            api: base("K7_GITHUB_API_URL", "https://api.github.com", &API_SAID),
         })
     }
 
@@ -167,4 +202,32 @@ pub(super) fn next_page(link: &str) -> Option<String> {
                 .to_string()
         })
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::is_loopback;
+
+    #[test]
+    fn github_base_override_is_taken_only_on_this_machine() {
+        for ok in [
+            "http://127.0.0.1:9000",
+            "http://localhost:1/x",
+            "http://[::1]:80",
+            "https://127.0.0.1",
+        ] {
+            assert!(is_loopback(ok), "{ok}");
+        }
+        for no in [
+            "https://evil.example",
+            "http://localhost.evil.example",
+            "http://127.0.0.1@evil.example",
+            "http://127.0.0.1.evil.example",
+            "ftp://127.0.0.1",
+            "127.0.0.1:9000",
+            "",
+        ] {
+            assert!(!is_loopback(no), "{no}");
+        }
+    }
 }

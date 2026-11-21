@@ -5,6 +5,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { Locator, Page } from "@playwright/test";
+import { chooseAnotherHost } from "../../src/home.ts";
 import { expect, test } from "../../src/target.ts";
 
 const A = "E2E-git-a";
@@ -74,6 +75,7 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
         .click();
       await page.getByRole("menuitem", { name: "Connect to git…" }).click();
       const dialog = page.getByRole("dialog", { name: /^Connect .+ to git$/ });
+      await chooseAnotherHost(dialog);
       await dialog.getByLabel("Repository address").fill(url);
       await dialog
         .getByRole("button", { name: "Connect", exact: true })
@@ -98,6 +100,7 @@ test("a workspace is connected, pushed, cloned and merged through a bare reposit
       await page.getByRole("menuitem", { name: "Clone from git" }).click();
       const dialog = page.getByRole("dialog", { name: "Clone a repository" });
       await dialog.getByLabel("Name of the workspace").fill(B);
+      await chooseAnotherHost(dialog);
       await dialog.getByLabel("Repository address").fill(url);
       await dialog.getByRole("button", { name: "Clone", exact: true }).click();
       await expect(dialog).toBeHidden(SLOW);

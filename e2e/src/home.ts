@@ -29,3 +29,13 @@ export const projectLink = (page: Page, ws: string, project: string): Locator =>
     name: `Open ${project}`,
     exact: true,
   });
+
+/** In a Connect or Clone dialog that opens on GitHub, takes the plain way; a dialog without GitHub is already on it. */
+export async function chooseAnotherHost(dialog: Locator): Promise<void> {
+  const other = dialog.getByRole("button", { name: "Another host…" });
+  const shown = await other
+    .waitFor({ state: "visible", timeout: 5_000 })
+    .then(() => true)
+    .catch(() => false);
+  if (shown) await other.click();
+}
