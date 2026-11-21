@@ -11,6 +11,7 @@ mod backend;
 mod exports;
 mod handlers;
 mod http;
+mod idmove;
 mod job;
 mod logbus;
 mod open;
@@ -29,6 +30,12 @@ use state::{AppState, Backend, SharedState};
 fn main() {
     #[cfg(target_os = "linux")]
     webview_linux::before_gtk();
+    // Before the builder and its plugins create the new folders; a scratch run leaves the person's alone.
+    let moved = if paths::scratch().is_none() {
+        idmove::run()
+    } else {
+        Vec::new()
+    };
     let mut builder = tauri::Builder::default();
     // A second launch brings the window up; a scratch run (`K7_DESKTOP_SCRATCH`) is a second app on purpose.
     if paths::scratch().is_none() {
@@ -43,7 +50,7 @@ fn main() {
     }
     builder
         .manage(backend::Process::default())
-        .setup(|app| {
+        .setup(move |app| {
             let handle = app.handle().clone();
             exports::install(&handle);
 
@@ -55,6 +62,9 @@ fn main() {
                 logbus::line("host", &why);
             }
             logbus::line("host", &format!("K7 DAW {} starting", env!("K7_RELEASE")));
+            for l in &moved {
+                logbus::line("host", l);
+            }
             // The front runs in this process, whose stderr nobody reads: its panics and its stop go to the merged log.
             k7_front::exit::watch(Some(|l| logbus::line("front", l)));
 

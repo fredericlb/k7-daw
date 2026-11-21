@@ -8,9 +8,24 @@ K7 DAW is k7 on a computer: Windows, Linux and macOS (Apple silicon). It is a Ta
 The product is **K7 DAW**. The binary, the Cargo package and the folder are `k7-desktop`
 (`mainBinaryName`): the dev session's stop finds the process by that name. The engine it runs is `k7-runtime`.
 
-**`org.parapluie.studio.engine-tray`, the bundle identifier, is frozen**, on every OS, whatever the name says. It is
-the app's identity on Windows and Linux, and it names the folder the front keeps its state in (the OS's per-app
-folder: `~/Library/Application Support/<identifier>` on a Mac), so a new identifier reads as a first launch.
+**`rocks.k7.daw` is the bundle identifier**, on every OS, like the iOS and Android apps'. It is the app's identity on
+Windows and Linux, and it names the folders the OS keeps per app: the data, config, local data and cache folders
+(`~/Library/Application Support/<identifier>` on a Mac), where the front keeps its state, and the webview's own storage
+(WKWebView's `~/Library/WebKit/<identifier>`, WebView2's and WebKitGTK's inside those folders). A change of identifier
+reads as a first launch, so it is a migration, not a rename.
+
+| choice | why |
+|---|---|
+| `src-tauri/src/idmove.rs` renames the old identifier's folder to the new one, before the builder and its plugins run | nothing may create the new folder first, or the old state is shadowed; a rename on one parent folder is atomic and keeps the volume |
+| the move covers data, config, local data and cache, and on a Mac `~/Library/WebKit`, `HTTPStorages`, `Logs` and the `Preferences` plist | these are every place the OS and the webview key on the identifier; the page's storage (origin `127.0.0.1:18789`) travels with the webview folder |
+| a new folder that already exists is left alone with the old one beside it, and the log names both | merging or deleting could lose a person's work |
+| a failed rename is logged and the app starts on the new folder | a start that cannot move is still a start |
+| a scratch run (`K7_DESKTOP_SCRATCH`) moves nothing | it is a second app on purpose and must not touch the person's folders |
+| the git secrets stay put: their keychain service is `k7 git`, not the identifier | there is nothing keyed on the identifier to copy; a Mac may ask once to let the new signature read an item the old one made |
+
+What a move cannot carry is the system's own grants, which are kept per identifier: the microphone and camera
+permissions on a Mac ask again, and a Windows install of the old identifier stays installed beside the new one, since the
+installer keys on it.
 
 Neither may `<state>` (`~/.k7`) move, nor what is under it, nor the `STUDIO_*` variables
 (`apps/k7-daw-frontend/packages/engine-client/docs/paths.md`).

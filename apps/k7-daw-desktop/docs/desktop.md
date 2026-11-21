@@ -55,4 +55,4 @@ After a gap in the backend the window reloads the page: what the backend never r
 ## Names
 
 The product is **K7 DAW**; the binary and the Cargo package are `k7-desktop` and the bundle identifier is
-`org.parapluie.studio.engine-tray` (`docs/app.md`). Release files are `k7-daw_<version>_<os>-<arch>.<ext>`.
+`rocks.k7.daw` (`docs/app.md`). Release files are `k7-daw_<version>_<os>-<arch>.<ext>`.
