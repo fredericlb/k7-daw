@@ -78,7 +78,8 @@ function Row({
     : [
         ...(input ? [input] : []),
         ...chain.steps.map(
-          (s) => `${s.module.split("/").pop()}${s.bypass ? " (bypass)" : ""}`,
+          (s) =>
+            `${s.module.split("/").pop()}${s.bypass ? m["frozen.bypass"]() : ""}`,
         ),
       ].join(" → ");
   // The bench plays it live, so a chain that cannot run live is edited nowhere: the reason says why.
@@ -248,10 +249,12 @@ export function FrozenChainsSection({ files }: { files: AccountFiles | null }) {
         initial: copyName(c.name, taken),
         placeholder: m["frozen.namePlaceholder"](),
         confirmLabel: m["frozen.duplicate"](),
+        // A bad name is said in the dialog, which stays open with what was typed.
+        validate: (v) =>
+          FROZEN_NAME.test(v.trim()) ? "" : m["frozen.badName"](),
       })
     )?.trim();
     if (!name) return;
-    if (!FROZEN_NAME.test(name)) return setError(m["frozen.badName"]());
     setError(null);
     try {
       await accountFiles.copyFrozenChain(files, c.ref, name);
