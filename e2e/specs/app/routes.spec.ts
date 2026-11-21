@@ -44,6 +44,10 @@ test("/settings draws every section with its controls, a tab at a time", async (
   await sections(["Paired devices"]);
   await expect(page.getByRole("link", { name: /^Engine/ })).toBeVisible();
   await expect(page).toHaveURL(/[?&]tab=devices/);
+  // Services: the sign-ins to outside services, GitHub's alone today.
+  await page.getByRole("tab", { name: "Services" }).click();
+  await sections(["GitHub"]);
+  await page.getByRole("tab", { name: "Devices" }).click();
   // A link straight to a tab opens on it.
   await page.reload();
   await expect(page.getByRole("tab", { name: "Devices" })).toHaveAttribute(

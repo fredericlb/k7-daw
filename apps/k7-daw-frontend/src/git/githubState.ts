@@ -31,15 +31,18 @@ export interface PollAnswer {
   keyNote?: string;
 }
 
-/** Sign-in asks for the person and the key; the repositories need `repo`, asked when the picker first opens. */
-export const SIGN_IN_SCOPES = ["read:user", "write:public_key"];
-export const REPO_SCOPES = [...SIGN_IN_SCOPES, "repo"];
+/** Settings → Services asks everything in one code: the person, the key, and `repo` for Connect's picker. */
+export const GITHUB_SCOPES = ["read:user", "write:public_key", "repo"];
 
 export const signedIn = (s: GithubStatus | null): boolean =>
   Boolean(s?.available && s.login);
 
 export const hasRepoScope = (s: GithubStatus | null): boolean =>
   Boolean(s?.scopes.includes("repo"));
+
+/** Connect and Clone show GitHub's picker only to a person signed in with `repo`; nobody else sees GitHub there. */
+export const canPick = (s: GithubStatus | null): boolean =>
+  signedIn(s) && hasRepoScope(s);
 
 export type SignIn =
   | { phase: "starting" }

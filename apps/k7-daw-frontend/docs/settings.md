@@ -39,7 +39,7 @@ at the account's settings is therefore a link to `/settings`.
 ## Tabs, and the one in the address
 
 `/settings` and the desktop app's engine page group their sections under tabs (`settings/SettingsTabs.tsx`):
-`/settings` under General, Devices, Downloads and About; `/settings/engine`, on the desktop app, under Engine and Plugins. Every section in one column runs past what one screen shows, and
+`/settings` under General, Devices, Services, Downloads and About; `/settings/engine`, on the desktop app, under Engine and Plugins. Every section in one column runs past what one screen shows, and
 the sections fall into groups nobody needs at once.
 
 - **The tab is in the address**, as `?tab=`, so a reload or a link given to someone lands on it. It
@@ -146,6 +146,19 @@ The fields save themselves (after a pause in typing, and when one loses focus) a
 
 **There is no fallback author.** An empty identity is a commit the backend refuses (`no-identity`) and the
 dialog asks for, never a commit signed by nobody; the heading falls back to "Local" instead.
+
+## Services — the sign-ins to outside services
+
+`git/GitHubSection.tsx`, its own tab. **Sign in with GitHub lives here and nowhere else**: Connect and Clone
+show GitHub's repositories only to a device already signed in, and otherwise open on the ssh address form
+(`git.md`). A sign-in inside the connect dialog would chain a second device code for the repository permission
+behind the first, a screen that reads as a hang once GitHub has already said "success".
+
+- **One code asks for everything** (`read:user`, `write:public_key`, `repo`): the sign-in exists to list and
+  make repositories, so the permission is needed the moment it ends.
+- **A sign-in GitHub granted without `repo`** shows "Allow repositories", one more code with
+  every scope; Connect does not offer the picker until it is done.
+- **Sign out removes the token only**, and the section says the key k7 added stays on GitHub.
 
 ## Paired devices — answered here, asked on the machine
 

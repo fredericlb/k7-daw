@@ -116,7 +116,7 @@ The home pages behind a floating tab bar (Projects, Surfaces, Tasks, Library, Se
 
 ### Git screens
 
-The git bar (workspace tree, Home row, project header), the commit dialog, the merge dialog with conflict cards, the remote and clone dialogs with their Sign in with GitHub ways, the device-flow code and the repository picker, the commit list, the identity form.
+The git bar (workspace tree, Home row, project header), the commit dialog, the merge dialog with conflict cards, the remote and clone dialogs with GitHub's repository picker once signed in, the commit list, the identity form; Sign in with GitHub and its device-flow code are in Settings → Services.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -478,7 +478,7 @@ The share panel: timeline choice, audio exports, video export row.
 
 ### Settings · In-project settings panel
 
-The `/settings` page (General, Devices, Downloads, About), the engine page (Engine, Instruments, Chains, Plugins; a phone variant), the in-project Settings panel (Editor, I/O, Project) and the full-screen command editor.
+The `/settings` page (General, Devices, Services, Downloads, About), the engine page (Engine, Instruments, Chains, Plugins; a phone variant), the in-project Settings panel (Editor, I/O, Project) and the full-screen command editor.
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
@@ -730,7 +730,7 @@ No interaction of its own: its controls are listed under .
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
 | 01.13 | Clear finished downloads | Settings → Downloads → Clear finished | — | tap | T M D |
-| 23.02 | Switch tab | click the tab: General, Devices, Downloads, About (kept in `?tab=`) | ←/→ | tap | T M D |
+| 23.02 | Switch tab | click the tab: General, Devices, Services, Downloads, About (kept in `?tab=`) | ←/→ | tap | T M D |
 | 23.03 | Change the language | click a language button | Enter | tap | T M D |
 | 23.04 | Save the Claude API key | type in the password field, click Save | Enter saves | tap, type | T M D |
 | 23.05 | Remove the Claude API key | click Remove | — | tap | T M D |
@@ -743,7 +743,7 @@ No interaction of its own: its controls are listed under .
 | 23.12 | Download, cancel, remove or retry an instrument | click the button on its row (Downloads tab) | Enter | tap | T M D |
 | 23.13 | Open the Engine page | Devices → click the Engine row | Enter | tap | T M D |
 | 23.14 | Read k7's licence, open its source, read a third-party notice | About → Read it; Open; search, click a notice | Enter | tap | T M D |
-| 23.15 | Sign out of GitHub | General → GitHub (shown once signed in): click "Sign out" beside @login; the key k7 added stays on GitHub | Tab, Enter | tap | T M D |
+| 23.15 | Sign out of GitHub | Services → GitHub (shown once signed in): click "Sign out" beside @login; the key k7 added stays on GitHub | Tab, Enter | tap | T M D |
 | 23.16 | Manage this device's keys on GitHub | click "Manage keys on GitHub" (github.com/settings/keys, a new tab) | Tab, Enter | tap | T M D |
 
 ### Git screens
@@ -1016,13 +1016,13 @@ The Surfaces tab lists, by device, the surfaces of the projects open on the netw
 
 | ID | Interaction | Mouse / trackpad | Keyboard | Touch | Devices |
 |---|---|---|---|---|---|
-| 41.01 | Sign in with GitHub | click "Sign in with GitHub": Connect and Clone open on it beside "Another host…" where the build offers GitHub → the code screen | Tab, Enter | tap | T M D |
-| 41.02 | Choose another host | click "Another host…" (under the two ways, the permission step and the picker) → the ssh address form; typing an address also chooses it | Tab, Enter | tap | T M D |
+| 41.01 | Sign in with GitHub | Settings → Services → GitHub: click "Sign in with GitHub" (shown while not signed in) → the code screen; the one code asks for the key and the repositories | Tab, Enter | tap | T M D |
+| 41.02 | Choose another host | click "Another host…" (under the picker, shown once signed in with GitHub) → the ssh address form; typing an address also chooses it | Tab, Enter | tap | T M D |
 | 41.03 | Copy the sign-in code | click "Copy code" (the code box selects all) | — | tap Copy code | T M D |
 | 41.04 | Open GitHub's device page | click "Open github.com/login/device" (a new tab) and type the code there; k7 waits, asking while the page is visible | — | tap | T M D |
 | 41.05 | Try the sign-in again | click "Try again" after "The code expired.", "Sign-in was cancelled on GitHub." or a network error | — | tap | T M D |
-| 41.06 | Cancel the sign-in | click Cancel under the code (back to the two ways) | — | tap | T M D |
-| 41.07 | Grant the repository permission | the first picker opens on a second code ("k7 needs one more permission to list and create your repositories."): copy, open and try again as 41.03–41.05; its Cancel goes to Another host | — | same | T M D |
+| 41.06 | Cancel the sign-in | click Cancel under the code (back to Services' GitHub row) | — | tap | T M D |
+| 41.07 | Allow repositories | Services → GitHub, a sign-in GitHub granted without the repository permission: click "Allow repositories" → one more code (copy, open and try again as 41.03–41.05); Connect shows no picker until it is done | — | same | T M D |
 
 ## 42 GitHub repositories
 
@@ -1056,3 +1056,4 @@ The Surfaces tab lists, by device, the surfaces of the projects open on the netw
 - A chain or OUT card opens no menu on right-click, unlike every other card.
 - Removing a takes crossfade needs Alt, and sizing a timeline crossfade needs a drag: touch gets only the default.
 - `apps/k7-daw-frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.
+- Screen 41's boards (GitHubWays, CloneWays, GitHubPermission) still draw Sign in with GitHub inside Connect and Clone; it is in Settings → Services, and Services has no board.

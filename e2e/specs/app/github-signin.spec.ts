@@ -1,5 +1,5 @@
-// github-signin.spec.ts — Connect through "Sign in with GitHub": the code is shown, the fake GitHub approves, the picker lists
-// the k7 workspace first, and picking a repository whose address is a folder connects the workspace.
+// github-signin.spec.ts — Sign in with GitHub in Settings → Services (one code, `repo` included), then Connect lists the
+// repositories, k7 workspaces first, and picking one whose address is a folder connects the workspace.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -12,7 +12,9 @@ const WS = "E2E-github";
 const SHOWN = { timeout: 30_000 };
 const PORT = Number(process.env.E2E_GITHUB_PORT ?? 0);
 
-test("a workspace is connected through Sign in with GitHub", async ({ k7 }) => {
+test("a workspace is connected after Sign in with GitHub in Settings", async ({
+  k7,
+}) => {
   test.skip(k7.target !== "web", "the remote is a folder on this machine");
   test.skip(!PORT, "the bed points the front at no fake GitHub");
   test.setTimeout(120_000);
@@ -25,31 +27,42 @@ test("a workspace is connected through Sign in with GitHub", async ({ k7 }) => {
   const files = await k7.files();
   await files.removeWorkspace(WS);
   await files.createWorkspace(WS);
+  const page = await k7.open("/settings?tab=services");
   try {
-    const page = await k7.open("/");
     // A run before this one may have left the device signed in.
     await page.request.post("/api/files/git/github/signout").catch(() => {});
+    await page.reload();
+    const section = page.getByRole("region", { name: "GitHub" });
+    await section.getByRole("button", { name: "Sign in with GitHub" }).click();
+    await expect(section.getByText("ABCD-1234")).toBeVisible(SHOWN);
+    expect(github.asked().split(" ")).toContain("repo");
+    github.approve();
+    await expect(section.getByText("@octo")).toBeVisible(SHOWN);
+    await expect(
+      section.getByRole("button", { name: "Sign out" }),
+    ).toBeVisible();
+    expect(github.keys).toHaveLength(1);
+
+    await page.goto("/");
     await workspaceCard(page, WS).waitFor({ timeout: 60_000 });
     await workspaceCard(page, WS)
       .getByRole("button", { name: `What can be done with ${WS}`, exact: true })
       .click();
     await page.getByRole("menuitem", { name: "Connect to git…" }).click();
     const dialog = page.getByRole("dialog", { name: /^Connect .+ to git$/ });
-
-    await dialog.getByRole("button", { name: "Sign in with GitHub" }).click();
-    await expect(dialog.getByText("ABCD-1234")).toBeVisible(SHOWN);
-    github.approve();
-
     await expect(dialog.getByText("Signed in as @octo")).toBeVisible(SHOWN);
+    await expect(
+      dialog.getByRole("button", { name: "Sign in with GitHub" }),
+    ).toHaveCount(0);
     const rows = dialog.getByRole("button", { name: /^octo\// });
     await expect(rows).toHaveCount(2, SHOWN);
     await expect(rows.first()).toContainText("octo/songs");
-    expect(github.keys).toHaveLength(1);
 
     await rows.first().click();
     await expect(dialog).toBeHidden(SHOWN);
     await expect(page.getByText(`${WS} is connected to`)).toBeVisible(SHOWN);
   } finally {
+    await page.request.post("/api/files/git/github/signout").catch(() => {});
     await github.close();
   }
 });

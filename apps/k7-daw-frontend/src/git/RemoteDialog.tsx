@@ -24,6 +24,7 @@ import { useGitTransport } from "./GitContext";
 import type { PickedRepo } from "./GitHubPicker";
 import { GitHubWays } from "./GitHubWays";
 import { explain, GitError, type Remote } from "./gitApi";
+import { canPick } from "./githubState";
 import { RemoteFields } from "./RemoteFields";
 import { useGithub } from "./useGithub";
 
@@ -65,10 +66,10 @@ export function RemoteDialog({
   const [error, setError] = useState("");
   const t = useGitTransport();
   const github = useGithub(open ? t : null);
-  // The person's explicit way ("Another host…"); until then GitHub leads where the build offers it and nothing was typed.
+  // The person's explicit way ("Another host…"); until then GitHub's picker leads for a person signed in and nothing was typed.
   const [chosen, setChosen] = useState<"other" | null>(null);
   const [fromGithub, setFromGithub] = useState(false);
-  const offered = github.status?.available === true && t !== null;
+  const offered = canPick(github.status) && t !== null;
   const ways = offered && !chosen && !initialUrl;
   // Typing an address is choosing the other way, whenever the status arrived.
   const edit = (e: FormEvent) => {
