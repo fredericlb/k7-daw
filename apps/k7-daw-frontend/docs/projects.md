@@ -39,10 +39,10 @@ If the first thing you want at a front door is your own work, then the page list
 the front door, and putting it behind a prefix you have to know how to type would rank it second.
 
 **The home pages share ONE frame** (`HomeFrame.tsx`): a floating tab bar, a round command-bar button beside it, no
-sidebar and no bottom bar. The tabs are Projects, Tasks and Library (the libraries, then the frozen chains), drawn by `@studio/ui/tab-bar`.
+sidebar and no bottom bar. The tabs are Projects, Tasks, Library (the libraries, then the frozen chains) and Settings, drawn by `@studio/ui/tab-bar`.
 They are LINKS, since each page has its own address: a plain click is a router move, a modified click opens like any
-link, and the current page carries `aria-current`. The settings pages are reached by the cog at the right of every
-page's top bar and light no tab.
+link, and the current page carries `aria-current`. Settings is the last tab, lit on App settings and on the Engine page
+under it; App settings itself is a sub-page with its own Back and no tab bar.
 
 | choice | why |
 |---|---|
@@ -519,7 +519,7 @@ from here, Tasks, draws the block without one.
 ## The page's hierarchy: one title, one menu for New, violet for state
 
 The top bar (`PageFrame.tsx`) is a large title with a count line under it, and at its right **New** (a menu: New
-workspace, Clone from git), **More** (Show examples) and the cog to App settings. A project is made from its
+workspace, Clone from git), **More** (Show examples). A project is made from its
 workspace's card, where its destination is already known, so the page has no New project button. The list is capped
 at `max-w-5xl`.
 
