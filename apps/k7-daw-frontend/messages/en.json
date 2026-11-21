@@ -439,6 +439,7 @@
   "name.required": "a name is needed",
   "name.noSlash": "no “/” or “\\\\” in a name",
   "name.noDot": "a name cannot start with a dot",
+  "repos.treeFailed": "k7 could not read the workspace {name}",
   "repos.reading": "Reading your workspaces…",
   "repos.emptyWorkspace": "This workspace is empty.",
   "repos.pickFile": "Pick a file to read it.",

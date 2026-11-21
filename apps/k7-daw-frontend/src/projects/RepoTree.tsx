@@ -3,6 +3,7 @@
 // Read-only: what is written in a project is written once it is open. See ../../docs/projects.md.
 
 import { Button } from "@studio/ui/button";
+import { ErrorCard } from "@studio/ui/error-card";
 import {
   ArrowLeft,
   ArrowRight,
@@ -101,6 +102,8 @@ export function RepoTree({
   workspace,
   files,
   nodes,
+  error = null,
+  onRetry,
   onBack,
   projectHref,
 }: {
@@ -109,6 +112,9 @@ export function RepoTree({
   files: AccountFiles | null;
   /** null until the file service has answered — that is not an empty workspace. */
   nodes: FileNode[] | null;
+  /** The read failed: its sentence, drawn in place of the tree. */
+  error?: string | null;
+  onRetry: () => void;
   onBack: () => void;
   /** A project's address, not the act of opening it: the row makes it a real link. */
   projectHref: (path: string, app: ProjectApp) => string;
@@ -123,8 +129,27 @@ export function RepoTree({
         </Button>
         <span className="truncate font-medium">{workspace.name}</span>
       </div>
-      <WorkspaceGitBar transport={gitTransport} workspace={workspace.name} />
-      <FilesTree source={source} nodes={nodes} projectHref={projectHref} />
+      {error ? (
+        <div className="flex flex-col gap-3 p-6">
+          <ErrorCard title={m["repos.treeFailed"]({ name: workspace.name })}>
+            {error}
+          </ErrorCard>
+          <div className="flex gap-2">
+            <Button onClick={onRetry}>{m["common.retry"]()}</Button>
+            <Button variant="glass" onClick={onBack}>
+              {m["common.back"]()}
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <WorkspaceGitBar
+            transport={gitTransport}
+            workspace={workspace.name}
+          />
+          <FilesTree source={source} nodes={nodes} projectHref={projectHref} />
+        </>
+      )}
     </div>
   );
 }

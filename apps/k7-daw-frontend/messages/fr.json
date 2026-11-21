@@ -439,6 +439,7 @@
   "name.required": "il faut un nom",
   "name.noSlash": "pas de « / » ni de « \\\\ » dans un nom",
   "name.noDot": "un nom ne peut pas commencer par un point",
+  "repos.treeFailed": "k7 n'a pas pu lire l'espace de travail {name}",
   "repos.reading": "Lecture de vos espaces de travail…",
   "repos.emptyWorkspace": "Cet espace de travail est vide.",
   "repos.pickFile": "Choisissez un fichier pour le lire.",

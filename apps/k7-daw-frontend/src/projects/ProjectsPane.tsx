@@ -59,6 +59,9 @@ export function ProjectsPane({
   // A warning that is not a failure — the library modules a project just created still owes.
   const [notice, setNotice] = useState<string | null>(null);
   const [nodes, setNodes] = useState<FileNode[] | null>(null);
+  // A failed read of the unfolded tree is its own error, drawn by the tree with Retry and Back.
+  const [treeError, setTreeError] = useState<string | null>(null);
+  const [treeTry, setTreeTry] = useState(0);
   const ws = workspaces.find((w) => w.name === openWs) ?? null;
 
   /** What stops a write, in one sentence, or "". Said on the button rather than found on click. */
@@ -211,22 +214,24 @@ export function ProjectsPane({
   useEffect(() => {
     if (!openWs || !fileService) {
       setNodes(null);
+      setTreeError(null);
       return;
     }
     let stop = false;
     setNodes(null);
+    setTreeError(null);
     void accountFiles
       .workspaceTree(fileService, openWs)
       .then((n) => {
         if (!stop) setNodes(n);
       })
       .catch((e: Error) => {
-        if (!stop) setError(e.message);
+        if (!stop) setTreeError(e.message);
       });
     return () => {
       stop = true;
     };
-  }, [openWs, fileService]);
+  }, [openWs, fileService, treeTry]);
 
   const gitTransportOf = useMemo(
     () => (fileService ? gitTransport(fileService) : null),
@@ -255,6 +260,8 @@ export function ProjectsPane({
             workspace={ws}
             files={fileService}
             nodes={nodes}
+            error={treeError}
+            onRetry={() => setTreeTry((n) => n + 1)}
             onBack={() => onOpen(null)}
             projectHref={(path, app) => projectHref(ws, { path, app })}
           />
