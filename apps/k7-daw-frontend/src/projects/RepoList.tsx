@@ -1,4 +1,4 @@
-// RepoList.tsx — the account's workspaces and their projects: the Home top bar (title, New, More, the cog), then the
+// RepoList.tsx — the account's workspaces and their projects: the Home top bar (title, New, More), then the
 // workspace cards (ProjectsTable.tsx), "On your other devices" at their foot, or what stands in for them when there is
 // nothing to list. Presentational — the section holds the async and this file draws. See ../../docs/projects.md.
 

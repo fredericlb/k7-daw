@@ -88,7 +88,6 @@ export function SettingsPage() {
         title={m["settings.title"]()}
         summary={m["settings.scope"]()}
         narrow
-        cog={false}
         back
       >
         <SettingsTabs

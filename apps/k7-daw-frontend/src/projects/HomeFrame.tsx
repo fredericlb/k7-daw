@@ -8,13 +8,14 @@ import {
   LibraryBig,
   ListChecks,
   type LucideIcon,
+  Settings,
 } from "@studio/ui/icons";
 import { TabBar, TabBarItem } from "@studio/ui/tab-bar";
 import type { ReactNode } from "react";
 import { useHref, useLocation, useNavigate } from "react-router-dom";
 import { AskHostK7 } from "../AskHostK7";
 import { m } from "../paraglide/messages.js";
-import { LIBRARIES_ROUTE, TASKS_ROUTE } from "./api";
+import { LIBRARIES_ROUTE, SETTINGS_ROUTE, TASKS_ROUTE } from "./api";
 import { HomeCommandBar, HomeCommandsButton } from "./HomeCommandBar";
 import { usePluginScanToast } from "./usePluginScanToast";
 
@@ -45,7 +46,10 @@ function HomeTab({
 }) {
   const href = useHref(route);
   const navigate = useNavigate();
-  const here = useLocation().pathname === route;
+  const path = useLocation().pathname;
+  // Settings stays selected on its sub-pages, such as the Engine page.
+  const here =
+    path === route || (route !== "/" && path.startsWith(`${route}/`));
   return (
     <TabBarItem
       href={href}
@@ -82,6 +86,11 @@ export function HomeTabs() {
           icon={LibraryBig}
           label={m["home.library"]()}
           route={LIBRARIES_ROUTE}
+        />
+        <HomeTab
+          icon={Settings}
+          label={m["home.settings"]()}
+          route={SETTINGS_ROUTE}
         />
       </TabBar>
     </div>

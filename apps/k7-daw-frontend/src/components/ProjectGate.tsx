@@ -109,8 +109,12 @@ export function ProjectGate({
         },
       }}
       /* A workspace with nothing in it asks for its first project rather than refusing to open. */
-      renderEmpty={({ workspace, onCreated }) => (
-        <FirstProject workspace={workspace} onCreated={onCreated} />
+      renderEmpty={({ workspace, onCreated, onBack }) => (
+        <FirstProject
+          workspace={workspace}
+          onCreated={onCreated}
+          onBack={onBack}
+        />
       )}
       /* No library: the read-only card, right here; the project opens once one is listed. */
       renderNoLibraries={({ onAdded }) => <AddLibrary onAdded={onAdded} />}

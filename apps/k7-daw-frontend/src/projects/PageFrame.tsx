@@ -1,14 +1,12 @@
 // PageFrame.tsx — the one page frame of the home side (Projects, Tasks, Libraries, Settings): a column of the same
-// width on every page, and the top bar: a large title over a count line, the page's own actions, the cog to App
-// settings. The column ends clear of the floating tab bar. See ../../docs/projects.md.
+// width on every page, and the top bar: a large title over a count line and the page's own actions. The column ends clear of the floating tab bar. See ../../docs/projects.md.
 
 import { Button } from "@studio/ui/button";
-import { ChevronLeft, Settings } from "@studio/ui/icons";
+import { ChevronLeft } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import type { ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { m } from "../paraglide/messages.js";
-import { SETTINGS_ROUTE } from "./api";
 
 /** The column every home-side page sits in; the foot leaves room for the tab bar (66 px at 28 from the bottom). */
 export const PAGE_COLUMN =
@@ -32,12 +30,11 @@ function BackButton() {
   );
 }
 
-/** The page's title, an optional line under it, its actions, and the cog on the right. */
+/** The page's title, an optional line under it, and its actions. */
 export function PageHeader({
   title,
   summary,
   actions,
-  cog = true,
   back = false,
 }: {
   title: ReactNode;
@@ -45,8 +42,6 @@ export function PageHeader({
   actions?: ReactNode;
   /** A sub-page: a Back button leads the bar. */
   back?: boolean;
-  /** The cog is the way to App settings: left out on the settings pages themselves. */
-  cog?: boolean;
 }) {
   return (
     <header className="flex items-start justify-between gap-x-4 gap-y-3 max-sm:flex-wrap">
@@ -67,17 +62,6 @@ export function PageHeader({
       </div>
       <div className="flex shrink-0 items-center gap-2">
         {actions}
-        {cog && (
-          <Button asChild variant="glass" size="icon">
-            <Link
-              to={SETTINGS_ROUTE}
-              title={m["home.settings"]()}
-              aria-label={m["home.settings"]()}
-            >
-              <Settings className="size-5" />
-            </Link>
-          </Button>
-        )}
       </div>
     </header>
   );
@@ -89,7 +73,6 @@ export function PageFrame({
   summary,
   actions,
   narrow = false,
-  cog = true,
   back = false,
   children,
 }: {
@@ -98,7 +81,6 @@ export function PageFrame({
   summary?: ReactNode;
   actions?: ReactNode;
   narrow?: boolean;
-  cog?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -108,7 +90,6 @@ export function PageFrame({
           title={title}
           summary={summary}
           actions={actions}
-          cog={cog}
           back={back}
         />
         <div

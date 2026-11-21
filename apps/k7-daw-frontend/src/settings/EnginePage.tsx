@@ -110,7 +110,7 @@ export function EnginePage() {
 
   return (
     <HomeShell>
-      <PageFrame title={m["engine.title"]()} narrow cog={false}>
+      <PageFrame title={m["engine.title"]()} narrow back>
         {here === undefined ? null : !here ? (
           <div className="flex min-w-0 flex-col gap-4">
             {/* On the phone the app is the engine's machine: this is where its engine is set. */}
