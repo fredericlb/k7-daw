@@ -1032,7 +1032,7 @@ function DomChainsBody({
             <LcdZoomContext.Provider value={lcdZoom}>
               <div
                 ref={hostRef}
-                // Focusable for the camera keys (useChainsCamera.ts): arrows pan, + and − zoom, 0 fits.
+                // biome-ignore lint/a11y/noNoninteractiveTabindex: the canvas takes the camera keys (useChainsCamera.ts)
                 tabIndex={0}
                 role="application"
                 aria-label={labels.canvas}
