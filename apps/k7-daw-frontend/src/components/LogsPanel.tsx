@@ -75,6 +75,9 @@ export function LogsPanel({
   warnings?: readonly string[];
 }) {
   const endRef = useRef<HTMLDivElement>(null);
+  /** Whether the list is scrolled to its end: only then does a new line pull the view down. */
+  const following = useRef(true);
+  const [copied, setCopied] = useState(false);
   const filter = useShell((st) => st.logsFilter);
   const setFilter = useShell((st) => st.setLogsFilter);
   const [text, setText] = useState("");
@@ -82,9 +85,21 @@ export function LogsPanel({
   const matches = (t: string) => !needle || t.toLowerCase().includes(needle);
   const shown = lines.filter((l) => IN_TAB[filter](l) && matches(l.text));
   const shownWarnings = filter === "problems" ? warnings.filter(matches) : [];
+  const count = shown.length + shownWarnings.length;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `count` and `filter` are the triggers — the list's own arrays are new on every render.
   useEffect(() => {
-    endRef.current?.scrollIntoView({ block: "end" });
-  }, [shown, shownWarnings]);
+    if (following.current) endRef.current?.scrollIntoView({ block: "end" });
+  }, [count, filter]);
+  const copy = async () => {
+    const all = [...shownWarnings, ...shown.map((l) => l.text)].join("\n");
+    try {
+      await navigator.clipboard?.writeText(all);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setCopied(false);
+    }
+  };
   const bare = lines.length === 0 && warnings.length === 0;
   const emptyTitle = bare ? m["logs.emptyTitle"]() : m["logs.noneTitle"]();
   const emptyText = bare ? m["logs.emptyText"]() : m["logs.noneText"]();
@@ -113,7 +128,14 @@ export function LogsPanel({
         aria-label={m["logs.filter"]()}
         className="mb-2 shrink-0"
       />
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div
+        className="min-h-0 flex-1 overflow-auto"
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          following.current =
+            el.scrollHeight - el.scrollTop - el.clientHeight < 24;
+        }}
+      >
         {shown.length + shownWarnings.length === 0 ? (
           <EmptyState compact glyph={<Info />} title={emptyTitle}>
             {emptyText}
@@ -163,14 +185,10 @@ export function LogsPanel({
         <Button
           size="sm"
           variant="ghost"
-          disabled={shown.length + shownWarnings.length === 0}
-          onClick={() =>
-            void navigator.clipboard?.writeText(
-              shown.map((l) => l.text).join("\n"),
-            )
-          }
+          disabled={count === 0}
+          onClick={() => void copy()}
         >
-          {m["logs.copy"]()}
+          {copied ? m["logs.copied"]() : m["logs.copy"]()}
         </Button>
         <Button size="sm" variant="ghost" onClick={onClear}>
           {m["logs.clear"]()}

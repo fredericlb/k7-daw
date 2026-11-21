@@ -126,7 +126,7 @@ export function ReferenceBar({
             }
           >
             {/* Said on the bar, because it is the one thing about this sound that surprises people. */}
-            <span className="hidden shrink-0 text-muted-foreground text-xs sm:inline">
+            <span className="min-w-0 truncate text-muted-foreground text-xs">
               {m["refs.throughBrowser"]()}
             </span>
           </MiniPlayer>,

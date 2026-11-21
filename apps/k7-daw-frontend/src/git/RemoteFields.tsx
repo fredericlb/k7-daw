@@ -21,11 +21,14 @@ export function RemoteFields({
   dispatch,
   busy,
   fail,
+  focusAddress = true,
 }: {
   form: FormFields;
   dispatch: (e: FormEvent) => void;
   busy: boolean;
   fail: (message: string) => void;
+  /** False when a field sits above the address: that one is first, and takes the focus. */
+  focusAddress?: boolean;
 }) {
   const t = useGitTransport();
   const urlId = useId();
@@ -52,7 +55,7 @@ export function RemoteFields({
         </label>
         <Input
           id={urlId}
-          autoFocus
+          autoFocus={focusAddress}
           placeholder={m["git.urlPlaceholder"]()}
           autoComplete="off"
           value={form.url}

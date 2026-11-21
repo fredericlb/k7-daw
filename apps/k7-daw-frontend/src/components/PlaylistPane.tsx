@@ -72,7 +72,7 @@ export function PlaylistPane({
   /** Why those two would not work — the same kind of fact as `addRefusal`, about a shape text cannot reorder. */
   editRefusal?: string;
   /** Dispatch a command line — the stem bar sends you to the settings with one; absent drops the button and keeps the sentence. */
-  onRun?: (line: string) => Promise<void>;
+  onRun?: (line: string, outcome?: { ok: boolean }) => Promise<void>;
 }) {
   const rows = useMemo(() => resolveRecords(items, files), [items, files]);
 
@@ -183,12 +183,11 @@ export function PlaylistPane({
       });
     if (!total || !onRun) return say(0, [], true);
     say(0, [], false);
-    try {
-      await onRun(`playlist stems ${playlist}`);
-      say(total, [], true);
-    } catch (e) {
-      say(0, [(e as Error).message], true);
-    }
+    // `onRun` does not reject: a refusal or a failure is told through its outcome.
+    const outcome = { ok: false };
+    await onRun(`playlist stems ${playlist}`, outcome);
+    if (outcome.ok) say(total, [], true);
+    else say(0, [m["pl.stemsRefused"]()], true);
   }, [rows, fileOf, onRun, playlist]);
 
   return (
@@ -219,13 +218,6 @@ export function PlaylistPane({
         >
           <Split className="mr-1 h-4 w-4" /> {m["pl.separate"]()}
         </Button>
-        <Button
-          size="sm"
-          disabled={(!!run && !run.over) || !chain || !playable}
-          onClick={() => void separateAll()}
-        >
-          {m["pl.start"]({ n: playable })}
-        </Button>
         <span className="type-status text-fg-3">
           {m["pl.rowCount"]({
             n: rows.length,
@@ -243,6 +235,9 @@ export function PlaylistPane({
           chain={chain}
           run={run}
           onSettings={onRun && (() => void onRun("ui settings io"))}
+          onStart={() => void separateAll()}
+          startLabel={m["pl.start"]({ n: playable })}
+          startDisabled={(!!run && !run.over) || !chain || !playable}
           onClose={() => setSeparating(false)}
         />
       ) : null}

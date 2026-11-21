@@ -19,17 +19,37 @@ import type { WebProject } from "../types";
 type Toggle = (id: string, control: "mute" | "solo") => void;
 type Set = (id: string, control: "volume" | "pan", value: number) => void;
 
+/** The top of a meter, a little above full scale like the fader's own range. */
+const METER_MAX_DB = 6;
+
+/** A pan value (0 left to 1 right) as L / C / R and how far, the way a console prints it. */
+export function panText(v: number): string {
+  const n = Math.round((v * 2 - 1) * 100);
+  if (n === 0) return m["mixer.panCenter"]();
+  return n < 0 ? m["mixer.panLeft"]({ n: -n }) : m["mixer.panRight"]({ n });
+}
+
 const ZONE = { ok: "bg-meter-ok", hot: "bg-meter-hot", clip: "bg-meter-clip" };
 
 /** The strip's live level and the loudest of the pass, a ref written during render like the master meter's. */
-function Meter({ index, muted }: { index: number; muted: boolean }) {
+function Meter({
+  index,
+  muted,
+  name,
+}: {
+  index: number;
+  muted: boolean;
+  name: string;
+}) {
   const db = useEngineState((s) => Math.round(s.levels[index] ?? FLOOR_DB));
   const shown = muted ? FLOOR_DB : db;
   return (
     <div
       className="min-h-24 w-1.5 flex-1 overflow-hidden rounded-[3px] bg-(--k7-progress-track)"
       role="meter"
-      aria-label={m["mixer.level"]()}
+      aria-label={m["mixer.levelOf"]({ name })}
+      aria-valuemin={FLOOR_DB}
+      aria-valuemax={METER_MAX_DB}
       aria-valuenow={shown}
     >
       <div
@@ -102,7 +122,7 @@ function Strip({
         min={0}
         max={1}
         step={0.02}
-        format={(v) => `${Math.round((v * 2 - 1) * 100)}`}
+        format={panText}
         onValueChange={(v) => onSet?.(id, "pan", v)}
       />
       <span
@@ -112,10 +132,12 @@ function Strip({
         )}
       >
         {peak.current > FLOOR_DB
-          ? `${peak.current >= 0 ? "clip +" : "pk "}${peak.current.toFixed(1)}`
+          ? (peak.current >= 0 ? m["mixer.peakClip"] : m["mixer.peakHeld"])({
+              db: peak.current.toFixed(1),
+            })
           : "–"}
       </span>
-      <Meter index={index} muted={muted} />
+      <Meter index={index} muted={muted} name={name} />
       <Fader
         label={m["mixer.volume"]({ name })}
         value={values.volume}
@@ -167,7 +189,9 @@ function MasterStrip({
         {m["graph.master"]()}
       </span>
       <span className="type-secondary w-full truncate text-center text-fg-2">
-        {m["mixer.masterSum"]({ n: lanes })}
+        {(lanes === 1 ? m["mixer.masterSum.one"] : m["mixer.masterSum.other"])({
+          n: lanes,
+        })}
       </span>
       <span
         className={cn(
@@ -180,7 +204,9 @@ function MasterStrip({
       <div
         className="min-h-24 w-1.5 flex-1 overflow-hidden rounded-[3px] bg-(--k7-progress-track)"
         role="meter"
-        aria-label={m["mixer.level"]()}
+        aria-label={m["mixer.levelOf"]({ name: m["graph.master"]() })}
+        aria-valuemin={FLOOR_DB}
+        aria-valuemax={METER_MAX_DB}
         aria-valuenow={shown}
       >
         <div
@@ -188,14 +214,9 @@ function MasterStrip({
           style={{ transform: `scaleY(${meterFill(shown)})` }}
         />
       </div>
-      <Knob
+      <Fader
         label={m["shell.masterVolume"]()}
-        size={40}
         value={volume}
-        min={-60}
-        max={6}
-        step={0.5}
-        format={(v) => `${v.toFixed(1)} dB`}
         onValueChange={(v) => onVolume?.(v)}
       />
       {mastering ? (
@@ -237,6 +258,10 @@ export function MixerStrips({
   onTrackSet?: (id: string, control: "volume" | "pan", value: number) => void;
 }) {
   const tracks = project?.tracks ?? [];
+  // Master sums lanes, not cards: a shared bus strip stands for every track feeding it.
+  const laneCount = tracks.filter(
+    (t) => t.mixer && strips.includes(t.mixer.module),
+  ).length;
   return (
     <ul
       aria-label={m["mixer.strips"]()}
@@ -261,7 +286,7 @@ export function MixerStrips({
       })}
       {master && (
         <MasterStrip
-          lanes={strips.length}
+          lanes={laneCount}
           volume={master.volume}
           onVolume={master.onVolume}
           mastering={master.mastering}

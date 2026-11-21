@@ -28,6 +28,13 @@ kind travels in the drag's TYPE (`resourceMime`, `fileDrop.ts`), since a `dragov
 types and not the data: a lane of the wrong kind refuses the drop before it is let go, and a video
 asks for a picture lane by name.
 
+## And from the lane's menu, for a keyboard and a phone
+
+A drag starts from neither a keyboard nor a phone's web view, so a lane's menu also lists the resources
+of its kind, one row each (`placeResource.ts`): "Place <id>" on a track, the same on a picture lane. Picking
+one runs `onDropResource` with the caret's timecode, so the two roads end in the same commands. The rows
+join the menu when the listing arrives, since the menu never waits on the file service.
+
 ## What is not listed
 
 A recorded take lands in `clips/` too and is left out: it was played, not imported, and a project

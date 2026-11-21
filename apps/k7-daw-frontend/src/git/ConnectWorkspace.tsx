@@ -1,7 +1,7 @@
 // ConnectWorkspace.tsx — "Connect to git" on a workspace: the address and sign-in, then the first fetch proves them.
 // A host without large-file storage is said after the connection, not refused: the push is what it refuses.
 
-import { askConfirm } from "@studio/project-shell/ask";
+import { askNotice } from "@studio/project-shell/ask";
 import { showToast } from "@studio/project-shell/toast";
 import { m } from "../paraglide/messages.js";
 import { useGitTransport } from "./GitContext";
@@ -51,9 +51,11 @@ export function ConnectWorkspace({
           }),
         });
         if (done.lfsWarning)
-          void askConfirm({
+          void askNotice({
             title: m["git.noLfsTitle"](),
-            body: done.lfsWarning,
+            body: m["git.noLfsBody"]({
+              host: remoteName(done.remote || r.url),
+            }),
             confirmLabel: m["common.close"](),
           });
       }}

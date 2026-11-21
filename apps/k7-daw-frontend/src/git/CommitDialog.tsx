@@ -225,7 +225,7 @@ export function CommitDialog({
       );
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+    <Dialog open={open} onOpenChange={(o) => !o && !busy && onClose()}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -257,7 +257,15 @@ export function CommitDialog({
                     placeholder={m["git.messagePlaceholder"]()}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    aria-describedby={
+                      view.block === "noMessage" ? "commit-block" : undefined
+                    }
                   />
+                  {view.block === "noMessage" && (
+                    <p id="commit-block" className="type-secondary text-fg-3">
+                      {m["git.blockNoMessage"]()}
+                    </p>
+                  )}
                 </div>
               )}
               {who && !signed && plan.commit && (
@@ -351,7 +359,7 @@ export function CommitDialog({
           </p>
         )}
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>
+          <Button variant="ghost" disabled={busy} onClick={onClose}>
             {finished || nothing ? m["common.close"]() : m["common.cancel"]()}
           </Button>
           {finished && (state?.behind ?? 0) > 0 && (
@@ -361,7 +369,15 @@ export function CommitDialog({
             </Button>
           )}
           {!finished && !nothing && (
-            <Button disabled={!ok} onClick={() => void go()}>
+            <Button
+              disabled={!ok}
+              title={
+                plan.commit && view.block === "noMessage" && !retryFrom
+                  ? m["git.blockNoMessage"]()
+                  : undefined
+              }
+              onClick={() => void go()}
+            >
               {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
               {busy
                 ? phase.kind === "running" && phase.step === "push"
@@ -369,7 +385,11 @@ export function CommitDialog({
                   : m["git.stepCommitting"]()
                 : retryFrom
                   ? m["git.tryAgain"]()
-                  : m["git.commitPush"]()}
+                  : plan.commit && plan.push
+                    ? m["git.commitPush"]()
+                    : plan.commit
+                      ? m["git.commit"]()
+                      : m["git.push"]()}
             </Button>
           )}
         </DialogFooter>

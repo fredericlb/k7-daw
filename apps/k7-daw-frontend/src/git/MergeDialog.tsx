@@ -3,8 +3,9 @@
 
 import { showToast } from "@studio/project-shell/toast";
 import { Button } from "@studio/ui/button";
+import { Dialog, DialogContent, DialogTitle } from "@studio/ui/dialog";
 import { ChevronLeft, ChevronRight, Loader2 } from "@studio/ui/icons";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { ConflictCard } from "./ConflictCard";
 import { explain, type GitTransport, git } from "./gitApi";
@@ -41,6 +42,7 @@ export function MergeDialog({
   const [from, setFrom] = useState("");
   // The abort is asked inside this dialog: a popin over a modal is drawn under it and cannot be clicked.
   const [confirming, setConfirming] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const load = useCallback(async () => {
     if (!t) return;
@@ -95,142 +97,172 @@ export function MergeDialog({
     if (to) setOpenId(to.id);
   };
   const next = current ? nextOpen(s, current.id) : null;
-  if (!open) return null;
   return (
-    <section
-      aria-label={m["git.conflictTitle"]()}
-      onKeyDown={(e) => e.key === "Escape" && !busy && !confirming && onClose()}
-      className="fixed inset-0 z-(--k7-z-dialog) flex flex-col bg-background text-foreground"
+    <Dialog
+      open={open}
+      onOpenChange={(on) => {
+        if (!on && !busy && !confirming) onClose();
+      }}
     >
-      <header className="flex flex-wrap items-center gap-3 border-b border-(--k7-hairline) px-4 py-3">
-        <Button variant="ghost" disabled={busy} onClick={onClose}>
-          {m["git.later"]()}
-        </Button>
-        <div className="flex min-w-0 flex-1 flex-col">
-          <h1 className="type-headline">{m["git.mergeTitle"]()}</h1>
-          <p className="truncate type-secondary text-fg-2">{where}</p>
-        </div>
-        {left > 0 && (
-          <span className="type-secondary text-fg-2 tabular-nums">
-            {m["git.finishLeft"]({ n: left })}
-          </span>
-        )}
-        <Button
-          variant="outline"
-          disabled={busy || !t}
-          onClick={() => setConfirming(true)}
-        >
-          {m["git.abort"]()}
-        </Button>
-        <Button disabled={busy || !canFinish(s)} onClick={() => void finish()}>
-          {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
-          {m["git.finish"]()}
-        </Button>
-      </header>
-      {confirming && (
-        <div
-          role="dialog"
-          aria-label={m["git.abortTitle"]()}
-          className="m-4 flex flex-col gap-2 rounded-2xl border border-(--k7-error-line) p-3"
-        >
-          <p className="type-label">{m["git.abortTitle"]()}</p>
-          <p className="type-secondary text-fg-2">{m["git.abortBody"]()}</p>
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="ghost"
-              disabled={busy}
-              onClick={() => setConfirming(false)}
-            >
-              {m["git.abortKeep"]()}
-            </Button>
-            <Button
-              variant="destructive"
-              disabled={busy || !t}
-              onClick={() => void abort()}
-            >
-              {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
-              {m["git.abort"]()}
-            </Button>
+      <DialogContent
+        ref={contentRef}
+        aria-describedby={undefined}
+        showCloseButton={false}
+        // The first conflict takes focus on opening, so a keyboard starts where the work is.
+        onOpenAutoFocus={(e) => {
+          const target = contentRef.current?.querySelector<HTMLElement>(
+            '[role="listbox"] [tabindex="0"]',
+          );
+          if (target) {
+            e.preventDefault();
+            target.focus();
+          }
+        }}
+        // Escape leaves the abort question before it leaves the screen, and never mid-write.
+        onEscapeKeyDown={(e) => {
+          if (busy) e.preventDefault();
+          else if (confirming) {
+            e.preventDefault();
+            setConfirming(false);
+          }
+        }}
+        className="left-0 top-0 flex h-dvh max-h-none w-screen max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none bg-background p-0 text-foreground sm:max-w-none"
+      >
+        <header className="flex flex-wrap items-center gap-3 border-b border-(--k7-hairline) px-4 py-3">
+          <Button variant="ghost" disabled={busy} onClick={onClose}>
+            {m["git.later"]()}
+          </Button>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <DialogTitle className="type-headline">
+              {m["git.mergeTitle"]()}
+            </DialogTitle>
+            <p className="truncate type-secondary text-fg-2">{where}</p>
           </div>
-        </div>
-      )}
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto p-4 md:grid-cols-[minmax(240px,1fr)_2fr]">
-        {!loaded && <Loader2 className="size-4 animate-spin" />}
-        {loaded && ordered.length === 0 && !error && (
-          <p className="type-secondary text-fg-2">{m["git.mergeNone"]()}</p>
+          {left > 0 && (
+            <span className="type-secondary text-fg-2 tabular-nums">
+              {m["git.finishLeft"]({ n: left })}
+            </span>
+          )}
+          <Button
+            variant="outline"
+            disabled={busy || !t}
+            onClick={() => setConfirming(true)}
+          >
+            {m["git.abort"]()}
+          </Button>
+          <Button
+            disabled={busy || !canFinish(s)}
+            onClick={() => void finish()}
+          >
+            {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+            {m["git.finish"]()}
+          </Button>
+        </header>
+        {confirming && (
+          <div
+            role="dialog"
+            aria-label={m["git.abortTitle"]()}
+            className="m-4 flex flex-col gap-2 rounded-2xl border border-(--k7-error-line) p-3"
+          >
+            <p className="type-label">{m["git.abortTitle"]()}</p>
+            <p className="type-secondary text-fg-2">{m["git.abortBody"]()}</p>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="ghost"
+                disabled={busy}
+                onClick={() => setConfirming(false)}
+              >
+                {m["git.abortKeep"]()}
+              </Button>
+              <Button
+                variant="destructive"
+                disabled={busy || !t}
+                onClick={() => void abort()}
+              >
+                {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+                {m["git.abort"]()}
+              </Button>
+            </div>
+          </div>
         )}
-        {ordered.length > 0 && (
-          <MergeList
-            conflicts={ordered}
-            chosen={s.chosen}
-            currentId={current?.id}
-            disabled={busy}
-            onOpen={setOpenId}
-            onAll={(choice) => dispatch({ type: "pickAll", choice })}
-          />
-        )}
-        {current && (
-          <div className="flex min-w-0 flex-col gap-3">
-            <div className="flex items-center gap-2">
-              <span className="min-w-0 flex-1 truncate type-secondary text-fg-2">
-                {current.path}
-              </span>
-              <span className="type-secondary text-fg-2 tabular-nums">
-                {m["git.conflictOf"]({ n: at + 1, total: ordered.length })}
-              </span>
-              {ordered.length > 1 && (
-                <>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    title={m["git.previousConflict"]()}
-                    aria-label={m["git.previousConflict"]()}
-                    onClick={() => step(-1)}
-                  >
-                    <ChevronLeft className="size-4" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    title={m["git.nextConflict"]()}
-                    aria-label={m["git.nextConflict"]()}
-                    onClick={() => step(1)}
-                  >
-                    <ChevronRight className="size-4" />
-                  </Button>
-                </>
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto p-4 md:grid-cols-[minmax(240px,1fr)_2fr]">
+          {!loaded && <Loader2 className="size-4 animate-spin" />}
+          {loaded && ordered.length === 0 && !error && (
+            <p className="type-secondary text-fg-2">{m["git.mergeNone"]()}</p>
+          )}
+          {ordered.length > 0 && (
+            <MergeList
+              conflicts={ordered}
+              chosen={s.chosen}
+              currentId={current?.id}
+              disabled={busy}
+              onOpen={setOpenId}
+              onAll={(choice) => dispatch({ type: "pickAll", choice })}
+            />
+          )}
+          {current && (
+            <div className="flex min-w-0 flex-col gap-3">
+              <div className="flex items-center gap-2">
+                <span className="min-w-0 flex-1 truncate type-secondary text-fg-2">
+                  {current.path}
+                </span>
+                <span className="type-secondary text-fg-2 tabular-nums">
+                  {m["git.conflictOf"]({ n: at + 1, total: ordered.length })}
+                </span>
+                {ordered.length > 1 && (
+                  <>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      title={m["git.previousConflict"]()}
+                      aria-label={m["git.previousConflict"]()}
+                      onClick={() => step(-1)}
+                    >
+                      <ChevronLeft className="size-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      title={m["git.nextConflict"]()}
+                      aria-label={m["git.nextConflict"]()}
+                      onClick={() => step(1)}
+                    >
+                      <ChevronRight className="size-4" />
+                    </Button>
+                  </>
+                )}
+              </div>
+              <ConflictCard
+                conflict={current}
+                chosen={s.chosen[current.id]}
+                disabled={busy}
+                theirsFrom={from}
+                onPick={(choice) =>
+                  dispatch({ type: "pick", id: current.id, choice })
+                }
+              />
+              {!next && ordered.length > 1 && (
+                <span className="type-secondary text-ok">
+                  {m["git.allChosen"]()}
+                </span>
+              )}
+              {error && (
+                <p
+                  role="alert"
+                  className="whitespace-pre-wrap text-error text-xs"
+                >
+                  {error}
+                </p>
               )}
             </div>
-            <ConflictCard
-              conflict={current}
-              chosen={s.chosen[current.id]}
-              disabled={busy}
-              theirsFrom={from}
-              onPick={(choice) =>
-                dispatch({ type: "pick", id: current.id, choice })
-              }
-            />
-            {!next && ordered.length > 1 && (
-              <span className="type-secondary text-ok">
-                {m["git.allChosen"]()}
-              </span>
-            )}
-            {error && (
-              <p
-                role="alert"
-                className="whitespace-pre-wrap text-error text-xs"
-              >
-                {error}
-              </p>
-            )}
-          </div>
-        )}
-        {error && !current && (
-          <p role="alert" className="whitespace-pre-wrap text-error text-xs">
-            {error}
-          </p>
-        )}
-      </div>
-    </section>
+          )}
+          {error && !current && (
+            <p role="alert" className="whitespace-pre-wrap text-error text-xs">
+              {error}
+            </p>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

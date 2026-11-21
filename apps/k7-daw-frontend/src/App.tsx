@@ -174,6 +174,7 @@ import { PaneVisible } from "./paneVisible";
 import { m } from "./paraglide/messages.js";
 import { type PendingEdit, pendingOf } from "./pendingEdits";
 import type { PendingNode } from "./pendingNode";
+import { resourceRows } from "./placeResource";
 import { setServiceProcesses } from "./processes";
 import { ENGINE_SETTINGS_ROUTE } from "./projects/api";
 import {
@@ -2057,11 +2058,12 @@ export default function App({
   /** A pick from the right-click menu: the bar is a form for COLLECTING arguments, so an entry with nothing left to collect just runs. */
   const pickMenuItem = useCallback(
     async (item: MenuItem) => {
+      if (item.place) return void onDropResource(item.place);
       if (!item.complete) return prewriteCommand(item.command);
       // The catalogue's few `confirm:` entries ask first (menuConfirm.ts).
       if (await confirmMenuItem(item)) void runCommandRef.current(item.command);
     },
-    [prewriteCommand],
+    [prewriteCommand, onDropResource],
   );
   // The catalogue in a ref: the menu reads it at open time, and a dependency would rebuild every pane's onContextMenu.
   const cmdCatalogue = useRef<CommandInfo[]>([]);
@@ -2072,6 +2074,7 @@ export default function App({
   // …and the language, for the third time: the entries' descriptions are resolved when the menu opens.
   const cmdLocale = useRef(locale);
   cmdLocale.current = locale;
+  const caretTcRef = useLatest(caret?.tc ?? null);
   const openContextMenu = useCallback(
     (ctx: MenuCtx, x: number, y: number) => {
       const items = contextMenu(
@@ -2083,8 +2086,15 @@ export default function App({
       const names = shownNamers(docRef.current?.tracks ?? []);
       if (items.length)
         setMenu({ items, target: menuTarget(ctx, names), x, y });
+      // The lane's resources join the menu when they arrive, if it is still that menu (placeResource.ts).
+      if (ctx.kind === "track" || ctx.kind === "picture-lane")
+        void resourceRows(ctx, caretTcRef.current).then((rows) => {
+          const open = shell.getState().menu;
+          if (rows.length && open && open.items === items)
+            setMenu({ ...open, items: [...items, ...rows] });
+        });
     },
-    [setMenu, docRef],
+    [setMenu, docRef, shell],
   );
   // A journal step as a sentence and its subject, for the undo toast and the history panel (stepSentence.ts).
   const describeStep = useCallback(
@@ -3161,7 +3171,6 @@ export default function App({
       </PaneBoundary>
     );
 
-  const closePanelNow = closeAnyPanel;
   // Resources and References, Tasks and History: one panel each, with a segment between the two bodies.
   const segment = (
     id: "resources" | "references" | "tasks" | "history",
@@ -3191,7 +3200,6 @@ export default function App({
             engine={engineRef.current ?? null}
             vimMode={vimMode}
             onRun={runCommand}
-            onClose={closePanelNow}
           />
         );
       case "playlists":

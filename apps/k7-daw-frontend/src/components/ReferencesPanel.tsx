@@ -2,6 +2,7 @@
 // `_references/`, a ＋ that uploads into it, and a row you click to hear. It plays nothing
 // itself — the player (ReferenceBar) does, drawing its card in this panel's slot (../docs/references.md).
 
+import { askConfirm } from "@studio/project-shell/ask";
 import {
   REFERENCE_ACCEPT,
   REFERENCES_DIR,
@@ -16,6 +17,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import { parts } from "../i18nParts";
 import { m } from "../paraglide/messages.js";
+import { PanelError } from "./PanelError";
 
 export function ReferencesPanel({
   playing,
@@ -36,6 +38,8 @@ export function ReferencesPanel({
 }) {
   const [rows, setRows] = useState<ReferenceTrack[] | null>(null);
   const [error, setError] = useState("");
+  /** What an upload or a removal said, kept apart from a failed read: Retry only fits the second. */
+  const [note, setNote] = useState("");
   /** What the upload is doing, as "file — 40%"; null when nothing is going up. */
   const [busy, setBusy] = useState<string | null>(null);
   const pick = useRef<HTMLInputElement>(null);
@@ -59,7 +63,7 @@ export function ReferencesPanel({
 
   /** Upload each chosen file into the folder, then re-read: the LISTING is the truth, not what we sent. */
   const upload = async (files: FileList): Promise<void> => {
-    setError("");
+    setNote("");
     for (const file of Array.from(files)) {
       try {
         setBusy(file.name);
@@ -73,7 +77,7 @@ export function ReferencesPanel({
             ),
         );
       } catch (e) {
-        setError(`${file.name}: ${(e as Error).message}`);
+        setNote(`${file.name}: ${(e as Error).message}`);
       }
     }
     setBusy(null);
@@ -81,12 +85,20 @@ export function ReferencesPanel({
   };
 
   const remove = async (track: ReferenceTrack): Promise<void> => {
+    const ok = await askConfirm({
+      title: m["refs.removeTitle"](),
+      body: m["refs.removeBody"]({ name: track.name }),
+      confirmLabel: m["common.remove"](),
+      cancelLabel: m["common.cancel"](),
+      danger: true,
+    });
+    if (!ok) return;
     try {
       // Recycled rather than destroyed, like every other delete on this service.
       await api.deleteFile(track.path);
       await refresh();
     } catch (e) {
-      setError((e as Error).message);
+      setNote((e as Error).message);
     }
   };
 
@@ -122,8 +134,16 @@ export function ReferencesPanel({
       ) : null}
 
       {error ? (
+        <PanelError
+          what={m["panel.what.references"]()}
+          detail={error}
+          onRetry={() => void refresh()}
+        />
+      ) : null}
+
+      {note ? (
         <p className="shrink-0 border-b px-2 py-1.5 text-destructive text-xs">
-          {error}
+          {note}
         </p>
       ) : null}
 
@@ -168,7 +188,7 @@ export function ReferencesPanel({
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-6 w-6 shrink-0"
+                  className="shrink-0"
                   title={m["refs.remove"]()}
                   aria-label={m["refs.remove"]()}
                   onClick={() => void remove(r)}

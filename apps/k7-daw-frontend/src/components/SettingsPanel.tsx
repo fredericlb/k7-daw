@@ -16,7 +16,6 @@ import {
   type Settings,
   SlidersHorizontal,
 } from "@studio/ui/icons";
-import { useWindowKey } from "../hooks/useWindowKey";
 import { m } from "../paraglide/messages.js";
 import { EditorSettingsPage } from "./EditorSettingsPage";
 import { IoPanel } from "./IoPanel";
@@ -55,7 +54,6 @@ export function SettingsPanel({
   engine,
   vimMode,
   onRun,
-  onClose,
 }: {
   /** Which tab is showing. Owned by `App`, because a command line can change it. */
   tab: SettingsTab;
@@ -63,13 +61,7 @@ export function SettingsPanel({
   engine: EngineClient | null;
   vimMode: boolean;
   onRun: (line: string) => Promise<void>;
-  onClose: () => void;
 }) {
-  // Escape closes it, which a docked panel must not lose: it is opened mid-gesture, and a surface you have to aim at is one you leave open.
-  useWindowKey((e) => {
-    if (e.key === "Escape") onClose();
-  });
-
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       {/* The tabs each dispatch their own `ui settings <tab>` rather than setting state here, so the panel and the palette are one road. */}

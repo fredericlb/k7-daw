@@ -5,18 +5,62 @@ import { Check, Loader2, TriangleAlert } from "@studio/ui/icons";
 import { m } from "../paraglide/messages.js";
 import type { StepRow } from "./commitState";
 
+/** What each row reads by its state, so a finished step does not say it is still running. */
 const LABEL = {
-  commit: "git.stepCommitting",
-  push: "git.stepPushing",
+  commit: {
+    pending: "git.stepCommitWaiting",
+    active: "git.stepCommitting",
+    done: "git.stepCommitted",
+    warn: "git.stepCommitted",
+    error: "git.stepCommitFailed",
+  },
+  push: {
+    pending: "git.stepPushWaiting",
+    active: "git.stepPushing",
+    done: "git.stepPushed",
+    warn: "git.stepPushWaiting",
+    error: "git.stepPushFailed",
+  },
+} as const;
+
+const MARK = {
+  pending: "git.markPending",
+  active: "git.markActive",
+  done: "git.stepDone",
+  warn: "git.markWarn",
+  error: "git.markError",
 } as const;
 
 function Mark({ state }: { state: StepRow["state"] }) {
-  if (state === "done") return <Check className="size-4 text-ok" />;
-  if (state === "active") return <Loader2 className="size-4 animate-spin" />;
-  if (state === "warn") return <TriangleAlert className="size-4 text-warn" />;
-  if (state === "error") return <TriangleAlert className="size-4 text-error" />;
+  const name = m[MARK[state]]();
+  if (state === "done")
+    return <Check role="img" aria-label={name} className="size-4 text-ok" />;
+  if (state === "active")
+    return (
+      <Loader2 role="img" aria-label={name} className="size-4 animate-spin" />
+    );
+  if (state === "warn")
+    return (
+      <TriangleAlert
+        role="img"
+        aria-label={name}
+        className="size-4 text-warn"
+      />
+    );
+  if (state === "error")
+    return (
+      <TriangleAlert
+        role="img"
+        aria-label={name}
+        className="size-4 text-error"
+      />
+    );
   return (
-    <span className="size-4 rounded-full border border-(--k7-hairline-strong)" />
+    <span
+      role="img"
+      aria-label={name}
+      className="size-4 rounded-full border border-(--k7-hairline-strong)"
+    />
   );
 }
 
@@ -42,7 +86,7 @@ export function CommitSteps({
           </span>
           <span className="flex min-w-0 flex-col">
             <span className={r.state === "pending" ? "text-fg-2" : undefined}>
-              {m[LABEL[r.id]]()}
+              {m[LABEL[r.id][r.state]]()}
             </span>
             {details[r.id] && r.state !== "warn" && r.state !== "error" && (
               <span className="text-fg-3">{details[r.id]}</span>

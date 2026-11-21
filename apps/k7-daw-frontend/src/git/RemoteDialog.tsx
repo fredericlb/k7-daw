@@ -56,6 +56,7 @@ export function RemoteDialog({
     onClose();
   };
   const ok = canSubmit && ready(form);
+  const trusted = form.trust?.confirmed === true;
 
   const go = async () => {
     if (!ok || busy) return;
@@ -86,6 +87,12 @@ export function RemoteDialog({
     }
   };
 
+  // Trusting the server is the answer to the call that stopped on it, so the call goes again at once.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `trusted` is the trigger; `go` of this render holds the confirmed form.
+  useEffect(() => {
+    if (trusted) void go();
+  }, [trusted]);
+
   return (
     <Dialog open={open} onOpenChange={(o) => !busy && !o && close()}>
       <DialogContent className="max-w-lg">
@@ -93,30 +100,44 @@ export function RemoteDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        {before}
-        <RemoteFields
-          form={form}
-          dispatch={dispatch}
-          busy={busy}
-          fail={setError}
-        />
-        {error && (
-          <p
-            role="alert"
-            className="whitespace-pre-wrap rounded-xl border border-(--k7-error-line) bg-(--k7-error-fill) px-3 py-2 text-error type-secondary"
-          >
-            {error}
-          </p>
-        )}
-        <DialogFooter>
-          <Button variant="ghost" disabled={busy} onClick={close}>
-            {m["common.cancel"]()}
-          </Button>
-          <Button disabled={!ok || busy} onClick={() => void go()}>
-            {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
-            {busy ? step : submit}
-          </Button>
-        </DialogFooter>
+        <form
+          className="contents"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void go();
+          }}
+        >
+          {before}
+          <RemoteFields
+            form={form}
+            dispatch={dispatch}
+            busy={busy}
+            fail={setError}
+            focusAddress={!before}
+          />
+          {error && (
+            <p
+              role="alert"
+              className="whitespace-pre-wrap rounded-xl border border-(--k7-error-line) bg-(--k7-error-fill) px-3 py-2 text-error type-secondary"
+            >
+              {error}
+            </p>
+          )}
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={busy}
+              onClick={close}
+            >
+              {m["common.cancel"]()}
+            </Button>
+            <Button type="submit" disabled={!ok || busy}>
+              {busy && <Loader2 className="mr-1 size-3 animate-spin" />}
+              {busy ? step : submit}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

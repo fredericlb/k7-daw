@@ -15,7 +15,7 @@ import {
   RotateCcw,
   Undo2,
 } from "@studio/ui/icons";
-import { Row, RowButton, RowGroup } from "@studio/ui/row-group";
+import { RowButton, RowGroup } from "@studio/ui/row-group";
 import type { HistoryListEntry } from "@studio/web-protocol";
 import {
   type ReactNode,
@@ -40,6 +40,7 @@ import {
   type SyncChange,
   type SyncHistory,
 } from "../syncHistory";
+import { PanelError } from "./PanelError";
 
 /** The 6 px dot that stands for an edit. */
 const Dot = () => <span className="size-1.5 rounded-full bg-fg-3" />;
@@ -77,6 +78,16 @@ export function HistoryPanel({
   // Only to tell which node of a touched chain a step's label names; a graph that will not build lights the chain.
   const { graph } = usePaneGraph(useReloadKey());
   const [error, setError] = useState("");
+  /** The row whose marks are lit: a tap or the keyboard's focus lights one as a pointer's hover does. */
+  const [lit, setLit] = useState<number | null>(null);
+  const light = (id: number, mark: HistoryMark) => {
+    setLit(id);
+    onMark(mark);
+  };
+  const unlight = () => {
+    setLit(null);
+    onMark(null);
+  };
   const revision = useRevision();
   // …and this tab's own knob writes, which are journalled rows too but move no published token.
   const quietWrites = useQuietWrites();
@@ -103,9 +114,11 @@ export function HistoryPanel({
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       {error && (
-        <div className="shrink-0 px-3 py-2 text-destructive text-xs">
-          {error}
-        </div>
+        <PanelError
+          what={m["panel.what.history"]()}
+          detail={error}
+          onRetry={() => void refresh()}
+        />
       )}
       <Choice
         label={m["git.lists"]()}
@@ -137,7 +150,11 @@ export function HistoryPanel({
       <div
         hidden={list !== "edits"}
         className="min-h-0 flex-1 overflow-y-auto"
-        onMouseLeave={() => onMark(null)}
+        onMouseLeave={unlight}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node | null))
+            unlight();
+        }}
       >
         <p className="type-status px-1 pt-1 text-fg-3">
           {m["history.intro"]()}
@@ -156,19 +173,24 @@ export function HistoryPanel({
                 </h3>
               )}
               <RowGroup>
-                <Row
+                <RowButton
                   title={`${label}\n${paths.join("\n")}`}
                   className={undone ? "opacity-50" : undefined}
                   icon={undone ? <Undo2 /> : <Dot />}
+                  selected={lit === r.id}
                   trailing={
                     <span className="type-mono-value text-fg-3">
                       {time(r.ts)}
                     </span>
                   }
-                  onMouseEnter={() => onMark(historyMarks(paths, label, graph))}
+                  onMouseEnter={() =>
+                    light(r.id, historyMarks(paths, label, graph))
+                  }
+                  onFocus={() => light(r.id, historyMarks(paths, label, graph))}
+                  onClick={() => light(r.id, historyMarks(paths, label, graph))}
                 >
                   {describe ? describe(label) : label}
-                </Row>
+                </RowButton>
               </RowGroup>
             </div>
           );
@@ -222,6 +244,8 @@ function SyncHistorySection({
   const syncHistory = historyClient;
   const [hist, setHist] = useState<SyncHistory | null>(null);
   const [error, setError] = useState("");
+  /** A failed read of the list, apart from a failed action: Retry only fits the first. */
+  const [readError, setReadError] = useState("");
   const [notice, setNotice] = useState("");
   const offers = historyOffers(git);
   const [open, setOpen] = useState<string | null>(null);
@@ -231,9 +255,9 @@ function SyncHistorySection({
     if (!workspace) return;
     try {
       setHist(await historyClient.list(workspace));
-      setError("");
+      setReadError("");
     } catch (e) {
-      setError((e as Error).message);
+      setReadError((e as Error).message);
     }
   }, [workspace]);
   // biome-ignore lint/correctness/useExhaustiveDependencies: `revision` is the trigger, not an input.
@@ -272,6 +296,7 @@ function SyncHistorySection({
   const restore = async (seq: number, point: string) => {
     if (!offers.write) return;
     const ok = await askConfirm({
+      // Named by what it is and when, since a sequence number is nothing anyone has seen.
       title: m["synchist.restoreTitle"]({ point }),
       body: m["synchist.restoreBodyDevice"](),
       confirmLabel: m["synchist.restoreConfirm"](),
@@ -323,7 +348,7 @@ function SyncHistorySection({
             className="shrink-0"
             title={m["synchist.restore"]()}
             aria-label={m["synchist.restore"]()}
-            onClick={() => void restore(seq, point)}
+            onClick={() => void restore(seq, `${point}, ${time(ts)}`)}
           >
             <RotateCcw className="size-4" />
           </Button>
@@ -359,6 +384,13 @@ function SyncHistorySection({
       {notice && (
         <div className="shrink-0 px-3 py-1 text-muted-foreground">{notice}</div>
       )}
+      {readError && (
+        <PanelError
+          what={m["panel.what.history"]()}
+          detail={readError}
+          onRetry={() => void refresh()}
+        />
+      )}
       {(error || hist?.error) && (
         <div className="shrink-0 px-3 py-1 text-destructive">
           {error || m["synchist.noRoom"]({ error: hist?.error ?? "" })}
@@ -378,7 +410,7 @@ function SyncHistorySection({
               c.seq,
               head,
               c.seq,
-              c.by === "auto" ? String(c.seq) : c.name,
+              c.by === "auto" ? m["synchist.auto"]() : c.name,
               <Bookmark />,
             ),
           )}
@@ -392,7 +424,7 @@ function SyncHistorySection({
             e.seq - 1,
             e.seq,
             e.seq,
-            String(e.seq),
+            e.label,
             <Dot />,
           ),
         )}
