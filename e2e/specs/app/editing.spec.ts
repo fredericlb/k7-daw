@@ -29,7 +29,7 @@ async function openProject(page: Page): Promise<void> {
   await expect(button(page, "mute melody")).toBeVisible({ timeout: 30_000 });
 }
 
-/** Opens project.k7x in the editor and retypes the tempo, in vim's keys when the editor is in vim mode (the account default). */
+/** Opens project.k7x in the editor and retypes the tempo, in vim's keys when the editor is in vim mode (off by default). */
 async function typeTempo(page: Page, tempo: number): Promise<void> {
   await (await pane(page, "Source")).click();
   // A phone folds the file tree into a drawer, opened by its "Files" button (EditorTab.tsx).
@@ -53,7 +53,7 @@ async function typeTempo(page: Page, tempo: number): Promise<void> {
     await expect(vimStatus(page)).toHaveText("NORMAL");
     return;
   }
-  await page.keyboard.press("Control+Home");
+  await page.keyboard.press("ControlOrMeta+Home");
   await page.keyboard.press("ArrowDown");
   await page.keyboard.press("ArrowDown");
   await page.keyboard.press("End");
@@ -189,16 +189,22 @@ test("one Ctrl+Z takes a whole vim change back, and the disk never holds half of
   const page = await k7.open(`/@local/${WS}/${PROJECT}`);
   const watch = watchPage(page);
   await openProject(page);
-  await typeTempo(page, 150);
-  await expectFile(page, WS, PROJECT_FILE, /tempo: 150,/);
-  test.skip(!(await inVim(page)), "the account's editor is not in vim mode");
+  // Vim is off by default: this test turns it on through the command, and puts the account's choice back.
+  await runCommand(page, "ui vim");
+  try {
+    await typeTempo(page, 150);
+    await expectFile(page, WS, PROJECT_FILE, /tempo: 150,/);
+    expect(await inVim(page)).toBe(true);
 
-  const text = editorText(page, "project.k7x");
-  await page.keyboard.press("Control+z");
-  await expect(text).toContainText("tempo: 120", { timeout: 2_000 });
-  const undone = await expectFile(page, WS, PROJECT_FILE, /tempo: 120,/);
-  expect(undone).not.toMatch(/tempo: ,/);
-  watch.assertClean();
+    const text = editorText(page, "project.k7x");
+    await page.keyboard.press("Control+z");
+    await expect(text).toContainText("tempo: 120", { timeout: 2_000 });
+    const undone = await expectFile(page, WS, PROJECT_FILE, /tempo: 120,/);
+    expect(undone).not.toMatch(/tempo: ,/);
+    watch.assertClean();
+  } finally {
+    await runCommand(page, "ui vim");
+  }
 });
 
 test("project undo on a freshly opened project leaves the automatic pin alone", async ({
