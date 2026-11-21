@@ -5,6 +5,7 @@ import { List } from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
 import { ModeIcon } from "../modeIcons";
 import { m } from "../paraglide/messages.js";
+import { radioKeyDown } from "../radioKeys";
 import { WAVE_PRESS, type WaveMode } from "../waveMode";
 
 const LABEL: Record<WaveMode, () => string> = {
@@ -37,6 +38,8 @@ export function ClipToolBar({
           type="button"
           role="radio"
           aria-checked={mode === current}
+          tabIndex={mode === current ? 0 : -1}
+          onKeyDown={(e) => radioKeyDown(e, modes, current, onPick)}
           title={`${LABEL[mode]()} — ${WAVE_PRESS[mode]}`}
           onClick={() => onPick(mode)}
           className={cn(

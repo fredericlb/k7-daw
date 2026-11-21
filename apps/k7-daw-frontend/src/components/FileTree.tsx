@@ -52,6 +52,7 @@ import {
 } from "../libraryTree";
 import { m } from "../paraglide/messages.js";
 import { isVideoTrackFile } from "../projectPaths";
+import { radioKeyDown } from "../radioKeys";
 import { TrackIcon } from "../trackIcons";
 import type { FileNode } from "../types";
 
@@ -563,6 +564,10 @@ export function FileTree({
               type="button"
               role="radio"
               aria-checked={tab === id}
+              tabIndex={tab === id ? 0 : -1}
+              onKeyDown={(e) =>
+                radioKeyDown(e, ["project", "libraries"] as const, tab, setTab)
+              }
               onClick={() => setTab(id)}
               className={cn(
                 "flex h-8 min-w-0 flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full px-2 font-bold text-[13px]",

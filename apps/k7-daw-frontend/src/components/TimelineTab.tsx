@@ -214,15 +214,14 @@ const controlLabel = (control: "mute" | "solo" | "arm", name: string) =>
       : m["tl.armLane"]({ name });
 
 /** A clip's tooltip: what it is, how it plays, and the three gestures it answers. */
-function clipTitle(
-  c: WebClip,
+function clipState(
   looping: boolean,
   stretched: boolean,
   unwarped: boolean,
   ghost: boolean,
   instances: number,
-): string {
-  const parts = [`${c.name} (${c.type})`];
+): string[] {
+  const parts: string[] = [];
   if (looping) parts.push(m["tl.clipLooping"]());
   if (stretched)
     parts.push(unwarped ? m["tl.clipUnwarped"]() : m["tl.clipStretched"]());
@@ -232,7 +231,11 @@ function clipTitle(
         ? m["tl.clipInstanceOther"]({ count: instances })
         : m["tl.clipInstanceFirst"]({ count: instances }),
     );
-  return `${parts.join(" · ")} — ${m["tl.clipHint"]()}`;
+  return parts;
+}
+
+function clipTitle(c: WebClip, state: string[]): string {
+  return `${[`${c.name} (${c.type})`, ...state].join(" · ")} — ${m["tl.clipHint"]()}`;
 }
 
 const laneEvents = (r: Extract<Row, { kind: "track" }>) => ({
@@ -3403,6 +3406,13 @@ function TimelineTabView({
                             const ghost =
                               (inst?.n ?? 1) > 1 &&
                               !isFirstPlacement(inst, t.id, c.start);
+                            const state = clipState(
+                              looping,
+                              stretched,
+                              unwarped,
+                              ghost,
+                              inst?.n ?? 1,
+                            );
                             const kin =
                               !!kinOfCaret &&
                               materialOf(c) === kinOfCaret &&
@@ -3442,14 +3452,12 @@ function TimelineTabView({
                               <div
                                 // A track may place the same clip ref twice, so the id alone collides — key by placement, id + index.
                                 key={`${c.id}-${i}`}
-                                title={clipTitle(
-                                  c,
-                                  looping,
-                                  stretched,
-                                  unwarped,
-                                  ghost,
-                                  inst?.n ?? 1,
-                                )}
+                                title={clipTitle(c, state)}
+                                role="group"
+                                aria-label={`${c.name} (${c.type})`}
+                                aria-description={
+                                  state.join(" · ") || undefined
+                                }
                                 // Drag to move: along the lane, or onto one holding the same material. Nothing is written until release.
                                 onPointerDown={(e) => beginClipDrag(e, t, c)}
                                 onPointerMove={onClipDragMove}
@@ -3625,14 +3633,16 @@ function TimelineTabView({
                                         <div
                                           key={`h-${which}`}
                                           className={cn(
-                                            "absolute top-0 z-30 h-2 w-2 cursor-ew-resize rounded-sm",
+                                            "absolute top-0 z-30 h-2 w-2 cursor-ew-resize rounded-sm after:absolute after:-inset-2 after:content-['']",
                                             which === "fadeIn"
                                               ? "left-0"
                                               : "right-0",
                                             // Visible once there is a fade; otherwise on hover, the same disclosure the edge handles use.
                                             len > 0
                                               ? "bg-white/60"
-                                              : "bg-white/0 group-hover:bg-white/35",
+                                              : c === clipUnderCaret
+                                                ? "bg-white/25"
+                                                : "bg-white/0 group-hover:bg-white/35",
                                           )}
                                           title={
                                             which === "fadeIn"
@@ -3674,9 +3684,12 @@ function TimelineTabView({
                                     <div
                                       key={edge}
                                       className={cn(
-                                        "absolute inset-y-0 z-20 w-1.5 cursor-ew-resize",
+                                        "absolute inset-y-0 z-20 w-1.5 cursor-ew-resize after:absolute after:inset-y-0 after:-inset-x-2 after:content-['']",
                                         edge === "start" ? "left-0" : "right-0",
-                                        "hover:bg-primary/60",
+                                        // The selected clip shows a faint grip, since a finger or a pen never hovers.
+                                        c === clipUnderCaret
+                                          ? "bg-primary/30"
+                                          : "hover:bg-primary/60",
                                       )}
                                       onPointerDown={(e) => {
                                         // Stop it here or the clip's own move drag starts too.
