@@ -8,6 +8,7 @@ pub mod engine_reach;
 pub mod files;
 pub mod health;
 mod http_file;
+pub mod lan;
 pub mod last;
 pub mod local;
 pub mod prefs;

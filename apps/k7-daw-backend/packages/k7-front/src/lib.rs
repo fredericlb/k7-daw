@@ -58,6 +58,8 @@ pub struct AppState {
     pub files: Option<Arc<routes::files::Files>>,
     /// What no family answers: the built page and the 404 (`routes/last`).
     pub last: Arc<routes::last::Last>,
+    /// The LAN door, its discovery and its relay, on a device with the engine core (`routes/lan`).
+    pub lan: Option<Arc<routes::lan::Lan>>,
 }
 
 /// A route behind the session: owned when the front can check sessions, else declined.
@@ -111,6 +113,13 @@ async fn claim(
         }
         return declined(State(state), peer, req).await;
     }
+    // The LAN family moves together: all here on a device with the engine core, or all declined.
+    if routes::lan::is_lan_path(path) {
+        if state.lan.is_some() {
+            return next.run(req).await;
+        }
+        return declined(State(state), peer, req).await;
+    }
     // The engine core's paths move together: all here, or all declined.
     if routes::engine::is_engine_path(path) {
         if state.engine.is_none() || !routes::engine::owns(method, path) {
@@ -152,6 +161,7 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
     let seams = routes::engine_reach::Seams::start(config, &settings, &seam);
     let files = routes::files::Files::start(config, &settings, port);
     let last = routes::last::Last::start(&settings);
+    let lan = routes::lan::Lan::start(&settings);
     let state = Arc::new(AppState {
         settings,
         cameras,
@@ -162,6 +172,7 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
         seams,
         files,
         last,
+        lan,
     });
     let (engine_guarded, engine_bare) = routes::engine::routes();
     let owned = Router::new()
@@ -213,6 +224,7 @@ fn build(config: &Config, limits: routes::cameras::Limits, port: u16) -> Built {
         .merge(engine_guarded)
         .merge(routes::engine_reach::routes())
         .merge(routes::files::routes())
+        .merge(routes::lan::routes())
         .route_layer(from_fn_with_state(state.clone(), web::guard))
         .route_layer(from_fn_with_state(state.clone(), claim));
     // Outside the web chain: the upgrades never cross the guards, the seam has its own gate.
@@ -294,6 +306,10 @@ async fn serve_seen(
     if let Some(local) = state.local.clone() {
         tokio::spawn(local.launch(addr.port()));
     }
+    // The door follows the switch until the front stops, holding the state weakly.
+    if let Some(lan) = state.lan.clone() {
+        tokio::spawn(lan.launch(Arc::downgrade(&state), state.closing.subscribe()));
+    }
     let shutdown = async move {
         shutdown.await;
         // The supervisor first: it deregisters through this front, which must still answer.
@@ -301,6 +317,9 @@ async fn serve_seen(
             local.stop().await;
         }
         state.closing.send_replace(true);
+        if let Some(lan) = &state.lan {
+            lan.stop();
+        }
         state.cameras.hub.stop();
         if let Some(e) = &state.engine {
             e.core.hub.stop();
