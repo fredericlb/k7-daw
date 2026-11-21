@@ -140,47 +140,38 @@ export function useDesktopEngine(): DesktopEngineState | null {
   return state;
 }
 
-/** The ranking as the supervisor keeps it: ranked names first (present or not), then the devices not ranked. */
-export function rankedDevices(s: DesktopEngineSnapshot): {
-  name: string;
-  deviceType: string;
-  present: boolean;
-  current: boolean;
-  currentInput: boolean;
-  inputs: number;
-  outputs: number;
-  ranked: boolean;
-}[] {
-  const devices = s.audioDevices ?? [];
-  const priority = s.audioPriority ?? [];
-  const rest = devices
-    .filter((d) => !priority.includes(d.name))
-    .map((d) => d.name);
-  return [...priority, ...rest].map((name, i) => {
-    const d = devices.find((x) => x.name === name);
-    return {
-      name,
-      deviceType: d?.deviceType ?? "",
-      present: d !== undefined,
-      current: d?.current ?? false,
-      currentInput: d?.currentInput ?? false,
-      inputs: d?.inputs ?? 0,
-      outputs: d?.outputs ?? 0,
-      ranked: i < priority.length,
-    };
-  });
+/** U+001F joins the names `audio.priority` takes (apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md). */
+const SEP = "\u001f";
+
+export interface AudioChoice {
+  /** The interface the engine opens first: the ranking's head, else the one open now. */
+  primary: string | null;
+  /** The one it falls back on: the ranking's second name. */
+  fallback: string | null;
+  /** The devices seen, then a ranked name that is not plugged in. */
+  options: { name: string; present: boolean }[];
 }
 
-/** The list on screen IS the ranking: what is shown, in its order, is sent whole on every move. */
-export function moveDevice(
-  names: string[],
-  from: number,
-  to: number,
-): string[] {
-  const out = [...names];
-  const [moved] = out.splice(from, 1);
-  out.splice(to, 0, moved);
-  return out;
+/** What the two audio selects show: the ranking's first two names, over the devices the engine sees. */
+export function audioChoice(s: DesktopEngineSnapshot): AudioChoice {
+  const devices = s.audioDevices ?? [];
+  const priority = s.audioPriority ?? [];
+  const options = devices.map((d) => ({ name: d.name, present: true }));
+  for (const name of priority.slice(0, 2))
+    if (!options.some((o) => o.name === name))
+      options.push({ name, present: false });
+  return {
+    primary: priority[0] ?? devices.find((d) => d.current)?.name ?? null,
+    fallback: priority[1] ?? null,
+    options,
+  };
+}
+
+/** The `audio.priority` argument for a primary and its fallback; a fallback equal to the primary is dropped. */
+export function priorityArg(primary: string, fallback: string | null): string {
+  return (
+    fallback && fallback !== primary ? [primary, fallback] : [primary]
+  ).join(SEP);
 }
 
 /** An ASIO driver the engine is NOT on while it plays through another backend — on Windows, the shared endpoint of the same interface, two channels a side (apps/k7-daw-engine/k7-runtime/docs/audioDevice.md). */

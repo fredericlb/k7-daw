@@ -1,6 +1,6 @@
-// SettingsPage.tsx — `/settings`, App settings: what a BROWSER may change for its account, under two tabs — General
-// (the language, the commit identity, About, the AI key, the separation chains) and Devices (the devices paired with the
-// engine, and the row that opens this machine's Engine page). A page and not a panel: it is visited on purpose and
+// SettingsPage.tsx — `/settings`, App settings: what a BROWSER may change for its account, under three tabs — General
+// (the language, the commit identity, About, the AI key, the separation chains), Devices (the audio interface, the devices
+// paired with the engine, the row that opens its Engine page) and Downloads (what is coming down, the engine's instruments). A page and not a panel: it is visited on purpose and
 // rarely. See ../../docs/settings.md.
 
 import { AudioLines, ChevronRight } from "@studio/ui/icons";
@@ -12,15 +12,24 @@ import { ENGINE_SETTINGS_ROUTE } from "../projects/api";
 import { HomeShell } from "../projects/HomeFrame";
 import { PageFrame } from "../projects/PageFrame";
 import { AiSection } from "./AiSection";
+import { AudioInterfaceSection } from "./AudioInterfaceSection";
 import { ChainsSection } from "./ChainsSection";
-import { useDesktopEngine } from "./desktopEngine";
+import { DownloadsSection } from "./DownloadsSection";
+import {
+  engineCommand,
+  useDesktopEngine,
+  useOnDesktopEngine,
+} from "./desktopEngine";
+import { InstrumentsSection } from "./InstrumentsSection";
 import { LanguageSection } from "./LanguageSection";
 import { PairedDevicesSection } from "./PairedDevicesSection";
 import { Section } from "./Section";
 import { type SettingsTab, SettingsTabs } from "./SettingsTabs";
 
 export function SettingsPage() {
-  const engineId = useDesktopEngine()?.snapshot?.engineId ?? "";
+  const snapshot = useDesktopEngine()?.snapshot ?? null;
+  const onDesktop = useOnDesktopEngine();
+  const engineId = snapshot?.engineId ?? "";
   const general: SettingsTab = {
     key: "general",
     label: m["settings.tabGeneral"](),
@@ -39,6 +48,7 @@ export function SettingsPage() {
     label: m["settings.tabDevices"](),
     content: (
       <>
+        {onDesktop && <AudioInterfaceSection s={snapshot} />}
         <PairedDevicesSection />
         <Section title={m["home.engine"]()}>
           <Link
@@ -60,6 +70,18 @@ export function SettingsPage() {
       </>
     ),
   };
+  const downloads: SettingsTab = {
+    key: "downloads",
+    label: m["settings.tabDownloads"](),
+    content: (
+      <>
+        <DownloadsSection />
+        {onDesktop && (
+          <InstrumentsSection snapshot={snapshot} send={engineCommand} />
+        )}
+      </>
+    ),
+  };
   return (
     <HomeShell tabs={false}>
       <PageFrame
@@ -69,7 +91,10 @@ export function SettingsPage() {
         cog={false}
         back
       >
-        <SettingsTabs label={m["settings.title"]()} tabs={[general, devices]} />
+        <SettingsTabs
+          label={m["settings.title"]()}
+          tabs={[general, devices, downloads]}
+        />
       </PageFrame>
     </HomeShell>
   );

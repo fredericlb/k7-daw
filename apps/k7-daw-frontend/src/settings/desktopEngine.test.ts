@@ -1,12 +1,12 @@
-// desktopEngine.test.ts — the audio ranking as the desktop engine's page draws and sends it.
+// desktopEngine.test.ts — the primary and fallback audio interface as the Devices tab draws and sends them.
 
 import { describe, expect, it } from "vitest";
 import {
+  audioChoice,
   idleAsioDriver,
   instrumentAction,
   instrumentRows,
-  moveDevice,
-  rankedDevices,
+  priorityArg,
   sizeOf,
 } from "./desktopEngine";
 
@@ -33,37 +33,28 @@ const snapshot = {
   audioPriority: ["MOTU", "Built-in"],
 };
 
-describe("the audio ranking", () => {
-  it("lists the ranked names first, an unplugged one kept, then the devices not ranked", () => {
-    expect(
-      rankedDevices(snapshot).map((d) => [
-        d.name,
-        d.present,
-        d.ranked,
-        d.current,
-      ]),
-    ).toEqual([
-      ["MOTU", false, true, false],
-      ["Built-in", true, true, true],
-      ["Scarlett", true, false, false],
-    ]);
+describe("the audio interface choice", () => {
+  it("reads the primary and the fallback off the ranking, an unplugged one kept as an option", () => {
+    expect(audioChoice(snapshot)).toEqual({
+      primary: "MOTU",
+      fallback: "Built-in",
+      options: [
+        { name: "Built-in", present: true },
+        { name: "Scarlett", present: true },
+        { name: "MOTU", present: false },
+      ],
+    });
   });
 
-  it("carries the open device's channel counts, 0 on the others", () => {
-    const counted = {
-      ...snapshot,
-      audioDevices: [
-        { ...snapshot.audioDevices[0], inputs: 2, outputs: 2 },
-        snapshot.audioDevices[1],
-      ],
-    };
-    expect(
-      rankedDevices(counted).map((d) => [d.name, d.inputs, d.outputs]),
-    ).toEqual([
-      ["MOTU", 0, 0],
-      ["Built-in", 2, 2],
-      ["Scarlett", 0, 0],
-    ]);
+  it("starts from the device in use when nothing is ranked", () => {
+    const c = audioChoice({ ...snapshot, audioPriority: [] });
+    expect([c.primary, c.fallback]).toEqual(["Built-in", null]);
+  });
+
+  it("joins the primary and its fallback, and drops a fallback equal to it or none", () => {
+    expect(priorityArg("MOTU", "Built-in")).toBe("MOTU\u001fBuilt-in");
+    expect(priorityArg("MOTU", null)).toBe("MOTU");
+    expect(priorityArg("MOTU", "MOTU")).toBe("MOTU");
   });
 
   it("names an ASIO driver the engine is not on, and none once it is", () => {
@@ -87,14 +78,6 @@ describe("the audio ranking", () => {
     expect(idleAsioDriver(windows(false))).toBe("Focusrite USB ASIO");
     expect(idleAsioDriver(windows(true))).toBeNull();
     expect(idleAsioDriver(snapshot)).toBeNull();
-  });
-
-  it("sends the whole list in its new order on a move", () => {
-    expect(moveDevice(["MOTU", "Built-in", "Scarlett"], 2, 0)).toEqual([
-      "Scarlett",
-      "MOTU",
-      "Built-in",
-    ]);
   });
 });
 

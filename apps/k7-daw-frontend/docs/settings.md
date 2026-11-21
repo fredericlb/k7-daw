@@ -39,8 +39,7 @@ at the account's settings is therefore a link to `/settings`.
 ## Tabs, and the one in the address
 
 `/settings` and the desktop app's engine page group their sections under tabs (`settings/SettingsTabs.tsx`):
-`/settings` under General and Devices; `/settings/engine`, on the desktop app, under Engine,
-Instruments, Chains, Plugins and Engines. Every section in one column runs past what one screen shows, and
+`/settings` under General, Devices and Downloads; `/settings/engine`, on the desktop app, under Engine and Plugins. Every section in one column runs past what one screen shows, and
 the sections fall into groups nobody needs at once.
 
 - **The tab is in the address**, as `?tab=`, so a reload or a link given to someone lands on it. It
@@ -161,6 +160,25 @@ process on the machine can apply them: the command-line engine's config file, or
 the backend running the engine (below). A second screen for one setting is two that disagree the day one is
 changed.
 
+## The audio interface — two choices, not a ranking
+
+`AudioInterfaceSection.tsx`, first in Devices, drawn only where this page's backend runs the engine. The engine
+opens the first interface of its ranking that is plugged in, and a person has two things to say about that:
+which one they want, and which one to take when it is away. So the section is a **Primary** and a **Fallback**
+select, each sending the pair as one `audio.priority` (`apps/k7-daw-engine/k7-supervisor/docs/hostProtocol.md`), over
+the devices the engine sees plus a ranked one that is unplugged, marked "not connected". A ranked list with arrows
+exposed an order of every device, which nobody sets past the second. The fallback offers None and never repeats
+the primary. The interface in use is named under the selects with the channels it opened, and on Windows the
+hint to leave the shared endpoint for the interface's own ASIO driver makes that driver the primary.
+
+## Downloads — what is coming down, and the engine's instruments
+
+`DownloadsSection.tsx`, the third tab. It reads `@studio/http-client`'s one store of downloads (the library songs, the
+models the file service fetches, uploads), live, with a bar while a size is known. A failed row stays until
+**Clear finished**, since it asks for something; with nothing going the section says so rather than vanish.
+Where the engine runs here, the instruments it can download follow in the same tab (`InstrumentsSection.tsx`): they
+are a download, and the Engine page is for the engine's own state. The phone's engine section keeps its own.
+
 ## The engine is a page beside it
 
 App settings carries a row for **Engine** in its Devices tab, and the engine is not a tab
@@ -169,8 +187,8 @@ so it takes no workspace name (`apps/k7-daw-frontend/packages/web-protocol/docs/
 
 **Engine**, `/settings/engine` (`settings/EnginePage.tsx`), is the same entry everywhere, and what it
 holds follows the machine. Served by the desktop app's backend — `GET /api/local` says this backend runs the
-engine (`localApp.md`) — it is this machine's engine: its state, its audio interface ranking, its
-plugins and its instruments, reached through k7's front, which runs the supervisor
+engine (`localApp.md`) — it is this machine's engine: its state, its network and slots, and its
+plugins, reached through k7's front, which runs the supervisor
 (`apps/k7-daw-backend/docs/localEngine.md`), since the supervisor opens no socket. Inside the phone's
 app it opens on the phone's engine. Anywhere else it carries the sentence saying a computer's engine is
 set on that computer. No page lists or chooses among engines: the app drives the one on this device.
