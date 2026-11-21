@@ -64,12 +64,15 @@ export function Action({
   onClick,
   disabled,
   title,
+  label,
   children,
   danger,
 }: {
   onClick: () => void;
   disabled?: boolean;
   title?: string;
+  /** The accessible name where the visible word repeats, such as "Revoke" on each device. */
+  label?: string;
   children: ReactNode;
   danger?: boolean;
 }) {
@@ -80,6 +83,7 @@ export function Action({
       onClick={onClick}
       disabled={disabled}
       title={title}
+      aria-label={label}
     >
       {children}
     </Button>

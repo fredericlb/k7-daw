@@ -57,7 +57,7 @@ export function ProjectMenu({
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            size="icon-sm"
+            size="icon"
             className="shrink-0 text-fg-2"
             title={blocked || m["project.menu"]({ label })}
             aria-label={m["project.menu"]({ label })}
@@ -73,27 +73,23 @@ export function ProjectMenu({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuItem
-            className="gap-2 text-xs"
             disabled={Boolean(noTarget)}
             title={noTarget || undefined}
             onSelect={() => setAct("copy")}
           >
-            <Copy className="h-3.5 w-3.5 text-muted-foreground" />
+            <Copy />
             {m["project.copy"]()}
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="gap-2 text-xs"
-            onSelect={() => setAct("rename")}
-          >
-            <PenLine className="h-3.5 w-3.5 text-muted-foreground" />
+          <DropdownMenuItem onSelect={() => setAct("rename")}>
+            <PenLine />
             {m["project.rename"]()}
           </DropdownMenuItem>
           {/* Last, and the only one that reads as danger: a rare destructive act sits apart from the two that keep it. */}
           <DropdownMenuItem
-            className="gap-2 text-destructive text-xs"
+            className="text-destructive [&_svg]:text-destructive"
             onSelect={() => setAct("delete")}
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 />
             {m["project.delete"]()}
           </DropdownMenuItem>
         </DropdownMenuContent>

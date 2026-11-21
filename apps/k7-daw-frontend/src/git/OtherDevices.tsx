@@ -47,8 +47,8 @@ function CloneRow({
         </span>
       </span>
       <Button
-        size="sm"
         variant="glass"
+        aria-label={m["roam.cloneNamed"]({ name: entry.name })}
         disabled={Boolean(blocked) || !t}
         title={blocked || m["git.cloneHint"]()}
         onClick={() => {

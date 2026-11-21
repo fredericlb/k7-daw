@@ -37,7 +37,7 @@ export function SlotButton({
     : m["frozen.saveSlot"]();
   const button = (onClick?: () => void) => (
     <Button
-      size="icon-sm"
+      size="icon"
       variant="ghost"
       disabled={!!refusal}
       onClick={onClick}

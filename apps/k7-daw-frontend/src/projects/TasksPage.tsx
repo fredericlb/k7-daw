@@ -138,6 +138,7 @@ export function TasksPage() {
                     {/* An ANCHOR, not a router link: a project is the router's basename, so opening one is a whole-page navigation. */}
                     <a
                       href={workspaceHref(ws)}
+                      aria-label={m["tasks.openNamed"]({ name: ws.name })}
                       className="type-secondary flex shrink-0 items-center gap-1 font-bold text-primary-text hover:underline"
                     >
                       {m["tasks.openWorkspace"]()}

@@ -118,7 +118,7 @@ function Row({
       </span>
       {onEdit && (
         <Button
-          size="icon-sm"
+          size="icon"
           variant="ghost"
           disabled={!!chain.liveRefusal}
           onClick={onEdit}
@@ -129,10 +129,10 @@ function Row({
         </Button>
       )}
       <Button
-        size="icon-sm"
+        size="icon"
         variant="ghost"
         onClick={onCopy}
-        aria-label={m["frozen.duplicate"]()}
+        aria-label={m["frozen.duplicateNamed"]({ name: chain.name })}
         title={m["frozen.duplicate"]()}
       >
         <Copy className="size-5" />
@@ -147,10 +147,10 @@ function Row({
       )}
       {onDelete && (
         <Button
-          size="icon-sm"
+          size="icon"
           variant="ghost"
           onClick={onDelete}
-          aria-label={m["frozen.delete"]()}
+          aria-label={m["frozen.deleteNamed"]({ name: chain.name })}
           title={m["frozen.delete"]()}
         >
           <Trash2 className="size-5" />
