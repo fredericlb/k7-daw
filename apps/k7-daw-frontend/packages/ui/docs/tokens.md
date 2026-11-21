@@ -29,7 +29,16 @@ meaning colours in its `index.css`.
 - **The tab lozenge slides.** A segmented control (`Tabs`, `Choice`) and the home `TabBar` draw
   one pill under the selected label, positioned from the label's box, instead of painting each
   tab. Under jsdom there is no box, so no lozenge draws.
-- **Motion is off under `prefers-reduced-motion`**, for every animation the tokens define.
+- **Motion is off under `prefers-reduced-motion`**, for every animation the tokens define. A state
+  that only a motion showed (a lane recording) keeps a static ring beside it.
+- **A control's edge reaches 3:1** against its ground (WCAG 1.4.11): the input line, the switch's
+  off track and an off M/S/A button's ring are 0.4 white, since 0.1 to 0.24 read as no edge at all.
+- **Type is counted in `--k7-u`**, 1px by default. `textScale.ts` scales it from the system text size
+  on a touch screen of an Apple device, since WKWebView does not apply Dynamic Type to px; the layout
+  stays in px, so a larger text grows inside the same boxes.
+- **An overlay keeps the keyboard** (`modal-focus.ts`): Tab stays inside a modal one, and closing gives
+  focus back to the opener unless a command already moved it. The kit's dialog names its Close button
+  through `DialogCloseLabel`, which the app provides in its language.
 
 ## The new components
 
