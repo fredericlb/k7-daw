@@ -1,5 +1,5 @@
 // nav.ts — a header control by its name, wherever the width put it: in the header, or in the phone's overflow menu.
-// The panes are `group "Pane"` buttons and the panels `toolbar "Panels"` buttons; a phone holds both in `menu "Views and panels"`.
+// The panes are `group "Pane"` buttons and the panels `toolbar "Panels"` buttons; a phone holds both as buttons of `dialog "Views and panels"`.
 import type { Locator, Page } from "@playwright/test";
 
 // The shell root says its layout in `data-layout` (phone, pad, desk); a page without one (home, settings) falls back to this query.
@@ -46,28 +46,40 @@ export async function navControl(page: Page, name: string): Promise<Locator> {
   const exact = { name, exact: true };
   return page
     .getByRole("button", exact)
-    .or(page.getByRole("menu").getByRole("menuitem", exact))
+    .or(
+      page
+        .getByRole("dialog", { name: "Views and panels" })
+        .getByRole("button", exact),
+    )
     .first();
 }
 
-/** A pane of the switcher: `group "Pane"` → `button`, or a phone's `menuitemradio`. */
+/** A pane of the switcher: `group "Pane"` → `button`, in the header or in the phone's dialog. */
 export async function pane(page: Page, name: string): Promise<Locator> {
   await openNav(page);
   const exact = { name, exact: true };
   return page
     .getByRole("group", { name: "Pane", exact: true })
     .getByRole("button", exact)
-    .or(page.getByRole("menuitemradio", exact))
+    .or(
+      page
+        .getByRole("dialog", { name: "Views and panels" })
+        .getByRole("button", exact),
+    )
     .first();
 }
 
-/** A right panel's button: `toolbar "Panels"` → `button`, or a phone's `menuitem`. */
+/** A right panel's button: `toolbar "Panels"` → `button`, or a tile of the phone's dialog. */
 export async function panel(page: Page, name: string): Promise<Locator> {
   await openNav(page);
   const exact = { name, exact: true };
   return page
     .getByRole("toolbar", { name: "Panels", exact: true })
     .getByRole("button", exact)
-    .or(page.getByRole("menuitem", exact))
+    .or(
+      page
+        .getByRole("dialog", { name: "Views and panels" })
+        .getByRole("button", exact),
+    )
     .first();
 }

@@ -1640,6 +1640,7 @@
   "shell.panels": "Panneaux",
   "shell.app": "Application",
   "shell.overflow": "Vues et panneaux",
+  "shell.overflow.close": "Fermer le menu",
   "shell.overflow.pane": "Volet",
   "shell.overflow.lanes": "Vues des pistes",
   "shell.overflow.graph": "Vues du graphe",

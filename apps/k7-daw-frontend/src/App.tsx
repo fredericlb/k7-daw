@@ -2903,7 +2903,12 @@ export default function App({
                 }
               : undefined
           }
-          metronome={{ on: metronomeIsOn, onPress: toggleMetronome }}
+          metronome={{
+            on: metronomeIsOn,
+            onPress: toggleMetronome,
+            level: metronomeLevel,
+            onLevel: (v) => void runCommand(`transport metronome volume ${v}`),
+          }}
         />
       }
     />
