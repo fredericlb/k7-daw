@@ -57,7 +57,7 @@ Another device, another tab or a command can change the file you have open.
 
 ## Vim mode
 
-The editor has vim key bindings, **on by default**. Turn them on or off with `ui vim`, or in the settings panel's **Editor** tab. The choice is remembered on the machine that holds your files.
+The editor has vim key bindings, **off by default**. Turn them on or off with `ui vim`, or in the settings panel's **Editor** tab. The choice is remembered on the machine that holds your files.
 
 ## Undo
 

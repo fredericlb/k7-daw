@@ -312,3 +312,6 @@ button still clicks, and a release over the menu just opened does not pick its f
 fires a native `contextmenu` of its own during a long press: one that arrives before ours wins and
 cancels ours, one that arrives after is dropped, so a press never opens two menus.
 
+A drag the timeline arms by holding (`docs/timeline.md`, "A finger holds, then drags") takes the
+press over: it cancels this long press, and opens the menu itself when the hold is released in place.
+

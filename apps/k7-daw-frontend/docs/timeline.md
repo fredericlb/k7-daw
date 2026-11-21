@@ -875,6 +875,25 @@ simply does not match, which is what an ordered keymap is for.
 
 A **shape** lane gets no button: it has no input to record.
 
+## A finger holds, then drags
+
+**Every drag on the timeline starts by a hold when a finger makes it.** The lane scrolls under a
+finger, and clips fill most of a lane, so a clip that took every press would leave nothing to pan with.
+A finger that stays 300 ms where it landed *arms* the drag (`src/holdDrag.ts`), with a short
+vibration where the device has one; one that moves first is left to the scroll. A mouse or a pen
+arms at once, as before.
+
+It covers a clip, its two edges, its fades, a lane's header (reorder), a picture shot and an
+automation point. On an **empty cell**, a hold then a drag draws the range rectangle that Shift
+draws with a mouse. Once armed, nothing else may scroll: a non-passive `touchmove` is cancelled
+and the element reads `touch-action: none`, because the property set mid-touch does not reach
+the touch already down.
+
+**A hold released without moving opens the context menu**, where the 500 ms long press of
+`contextMenu.md` would have, and arming cancels that long press so a hold never does both. The menu
+stays reachable by the clip's own `⋮` and the command bar. **A tap** (released before the hold)
+selects, as a click does.
+
 ## Reordering: drag a header to another row
 
 A lane's **gutter** is its handle. Press it and drag vertically and the row under the pointer is

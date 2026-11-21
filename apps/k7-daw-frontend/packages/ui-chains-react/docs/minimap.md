@@ -2,7 +2,7 @@
 
 A small map of the whole graph in the bottom-right corner of the chains pane: every card as a
 block and the pane's view as a frame over them. By default two icon buttons ride on top, **Zoom fit**
-and **Organize**; a host that draws them as labelled pills sets `minimapBar` to false, as k7's
+and **Auto layout**; a host that draws them as labelled pills sets `minimapBar` to false, as k7's
 Graph pane does (`GraphActions.tsx`). `Minimap.tsx`
 draws it; `DomChains` places it and owns everything it does.
 
@@ -38,7 +38,7 @@ forgets the view a double-click would return to. It also marks the camera as no 
 which is what "the original zoom and pan" means: until somebody moves it again, a resize of the pane
 re-frames it, as it did before anybody touched it.
 
-## Organize is the host's
+## Auto layout is the host's
 
 `graph organize` is a command that rewrites `positions:` and bumps the shell's `organizeKey`, so
 it has to go through the host's reloading command path — the renderer's `command` prop is the QUIET

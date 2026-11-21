@@ -94,10 +94,22 @@ export class LongPressTracker {
     return swallow;
   }
 
+  /** A press another gesture has taken over: no menu will fire for it. */
+  suppress(): void {
+    this.cancel();
+  }
+
   private cancel(): void {
     if (this.press) this.timers.clear(this.press.timer);
     this.press = null;
   }
+}
+
+let installed: LongPressTracker | null = null;
+
+/** The hold-to-drag gestures (holdDrag.ts) call this when they arm, so the 500 ms menu does not follow. */
+export function suppressLongPress(): void {
+  installed?.suppress();
 }
 
 const isEditable = (t: EventTarget | null): boolean =>
@@ -124,6 +136,7 @@ export function installLongPress(win: Window = window): () => void {
     clear: (h) => win.clearTimeout(h as number),
     now: () => win.performance.now(),
   });
+  installed = t;
   const onDown = (e: PointerEvent) => t.down(e, isEditable(e.target));
   const onMove = (e: PointerEvent) => t.move(e);
   const onEnd = (e: PointerEvent) => t.end(e);
@@ -147,6 +160,7 @@ export function installLongPress(win: Window = window): () => void {
   win.addEventListener("contextmenu", onMenu, true);
   win.addEventListener("click", onClick, true);
   return () => {
+    if (installed === t) installed = null;
     win.removeEventListener("pointerdown", onDown, opts);
     win.removeEventListener("pointermove", onMove, opts);
     win.removeEventListener("pointerup", onEnd, opts);

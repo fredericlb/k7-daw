@@ -4,6 +4,7 @@
 
 import { nearestTick } from "@studio/ui-timeline/ticks";
 import { type RefObject, useCallback, useEffect, useState } from "react";
+import { holdToArm } from "../holdDrag";
 import { m } from "../paraglide/messages.js";
 import { snapMode, snapTo } from "../snap";
 import { pictureToolLine, type Tool } from "../timelineTools";
@@ -88,24 +89,31 @@ export function useVideoDrag({
         if (act) setStatus(act.note);
         if (act) return;
       }
-      (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-      setVDrag({
-        trackId: track.id,
-        index,
-        // The compile leaves an activation's id empty, having no ref to put there.
-        activation: !c.id,
-        mode,
-        origStart: c.start,
-        origLength: c.length,
-        origFrom: c.sourceFrom,
-        ...(c.speed !== undefined ? { speed: c.speed } : {}),
-        start: c.start,
-        length: c.length,
-        x: e.clientX,
-        // px per second at the grab: px per beat × beats per second.
-        pxPerSec: Math.max(1e-6, ppbRef.current * bpsRef.current),
-        moved: false,
-      });
+      const el = e.currentTarget as HTMLElement;
+      const pointerId = e.pointerId;
+      const x0 = e.clientX;
+      const grab = () => {
+        el.setPointerCapture?.(pointerId);
+        setVDrag({
+          trackId: track.id,
+          index,
+          // The compile leaves an activation's id empty, having no ref to put there.
+          activation: !c.id,
+          mode,
+          origStart: c.start,
+          origLength: c.length,
+          origFrom: c.sourceFrom,
+          ...(c.speed !== undefined ? { speed: c.speed } : {}),
+          start: c.start,
+          length: c.length,
+          x: x0,
+          // px per second at the grab: px per beat × beats per second.
+          pxPerSec: Math.max(1e-6, ppbRef.current * bpsRef.current),
+          moved: false,
+        });
+      };
+      // A finger holds before the grab starts, so a drag on a shot still scrolls the lane until then (holdDrag.ts).
+      holdToArm(e, { arm: grab }, el);
     },
     [onToolLine, setStatus, toolRef, ppbRef, bpsRef, unitRef],
   );

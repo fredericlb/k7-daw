@@ -79,6 +79,7 @@ import {
   TIMELINE_MIME,
 } from "../fileDrop";
 import type { PasteResult } from "../gridCaret";
+import { holdToArm, openMenuAt } from "../holdDrag";
 import { useEdgeResize, useFadeDrag } from "../hooks/useEdgeDrags";
 import { useLatest } from "../hooks/useLatest";
 import type { ResourceDropEvent } from "../hooks/useTimelineDrop";
@@ -964,7 +965,10 @@ function TimelineTabView({
         });
       };
       // A cancel drops the lane where it was: the next click elsewhere must not complete the move.
-      follow(e, { move: onMove, end: onUp, cancel: () => setRowDrag(null) });
+      const grab = () =>
+        follow(e, { move: onMove, end: onUp, cancel: () => setRowDrag(null) });
+      // A finger holds first, so the gutter still scrolls the lanes until then (holdDrag.ts).
+      holdToArm(e, { arm: grab }, e.currentTarget as HTMLElement);
     },
     [readOnly, onReorder, rows, follow],
   );
@@ -1111,6 +1115,9 @@ function TimelineTabView({
       : null;
   }, []);
 
+  // The tap of a finger covers the clip with the caret, as a click does; `coverClip` is built further down.
+  const coverClipRef = useRef<(m: Move) => void>(() => {});
+
   const beginClipDrag = useCallback(
     (
       e: React.PointerEvent,
@@ -1188,20 +1195,11 @@ function TimelineTabView({
         if (act) setStatus(act.note);
         return;
       }
-      (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-      dragRef.current = {
-        x: e.clientX,
-        y: e.clientY,
-        ppb: ppbRef.current,
-        unit: unitRef.current,
-        moved: false,
-        trackId: track.id,
-        clipId: c.id,
-      };
+      const el = e.currentTarget as HTMLElement;
+      const grab = { pointerId: e.pointerId, x: e.clientX, y: e.clientY };
       // No MOVE on a generated, frozen or read-only lane — there is a clip to look at and nothing to write (apps/k7-daw-frontend/packages/song/docs/freeze.md).
-      if (readOnly || track.generated || c.frozen) return;
-      setSel(null);
-      setMove({
+      const movable = !(readOnly || track.generated || c.frozen);
+      const mv: Move = {
         trackId: track.id,
         clipId: c.id,
         origStart: c.start,
@@ -1210,7 +1208,33 @@ function TimelineTabView({
         offset: 0,
         toTrackId: track.id,
         dragging: true,
-      });
+      };
+      const start = () => {
+        el.setPointerCapture?.(grab.pointerId);
+        dragRef.current = {
+          x: grab.x,
+          y: grab.y,
+          ppb: ppbRef.current,
+          unit: unitRef.current,
+          moved: false,
+          trackId: track.id,
+          clipId: c.id,
+        };
+        if (!movable) return;
+        setSel(null);
+        setMove(mv);
+      };
+      // A finger holds before the grab (so a drag on a clip still scrolls the lane); a tap selects, a hold released in place opens the menu.
+      if (e.pointerType !== "touch" || !movable) return start();
+      holdToArm(
+        e,
+        {
+          arm: start,
+          tap: () => coverClipRef.current(mv),
+          release: (x, y) => openMenuAt(el, x, y),
+        },
+        el,
+      );
     },
     [readOnly, onToolLine, setStatus, follow],
   );
@@ -1342,6 +1366,8 @@ function TimelineTabView({
     },
     [clampCell, clampCaret],
   );
+
+  coverClipRef.current = coverClip;
 
   // When a click last opened a clip: the split it causes can shift the lanes, so a double-click's second press may land on bare lane.
   const clipOpenedAt = useRef(0);
@@ -3244,23 +3270,17 @@ function TimelineTabView({
                     onPointerDown={(e) => {
                       if (e.button !== 0) return;
                       if (dragRef.current) return; // a clip took this press
-                      /** Shift: the caret GROWS into the `v` rectangle — the same Selection the keyboard's `v` builds, and it works over a clip too. */
-                      if (e.shiftKey) {
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        const cellAt = (cx: number) =>
-                          Math.max(
-                            beatLo,
-                            Math.min(
-                              beatHi,
-                              Math.floor(beatLo + (cx - rect.left) / ppb),
-                            ),
-                          );
-                        const anchor: Cell = sel
-                          ? sel.anchor
-                          : clampCell({
-                              row: caret.row,
-                              beat: caret.beat === LABEL ? beatLo : caret.beat,
-                            });
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const cellAt = (cx: number) =>
+                        Math.max(
+                          beatLo,
+                          Math.min(
+                            beatHi,
+                            Math.floor(beatLo + (cx - rect.left) / ppb),
+                          ),
+                        );
+                      /** Draw the `v` rectangle from `anchor` and let this pointer steer its head — shift-press for a mouse, hold-then-drag for a finger. */
+                      const drawRange = (anchor: Cell) => {
                         setSel({
                           anchor,
                           head: clampCell({
@@ -3289,10 +3309,21 @@ function TimelineTabView({
                         };
                         // The rectangle stays as drawn on a release or a cancel alike; only the pointer stops steering it.
                         follow(e, { move: onSelMove });
+                      };
+                      /** Shift: the caret GROWS into the `v` rectangle — the same Selection the keyboard's `v` builds, and it works over a clip too. */
+                      if (e.shiftKey) {
+                        drawRange(
+                          sel
+                            ? sel.anchor
+                            : clampCell({
+                                row: caret.row,
+                                beat:
+                                  caret.beat === LABEL ? beatLo : caret.beat,
+                              }),
+                        );
                         return;
                       }
                       if (e.target !== e.currentTarget) return;
-                      const rect = e.currentTarget.getBoundingClientRect();
                       const beat = Math.floor(
                         beatLo + (e.clientX - rect.left) / ppb,
                       );
@@ -3306,6 +3337,17 @@ function TimelineTabView({
                         DBLCLICK_MS
                       )
                         onEmptyClick?.();
+                      // A finger holds on an empty cell, then drags: that draws the range (holdDrag.ts).
+                      if (e.pointerType === "touch")
+                        holdToArm(e, {
+                          arm: () =>
+                            drawRange(
+                              clampCell({
+                                row: `track:${t.id}` as RowKey,
+                                beat: cellAt(e.clientX),
+                              }),
+                            ),
+                        });
                     }}
                     className={cn(
                       "relative overflow-hidden",
@@ -3510,7 +3552,7 @@ function TimelineTabView({
                                 }}
                                 className={cn(
                                   // `isolate` keeps the activity layer's -z-10 inside this block; `group` is what the name reads.
-                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-xl px-2 font-mono text-[11px] active:cursor-grabbing isolate",
+                                  "group absolute top-1 flex h-[calc(100%-8px)] cursor-grab overflow-hidden rounded-xl px-2 font-mono text-[11px] active:cursor-grabbing isolate select-none [-webkit-touch-callout:none]",
                                   // Disabled: still placed, still readable, plainly off — an event you cannot see is a deleted one.
                                   c.disabled &&
                                     "opacity-40 saturate-0 outline-dashed outline-1 outline-muted-foreground",
@@ -3664,23 +3706,35 @@ function TimelineTabView({
                                           }
                                           onPointerDown={(e) => {
                                             e.stopPropagation();
-                                            (
-                                              e.currentTarget as HTMLElement
-                                            ).setPointerCapture(e.pointerId);
-                                            setFade({
-                                              trackId: t.id,
-                                              clipId: c.id,
-                                              which,
-                                              start: c.start,
-                                              span:
-                                                c.length > 0
-                                                  ? c.length
-                                                  : NATURAL,
-                                              orig: len,
-                                              len,
-                                              x: e.clientX,
-                                              ppb,
-                                            });
+                                            const el =
+                                              e.currentTarget as HTMLElement;
+                                            const pointerId = e.pointerId;
+                                            const x0 = e.clientX;
+                                            holdToArm(
+                                              e,
+                                              {
+                                                arm: () => {
+                                                  el.setPointerCapture(
+                                                    pointerId,
+                                                  );
+                                                  setFade({
+                                                    trackId: t.id,
+                                                    clipId: c.id,
+                                                    which,
+                                                    start: c.start,
+                                                    span:
+                                                      c.length > 0
+                                                        ? c.length
+                                                        : NATURAL,
+                                                    orig: len,
+                                                    len,
+                                                    x: x0,
+                                                    ppb,
+                                                  });
+                                                },
+                                              },
+                                              el,
+                                            );
                                           }}
                                           onPointerMove={onFadeMove}
                                           onPointerUp={commitFade}
@@ -3708,24 +3762,34 @@ function TimelineTabView({
                                         // Stop it here or the clip's own move drag starts too.
                                         e.stopPropagation();
                                         e.preventDefault();
-                                        (
-                                          e.currentTarget as HTMLElement
-                                        ).setPointerCapture?.(e.pointerId);
+                                        const el =
+                                          e.currentTarget as HTMLElement;
+                                        const pointerId = e.pointerId;
+                                        const x0 = e.clientX;
                                         const end =
                                           c.start +
                                           (c.length > 0 ? c.length : NATURAL);
-                                        setResize({
-                                          trackId: t.id,
-                                          clipId: c.id,
-                                          edge,
-                                          origStart: c.start,
-                                          origEnd: end,
-                                          start: c.start,
-                                          end,
-                                          x: e.clientX,
-                                          ppb,
-                                          unit: unitRef.current,
-                                        });
+                                        holdToArm(
+                                          e,
+                                          {
+                                            arm: () => {
+                                              el.setPointerCapture?.(pointerId);
+                                              setResize({
+                                                trackId: t.id,
+                                                clipId: c.id,
+                                                edge,
+                                                origStart: c.start,
+                                                origEnd: end,
+                                                start: c.start,
+                                                end,
+                                                x: x0,
+                                                ppb,
+                                                unit: unitRef.current,
+                                              });
+                                            },
+                                          },
+                                          el,
+                                        );
                                       }}
                                       onPointerMove={onResizeMove}
                                       onPointerUp={commitResize}

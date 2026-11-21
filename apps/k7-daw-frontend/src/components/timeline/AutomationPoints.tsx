@@ -3,6 +3,7 @@
 
 import { cn } from "@studio/ui/lib/utils";
 import { useState } from "react";
+import { holdToArm } from "../../holdDrag";
 import { m } from "../../paraglide/messages.js";
 
 export interface AutoPoint {
@@ -105,15 +106,26 @@ export function AutomationPoints({
           title={m["tl.autoPointHint"]()}
           className={cn(
             "absolute z-10 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-background bg-(--k7-curve) after:absolute after:-inset-3.5 after:content-[''] focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none",
-            !readOnly && "cursor-grab touch-none",
+            !readOnly && "cursor-grab",
             drag?.i === i && drag.moved && "cursor-grabbing",
           )}
           style={{ left: x(p.b), top: yOf(p.v, rowH) }}
           onPointerDown={(e) => {
             e.stopPropagation();
             if (readOnly || e.button !== 0) return;
-            e.currentTarget.setPointerCapture(e.pointerId);
-            setDrag({ i, b: points[i].b, v: points[i].v, moved: false });
+            const el = e.currentTarget;
+            const pointerId = e.pointerId;
+            // A finger holds first, so the lane still scrolls under it until then (holdDrag.ts).
+            holdToArm(
+              e,
+              {
+                arm: () => {
+                  el.setPointerCapture(pointerId);
+                  setDrag({ i, b: points[i].b, v: points[i].v, moved: false });
+                },
+              },
+              el,
+            );
           }}
           onPointerMove={(e) => {
             if (!drag || drag.i !== i) return;
