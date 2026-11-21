@@ -20,6 +20,7 @@ import {
   CardPullBar,
   useCardGit,
 } from "../git/GitBar";
+import { lockSentence } from "../git/gitLock";
 import { useLocale } from "../i18n";
 import { m } from "../paraglide/messages.js";
 import { NewProject } from "./NewProject";
@@ -91,6 +92,9 @@ function WorkspaceCard({
 }) {
   const git = useCardGit(w.name);
   const locked = !!p.locked?.(w);
+  // A merge waiting here refuses every write, so the card says so before a dialog is filled in.
+  const lockSaid = locked ? lockSentence() : "";
+  const writeBlocked = p.blocked || lockSaid;
   const lit = over === w.name && takesDrops(w, locked);
   const Chevron = open ? ChevronDown : ChevronRight;
   const drop = {
@@ -130,7 +134,7 @@ function WorkspaceCard({
       <div className="flex min-h-[60px] flex-wrap items-center gap-x-2 gap-y-1 px-3.5 py-2">
         <button
           type="button"
-          className="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-fg-2 outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
+          className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-fg-2 outline-none hover:bg-on-fill focus-visible:shadow-(--k7-focus-ring)"
           aria-expanded={open}
           aria-label={
             open
@@ -141,11 +145,12 @@ function WorkspaceCard({
         >
           <Chevron className="size-4" />
         </button>
-        {/* The workspace opens on its name, as its card did. */}
+        {/* The name folds the card like the chevron beside it, which is the keyboard's way in. */}
         <button
           type="button"
+          tabIndex={-1}
           className="group flex min-w-0 flex-1 basis-40 cursor-pointer items-center gap-2.5 rounded-xl text-left outline-none focus-visible:shadow-(--k7-focus-ring)"
-          onClick={() => p.onOpen(w)}
+          onClick={onFold}
         >
           <Folder className="size-5 shrink-0 text-primary-text" />
           <span className="min-w-0 truncate text-[17px] font-bold">
@@ -159,7 +164,7 @@ function WorkspaceCard({
         <CardGitPills git={git} workspace={w.name} demo={isExamples(w)} />
         {!isExamples(w) && (
           <NewProject
-            blocked={p.blocked}
+            blocked={writeBlocked}
             workspace={w.name}
             onCreate={p.createIn}
           />
@@ -168,11 +173,18 @@ function WorkspaceCard({
           workspace={w.name}
           projectCount={w.projects.length}
           blocked={p.blocked}
+          locked={lockSaid}
+          onBrowse={() => p.onOpen(w)}
           onRemove={() => p.onRemoveWorkspace(w)}
           onConnected={p.onChanged}
         />
       </div>
       <CardPullBar git={git} workspace={w.name} />
+      {lockSaid && (
+        <p role="status" className="type-secondary px-3.5 pb-2 text-warn">
+          {lockSaid}
+        </p>
+      )}
       {open &&
         (!w.projects.length && !isExamples(w) ? (
           // Nothing in it yet: the link opens the WORKSPACE and the editor asks for the first project (FirstProject.tsx).
@@ -192,7 +204,7 @@ function WorkspaceCard({
               project={x}
               href={p.projectHref(w, x)}
               targets={targets}
-              blocked={p.blocked}
+              blocked={writeBlocked}
               now={now}
               locale={locale}
               onCopy={(to, folder, onStep) =>

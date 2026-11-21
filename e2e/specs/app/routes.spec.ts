@@ -56,10 +56,9 @@ test("/settings draws every section with its controls, a tab at a time", async (
         page.getByRole("heading", { name, exact: true }),
       ).toBeVisible();
   };
-  // General opens first: the language, the AI key, the separation chains and About (apps/k7-daw-frontend/docs/settings.md).
+  // General opens first: the language, the AI key and the separation chains (apps/k7-daw-frontend/docs/settings.md).
   await expect(page.getByRole("tablist", { name: "Settings" })).toBeVisible();
   await sections(["Language", "AI"]);
-  await expect(page.getByRole("region", { name: "About" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Français" })).toBeEnabled();
   await expect(
     page.getByRole("textbox", { name: "New API key" }),

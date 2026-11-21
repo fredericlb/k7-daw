@@ -30,6 +30,8 @@ export function useCommandKeys({
   useEffect(() => {
     if (!enabled) return;
     const onKey = (e: KeyboardEvent) => {
+      // A control that took the key itself (Record on Space, the clock on Enter) has answered it.
+      if (e.defaultPrevented) return;
       const el = e.target as HTMLElement | null;
       // The page walk (F6) is the way OUT of a field or a control, so it passes both guards below.
       const t = keyToken(e);

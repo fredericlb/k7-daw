@@ -68,16 +68,16 @@ export interface CommandPending {
   kind: ArgClass;
 }
 
-// One colour per param kind, so a form reads as coloured questions — exhaustive over ArgClass, so a new kind cannot ship uncoloured.
+// One theme colour per param kind, so a form reads as coloured questions — exhaustive over ArgClass, so a new kind cannot ship uncoloured.
 const ARG_COLOR: Record<ArgClass, string> = {
-  track: "text-sky-400",
-  module: "text-violet-400",
-  file: "text-emerald-400",
-  marker: "text-fuchsia-400",
-  choice: "text-cyan-300",
-  timecode: "text-amber-400",
-  number: "text-orange-400",
-  note: "text-rose-400",
+  track: "text-primary-text",
+  module: "text-lavender",
+  file: "text-ok",
+  marker: "text-record",
+  choice: "text-fg-2",
+  timecode: "text-warn",
+  number: "text-warn",
+  note: "text-error",
   text: "text-foreground",
 };
 
@@ -496,7 +496,7 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
                   ? `${listId}-${highlighted}`
                   : undefined
               }
-              className="type-mono-command min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-faint"
+              className="type-mono-command min-w-0 flex-1 bg-transparent text-foreground outline-none placeholder:text-faint pointer-coarse:text-[16px]"
             />
           )}
         </div>
@@ -551,8 +551,17 @@ export const CommandBar = forwardRef<CommandBarHandle, CommandBarProps>(
           </div>
         )}
         {!command && focused && shown.length > 0 && (
-          <p aria-hidden className="type-badge px-3 pb-1.5 text-fg-3">
+          <p
+            aria-hidden
+            className="type-badge px-3 pb-1.5 text-fg-3 pointer-coarse:hidden"
+          >
             {m["commandBar.footer"]()}
+          </p>
+        )}
+        {!command && focused && query && matches.length === 0 && (
+          // Enter still runs the raw text (commitCommand), so the card says so instead of staying empty.
+          <p role="status" className="type-secondary px-3 pb-2 text-fg-2">
+            {m["commandBar.noMatch"]({ text: value.trim() })}
           </p>
         )}
       </div>

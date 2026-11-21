@@ -26,7 +26,7 @@ async function openPage(page: Page): Promise<void> {
 /** Deletes the account's chain through its row's Delete and the confirmation. */
 async function deleteMine(page: Page): Promise<void> {
   await row(page, `@account/${MINE}`)
-    .getByRole("button", { name: "Delete", exact: true })
+    .getByRole("button", { name: /^Delete / })
     .click();
   const confirm = page.getByRole("dialog", {
     name: `Delete the chain ${MINE}?`,
@@ -52,7 +52,7 @@ test("a cold chain is duplicated into the account's and deleted, and New chain o
       page.getByRole("heading", { name: "Library cold chains" }),
     ).toBeVisible();
     await row(page, SOURCE)
-      .getByRole("button", { name: "Duplicate into your chains" })
+      .getByRole("button", { name: /^Duplicate .* into your chains$/ })
       .click();
     const dialog = page.getByRole("dialog", {
       name: "Duplicate into your chains",

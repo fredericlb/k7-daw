@@ -6,33 +6,33 @@ by itself.
 
 ## What you need
 
-- the address of a repository, such as `https://git.example.org/me/songs.git` or `git@git.example.org:me/songs.git`;
-- a way to sign in: for an `https://` address, your user name and an **access token** (make one in your host's settings; do not use
-  your password); for an `ssh` address, a key: let k7 **make a key here** and add the public line it shows to your account's SSH keys
-  at the host, or **use your own key** by pasting it or picking its file (a passphrase is asked if it has one).
+- the **ssh address** of a repository, such as `git@git.example.org:me/songs.git`; k7 syncs over SSH only, so an `https://` address
+  is refused at once, and there is no token, no password and no pasted key to give;
+- the public key of **this device**: k7 makes it for you the first time you open the connect dialog and shows it with a **Copy**
+  button. Add that line to the host, as a deploy key of the repository (with write access, to push) or among your account's SSH
+  keys. The key is the same for every workspace and stays on this device (on an Apple device it is shared with your others
+  through iCloud Keychain);
 - a host that stores **large files** (git LFS) if the workspace holds audio: GitHub, GitLab and Gitea do. A host without it
   refuses the push with a sentence, and nothing is sent.
 
-k7 keeps the token or the private key in this device's keychain, for your k7 account alone. It is never written in the workspace
-or in the repository, and the page forgets it as soon as the server answers.
+The private key never leaves the device and is never written in the workspace or in the repository.
 
 The first time k7 meets an ssh server it shows the server's key fingerprint and waits: check it against what your host publishes,
-press **Trust this server**, then type your secret again. If the key of a server you trusted later changes, k7 warns you with both
-fingerprints and does not go on. If the host's owner confirms the change, press **Forget the old key**: the next try shows the
-new fingerprint for you to trust.
+then confirm. If the key of a server you trusted later changes, k7 warns you with both fingerprints and does not go on. If the
+host's owner confirms the change, press **Forget the old key**: the next try shows the new fingerprint for you to trust.
 
 ## Connect a workspace
 
 1. On the projects page, open the **⋮** menu of the workspace and choose **Connect to git…**.
-2. Paste the address, choose how to sign in, then press **Connect**.
+2. Paste the ssh address, add the key shown to your host, then press **Connect**.
 
-The first contact proves the address and the sign-in. Under the workspace a bar now shows the remote, how many commits wait to be
+The first contact proves the address and the key. Under the workspace a bar now shows the remote, how many commits wait to be
 pulled and pushed, and how many files you changed.
 
 ## Clone a repository
 
 1. On the projects page press **Clone from git**.
-2. Give the workspace a name, the address and the sign-in.
+2. Give the workspace a name and the ssh address.
 
 The repository comes down as a new workspace, large files included.
 
@@ -46,7 +46,7 @@ The repository comes down as a new workspace, large files included.
 | commits to pull | **Pull** |
 | **Commit first** | you changed files since the last commit: commit them, then pull |
 
-Your name and email sign the commits; k7 asks for them once, and they live in the settings, under Devices.
+Your name and email sign the commits; k7 asks for them once, and they live in Settings, under General.
 
 ## When both sides changed the same thing
 

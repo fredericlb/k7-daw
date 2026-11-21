@@ -1,6 +1,6 @@
 # The settings page, and the line it draws
 
-The cog at the right of every home page's top bar opens `/settings`, App settings, a page of its own: `settings/SettingsPage.tsx`,
+The Settings tab of the floating tab bar, on every home page, opens `/settings`, App settings, a page of its own: `settings/SettingsPage.tsx`,
 a route of the home page like `/libraries` (`appMain.tsx`), so going there reloads nothing.
 The editor keeps its own settings as a panel (`components/SettingsPanel.tsx`), because those are
 set while you look at the song they affect; these are not.
@@ -39,7 +39,7 @@ at the account's settings is therefore a link to `/settings`.
 ## Tabs, and the one in the address
 
 `/settings` and the desktop app's engine page group their sections under tabs (`settings/SettingsTabs.tsx`):
-`/settings` under General, Devices and Downloads; `/settings/engine`, on the desktop app, under Engine and Plugins. Every section in one column runs past what one screen shows, and
+`/settings` under General, Devices, Downloads and About; `/settings/engine`, on the desktop app, under Engine and Plugins. Every section in one column runs past what one screen shows, and
 the sections fall into groups nobody needs at once.
 
 - **The tab is in the address**, as `?tab=`, so a reload or a link given to someone lands on it. It
@@ -193,7 +193,7 @@ plugins, reached through k7's front, which runs the supervisor
 app it opens on the phone's engine. Anywhere else it carries the sentence saying a computer's engine is
 set on that computer. No page lists or chooses among engines: the app drives the one on this device.
 
-## About is in General
+## About is a tab of its own
 
-The version, the licence, the source and the third-party notices are a section at the foot of General (`about.md`).
-None of it is a setting; it shares the page because both are visited on purpose and rarely.
+The version, the licence, the source and the third-party notices are the About tab (`about.md`). None of it is a setting, and the
+notices list is hundreds of rows long, so it sits last where it cannot push the AI key or the separation chains out of reach.

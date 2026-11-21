@@ -57,7 +57,7 @@ export function useVideoRecording(opts: {
   const closeRef = useRef<(() => void) | null>(null);
   // Takes stopped but not yet filed: the page must not be left while one is, or it is lost with the tab.
   const [filing, setFiling] = useState(0);
-  useUnsavedGuard(recording || filing > 0);
+  useUnsavedGuard(recording || filing > 0, "recording");
   // Read inside the async start, which must not re-bind the whole effect on a status change.
   const live = useRef({ store, project, runCommand, setStatus, bumpReload });
   live.current = { store, project, runCommand, setStatus, bumpReload };

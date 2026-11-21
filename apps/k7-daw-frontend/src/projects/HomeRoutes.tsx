@@ -51,10 +51,10 @@ export function HomeRoutes({ fallback }: { fallback: ReactNode }) {
           />
           <Route path={SETTINGS_ROUTE} element={<SettingsPage />} />
           <Route path={ENGINE_SETTINGS_ROUTE} element={<EnginePage />} />
-          {/* About lives in App settings now; an old address lands there. */}
+          {/* About is a tab of App settings; its address lands on it. */}
           <Route
             path={ABOUT_ROUTE}
-            element={<Navigate to={SETTINGS_ROUTE} replace />}
+            element={<Navigate to={`${SETTINGS_ROUTE}?tab=about`} replace />}
           />
           <Route path={TASKS_ROUTE} element={<TasksPage />} />
           <Route path="*" element={<Home />} />

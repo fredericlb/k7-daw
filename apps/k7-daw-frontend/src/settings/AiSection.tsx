@@ -2,11 +2,13 @@
 // runs on. The key is stored by k7's backend for this account and is WRITE-ONLY from here:
 // what comes back is a hint of it, never the key. See ../../docs/settings.md.
 
+import { askConfirm } from "@studio/project-shell/ask";
 import { TriangleAlert } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
 import { useEffect, useState } from "react";
 import { type AiSettingsView, aiOrganize } from "../api";
 import { m } from "../paraglide/messages.js";
-import { Action, FIELD, Row, Section } from "./Section";
+import { Action, Row, Section } from "./Section";
 
 export function AiSection() {
   const [view, setView] = useState<AiSettingsView | null>(null);
@@ -40,6 +42,17 @@ export function AiSection() {
       .finally(() => setBusy(false));
   };
 
+  // The key is never shown again, so removing it is asked first.
+  const removeKey = async () => {
+    const ok = await askConfirm({
+      title: m["ai.removeTitle"](),
+      body: m["ai.removeBody"](),
+      confirmLabel: m["ai.remove"](),
+      danger: true,
+    });
+    if (ok) save({ apiKey: null });
+  };
+
   const modelChanged = model.trim() !== (view?.model ?? "");
 
   return (
@@ -53,17 +66,16 @@ export function AiSection() {
         detail={view?.keyHint ? m["ai.keyOn"]() : m["ai.keyOff"]()}
       >
         {view?.keyHint && (
-          <Action danger disabled={busy} onClick={() => save({ apiKey: null })}>
+          <Action danger disabled={busy} onClick={() => void removeKey()}>
             {m["ai.remove"]()}
           </Action>
         )}
       </Row>
       <div className="flex gap-2 px-3.5 py-2.5">
-        <input
+        <Input
           type="password"
           autoComplete="off"
           aria-label={m["ai.newKey"]()}
-          className={FIELD}
           placeholder={view?.keyHint ? m["ai.replaceKey"]() : "sk-ant-…"}
           value={key}
           onChange={(e) => setKey(e.target.value)}
@@ -79,8 +91,8 @@ export function AiSection() {
         </Action>
       </div>
       <div className="flex gap-2 px-3.5 py-2.5">
-        <input
-          className={FIELD}
+        <Input
+          aria-label={m["ai.model"]()}
           placeholder={view?.defaultModel ?? m["ai.modelPlaceholder"]()}
           title={m["ai.modelHint"]()}
           value={model}
@@ -98,13 +110,13 @@ export function AiSection() {
         </Action>
       </div>
       {error && (
-        <Row
-          label={
-            <>
-              <TriangleAlert className="size-5 inline text-warn" /> {error}
-            </>
-          }
-        />
+        <div
+          role="alert"
+          className="type-secondary flex items-start gap-2 px-3.5 py-2.5 text-error"
+        >
+          <TriangleAlert className="mt-0.5 size-5 shrink-0" aria-hidden />
+          <span className="min-w-0 break-words">{error}</span>
+        </div>
       )}
     </Section>
   );

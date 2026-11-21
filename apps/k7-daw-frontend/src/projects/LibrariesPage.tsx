@@ -4,29 +4,19 @@
 
 import { Spinner } from "@studio/ui/spinner";
 import type { AccountLibrary } from "@studio/web-protocol";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { m } from "../paraglide/messages.js";
-import { findAccountFiles } from "../settings/accountFiles";
+import { useAccountFiles } from "../settings/useAccountFiles";
 import { FrozenChainsSection } from "./FrozenChainsPage";
 import { HomeShell } from "./HomeFrame";
 import { LibrariesCard } from "./LibrariesCard";
 import { LibraryPins } from "./LibraryPins";
 import { PageFrame } from "./PageFrame";
-import type { AccountFiles } from "./workspaceOps";
 
 export function LibrariesPage() {
   // `undefined` while asked: the card says "none answers" only once that is the answer.
-  const [fileService, setFileService] = useState<
-    AccountFiles | null | undefined
-  >(undefined);
+  const fileService = useAccountFiles();
   const [libraries, setLibraries] = useState<AccountLibrary[]>([]);
-  useEffect(() => {
-    let live = true;
-    void findAccountFiles(false).then((f) => live && setFileService(f));
-    return () => {
-      live = false;
-    };
-  }, []);
 
   return (
     <HomeShell>
