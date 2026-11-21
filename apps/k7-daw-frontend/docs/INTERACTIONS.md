@@ -1056,4 +1056,3 @@ The Surfaces tab lists, by device, the surfaces of the projects open on the netw
 - A chain or OUT card opens no menu on right-click, unlike every other card.
 - Removing a takes crossfade needs Alt, and sizing a timeline crossfade needs a drag: touch gets only the default.
 - `apps/k7-daw-frontend/src/settings/RemoteSlotsSection.tsx` is not referenced by any screen.
-- The GitHub account section (@login

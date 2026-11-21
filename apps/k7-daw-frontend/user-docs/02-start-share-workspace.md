@@ -30,7 +30,7 @@ workspaces come first, and in Connect **New repository** makes one (private unle
 opens, GitHub is asked for one more permission, to list and create repositories.
 
 Files still travel over SSH with the device's key; the sign-in only talks to GitHub's website. It stays on this device and is never
-synced. **Settings, Devices** shows the account and **Sign out**, which removes the sign-in but leaves the key on your GitHub
+synced. **Settings, General** shows the account and **Sign out**, which removes the sign-in but leaves the key on your GitHub
 account (it is this device's git access; remove it at github.com/settings/keys). **Another host…** in the dialog is the form
 described above, for any other host.
 
