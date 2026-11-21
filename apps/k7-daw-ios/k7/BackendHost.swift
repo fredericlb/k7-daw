@@ -214,6 +214,7 @@ final class BackendHost {
             setrlimit(RLIMIT_NOFILE, &limit)
         }
         RoamStore.install()
+        LanBridge.install()
         let config: [String: Any] = ["listen": "127.0.0.1:\(Self.port)", "env": environment()]
         guard let data = try? JSONSerialization.data(withJSONObject: config),
               let text = String(data: data, encoding: .utf8) else { return -2 }

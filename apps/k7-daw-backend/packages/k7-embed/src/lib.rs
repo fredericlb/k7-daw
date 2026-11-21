@@ -46,3 +46,29 @@ pub extern "C" fn k7_front_stop() -> i32 {
 pub extern "C" fn k7_roam_install(list: k7_roam::ffi::List, put: k7_roam::ffi::Put) {
     k7_roam::ffi::install_callbacks(list, put);
 }
+
+/// Installs the host's advertiser before `k7_front_start`; the host then pushes what it browses with `k7_lan_peers` (`apps/k7-daw-backend/docs/lan.md`).
+#[unsafe(no_mangle)]
+pub extern "C" fn k7_lan_install(advertise: k7_lan::AdvertiseFn) {
+    k7_lan::HostBridge::install(advertise);
+}
+
+/// The host's browse result, a NUL-terminated JSON array of peers; returns 1 when it was taken, 0 when it was not.
+// The safety contract is the one line above; a multi-line `# Safety` section breaks the repo's comment rule.
+#[allow(clippy::missing_safety_doc)]
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn k7_lan_peers(json: *const c_char) -> i32 {
+    if json.is_null() {
+        return 0;
+    }
+    let Ok(text) = (unsafe { CStr::from_ptr(json) }).to_str() else {
+        return 0;
+    };
+    i32::from(k7_lan::HostBridge::installed().is_some_and(|b| b.push(text)))
+}
+
+/// The host's word on its LAN switch, for a phone whose supervisor the front cannot read.
+#[unsafe(no_mangle)]
+pub extern "C" fn k7_lan_set_open(open: i32) {
+    k7_lan::set_host_open(open != 0);
+}

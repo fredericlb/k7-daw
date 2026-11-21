@@ -38,12 +38,10 @@ session into a ticket and stamps the user itself
 
 `AuthGate` → `EngineGate` → `ProjectGate` → editor, when the address names a project.
 When it names none, `main.tsx` mounts `AuthGate` → `Home` instead — the projects page, which
-needs the account and neither an engine nor a project (`docs/projects.md`). One address
-short-circuits both: `/external` (kept until the app's second-device rework, `docs/inventaire.md`), the menu of surfaces a second device can drive — every surface
-of the project the ENGINE is holding, which `GET /engine/served` answers and which is not the same
-question as each workspace's active-project marker. It is `AuthGate` → `ExternalIndex` and probes
-for a machine without claiming one (`docs/external.md`). It is read BEFORE `parseLaunch`, since a single segment is
-otherwise a workspace — so `external` is a reserved short name. The engine
+needs the account and neither an engine nor a project (`docs/projects.md`). Another device's surface
+short-circuits both: `/@lan/<engineId>/<workspace>/<project>/@external/<surface>` mounts `AuthGate` → `LanSurfaceGate`, which holds no
+engine and no claim and reads that device's door through this device's own front (`docs/external.md`). The home's `/surfaces`
+page lists those surfaces. The engine
 picker is unreachable until the page holds the token either way.
 
 **`/auth/*` is k7's**, answered by its Rust front (`apps/k7-daw-backend/docs/routes.md`): `/auth/me` alone, which hands the

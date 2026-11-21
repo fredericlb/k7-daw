@@ -67,8 +67,13 @@ export const VIEW_COMMANDS: LocalCommand[] = [
       fr: "Afficher ou masquer la fenêtre de l'image",
     },
     run: (ctx) => {
+      const taken = ctx.blockedReason("viewport");
       if (!ctx.hasViewport) ctx.setStatus(m["status.noViewport"]());
-      else ctx.setViewportWindow((cur) => ({ open: !cur.open }));
+      // What a remote shows is not opened here: refused in words, and the window stays shut.
+      else if (taken) {
+        ctx.setStatus(taken);
+        ctx.setViewportWindow(() => ({ open: false }));
+      } else ctx.setViewportWindow((cur) => ({ open: !cur.open }));
       return true;
     },
   },

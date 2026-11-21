@@ -4,6 +4,7 @@
 
 import { METRONOME_MIN } from "@studio/engine-protocol/build";
 import { Button } from "@studio/ui/button";
+import { showReason } from "@studio/ui/disabled-reason";
 import {
   CircleHelp,
   Ellipsis,
@@ -24,6 +25,8 @@ export interface OverflowPane {
   id: string;
   label: string;
   icon: LucideIcon;
+  /** Why this pane cannot be opened now; a press says it instead of opening. */
+  blocked?: string;
 }
 
 export interface OverflowLaneView {
@@ -152,8 +155,13 @@ export function OverflowMenu({
                   type="button"
                   role="radio"
                   aria-checked={pane === p.id}
-                  onClick={run(() => onPane(p.id))}
-                  className="type-label flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-1 text-foreground aria-checked:bg-on-fill aria-checked:text-lavender"
+                  aria-disabled={p.blocked ? true : undefined}
+                  onClick={
+                    p.blocked
+                      ? run(() => showReason(p.blocked ?? ""))
+                      : run(() => onPane(p.id))
+                  }
+                  className="type-label flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-1 text-foreground aria-checked:bg-on-fill aria-checked:text-lavender aria-disabled:opacity-40"
                 >
                   <p.icon className="size-[18px] shrink-0" />
                   <span className="truncate">{p.label}</span>

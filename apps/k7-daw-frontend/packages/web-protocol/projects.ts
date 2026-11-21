@@ -259,8 +259,56 @@ export function externalOf(projectUrl: string, surface: string): string {
   return `${projectUrl}/${EXTERNAL_SEGMENT}/${encodeSegment(surface)}`;
 }
 
-/** The MENU of those addresses, `/external` — a RESERVED repository short name; see docs/addresses.md. */
-export const EXTERNAL_INDEX = "external";
+/** The SURFACES page, `/surfaces` — the surfaces of every project open on the LAN; reserved and routed like the libraries. */
+export const SURFACES_PAGE = "surfaces";
+
+/** The whole URL of that page: a surface cannot use the router, its basename ending at the project. */
+export function surfacesUrl(origin: string, app: ProjectApp): string {
+  return `${serviceUrl(origin, app)}/${SURFACES_PAGE}`;
+}
+
+/** `@lan` — the reserved repository of a surface that belongs to ANOTHER device: `/@lan/<engineId>/<workspace>/<project>/@external/<surface>`. */
+export const LAN_REPO = "@lan";
+
+/** One surface of a project on another device, as its address names it. */
+export interface LanSurface {
+  /** The other device's engine id, which names it on the LAN. */
+  engineId: string;
+  workspace: string;
+  /** The project inside the workspace, "." when the workspace is the project. */
+  project: string;
+  surface: string;
+}
+
+/** Where a surface of another device opens: below the project like `externalUrl`, under that device's id. */
+export function lanSurfaceUrl(
+  origin: string,
+  l: Omit<LanSurface, "surface">,
+  surface: string,
+  app: ProjectApp,
+): string {
+  const where = l.project === "." ? l.workspace : `${l.workspace}/${l.project}`;
+  return externalOf(
+    launchUrl(origin, LAN_REPO, `${l.engineId}/${where}`, app),
+    surface,
+  );
+}
+
+/** Read a `@lan` surface address, or null for anything else — an `@lan` with no surface after it is not one. */
+export function parseLanSurface(
+  pathname: string,
+  app: ProjectApp,
+  base: string,
+): LanSurface | null {
+  const at = parseLaunch(pathname, app, base);
+  if (!at || at.repo !== LAN_REPO) return null;
+  const surface = parseExternal(pathname, app, base);
+  if (!surface) return null;
+  const [engineId, ...rest] = at.project.split("/");
+  const target = localTarget(rest.join("/"));
+  if (!engineId || !target) return null;
+  return { engineId, ...target, surface };
+}
 
 /** The LIBRARIES page, `/libraries` — the origin's list, and where an admin edits it; reserved like `external`, and a ROUTE of k7's home. */
 export const LIBRARIES_PAGE = "libraries";
@@ -285,12 +333,6 @@ function belowMount(pathname: string, base: string): string[] | null {
   return segs.slice(skip.length);
 }
 
-/** Is this address exactly `word`, one segment below the mount? */
-function isReservedPage(pathname: string, base: string, word: string): boolean {
-  const rest = belowMount(pathname, base);
-  return rest?.length === 1 && rest[0] === word;
-}
-
 /** Does this address START with `word` below the mount, whatever follows it? */
 function isReservedPrefix(
   pathname: string,
@@ -307,16 +349,7 @@ export function isHomePage(pathname: string, base: string): boolean {
     isReservedPrefix(pathname, base, SETTINGS_PAGE) ||
     isReservedPrefix(pathname, base, ABOUT_PAGE) ||
     isReservedPrefix(pathname, base, TASKS_PAGE) ||
+    isReservedPrefix(pathname, base, SURFACES_PAGE) ||
     isReservedPrefix(pathname, base, MEDIA_PAGE)
   );
-}
-
-/** Is this address that menu? Exactly one segment below the mount, and that word. */
-export function isExternalIndex(pathname: string, base: string): boolean {
-  return isReservedPage(pathname, base, EXTERNAL_INDEX);
-}
-
-/** …and the whole URL of it: a surface cannot use the router, its basename ending at the project. */
-export function externalIndexUrl(origin: string, app: ProjectApp): string {
-  return `${serviceUrl(origin, app)}/${EXTERNAL_INDEX}`;
 }

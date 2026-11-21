@@ -7,6 +7,8 @@
     <!-- The IPv4 the activity shows, so a browser knows what to dial. -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- mDNS: other k7 devices on the network are found by multicast, which Android filters out unless the app holds the lock (BackendHost.kt). -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <!-- The engine opens the device WITH its inputs (docs/engineHost.md); Oboe wants both below. Asked on first need (DeviceAccess.kt). -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />

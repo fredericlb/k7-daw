@@ -9,13 +9,14 @@ import {
   ListChecks,
   type LucideIcon,
   Settings,
+  TabletSmartphone,
 } from "@studio/ui/icons";
 import { TabBar, TabBarItem } from "@studio/ui/tab-bar";
 import { lazy, type ReactNode, Suspense, useMemo, useState } from "react";
 import { useHref, useLocation, useNavigate } from "react-router-dom";
 import { AskHostK7 } from "../AskHostK7";
 import { m } from "../paraglide/messages.js";
-import { LIBRARIES_ROUTE, SETTINGS_ROUTE, TASKS_ROUTE } from "./api";
+import { LIBRARIES_ROUTE, SETTINGS_ROUTE, SURFACES_ROUTE, TASKS_ROUTE } from "./api";
 import { HomeCommandBar, HomeCommandsButton } from "./HomeCommandBar";
 import { HelpContext } from "./homeHelp";
 import { usePluginScanToast } from "./usePluginScanToast";
@@ -94,6 +95,11 @@ export function HomeTabs() {
         trailing={<HomeCommandsButton />}
       >
         <HomeTab icon={Folders} label={m["home.projects"]()} route="/" />
+        <HomeTab
+          icon={TabletSmartphone}
+          label={m["home.surfaces"]()}
+          route={SURFACES_ROUTE}
+        />
         <HomeTab
           icon={ListChecks}
           label={m["home.tasks"]()}

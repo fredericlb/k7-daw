@@ -1,0 +1,12 @@
+[package]
+name = "k7-lan"
+description = "How k7 devices on one network find each other: the _k7._tcp advertisement, the browse, a fixed list for beds, a host's own bridge (docs/lan.md)."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+# Pure Rust mDNS that advertises and browses, for the desktop and Android; iOS goes through the host's bridge (docs/lan.md).
+mdns-sd = "0.13"

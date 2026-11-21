@@ -39,7 +39,7 @@ If the first thing you want at a front door is your own work, then the page list
 the front door, and putting it behind a prefix you have to know how to type would rank it second.
 
 **The home pages share ONE frame** (`HomeFrame.tsx`): a floating tab bar, a round command-bar button beside it, no
-sidebar and no bottom bar. The tabs are Projects, Tasks, Library (the libraries, then the frozen chains) and Settings, drawn by `@studio/ui/tab-bar`.
+sidebar and no bottom bar. The tabs are Projects, Surfaces, Tasks, Library (the libraries, then the frozen chains) and Settings, drawn by `@studio/ui/tab-bar`.
 They are LINKS, since each page has its own address: a plain click is a router move, a modified click opens like any
 link, and the current page carries `aria-current`. Settings is the last tab, lit on App settings and on the Engine page
 under it; App settings itself is a sub-page with its own Back and no tab bar.
@@ -59,9 +59,8 @@ under it; App settings itself is a sub-page with its own Back and no tab bar.
 The round button opens the command bar, which also finds workspaces and projects (`workspace open`, `project open`)
 and says what it did as toasts (`commandBar.md`). There is no search field in the page: the bar is the one search.
 
-The entries are routes, so going between them reloads nothing. `/external` is not among them: it
-is the page a SECOND device opens, independent of this one, with a header of its own
-(`external.md`).
+The entries are routes, so going between them reloads nothing. **Surfaces** is one of them: the surfaces other
+devices on the network have open (`external.md`).
 
 `/auth/*` follows the root: the IdP knows only one `redirect_uri`, on k7's origin, so those
 routes can only be served by k7 (`apps/k7-daw-frontend/packages/web-protocol/docs/addresses.md`).
@@ -73,7 +72,7 @@ routes can only be served by k7 (`apps/k7-daw-frontend/packages/web-protocol/doc
 /?ws=<workspace>      …with one workspace's tree unfolded
 /@local/demos/x.k7   a project, by its workspace and its folder — see below
 /@banc/vocals/warm/live.k7  a bench: a live rig seeded with a library chain
-/external             the menu of surfaces a second device drives
+/surfaces             the surfaces of the projects open on the network — external.md
 /libraries            the Library page: the bundled libraries (read-only), then the frozen chains — frozenChains.md
 /libraries/chains     redirects to /libraries#frozen-chains
 /tasks                every workspace's TODOS.md in one list — tasks.md
@@ -98,7 +97,7 @@ switched off:
 | the address | what is mounted |
 |---|---|
 | `/` | `AuthGate` → `Home` — the account, and nothing else |
-| `/external` | `AuthGate` → `ExternalIndex` — probes for a machine without claiming one |
+| `/surfaces` | `AuthGate` → `SurfacesPage` — the surfaces of every project open on the network, no engine |
 | `/libraries` | `AuthGate` → `LibrariesPage`, with `FrozenChainsSection` under the libraries — the account's file service, no engine |
 | `/settings` | `AuthGate` → `SettingsPage` — no engine |
 | `/@local/…`, `/@banc/…` | `AuthGate` → `EngineGate` → `ProjectGate` → the editor |
@@ -219,7 +218,7 @@ editor's bar, whose lines end at `/command`.
 The libraries are named folders of the modules and chains every project inherits, **bundled with the
 app**: a library changes with an app update and nothing on this screen edits one. It is a PAGE,
 `/libraries` (`LibrariesPage.tsx`, drawing `LibrariesCard.tsx`), which the **Libraries** tab
-links to — reserved like `/external`, and read before `parseLaunch`. It lists each library
+links to — reserved like `/surfaces`, and read before `parseLaunch`. It lists each library
 by name with the versions it holds, says so plainly, and flags a library whose folder is missing or
 whose version needs a newer k7 level. A device user is never an admin, and the backend answers 403 to
 a write or a publish anyway ([apps/k7-daw-backend/docs/files/hub.md](../../k7-daw-backend/docs/files/hub.md)).
@@ -388,7 +387,7 @@ is the only rule specific to `@local`. A workspace that IS a project has nothing
 and the project is `"."`, so nothing downstream changes.
 
 **It is the ONLY address.** No register maps a short name to anything else, so `projectHref`,
-`workspaceHref` and `externalHref` take no set of registered names and choose nothing: a project
+`workspaceHref` and `projectHref` take no set of registered names and choose nothing: a project
 is a folder in the account's workspaces, and its folder name is what addresses it.
 
 What that gives up is portability between accounts: a link pasted to somebody names a folder in

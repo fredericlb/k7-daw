@@ -49,8 +49,8 @@ export default ({ command }: ConfigEnv) => {
     backendPort,
     // `/auth` (the local user's session), beside `/api`.
     proxyPaths: ["/auth"],
-    // The engine relay, live sync's relay and the remote cameras' signalling: only a declared wsPath gets `ws: true` (apps/k7-daw-backend/docs/engine/proxy.md).
-    wsPaths: ["/api/engine", "/api/sync", "/api/cameras"],
+    // The engine relay, live sync's relay, the remote cameras' signalling and another device's engine socket (`/api/lan`): only a declared wsPath gets `ws: true` (apps/k7-daw-backend/docs/engine/proxy.md).
+    wsPaths: ["/api/engine", "/api/sync", "/api/cameras", "/api/lan"],
     // No `base`: k7 is the front door, so its assets and routes sit at `/`. Polling only when asked for (`$STUDIO_POLL`), for a tree native file events cannot see.
     poll: !!process.env.STUDIO_POLL,
     // The one thing about the shared service worker that is k7's: see OTHER_APPS above.

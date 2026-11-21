@@ -16,19 +16,15 @@ import {
   type FrozenChain,
   type ModelDownloadJob,
   type RepoProject,
-  type ServedProject,
-  type ServedProjectReply,
-  type SurfacedProject,
-  type SurfacedProjectList,
   USER_HEADER,
   WORKSPACE_HEADER,
 } from "@studio/web-protocol";
 import {
   ABOUT_PAGE,
-  externalOf,
   LIBRARIES_PAGE,
   localProjectUrl,
   SETTINGS_PAGE,
+  SURFACES_PAGE,
   TASKS_PAGE,
 } from "@studio/web-protocol/projects";
 
@@ -64,14 +60,11 @@ export const ABOUT_ROUTE = `/${ABOUT_PAGE}`;
 /** …and the ENGINE page beside the settings: this machine's on the desktop app, the engines this account may use everywhere. */
 export const ENGINE_SETTINGS_ROUTE = `/${SETTINGS_PAGE}/engine`;
 
+/** …and the SURFACES page: the surfaces of every project open on the network. */
+export const SURFACES_ROUTE = `/${SURFACES_PAGE}`;
+
 /** …and the TASKS page, the same way. */
 export const TASKS_ROUTE = `/${TASKS_PAGE}`;
-
-/** Where ONE SURFACE of that project opens, on its own — through `projectHref`, so the tablet and the laptop claim the same song. */
-export function externalHref(row: SurfacedProject, surface: string): string {
-  const ws: Addressable = { name: row.workspace };
-  return externalOf(projectHref(ws, { path: row.path, app: row.app }), surface);
-}
 
 // ── the chosen engine's file service: the working copies ────────────────────────
 
@@ -220,26 +213,6 @@ export const accountFiles = {
       method: "POST",
       json: { name },
     }),
-
-  /** The same disk, asked what could be put on a SECOND DEVICE — its own route, the home page drawing no surfaces (../../docs/external.md). */
-  surfacedProjects: async (m: AccountFiles): Promise<SurfacedProject[]> => {
-    const { projects } = await call<SurfacedProjectList>(
-      m,
-      `/workspaces/surfaces`,
-      "surfaces",
-    );
-    return projects;
-  },
-
-  /** …and which ONE of those the engine is holding for this person: one answer per account, unlike each row's `.studio-active`. */
-  servedProject: async (m: AccountFiles): Promise<ServedProject | null> => {
-    const { project } = await call<ServedProjectReply>(
-      m,
-      `/engine/served`,
-      "served",
-    );
-    return project;
-  },
 
   /** One workspace's whole tree, asked of a workspace this page has not opened — `/tree` needs one. */
   workspaceTree: async (

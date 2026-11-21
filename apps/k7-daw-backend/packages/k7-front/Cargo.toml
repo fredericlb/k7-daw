@@ -42,6 +42,8 @@ k7-libraries.workspace = true
 k7-capture.workspace = true
 k7-git.workspace = true
 k7-roam.workspace = true
+# The LAN door's discovery: mDNS, a host's own, or a fixed list (docs/lan.md).
+k7-lan.workspace = true
 # Chromium over the DevTools protocol: the picture render of `native/shares/picture.rs` (docs/service.md, "Picture render").
 k7-picture.workspace = true
 # The file service's native pieces (docs/file-native.md).

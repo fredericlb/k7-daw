@@ -1,4 +1,4 @@
-//! jni.rs — the two calls `RustFront.kt` declares, under the names JNI looks them up by. The config string
+//! jni.rs — the three calls `RustFront.kt` declares, under the names JNI looks them up by. The config string
 //! is read through the JNIEnv's own function table, so no JNI crate is needed; `apps/k7-daw-backend/docs/embed.md`.
 
 use std::ffi::{c_char, c_void};
@@ -49,4 +49,14 @@ pub extern "system" fn Java_se_frediver_k7_RustFront_nativeStop(
     _class: *mut c_void,
 ) -> i32 {
     crate::k7_front_stop()
+}
+
+/// `RustFront.nativeLanOpen(open)`: `k7_lan_set_open`, the switch this phone's supervisor holds.
+#[unsafe(no_mangle)]
+pub extern "system" fn Java_se_frediver_k7_RustFront_nativeLanOpen(
+    _env: Env,
+    _class: *mut c_void,
+    open: i32,
+) {
+    crate::k7_lan_set_open(open);
 }

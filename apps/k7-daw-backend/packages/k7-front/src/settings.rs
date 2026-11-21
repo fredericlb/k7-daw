@@ -49,6 +49,12 @@ pub struct Settings {
     pub ready_volumes: Vec<String>,
     /// The built page, `K7_FRONTEND_DIST`; None looks for `apps/k7-daw-frontend/dist` above the front.
     pub frontend_dist: Option<PathBuf>,
+    /// `K7_LAN_LISTEN`: where the LAN door listens while "Available on the local network" is on; 0.0.0.0:18790 unless named.
+    pub lan_listen: std::net::SocketAddr,
+    /// `K7_LAN_OPEN=1`: the switch counts as on whatever the supervisor says (a bed, a host that cannot say).
+    pub lan_open: bool,
+    /// `K7_LAN_PEERS`: a fixed `host:door:engine` list, or `none`, in place of discovery (`docs/lan.md`).
+    pub lan_peers: Option<String>,
     /// `K7_DEV_FRONTEND`: a running Vite that serves the page in its place, as the dev tray asks.
     pub dev_frontend: Option<String>,
 }
@@ -102,6 +108,11 @@ impl Settings {
             files_front,
             frontend_dist: raw("K7_FRONTEND_DIST").map(PathBuf::from),
             dev_frontend: raw("K7_DEV_FRONTEND"),
+            lan_listen: get("K7_LAN_LISTEN")
+                .and_then(|v| v.parse().ok())
+                .unwrap_or_else(|| std::net::SocketAddr::from(([0, 0, 0, 0], 18790))),
+            lan_open: get("K7_LAN_OPEN").as_deref() == Some("1"),
+            lan_peers: get("K7_LAN_PEERS"),
             anthropic_base_url: raw("ANTHROPIC_BASE_URL")
                 .unwrap_or_else(|| "https://api.anthropic.com".into()),
             files_root: raw("STUDIO_FILES_ROOT").map(|r| PathBuf::from(r.trim())),

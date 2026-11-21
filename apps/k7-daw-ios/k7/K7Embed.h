@@ -11,3 +11,9 @@ typedef void (*k7_roam_emit)(void *ctx, const char *key, const char *value);
 typedef void (*k7_roam_list)(k7_roam_emit emit, void *ctx);
 typedef void (*k7_roam_put)(const char *key, const char *value);
 void k7_roam_install(k7_roam_list list, k7_roam_put put);
+
+// Discovery of other k7 devices is the host's: the advertiser is a callback installed before the start, the browse result is pushed (apps/k7-daw-backend/docs/lan.md).
+typedef void (*k7_lan_advertise)(const char *record_json);
+void k7_lan_install(k7_lan_advertise advertise);
+int32_t k7_lan_peers(const char *peers_json);
+void k7_lan_set_open(int32_t open);

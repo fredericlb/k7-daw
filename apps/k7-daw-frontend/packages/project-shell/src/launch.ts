@@ -8,18 +8,16 @@ import { serviceUrl } from "@studio/web-protocol/services";
 
 export type { Launch } from "@studio/web-protocol/projects";
 export {
-  EXTERNAL_INDEX,
   EXTERNAL_SEGMENT,
-  externalIndexUrl,
   externalOf,
   externalUrl,
-  isExternalIndex,
   launchUrl,
   parseExternal,
   parseLaunch,
   projectApp,
   projectBasename,
   projectClaimKey,
+  surfacesUrl,
 } from "@studio/web-protocol/projects";
 
 /** Where projects are chosen: k7's home page, ONE address for every app — see docs/launch.md. */

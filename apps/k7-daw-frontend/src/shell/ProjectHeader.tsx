@@ -29,6 +29,8 @@ export interface HeaderPane {
   icon: LucideIcon;
   /** The number key that opens it (keys.ts names panes, not ring positions), shown in the tooltip. */
   shortcut?: string;
+  /** Why this pane cannot be opened now ("In use on <device>"): said on a press, the pane drawn dimmed. */
+  blocked?: string;
 }
 
 export interface HeaderPanel {
@@ -158,8 +160,13 @@ export function ProjectHeader({
                 <CapsuleButton
                   key={p.id}
                   pressed={pane === p.id}
+                  disabled={!!p.blocked}
+                  disabledReason={p.blocked}
                   aria-label={p.label}
-                  title={p.shortcut ? `${p.label} (${p.shortcut})` : p.label}
+                  title={
+                    p.blocked ??
+                    (p.shortcut ? `${p.label} (${p.shortcut})` : p.label)
+                  }
                   onClick={() => onPane(p.id)}
                 >
                   <p.icon />

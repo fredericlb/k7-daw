@@ -23,7 +23,7 @@ pub struct Config {
 }
 
 /// What the routes read of the environment a host hands the front.
-pub const ENV_KEYS: [&str; 35] = [
+pub const ENV_KEYS: [&str; 38] = [
     "K7_EXTRA_CA_CERTS",
     "K7_SESSION_TOKEN",
     "STUDIO_LOCAL_USER",
@@ -61,6 +61,10 @@ pub const ENV_KEYS: [&str; 35] = [
     // The page and its fallback (`routes/last`).
     "K7_FRONTEND_DIST",
     "K7_DEV_FRONTEND",
+    // The LAN door and its discovery (`routes/lan`).
+    "K7_LAN_LISTEN",
+    "K7_LAN_OPEN",
+    "K7_LAN_PEERS",
 ];
 
 impl Config {

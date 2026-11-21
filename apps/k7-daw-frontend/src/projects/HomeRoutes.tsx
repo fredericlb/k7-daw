@@ -10,6 +10,7 @@ import {
   FROZEN_CHAINS_ROUTE,
   LIBRARIES_ROUTE,
   SETTINGS_ROUTE,
+  SURFACES_ROUTE,
   TASKS_ROUTE,
 } from "./api";
 import { Home } from "./Home";
@@ -23,6 +24,11 @@ const LibrariesPage = lazy(() =>
 );
 const TasksPage = lazy(() =>
   import("./TasksPage").then((m) => ({ default: m.TasksPage })),
+);
+const SurfacesPage = lazy(() =>
+  import("../surfaces/SurfacesPage").then((m) => ({
+    default: m.SurfacesPage,
+  })),
 );
 const EnginePage = lazy(() =>
   import("../settings/EnginePage").then((m) => ({
@@ -57,6 +63,7 @@ export function HomeRoutes({ fallback }: { fallback: ReactNode }) {
             element={<Navigate to={`${SETTINGS_ROUTE}?tab=about`} replace />}
           />
           <Route path={TASKS_ROUTE} element={<TasksPage />} />
+          <Route path={SURFACES_ROUTE} element={<SurfacesPage />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </Suspense>
