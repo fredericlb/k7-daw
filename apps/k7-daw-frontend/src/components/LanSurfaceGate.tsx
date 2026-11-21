@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AskHostK7 } from "../AskHostK7";
 import { api } from "../api";
 import { m } from "../paraglide/messages.js";
+import { drawersReady } from "../surfaces/drawers";
 import { lanApi } from "../surfaces/lanApi";
 import { pollWhileVisible } from "../visiblePoll";
 import { ExternalSurface } from "./ExternalSurface";
@@ -53,6 +54,8 @@ export function LanSurfaceGate({ lan }: { lan: LanSurface }) {
         const [me, self] = await Promise.all([
           api.getMe(),
           lanApi.self().catch(() => null),
+          // The drawers of every surface type, which a project's own address gets from the editor's chunk.
+          drawersReady(),
         ]);
         if (!live) return;
         const userEmail = me?.email || me?.sub || "unknown";

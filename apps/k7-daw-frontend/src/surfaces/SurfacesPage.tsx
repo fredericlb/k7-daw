@@ -14,6 +14,7 @@ import { HomeShell } from "../projects/HomeFrame";
 import { PageFrame } from "../projects/PageFrame";
 import { deviceSurfaceDrawer } from "../surfacePanes";
 import { pollWhileVisible } from "../visiblePoll";
+import { drawersReady } from "./drawers";
 import { type LanPeer, lanApi } from "./lanApi";
 import { SurfaceIcon, typeLabel } from "./surfaceMeta";
 import {
@@ -47,6 +48,15 @@ export function SurfacesPage() {
   const [selfName, setSelfName] = useState("");
   const [selfId, setSelfId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Which types this device can draw is the registry's answer, which the editor's chunk fills (drawers.ts).
+  const [drawers, setDrawers] = useState(false);
+  useEffect(() => {
+    let live = true;
+    void drawersReady().then(() => live && setDrawers(true));
+    return () => {
+      live = false;
+    };
+  }, []);
 
   /** The list, then each device's hello together, so a device appears whole and the list does not grow line by line. */
   const load = useCallback(async () => {
@@ -111,7 +121,7 @@ export function SurfacesPage() {
           </Button>
         }
       >
-        {peers === null ? (
+        {peers === null || !drawers ? (
           <div className="type-secondary flex items-center gap-2 text-fg-2">
             <Spinner />
             {m["surfaces.looking"]()}
