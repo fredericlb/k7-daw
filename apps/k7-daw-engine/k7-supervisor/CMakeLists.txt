@@ -239,9 +239,9 @@ if(K7_ORT_URL)
     set_target_properties(k7_audio PROPERTIES
         IMPORTED_LOCATION ${K7_AUDIO_LIB}
         INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/rust/include)
-    # What Rust's standard library links against (`cargo rustc -- --print native-static-libs`).
+    # What Rust's standard library links against (`cargo rustc -- --print native-static-libs`); synchronization holds WaitOnAddress on Windows.
     if(WIN32)
-        set_property(TARGET k7_audio PROPERTY INTERFACE_LINK_LIBRARIES kernel32 advapi32 ntdll userenv ws2_32 dbghelp)
+        set_property(TARGET k7_audio PROPERTY INTERFACE_LINK_LIBRARIES kernel32 advapi32 ntdll userenv ws2_32 dbghelp synchronization bcrypt)
     elseif(APPLE)
         set_property(TARGET k7_audio PROPERTY INTERFACE_LINK_LIBRARIES "-framework CoreFoundation" iconv m)
     else()
