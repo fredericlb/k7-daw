@@ -45,9 +45,12 @@ export function useShowExamples(
 export function ProjectsMenu({
   showExamples,
   onShowExamples,
+  pinned = false,
 }: {
   showExamples: boolean;
   onShowExamples: (show: boolean) => void;
+  /** Examples is all there is: it stays shown, and the item says so. */
+  pinned?: boolean;
 }) {
   return (
     <DropdownMenu>
@@ -67,6 +70,8 @@ export function ProjectsMenu({
         <DropdownMenuItem
           role="menuitemcheckbox"
           aria-checked={showExamples}
+          disabled={pinned}
+          title={pinned ? m["repos.examplesOnly"]() : undefined}
           onSelect={(e) => {
             e.preventDefault();
             onShowExamples(!showExamples);

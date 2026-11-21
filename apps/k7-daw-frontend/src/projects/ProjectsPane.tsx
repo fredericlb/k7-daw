@@ -210,7 +210,8 @@ export function ProjectsPane({
     [chosen, onChanged],
   );
 
-  /** The unfolded workspace's tree, read off the file service — one request, no retry: it is a `readdir` on a disk that is there. */
+  /** The unfolded workspace's tree, read off the file service — one request; Retry bumps `treeTry`. */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `treeTry` is the Retry trigger, not a value the read uses.
   useEffect(() => {
     if (!openWs || !fileService) {
       setNodes(null);

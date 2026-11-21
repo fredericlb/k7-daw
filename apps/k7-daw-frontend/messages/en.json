@@ -334,6 +334,7 @@
   "repos.colFolder": "Folder",
   "repos.colEdited": "Edited",
   "repos.pageMenu": "More for the projects list",
+  "repos.examplesOnly": "Examples is shown while it is the only workspace",
   "repos.showExamples": "Show examples",
   "repos.foldWorkspace": "Fold {name}",
   "repos.unfoldWorkspace": "Unfold {name}",

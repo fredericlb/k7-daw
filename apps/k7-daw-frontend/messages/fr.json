@@ -334,6 +334,7 @@
   "repos.colFolder": "Dossier",
   "repos.colEdited": "Modifié",
   "repos.pageMenu": "Plus d’options pour la liste des projets",
+  "repos.examplesOnly": "Les exemples restent affichés tant qu'ils sont le seul espace de travail",
   "repos.showExamples": "Afficher les exemples",
   "repos.foldWorkspace": "Replier {name}",
   "repos.unfoldWorkspace": "Déplier {name}",

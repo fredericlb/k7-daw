@@ -132,9 +132,10 @@ export function RepoList({
   onChanged: () => void;
 }) {
   // Examples is listed when the ⋮ says so, by default only while nothing of one's own is.
-  const [showExamples, setShowExamples] = useShowExamples(
-    workspaces.some((w) => !isExamples(w)),
-  );
+  const hasOwn = workspaces.some((w) => !isExamples(w));
+  const [chosenExamples, setShowExamples] = useShowExamples(hasOwn);
+  // Examples cannot be hidden while it is all there is: the page would be blank.
+  const showExamples = chosenExamples || !hasOwn;
   // A workspace waiting for a merge's choices takes no write from the home page (docs/git.md).
   const merges = useMergingWorkspaces(
     useGitTransport(),
@@ -159,6 +160,33 @@ export function RepoList({
   const [making, setMaking] = useState(false);
   const [cloning, setCloning] = useState(false);
   const newBlocked = blockedWorkspace;
+  // The act itself, on the spot: the menu has the same item, but an empty page is read from its middle.
+  const emptyState = (
+    <EmptyState
+      glyph={<Folder />}
+      title={m["repos.emptyTitle"]()}
+      actions={
+        <>
+          <NewWorkspace
+            primary
+            blocked={blockedWorkspace}
+            onCreate={onCreateWorkspace}
+          />
+          <Button
+            variant="glass"
+            disabled={Boolean(blocked)}
+            title={blocked || m["git.cloneHint"]()}
+            onClick={() => setCloning(true)}
+          >
+            <GitBranch />
+            {m["git.clone"]()}
+          </Button>
+        </>
+      }
+    >
+      {m["repos.empty"]()}
+    </EmptyState>
+  );
   return (
     <div className={PAGE_COLUMN}>
       <PageHeader
@@ -203,6 +231,7 @@ export function RepoList({
             <ProjectsMenu
               showExamples={showExamples}
               onShowExamples={setShowExamples}
+              pinned={!hasOwn}
             />
           </>
         }
@@ -251,51 +280,31 @@ export function RepoList({
           <Loader2 className="size-4 animate-spin" /> {m["common.loading"]()}
         </div>
       ) : workspaces.length === 0 ? (
-        // The act itself, on the spot: the menu has the same item, but an empty page is read from its middle.
-        <EmptyState
-          glyph={<Folder />}
-          title={m["repos.emptyTitle"]()}
-          actions={
-            <>
-              <NewWorkspace
-                primary
-                blocked={blockedWorkspace}
-                onCreate={onCreateWorkspace}
-              />
-              <Button
-                variant="glass"
-                disabled={Boolean(blocked)}
-                title={blocked || m["git.cloneHint"]()}
-                onClick={() => setCloning(true)}
-              >
-                <GitBranch />
-                {m["git.clone"]()}
-              </Button>
-            </>
-          }
-        >
-          {m["repos.empty"]()}
-        </EmptyState>
+        emptyState
       ) : (
-        <ProjectsTable
-          workspaces={ordered}
-          blocked={blocked}
-          onOpen={onOpen}
-          onDropProject={onDropProject}
-          locked={(w) => merges.merging(w.name)}
-          createIn={createIn}
-          onDelete={(w, p, step) => refuse(w.name) ?? onDelete(w, p, step)}
-          onRename={(w, p, f, step) =>
-            refuse(w.name) ?? onRename(w, p, f, step)
-          }
-          onCopy={(w, p, to, f, step) =>
-            refuse(to.name) ?? onCopy(w, p, to, f, step)
-          }
-          projectHref={projectHref}
-          workspaceHref={workspaceHref}
-          onRemoveWorkspace={onRemoveWorkspace}
-          onChanged={onChanged}
-        />
+        <>
+          {/* First run: the empty state stays above the demos, which are all there is. */}
+          {!hasOwn && emptyState}
+          <ProjectsTable
+            workspaces={ordered}
+            blocked={blocked}
+            onOpen={onOpen}
+            onDropProject={onDropProject}
+            locked={(w) => merges.merging(w.name)}
+            createIn={createIn}
+            onDelete={(w, p, step) => refuse(w.name) ?? onDelete(w, p, step)}
+            onRename={(w, p, f, step) =>
+              refuse(w.name) ?? onRename(w, p, f, step)
+            }
+            onCopy={(w, p, to, f, step) =>
+              refuse(to.name) ?? onCopy(w, p, to, f, step)
+            }
+            projectHref={projectHref}
+            workspaceHref={workspaceHref}
+            onRemoveWorkspace={onRemoveWorkspace}
+            onChanged={onChanged}
+          />
+        </>
       )}
 
       {/* The workspaces added on the person's other devices, which git can bring here. */}

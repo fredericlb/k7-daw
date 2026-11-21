@@ -60,9 +60,7 @@ export function PageHeader({
           )}
         </div>
       </div>
-      <div className="flex shrink-0 items-center gap-2">
-        {actions}
-      </div>
+      <div className="flex shrink-0 items-center gap-2">{actions}</div>
     </header>
   );
 }
