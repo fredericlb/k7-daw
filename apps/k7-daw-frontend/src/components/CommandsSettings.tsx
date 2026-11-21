@@ -47,6 +47,7 @@ import {
   setCommandPref,
   setMenuEntities,
 } from "../commandPrefs";
+import { entityName } from "../commandEntityNames";
 import { useWindowKey } from "../hooks/useWindowKey";
 import { useLocale } from "../i18n";
 import {
@@ -245,7 +246,7 @@ export function CommandsSettings({
           disabled={!dirty}
           onClick={() => setDraft(prefs)}
         >
-          {m["common.cancelLower"]()}
+          {m["common.cancel"]()}
         </Button>
         <Button size="sm" disabled={!dirty} onClick={() => onSave(draft)}>
           {m["common.save"]()}
@@ -261,7 +262,7 @@ export function CommandsSettings({
             selected={entity === e}
             onClick={() => setEntity(e)}
           >
-            {e || m["cmds.all"]()}
+            {e ? entityName(e) : m["cmds.all"]()}
           </Chip>
         ))}
         <span className="ml-auto type-secondary text-fg-2">
@@ -280,8 +281,10 @@ export function CommandsSettings({
         ))}
         <span className="w-56 shrink-0">{m["cmds.colCommand"]()}</span>
         <span className="w-28 shrink-0">{m["cmds.colMenu"]()}</span>
-        <span className="w-[76px] shrink-0">{m["cmds.colKey"]()}</span>
-        <span className="w-24 shrink-0">{m["cmds.colOrder"]()}</span>
+        <span className="hidden w-[76px] shrink-0 [@media(any-pointer:fine)]:inline">
+          {m["cmds.colKey"]()}
+        </span>
+        <span className="w-36 shrink-0">{m["cmds.colOrder"]()}</span>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto">
@@ -429,20 +432,20 @@ const CommandRow = memo(function CommandRow({
       {/* WHICH right-clicks offer it — the catalogue's own list until you touch it. */}
       <MenuEntityPicker c={c} pref={pref} onMenu={onMenu} />
 
-      {/* The shortcut: click, press a key, and a stolen one goes blank in the row that held it, both reading one effective map. */}
+      {/* The shortcut: click, press a key (hidden where no key can be pressed: a touch screen alone), and a stolen one goes blank in the row that held it, both reading one effective map. */}
       <Button
         size="sm"
         variant={capturing ? "default" : "outline"}
         title={m["cmds.keyHint"]()}
         aria-pressed={capturing}
-        className="h-9 w-[76px] shrink-0 justify-center type-mono-value"
+        className="hidden h-9 w-[76px] shrink-0 justify-center type-mono-value [@media(any-pointer:fine)]:inline-flex"
         onClick={() => onCapture(capturing ? null : c.canonical)}
       >
         {capturing ? "…" : (keyText ?? "—")}
       </Button>
 
       <Button
-        size="icon-xs"
+        size="icon"
         variant="ghost"
         title={m["cmds.up"]()}
         onClick={() => onMove(c.canonical, -1)}
@@ -450,7 +453,7 @@ const CommandRow = memo(function CommandRow({
         <ArrowUp className="size-3.5" />
       </Button>
       <Button
-        size="icon-xs"
+        size="icon"
         variant="ghost"
         title={m["cmds.down"]()}
         onClick={() => onMove(c.canonical, 1)}
@@ -458,7 +461,7 @@ const CommandRow = memo(function CommandRow({
         <ArrowDown className="size-3.5" />
       </Button>
       <Button
-        size="icon-xs"
+        size="icon"
         variant="ghost"
         disabled={!touched}
         title={m["cmds.giveBack"]()}
