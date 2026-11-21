@@ -19,6 +19,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../api";
 import { parts } from "../i18nParts";
 import { m } from "../paraglide/messages.js";
+import { PanelError } from "./PanelError";
 import { PlaylistEditor } from "./PlaylistEditor";
 
 export function PlaylistsPanel({
@@ -27,7 +28,7 @@ export function PlaylistsPanel({
 }: {
   vimMode: boolean;
   /** Run a command line through the shell — what « Nouvelle playlist » dispatches, so the palette reaches it (../docs/shell.md). */
-  onRun: (line: string) => Promise<void>;
+  onRun: (line: string, outcome?: { ok: boolean }) => Promise<void>;
 }) {
   const [rows, setRows] = useState<PlaylistInfo[] | null>(null);
   const [error, setError] = useState("");
@@ -84,15 +85,17 @@ export function PlaylistsPanel({
     const want = name.trim();
     if (!want) return;
     const rel = playlistPathOf(want);
-    void onRun(`playlist new ${want}`)
+    const outcome = { ok: false };
+    void onRun(`playlist new ${want}`, outcome)
       .then(() => refresh())
       .then((list) => {
+        // A refused create keeps the form and the typed name, the refusal being already told.
+        if (!outcome.ok) return;
         setCreating(false);
         setName("");
         // Straight into it — but only if it is really there: a refused create must not show a panel for a file nobody wrote.
         if (rel && list?.some((p) => p.path === rel)) setOpen(rel);
-      })
-      .catch((e: Error) => setError(e.message));
+      });
   }, [name, onRun, refresh]);
 
   if (expanded && open)
@@ -170,7 +173,11 @@ export function PlaylistsPanel({
       ) : null}
 
       {error ? (
-        <p className="type-status shrink-0 pb-2 text-error">{error}</p>
+        <PanelError
+          what={m["panel.what.playlists"]()}
+          detail={error}
+          onRetry={() => void refresh()}
+        />
       ) : null}
 
       {current && !current.ok ? (

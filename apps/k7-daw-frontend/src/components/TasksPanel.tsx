@@ -8,7 +8,9 @@ import { askConfirm } from "@studio/project-shell/ask";
 import { projectTagsOf } from "@studio/song-schema/projectTags";
 import { parseTasks, TASKS_FILE, type Task } from "@studio/song-schema/tasks";
 import { Button } from "@studio/ui/button";
+import { Checkbox } from "@studio/ui/checkbox";
 import { Plus, Trash2, X } from "@studio/ui/icons";
+import { Input } from "@studio/ui/input";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
 import { useRevision } from "../hooks/useRevision";
@@ -28,7 +30,7 @@ export function TasksPanel({
   timecode: () => string;
   /** Put the playhead on a timecode of the open project. */
   onSeek: (timecode: string) => void;
-  onRun: (line: string) => Promise<void>;
+  onRun: (line: string, outcome?: { ok: boolean }) => Promise<void>;
 }) {
   const [tasks, setTasks] = useState<Task[] | null>(null);
   const [error, setError] = useState("");
@@ -80,10 +82,14 @@ export function TasksPanel({
   const add = async () => {
     const t = text.trim();
     if (!t) return;
-    setText("");
-    await run(
+    const outcome = { ok: false };
+    await onRun(
       attach && project ? `task mark ${timecode()} ${t}` : `task add ${t}`,
+      outcome,
     );
+    // A refused task keeps its text, so the person fixes it rather than retypes it.
+    if (outcome.ok) setText("");
+    await refresh();
   };
   // A removed task is gone from the file, so the bin asks first and names what it drops.
   const removeTask = async (n: number, task: string) => {
@@ -97,11 +103,14 @@ export function TasksPanel({
     if (ok) await run(`task remove ${n}`);
   };
 
+  const open = (tasks ?? []).filter((t) => !t.done).length;
+
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <ProcessesSection />
       <p className="shrink-0 pb-2 font-mono text-[10px] text-muted-foreground">
         {TASKS_FILE}
+        {open > 0 ? ` · ${m["tasks.openCount"]({ n: open })}` : ""}
       </p>
 
       {project && (
@@ -132,12 +141,13 @@ export function TasksPanel({
               </button>
             </span>
           ))}
-          <input
+          <Input
             value={tag}
             onChange={(e) => setTag(e.target.value)}
             placeholder={m["tasks.tagPlaceholder"]()}
             title={m["tasks.tagHint"]()}
-            className="min-w-[6rem] flex-1 rounded border border-transparent bg-transparent px-1.5 py-0.5 text-xs outline-none focus:border-primary"
+            aria-label={m["tasks.tagHint"]()}
+            className="min-w-[6rem]"
           />
         </form>
       )}
@@ -150,18 +160,18 @@ export function TasksPanel({
         }}
       >
         <div className="flex gap-1.5">
-          <input
+          <Input
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder={m["tasks.placeholder"]()}
-            className="min-w-0 flex-1 rounded border border-border bg-transparent px-2 py-1 text-sm outline-none focus:border-primary"
+            aria-label={m["tasks.placeholder"]()}
           />
           <Button
             type="submit"
             size="icon"
-            className="h-8 w-8"
             disabled={!text.trim()}
             title={m["tasks.add"]()}
+            aria-label={m["tasks.add"]()}
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -170,18 +180,17 @@ export function TasksPanel({
           className={`flex items-center gap-1.5 text-xs ${project ? "" : "opacity-50"}`}
           title={project ? m["tasks.attachHint"]() : m["tasks.attachNone"]()}
         >
-          <input
-            type="checkbox"
+          <Checkbox
             checked={attach}
             disabled={!project}
-            onChange={(e) => setAttach(e.target.checked)}
+            onCheckedChange={(on) => setAttach(on === true)}
           />
           {m["tasks.attach"]()}
         </label>
       </form>
 
       <div className="min-h-0 flex-1 overflow-auto px-1 py-1">
-        {error && <p className="px-2 py-1 text-xs text-red-500">{error}</p>}
+        {error && <p className="px-2 py-1 text-error text-xs">{error}</p>}
         {tasks?.length === 0 && (
           <p className="px-2 py-4 text-center text-xs text-muted-foreground">
             {m["tasks.empty"]()}
@@ -196,13 +205,14 @@ export function TasksPanel({
               key={`${t.line}:${t.text}`}
               className="group flex items-start gap-2 rounded px-2 py-1.5 hover:bg-muted/50"
             >
-              <input
-                type="checkbox"
-                className="mt-0.5"
-                checked={t.done}
-                onChange={() => void run(`task done ${n}`)}
-                aria-label={t.done ? m["tasks.untick"]() : m["tasks.tick"]()}
-              />
+              {/* A 44px hit area round the 20px box. */}
+              <span className="-m-2 flex size-11 shrink-0 items-center justify-center">
+                <Checkbox
+                  checked={t.done}
+                  onCheckedChange={() => void run(`task done ${n}`)}
+                  aria-label={t.done ? m["tasks.untick"]() : m["tasks.tick"]()}
+                />
+              </span>
               <div className="min-w-0 flex-1">
                 <div
                   className={`break-words text-sm ${t.done ? "text-muted-foreground line-through" : ""}`}
@@ -230,7 +240,7 @@ export function TasksPanel({
               <Button
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6 opacity-0 focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
+                className="opacity-0 focus-visible:opacity-100 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
                 onClick={() => void removeTask(n, t.text)}
                 title={m["tasks.remove"]()}
                 aria-label={m["tasks.remove"]()}

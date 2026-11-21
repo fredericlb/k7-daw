@@ -20,6 +20,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api, mediaUrl } from "../api";
 import { resourceMime } from "../fileDrop";
 import { m } from "../paraglide/messages.js";
+import { PanelError } from "./PanelError";
 
 /** What a lane is handed when a resource is dropped on it: the clip, and where to fetch it for a probe. */
 interface DraggedResource {
@@ -72,9 +73,11 @@ export function ResourcesPanel({ reloadKey }: { reloadKey: number }) {
       </div>
 
       {error ? (
-        <p className="shrink-0 border-b px-2 py-1.5 text-destructive text-xs">
-          {error}
-        </p>
+        <PanelError
+          what={m["panel.what.resources"]()}
+          detail={error}
+          onRetry={() => void refresh()}
+        />
       ) : null}
 
       <div className="min-h-0 flex-1 overflow-y-auto">
@@ -116,7 +119,7 @@ export function ResourcesPanel({ reloadKey }: { reloadKey: number }) {
   );
 }
 
-/** One resource: drag it onto a lane, or open its player under it. */
+/** One resource: drag it onto a lane (or pick it from the lane's menu), or open its player under it. */
 function ResourceRow({
   r,
   open,
@@ -131,7 +134,7 @@ function ResourceRow({
   const url = mediaUrl(r.preview ?? r.source);
   return (
     <li className="px-1">
-      {/* biome-ignore lint/a11y/noStaticElementInteractions: a DRAG source, which a keyboard has no gesture for; the button inside is the control. */}
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: a DRAG source; keyboard and touch place from the lane's menu (placeResource.ts). */}
       <div
         className="flex cursor-grab items-center gap-1 rounded hover:bg-accent active:cursor-grabbing"
         draggable={!r.missing}
@@ -145,7 +148,7 @@ function ResourceRow({
         <Button
           size="icon"
           variant="ghost"
-          className="h-6 w-6 shrink-0"
+          className="shrink-0"
           disabled={r.missing}
           title={open ? m["res.stop"]() : m["res.previewFile"]({ file: r.id })}
           aria-label={

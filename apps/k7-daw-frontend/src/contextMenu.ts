@@ -6,6 +6,7 @@
 
 import { timelineLaneOf } from "@studio/song-schema/timelineLane";
 import { type CommandPrefs, inMenu } from "./commandPrefs";
+import type { ResourceDropEvent } from "./hooks/useTimelineDrop";
 import type { ArgClass, ArgProvider, CommandInfo, MenuEntity } from "./types";
 
 // What the cursor was over. `id` is the entity as commands name it: a track/module id, a clip's ref, a chain name.
@@ -102,6 +103,8 @@ export interface MenuItem {
   verb: string;
   /** What the ROW reads: the catalogue's `readable` in the language being read, the label then shown beside it as the verb. */
   sentence?: string;
+  /** A resource to place: picking the row runs the drop's own steps (a video needs a probe and two follow-ups), not just `command`. */
+  place?: ResourceDropEvent;
 }
 
 /** One argument the clicked thing can answer, in the order the command asks: `provider` is the precise type, `kind` is for the scalars. */
