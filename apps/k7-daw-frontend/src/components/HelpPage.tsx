@@ -182,11 +182,11 @@ export function HelpPage({
     <div className="flex h-full flex-col bg-background text-foreground">
       <header className="flex shrink-0 items-center gap-3 border-b border-border px-3 py-2">
         <Button variant="secondary" size="sm" onClick={onBack}>
-          <ArrowLeft className="mr-1 h-4 w-4" /> Back
+          <ArrowLeft className="mr-1 h-4 w-4" /> {m["common.back"]()}
         </Button>
-        <div className="text-sm font-semibold">Documentation</div>
+        <div className="text-sm font-semibold">{m["help.title"]()}</div>
         <div className="text-xs text-muted-foreground">
-          commands · file formats · architecture
+          {m["help.subtitle"]()}
         </div>
       </header>
 
@@ -215,7 +215,9 @@ export function HelpPage({
                 {part.part === "commands" && (
                   <Section
                     id="command-reference"
-                    title={`Command reference (${commands.length + VIEW_COMMANDS.length})`}
+                    title={m["help.commandReferenceCount"]({
+                      n: commands.length + VIEW_COMMANDS.length,
+                    })}
                   >
                     <div className="flex flex-col divide-y divide-border/60">
                       {commands.map((c) => (
@@ -253,7 +255,10 @@ function Toc() {
             {part.label}
           </div>
           {part.part === "commands" && (
-            <NavLink id="command-reference" label="Command reference" />
+            <NavLink
+              id="command-reference"
+              label={m["help.commandReference"]()}
+            />
           )}
           {part.pages.map((pg) => (
             <NavLink key={pg.id} id={pg.id} label={pg.title} />

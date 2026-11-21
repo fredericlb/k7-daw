@@ -24,14 +24,14 @@ Save only writes it — the binding is already there. If not, it opens on a new 
 it and THEN binds it, `curve set` followed by `node automate`, in that order: a binding to a curve not
 yet written would be a reference to nothing.
 
-On a control a curve already drives, the same menu also offers **remove automation**:
+On a control a curve already drives, the same menu also offers **Remove automation**:
 `node automate <node> <param> none`, which unbinds the param and leaves the curve where it is — another
 control may follow it, and a curve is cheap to keep and costly to redraw. It is offered only then
 (the right-click context's `automated`, read off the graph's automation edges), since removing what
 is not there is a row that does nothing.
 
 A **curve card** on the graph offers the same two rows: a bound card is one binding, so its
-right-click is `ui automate` on the param it drives and the same `remove automation`. A free card,
+right-click is `ui automate` on the param it drives and the same "Remove automation". A free card,
 bound to nothing, has no param to automate and offers `ui curve <id>` instead.
 
 The **shapes it offers follow the param's kind**: a toggle or a button drives a boolean, which follows
