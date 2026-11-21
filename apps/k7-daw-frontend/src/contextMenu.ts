@@ -6,6 +6,7 @@
 
 import { timelineLaneOf } from "@studio/song-schema/timelineLane";
 import { type CommandPrefs, inMenu } from "./commandPrefs";
+import { m } from "./paraglide/messages.js";
 import type { ArgClass, ArgProvider, CommandInfo, MenuEntity } from "./types";
 
 // What the cursor was over. `id` is the entity as commands name it: a track/module id, a clip's ref, a chain name.
@@ -290,32 +291,37 @@ export function contextMenu(
           verb: "node tap note",
           arg: at,
           needsMore: true,
-          name: "Change note…",
+          name: m["ctx.tapNote"](),
         },
         {
           verb: "node tap sample",
           arg: at,
           needsMore: true,
-          name: "Change sample…",
+          name: m["ctx.tapSample"](),
         },
-        { verb: "node tap rename", arg: at, needsMore: true, name: "Rename…" },
-        { verb: "node tap remove", arg: at, name: "Remove" },
+        {
+          verb: "node tap rename",
+          arg: at,
+          needsMore: true,
+          name: m["ctx.tapRename"](),
+        },
+        { verb: "node tap remove", arg: at, name: m["ctx.tapRemove"]() },
         {
           verb: "node tap insert",
           arg: `${quoteArg(ctx.id)} before ${quoteArg(ctx.symbol)}`,
-          name: "Add one before",
+          name: m["ctx.tapBefore"](),
         },
         {
           verb: "node tap insert",
           arg: `${quoteArg(ctx.id)} after ${quoteArg(ctx.symbol)}`,
-          name: "Add one after",
+          name: m["ctx.tapAfter"](),
         },
         // …and its OWN chain of effects, in a popin: a rack's tap or a kit's pad alike (song docs/racks.md).
         {
           verb: "ui tap chain",
           arg: at,
-          name: "Edit chain…",
-          help: "this tap's own chain of effects — add, remove, reorder",
+          name: m["ctx.tapChain"](),
+          help: m["ctx.tapChainHelp"](),
         },
       ]);
     }
@@ -328,7 +334,7 @@ export function contextMenu(
               {
                 verb: "track group",
                 arg: quoteArg(several.join(",")),
-                name: `Group the ${several.length} tracks`,
+                name: m["ctx.groupTracks"]({ n: several.length }),
               },
             ]
           : []),
@@ -339,7 +345,7 @@ export function contextMenu(
         {
           verb: "ui file",
           arg: ctx.id,
-          help: "open the track's own file, tracks/<id>.k7x",
+          help: m["ctx.trackFileHelp"](),
         },
       ]);
     }
@@ -364,8 +370,8 @@ export function contextMenu(
               {
                 verb: "ui model",
                 arg: ctx.id,
-                name: "Download model",
-                help: "download the model this module needs onto this machine, from its model_url",
+                name: m["ctx.downloadModel"](),
+                help: m["ctx.downloadModelHelp"](),
               },
             ]
           : []),
@@ -377,7 +383,7 @@ export function contextMenu(
               {
                 verb: "ui file",
                 arg: ctx.id,
-                help: "open the module's own file in the editor",
+                help: m["ctx.moduleFileHelp"](),
               },
             ]),
       ]);
@@ -397,7 +403,7 @@ export function contextMenu(
         {
           verb: "ui file",
           arg: ctx.id,
-          help: "open the clip's own definition in the editor",
+          help: m["ctx.clipFileHelp"](),
         },
         // The RANGE verbs first, from the rectangle: three slots rather than two, so a command that takes a span arrives with its span.
         ...range,
@@ -426,13 +432,13 @@ export function contextMenu(
         {
           verb: "ui midi learn",
           arg: quoted,
-          help: "bind this param to the next controller knob you touch",
+          help: m["ctx.midiLearnHelp"](),
         },
         // …and the curve editor on it: the curve this param is bound to, or a new one bound on Save (docs/curveEditor.md).
         {
           verb: "ui automate",
           arg: quoted,
-          help: "automate this param with a curve — the one it follows, or a new one",
+          help: m["ctx.automateHelp"](),
         },
         // …and the unbind, only when a curve drives it: `none` is a literal the entry writes, so it is named — the curve stays.
         ...(ctx.automated
@@ -441,8 +447,8 @@ export function contextMenu(
                 verb: "node automate",
                 // Unquoted: the verb takes the words between the node and the curve as the param, and keeps quotes literal.
                 arg: `${ctx.id} ${ctx.param} none`,
-                name: "remove automation",
-                help: "stop this param following its curve — the curve itself stays",
+                name: m["ctx.removeAutomation"](),
+                help: m["ctx.removeAutomationHelp"](),
               },
             ]
           : []),
@@ -455,8 +461,8 @@ export function contextMenu(
                 verb: "module cc",
                 arg: `${quoted} none`,
                 // Named, because the bind is on this same menu under the same verb: `none` is a literal the entry writes.
-                name: "module cc none",
-                help: "remove the MIDI binding on this param",
+                name: m["ctx.removeMidi"](),
+                help: m["ctx.removeMidiHelp"](),
               },
             ]
           : []),
@@ -481,7 +487,11 @@ export function contextMenu(
       // A free card has no param to automate: its one row opens the curve itself.
       if (!ctx.module || !ctx.param)
         return offer([
-          { verb: "ui curve", arg: ctx.curve, help: "edit this curve" },
+          {
+            verb: "ui curve",
+            arg: ctx.curve,
+            help: m["ctx.editCurveHelp"](),
+          },
         ]);
       const quoted = `${ctx.module} ${quoteArg(ctx.param)}`;
       return offer([
@@ -489,14 +499,14 @@ export function contextMenu(
         {
           verb: "ui automate",
           arg: quoted,
-          help: "edit this curve, as the automation of its param",
+          help: m["ctx.editCurveParamHelp"](),
         },
         {
           verb: "node automate",
           // Unquoted: the verb takes the words between the node and the curve as the param, and keeps quotes literal.
           arg: `${ctx.module} ${ctx.param} none`,
-          name: "remove automation",
-          help: "stop this param following this curve — the curve itself stays",
+          name: m["ctx.removeAutomation"](),
+          help: m["ctx.removeAutomationCurveHelp"](),
         },
       ]);
     }
@@ -513,7 +523,7 @@ export function contextMenu(
         {
           verb: "ui assembly",
           arg: ctx.uses,
-          help: "open the template this box is one of, in the builder",
+          help: m["ctx.assemblyHelp"](),
         },
       ]);
     case "marker-add":
@@ -525,11 +535,14 @@ export function contextMenu(
           ? [
               {
                 verb: "transport loop",
-                name: ctx.loop === "set" ? "Loop selection" : "Clear loop",
+                name:
+                  ctx.loop === "set"
+                    ? m["ctx.loopSet"]()
+                    : m["ctx.loopClear"](),
                 help:
                   ctx.loop === "set"
-                    ? "make the selected range the transport loop"
-                    : "stop looping",
+                    ? m["ctx.loopSetHelp"]()
+                    : m["ctx.loopClearHelp"](),
               },
             ]
           : []),
@@ -577,7 +590,7 @@ export function contextMenu(
           {
             verb: "ui file",
             arg: `timelines/${tl.timeline}.k7x`,
-            help: "open the timeline's file, which holds this lane",
+            help: m["ctx.timelineFileHelp"](),
           },
         ]);
       return offer([
@@ -585,8 +598,8 @@ export function contextMenu(
         {
           verb: "timeline lane copy",
           arg: `${lane} main`,
-          name: "duplicate",
-          help: "copy this lane within the song — its shots and its frame",
+          name: m["ctx.duplicate"](),
+          help: m["ctx.duplicateHelp"](),
         },
         ...shared,
         { verb: "picture mute", arg: lane },
@@ -597,7 +610,7 @@ export function contextMenu(
         {
           verb: "ui file",
           arg: ctx.lane,
-          help: "open the lane's own file, its node",
+          help: m["ctx.laneFileHelp"](),
         },
       ]);
     }

@@ -307,7 +307,7 @@ describe("a picture lane", () => {
       "ui file cam",
     ]);
     // The duplicate is the copy into Main, named for what it does beside the copy that asks where.
-    expect(labels(menu)[1]).toBe("duplicate");
+    expect(labels(menu)[1]).toBe("Duplicate");
   });
 
   it("offers a timeline's lane none of the song lane's own — frame, visibility, order, camera", () => {
@@ -643,7 +643,7 @@ describe("a param", () => {
   });
 
   it("offers to remove the automation only on a param a curve drives, naming its curve-keeping unbind", () => {
-    expect(labels(menu)).not.toContain("remove automation");
+    expect(labels(menu)).not.toContain("Remove automation");
     const driven = contextMenu(
       {
         kind: "param",
@@ -654,8 +654,8 @@ describe("a param", () => {
       },
       CATALOGUE,
     );
-    expect(labels(driven)).toContain("remove automation");
-    expect(driven.find((i) => i.label === "remove automation")?.command).toBe(
+    expect(labels(driven)).toContain("Remove automation");
+    expect(driven.find((i) => i.label === "Remove automation")?.command).toBe(
       "node automate amp Filter Freq none",
     );
   });
@@ -672,8 +672,8 @@ describe("a param", () => {
       },
       CATALOGUE,
     );
-    expect(labels(bound)).toContain("module cc none");
-    expect(says(bound, "module cc none")).toBe(
+    expect(labels(bound)).toContain("Remove MIDI binding");
+    expect(says(bound, "Remove MIDI binding")).toBe(
       "remove the MIDI binding on this param",
     );
   });
@@ -689,7 +689,7 @@ describe("a curve card", () => {
       'ui automate amp "Filter Freq"',
       "node automate amp Filter Freq none",
     ]);
-    expect(labels(menu)).toEqual(["ui automate", "remove automation"]);
+    expect(labels(menu)).toEqual(["ui automate", "Remove automation"]);
   });
 
   it("opens a FREE card's curve on its own, having no param to automate", () => {
