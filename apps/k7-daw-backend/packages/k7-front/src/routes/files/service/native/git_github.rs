@@ -305,6 +305,10 @@ fn refused(ctx: &Ctx, r: &Reply) -> Response {
 }
 
 /// The token if the person is signed in with `repo`, else the answer to give.
+#[allow(
+    clippy::result_large_err,
+    reason = "the refusal is the answer to give, built once"
+)]
 fn with_repo(ctx: &Ctx) -> Result<Saved, Response> {
     let Some(s) = saved(ctx) else {
         return Err(fail(401, "github-signout", "sign in with GitHub first"));
