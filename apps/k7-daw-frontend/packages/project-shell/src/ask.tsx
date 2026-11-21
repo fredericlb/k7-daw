@@ -201,7 +201,9 @@ function AskDialog({
           return;
         }
         if (e.key === "Escape") cancel();
-        if (e.key === "Enter" && !invalid) accept();
+        // A focused button answers for itself: Enter there must not confirm over a Cancel.
+        const onButton = (e.target as HTMLElement).tagName === "BUTTON";
+        if (e.key === "Enter" && !invalid && !onButton) accept();
       }}
     >
       <button

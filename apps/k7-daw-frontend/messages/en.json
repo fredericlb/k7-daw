@@ -983,6 +983,8 @@
   "engineSwitch.noSound": "No sound — the engine is not running",
   "engineSwitch.noSoundHint": "The project is open, but the audio engine is not playing it. Start it from the engine settings.",
   "leave.unsaved": "Some changes are not saved yet. Leave this project anyway?",
+  "leave.module.title": "Leave without saving?",
+  "leave.module.body": "This module's files are changed here, and Save writes them together.",
   "engineSwitch.playsOn": "Plays on",
   "engineSwitch.thisMachine": "This machine",
   "engineSwitch.thisMachineHint": "The engine's mix is streamed to this browser; its own speakers keep playing",

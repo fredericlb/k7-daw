@@ -116,12 +116,16 @@ export function ContextMenu({
     window.addEventListener("pointerdown", down, true);
     window.addEventListener("keydown", key, true);
     window.addEventListener("blur", onClose);
-    window.addEventListener("scroll", onClose, true);
+    // The menu's own overflow scroll must not close it.
+    const scrolled = (e: Event) => {
+      if (!ref.current?.contains(e.target as Node)) onClose();
+    };
+    window.addEventListener("scroll", scrolled, true);
     return () => {
       window.removeEventListener("pointerdown", down, true);
       window.removeEventListener("keydown", key, true);
       window.removeEventListener("blur", onClose);
-      window.removeEventListener("scroll", onClose, true);
+      window.removeEventListener("scroll", scrolled, true);
     };
   }, [onClose]);
   // Read by the key handler, which is bound once.
