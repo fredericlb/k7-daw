@@ -2,7 +2,8 @@
 // the bar's button), a scrim under it, focused. It goes away on Escape, the scrim or a run, never on blur. While a
 // command waits on its answers the scrim lets pointers through, since a gesture in a pane may be the answer.
 // See ../../docs/commandBar.md.
-import { forwardRef, useEffect } from "react";
+import { useModalFocus } from "@studio/ui/modal-focus";
+import { forwardRef, useRef } from "react";
 import { useWindowKey } from "../hooks/useWindowKey";
 import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
@@ -38,16 +39,10 @@ export const FloatingCommandBar = forwardRef<
   { open, onDismiss, pending, onRun, ...bar },
   ref,
 ) {
+  const card = useRef<HTMLDivElement>(null);
+  useModalFocus(card, { active: open });
   // On the Escape ladder, so Esc from a pane clicked to answer an argument closes the bar and not the panel behind it.
   usePopin(open, onDismiss);
-  // The key goes back to whatever summoned the bar.
-  useEffect(() => {
-    if (!open) return;
-    const from = document.activeElement as HTMLElement | null;
-    return () => {
-      if (from?.isConnected) from.focus();
-    };
-  }, [open]);
   if (!open) return null;
   return (
     <div className="pointer-events-none fixed inset-0 z-(--k7-z-palette)">
@@ -59,6 +54,7 @@ export const FloatingCommandBar = forwardRef<
         className={`scrim absolute inset-0 cursor-default ${pending ? "pointer-events-none" : "pointer-events-auto"}`}
       />
       <div
+        ref={card}
         role="dialog"
         aria-label={m["shell.commandBar"]()}
         className="panel-dialog pointer-events-auto absolute top-[calc(var(--k7-header-h)+8px)] left-1/2 flex w-[min(560px,calc(100%-16px))] -translate-x-1/2 flex-col rounded-[22px] px-3.5 py-1.5 max-[820px]:top-[62px]"

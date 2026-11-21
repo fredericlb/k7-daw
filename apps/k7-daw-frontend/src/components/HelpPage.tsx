@@ -11,6 +11,7 @@ import type { CommandPrefs } from "../commandPrefs";
 import { DOC_PARTS } from "../docs/pages";
 import { useWindowKey } from "../hooks/useWindowKey";
 import { shortcutsByCommand } from "../keys";
+import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
 import type { CommandInfo } from "../types";
 import { Markdown } from "./Markdown";
@@ -116,7 +117,7 @@ function CommandRow({
         ))}
       </code>
       {shortcut && (
-        <kbd className="shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] leading-none text-muted-foreground">
+        <kbd className="shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px] leading-none text-muted-foreground">
           {shortcut}
         </kbd>
       )}
@@ -181,33 +182,27 @@ export function HelpPage({
     <div className="flex h-full flex-col bg-background text-foreground">
       <header className="flex shrink-0 items-center gap-3 border-b border-border px-3 py-2">
         <Button variant="secondary" size="sm" onClick={onBack}>
-          <ArrowLeft className="mr-1 h-4 w-4" /> Back
+          <ArrowLeft className="mr-1 h-4 w-4" /> {m["common.back"]()}
         </Button>
-        <div className="text-sm font-semibold">Documentation</div>
+        <div className="text-sm font-semibold">{m["help.title"]()}</div>
         <div className="text-xs text-muted-foreground">
-          commands · file formats · architecture
+          {m["help.subtitle"]()}
         </div>
       </header>
 
       {/* A documentation LAYOUT — a fixed table of contents over one scrollable body; tabs would break ctrl-F and deep links. */}
       <div className="flex min-h-0 flex-1">
         <nav className="hidden w-56 shrink-0 flex-col gap-3 overflow-y-auto border-r border-border bg-card/40 p-2 md:flex">
-          {DOC_PARTS.map((part) => (
-            <div key={part.part} className="flex flex-col">
-              <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-foreground/70">
-                {part.label}
-              </div>
-              {part.part === "commands" && (
-                <NavLink id="command-reference" label="Command reference" />
-              )}
-              {part.pages.map((pg) => (
-                <NavLink key={pg.id} id={pg.id} label={pg.title} />
-              ))}
-            </div>
-          ))}
+          <Toc />
         </nav>
 
         <div className="min-h-0 flex-1 overflow-y-auto p-4">
+          <details className="mx-auto mb-4 flex max-w-3xl flex-col rounded border border-border bg-card/40 md:hidden">
+            <summary className="cursor-pointer px-3 py-2 text-sm font-semibold">
+              {m["help.contents"]()}
+            </summary>
+            <Toc />
+          </details>
           <div className="mx-auto flex max-w-3xl flex-col gap-8 pb-24">
             {DOC_PARTS.map((part) => (
               <Fragment key={part.part}>
@@ -220,7 +215,9 @@ export function HelpPage({
                 {part.part === "commands" && (
                   <Section
                     id="command-reference"
-                    title={`Command reference (${commands.length + VIEW_COMMANDS.length})`}
+                    title={m["help.commandReferenceCount"]({
+                      n: commands.length + VIEW_COMMANDS.length,
+                    })}
                   >
                     <div className="flex flex-col divide-y divide-border/60">
                       {commands.map((c) => (
@@ -246,6 +243,29 @@ export function HelpPage({
         </div>
       </div>
     </div>
+  );
+}
+
+function Toc() {
+  return (
+    <>
+      {DOC_PARTS.map((part) => (
+        <div key={part.part} className="flex flex-col">
+          <div className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-foreground/70">
+            {part.label}
+          </div>
+          {part.part === "commands" && (
+            <NavLink
+              id="command-reference"
+              label={m["help.commandReference"]()}
+            />
+          )}
+          {part.pages.map((pg) => (
+            <NavLink key={pg.id} id={pg.id} label={pg.title} />
+          ))}
+        </div>
+      ))}
+    </>
   );
 }
 

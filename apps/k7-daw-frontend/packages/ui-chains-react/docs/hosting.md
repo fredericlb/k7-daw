@@ -274,7 +274,7 @@ plugs lift nothing, their bindings being the module's to edit.
 
 **An automation cable takes no click at all**: it is drawn faint and lets the pointer through to
 what is under it (docs/hang.md), so it is unbound from the menus instead — the knob's or the curve
-card's right-click, "remove automation", which is `node automate <module> <param> none` through the
+card's right-click, "Remove automation", which is `node automate <module> <param> none` through the
 host's `command`. Not by lifting an end: the end it lands on is a knob, not a socket, so there is no
 jack to lift it from. The curve itself stays — unbinding is not deleting it, and another param can
 take it.

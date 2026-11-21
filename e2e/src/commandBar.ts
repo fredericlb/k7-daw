@@ -53,10 +53,10 @@ export async function runCommand(page: Page, name: string): Promise<void> {
   const bar = await openCommandBar(page);
   await bar.click();
   await bar.fill(name);
-  // A row's accessible name is the command's name; the sentence is its description.
+  // A row's accessible name is its sentence; the command's name is its description and its data-command.
   const row = page
     .getByRole("listbox", { name: "Commands" })
-    .getByRole("option", { name, exact: true });
+    .locator(`[role="option"][data-command="${name}"]`);
   await expect(row).toBeVisible();
   await row.click();
 }

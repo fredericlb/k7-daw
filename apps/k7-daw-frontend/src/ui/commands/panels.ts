@@ -88,8 +88,8 @@ export const PANEL_COMMANDS: LocalCommand[] = [
   }),
   // `ui` because the PANEL is a view; every verb inside it is a `project` one and writes.
   toggle("export", {
-    en: "Open or close the share and export panel",
-    fr: "Ouvrir ou fermer le panneau de partage",
+    en: "Open or close the Export panel",
+    fr: "Ouvrir ou fermer le panneau Exporter",
   }),
   {
     // The one control ON the editor settings screen — a global preference, which is why it is `ui`.

@@ -6,6 +6,7 @@
 import { Piano } from "@studio/ui/icons";
 import { useEffect, useState } from "react";
 import { api } from "../api";
+import { m } from "../paraglide/messages.js";
 import { fileStem } from "../projectPaths";
 import type { Hints } from "../types";
 import { GraphSlotPane } from "./GraphSlotPane";
@@ -41,7 +42,7 @@ export function SeqGridPane({
         <>
           <Piano className="h-4 w-4 text-muted-foreground" />
           <span className="font-medium text-foreground">{fileStem(path)}</span>
-          <span>piano roll</span>
+          <span>{m["seq.pianoRoll"]()}</span>
           <span className="truncate">{path}</span>
         </>
       }

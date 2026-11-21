@@ -312,7 +312,7 @@ export function TakesView({
         <button
           type="button"
           aria-label={m["takes.seek"]()}
-          className="relative block h-4 min-w-0 flex-1 cursor-pointer border-b border-border/50 text-left font-mono text-[10px] text-muted-foreground"
+          className="relative block h-4 min-w-0 flex-1 cursor-pointer border-b border-border/50 text-left font-mono text-[11px] text-muted-foreground"
           onClick={(e) => onSeek?.((beatAt(e.clientX) * 60) / tempo)}
         >
           {bars.map((b) => (

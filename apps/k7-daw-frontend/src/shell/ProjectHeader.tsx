@@ -168,7 +168,7 @@ export function ProjectHeader({
               ))}
             </Capsule>
             <div className="flex min-w-max flex-1 basis-0 items-center justify-end gap-2">
-              <Capsule role="toolbar" aria-label={m["shell.panels"]()}>
+              <Capsule role="group" aria-label={m["shell.panels"]()}>
                 {panels.map((p) => {
                   const def = PANEL_DEFS[p.id];
                   return (
@@ -188,7 +188,7 @@ export function ProjectHeader({
                   );
                 })}
               </Capsule>
-              <Capsule role="toolbar" aria-label={m["shell.app"]()}>
+              <Capsule role="group" aria-label={m["shell.app"]()}>
                 <CapsuleButton
                   pressed={settingsPressed}
                   aria-label={m["settings.menu"]()}

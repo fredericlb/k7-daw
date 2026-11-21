@@ -38,7 +38,7 @@ export function UploadProgress({
 
   return (
     <div className="border-t border-border bg-card/60 px-3 py-1.5">
-      <div className="mb-1 flex items-center justify-between text-[10px] text-muted-foreground">
+      <div className="mb-1 flex items-center justify-between text-[11px] text-muted-foreground">
         <span className="truncate">{label}</span>
         <span className="ml-2 shrink-0 tabular-nums">{pct}%</span>
       </div>

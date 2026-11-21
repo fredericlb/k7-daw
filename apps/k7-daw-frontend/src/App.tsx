@@ -1074,9 +1074,10 @@ export default function App({
       // Another module while this one holds unsaved edits: the same question the builder's own Back asks.
       if (builder && builder.path !== path && builderDirty.current) {
         const agreed = await askConfirm({
-          title: "Leave without saving?",
-          body: "This module's files are changed here, and Save writes them together.",
-          confirmLabel: "Quitter",
+          title: m["leave.module.title"](),
+          body: m["leave.module.body"](),
+          confirmLabel: m["common.confirm"](),
+          cancelLabel: m["common.cancel"](),
           danger: true,
         });
         if (!agreed) return;
@@ -2894,6 +2895,7 @@ export default function App({
           }
           panels={headerPanels}
           onSettings={() => void runCommand("ui settings")}
+          onHelp={openHelp}
           tool={
             full === "timeline" && hasTimeline
               ? {

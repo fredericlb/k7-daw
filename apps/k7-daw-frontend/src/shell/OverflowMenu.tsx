@@ -4,8 +4,14 @@
 
 import { METRONOME_MIN } from "@studio/engine-protocol/build";
 import { Button } from "@studio/ui/button";
-import { Ellipsis, type LucideIcon, Settings } from "@studio/ui/icons";
+import {
+  CircleHelp,
+  Ellipsis,
+  type LucideIcon,
+  Settings,
+} from "@studio/ui/icons";
 import { cn } from "@studio/ui/lib/utils";
+import { useModalFocus } from "@studio/ui/modal-focus";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { m } from "../paraglide/messages.js";
 import { usePopin } from "../popins";
@@ -55,6 +61,7 @@ export function OverflowMenu({
   lanesHeading,
   panels,
   onSettings,
+  onHelp,
   tool,
   metronome,
 }: {
@@ -66,6 +73,7 @@ export function OverflowMenu({
   lanesHeading: string;
   panels: OverflowPanel[];
   onSettings: () => void;
+  onHelp: () => void;
   /** The timeline tool, which the phone bar does not carry; absent off the Arrangement. */
   tool?: OverflowTool;
   /** The metronome switch, which the phone bar does not carry either. */
@@ -82,11 +90,15 @@ export function OverflowMenu({
   const trigger = useRef<HTMLButtonElement>(null);
   const card = useRef<HTMLDivElement>(null);
   usePopin(open, () => setOpen(false));
-  // Focus goes into the card on open and back to the trigger on close, instead of dropping to the body.
+  useModalFocus(card, { active: open });
+  // Focus goes into the card on open, onto the pane in use, and back to the trigger on close, instead of dropping to the body.
   useEffect(() => {
     if (!open) return;
     const t = trigger.current;
-    card.current?.querySelector<HTMLElement>("button")?.focus();
+    (
+      card.current?.querySelector<HTMLElement>('[aria-checked="true"]') ??
+      card.current?.querySelector<HTMLElement>("button")
+    )?.focus();
     return () => t?.focus();
   }, [open]);
   const commitLevel = () => {
@@ -130,7 +142,7 @@ export function OverflowMenu({
           >
             <Heading>{m["shell.overflow.pane"]()}</Heading>
             <div
-              role="group"
+              role="radiogroup"
               aria-label={m["shell.overflow.pane"]()}
               className="glass flex rounded-full p-[3px]"
             >
@@ -138,9 +150,10 @@ export function OverflowMenu({
                 <button
                   key={p.id}
                   type="button"
-                  aria-pressed={pane === p.id}
+                  role="radio"
+                  aria-checked={pane === p.id}
                   onClick={run(() => onPane(p.id))}
-                  className="type-label flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-1 text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender"
+                  className="type-label flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full px-1 text-foreground aria-checked:bg-on-fill aria-checked:text-lavender"
                 >
                   <p.icon className="size-[18px] shrink-0" />
                   <span className="truncate">{p.label}</span>
@@ -170,7 +183,7 @@ export function OverflowMenu({
               <>
                 <Heading>{m["shell.overflow.tool"]()}</Heading>
                 <div
-                  role="group"
+                  role="radiogroup"
                   aria-label={m["shell.overflow.tool"]()}
                   className="glass flex rounded-full p-[3px]"
                 >
@@ -178,11 +191,12 @@ export function OverflowMenu({
                     <button
                       key={t}
                       type="button"
-                      aria-pressed={tool.current === t}
+                      role="radio"
+                      aria-checked={tool.current === t}
                       aria-label={TOOL_NAME[t]()}
                       title={TOOL_NAME[t]()}
                       onClick={run(() => tool.onPick(t))}
-                      className="grid h-11 min-w-0 flex-1 place-items-center rounded-full text-foreground aria-pressed:bg-on-fill aria-pressed:text-lavender [&_svg]:size-[18px]"
+                      className="grid h-11 min-w-0 flex-1 place-items-center rounded-full text-foreground aria-checked:bg-on-fill aria-checked:text-lavender [&_svg]:size-[18px]"
                     >
                       <ToolGlyph tool={t} />
                     </button>
@@ -247,6 +261,14 @@ export function OverflowMenu({
                 <span className="max-w-full truncate">
                   {m["settings.menu"]()}
                 </span>
+              </button>
+              <button
+                type="button"
+                onClick={run(onHelp)}
+                className="type-secondary flex h-[68px] flex-col items-center justify-center gap-1 rounded-2xl bg-(--k7-row) px-1 text-foreground"
+              >
+                <CircleHelp className="size-5" />
+                <span className="max-w-full truncate">{m["help.menu"]()}</span>
               </button>
             </div>
           </div>

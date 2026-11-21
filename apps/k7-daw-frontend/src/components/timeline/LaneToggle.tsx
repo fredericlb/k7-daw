@@ -51,7 +51,8 @@ export function LaneToggle({
           : "relative !h-3.5 !w-6 !rounded-[3px] !text-[11px] !leading-none [@media(pointer:coarse)]:!h-4 [@media(pointer:coarse)]:!w-8 [@media(pointer:coarse)]:after:absolute [@media(pointer:coarse)]:after:-inset-y-3.5 [@media(pointer:coarse)]:after:inset-x-0 [@media(pointer:coarse)]:after:content-['']",
         touch &&
           "min-w-0 flex-1 after:absolute after:inset-x-0 after:-inset-y-2 after:content-['']",
-        pulse && "animate-pulse",
+        // A static ring stays when reduced motion stops the pulse: armed and recording must differ.
+        pulse && "animate-pulse ring-2 ring-foreground",
         className,
       )}
     />

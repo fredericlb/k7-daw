@@ -833,7 +833,7 @@ export function AudioClipPanel({
                   height={18}
                   mode={rulerSeconds ? "seconds" : "bars"}
                   onSeek={onSeek}
-                  className="shrink-0 border-b border-border/50 font-mono text-[10px] text-muted-foreground"
+                  className="shrink-0 border-b border-border/50 font-mono text-[11px] text-muted-foreground"
                 />
                 {/* The loop's points on the FILE's seconds, the axis the event's window is written in. */}
                 {looped && loopAddr && (

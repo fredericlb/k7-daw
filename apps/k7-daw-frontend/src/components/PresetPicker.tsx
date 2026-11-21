@@ -169,7 +169,7 @@ export function PresetPicker({
       role="menu"
       aria-label={m["preset.engine"]()}
     >
-      <div className="px-3 pb-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+      <div className="px-3 pb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
         {m["preset.engine"]()}
       </div>
       {engines.names.map((name) => (

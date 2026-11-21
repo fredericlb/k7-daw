@@ -157,8 +157,13 @@ export function keyToken(e: KeyboardEvent): string | null {
 }
 
 /** Drop focus after a MOUSE activation of a momentary button — what still saves every single-key binding but Space, which the shell takes outright. */
-export const blurOnClick = (e: { currentTarget: HTMLElement }): void =>
-  e.currentTarget.blur();
+export const blurOnClick = (e: {
+  currentTarget: HTMLElement;
+  detail?: number;
+}): void => {
+  // A keyboard activation has detail 0: it keeps focus so the user walks on from here.
+  if (e.detail) e.currentTarget.blur();
+};
 
 const interpolate = (s: string, cond: ConditionCtx) =>
   s.replace(/\{(\w+)\}/g, (_, k) => cond[k] ?? "");

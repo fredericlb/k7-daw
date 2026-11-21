@@ -106,3 +106,12 @@
     outline-offset: 2px;
   }
 }
+
+/* iOS WebKit zooms the page into a focused field under 16 px; unlayered, so it beats every size utility (docs/shell.md). */
+@media (pointer: coarse) {
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}

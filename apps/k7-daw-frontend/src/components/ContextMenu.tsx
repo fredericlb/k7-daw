@@ -4,6 +4,7 @@
 // instance lives in App; both surfaces open it through openContextMenu. Dismisses on Escape, an
 // outside click, a scroll, losing focus or its close button. Rows are split into TABS (menuTabs.ts).
 
+import { useModalFocus } from "@studio/ui/modal-focus";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { type CommandPrefs, labelIn } from "../commandPrefs";
 import type { MenuItem } from "../contextMenu";
@@ -12,6 +13,7 @@ import { shortcutsByCommand } from "../keys";
 import { useIcons } from "../lucideIcons";
 import { dangerLast, menuTabs, moveFocus } from "../menuTabs";
 import type { MenuTarget } from "../menuTitle";
+import { m } from "../paraglide/messages.js";
 import { ContextMenuHeader } from "./ContextMenuHeader";
 
 export function ContextMenu({
@@ -44,6 +46,7 @@ export function ContextMenu({
   // The key each command answers to, read off the person's own table so a row never advertises a key nothing binds.
   const keys = useMemo(() => shortcutsByCommand(prefs), [prefs]);
   const ref = useRef<HTMLDivElement>(null);
+  useModalFocus(ref, { trap: false });
   // Start at the click, then clamp into the viewport once we can measure the menu.
   const [pos, setPos] = useState({ x, y });
   // The rows by tab, and the tab on show: the first, which is the thing you clicked, on every new menu.
@@ -116,12 +119,16 @@ export function ContextMenu({
     window.addEventListener("pointerdown", down, true);
     window.addEventListener("keydown", key, true);
     window.addEventListener("blur", onClose);
-    window.addEventListener("scroll", onClose, true);
+    // The menu's own overflow scroll must not close it.
+    const scrolled = (e: Event) => {
+      if (!ref.current?.contains(e.target as Node)) onClose();
+    };
+    window.addEventListener("scroll", scrolled, true);
     return () => {
       window.removeEventListener("pointerdown", down, true);
       window.removeEventListener("keydown", key, true);
       window.removeEventListener("blur", onClose);
-      window.removeEventListener("scroll", onClose, true);
+      window.removeEventListener("scroll", scrolled, true);
     };
   }, [onClose]);
   // Read by the key handler, which is bound once.
@@ -145,7 +152,9 @@ export function ContextMenu({
         type="button"
         role="menuitem"
         title={
-          it.complete ? `runs: ${it.command}` : `fills the bar: ${it.command}`
+          it.complete
+            ? m["menu.runs"]({ command: it.command })
+            : m["menu.fills"]({ command: it.command })
         }
         onClick={() => {
           onPick(it);
@@ -176,7 +185,7 @@ export function ContextMenu({
           <span className="shrink-0 text-muted-foreground">…</span>
         )}
         {key && (
-          <kbd className="shrink-0 rounded border border-border px-1 font-mono text-[10px] text-muted-foreground">
+          <kbd className="shrink-0 rounded border border-border px-1 font-mono text-[11px] text-muted-foreground">
             {key}
           </kbd>
         )}

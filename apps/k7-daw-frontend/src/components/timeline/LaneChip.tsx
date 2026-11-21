@@ -32,7 +32,7 @@ export function LaneChip({
         blurOnClick(e);
       }}
       className={cn(
-        "type-label relative h-6 shrink-0 rounded-full px-2 font-mono text-[11px] after:absolute after:-inset-2 after:content-['']",
+        "type-label relative h-6 shrink-0 rounded-full px-2 font-mono text-[11px] after:absolute after:-inset-2.5 after:content-['']",
         arm
           ? "bg-record text-ink"
           : mute

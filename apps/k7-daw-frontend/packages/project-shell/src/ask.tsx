@@ -4,6 +4,7 @@
 // that ignores the app's Escape ladder, its focus and its language. Render <AskHost/> once beside
 // <Toaster/>. See docs/ask.md.
 
+import { useModalFocus } from "@studio/ui/modal-focus";
 import { useEffect, useRef, useState } from "react";
 
 const cx = (...parts: (string | false | undefined)[]): string =>
@@ -178,6 +179,7 @@ function AskDialog({
           : true,
     );
 
+  useModalFocus(box);
   useEffect(() => {
     if (!field.current) return void box.current?.focus();
     field.current.focus();
@@ -201,12 +203,15 @@ function AskDialog({
           return;
         }
         if (e.key === "Escape") cancel();
-        if (e.key === "Enter" && !invalid) accept();
+        // A focused button answers for itself: Enter there must not confirm over a Cancel.
+        const onButton = (e.target as HTMLElement).tagName === "BUTTON";
+        if (e.key === "Enter" && !invalid && !onButton) accept();
       }}
     >
       <button
         type="button"
         aria-label={pending.cancelLabel ?? ENGLISH.cancel}
+        tabIndex={-1}
         className="scrim absolute inset-0 animate-[k7-fade-in_var(--k7-dur-fade)_ease-out]"
         onClick={cancel}
       />

@@ -111,7 +111,7 @@ export function EditorToolbar({
           aria-label={m["seq.views"]()}
           className="glass flex h-10 items-center gap-0.5 rounded-full p-[3px]"
         >
-          {SEQ_TABS.map((t) => (
+          {seqTabList().map((t) => (
             <button
               key={t.id}
               type="button"

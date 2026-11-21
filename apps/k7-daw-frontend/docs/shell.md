@@ -1706,6 +1706,11 @@ Being a phone is a question of SIZE, not of pointer (`useIsMobile.ts`): an iPad 
 layout. What a touch screen of any size does need is the right-click, and a finger held still is one
 (`longPress.ts`, [contextMenu.md](contextMenu.md)).
 
+**A field is 16px on a coarse pointer** (`index.css`, unlayered so it beats every size utility): iOS
+WebKit zooms the page into any focused field under 16px and leaves it zoomed. The phone's overflow
+menu is a plain dialog of buttons, not an ARIA menu: it takes focus on opening, on the pane in use, and
+every segment of it is 44px.
+
 ## Keyboard focus is always drawn
 
 **Tab and Shift+Tab are the browser's**, everywhere in the shell: `keyToken` makes no token of Tab, so

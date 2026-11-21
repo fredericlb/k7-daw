@@ -43,7 +43,8 @@
     "./backdrop": "./src/backdrop.tsx",
     "./checkbox": "./src/checkbox.tsx",
     "./field": "./src/field.tsx",
-    "./label": "./src/label.tsx"
+    "./label": "./src/label.tsx",
+    "./modal-focus": "./src/modal-focus.ts"
   },
   "peerDependencies": {
     "react": "^19.2.7",

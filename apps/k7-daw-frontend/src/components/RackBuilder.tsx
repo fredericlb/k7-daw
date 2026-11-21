@@ -330,7 +330,7 @@ export function RackBuilder({
                       : "border-dashed border-border bg-card/40",
                   )}
                 >
-                  <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
                     <span className="tabular-nums">{padNote(row, col)}</span>
                     {pad && (
                       <>
@@ -385,14 +385,14 @@ export function RackBuilder({
                         aria-label={m["rb.padSymbol"]()}
                       />
                       <span
-                        className="mt-auto truncate text-[10px] text-muted-foreground"
+                        className="mt-auto truncate text-[11px] text-muted-foreground"
                         title={pad.file.name}
                       >
                         {pad.file.name}
                       </span>
                     </>
                   ) : (
-                    <span className="m-auto text-[10px] text-faint">
+                    <span className="m-auto text-[11px] text-faint">
                       {m["rb.dropSample"]()}
                     </span>
                   )}
