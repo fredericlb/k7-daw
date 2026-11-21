@@ -53,6 +53,10 @@
 	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>k7 records from the microphone when you arm a track, and plays live inputs through the engine.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_k7._tcp</string>
+	</array>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>k7's engine is reachable from a browser on your network, and finds the devices that pair with it there.</string>
 	<key>NSAppTransportSecurity</key>

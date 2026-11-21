@@ -6,6 +6,7 @@
 package se.frediver.k7
 
 import android.content.Context
+import android.net.wifi.WifiManager
 import android.util.Log
 import org.json.JSONObject
 import java.io.File
@@ -24,6 +25,7 @@ object BackendHost {
     const val HOME = "$ORIGIN/"
 
     private var app: Context? = null
+    private var multicast: WifiManager.MulticastLock? = null
     private var dirs: Dirs? = null
     private var started = false
     private var stopping = false
@@ -64,6 +66,9 @@ object BackendHost {
         if (started) return
         started = true
         app = context.applicationContext
+        // Android drops multicast packets unless an app holds this lock: without it the front hears no other k7 device (docs/lan.md).
+        multicast = (app?.getSystemService(Context.WIFI_SERVICE) as? WifiManager)
+            ?.createMulticastLock("k7-lan")?.apply { setReferenceCounted(false); acquire() }
         attempt()
     }
 

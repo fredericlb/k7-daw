@@ -1070,10 +1070,14 @@ export default function App({
     },
     [focusOn, layout, full, remote.reasonOf],
   );
+  const switcherOrder = useMemo(
+    () => SWITCHER_ORDER.filter((p) => layout.fullscreen.includes(p)),
+    [layout],
+  );
   useRemoteTakeover({
     inUse: remote.inUse,
     full,
-    order: SWITCHER_ORDER.filter((p) => layout.fullscreen.includes(p)),
+    order: switcherOrder,
     moveTo: fullscreen,
     viewportOpen,
     closeViewport: useCallback(

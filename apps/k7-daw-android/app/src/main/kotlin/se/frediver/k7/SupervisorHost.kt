@@ -153,6 +153,8 @@ object SupervisorHost {
         when (frame.optString("t")) {
             // A dead supervisor's last frames would cover the line that says it is down.
             "state" -> if (synchronized(this) { (from == process).also { if (it) lastState = frame } }) {
+                // The front opens its LAN door while this is on, and cannot read a supervisor it does not run.
+                RustFront.setLanOpen(frame.optBoolean("lanOpen", false))
                 listeners.forEach { it.onState(frame) }
             }
             // Only the CURRENT supervisor's: a restarted one's last words — "stop the engine" — may still be in its pipe.

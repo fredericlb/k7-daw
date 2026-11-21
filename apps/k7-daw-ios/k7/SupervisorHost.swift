@@ -205,6 +205,8 @@ final class SupervisorHost {
             if current { lastState = frame }
             let to = watchers()
             lock.unlock()
+            // The front opens its LAN door while this is on, and cannot read a supervisor it does not run.
+            if current { k7_lan_set_open((frame["lanOpen"] as? Bool) == true ? 1 : 0) }
             if current { to.forEach { $0.onState(frame) } }
         case "engine":
             // Only the CURRENT supervisor's: a restarted one's last words — "stop the engine" — may still be in its pipe.

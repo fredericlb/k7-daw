@@ -45,6 +45,13 @@ object RustFront {
         port = 0
     }
 
+    /** The LAN switch this phone's supervisor holds, which the front cannot read: the door follows it (apps/k7-daw-backend/docs/lan.md). */
+    fun setLanOpen(open: Boolean) {
+        if (port > 0) nativeLanOpen(if (open) 1 else 0)
+    }
+
+    @JvmStatic private external fun nativeLanOpen(open: Int)
+
     @JvmStatic private external fun nativeStart(config: String): Int
 
     @JvmStatic private external fun nativeStop(): Int
