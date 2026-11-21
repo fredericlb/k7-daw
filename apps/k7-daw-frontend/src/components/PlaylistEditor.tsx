@@ -62,7 +62,7 @@ export function PlaylistEditor({
   /** The file has reached disk: the listing behind this screen is one row out of date. */
   onSaved: () => void;
   /** Dispatch a command line, passed straight through to the records pane — optional, so neither host has to invent a shell. */
-  onRun?: (line: string) => Promise<void>;
+  onRun?: (line: string, outcome?: { ok: boolean }) => Promise<void>;
 }) {
   const [content, setContent] = useState<string | null>(null);
   // What is on disk; dirty is `content !== saved`, derived rather than a flag a failed write could leave lying.

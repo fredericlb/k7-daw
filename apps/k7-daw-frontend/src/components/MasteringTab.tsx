@@ -12,6 +12,13 @@ import {
   usePluginParamValue,
 } from "@studio/engine-browser/params";
 import type { ProjectSurface } from "@studio/song-schema/yaml/surfaceFile";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@studio/ui/select";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useRevision } from "../hooks/useRevision";
 import {
@@ -166,16 +173,16 @@ function Part({
     <section
       role="group"
       aria-label={PART_LABEL[part]()}
-      className="flex min-w-0 flex-col gap-2 rounded border border-border p-3"
+      className="flex min-w-0 flex-col gap-2 rounded-2xl bg-(--k7-row) p-3"
     >
-      <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+      <h3 className="type-caps text-fg-2">
         {PART_LABEL[part]()}
       </h3>
       {has ? (
         <div className="flex flex-col gap-2">{children}</div>
       ) : (
         // Every part has a required control, so this is only reachable while the graph has not arrived or will not compile.
-        <p className="text-xs text-muted-foreground">
+        <p className="type-secondary text-fg-2">
           {m["mst.noneResolve"]()}
         </p>
       )}
@@ -221,40 +228,44 @@ function Knob({
   // A CHOICE is a dropdown of named values, the slider being for a range (src/mastering/controls.ts).
   if (choices)
     return (
-      <label className="flex items-center gap-2 text-xs">
-        <span className="w-28 shrink-0 text-muted-foreground">{label()}</span>
-        <select
-          value={Math.round(value)}
-          className="w-40 rounded border border-border bg-background px-1 py-0.5"
-          onChange={(e) => {
-            const v = Number(e.target.value);
+      <div className="type-secondary flex items-center gap-2">
+        <span className="w-28 shrink-0 text-fg-2">{label()}</span>
+        <Select
+          value={String(Math.round(value))}
+          onValueChange={(pick) => {
+            const v = Number(pick);
             setHeld(v);
             onSet(binding.pluginId, binding.param, v);
             // A pick is a whole gesture, so it is written at once.
             send(masterParamLine(binding, v));
           }}
         >
-          {choices.map((c, i) => (
-            <option key={c} value={i}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </label>
+          <SelectTrigger aria-label={label()} className="w-40">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent position="popper">
+            {choices.map((c, i) => (
+              <SelectItem key={c} value={String(i)}>
+                {c}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
     );
   // A step of 1 or more is a whole number, anything finer keeps one decimal: a ceiling shown as '0 dB' when it is at −0.3 is a lie.
   const shown = step >= 1 ? Math.round(value) : value.toFixed(1);
 
   return (
-    <label className="flex items-center gap-2 text-xs">
-      <span className="w-28 shrink-0 text-muted-foreground">{label()}</span>
+    <label className="type-secondary flex items-center gap-2">
+      <span className="w-28 shrink-0 text-fg-2">{label()}</span>
       <input
         type="range"
         min={min}
         max={max}
         step={step}
         value={value}
-        className="w-40 cursor-pointer accent-foreground"
+        className="h-5 w-40 cursor-pointer accent-(--k7-accent-text)"
         onChange={(e) => {
           const v = Number(e.target.value);
           setHeld(v);
@@ -268,7 +279,7 @@ function Knob({
       />
       <span className="w-16 shrink-0 text-right font-mono tabular-nums">
         {shown}
-        <span className="ml-0.5 text-muted-foreground">{unit}</span>
+        <span className="ml-0.5 text-fg-2">{unit}</span>
       </span>
     </label>
   );

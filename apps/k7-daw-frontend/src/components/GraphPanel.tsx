@@ -229,26 +229,29 @@ export function GraphPanel({
         </Note>
       );
     if (!graph) return <Note>{m["common.loading"]()}</Note>;
-    if (strips && !strips.length) return <Note>{m["graph.noStrip"]()}</Note>;
     if (strips)
       return (
-        <MixerStrips
-          strips={strips}
-          project={project}
-          trackControls={trackControls}
-          onTrackToggle={onTrackToggle}
-          onTrackSet={onTrackSet}
-          master={{
-            volume: masterVolume ?? 0,
-            onVolume: onMaster,
-            mastering: master
-              ? {
-                  open: masteringOpen,
-                  onToggle: () => setMasteringOpen((o) => !o),
-                }
-              : undefined,
-          }}
-        />
+        <>
+          <MixerStrips
+            strips={strips}
+            project={project}
+            trackControls={trackControls}
+            onTrackToggle={onTrackToggle}
+            onTrackSet={onTrackSet}
+            master={{
+              volume: masterVolume ?? 0,
+              onVolume: onMaster,
+              mastering: master
+                ? {
+                    open: masteringOpen,
+                    onToggle: () => setMasteringOpen((o) => !o),
+                  }
+                : undefined,
+            }}
+          />
+          {/* Master is drawn even with no lane to sum, so its fader and OUT stay in reach. */}
+          {!strips.length && <Note>{m["graph.noStrip"]()}</Note>}
+        </>
       );
     if (!strips && !trackId) return <Note>{m["graph.selectTrack"]()}</Note>;
     if (!laidShown)

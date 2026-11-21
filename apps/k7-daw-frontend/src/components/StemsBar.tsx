@@ -28,6 +28,9 @@ export function StemsBar({
   chain,
   run,
   onSettings,
+  onStart,
+  startLabel,
+  startDisabled,
   onClose,
 }: {
   /** The chain this MACHINE separates with: `null` for 'never told', `undefined` while the preference is being read. */
@@ -35,6 +38,10 @@ export function StemsBar({
   run: Run | null;
   /** Open the settings, where the chain is set. Absent in a host with no command bar. */
   onSettings?: () => void;
+  /** Begins the separation: it lives here, where its chain and its progress are, rather than in the header. */
+  onStart: () => void;
+  startLabel: string;
+  startDisabled: boolean;
   onClose: () => void;
 }) {
   /** The bar's fill, 0..1 — songs finished PLUS how far into the one in hand, neither half being honest alone. */
@@ -50,10 +57,13 @@ export function StemsBar({
         <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground">
           {chain === undefined ? "…" : (chain ?? m["clip.noChain"]())}
         </span>
+        <Button size="sm" disabled={startDisabled} onClick={onStart}>
+          {startLabel}
+        </Button>
         <Button
           size="icon"
           variant="ghost"
-          className="h-7 w-7 shrink-0"
+          className="shrink-0"
           aria-label={m["common.close"]()}
           onClick={onClose}
         >

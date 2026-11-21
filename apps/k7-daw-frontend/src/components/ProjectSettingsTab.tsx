@@ -7,6 +7,10 @@ import { sortForPeople } from "@studio/web-protocol/tree";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
 import { m } from "../paraglide/messages.js";
+import { PanelError } from "./PanelError";
+
+/** The file service's answer when no project is open (`NO_ACTIVE`, k7-file-service's module_reads.rs). */
+const NO_PROJECT = /^no active project/;
 
 /** What the file service said: the systems the libraries hold, and the one the project names. */
 interface Consoles {
@@ -21,7 +25,8 @@ export function ProjectSettingsTab({
 }) {
   // Null while asking, and left null when there is no project to ask about.
   const [consoles, setConsoles] = useState<Consoles | null>(null);
-  const [failed, setFailed] = useState(false);
+  /** Why it could not be read: no project open is an answer, anything else is a failure to show. */
+  const [failed, setFailed] = useState<{ noProject: boolean; text: string } | null>(null);
 
   const load = useCallback(
     () =>
@@ -32,9 +37,10 @@ export function ProjectSettingsTab({
             ...c,
             systems: sortForPeople(c.systems, (s) => s.label),
           });
-          setFailed(false);
+          setFailed(null);
         },
-        () => setFailed(true),
+        (e: Error) =>
+          setFailed({ noProject: NO_PROJECT.test(e.message), text: e.message }),
       ),
     [],
   );
@@ -48,9 +54,17 @@ export function ProjectSettingsTab({
     await load();
   };
 
-  if (failed)
+  if (failed?.noProject)
     return (
       <p className="type-status p-1 text-fg-2">{m["settings.noProject"]()}</p>
+    );
+  if (failed)
+    return (
+      <PanelError
+        what={m["panel.what.project"]()}
+        detail={failed.text}
+        onRetry={() => void load()}
+      />
     );
 
   const current = consoles?.current ?? "";

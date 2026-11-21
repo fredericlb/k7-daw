@@ -20,6 +20,7 @@ import { pitchName } from "../noteNames";
 import { m } from "../paraglide/messages.js";
 import type { IoPort } from "../types";
 import { pollWhileVisible } from "../visiblePoll";
+import { PanelError } from "./PanelError";
 
 const POLL_MS = 100; // ~10 Hz: a meter reads as live, and each frame enables devices engine-side
 
@@ -29,11 +30,25 @@ const norm = (db: number): number => {
   return t < 0 ? 0 : t > 1 ? 1 : t;
 };
 
-function Meter({ level, live }: { level: number; live: boolean }) {
+function Meter({
+  level,
+  live,
+  label,
+}: {
+  level: number;
+  live: boolean;
+  /** What it meters, for the accessible name. */
+  label: string;
+}) {
   return (
     <div
+      role="meter"
+      aria-label={m["io.meter"]({ name: label })}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round((live ? level : 0) * 100)}
       className="relative h-1.5 w-28 shrink-0 overflow-hidden rounded-[3px] bg-(--k7-progress-track)"
-      title={live ? undefined : "no device on this channel"}
+      title={live ? undefined : m["io.noDevice"]()}
     >
       <div
         className={cn(
@@ -76,12 +91,20 @@ export function noteOf(
 }
 
 /** The tuner: nearest note, and a needle for how far off it sits. Blank until a note is heard. */
-function Tuner({ hz, clarity }: { hz: number; clarity: number }) {
+function Tuner({
+  hz,
+  clarity,
+  label,
+}: {
+  hz: number;
+  clarity: number;
+  label: string;
+}) {
   const note = noteOf(hz);
   if (!note)
     return (
       <div className="flex flex-1 items-center pl-1">
-        <span className="type-status text-fg-3">no note</span>
+        <span className="type-status text-fg-3">{m["io.noNote"]()}</span>
       </div>
     );
   const inTune = Math.abs(note.cents) <= IN_TUNE_CENTS;
@@ -89,6 +112,15 @@ function Tuner({ hz, clarity }: { hz: number; clarity: number }) {
   const offset = 50 + Math.max(-50, Math.min(50, note.cents));
   return (
     <div
+      role="meter"
+      aria-label={m["io.tuner"]({ name: label })}
+      aria-valuemin={-50}
+      aria-valuemax={50}
+      aria-valuenow={note.cents}
+      aria-valuetext={m["io.tunerReading"]({
+        note: `${note.name}${note.octave}`,
+        cents: note.cents,
+      })}
       className="flex flex-1 items-center gap-1.5"
       // A weak reading fades rather than disappearing: a note flickering in and out is harder to tune against than a visibly uncertain one.
       style={{ opacity: 0.4 + 0.6 * Math.max(0, Math.min(1, clarity)) }}
@@ -124,6 +156,7 @@ function Tuner({ hz, clarity }: { hz: number; clarity: number }) {
 /** One row of the panel: a name, what it is wired to, its meter — and, for an input, its tuner on the line below. */
 function PortRow({
   name,
+  label,
   detail,
   live,
   level,
@@ -132,6 +165,8 @@ function PortRow({
   clarity,
 }: {
   name: React.ReactNode;
+  /** The name as plain text, for the meters' accessible names. */
+  label: string;
   detail: string;
   /** Whether there is a channel behind it to meter: a generic or an unwired port has none. */
   live: boolean;
@@ -148,12 +183,16 @@ function PortRow({
           {name}
         </span>
         <span className="type-status shrink-0 text-fg-3">{detail}</span>
-        <Meter level={level} live={live} />
+        <Meter level={level} live={live} label={label} />
       </div>
       {/* The tuner on its own line, as wide as the row: a needle squeezed beside the meter was too short to tune against. */}
       {tuned && (
         <div className="flex">
-          <Tuner hz={live ? hz : 0} clarity={live ? clarity : 0} />
+          <Tuner
+            hz={live ? hz : 0}
+            clarity={live ? clarity : 0}
+            label={label}
+          />
         </div>
       )}
     </div>
@@ -164,14 +203,14 @@ function PortRow({
 function portDetail(port: IoPort): string {
   const live = port.channels.length > 0;
   return port.unknownLabel
-    ? `'${port.label}' — no such input`
+    ? m["io.noSuchInput"]({ label: port.label })
     : port.label
       ? `${port.label} (${port.channels.join("+")})`
       : live
-        ? `ch ${port.channels.join("+")}`
+        ? m["io.channels"]({ channels: port.channels.join("+") })
         : port.generic
-          ? "generic"
-          : "no channel";
+          ? m["io.generic"]()
+          : m["io.noChannel"]();
 }
 
 /** A declared port's name, with the catalogue it comes from. */
@@ -196,6 +235,9 @@ export function IoPanel({
   engine: EngineClient | null;
 }) {
   const [ports, setPorts] = useState<IoPort[] | null>(null);
+  /** The listing's failure, kept apart from an empty list: a song with no ports is not a file service that is down. */
+  const [failure, setFailure] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const [levels, setLevels] = useState<{
     inputs: number[];
     master: number;
@@ -211,12 +253,16 @@ export function IoPanel({
     api
       .ioPorts()
       // The service answers in code points; the panel reads for people, `in-2` before `in-10` (../../docs/listOrder.md).
-      .then((p) => alive && setPorts(sortForPeople(p, (x) => x.ref)))
-      .catch(() => alive && setPorts([]));
+      .then((p) => {
+        if (!alive) return;
+        setFailure(null);
+        setPorts(sortForPeople(p, (x) => x.ref));
+      })
+      .catch((e: Error) => alive && setFailure(e.message));
     return () => {
       alive = false;
     };
-  }, []);
+  }, [attempt]);
 
   // Escape belongs to the PANEL, which closes whichever tab is showing — two listeners for one key would close it twice.
 
@@ -275,7 +321,9 @@ export function IoPanel({
     </h3>
   );
   const none = (
-    <p className="type-status px-3.5 py-3 text-fg-3">none declared</p>
+    <p className="type-status px-3.5 py-3 text-fg-3">
+      {m["io.noneDeclared"]()}
+    </p>
   );
   // The pitch arrays are indexed like the sets asked for, so an input row reads its own.
   const inputRows = devices.length
@@ -287,8 +335,9 @@ export function IoPanel({
         return (
           <PortRow
             key={`dev:${d.name}`}
-            name={`in ${d.name}`}
-            detail={users.length ? users.join(", ") : "unused"}
+            name={m["io.deviceIn"]({ name: d.name })}
+            label={d.name}
+            detail={users.length ? users.join(", ") : m["io.unused"]()}
             live={d.enabled}
             level={norm(levels.inputs[i] ?? -100)}
             tuned
@@ -301,6 +350,7 @@ export function IoPanel({
         <PortRow
           key={p.ref}
           name={portName(p)}
+          label={p.name}
           detail={portDetail(p)}
           live={p.channels.length > 0}
           level={norm(levels.inputs[i] ?? -100)}
@@ -313,20 +363,29 @@ export function IoPanel({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="min-h-0 flex-1 overflow-y-auto pb-2">
-        {ports === null ? (
-          <div className="py-6 text-center text-fg-2 text-sm">…</div>
+        {failure !== null ? (
+          <PanelError
+            what={m["panel.what.io"]()}
+            detail={failure}
+            onRetry={() => setAttempt((n) => n + 1)}
+          />
+        ) : ports === null ? (
+          <div className="py-6 text-center text-fg-2 text-sm">
+            {m["common.loading"]()}
+          </div>
         ) : (
           <>
-            {heading("inputs", <ArrowDownToLine className="size-3.5" />)}
+            {heading(m["io.inputs"](), <ArrowDownToLine className="size-3.5" />)}
             {inputRows.length ? <RowGroup>{inputRows}</RowGroup> : none}
             {/* Every out sink shares one meter: what leaves is the master mix, and Tracktion gives an output DEVICE no measurer. */}
-            {heading("outputs", <ArrowUpFromLine className="size-3.5" />)}
+            {heading(m["io.outputs"](), <ArrowUpFromLine className="size-3.5" />)}
             {outputs.length ? (
               <RowGroup>
                 {outputs.map((p) => (
                   <PortRow
                     key={p.ref}
                     name={portName(p)}
+                    label={p.name}
                     detail={portDetail(p)}
                     live={p.channels.length > 0}
                     level={norm(levels.master)}
@@ -347,7 +406,7 @@ export function IoPanel({
       </div>
       {!engine && (
         <p className="type-status shrink-0 pt-2 text-fg-3">
-          engine not connected — levels are idle
+          {m["io.engineOff"]()}
         </p>
       )}
     </div>

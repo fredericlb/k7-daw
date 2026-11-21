@@ -7,7 +7,6 @@
 import { Button } from "@studio/ui/button";
 import { Chip } from "@studio/ui/chip";
 import { Download, FileArchive } from "@studio/ui/icons";
-import { cn } from "@studio/ui/lib/utils";
 import { Progress } from "@studio/ui/progress";
 import { RowButton, RowGroup } from "@studio/ui/row-group";
 import { useEffect, useState, useSyncExternalStore } from "react";
@@ -52,9 +51,9 @@ function RunningCard({ timeline }: { timeline: string }) {
         )}
       </div>
       <Progress
-        value={pct ?? 100}
+        value={pct ?? undefined}
         label={what || m["share.rendering2"]()}
-        className={cn("my-2", pct === null && "animate-pulse")}
+        className="my-2"
       />
       <p className="type-status text-fg-3">
         {[
