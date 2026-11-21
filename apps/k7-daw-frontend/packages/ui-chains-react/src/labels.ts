@@ -85,8 +85,8 @@ export const ENGLISH_CHAINS_LABELS: ChainsLabels = {
   stackViewHint: "Stack view — a column per track, the mix last (ui stack)",
   zoomFit: "Zoom fit",
   zoomFitHint: "Zoom fit — frame the whole graph",
-  organize: "Organize",
-  organizeHint: "Organize — lay the graph out again (graph organize)",
+  organize: "Auto layout",
+  organizeHint: "Auto layout — lay the graph out again (graph organize)",
   seamsTitle: "Where a module can be added",
   addModuleEnd: "Add a module at the end",
   addModuleBetween: (before, after) =>

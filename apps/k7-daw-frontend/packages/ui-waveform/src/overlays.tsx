@@ -113,7 +113,7 @@ export function WarpHandles({
           height: height,
         }}
         title={`Drag to move where ${w.orig.toFixed(3)}s lands (${at.toFixed(3)}s) — right-click for more`}
-        aria-label="stretch point"
+        aria-label={`Stretch point at ${w.orig.toFixed(2)}s, landing at ${at.toFixed(2)}s`}
         // The host's menu and not the browser's, but only when it offers one.
         onContextMenu={
           onMenu
@@ -190,6 +190,7 @@ export function MarkerPins({
       title={
         onMove ? (m.comment ?? "Marker — drag to move") : m.comment || "Marker"
       }
+      aria-label={`${m.comment || "Marker"} at ${m.atSec.toFixed(2)}s`}
       onPointerDown={(e) => {
         if (!onMove) return;
         e.stopPropagation(); // …or the canvas underneath starts a selection at the same time

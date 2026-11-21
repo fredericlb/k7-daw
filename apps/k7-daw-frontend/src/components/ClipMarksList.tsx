@@ -78,20 +78,62 @@ function SecValue({
   );
 }
 
+/** The add row: a second to type, then which mark it becomes. */
+function AddRow({
+  onAdd,
+}: {
+  onAdd: (kind: "onset" | "stretch", sec: number) => void;
+}) {
+  const [text, setText] = useState("");
+  const sec = Number(text.replace(",", "."));
+  const ok = text.trim() !== "" && Number.isFinite(sec) && sec >= 0;
+  return (
+    <div className="flex min-h-11 flex-wrap items-center gap-2 px-3.5 py-1.5">
+      <input
+        inputMode="decimal"
+        aria-label={m["clip.mark.addAt"]()}
+        placeholder={m["clip.mark.addAt"]()}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        className="h-9 w-28 rounded bg-on-fill px-2 font-mono text-[13px] outline-none focus-visible:shadow-(--k7-focus-ring)"
+      />
+      {(["onset", "stretch"] as const).map((kind) => (
+        <button
+          key={kind}
+          type="button"
+          disabled={!ok}
+          onClick={() => {
+            onAdd(kind, sec);
+            setText("");
+          }}
+          className="h-9 cursor-pointer rounded-full bg-on-fill px-3 font-bold text-[13px] disabled:cursor-not-allowed disabled:opacity-40 focus-visible:shadow-(--k7-focus-ring) focus-visible:outline-none"
+        >
+          {kind === "onset"
+            ? m["clip.mark.addOnset"]()
+            : m["clip.mark.addStretch"]()}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 /** `onRemove` is given a row and the point to anchor a menu at; it is undefined for a read-only row. */
 export function ClipMarksList({
   rows,
   onFocus,
   onRemove,
   onEdit,
+  onAdd,
 }: {
   rows: readonly MarkRow[];
   onFocus: (sec: number) => void;
   /** Commits a typed value for a row — an edge or onset moves, a stretch point's landing moves; undefined for a read-only row. */
   onEdit?: (row: MarkRow, sec: number) => void;
   onRemove?: (row: MarkRow, x: number, y: number) => void;
+  /** Adds an onset or a stretch point at a typed second: the keyboard's way to what a click does on the wave. */
+  onAdd?: (kind: "onset" | "stretch", sec: number) => void;
 }) {
-  if (!rows.length)
+  if (!rows.length && !onAdd)
     return (
       <p className="py-6 text-center text-fg-2 text-sm">
         {m["clip.mark.none"]()}
@@ -99,6 +141,7 @@ export function ClipMarksList({
     );
   return (
     <RowGroup className="min-h-0 flex-1 overflow-y-auto">
+      {onAdd && <AddRow onAdd={onAdd} />}
       {rows.map((r) => (
         <div
           key={r.key}

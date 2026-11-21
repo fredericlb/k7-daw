@@ -690,6 +690,31 @@ export function AudioClipPanel({
           {showList && wf && (
             <ClipMarksList
               rows={markRows}
+              onAdd={
+                clip && !piece
+                  ? (kind, sec) => {
+                      if (!inside(sec)) return;
+                      if (kind === "onset")
+                        void run(
+                          `clip onset add ${clip} ${sec.toFixed(4)}`,
+                          "add",
+                        );
+                      else
+                        void run(
+                          warpLine(
+                            clip,
+                            sec,
+                            sec,
+                            wf.sourceMap,
+                            tempo,
+                            wf.warpMarks,
+                          ),
+                          "warp",
+                          true,
+                        );
+                    }
+                  : undefined
+              }
               onFocus={(sec) => {
                 setAsked((a) => ({
                   ...a,
