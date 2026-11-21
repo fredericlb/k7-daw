@@ -164,7 +164,8 @@ K7_IOS_TEAM=<team id> K7_ASC_KEY_ID=<key id> K7_ASC_ISSUER=<issuer id> \
   apps/k7-daw-ios/scripts/testflight.sh [--no-stage] [--export-only] [--allow-dirty] [--dry-run]
 ```
 
-`K7_ASC_KEY_PATH` names the `.p8` when it is not at the default path, and `K7_GITHUB_CLIENT_ID` is baked into the build
+The four ids can live in `~/.config/k7/testflight.env` (`KEY=VALUE` lines, `K7_TESTFLIGHT_ENV` to name another file), which the
+script reads, a variable set in the shell winning: they stay out of the public tree. `K7_ASC_KEY_PATH` names the `.p8` when it is not at the default path, and `K7_GITHUB_CLIENT_ID` is baked into the build
 for Sign in with GitHub. `--no-stage` reuses the last staging, `--export-only` writes the `.ipa` and uploads nothing
 (no API key needed), `--allow-dirty` builds an uncommitted tree, `--dry-run` prints the `xcodebuild` commands and runs none.
 
@@ -172,6 +173,7 @@ for Sign in with GitHub. `--no-stage` reuses the last staging, `--export-only` w
 |---|---|
 | internal testing only (`testFlightInternalTestingOnly`) | no Beta App Review, and a build cannot slip to external testers |
 | the API key rather than an Xcode sign-in | one command and no Xcode window; the script passes only the key's path, never its content |
+| the ids in a file under `~/.config`, never in the repository | the repository is public, and the API key's `.p8` stays the one secret on disk |
 | a dirty tree refused | the build number names a commit, and a build from other files would carry a number that is not its own |
 | archives kept per build number under `~/.cache/k7-ios-testflight` | the archive holds the symbols a crash report is read with |
 

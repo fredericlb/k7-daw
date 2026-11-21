@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # testflight.sh — stages a device build, archives it in Release, and uploads it to App Store Connect for TestFlight.
-# Usage: K7_IOS_TEAM=<team> K7_ASC_KEY_ID=<key> K7_ASC_ISSUER=<issuer> testflight.sh [--no-stage] [--export-only] [--allow-dirty] [--dry-run]
+# Usage: [K7_IOS_TEAM=<team> K7_ASC_KEY_ID=<key> K7_ASC_ISSUER=<issuer>] testflight.sh [--no-stage] [--export-only] [--allow-dirty] [--dry-run]
 # Docs: apps/k7-daw-engine/k7-runtime/docs/ios.md, "TestFlight".
 # What a reader gets wrong: the build number is the commit count, so a second upload from the same commit is refused.
 set -euo pipefail
@@ -23,6 +23,16 @@ for a in "$@"; do
 done
 
 say() { echo "testflight: $*"; }
+
+# The ids kept out of the public tree: K7_TESTFLIGHT_ENV (default ~/.config/k7/testflight.env), KEY=VALUE lines; the shell's own values win.
+env_file="${K7_TESTFLIGHT_ENV:-$HOME/.config/k7/testflight.env}"
+if [ -f "$env_file" ]; then
+  while IFS='=' read -r key value; do
+    case "$key" in '' | \#*) continue ;; esac
+    [ -n "${!key:-}" ] || export "$key=$value"
+  done < "$env_file"
+  say "ids read from $env_file"
+fi
 run() {
   if [ "$dry" = 1 ]; then echo "  + $*"; else "$@"; fi
 }
